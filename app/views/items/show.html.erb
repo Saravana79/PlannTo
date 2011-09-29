@@ -1,0 +1,268 @@
+
+<div id="ContentPanel" class="contentpanel">
+  <div id="main-navigation">
+    <ul id="navlist" class="navtabs botmargin">
+      <li>
+        <a href="#" class="navtab">All</a>
+      </li>
+      <li>
+        <a href="index.html" class="navtab" onclick="popup('popupwindowDiv');">Car</a>
+        <div id="CarSubMenuDiv" class="SubmenuDiv" style="display:block;">
+          <ul class="nabtabChilds">
+            <li>
+              <a href="#" class="navtabChild">Browse All Cars</a>
+            </li>
+            <li>
+              <a href="Garage.html" class="navtabChild">My Garage</a>
+            </li>
+            <li>
+              <a href="PreferencePage.html" class="navtabChild">My Preferences</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <a href="#" class="navtab">Mobile</a>
+      </li>
+      <li>
+        <a href="#" class="navtab">Camera/Photography</a>
+      </li>
+      <li>
+        <a href="#" class="navtab">Movies</a>
+      </li>
+      <li>
+        <a href="#" class="navtab">Travel</a>
+      </li>
+    </ul>
+  </div>
+  <div id="main-content">
+    <div>
+      <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
+    </div>
+    <div class="productbuttonsGrp">
+      <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>PlanTo Buy It</span></a></span>
+      <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>I Own It</span></a></span>
+      <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>Follow This Car</span></a></span>
+    </div>
+    <div class="feedcontentheader">
+      <div class="productcontentmain">
+        <div>
+          <img class="productimage"  src="/assets/Fiat_Grande_Punto__175.jpg"/>
+        </div>
+        <div>
+          <span  class="producttitle"><%= @item.name %></span>
+        <%#*</div>%>
+        <div class="productprice">
+          Price - Rs 4,14,100 (Showroom Price)
+        </div>
+        <div class="productreview">
+          <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings <a class="feedlink">(100 Reviews)</a>
+        </div>
+        <div class="productspecification">
+          Petrol (Fuel Type), 1172cc (Engine), 5 Speed (Gear),Manual (Transmission), Automatic A/C Control <a class="feedlink">...Detailed Specification</a>
+        </div>
+      </div>
+    </div>
+    <div class="productcontentcreation">
+      <div class="">
+        <span class="buttonLink">Review Car</span>
+        <span class="buttonLink"><a class="feedlink">Ask a Question</a></span>
+        <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
+      </div>
+      
+      <%#*<div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">%>
+        <%#*<div class="txtAreaDiv">%>
+          <%#*<textarea class="textFilling" id="txtAreaExpand"  value="" style="width:570px;height:50px;"></textarea>%>
+        <%#*</div>%>
+        <%#*<div>%>
+          <%#*<div class="productreview">%>
+            <%#*<img src="/assets/white.gif"/> <img src="/assets/white.gif"/> <img src="/assets/white.gif"/> <img src="/assets/white.gif"/> <img src="/assets/white.gif"/> Click to Rate it.%>
+          <%#*</div>%>
+        <%#*</div>%>
+        <%#*<div style="padding:5px 5px 0px 5px;">%>
+          <%#*<span >%>
+								<%#*Pros : <input style="margin-left:25px;" type="text" name="textfield" placeholder="Start typing to get recommendations..." class="search"/><input class="button" type="submit" name="Submit" value="Add" />%>
+          <%#*</span>%>
+          <%#*<span style="float:right;">%>
+								<%#*Cons : <input type="text" name="textfield" placeholder="Start typing to get recommendations..." class="search"/><input class="button" type="submit" name="Submit" value="Add" />%>
+          <%#*</span>%>
+        <%#*</div>%>
+        <%#*<div style="padding:5px 5px 0px 5px;">%>
+								<%#*Best Uses : <input style="margin-left:0px;" type="text" name="textfield" placeholder="Start typing to get recommendations..." class="search"/><input class="button" type="submit" name="Submit" value="Add" />%>
+        <%#*</div>%>
+
+        <%#*<div style="padding:5px 5px 0px 5px;">%>
+								<%#*Would you recommend this product to your friend<input class="button" type="submit" name="Submit" value="Yes" onclick="divCarName.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />%>
+        <%#*</div>%>
+        <%#*<div style="padding:0px 5px 20px 5px;">%>
+          <%#*<a href="index.html"><input style="background-color:#006CF9;color:#ffffff;float:right;"  type="submit" name="Submit" Value="Share This Review">%>
+            <%#*</input></a>%>
+        <%#*</div>%>
+
+
+      <%#*</div>%>
+
+      <%= render :partial => 'reviews/review_block' %>
+
+    </div>
+
+    <div class="">
+      <span style="background-color:#E6E6E6;" class="tabstyle">
+        <a style="color:#000000;font-style:none;">All Feeds</a>
+      </span>
+      <span class="tabstyle" style="margin-left:-2px;">
+        <a class="" href="#" >Specification</a>
+      </span>
+      <span class="tabstyle">
+        <a class="">Questions</a>
+      </span>
+    </div>
+
+    <div class="main-content-section">
+      <div class="feedcontentheader">
+        <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+        reviewed <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+        <div class="feeddate">
+          Reviewed on Sep 8th 2011
+        </div>
+        <div class="feedcontent">
+          I bought punto car last week, its one of the best car i have driven. Its road sense and stability is excellent. Look of the care is also good. Only drawback is the interior of the car.<a class="feedlink">more...</a>
+        </div>
+        <div class="feedcontent">
+          <span><a>10 people found it useful.</a></span>
+          <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+        </div>
+      </div>
+      <div class="feedcontentheader">
+        <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+        shared a tip on <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+        <div class="feeddate">
+          Shared on Sep 8th 2011
+        </div>
+        <div class="feedcontent">
+          I bought punto car last week, its one of the best car i have driven. Its road sense and stability is excellent. Look of the care is also good. Only drawback is the interior of the car.<a class="feedlink">more...</a>
+        </div>
+        <div class="feedcontent">
+          <span><a>10 people found it useful.</a></span>
+          <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+        </div>
+      </div>
+      <div class="feedcontentheader">
+        <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+        asked a question on <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+        <div class="feeddate">
+          Asked on Sep 8th 2011
+        </div>
+        <div class="feedcontent">
+          I bought punto car last week, its one of the best car i have driven. Its road sense and stability is excellent. Look of the care is also good. Only drawback is the interior of the car.<a class="feedlink">more...</a>
+        </div>
+        <div class="feedcontent">
+          <span><a>10 people found it useful.</a></span>
+          <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="main-subcontent">
+  <div class="uiHeaderSection">
+    <div class="uisidepanelheadercontent">
+      Related Cars
+    </div>
+  </div>
+  <div class="uiSidePanelContent">
+    <div class="uisidePanelContent">
+
+      <%= render :partial=> 'itemrelationships/relateditem',:collection => @item.relatedcars  %>
+
+      <div>
+        <img alt="car" class="mediumimage" src="/assets/MarutiRitz_100x60.jpg"/>
+        <div>
+          Maruti Ritz
+        </div>
+        <div>
+          3 Star Rating
+        </div>
+        <div>
+          <a class="feedlink">Follow</a>
+        </div>
+        <div>
+          Rahul, Deepak and 100 other people owns this.
+        </div>
+        <hr/>
+      </div>
+      <div>
+        <img alt="car" class="mediumimage" src="/assets/Lancer.jpg"/>
+        <div>
+          Maruti Ritz
+        </div>
+        <div>
+          3 Star Rating
+        </div>
+        <div>
+          <a class="feedlink">Follow</a>
+        </div>
+        <div>
+          Rahul, Deepak and 100 other people owns this.
+        </div>
+        <hr/>
+      </div>
+    </div>
+    <div>
+      <a class="feedlink centeritem">More Items...</a>
+    </div>
+  </div>
+  <div class="uiHeaderSection">
+    <div class="uisidepanelheadercontent">
+      Top Hatchback Cars
+    </div>
+  </div>
+  <div class="uiSidePanelContent">
+    <div class="uisidePanelContent">
+      <div>
+        <img alt="car" class="mediumimage" src="/assets/MarutiRitz_100x60.jpg"/>
+        <div>
+          Maruti Ritz
+        </div>
+        <div>
+          3 Star Rating
+        </div>
+        <div>
+          <a class="feedlink">Follow</a>
+        </div>
+        <div>
+          Rahul, Deepak and 100 other people owns this.
+        </div>
+        <hr/>
+      </div>
+      <div>
+        <img alt="car" class="mediumimage" src="/assets/Lancer.jpg"/>
+        <div>
+          Maruti Ritz
+        </div>
+        <div>
+          3 Star Rating
+        </div>
+        <div>
+          <a class="feedlink">Follow</a>
+        </div>
+        <div>
+          Rahul, Deepak and 100 other people owns this.
+        </div>
+        <hr/>
+      </div>
+    </div>
+    <div>
+      <a class="feedlink centeritem">More Items...</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<%#= @item.inverse_relateditems.inspect %>
+
+<%#*Manufacturer: <%= @item.manufacturer.inspect %>  <%# <hr />%>
+
+<%#= @item.accessories.inspect %> <%# <hr />%>
+
+<%#= @item.relatedcars.inspect %> <%# <hr />%>

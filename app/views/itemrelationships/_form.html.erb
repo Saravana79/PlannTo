@@ -1,0 +1,17 @@
+<%= form_for(@itemrelationship) do |f| %>
+  <% if @itemrelationship.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@itemrelationship.errors.count, "error") %> prohibited this itemrelationship from being saved:</h2>
+
+      <ul>
+      <% @itemrelationship.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
