@@ -12,10 +12,14 @@ class Item < ActiveRecord::Base
 
   belongs_to :user, :foreign_key => 'created_by'
 
-  has_many :attribute_values
+  has_many :attribute_values, :include => :attribute 
   has_many :reviews
   has_many :pros
   has_many :cons
   has_many :best_uses
+
+  searchable :auto_index => true, :auto_remove => true  do
+    text :name, :boost => 4.0,  :as => :name_ac            
+  end
 
 end

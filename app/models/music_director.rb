@@ -1,0 +1,3 @@
+class MusicDirector < Item
+
+end 

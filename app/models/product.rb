@@ -17,6 +17,9 @@ has_many :accessories,
          :through => :itemrelationships
          #:class_name => 'Accessory'
         # :source => :accessory
+        
+
+  
 
 
 end

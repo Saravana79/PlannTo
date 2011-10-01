@@ -1,0 +1,6 @@
+class Movie < Item
+end
+
+
+
+
