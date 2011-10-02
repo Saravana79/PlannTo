@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_filter :authenticate_user!
+#  before_filter :authenticate_user!
   # GET /items
   # GET /items.json
   def index
@@ -35,14 +35,31 @@ class ItemsController < ApplicationController
 #@rel.relationtype = 'Manufacturer'
 #@rel.save
 
-    @item = Car.find(5)
-#@car.product_list = "Punto"
-    #@car.comments.create(:title => "Punto is a great Car",:comment => "This is a nice car to drive along")
-    #@comments = @car.comments
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @items }
-    end
+    @car = Car.find(5).manufacturer
+    
+    
+
+     result = Sunspot.search(Car) do 
+        keywords params[:q]
+        facet :manufacturer
+        dynamic :features do
+          #with(:Price).greater_than(1800000)
+          facet(:Price)
+          facet(:Engine)
+          facet(:'Fuel Economy [City]')
+        end
+        
+     end
+     # if result.facet( :manufacturer )
+     #    @facet_rows = result.facet(:manufacturer).rows  
+     #  end
+     
+    @item = result
+
+    #respond_to do |format|
+    #  format.html  index.html.erb
+    #  format.json { render json: @items }
+    # end
   end
 
   # GET /items/1
