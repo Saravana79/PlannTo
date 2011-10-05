@@ -1,26 +1,26 @@
 class ItemsController < ApplicationController
-#  before_filter :authenticate_user!
+  #  before_filter :authenticate_user!
   # GET /items
   # GET /items.json
   def index
     #@items = Item.all
-#    @items = Car.all
-#
-#    @car = Car.new
-#    @car.name = 'Fiat Grande Punto 2 '
-#    @car.description = 'Grande Punto Version 2'
-#    @car.editablebynonadmin = false
-#    @car.isgroupheader = false
-#    @car.needapproval = false
+    #    @items = Car.all
+    #
+    #    @car = Car.new
+    #    @car.name = 'Fiat Grande Punto 2 '
+    #    @car.description = 'Grande Punto Version 2'
+    #    @car.editablebynonadmin = false
+    #    @car.isgroupheader = false
+    #    @car.needapproval = false
 
- #   @car = Car.find :last
-#    @itemtype = Itemtype.find_by_itemtype('Car')
-  #  @manufacturer = Manufacturer.find_by_name('Fiat')
-   # @accessories = Accessory.find_by_name 'Car'
-   # @relatedcars = Car.all
+    #   @car = Car.find :last
+    #    @itemtype = Itemtype.find_by_itemtype('Car')
+    #  @manufacturer = Manufacturer.find_by_name('Fiat')
+    # @accessories = Accessory.find_by_name 'Car'
+    # @relatedcars = Car.all
 
-  #  @car.manufacturer = @manufacturer
-#    @car.itemtype = @itemtype
+    #  @car.manufacturer = @manufacturer
+    #    @car.itemtype = @itemtype
 
 
     #@car.itemrelationship.relationtype = 'Manufacturer'
@@ -28,31 +28,31 @@ class ItemsController < ApplicationController
     #@car.relatedcars = @relatedcars
 
     #@car.save
-#    Itemrelationship.create(:item => @car, :relateditem => @manufacturer, :relationtype => "Manufacturer")
-#@rel = Itemrelationship.new #.create(@car,:relationtype => "Manufacturer")
-#@rel.car = @car
-#@rel.manufacturer = @manufacturer
-#@rel.relationtype = 'Manufacturer'
-#@rel.save
+    #    Itemrelationship.create(:item => @car, :relateditem => @manufacturer, :relationtype => "Manufacturer")
+    #@rel = Itemrelationship.new #.create(@car,:relationtype => "Manufacturer")
+    #@rel.car = @car
+    #@rel.manufacturer = @manufacturer
+    #@rel.relationtype = 'Manufacturer'
+    #@rel.save
 
     @car = Car.find(5).manufacturer
     
     
 
-     result = Sunspot.search(Car) do 
-        keywords params[:q]
-        facet :manufacturer
-        dynamic :features do
-          #with(:Price).greater_than(1800000)
-          facet(:Price)
-          facet(:Engine)
-          facet(:'Fuel Economy [City]')
-        end
+    result = Sunspot.search(Car) do
+      keywords params[:q]
+      facet :manufacturer
+      dynamic :features do
+        #with(:Price).greater_than(1800000)
+        facet(:Price)
+        facet(:Engine)
+        facet(:'Fuel Economy [City]')
+      end
         
-     end
-     # if result.facet( :manufacturer )
-     #    @facet_rows = result.facet(:manufacturer).rows  
-     #  end
+    end
+    # if result.facet( :manufacturer )
+    #    @facet_rows = result.facet(:manufacturer).rows
+    #  end
      
     @item = result
 
@@ -133,5 +133,13 @@ class ItemsController < ApplicationController
       format.html { redirect_to items_url }
       format.json { head :ok }
     end
+  end
+
+  def autocomplete_items
+    @items = Sunspot.search(Item) do
+      keywords params[:term]
+    end
+
+    render :json => @items.results.collect{ |item| {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg"} }
   end
 end

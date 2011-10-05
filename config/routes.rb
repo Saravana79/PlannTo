@@ -14,7 +14,11 @@ PlanNto::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-      resources :items
+      resources :items do
+        collection do
+          get "autocomplete_items"
+        end
+      end
       resources :reviews
   # Sample resource route with options:
   #   resources :products do
