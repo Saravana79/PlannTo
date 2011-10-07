@@ -108,12 +108,29 @@
       </p>
     </div>
    <script type="text/javascript">
+     $("#ui-active-menuitem").mouseout(function() {
+      $("#ui-active-menuitem").hide();
+    });
+
     $( "#plannToSearch" ).autocomplete({
       minLength: 3,
       format: "js",
       source: "<%=autocomplete_items_items_url%>",
+      focus:function(e,ui) {
+
+        // return the original title when lose focus
+        $(".autocomplete").remove();            
+            $.each(JSON.parse(ui.item.children), function(i, row) {          
+          $("input").val($("#ui-active-menuitem").val());
+            $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'><li class='autocomplete_item' id=''>" + row.value +  "</li></ul></div>");
+            // add class selecting to mark the item
+            $("#ui-active-menuitem").addClass('selecting');      
+          });
+    },
       select: function( event, ui ) {
-        //return false;
+        alert($(this).parent().siblings(".autocomplete"));
+        $(this).parent().siblings(".autocomplete").show();
+        return false;
       }
     })
     .data( "autocomplete" )._renderItem = function( ul, item,index ) {
@@ -139,6 +156,65 @@
         /*left: 15px;*/
         z-index: 3;
       }
+
+      /*AUTOCOMPLETE CSS FOR TEST*/
+      /*autocomplete*/
+.auto_complete,
+.autocomplete {
+	width: 300px;
+         clear: left;
+    float: left;
+	background: #E3E9FF;
+	 z-index:999999;
+	}
+.auto_complete ul,
+.autocomplete ul {
+		border:0px ;
+		/*solid #888;*/
+		 margin:0;
+		padding:0;
+		width:100%;
+		list-style-type:none;
+		}
+.auto_complete ul li,
+.autocomplete ul li{
+		margin:0; padding:3px; color:black;
+		cursor:hand;cursor:pointer;}
+.auto_complete ul li.selected,
+.autocomplete ul li.selected{
+		background-color: #68e;
+	 }
+
+.auto_complete ul li:hover,
+.autocomplete ul li:hover {
+		background-color:  #68e;
+		border:0px;
+		 }
+
+.auto_complete ul strong.highlight,
+.autocomplete ul strong.highlight { background-color:  #68e;;
+	 margin:0; padding:0; }
+
+.autocomplete2{font-size:11px;}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  border:1px solid #888;
+  margin:0;
+  padding:0;
+
+
+	background: #E3E9FF;
+	 z-index:999999;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+
+/*======enbd autocomplete==*/
     </style>
   </body>
 </html>
