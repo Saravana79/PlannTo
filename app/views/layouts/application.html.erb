@@ -5,25 +5,25 @@
     <title>PlannTo - Empowered Customers</title>
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag 'application' %>
-     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-1.5.1.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js"></script>
     <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js"></script>
-  
+
     <script type="text/javascript">
       var i = 0;
 
       function CarClick(){
-      var obj = document.getElementById("CarSubMenuDiv");
+        var obj = document.getElementById("CarSubMenuDiv");
 
-      if (obj.style.display == "block") {
-      document.getElementById("CarSubMenuDiv").style.display = "none";
-      }
-      else {
-      document.getElementById("CarSubMenuDiv").style.display = "block";
+        if (obj.style.display == "block") {
+          document.getElementById("CarSubMenuDiv").style.display = "none";
+        }
+        else {
+          document.getElementById("CarSubMenuDiv").style.display = "block";
 
-      }
-      return true;
+        }
+        return true;
       };
     </script>
   </head>
@@ -107,38 +107,40 @@
         <a href="#" target="_blank">| Copyright &copy; PlannTo |</a>
       </p>
     </div>
-   <script type="text/javascript">
-     $("#ui-active-menuitem").mouseout(function() {
-      $("#ui-active-menuitem").hide();
-    });
+    <script type="text/javascript">
+      $("#ui-active-menuitem").mouseout(function() {
+        $("#ui-active-menuitem").hide();
+      });
 
-    $( "#plannToSearch" ).autocomplete({
-      minLength: 3,
-      format: "js",
-      source: "<%=autocomplete_items_items_url%>",
-      focus:function(e,ui) {
-
-        // return the original title when lose focus
-        $(".autocomplete").remove();            
-            $.each(JSON.parse(ui.item.children), function(i, row) {          
+      $( "#plannToSearch" ).autocomplete({
+        minLength: 3,
+        format: "js",
+        source: "<%=autocomplete_items_items_url%>",
+        focus:function(e,ui) {
+          // return the original title when lose focus
+          $(".autocomplete").remove();
           $("input").val($("#ui-active-menuitem").val());
-            $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'><li class='autocomplete_item' id=''>" + row.value +  "</li></ul></div>");
-            // add class selecting to mark the item
-            $("#ui-active-menuitem").addClass('selecting');      
+          var list  ='';
+          $.each(ui.item.children, function(i, row) {
+            list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
           });
-    },
-      select: function( event, ui ) {
-        alert($(this).parent().siblings(".autocomplete"));
-        $(this).parent().siblings(".autocomplete").show();
-        return false;
-      }
-    })
-    .data( "autocomplete" )._renderItem = function( ul, item,index ) {
-      return $( "<li></li>" )
-      .data( "item.autocomplete", item )
-      .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span>" +  "</a>" )
-      .appendTo( ul );
-    };
+          $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
+
+          // add class selecting to mark the item
+          $("#ui-active-menuitem").addClass('selecting');
+        },
+        select: function( event, ui ) {
+          // alert($(this).parent().siblings(".autocomplete"));
+          // $(this).parent().siblings(".autocomplete").show();
+          //return false;
+        }
+      })
+      .data( "autocomplete" )._renderItem = function( ul, item,index ) {
+        return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span>" +  "</a>" )
+        .appendTo( ul );
+      };
     </script>
     <style type="text/css">
       /* TEMPORARY FIX. TO BE REMOVED SOON*/
@@ -159,62 +161,62 @@
 
       /*AUTOCOMPLETE CSS FOR TEST*/
       /*autocomplete*/
-.auto_complete,
-.autocomplete {
-	width: 300px;
-         clear: left;
-    float: left;
-	background: #E3E9FF;
-	 z-index:999999;
-	}
-.auto_complete ul,
-.autocomplete ul {
-		border:0px ;
-		/*solid #888;*/
-		 margin:0;
-		padding:0;
-		width:100%;
-		list-style-type:none;
-		}
-.auto_complete ul li,
-.autocomplete ul li{
-		margin:0; padding:3px; color:black;
-		cursor:hand;cursor:pointer;}
-.auto_complete ul li.selected,
-.autocomplete ul li.selected{
-		background-color: #68e;
-	 }
+      .auto_complete,
+      .autocomplete {
+        width: 300px;
+        clear: left;
+        float: left;
+        background: #E3E9FF;
+        z-index:999999;
+      }
+      .auto_complete ul,
+      .autocomplete ul {
+        border:0px ;
+        /*solid #888;*/
+        margin:0;
+        padding:0;
+        width:100%;
+        list-style-type:none;
+      }
+      .auto_complete ul li,
+      .autocomplete ul li{
+        margin:0; padding:3px; color:black;
+        cursor:hand;cursor:pointer;}
+      .auto_complete ul li.selected,
+      .autocomplete ul li.selected{
+        background-color: #68e;
+      }
 
-.auto_complete ul li:hover,
-.autocomplete ul li:hover {
-		background-color:  #68e;
-		border:0px;
-		 }
+      .auto_complete ul li:hover,
+      .autocomplete ul li:hover {
+        background-color:  #68e;
+        border:0px;
+      }
 
-.auto_complete ul strong.highlight,
-.autocomplete ul strong.highlight { background-color:  #68e;;
-	 margin:0; padding:0; }
+      .auto_complete ul strong.highlight,
+      .autocomplete ul strong.highlight { background-color:  #68e;;
+                                          margin:0; padding:0; }
 
-.autocomplete2{font-size:11px;}
+      .autocomplete2{font-size:11px;}
 
-div.autocomplete {
-  position:absolute;
-  width:250px;
-  border:1px solid #888;
-  margin:0;
-  padding:0;
+      div.autocomplete {
+        position:absolute;
+        width:250px;
+        border:1px solid #888;
+        margin:0;
+        padding:0;
 
 
-	background: #E3E9FF;
-	 z-index:999999;
-}
-div.autocomplete ul {
-  list-style-type:none;
-  margin:0;
-  padding:0;
-}
+        background: #E3E9FF;
+        z-index:999999;
+      }
+      div.autocomplete ul {
+        list-style-type:none;
+        margin:0;
+        padding:0;
+      }
 
-/*======enbd autocomplete==*/
+      /*======enbd autocomplete==*/
     </style>
   </body>
 </html>

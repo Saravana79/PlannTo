@@ -136,23 +136,26 @@ class ItemsController < ApplicationController
   end
 
   def autocomplete_items
-    @car = Car.find(:first)
-    logger.info @car.cargroup
-    
     @items = Sunspot.search(Car) do
       keywords params[:term]
       # order_by :itemtype_id, :asc
     end
-    @results  = Hash.new
-    @results  = @items.results.collect{ |item|
+    
+    @results  = Array.new
+    @items.results.each do |item|
       if item.cargroup.nil?
-        {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }
+        @results  << {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }
       else
-        logger.info(item.cargroup.id)
-        {:id => item.id, :value => "#{item.cargroup.name}", :imgsrc => "/images/B16.jpg", :header => true, :children => [{:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }].to_json}
-        
+        @added  =false
+          @results.each do |result|
+            if result[:id] == item.cargroup.id
+               result[:children] << {:id => item.id, :value => "#{item.name}", :imgsrc => "/test/B16.jpg", :header => false }
+              @added  = true
+            end
+          end        
+        @results  << {:id => item.cargroup.id, :value => "#{item.cargroup.name}", :imgsrc => "/images/B16.jpg", :header => true, :children => [{:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }]} if @added == false
       end
-    }
+    end
     render :json => @results
   end
 end
