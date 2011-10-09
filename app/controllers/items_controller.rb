@@ -135,27 +135,4 @@ class ItemsController < ApplicationController
     end
   end
 
-  def autocomplete_items
-    @items = Sunspot.search(Car) do
-      keywords params[:term]
-      # order_by :itemtype_id, :asc
-    end
-    
-    @results  = Array.new
-    @items.results.each do |item|
-      if item.cargroup.nil?
-        @results  << {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }
-      else
-        @added  =false
-          @results.each do |result|
-            if result[:id] == item.cargroup.id
-               result[:children] << {:id => item.id, :value => "#{item.name}", :imgsrc => "/test/B16.jpg", :header => false }
-              @added  = true
-            end
-          end        
-        @results  << {:id => item.cargroup.id, :value => "#{item.cargroup.name}", :imgsrc => "/images/B16.jpg", :header => true, :children => [{:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }]} if @added == false
-      end
-    end
-    render :json => @results
-  end
 end

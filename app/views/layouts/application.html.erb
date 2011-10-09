@@ -112,35 +112,54 @@
         $("#ui-active-menuitem").hide();
       });
 
+      $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
+          var self = this;         
+            $.each( items, function( index, item ) {
+            self._renderItem( ul, item, index );            
+          });
+          item = {value: "Search more items...", id: "0", imgsrc: ""}
+          self._renderItem( ul, item, -1 );        
+        };
+
       $( "#plannToSearch" ).autocomplete({
         minLength: 3,
         format: "js",
-        source: "<%=autocomplete_items_items_url%>",
+        source: "/search/autocomplete_items",
         focus:function(e,ui) {
           // return the original title when lose focus
-          $(".autocomplete").remove();
-          $("input").val($("#ui-active-menuitem").val());
-          var list  ='';
-          $.each(ui.item.children, function(i, row) {
-            list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
-          });
-          $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
+         // $(".autocomplete").remove();
+        //  $("input").val($("#ui-active-menuitem").val());
+        //  var list  ='';
+        //  $.each(ui.item.children, function(i, row) {
+        //    list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
+       //   });
+       //   $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
 
           // add class selecting to mark the item
-          $("#ui-active-menuitem").addClass('selecting');
+       //   $("#ui-active-menuitem").addClass('selecting');
         },
         select: function( event, ui ) {
-          // alert($(this).parent().siblings(".autocomplete"));
-          // $(this).parent().siblings(".autocomplete").show();
-          //return false;
+          if (ui.item.id  == 0){
+            location.href = "/search/search_items?q=" + $("#plannToSearch").val();
+            return false;
+          }          
         }
       })
       .data( "autocomplete" )._renderItem = function( ul, item,index ) {
+        if (index == -1){
+          return $( "<li></li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a class='searchMore'>" +item.value+ "" +  "</a>" )
+        .appendTo( ul );
+        }
+        else{
         return $( "<li></li>" )
         .data( "item.autocomplete", item )
         .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span>" +  "</a>" )
         .appendTo( ul );
+        }
       };
+
     </script>
     <style type="text/css">
       /* TEMPORARY FIX. TO BE REMOVED SOON*/
@@ -148,20 +167,28 @@
       {
         font-family: "Comic Sans MS";
         font-size: 12px;
-        font-weight: 700;
         color: #000066;
-        letter-spacing: 1px;
         float: right;
-        /*width: 100%;*/
         position: relative;
         top: 5px;
-        /*left: 15px;*/
+      }
+
+      .searchMore
+      {
+        font-family: "Comic Sans MS";
+        font-size: 12px;
+        font-weight: 700;
+        color: #000066;
+        text-align: center;
+        letter-spacing: 1px;
+        /*width: 100%;*/
+        position: relative;
         z-index: 3;
       }
 
       /*AUTOCOMPLETE CSS FOR TEST*/
       /*autocomplete*/
-      .auto_complete,
+    /*  .auto_complete,
       .autocomplete {
         width: 300px;
         clear: left;
@@ -173,7 +200,7 @@
       .autocomplete ul {
         border:0px ;
         /*solid #888;*/
-        margin:0;
+       /* margin:0;
         padding:0;
         width:100%;
         list-style-type:none;
@@ -214,7 +241,7 @@
         list-style-type:none;
         margin:0;
         padding:0;
-      }
+      }*/
 
       /*======enbd autocomplete==*/
     </style>
