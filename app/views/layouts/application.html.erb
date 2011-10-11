@@ -113,13 +113,13 @@
       });
 
       $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
-          var self = this;         
-            $.each( items, function( index, item ) {
-            self._renderItem( ul, item, index );            
-          });
-          item = {value: "Search more items...", id: "0", imgsrc: ""}
-          self._renderItem( ul, item, -1 );        
-        };
+        var self = this;
+        $.each( items, function( index, item ) {
+          self._renderItem( ul, item, index );
+        });
+        item = {value: "Search more items...", id: "0", imgsrc: ""}
+        self._renderItem( ul, item, -1 );
+      };
 
       $( "#plannToSearch" ).autocomplete({
         minLength: 3,
@@ -128,16 +128,16 @@
         focus:function(e,ui) {
           return false
           // return the original title when lose focus
-         // $(".autocomplete").remove();
-        //  $("input").val($("#ui-active-menuitem").val());
-        //  var list  ='';
-        //  $.each(ui.item.children, function(i, row) {
-        //    list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
-       //   });
-       //   $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
+          // $(".autocomplete").remove();
+          //  $("input").val($("#ui-active-menuitem").val());
+          //  var list  ='';
+          //  $.each(ui.item.children, function(i, row) {
+          //    list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
+          //   });
+          //   $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
 
           // add class selecting to mark the item
-       //   $("#ui-active-menuitem").addClass('selecting');
+          //   $("#ui-active-menuitem").addClass('selecting');
         },
         select: function( event, ui ) {
           if (ui.item.id  == 0){
@@ -150,15 +150,15 @@
       .data( "autocomplete" )._renderItem = function( ul, item,index ) {
         if (index == -1){
           return $( "<li></li>" )
-        .data( "item.autocomplete", item )
-        .append( "<a class='searchMore'>" +item.value+ "" +  "</a>" )
-        .appendTo( ul );
+          .data( "item.autocomplete", item )
+          .append( "<a class='searchMore'>" +item.value+ "" +  "</a>" )
+          .appendTo( ul );
         }
         else{
-        return $( "<li></li>" )
-        .data( "item.autocomplete", item )
-        .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span>" +  "</a>" )
-        .appendTo( ul );
+          return $( "<li></li>" )
+          .data( "item.autocomplete", item )
+          .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span>" +  "</a>" )
+          .appendTo( ul );
         }
       };
 
@@ -188,62 +188,66 @@
         z-index: 3;
       }
 
+      .ui-autocomplete-loading {
+        background:url('../images/images.jpg') no-repeat right center ;
+        background-color:#ffffff;}
+
       /*AUTOCOMPLETE CSS FOR TEST*/
       /*autocomplete*/
-    /*  .auto_complete,
-      .autocomplete {
-        width: 300px;
-        clear: left;
-        float: left;
-        background: #E3E9FF;
-        z-index:999999;
-      }
-      .auto_complete ul,
-      .autocomplete ul {
-        border:0px ;
-        /*solid #888;*/
-       /* margin:0;
-        padding:0;
-        width:100%;
-        list-style-type:none;
-      }
-      .auto_complete ul li,
-      .autocomplete ul li{
-        margin:0; padding:3px; color:black;
-        cursor:hand;cursor:pointer;}
-      .auto_complete ul li.selected,
-      .autocomplete ul li.selected{
-        background-color: #68e;
-      }
+      /*  .auto_complete,
+        .autocomplete {
+          width: 300px;
+          clear: left;
+          float: left;
+          background: #E3E9FF;
+          z-index:999999;
+        }
+        .auto_complete ul,
+        .autocomplete ul {
+          border:0px ;
+          /*solid #888;*/
+      /* margin:0;
+       padding:0;
+       width:100%;
+       list-style-type:none;
+     }
+     .auto_complete ul li,
+     .autocomplete ul li{
+       margin:0; padding:3px; color:black;
+       cursor:hand;cursor:pointer;}
+     .auto_complete ul li.selected,
+     .autocomplete ul li.selected{
+       background-color: #68e;
+     }
 
-      .auto_complete ul li:hover,
-      .autocomplete ul li:hover {
-        background-color:  #68e;
-        border:0px;
-      }
+     .auto_complete ul li:hover,
+     .autocomplete ul li:hover {
+       background-color:  #68e;
+       border:0px;
+     }
 
-      .auto_complete ul strong.highlight,
-      .autocomplete ul strong.highlight { background-color:  #68e;;
-                                          margin:0; padding:0; }
+     .auto_complete ul strong.highlight,
+     .autocomplete ul strong.highlight { background-color:  #68e;;
+                                         margin:0; padding:0; }
 
-      .autocomplete2{font-size:11px;}
+     .autocomplete2{font-size:11px;}
 
-      div.autocomplete {
-        position:absolute;
-        width:250px;
-        border:1px solid #888;
-        margin:0;
-        padding:0;
+     div.autocomplete {
+       position:absolute;
+       width:250px;
+       border:1px solid #888;
+       margin:0;
+       padding:0;
 
 
-        background: #E3E9FF;
-        z-index:999999;
-      }
-      div.autocomplete ul {
-        list-style-type:none;
-        margin:0;
-        padding:0;
-      }*/
+       background: #E3E9FF;
+       z-index:999999;
+     }
+     div.autocomplete ul {
+       list-style-type:none;
+       margin:0;
+       padding:0;
+     }*/
 
       /*======enbd autocomplete==*/
     </style>
