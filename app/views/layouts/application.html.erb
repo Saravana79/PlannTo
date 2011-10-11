@@ -126,6 +126,7 @@
         format: "js",
         source: "/search/autocomplete_items",
         focus:function(e,ui) {
+          return false
           // return the original title when lose focus
          // $(".autocomplete").remove();
         //  $("input").val($("#ui-active-menuitem").val());
@@ -142,7 +143,8 @@
           if (ui.item.id  == 0){
             location.href = "/search/search_items?q=" + $("#plannToSearch").val();
             return false;
-          }          
+          }
+          return false;
         }
       })
       .data( "autocomplete" )._renderItem = function( ul, item,index ) {
