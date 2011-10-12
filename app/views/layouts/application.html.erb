@@ -157,7 +157,7 @@
         else{
           return $( "<li></li>" )
           .data( "item.autocomplete", item )
-          .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span>" +  "</a>" )
+          .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<div style='float:right;'><span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></div></a>" )
           .appendTo( ul );
         }
       };
@@ -171,8 +171,10 @@
         font-size: 12px;
         color: #000066;
         float: right;
+        text-align: right;
         position: relative;
-        top: 5px;
+       /* top: 5px;*/
+        width:100%;
       }
 
       .searchMore
