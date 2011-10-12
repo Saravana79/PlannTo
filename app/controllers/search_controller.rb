@@ -4,7 +4,8 @@ class SearchController < ApplicationController
     @page  = params[:page].nil? ? 1 : params[:page].to_i
 
     @items = Sunspot.search(Manufacturer,CarGroup ) do
-      keywords params[:q]
+      keywords params[:q], :fields => :name
+       order_by :class, :desc
       paginate(:page => params[:page], :per_page => 10)
       # order_by :itemtype_id, :asc
     end
