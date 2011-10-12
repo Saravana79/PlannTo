@@ -3,7 +3,7 @@ class SearchController < ApplicationController
   def search_items
     @page  = params[:page].nil? ? 1 : params[:page].to_i
 
-    @items = Sunspot.search(CarGroup, Manufacturer) do
+    @items = Sunspot.search(Manufacturer,CarGroup ) do
       keywords params[:q]
       paginate(:page => params[:page], :per_page => 10)
       # order_by :itemtype_id, :asc
@@ -19,8 +19,9 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
-    @items = Sunspot.search(CarGroup, Manufacturer) do
-      keywords params[:term]
+    @items = Sunspot.search(Manufacturer,CarGroup) do
+      keywords params[:term], :fields => :name 
+      order_by :class, :desc
       paginate(:page => 1, :per_page => 6)
       # order_by :itemtype_id, :asc
     end
