@@ -1,0 +1,110 @@
+
+<%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post}) do |f| %>
+  <b>Search Criteria:</b><br/>
+  <label><b>Fuel Type</b></label><br/>
+  <label><b>Petrol</b></label>
+  <%= radio_button_tag  :fuel_type, "Petrol", @petrol %>
+  <label><b>Diesel</b></label>
+  <%= radio_button_tag  :fuel_type, "Diesel", @diesel %>
+  <label><b>Both</b></label>
+  <%= radio_button_tag  :fuel_type, "", @both %><br/>
+  <label><b>Manufacturer</b></label>
+  <%=hidden_field_tag :manufacturer, @manufacturer%>
+  <input type="text" name="textfield" value="<%=@manufacturer%>" class="search" id="searchManufacturer"/><br/>
+
+  <label><b>Price Range</b></label>
+  <div id="price" class="sliderText" style="color: orange;"></div><div id="priceSlider"></div>
+  <%= hidden_field_tag  :min_price, @min_price %>
+  <%= hidden_field_tag :max_price, @max_price  %><br/>
+  <%=f.submit "Search"%>
+<%end%>
+<div class="col main_col w4_5">
+  <h1 class="heading">Search Results</h1>
+  <%@items.results.each do |item|%>
+    <div class="col w4_5 feed_item p1">
+      <div class="col w0_5">
+        <a>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="/images/B16.jpg"/>
+        </a>
+      </div>
+      <div class="e_col w3_5">
+        <h2>
+          <a href="">
+            <%=item.name%>
+          </a>
+        </h2>
+        <div class="feed_item_question_info">
+        </div>
+      </div>
+    </div>
+  <%end%>
+  <div class="e_col w3_5" style="display:<%=@display%>">
+    <h2></h2>
+    <div>
+      <a href="/search/index?manufacturer=<%=params[:manufacturer]%>&
+         min_price=<%=params[:min_price]%>&max_price=<%=params[:max_price]%>
+         &fuel_type=<%=params[:fuel_type]%>&page=<%=@page%>">
+        Show Next Items...
+      </a>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  .w4_5 {
+    width: 600px;
+  }
+
+  h1.heading {
+    border-bottom: 1px solid #B0B0B0;
+    margin-bottom: 1px;
+    padding-bottom: 0.4em;
+  }
+
+  .w0_5 {
+    width: 50px;
+  }
+  .col, .e_col {
+    float: left;
+    margin: 0 10px 0 0;
+  }
+  .feed_item {
+    border-bottom: 1px solid #E0E0E0;
+    float: left;
+    position: relative;
+  }
+  .p1 {
+    padding: 10px 0;
+  }
+</style>
+<script type="text/javascript">
+  $( "#searchManufacturer" ).autocomplete({
+    minLength: 3,
+    format: "js",
+    source: "/search/autocomplete_manufacturers",
+    focus:function(e,ui) {
+      return false
+    },
+    select: function( event, ui ) {
+      $("#manufacturer").val(ui.item.value);
+      //return false;
+    }
+  })
+  $(function() {
+    $( "#priceSlider" ).slider({
+      range: true,
+      min: 1000000,
+      max: 100000000,
+      values: [ <%=@min_price.to_i%>, <%=@max_price.to_i%> ],
+      slide: function( event, ui ) {
+        $( "#price" ).html( ui.values[ 0 ] + " Rs" + " - " + ui.values[ 1 ]+ " Rs" );
+        $( "#min_price" ).val( ui.values[ 0 ] );
+        $( "#max_price" ).val( ui.values[ 1 ] );
+      }
+    });
+    $( "#price" ).html( <%=@min_price.to_i%>  + " Rs" +
+      " - " + <%=@max_price.to_i%>  + " Rs" );
+    $( "#min_price" ).val( <%=@min_price.to_i%> );
+    $( "#max_price" ).val( <%=@max_price.to_i%> );
+  });
+</script>
