@@ -10,11 +10,12 @@ PlanNto::Application.routes.draw do
 
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+#  match 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-      resources :items 
+      resources :products
+      resources :items
       resources :reviews
   # Sample resource route with options:
   #   resources :products do

@@ -1,0 +1,13 @@
+<h1 class="bike-specs-title">SPECIFICATIONS</h1>
+<% @product_attributes.each do |category, product_attributes| %>
+  <h1><%= category %></h1>
+<div class="bike-specs-copy">
+  <div class="bike-specs">
+    <ul>
+      <% product_attributes.each do |product_attribute| %>
+        <li><strong><%= product_attribute.name %>.</strong><%= product_attribute.value %> <%= product_attribute.unit_of_measure %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

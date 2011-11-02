@@ -11,8 +11,8 @@ class Item < ActiveRecord::Base
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
 
   belongs_to :user, :foreign_key => 'created_by'
-
-  has_many :attribute_values, :include => :attribute 
+  has_many :attribute_values
+  has_many :item_attributes, :class_name => 'Attribute', :through => :attribute_values, :source => :attribute
   has_many :reviews
   has_many :pros
   has_many :cons

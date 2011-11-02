@@ -5,3 +5,4 @@ tmp/
 .sass-cache/
 solr/data/*
 solr/lib/*
+app/assets/
