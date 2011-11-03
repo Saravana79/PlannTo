@@ -20,6 +20,7 @@ gem 'jquery-rails'
 gem 'acts-as-taggable-on', '~>2.1.1'
 gem 'devise'
 gem 'sunspot_rails'
+gem 'acts_as_follower'
 # Use unicorn as the web server
 # gem 'unicorn'
 
