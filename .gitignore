@@ -6,3 +6,4 @@ tmp/
 solr/data/*
 solr/lib/*
 app/assets/
+vendor/bundle/
