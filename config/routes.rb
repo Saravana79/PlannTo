@@ -15,7 +15,13 @@ PlanNto::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
       resources :products
-      resources :items
+      resources :items do
+        member do
+          get 'plan_to_buy_item'
+          get 'own_a_item'
+          get 'follow_this_item'
+        end
+      end
       resources :reviews
   # Sample resource route with options:
   #   resources :products do

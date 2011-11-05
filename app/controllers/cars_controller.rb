@@ -1,0 +1,3 @@
+class CarsController < ProductsController
+
+end

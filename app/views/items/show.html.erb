@@ -39,10 +39,11 @@
     <div>
       <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
     </div>
+    <div id="comment-notice"></div>
     <div class="productbuttonsGrp">
-      <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>PlanTo Buy It</span></a></span>
-      <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>I Own It</span></a></span>
-      <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>Follow This Car</span></a></span>
+      <span class="productbuttons"><%= link_to(("<span>"+@item.plan_to_buy+"</span>").html_safe, plan_to_buy_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk") %></span>
+      <span class="productbuttons"><%= link_to(("<span>"+@item.own_a_item+"</span>").html_safe, own_a_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk") %></span>
+      <span class="productbuttons"><%= link_to(("<span>"+@item.follow_this_item+"</span>").html_safe, follow_this_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk") %></span>      
     </div>
     <div class="feedcontentheader">
       <div class="productcontentmain">

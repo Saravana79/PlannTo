@@ -36,5 +36,17 @@ class Car < Product
     end
   end
 
+  def plan_to_buy
+    "Plan to buy"
+  end
+
+  def own_a_item
+    "I Own it"
+  end
+
+  def follow_this_item
+    "Follow This Car"
+  end
+
   
 end

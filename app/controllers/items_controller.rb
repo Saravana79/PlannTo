@@ -65,7 +65,7 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
-    @item = Car.find(params[:id])
+    @item = Item.find(params[:id])
 
     #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
     #@item = Car.find params[:id]
@@ -133,6 +133,56 @@ class ItemsController < ApplicationController
       format.html { redirect_to items_url }
       format.json { head :ok }
     end
+  end
+
+  def plan_to_buy_item
+    follow = follow_item('Buyer')
+    if follow.blank?
+      flash[:notice] = "Wrong Item to buy"      
+    else
+      flash[:notice] = "Planning is saved"
+    end
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  def own_a_item
+    follow = follow_item('Owner')
+    if follow.blank?
+      flash[:notice] = "Wrong Item to be owned"
+    else
+      flash[:notice] = "Owner is saved"
+    end
+    respond_to do |format|
+      format.js { render :action => 'plan_to_buy_item'}
+    end
+  end
+
+  def follow_this_item
+    follow = follow_item('Follow')
+    if follow.blank?
+      flash[:notice] = "Wrong Item to be Followed"
+    else
+      flash[:notice] = "Follow is saved"
+    end
+    respond_to do |format|
+      format.js { render :action => 'plan_to_buy_item'}
+    end
+  end
+
+  private
+
+  def follow_item(follow_type)
+    @user = User.first
+    @user.follow_type = follow_type
+    @item = Item.find(params[:id])
+    if !@user.blank? && !@item.blank?
+      @user.follow(@item, @user.follow_type)
+    else
+      false
+    end
+
   end
 
 end
