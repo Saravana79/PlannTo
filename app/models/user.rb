@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
   attr_accessor :follow_type
-
+  acts_as_followable
   acts_as_follower  
 
   #has_many :attributes,:foreign_key => :created_by

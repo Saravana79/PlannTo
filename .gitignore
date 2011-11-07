@@ -7,3 +7,6 @@ solr/data/*
 solr/lib/*
 app/assets/
 vendor/bundle/
+.idea/
+log/
+

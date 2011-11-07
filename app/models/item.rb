@@ -17,10 +17,24 @@ class Item < ActiveRecord::Base
   has_many :pros
   has_many :cons
   has_many :best_uses
-  acts_as_follower
+  has_many :itemrelationships, :foreign_key => :item_id
+  has_many :relateditems,
+    :through => :itemrelationships
+  acts_as_followable
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :name, :boost => 4.0,  :as => :name_ac            
+    text :name, :boost => 4.0,  :as => :name_ac
+  end
+
+  def get_price_info(item_type)
+    item_attribute = item_attributes.first{|a| a.name == item_type}
+    attribute_value = item_attribute.attribute_values.where(:item_id => id).last
+    item_attribute.name + ' - ' + item_attribute.unit_of_measure + ' ' +
+      attribute_value.value + ' ( ' + attribute_value.addition_comment + ' )'
+  end
+
+  def unfollowing_related_items(user)
+    relateditems.select{|item| !user.following?(item) }
   end
 
 end

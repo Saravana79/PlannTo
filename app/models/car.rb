@@ -2,9 +2,9 @@
 # and open the template in the editor.
 
 class Car < Product
-  has_many :itemrelationships, :foreign_key => :item_id
-  has_many :relatedcars,
-    :through => :itemrelationships, :include => :cargroup
+#  has_many :itemrelationships, :foreign_key => :item_id
+#  has_many :relatedcars,
+#    :through => :itemrelationships, :include => :cargroup
   acts_as_taggable
   #  acts_as_taggable_on :product
   acts_as_commentable

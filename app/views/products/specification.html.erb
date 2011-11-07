@@ -1,0 +1,14 @@
+<h1 class="bike-specs-title">SPECIFICATIONS</h1>
+<% @item.specification.group_by(&:category_name).each do |category, product_attributes| %>
+
+<div class="bike-specs-copy">
+  <div class="bike-specs">
+    <h1><%= category %></h1>
+    <ul>
+      <% product_attributes.each do |product_attribute| %>
+        <li><strong><%= product_attribute.name %>.</strong><%= product_attribute.value %> <%= product_attribute.unit_of_measure %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<% end %>

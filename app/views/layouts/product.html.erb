@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+  <title>PlannTo - Empowered Customers</title>
+  <%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag 'application' %>
+  <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-1.5.1.min.js"></script>
+  <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js"></script>
+  <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+  <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js"></script>
+  <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery.idTabs.min.js"></script>
+
+  <script type="text/javascript">
+    var i = 0;
+
+    function CarClick() {
+      var obj = document.getElementById("CarSubMenuDiv");
+
+      if (obj.style.display == "block") {
+        document.getElementById("CarSubMenuDiv").style.display = "none";
+      }
+      else {
+        document.getElementById("CarSubMenuDiv").style.display = "block";
+
+      }
+      return true;
+    }
+    ;
+  </script>
+</head>
+<body style="padding-bottom: 0px;" class="body">
+<div id="container">
+<%= render 'shared/header_links' %>
+
+<div id="ContentPanel" class="contentpanel">
+  <%= render 'shared/left_nav' %>
+  <%= yield %>
+  <div id="main-subcontent">
+    
+    <%= render 'items/related_products'  %>
+    
+    <%= render 'items/hatchback_items' %>
+  </div>
+
+</div>
+</div>
+<%= render 'shared/footer'  %>
+<script type="text/javascript">
+  $("#ui-active-menuitem").mouseout(function() {
+    $("#ui-active-menuitem").hide();
+  });
+
+  $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
+    var self = this;
+    $.each(items, function(index, item) {
+      self._renderItem(ul, item, index);
+    });
+    item = {value: "Search more items...", id: "0", imgsrc: ""}
+    self._renderItem(ul, item, -1);
+  };
+
+  $("#plannToSearch").autocomplete({
+    minLength: 3,
+    format: "js",
+    source: "/search/autocomplete_items",
+    focus:function(e, ui) {
+      return false
+      // return the original title when lose focus
+      // $(".autocomplete").remove();
+      //  $("input").val($("#ui-active-menuitem").val());
+      //  var list  ='';
+      //  $.each(ui.item.children, function(i, row) {
+      //    list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
+      //   });
+      //   $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
+
+      // add class selecting to mark the item
+      //   $("#ui-active-menuitem").addClass('selecting');
+    },
+    select: function(event, ui) {
+      if (ui.item.id == 0) {
+        location.href = "/search/search_items?q=" + $("#plannToSearch").val();
+        return false;
+      }
+      return false;
+    }
+  })
+          .data("autocomplete")._renderItem = function(ul, item, index) {
+    if (index == -1) {
+      return $("<li></li>")
+              .data("item.autocomplete", item)
+              .append("<a class='searchMore'>" + item.value + "" + "</a>")
+              .appendTo(ul);
+    }
+    else {
+      return $("<li></li>")
+              .data("item.autocomplete", item)
+              .append("<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<div style='float:right;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+              .appendTo(ul);
+    }
+  };
+
+</script>
+
+</body>
+</html>

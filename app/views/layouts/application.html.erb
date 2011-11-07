@@ -29,84 +29,14 @@
   </head>
   <body style="padding-bottom: 0px;" class="body">
     <div id="container">
-      <div id="header">
-        <div class="headerright">
-          <form name="form1" id="form1" method="post" action="" class="search">
-            <!--Search...-->
-            <input type="text" name="textfield" value="" class="search" id="plannToSearch"/><input class="button" type="submit" name="Submit" value="GO" />
-          </form>
-        </div>
-        <ul class="headernav">
-          <li class="headerlinklogo ">
-            <a href="#" class="plannto">PlannTo</a>
-          </li>
-          <li class="headerlink ">
-            <a href="#">Home</a>
-          </li>
-          <li class="headerlink ">
-            <a href="" onclick="popup('popupwindowDiv');return false;">Explore</a>
-          </li>
-          <li class="headerlink ">
-            <a href="#">People</a>
-          </li>
-          <li class="headerlink ">
-            <a href="#">Messages</a>
-          </li>
-        </ul>
-      </div>
-      <div ID="blanket" class="blanket" style="display:none;">
-      </div>
-      <div ID="popupwindowDiv" class="popupwindowDiv" style="display:none;">
-        <div class="popupWindowLink">
-          <a class="feedlink" onclick="popup('popupwindowDiv');">Close</a>
-        </div>
-        <div class="popupdiv">
-          <div>
-            PlanTo buy a car? <input class="button" type="submit" name="Submit" value="Yes" onclick="divCarShortList.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
-          </div>
-          <div id="divCarShortList" style="display:none;">
-            Have you shortlisted the cars that you are considering?<input class="button" type="submit" name="Submit" value="Yes" onclick="divCarName.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
-            <div id="divCarName" style="display:none;">
-              <input type="text" class="inputtype" placeholder="Start typing the car name..." style="width:200px;"/>
-            </div>
-          </div>
-          <br/>
-          <hr/>
-          <br/>
-          <div>
-            Generally interested in car? Would love to know about various cars or a specific car that i own and also like to interact with like minded people?<input class="button" type="submit" name="Submit" value="Yes" onclick="CarCommunityDiv.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
-          </div>
-          <br/>
-          <div id="CarCommunityDiv" style="display:none;">
-            Do you like to follow
-            <ul>
-              <li>
-                <input type="radio" name="Cars" value="">All Cars
-                </input>
-              </li>
-              <li>
-                <input type="radio" name="Cars" value="">Specific Cars
-                </input><input type="text" class="inputtype" placeholder="Start typing the car name that you like to follow..." style="width:250px;"/>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <a class="feedlink">Why i have to enter this information?</a>
-          <a href="" onclick="popup('popupwindowDiv');toggle('CarSubMenuDiv');return false;" ><input class="buttonDone" type="submit" name="Submit" Value="Done">
-            </input></a>
-        </div>
-      </div>
+      <%= render 'shared/header_links' %>
+      
 
       <%= yield %>
 
     </div>
 
-    <div id="footer">
-      <p>
-        <a href="#" target="_blank">| Copyright &copy; PlannTo |</a>
-      </p>
-    </div>
+    <%= render 'shared/footer'  %>
     <script type="text/javascript">
       $("#ui-active-menuitem").mouseout(function() {
         $("#ui-active-menuitem").hide();

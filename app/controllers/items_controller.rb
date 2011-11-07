@@ -1,8 +1,11 @@
 class ItemsController < ApplicationController
+  
+
   #  before_filter :authenticate_user!
   # GET /items
   # GET /items.json
   def index
+
     #@items = Item.all
     #    @items = Car.all
     #
@@ -55,7 +58,7 @@ class ItemsController < ApplicationController
     #  end
      
     @item = result
-
+    render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
     #  format.json { render json: @items }
@@ -65,8 +68,10 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
-    @item = Item.find(params[:id])
-
+    @user = User.last    
+    @user.follow_type = 'Buyer'
+    @item = Item.where(:id => params[:id]).includes(:item_attributes).last
+    
     #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
     #@item = Car.find params[:id]
     respond_to do |format|
@@ -136,9 +141,10 @@ class ItemsController < ApplicationController
   end
 
   def plan_to_buy_item
+    @type = "buy"
     follow = follow_item('Buyer')
     if follow.blank?
-      flash[:notice] = "Wrong Item to buy"      
+      flash[:notice] = "You already buy this Item"      
     else
       flash[:notice] = "Planning is saved"
     end
@@ -148,9 +154,10 @@ class ItemsController < ApplicationController
   end
 
   def own_a_item
+    @type = "own"
     follow = follow_item('Owner')
     if follow.blank?
-      flash[:notice] = "Wrong Item to be owned"
+      flash[:notice] = "You are already owning this Item"
     else
       flash[:notice] = "Owner is saved"
     end
@@ -160,9 +167,10 @@ class ItemsController < ApplicationController
   end
 
   def follow_this_item
+    @type = "follow"
     follow = follow_item('Follow')
     if follow.blank?
-      flash[:notice] = "Wrong Item to be Followed"
+      flash[:notice] = "You are already Following this Item"
     else
       flash[:notice] = "Follow is saved"
     end
