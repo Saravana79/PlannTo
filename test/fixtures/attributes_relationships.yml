@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  attribute_id: 1
+  itemtype_id: 1
+  Priority: 1
+  is_filterable: false
+
+two:
+  attribute_id: 1
+  itemtype_id: 1
+  Priority: 1
+  is_filterable: false

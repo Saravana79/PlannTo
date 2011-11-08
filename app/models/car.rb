@@ -11,8 +11,11 @@ class Car < Product
   
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 4.0,  :as => :name_ac
-    string :manufacturer do |product|
+    string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
+    end
+    string :cargroup, :multiple => true do |product|
+      product.cargroup.name
     end
       
     dynamic_float :features do |car|
@@ -27,7 +30,8 @@ class Car < Product
     
     dynamic_string :features_string do |car|
       car.attribute_values.inject({}) do |hash,attribute_value|
-        if attribute_value.attribute.attribute_type == "Text"
+        #if attribute_value.attribute.attribute_type == "Text"
+        if attribute_value.attribute.attribute_type != "Numeric"
           hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
         else
           hash

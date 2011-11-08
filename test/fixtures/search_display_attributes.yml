@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  attribute_display_name: MyString
+  attribute_id: 1
+  itemtype_id: 1
+  type: 
+  value_type: MyString
+  minimum_value: MyString
+  maximum_value: MyString
+  actual_value: MyString
+
+two:
+  attribute_display_name: MyString
+  attribute_id: 1
+  itemtype_id: 1
+  type: 
+  value_type: MyString
+  minimum_value: MyString
+  maximum_value: MyString
+  actual_value: MyString

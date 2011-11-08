@@ -1,110 +1,354 @@
+<div id="container2">
 
-<%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post}) do |f| %>
-  <b>Search Criteria:</b><br/>
-  <label><b>Fuel Type</b></label><br/>
-  <label><b>Petrol</b></label>
-  <%= radio_button_tag  :fuel_type, "Petrol", @petrol %>
-  <label><b>Diesel</b></label>
-  <%= radio_button_tag  :fuel_type, "Diesel", @diesel %>
-  <label><b>Both</b></label>
-  <%= radio_button_tag  :fuel_type, "", @both %><br/>
-  <label><b>Manufacturer</b></label>
-  <%=hidden_field_tag :manufacturer, @manufacturer%>
-  <input type="text" name="textfield" value="<%=@manufacturer%>" class="search" id="searchManufacturer"/><br/>
+  <style type="text/css">
 
-  <label><b>Price Range</b></label>
-  <div id="price" class="sliderText" style="color: orange;"></div><div id="priceSlider"></div>
-  <%= hidden_field_tag  :min_price, @min_price %>
-  <%= hidden_field_tag :max_price, @max_price  %><br/>
-  <%=f.submit "Search"%>
-<%end%>
-<div class="col main_col w4_5">
-  <h1 class="heading">Search Results</h1>
-  <%@items.results.each do |item|%>
-    <div class="col w4_5 feed_item p1">
-      <div class="col w0_5">
-        <a>
-          <img class="profile_photo_img" width="50" height="50" alt="image" src="/images/B16.jpg"/>
-        </a>
-      </div>
-      <div class="e_col w3_5">
-        <h2>
-          <a href="">
-            <%=item.name%>
-          </a>
-        </h2>
-        <div class="feed_item_question_info">
-        </div>
-      </div>
+    #content {
+      width: 100%;
+    }
+    #navbar {
+      float: left;
+      width: 20%;
+      background-color: #f2f2f2;
+    }
+    .box{
+      background-color: #ffffff;
+      border-bottom: 1px solid #E0E0E0;
+      height: 30px;
+    }
+    .w4_5 {
+      width: 760px;
+    }
+
+    h1.heading {
+      border-bottom: 1px solid #B0B0B0;
+      margin-bottom: 1px;
+      padding-bottom: 0.4em;
+    }
+
+    .w0_5 {
+      width: 50px;
+    }
+    .col, .e_col {
+      float: left;
+      margin: 0 10px 0 0;
+    }
+    .feed_item {
+      border-bottom: 1px solid #E0E0E0;
+      float: left;
+      margin-left: 10px;
+      position: relative;
+    }
+    .p1 {
+      padding: 10px 0;
+    }
+  </style>
+  <style type="text/css">
+  
+    .textboxlist { font: 11px "Lucida Grande", Verdana; cursor: text; }
+    .textboxlist-bits { zoom: 1; overflow: hidden; margin: 0; padding: 3px 4px 0; border: 1px solid #999; padding-bottom: 3px; }
+    .textboxlist-bit { color: #19558D; list-style-type: none; float: left; display: block; padding: 0; margin: 0 5px 3px 0; cursor: default; }
+    .textboxlist-bit-editable { border: 1px solid #fff; }
+    .textboxlist-bit-editable-input { border: 0; padding: 2px 0; padding-bottom: 0; height: 14px; font: 11px "Lucida Grande", Verdana; }
+    .textboxlist-bit-editable-input:focus { outline: 0; }
+    .textboxlist-bit-box { position: relative; line-height: 30px; padding: 0 5px; -moz-border-radius: 9px; -webkit-border-radius: 9px; border-radius: 9px; border: 1px solid #CAD8F3; background: #DEE7F8; cursor: default; }
+    .textboxlist-bit-box-deletable { padding-right: 15px; }
+    .textboxlist-bit-box-deletebutton { position: absolute; right: 4px; top: 13px; display: block; width: 7px; height: 7px; font-size: 1px; background: url('/images/close.gif'); }
+    .textboxlist-bit-box-deletebutton:hover { border: none; background-position: 7px; text-decoration: none; }
+    .textboxlist-bit-box-hover { background: #BBCEF1; border: 1px solid #6D95E0; }
+    .textboxlist-bit-box-focus { border-color: #598BEC; background: #598BEC; color: #fff; }
+    .textboxlist-bit-box-focus .textboxlist-bit-box-deletebutton { background-position: bottom; }
+
+  </style>  
+  <div id="navbar"><b>Search Criteria:</b><br/>
+    <div class="row">
+      <div class="box" id="manufacturerAtt" onclick="openManufacturerBox('Car', this)"><b>Manufacturer</b></div>
+      <%@search_info_lookups.each_with_index do |lookup, index|%>
+        <div class="box" id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this )"><b><%=lookup[:name]%></b></div>
+      <%end%>
+      <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
+        <!-- need to have an if condition and depending on manufacturer change the att list -->
+        <%= hidden_field_tag :page %>
+        <%=hidden_field_tag :manufacturer%>
+        <%@search_form_lookups.each do |form_list|%>
+          <%=hidden_field_tag form_list[:field_name].to_sym%>
+        <%end%>
+
+      <%end%>
     </div>
-  <%end%>
-  <div class="e_col w3_5" style="display:<%=@display%>">
-    <h2></h2>
-    <div>
-      <a href="/search/index?manufacturer=<%=params[:manufacturer]%>&
-         min_price=<%=params[:min_price]%>&max_price=<%=params[:max_price]%>
-         &fuel_type=<%=params[:fuel_type]%>&page=<%=@page%>">
-        Show Next Items...
-      </a>
-    </div>
+  </div>
+  <div id="navmenu"><ul></ul></div>
+  <div id="searchList" style="width:100%;"></div>
+  <div id="content">
+    <%= render :partial => "/search/index" %>
   </div>
 </div>
 
-<style type="text/css">
-  .w4_5 {
-    width: 600px;
-  }
 
-  h1.heading {
-    border-bottom: 1px solid #B0B0B0;
-    margin-bottom: 1px;
-    padding-bottom: 0.4em;
-  }
+<div id="dialog" title="Search Criteria" style="display:none">
+  <span id="dialogName"></span>
+  <%=hidden_field_tag :which_attribute%>
+  <%=hidden_field_tag :which_type%>
+  <%=hidden_field_tag :which_form_field%>
+  <div id="price2" class="sliderText" style="color: orange;"></div>
+  <br/>
+  <div id="priceSlider2" class="priceSlider2"></div>
+  <div id="fuelSlider" class="fuelSlider"></div>
+  <input id="autocompleteField" style="display:none;width: 220px;"></input><br/><br/>
+  <button id="searchButton2" class="button" onclick="return false;" style="float: right">Search</button><br/>
 
-  .w0_5 {
-    width: 50px;
-  }
-  .col, .e_col {
-    float: left;
-    margin: 0 10px 0 0;
-  }
-  .feed_item {
-    border-bottom: 1px solid #E0E0E0;
-    float: left;
-    position: relative;
-  }
-  .p1 {
-    padding: 10px 0;
-  }
-</style>
+</div>
 <script type="text/javascript">
-  $( "#searchManufacturer" ).autocomplete({
-    minLength: 3,
-    format: "js",
-    source: "/search/autocomplete_manufacturers",
-    focus:function(e,ui) {
-      return false
-    },
-    select: function( event, ui ) {
-      $("#manufacturer").val(ui.item.value);
-      //return false;
-    }
-  })
-  $(function() {
-    $( "#priceSlider" ).slider({
-      range: true,
-      min: 1000000,
-      max: 100000000,
-      values: [ <%=@min_price.to_i%>, <%=@max_price.to_i%> ],
-      slide: function( event, ui ) {
-        $( "#price" ).html( ui.values[ 0 ] + " Rs" + " - " + ui.values[ 1 ]+ " Rs" );
-        $( "#min_price" ).val( ui.values[ 0 ] );
-        $( "#max_price" ).val( ui.values[ 1 ] );
+  $('#searchButton2').click(function() {
+    var add = true;
+    $("#navmenu").find("li").each(function(index) {
+      // var compText = text + "href='#'>"
+      if ($(this).text().toString() == $("#ui-dialog-title-dialog").text().toString())  {
+        add = false;
       }
     });
-    $( "#price" ).html( <%=@min_price.to_i%>  + " Rs" +
-      " - " + <%=@max_price.to_i%>  + " Rs" );
-    $( "#min_price" ).val( <%=@min_price.to_i%> );
-    $( "#max_price" ).val( <%=@max_price.to_i%> );
+    var tagId = $("#which_attribute").val() + "_tag"
+    if (add == true){
+      var list = "<li id='" + tagId + "' class='attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +$("#ui-dialog-title-dialog").text()+ "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      $(list).appendTo('#navmenu ul');
+    }
+
+    //$(str).insertAfter('#' + taggingField);
+    $("#page").val(1)
+    $.get('/search',$("#searchForm").serialize(),null,"script");
+    $("#dialog").dialog("close");
+    $("#" + $("#which_attribute").val()).hide();
+
   });
+
+
+  $('.attributeTag').live('click', function(){
+    var tagId = $(this).attr('id');   
+    var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+    $('#' + attributeId).trigger('click');
+    return false;
+  })
+
+  $('#deleteTag').live('click', function(){
+    var tagId = $(this).closest('li').attr('id');
+    var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+    $("#" + attributeId).show();
+    if (attributeId == "manufacturerAtt"){
+      $("#manufacturer").val('');
+    }
+    else{
+      var attributeIndex = attributeId.replace('attribute_menu_',''); //substring(0, tagId.indexOf("attribute_menu_"));
+<%@search_info_lookups.each_with_index do |lookup, index|%>
+        if (<%=index%> == attributeIndex){
+          var valueType = "<%=lookup[:param_1][:vt]%>"
+          var attributeId = "<%=lookup[:id]%>"
+          if (valueType == "Between"){
+            $("#min_" + attributeId).val('');
+            $("#max_" + attributeId).val('');
+          }
+          else{
+            $("#" + attributeId).val('');
+          }
+        }
+<%end%> 
+    }
+      
+    $(this).closest('li').remove();
+    $.get('/search',$("#searchForm").serialize(),null,"script");
+    return false;
+  })
+ 
+</script>
+<!--<div id="items"></div>-->
+
+<script type="text/javascript">
+  $(".button").button();
+  function openInfoBox(displayInfo, attr_name, elem){
+    $("#which_attribute").val($(elem).attr('id'));
+    $("#which_form_field").val(attr_name);
+    $("#dialogName").val(attr_name);
+    // $.each(obj, function(name, value) {
+    $("#dialog #autocompleteField").hide();
+       
+    if (displayInfo.vt == "Between"){
+      var min_v;
+      var max_v;
+      min_v = $( "#min_" + attr_name ).val() == "" ? displayInfo.min_v : $( "#min_" + attr_name ).val()
+      max_v = $( "#max_" + attr_name ).val() == "" ? displayInfo.max_v : $( "#max_" + attr_name ).val()
+      $("#which_type").val('Between');
+      $( "#fuelSlider" ).hide();
+      $("#dialog #priceSlider2").show();
+      $("#dialog").dialog({title: displayInfo.adn});
+      if ($("#dialog #priceSlider2").size() > 0){
+        $( "#priceSlider2" ).slider({
+          range: true,
+          min: parseInt(displayInfo.min_v),
+          max: parseInt(displayInfo.max_v),
+          step: 1000,
+          values: [ min_v, max_v ],
+          slide: function( event, ui ) {
+            $( "#price2" ).html( displayInfo.vth + " "  + ui.values[ 0 ] + " " + displayInfo.ut + " - " + ui.values[ 1 ] + " "  + displayInfo.ut );
+            $( "#min_" +attr_name ).val( ui.values[ 0 ] );
+            $( "#max_" + attr_name ).val( ui.values[ 1 ] );
+          }
+        })
+        $( "#price2" ).html( displayInfo.vth + " "  + min_v  + " " + displayInfo.ut + " - " + max_v  + " "  + displayInfo.ut);
+        $( "#min_" + attr_name ).val( min_v );
+        $( "#max_" + attr_name ).val( max_v );
+      }
+    }
+    else if ((displayInfo.vt == "GreaterThan") || (displayInfo.vt == "LessThen")){
+      $( "#fuelSlider" ).show();
+      var actual_value;
+      if (displayInfo.vt == "GreaterThan"){       
+        actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.av) : parseInt($( "#" + attr_name ).val())
+              
+      }
+      else{
+        actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.max_v) : parseInt($( "#" + attr_name ).val())
+       
+      }
+      
+      $("#dialog").dialog({title: displayInfo.adn});
+      if ($("#dialog #fuelSlider").size() > 0){
+        $( "#priceSlider2" ).hide();
+        $( "#fuelSlider" ).slider({
+          value: actual_value,
+          step: 1,
+          min: parseInt(displayInfo.min_v),
+          max: parseInt(displayInfo.max_v),
+          slide: function( event, ui ) {
+            $( "#price2" ).html( displayInfo.vth + " "  + ui.value + " " + displayInfo.ut );
+            $( "#" +attr_name ).val( ui.value );
+          }
+        })
+        $( "#price2" ).html( displayInfo.vth + " "  + actual_value + " " + displayInfo.ut );
+        $( "#" + attr_name ).val( actual_value );
+      }
+      return true
+    }
+    else if (displayInfo.vt == "Click"){
+      $( "#fuelSlider" ).hide();
+      var booleanObject = jQuery.parseJSON(attr_name);
+      $("#which_form_field").val(booleanObject.field_id);
+      var tagId = $("#which_attribute").val() + "_tag"
+      var list = "<li id='" +tagId +"' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" +booleanObject.display_name+ "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      $(list).appendTo('#navmenu ul');
+      $("#" + $("#which_attribute").val()).hide();
+      $( "#" + booleanObject.field_id ).val( booleanObject.value );
+      $("#page").val(1)
+      $.get('/search',$("#searchForm").serialize(),null,"script");
+      return false
+    }
+    else if (displayInfo.vt == "ListOfValues"){
+      $("#dialog #priceSlider2").hide()
+      $("#dialog #fuelSlider").hide()
+      $("#dialog").dialog({title: displayInfo.adn});
+      $("#price2").text('');
+      if ($("#dialog #autocompleteField").size() > 0){
+        var carTypeList = loadCarTypes();
+        $( "#dialog #autocompleteField" ).autocomplete({
+          minLength: 0,
+          //  format: "json",
+          //  source: "/search/autocomplete_manufacturers",
+          source: carTypeList,
+          focus:function(e,ui) {
+            return false
+          },
+          select: function( event, ui ) {
+            //$("#price2").html(ui.item.value);
+            store_info_div("price2", ui.item)
+            store_ids(attr_name, ui.item)
+            $("#dialog #autocompleteField").val('');
+            return false;
+          }
+        })
+        //.data( "autocomplete" )._renderItem = function( ul, item ) {
+        //			return $( "<li></li>" )
+        //				.data( "item.autocomplete", item )
+        //				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
+        //				.appendTo( ul );
+        //		};
+        $( "#dialog #autocompleteField" ).show();
+
+      }
+    }
+    return false
+    //  });
+  }
+
+  function openManufacturerBox(attr_name,elem){
+    $("#which_attribute").val($(elem).attr('id'));
+    $("#which_form_field").val("manufacturer");
+    $("#dialog #priceSlider2").hide()
+    $("#dialog #fuelSlider").hide()
+    $("#dialog").dialog({title: "Manufacturer"});
+    $("#price2").text($( "#manufacturer" ).val());
+    if ($("#dialog #autocompleteField").size() > 0){
+      var manufacturerList = loadManufacturers();
+      $( "#dialog #autocompleteField" ).autocomplete({
+        minLength: 0,
+        source: manufacturerList,
+        focus:function(e,ui) {
+          return false
+        },
+        select: function( event, ui ) {
+          //$("#price2").html(ui.item.value);
+          store_info_div("price2", ui.item)
+          store_ids("manufacturer", ui.item)
+          $("#dialog #autocompleteField").val('');
+          return false;
+        }
+      })
+      //.data( "autocomplete" )._renderItem = function( ul, item ) {
+      //			return $( "<li></li>" )
+      //				.data( "item.autocomplete", item )
+      //				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
+      //				.appendTo( ul );
+      //		};
+      $( "#dialog #autocompleteField" ).show();
+
+    }
+  
+  }
+  
+  function store_info_div(type, sender){
+    var value_selector = "#" + type +""
+
+    if ($(value_selector).text() == "") {
+      var ids = [];
+    } else {
+      var ids = $(value_selector).text().split(",");
+    }
+    var add = true
+    $.each(ids, function(index, value) {
+      if (value.toString() == sender.value.toString())  {
+        add = false;
+      }
+    });
+    if (add == true){
+      ids.push(sender.value);
+    }
+    $(value_selector).text(ids.toString());
+  }
+
+  function store_ids(type, sender) {
+
+    var value_selector = "#" + type +""
+
+    if ($(value_selector).val() == "") {
+      var ids = [];
+    } else {
+      var ids = $(value_selector).val().split(",");
+    }
+    var add = true
+    $.each(ids, function(index, value) {
+      if (value.toString() == sender.value.toString())  {
+        add = false;
+      }
+    });
+    if (add == true){
+      ids.push(sender.value);
+    }
+    $(value_selector).val(ids.toString());
+  };
 </script>

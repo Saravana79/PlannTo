@@ -19,7 +19,7 @@ class Item < ActiveRecord::Base
   has_many :best_uses
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :name, :boost => 4.0,  :as => :name_ac            
+    text :name, :boost => 4.0,  :as => :name_ac    
   end
 
 end

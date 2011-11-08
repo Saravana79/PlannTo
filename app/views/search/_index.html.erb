@@ -1,0 +1,83 @@
+<%#=@items.facet(:features, 'Price'.to_sym).rows.count%>
+<%#=@items.facet(:features_string, 'Fuel Type'.to_sym).rows%>
+<%#=@items.facet(:manufacturer).rows%>
+<%#= @items.facet(:cargroup).rows %>
+
+<div class="col main_col w4_5">
+  <h1 class="heading">Search Results</h1>
+  <%@items.results.each do |item|%>
+    <div class="col w4_5 feed_item p1">
+      <div class="col w0_5">
+        <a>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="/images/B16.jpg"/>
+        </a>
+      </div>
+      <div class="e_col w3_5">
+        <h2>
+          <a href="">
+            <%=item.name%>
+          </a>
+        </h2>
+        <div class="feed_item_question_info">
+        </div>
+      </div>
+    </div>
+  <%end%>
+  <div class="e_col w3_5" style="display:<%=@display%>">
+    <h2></h2>
+    <div>
+      <a id="nextItem" href="">
+        Show Next Items...
+      </a>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('#nextItem').click(function() {
+    var page = <%=@page%>
+    // alert(page);
+    // alert(page+1)
+    $("#page").val(page)
+    $.get('/search',$("#searchForm").serialize(),null,"script");
+    //$("#dialog").dialog("close");
+    return false;
+  });
+</script>
+
+<script type="text/javascript">
+  //NOT SURE IF  WE NEED THIS
+  $(document).ready(function(){
+    var manufacturerList = loadManufacturers();
+    $('#dialog #autocompleteField').autocomplete(manufacturerList);
+  });
+  function loadManufacturers(){
+    var manufacturerList = [];
+<%if @items.facet(:manufacturer).rows.count > 0%>
+
+  <% for row in @items.facet(:manufacturer).rows%>
+        manufacturerList.push( {
+          label: "<%="#{row.value} (#{row.count})"%>",
+          value: "<%="#{row.value}"%>"
+
+        });
+  <%end
+end%>
+    return manufacturerList;
+  }
+
+  function loadCarTypes(){
+    var carTypeList = [];
+<%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
+
+  <% for row in @items.facet(:cargroup).rows%>
+        carTypeList.push( {
+          label: "<%="#{row.value} (#{row.count})"%>",
+          value: "<%="#{row.value}"%>"
+
+        });
+  <%end
+end%>
+    return carTypeList;
+  }
+</script>
