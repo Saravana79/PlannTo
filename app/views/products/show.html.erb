@@ -1,0 +1,153 @@
+<div id="main-content">
+  <div>
+    <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande
+      Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
+  </div>
+  <div id="comment-notice"></div>
+  <div class="productbuttonsGrp">
+    <span class="productbuttons" id="plan_to_buy_span"><%= link_to(("<span>"+@item.plan_to_buy+"</span>").html_safe, plan_to_buy_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id=>"plan_to_buy") %></span>
+    <span class="productbuttons" id="plan_to_own_span"><%= link_to(("<span>"+@item.own_a_item+"</span>").html_safe, own_a_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "plan_to_own") %></span>
+    <span class="productbuttons" id="plan_to_follow_span"><%= link_to(("<span>"+@item.follow_this_item+"</span>").html_safe, follow_this_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "plan_to_follow") %></span>
+  </div>
+  <div class="feedcontentheader">
+    <div class="productcontentmain">
+      <div>
+        <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
+      </div>
+      <div>
+        <span class="producttitle"><%= @item.name %></span>
+        <%#*</div>%>
+        <div class="productprice">
+          <%= @item.get_price_info('Price') %>
+        </div>
+        <div class="productreview">
+          <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
+          <a class="feedlink">(100 Reviews)</a>
+        </div>
+        <div class="productspecification">
+
+          <% @item.priority_specification.each do |item_attribute| %>
+            <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
+          <% end %>
+          <%= link_to("...Detailed Specification", "#tab2", :class => 'feedlink', :id => "detailed_specification") %>
+
+        </div>
+      </div>
+    </div>
+    <div class="productcontentcreation">
+      <div class="">
+        <span class="buttonLink">Review Car</span>
+        <span class="buttonLink"><a class="feedlink">Ask a Question</a></span>
+        <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
+      </div>
+
+      <%= render :partial => 'reviews/review_block' %>
+
+    </div>
+    <div id="usual2" class="usual">
+      <ul>
+        <li class="tabstyle">
+            <a href="#tabs1">All Feeds</a>
+        </li>
+        <li class="tabstyle">
+            <a class="" href="#tabs2" id="specification">Specification</a>
+
+        </li>
+        <li class="tabstyle">
+
+            <a href="#tabs3" class="">Questions</a>
+
+        </li>
+      </ul>
+      <div id="tabs1" style="display: block; " class="main-content-section">
+
+        <div class="feedcontentheader">
+          <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+          reviewed <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+
+          <div class="feeddate">
+            Reviewed on Sep 8th 2011
+          </div>
+          <div class="feedcontent">
+            I bought punto car last week, its one of the best car i have driven. Its road sense and stability is
+            excellent. Look of the care is also good. Only drawback is the interior of the
+            car.<a class="feedlink">more...</a>
+          </div>
+          <div class="feedcontent">
+            <span><a>10 people found it useful.</a></span>
+            <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+          </div>
+        </div>
+        <div class="feedcontentheader">
+          <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+          shared a tip on <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+
+          <div class="feeddate">
+            Shared on Sep 8th 2011
+          </div>
+          <div class="feedcontent">
+            I bought punto car last week, its one of the best car i have driven. Its road sense and stability is
+            excellent. Look of the care is also good. Only drawback is the interior of the
+            car.<a class="feedlink">more...</a>
+          </div>
+          <div class="feedcontent">
+            <span><a>10 people found it useful.</a></span>
+            <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+          </div>
+        </div>
+        <div class="feedcontentheader">
+          <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+          asked a question on <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+
+          <div class="feeddate">
+            Asked on Sep 8th 2011
+          </div>
+          <div class="feedcontent">
+            I bought punto car last week, its one of the best car i have driven. Its road sense and stability is
+            excellent. Look of the care is also good. Only drawback is the interior of the
+            car.<a class="feedlink">more...</a>
+          </div>
+          <div class="feedcontent">
+            <span><a>10 people found it useful.</a></span>
+            <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+          </div>
+        </div>
+      </div>
+      <div id="tabs2" style="display: none; " class="main-content-section">
+        <%= render :template => 'products/specification' %>
+      </div>
+      <div id="tabs3" style="display: none; ">Any Questions</div>
+    </div>
+
+    
+
+  </div>
+</div>
+<script type="text/javascript">
+<% if !@user_follow["Buyer"].blank? %>
+  $("#plan_to_buy").removeClass();
+  $("#plan_to_buy_span").removeClass().addClass("tabstyle");
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% end %>
+<% if !@user_follow["Owner"].blank? %>
+  $("#plan_to_own").removeClass();
+  $("#plan_to_own_span").removeClass().addClass("tabstyle");
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% end %>
+$(document).ready(function() {
+    $.ajax({
+      url: '<%= related_products_product_path(@item, :follow_type => @user.follow_type) %>',
+      dataType: "html",
+      success: function(data) {
+        $('#uisideRelatedProduct').html(data);
+      }
+    });
+  });
+$("#usual2 ul").idTabs("tabs1");
+$("#detailed_specification").click(function(){
+  $("#usual2 ul").idTabs("tabs2");
+  $("#specification").trigger('click');
+});
+</script>

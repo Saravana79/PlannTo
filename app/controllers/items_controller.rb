@@ -1,8 +1,11 @@
 class ItemsController < ApplicationController
+  
+
   #  before_filter :authenticate_user!
   # GET /items
   # GET /items.json
   def index
+
     #@items = Item.all
     #    @items = Car.all
     #
@@ -55,7 +58,7 @@ class ItemsController < ApplicationController
     #  end
      
     @item = result
-
+    render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
     #  format.json { render json: @items }
@@ -65,8 +68,10 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
-    @item = Car.find(params[:id])
-
+    @user = User.last    
+    @user.follow_type = 'Buyer'
+    @item = Item.where(:id => params[:id]).includes(:item_attributes).last
+    
     #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
     #@item = Car.find params[:id]
     respond_to do |format|
@@ -133,6 +138,59 @@ class ItemsController < ApplicationController
       format.html { redirect_to items_url }
       format.json { head :ok }
     end
+  end
+
+  def plan_to_buy_item
+    @type = "buy"
+    follow = follow_item('Buyer')
+    if follow.blank?
+      flash[:notice] = "You already buy this Item"      
+    else
+      flash[:notice] = "Planning is saved"
+    end
+    respond_to do |format|
+      format.js { }
+    end
+  end
+
+  def own_a_item
+    @type = "own"
+    follow = follow_item('Owner')
+    if follow.blank?
+      flash[:notice] = "You are already owning this Item"
+    else
+      flash[:notice] = "Owner is saved"
+    end
+    respond_to do |format|
+      format.js { render :action => 'plan_to_buy_item'}
+    end
+  end
+
+  def follow_this_item
+    @type = "follow"
+    follow = follow_item('Follow')
+    if follow.blank?
+      flash[:notice] = "You are already Following this Item"
+    else
+      flash[:notice] = "Follow is saved"
+    end
+    respond_to do |format|
+      format.js { render :action => 'plan_to_buy_item'}
+    end
+  end
+
+  private
+
+  def follow_item(follow_type)
+    @user = User.first
+    @user.follow_type = follow_type
+    @item = Item.find(params[:id])
+    if !@user.blank? && !@item.blank?
+      @user.follow(@item, @user.follow_type)
+    else
+      false
+    end
+
   end
 
 end

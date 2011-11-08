@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110924174032) do
+ActiveRecord::Schema.define(:version => 20111103180630) do
 
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(:version => 20110924174032) do
     t.string   "creator_ip"
     t.string   "updater_ip"
   end
+
+  add_index "attribute_values", ["item_id"], :name => "ItemIdBasedKey"
 
   create_table "attributes", :force => true do |t|
     t.string   "name",            :limit => 500, :null => false
@@ -95,6 +97,20 @@ ActiveRecord::Schema.define(:version => 20110924174032) do
     t.string   "updater_ip"
   end
 
+  create_table "follows", :force => true do |t|
+    t.integer  "followable_id",                      :null => false
+    t.string   "followable_type",                    :null => false
+    t.integer  "follower_id",                        :null => false
+    t.string   "follower_type",                      :null => false
+    t.boolean  "blocked",         :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "follow_type"
+  end
+
+  add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
+  add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
   create_table "itemrelationships", :force => true do |t|
     t.integer  "item_id",        :null => false
     t.integer  "relateditem_id", :null => false
@@ -104,14 +120,14 @@ ActiveRecord::Schema.define(:version => 20110924174032) do
   end
 
   create_table "items", :force => true do |t|
-    t.string   "name",               :limit => 2000, :null => false
-    t.text     "description",                        :null => false
+    t.string   "name",               :limit => 2000,                    :null => false
+    t.text     "description",                                           :null => false
     t.string   "imageurl",           :limit => 2000
     t.integer  "itemtype_id"
     t.integer  "group_id"
-    t.boolean  "editablebynonadmin",                 :null => false
-    t.boolean  "needapproval",                       :null => false
-    t.boolean  "isgroupheader",                      :null => false
+    t.boolean  "editablebynonadmin",                 :default => false, :null => false
+    t.boolean  "needapproval",                       :default => false, :null => false
+    t.boolean  "isgroupheader",                      :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "type"

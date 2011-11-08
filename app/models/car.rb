@@ -2,9 +2,9 @@
 # and open the template in the editor.
 
 class Car < Product
-  has_many :itemrelationships, :foreign_key => :item_id
-  has_many :relatedcars,
-    :through => :itemrelationships, :include => :cargroup
+#  has_many :itemrelationships, :foreign_key => :item_id
+#  has_many :relatedcars,
+#    :through => :itemrelationships, :include => :cargroup
   acts_as_taggable
   #  acts_as_taggable_on :product
   acts_as_commentable
@@ -38,6 +38,18 @@ class Car < Product
         end
       end
     end
+  end
+
+  def plan_to_buy
+    "Plan to buy"
+  end
+
+  def own_a_item
+    "I Own it"
+  end
+
+  def follow_this_item
+    "Follow This Car"
   end
 
   

@@ -1,0 +1,15 @@
+$("#comment-notice").html('<div class="flash notice"><%= escape_javascript(flash[:notice]) %></div>').effect("highlight", {}, 3000);
+<% if @type == "buy" %>
+  $("#plan_to_buy").removeClass();
+  $("#plan_to_buy_span").removeClass().addClass("tabstyle");
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% elsif @type == "own" %>
+  $("#plan_to_own").removeClass();
+  $("#plan_to_own_span").removeClass().addClass("tabstyle");
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% elsif @type == "follow" %>
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% end %>

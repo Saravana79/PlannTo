@@ -1,5 +1,5 @@
 # MySQL.  Versions 4.1 and 5.0 are recommended.
-# 
+#
 # Install the MYSQL driver
 #   gem install mysql2
 #
@@ -15,8 +15,8 @@ development:
   database: planNto_development
   pool: 5
   username: root
-  password: pass
-  socket: /var/run/mysqld/mysqld.sock
+  password:
+  socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -28,8 +28,8 @@ test:
   database: planNto_test
   pool: 5
   username: root
-  password: pass
-  socket: /var/run/mysqld/mysqld.sock
+  password:
+  socket: /tmp/mysql.sock
 
 production:
   adapter: mysql2
@@ -38,5 +38,5 @@ production:
   database: planNto_production
   pool: 5
   username: root
-  password: pass
-  socket: /var/run/mysqld/mysqld.sock
+  password:
+  socket: /tmp/mysql.sock
