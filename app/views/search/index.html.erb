@@ -50,7 +50,7 @@
     .textboxlist-bit-editable { border: 1px solid #fff; }
     .textboxlist-bit-editable-input { border: 0; padding: 2px 0; padding-bottom: 0; height: 14px; font: 11px "Lucida Grande", Verdana; }
     .textboxlist-bit-editable-input:focus { outline: 0; }
-    .textboxlist-bit-box { position: relative; line-height: 30px; padding: 0 5px; -moz-border-radius: 9px; -webkit-border-radius: 9px; border-radius: 9px; border: 1px solid #CAD8F3; background: #DEE7F8; cursor: default; }
+    .textboxlist-bit-box { position: relative; vertical-align:middle; height: 35px; text-align: center; padding: 0 5px; -moz-border-radius: 9px; -webkit-border-radius: 9px; border-radius: 9px; border: 1px solid #CAD8F3; background: #DEE7F8; cursor: default; }
     .textboxlist-bit-box-deletable { padding-right: 15px; }
     .textboxlist-bit-box-deletebutton { position: absolute; right: 4px; top: 13px; display: block; width: 7px; height: 7px; font-size: 1px; background: url('/images/close.gif'); }
     .textboxlist-bit-box-deletebutton:hover { border: none; background-position: 7px; text-decoration: none; }
@@ -58,7 +58,8 @@
     .textboxlist-bit-box-focus { border-color: #598BEC; background: #598BEC; color: #fff; }
     .textboxlist-bit-box-focus .textboxlist-bit-box-deletebutton { background-position: bottom; }
 
-  </style>  
+  </style>
+  <br/>
   <div id="navbar"><b>Search Criteria:</b><br/>
     <div class="row">
       <div class="box" id="manufacturerAtt" onclick="openManufacturerBox('Car', this)"><b>Manufacturer</b></div>
@@ -66,7 +67,6 @@
         <div class="box" id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this )"><b><%=lookup[:name]%></b></div>
       <%end%>
       <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
-        <!-- need to have an if condition and depending on manufacturer change the att list -->
         <%= hidden_field_tag :page %>
         <%=hidden_field_tag :manufacturer%>
         <%@search_form_lookups.each do |form_list|%>
@@ -101,16 +101,26 @@
   $('#searchButton2').click(function() {
     var add = true;
     $("#navmenu").find("li").each(function(index) {
-      // var compText = text + "href='#'>"
-      if ($(this).text().toString() == $("#ui-dialog-title-dialog").text().toString())  {
+      var tagName = $(this).text().replace(/\(.*?\)/, "")
+      var tagTitle = $("#ui-dialog-title-dialog").text().toString()      
+      if ($.trim(tagName.toString()) == $.trim(tagTitle.toString()))  {       
         add = false;
       }
     });
     var tagId = $("#which_attribute").val() + "_tag"
-    if (add == true){
-      var list = "<li id='" + tagId + "' class='attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +$("#ui-dialog-title-dialog").text()+ "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    if (add == false){
+       $("#" +tagId).remove();
+    } 
+    var searchInfo = "";
+    var lineHeight = "";
+      if ($("#price2").html() != ""){
+        searchInfo = "<br/>(" + $("#price2").html() + ")"
+      }
+      else{
+        lineHeight = "style='line-height:35px;'"
+      }
+      var list = "<li id='" + tagId + "'" + lineHeight + " class='attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +$("#ui-dialog-title-dialog").text()+ searchInfo + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
       $(list).appendTo('#navmenu ul');
-    }
 
     //$(str).insertAfter('#' + taggingField);
     $("#page").val(1)
@@ -137,7 +147,7 @@
     }
     else{
       var attributeIndex = attributeId.replace('attribute_menu_',''); //substring(0, tagId.indexOf("attribute_menu_"));
-<%@search_info_lookups.each_with_index do |lookup, index|%>
+        <%@search_info_lookups.each_with_index do |lookup, index|%>
         if (<%=index%> == attributeIndex){
           var valueType = "<%=lookup[:param_1][:vt]%>"
           var attributeId = "<%=lookup[:id]%>"
@@ -149,9 +159,8 @@
             $("#" + attributeId).val('');
           }
         }
-<%end%> 
-    }
-      
+        <%end%>
+    }      
     $(this).closest('li').remove();
     $.get('/search',$("#searchForm").serialize(),null,"script");
     return false;
@@ -231,7 +240,7 @@
       var booleanObject = jQuery.parseJSON(attr_name);
       $("#which_form_field").val(booleanObject.field_id);
       var tagId = $("#which_attribute").val() + "_tag"
-      var list = "<li id='" +tagId +"' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" +booleanObject.display_name+ "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      var list = "<li id='" +tagId +"' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" +booleanObject.display_name+ "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
       $(list).appendTo('#navmenu ul');
       $("#" + $("#which_attribute").val()).hide();
       $( "#" + booleanObject.field_id ).val( booleanObject.value );

@@ -36,8 +36,6 @@
 <script type="text/javascript">
   $('#nextItem').click(function() {
     var page = <%=@page%>
-    // alert(page);
-    // alert(page+1)
     $("#page").val(page)
     $.get('/search',$("#searchForm").serialize(),null,"script");
     //$("#dialog").dialog("close");
@@ -46,12 +44,7 @@
 </script>
 
 <script type="text/javascript">
-  //NOT SURE IF  WE NEED THIS
-  $(document).ready(function(){
-    var manufacturerList = loadManufacturers();
-    $('#dialog #autocompleteField').autocomplete(manufacturerList);
-  });
-  function loadManufacturers(){
+   function loadManufacturers(){
     var manufacturerList = [];
 <%if @items.facet(:manufacturer).rows.count > 0%>
 
