@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
+  
   layout 'product'
+  
   def index
 
   end
@@ -9,16 +11,11 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @user = User.last
+    build_resource(:car)
+    @user = User.first
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    @user_follow = Follow.all_follower_type(@user, @item).group_by(&:follow_type)
-    @user.follow_type = if !@user_follow["Buyer"].blank?
-                          "Buyer"
-                        elsif !@user_follow["Owner"].blank?
-                          "Owner"
-                        elsif !@user_follow["Follow"].blank?
-                          "Follow"
-                        end
+    @user_follow = @user.get_follow(@item)    
+    @user.follow_type = @user_follow.follow_type
   end
 
   def related_products

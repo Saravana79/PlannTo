@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  
+  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item]
 
   #  before_filter :authenticate_user!
   # GET /items

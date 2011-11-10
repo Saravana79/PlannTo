@@ -20,6 +20,8 @@ module ActsAsFollower
         if follow.blank? && self != followable
           Follow.create(:followable_type => followable.class.name, :followable_id => followable.id,
                         :follower_type => self.class.name, :follower_id => self.id, :follow_type => follow_type)
+        else
+          follow.update_attribute(:follow_type, follow_type)
         end
       end      
     end
