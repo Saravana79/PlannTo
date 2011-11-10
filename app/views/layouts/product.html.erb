@@ -30,22 +30,26 @@
   </script>
 </head>
 <body style="padding-bottom: 0px;" class="body">
+<p class="notice"><%= notice %></p>
+
+<p class="alert"><%= alert %></p>
+
 <div id="container">
-<%= render 'shared/header_links' %>
+  <%= render 'shared/header_links' %>
 
-<div id="ContentPanel" class="contentpanel">
-  <%= render 'shared/left_nav' %>
-  <%= yield %>
-  <div id="main-subcontent">
-    
-    <%= render 'items/related_products'  %>
-    
-    <%= render 'items/hatchback_items' %>
+  <div id="ContentPanel" class="contentpanel">
+    <%= render 'shared/left_nav' %>
+    <%= yield %>
+    <div id="main-subcontent">
+
+      <%= render 'items/related_products' %>
+
+      <%= render 'items/hatchback_items' %>
+    </div>
+
   </div>
-
 </div>
-</div>
-<%= render 'shared/footer'  %>
+<%= render 'shared/footer' %>
 <script type="text/javascript">
   $("#ui-active-menuitem").mouseout(function() {
     $("#ui-active-menuitem").hide();

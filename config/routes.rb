@@ -29,6 +29,7 @@ PlanNto::Application.routes.draw do
         end
       end
       resources :reviews
+      devise_for :users
   # Sample resource route with options:
   #   resources :products do
   #     member do
