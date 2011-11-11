@@ -63,7 +63,7 @@ end%>
     var carTypeList = [];
 <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
 
-  <% for row in @items.facet(:cargroup).rows%>
+  <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
         carTypeList.push( {
           label: "<%="#{row.value} (#{row.count})"%>",
           value: "<%="#{row.value}"%>"
