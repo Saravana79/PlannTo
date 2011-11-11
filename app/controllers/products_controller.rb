@@ -11,7 +11,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    build_resource(:car)
+#    build_resource(:car)
     @user = User.first
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
     @user_follow = @user.get_follow(@item)    
