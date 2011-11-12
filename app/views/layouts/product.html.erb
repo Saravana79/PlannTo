@@ -45,12 +45,30 @@
       <%= render 'items/related_products' %>
 
       <%= render 'items/hatchback_items' %>
+      <div id="compare-list">
+        <div class="uiHeaderSection">
+          <div class="uisidepanelheadercontent">
+            Compare Items
+          </div>
+        </div>
+        <div class="uiSidePanelContent">
+          <% @compare_items||[].each do |item|%>
+            <%= render :partial => 'items/compare_view', :locals => { :item => item }%>
+          <% end %>
+        </div>
+      </div>
     </div>
 
   </div>
 </div>
 <%= render 'shared/footer' %>
 <script type="text/javascript">
+  if($('#compare-list .uiSidePanelContent div.compare-view').length == 0){
+    $('#compare-list').hide()
+  }else{
+    $('#compare-list').show()  
+  }
+
   $("#ui-active-menuitem").mouseout(function() {
     $("#ui-active-menuitem").hide();
   });
