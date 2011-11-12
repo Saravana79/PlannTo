@@ -52,5 +52,8 @@ class Car < Product
     "Follow This Car"
   end
 
+  def add_to_compare
+    "Add to Compare"
+  end
   
 end
