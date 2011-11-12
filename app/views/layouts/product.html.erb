@@ -52,8 +52,8 @@
           </div>
         </div>
         <div class="uiSidePanelContent">
-          <% @compare_items||[].each do |item|%>
-            <%= render :partial => 'items/compare_view', :locals => { :item => item }%>
+          <% (@comparable_items||[]).each do |compare|%>
+            <%= render :partial => 'items/compare_view', :locals => { :item => compare.comparable }%>
           <% end %>
         </div>
       </div>

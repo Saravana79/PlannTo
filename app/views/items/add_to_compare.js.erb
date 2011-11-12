@@ -20,9 +20,13 @@ $("#comment-notice").html('<div class="flash notice"><%= escape_javascript(flash
   $("#plan_to_follow").removeClass();
   $("#plan_to_follow").attr('href', "#")
   $("#plan_to_follow_span").removeClass().addClass("tabstyle");
-<% elsif @type == "compare" %>
+<% elsif @type.match(/compare/) %>
   $("#add_to_compare").removeClass();
   $("#add_to_compare").attr('href', "#")
   $("#add_to_compare_span").removeClass().addClass("tabstyle");
+  $("#compare-list").show();
+  <%if @type == 'compare'%>
+   $('#compare-list .uiSidePanelContent').append("<%= escape_javascript(render :partial => 'compare_view', :locals => { :item => @item }) %>");
+  <% end %>
 
 <% end %>

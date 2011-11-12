@@ -20,6 +20,7 @@ class Item < ActiveRecord::Base
   has_many :itemrelationships, :foreign_key => :item_id
   has_many :relateditems,
     :through => :itemrelationships
+  has_many :compares, :as => :comparable
   acts_as_followable
 
   searchable :auto_index => true, :auto_remove => true  do
