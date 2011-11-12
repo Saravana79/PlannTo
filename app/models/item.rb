@@ -34,8 +34,23 @@ class Item < ActiveRecord::Base
       attribute_value.value + ' ( ' + attribute_value.addition_comment + ' )'
   end
 
-  def unfollowing_related_items(user)
-    relateditems.select{|item| !user.following?(item) }
+  def unfollowing_related_items(user, number)
+    if user
+      relateditems.select{|item| !user.following?(item) }[0..number]
+    else
+      relateditems.limit(number)
+    end
+  end
+
+  def related_followers(follow_type)
+    related_iteams = followers_by_type('User')
+    unless follow_type.blank?
+      related_iteams.where("follows.follow_type" => follow_type)
+    else
+      related_iteams.where("follows.follow_type" => [Follow::ProductFollowType::Buyer,
+                                                     Follow::ProductFollowType::Owner,
+                                                     Follow::ProductFollowType::Follow])
+    end
   end
 
 end

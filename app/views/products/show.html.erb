@@ -131,66 +131,21 @@
 
 
 <script type="text/javascript">
-<% if @user_follow.follow_type == "Buyer" %>
-  $("#plan_to_buy").removeClass();
-  $("#plan_to_buy_span").removeClass().addClass("tabstyle");
-  $("#plan_to_buy").attr("href", "javascript:void(0)");
-  $("#plan_to_follow").removeClass();
-  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
-  $("#plan_to_follow").attr("href", "javascript:void(0)");
+<% if @user_follow && @user_follow.follow_type == "Buyer" %>
+  Product.load_buyer();
 <% end %>
-<% if @user_follow.follow_type == "Owner" %>
-  $("#plan_to_own").removeClass();
-  $("#plan_to_own_span").removeClass().addClass("tabstyle");
-  $("#plan_to_own").attr("href", "javascript:void(0)");
-  $("#plan_to_buy").removeClass();
-  $("#plan_to_buy_span").removeClass().addClass("tabstyle");
-  $("#plan_to_buy").attr("href", "javascript:void(0)");
-  $("#plan_to_follow").removeClass();
-  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
-  $("#plan_to_follow").attr("href", "javascript:void(0)");
+<% if @user_follow && @user_follow.follow_type == "Owner" %>
+  Product.load_owner();
 <% end %>
-$(document).ready(function() {
-    $.ajax({
-      url: '<%= related_products_product_path(@item, :follow_type => @user.follow_type) %>',
-      dataType: "html",
-      success: function(data) {
-        $('#uisideRelatedProduct').html(data);
-      }
-    });
-  });
+
+Product.related_products('<%= related_products_product_path(@item, :follow_type => @user_follow ? @user_follow.follow_type : "") %>');
+
 $("#usual2 ul").idTabs("tabs1");
-$("#detailed_specification").click(function(){
-  $("#usual2 ul").idTabs("tabs2");
-  $("#specification").trigger('click');
-});
+Product.detailed_specification();
 <% if current_user.blank? %>
-$("#dialog-form").dialog({
-  autoOpen: false,
-  height: 300,
-  width: 350,
-  modal: true,
-  buttons: {
-    "Sign in": function() {
-      var bValid = true;
-      if (bValid) {
-        $("#user_edit").submit();
-        $(this).dialog("close");
-      }
-    },
-    Cancel: function() {
-      $(this).dialog("close");
-    }
-  },
-  close: function() {
-    allFields.val("").removeClass("ui-state-error");
-  }
-});
-$("#plan_to_buy, #plan_to_own, #plan_to_follow")
-        .click(function() {
-  $("#dialog-form").dialog("open");
-});
+  Product.login_dialog();
+  Prodcut.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow");
 <% else %>
- $("#dialog-form").hide();
+ Product.hide_login_dialog();
 <% end %>
 </script>

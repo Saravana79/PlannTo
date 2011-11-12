@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111103180630) do
+ActiveRecord::Schema.define(:version => 20111112165204) do
 
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(:version => 20111103180630) do
     t.integer  "updated_by"
     t.string   "creator_ip"
     t.string   "updater_ip"
+  end
+
+  create_table "attributes_relationships", :force => true do |t|
+    t.integer  "attribute_id"
+    t.integer  "itemtype_id"
+    t.integer  "Priority"
+    t.boolean  "is_filterable"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "best_uses", :force => true do |t|
@@ -173,6 +182,19 @@ ActiveRecord::Schema.define(:version => 20111103180630) do
     t.string   "updater_ip"
   end
 
+  create_table "search_display_attributes", :force => true do |t|
+    t.string   "attribute_display_name"
+    t.integer  "attribute_id"
+    t.integer  "itemtype_id"
+    t.string   "type"
+    t.string   "value_type"
+    t.string   "minimum_value"
+    t.string   "maximum_value"
+    t.string   "actual_value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
@@ -203,6 +225,7 @@ ActiveRecord::Schema.define(:version => 20111103180630) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
-  
+  before_filter :user_follow_item, :if => Proc.new { |c| !current_user.blank? }
+
   layout 'product'
   
   def index
@@ -11,19 +12,15 @@ class ProductsController < ApplicationController
   end
 
   def show
-#    build_resource(:car)
-    @user = User.first
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    @user_follow = @user.get_follow(@item)    
-    @user.follow_type = @user_follow.follow_type
+    @user_follow = current_user.blank? ? false : current_user.get_follow(@item)
   end
 
   def related_products
     @item = Item.where(:id => params[:id]).last
-    @user = User.last
-    @user.follow_type = params[:follow_type]
+    @follow_type = params[:follow_type]
     respond_to do |format|
-      format.js { render :partial=> 'itemrelationships/relateditem', :collection => @item.unfollowing_related_items(@user) }
+      format.js { render :partial=> 'itemrelationships/relateditem', :collection => @item.unfollowing_related_items(current_user, 2) }
     end
 
   end

@@ -182,7 +182,7 @@ class ItemsController < ApplicationController
   private
 
   def follow_item(follow_type)
-    @user = User.first
+    @user = current_user
     @user.follow_type = follow_type
     @item = Item.find(params[:id])
     if !@user.blank? && !@item.blank?

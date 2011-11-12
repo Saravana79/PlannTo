@@ -8,7 +8,7 @@
     3 Star Rating
   </div>
   <div>
-    <% if !@user.following?(relateditem) %>
+    <% if current_user.blank? || !current_user.following?(relateditem) %>
       <%= link_to("Buy", plan_to_buy_item_item_path(relateditem.id), :class => "feedlink", :remote => true) %>
       <%= link_to("Own", own_a_item_item_path(relateditem.id), :class => "feedlink", :remote => true) %>
       <%= link_to("Follow", follow_this_item_item_path(relateditem.id), :class => "feedlink", :remote => true) %>
@@ -16,7 +16,7 @@
     <% end %>
   </div>
   <div>
-    <% related_follower = relateditem.followers_by_type('User', :where => {"follows.follow_type" => @user.follow_type}) %>
+    <% related_follower = relateditem.related_followers(@follow_type) %>
     <%= related_follower[0..2].collect{|user| user.email}.join(",") %>
     <% if ((related_follower.count - 2) > 0) %>
       and <%= (related_follower.count - 2) %> other people owns this.
