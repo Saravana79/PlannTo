@@ -1,8 +1,9 @@
 class CreateCompares < ActiveRecord::Migration
   def change
     create_table :compares do |t|
-      t.integer :product_id
-      t.integer :item_id
+      t.integer :compare_id
+      t.string :compare_type
+      t.string :session_id
 
       t.timestamps
     end

@@ -1,0 +1,28 @@
+$("#comment-notice").html('<div class="flash notice"><%= escape_javascript(flash[:notice]) %></div>').effect("highlight", {}, 3000);
+<% if @type == "buy" %>
+  $("#plan_to_buy").removeClass();
+  $("#plan_to_buy").attr('href', "#")
+  $("#plan_to_buy_span").removeClass().addClass("tabstyle");
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow").attr('href', "#")
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% elsif @type == "own" %>
+  $("#plan_to_own").removeClass();
+  $("#plan_to_own").attr('href', "#")
+  $("#plan_to_own_span").removeClass().addClass("tabstyle");
+  $("#plan_to_buy").removeClass();
+  $("#plan_to_buy").attr('href', "#")
+  $("#plan_to_buy_span").removeClass().addClass("tabstyle");
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow").attr('href', "#")
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% elsif @type == "follow" %>
+  $("#plan_to_follow").removeClass();
+  $("#plan_to_follow").attr('href', "#")
+  $("#plan_to_follow_span").removeClass().addClass("tabstyle");
+<% elsif @type == "compare" %>
+  $("#add_to_compare").removeClass();
+  $("#add_to_compare").attr('href', "#")
+  $("#add_to_compare_span").removeClass().addClass("tabstyle");
+
+<% end %>

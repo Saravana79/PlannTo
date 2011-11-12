@@ -8,7 +8,7 @@
     <span class="productbuttons" id="plan_to_buy_span"><%= link_to(("<span>"+@item.plan_to_buy+"</span>").html_safe, plan_to_buy_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id=>"plan_to_buy") %></span>
     <span class="productbuttons" id="plan_to_own_span"><%= link_to(("<span>"+@item.own_a_item+"</span>").html_safe, own_a_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "plan_to_own") %></span>
     <span class="productbuttons" id="plan_to_follow_span"><%= link_to(("<span>"+@item.follow_this_item+"</span>").html_safe, follow_this_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "plan_to_follow") %></span>
-    <span class="productbuttons" id="add_to_compare"><%= link_to(("<span>"+@item.add_to_compare+"</span>").html_safe, follow_this_item_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "plan_to_follow") %></span>
+    <span class="productbuttons" id="add_to_compare_span"><%= link_to(("<span>"+@item.add_to_compare+"</span>").html_safe, add_to_compare_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "add_to_compare") %></span>
   </div>
   <div class="feedcontentheader">
     <div class="productcontentmain">

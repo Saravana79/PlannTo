@@ -179,6 +179,22 @@ class ItemsController < ApplicationController
     end
   end
 
+  def add_to_compare
+    @type = "compare"
+    @item = Item.find(params[:id])
+    session[:current_session_key] ||= UUIDTools::UUID.random_create.to_s
+    @compare = Compare.find_by_session_id_and_compare_type_and_compare_id(session[:current_session_key],@item.class.name,@item.id)
+    if @compare
+      flash[:notice] = "You are already comparing this Item"
+    else
+      @compare = Compare.create(:session_id => session[:current_session_key], :compare_type => @item.class.name, :compare_id => @item.id)
+      flash[:notice] = "Compare is saved"
+    end
+    respond_to do |format|
+      format.js { render :action => 'add_to_compare'}
+    end
+  end
+
   private
 
   def follow_item(follow_type)

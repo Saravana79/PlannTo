@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
 
 one:
-  product_id: 1
-  item_id: 1
+  compare_id: 1
+  compare_type: MyString
+  session_id: MyString
 
 two:
-  product_id: 1
-  item_id: 1
+  compare_id: 1
+  compare_type: MyString
+  session_id: MyString
