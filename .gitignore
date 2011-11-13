@@ -10,4 +10,4 @@ vendor/bundle/
 .idea/
 log/
 public/assets/
-
+public/cache/

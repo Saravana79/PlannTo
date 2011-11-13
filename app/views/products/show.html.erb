@@ -138,6 +138,9 @@
 <% if @user_follow && @user_follow.follow_type == "Owner" %>
   Product.load_owner();
 <% end %>
+<% if @user_follow && @user_follow.follow_type == "Follow" %>
+  Product.load_follow();
+<% end %>
 <% if current_user.blank? %>
   Product.load_signout_user_link();
 <% end %>

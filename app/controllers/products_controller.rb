@@ -14,7 +14,7 @@ class ProductsController < ApplicationController
 
   def show
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    @user_follow = current_user.blank? ? false : user_follow_item[@item.id].last
+    @user_follow = current_user.blank? ||user_follow_item[@item.id].blank? ? false : user_follow_item[@item.id].last
   end
 
   def related_products

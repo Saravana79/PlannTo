@@ -200,11 +200,10 @@ class ItemsController < ApplicationController
   private
 
   def follow_item(follow_type)
-    @user = current_user
-    @user.follow_type = follow_type
+    Rails.cache.delete("item_follow"+current_user.id.to_s)
     @item = Item.find(params[:id])
-    if !@user.blank? && !@item.blank?
-      @user.follow(@item, @user.follow_type)
+    if !@item.blank?
+      current_user.follow(@item, follow_type)
     else
       false
     end
