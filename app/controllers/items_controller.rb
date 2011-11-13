@@ -51,7 +51,7 @@ class ItemsController < ApplicationController
         facet(:Engine)
         facet(:'Fuel Economy [City]')
       end
-        
+
     end
     # if result.facet( :manufacturer )
     #    @facet_rows = result.facet(:manufacturer).rows
@@ -177,6 +177,11 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.js { render :action => 'plan_to_buy_item'}
     end
+  end
+
+  def compare
+    ids = params[:ids].split(',')
+    @items = Item.find_all_by_id(ids)
   end
 
   private

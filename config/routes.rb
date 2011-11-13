@@ -22,6 +22,9 @@ PlanNto::Application.routes.draw do
         end
       end
       resources :items do
+        collection do
+          get :compare
+        end
         member do
           get 'plan_to_buy_item'
           get 'own_a_item'
