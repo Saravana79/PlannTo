@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111112165204) do
+ActiveRecord::Schema.define(:version => 20111112185150) do
 
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
@@ -81,6 +81,14 @@ ActiveRecord::Schema.define(:version => 20111112165204) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "compares", :force => true do |t|
+    t.integer  "comparable_id"
+    t.string   "comparable_type"
+    t.string   "session_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cons", :force => true do |t|
     t.string   "title",      :limit => 50, :null => false
