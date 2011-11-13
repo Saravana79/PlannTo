@@ -21,7 +21,6 @@ gem 'acts-as-taggable-on', '~>2.1.1'
 gem 'devise'
 gem 'sunspot_rails'
 gem 'acts_as_follower'
-gem 'uuidtools'
 # Use unicorn as the web server
 # gem 'unicorn'
 

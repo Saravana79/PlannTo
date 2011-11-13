@@ -26,7 +26,6 @@ PlanNto::Application.routes.draw do
           get 'plan_to_buy_item'
           get 'own_a_item'
           get 'follow_this_item'
-          get 'add_to_compare'
         end
       end
       resources :reviews

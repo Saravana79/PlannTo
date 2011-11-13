@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item]
 
-  before_filter :comparable_items, :only => [:show, :index]
   #  before_filter :authenticate_user!
   # GET /items
   # GET /items.json
@@ -177,23 +176,6 @@ class ItemsController < ApplicationController
     end
     respond_to do |format|
       format.js { render :action => 'plan_to_buy_item'}
-    end
-  end
-
-  def add_to_compare
-    @type = "compare"
-    @item = Item.find(params[:id])
-    session[:current_session_key] ||= UUIDTools::UUID.random_create.to_s
-    @compare = Compare.find_by_session_id_and_comparable_type_and_comparable_id(session[:current_session_key],@item.class.name,@item.id)
-    if @compare
-      @type = "compare_exists"
-      flash[:notice] = "You are already comparing this Item"
-    else
-      @compare = Compare.create(:session_id => session[:current_session_key], :comparable_type => @item.class.name, :comparable_id => @item.id)
-      flash[:notice] = "Compare is saved"
-    end
-    respond_to do |format|
-      format.js { render :action => 'add_to_compare'}
     end
   end
 

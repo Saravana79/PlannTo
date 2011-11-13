@@ -5,12 +5,10 @@ class Car < Product
 #  has_many :itemrelationships, :foreign_key => :item_id
 #  has_many :relatedcars,
 #    :through => :itemrelationships, :include => :cargroup
-
-  has_many :compares, :as => :comparable
   acts_as_taggable
   #  acts_as_taggable_on :product
   acts_as_commentable
-
+  
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 4.0,  :as => :name_ac
     string :manufacturer, :multiple => true do |product|
@@ -54,8 +52,5 @@ class Car < Product
     "Follow This Car"
   end
 
-  def add_to_compare
-    "Add to Compare"
-  end
   
 end
