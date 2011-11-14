@@ -57,7 +57,7 @@ class ItemsController < ApplicationController
     #    @facet_rows = result.facet(:manufacturer).rows
     #  end
      
-    @item = result
+    @items = result
     render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
