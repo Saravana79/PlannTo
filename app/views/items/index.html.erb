@@ -304,7 +304,7 @@
       </div>
       <div>
         Rahul, Deepak and 100 other people owns this.
-        <a class="remove-compare" style="float:right; color:#5BAEF4;" rel="<%=item.id()%>">Remove</a>
+        <a class="remove-compare" href="javascript:void(0);"  onclick="javascript:removeCompare(this);" style="float:right; color:#5BAEF4;" rel="<%=item.id()%>">Remove</a>
       </div>
       <hr/>
     </div>
@@ -321,7 +321,6 @@ Facet
 
 
   function removeCompare(obj){
-
       $(obj).parents('.compare-view').remove();
       $.cookie($(obj).attr('rel'),null);
       if($('#compare-list .compare-view').length > 1){
@@ -365,10 +364,6 @@ Facet
       $.cookie('allItems',$.cookie('allItems') + ',' + key)
       $.cookie(key,value)
       $('#compare-list').append(value)
-      $(value).find('a.remove-compare').click(function(){
-        removeCompare($(this))
-      });
-
       url = $('#compare-items a').attr('href')
       $('#compare-items a').attr('href', url + ',' + key);
       $('#compare-list').show();
