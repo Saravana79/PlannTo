@@ -17,7 +17,7 @@
   </div>
   <div class="feedcontentheader">
     <div>
-      <span class="producttitle">Fiat</span>
+      <span class="producttitle"><%= @item.name %></span>
     </div>
 
     <div class="feedcontentheader">
@@ -64,12 +64,14 @@
         <%- @item.relateditems.each do |item| %>
           <div class="feedcontentheader">
             <div class="productcontentmainmini">
-              <div>                
+              <div>
+                <%= link_to({},:href => car_group_path(item.id)) do %>
                 <%= image_tag("MarutiRitz_100x60.jpg", :alt => item.name, :class => "productimage",
-                              :style => "width:50px;height:50px;", :href => car_groups_path(item.id)) %>
+                              :style => "width:50px;height:50px;") %>
+                <% end %>
               </div>
               <div class="producttitlemini">
-                <%= link_to item.name, car_groups_path(item.id), :class => "feedlink" %>                
+                <%= link_to item.name, car_group_path(item.id), :class => "feedlink" %>
               </div>
               <div class="productpricemini">
 
@@ -102,7 +104,7 @@
   <% end %>
 </div>
 
-
+</div>
 <script type="text/javascript">
   <% if @user_follow && @user_follow.follow_type == "Buyer" %>
   Product.load_buyer();
