@@ -24,11 +24,13 @@ PlanNto::Application.routes.draw do
         end
       end
       resources :items do
+        collection do
+          get :compare
+        end
         member do
           get 'plan_to_buy_item'
           get 'own_a_item'
           get 'follow_this_item'
-          get 'add_to_compare'
         end
       end
       resources :reviews

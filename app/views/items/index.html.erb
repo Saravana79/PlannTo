@@ -254,13 +254,130 @@
     <%#*</div>%>
   <%#*</div>%>
 <%#*</div>%>
+<div id="comment-notice"></div>
 
-<%= @item.results.count%>
+<div id="compare-list" class="productcontentmain" style="display:none">
+  <span id="compare-items"><%= link_to(("<span>Compare</span>").html_safe, compare_items_path + '?ids=0' , :class => "imageButtonAsk") %></span>
+</div>
+
+<%= @items.count%>
 <br>
-<%= @item.results%>
+<%@items.each do |item|%>
+
+    <div class="productcontentmain">
+      <div>
+        <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
+      </div>
+      <div>
+        <span class="producttitle"><%= item.name %></span>
+        <%#*</div>%>
+        <div class="productprice">
+          <%= item.get_price_info('Price') %>
+        </div>
+        <div class="productreview">
+          <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
+          <a class="feedlink">(100 Reviews)</a>
+        </div>
+        <div class="productspecification">
+
+          <% item.item_attributes.select("attribute_values.value, name, unit_of_measure, category_name").limit(5).each do |item_attribute| %>
+            <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
+          <% end %>
+
+        </div>
+        <span class="add-compare" rel="<%= item.id() %>"><%= link_to(("<span>Add to Compare</span>").html_safe, "javascript:void(0);", :class => "imageButtonAsk") %></span>
+      </div>
+    </div>
+    <div class="compare-view" style="display:none; width:20%; float:left;" id="compare-view-<%= item.id()%>">
+      name <%= item.name %>
+      <div>
+      <img alt="car" class="mediumimage" src="/assets/MarutiRitz_100x60.jpg"/>
+
+      <div>
+        Maruti Ritz
+      </div>
+      <div>
+        3 Star Rating
+      </div>
+      <div>
+        <a class="feedlink">Follow</a>
+      </div>
+      <div>
+        Rahul, Deepak and 100 other people owns this.
+        <a class="remove-compare" href="javascript:void(0);"  onclick="javascript:removeCompare(this);" style="float:right; color:#5BAEF4;" rel="<%=item.id()%>">Remove</a>
+      </div>
+      <hr/>
+    </div>
+    </div>
+
+<% end %>
 <br>
 Facet
 
 <%= @car%>
 
 
+<script type="text/javascript">
+
+
+  function removeCompare(obj){
+      $(obj).parents('.compare-view').remove();
+      $.cookie($(obj).attr('rel'),null);
+      if($('#compare-list .compare-view').length > 1){
+        $('#compare-items').show();
+      }else{
+        $('#compare-items').hide();
+      }
+      if($('#compare-list div.compare-view').length == 0){
+        $('#compare-list').hide();
+      }
+      return false;
+  };
+
+  keys = ($.cookie('allItems')||'').split(',')
+  keys = $.unique(keys)
+  keys = $.unique(keys)
+  keys = $.unique(keys)
+  keys = $.unique(keys)
+  url = $('#compare-items a').attr('href')
+  for(i=0; i < keys.length; i++){
+    value = $.cookie(keys[i]);   
+    $('#compare-list').append(value);
+    url = url + ',' + keys[i]
+
+  }
+  $('#compare-items a').attr('href', url);
+  if($('#compare-list div.compare-view').length == 0){
+    $('#compare-list').hide();
+  }else{
+    $('#compare-list').show();  
+  }
+  $('span.add-compare').click(function(){
+
+    key = $(this).attr('rel');  
+    if($('#compare-list .compare-view').length == 4){
+      $("#comment-notice").html('<div class="flash notice">You can not add more then 4 items to compare.</div>').effect("highlight", {}, 3000);  
+    }else if($.cookie(key)!=null){
+      $("#comment-notice").html('<div class="flash notice">This item already added to compare.</div>').effect("highlight", {}, 3000);    
+    }else {
+      value = "<div class='compare-view' style='width:20%; float:left;'>" + $(this).parent('div').parent('div').next('.compare-view').html() + "</div>";
+      $.cookie('allItems',$.cookie('allItems') + ',' + key)
+      $.cookie(key,value)
+      $('#compare-list').append(value)
+      url = $('#compare-items a').attr('href')
+      $('#compare-items a').attr('href', url + ',' + key);
+      $('#compare-list').show();
+      $('#compare-list .compare-view').show();
+      if($('#compare-list .compare-view').length > 1){
+         $('#compare-items').show();
+      }else{
+        $('#compare-items').hide();
+      }
+    }
+  });
+
+  $('a.remove-compare').click(function(){
+     removeCompare($(this));
+  })
+
+</script>
