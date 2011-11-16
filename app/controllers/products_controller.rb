@@ -1,7 +1,6 @@
 class ProductsController < ApplicationController
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
   after_filter :user_follow_type, :only => [:show]
-  before_filter :comparable_items
 
   layout 'product'
   

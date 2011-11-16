@@ -7,9 +7,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def comparable_items
-    @comparable_items = Compare.all(:conditions => { :session_id => session[:current_session_key] }) 
-  end
 
   def user_follow_type    
     @user_follow = current_user.blank? || user_follow_item[@item.id].blank? ? false : user_follow_item[@item.id].last
