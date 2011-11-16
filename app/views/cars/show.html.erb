@@ -13,8 +13,7 @@
     </span>
     <span class="productbuttons" id="plan_to_follow_span">
       <%= get_follow_link("Follow This Car", follow_this_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id => "plan_to_follow"}) %>
-    </span>
-    <span class="productbuttons" id="add_to_compare_span"><%= link_to(("<span>"+@item.add_to_compare+"</span>").html_safe, add_to_compare_item_path(@item.id), :remote => true, :class => "imageButtonAsk", :id => "add_to_compare") %></span>
+    </span>    
   </div>
   <div class="feedcontentheader">
     <div class="productcontentmain">
