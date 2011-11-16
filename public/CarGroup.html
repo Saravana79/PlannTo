@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <title>PlannTo - Empowered Customers</title>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="Common.js" />
+        <script type="text/javascript">
+            var i = 0;
+            
+            function CarClick(){
+                var obj = document.getElementById("CarSubMenuDiv");
+                
+                if (obj.style.display == "block") {
+                    document.getElementById("CarSubMenuDiv").style.display = "none";
+                }
+                else {
+                    document.getElementById("CarSubMenuDiv").style.display = "block";
+                    
+                }
+                return true;
+            };
+        </script>
+    </head>
+    <body style="padding-bottom: 0px;" class="body">
+        <div id="container">
+            <div id="header">
+                <div class="headerright">
+                    <form name="form1" id="form1" method="post" action="" class="search">
+                        <input type="text" name="textfield" value="Search..." class="search"/><input class="button" type="submit" name="Submit" value="GO" />
+                    </form>
+                </div>
+                <ul class="headernav">
+                    <li class="headerlinklogo ">
+                        <a href="#" class="plannto">PlannTo</a>
+                    </li>
+                    <li class="headerlink ">
+                        <a href="index.html">Home</a>
+                    </li>
+                    <li class="headerlink ">
+                        <a href="#">Explore</a>
+                    </li>
+                  <li class="headerlink ">
+                        <a href="#">People</a>
+                    </li>
+                    <li class="headerlink ">
+                        <a href="#">Messages</a>
+                    </li>
+                </ul>
+            </div>
+            <div ID="blanket" class="blanket" style="display:none;">
+            </div>
+            <div ID="popupwindowDiv" class="popupwindowDiv" style="display:none;">
+                <div class="popupWindowLink">
+                    <a class="feedlink" onclick="popup('popupwindowDiv');">Close</a>
+                </div>
+                <div class="popupdiv">
+                    <div>
+                        PlanTo buy a car? <input class="button" type="submit" name="Submit" value="Yes" onclick="divCarShortList.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
+                    </div>
+                    <div id="divCarShortList" style="display:none;">
+                        Have you shortlisted the cars that you are considering?<input class="button" type="submit" name="Submit" value="Yes" onclick="divCarName.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
+                        <div id="divCarName" style="display:none;">
+                            <input type="text" class="inputtype" placeholder="Start typing the car name..." style="width:200px;"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr/>
+                    <br/>
+                    <div>
+                        Generally interested in car? Would love to know about various cars or a specific car that i own and also like to interact with like minded people?<input class="button" type="submit" name="Submit" value="Yes" onclick="CarCommunityDiv.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
+                    </div>
+                    <br/>
+                    <div id="CarCommunityDiv" style="display:none;">
+                        Do you like to follow
+                        <ul>
+                            <li>
+                                <input type="radio" name="Cars" value="">All Cars
+                                </input>
+                            </li>
+                            <li>
+                                <input type="radio" name="Cars" value="">Specific Cars
+                                </input><input type="text" class="inputtype" placeholder="Start typing the car name that you like to follow..." style="width:250px;"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <a class="feedlink">Why i have to enter this information?</a>
+                    <a href="index.html"><input class="buttonDone" type="submit" name="Submit" Value="Done">
+                        </input></a>
+                </div>
+            </div>
+            <div ="ContentPanel" class="contentpanel">
+                <div id="main-navigation">
+                    <ul id="navlist" class="navtabs botmargin">
+                        <li>
+                            <a href="#" class="navtab">All</a>
+                        </li>
+                        <li>
+                            <a href="index.html" class="navtab" onclick="popup('popupwindowDiv');">Car</a>
+                            <div id="CarSubMenuDiv" class="SubmenuDiv" style="display:block;">
+                                <ul class="nabtabChilds">
+                                    <li>
+                                        <a href="#" class="navtabChild">Browse All Cars</a>
+                                    </li>
+                                    <li>
+                                        <a href="Garage.html" class="navtabChild">My Garage</a>
+                                    </li>
+                                    <li>
+                                        <a href="PreferencePage.html" class="navtabChild">My Preferences</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="navtab">Mobile</a>
+                        </li>
+                        <li>
+                            <a href="#" class="navtab">Camera/Photography</a>
+                        </li>
+                        <li>
+                            <a href="#" class="navtab">Movies</a>
+                        </li>
+                        <li>
+                            <a href="#" class="navtab">Travel</a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="main-content">
+                    <div>
+                        <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink" href="cargroup.html">Grande Punto</a>
+                    </div>
+                    <div class="productbuttonsGrp">
+                        <span class="productbuttons"><a class="imageButtonAsk" href="#"><span>Follow</span></a></span>
+                    </div>
+                    <div class="feedcontentheader">
+                        <div class="productcontentmain">
+                            <div>
+                                <img class="productimage"  src="Images\Fiat_Grande_Punto__175.jpg"/>
+                            </div>
+                            <div>
+                                <span class="producttitle">Fiat Grande Punto</span>
+                            </div>
+                            <div class="productprice">
+                                Price - Rs 4,14,100 To Rs 6,14,000(Showroom Price) 
+                            </div>
+                            <div class="productreview">
+                                <img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\white.gif"/>Ratings <a class="feedlink">(100 Reviews)</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="productcontentcreation">
+                        <div class="">
+                            <span class="buttonLink">Review Car</span>
+                            <span class="buttonLink"><a class="feedlink">Ask a Question</a></span>
+                            <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
+                        </div>
+                        <div ID="reviewSmallDiv" class="txtAreaDiv" style="padding:5px 5px 5px 5px;">
+                            <textarea class="textFilling" id="txtArea" placeholder="What do you think of this car?" value="" style="width:580px;height:10px;" onclick="reviewSmallDiv.style.display='none';reviewDiv.style.display='block';txtAreaExpand.focus();" ></textarea>
+                        </div>
+						<div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">
+							<div class="txtAreaDiv">
+                            	<textarea class="textFilling" id="txtAreaExpand"  value="" style="width:570px;height:50px;"></textarea>
+							</div>
+							<div>
+								 <div class="productreview">
+                                	<img src="Images\white.gif"/> <img src="Images\white.gif"/> <img src="Images\white.gif"/> <img src="Images\white.gif"/> <img src="Images\white.gif"/> Click to Rate it.
+                            	</div>
+							</div>
+							<div style="padding:5px 5px 0px 5px;">
+								<span >
+								Pros : <input style="margin-left:25px;" type="text" name="textfield" placeholder="Start typing to get recommendations..." class="search"/><input class="button" type="submit" name="Submit" value="Add" />
+								</span>
+								<span style="float:right;">
+								Cons : <input type="text" name="textfield" placeholder="Start typing to get recommendations..." class="search"/><input class="button" type="submit" name="Submit" value="Add" />	
+								</span>
+							</div>
+							<div style="padding:5px 5px 0px 5px;">
+								Best Uses : <input style="margin-left:0px;" type="text" name="textfield" placeholder="Start typing to get recommendations..." class="search"/><input class="button" type="submit" name="Submit" value="Add" />
+							</div>
+							
+							<div style="padding:5px 5px 0px 5px;">
+								Would you recommend this product to your friend<input class="button" type="submit" name="Submit" value="Yes" onclick="divCarName.style.display='block';"/><input class="button" type="submit" name="Submit" value="No" />
+							</div>
+							<div style="padding:0px 5px 20px 5px;">
+								 <a href="index.html"><input style="background-color:#006CF9;color:#ffffff;float:right;"  type="submit" name="Submit" Value="Share This Review">
+                        		</input></a>
+							</div>
+							
+							
+						</div>
+					
+                </div>
+                    			
+                    <div class="">
+                        <br></br>
+                       <span class="tabstyle" style="background-color:#E6E6E6;"><a style="color:#000000;font-style:none;">All Variants</a></span> <span style="margin-left:-2px;" class="tabstyle"><a class="">Reviews</a> </span><span class="tabstyle"><a class="">Questions and Answers</a></span>
+                    </div>
+                    <div class="main-content-section">
+                	<div class="productbuttonsGrp" style="margin-top:-15px;">
+                        
+			<span class="productbuttons"><a class="imageButtonAsk" href="#"><span>Compare Cars</span></a></span>
+                    </div>	
+	              	 <div class="feedcontentheadermini">                        	
+	                           <div class="productcontentmainmini">
+	                            <div>
+	                                <img class="productimage" style="width:50px;height:50px;" src="Images\Fiat_Grande_Punto__175.jpg"/>
+	                            </div>
+	                            <div>
+	                                <span class="producttitlemini">Fiat Grande Punto Active 1.2</span>
+	                            </div>
+	                            <div class="productpricemini">
+	                                Price - Rs 4,14,100 (Showroom Price) 
+	                            </div>
+	                            <div class="productreviewmini">
+	                                <img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\white.gif"/>Ratings <a class="feedlink">(100 Reviews)</a>
+	                            </div>
+	                            <div class="productspecificationmini">
+	                                Petrol (Fuel Type), 1172cc (Engine), 5 Speed (Gear),Manual (Transmission), Automatic A/C Control 
+	                            </div>
+								 <div style="margin-left:65px;">
+                        			<a class="imageButtonmini" href="#"><span>PlanTo Buy It</span></a></span>
+                        			<a class="imageButtonmini" href="#"><span>Own It</span></a></span>                        			
+                    			</div>
+	                        </div>
+							</div>
+							
+							<div class="feedcontentheadermini">                        	
+	                           <div class="productcontentmainmini">
+	                            <div>
+	                                <img class="productimage" style="width:50px;height:50px;" src="Images\Fiat_Grande_Punto__175.jpg"/>
+	                            </div>
+	                            <div>
+	                                <span class="producttitlemini">Fiat Grande Punto Emtion Pack 1.2</span>
+	                            </div>
+	                            <div class="productpricemini">
+	                                Price - Rs 4,14,100 (Showroom Price) 
+	                            </div>
+	                            <div class="productreviewmini">
+	                                <img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\white.gif"/>Ratings <a class="feedlink">(100 Reviews)</a>
+	                            </div>
+	                            <div class="productspecificationmini">
+	                                Petrol (Fuel Type), 1172cc (Engine), 5 Speed (Gear),Manual (Transmission), Automatic A/C Control 
+	                            </div>
+										 <div style="margin-left:65px;">
+                        			<a class="imageButtonmini" href="#"><span>PlanTo Buy It</span></a></span>
+                        			<a class="imageButtonmini" href="#"><span>Own It</span></a></span>                        			
+                    			</div>
+	                        </div>
+	                       
+	                    </div>
+								<div class="feedcontentheadermini">                        	
+	                           <div class="productcontentmainmini">
+	                            <div>
+	                                <img class="productimage" style="width:50px;height:50px;" src="Images\Fiat_Grande_Punto__175.jpg"/>
+	                            </div>
+	                            <div>
+	                                <span class="producttitlemini">Fiat Grande Punto Active 1.2</span>
+	                            </div>
+	                            <div class="productpricemini">
+	                                Price - Rs 4,14,100 (Showroom Price) 
+	                            </div>
+	                            <div class="productreviewmini">
+	                                <img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\white.gif"/>Ratings <a class="feedlink">(100 Reviews)</a>
+	                            </div>
+	                            <div class="productspecificationmini">
+	                                Petrol (Fuel Type), 1172cc (Engine), 5 Speed (Gear),Manual (Transmission), Automatic A/C Control 
+	                            </div>
+										 <div style="margin-left:65px;">
+                        			<a class="imageButtonmini" href="#"><span>PlanTo Buy It</span></a></span>
+                        			<a class="imageButtonmini" href="#"><span>Own It</span></a></span>                        			
+                    			</div>
+	                        </div>
+	                       
+	                    </div>
+								<div class="feedcontentheadermini">                        	
+	                           <div class="productcontentmainmini">
+	                            <div>
+	                                <img class="productimage" style="width:50px;height:50px;" src="Images\Fiat_Grande_Punto__175.jpg"/>
+	                            </div>
+	                            <div>
+	                                <span class="producttitlemini">Fiat Grande Punto Active 1.2</span>
+	                            </div>
+	                            <div class="productpricemini">
+	                                Price - Rs 4,14,100 (Showroom Price) 
+	                            </div>
+	                            <div class="productreviewmini">
+	                                <img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\star2.gif"/><img src="Images\white.gif"/>Ratings <a class="feedlink">(100 Reviews)</a>
+	                            </div>
+	                            <div class="productspecificationmini">
+	                                Petrol (Fuel Type), 1172cc (Engine), 5 Speed (Gear),Manual (Transmission), Automatic A/C Control 
+	                            </div>
+										 <div style="margin-left:65px;">
+                        			<a class="imageButtonmini" href="#"><span>PlanTo Buy It</span></a></span>
+                        			<a class="imageButtonmini" href="#"><span>Own It</span></a></span>                        			
+                    			</div>
+	                        </div>
+	                       
+	                    </div>
+					
+            </div>
+                </div>
+            </div>
+            <div id="main-subcontent">
+                <div class="uiHeaderSection">
+                    <div class="uisidepanelheadercontent">
+                        Related Cars
+                    </div>
+                </div>
+                <div class="uiSidePanelContent">
+                    <div class="uisidePanelContent">
+                        <div>
+                            <img alt="car" class="mediumimage" src="Images\MarutiRitz_100x60.jpg"/>
+                            <div>
+                                Maruti Ritz
+                            </div>
+                            <div>
+                                3 Star Rating
+                            </div>
+                            <div>
+                                <a class="feedlink">Follow</a>
+                            </div>
+                            <div>
+                                Rahul, Deepak and 100 other people owns this.
+                            </div>
+                            <hr/>
+                        </div>
+                        <div>
+                            <img alt="car" class="mediumimage" src="Images\Lancer.jpg"/>
+                            <div>
+                                Maruti Ritz
+                            </div>
+                            <div>
+                                3 Star Rating
+                            </div>
+                            <div>
+                                <a class="feedlink">Follow</a>
+                            </div>
+                            <div>
+                                Rahul, Deepak and 100 other people owns this.
+                            </div>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="feedlink centeritem">More Items...</a>
+                    </div>
+                </div>
+                <div class="uiHeaderSection">
+                    <div class="uisidepanelheadercontent">
+                        Top Hatchback Cars
+                    </div>
+                </div>
+                <div class="uiSidePanelContent">
+                    <div class="uisidePanelContent">
+                        <div>
+                            <img alt="car" class="mediumimage" src="Images\MarutiRitz_100x60.jpg"/>
+                            <div>
+                                Maruti Ritz
+                            </div>
+                            <div>
+                                3 Star Rating
+                            </div>
+                            <div>
+                                <a class="feedlink">Follow</a>
+                            </div>
+                            <div>
+                                Rahul, Deepak and 100 other people owns this.
+                            </div>
+                            <hr/>
+                        </div>
+                        <div>
+                            <img alt="car" class="mediumimage" src="Images\Lancer.jpg"/>
+                            <div>
+                                Maruti Ritz
+                            </div>
+                            <div>
+                                3 Star Rating
+                            </div>
+                            <div>
+                                <a class="feedlink">Follow</a>
+                            </div>
+                            <div>
+                                Rahul, Deepak and 100 other people owns this.
+                            </div>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div>
+                        <a class="feedlink centeritem">More Items...</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p>
+                <a href="#" target="_blank">| Copyright &copy; PlannTo |</a>
+            </p>
+        </div>
+        </div>
+    </body>
+</html>
