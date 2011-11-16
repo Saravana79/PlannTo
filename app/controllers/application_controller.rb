@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  def user_follow_item
+  def all_user_follow_item
     Rails.cache.fetch("item_follow_"+current_user.id.to_s) do
       current_user.follows.group_by(&:followable_id)
     end
@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
 
   def comparable_items
     @comparable_items = Compare.all(:conditions => { :session_id => session[:current_session_key] }) 
+  end
+
+  def user_follow_type    
+    @user_follow = current_user.blank? || user_follow_item[@item.id].blank? ? false : user_follow_item[@item.id].last
   end
 
 end

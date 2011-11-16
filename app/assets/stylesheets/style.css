@@ -355,3 +355,9 @@ input {background-color: #FFF;color: #999999;border: 1px solid #CCC;	font-size: 
                 -khtml-border-radius:6px;
             }
             #amount{font-size: 14px;text-shadow:0px 1px 0px #ccc}
+
+.productcontentmainmini {
+padding: 5px 0px 0px 5px;
+border-bottom: solid 1px #E3E3E3;
+min-height: 50px;
+}

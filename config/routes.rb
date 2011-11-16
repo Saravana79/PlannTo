@@ -15,6 +15,8 @@ PlanNto::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
       resources :cars
+      resources :manufacturers
+      resources :car_groups
       resources :products do
         member do
           get 'related_products'

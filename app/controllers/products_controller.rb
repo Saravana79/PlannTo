@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
-  before_filter :user_follow_item, :if => Proc.new { |c| !current_user.blank? }
+  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
+  after_filter :user_follow_type, :only => [:show]
   before_filter :comparable_items
 
   layout 'product'
@@ -13,8 +14,7 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    @user_follow = current_user.blank? ||user_follow_item[@item.id].blank? ? false : user_follow_item[@item.id].last
+    
   end
 
   def related_products
