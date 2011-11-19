@@ -1,28 +1,44 @@
-<%@items.each do |item|%>
+<div id="compare-list" class="productcontentmain" style="display:none">
+  <span id="compare-items"><%= link_to(("<span>Compare</span>").html_safe, compare_items_path + '?ids=0' , :class => "imageButtonAsk") %></span>
+</div>
 
-    <div class="productcontentmain">
+<%@items.each do |item|%>
+    <div class="usual">
       <div>
         <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
+        <span class="producttitle"><%= item.name %></span>
       </div>
       <div>
-        <span class="producttitle"><%= item.name %></span>
-        <%#*</div>%>
-        <div class="productprice">
-          <%= item.get_price_info('Price') %>
-        </div>
-        <div class="productreview">
-          <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
-          <a class="feedlink">(100 Reviews)</a>
-        </div>
-        <div class="productspecification">
-
-          <% item.item_attributes.select("attribute_values.value, name, unit_of_measure, category_name").limit(5).each do |item_attribute| %>
-            <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
-          <% end %>
-
+        <div id="tabs2" class="main-content-section">
+          <%= render :template => 'products/specification', :locals => { :@item => item } %>
         </div>
       </div>
     </div>
-
-
+    <br style="clear:both;" />
 <% end %>
+
+<script type="text/javascript">
+
+  keys = ($.cookie('allItems')||'').split(',')
+  url = $('#compare-items a').attr('href')
+  for(i=0; i < keys.length; i++){
+    value = $.cookie(keys[i]);
+    if(value != null){
+     $('#compare-list').append(value);
+     $('#add_to_compare_' + keys[i] ).attr('checked',true);
+     url = url + ',' + keys[i]
+    }
+  }
+  $('#compare-items a').attr('href', url);
+  if($('#compare-list div.compare-view').length == 0){
+    $('#compare-list').hide();
+  }else if($('#compare-list div.compare-view').length > 1){
+    $('#compare-list').show();
+    $('#compare-items').show();
+  }else{
+    $('#compare-list').show();
+    $('#compare-items').hide();
+  }
+
+        
+</script>
