@@ -1,7 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 
-class Manufacturer < Item
+class Manufacturer < Product
   has_many :itemrelationships, :foreign_key => :relateditem_id
   has_many :products,
     :through => :itemrelationships
