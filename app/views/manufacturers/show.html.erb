@@ -24,7 +24,10 @@
       <div class="productcontentmain">
         <div>
           <%- @item.relateditems.each do |item| %>
-            <%= image_tag("MarutiRitz_100x60.jpg", :alt => item.name, :href => "#") %>
+            <%= link_to({}, :href => car_group_path(item.id)) do %>
+              <%= image_tag("MarutiRitz_100x60.jpg", :alt => item.name, :class => "productimage") %>
+            <% end %>
+            
            <%- end %>
           
         </div>
@@ -74,8 +77,7 @@
                 <%= link_to item.name, car_group_path(item.id), :class => "feedlink" %>
               </div>
               <div class="productpricemini">
-
-                Price - Rs 4,14,100 - 6,16,000(Showroom Price)
+                <%= get_price_range(item) %>                
               </div>
               <div class="productreviewmini">
                 <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings

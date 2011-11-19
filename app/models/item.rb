@@ -20,14 +20,23 @@ class Item < ActiveRecord::Base
   has_many :itemrelationships, :foreign_key => :item_id
   has_many :relateditems,
     :through => :itemrelationships
+  
+  scope :get_price_range, lambda {|item_ids| joins(:item_attributes).
+    where("attribute_values.item_id in (?) and attributes.name = 'Price'", item_ids).
+    select("min(CAST(value as SIGNED)) as min_value, max(CAST(value as SIGNED)) as max_value, attributes.unit_of_measure as measure_type, attribute_values.addition_comment as comment, attributes.name as name").
+    group("attribute_id")
+  }
+
   acts_as_followable
+
+
 
   searchable :auto_index => true, :auto_remove => true  do
 
     text :name, :boost => 4.0,  :as => :name_ac    
   end
 
-  def get_price_info(item_type)
+  def get_price_info(item_type)    
     item_attribute = item_attributes.first{|a| a.name == item_type}
     attribute_value = item_attribute.attribute_values.where(:item_id => id).last
     item_attribute.name + ' - ' + item_attribute.unit_of_measure + ' ' +
