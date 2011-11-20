@@ -10,3 +10,4 @@ vendor/bundle/
 log/
 public/assets/
 public/cache/
+config/database.yml

@@ -1,0 +1,24 @@
+<%- @item.relateditems.each do |item| %>
+  <div class="feedcontentheader">
+    <div class="productcontentmainmini">
+      <div>
+        <%= link_to({}, :href => car_path(item.id)) do %>
+          <%= image_tag("MarutiRitz_100x60.jpg", :alt => item.name, :class => "productimage",
+                        :style                        => "width:50px;height:50px;") %>
+        <% end %>
+      </div>
+      <div class="producttitlemini">
+        <%= link_to item.name, car_path(item.id), :class => "feedlink" %>
+      </div>
+      <div class="productpricemini">
+
+        <%= item.get_price_info('Price') %>
+      </div>
+      <div class="productreviewmini">
+        <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
+        <a class="feedlink">(100 Reviews)</a>
+      </div>
+    </div>
+
+  </div>
+<%- end %>

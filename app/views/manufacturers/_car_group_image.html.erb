@@ -1,0 +1,15 @@
+<div class="feedcontentheader">
+      <div class="productcontentmain">
+        <div>
+          <%- @item.relateditems.each do |item| %>
+            <%= link_to({}, :href => car_group_path(item.id)) do %>
+              <%= image_tag("MarutiRitz_100x60.jpg", :alt => item.name, :class => "productimage") %>
+            <% end %>
+
+           <%- end %>
+
+        </div>
+
+
+      </div>
+    </div>

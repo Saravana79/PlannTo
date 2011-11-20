@@ -11,7 +11,6 @@ class Manufacturer < Product
   
   def add_relation_type
     self.relationtype = 'Manufacturer'
-
   end
 
 end
