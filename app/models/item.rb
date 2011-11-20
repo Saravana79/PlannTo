@@ -38,9 +38,13 @@ class Item < ActiveRecord::Base
 
   def get_price_info(item_type)    
     item_attribute = item_attributes.first{|a| a.name == item_type}
-    attribute_value = item_attribute.attribute_values.where(:item_id => id).last
-    item_attribute.name + ' - ' + item_attribute.unit_of_measure + ' ' +
-      attribute_value.value + ' ( ' + attribute_value.addition_comment + ' )'
+    if item_attribute
+      attribute_value = item_attribute.attribute_values.where(:item_id => id).last
+      item_attribute.name + ' - ' + item_attribute.unit_of_measure + ' ' +
+        attribute_value.value + ' ( ' + attribute_value.addition_comment + ' )'
+    else
+      ""
+    end
   end
 
   def unfollowing_related_items(user, number)

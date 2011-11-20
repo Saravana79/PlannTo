@@ -261,6 +261,7 @@
 </div>
 
 <%= @items.count%>
+
 <br>
 <%@items.each do |item|%>
 
@@ -287,7 +288,8 @@
         </div>
         <span><%= check_box_tag("add_to_compare_#{item.id()}", nil,false ,:checked => nil,
                                 :class => "add-compare", :rel =>item.id())%>
-              <%= link_to(("<span>Add to Compare</span>").html_safe, "javascript:void(0);", :class => "imageButtonAsk") %>
+              <span>Add to Compare</span>
+              
         </span>
       </div>
     </div>
