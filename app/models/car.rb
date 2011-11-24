@@ -50,6 +50,14 @@ class Car < Product
     end
   end
 
+  def unfollowing_related_items(user, number)
+    if user
+      relateditems.select{|item| !user.following?(item) }[0..number]
+    else
+      relateditems.limit(number)
+    end
+  end
+
   def add_to_compare
     "Add to Compare"
   end
