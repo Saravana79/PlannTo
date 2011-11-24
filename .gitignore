@@ -8,6 +8,5 @@ solr/lib/*
 vendor/bundle/
 .idea/
 log/
-public/assets/
 public/cache/
 config/database.yml
