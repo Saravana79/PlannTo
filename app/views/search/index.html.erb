@@ -43,7 +43,7 @@
     }
   </style>
   <style type="text/css">
-  
+
     .textboxlist { font: 11px "Lucida Grande", Verdana; cursor: text; }
     .textboxlist-bits { zoom: 1; overflow: hidden; margin: 0; padding: 3px 4px 0; border: 1px solid #999; padding-bottom: 3px; }
     .textboxlist-bit { color: #19558D; list-style-type: none; float: left; display: block; padding: 0; margin: 0 5px 3px 0; cursor: default; }
@@ -59,6 +59,10 @@
     .textboxlist-bit-box-focus .textboxlist-bit-box-deletebutton { background-position: bottom; }
 
   </style>
+
+  <script type="text/javascript" charset="utf-8">
+
+  </script>
   <br/>
   <div id="navbar"><b>Search Criteria:</b><br/>
     <div class="row">
@@ -68,6 +72,7 @@
       <%end%>
       <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
         <%= hidden_field_tag :page %>
+        <%= hidden_field_tag :search_type, @search_type %>
         <%=hidden_field_tag :manufacturer%>
         <%@search_form_lookups.each do |form_list|%>
           <%=hidden_field_tag form_list[:field_name].to_sym%>
@@ -85,44 +90,62 @@
 
 
 <div id="dialog" title="Search Criteria" style="display:none">
-  <span id="dialogName"></span>
+  <!--<span id="dialogName"></span>-->
   <%=hidden_field_tag :which_attribute%>
   <%=hidden_field_tag :which_type%>
   <%=hidden_field_tag :which_form_field%>
+  <%=hidden_field_tag :which_unit%>
   <div id="price2" class="sliderText" style="color: orange;"></div>
   <br/>
-  <div id="priceSlider2" class="priceSlider2"></div>
-  <div id="fuelSlider" class="fuelSlider"></div>
+  <!--<div id="priceSlider2" class="priceSlider2"></div>
+  <div id="fuelSlider" class="fuelSlider"></div>-->
+  <%@search_info_lookups.each do |search|%>
+    <%if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
+      <input id="Slider<%=search[:param_2]%>" type="slider" name="price" style="display:none" />
+    <%end%>
+  <%end%>
   <input id="autocompleteField" style="display:none;width: 220px;"></input><br/><br/>
   <button id="searchButton2" class="button" onclick="return false;" style="float: right">Search</button><br/>
 
 </div>
+
+
 <script type="text/javascript">
   $('#searchButton2').click(function() {
     var add = true;
     $("#navmenu").find("li").each(function(index) {
       var tagName = $(this).text().replace(/\(.*?\)/, "")
-      var tagTitle = $("#ui-dialog-title-dialog").text().toString()      
-      if ($.trim(tagName.toString()) == $.trim(tagTitle.toString()))  {       
+      var tagTitle = $("#ui-dialog-title-dialog").text().toString()
+      if ($.trim(tagName.toString()) == $.trim(tagTitle.toString()))  {
         add = false;
       }
     });
     var tagId = $("#which_attribute").val() + "_tag"
     if (add == false){
-       $("#" +tagId).remove();
-    } 
+      $("#" +tagId).remove();
+    }
     var searchInfo = "";
     var lineHeight = "";
-      if ($("#price2").html() != ""){
-        searchInfo = "<br/>(" + $("#price2").html() + ")"
-      }
-      else{
-        lineHeight = "style='line-height:35px;'"
-      }
-      var list = "<li id='" + tagId + "'" + lineHeight + " class='attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +$("#ui-dialog-title-dialog").text()+ searchInfo + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
-      $(list).appendTo('#navmenu ul');
+    var fieldId = $("#which_form_field").val()
+    if ($("#which_type").val() == "Between"){
+      var minValue = $( "#min_" + fieldId ).val()
+      var maxValue = $("#max_" + fieldId).val()
+      var searchCriteria = "<br/>( " + $("#which_type").val() + " "  + minValue + " " + $("#which_unit").val() + " - " + maxValue + " "  + $("#which_unit").val() + ")"
+    }
+    else if (($("#which_type").val() == "Greater than") || ($("#which_type").val() == "Less then"))
+    {
+      var selectedValue = $("#" + fieldId).val()
+      var searchCriteria = "<br/>( " + $("#which_type").val() + " "  + selectedValue + " " + $("#which_unit").val() +  ")"
 
-    //$(str).insertAfter('#' + taggingField);
+    }
+    else{
+      var selectedValue = $("#" + fieldId).val()
+      var searchCriteria = "<br/>( " + selectedValue + " " +  ")"
+    }
+
+    var list = "<li id='" + tagId + "'" + lineHeight + " class='attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +$("#ui-dialog-title-dialog").text()+ searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    $(list).appendTo('#navmenu ul');
+
     $("#page").val(1)
     $.get('/search',$("#searchForm").serialize(),null,"script");
     $("#dialog").dialog("close");
@@ -132,7 +155,7 @@
 
 
   $('.attributeTag').live('click', function(){
-    var tagId = $(this).attr('id');   
+    var tagId = $(this).attr('id');
     var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
     $('#' + attributeId).trigger('click');
     return false;
@@ -147,7 +170,7 @@
     }
     else{
       var attributeIndex = attributeId.replace('attribute_menu_',''); //substring(0, tagId.indexOf("attribute_menu_"));
-        <%@search_info_lookups.each_with_index do |lookup, index|%>
+<%@search_info_lookups.each_with_index do |lookup, index|%>
         if (<%=index%> == attributeIndex){
           var valueType = "<%=lookup[:param_1][:vt]%>"
           var attributeId = "<%=lookup[:id]%>"
@@ -159,84 +182,101 @@
             $("#" + attributeId).val('');
           }
         }
-        <%end%>
-    }      
+<%end%>
+    }
     $(this).closest('li').remove();
     $.get('/search',$("#searchForm").serialize(),null,"script");
     return false;
   })
- 
+
 </script>
 <!--<div id="items"></div>-->
 
 <script type="text/javascript">
   $(".button").button();
   function openInfoBox(displayInfo, attr_name, elem){
+    $( "#price2" ).html("")
     $("#which_attribute").val($(elem).attr('id'));
     $("#which_form_field").val(attr_name);
+    $("#which_type").val(displayInfo.vth);
+    $("#which_unit").val(displayInfo.ut);
     $("#dialogName").val(attr_name);
     // $.each(obj, function(name, value) {
     $("#dialog #autocompleteField").hide();
-       
+    $(".jslider").hide()
     if (displayInfo.vt == "Between"){
       var min_v;
       var max_v;
       min_v = $( "#min_" + attr_name ).val() == "" ? displayInfo.min_v : $( "#min_" + attr_name ).val()
       max_v = $( "#max_" + attr_name ).val() == "" ? displayInfo.max_v : $( "#max_" + attr_name ).val()
       $("#which_type").val('Between');
-      $( "#fuelSlider" ).hide();
-      $("#dialog #priceSlider2").show();
       $("#dialog").dialog({title: displayInfo.adn});
-      if ($("#dialog #priceSlider2").size() > 0){
-        $( "#priceSlider2" ).slider({
-          range: true,
-          min: parseInt(displayInfo.min_v),
-          max: parseInt(displayInfo.max_v),
-          step: 1000,
-          values: [ min_v, max_v ],
-          slide: function( event, ui ) {
-            $( "#price2" ).html( displayInfo.vth + " "  + ui.values[ 0 ] + " " + displayInfo.ut + " - " + ui.values[ 1 ] + " "  + displayInfo.ut );
-            $( "#min_" +attr_name ).val( ui.values[ 0 ] );
-            $( "#max_" + attr_name ).val( ui.values[ 1 ] );
+      var  rangeVal = displayInfo.range.split(",")
+
+      $( "#Slider" + attr_name).val( displayInfo.min_v + ";" + displayInfo.max_v);
+      if ($('#Slider' + attr_name).next(".jslider").length == 0){
+        jQuery("#Slider" + attr_name).slider({
+          from: parseInt(displayInfo.min_v),
+          to: parseInt(displayInfo.max_v),
+          step: parseInt(displayInfo.step),
+          smooth: false,
+          round: 0,
+          dimension: displayInfo.ut,
+          dimension: "&nbsp;" + displayInfo.ut,
+          //heterogeneity: ['50/5000000', '75/10000000'],
+          scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
+          skin: "plastic",
+          onstatechange: function(value) {
+            //alert(value)
+            var  sliderVal = value.split(";")
+            $( "#min_" +attr_name ).val( sliderVal[ 0 ] );
+            $( "#max_" + attr_name ).val( sliderVal[ 1 ] );
           }
-        })
-        $( "#price2" ).html( displayInfo.vth + " "  + min_v  + " " + displayInfo.ut + " - " + max_v  + " "  + displayInfo.ut);
-        $( "#min_" + attr_name ).val( min_v );
-        $( "#max_" + attr_name ).val( max_v );
+        });
       }
+      else{
+        $('#Slider' + attr_name).next(".jslider").show()
+      }
+      return false;
     }
     else if ((displayInfo.vt == "GreaterThan") || (displayInfo.vt == "LessThen")){
-      $( "#fuelSlider" ).show();
       var actual_value;
-      if (displayInfo.vt == "GreaterThan"){       
+      if (displayInfo.vt == "GreaterThan"){
         actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.av) : parseInt($( "#" + attr_name ).val())
-              
+
       }
       else{
         actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.max_v) : parseInt($( "#" + attr_name ).val())
-       
       }
-      
+
       $("#dialog").dialog({title: displayInfo.adn});
-      if ($("#dialog #fuelSlider").size() > 0){
-        $( "#priceSlider2" ).hide();
-        $( "#fuelSlider" ).slider({
-          value: actual_value,
-          step: 1,
-          min: parseInt(displayInfo.min_v),
-          max: parseInt(displayInfo.max_v),
-          slide: function( event, ui ) {
-            $( "#price2" ).html( displayInfo.vth + " "  + ui.value + " " + displayInfo.ut );
-            $( "#" +attr_name ).val( ui.value );
+      var  rangeVal = displayInfo.range.split(",")
+      $( "#Slider"  + attr_name).val( actual_value);
+      if ($('#Slider' + attr_name).next(".jslider").length == 0){
+        jQuery("#Slider" + attr_name).slider({
+          from: parseInt(displayInfo.min_v),
+          to: parseInt(displayInfo.max_v),
+          step: parseInt(displayInfo.step),
+          smooth: true,
+          range : false,
+          round: 1,
+          dimension: displayInfo.ut,
+          dimension: "&nbsp;" + displayInfo.ut,
+          // heterogeneity: ['50/5000000', '75/10000000'],
+          scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
+          skin: "plastic",
+          onstatechange: function(value) {
+            var  sliderVal = value
+            $( "#" +attr_name ).val( sliderVal );
           }
-        })
-        $( "#price2" ).html( displayInfo.vth + " "  + actual_value + " " + displayInfo.ut );
-        $( "#" + attr_name ).val( actual_value );
+        });
       }
-      return true
+      else{
+        $('#Slider' + attr_name).next(".jslider").show()
+      }
+      return false;
     }
     else if (displayInfo.vt == "Click"){
-      $( "#fuelSlider" ).hide();
       var booleanObject = jQuery.parseJSON(attr_name);
       $("#which_form_field").val(booleanObject.field_id);
       var tagId = $("#which_attribute").val() + "_tag"
@@ -249,22 +289,18 @@
       return false
     }
     else if (displayInfo.vt == "ListOfValues"){
-      $("#dialog #priceSlider2").hide()
-      $("#dialog #fuelSlider").hide()
       $("#dialog").dialog({title: displayInfo.adn});
       $("#price2").text('');
+      $("#" + attr_name).val('');
       if ($("#dialog #autocompleteField").size() > 0){
-        var carTypeList = loadCarTypes();
+        var typeList = loadTypes();
         $( "#dialog #autocompleteField" ).autocomplete({
           minLength: 0,
-          //  format: "json",
-          //  source: "/search/autocomplete_manufacturers",
-          source: carTypeList,
+          source: typeList,
           focus:function(e,ui) {
             return false
           },
           select: function( event, ui ) {
-            //$("#price2").html(ui.item.value);
             store_info_div("price2", ui.item)
             store_ids(attr_name, ui.item)
             $("#dialog #autocompleteField").val('');
@@ -286,12 +322,12 @@
   }
 
   function openManufacturerBox(attr_name,elem){
+    $(".jslider").hide()
     $("#which_attribute").val($(elem).attr('id'));
     $("#which_form_field").val("manufacturer");
-    $("#dialog #priceSlider2").hide()
-    $("#dialog #fuelSlider").hide()
+    $("#" + $("#which_form_field").val()).val('');
+    $("#price2").text('');
     $("#dialog").dialog({title: "Manufacturer"});
-    $("#price2").text($( "#manufacturer" ).val());
     if ($("#dialog #autocompleteField").size() > 0){
       var manufacturerList = loadManufacturers();
       $( "#dialog #autocompleteField" ).autocomplete({
@@ -301,7 +337,6 @@
           return false
         },
         select: function( event, ui ) {
-          //$("#price2").html(ui.item.value);
           store_info_div("price2", ui.item)
           store_ids("manufacturer", ui.item)
           $("#dialog #autocompleteField").val('');
@@ -317,9 +352,9 @@
       $( "#dialog #autocompleteField" ).show();
 
     }
-  
+
   }
-  
+
   function store_info_div(type, sender){
     var value_selector = "#" + type +""
 

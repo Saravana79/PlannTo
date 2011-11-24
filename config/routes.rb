@@ -10,31 +10,31 @@ PlanNto::Application.routes.draw do
 
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-#  match 'products/:id' => 'products#show', :as => :products
+  #  match 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
-
+  match ':search_type/search' => 'search#index'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
-      resources :cars
-      resources :manufacturers
-      resources :car_groups
-      resources :products do
-        member do
-          get 'related_products'
-          get 'specification'
-        end
-      end
-      resources :items do
-        collection do
-          get :compare
-        end
-        member do
-          get 'plan_to_buy_item'
-          get 'own_a_item'
-          get 'follow_this_item'
-        end
-      end
-      resources :reviews
-      devise_for :users
+  resources :cars
+  resources :manufacturers
+  resources :car_groups
+  resources :products do
+    member do
+      get 'related_products'
+      get 'specification'
+    end
+  end
+  resources :items do
+    collection do
+      get :compare
+    end
+    member do
+      get 'plan_to_buy_item'
+      get 'own_a_item'
+      get 'follow_this_item'
+    end
+  end
+  resources :reviews
+  devise_for :users
   # Sample resource route with options:
   #   resources :products do
   #     member do

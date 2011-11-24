@@ -1,7 +1,48 @@
 <%#=@items.facet(:features, 'Price'.to_sym).rows.count%>
-<%#=@items.facet(:features_string, 'Fuel Type'.to_sym).rows%>
+<%#=@items.facet(:features_string, 'Type'.to_sym).rows%>
 <%#=@items.facet(:manufacturer).rows%>
 <%#= @items.facet(:cargroup).rows %>
+
+<%#=@sunspot_search_fields.each do |search|%>
+<%#=search[:attribute_name]%>
+<%#=@items.facet(search[:attribute_name].to_sym) %>
+<%#end%>
+<%#@search_info_lookups.each do |search|%>
+<%#=search%>
+<%#end%>
+
+<%#@sunspot_search_fields.each_with_index do |search, index|%>
+<% #  if (search[:value_type] == "Between" || search[:value_type] == "LessThen" || search[:value_type] == "GreaterThan")%>
+<%#= search[:attribute_name]%>
+<%#= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
+<% #    elsif (search[:value_type] == "Click" || search[:value_type] == "ListOfValues" )%>
+<%#= search[:attribute_name]%>
+<%#= @items.facet(:features_string, search[:attribute_name].to_sym).rows%>
+<% # end%>
+<%#  end%>
+
+<%#@search_info_lookups.each_with_index do |search, index|%>
+
+  <% #  if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
+    <%#= search[:attribute_name]%>
+    <%#= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
+  <%#     elsif (search[:param_1][:vt] == "Click" )%>
+    <%#= search[:attribute_name]%>
+      <%#= "------------------------------------------------------------------------------" %>
+    <%# @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
+      <%#=row.value%>
+      <%#=search[:param_1][:av]%><%#=row.value%>
+      <%#if search[:param_1][:av] == row.value%>
+        <%#=index%><%#=row.count%><%#=row.value%><%#=search[:param_1][:av]%>
+      <%#end%>
+    <%#end%>
+
+  <% #elsif search[:param_1][:vt] == "ListOfValues"  %>
+    <%#= search[:attribute_name]%>
+    <%#= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
+  <%#  end%>
+
+<%#end%>
 
 <div class="col main_col w4_5">
   <h1 class="heading">Search Results</h1>
@@ -34,6 +75,56 @@
 </div>
 
 <script type="text/javascript">
+  //this logic fails to display total if same attributes have two display values.
+<%@search_info_lookups.each_with_index do |search, index|%>
+    var selectedCount = 0;
+  <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
+    <%#= search[:attribute_name]%>
+      selectedCount = <%= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
+  <%     elsif (search[:param_1][:vt] == "Click" )%>
+    <%#= search[:attribute_name]%>
+    <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
+      <%if search[:param_1][:av] == row.value%>
+          selectedCount = <%=row.count%><%#=row.value%>
+      <%end%>
+    <%end%>
+
+  <% elsif search[:param_1][:vt] == "ListOfValues"  %>
+    <%#= search[:attribute_name]%>
+      selectedCount = <%= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
+  <%  end%>
+    var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
+    //alert("#attribute_menu_<%=index%>");
+    value = value + " ( " + selectedCount + " )"
+    $("#attribute_menu_<%=index%> b").html(" ")
+    $("#attribute_menu_<%=index%> b").html(value)
+<%end%>
+  selectedCount = <%= @items.facet(:manufacturer).rows.count%>
+  var value = $("#manufacturerAtt").text().replace(/\(.*?\)/, "")
+
+  value = value + " ( " + selectedCount + " )"
+  $("#manufacturerAtt b").html(" ")
+  $("#manufacturerAtt b").html(value)
+
+
+<%#@sunspot_search_fields.each_with_index do |search, index|%>
+  //   var selectedCount = 0;
+<%#   if (search[:value_type] == "Between" || search[:value_type] == "LessThen" || search[:value_type] == "GreaterThan")%>
+<%#= search[:attribute_name]%>
+  //  selectedCount = <%#= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
+<% #    elsif (search[:value_type] == "Click" || search[:value_type] == "ListOfValues" )%>
+<%#= search[:attribute_name]%>
+  //  selectedCount = <%#= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
+<%#  end%>
+  //  var value = $("#attribute_menu_<%#=index%>").text().replace(/\(.*?\)/, "")
+  //alert("#attribute_menu_<%#=index%>");
+  //value = value + " ( " + selectedCount + " )"
+  //$("#attribute_menu_<%#=index%> b").html(" ")
+  //$("#attribute_menu_<%#=index%> b").html(value)
+
+<% # end%>
+
+
   $('#nextItem').click(function() {
     var page = <%=@page%>
     $("#page").val(page)
@@ -44,7 +135,7 @@
 </script>
 
 <script type="text/javascript">
-   function loadManufacturers(){
+  function loadManufacturers(){
     var manufacturerList = [];
 <%if @items.facet(:manufacturer).rows.count > 0%>
 
@@ -59,7 +150,7 @@ end%>
     return manufacturerList;
   }
 
-  function loadCarTypes(){
+  function loadTypes(){
     var carTypeList = [];
 <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
 
