@@ -4,7 +4,8 @@ class Itemrelationship < ActiveRecord::Base
   belongs_to :accessory, :foreign_key => :relateditem_id
   belongs_to :car #, :foreign_key => :item_id
   belongs_to :cargroup, :foreign_key => :relateditem_id , :class_name => "CarGroup"
-
+  belongs_to :car_groups, :foreign_key => :item_id , :class_name => "CarGroup"
+  belongs_to :related_cars, :foreign_key => :item_id , :class_name => "Car"
   belongs_to :relateditems, :class_name => 'Item', :foreign_key => :relateditem_id
 end
 

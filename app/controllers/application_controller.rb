@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
 
   def user_follow_type    
-    @user_follow = current_user.blank? || user_follow_item[@item.id].blank? ? false : user_follow_item[@item.id].last
+    @user_follow = current_user.blank? || all_user_follow_item[@item.id].blank? ? false : all_user_follow_item[@item.id].last
   end
 
 end
