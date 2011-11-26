@@ -148,11 +148,12 @@
 
     }
     else{
+      var selectedValue = $("#" + fieldId).val()
       if (selectedValue == ""){
         alert("Please select a search criteria.");
         return false
       }
-      var selectedValue = $("#" + fieldId).val()
+      
       var searchCriteria = "<br/>( " + selectedValue + " " +  ")"
     }
 
@@ -171,9 +172,14 @@
         searchCriteria = searchCriteria + "</span>"
       })
       searchCriteria = searchCriteria + " " +  " "
+
+      var className = "textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+    }
+    else{
+      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
     }
 
-    var list = "<li id='" + tagId + "'" + lineHeight + " class='attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +$("#ui-dialog-title-dialog").text()+ searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" +$("#ui-dialog-title-dialog").text()+ searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
     $(list).appendTo('#navmenu ul');
 
     $("#page").val(1)
@@ -423,7 +429,7 @@
     $(".jslider").hide()
     $("#which_attribute").val($(elem).attr('id'));
     $("#which_form_field").val("manufacturer");
-    $("#which_form_field").val("manufacturer");
+    $("#which_type").val("manufacturer");
     $("#" + $("#which_form_field").val()).val('');
     $("#price2").text('');
     $("#dialog").dialog({title: "Manufacturer"});
