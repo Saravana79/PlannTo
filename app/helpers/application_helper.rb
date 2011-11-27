@@ -5,7 +5,8 @@ module ApplicationHelper
   end
 
 
-  def get_follow_types(item, array_follow, type, options = {})
+  def get_follow_types(item, follow_type, type, options = {})
+    array_follow = get_follow_text(follow_type)
     if type == "select_box"
       select_tag("follow_type", options_for_select(array_follow),
                  {"data-remote" => true, "data-url" => follow_item_type_item_path(item),
@@ -20,5 +21,26 @@ module ApplicationHelper
       end
       links_follow.html_safe
     end
+  end
+
+  def get_follow_text(follow_type)
+    case follow_type
+      when 'Manufacturer', 'CarGroup'
+        [["Follow This Car", "plan_to_follow", "Follow"]]
+      when 'Car'
+        [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This Car", "plan_to_follow", "Follow"]]
+      else
+        [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This Car", "plan_to_follow", "Follow"]]
+    end
+  end
+
+  def get_image_url(item, type = 'Car')
+    case type
+      when 'Car'
+        configatron.car_image_url + item.imageurl
+      when 'Manufacturer', 'CarGroup'
+        configatron.mobile_image_url + item.imageurl
+    end
+
   end
 end

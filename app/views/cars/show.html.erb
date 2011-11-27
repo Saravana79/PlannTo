@@ -4,13 +4,11 @@
       Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
   </div>
   <div id="comment-notice"></div>
-  <div class="productbuttonsGrp">
-    <%= get_follow_types(@item.id, [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This Car", "plan_to_follow", "Follow"]], "select_box", {:remote => true, :class => "imageButtonAsk"}) %>    
-  </div>
+  <%= render 'shared/follow_buttons', :follow_type => 'Car', :follow_html => 'select_box' %>  
   <div class="feedcontentheader">
     <div class="productcontentmain">
-      <div>
-        <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
+      <div>        
+        <%= image_tag(get_image_url(@item, 'Car'), :title => @item.name, :class => "productimage") %>        
       </div>
       <div>
         <span class="producttitle"><%= @item.name %></span>

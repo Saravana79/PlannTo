@@ -4,15 +4,13 @@
       Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
   </div>
   <div id="comment-notice"></div>
-  <div class="productbuttonsGrp">
-    <%= get_follow_types(@item.id, [["Follow This Car", "plan_to_follow", "Follow"]], "button", {:remote => true, :class => "imageButtonAsk"}) %>
-  </div>
+  <%= render 'shared/follow_buttons', :follow_type => 'CarGroup', :follow_html => 'button' %>  
   <div class="feedcontentheader">
     <div>
       <span class="producttitle"><%= @item.name %></span>
     </div>
 
-    <%= render "manufacturers/" + @item.car_groups.last.class.name.underscore + '_image' unless @item.car_groups.blank? %>
+    <%= render "manufacturers/" + @item.car_groups.last.class.name.underscore + '_image', :image_type => 'CarGroup' unless @item.car_groups.blank? %>
     
 
     <div class="productcontentcreation">

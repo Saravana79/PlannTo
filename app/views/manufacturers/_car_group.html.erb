@@ -3,7 +3,7 @@
     <div class="productcontentmainmini">
       <div>
         <%= link_to({}, :href => car_group_path(item.id)) do %>
-          <%= image_tag("MarutiRitz_100x60.jpg", :alt => item.name, :class => "productimage",
+          <%= image_tag(get_image_url(item, 'CarGroup'), :title => item.name, :class => "productimage",
                         :style                        => "width:50px;height:50px;") %>
         <% end %>
       </div>

@@ -1,5 +1,5 @@
 <div>
-  <img src="/assets/MarutiRitz_100x60.jpg" class="mediumimage" alt="car"/>
+  <%= image_tag(get_image_url(relateditem, 'Car'), :title => relateditem.name, :class => "mediumimage") %>
 
   <div>
     <%= relateditem.name %>
