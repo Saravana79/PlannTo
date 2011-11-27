@@ -106,26 +106,17 @@
 
 
 <script type="text/javascript">
-  
+  function validateSearchField(fieldVal1, fieldVal2){
+    if ((fieldVal1 == "")|| (fieldVal2 == "")){
+      alert("Please select a search criteria.");
+      return false
+    }
+  }
   $('#searchButton2').click(function() {
-    //var add = true;
     var tagId = $("#which_attribute").val() + "_tag"
     if ($("#navmenu").find("#" + tagId).length > 0){
-      //add = false;
       $("#" +tagId).remove();
-    }
-    //$("#navmenu").find("li").each(function(index) {
-    //  var tagName = $(this).text().replace(/.\(.*?\)/, "")
-    //   var tagTitle = $("#ui-dialog-title-dialog").text().toString()
-    //   if ($.trim(tagName.toString()) == $.trim(tagTitle.toString()))  {
-    //     add = false;
-    //   }
-    // });
-    //if (add == false){
-    //  $("#" +tagId).remove();
-    //}
-    
-    var searchInfo = "";
+    }   
     var lineHeight = "";
     var fieldId = $("#which_form_field").val()
     if ($("#which_type").val() == "Between"){
@@ -163,16 +154,16 @@
       var formFieldId = $("#which_form_field").val();
       var searchCriteria = "<br/> " // + selectedValue + " " +  ")"
       var anchorId
+      var spanId = 'removableListofValues' + formFieldId
+      searchCriteria = searchCriteria +  "<span id='" + spanId + "'>"
+      var anchorId;
+      var updatedSearchList= [];
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-        searchCriteria = searchCriteria +  "<span id='removableListofValues'>" + " " + value  + " " + "<a id='" + anchorId + "' class='removableList'>x</a>"
-        if (index > 0 && (index + 1 != selectedList.length)){
-          searchCriteria = searchCriteria + ", "          
-        }
-        searchCriteria = searchCriteria + "</span>"
+        updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'>x</a>")
       })
-      searchCriteria = searchCriteria + " " +  " "
 
+      searchCriteria = searchCriteria + updatedSearchList.toString() +  "</span>"
       var className = "textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
     }
     else{
@@ -205,17 +196,20 @@
     var formVal = $("#" + formId).val()
     var formValArray = formVal.split(",")
     formVal  = ""
+    var updatedFormList = [];
     $.each(formValArray, function(index, value) {
-      if(index > 0 && index != removableIndex){
-        formVal = formVal + ", "
-      }
-      if (index != removableIndex){
-        formVal = formVal + value;
-      }
+      if(index != removableIndex){
+        updatedFormList.push(value)
+      }     
     })
-
-    $(this).closest('span').remove();    
-    $("#" + formId).val("" + formVal + "")
+    var anchorId;
+    var updatedSearchList= [];
+    $.each(updatedFormList, function(index, value) {
+      anchorId = "removeThis_" + index + "_" + formId
+      updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'>x</a>")
+    })
+    $(this).closest('span').html("" +updatedSearchList.toString())
+    $("#" + formId).val("" + updatedFormList.toString() + "")
     $("#page").val(1)
     $.get('/search',$("#searchForm").serialize(),null,"script");
     return false;
@@ -248,12 +242,7 @@
     $.get('/search',$("#searchForm").serialize(),null,"script");
     return false;
   })
-
-  
-
 </script>
-<!--<div id="items"></div>-->
-
 <script type="text/javascript">
   $(".button").button();
   function resetUnwantedFormFields(){
@@ -280,7 +269,6 @@
     $("#which_type").val(displayInfo.vth);
     $("#which_unit").val(displayInfo.ut);
     $("#dialogName").val(attr_name);
-    // $.each(obj, function(name, value) {
     $("#dialog #autocompleteField").hide();
     $(".jslider").hide()
     if (displayInfo.vt == "Between"){
@@ -305,8 +293,6 @@
           round: 0,
           dimension: displayInfo.ut,
           dimension: "&nbsp;" + displayInfo.ut,
-          // heterogeneity: [25/parseInt(rangeVal[1]).toString(), (50/parseInt(rangeVal[2])).toString(), (75/parseInt(rangeVal[3])).toString(), (100/parseInt(rangeVal[4])).toString()],
-          //heterogeneity: ['50/5000000', '75/10000000'],
           heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
           scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
           skin: "plastic",
@@ -314,12 +300,10 @@
             return parseInt(value)
           },
           onstatechange: function(value) {
-            // alert(value)
             var  sliderVal = value.split(";")
             $( "#min_" +attr_name ).val( sliderVal[ 0 ] );
             $( "#max_" + attr_name ).val( sliderVal[ 1 ] );
             var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
-            //  alert(searchCriteria);
             $("#price2").html(searchCriteria)
           }
         });
@@ -348,7 +332,6 @@
       var heteroVal1 = "25/" + rangeVal[1]
       var heteroVal2 = "50/" + rangeVal[2]
       var heteroVal3 = "75/" + rangeVal[3]
-      // var heteroVal4 = "100/" + rangeVal[4]
       $( "#Slider"  + attr_name).val( actual_value);
       if ($('#Slider' + attr_name).next(".jslider").length == 0){
         jQuery("#Slider" + attr_name).slider({
@@ -360,7 +343,6 @@
           round: 1,
           dimension: displayInfo.ut,
           dimension: "&nbsp;" + displayInfo.ut,
-          //heterogeneity: ['25/500000', '50/1000000', '75/5000000', '100/13000000'],
           heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
           scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
           skin: "plastic",
