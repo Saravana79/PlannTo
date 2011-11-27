@@ -28,6 +28,7 @@ PlanNto::Application.routes.draw do
       get :compare
     end
     member do
+      get 'follow_item_type'
       get 'plan_to_buy_item'
       get 'own_a_item'
       get 'follow_this_item'

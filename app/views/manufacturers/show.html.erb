@@ -4,16 +4,8 @@
       Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
   </div>
   <div id="comment-notice"></div>
-  <div class="productbuttonsGrp">
-    <span class="productbuttons" id="plan_to_buy_span">
-      <%= get_follow_link("Plan to buy", plan_to_buy_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id=>"plan_to_buy"}) %>
-    </span>
-    <span class="productbuttons" id="plan_to_own_span">
-      <%= get_follow_link("I Own it", own_a_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id => "plan_to_own"}) %>
-    </span>
-    <span class="productbuttons" id="plan_to_follow_span">
-      <%= get_follow_link("Follow This Car", follow_this_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id => "plan_to_follow"}) %>
-    </span>
+  <div class="productbuttonsGrp">    
+    <%= get_follow_types(@item.id, [["Follow This Car", "plan_to_follow", "Follow"]], "button", {:remote => true, :class => "imageButtonAsk"}) %>
   </div>
   <div class="feedcontentheader">
     <div>
