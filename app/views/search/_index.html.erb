@@ -5,7 +5,7 @@
     <div class="col w4_5 feed_item p1">
       <div class="col w0_5">
         <a>
-          <img class="profile_photo_img" width="50" height="50" alt="image" src="/images/B16.jpg"/>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(item)%>"/>
         </a>
       </div>
       <div class="e_col w3_5">
@@ -31,35 +31,45 @@
 
 <script type="text/javascript">
   //this logic fails to display total if same attributes have two display values.
+
 <%@search_info_lookups.each_with_index do |search, index|%>
     var selectedCount = 0;
+    var displayCount = true
   <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
     <%#= search[:attribute_name]%>
-      selectedCount = <%= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
+      displayCount = false;
+      //selectedCount = <%#= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
   <%     elsif (search[:param_1][:vt] == "Click" )%>
     <%#= search[:attribute_name]%>
     <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
       <%if search[:param_1][:av] == row.value%>
           selectedCount = <%=row.count%><%#=row.value%>
       <%end%>
-    <%end%>
+    <%end%>      
 
   <% elsif search[:param_1][:vt] == "ListOfValues"  %>
     <%#= search[:attribute_name]%>
-      selectedCount = <%= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
+     // selectedCount = <%#= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
+      displayCount = false;
   <%  end%>
+  //  alert(displayCount)
+    if (displayCount == true){
     var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
     //alert("#attribute_menu_<%=index%>");
     value = value + " ( " + selectedCount + " )"
     $("#attribute_menu_<%=index%> b").html(" ")
     $("#attribute_menu_<%=index%> b").html(value)
+    }
 <%end%>
-  selectedCount = <%= @items.facet(:manufacturer).rows.count%>
-  var value = $("#manufacturerAtt").text().replace(/\(.*?\)/, "")
+  
+   // selectedCount = <%#= @items.facet(:manufacturer).rows.count%>
+ // var value = $("#manufacturerAtt").text().replace(/\(.*?\)/, "")
 
-  value = value + " ( " + selectedCount + " )"
-  $("#manufacturerAtt b").html(" ")
-  $("#manufacturerAtt b").html(value)
+ // value = value + " ( " + selectedCount + " )"
+ // $("#manufacturerAtt b").html(" ")
+//  $("#manufacturerAtt b").html(value)
+  
+  
 
   $('#nextItem').click(function() {
     var page = <%=@page%>

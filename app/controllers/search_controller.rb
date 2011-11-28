@@ -76,15 +76,10 @@ class SearchController < ApplicationController
 
     $search_type = @search_type
     @sunspot_search_fields = sunspot_search_fields
-    logger.info "-----------------------------------------------------------"
     @page  = params[:page].nil? ? 1 : params[:page].to_i
     @manufacturer  = params[:manufacturer].blank? ? "" : params[:manufacturer]
 
-    cartype = @search_form_lookups.find {|s| s[:attribute_name] == "Type" }
-    @cartype  = params[cartype[:field_name].to_sym].blank? ? "" : params[cartype[:field_name].to_sym]
-
     list  = @manufacturer.split(',')
-    cartypelist  = @cartype.split(',')
 
     @items = Sunspot.search($search_type.camelize.constantize) do
       #keywords "Aston", :fields => :name
@@ -156,25 +151,18 @@ class SearchController < ApplicationController
       paginate(:page => 1, :per_page => 6)
       order_by :class , :desc
     end
+    
+    render :json => @items.results.collect{|item|
+       if item.type == "CarGroup"
+        url = "http://plannto.com/images/car/" + item.imageurl
+        type = "Car"
+      else
+        url = "http://plannto.com/images/mobile/" + item.imageurl
+        type = item.type.humanize
+      end
 
-
-    #    @results  = Array.new
-    #    @items.results.each do |item|
-    #      logger.info(item.attributes)
-    #      if item.cargroup.nil?
-    #        @results  << {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }
-    #      else
-    #        @added  =false
-    #          @results.each do |result|
-    #            if result[:id] == item.cargroup.id
-    #               result[:children] << {:id => item.id, :value => "#{item.name}", :imgsrc => "/test/B16.jpg", :header => false }
-    #              @added  = true
-    #            end
-    #          end
-    #        @results  << {:id => item.cargroup.id, :value => "#{item.cargroup.name}", :imgsrc => "/images/B16.jpg", :header => true, :children => [{:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :header => false }]} if @added == false
-    #      end
-    #    end
-    render :json => @items.results.collect{|item| {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :type => item.type.humanize }}
+      {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :type => type }
+            }
   end
 
   def autocomplete_manufacturers

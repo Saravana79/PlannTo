@@ -160,7 +160,7 @@
       var updatedSearchList= [];
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-        updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'>x</a>")
+        updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'> x </a>")
       })
 
       searchCriteria = searchCriteria + updatedSearchList.toString() +  "</span>"
@@ -196,22 +196,60 @@
     var formVal = $("#" + formId).val()
     var formValArray = formVal.split(",")
     formVal  = ""
+    if(formValArray.length == 1){
+      var tagId = $(this).closest('li').attr('id');
+      var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+      $("#" + attributeId).show();
+      $(this).closest('li').remove()
+      $("#" + formId).val("")
+    }
+    else{
+
+      var updatedFormList = [];
+      $.each(formValArray, function(index, value) {
+        if(index != removableIndex){
+          updatedFormList.push(value)
+        }
+      })
+      var anchorId;
+      var updatedSearchList= [];
+      $.each(updatedFormList, function(index, value) {
+        anchorId = "removeThis_" + index + "_" + formId
+        updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'> x </a>")
+      })
+      $(this).closest('span').html("" +updatedSearchList.toString())
+      $("#" + formId).val("" + updatedFormList.toString() + "")
+
+    }
+    $("#page").val(1)
+    $.get('/search',$("#searchForm").serialize(),null,"script");
+    return false;
+  });
+
+
+  $('.removablePopupList').live('click', function(){
+    var deleteId = $(this).attr('id').replace("removeThis_",'');
+    var indexArray  = deleteId.split("_")
+    var removableIndex = indexArray[0]
+    var formId = indexArray[1]
+    var formVal = $("#" + formId).val()
+    var formValArray = formVal.split(",")
+    formVal  = ""
+ 
     var updatedFormList = [];
     $.each(formValArray, function(index, value) {
       if(index != removableIndex){
         updatedFormList.push(value)
-      }     
+      }
     })
     var anchorId;
     var updatedSearchList= [];
     $.each(updatedFormList, function(index, value) {
       anchorId = "removeThis_" + index + "_" + formId
-      updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'>x</a>")
+      updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
     })
-    $(this).closest('span').html("" +updatedSearchList.toString())
+    $("#price2").html("" +updatedSearchList.toString())
     $("#" + formId).val("" + updatedFormList.toString() + "")
-    $("#page").val(1)
-    $.get('/search',$("#searchForm").serialize(),null,"script");
     return false;
   });
 
@@ -387,9 +425,10 @@
             return false
           },
           select: function( event, ui ) {
-            store_info_div("price2", ui.item)
+            //store_info_div("price2", ui.item)
             store_ids(attr_name, ui.item)
             $("#dialog #autocompleteField").val('');
+            setUpLOV(attr_name);
             return false;
           }
         })
@@ -405,6 +444,20 @@
     }
     return false
     //  });
+  }
+
+  function setUpLOV(attr_name){
+    var selectedList = $("#" + attr_name).val().split(',')
+    var anchorId
+    var spanId = 'removableListofValues' + attr_name
+    var updatedSearchList= [];
+    $.each(selectedList, function(index, value) {
+      anchorId = "removeThis_" + index + "_" + attr_name
+      updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
+    })
+    $("#price2").html("<span id='" + spanId + "'>" + updatedSearchList.toString() + "</span>")
+    
+
   }
 
   function openManufacturerBox(attr_name,elem){
@@ -424,9 +477,10 @@
           return false
         },
         select: function( event, ui ) {
-          store_info_div("price2", ui.item)
+          //store_info_div("price2", ui.item)
           store_ids("manufacturer", ui.item)
           $("#dialog #autocompleteField").val('');
+          setUpLOV("manufacturer");
           return false;
         }
       })
