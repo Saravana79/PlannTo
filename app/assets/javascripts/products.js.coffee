@@ -35,7 +35,8 @@ root.Product =
   load_signout_user_link: ->
     $("#plan_to_own").attr "href", "javascript:void(0)"
     $("#plan_to_buy").attr "href", "javascript:void(0)"
-    $("#plan_to_follow").attr "href", "javascript:void(0)"        
+    $("#plan_to_follow").attr "href", "javascript:void(0)"
+    $("#plan_to_buy_select").attr "data-url", "javascript:void(0)"
 
   login_dialog: ->
     $("#dialog-form").dialog
@@ -58,6 +59,11 @@ root.Product =
 
   show_login_dialog: (dom_elements) ->
     $(dom_elements).click ->
+      $("#dialog-form").dialog "open"
+
+
+  show_login_dialog_change: (dom_elements) ->
+    $(dom_elements).change ->
       $("#dialog-form").dialog "open"
 
   hide_login_dialog: ->

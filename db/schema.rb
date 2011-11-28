@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111112185150) do
+ActiveRecord::Schema.define(:version => 20111119054719) do
 
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
@@ -52,6 +52,12 @@ ActiveRecord::Schema.define(:version => 20111112185150) do
     t.datetime "updated_at"
   end
 
+  create_table "attributesrelationships", :force => true do |t|
+    t.integer "attribute_id", :null => false
+    t.integer "itemtype_id",  :null => false
+    t.integer "Priority",     :null => false
+  end
+
   create_table "best_uses", :force => true do |t|
     t.string   "title",      :limit => 50, :null => false
     t.integer  "item_id",                  :null => false
@@ -81,14 +87,6 @@ ActiveRecord::Schema.define(:version => 20111112185150) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
-
-  create_table "compares", :force => true do |t|
-    t.integer  "comparable_id"
-    t.string   "comparable_type"
-    t.string   "session_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "cons", :force => true do |t|
     t.string   "title",      :limit => 50, :null => false
@@ -127,6 +125,18 @@ ActiveRecord::Schema.define(:version => 20111112185150) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
+  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemID",                    :null => false
+    t.text    "URL",                       :null => false
+    t.string  "URLSource", :limit => 2000, :null => false
+  end
+
+  create_table "itemimages", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemId",                    :null => false
+    t.string  "ImageURL",  :limit => 4000, :null => false
+    t.boolean "IsDefault",                 :null => false
+  end
 
   create_table "itemrelationships", :force => true do |t|
     t.integer  "item_id",        :null => false
@@ -201,6 +211,8 @@ ActiveRecord::Schema.define(:version => 20111112185150) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "step"
+    t.string   "range"
   end
 
   create_table "taggings", :force => true do |t|

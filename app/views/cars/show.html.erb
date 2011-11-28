@@ -4,21 +4,11 @@
       Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
   </div>
   <div id="comment-notice"></div>
-  <div class="productbuttonsGrp">
-    <span class="productbuttons" id="plan_to_buy_span">
-      <%= get_follow_link("Plan to buy", plan_to_buy_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id=>"plan_to_buy"}) %>
-    </span>
-    <span class="productbuttons" id="plan_to_own_span">
-      <%= get_follow_link("I Own it", own_a_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id => "plan_to_own"}) %>
-    </span>
-    <span class="productbuttons" id="plan_to_follow_span">
-      <%= get_follow_link("Follow This Car", follow_this_item_item_path(@item.id), {:remote => true, :class => "imageButtonAsk", :id => "plan_to_follow"}) %>
-    </span>    
-  </div>
+  <%= render 'shared/follow_buttons', :follow_type => 'Car', :follow_html => 'select_box' %>  
   <div class="feedcontentheader">
     <div class="productcontentmain">
-      <div>
-        <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
+      <div>        
+        <%= image_tag(get_image_url(@item, 'Car'), :title => @item.name, :class => "productimage") %>        
       </div>
       <div>
         <span class="producttitle"><%= @item.name %></span>
@@ -156,7 +146,8 @@ $("#usual2 ul").idTabs("tabs1");
 Product.detailed_specification();
 <% if current_user.blank? %>
   Product.login_dialog();
-  Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow");
+  Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow #plan_to_buy_select");
+  Product.show_login_dialog_change("#plan_to_buy_select");
 <% else %>
  Product.hide_login_dialog();
 <% end %>

@@ -140,9 +140,23 @@ class ItemsController < ApplicationController
     end
   end
 
+  def follow_item_type
+    case params[:follow_type]
+      when 'Buyer'
+        plan_to_buy_item
+      when 'Owner'
+        own_a_item
+      when 'Follow'
+        follow_this_item
+    end
+    if params[:follow_type] == 'Buyer'
+      plan_to_buy_item
+    end
+  end
+
   def plan_to_buy_item
     @type = "buy"
-    follow = follow_item('Buyer')
+    follow = follow_item(params[:follow_type])
     if follow.blank?
       flash[:notice] = "You already buy this Item"      
     else
@@ -155,7 +169,7 @@ class ItemsController < ApplicationController
 
   def own_a_item
     @type = "own"
-    follow = follow_item('Owner')
+    follow = follow_item(params[:follow_type])
     if follow.blank?
       flash[:notice] = "You are already owning this Item"
     else
@@ -168,7 +182,7 @@ class ItemsController < ApplicationController
 
   def follow_this_item
     @type = "follow"
-    follow = follow_item('Follow')
+    follow = follow_item(params[:follow_type])
     if follow.blank?
       flash[:notice] = "You are already Following this Item"
     else

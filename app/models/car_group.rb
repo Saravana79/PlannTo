@@ -1,6 +1,4 @@
-class CarGroup < Manufacturer
-  has_many :related_cars,
-    :through => :related_car_groups
+class CarGroup < Manufacturer  
 
   def car_groups
     related_cars
