@@ -82,7 +82,7 @@ class SearchController < ApplicationController
     list  = @manufacturer.split(',')
 
     @items = Sunspot.search($search_type.camelize.constantize) do
-      #keywords "Aston", :fields => :name
+      keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
       # with(:cargroup, cargrouplist)  if !params[cargroup[:field_name].to_sym].blank?
       facet :manufacturer
@@ -98,6 +98,7 @@ class SearchController < ApplicationController
             with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           end
           facet(search[:attribute_name].to_sym)
+          order_by(:Price) #, :desc)
         end
       end
       dynamic :features_string do
@@ -109,9 +110,14 @@ class SearchController < ApplicationController
           end
           facet(search[:attribute_name].to_sym)
         end
+        
       end
 
       paginate(:page => params[:page], :per_page => 10)
+      order_by :name
+  #   order_by :Price, :desc           # descending order , check Documentation link below
+    
+
     end
     #order_by :class , :desc
 
@@ -161,7 +167,7 @@ class SearchController < ApplicationController
         type = item.type.humanize
       end
 
-      {:id => item.id, :value => "#{item.name}", :imgsrc => "/images/B16.jpg", :type => type }
+      {:id => item.id, :value => "#{item.name}", :imgsrc => url, :type => type }
             }
   end
 

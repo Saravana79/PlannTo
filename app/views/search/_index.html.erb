@@ -1,6 +1,6 @@
 
 <div class="col main_col w4_5">
-  <h1 class="heading">Search Results</h1>
+  <h1 class="heading">Total Search Results: <%=@items.total()%></h1>
   <%@items.results.each do |item|%>
     <div class="col w4_5 feed_item p1">
       <div class="col w0_5">

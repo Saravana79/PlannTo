@@ -13,6 +13,7 @@ class Car < Product
   
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 4.0,  :as => :name_ac
+    string :name
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end

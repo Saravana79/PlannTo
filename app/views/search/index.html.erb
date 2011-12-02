@@ -1,6 +1,14 @@
 <div id="container2">
 
   <style type="text/css">
+    #clearTag, #deleteTag{
+      cursor: pointer;
+      text-align: center;
+}
+
+.attributeTag:hover{
+  cursor: pointer;
+}
 
     #content {
       width: 100%;
@@ -14,6 +22,7 @@
       background-color: #ffffff;
       border-bottom: 1px solid #E0E0E0;
       height: 30px;
+      cursor:pointer;
     }
     .w4_5 {
       width: 760px;
@@ -78,7 +87,7 @@
       <%end%>
     </div>
   </div>
-  <div id="navmenu"><ul></ul></div>
+  <div id="navmenu"><ul></ul></div><ul><li id='clearTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Clear</li></ul>
   <div id="searchList" style="width:100%;"></div>
   <div id="content">
     <%= render :partial => "/search/index" %>
@@ -115,6 +124,7 @@
   }
   $('#searchButton2').click(function() {
     var tagId = $("#which_attribute").val() + "_tag"
+    showClearTag();
     if ($("#navmenu").find("#" + tagId).length > 0){
       $("#" +tagId).remove();
     }   
@@ -283,14 +293,52 @@
 <%end%>
     }
     $(this).closest('li').remove();
+    hideClearTag();
     $.get('/search',$("#searchForm").serialize(),null,"script");
     return false;
   })
 </script>
 <script type="text/javascript">
   $(".button").button();
+
+  $('#clearTag').live('click', function(){
+    removeAllTags();
+    resetFormData();
+    hideClearTag()
+    searchData();
+  });
+
+  function resetFormData(){
+    $("#page").val(1);
+    $("#manufacturer").val('')
+    <%@search_form_lookups.each do |form_list|%>
+      $("#" + '<%=form_list[:field_name]%>').val('')
+    <%end%>
+  }
+  
+  function searchData(){
+    $.get('/search',$("#searchForm").serialize(),null,"script");
+  }
+
+  function removeAllTags(){
+    $("#navmenu").find("ul li").remove();
+    $(".box").show()
+  }
+
+  function hideClearTag(){
+    if ($("#navmenu").find("ul li").length == 0){
+      $("#clearTag").hide();
+    }
+  }
+
+  function showClearTag(){
+    if ($("#navmenu").find("ul li").length == 0){
+      $("#clearTag").show();
+    }
+  }
+  
   function resetUnwantedFormFields(){
-<%@search_info_lookups.each_with_index do |value, index|%>
+      <%@search_info_lookups.each_with_index do |value, index|%>
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"
       if ($("#navmenu").find("#" + searchListId).length == 0){
         var formId = <%= value[:id] %>
@@ -303,8 +351,23 @@
           $("#" + formId).val('')
         }
       }
-<%end%>
+      <%end%>
+      }
+  
+  function removeMultipleAttributeInstance(fieldId, tagId){
+      <%@search_info_lookups.each_with_index do |value, index|%>
+      var searchListId = "attribute_menu_" + <%=index%> + "_tag"
+      var formId = <%= value[:id] %>
+      if ((formId == fieldId) && (searchListId != tagId)){
+        if ($("#navmenu").find("#" + searchListId).length != 0){
+          $("#" + searchListId).remove();
+          var attrField = searchListId.replace("_tag", "")
+          $("#" + attrField).show();
+        }
+      }
+      <%end%>
   }
+
   function openInfoBox(displayInfo, attr_name, elem){
     resetUnwantedFormFields();
     $( "#price2" ).html(" ")
@@ -332,7 +395,7 @@
           from: parseFloat(displayInfo.min_v),
           to: parseFloat(displayInfo.max_v),
           step: displayInfo.step,
-         // smooth: false,
+          // smooth: false,
           round: 0,
           //dimension: displayInfo.ut,
           dimension: "&nbsp;" + displayInfo.ut,
@@ -345,19 +408,19 @@
           onstatechange: function(value) {
             var  sliderVal = value.split(";")
             $("#form_field_val").val(value);
-          //  $( "#min_" +attr_name ).val( sliderVal[ 0 ] );
-          //  $( "#max_" + attr_name ).val( sliderVal[ 1 ] );
+            //  $( "#min_" +attr_name ).val( sliderVal[ 0 ] );
+            //  $( "#max_" + attr_name ).val( sliderVal[ 1 ] );
             var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
             $("#price2").html(searchCriteria)
           }
         });
-       // $(".jslider").slider( "value", min_v, max_v )
+        // $(".jslider").slider( "value", min_v, max_v )
       }
       else{
         $('#Slider' + attr_name).next(".jslider").show()
-       // $(".jslider").slider( "value", min_v, max_v )
+        // $(".jslider").slider( "value", min_v, max_v )
         $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
-      //  $( "#Slider" + attr_name).val( min_v + ";" + max_v);
+        //  $( "#Slider" + attr_name).val( min_v + ";" + max_v);
         //$( "#min_" +attr_name ).val( min_v );
         //$( "#max_" + attr_name ).val( max_v );
         var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
@@ -380,35 +443,32 @@
       var heteroVal2 = "50/" + rangeVal[2]
       var heteroVal3 = "75/" + rangeVal[3]
       
-       $( "#Slider" +attr_name ).val( actual_value );
+      $( "#Slider" +attr_name ).val( actual_value );
       if ($('#Slider' + attr_name).next(".jslider").length == 0){
         jQuery("#Slider" + attr_name).slider({
           from: parseFloat(displayInfo.min_v),
           to: parseFloat(displayInfo.max_v),
           step: displayInfo.step,
           //step: 1,
-         // smooth: true,
-         // range : false,
+          // smooth: true,
+          // range : false,
           round: 1,
-         // dimension: displayInfo.ut,
+          // dimension: displayInfo.ut,
           dimension: "&nbsp;" + displayInfo.ut,
           heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
           scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
           skin: "plastic",
           calculate: function(value){
-          //  alert(value)
+            //  alert(value)
             return parseFloat(value)
           },
           onstatechange: function(value) {
-           // alert(value)
-          var  sliderVal = value
-           // $( "#" +attr_name ).val( sliderVal );
-           $( "#form_field_val").val( sliderVal );
+            var  sliderVal = value
+            $( "#form_field_val").val( sliderVal );
             var searchCriteria = $("#which_type").val() + " "  + sliderVal + " " + $("#which_unit").val()
             $("#price2").html(searchCriteria)
           }
         });
-       // $( "#Slider"  + attr_name).val( 4);
       }
       else{      
         $('#Slider' + attr_name).next(".jslider").show()
@@ -420,9 +480,12 @@
       return false;
     }
     else if (displayInfo.vt == "Click"){
+      showClearTag();
       var booleanObject = jQuery.parseJSON(attr_name);
       $("#which_form_field").val(booleanObject.field_id);
       var tagId = $("#which_attribute").val() + "_tag"
+      //if this attribute already has a different tag then lets remove it.
+      removeMultipleAttributeInstance(booleanObject.field_id, tagId);
       var list = "<li id='" +tagId +"' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" +booleanObject.display_name+ "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
       $(list).appendTo('#navmenu ul');
       $("#" + $("#which_attribute").val()).hide();
@@ -439,6 +502,8 @@
         var typeList = loadTypes();
         $( "#dialog #autocompleteField" ).autocomplete({
           minLength: 0,
+          minChars: 0,
+          max:10,
           source: typeList,
           focus:function(e,ui) {
             return false
@@ -447,7 +512,7 @@
             //store_info_div("price2", ui.item)
             store_ids(attr_name, ui.item)
             $("#dialog #autocompleteField").val('');
-            setUpLOV(attr_name);
+            setUpLOV(attr_name);            
             return false;
           }
         })
@@ -458,6 +523,8 @@
         //				.appendTo( ul );
         //		};
         $( "#dialog #autocompleteField" ).show();
+        $("#autocompleteField").select();
+        $("#autocompleteField").autocomplete('search','')
 
       }
     }
@@ -485,12 +552,18 @@
     $("#which_form_field").val("manufacturer");
     $("#which_type").val("manufacturer");
     $("#" + $("#which_form_field").val()).val('');
+    
     $("#price2").text('');
     $("#dialog").dialog({title: "Manufacturer"});
     if ($("#dialog #autocompleteField").size() > 0){
       var manufacturerList = loadManufacturers();
       $( "#dialog #autocompleteField" ).autocomplete({
         minLength: 0,
+      // maxItemsToShow:10,
+       cacheLength:5,
+      max:5,
+
+        minChars: 0,
         source: manufacturerList,
         focus:function(e,ui) {
           return false
@@ -500,6 +573,8 @@
           store_ids("manufacturer", ui.item)
           $("#dialog #autocompleteField").val('');
           setUpLOV("manufacturer");
+
+          //$("#autocompleteField").autocomplete('search','')
           return false;
         }
       })
@@ -510,6 +585,8 @@
       //				.appendTo( ul );
       //		};
       $( "#dialog #autocompleteField" ).show();
+      $("#autocompleteField").select();
+      $("#autocompleteField").autocomplete('search','')
 
     }
 
@@ -555,4 +632,14 @@
     }
     $(value_selector).val(ids.toString());
   };
+
+  function resetForm(form_id){
+
+    $(':input','#' + form_id + '')
+    .not(':button, :submit, :reset, :hidden')
+    .val('')
+    .removeAttr('checked')
+    .removeAttr('selected');
+
+  }
 </script>
