@@ -98,7 +98,7 @@ class SearchController < ApplicationController
             with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           end
           facet(search[:attribute_name].to_sym)
-          order_by(:Price) #, :desc)
+          #order_by(:Price) #, :desc)
         end
       end
       dynamic :features_string do
@@ -115,7 +115,7 @@ class SearchController < ApplicationController
 
       paginate(:page => params[:page], :per_page => 10)
       order_by :name
-  #   order_by :Price, :desc           # descending order , check Documentation link below
+      #   order_by :Price, :desc           # descending order , check Documentation link below
     
 
     end
@@ -159,16 +159,17 @@ class SearchController < ApplicationController
     end
     
     render :json => @items.results.collect{|item|
-       if item.type == "CarGroup"
-        url = "http://plannto.com/images/car/" + item.imageurl
+      if item.type == "CarGroup"
+        image_url = "http://plannto.com/images/car/" + item.imageurl
         type = "Car"
       else
-        url = "http://plannto.com/images/mobile/" + item.imageurl
+        image_url = "http://plannto.com/images/mobile/" + item.imageurl
         type = item.type.humanize
       end
+      url = "/#{item.type.tableize}/#{item.id}"
 
-      {:id => item.id, :value => "#{item.name}", :imgsrc => url, :type => type }
-            }
+      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+    }
   end
 
   def autocomplete_manufacturers

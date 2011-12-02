@@ -83,6 +83,10 @@
             location.href = "/search/search_items?q=" + $("#plannToSearch").val();
             return false;
           }
+          else{
+            location.href = "" + ui.item.url
+            return false;
+          }
           return false;
         }
       })

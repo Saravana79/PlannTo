@@ -7,4 +7,8 @@ module SearchHelper
       return "http://plannto.com/images/car/" + item.imageurl
     end
   end
+
+  def link_url(item)
+     return "/#{item.type.downcase.pluralize}/#{item.id}"
+  end
 end
