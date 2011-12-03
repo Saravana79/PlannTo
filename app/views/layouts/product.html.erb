@@ -83,14 +83,18 @@
       // add class selecting to mark the item
       //   $("#ui-active-menuitem").addClass('selecting');
     },
-    select: function(event, ui) {
-      if (ui.item.id == 0) {
-        location.href = "/search/search_items?q=" + $("#plannToSearch").val();
-        return false;
-      }
-      return false;
-    }
-  })
+    select: function( event, ui ) {
+          if (ui.item.id  == 0){
+            location.href = "/search/search_items?q=" + $("#plannToSearch").val();
+           // return false;
+          }
+          else{
+            location.href = "" + ui.item.url
+           // return false;
+          }
+         // return false;
+        }
+      })
           .data("autocomplete")._renderItem = function(ul, item, index) {
     if (index == -1) {
       return $("<li></li>")

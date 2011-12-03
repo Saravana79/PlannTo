@@ -167,7 +167,7 @@ class SearchController < ApplicationController
         type = item.type.humanize
       end
       url = "/#{item.type.tableize}/#{item.id}"
-
+      
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
   end
