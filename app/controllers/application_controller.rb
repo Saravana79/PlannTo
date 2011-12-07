@@ -1,6 +1,18 @@
 class ApplicationController < ActionController::Base
+  include Authentication
   protect_from_forgery
-  
+
+  rescue_from FbGraph::Exception, :with => :fb_graph_exception
+
+  def fb_graph_exception(e)
+    flash[:error] = {
+      :title   => e.class,
+      :message => e.message
+    }
+    current_user.try(:destroy)
+    redirect_to root_url
+  end
+
   def all_user_follow_item
     Rails.cache.fetch("item_follow_"+current_user.id.to_s) do
       current_user.follows.group_by(&:followable_id)

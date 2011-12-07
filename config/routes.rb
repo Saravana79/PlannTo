@@ -17,6 +17,9 @@ PlanNto::Application.routes.draw do
   resources :cars
   resources :manufacturers
   resources :car_groups
+  resource :facebook, :except => :create do
+    get :callback, :to => :create
+  end
   resources :products do
     member do
       get 'related_products'

@@ -8,6 +8,7 @@ gem 'rails', '3.1.0'
 gem 'mysql2'
 
 gem "configatron", "~> 2.8.4"
+gem 'fb_graph'
 
 # Gems used only for assets and not required
 # in production environments by default.
