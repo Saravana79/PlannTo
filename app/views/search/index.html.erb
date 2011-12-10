@@ -1,14 +1,14 @@
 <div id="container2">
 
   <style type="text/css">
-    #clearTag, #deleteTag{
+    #clearTag, #deleteTag, #addPreferenceTag{
       cursor: pointer;
       text-align: center;
-}
+    }
 
-.attributeTag:hover{
-  cursor: pointer;
-}
+    .attributeTag:hover{
+      cursor: pointer;
+    }
 
     #content {
       width: 100%;
@@ -71,9 +71,11 @@
   </style>
   <br/>
   <div id="navbar"><b>Search Criteria:</b><br/>
-    <div class="row">
-      <div class="box" id="manufacturerAtt" onclick="openManufacturerBox('Car', this)"><b>Manufacturer</b></div>
+    <div class="row">      
       <%@search_info_lookups.each_with_index do |lookup, index|%>
+        <%if index == 0%>
+          <div class="box" id="manufacturerAtt" onclick="openManufacturerBox('Car', this)"><b>Manufacturer</b></div>
+        <%end%>
         <div class="box" id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this )"><b><%=lookup[:name]%></b></div>
       <%end%>
       <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
@@ -87,7 +89,7 @@
       <%end%>
     </div>
   </div>
-  <div id="navmenu"><ul></ul></div><ul><li id='clearTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Clear</li></ul>
+  <div id="navmenu"><ul></ul></div><ul><li id='clearTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Clear</li><li id='addPreferenceTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add Preference</li></ul>
   <div id="searchList" style="width:100%;"></div>
   <div id="content">
     <%= render :partial => "/search/index" %>
@@ -116,6 +118,79 @@
 
 
 <script type="text/javascript">
+  function showClearTag(){
+    if ($("#navmenu").find("ul li").length == 0){
+      $("#clearTag").show();
+    }
+  }
+
+  function showPreferenceTag(){
+<% if user_signed_in? %>
+      if ($("#navmenu").find("ul li").length == 0){
+        $("#addPreferenceTag").show();
+      }
+<%end%>
+  }
+  //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
+  <% if user_signed_in? %>
+      $("#page").val(1);
+    <%if @preferences_list.size > 0%>
+      showClearTag();
+      showPreferenceTag();
+    <%end%>
+  <%@preferences_list.each do |preference|%>
+      var lineHeight = "";
+      var searchCriteria = "";
+      var index = "<%=@search_info_lookups.index{|x|x[:id]== preference[:attribute]}%>"
+      var searchName = "<%=preference[:search_name]%>"
+      var tagId = "attribute_menu_" + index + "_tag"
+    <%if preference[:value_type] == "Between"%>
+        var minFieldId = "<%=preference[:min_attribute]%>"
+        var maxFieldId = "<%=preference[:max_attribute]%>"
+        var minValue   = "<%=preference[:min_value]%>"
+        var maxValue   = "<%=preference[:max_value]%>"
+        $("#" + minFieldId).val(minValue)
+        $("#" + maxFieldId).val(maxValue)
+        searchCriteria = "<br/>"
+        searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+        var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+        var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+        var fieldId = "<%="#{preference[:attribute]}"%>"
+        var value   = "<%="#{preference[:value]}"%>"
+        $("#" + fieldId).val(value)
+        searchCriteria = "<br/>"
+        searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+        var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+        var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+        var fieldId = "<%="#{preference[:attribute]}"%>"
+        var value   = "<%="#{preference[:value]}"%>"
+        var selectedList = value.split(',')
+        var searchCriteria = "<br/> "
+        var anchorId
+        var spanId = 'removableListofValues' + fieldId
+        searchCriteria = searchCriteria +  "<span id='" + spanId + "'>"
+        var updatedSearchList= [];
+        $.each(selectedList, function(index, value) {
+          anchorId = "removeThis_" + index + "_" + fieldId
+          updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'> x </a>")
+        })
+        searchCriteria = searchCriteria + updatedSearchList.toString() +  "</span>"
+        var className = "textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "        
+        var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+        var fieldId = "<%="#{preference[:attribute]}"%>"
+        var value   = "<%="#{preference[:value]}"%>"
+        $("#" + fieldId).val(value)
+    <%else%>
+        var fieldId = "<%="#{preference[:attribute]}"%>"
+        var value   = "<%="#{preference[:value]}"%>"
+        $("#" + fieldId).val(value)
+        var list = "<li id='" +tagId +"' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" + searchName + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    <%end%>
+      $(list).appendTo('#navmenu ul');
+  <%end%>
+<%end%>
   function validateSearchField(fieldVal1, fieldVal2){
     if ((fieldVal1 == "")|| (fieldVal2 == "")){
       alert("Please select a search criteria.");
@@ -125,6 +200,7 @@
   $('#searchButton2').click(function() {
     var tagId = $("#which_attribute").val() + "_tag"
     showClearTag();
+    showPreferenceTag();
     if ($("#navmenu").find("#" + tagId).length > 0){
       $("#" +tagId).remove();
     }   
@@ -160,10 +236,8 @@
         alert("Please select a search criteria.");
         return false
       }
-      
       var searchCriteria = "<br/>( " + selectedValue + " " +  ")"
     }
-
     if (($("#which_type").val() == "List of values") || ($("#which_type").val() == "manufacturer"))
     {
       var selectedList = selectedValue.split(',')
@@ -196,7 +270,6 @@
 
   });
 
-
   $('.attributeTag').live('click', function(){
     var tagId = $(this).attr('id');
     var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
@@ -220,7 +293,6 @@
       $("#" + formId).val("")
     }
     else{
-
       var updatedFormList = [];
       $.each(formValArray, function(index, value) {
         if(index != removableIndex){
@@ -305,15 +377,25 @@
     removeAllTags();
     resetFormData();
     hideClearTag()
+    hidePreferenceTag();
     searchData();
+  });
+
+  $('#addPreferenceTag').live('click', function(){
+    if(confirm("This will remove your old preference for this type, Are you sure?")){
+      $.get('/search/add_preference',$("#searchForm").serialize(),null,"script");
+      return false;
+    } else {
+      return false;
+    }   
   });
 
   function resetFormData(){
     $("#page").val(1);
     $("#manufacturer").val('')
-    <%@search_form_lookups.each do |form_list|%>
+<%@search_form_lookups.each do |form_list|%>
       $("#" + '<%=form_list[:field_name]%>').val('')
-    <%end%>
+<%end%>
   }
   
   function searchData(){
@@ -331,14 +413,14 @@
     }
   }
 
-  function showClearTag(){
+  function hidePreferenceTag(){
     if ($("#navmenu").find("ul li").length == 0){
-      $("#clearTag").show();
+      $("#addPreferenceTag").hide();
     }
   }
   
   function resetUnwantedFormFields(){
-      <%@search_info_lookups.each_with_index do |value, index|%>
+<%@search_info_lookups.each_with_index do |value, index|%>
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"
       if ($("#navmenu").find("#" + searchListId).length == 0){
         var formId = <%= value[:id] %>
@@ -351,11 +433,11 @@
           $("#" + formId).val('')
         }
       }
-      <%end%>
-      }
+<%end%>
+  }
   
   function removeMultipleAttributeInstance(fieldId, tagId){
-      <%@search_info_lookups.each_with_index do |value, index|%>
+<%@search_info_lookups.each_with_index do |value, index|%>
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"
       var formId = <%= value[:id] %>
       if ((formId == fieldId) && (searchListId != tagId)){
@@ -365,7 +447,7 @@
           $("#" + attrField).show();
         }
       }
-      <%end%>
+<%end%>
   }
 
   function openInfoBox(displayInfo, attr_name, elem){
@@ -481,6 +563,7 @@
     }
     else if (displayInfo.vt == "Click"){
       showClearTag();
+      showPreferenceTag();
       var booleanObject = jQuery.parseJSON(attr_name);
       $("#which_form_field").val(booleanObject.field_id);
       var tagId = $("#which_attribute").val() + "_tag"
@@ -559,9 +642,9 @@
       var manufacturerList = loadManufacturers();
       $( "#dialog #autocompleteField" ).autocomplete({
         minLength: 0,
-      // maxItemsToShow:10,
-       cacheLength:5,
-      max:5,
+        // maxItemsToShow:10,
+        cacheLength:5,
+        max:5,
 
         minChars: 0,
         source: manufacturerList,

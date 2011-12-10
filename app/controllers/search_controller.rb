@@ -22,6 +22,7 @@ class SearchController < ApplicationController
       end
       @search_info_lookups = $search_info_lookups
     end
+    
 
     unless ($search_form_lookups.nil? || $search_type != params[:search_type])
       @search_form_lookups = $search_form_lookups
@@ -32,12 +33,12 @@ class SearchController < ApplicationController
           if attr_rel.value_type == "Between"
             min_attribute = "min_" + attr_rel.attribute.id.to_s
             max_attribute = "max_" + attr_rel.attribute.id.to_s
-            $search_form_lookups << {:field_name =>min_attribute, :attribute_name => attr_rel.attribute.name, :lower => true}
-            $search_form_lookups << {:field_name =>max_attribute, :attribute_name => attr_rel.attribute.name, :lower => false}
+            $search_form_lookups << {:field_name =>min_attribute, :attribute_name => attr_rel.attribute.name, :lower => true, :search_display_id => attr_rel.id}
+            $search_form_lookups << {:field_name =>max_attribute, :attribute_name => attr_rel.attribute.name, :lower => false, :search_display_id => attr_rel.id}
           else
             @field = @search_form_lookups.find {|s| s[:field_name] == attr_rel.attribute.id.to_s}
             if @field.nil?
-              $search_form_lookups << {:field_name =>attr_rel.attribute.id.to_s, :attribute_name => attr_rel.attribute.name}
+              $search_form_lookups << {:field_name =>attr_rel.attribute.id.to_s, :attribute_name => attr_rel.attribute.name, :search_display_id => attr_rel.id}
             end
           end
         end
@@ -73,21 +74,52 @@ class SearchController < ApplicationController
       end
     end
 
+    ############## PREFERENCES SECTION ######################
+    preferences = Array.new
+    if user_signed_in? && !request.xhr?
+      search_ids = @search_attributes.collect{|item| item.id}
+      @preferences = Preference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", current_user.id, itemtype.id, search_ids).includes(:search_attribute)
+      @preferences_list = preferences = Preference.get_items(@preferences)
+    end
+    ############ PREFERENCE SECTION ENDS#############
 
     $search_type = @search_type
     @sunspot_search_fields = sunspot_search_fields
-    @page  = params[:page].nil? ? 1 : params[:page].to_i
-    @manufacturer  = params[:manufacturer].blank? ? "" : params[:manufacturer]
+    @page  = params[:page].nil? ? 1 : params[:page].to_i    
 
-    list  = @manufacturer.split(',')
+
+    unless params[:manufacturer].present?
+      if user_signed_in? && !request.xhr?
+        preference = @preferences_list.find {|s| s[:value_type] == "manufacturer" }
+        list =  preference.nil? ? Array.new : preference[:value].split(',')
+      else
+        list = Array.new
+      end
+    else
+      @manufacturer  = params[:manufacturer].blank? ? "" : params[:manufacturer]
+      list  = @manufacturer.split(',')
+    end
+
+    #logger.info list.kind_of?(Array)
 
     @items = Sunspot.search($search_type.camelize.constantize) do
       keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
+      with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
       # with(:cargroup, cargrouplist)  if !params[cargroup[:field_name].to_sym].blank?
       facet :manufacturer
       #facet :cargroup
       dynamic :features do
+        preferences.each do |preference|
+          if preference[:value_type] == "Between"
+            with(preference[:attribute_name].to_sym).greater_than(preference[:min_value]) if !params[preference[:min_attribute]].present?
+            with(preference[:attribute_name].to_sym).less_than(preference[:max_value]) if !params[preference[:max_attribute]].present?
+          elsif preference[:value_type] == "GreaterThan"
+            with(preference[:attribute_name].to_sym).greater_than(preference[:value]) if !params[preference[:attribute]].present?
+          elsif preference[:value_type] == "LessThen"
+            with(preference[:attribute_name].to_sym).less_than(preference[:value]) if !params[preference[:attribute]].present?
+          end
+        end
         sunspot_search_fields.each do |search|
           if search[:value_type] == "Between"
             with(search[:attribute_name].to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
@@ -102,6 +134,13 @@ class SearchController < ApplicationController
         end
       end
       dynamic :features_string do
+        preferences.each do |preference|
+          if preference[:value_type] == "Click"
+            with(preference[:attribute_name].to_sym, preference[:value]) if !params[preference[:attribute]].present?
+          elsif preference[:value_type] == "ListOfValues"
+            with(preference[:attribute_name].to_sym, preference[:search_value]) if !params[preference[:attribute]].present?
+          end
+        end
         sunspot_search_fields.each do |search|
           if search[:value_type] == "Click"
             with(search[:attribute_name].to_sym, params[search[:first_value]]) if !params[search[:first_value]].blank?
@@ -170,6 +209,12 @@ class SearchController < ApplicationController
       
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
+  end
+
+  def add_preference
+
+    Preference.add_preference(current_user.id, params[:search_type], params)   
+    render :nothing => true
   end
 
   def autocomplete_manufacturers
