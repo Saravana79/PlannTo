@@ -1,9 +1,10 @@
-<%- @item.car_groups.each do |item| %>
+<%- car_groups = @item.car_groups(params[:page], true) %>
+<%- car_groups.each do |item| %>
   <div class="feedcontentheader">
     <div class="productcontentmainmini">
       <div>
         <%= link_to({}, :href => car_path(item.id)) do %>
-          <%= image_tag(get_image_url(item, 'Car'), :title => item.name, :class => "productimage",
+          <%= image_tag(image_path(get_image_url(item, 'Car')), :title => item.name, :class => "productimage",
                         :style                        => "width:50px;height:50px;") %>
         <% end %>
       </div>
@@ -22,3 +23,4 @@
 
   </div>
 <%- end %>
+<%= paginate car_groups %>

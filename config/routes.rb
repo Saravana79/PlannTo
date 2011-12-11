@@ -1,5 +1,4 @@
 PlanNto::Application.routes.draw do
-  devise_for :users
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -39,7 +38,8 @@ PlanNto::Application.routes.draw do
     end
   end
   resources :reviews
-  devise_for :users
+  
+  devise_for :users, :controllers => { :sessions => "users/sessions" }
   # Sample resource route with options:
   #   resources :products do
   #     member do

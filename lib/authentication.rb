@@ -10,7 +10,7 @@ module Authentication
   module HelperMethods
 
     def current_user
-      @current_user ||= Facebook.find(session[:current_user])
+      @current_user ||= Facebook.find(session[:current_user]).user
     rescue ActiveRecord::RecordNotFound
       nil
     end
@@ -35,7 +35,7 @@ module Authentication
     end
 
     def unauthenticate
-      current_user.destroy
+      current_user.destroy if current_user
       @current_user = session[:current_user] = nil
     end
 

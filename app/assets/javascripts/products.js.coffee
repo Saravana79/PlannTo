@@ -44,6 +44,7 @@ root.Product =
       height: 300
       width: 350
       modal: true
+      title: "Login"
       buttons:
         "Sign in": ->
           bValid = true

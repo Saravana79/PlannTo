@@ -1,13 +1,18 @@
 class Facebook < ActiveRecord::Base
-
+  has_one :user
   def profile
     @profile ||= FbGraph::User.me(self.access_token).fetch
   end
 
   def create_user
     _fb_profile = profile
-    User.create!(:email => _fb_profile.email, :name => _fb_profile.name, :password => 'password',
-                 :password_confirmation => 'password')
+    user = User.find_by_email(_fb_profile.email)
+    if user.blank?
+      User.create!(:email => _fb_profile.email, :name => _fb_profile.name, :password => 'password',
+                   :password_confirmation => 'password', :facebook_id => self.id)
+    else
+      user.update_attribute(:facebook_id, self.id)
+    end
   end
 
   class << self

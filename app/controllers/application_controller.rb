@@ -1,8 +1,17 @@
 class ApplicationController < ActionController::Base
   include Authentication
   protect_from_forgery
-
+#  before_filter :check_authentication
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
+
+  def check_authentication
+    begin
+      auth = Facebook.auth.from_cookie(cookies)
+      authenticate Facebook.identify(auth.user)
+    rescue
+      return false
+    end
+  end
 
   def fb_graph_exception(e)
     flash[:error] = {

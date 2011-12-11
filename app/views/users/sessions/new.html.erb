@@ -1,0 +1,30 @@
+<h2>Sign in</h2>
+
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+
+  <%= render "shared/login_fields", {:f => f} %>
+  <div><%= f.submit "Sign in" %></div>
+  <% if devise_mapping.rememberable? -%>
+    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+  <% end -%>
+<% end %>
+
+<%= render :partial => "devise/shared/links" %>
+
+<dl>
+  <dt>JavaScript SDK</dt>
+  <dd>
+    <fb:login-button length="long" onlogin="location.href = '<%= facebook_path %>'" scope="<%= Facebook.config[:scope] %>"></fb:login-button>
+  </dd>
+  <dt>Normal OAuth flow</dt>
+  <dd><%= link_to "Start", new_facebook_path %></dd>
+</dl>
+
+<script type="text/javascript">
+  FB.init({
+    appId: "<%= Facebook.config[:client_id] %>",
+    cookie: true,
+    xfbml: true,
+    oauth: true
+  });
+</script>

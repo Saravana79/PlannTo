@@ -19,7 +19,7 @@
     //    $("#ui-active-menuitem").hide();
     //  });
 $(document).ready(function(){
- 
+
       $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
         var self = this;
         $.each( items, function( index, item ) {
@@ -103,14 +103,14 @@ $(document).ready(function(){
 
     <div id="container">
       <%= render 'shared/header_links' %>
-      
+
 
       <%= yield %>
 
     </div>
 
     <%= render 'shared/footer'  %>
-   
+
     <style type="text/css">
       /* TEMPORARY FIX. TO BE REMOVED SOON*/
       .atext

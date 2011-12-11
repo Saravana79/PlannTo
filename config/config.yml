@@ -1,3 +1,5 @@
 development:
-  car_image_url: "images/car/"
-  mobile_image_url: "images/mobile/"
+  car_image_url: "/images/car/"
+  mobile_image_url: "/images/mobile/"
+  no_of_main_item: 4
+  no_of_item_in_tab: 10
