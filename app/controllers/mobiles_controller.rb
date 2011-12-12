@@ -1,0 +1,3 @@
+class MobilesController < ProductsController
+
+end

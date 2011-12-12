@@ -1,6 +1,8 @@
 class Users::SessionsController < Devise::SessionsController
-  def destroy
+
+  def new
+    return redirect_to root_url unless current_user.blank?
     super
-    unauthenticate
   end
+
 end

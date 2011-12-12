@@ -37,11 +37,16 @@ class Item < ActiveRecord::Base
   end
 
   def get_price_info(item_type)    
-    item_attribute = item_attributes.first{|a| a.name == item_type}
+    item_attribute = item_attributes.select{|a| a.name == item_type}.last
     if item_attribute
       attribute_value = item_attribute.attribute_values.where(:item_id => id).last
-      item_attribute.name + ' - ' + item_attribute.unit_of_measure + ' ' +
-        attribute_value.value + ' ( ' + attribute_value.addition_comment + ' )'
+      if !attribute_value.blank?
+        item_attribute.name + ' - ' + (item_attribute.unit_of_measure || "") + ' ' +
+          attribute_value.value +
+          (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
+      else
+        ""
+      end
     else
       ""
     end

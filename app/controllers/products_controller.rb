@@ -12,6 +12,7 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @item = Item.where(:id => params[:id]).includes(:item_attributes).last
     user_follow_type
   end
 

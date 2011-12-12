@@ -28,16 +28,17 @@ class Manufacturer < Item
   private
   
   def get_min_the_items(no_of_car)
-    relate_car_groups.limit(no_of_car)
+    related_items = relate_car_groups.where(:type => related_cars.first.class.name).limit(no_of_car)
     if relate_car_groups.blank?
-      related_cars.limit(no_of_car)
+      related_items = related_cars.where(:type => related_cars.first.class.name).limit(no_of_car)
     end
+    related_items
   end
 
   def get_paginated_items(page_number)
-    sub_item = relate_car_groups
+    sub_item = relate_car_groups.where(:type => related_cars.first.class.name)
     if relate_car_groups.blank?
-      sub_item = related_cars
+      sub_item = related_cars.where(:type => related_cars.first.class.name)
     end
     sub_item.page(page_number).per(10)
   end

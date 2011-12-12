@@ -9,14 +9,14 @@ module Authentication
 
   module HelperMethods
 
-    def current_user
+    def facebook_current_user
       @current_user ||= Facebook.find(session[:current_user]).user
     rescue ActiveRecord::RecordNotFound
       nil
     end
 
     def authenticated?
-      !current_user.blank?
+      !facebook_current_user.blank?
     end
 
   end

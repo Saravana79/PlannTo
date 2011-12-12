@@ -2,7 +2,8 @@
   <div class="productcontentmain">
     <div>
       <%- @item.car_groups.each do |item| %>
-        <%= link_to({}, :href => car_path(item.id)) do %>
+        <% path_name = item.class.name.downcase+"_path(item.id)" %>
+        <%= link_to({}, :href => eval(path_name)) do %>        
           <%= image_tag(get_image_url(item, image_type), :title => item.name, :class => "productimage") %>
         <% end %>
       <%- end %>

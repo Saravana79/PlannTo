@@ -10,7 +10,7 @@
       <span class="producttitle"><%= @item.name %></span>
     </div>
 
-    <%= render "manufacturers/" + @item.car_groups.last.class.name.underscore + '_image', :image_type => 'CarGroup' unless @item.car_groups.blank? %>
+    <%= render "manufacturers/" + @item.car_groups.last.class.superclass.name.underscore + '_image', :image_type => 'CarGroup' unless @item.car_groups.blank? %>
     
 
     <div class="productcontentcreation">
@@ -41,7 +41,7 @@
       <div id="tabs1" style="display: block; " class="main-content-section">
 
 
-        <%= render "manufacturers/" + @item.car_groups.last.class.name.underscore unless @item.car_groups.blank? %>
+        <%= render "manufacturers/" + @item.car_groups.last.class.superclass.name.underscore unless @item.car_groups.blank? %>
 
       <div id="tabs2" style="display: none; " class="main-content-section">
         This specification tab
