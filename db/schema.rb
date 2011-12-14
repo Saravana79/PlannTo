@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111209175754) do
+ActiveRecord::Schema.define(:version => 20111213162941) do
 
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
@@ -26,8 +26,6 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
     t.string   "creator_ip"
     t.string   "updater_ip"
   end
-
-  add_index "attribute_values", ["item_id"], :name => "ItemIdBasedKey"
 
   create_table "attributes", :force => true do |t|
     t.string   "name",            :limit => 500, :null => false
@@ -50,12 +48,6 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
     t.boolean  "is_filterable"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "attributesrelationships", :force => true do |t|
-    t.integer "attribute_id", :null => false
-    t.integer "itemtype_id",  :null => false
-    t.integer "Priority",     :null => false
   end
 
   create_table "best_uses", :force => true do |t|
@@ -133,18 +125,6 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
 
-  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemID",                    :null => false
-    t.text    "URL",                       :null => false
-    t.string  "URLSource", :limit => 2000, :null => false
-  end
-
-  create_table "itemimages", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemId",                    :null => false
-    t.string  "ImageURL",  :limit => 4000, :null => false
-    t.boolean "IsDefault",                 :null => false
-  end
-
   create_table "itemrelationships", :force => true do |t|
     t.integer  "item_id",        :null => false
     t.integer  "relateditem_id", :null => false
@@ -180,6 +160,36 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
     t.integer  "updated_by"
     t.string   "creator_ip"
     t.string   "updater_ip"
+  end
+
+  create_table "messages", :force => true do |t|
+    t.string   "topic"
+    t.text     "body"
+    t.integer  "received_messageable_id"
+    t.string   "received_messageable_type"
+    t.integer  "sent_messageable_id"
+    t.string   "sent_messageable_type"
+    t.boolean  "opened",                     :default => false
+    t.boolean  "recipient_delete",           :default => false
+    t.boolean  "sender_delete",              :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "ancestry"
+    t.boolean  "recipient_permanent_delete", :default => false
+    t.boolean  "sender_permanent_delete",    :default => false
+  end
+
+  add_index "messages", ["ancestry"], :name => "index_messages_on_ancestry"
+  add_index "messages", ["sent_messageable_id", "received_messageable_id"], :name => "acts_as_messageable_ids"
+
+  create_table "preferences", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "search_display_attribute_id"
+    t.string   "value_1"
+    t.string   "value_2"
+    t.integer  "itemtype_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "pros", :force => true do |t|

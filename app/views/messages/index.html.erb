@@ -1,0 +1,46 @@
+<script type="text/javascript">
+  function reply_form(id){
+    var form_id = id;
+    $("#reply_form_"+form_id).show();
+  };
+  function cancel_reply_form(id){
+    var form_id = id;
+    $("#reply_form_"+form_id).hide();
+    $("#message_to").text("");
+    $("#message_body").text("");
+  }
+
+</script>
+<p><%= link_to "New Message", new_message_path %>
+<%#= link_to "Sent", sent_messages_path(@user) %></p>
+<% if @inbox.size >= 0 %>
+  <% @inbox.each do |message| %>
+    <fieldset>
+      <p><%= message.from.email %></p>
+      <p><%= message.topic %></p>
+      <p><%= message.body %></p>
+      <div onclick="reply_form(<%= message.id %>)">
+        Reply
+      </div>
+      <div id="reply_form_<%= message.id %>" style="display:none;">
+        <p>
+          <%= form_for(:message, :url => create_message_path(current_user)) do |f| %>
+            <p>
+              <%= f.text_field :to, :value => message.from.email %>
+            </p>
+            <p>
+              <%= label "message", "Message:" %>
+              <%= f.text_area :body, :rows => 5, :cols => 40 %>
+            </p>
+            <%= f.submit "Reply" %>
+            <div onclick="cancel_reply_form(<%= message.id %>);">
+              Cancel
+            </div>
+          <% end %>
+        </p>
+      </div>
+    </fieldset>
+  <% end %>
+<% else %>
+  <%= "No messages yet." %>
+<% end %>

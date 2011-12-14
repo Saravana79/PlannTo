@@ -39,7 +39,8 @@ PlanNto::Application.routes.draw do
     end
   end
   resources :reviews
-  
+  resources :messages
+  match "/create_message/:id" => 'messages#create_message', :as => :create_message
   devise_for :users, :controllers => { :sessions => "users/sessions" }
   # Sample resource route with options:
   #   resources :products do

@@ -1,0 +1,11 @@
+<%= form_for(:message, :url => create_message_path(current_user)) do |f| %>
+  <p>
+    <%= label "message", "To :"%>
+    <%= text_field "message", "to" %>
+  </p>
+  <p>
+    <%= label "message", "Message:" %>
+    <%= f.text_area :body, :rows => 5, :cols => 40 %>
+  </p>
+  <%= f.submit "Send" %>
+<% end %>
