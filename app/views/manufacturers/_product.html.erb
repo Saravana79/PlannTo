@@ -5,7 +5,7 @@
       <div>
         <% path_name = item.class.name.downcase+"_path(item.id)" %>
         <%= link_to({}, :href => eval(path_name)) do %>
-          <%= image_tag(image_path(get_image_url(item, 'Car')), :title => item.name, :class => "productimage",
+          <%= image_tag(image_path(get_image_url(item, item.class.name)), :title => item.name, :class => "productimage",
                         :style                        => "width:50px;height:50px;") %>
         <% end %>
       </div>
