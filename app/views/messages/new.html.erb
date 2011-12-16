@@ -1,4 +1,4 @@
-<%= form_for(:message, :url => create_message_path(current_user)) do |f| %>
+<%= form_for(:message, :url => create_message_path(current_user,'new')) do |f| %>
   <p>
     <%= label "message", "To :"%>
     <%= text_field "message", "to" %>
