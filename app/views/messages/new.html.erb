@@ -4,6 +4,7 @@
 <script type ="text/javascript">
   $(document).ready(function() {
     $("#message_message_users_tokens").tokenInput("/messages/message_users.json",{
+     preventDuplicates: true,
      crossDomain: false,
      theme: "facebook"
     });

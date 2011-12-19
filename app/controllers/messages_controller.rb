@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
   end
 
   def show
-    @message_users = User.find(:all, :conditions => ['name like ?',"%#{params[:q]}%"])
+    @message_users = User.find(:all, :conditions => ['name like ? and id !=?',"%#{params[:q]}%", current_user.id])
     respond_to do |format|
       format.html
       format.json { render :json => @message_users.map(&:attributes)}
@@ -20,8 +20,8 @@ class MessagesController < ApplicationController
   end
 
   def create_message
-    @emails = params[:message][:to].split(",") rescue []
-    if @emails.empty? and params[:method] == 'new'
+    @ids = params[:message][:message_users_tokens].split(",") rescue []
+    if @ids.empty? and params[:method] == 'new'
       flash[:error] = 'Error in Sending Message. No Receivers'
       return redirect_to :back
     end
@@ -29,8 +29,8 @@ class MessagesController < ApplicationController
       user_to = User.find(params[:id])
       message = current_user.send_message(user_to, { :body => params[:message][:body] })
     else
-      @emails.each do |email|
-        send_message(email)
+      @ids.each do |id|
+        send_message(id)
       end
     end
     redirect_to messages_path, :notice => 'Message sent.'
@@ -40,8 +40,8 @@ class MessagesController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  def send_message(email)
-    user_to = User.find_by_email(email)
+  def send_message(id)
+    user_to = User.find(id)
     message = current_user.send_message(user_to, { :body => params[:message][:body] })
     return
   end

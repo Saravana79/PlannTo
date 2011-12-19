@@ -413,7 +413,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Inner function to a token to the list
     function insert_token(item) {
-        var this_token = $("<li><p>"+ item.login +"</p></li>")
+        var this_token = $("<li><p>"+ item.name +"</p></li>")
           .addClass(settings.classes.token)
           .insertBefore(input_token);
 
@@ -427,7 +427,7 @@ $.TokenList = function (input, url_or_data, settings) {
             });
 
         // Store data on the token
-        var token_data = {"id": item.id, "login": item.login};
+        var token_data = {"id": item.id, "name": item.name};
         $.data(this_token.get(0), "tokeninput", item);
 
         // Save this token for duplicate checking
@@ -747,7 +747,7 @@ $.TokenList = function (input, url_or_data, settings) {
             } else if(settings.local_data) {
                 // Do the search through local data
                 var results = $.grep(settings.local_data, function (row) {
-                    return row.login.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                    return row.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
                 });
 
                 if($.isFunction(settings.onResult)) {
