@@ -41,22 +41,22 @@ class ItemsController < ApplicationController
     
     
 
-    result = Sunspot.search(Car) do
-      keywords params[:q]
-      facet :manufacturer
-      dynamic :features do
-        #with(:Price).greater_than(1800000)
-        facet(:Price)
-        facet(:Engine)
-        facet(:'Fuel Economy [City]')
-      end
-
-    end
+#    result = Sunspot.search(Car) do
+#      keywords params[:q]
+#      facet :manufacturer
+#      dynamic :features do
+#        #with(:Price).greater_than(1800000)
+#        facet(:Price)
+#        facet(:Engine)
+#        facet(:'Fuel Economy [City]')
+#      end
+#
+#    end
     # if result.facet( :manufacturer )
     #    @facet_rows = result.facet(:manufacturer).rows
     #  end
      
-    @items = result
+    @items = {}
     render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
