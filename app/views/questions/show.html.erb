@@ -1,0 +1,83 @@
+<div id="ContentPanel" class="contentpanel">
+  <div id="main-navigation">
+    <ul id="navlist" class="navtabs botmargin">
+      <li>
+        <a href="#" class="navtab">All</a>
+      </li>
+      <li>
+        <a href="index.html" class="navtab" onclick="popup('popupwindowDiv');">Car</a>
+        <div id="CarSubMenuDiv" class="SubmenuDiv" style="display:block;">
+          <ul class="nabtabChilds">
+            <li>
+              <a href="#" class="navtabChild">Browse All Cars</a>
+            </li>
+            <li>
+              <a href="Garage.html" class="navtabChild">My Garage</a>
+            </li>
+            <li>
+              <a href="PreferencePage.html" class="navtabChild">My Preferences</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <a href="#" class="navtab">Mobile</a>
+      </li>
+      <li>
+        <a href="#" class="navtab">Camera/Photography</a>
+      </li>
+      <li>
+        <a href="#" class="navtab">Movies</a>
+      </li>
+      <li>
+        <a href="#" class="navtab">Travel</a>
+      </li>
+    </ul>
+  </div>
+  <div id="main-content">
+    <div class="feedcontentheader">
+    	<div class = "questionblock">
+      <div class="questioncontentmain">
+
+        <div class="questiontitle">
+		<%= @question.title %> 
+        </div>
+        <%= render :partial => 'votes/vote_block', :locals => { :parent => @question, :vote => nil } %>
+        <div class="questiondescription">
+		<%= @question.description %>
+        </div>
+      </div>
+      <div style="width:100%;">
+      <div class="uploader" style="float: right;">
+		 Asked By <a class="feedlink">Saravana Kumar</a>
+        <div class="feeddate">
+			 <%= @question.created_at.strftime('%b %d, %Y  at %I:%M %p')
+ %>
+        </div>
+      </div>
+
+      </div>
+      <div class="displaycomments" style="width: 100%;">
+        
+      </div>
+      <div class="questioncomments">
+        <!-- <%= render :partial => 'comments/comments',:collection => @question.comments %> -->
+        <%= render :partial => 'comments/comments',:object => @question.comments %>
+        <a class="invokecomment" href="#">comment</a>
+        <%= render :partial => 'comments/new_comment', :locals => {:parent => @question.class.name, :parent_id => @question.id}  %>
+        
+      </div>
+    </div>
+  </div>
+  <br /><br /><br />
+  <div class="answersblock">
+  	<div class="answercount" style="font-weight: bold; font-size: 140%;  font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;">
+  		<%= pluralize @question.answers.count, 'Answers'  %>
+  	</div>
+  	
+  	<%= render :partial => 'answers/answers', :object => @question.answers %>
+  	
+  </div>
+</div>
+
+

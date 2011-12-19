@@ -21,6 +21,9 @@ end
 
 gem 'jquery-rails'
 gem 'acts-as-taggable-on', '~>2.1.1'
+gem 'acts_as_rateable'
+gem 'acts_as_commentable'
+gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
 gem 'devise'
 gem 'sunspot_rails'
 gem 'acts_as_follower'

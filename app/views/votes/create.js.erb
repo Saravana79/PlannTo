@@ -1,0 +1,12 @@
+var vote_block = $("<%= "##{@vote.voteable.class.name.downcase}_#{@vote.voteable.id}_vote_block div:first" %>");
+if(vote_block.attr('id') == undefined){
+  vote_block.attr('id','<%= "vote_for_#{@vote.id}" %>');
+  var arrows = $("<%= "##{@vote.voteable.class.name.downcase}_#{@vote.voteable.id}_vote_block div:first a" %>");
+  
+  arrows.each(function(index){
+   $(this).attr('href',$(this).attr('href') + '&' + '<%= "id=#{@vote.id}" %>' );
+  });
+
+ 
+}
+

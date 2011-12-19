@@ -13,6 +13,19 @@
 
 ActiveRecord::Schema.define(:version => 20111213162941) do
 
+  create_table "answers", :force => true do |t|
+    t.integer  "question_id"
+    t.text     "content"
+    t.string   "format",         :limit => 1
+    t.boolean  "mark_as_answer",              :default => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.string   "creator_ip"
+    t.string   "updator_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
     t.integer  "item_id",                                            :null => false
@@ -203,6 +216,35 @@ ActiveRecord::Schema.define(:version => 20111213162941) do
     t.string   "updater_ip"
   end
 
+  create_table "questions", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "format",      :limit => 1
+    t.boolean  "is_answered",              :default => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.string   "creator_ip"
+    t.string   "updator_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rates", :force => true do |t|
+    t.integer "score"
+  end
+
+  create_table "ratings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "rate_id"
+    t.integer  "rateable_id"
+    t.string   "rateable_type", :limit => 32
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ratings", ["rate_id"], :name => "index_ratings_on_rate_id"
+  add_index "ratings", ["rateable_id", "rateable_type"], :name => "index_ratings_on_rateable_id_and_rateable_type"
+
   create_table "reviews", :force => true do |t|
     t.string   "title",          :limit => 200
     t.string   "description",    :limit => 5000
@@ -268,5 +310,27 @@ ActiveRecord::Schema.define(:version => 20111213162941) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "vote_counts", :force => true do |t|
+    t.integer  "voteable_id",   :null => false
+    t.string   "voteable_type", :null => false
+    t.integer  "vote_count",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "votes", :force => true do |t|
+    t.boolean  "vote",          :default => false
+    t.integer  "voteable_id",                      :null => false
+    t.string   "voteable_type",                    :null => false
+    t.integer  "voter_id"
+    t.string   "voter_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "votes", ["voteable_id", "voteable_type"], :name => "index_votes_on_voteable_id_and_voteable_type"
+  add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
+  add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
 end

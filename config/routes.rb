@@ -39,6 +39,11 @@ PlanNto::Application.routes.draw do
     end
   end
   resources :reviews
+  resources :pros
+  resources :comments
+  resources :votes
+  resources :questions
+  resources :answers
   resources :messages
 
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message

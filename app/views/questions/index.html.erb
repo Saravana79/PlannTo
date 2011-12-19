@@ -1,0 +1,4 @@
+Sort: <%= select_tag "question-sort", options_for_select([["Votes",1],["Date",2]],"1") %>
+<div id="display-question">
+<%= render :partial => 'questions/questions', :collection => @questions %>
+</div>
