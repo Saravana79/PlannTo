@@ -5,12 +5,18 @@ class MessagesController < ApplicationController
   def index
     @user = current_user
     @inbox = current_user.received_messages.group(:sent_messageable_id)
-#    params[:data]  = @inbox
-#    exit
   end
 
   def new
     
+  end
+
+  def show
+    @message_users = User.find(:all, :conditions => ['name like ?',"%#{params[:q]}%"])
+    respond_to do |format|
+      format.html
+      format.json { render :json => @message_users.map(&:attributes)}
+    end
   end
 
   def create_message
