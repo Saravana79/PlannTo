@@ -10,9 +10,20 @@ module Authentication
   module HelperMethods
 
     def facebook_current_user
-      @current_user ||= Facebook.find(session[:current_user]).user
+      @facebook_user ||= Facebook.find(session[:current_user])
+      Rails.logger.info("-----#{@facebook_user.inspect}------#{session[:current_user]}")
+      if !@facebook_user.blank? && current_user.blank?
+        @facebook_user.create_user
+      end
+      @current_user ||= @facebook_user.user
+      Rails.logger.info("-----#{@current_user.inspect}")
+      @current_user
     rescue ActiveRecord::RecordNotFound
       nil
+    end
+
+    def facebook_profile
+      @facebook_user.profile
     end
 
     def authenticated?
@@ -35,7 +46,7 @@ module Authentication
     end
 
     def unauthenticate
-      current_user.destroy if current_user
+#      current_user.destroy if current_user
       @current_user = session[:current_user] = nil
     end
 

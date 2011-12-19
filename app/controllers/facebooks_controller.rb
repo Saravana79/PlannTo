@@ -1,7 +1,7 @@
 require 'rack/oauth2'
 
 class FacebooksController < ApplicationController
-  before_filter :require_authentication, :only => :destroy
+  before_filter :require_authentication, :only => [:destroy, :friends, :wall_post, :wall_content]
 
   rescue_from Rack::OAuth2::Client::Error, :with => :oauth2_error
 
@@ -36,6 +36,24 @@ class FacebooksController < ApplicationController
     redirect_to root_url
   end
 
+  def friends
+    @facebook_friends = facebook_profile.friends
+  end
+
+  def wall_post
+    
+  end
+
+  def wall_content
+    me = FbGraph::User.me(@facebook_user.access_token)
+    me.feed!(
+      :message     => params[:message],
+      :description => params[:description]
+    )
+    flash[:notice] = "message posted successfully"
+    redirect_to wall_post_facebook_path
+  end
+
   private
 
   def oauth2_error(e)
@@ -45,4 +63,6 @@ class FacebooksController < ApplicationController
     }
     redirect_to root_url
   end
+
+  
 end

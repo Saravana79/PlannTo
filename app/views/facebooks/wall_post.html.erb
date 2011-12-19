@@ -1,0 +1,9 @@
+
+<%= form_tag(wall_content_facebook_path, :method => :post) do %>
+  <br/>
+  Message: <%= text_field_tag :message %>
+  <br/>
+  Description: <%= text_area_tag :description %>
+  <br/>
+  <%= submit_tag "Post to Wall" %>
+<% end %>

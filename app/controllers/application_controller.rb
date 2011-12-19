@@ -2,13 +2,13 @@ class ApplicationController < ActionController::Base
   include Authentication
   protect_from_forgery
   before_filter :check_authentication
-  rescue_from FbGraph::Exception, :with => :fb_graph_exception  
+  rescue_from FbGraph::Exception, :with => :fb_graph_exception
 
   def check_authentication
     begin
       auth = Facebook.auth.from_cookie(cookies)
       authenticate Facebook.identify(auth.user)
-      @current_user ||= facebook_current_user
+      facebook_current_user
     rescue
       return false
     end
@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
       :title   => e.class,
       :message => e.message
     }
-    current_user.try(:destroy)
     redirect_to root_url
   end
 

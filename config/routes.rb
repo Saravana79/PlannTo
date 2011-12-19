@@ -20,6 +20,9 @@ PlanNto::Application.routes.draw do
   resources :car_groups
   resource :facebook, :except => :create do
     get :callback, :to => :create
+    get :friends
+    get :wall_post
+    post :wall_content
   end
   resources :products do
     member do

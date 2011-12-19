@@ -36,10 +36,12 @@ module ApplicationHelper
 
   def get_image_url(item, type = 'Car')
     case type
-      when 'Car'
+      when 'Car', 'CarGroup'
         configatron.car_image_url + item.imageurl
-      when 'Manufacturer', 'CarGroup'
+      when 'Mobile'
         configatron.mobile_image_url + item.imageurl
+      when 'Manufacturer',
+        configatron.car_image_url + item.imageurl
     end
 
   end
