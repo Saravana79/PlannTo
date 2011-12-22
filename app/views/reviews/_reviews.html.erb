@@ -1,0 +1,15 @@
+<b><%= link_to reviews.title,reviews  %></b>
+<br />
+<%= "#{reviews.user.name} reviewed #{reviews.item.name} " + time_ago_in_words(reviews.created_at) + " ago"%>
+<br />
+
+<%= "Pros: " + (reviews.pros.map {|i| i.title}).join(",") if reviews.pros.length > 0 %>
+<br />
+<%= "Cons: " + (reviews.cons.map {|i| i.title}).join(",") if reviews.cons.length > 0 %>
+<br />
+<%= reviews.description.slice(0..149) + "..."  %>
+<br />
+<%= link_to "More..",reviews%>
+<br/>
+<%= "Comments (#{reviews.comments.length}) |   Share  |  Report"  %>
+<hr/>

@@ -29,11 +29,12 @@ respond_to :html, :js
     respond_with @review, :location => reviews_url
   end
   
-  # def show
-    # review = Review.find 3
-    # user = User.find 1
-    # user.voted_on? review
-    # user.vote_count
-  # end
+  def new
+    @review = Review.new
+    @review.pros.build
+    @review.cons.build
+    @review.best_uses.build
+    @item = Car.find 307
+  end
 
 end

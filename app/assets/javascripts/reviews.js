@@ -24,7 +24,6 @@ $(function(){
 //         });
     });
 
-
 $('#rating').raty({
   starOff:	'assets/star-off.png',
   starOn:	'assets/star2.gif',
@@ -33,3 +32,5 @@ $('#rating').raty({
 });
     
 });
+
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111213162941) do
+ActiveRecord::Schema.define(:version => 20111221184754) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -39,8 +39,6 @@ ActiveRecord::Schema.define(:version => 20111213162941) do
     t.string   "creator_ip"
     t.string   "updater_ip"
   end
-
-  add_index "attribute_values", ["item_id"], :name => "ItemIdBasedKey"
 
   create_table "attributes", :force => true do |t|
     t.string   "name",            :limit => 500, :null => false
@@ -113,7 +111,6 @@ ActiveRecord::Schema.define(:version => 20111213162941) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -145,12 +142,6 @@ ActiveRecord::Schema.define(:version => 20111213162941) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
-
-  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemID",                    :null => false
-    t.text    "URL",                       :null => false
-    t.string  "URLSource", :limit => 2000, :null => false
-  end
 
   create_table "itemimages", :primary_key => "ID", :force => true do |t|
     t.integer "ItemId",                    :null => false
