@@ -23,7 +23,10 @@ class FacebooksController < ApplicationController
   # handle Normal OAuth flow: callback
   def create
     client = Facebook.auth(callback_facebook_url).client
-    client.authorization_code = params[:code]
+    if params[:error_code]
+      flash[:notice] = "Not able to login to facebook"
+    end
+    client.authorization_code = params[:code] || params[:error_code]
     access_token = client.access_token!
     user = FbGraph::User.me(access_token).fetch
     authenticate Facebook.identify(user)
@@ -45,13 +48,13 @@ class FacebooksController < ApplicationController
   end
 
   def wall_content
-    me = FbGraph::User.me(@facebook_user.access_token)
-    me.feed!(
-      :message     => params[:message],
-      :description => params[:description]
-    )
+    Facebook.user_feed(params)
     flash[:notice] = "message posted successfully"
     redirect_to wall_post_facebook_path
+  end
+
+  def show_friends
+    @friends = Follow.for_follower(current_user)
   end
 
   private

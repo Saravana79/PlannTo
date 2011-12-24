@@ -47,7 +47,27 @@ class Facebook < ActiveRecord::Base
       _fb_user_.save!
       _fb_user_
     end
+
+    def user_feed(params)
+      me = FbGraph::User.me(@facebook_user.access_token)
+      me.feed!(
+        :message     => params[:message],
+        :description => params[:description],
+        :link        => params[:link]
+      )
+    end
+
+    def store_facebook_users(current_user, facebook_profile)
+      facebook_profile.friends.each do |facebook_friend|
+        facebook_user = Facebook.find_by_identifier(facebook_friend.identifier)
+        if facebook_user
+          current_user.follow(facebook_user.user, 'Facebook')
+          facebook_user.user.follow(current_user, 'Facebook')
+        end
+      end
+    end
   end
+
 
 
 end

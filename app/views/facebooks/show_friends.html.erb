@@ -1,0 +1,5 @@
+<% @friends.each do |firend| %>
+  <% friend_user = firend.followable %>
+  Name : <%= friend_user.name %> |
+  Email: <%= friend_user.email %>
+<% end %>

@@ -22,6 +22,7 @@ PlanNto::Application.routes.draw do
     get :callback, :to => :create
     get :friends
     get :wall_post
+    get :show_friends
     post :wall_content
   end
   resources :products do
