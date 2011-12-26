@@ -2,13 +2,12 @@ class ApplicationController < ActionController::Base
   include Authentication
   protect_from_forgery
   before_filter :check_authentication
-  before_filter :facebook_friends
+
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
 
   def check_authentication
     begin
       auth = Facebook.auth.from_cookie(cookies)
-
       authenticate Facebook.identify(auth.user)
       facebook_current_user
     rescue
