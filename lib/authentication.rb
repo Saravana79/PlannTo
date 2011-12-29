@@ -15,7 +15,7 @@ module Authentication
         @facebook_user.create_user
       end
       @current_user ||= @facebook_user.user
-      @current_user
+
     rescue ActiveRecord::RecordNotFound
       nil
     end

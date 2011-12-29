@@ -45,4 +45,15 @@ module ApplicationHelper
     end
 
   end
+
+  def get_the_follow_text(follow_type)
+    case follow_type
+      when 'Buyer'
+        "Plan to buy"
+      when 'Owner'
+        "I Own it"
+      when 'Follow'
+        "Follow This Car"
+    end
+  end
 end

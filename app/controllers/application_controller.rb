@@ -6,13 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
 
   def check_authentication
-    begin
-      auth = Facebook.auth.from_cookie(cookies)
-      authenticate Facebook.identify(auth.user)
-      facebook_current_user
-    rescue
-      return false
-    end
+    facebook_current_user
   end
 
   def facebook_friends
