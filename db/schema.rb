@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(:version => 20111221184754) do
     t.string   "updater_ip"
   end
 
+  add_index "attribute_values", ["item_id"], :name => "ItemIdBasedKey"
+
   create_table "attributes", :force => true do |t|
     t.string   "name",            :limit => 500, :null => false
     t.string   "attribute_type",  :limit => 100, :null => false
@@ -142,6 +144,12 @@ ActiveRecord::Schema.define(:version => 20111221184754) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
+  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemID",                    :null => false
+    t.text    "URL",                       :null => false
+    t.string  "URLSource", :limit => 2000, :null => false
+  end
 
   create_table "itemimages", :primary_key => "ID", :force => true do |t|
     t.integer "ItemId",                    :null => false

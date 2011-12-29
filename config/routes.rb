@@ -13,6 +13,7 @@ PlanNto::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
   match ':search_type/search' => 'search#index'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
+  resources :accounts
   resources :preferences
   resources :cars
   resources :mobiles
@@ -22,6 +23,7 @@ PlanNto::Application.routes.draw do
     get :callback, :to => :create
     get :friends
     get :wall_post
+    get :show_friends
     post :wall_content
   end
   resources :products do
@@ -52,7 +54,9 @@ PlanNto::Application.routes.draw do
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
-  devise_for :users, :controllers => { :sessions => "users/sessions" }
+  devise_for :users, :controllers => { :sessions => "users/sessions" } do
+    put 'account_update', :to => "accounts#update", :as => "account_update"
+  end
   # Sample resource route with options:
   #   resources :products do
   #     member do

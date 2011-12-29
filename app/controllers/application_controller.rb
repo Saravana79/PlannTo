@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Authentication
   protect_from_forgery
   before_filter :check_authentication
+
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
 
   def check_authentication
@@ -12,6 +13,16 @@ class ApplicationController < ActionController::Base
     rescue
       return false
     end
+  end
+
+  def facebook_friends
+    if current_user && current_user.facebook
+      Facebook.store_facebook_users(current_user,facebook_profile)
+    end
+  end
+
+  def after_sign_out_path_for(resource_or_scope)
+    new_user_session_path
   end
 
   def fb_graph_exception(e)
