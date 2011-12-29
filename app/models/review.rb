@@ -11,4 +11,10 @@ class Review < ActiveRecord::Base
   acts_as_rateable
   acts_as_voteable
   acts_as_commentable
+
+  def self.sort_by_vote_count
+    includes(:vote_count).order('vote_counts.vote_count DESC')
+  end
+
+
 end

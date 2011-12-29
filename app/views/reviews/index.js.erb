@@ -1,0 +1,14 @@
+$('.review-summary').remove();
+
+$('#all_reviews').append('<%= escape_javascript(render :partial => 'reviews/reviews', :collection => @reviews) %>');
+
+$('div.rating').each(function(){
+    $(this).raty({
+      starOff:	'assets/star-off.png',
+      starOn:	'assets/star2.gif',
+      scoreName:    'rating',
+      start:        $(this).attr('data-rating'),
+      readOnly:     true,
+      space:        false
+    });
+});

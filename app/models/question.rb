@@ -7,7 +7,7 @@ class Question < ActiveRecord::Base
   acts_as_voteable
   #acts_as_taggable_on :skills, :interests
   
-  def self.by_vote_count
+  def self.sort_by_vote_count
     includes(:vote_count).order('vote_counts.vote_count DESC')
   end
   

@@ -1,8 +1,9 @@
+<div id=<%= "review-details-#{reviews.id}" %> class = "review-summary" >
 <b><%= link_to reviews.title,reviews  %></b>
 <br />
 <%= "#{reviews.user.name} reviewed #{reviews.item.name} " + time_ago_in_words(reviews.created_at) + " ago"%>
 <br />
-
+<div class="rating" <%= "data-rating=#{reviews.rating}" unless reviews.rating.nil? %>></div>
 <%= "Pros: " + (reviews.pros.map {|i| i.title}).join(",") if reviews.pros.length > 0 %>
 <br />
 <%= "Cons: " + (reviews.cons.map {|i| i.title}).join(",") if reviews.cons.length > 0 %>
@@ -13,3 +14,4 @@
 <br/>
 <%= "Comments (#{reviews.comments.length}) |   Share  |  Report"  %>
 <hr/>
+</div>

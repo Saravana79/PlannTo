@@ -2,7 +2,27 @@ class ReviewsController < ApplicationController
 respond_to :html, :js
 
   def index
-    @reviews = Review.all
+    @reviews = case params[:sort]
+    when 'voting'
+      Review.sort_by_vote_count
+    when 'time_asc'
+      Review.order 'created_at'
+    when 'time_desc'
+      Review.order 'created_at desc'
+    when 'rating_asc'
+      Review.order 'rating, created_at desc'
+    when 'rating_desc'
+      Review.order 'rating desc, created_at desc'
+    else
+      logger.error('Inside Else');
+      Review.order 'created_at desc'
+    end
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  
   end
 
   def create
@@ -35,6 +55,28 @@ respond_to :html, :js
     @review.cons.build
     @review.best_uses.build
     @item = Car.find 307
+  end
+
+  def sort
+    @reviews = case params[:sort]
+    when :voting
+      Review.sort_by_vote_count
+    when :time_asc
+      Review.order 'created_at'
+    when :time_desc
+      Review.order 'created_at desc'
+    when :rating_asc
+      Review.order 'rating, created_at desc'
+    when :rating_desc
+      Review.order 'raitng desc, created_at desc'
+    else
+      Review.order 'created_at desc'
+    end
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
 end

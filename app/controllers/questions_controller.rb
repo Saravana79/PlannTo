@@ -12,7 +12,7 @@ class QuestionsController < ApplicationController
     if params[:sort_option] == '2'
       @questions = Question.all(:order => 'questions.updated_at DESC')
     else
-      @questions = Question.by_vote_count
+      @questions = Question.sort_by_vote_count
     end
     
      respond_to do |format|

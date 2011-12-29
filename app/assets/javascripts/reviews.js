@@ -30,7 +30,29 @@ $('#rating').raty({
   scoreName:    'rating',
   start:        ''
 });
-    
+
+$('div.rating').each(function(){
+    $(this).raty({
+      starOff:	'assets/star-off.png',
+      starOn:	'assets/star2.gif',
+      scoreName:    'rating',
+      start:        $(this).attr('data-rating'),
+      readOnly:     true,
+      space:        false
+    });
+});
+
+$('#review-sort').change(function(){
+    jQuery.ajaxSetup({
+         'beforeSend' : function(xhr){
+                            xhr.setRequestHeader("Accept","text/javascript");
+                        }
+    });
+    $.get('/reviews/',{
+                           'sort' : $(this).find('option:selected').val()
+                           },function(response){});
+});
+
 });
 
 
