@@ -6,18 +6,12 @@
     <div>
       <span class="producttitle"><%= item.name %></span>
       <%#*</div>%>
-      <div class="productprice">
-        <%= item.get_price_info('Price') %>
-      </div>
+
       <div class="productreview">
         <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
         <a class="feedlink">(100 Reviews)</a>
       </div>
-      <div class="productspecification">
-
-        <% item.priority_specification.each do |item_attribute| %>
-          <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
-        <% end %>
+      <div class="productspecification">       
         <div>
           <label style="color:red"><%= get_the_follow_text(follow.follow_type) %></label>
         </div>
