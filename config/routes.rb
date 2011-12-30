@@ -15,8 +15,9 @@ PlanNto::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   match 'profile', :to => "accounts#profile", :as => "profile"
   resources :accounts, :only => [:index] do
-    put 'account_update', :to => "accounts#update", :as => "account_update"
+    put :update
   end
+  match 'account_update', :to => "accounts#update", :as => "account_update"
   resources :preferences
   resources :cars
   resources :mobiles
