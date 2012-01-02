@@ -1,0 +1,3 @@
+$("#getAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/get_advice')) %>');
+$("#getAdviceDialog").dialog({width:600});
+$("#question_buying_plan_id").val('<%=@buying_plan.id%>')

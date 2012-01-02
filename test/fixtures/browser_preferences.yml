@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  search_display_attribute_id: 1
+  value_1: MyString
+  value_2: MyString
+  itemtype_id: 1
+
+two:
+  user_id: 1
+  search_display_attribute_id: 1
+  value_1: MyString
+  value_2: MyString
+  itemtype_id: 1

@@ -1,7 +1,7 @@
 <div id="container2">
 
   <style type="text/css">
-    #clearTag, #deleteTag, #addPreferenceTag{
+    #clearTag, #deleteTag, #addPreferenceTag, #getAdviceTag{
       cursor: pointer;
       text-align: center;
     }
@@ -89,7 +89,7 @@
       <%end%>
     </div>
   </div>
-  <div id="navmenu"><ul></ul></div><ul><li id='clearTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Clear</li><li id='addPreferenceTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add Preference</li></ul>
+  <div id="navmenu"><ul></ul></div><ul><li id='clearTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Clear</li><li id='addPreferenceTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add Preference</li><li id='getAdviceTag' style= 'line-height:35px;display: none;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Get Advice</li></ul>
   <div id="searchList" style="width:100%;"></div>
   <div id="content">
     <%= render :partial => "/search/index" %>
@@ -115,7 +115,10 @@
   <button id="searchButton2" class="button" onclick="return false;" style="float: right">Search</button><br/>
 
 </div>
+<div id="getAdviceDialog" title="I am looking for an advice" style="display:none">
 
+
+</div>
 
 <script type="text/javascript">
   function showClearTag(){
@@ -131,12 +134,22 @@
       }
 <%end%>
   }
+
+    function showGetAdviceTag(){
+<% if user_signed_in? %>
+      if ($("#navmenu").find("ul li").length == 0){
+        $("#getAdviceTag").show();
+      }
+<%end%>
+  }
   //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
   <% if user_signed_in? %>
       $("#page").val(1);
     <%if @preferences_list.size > 0%>
       showClearTag();
       showPreferenceTag();
+      showGetAdviceTag();
+      showGetAdviceTag();
     <%end%>
   <%@preferences_list.each do |preference|%>
       var lineHeight = "";
@@ -201,6 +214,7 @@
     var tagId = $("#which_attribute").val() + "_tag"
     showClearTag();
     showPreferenceTag();
+    showGetAdviceTag();
     if ($("#navmenu").find("#" + tagId).length > 0){
       $("#" +tagId).remove();
     }   
@@ -378,17 +392,25 @@
     resetFormData();
     hideClearTag()
     hidePreferenceTag();
+    hideGetAdviceTag();
     searchData();
   });
 
   $('#addPreferenceTag').live('click', function(){
     if(confirm("This will remove your old preference for this type, Are you sure?")){
-      $.get('/search/add_preference',$("#searchForm").serialize(),null,"script");
+      $.post('/preferences/add_preference',$("#searchForm").serialize(),null,"script");
       return false;
     } else {
       return false;
     }   
   });
+
+  $('#getAdviceTag').live('click', function(){
+    //alert($.param($("#searchForm").serialize()))
+    //$("#search_options").val(decodeURIComponent($.param($("#searchForm").serialize())))
+    //$("#getAdviceDialog").dialog({});
+    $.get('/preferences/get_advice',$("#searchForm").serialize(),null,"script");
+  })
 
   function resetFormData(){
     $("#page").val(1);
@@ -416,6 +438,12 @@
   function hidePreferenceTag(){
     if ($("#navmenu").find("ul li").length == 0){
       $("#addPreferenceTag").hide();
+    }
+  }
+
+  function hideGetAdviceTag(){
+    if ($("#navmenu").find("ul li").length == 0){
+      $("#getAdviceTag").hide();
     }
   }
   
@@ -564,6 +592,7 @@
     else if (displayInfo.vt == "Click"){
       showClearTag();
       showPreferenceTag();
+      showGetAdviceTag();
       var booleanObject = jQuery.parseJSON(attr_name);
       $("#which_form_field").val(booleanObject.field_id);
       var tagId = $("#which_attribute").val() + "_tag"

@@ -1,6 +1,6 @@
 module SearchHelper
 
-  def image_url(item)
+  def image_url(item)  
     if item.type == "Mobile"
       return "http://plannto.com/images/mobile/" + item.imageurl
     else

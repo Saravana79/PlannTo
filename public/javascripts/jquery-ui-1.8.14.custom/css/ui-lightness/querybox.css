@@ -1,0 +1,50 @@
+/*
+* QueryBox 1.0
+* @author marcos weskamp
+* @published: Nov 20, 2008.
+* Copyright 2008, Marcos Weskamp marcos@marumushi.com
+* This work is licensed under a Creative Commons Attribution 3.0 Unported License. 
+* http://creativecommons.org/licenses/by/3.0/
+*/
+.QueryBox { margin:2px; font: 11px/16px Georgia, serif;}
+.QueryBox form input { padding:5px; background-color:#FEFEFE; border:1px solid #666; color: #333; }
+.QueryBox .Input { float:left;margin:0px;padding:1px 5px;}
+.QueryBox .Last { float:right; display:none; }
+.QueryBox .QueryInput{ padding:4px 0px; display:block; overflow:hidden; display:block; border:1px solid #BBBBBB; }
+.QueryBox .SearchIcon{ background:transparent url(/images/querybox/search.gif) no-repeat scroll 0 0; display:none; }
+.QueryBox .Button{ padding:4px; text-transform:uppercase;}
+.QueryBox .TextInput{ padding-right:2px; width:230px; background:#FFF url(/images/querybox/search-icon-light.gif) no-repeat scroll 210px 6px; }
+.QueryBox .ResultBox div, 
+.QueryBox .ResultBox h1,
+.QueryBox .ResultBox h2,
+.QueryBox .ResultBox p { padding:0px; margin:0px; overflow:hidden; text-transform:lowercase; font-weight:normal; }
+.QueryBox .ResultBox h1{ border-bottom:1px solid #BBBBBB; font-size:16px; font-style:italic; margin:8px 10px 5px 10px; }
+.QueryBox .ResultBox h2 { font-size:14px; color:#444; margin-bottom:2px; }
+.QueryBox .ResultBox p { margin:0px 0px 0px 4px; color:#888; }
+.QueryBox .ResultBox b { font-weight:normal; }
+.QueryBox .ResultBox a { text-decoration: none; color: #BBB; border: none; }
+.QueryBox .ResultBox a:visited, 
+.QueryBox .ResultBox a:active, 
+.QueryBox .ResultBox a:focus{ }
+.QueryBox .ResultBox .ListItem { padding:4px 4px 4px 14px; }
+.QueryBox .QueryInput,
+.QueryBox .ResultBox{ background-color:#F0F0F0; background-position:left bottom; background-repeat:no-repeat; width:240px; }
+.QueryBox .ResultBox{
+	border-color:#000000 #BBBBBB #BBBBBB;
+	border-style:none solid solid;
+	border-width:0 1px 1px;
+	color:#333333;
+	font-size:14px;
+	margin:-1px 0 0 0px;
+	padding:0px;
+	position:absolute;
+}
+.QueryBox .ResultBox .ListItem:hover,
+.QueryBox .ResultBox .Selected { background-color:#FFF; }
+.QueryBox .ResultBox .NoResults { padding:5px }
+.QueryBox .ResultBox .NoResults p { color:#666; }
+.QueryBox .ResultBox .NoResults b { color:#000; font-style:italic; }
+
+.QueryBox .ResultsPage .Result { margin:1px 0px; padding:4px 4px 10px;border-bottom:1px solid #F0F0F0;width:700px;}
+.QueryBox .ResultsPage .Result h3 { color:#000; font-size:16px; font-weight:normal;padding:0px;margin:5px 0px;}
+.QueryBox .ResultsPage .Result p { color:#444; font-size:14px;margin:0px;padding:0px;}

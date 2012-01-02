@@ -1,0 +1,8 @@
+$("#giveAdviceDialog").dialog("close")
+var list = '<div class="box" id="box_<%=@count-1%>"><%=@user_answer.answer%>'
+<%@user_answer.recommendations.each_with_index do |reco, index|%>
+    list = list + '<img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(reco.item)%>"/><p>Recommendations <%=reco.item.name%></p>'
+        <%end%>
+list = list + '</div>'
+var rowCount = <%=@count - 2%>;
+$(list).insertAfter('#box_' + '<%=@count - 2%>');

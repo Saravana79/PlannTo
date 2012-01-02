@@ -1,13 +1,14 @@
-class Preference < ActiveRecord::Base
+class BrowserPreference < ActiveRecord::Base
+  
   belongs_to :search_attribute, :class_name => "SearchAttribute", :foreign_key => "search_display_attribute_id"
 
-   def self.add_preference(buying_plan_id, search_type, params)
+  def self.add_preference(user, search_type, params)
 
     itemtype = Itemtype.find_by_itemtype(search_type)
     search_attributes = SearchAttribute.by_itemtype(itemtype.id)
-    #Preference.clear_items(search_attributes.collect(&:id))
+    BrowserPreference.clear_items(user, itemtype.id, search_attributes.collect(&:id))
 
-    Preference.add_items(buying_plan_id, search_attributes, params)
+    BrowserPreference.add_items(user, itemtype.id, search_attributes, params)
 
   end
 
@@ -49,11 +50,11 @@ class Preference < ActiveRecord::Base
     return preferences_list
   end
 
-  def self.add_items(buying_plan_id, search_attributes, params)
+  def self.add_items(user, type, search_attributes, params)
 
     unless params["manufacturer"].blank?
       manufacturer_id = search_attributes.find {|s| s.attribute_id == 0 }
-      Preference.create(:buying_plan_id => buying_plan_id, :search_display_attribute_id => manufacturer_id.id, :value_1 => params["manufacturer"])
+      BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => manufacturer_id.id, :value_1 => params["manufacturer"])
     end
 
     search_attributes.each do |search_attr|
@@ -63,17 +64,16 @@ class Preference < ActiveRecord::Base
         unless params["#{min_attribute}"].blank? && params["#{max_attribute}"].blank?
           min_value = params["#{min_attribute}"]
           max_value = params["#{max_attribute}"]
-          Preference.create(:buying_plan_id => buying_plan_id, :search_display_attribute_id => search_attr.id, :value_1 => min_value, :value_2 => max_value)
+          Preference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => min_value, :value_2 => max_value)
         end
       else
         attribute_field = search_attr.attribute_id
-        Preference.create(:buying_plan_id => buying_plan_id, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
+        BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
       end
     end
   end
 
-  def self.clear_items(ids)
-    Preference.delete_all(["search_display_attribute_id in (?)", ids])
+  def self.clear_items(user, type, ids)
+    BrowserPreference.delete_all(["user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", user, type, ids])
   end
-
 end

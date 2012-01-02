@@ -1,0 +1,35 @@
+<div id="recommendation_list"></div><br/>
+Select Recommendation<input type="text" name="textfield" value="" id="recommendation"/>
+<%= form_for @user_answer,:url => { :controller => "preferences", :action => "save_advice" }, :html => {:id => "saveAdviceForm"} do |f|%>
+<%=f.fields_for :user_question_answers do |uqa|%>
+  <%= hidden_field_tag "user_question_answers[user_question_id]", @question.id %>
+<%end%>
+<%=f.fields_for :recommendations do |rec|%>
+  <%= hidden_field_tag "recommendations[item_id]" %>
+<%end%>
+  <%= f.hidden_field :user_id, :value => current_user.id %>
+  <%= f.text_area :answer, :rows=>2, :cols=>80, :class => "validate[required] text-input"%><br/>
+  <%= f.submit "Give Suggestion", :class=> 'suggestionButton' %>
+<% end %>
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery("#saveAdviceForm").validationEngine();
+  });
+  $(".suggestionButton").button();
+  $(".suggestionButton").click(function (e) {
+    if ($("#saveAdviceForm").validationEngine('validate'))
+   {
+    $.post('/preferences/save_advice',$("#saveAdviceForm").serialize(),null,"script");
+    e.preventDefault();
+   }
+   return false;
+  });
+
+</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $.textTagger2("recommendation","recommendation_list", {addButton: false, url: "/search/autocomplete_items", addNew: true, editMode: false, multiple: true, hidden_field: "recommendations_item_id"});
+  });
+
+</script>
+  

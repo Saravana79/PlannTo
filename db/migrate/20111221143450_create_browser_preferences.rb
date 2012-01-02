@@ -1,6 +1,6 @@
-class CreatePreferences < ActiveRecord::Migration
+class CreateBrowserPreferences < ActiveRecord::Migration
   def change
-    create_table :preferences do |t|
+    create_table :browser_preferences do |t|      
       t.integer :user_id
       t.integer :search_display_attribute_id
       t.string :value_1
