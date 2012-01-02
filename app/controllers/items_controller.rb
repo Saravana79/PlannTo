@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item]
 
-  #  before_filter :authenticate_user!
+  #before_filter :authenticate_user!
   # GET /items
   # GET /items.json
   def index
@@ -41,22 +41,22 @@ class ItemsController < ApplicationController
     
     
 
-    result = Sunspot.search(Car) do
-      keywords params[:q]
-      facet :manufacturer
-      dynamic :features do
-        #with(:Price).greater_than(1800000)
-        facet(:Price)
-        facet(:Engine)
-        facet(:'Fuel Economy [City]')
-      end
-
-    end
+#    result = Sunspot.search(Car) do
+#      keywords params[:q]
+#      facet :manufacturer
+#      dynamic :features do
+#        #with(:Price).greater_than(1800000)
+#        facet(:Price)
+#        facet(:Engine)
+#        facet(:'Fuel Economy [City]')
+#      end
+#
+#    end
     # if result.facet( :manufacturer )
     #    @facet_rows = result.facet(:manufacturer).rows
     #  end
      
-    @items = result
+    @items = {}
     render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
@@ -70,7 +70,12 @@ class ItemsController < ApplicationController
     @user = User.last    
     @user.follow_type = 'Buyer'
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    
+    @review = Review.new
+    @review.pros.build
+    @review.cons.build
+    @review.best_uses.build
+    @comment = Comment.new
+    @questions = Question.all
     #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
     #@item = Car.find params[:id]
     respond_to do |format|

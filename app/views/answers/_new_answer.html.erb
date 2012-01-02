@@ -1,0 +1,12 @@
+<div class="new_comment_form_wrapper">
+  <%= form_for @answer, :remote => true do |f|  %>
+    <%# hidden_field_tag :parent, parent %>
+    <%= hidden_field_tag :parent_id,parent.id %>
+    <div style="margin-bottom: 5px;">
+      <%= f.text_area :content,:rows=>"2", :class=>"answer_box" %>
+    </div>
+    <div class="submit_button1">
+      <%= f.submit :value => "Answer", :id => "comment_submit_3", 'data-disable-with'=>"Answering...", :class=>"comment_submit button creation" %>
+    </div>
+  <% end %>
+</div>

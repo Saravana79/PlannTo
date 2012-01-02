@@ -1,0 +1,5 @@
+Sort: <%= select_tag "review-sort",options_for_select([[:Newest,:time_desc],[:Oldest,:time_asc],['Highest Rated',:rating_desc],['Lowest Rated',:rating_asc],['Highly Recommended',:voting]],1) %>
+<hr />
+<div id="all_reviews" >
+<%= render :partial => 'reviews/reviews', :collection => @reviews %>
+</div>

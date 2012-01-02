@@ -1,4 +1,4 @@
-
+<%= flash[:notice] %>
 <%#*<div id="ContentPanel" class="contentpanel">%>
   <%#*<div id="main-navigation">%>
     <%#*<ul id="navlist" class="navtabs botmargin">%>
@@ -320,7 +320,7 @@
 Facet
 
 <%= @car%>
-
+<%= link_to "review", :controller => :reviews, :action => :show, :id => 3 %>
 
 <script type="text/javascript">
 

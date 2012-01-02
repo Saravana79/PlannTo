@@ -1,0 +1,22 @@
+<% count = parent.vote_count.nil? ? 0: parent.vote_count.vote_count %>
+<% vote_id = vote.nil? ? nil : vote.id %>
+<div id=<%= "#{parent.class.name.downcase}_#{parent.id}_vote_block" %> >
+ <% vote_display = {:plus => 'likes', :minus => 'dislikes', :unvoted => 'unvoted'}  %>
+
+<div <%= "id='vote_for_#{vote_id}'" unless vote_id.nil? %> style="width:5ex;" <%= "class= 'midcol #{vote.nil? ? vote_display[:unvoted] : (vote.vote ? vote_display[:likes] : vote_display[:likes] )}' " %>  >
+  <%= link_to "",{:controller => 'votes', :id => vote_id,  :parent => parent.class.name, :parent_id => parent.id, :vote => :up}, :method => 'POST' , :remote => true, :class=> "arrow login-required #{vote.nil? ? 'up' : (vote.vote ? 'upmod' : 'up') }" %>
+  
+  <div class="score likes">
+		<%= count + 1 %>
+  </div>
+  <div class="score unvoted">
+		<%= count %>
+  </div>
+  <div class="score dislikes">
+		<%= count - 1 %>
+  </div>
+  <%#= link_to "",{:controller => 'votes', :id => vote_id, :parent => parent.class.name, :parent_id => parent.id, :vote => :down}, :method => 'POST' , :remote => true, :class=> "arrow login-required #{vote.nil? ? 'down' : (vote.vote ? 'down' : 'downmod')} " %>
+  <%= link_to "",{:controller => 'votes', :id => vote_id, :parent => parent.class.name, :parent_id => parent.id, :vote => :down}, :method => 'POST' , :remote => true, :class=> "arrow login-required #{vote.nil? ? 'down' : (vote.vote.nil? ? "down" : (vote.vote ? "down" : "downnod"))} " %>
+</div>
+</div>
+ <%# Parameters => parent,parent_id%>

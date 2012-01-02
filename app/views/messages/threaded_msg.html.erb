@@ -1,0 +1,19 @@
+<b><%= @sender.name %></b>
+<% @messages.each do |message| %>
+  <fieldset>
+    <p>
+      <%= message.from.email %> : 
+      <%= message.body %></p>
+    <p><%= message.created_at.strftime("%d - %m - %Y") %></p>
+  </fieldset>
+<% end %>
+<div>
+  <p>
+    <%= form_for(:message, :url => create_message_path(@sender,'reply')) do |f| %>
+      <p>
+        <%= f.text_area :body, :rows => 5, :cols => 40 %>
+      </p>
+      <%= f.submit "Reply" %>
+    <% end %>
+  </p>
+</div>

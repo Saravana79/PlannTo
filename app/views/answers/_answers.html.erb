@@ -1,0 +1,7 @@
+<div id='answers'>
+<%= render :partial => 'answers/answer', :collection => answers %>
+ <a class="invokeanswers" href="#">Add Answer</a>
+ <%= render :partial => 'answers/new_answer', :locals => {:parent => @question}  %>       
+</div>
+
+

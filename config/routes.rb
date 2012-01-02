@@ -13,22 +13,31 @@ PlanNto::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
   match ':search_type/search' => 'search#index'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
+
+  match 'profile', :to => "accounts#profile", :as => "profile"
+  resources :accounts, :only => [:index] do
+    put :update
+  end
+  match 'account_update', :to => "accounts#update", :as => "account_update"
   match 'preferences/:search_type/:uuid' => 'preferences#show'
   resources :preferences do
     collection do
-    get :give_advice
-    get :get_advice
-    post :add_preference
-    post :save_advice
+      get :give_advice
+      get :get_advice
+      post :add_preference
+      post :save_advice
     end
   end
-  
   resources :cars
   resources :mobiles
   resources :manufacturers
   resources :car_groups
   resource :facebook, :except => :create do
     get :callback, :to => :create
+    get :friends
+    get :wall_post
+    get :show_friends
+    post :wall_content
   end
   resources :products do
     member do
@@ -48,7 +57,16 @@ PlanNto::Application.routes.draw do
     end
   end
   resources :reviews
-  
+  resources :pros
+  resources :comments
+  resources :votes
+  resources :questions
+  resources :answers
+  resources :messages
+
+  match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
+  match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
+  match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
   devise_for :users, :controllers => { :sessions => "users/sessions" }
   # Sample resource route with options:
   #   resources :products do

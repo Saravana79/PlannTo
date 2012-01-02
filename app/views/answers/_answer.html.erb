@@ -1,0 +1,8 @@
+<div id=<%= "answers#{answer.id}"%> class="answerblock" style="display: block; min-height: 60px;" >
+	<%= render :partial => 'votes/vote_block', :locals => {:parent => answer, :vote => answer.user.fetch_vote(answer) } %>
+	<%= answer.content %>
+	<div class="answercomments">
+		<a class="invokecomment" href="#">comment</a>
+		<%= render :partial => 'comments/new_comment', :locals => {:parent => answer.class.name, :parent_id => answer.id}  %>
+	</div>
+</div>	 

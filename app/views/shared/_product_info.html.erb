@@ -1,0 +1,21 @@
+<div class="mb-inside">
+  <div class="productcontentmain">
+    <div>
+      <%= image_tag(get_image_url(item, 'Car'), :title => item.name, :class => "productimage") %>
+    </div>
+    <div>
+      <span class="producttitle"><%= item.name %></span>
+      <%#*</div>%>
+
+      <div class="productreview">
+        <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
+        <a class="feedlink">(100 Reviews)</a>
+      </div>
+      <div class="productspecification">       
+        <div>
+          <label style="color:red"><%= get_the_follow_text(follow.follow_type) %></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

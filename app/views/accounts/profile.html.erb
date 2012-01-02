@@ -1,0 +1,65 @@
+<script type="text/javascript" src="/javascripts/movingboxs.js"></script>
+<link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
+<script type="text/javascript">
+  	$(function(){
+      $('#car_slider').movingBoxes({
+        startPanel   : 1,      // start with this panel
+  	    width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+  	    wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+  	    buildNav     : true,   // if true, navigation links will be added
+  	    navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
+  	     });
+      $(".tabing2").click(function(){
+        $('#mobile_slider').movingBoxes({
+        startPanel   : 1,      // start with this panel
+  	    width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+  	    wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+  	    buildNav     : true,   // if true, navigation links will be added
+  	    navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
+  	     });  
+      });
+
+
+    });
+</script>
+<div id="main-content">
+  <div id="usual2" class="usual">
+    <ul>
+      <li class="tabstyle">
+        <a class="tabing1" href="#tabs1">Car</a>
+      </li>
+      <li class="tabstyle">
+        <a class="tabing2" href="#tabs2" id="specification">Mobile</a>
+
+      </li>
+
+    </ul>
+
+    <div id="tabs1" style="display: block; " class="main-content-section">
+      <ul id="car_slider" class="mb-slider" >
+        <% @follow_item['Car'].each do |follow| %>
+          <% item = follow.followable %>
+          <%= render("shared/product_info", {:item => item, :follow => follow}) %>
+        <% end %>
+
+
+      </ul>
+    </div>
+    <div id="tabs2" style="display: none; " class="main-content-section">
+      <ul id="mobile_slider" class="mb-slider" >
+        <% @follow_item['Mobile'].each do |follow| %>
+          <% item = follow.followable %>
+          <%= render("shared/product_info", {:item => item, :follow => follow}) %>
+        <% end %>
+
+
+      </ul>
+    </div>
+
+  </div>
+</div>
+<script type="text/javascript">
+  $("#usual2 ul").idTabs("tabs1");
+</script>
+
+

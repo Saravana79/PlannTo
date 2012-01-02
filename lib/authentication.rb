@@ -10,9 +10,18 @@ module Authentication
   module HelperMethods
 
     def facebook_current_user
-      @current_user ||= Facebook.find(session[:current_user]).user
+      @facebook_user ||= Facebook.find(session[:current_user])
+      if !@facebook_user.blank? && current_user.blank?
+        @facebook_user.create_user
+      end
+      @current_user ||= @facebook_user.user
+
     rescue ActiveRecord::RecordNotFound
       nil
+    end
+
+    def facebook_profile
+      @facebook_user.blank? ? nil : @facebook_user.profile
     end
 
     def authenticated?
@@ -24,7 +33,9 @@ module Authentication
   module ControllerMethods
 
     def require_authentication
-      authenticate Facebook.find_by_id(session[:current_user])
+      user = User.find_by_id(current_user || session[:current_user])
+      session[:current_user] = user.facebook_id if user
+      authenticate (user.facebook || nil)
     rescue Unauthorized => e
       redirect_to root_url and return false
     end
@@ -35,7 +46,7 @@ module Authentication
     end
 
     def unauthenticate
-      current_user.destroy if current_user
+#      current_user.destroy if current_user
       @current_user = session[:current_user] = nil
     end
 

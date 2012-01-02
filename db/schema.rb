@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111209175754) do
+ActiveRecord::Schema.define(:version => 20111221184754) do
+
+  create_table "answers", :force => true do |t|
+    t.integer  "question_id"
+    t.text     "content"
+    t.string   "format",         :limit => 1
+    t.boolean  "mark_as_answer",              :default => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.string   "creator_ip"
+    t.string   "updator_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
@@ -100,7 +113,6 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -182,6 +194,36 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
     t.string   "updater_ip"
   end
 
+  create_table "messages", :force => true do |t|
+    t.string   "topic"
+    t.text     "body"
+    t.integer  "received_messageable_id"
+    t.string   "received_messageable_type"
+    t.integer  "sent_messageable_id"
+    t.string   "sent_messageable_type"
+    t.boolean  "opened",                     :default => false
+    t.boolean  "recipient_delete",           :default => false
+    t.boolean  "sender_delete",              :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "ancestry"
+    t.boolean  "recipient_permanent_delete", :default => false
+    t.boolean  "sender_permanent_delete",    :default => false
+  end
+
+  add_index "messages", ["ancestry"], :name => "index_messages_on_ancestry"
+  add_index "messages", ["sent_messageable_id", "received_messageable_id"], :name => "acts_as_messageable_ids"
+
+  create_table "preferences", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "search_display_attribute_id"
+    t.string   "value_1"
+    t.string   "value_2"
+    t.integer  "itemtype_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pros", :force => true do |t|
     t.string   "title",      :limit => 50, :null => false
     t.integer  "item_id",                  :null => false
@@ -192,6 +234,35 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
     t.string   "creator_ip"
     t.string   "updater_ip"
   end
+
+  create_table "questions", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "format",      :limit => 1
+    t.boolean  "is_answered",              :default => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.string   "creator_ip"
+    t.string   "updator_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rates", :force => true do |t|
+    t.integer "score"
+  end
+
+  create_table "ratings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "rate_id"
+    t.integer  "rateable_id"
+    t.string   "rateable_type", :limit => 32
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ratings", ["rate_id"], :name => "index_ratings_on_rate_id"
+  add_index "ratings", ["rateable_id", "rateable_type"], :name => "index_ratings_on_rateable_id_and_rateable_type"
 
   create_table "reviews", :force => true do |t|
     t.string   "title",          :limit => 200
@@ -258,5 +329,27 @@ ActiveRecord::Schema.define(:version => 20111209175754) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "vote_counts", :force => true do |t|
+    t.integer  "voteable_id",   :null => false
+    t.string   "voteable_type", :null => false
+    t.integer  "vote_count",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "votes", :force => true do |t|
+    t.boolean  "vote",          :default => false
+    t.integer  "voteable_id",                      :null => false
+    t.string   "voteable_type",                    :null => false
+    t.integer  "voter_id"
+    t.string   "voter_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "votes", ["voteable_id", "voteable_type"], :name => "index_votes_on_voteable_id_and_voteable_type"
+  add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
+  add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
 end

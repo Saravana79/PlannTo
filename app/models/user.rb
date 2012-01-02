@@ -9,7 +9,12 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id
   attr_accessor :follow_type
   acts_as_followable
-  acts_as_follower  
+  acts_as_follower
+
+  # Message configurations
+  acts_as_messageable :table_name => "messages",                        # default 'messages'
+                      :required   => :body,                             # default [:topic, :body]
+                      :class_name => "ActsAsMessageable::Message"       # default "ActsAsMessageable::Message"
 
   #has_many :attributes,:foreign_key => :created_by
   has_many :attribute_values,:foreign_key => :created_by

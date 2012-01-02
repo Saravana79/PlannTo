@@ -1,0 +1,70 @@
+<div id="main-content">
+  <div id="usual2" class="usual">
+    <ul>
+      <li class="tabstyle">
+        <a href="#tabs1">Basic Info</a>
+      </li>
+      <li class="tabstyle">
+        <a class="" href="#tabs2" id="specification">Email Notifications</a>
+
+      </li>
+      <li class="tabstyle">
+
+        <a href="#tabs3" class="">Linked Accounts</a>
+
+      </li>
+    </ul>
+
+    <div id="tabs1" style="display: block; " class="main-content-section">
+      <% @user.errors.full_messages.each do |error_message| %>
+        <%= error_message %>
+      <% end %>
+      <%= form_for(@user, :url => account_update_path, :method => :put) do |f| %>
+        <%= f.label :name, 'Full Name' %>:
+        <%= f.text_field :name %>
+        <br/>
+        <%= f.label :email, 'Email Address' %>:
+        <%= f.text_field :email %>
+        <br/>
+        <%= f.label :password, 'Password' %>:
+        <%= f.text_field :password %>
+        <br/>
+        <br/>
+        <%= f.label :password_confirmation, 'Password Confirmation' %>:
+        <%= f.text_field :password_confirmation %>
+        <%= f.submit %>
+      <% end %>
+      <% if !@facebook_user.blank? %>
+        Profile Picture: <br/>
+        <%= image_tag(@facebook_user.endpoint + "/picture") %>
+      <% end %>
+    </div>
+    <div id="tabs2" style="display: none; " class="main-content-section">
+      Email Settings goes here
+    </div>
+    <div id="tabs3" style="display: none; ">
+      <dl>
+        <dd>
+          <fb:login-button length="long" onlogin="location.href = '<%= facebook_path %>'" scope="<%= Facebook.config[:scope] %>"></fb:login-button>
+        </dd>
+
+      </dl>
+      <% if !@facebook_user.blank? %>
+        Name: <%= @facebook_user.name %>
+        <br/>
+        Profile Picture: <%= image_tag(@facebook_user.endpoint + "/picture") %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $("#usual2 ul").idTabs("tabs1");
+  FB.init({
+    appId: "<%= Facebook.config[:client_id] %>",
+    cookie: true,
+    xfbml: true,
+    oauth: true
+  });
+</script>
+
+

@@ -1,3 +1,9 @@
+PATH
+  remote: vendor/plugins/thumbs_up
+  specs:
+    thumbs_up (0.4.3)
+      activerecord
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -30,9 +36,17 @@ GEM
       activesupport (= 3.1.0)
     activesupport (3.1.0)
       multi_json (~> 1.0)
+    acts-as-messageable (0.4.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      ancestry (~> 1.2.4)
     acts-as-taggable-on (2.1.1)
       rails
+    acts_as_commentable (3.0.1)
     acts_as_follower (0.1.0)
+    acts_as_rateable (2.0.1)
+    ancestry (1.2.4)
+      activerecord (>= 2.2.2)
     ansi (1.3.0)
     arel (2.2.1)
     attr_required (0.0.3)
@@ -109,7 +123,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.6)
-    rake (0.9.2)
+    rake (0.9.2.2)
     rdoc (3.9.4)
     rsolr (0.12.1)
       builder (>= 2.1.2)
@@ -150,8 +164,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts-as-messageable
   acts-as-taggable-on (~> 2.1.1)
+  acts_as_commentable
   acts_as_follower
+  acts_as_rateable
   coffee-rails (~> 3.1.0)
   configatron (~> 2.8.4)
   devise
@@ -162,5 +179,6 @@ DEPENDENCIES
   rails (= 3.1.0)
   sass-rails (~> 3.1.0)
   sunspot_rails
+  thumbs_up!
   turn
   uglifier

@@ -1,0 +1,39 @@
+<% if not @inbox.nil? %>
+  <% @inbox.each do |message| %>
+    <fieldset>
+      <p>
+        <%= message.from.email %>
+        <%= link_to "Show full thread", threaded_msg_path(message.from.id) %>
+        <div id="block_user_<%= message.id %>">
+            <%= link_to 'Block this User', block_user_path(message.from), :remote => true %>
+        </div>
+      </p>
+
+      <p><%= message.topic %></p>
+      <p><%= raw(message.body) %></p>
+      <p><%= message.created_at.strftime("%d - %m - %Y") %></p>
+      <div onclick="reply_form(<%= message.id %>)">
+        Reply
+      </div>
+      <div id="reply_form_<%= message.id %>" style="display:none;">
+        <p>
+          <%= form_for(:message, :url => create_message_path(message.from,'reply')) do |f| %>
+            <p>
+              <%= f.text_field :to, :value => message.from.email %>
+            </p>
+            <p>
+              <%= label "message", "Message:" %>
+              <%= f.text_area :body, :rows => 5, :cols => 40 %>
+            </p>
+            <%= f.submit "Reply" %>
+            <div onclick="cancel_reply_form(<%= message.id %>);">
+              Cancel
+            </div>
+          <% end %>
+        </p>
+      </div>
+    </fieldset>
+  <% end %>
+<% else %>
+  <%= "No messages yet." %>
+<% end %>

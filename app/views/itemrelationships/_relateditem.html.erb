@@ -1,5 +1,5 @@
 <div>
-  <%= image_tag(get_image_url(relateditem, 'Car'), :title => relateditem.name, :class => "mediumimage") %>
+  <%= image_tag(get_image_url(relateditem, relateditem.class.name), :title => relateditem.name, :class => "mediumimage") %>
 
   <div>
     <%= relateditem.name %>

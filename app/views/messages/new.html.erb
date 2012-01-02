@@ -1,0 +1,24 @@
+<%= stylesheet_link_tag 'token-input-facebook' %>
+<%= javascript_include_tag 'jquery.tokeninput' %>
+
+<script type ="text/javascript">
+  $(document).ready(function() {
+    $("#message_message_users_tokens").tokenInput("/messages/message_users.json",{
+     preventDuplicates: true,
+     crossDomain: false,
+     theme: "facebook"
+    });
+  });
+</script>
+
+<%= form_for(:message, :url => create_message_path(current_user,'new')) do |f| %>
+  <p>
+    <%= label "message", "To :"%>
+    <%= f.text_field :message_users_tokens %>
+  </p>
+  <p>
+    <%= label "message", "Message:" %>
+    <%= f.text_area :body, :rows => 5, :cols => 40 %>
+  </p>
+  <%= f.submit "Send" %>
+<% end %>

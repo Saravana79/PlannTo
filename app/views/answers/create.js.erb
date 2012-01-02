@@ -1,0 +1,7 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+$('#new_answer')[0].reset();
+$('#answers').append('<%= escape_javascript(render :partial => 'answers/answer', :object => @answer )%>');
