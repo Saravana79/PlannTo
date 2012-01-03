@@ -205,6 +205,282 @@
 
       /*======enbd autocomplete==*/
     </style>
+<style type="text/css">
+
+  .textboxlist { font: 11px "Lucida Grande", Verdana; cursor: text; }
+  .textboxlist-bits { zoom: 1; overflow: hidden; margin: 0; padding: 3px 4px 0; border: 1px solid #999; padding-bottom: 3px; }
+  .textboxlist-bit { color: #19558D; list-style-type: none; float: left; display: block; padding: 0; margin: 0 5px 3px 0; cursor: default; }
+  .textboxlist-bit-editable { border: 1px solid #fff; }
+  .textboxlist-bit-editable-input { border: 0; padding: 2px 0; padding-bottom: 0; height: 14px; font: 11px "Lucida Grande", Verdana; }
+  .textboxlist-bit-editable-input:focus { outline: 0; }
+  .textboxlist-bit-box { position: relative; vertical-align:middle; height: 35px; text-align: center; padding: 0 5px; -moz-border-radius: 9px; -webkit-border-radius: 9px; border-radius: 9px; border: 1px solid #CAD8F3; background: #DEE7F8; cursor: default; }
+  .textboxlist-bit-box-deletable { padding-right: 15px; }
+  .textboxlist-bit-box-deletebutton { position: absolute; right: 4px; top: 13px; display: block; width: 7px; height: 7px; font-size: 1px; background: url('/images/close.gif'); }
+  .textboxlist-bit-box-deletebutton:hover { border: none; background-position: 7px; text-decoration: none; }
+  .textboxlist-bit-box-hover { background: #BBCEF1; border: 1px solid #6D95E0; }
+  .textboxlist-bit-box-focus { border-color: #598BEC; background: #598BEC; color: #fff; }
+  .textboxlist-bit-box-focus .textboxlist-bit-box-deletebutton { background-position: bottom; }
+  .deleteOption { color:black; position: absolute; display: block; width: 7px; height: 7px; font-size: 1px; }
+  /* background: url('/images/close.gif');*/
+    #clearTag, #deleteTag, #addPreferenceTag, #getAdviceTag{
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .attributeTag:hover{
+    cursor: pointer;
+  }
+</style>
+<script type="text/javascript">
+  $.textTagger2 = function(fieldId, taggingField, options){
+    $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
+      var self = this;
+      //if (settings.addNew){
+      //  item = {value: "Create New Tag", id: "0"}
+      //  self._renderItem( ul, item, "New" );
+      //}
+      $.each( items, function( index, item ) {
+        self._renderItem( ul, item, index );
+      });
+    };
+
+    var
+    defaults = {
+      background: '#e3e3e3',
+      url: '',
+      editMode: false,
+      addNew: false,
+      close: true,
+      addButton: true,
+      color: 'black',
+      multiple: true,
+      rounded: false,
+      hidden_field: ""
+    },
+    settings = $.extend({}, defaults, options);
+    $("#"+ fieldId).each(function(){
+      $(this).bind('keypress', function(e) {
+        if(e.keyCode==13){
+          var text = $("#"+ fieldId).val();
+
+          var add = true;
+          $("#tag_list").find("li").each(function(index) {
+            // var compText = text + "href='#'>"
+            if ($(this).text().toString() == text.toString())  {
+              add = false;
+            }
+          });
+
+          if ((text != "") && add == true)
+          {
+            if (multiple == false){
+              //remove old tags is multiple tags are not allowed.
+              $("#"+ taggingField).find("li").remove();
+            }
+            var str = "<li   style= 'line-height:35px;' id = 'textTaggers' class = 'textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +text +"<a id= 'deleteTaggers' class='textboxlist-bit-box-deletebutton'></a></li>"
+            //$(str).insertAfter('#' + taggingField);
+            $(str).appendTo('#' + taggingField);
+            $("#" + fieldId).val("")
+            $('#' + fieldId).autocomplete("enable");
+            if (settings.editMode){
+              $(".textboxlist-bit-box-deletebutton").show();
+            }
+            else{
+              $(".textboxlist-bit-box-deletebutton").hide();
+            }
+          }
+          $("#"+ fieldId).val("");
+          //  $(".textboxlist-bit-box-deletebutton").hide();
+        }
+      });
+    });
+    if (settings.addButton){
+      var tagButton = "<button id='addTag'> Add </button>"
+
+      $(tagButton).insertAfter("#"+ fieldId);
+      var doneButton = "<button id='doneButton'> Done </button>"
+      $(doneButton).insertAfter("#addTag");
+    }
+    else
+    {
+      // $("#" + fieldId).hide();
+    }
+    $.setMode(fieldId, taggingField, settings.editMode);
+
+    $( "#" + fieldId ).autocomplete({
+      minLength: 0,
+      format: "js",
+      source: settings.url,
+      focus: function( event, ui ) {
+        //$( "#project" ).val( ui.item.label );
+        return false;
+      },
+      select: function( event, ui ) {
+        if (settings.hidden_field != "")
+        {
+          $.addIdToField(settings.hidden_field, ui.item.id)
+        }
+        $.addTag(fieldId, taggingField, settings, ui.item.value, ui.item.id);
+        $("#" + fieldId).val("");
+        return false;
+      }
+    })
+    .data( "autocomplete" )._renderItem = function( ul, item,index ) {
+
+      //if (index == "New"){
+      //  return $( "<li></li>" )
+      //  .data( "item.autocomplete", item )
+      //   .append( "<a>" + "Create New Tag"+ "</a>" )
+      //   .appendTo( ul );
+      // }
+      //else{
+      return $( "<li></li>" )
+      .data( "item.autocomplete", item )
+      //.append( "<a>" + item.id + " " + item.value+ "</a>" )
+      .append( "<a>" + item.value+ "</a>" )
+      .appendTo( ul );
+      //}
+    };
+
+    $('#addTag').live( 'click', function(){
+      $.addTag(fieldId, taggingField, settings, $("#" + fieldId).val(), '');
+    })
+
+    $('#textTaggers').live('click', function(){
+      //alert($(this).text());
+    })
+
+    $('#deleteTaggers').live('click', function(){
+      if (settings.hidden_field != ""){
+        var deleteId = $(this).closest('li').attr('id').replace("textTaggers",'');
+        $.removeIdFromField(settings.hidden_field, deleteId);
+      }
+      $(this).closest('li').remove();
+      return false;
+    })
+
+    $('#doneButton').live( 'click', function(){
+      settings.addButton = false;
+      $(".textboxlist-bit-box-deletebutton").hide();
+      $.doneEvent(fieldId, taggingField, settings.editMode);
+    })
+
+    $('#editTag').click(function() {
+      $(this).hide();
+      $(".textboxlist-bit-box-deletebutton").show();
+      settings.addButton = true;
+      $.editTag(fieldId, taggingField, settings.addButton);
+    });
+  }
+
+  jQuery.addIdToField = function(hidden_field, id){
+    var formVal = $("#" + hidden_field).val();
+    var formValArray = formVal == "" ? [] : formVal.split(",")
+    var add = true
+    $.each(formValArray, function(index, value) {
+      if (value.toString() == id.toString())  {
+        add = false;
+      }
+    })
+    if (add == true){
+      formValArray.push(id)
+    }
+    $("#" + hidden_field).val(formValArray.toString())
+  }
+
+  jQuery.removeIdFromField = function(hidden_field, deleteId){
+    var formVal = $("#" + hidden_field).val();
+    var formValArray =  formVal == "" ?  [] : formVal.split(",")
+    var idList = [];
+    $.each(formValArray, function(index, value) {
+      if (value.toString() != deleteId.toString())  {
+        idList.push(value);
+      }
+    })
+    $("#" + hidden_field).val(idList);
+    }
+  jQuery.doneEvent = function(fieldId, taggingField, editMode){
+
+    if(editMode){
+      //add edit button
+      $("#" + fieldId).hide();
+      $("#addTag").hide();
+      $("#doneButton").hide();
+      $("#editTag").show();
+    }
+
+  }
+
+  jQuery.setMode = function(fieldId, taggingField, editMode){
+    if(editMode){
+      //add edit button
+      var tagButton = "<button id='editTag'>Edit</button>"
+
+      $(tagButton).insertAfter("#"+ taggingField);
+      //show close buttons
+      $(".textboxlist-bit-box-deletebutton").show();
+    }
+    else
+    {
+      $(".textboxlist-bit-box-deletebutton").hide();
+    }
+  }
+
+  jQuery.editTag = function(fieldId, taggingField, addButton) {
+    if(addButton)
+    {
+      $("#" + fieldId).val("")
+      $("#" + fieldId).show();
+
+      if (!$('#addTag').length) {
+        var tagButton = "<button id=" + '"' +"addTag" + '"' + "> Add </button>"
+        $(tagButton).insertAfter("#"+ fieldId);
+      }
+      else{
+        $("#addTag").show();
+
+      }
+      if (!$('#doneButton').length) {
+        var doneButton = "<button id='doneButton'> Done </button>"
+        $(doneButton).insertAfter("#addTag");
+      }
+      else{
+        $("#doneButton").show();
+      }
+    }
+  }
+
+  jQuery.addTag = function(fieldId, taggingField, settings, value, id) {
+    var text = value;
+    var add = true;
+    $("#" + taggingField).find("li").each(function(index) {
+      if ($(this).text().toString() == text.toString())  {
+        add = false;
+      }
+    });
+    if ((text != "") && add == true)
+    {
+      if (settings.multiple == false){
+        //remove old tags is multiple tags are not allowed.
+        $("#"+ taggingField).find("li").remove();
+      }
+      var listTagId = 'textTaggers' + id
+      var str = "<li  id = '" + listTagId + "'  style= 'line-height:35px;' class = 'textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +text +"<a id= 'deleteTaggers' class='textboxlist-bit-box-deletebutton'></a></li>"
+      $(str).appendTo('#' + taggingField);
+      $("#" + fieldId).val("")
+      $('#' + fieldId).autocomplete("enable");
+      if (settings.editMode || settings.close){
+        $(".textboxlist-bit-box-deletebutton").show();
+      }
+      else{
+        $(".textboxlist-bit-box-deletebutton").hide();
+      }
+    }
+    $("#"+ fieldId).val("");
+  }
+
+</script>
+
   </body>
 </html>
 
