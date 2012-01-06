@@ -23,7 +23,7 @@
         <div class="productspecification">
 
           <% @item.priority_specification.each do |item_attribute| %>
-            <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
+            <%= item_attribute.name %> - <%= item_attribute.value %> ( <%= item_attribute.unit_of_measure %> ),
           <% end %>
           <%= link_to("...Detailed Specification", "#tab2", :class => 'feedlink', :id => "detailed_specification") %>
 

@@ -40,7 +40,9 @@ module ApplicationHelper
         configatron.car_image_url + item.imageurl
       when 'Mobile'
         configatron.mobile_image_url + item.imageurl
-      when 'Manufacturer',
+      when 'Manufacturer'
+        configatron.car_image_url + item.imageurl
+      else
         configatron.car_image_url + item.imageurl
     end
 
