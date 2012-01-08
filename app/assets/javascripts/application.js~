@@ -37,8 +37,6 @@ function removeCompare(obj){
 $(document).ready(function() {
         
   $('span.buttonLink a#youtube_form').click(function() {
-          $("#image_share").hide();
-          $("#article_share").hide();
           $("#youtube").toggle(2000);
 //          alert('Handler for .click() called.');
           return false;
@@ -46,17 +44,13 @@ $(document).ready(function() {
 
 
   $('span.buttonLink a#image_form').click(function() {
-          $("#article_share").hide();
-          $("#youtube").hide(); 
-          $("#image_share").toggle(2000);
+          alert('Handler for .click() called.');
           return false;
         });
 
 
   $('span.buttonLink a#article_form').click(function() {
-          $("#youtube").hide(); 
-          $("#image_share").hide();
-          $("#article_share").toggle(2000);
+          alert('Handler for .click() called.');
           return false;
         });
 

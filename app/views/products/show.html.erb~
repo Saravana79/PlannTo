@@ -45,14 +45,6 @@
         <%= render :partial => 'layouts/youtube_share'  %>      
        </div> 
        
-       <div id="image_share" style="display:none"> 
-        <%= render :partial => 'layouts/image_share'  %>      
-       </div> 
-       
-       <div id="article_share" style="display:none"> 
-        <%= render :partial => 'layouts/article_share'  %>      
-       </div> 
-       
     </div>
     <div id="usual2" class="usual">
       <ul>

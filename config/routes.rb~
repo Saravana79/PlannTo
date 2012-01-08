@@ -28,9 +28,7 @@ PlanNto::Application.routes.draw do
       post :save_advice
     end
   end
-  resources :cars do
-        resources :shares
-  end      
+  resources :cars
   resources :mobiles
   resources :manufacturers
   resources :car_groups
@@ -49,7 +47,7 @@ PlanNto::Application.routes.draw do
     end
   end
   resources :items do
-        
+        resources :shares
     collection do
       get :compare
     end

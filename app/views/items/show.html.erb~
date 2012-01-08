@@ -11,7 +11,7 @@
         <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
       </div>
       <div>
-        <span class="producttitle"><%= @item.name %></span>
+        <span class="producttitle"><%#= @item.name %></span>
         <%#*</div>%>
         <div class="productprice">
           <%= @item.get_price_info('Price') %>
