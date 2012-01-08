@@ -17,7 +17,7 @@ class ProductsController < ApplicationController
   end
 
   def related_products
-    @item = Item.where(:id => params[:id]).last
+    @item = Item.where(:id => params[:id]).last    
     @follow_type = params[:follow_type]
     respond_to do |format|
       format.js { render :partial=> 'itemrelationships/relateditem', :collection => @item.unfollowing_related_items(current_user, 2) }

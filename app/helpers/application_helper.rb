@@ -56,4 +56,14 @@ module ApplicationHelper
         "Follow This Car"
     end
   end
+
+  def get_follow_count(follower_count, follow_type)
+    followers = follower_count.select {|fo| fo.follow_type == follow_type}.last
+    followers.blank? ? 0 : followers.follow_count
+  end
+
+  def get_owners(item)
+    Follow.for_followable(item).map(&:follower).map(&:name)
+  end
+  
 end

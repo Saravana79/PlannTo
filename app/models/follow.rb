@@ -27,5 +27,9 @@ class Follow < ActiveRecord::Base
   def block!
     self.update_attribute(:blocked, true)
   end
+
+  def self.get_followers(item)
+    Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
+  end
   
 end
