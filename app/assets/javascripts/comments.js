@@ -6,7 +6,7 @@ $(function(){
             $('.new_comment_form_wrapper').show();
         });
         
-    $('textarea.comment_box').autoResize();
+    //$('textarea.comment_box').autoResize();
 
     $('.invokecomment').click(function(){
         $(this).hide();

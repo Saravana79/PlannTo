@@ -1,20 +1,146 @@
-<div id="main-content">
+<!-- Product Details - Start -->
+<%=render "shared/breadcrumb"%>
+<%= render 'shared/follow_buttons', :follow_type => 'Car', :follow_html => 'select_box' %>
+<br/>
+<div class="productdetails" style="float: left">
+  <span class="img_product"><img src="<%=get_image_url(@item, 'Car')%>" alt="<%=@item.name%>" width="205" height="124" /></span>
+  <span class="product_details">
+    <h1><%=@item.name%></h1>
+    <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
+    <a>
+      <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/>
+    </a>
+    <a class="txt_normal">Ratings
+      <span class="txt_blue"> (100 Reviews)</span>
+    </a><br />
+    <a class="txt_normal"><%=display_specifications(@item)%>
+      <%= link_to("...Detailed Specification", "#tab2", :class => 'txt_blue', :id => "detailed_specification") %>
+    </a>
+  </span>
+</div>
+
+<%=render :template =>"products/related_products" %>
+<br /><br />
+<div class="review_tabs">
+  <ul>
+    <li class="icon_reviewcar" >
+      <a href="#" id="active_tabs">Review Car</a>
+    </li>
+    <li class="icon_Askquestion">
+      <a href="#" >Ask a Question</a>
+    </li>
+    <li class="icon_sharetip">      
+      <a href="#">Share a Tip</a>
+    </li>
+  </ul>
+  <span><textarea name="textarea" id="textarea" cols="45" rows="5">What do you think of this car?
+    </textarea></span>
+</div>
+<br />
+
+<div class="question_answer">
+  <h3 class="yellow_border">Questions and Answers</h3>
+  <span class="sortby">
+    <span><b>Sort by:</b></span>
+    <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:0px 5px;">|</span>
+    <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
+    <a class="txt_blue" href="#">Most Answers</a>
+  </span>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="padding_topbottom15">
+    <tr height="70" valign="top">
+      <td width="67" valign="top">
+        <div class="rate_content">
+          <a class="bg_ratecontent">100</a>
+          <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+        </div></td>
+      <td width="580"><h4>What is the best car insurance?</h4>
+        <a class="txt_black">looking for best car insurance</a><br />
+       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
+      <td width="36"><img src="images/users.png" width="24" height="24" /></td>
+    </tr>
+
+    <tr height="70" valign="top">
+      <td width="67" valign="top"><div class="rate_content">
+          <a class="bg_ratecontent">100</a>
+          <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+        </div></td>
+      <td width="580"><h4>What is the best car insurance?</h4>
+        <a class="txt_black">looking for best car insurance</a><br />
+       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
+      <td width="36"><img src="images/users.png" width="24" height="24" /></td>
+    </tr>
+
+    <tr height="70" valign="top">
+      <td width="67" valign="top"><div class="rate_content">
+          <a class="bg_ratecontent">100</a>
+          <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+        </div></td>
+      <td width="580"><h4>What is the best car insurance?</h4>
+        <a class="txt_black">looking for best car insurance</a><br />
+       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
+      <td width="36"><img src="images/users.png" width="24" height="24" /></td>
+    </tr>
+
+    <tr height="70" valign="top">
+      <td width="67" valign="top"><div class="rate_content">
+          <a class="bg_ratecontent">100</a>
+          <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+        </div></td>
+      <td width="580"><h4>What is the best car insurance?</h4>
+        <a class="txt_black">looking for best car insurance</a><br />
+       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
+      <td width="36"><img src="images/users.png" width="24" height="24" /></td>
+    </tr>
+
+  </table>
+
+  <!-- Add Answer or Ask Question - start -->
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top:solid 1px #e4e4e4;">
+    <tr>
+      <td height="55">
+        <span><span class="txt_lightgry">Add Answer </span><span class="txt_yellow">or Ask Question</span></span><br />
+        <span class="txt_black"><a>Saravana Kumar Add Bio</a> -  make ANonymous</span>
+
+      </td>
+    </tr>
+    <tr>
+      <td height="106" bgcolor="#eaeaea">&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="52" align="right">
+        <a href="#" class="answer_later">Answer Later</a>
+        <a style="" href="#" class="btn_submitanswer">Submit Answer</a>
+      </td>
+    </tr>
+  </table>
+  <!-- Add Answer or Ask Question - End -->
+
+</div>
+<!-- Q&A -  End -->
+
+
+<div class="push"></div>
+<!-- Product Details - End -->
+
+<!-- TO BE REMOVED -->
+
+<!--<div id="main-content">
   <div>
     <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande
-      Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
+        Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
   </div>
   <div id="comment-notice"></div>
-  <%= render 'shared/follow_buttons', :follow_type => 'Car', :follow_html => 'select_box' %>  
+<%#= render 'shared/follow_buttons', :follow_type => 'Car', :follow_html => 'select_box' %>
   <div class="feedcontentheader">
     <div class="productcontentmain">
       <div>        
-        <%= image_tag(get_image_url(@item, 'Car'), :title => @item.name, :class => "productimage") %>        
+<%#= image_tag(get_image_url(@item, 'Car'), :title => @item.name, :class => "productimage") %>
       </div>
       <div>
-        <span class="producttitle"><%= @item.name %></span>
-        <%#*</div>%>
+        <span class="producttitle"><%#= @item.name %></span>
+<%#*</div>%>
         <div class="productprice">
-          <%= @item.get_price_info('Price') %>
+<%#= @item.get_price_info('Price') %>
         </div>
         <div class="productreview">
           <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
@@ -22,10 +148,10 @@
         </div>
         <div class="productspecification">
 
-          <% @item.priority_specification.each do |item_attribute| %>
-            <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
-          <% end %>
-          <%= link_to("...Detailed Specification", "#tab2", :class => 'feedlink', :id => "detailed_specification") %>
+<%# @item.priority_specification.each do |item_attribute| %>
+<%#= item_attribute.unit_of_measure %> <%#= item_attribute.value %> ( <%#= item_attribute.name %> ),
+<% #end %>
+<%#= link_to("...Detailed Specification", "#tab2", :class => 'feedlink', :id => "detailed_specification") %>
 
         </div>
       </div>
@@ -37,21 +163,21 @@
         <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
       </div>
 
-      <%#= render :partial => 'reviews/review_block' %>
+<%#= render :partial => 'reviews/review_block' %>
 
     </div>
     <div id="usual2" class="usual">
       <ul>
         <li class="tabstyle">
-            <a href="#tabs1">All Feeds</a>
+          <a href="#tabs1">All Feeds</a>
         </li>
         <li class="tabstyle">
-            <a class="" href="#tabs2" id="specification">Specification</a>
+          <a class="" href="#tabs2" id="specification">Specification</a>
 
         </li>
         <li class="tabstyle">
 
-            <a href="#tabs3" class="">Questions</a>
+          <a href="#tabs3" class="">Questions</a>
 
         </li>
       </ul>
@@ -110,15 +236,15 @@
         </div>
       </div>
       <div id="tabs2" style="display: none; " class="main-content-section">
-        <%= render :template => 'products/specification' %>
+<%#= render :template => 'products/specification' %>
       </div>
       <div id="tabs3" style="display: none; ">Any Questions</div>
     </div>
 
-    
+
 
   </div>
-</div>
+</div>-->
 <div id="dialog-form" title="Create new user">
   <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
     <%= render "shared/login_fields", {:f => f} %>
@@ -128,27 +254,27 @@
 
 <script type="text/javascript">
 <% if @user_follow && @user_follow.follow_type == "Buyer" %>
-  Product.load_buyer();
+    Product.load_buyer();
 <% end %>
 <% if @user_follow && @user_follow.follow_type == "Owner" %>
-  Product.load_owner();
+    Product.load_owner();
 <% end %>
 <% if @user_follow && @user_follow.follow_type == "Follow" %>
-  Product.load_follow();
+    Product.load_follow();
 <% end %>
 <% if current_user.blank? %>
-  Product.load_signout_user_link();
+    Product.load_signout_user_link();
 <% end %>
 
-Product.related_products('<%= related_products_product_path(@item, :follow_type => @user_follow ? @user_follow.follow_type : "") %>');
+  Product.related_products('<%= related_products_product_path(@item, :follow_type => @user_follow ? @user_follow.follow_type : "") %>');
 
-$("#usual2 ul").idTabs("tabs1");
-Product.detailed_specification();
+  $("#usual2 ul").idTabs("tabs1");
+  Product.detailed_specification();
 <% if current_user.blank? %>
-  Product.login_dialog();
-  Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow #plan_to_buy_select");
-  Product.show_login_dialog_change("#plan_to_buy_select");
+    Product.login_dialog();
+    Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow #plan_to_buy_select");
+    Product.show_login_dialog_change("#plan_to_buy_select");
 <% else %>
- Product.hide_login_dialog();
+    Product.hide_login_dialog();
 <% end %>
 </script>

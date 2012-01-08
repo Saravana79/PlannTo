@@ -1,7 +1,7 @@
-<div id="header">
+<!--<div id="header">
   <div class="headerright">
     <form name="form1" id="form1" method="post" action="" class="search">
-      <!--Search...-->
+      
       <input type="text" name="textfield" value="" class="search" id="plannToSearch"/><input class="button" type="submit" name="Submit" value="GO"/>
     </form>
   </div>
@@ -19,14 +19,50 @@
       <a href="#">People</a>
     </li>
     <li class="headerlink ">
-      <%= link_to "Messages", messages_path %>
+      <%#= link_to "Messages", messages_path %>
     </li>
     <li class="headerlink ">
-    <% if user_signed_in? %>
-      <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+    <%# if user_signed_in? %>
+      <%#= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+    <%# else %>
+      <%#= link_to "Sign In", new_user_session_path %>
+    <%# end %>
+    </li>
+  </ul>
+</div>-->
+
+    <div class="header">
+    	<span class="logo"><img src="images/logo.png" /></span>
+        <div class="search">
+        	<span class="search_txt">
+            <input name="Search" type="text" value="Search text here" id="plannToSearch"/>
+            <select name="searchby">
+        	  <option>Select</option>
+              <option>Car</option>
+              <option>Mobile</option>
+              <option>Others</option>
+       	  </select></span>
+          <a class="btn_search" href="#"></a>
+
+      </div>
+
+     	 <span>
+              <a class="icon_user" id="user_active" href="#"></a>
+              <a class="icon_chat" href="#"></a>
+         </span>
+
+
+       <span class="txt_welcome"><% if user_signed_in? %>
+      <a>Welcome <b>Guest</b></a><a class="divider_line">|</a><%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
     <% else %>
       <%= link_to "Sign In", new_user_session_path %>
     <% end %>
-    </li>
-  </ul>
-</div>
+      <a class="divider_line">|</a><a href="#">Home</a></span>
+       <div class="main_menu">
+       <a id="menu_active" href="#">Cars</a>
+       <a href="#">Mobile </a>
+       <a href="#">Camera</a>
+       <a href="#">Travel</a>
+       <a href="#">Movies</a>
+       </div>
+    </div> 

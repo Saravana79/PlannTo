@@ -78,8 +78,8 @@ class SearchController < ApplicationController
     preferences = Array.new
     if user_signed_in? && !request.xhr?
       search_ids = @search_attributes.collect{|item| item.id}
-      @preferences = Preference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", current_user.id, itemtype.id, search_ids).includes(:search_attribute)
-      @preferences_list = preferences = Preference.get_items(@preferences)
+      @preferences = BrowserPreference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", current_user.id, itemtype.id, search_ids).includes(:search_attribute)
+      @preferences_list = preferences = BrowserPreference.get_items(@preferences)
     end
     ############ PREFERENCE SECTION ENDS#############
 
@@ -190,14 +190,14 @@ class SearchController < ApplicationController
 
   def autocomplete_items
 
-    @items = Sunspot.search(Manufacturer,CarGroup) do
+    @items = Sunspot.search(Manufacturer,CarGroup, Car, Mobile) do
       keywords params[:term], :fields => :name
       order_by :class, :desc
       paginate(:page => 1, :per_page => 6)
       order_by :class , :desc
     end
     
-    render :json => @items.results.collect{|item|
+    results = @items.results.collect{|item|
       if item.type == "CarGroup"
         image_url = "http://plannto.com/images/car/" + item.imageurl
         type = "Car"
@@ -205,16 +205,11 @@ class SearchController < ApplicationController
         image_url = "http://plannto.com/images/mobile/" + item.imageurl
         type = item.type.humanize
       end
-      url = "/#{item.type.tableize}/#{item.id}"
-      
+      url = "/#{item.type.tableize}/#{item.id}"      
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
-  end
-
-  def add_preference
-
-    Preference.add_preference(current_user.id, params[:search_type], params)   
-    render :nothing => true
+    render :json => results
+    
   end
 
   def autocomplete_manufacturers
