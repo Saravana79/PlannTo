@@ -1,5 +1,35 @@
 <!--<div id="header">
   <div class="headerright">
+    <% #if user_signed_in? %>
+      <%#= link_to "Welcome " +  current_user.name, "#", :onclick => "showLoginLinks()" %>
+      <div id="login_link" style="display:none">
+        <ul>
+          <li>
+            <%#= link_to "Account Setting", accounts_path %>
+          </li>
+          <li>
+            <%#= link_to "Profile", profile_path %>
+          </li>
+          <li>
+            <%#= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+          </li>
+        </ul>
+      </div>
+    <%# else %>
+      <%#= link_to "Welcome Guest", "#", :onclick => "showLogout()"%>
+      <div id="logout_link" style="display:none" >
+        <ul>
+          <li>
+        <%#= link_to "Sign In", new_user_session_path %>
+            </li>
+          <li></li>
+        <%#= link_to "Sign Up", new_registration_path('user') %>
+          </li>
+          </ul>
+      </div>
+    <%# end %>
+  </div>
+  <div class="headerright">
     <form name="form1" id="form1" method="post" action="" class="search">
       
       <input type="text" name="textfield" value="" class="search" id="plannToSearch"/><input class="button" type="submit" name="Submit" value="GO"/>
@@ -66,3 +96,13 @@
        <a href="#">Movies</a>
        </div>
     </div> 
+<!-- WITH APOLOGIES, THIS FEATURE MIGHT HAVE BEEN LOST, PLEASE SEE THE COMMENTED CODE ABOVE-->
+<script type="text/javascript">
+  function showLoginLinks(){
+    $('#login_link').show();
+  }
+
+  function showLogout(){
+    $('#logout_link').show();
+  }
+</script>
