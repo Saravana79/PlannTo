@@ -1,6 +1,6 @@
 <!-- Product Details - Start -->
 <%=render "shared/breadcrumb"%>
-<%= render 'shared/follow_buttons', :follow_type => 'Car', :follow_html => 'select_box' %>
+<%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '' %>
 <br/>
 <div class="productdetails" style="float: left">
   <span class="img_product"><img src="<%=get_image_url(@item, 'Car')%>" alt="<%=@item.name%>" width="205" height="124" /></span>
@@ -14,12 +14,12 @@
       <span class="txt_blue"> (100 Reviews)</span>
     </a><br />
     <a class="txt_normal"><%=display_specifications(@item)%>
-      <%= link_to("...Detailed Specification", "#tab2", :class => 'txt_blue', :id => "detailed_specification") %>
+      <%= link_to("...Detailed Specification", "#tab5", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
   </span>
 </div>
 
-<%=render :template =>"products/related_products" %>
+<%=render :partial =>"items/related_products" %>
 <br /><br />
 <div class="review_tabs">
   <ul>
@@ -37,8 +37,18 @@
     </textarea></span>
 </div>
 <br />
-
-<div class="question_answer">
+<div id="usual2" class="usual">
+  <ul class="tabs">
+    <li class="tabstyle"><a href="#tabs1">Overview</a></li>
+    <li><a href="#tabs2" class="tabstyle">Tips</a></li>
+    <li><a href="#tabs3" class="tabstyle">Review</a></li>
+    <li><a href="#tabs4" class="tabstyle">Q&amp;A</a></li>
+    <li><a href="#tabs5" class="tabstyle" id="specification">Specification</a></li>
+    <li><a href="#tabs6" class="tabstyle">Image</a></li>
+    <li><a href="#tabs7" class="tabstyle">Videos</a></li>
+  </ul>
+</div>
+<div id="tabs1" style="display: block; " class="question_answer">
   <h3 class="yellow_border">Questions and Answers</h3>
   <span class="sortby">
     <span><b>Sort by:</b></span>
@@ -116,6 +126,16 @@
   <!-- Add Answer or Ask Question - End -->
 
 </div>
+
+<div id="tabs5" style="display: none; " class="main-content-section">
+<%= render :template => 'products/specification' %>
+      </div>
+
+<div id="tabs3" style="display: none; " class="main-content-section"></div>
+<div id="tabs4" style="display: none; " class="main-content-section"></div>
+<div id="tabs2" style="display: none; " class="main-content-section"></div>
+<div id="tabs6" style="display: none; " class="main-content-section"></div>
+<div id="tabs7" style="display: none; " class="main-content-section"></div>
 <!-- Q&A -  End -->
 
 
@@ -148,10 +168,7 @@
         </div>
         <div class="productspecification">
 
-          <% @item.priority_specification.each do |item_attribute| %>
-            <%= item_attribute.name %> - <%= item_attribute.value %> ( <%= item_attribute.unit_of_measure %> ),
-          <% end %>
-          <%= link_to("...Detailed Specification", "#tab2", :class => 'feedlink', :id => "detailed_specification") %>
+          
 
 
         </div>
@@ -256,6 +273,7 @@
 <script type="text/javascript">
 <% if @user_follow && @user_follow.follow_type == "Buyer" %>
     Product.load_buyer();
+
 <% end %>
 <% if @user_follow && @user_follow.follow_type == "Owner" %>
     Product.load_owner();
@@ -278,4 +296,5 @@
 <% else %>
     Product.hide_login_dialog();
 <% end %>
+
 </script>
