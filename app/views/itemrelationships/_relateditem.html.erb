@@ -6,8 +6,7 @@
       <%= image_tag(get_image_url(relateditem, relateditem.class.name), :title => relateditem.name, :width => "101", :height => "68") %>
     </td>
     <td width="113">
-
-      <a href="#" class="txt_black"><%= relateditem.name %></a>
+      <%= link_to relateditem.name, {:controller => relateditem.class.name.underscore.pluralize, :action => "show", :id => relateditem.id}, :class => "txt_black" %>
 
       <img src="../images/rating_stars.png" width="87" height="20"/><br/>
 

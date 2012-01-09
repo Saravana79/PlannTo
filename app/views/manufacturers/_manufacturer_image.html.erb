@@ -1,15 +1,9 @@
-<div class="feedcontentheader">
-      <div class="productcontentmain">
-        <div>
-          <%- @item.car_groups.each do |item| %>
+<%- @item.car_groups.each do |item| %>
+  <span class="img_product">
             <%= link_to({}, :href => car_group_path(item.id)) do %>
-              <%= image_tag(image_path(get_image_url(item, item.class.name)), :title => item.name, :class => "productimage") %>
+              <%= image_tag(image_path(get_image_url(item, item.class.name)), :title => item.name, :class => "productimage", :width => "205", :height => "124") %>
+      </span>
             <% end %>
 
-           <%- end %>
+<%- end %>
 
-        </div>
-
-
-      </div>
-    </div>

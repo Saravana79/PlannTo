@@ -69,5 +69,9 @@ module ApplicationHelper
   def get_owners(item)
     Follow.for_followable(item).map(&:follower).map(&:name)
   end
+
+  def get_item_link(item)
+    item.class.name.downcase+"_path(item.id)"
+  end
   
 end

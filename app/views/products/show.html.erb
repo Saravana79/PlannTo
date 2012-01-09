@@ -3,7 +3,7 @@
 <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '' %>
 <br/>
 <div class="productdetails" style="float: left">
-  <span class="img_product"><img src="<%=get_image_url(@item, 'Car')%>" alt="<%=@item.name%>" width="205" height="124" /></span>
+  <span class="img_product"><img src="<%=get_image_url(@item, @item.class.name)%>" alt="<%=@item.name%>" width="205" height="124" /></span>
   <span class="product_details">
     <h1><%=@item.name%></h1>
     <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
@@ -20,23 +20,7 @@
 </div>
 
 <%=render :partial =>"items/related_products" %>
-<br /><br />
-<div class="review_tabs">
-  <ul>
-    <li class="icon_reviewcar" >
-      <a href="#" id="active_tabs">Review Car</a>
-    </li>
-    <li class="icon_Askquestion">
-      <a href="#" >Ask a Question</a>
-    </li>
-    <li class="icon_sharetip">      
-      <a href="#">Share a Tip</a>
-    </li>
-  </ul>
-  <span><textarea name="textarea" id="textarea" cols="45" rows="5">What do you think of this car?
-    </textarea></span>
-</div>
-<br />
+<%= render :partial => "shared/review" %>
 <div id="usual2" class="usual">
   <ul class="tabs">
     <li class="tabstyle"><a href="#tabs1">Overview</a></li>
@@ -48,6 +32,7 @@
     <li><a href="#tabs7" class="tabstyle">Videos</a></li>
   </ul>
 </div>
+
 <div id="tabs1" style="display: block; " class="question_answer">
   <h3 class="yellow_border">Questions and Answers</h3>
   <span class="sortby">
