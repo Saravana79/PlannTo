@@ -1,7 +1,7 @@
 <div class="youtubedata" style="widht: 400px; min-height:300px">
 <div class="youtubeentyform" style="width:210px;float:left;">
 <%#= form_for([@item, @item.shares.build], :remote => true) do |f| %>
-<%= form_for([@item, @item.shares.build]) do |f| %>
+<%= form_for([@item, @item.shares.build], :remote => true) do |f| %>
   <div class="field">
     <%= f.label "Share Article" %><br />
     <%= f.text_field :url %>

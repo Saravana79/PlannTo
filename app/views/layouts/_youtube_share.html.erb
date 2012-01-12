@@ -11,7 +11,7 @@
     <%= f.text_area :user_description, :size => "30x10" %>
     <%= f.hidden_field :youtube, :value => "1" %>
   </div>
-    
+   <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
   <div class="actions">
     <%= f.submit %>
   </div>

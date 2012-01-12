@@ -17,7 +17,7 @@
   </div>
 <% end %>   
 </div>
-<div style="float:right;width:390;">
+<div id="youtube_contents" style="float:right;width:390;">
         <% @item.shares.each do |share| %>
                 <h1><%= link_to share.title, "#"  if share.youtube%></h1>
         <% end %>

@@ -10,6 +10,7 @@
     <%= f.label "Custome Description"%><br />
     <%= f.text_area :user_description, :size => "30x10" %>
   </div>
+  <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120108101240) do
+ActiveRecord::Schema.define(:version => 20120111075138) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(:version => 20120108101240) do
     t.string   "creator_ip"
     t.string   "updater_ip"
   end
+
+  add_index "attribute_values", ["item_id"], :name => "ItemIdBasedKey"
 
   create_table "attributes", :force => true do |t|
     t.string   "name",            :limit => 500, :null => false
@@ -299,6 +301,12 @@ ActiveRecord::Schema.define(:version => 20120108101240) do
     t.string   "range"
   end
 
+  create_table "share_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "shares", :force => true do |t|
     t.string   "url"
     t.string   "title"
@@ -309,6 +317,13 @@ ActiveRecord::Schema.define(:version => 20120108101240) do
     t.integer  "item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "user_id"
+    t.integer  "share_type_id"
+    t.string   "ip_address"
   end
 
   add_index "shares", ["item_id"], :name => "index_shares_on_item_id"
