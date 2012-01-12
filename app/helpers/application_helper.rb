@@ -1,7 +1,8 @@
 module ApplicationHelper
 
   def get_follow_link(name, path, options = {})
-    link_to(("<span>"+name+"</span>").html_safe, path, options)
+    link_to("", path, options).to_s +
+    link_to(name, path, options.merge(:class => "btn_txt")).to_s
   end
 
 
@@ -13,8 +14,9 @@ module ApplicationHelper
                   :id => array_follow.first[1].to_s+"_select"})
     else
       links_follow = ""
-      array_follow.each do |text_val, id_val, follow|                
-          links_follow += "<span class='productbuttons' id=#{id_val+'_span'}>" +
+      array_follow.each do |text_val, id_val, follow|
+
+          links_follow += "<span class='action_btns' id=#{id_val+'_span'}>" +
             get_follow_link(text_val, follow_item_type_item_path(item, :follow_type => follow),
                             options.merge(:id => id_val)) +
           '</span>'
@@ -40,7 +42,9 @@ module ApplicationHelper
         configatron.car_image_url + item.imageurl
       when 'Mobile'
         configatron.mobile_image_url + item.imageurl
-      when 'Manufacturer',
+      when 'Manufacturer'
+        configatron.car_image_url + item.imageurl
+      else
         configatron.car_image_url + item.imageurl
     end
 
@@ -56,4 +60,18 @@ module ApplicationHelper
         "Follow This Car"
     end
   end
+
+  def get_follow_count(follower_count, follow_type)
+    followers = follower_count.select {|fo| fo.follow_type == follow_type}.last
+    followers.blank? ? 0 : followers.follow_count
+  end
+
+  def get_owners(item)
+    Follow.for_followable(item).map(&:follower).map(&:name)
+  end
+
+  def get_item_link(item)
+    item.class.name.downcase+"_path(item.id)"
+  end
+  
 end

@@ -153,8 +153,8 @@ class ItemsController < ApplicationController
       when 'Follow'
         follow_this_item
     end
-    if params[:follow_type] == 'Buyer'
-      plan_to_buy_item
+    respond_to do |format|
+      format.js { render :action => 'plan_to_buy_item'}
     end
   end
 
@@ -166,9 +166,7 @@ class ItemsController < ApplicationController
     else
       flash[:notice] = "Planning is saved"
     end
-    respond_to do |format|
-      format.js { }
-    end
+
   end
 
   def own_a_item
@@ -179,9 +177,7 @@ class ItemsController < ApplicationController
     else
       flash[:notice] = "Owner is saved"
     end
-    respond_to do |format|
-      format.js { render :action => 'plan_to_buy_item'}
-    end
+
   end
 
   def follow_this_item
@@ -192,9 +188,7 @@ class ItemsController < ApplicationController
     else
       flash[:notice] = "Follow is saved"
     end
-    respond_to do |format|
-      format.js { render :action => 'plan_to_buy_item'}
-    end
+    
   end
 
   def compare

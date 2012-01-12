@@ -68,7 +68,7 @@ div.buttons									{ width:280px; height:29px; display:block; }
 .action_btns:hover							{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; }
 
 /* Button Active */
-#btn_active									{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; }
+.btn_active									{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; }
 
 /* Button Icons */
 .btn_plantobuy_icon	                        { width:23px; height:29px; background:url(../images/btn_icons.png) no-repeat 6px 6px;  float:left; border:solid 0px; display:block; }
@@ -123,7 +123,7 @@ ul.tabs li									{ width:103px; height:33px; background:url(../images/bg_tabs.
 ul.tabs li a								{ font:bold 12px/36px arial; color:#5f5f5f; text-decoration:none; border:solid 0px; width:100px; height:33px; display:block; text-align:center; }
 ul.tabs li:hover							{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px;}
 #tab_active									{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px; color:#000;}
-
+.selected									{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px; color:#000;}
 /* Question & Answers */
 
 div.question_answer							{ width:683px; border:solid 0px; }

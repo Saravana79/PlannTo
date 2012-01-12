@@ -28,7 +28,7 @@ class Manufacturer < Item
   private
   
   def get_min_the_items(no_of_car)
-    related_items = relate_car_groups.where(:type => related_cars.first.class.name).limit(no_of_car)
+    related_items = relate_car_groups.limit(no_of_car)
     if relate_car_groups.blank?
       related_items = related_cars.where(:type => related_cars.first.class.name).limit(no_of_car)
     end

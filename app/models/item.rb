@@ -72,4 +72,12 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def priority_specification
+    specification.where(:priority => 1)
+  end
+
+  def specification
+    item_attributes.select("value, name, unit_of_measure, category_name")
+  end
+
 end
