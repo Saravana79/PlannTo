@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  layout "product"
 
   def index
     @search_type = params[:search_type]
