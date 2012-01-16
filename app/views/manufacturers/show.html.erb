@@ -1,4 +1,7 @@
+<!--  breadcrumbs - Start -->
+  <%= render "shared/breadcrumb" %>
 
+<!--  breadcrumbs - End -->
 <!-- buttons - Start -->
 <%= render 'shared/follow_buttons', :follow_type => 'Manufacturer', :follow_html => 'button' %>
 
@@ -11,7 +14,7 @@
 <div class="leftcolumnbig">
 <!-- Product Details - Start -->
 
-  <div class="productdetails" style="float: left">
+  <div class="productdetails" >
     <%= render @item.car_groups.last.class.superclass.name.underscore + '_image', :image_type => 'Manufacturer' unless @item.car_groups.blank? %>
     <span class="product_details">
       <h1><%= @item.name %></h1>
