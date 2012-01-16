@@ -1,8 +1,5 @@
 <div id="main-content">
-  <div>
-    <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande
-      Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
-  </div>
+  <%= render "shared/breadcrumb" %>
   <div id="comment-notice"></div>
   <%= render 'shared/follow_buttons', :follow_type => 'CarGroup', :follow_html => 'button' %>  
   <div class="productdetails" style="float: left">

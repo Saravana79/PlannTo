@@ -2,10 +2,10 @@
 <%- car_groups.each do |item| %>
   <div class="feedcontentheader">
     <div class="productcontentmainmini">
-      <div>        
-        <%= link_to({}, {:controller => item.class.name.underscore.pluralize, :action => "show", :id => item.id}) do %>
+      <div>
+        <%= link_to({:controller => item.class.name.underscore.pluralize, :action => "show", :id => item.id}) do %>
           <%= image_tag(image_path(get_image_url(item, item.class.name)), :title => item.name, :class => "productimage",
-                        :style                        => "width:50px;height:50px;") %>
+                        :style                                                   => "width:50px;height:50px;") %>
         <% end %>
       </div>
       <div class="producttitlemini">

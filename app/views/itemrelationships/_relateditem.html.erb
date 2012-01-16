@@ -21,7 +21,7 @@
     <td height="40" colspan="2" class="dotted_border" valign="top">
 
       <% related_follower = relateditem.related_followers(@follow_type) %>
-      <%= related_follower[0..2].collect { |user| user.email }.join(",") %>
+      <%= related_follower[0..2].collect { |user| user.name }.join(",") %>
       <% if ((related_follower.count - 2) > 0) %>
         and <%= (related_follower.count - 2) %> other people owns this.
       <% elsif related_follower.count > 0 %>

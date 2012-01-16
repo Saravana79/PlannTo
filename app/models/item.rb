@@ -55,7 +55,7 @@ class Item < ActiveRecord::Base
 
   def unfollowing_related_items(user, number)
     if user
-      car_groups.select{|item| !user.following?(item) }[0..number]
+      car_groups(1, false, 2).select{|item| !user.following?(item) }[0..number]
     else
       car_groups.limit(number)
     end
