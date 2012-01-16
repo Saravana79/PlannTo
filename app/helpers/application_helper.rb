@@ -16,7 +16,7 @@ module ApplicationHelper
       links_follow = ""
       array_follow.each do |text_val, id_val, follow|
 
-          links_follow += "<span class='action_btns' id=#{id_val+'_span'}>" +
+          links_follow += "<span class='action_btns' style='width:120px;' id=#{id_val+'_span'}>" +
             get_follow_link(text_val, follow_item_type_item_path(item, :follow_type => follow),
                             options.merge(:id => id_val)) +
           '</span>'

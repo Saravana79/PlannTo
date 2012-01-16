@@ -1,16 +1,16 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
-    <title>PlannTo - Empowered Customers</title>
-    <%= javascript_include_tag 'application' %>
-    <%= stylesheet_link_tag 'application' %>
-    <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
-    <link type="text/css" href="/stylesheets/search.css" rel="stylesheet" />
-    <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-1.5.1.min.js"></script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PlannTo - Empowered Customers</title>
+  <%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag 'application' %>
+  <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet"/>
+  <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-1.5.1.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js"></script>
     <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    
+
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery.idTabs.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.cookie.js"></script>
@@ -32,20 +32,51 @@
         return true;
       };
     </script>
-  </head>
-  <body style="padding-bottom: 0px;" class="body">
-    <%= render 'shared/header_links' %>
-    <div id="ContentPanel" class="content">
-    <%#= render 'shared/left_nav' %>
-      <%= yield %>
-    </div>
+</head>
 
-    <%= render 'shared/footer' %>
-    <p class="notice"><%= notice %></p>
+<body marginheight="0" topmargin="0">
 
-    <p class="alert"><%= alert %></p>
+<!-- Header - Start -->
+<%= render 'shared/header_links' %>
+    
 
-    <script type="text/javascript">
+<!-- Header - End -->
+
+<div id="maincontainer" class="maincontainerCss">
+<!-- Till this will go into main layout and common for all pages.-->
+
+<div class="breadcrumpbtnDiv">
+<!--  breadcrumbs - Start -->
+  <%= render "shared/breadcrumb" %>
+
+<!--  breadcrumbs - End -->
+
+
+<%= yield %>
+
+
+
+
+
+
+
+
+
+
+
+<!-- This will go into main layout -->
+</div>
+
+<br />
+<div class="footerdiv">
+<!-- Footer -- Start -->
+<%= render 'shared/footer' %>
+
+
+
+</div>
+<!-- Footer -- End -->
+ <script type="text/javascript">
       // WHILE FIXING SEARCH BOX IN LAYOUT, MOVE THIS TO JAVASCRIPT FILE.
       $("#ui-active-menuitem").mouseout(function() {
         $("#ui-active-menuitem").hide();
@@ -106,6 +137,12 @@
       };
 
     </script>
-
-  </body>
+</body>
 </html>
+
+
+
+
+
+
+
