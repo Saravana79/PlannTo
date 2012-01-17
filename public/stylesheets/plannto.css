@@ -222,6 +222,13 @@ li.middlebg								{ height:auto; background-color:#fffce0; border:solid 1px #ef
 .pagination	li a:hover					{ background:url(../images/btn_bg.png) repeat-x top; font:normal 11px arial;  color:#fff; }
 #selected_pagination				    { background:url(../images/btn_bg.png) repeat-x top; font:normal 11px arial;  color:#fff;  padding:4px 7px; }
 /* Search Result -- Start */
+.width356								{ width:356px; }
+.bg_popup_top							{ width:356px; height:50px;  background:url(../images/bg_popup.png) no-repeat top; display:block; float:left;}
+.popup_heading							{ float:left; margin:23px 0px 0px 32px; border:solid 0px; width:80%;  }
+.margin_left32							{ margin:0px 0px 0px 32px;  }
 
+.bg_popup_bottom						{ width:356px; height:130px; display:block; background:url(../images/bg_popup.png) no-repeat bottom; float:left; }
+.slider									{ width:19px; height:33px; display:block; margin:10px 0px -36px 40px; }
+.sliderbar								{ width:356px; height:65px; background:url(../images/bgslidingbar.png) no-repeat; display:block; margin:10px 0px 0px 35px; float:left; }
 
 

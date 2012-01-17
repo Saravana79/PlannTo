@@ -4,14 +4,34 @@
       <div class="hdr_search">Search Criteria:</div>
       <%@search_info_lookups.each_with_index do |lookup, index|%>
         <%if index == 0%>
-          <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="box"><a href="" id="search_criteria_active">Manufacturer</a></li>
+          <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" id="search_criteria_active">Manufacturer</a></li>
 
         <%end%>
-        <li   class="box" id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+        <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
       <%end%>
     </ul>
   </div>
-
+    <div class="width356" id="criteriaPopup" style="display:none">
+      <span class="bg_popup_top">
+        <a class="txt_black popup_heading" id="criteriaHeading"></a>
+        <a class="txt_subcategories margin_left32" id="searchCriteriaLabel"></a>
+      </span><br/>
+      <span class="bg_popup_bottom">
+        <%=hidden_field_tag :which_attribute%>
+        <%=hidden_field_tag :which_type%>
+        <%=hidden_field_tag :which_form_field%>
+        <%=hidden_field_tag :which_unit%>
+        <%=hidden_field_tag :form_field_val%>
+        <%@search_info_lookups.each do |search|%>
+          <%if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
+            <input id="Slider<%=search[:param_2]%>" type="slider" name="price" style="display:none" />
+          <%end%>
+        <%end%>
+        <input id="autocompleteField" style="display:none;width: 220px;"></input>
+        <br/>
+        <a class="btn_submitanswer search" id="criteriaSubmit">Search</a>
+      </span>
+    </div>
   <div class="rightcolumnbig">
     <div class="searchPack" style="display: none;">
       <div class="hdr_Category">Search Preferences:</div>
@@ -25,9 +45,11 @@
       </div>
     </div>
     <div class="push"></div>
+
     <div id="content">
       <%= render :partial => "/search/index" %>
     </div>
+
   </div>
 
 </div>
@@ -40,21 +62,23 @@
   <%end%>
 <%end%>
 
+
+
 <div id="dialog" title="Search Criteria" style="display:none">
   <!--<span id="dialogName"></span>-->
-  <%=hidden_field_tag :which_attribute%>
-  <%=hidden_field_tag :which_type%>
-  <%=hidden_field_tag :which_form_field%>
-  <%=hidden_field_tag :which_unit%>
-  <%=hidden_field_tag :form_field_val%>
-  <div id="price2" class="sliderText" style="color: orange;"></div>
+<%#=hidden_field_tag :which_attribute%>
+<%#=hidden_field_tag :which_type%>
+<%#=hidden_field_tag :which_form_field%>
+<%#=hidden_field_tag :which_unit%>
+<%#=hidden_field_tag :form_field_val%>
+  <!--<div id="searchCriteriaLabel" class="sliderText" style="color: orange;"></div>
   <br/>
-  <%@search_info_lookups.each do |search|%>
-    <%if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
-      <input id="Slider<%=search[:param_2]%>" type="slider" name="price" style="display:none" />
-    <%end%>
-  <%end%>
-  <input id="autocompleteField" style="display:none;width: 220px;"></input><br/><br/>
+<%#@search_info_lookups.each do |search|%>
+<%#if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
+      <input id="Slider<%#=search[:param_2]%>" type="slider" name="price" style="display:none" />
+<%#end%>
+<%#end%>
+  <input id="autocompleteField" style="display:none;width: 220px;"></input><br/><br/>-->
   <button id="searchButton" class="button" onclick="return false;" style="float: right">Search</button><br/>
 
 </div>
@@ -63,15 +87,25 @@
 
 <div class="push"></div>
 <script type="text/javascript">
+  $('.box').mouseover(function() {
+    $(this).click();
+  })
+
+  //$('.box').mouseout(function() {
+  // $("#criteriaPopup").hide();
+  // $("#dialog").dialog("close");
+  //})
   function openInfoBox(displayInfo, attr_name, elem){
+    var searchCriteriaFieldId = $(elem).attr('id');
     resetUnwantedFormFields();
-    $( "#price2" ).html(" ")
+    $( "#searchCriteriaLabel" ).html(" ")
+    $( "#criteriaHeading" ).html(" ")
     $("#which_attribute").val($(elem).attr('id'));
     $("#which_form_field").val(attr_name);
     $("#which_type").val(displayInfo.vth);
     $("#which_unit").val(displayInfo.ut);
-    $("#dialogName").val(attr_name);
-    $("#dialog #autocompleteField").hide();
+   // $("#dialogName").val(attr_name);
+    $("#criteriaPopup #autocompleteField").hide();
     $(".jslider").hide()
     if (displayInfo.vt == "Between"){
       var min_v;
@@ -79,7 +113,11 @@
       min_v = $( "#min_" + attr_name ).val() == "" ? displayInfo.min_v : $( "#min_" + attr_name ).val()
       max_v = $( "#max_" + attr_name ).val() == "" ? displayInfo.max_v : $( "#max_" + attr_name ).val()
       $("#which_type").val('Between');
-      $("#dialog").dialog({title: displayInfo.adn});
+      var position = $("#" + searchCriteriaFieldId).position();
+      $("#criteriaPopup").hide();
+      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
+      $( "#criteriaHeading" ).html(displayInfo.adn)
+     // $("#dialog").dialog({title: displayInfo.adn});
       var  rangeVal = displayInfo.range.split(",")
       var heteroVal1 = "25/" + rangeVal[1]
       var heteroVal2 = "50/" + rangeVal[2]
@@ -102,7 +140,7 @@
             var  sliderVal = value.split(";")
             $("#form_field_val").val(value);
             var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
-            $("#price2").html(searchCriteria)
+            $("#searchCriteriaLabel").html(searchCriteria)
           }
         });
       }
@@ -110,7 +148,7 @@
         $('#Slider' + attr_name).next(".jslider").show()
         $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
         var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
-        $("#price2").html(searchCriteria)
+        $("#searchCriteriaLabel").html(searchCriteria)
       }
       return false;
     }
@@ -123,7 +161,11 @@
         actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.max_v) : parseInt($( "#" + attr_name ).val())
       }
 
-      $("#dialog").dialog({title: displayInfo.adn});
+      var position = $("#" + searchCriteriaFieldId).position();
+      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
+      $( "#criteriaHeading" ).html(displayInfo.adn)
+
+      //$("#dialog").dialog({title: displayInfo.adn});
       var  rangeVal = displayInfo.range.split(",")
       var heteroVal1 = "25/" + rangeVal[1]
       var heteroVal2 = "50/" + rangeVal[2]
@@ -147,14 +189,14 @@
             var  sliderVal = value
             $( "#form_field_val").val( sliderVal );
             var searchCriteria = $("#which_type").val() + " "  + sliderVal + " " + $("#which_unit").val()
-            $("#price2").html(searchCriteria)
+            $("#searchCriteriaLabel").html(searchCriteria)
           }
         });
       }
       else{
         $('#Slider' + attr_name).next(".jslider").show()
         var searchCriteria = $("#which_type").val() + " "  + actual_value + " " + $("#which_unit").val()
-        $("#price2").html(searchCriteria)
+        $("#searchCriteriaLabel").html(searchCriteria)
         $( "#form_field_val" ).val( actual_value );
       }
       return false;
@@ -179,12 +221,16 @@
       return false
     }
     else if (displayInfo.vt == "ListOfValues"){
-      $("#dialog").dialog({title: displayInfo.adn});
-      $("#price2").text('');
+      var position = $("#" + searchCriteriaFieldId).position();
+      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
+      $( "#criteriaHeading" ).html(displayInfo.adn)
+
+     // $("#dialog").dialog({title: displayInfo.adn});
+      $("#searchCriteriaLabel").text('');
       $("#" + attr_name).val('');
-      if ($("#dialog #autocompleteField").size() > 0){
+      if ($("#criteriaPopup #autocompleteField").size() > 0){
         var typeList = loadTypes();
-        $( "#dialog #autocompleteField" ).autocomplete({
+        $( "#criteriaPopup #autocompleteField" ).autocomplete({
           minLength: 0,
           minChars: 0,
           max:10,
@@ -193,9 +239,9 @@
             return false
           },
           select: function( event, ui ) {
-            //store_info_div("price2", ui.item)
+            //store_info_div("searchCriteriaLabel", ui.item)
             store_ids(attr_name, ui.item)
-            $("#dialog #autocompleteField").val('');
+            $("#criteriaPopup #autocompleteField").val('');
             setUpLOV(attr_name);
             return false;
           }
@@ -206,7 +252,7 @@
         //				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
         //				.appendTo( ul );
         //		};
-        $( "#dialog #autocompleteField" ).show();
+        $( "#criteriaPopup #autocompleteField" ).show();
         $("#autocompleteField").select();
         $("#autocompleteField").autocomplete('search','')
 
@@ -272,9 +318,9 @@
         $("#" + maxFieldId).val(maxValue)
         searchCriteria = ""
         searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      //  var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-     //   var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
-      var className = "middlebg attributeTag"
+        //  var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+        //   var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+        var className = "middlebg attributeTag"
         var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
 
     <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
@@ -284,12 +330,12 @@
         searchCriteria = ""
         searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
         var value = searchCriteria
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+        var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
         //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-         var className = "middlebg attributeTag"
+        var className = "middlebg attributeTag"
         var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
 
-       // var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+        // var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
     <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
         var fieldId = "<%="#{preference[:attribute]}"%>"
         var value   = "<%="#{preference[:value]}"%>"
@@ -319,7 +365,7 @@
 <%end%>
  
   
-  $('#searchButton').click(function() {
+  $('#criteriaSubmit').click(function() {
     var tagId = $("#which_attribute").val() + "_tag"
     showSearchPack();
     showClearTag();
@@ -386,12 +432,12 @@
     else{
       var className = "middlebg attributeTag"
     }
-    var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" +$("#ui-dialog-title-dialog").text()+ "<a id= 'deleteTag' class='icon_close'></a></span>" +searchCriteria + "</li>" ;
+    var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" +$("#criteriaHeading").text()+ "<a id= 'deleteTag' class='icon_close'></a></span>" +searchCriteria + "</li>" ;
     $(list).appendTo('.search_category');
 
     $("#page").val(1)
     $.get('/search',$("#searchForm").serialize(),null,"script");
-    $("#dialog").dialog("close");
+    $("#criteriaPopup").hide();
     $("#" + $("#which_attribute").val()).hide();
 
   });
@@ -466,7 +512,7 @@
       anchorId = "removeThis_" + index + "_" + formId
       updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
     })
-    $("#price2").html("" +updatedSearchList.toString())
+    $("#searchCriteriaLabel").html("" +updatedSearchList.toString())
     $("#" + formId).val("" + updatedFormList.toString() + "")
     return false;
   });
@@ -560,7 +606,7 @@
       anchorId = "removeThis_" + index + "_" + attr_name
       updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
     })
-    $("#price2").html("<span id='" + spanId + "'>" + updatedSearchList.toString() + "</span>")
+    $("#searchCriteriaLabel").html("<span id='" + spanId + "'>" + updatedSearchList.toString() + "</span>")
     
 
   }
@@ -572,11 +618,14 @@
     $("#which_type").val("manufacturer");
     $("#" + $("#which_form_field").val()).val('');
     
-    $("#price2").text('');
-    $("#dialog").dialog({title: "Manufacturer"});
-    if ($("#dialog #autocompleteField").size() > 0){
+    $("#searchCriteriaLabel").text('');
+    var position = $("#" + $(elem).attr('id')).position();
+     $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
+      $( "#criteriaHeading" ).html("Manufacturer")
+    //$("#criteriaPopup").dialog({title: "Manufacturer"});
+    if ($("#criteriaPopup #autocompleteField").size() > 0){
       var manufacturerList = loadManufacturers();
-      $( "#dialog #autocompleteField" ).autocomplete({
+      $( "#criteriaPopup #autocompleteField" ).autocomplete({
         minLength: 0,
         // maxItemsToShow:10,
         cacheLength:5,
@@ -588,9 +637,9 @@
           return false
         },
         select: function( event, ui ) {
-          //store_info_div("price2", ui.item)
+          //store_info_div("searchCriteriaLabel", ui.item)
           store_ids("manufacturer", ui.item)
-          $("#dialog #autocompleteField").val('');
+          $("#criteriaPopup #autocompleteField").val('');
           setUpLOV("manufacturer");
 
           //$("#autocompleteField").autocomplete('search','')
@@ -603,7 +652,7 @@
       //				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
       //				.appendTo( ul );
       //		};
-      $( "#dialog #autocompleteField" ).show();
+      $( "#criteriaPopup #autocompleteField" ).show();
       $("#autocompleteField").select();
       $("#autocompleteField").autocomplete('search','')
 
