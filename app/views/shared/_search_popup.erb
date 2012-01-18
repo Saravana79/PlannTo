@@ -1,0 +1,26 @@
+<div class="width356" id="criteriaPopup" style="display:none">
+  <span class="bg_popup_top">
+    <a class="txt_black popup_heading" id="criteriaHeading"></a>
+    <br/>
+    <a class="txt_subcategories margin_left32" id="searchCriteriaLabel"></a>
+  </span><br/>
+  <span class="bg_popup_bottom">
+    <%=hidden_field_tag :which_attribute%>
+    <%=hidden_field_tag :which_type%>
+    <%=hidden_field_tag :which_form_field%>
+    <%=hidden_field_tag :which_unit%>
+    <%=hidden_field_tag :form_field_val%>
+    <br/>
+    <div class="slider">
+      <%@search_info_lookups.each do |search|%>
+        <%if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
+          <input id="Slider<%=search[:param_2]%>" type="slider" name="price" style="display:none" />
+        <%end%>
+      <%end%>
+      <input id="autocompleteField" style="display:none;width: 220px;"></input>
+    </div>
+    <div style="clear:both;margin-top:60px;margin-right:30px">
+      <a class="btn_submitanswer search" id="criteriaSubmit">Search</a>
+    </div>
+  </span>
+</div>

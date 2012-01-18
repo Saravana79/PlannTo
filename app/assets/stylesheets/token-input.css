@@ -1,5 +1,5 @@
 /* Example tokeninput style #1: Token vertical list*/
-ul.token-input-list {
+/*ul.token-input-list {
     overflow: hidden; 
     height: auto !important; 
     height: 1%;
@@ -109,5 +109,5 @@ div.token-input-dropdown ul li em {
 
 div.token-input-dropdown ul li.token-input-selected-dropdown-item {
     background-color: #d0efa0;
-}
+}*/
 

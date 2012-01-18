@@ -228,7 +228,13 @@ li.middlebg								{ height:auto; background-color:#fffce0; border:solid 1px #ef
 .margin_left32							{ margin:0px 0px 0px 32px;  }
 
 .bg_popup_bottom						{ width:356px; height:130px; display:block; background:url(../images/bg_popup.png) no-repeat bottom; float:left; }
-.slider									{ width:19px; height:33px; display:block; margin:10px 0px -36px 40px; }
+.slider {
+    display: block;
+    float: left;
+    height: 33px;
+    margin: 10px 0 -36px 30px;
+    width: 290px;
+}
 .sliderbar								{ width:356px; height:65px; background:url(../images/bgslidingbar.png) no-repeat; display:block; margin:10px 0px 0px 35px; float:left; }
 
 

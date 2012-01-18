@@ -11,27 +11,7 @@
       <%end%>
     </ul>
   </div>
-    <div class="width356" id="criteriaPopup" style="display:none">
-      <span class="bg_popup_top">
-        <a class="txt_black popup_heading" id="criteriaHeading"></a>
-        <a class="txt_subcategories margin_left32" id="searchCriteriaLabel"></a>
-      </span><br/>
-      <span class="bg_popup_bottom">
-        <%=hidden_field_tag :which_attribute%>
-        <%=hidden_field_tag :which_type%>
-        <%=hidden_field_tag :which_form_field%>
-        <%=hidden_field_tag :which_unit%>
-        <%=hidden_field_tag :form_field_val%>
-        <%@search_info_lookups.each do |search|%>
-          <%if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
-            <input id="Slider<%=search[:param_2]%>" type="slider" name="price" style="display:none" />
-          <%end%>
-        <%end%>
-        <input id="autocompleteField" style="display:none;width: 220px;"></input>
-        <br/>
-        <a class="btn_submitanswer search" id="criteriaSubmit">Search</a>
-      </span>
-    </div>
+  <%= render :partial => "shared/search_popup" %>
   <div class="rightcolumnbig">
     <div class="searchPack" style="display: none;">
       <div class="hdr_Category">Search Preferences:</div>
@@ -45,11 +25,9 @@
       </div>
     </div>
     <div class="push"></div>
-
     <div id="content">
       <%= render :partial => "/search/index" %>
     </div>
-
   </div>
 
 </div>
@@ -62,39 +40,39 @@
   <%end%>
 <%end%>
 
-
-
-<div id="dialog" title="Search Criteria" style="display:none">
-  <!--<span id="dialogName"></span>-->
-<%#=hidden_field_tag :which_attribute%>
-<%#=hidden_field_tag :which_type%>
-<%#=hidden_field_tag :which_form_field%>
-<%#=hidden_field_tag :which_unit%>
-<%#=hidden_field_tag :form_field_val%>
-  <!--<div id="searchCriteriaLabel" class="sliderText" style="color: orange;"></div>
-  <br/>
-<%#@search_info_lookups.each do |search|%>
-<%#if search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "GreaterThan" || search[:param_1][:vt] == "LessThen"%>
-      <input id="Slider<%#=search[:param_2]%>" type="slider" name="price" style="display:none" />
-<%#end%>
-<%#end%>
-  <input id="autocompleteField" style="display:none;width: 220px;"></input><br/><br/>-->
-  <button id="searchButton" class="button" onclick="return false;" style="float: right">Search</button><br/>
-
-</div>
 <div id="getAdviceDialog" title="I am looking for an advice" style="display:none">
 </div>
 
 <div class="push"></div>
 <script type="text/javascript">
-  $('.box').mouseover(function() {
+  //$(".button").button();
+  $(".box").mouseenter(function() {
     $(this).click();
+  }).mouseleave(function(event) {
+    var $target = $(event.target);
+    //alert($target.attr('class'))
+  //if ( $target.is("div") ) {
+  //  $target.css("background-color", "red");
+ // }
+ if ($target.attr('id') != 'search_criteria_active'){
+   //$("#criteriaPopup").hide();
+ } 
+  });
+
+
+ $(".leftcolumnsmall").mouseenter(function(event) {
+   var $target = $(event.target);
+   //log($target.attr('class'))
+ })
+
+  $('.bg_popup_top').mouseover(function() {
+   // alert("hi")
   })
 
-  //$('.box').mouseout(function() {
-  // $("#criteriaPopup").hide();
-  // $("#dialog").dialog("close");
-  //})
+  $(".boxClick").mouseenter(function(){
+    $("#criteriaPopup").hide();
+  })
+
   function openInfoBox(displayInfo, attr_name, elem){
     var searchCriteriaFieldId = $(elem).attr('id');
     resetUnwantedFormFields();
@@ -105,6 +83,7 @@
     $("#which_type").val(displayInfo.vth);
     $("#which_unit").val(displayInfo.ut);
    // $("#dialogName").val(attr_name);
+   $(".ui-autocomplete").hide();
     $("#criteriaPopup #autocompleteField").hide();
     $(".jslider").hide()
     if (displayInfo.vt == "Between"){
@@ -548,7 +527,6 @@
   })
 </script>
 <script type="text/javascript">
-  $(".button").button();
 
   $('#clearTag').live('click', function(){
     removeAllTags();
@@ -617,7 +595,7 @@
     $("#which_form_field").val("manufacturer");
     $("#which_type").val("manufacturer");
     $("#" + $("#which_form_field").val()).val('');
-    
+    $(".ui-autocomplete").hide();
     $("#searchCriteriaLabel").text('');
     var position = $("#" + $(elem).attr('id')).position();
      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
