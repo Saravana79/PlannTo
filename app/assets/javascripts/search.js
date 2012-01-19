@@ -101,3 +101,20 @@
     .removeAttr('selected');
 
   }
+  
+$(document).ready(function(){
+  $('div.pagination a').live('click', function(){
+    var page = $(this).text()
+    var current = $('em.current').text();
+    if (page == "← Previous"){
+      page = parseInt(current) -1
+    }
+    else if (page == "Next →"){
+      page = parseInt(current) + 1
+    }
+    $("#page").val(page)
+    $.get('/search',$("#searchForm").serialize(),null,"script");
+    return false;
+  })
+
+});

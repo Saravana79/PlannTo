@@ -46,32 +46,32 @@
 <div class="push"></div>
 <script type="text/javascript">
   //$(".button").button();
-  $(".box").mouseenter(function() {
-    $(this).click();
-  }).mouseleave(function(event) {
-    var $target = $(event.target);
+  //$(".box").mouseenter(function() {
+  //  $(this).click();
+  //}).mouseleave(function(event) {
+  //  var $target = $(event.target);
     //alert($target.attr('class'))
   //if ( $target.is("div") ) {
   //  $target.css("background-color", "red");
  // }
- if ($target.attr('id') != 'search_criteria_active'){
+ //if ($target.attr('id') != 'search_criteria_active'){
    //$("#criteriaPopup").hide();
- } 
-  });
+ //}
+  //});
 
 
- $(".leftcolumnsmall").mouseenter(function(event) {
-   var $target = $(event.target);
+ //$(".leftcolumnsmall").mouseenter(function(event) {
+ //  var $target = $(event.target);
    //log($target.attr('class'))
- })
+ //})
 
-  $('.bg_popup_top').mouseover(function() {
+  //$('.bg_popup_top').mouseover(function() {
    // alert("hi")
-  })
+  //})
 
-  $(".boxClick").mouseenter(function(){
-    $("#criteriaPopup").hide();
-  })
+ // $(".boxClick").mouseenter(function(){
+ //   $("#criteriaPopup").hide();
+ // })
 
   function openInfoBox(displayInfo, attr_name, elem){
     var searchCriteriaFieldId = $(elem).attr('id');

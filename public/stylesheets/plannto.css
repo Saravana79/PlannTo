@@ -218,6 +218,18 @@ li.middlebg								{ height:auto; background-color:#fffce0; border:solid 1px #ef
 
 .pagination								{ list-style:none; padding:0; margin:0; float:right; } /* Pagination style */
 .pagination li							{ float:left; padding:0px 0px; line-height:46px;  }
+.pagination	a						{ font:normal 11px arial; color:#333333; text-decoration:none; border:solid 0px red; padding:4px 7px; text-transform:uppercase; }
+.pagination	a:hover					{
+    background:url(../images/btn_bg.png) repeat-x top;
+    font:normal 11px arial;
+    color:#fff;
+}
+.pagination	em.current				{
+    background: url(../images/btn_bg.png) repeat-x scroll center top transparent;
+    color: #FFFFFF;
+    font: 11px arial;
+    padding: 4px 7px;
+}
 .pagination	li a						{ font:normal 11px arial; color:#333333; text-decoration:none; border:solid 0px red; padding:4px 7px; text-transform:uppercase; }
 .pagination	li a:hover					{ background:url(../images/btn_bg.png) repeat-x top; font:normal 11px arial;  color:#fff; }
 #selected_pagination				    { background:url(../images/btn_bg.png) repeat-x top; font:normal 11px arial;  color:#fff;  padding:4px 7px; }

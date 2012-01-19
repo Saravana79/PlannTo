@@ -161,12 +161,12 @@ class SearchController < ApplicationController
     end
     #order_by :class , :desc
 
-    if @items.results.count < 10
-      @display = "none;"
-    else
-      @display = "block;"
-      @page += 1
-    end
+   # if @items.results.count < 10
+   #   @display = "none;"
+   # else
+   #   @display = "block;"
+   #   @page += 1
+   # end
   end
 
   def search_items
