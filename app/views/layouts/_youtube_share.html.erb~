@@ -11,7 +11,7 @@
     <%= f.text_area :user_description, :size => "30x10" %>
     <%= f.hidden_field :youtube, :value => "1" %>
   </div>
-    
+   <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
   <div class="actions">
     <%= f.submit %>
   </div>
@@ -20,6 +20,11 @@
 <div id="youtube_contents" style="float:right;width:390;">
         <% @item.shares.each do |share| %>
                 <h1><%= link_to share.title, "#"  if share.youtube%></h1>
+                <%= render :partial => 'votes/vote_block', :locals => {:parent => share, :vote => share.user.fetch_vote(share) } if share.youtube %>
+                <div class="answercomments">
+		<a class="invokecomment" href="#">comment</a>
+		<%= render :partial => 'comments/new_comment', :locals => {:parent => share.class.name, :parent_id => share.id}  %>
+	</div>
         <% end %>
 </div>
 </div>

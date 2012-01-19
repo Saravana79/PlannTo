@@ -6,4 +6,5 @@ class Share < ActiveRecord::Base
     :styles => {
       :thumb=> "100x100#",
       :small  => "150x150>" }
+  acts_as_voteable    
 end

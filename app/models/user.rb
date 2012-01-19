@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
+  acts_as_voter
 
   # Message configurations
   acts_as_messageable :table_name => "messages",                        # default 'messages'

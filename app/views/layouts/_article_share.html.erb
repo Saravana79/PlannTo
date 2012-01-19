@@ -19,6 +19,7 @@
 <div id="article_contents" style="float:right;width:390;">
         <% @item.shares.each do |share| %>
                 <h1><%= link_to share.title, "#" if share.title and share.youtube.nil?%></h1>
+
         <% end %>
 </div>
 </div>

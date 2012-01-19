@@ -1,4 +1,5 @@
 class SharesController < ApplicationController
+  before_filter :authenticate_user!
    def create
       @item = Item.find(params[:car_id])
       if params['share']['url'].nil?
@@ -6,7 +7,7 @@ class SharesController < ApplicationController
       else
               url = params['share']['url']
               user_description = params['share']['user_description']
-              @share = @item.shares.create(:url => url, :user_description => user_description)
+              @share = @item.shares.create(:url => url, :user_description => user_description, :user_id => current_user.id)
               youtube_content = params['share']['youtube'] 
              # Following block for youtube
              if youtube_content

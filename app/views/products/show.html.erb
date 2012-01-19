@@ -35,9 +35,11 @@
         <span class="buttonLink">Review Car</span>
         <span class="buttonLink"><a class="feedlink">Ask a Question</a></span>
         <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
+        <% if current_user %>
         <span class="buttonLink"><%= link_to "Share Youtube", "#", :id => "youtube_form"%></span>
         <span class="buttonLink"><%= link_to "Share Image", "#", :id => "image_form"%></span>
         <span class="buttonLink"><%= link_to "Share Article", "#", :id => "article_form"%></span>
+        <% end %>
       </div>
 
       <%#= render :partial => 'reviews/review_block' %>

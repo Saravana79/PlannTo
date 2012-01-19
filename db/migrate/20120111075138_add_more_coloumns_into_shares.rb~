@@ -6,5 +6,8 @@ class AddMoreColoumnsIntoShares < ActiveRecord::Migration
   end
 
   def down
+  			remove_column :shares, :user_id
+  			remove_column :shares, :share_type_id
+  			remove_column :shares, :ip_address
   end
 end

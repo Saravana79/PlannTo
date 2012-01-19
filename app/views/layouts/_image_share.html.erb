@@ -23,8 +23,10 @@
 </div>
 <div style="float:right;width:390;">
         <% @item.shares.each do |share| %>
-                <h1><%= link_to share.title, "#{share.id}"  if share.image_file_name%></h1>
+                <!--<h1><%#= link_to share.title, "#{share.id}"  if share.image_file_name%></h1>-->
                <%= image_tag share.image.url(:thumb) if share.image_file_name%>
+               <h1><%= link_to share.title, "#"  if share.image_file_name%></h1>
+                <%= render :partial => 'votes/vote_block', :locals => {:parent => share, :vote => share.user.fetch_vote(share) } if share.youtube %>
         <% end %>
 </div>
 </div>
