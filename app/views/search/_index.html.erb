@@ -1,3 +1,5 @@
+ <%= will_paginate @items.results , :page_links => true %>
+<div class="push"></div><br/>
 <div style="clear:both;"></div>
 
 <table width="735" border="0" cellspacing="0" cellpadding="0">
@@ -48,23 +50,6 @@
 
     </td>
   </tr>
-<!--  <tr  class="bg_border_topbottom">
-   
-    <td width="375" height="50" colspan="2" valing="center">
-      <ul class="pagination">
-        <li><a href="#"> << First </a></li>
-        <li><a href="#">  < Prev  </a></li>
-        <li><a href="#"> 1 </a></li>
-        <li><a href="#" id="selected_pagination"> 2 </a></li>
-        <li><a href="#"> 3 </a></li>
-        <li><a href="#"> 4 </a></li>
-        <li><a href="#"> 5 </a></li>
-        <li><a href="#"> Next > </a></li>
-        <li><a href="#"> Last >> </a></li>
-      </ul>
-    </td>
-  </tr>-->
-
 </table>
 <div class="push"></div><br/>
  <%= will_paginate @items.results , :page_links => true %>
@@ -108,13 +93,13 @@
   // $("#manufacturerAtt b").html(" ")
   //  $("#manufacturerAtt b").html(value)
   
-  $('#nextItem').click(function() {
-    var page = <%=@page%>
-    $("#page").val(page)
-    $.get('/search',$("#searchForm").serialize(),null,"script");
+  //$('#nextItem').click(function() {
+   // var page = <%#=@page%>
+    //$("#page").val(page)
+    //$.get('/search',$("#searchForm").serialize(),null,"script");
     //$("#dialog").dialog("close");
-    return false;
-  });
+    //return false;
+  //});
 </script>
 
 <script type="text/javascript">
