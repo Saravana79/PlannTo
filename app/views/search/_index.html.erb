@@ -1,14 +1,12 @@
- <%= will_paginate @items.results , :page_links => true %>
-<div class="push"></div><br/>
 <div style="clear:both;"></div>
 
 <table width="735" border="0" cellspacing="0" cellpadding="0">
   <tr class="bg_border_topbottom">
     <td width="375" height="50" class="txt_search_result">Total Search Results: <%=@items.total()%></td>
     <td width="358" class="align_right txt_search_result">Sort By:
-      <select name="sort by" class="txt_normal width50">
-        <option>Select</option>
-      </select></td>
+      <%=select_tag "search_sort_by",
+        options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"]], params[:sort_by]), :class => "txt_normal width50" %>
+    </td>
   </tr>
   <tr>
     <td colspan="2" valign="top">
@@ -26,9 +24,7 @@
                   <a class="txt_compare" id="btn_selected_compare"> COMPARE</a>
                   <a  class="float_rgt"><input name="Compare" type="checkbox" value="" checked="checked" /></a>
                 </div>
-
                 <h1><%=item.name%></h1>
-
                 <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
                 <a><img src="../images/rating_stars.png" width="87" height="20" /></a>
                 <a class="txt_normal">Ratings<span class="txt_blue"> (100 Reviews)</span></a><br />
@@ -52,7 +48,7 @@
   </tr>
 </table>
 <div class="push"></div><br/>
- <%= will_paginate @items.results , :page_links => true %>
+<%= will_paginate @items.results , :page_links => true %>
 <script type="text/javascript">
   //this logic fails to display total if same attributes have two display values.
 
@@ -94,11 +90,11 @@
   //  $("#manufacturerAtt b").html(value)
   
   //$('#nextItem').click(function() {
-   // var page = <%#=@page%>
-    //$("#page").val(page)
-    //$.get('/search',$("#searchForm").serialize(),null,"script");
-    //$("#dialog").dialog("close");
-    //return false;
+  // var page = <%#=@page%>
+  //$("#page").val(page)
+  //$.get('/search',$("#searchForm").serialize(),null,"script");
+  //$("#dialog").dialog("close");
+  //return false;
   //});
 </script>
 

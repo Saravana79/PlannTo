@@ -102,7 +102,7 @@ class SearchController < ApplicationController
     end
 
     #logger.info list.kind_of?(Array)
-
+    @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "name"
     @items = Sunspot.search($search_type.camelize.constantize) do
       keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
@@ -130,9 +130,9 @@ class SearchController < ApplicationController
           elsif search[:value_type] == "LessThen"
             with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           end
-          facet(search[:attribute_name].to_sym)
-          #order_by(:Price) #, :desc)
+          facet(search[:attribute_name].to_sym)          
         end
+        order_by :Price if sort_by_option == "Price" #, :desc)
       end
       dynamic :features_string do
         preferences.each do |preference|
@@ -154,7 +154,7 @@ class SearchController < ApplicationController
       end
 
       paginate(:page => params[:page], :per_page => 10)
-      order_by :name
+      order_by :name if sort_by_option == "Name"
       #   order_by :Price, :desc           # descending order , check Documentation link below
     
 

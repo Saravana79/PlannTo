@@ -1,98 +1,98 @@
 
-  function showSearchPack(){
+function showSearchPack(){
     if ($(".search_category").find("li").length == 0){
-      $(".searchPack").slideDown();
+        $(".searchPack").slideDown();
     }
-  }
+}
 
-  function showClearTag(){
+function showClearTag(){
     if ($(".search_category").find("li").length == 0){
-      $("#clearTag").show();
+        $("#clearTag").show();
     }
-  }
+}
 
-   function validateSearchField(fieldVal1, fieldVal2){
+function validateSearchField(fieldVal1, fieldVal2){
     if ((fieldVal1 == "")|| (fieldVal2 == "")){
-      alert("Please select a search criteria.");
-      return false
+        alert("Please select a search criteria.");
+        return false
     }
-  }
-  function hideSearchPack(){
+}
+function hideSearchPack(){
     if ($(".search_category").find("li").length == 0){
-      $(".searchPack").slideUp();
+        $(".searchPack").slideUp();
     }
-  }
+}
 
 
-  function searchData(){
+function searchData(){
     $.get('/search',$("#searchForm").serialize(),null,"script");
-  }
+}
 
-  function removeAllTags(){
+function removeAllTags(){
     $(".search_category").find("li").remove();
     $(".box").show()
-  }
+}
 
-  function hideClearTag(){
+function hideClearTag(){
     if ($(".search_category").find("li").length == 0){
-      $("#clearTag").hide();
+        $("#clearTag").hide();
     }
-  }
+}
 
-  function hidePreferenceTag(){
+function hidePreferenceTag(){
     if ($(".search_category").find("li").length == 0){
-      $("#addPreferenceTag").hide();
+        $("#addPreferenceTag").hide();
     }
-  }
+}
 
-  function hideGetAdviceTag(){
+function hideGetAdviceTag(){
     if ($(".search_category").find("li").length == 0){
-      $("#getAdviceTag").hide();
+        $("#getAdviceTag").hide();
     }
-  }
+}
 
-  function store_info_div(type, sender){
+function store_info_div(type, sender){
     var value_selector = "#" + type +""
 
     if ($(value_selector).text() == "") {
-      var ids = [];
+        var ids = [];
     } else {
-      var ids = $(value_selector).text().split(",");
+        var ids = $(value_selector).text().split(",");
     }
     var add = true
     $.each(ids, function(index, value) {
-      if (value.toString() == sender.value.toString())  {
-        add = false;
-      }
+        if (value.toString() == sender.value.toString())  {
+            add = false;
+        }
     });
     if (add == true){
-      ids.push(sender.value);
+        ids.push(sender.value);
     }
     $(value_selector).text(ids.toString());
-  }
+}
 
-  function store_ids(type, sender) {
+function store_ids(type, sender) {
 
     var value_selector = "#" + type +""
 
     if ($(value_selector).val() == "") {
-      var ids = [];
+        var ids = [];
     } else {
-      var ids = $(value_selector).val().split(",");
+        var ids = $(value_selector).val().split(",");
     }
     var add = true
     $.each(ids, function(index, value) {
-      if (value.toString() == sender.value.toString())  {
-        add = false;
-      }
+        if (value.toString() == sender.value.toString())  {
+            add = false;
+        }
     });
     if (add == true){
-      ids.push(sender.value);
+        ids.push(sender.value);
     }
     $(value_selector).val(ids.toString());
-  };
+};
 
-  function resetForm(form_id){
+function resetForm(form_id){
 
     $(':input','#' + form_id + '')
     .not(':button, :submit, :reset, :hidden')
@@ -100,9 +100,9 @@
     .removeAttr('checked')
     .removeAttr('selected');
 
-  }
+}
 
-  function openInfoBox(displayInfo, attr_name, elem){
+function openInfoBox(displayInfo, attr_name, elem){
     var searchCriteriaFieldId = $(elem).attr('id');
     resetUnwantedFormFields();
     $( "#searchCriteriaLabel" ).html(" ")
@@ -111,148 +111,228 @@
     $("#which_form_field").val(attr_name);
     $("#which_type").val(displayInfo.vth);
     $("#which_unit").val(displayInfo.ut);
-   // $("#dialogName").val(attr_name);
-   $(".ui-autocomplete").hide();
+    // $("#dialogName").val(attr_name);
+    $(".ui-autocomplete").hide();
     $("#criteriaPopup #autocompleteField").hide();
     $(".jslider").hide()
     if (displayInfo.vt == "Between"){
-      var min_v;
-      var max_v;
-      min_v = $( "#min_" + attr_name ).val() == "" ? displayInfo.min_v : $( "#min_" + attr_name ).val()
-      max_v = $( "#max_" + attr_name ).val() == "" ? displayInfo.max_v : $( "#max_" + attr_name ).val()
-      $("#which_type").val('Between');
-      var position = $("#" + searchCriteriaFieldId).position();
-      $("#criteriaPopup").hide();
-      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
-      $( "#criteriaHeading" ).html(displayInfo.adn)
-     // $("#dialog").dialog({title: displayInfo.adn});
-      var  rangeVal = displayInfo.range.split(",")
-      var heteroVal1 = "25/" + rangeVal[1]
-      var heteroVal2 = "50/" + rangeVal[2]
-      var heteroVal3 = "75/" + rangeVal[3]
-      $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
-      if ($('#Slider' + attr_name).next(".jslider").length == 0){
-        jQuery("#Slider" + attr_name).slider({
-          from: parseFloat(displayInfo.min_v),
-          to: parseFloat(displayInfo.max_v),
-          step: displayInfo.step,
-          round: 0,
-          dimension: "&nbsp;" + displayInfo.ut,
-          heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
-          scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
-          skin: "plastic",
-          calculate: function(value){
-            return value
-          },
-          onstatechange: function(value) {
-            var  sliderVal = value.split(";")
-            $("#form_field_val").val(value);
-            var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
-            $("#searchCriteriaLabel").html(searchCriteria)
-          }
-        });
-      }
-      else{
-        $('#Slider' + attr_name).next(".jslider").show()
+        var min_v;
+        var max_v;
+        min_v = $( "#min_" + attr_name ).val() == "" ? displayInfo.min_v : $( "#min_" + attr_name ).val()
+        max_v = $( "#max_" + attr_name ).val() == "" ? displayInfo.max_v : $( "#max_" + attr_name ).val()
+        $("#which_type").val('Between');
+        var position = $("#" + searchCriteriaFieldId).position();
+        $("#criteriaPopup").hide();
+        $("#criteriaPopup").css({
+            "position": "absolute",
+            "top": (position.top -15)+ "px",
+            "left":(position.left+210) + "px"
+        }).show();
+        $( "#criteriaHeading" ).html(displayInfo.adn)
+        // $("#dialog").dialog({title: displayInfo.adn});
+        var  rangeVal = displayInfo.range.split(",")
+        var heteroVal1 = "25/" + rangeVal[1]
+        var heteroVal2 = "50/" + rangeVal[2]
+        var heteroVal3 = "75/" + rangeVal[3]
         $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
-        var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
-        $("#searchCriteriaLabel").html(searchCriteria)
-      }
-      return false;
+        if ($('#Slider' + attr_name).next(".jslider").length == 0){
+            jQuery("#Slider" + attr_name).slider({
+                from: parseFloat(displayInfo.min_v),
+                to: parseFloat(displayInfo.max_v),
+                step: displayInfo.step,
+                round: 0,
+                dimension: "&nbsp;" + displayInfo.ut,
+                heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
+                scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
+                skin: "plastic",
+                calculate: function(value){
+                    return value
+                },
+                onstatechange: function(value) {
+                    var  sliderVal = value.split(";")
+                    $("#form_field_val").val(value);
+                    var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
+                    $("#searchCriteriaLabel").html(searchCriteria)
+                }
+            });
+        }
+        else{
+            $('#Slider' + attr_name).next(".jslider").show()
+            $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
+            var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
+            $("#searchCriteriaLabel").html(searchCriteria)
+        }
+        return false;
     }
     else if ((displayInfo.vt == "GreaterThan") || (displayInfo.vt == "LessThen")){
-      var actual_value;
-      if (displayInfo.vt == "GreaterThan"){
-        actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.av) : parseInt($( "#" + attr_name ).val())
-      }
-      else{
-        actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.max_v) : parseInt($( "#" + attr_name ).val())
-      }
+        var actual_value;
+        if (displayInfo.vt == "GreaterThan"){
+            actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.av) : parseInt($( "#" + attr_name ).val())
+        }
+        else{
+            actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.max_v) : parseInt($( "#" + attr_name ).val())
+        }
 
-      var position = $("#" + searchCriteriaFieldId).position();
-      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
-      $( "#criteriaHeading" ).html(displayInfo.adn)
+        var position = $("#" + searchCriteriaFieldId).position();
+        $("#criteriaPopup").css({
+            "position": "absolute",
+            "top": (position.top -15)+ "px",
+            "left":(position.left+210) + "px"
+        }).show();
+        $( "#criteriaHeading" ).html(displayInfo.adn)
 
-      //$("#dialog").dialog({title: displayInfo.adn});
-      var  rangeVal = displayInfo.range.split(",")
-      var heteroVal1 = "25/" + rangeVal[1]
-      var heteroVal2 = "50/" + rangeVal[2]
-      var heteroVal3 = "75/" + rangeVal[3]
+        //$("#dialog").dialog({title: displayInfo.adn});
+        var  rangeVal = displayInfo.range.split(",")
+        var heteroVal1 = "25/" + rangeVal[1]
+        var heteroVal2 = "50/" + rangeVal[2]
+        var heteroVal3 = "75/" + rangeVal[3]
 
-      $( "#Slider" +attr_name ).val( actual_value );
-      if ($('#Slider' + attr_name).next(".jslider").length == 0){
-        jQuery("#Slider" + attr_name).slider({
-          from: parseFloat(displayInfo.min_v),
-          to: parseFloat(displayInfo.max_v),
-          step: displayInfo.step,
-          round: 1,
-          dimension: "&nbsp;" + displayInfo.ut,
-          heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
-          scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
-          skin: "plastic",
-          calculate: function(value){
-            return parseFloat(value)
-          },
-          onstatechange: function(value) {
-            var  sliderVal = value
-            $( "#form_field_val").val( sliderVal );
-            var searchCriteria = $("#which_type").val() + " "  + sliderVal + " " + $("#which_unit").val()
+        $( "#Slider" +attr_name ).val( actual_value );
+        if ($('#Slider' + attr_name).next(".jslider").length == 0){
+            jQuery("#Slider" + attr_name).slider({
+                from: parseFloat(displayInfo.min_v),
+                to: parseFloat(displayInfo.max_v),
+                step: displayInfo.step,
+                round: 1,
+                dimension: "&nbsp;" + displayInfo.ut,
+                heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
+                scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
+                skin: "plastic",
+                calculate: function(value){
+                    return parseFloat(value)
+                },
+                onstatechange: function(value) {
+                    var  sliderVal = value
+                    $( "#form_field_val").val( sliderVal );
+                    var searchCriteria = $("#which_type").val() + " "  + sliderVal + " " + $("#which_unit").val()
+                    $("#searchCriteriaLabel").html(searchCriteria)
+                }
+            });
+        }
+        else{
+            $('#Slider' + attr_name).next(".jslider").show()
+            var searchCriteria = $("#which_type").val() + " "  + actual_value + " " + $("#which_unit").val()
             $("#searchCriteriaLabel").html(searchCriteria)
-          }
-        });
-      }
-      else{
-        $('#Slider' + attr_name).next(".jslider").show()
-        var searchCriteria = $("#which_type").val() + " "  + actual_value + " " + $("#which_unit").val()
-        $("#searchCriteriaLabel").html(searchCriteria)
-        $( "#form_field_val" ).val( actual_value );
-      }
-      return false;
+            $( "#form_field_val" ).val( actual_value );
+        }
+        return false;
     }
     else if (displayInfo.vt == "Click"){
-      showSearchPack()
-      showClearTag();
-      showPreferenceTag();
-      showGetAdviceTag();
-      var booleanObject = jQuery.parseJSON(attr_name);
-      $("#which_form_field").val(booleanObject.field_id);
-      var tagId = $("#which_attribute").val() + "_tag"
-      //if this attribute already has a different tag then lets remove it.
-      removeMultipleAttributeInstance(booleanObject.field_id, tagId);
+        showSearchPack()
+        showClearTag();
+        showPreferenceTag();
+        showGetAdviceTag();
+        var booleanObject = jQuery.parseJSON(attr_name);
+        $("#which_form_field").val(booleanObject.field_id);
+        var tagId = $("#which_attribute").val() + "_tag"
+        //if this attribute already has a different tag then lets remove it.
+        removeMultipleAttributeInstance(booleanObject.field_id, tagId);
 
-      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
-      $(list).appendTo('.search_category');
-      $("#" + $("#which_attribute").val()).hide();
-      $( "#" + booleanObject.field_id ).val( booleanObject.value );
-      $("#page").val(1)
-      $.get('/search',$("#searchForm").serialize(),null,"script");
-      return false
+        var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
+        $(list).appendTo('.search_category');
+        $("#" + $("#which_attribute").val()).hide();
+        $( "#" + booleanObject.field_id ).val( booleanObject.value );
+        $("#page").val(1)
+        $.get('/search',$("#searchForm").serialize(),null,"script");
+        return false
     }
     else if (displayInfo.vt == "ListOfValues"){
-      var position = $("#" + searchCriteriaFieldId).position();
-      $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
-      $( "#criteriaHeading" ).html(displayInfo.adn)
+        var position = $("#" + searchCriteriaFieldId).position();
+        $("#criteriaPopup").css({
+            "position": "absolute",
+            "top": (position.top -15)+ "px",
+            "left":(position.left+210) + "px"
+        }).show();
+        $( "#criteriaHeading" ).html(displayInfo.adn)
 
-     // $("#dialog").dialog({title: displayInfo.adn});
-      $("#searchCriteriaLabel").text('');
-      $("#" + attr_name).val('');
-      if ($("#criteriaPopup #autocompleteField").size() > 0){
-        var typeList = loadTypes();
+        // $("#dialog").dialog({title: displayInfo.adn});
+        $("#searchCriteriaLabel").text('');
+        $("#" + attr_name).val('');
+        if ($("#criteriaPopup #autocompleteField").size() > 0){
+            var typeList = loadTypes();
+            $( "#criteriaPopup #autocompleteField" ).autocomplete({
+                minLength: 0,
+                minChars: 0,
+                max:10,
+                source: typeList,
+                focus:function(e,ui) {
+                    return false
+                },
+                select: function( event, ui ) {
+                    //store_info_div("searchCriteriaLabel", ui.item)
+                    store_ids(attr_name, ui.item)
+                    $("#criteriaPopup #autocompleteField").val('');
+                    setUpLOV(attr_name);
+                    return false;
+                }
+            })
+            //.data( "autocomplete" )._renderItem = function( ul, item ) {
+            //			return $( "<li></li>" )
+            //				.data( "item.autocomplete", item )
+            //				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
+            //				.appendTo( ul );
+            //		};
+            $( "#criteriaPopup #autocompleteField" ).show();
+            $("#autocompleteField").select();
+            $("#autocompleteField").autocomplete('search','')
+
+        }
+    }
+    return false
+//  });
+}
+function setUpLOV(attr_name){
+    var selectedList = $("#" + attr_name).val().split(',')
+    var anchorId
+    var spanId = 'removableListofValues' + attr_name
+    var updatedSearchList= [];
+    $.each(selectedList, function(index, value) {
+        anchorId = "removeThis_" + index + "_" + attr_name
+        updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
+    })
+    $("#searchCriteriaLabel").html("<span id='" + spanId + "'>" + updatedSearchList.toString() + "</span>")
+
+
+}
+
+function openManufacturerBox(attr_name,elem){
+    $(".jslider").hide()
+    $("#which_attribute").val($(elem).attr('id'));
+    $("#which_form_field").val("manufacturer");
+    $("#which_type").val("manufacturer");
+    $("#" + $("#which_form_field").val()).val('');
+    $(".ui-autocomplete").hide();
+    $("#searchCriteriaLabel").text('');
+    var position = $("#" + $(elem).attr('id')).position();
+    $("#criteriaPopup").css({
+        "position": "absolute",
+        "top": (position.top -15)+ "px",
+        "left":(position.left+210) + "px"
+    }).show();
+    $( "#criteriaHeading" ).html("Manufacturer")
+    //$("#criteriaPopup").dialog({title: "Manufacturer"});
+    if ($("#criteriaPopup #autocompleteField").size() > 0){
+        var manufacturerList = loadManufacturers();
         $( "#criteriaPopup #autocompleteField" ).autocomplete({
-          minLength: 0,
-          minChars: 0,
-          max:10,
-          source: typeList,
-          focus:function(e,ui) {
-            return false
-          },
-          select: function( event, ui ) {
-            //store_info_div("searchCriteriaLabel", ui.item)
-            store_ids(attr_name, ui.item)
-            $("#criteriaPopup #autocompleteField").val('');
-            setUpLOV(attr_name);
-            return false;
-          }
+            minLength: 0,
+            // maxItemsToShow:10,
+            cacheLength:5,
+            max:5,
+
+            minChars: 0,
+            source: manufacturerList,
+            focus:function(e,ui) {
+                return false
+            },
+            select: function( event, ui ) {
+                //store_info_div("searchCriteriaLabel", ui.item)
+                store_ids("manufacturer", ui.item)
+                $("#criteriaPopup #autocompleteField").val('');
+                setUpLOV("manufacturer");
+
+                //$("#autocompleteField").autocomplete('search','')
+                return false;
+            }
         })
         //.data( "autocomplete" )._renderItem = function( ul, item ) {
         //			return $( "<li></li>" )
@@ -264,271 +344,238 @@
         $("#autocompleteField").select();
         $("#autocompleteField").autocomplete('search','')
 
-      }
     }
-    return false
-    //  });
-  }
- function setUpLOV(attr_name){
-    var selectedList = $("#" + attr_name).val().split(',')
-    var anchorId
-    var spanId = 'removableListofValues' + attr_name
-    var updatedSearchList= [];
-    $.each(selectedList, function(index, value) {
-      anchorId = "removeThis_" + index + "_" + attr_name
-      updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
-    })
-    $("#searchCriteriaLabel").html("<span id='" + spanId + "'>" + updatedSearchList.toString() + "</span>")
+
+}
 
 
-  }
-
-  function openManufacturerBox(attr_name,elem){
-    $(".jslider").hide()
-    $("#which_attribute").val($(elem).attr('id'));
-    $("#which_form_field").val("manufacturer");
-    $("#which_type").val("manufacturer");
-    $("#" + $("#which_form_field").val()).val('');
-    $(".ui-autocomplete").hide();
-    $("#searchCriteriaLabel").text('');
-    var position = $("#" + $(elem).attr('id')).position();
-     $("#criteriaPopup").css({"position": "absolute", "top": (position.top -15)+ "px", "left":(position.left+210) + "px" }).show();
-      $( "#criteriaHeading" ).html("Manufacturer")
-    //$("#criteriaPopup").dialog({title: "Manufacturer"});
-    if ($("#criteriaPopup #autocompleteField").size() > 0){
-      var manufacturerList = loadManufacturers();
-      $( "#criteriaPopup #autocompleteField" ).autocomplete({
-        minLength: 0,
-        // maxItemsToShow:10,
-        cacheLength:5,
-        max:5,
-
-        minChars: 0,
-        source: manufacturerList,
-        focus:function(e,ui) {
-          return false
-        },
-        select: function( event, ui ) {
-          //store_info_div("searchCriteriaLabel", ui.item)
-          store_ids("manufacturer", ui.item)
-          $("#criteriaPopup #autocompleteField").val('');
-          setUpLOV("manufacturer");
-
-          //$("#autocompleteField").autocomplete('search','')
-          return false;
+$(document).click(function(e) {
+    if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
+        if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
+            $("#criteriaPopup").hide();
+            $(".ui-autocomplete").hide();
         }
-      })
-      //.data( "autocomplete" )._renderItem = function( ul, item ) {
-      //			return $( "<li></li>" )
-      //				.data( "item.autocomplete", item )
-      //				.append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
-      //				.appendTo( ul );
-      //		};
-      $( "#criteriaPopup #autocompleteField" ).show();
-      $("#autocompleteField").select();
-      $("#autocompleteField").autocomplete('search','')
-
     }
+});
 
-  }
-
+$(document).mouseover(function(e) {
+    if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
+        if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
+            $("#criteriaPopup").hide();
+            $(".ui-autocomplete").hide();
+        }
+    }
+});
   
 $(document).ready(function(){
-  $('div.pagination a').live('click', function(){
-    var page = $(this).text()
-    var current = $('em.current').text();
-    if (page == "← Previous"){
-      page = parseInt(current) -1
-    }
-    else if (page == "Next →"){
-      page = parseInt(current) + 1
-    }
-    $("#page").val(page)
-    $.get('/search',$("#searchForm").serialize(),null,"script");
-    return false;
-  })
+    $('#search_sort_by').live('change',function(){
+        if ($(this).val()){
+            $("#sort_by").val($(this).val())
+            $("#page").val(1)
+            $.get('/search',$("#searchForm").serialize(),null,"script");
+        }
+        return false;
+    })
+  
+    $('div.pagination a').live('click', function(){
+        var page = $(this).text()
+        var current = $('em.current').text();
+        if (page == "← Previous"){
+            page = parseInt(current) -1
+        }
+        else if (page == "Next →"){
+            page = parseInt(current) + 1
+        }
+        $("#page").val(page)
+        $.get('/search',$("#searchForm").serialize(),null,"script");
+        return false;
+    })
 
-  $('#clearTag').live('click', function(){
-    removeAllTags();
-    resetFormData();
-    hideClearTag()
-    hidePreferenceTag();
-    hideGetAdviceTag();
-    hideSearchPack()
-    searchData();
-  });
+    $('#clearTag').live('click', function(){
+        removeAllTags();
+        resetFormData();
+        hideClearTag()
+        hidePreferenceTag();
+        hideGetAdviceTag();
+        hideSearchPack()
+        searchData();
+    });
 
-  $('#addPreferenceTag').live('click', function(){
-    if(confirm("This will remove your old preference for this type, Are you sure?")){
-      $.post('/preferences/add_preference',$("#searchForm").serialize(),null,"script");
-      return false;
-    } else {
-      return false;
-    }
-  });
+    $('#addPreferenceTag').live('click', function(){
+        if(confirm("This will remove your old preference for this type, Are you sure?")){
+            $.post('/preferences/add_preference',$("#searchForm").serialize(),null,"script");
+            return false;
+        } else {
+            return false;
+        }
+    });
 
-  $('#getAdviceTag').live('click', function(){
-    $.get('/preferences/get_advice',$("#searchForm").serialize(),null,"script");
-  })
+    $('#getAdviceTag').live('click', function(){
+        $.get('/preferences/get_advice',$("#searchForm").serialize(),null,"script");
+    })
 
     $('#criteriaSubmit').click(function() {
-    var tagId = $("#which_attribute").val() + "_tag"
-    showSearchPack();
-    showClearTag();
-    showPreferenceTag();
-    showGetAdviceTag();
-    if ($(".search_category").find("#" + tagId).length > 0){
-      $("#" +tagId).remove();
-    }
-    //var lineHeight = "";
-    var fieldId = $("#which_form_field").val()
-    if ($("#which_type").val() == "Between"){
-      var  sliderVal = $("#form_field_val").val().split(";")
-      $("#min_" + fieldId).val(sliderVal[0])
-      $("#max_" + fieldId).val(sliderVal[1])
-
-      var minValue = $( "#min_" + fieldId ).val()
-      var maxValue = $("#max_" + fieldId).val()
-      if ((minValue == "")|| (maxValue == "")){
-        alert("Please select a search criteria.");
-        return false
-      }
-      var value = "" + $("#which_type").val() + " "  + minValue + " " + $("#which_unit").val() + " - " + maxValue + " "  + $("#which_unit").val() + ""
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-    }
-    else if (($("#which_type").val() == "Greater than") || ($("#which_type").val() == "Less then"))
-    {
-      $("#" + fieldId).val($("#form_field_val").val())
-      var selectedValue = $("#" + fieldId).val()
-      if (selectedValue == ""){
-        alert("Please select a search criteria.");
-        return false
-      }
-      var value = "" + $("#which_type").val() + " "  + selectedValue + " " + $("#which_unit").val() +  ""
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-
-    }
-    else{
-      var selectedValue = $("#" + fieldId).val()
-      if (selectedValue == ""){
-        alert("Please select a search criteria.");
-        return false
-      }
-      var value = " ( " + selectedValue + " " +  ") "
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-    }
-    if (($("#which_type").val() == "List of values") || ($("#which_type").val() == "manufacturer"))
-    {
-
-      var selectedList = selectedValue.split(',')
-      var formFieldId = $("#which_form_field").val();
-      var searchCriteria = "" // + selectedValue + " " +  ")"
-      var anchorId
-      var spanId = 'removableListofValues' + formFieldId
-      searchCriteria = searchCriteria +  "<span id='" + spanId + "'>"
-      var anchorId;
-      var spanHTML = ""
-      $.each(selectedList, function(index, value) {
-        anchorId = "removeThis_" + index + "_" + formFieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
-      })
-      searchCriteria = searchCriteria + spanHTML
-      var className = "middlebg"
-    }
-    else{
-      var className = "middlebg attributeTag"
-    }
-    var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" +$("#criteriaHeading").text()+ "<a id= 'deleteTag' class='icon_close'></a></span>" +searchCriteria + "</li>" ;
-    $(list).appendTo('.search_category');
-
-    $("#page").val(1)
-    $.get('/search',$("#searchForm").serialize(),null,"script");
-    $("#criteriaPopup").hide();
-    $("#" + $("#which_attribute").val()).hide();
-
-  });
-
-  $('.attributeTag').live('click', function(){
-    var tagId = $(this).attr('id');
-    var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
-    $('#' + attributeId).trigger('click');
-    return false;
-  })
-
-  $('.removableList').live('click', function(){
-    var deleteId = $(this).attr('id').replace("removeThis_",'');
-    var indexArray  = deleteId.split("_")
-    var removableIndex = indexArray[0]
-    var formId = indexArray[1]
-    var formVal = $("#" + formId).val()
-    var formValArray = formVal.split(",")
-    formVal  = ""
-    if(formValArray.length == 1){
-      var tagId = $(this).closest('li').attr('id');
-      var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
-      $("#" + attributeId).show();
-      $(this).closest('li').remove()
-      $("#" + formId).val("")
-    }
-    else{
-      var updatedFormList = [];
-      $.each(formValArray, function(index, value) {
-        if(index != removableIndex){
-          updatedFormList.push(value)
+        var tagId = $("#which_attribute").val() + "_tag"
+        showSearchPack();
+        showClearTag();
+        showPreferenceTag();
+        showGetAdviceTag();
+        if ($(".search_category").find("#" + tagId).length > 0){
+            $("#" +tagId).remove();
         }
-      })
-      var anchorId;
-      //var updatedSearchList= [];
-      var spanHTML = ""
-      $.each(updatedFormList, function(index, value) {
-        anchorId = "removeThis_" + index + "_" + formId
-        //updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'> x </a>")
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
-      })
+        //var lineHeight = "";
+        var fieldId = $("#which_form_field").val()
+        if ($("#which_type").val() == "Between"){
+            var  sliderVal = $("#form_field_val").val().split(";")
+            $("#min_" + fieldId).val(sliderVal[0])
+            $("#max_" + fieldId).val(sliderVal[1])
 
-      var listSpanId = "removableListofValues" + formId
-      $("#" + listSpanId).html(spanHTML)
-      $("#" + formId).val("" + updatedFormList.toString() + "")
+            var minValue = $( "#min_" + fieldId ).val()
+            var maxValue = $("#max_" + fieldId).val()
+            if ((minValue == "")|| (maxValue == "")){
+                alert("Please select a search criteria.");
+                return false
+            }
+            var value = "" + $("#which_type").val() + " "  + minValue + " " + $("#which_unit").val() + " - " + maxValue + " "  + $("#which_unit").val() + ""
+            var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+        }
+        else if (($("#which_type").val() == "Greater than") || ($("#which_type").val() == "Less then"))
+        {
+            $("#" + fieldId).val($("#form_field_val").val())
+            var selectedValue = $("#" + fieldId).val()
+            if (selectedValue == ""){
+                alert("Please select a search criteria.");
+                return false
+            }
+            var value = "" + $("#which_type").val() + " "  + selectedValue + " " + $("#which_unit").val() +  ""
+            var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
 
-    }
-    $("#page").val(1)
-    $.get('/search',$("#searchForm").serialize(),null,"script");
-    return false;
-  });
+        }
+        else{
+            var selectedValue = $("#" + fieldId).val()
+            if (selectedValue == ""){
+                alert("Please select a search criteria.");
+                return false
+            }
+            var value = " ( " + selectedValue + " " +  ") "
+            var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+        }
+        if (($("#which_type").val() == "List of values") || ($("#which_type").val() == "manufacturer"))
+        {
 
+            var selectedList = selectedValue.split(',')
+            var formFieldId = $("#which_form_field").val();
+            var searchCriteria = "" // + selectedValue + " " +  ")"
+            var anchorId
+            var spanId = 'removableListofValues' + formFieldId
+            searchCriteria = searchCriteria +  "<span id='" + spanId + "'>"
+            var anchorId;
+            var spanHTML = ""
+            $.each(selectedList, function(index, value) {
+                anchorId = "removeThis_" + index + "_" + formFieldId
+                spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
+            })
+            searchCriteria = searchCriteria + spanHTML
+            var className = "middlebg"
+        }
+        else{
+            var className = "middlebg attributeTag"
+        }
+        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" +$("#criteriaHeading").text()+ "<a id= 'deleteTag' class='icon_close'></a></span>" +searchCriteria + "</li>" ;
+        $(list).appendTo('.search_category');
 
-  $('.removablePopupList').live('click', function(){
-    var deleteId = $(this).attr('id').replace("removeThis_",'');
-    var indexArray  = deleteId.split("_")
-    var removableIndex = indexArray[0]
-    var formId = indexArray[1]
-    var formVal = $("#" + formId).val()
-    var formValArray = formVal.split(",")
-    formVal  = ""
+        $("#page").val(1)
+        $.get('/search',$("#searchForm").serialize(),null,"script");
+        $("#criteriaPopup").hide();
+        $("#" + $("#which_attribute").val()).hide();
 
-    var updatedFormList = [];
-    $.each(formValArray, function(index, value) {
-      if(index != removableIndex){
-        updatedFormList.push(value)
-      }
+    });
+
+    $('.attributeTag').live('click', function(){
+        var tagId = $(this).attr('id');
+        var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+        $('#' + attributeId).trigger('click');
+        return false;
     })
-    var anchorId;
-    var updatedSearchList= [];
-    $.each(updatedFormList, function(index, value) {
-      anchorId = "removeThis_" + index + "_" + formId
-      updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
+
+    $('.removableList').live('click', function(){
+        var deleteId = $(this).attr('id').replace("removeThis_",'');
+        var indexArray  = deleteId.split("_")
+        var removableIndex = indexArray[0]
+        var formId = indexArray[1]
+        var formVal = $("#" + formId).val()
+        var formValArray = formVal.split(",")
+        formVal  = ""
+        if(formValArray.length == 1){
+            var tagId = $(this).closest('li').attr('id');
+            var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+            $("#" + attributeId).show();
+            $(this).closest('li').remove()
+            $("#" + formId).val("")
+        }
+        else{
+            var updatedFormList = [];
+            $.each(formValArray, function(index, value) {
+                if(index != removableIndex){
+                    updatedFormList.push(value)
+                }
+            })
+            var anchorId;
+            //var updatedSearchList= [];
+            var spanHTML = ""
+            $.each(updatedFormList, function(index, value) {
+                anchorId = "removeThis_" + index + "_" + formId
+                //updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'> x </a>")
+                spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
+            })
+
+            var listSpanId = "removableListofValues" + formId
+            $("#" + listSpanId).html(spanHTML)
+            $("#" + formId).val("" + updatedFormList.toString() + "")
+
+        }
+        $("#page").val(1)
+        $.get('/search',$("#searchForm").serialize(),null,"script");
+        return false;
+    });
+
+
+    $('.removablePopupList').live('click', function(){
+        var deleteId = $(this).attr('id').replace("removeThis_",'');
+        var indexArray  = deleteId.split("_")
+        var removableIndex = indexArray[0]
+        var formId = indexArray[1]
+        var formVal = $("#" + formId).val()
+        var formValArray = formVal.split(",")
+        formVal  = ""
+
+        var updatedFormList = [];
+        $.each(formValArray, function(index, value) {
+            if(index != removableIndex){
+                updatedFormList.push(value)
+            }
+        })
+        var anchorId;
+        var updatedSearchList= [];
+        $.each(updatedFormList, function(index, value) {
+            anchorId = "removeThis_" + index + "_" + formId
+            updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
+        })
+        $("#searchCriteriaLabel").html("" +updatedSearchList.toString())
+        $("#" + formId).val("" + updatedFormList.toString() + "")
+        return false;
+    });
+
+    $(".boxClick").mouseenter(function(){
+        $("#criteriaPopup").hide();
     })
-    $("#searchCriteriaLabel").html("" +updatedSearchList.toString())
-    $("#" + formId).val("" + updatedFormList.toString() + "")
-    return false;
-  });
 
-  $(".boxClick").mouseenter(function(){
-    $("#criteriaPopup").hide();
-  })
-
-  $('.boxClick').live('click', function(){
-      $("#criteriaPopup").hide();
-  });
+    $('.boxClick').live('click', function(){
+        $("#criteriaPopup").hide();
+    });
+  
+    $(".box").mouseover(function() {
+        $(this).click();
+    })
 
 });

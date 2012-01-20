@@ -34,6 +34,7 @@
 <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
   <%= hidden_field_tag :page %>
   <%= hidden_field_tag :search_type, @search_type %>
+  <%= hidden_field_tag :sort_by, @sort_by %>
   <%=hidden_field_tag :manufacturer%>
   <%@search_form_lookups.each do |form_list|%>
     <%=hidden_field_tag form_list[:field_name].to_sym%>
@@ -45,54 +46,6 @@
 
 <div class="push"></div>
 <script type="text/javascript">
-      $(document).click(function(e) {
-        if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
-          if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
-               $("#criteriaPopup").hide();
-               $(".ui-autocomplete").hide();
-          }
-        }
-    });
-
-    $(document).mouseover(function(e) {    
-        if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
-          if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
-               $("#criteriaPopup").hide();
-               $(".ui-autocomplete").hide();
-          }
-        }
-    });
-
-    $(".box").mouseover(function() {
-    $(this).click();
-    })
-
-  
-  //$(".button").button();
-  //$(".box").mouseenter(function() {
-  //  $(this).click();
-  //}).mouseleave(function(event) {
-  //  var $target = $(event.target);
-  //alert($target.attr('class'))
-  //if ( $target.is("div") ) {
-  //  $target.css("background-color", "red");
-  // }
-  //if ($target.attr('id') != 'search_criteria_active'){
-  //$("#criteriaPopup").hide();
-  //}
-  //});
-
-
-  //$(".leftcolumnsmall").mouseenter(function(event) {
-  //  var $target = $(event.target);
-  //log($target.attr('class'))
-  //})
-
-  //$('.bg_popup_top').mouseover(function() {
-  // alert("hi")
-  //})
-
-
   
   function resetUnwantedFormFields(){
 <%@search_info_lookups.each_with_index do |value, index|%>
@@ -229,19 +182,14 @@
     return false;
   })
 </script>
-<script type="text/javascript">
-
-  
-
-
+<script type="text/javascript"> 
   function resetFormData(){
     $("#page").val(1);
     $("#manufacturer").val('')
 <%@search_form_lookups.each do |form_list|%>
       $("#" + '<%=form_list[:field_name]%>').val('')
 <%end%>
-  }
-  
+  } 
   
   function removeMultipleAttributeInstance(fieldId, tagId){
 <%@search_info_lookups.each_with_index do |value, index|%>
@@ -255,8 +203,6 @@
         }
       }
 <%end%>
-  }
-
- 
+  } 
   
 </script>
