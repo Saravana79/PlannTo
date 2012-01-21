@@ -1,4 +1,6 @@
 
+var SEARCH_URL = '/search';
+
 function showSearchPack(){
     if ($(".search_category").find("li").length == 0){
         $(".searchPack").slideDown();
@@ -25,7 +27,7 @@ function hideSearchPack(){
 
 
 function searchData(){
-    $.get('/search',$("#searchForm").serialize(),null,"script");
+    $.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
 }
 
 function removeAllTags(){
@@ -110,8 +112,7 @@ function openInfoBox(displayInfo, attr_name, elem){
     $("#which_attribute").val($(elem).attr('id'));
     $("#which_form_field").val(attr_name);
     $("#which_type").val(displayInfo.vth);
-    $("#which_unit").val(displayInfo.ut);
-    // $("#dialogName").val(attr_name);
+    $("#which_unit").val(displayInfo.ut);    
     $(".ui-autocomplete").hide();
     $("#criteriaPopup #autocompleteField").hide();
     $(".jslider").hide()
@@ -129,7 +130,6 @@ function openInfoBox(displayInfo, attr_name, elem){
             "left":(position.left+210) + "px"
         }).show();
         $( "#criteriaHeading" ).html(displayInfo.adn)
-        // $("#dialog").dialog({title: displayInfo.adn});
         var  rangeVal = displayInfo.range.split(",")
         var heteroVal1 = "25/" + rangeVal[1]
         var heteroVal2 = "50/" + rangeVal[2]
@@ -244,12 +244,10 @@ function openInfoBox(displayInfo, attr_name, elem){
             "left":(position.left+210) + "px"
         }).show();
         $( "#criteriaHeading" ).html(displayInfo.adn)
-
-        // $("#dialog").dialog({title: displayInfo.adn});
         $("#searchCriteriaLabel").text('');
         $("#" + attr_name).val('');
         if ($("#criteriaPopup #autocompleteField").size() > 0){
-            var typeList = loadTypes();
+            var typeList =loadTypes();
             $( "#criteriaPopup #autocompleteField" ).autocomplete({
                 minLength: 0,
                 minChars: 0,
@@ -266,6 +264,15 @@ function openInfoBox(displayInfo, attr_name, elem){
                     return false;
                 }
             })
+            $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
+                var self = this;
+                $.each( items, function( index, item ) {
+                    if (index < 10)
+                    {
+                        self._renderItem( ul, item );
+                    }
+                });
+            }
             //.data( "autocomplete" )._renderItem = function( ul, item ) {
             //			return $( "<li></li>" )
             //				.data( "item.autocomplete", item )
@@ -291,8 +298,6 @@ function setUpLOV(attr_name){
         updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePopupList'> x </a>")
     })
     $("#searchCriteriaLabel").html("<span id='" + spanId + "'>" + updatedSearchList.toString() + "</span>")
-
-
 }
 
 function openManufacturerBox(attr_name,elem){
@@ -315,10 +320,8 @@ function openManufacturerBox(attr_name,elem){
         var manufacturerList = loadManufacturers();
         $( "#criteriaPopup #autocompleteField" ).autocomplete({
             minLength: 0,
-            // maxItemsToShow:10,
             cacheLength:5,
             max:5,
-
             minChars: 0,
             source: manufacturerList,
             focus:function(e,ui) {
@@ -329,11 +332,19 @@ function openManufacturerBox(attr_name,elem){
                 store_ids("manufacturer", ui.item)
                 $("#criteriaPopup #autocompleteField").val('');
                 setUpLOV("manufacturer");
-
                 //$("#autocompleteField").autocomplete('search','')
                 return false;
             }
         })
+        $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
+            var self = this;
+            $.each( items, function( index, item ) {
+                if (index < 10)
+                {
+                    self._renderItem( ul, item );
+                }
+            });
+        }
         //.data( "autocomplete" )._renderItem = function( ul, item ) {
         //			return $( "<li></li>" )
         //				.data( "item.autocomplete", item )
@@ -352,18 +363,18 @@ function openManufacturerBox(attr_name,elem){
 $(document).click(function(e) {
     if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
         if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
-            $("#criteriaPopup").hide();
-            $(".ui-autocomplete").hide();
-        }
+     $("#criteriaPopup").hide();
+     $(".ui-autocomplete").hide();
+    }
     }
 });
 
 $(document).mouseover(function(e) {
     if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
         if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
-            $("#criteriaPopup").hide();
-            $(".ui-autocomplete").hide();
-        }
+    $("#criteriaPopup").hide();
+    $(".ui-autocomplete").hide();
+    }
     }
 });
   
@@ -372,7 +383,7 @@ $(document).ready(function(){
         if ($(this).val()){
             $("#sort_by").val($(this).val())
             $("#page").val(1)
-            $.get('/search',$("#searchForm").serialize(),null,"script");
+            $.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         }
         return false;
     })
@@ -387,7 +398,7 @@ $(document).ready(function(){
             page = parseInt(current) + 1
         }
         $("#page").val(page)
-        $.get('/search',$("#searchForm").serialize(),null,"script");
+        $.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         return false;
     })
 
@@ -423,13 +434,11 @@ $(document).ready(function(){
         if ($(".search_category").find("#" + tagId).length > 0){
             $("#" +tagId).remove();
         }
-        //var lineHeight = "";
         var fieldId = $("#which_form_field").val()
         if ($("#which_type").val() == "Between"){
             var  sliderVal = $("#form_field_val").val().split(";")
             $("#min_" + fieldId).val(sliderVal[0])
             $("#max_" + fieldId).val(sliderVal[1])
-
             var minValue = $( "#min_" + fieldId ).val()
             var maxValue = $("#max_" + fieldId).val()
             if ((minValue == "")|| (maxValue == "")){
@@ -485,7 +494,7 @@ $(document).ready(function(){
         $(list).appendTo('.search_category');
 
         $("#page").val(1)
-        $.get('/search',$("#searchForm").serialize(),null,"script");
+        $.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         $("#criteriaPopup").hide();
         $("#" + $("#which_attribute").val()).hide();
 
@@ -535,7 +544,7 @@ $(document).ready(function(){
 
         }
         $("#page").val(1)
-        $.get('/search',$("#searchForm").serialize(),null,"script");
+        $.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         return false;
     });
 

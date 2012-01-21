@@ -11,4 +11,5 @@ module SearchHelper
   def link_url(item)
      return "/#{item.type.downcase.pluralize}/#{item.id}"
   end
+
 end

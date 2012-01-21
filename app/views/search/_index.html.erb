@@ -16,7 +16,7 @@
             <td colspan="3" height="15"></td>
           </tr>
           <tr>
-            <td width="120" height="25" class="img_product"><img src="<%=image_url(item)%>" width="175" height="114" /></td>
+            <td width="120" height="25" class="img_product"><img src="<%=image_url(item)%>" width="175" height="114" onclick="parent.location='<%=link_url(item)%>'" /></td>
             <td width="5"></td>
             <td width="600" valign="top">
               <span class="product_details">
@@ -24,7 +24,7 @@
                   <a class="txt_compare" id="btn_selected_compare"> COMPARE</a>
                   <a  class="float_rgt"><input name="Compare" type="checkbox" value="" checked="checked" /></a>
                 </div>
-                <h1><%=item.name%></h1>
+                <h1 onclick="parent.location='<%=link_url(item)%>'"><%=item.name%></h1>
                 <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
                 <a><img src="../images/rating_stars.png" width="87" height="20" /></a>
                 <a class="txt_normal">Ratings<span class="txt_blue"> (100 Reviews)</span></a><br />
