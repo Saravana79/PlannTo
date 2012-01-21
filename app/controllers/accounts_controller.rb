@@ -1,13 +1,18 @@
 class AccountsController < ApplicationController
-  before_filter :require_authentication
+  before_filter :authenticate_user!
   before_filter :get_user_info
   def index
-
-
+    
   end
 
   def update
     if current_user.update_attributes(params[:user]) && current_user.errors.blank?
+      begin
+        params[:user][:avatar][:user_id] = current_user.id
+        current_user.avatar.update_attributes(params[:user][:avatar])
+      rescue
+        flash[:notice] = "please upload the avatar from profile page"
+      end
       flash[:message] = "Account update successfully"
     end      
     render :action => :index
