@@ -25,4 +25,6 @@ class User < ActiveRecord::Base
   has_many :pros,:foreign_key => :created_by
   has_many :reviews,:foreign_key => :created_by
   belongs_to :facebook
+
+  has_one :avatar
 end

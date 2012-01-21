@@ -32,12 +32,22 @@
         <br/>
         <%= f.label :password_confirmation, 'Password Confirmation' %>:
         <%= f.text_field :password_confirmation %>
+        <br/>
+
+        <div><%= f.label "Profile Picture: " %>
+          <%= f.fields_for Avatar.new do |photo| %>
+            <%= photo.file_field :photo %>
+          <% end %>
+        </div>
+        <% if !@facebook_user.blank? %>
+          <%= image_tag(@facebook_user.endpoint + "/picture") %>
+        <% else %>
+          <%= image_tag @user.avatar.photo.url(:thumb) %>
+        <% end %>
+
         <%= f.submit %>
       <% end %>
-      <% if !@facebook_user.blank? %>
-        Profile Picture: <br/>
-        <%= image_tag(@facebook_user.endpoint + "/picture") %>
-      <% end %>
+
     </div>
     <div id="tabs2" style="display: none; " class="main-content-section">
       Email Settings goes here

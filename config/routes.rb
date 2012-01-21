@@ -67,7 +67,7 @@ PlanNto::Application.routes.draw do
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
-  devise_for :users, :controllers => { :sessions => "users/sessions" }
+  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations" }
   # Sample resource route with options:
   #   resources :products do
   #     member do
