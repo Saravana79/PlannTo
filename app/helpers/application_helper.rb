@@ -88,10 +88,12 @@ module ApplicationHelper
       "Travel"
     when 'Movies'
       "Movie"
+    when 'Tablets'
+      "Tablet"
     else
       ""
     end
-    links = ["Cars", "Mobile", "Camera", "Travel", "Movies"]
+    links = ["Cars", "Mobile", "Camera", "Travel", "Movies","Tablet"]
     items = ""
     links.each do |link|      
       items+= "<a #{ "id= 'menu_active'" if active_menu == link}"

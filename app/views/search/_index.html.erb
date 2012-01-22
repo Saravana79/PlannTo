@@ -82,20 +82,6 @@
     }
 <%end%>
   
-  // selectedCount = <%#= @items.facet(:manufacturer).rows.count%>
-  // var value = $("#manufacturerAtt").text().replace(/\(.*?\)/, "")
-
-  // value = value + " ( " + selectedCount + " )"
-  // $("#manufacturerAtt b").html(" ")
-  //  $("#manufacturerAtt b").html(value)
-  
-  //$('#nextItem').click(function() {
-  // var page = <%#=@page%>
-  //$("#page").val(page)
-  //$.get('/search',$("#searchForm").serialize(),null,"script");
-  //$("#dialog").dialog("close");
-  //return false;
-  //});
 </script>
 
 <script type="text/javascript">
@@ -115,17 +101,19 @@ end%>
   }
 
   function loadTypes(){
-    var carTypeList = [];
-<%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
+    var typeList = [];
+<%if @items.facet(:features_string, 'Type'.to_sym)%>
+  <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
 
-  <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
-        carTypeList.push( {
-          label: "<%="#{row.value} (#{row.count})"%>",
-          value: "<%="#{row.value}"%>"
+    <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
+          typeList.push( {
+            label: "<%="#{row.value} (#{row.count})"%>",
+            value: "<%="#{row.value}"%>"
 
-        });
-  <%end
+          });
+    <%end
+  end
 end%>
-    return carTypeList;
+    return typeList;
   }
 </script>

@@ -167,10 +167,10 @@ function openInfoBox(displayInfo, attr_name, elem){
     else if ((displayInfo.vt == "GreaterThan") || (displayInfo.vt == "LessThen")){
         var actual_value;
         if (displayInfo.vt == "GreaterThan"){
-            actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.av) : parseInt($( "#" + attr_name ).val())
+            actual_value = $( "#" + attr_name ).val() == "" ? parseFloat(displayInfo.av) : parseFloat($( "#" + attr_name ).val())
         }
         else{
-            actual_value = $( "#" + attr_name ).val() == "" ? parseInt(displayInfo.max_v) : parseInt($( "#" + attr_name ).val())
+            actual_value = $( "#" + attr_name ).val() == "" ? parseFloat(displayInfo.max_v) : parseFloat($( "#" + attr_name ).val())
         }
 
         var position = $("#" + searchCriteriaFieldId).position();
