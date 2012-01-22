@@ -56,39 +56,29 @@
     var selectedCount = 0;
     var displayCount = true
   <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
-    <%#= search[:attribute_name]%>
       displayCount = false;
-      //selectedCount = <%#= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
   <%     elsif (search[:param_1][:vt] == "Click" )%>
-    <%#= search[:attribute_name]%>
     <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
       <%if search[:param_1][:av] == row.value%>
           selectedCount = <%=row.count%><%#=row.value%>
       <%end%>
     <%end%>
-
   <% elsif search[:param_1][:vt] == "ListOfValues"  %>
-    <%#= search[:attribute_name]%>
-      // selectedCount = <%#= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
-      displayCount = false;
+        displayCount = false;
   <%  end%>
-    //  alert(displayCount)
     if (displayCount == true){
       var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
-      //alert("#attribute_menu_<%=index%>");
       value = value + " ( " + selectedCount + " )"
       $("#attribute_menu_<%=index%> a").html(" ")
       $("#attribute_menu_<%=index%> a").html(value)
     }
-<%end%>
-  
+<%end%>  
 </script>
 
 <script type="text/javascript">
   function loadManufacturers(){
     var manufacturerList = [];
 <%if @items.facet(:manufacturer).rows.count > 0%>
-
   <% for row in @items.facet(:manufacturer).rows%>
         manufacturerList.push( {
           label: "<%="#{row.value} (#{row.count})"%>",
@@ -104,12 +94,10 @@ end%>
     var typeList = [];
 <%if @items.facet(:features_string, 'Type'.to_sym)%>
   <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
-
     <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
           typeList.push( {
             label: "<%="#{row.value} (#{row.count})"%>",
             value: "<%="#{row.value}"%>"
-
           });
     <%end
   end

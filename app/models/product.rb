@@ -19,6 +19,10 @@ has_many :accessories,
          #:class_name => 'Accessory'
         # :source => :accessory
 
+ def self.search_type(type)
+   return ["Manufacturer".camelize.constantize, "CarGroup".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
+   return type.camelize.constantize
+ end
 
 
 

@@ -101,5 +101,10 @@ module ApplicationHelper
     end
     return items
   end
+
+  def default_search_type(search_type)
+    return "" if (search_type == " " || search_type.nil?)
+    return search_type.camelize.constantize
+  end
   
 end

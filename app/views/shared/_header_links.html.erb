@@ -4,14 +4,11 @@
   <div class="search">
         	<span class="search_txt">
             <input name="Search" type="text" value="Search text here" id="plannToSearch"/>
-            <select name="searchby">
-              <option>Select</option>
-              <option>Car</option>
-              <option>Mobile</option>
-              <option>Others</option>
-            </select></span>
-    <a class="btn_search" href="#"></a>
+            <%=select_tag "plannto_search_type",
+        options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>
 
+                </span>
+    <a class="btn_search" href="#"></a>
   </div>
 
      	 <span>

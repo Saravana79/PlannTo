@@ -101,7 +101,6 @@ class SearchController < ApplicationController
       list  = @manufacturer.split(',')
     end
 
-    #logger.info list.kind_of?(Array)
     @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "name"
     @items = Sunspot.search($search_type.camelize.constantize) do
       keywords "", :fields => :name
@@ -190,8 +189,8 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
-
-    @items = Sunspot.search(Manufacturer,CarGroup, Car, Mobile) do
+search_type = Product.search_type(params[:search_type])
+    @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       order_by :class, :desc
       paginate(:page => 1, :per_page => 6)
@@ -203,10 +202,11 @@ class SearchController < ApplicationController
         image_url = "http://plannto.com/images/car/" + item.imageurl
         type = "Car"
       else
-        image_url = "http://plannto.com/images/mobile/" + item.imageurl
+        image_url =item.image_url
         type = item.type.humanize
       end
-      url = "/#{item.type.tableize}/#{item.id}"      
+      url = "/#{item.type.tableize}/#{item.id}"
+     # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
     render :json => results

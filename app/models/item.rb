@@ -80,4 +80,18 @@ class Item < ActiveRecord::Base
     item_attributes.select("value, name, unit_of_measure, category_name")
   end
 
+  def image_url
+    if self.type == "Mobile"
+      return configatron.mobile_image_url + self.imageurl
+    elsif self.type == "Car"
+      return configatron.car_image_url + self.imageurl
+    elsif self.type == "Tablet"
+      return configatron.tablet_image_url + self.imageurl
+    elsif self.type == "Camera"
+      return configatron.camera_image_url + self.imageurl
+    else
+      return ""
+    end
+  end
+
 end

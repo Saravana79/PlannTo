@@ -17,124 +17,26 @@
     <script type="text/javascript" src="/javascripts/jquery.cookie.js"></script>
     <script type="text/javascript" src="/javascripts/jslider/jquery.dependClass.js"></script>
     <script type="text/javascript" src="/javascripts/jslider/jquery.slider-min.js"></script>
-    <script type="text/javascript">
-      // DO WE NEED THESE ? IF YES PUT MOVE THEM TO JAVASCRIPT FILE
-      var i = 0;
-
-      function CarClick() {
-        var obj = document.getElementById("CarSubMenuDiv");
-
-        if (obj.style.display == "block") {
-          document.getElementById("CarSubMenuDiv").style.display = "none";
-        }
-        else {
-          document.getElementById("CarSubMenuDiv").style.display = "block";
-        }
-        return true;
-      };
-    </script>
 </head>
 
 <body marginheight="0" topmargin="0">
 
-<!-- Header - Start -->
-<%= render 'shared/header_links' %>
-    
-
-<!-- Header - End -->
+<%= render 'shared/header_links' %>    
 
 <div id="maincontainer" class="maincontainerCss">
-<!-- Till this will go into main layout and common for all pages.-->
 
-<div class="breadcrumpbtnDiv">
-
-
+<!--<div class="breadcrumpbtnDiv">-->
 
 <%= yield %>
-
-
-
-
-
-
-
-
-
-
 
 <!-- This will go into main layout -->
 </div>
 
 <br />
 <div class="footerdiv">
-<!-- Footer -- Start -->
 <%= render 'shared/footer' %>
-
-
-
 </div>
-<!-- Footer -- End -->
- <script type="text/javascript">
-      // WHILE FIXING SEARCH BOX IN LAYOUT, MOVE THIS TO JAVASCRIPT FILE.
-      $("#ui-active-menuitem").mouseout(function() {
-        $("#ui-active-menuitem").hide();
-      });
 
-      $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
-        var self = this;
-        $.each(items, function(index, item) {
-          self._renderItem(ul, item, index);
-        });
-        item = {value: "Search more items...", id: "0", imgsrc: ""}
-        self._renderItem(ul, item, -1);
-      };
-
-      $("#plannToSearch").autocomplete({
-        minLength: 3,
-        format: "js",
-        source: "/search/autocomplete_items",
-        focus:function(e, ui) {
-          return false
-          // return the original title when lose focus
-          // $(".autocomplete").remove();
-          //  $("input").val($("#ui-active-menuitem").val());
-          //  var list  ='';
-          //  $.each(ui.item.children, function(i, row) {
-          //    list  += "<li class='autocomplete_item' id=''>" + row.value +  "</li>"
-          //   });
-          //   $("#ui-active-menuitem").after("<div class='autocomplete'><ul class='autocomplete_list'>" + list  +"</ul></div>");
-
-          // add class selecting to mark the item
-          //   $("#ui-active-menuitem").addClass('selecting');
-        },
-        select: function( event, ui ) {
-          if (ui.item.id  == 0){
-            location.href = "/search/search_items?q=" + $("#plannToSearch").val();
-            // return false;
-          }
-          else{
-            location.href = "" + ui.item.url
-            // return false;
-          }
-          // return false;
-        }
-      })
-      .data("autocomplete")._renderItem = function(ul, item, index) {
-        if (index == -1) {
-          return $("<li></li>")
-          .data("item.autocomplete", item)
-          .append("<a class='searchMore'>" + item.value + "" + "</a>")
-          .appendTo(ul);
-        }
-        else {
-          return $("<li></li>")
-          .data("item.autocomplete", item)
-          .append("<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<div style='float:right;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
-          .appendTo(ul);
-        }
-      };
-
-    </script>
 </body>
 </html>
 
