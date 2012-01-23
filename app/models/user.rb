@@ -26,5 +26,11 @@ class User < ActiveRecord::Base
   has_many :reviews,:foreign_key => :created_by
   belongs_to :facebook
 
+  USER_POINTS = {:new_review => {:points => 2,:self_update => true},
+                 :new_question => {:points => 1,:self_update => true}, 
+                 :new_answer => {:points => 1,:self_update => true}
+                }
+
   has_one :avatar
+
 end

@@ -2,7 +2,7 @@
   <span class="logo"><img src="../images/logo.png"/></span>
 
   <div class="search">
-        	<span class="search_txt">
+          <span class="search_txt">
             <input name="Search" type="text" value="Search text here" id="plannToSearch"/>
             <%=select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>
@@ -11,7 +11,7 @@
     <a class="btn_search" href="#"></a>
   </div>
 
-     	 <span>
+       <span>
               <a class="icon_user" id="user_active" href="#"></a>
               <a class="icon_chat" href="#"></a>
          </span>

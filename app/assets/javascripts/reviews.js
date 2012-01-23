@@ -53,6 +53,8 @@ $('#review-sort').change(function(){
                            },function(response){});
 });
 
+$('textarea#txtAreaExpand').autoResize();
+
 });
 
 

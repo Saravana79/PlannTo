@@ -5,7 +5,6 @@ class VotesController < ApplicationController
     voteable = params[:parent].camelize.constantize.find(params[:parent_id])
     if voter.voted_on?voteable
       if voter.voted_which_way?(voteable, params[:vote].to_sym)
-        logger.error "Clear #{ params[:vote]}"
         voter.clear_votes(voteable)
       else
         logger.error "Vote #{ params[:vote]}"

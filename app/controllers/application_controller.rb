@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Authentication
+  include Reputation
   protect_from_forgery
   before_filter :check_authentication
 

@@ -1,8 +1,12 @@
 class QuestionsController < ApplicationController
 
+  
+  before_filter :authenticate_user!, :only => [:new]
+
   # respond_to :json,:html
   
   def show
+    # logger.error "Library ::" + reputation_tester
     @question = Question.find(params[:id])
     @comment = Comment.new
     @answer = Answer.new
@@ -28,16 +32,13 @@ class QuestionsController < ApplicationController
   
   def create
     @question = Question.new params[:question]
-    @question.user = User.find 1
+    @question.user = current_user
     
     if @question.save
+      update_user_reputation(@question.user,User::USER_POINTS[:new_question])
       @comment = Comment.new
       @answer = Answer.new
       render :show
-      # respond_to do |format|
-        # format.js
-        # format.html render :show
-      # end
     end
     
   end
