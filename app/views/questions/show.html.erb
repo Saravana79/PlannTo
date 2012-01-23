@@ -49,7 +49,7 @@
       </div>
       <div style="width:100%;">
       <div class="uploader" style="float: right;">
-		 Asked By <a class="feedlink">Saravana Kumar</a>
+		 Asked By <a class="feedlink">Saravana Kumar<%= "(#{current_user.reputation unless current_user.nil?})"%></a>
         <div class="feeddate">
 			 <%= @question.created_at.strftime('%b %d, %Y  at %I:%M %p')
  %>

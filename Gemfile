@@ -10,7 +10,7 @@ gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'fb_graph'
 gem 'kaminari'
-
+gem 'therubyracer',:require => 'v8'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

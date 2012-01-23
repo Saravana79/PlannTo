@@ -4,6 +4,7 @@
 
 <div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">
   <%= form_for @review, :remote => true do |f| %>
+    <%= f.hidden_field :item_id, :value => item.id %>
     <div class="txtAreaDiv">
       <%= f.text_area :description, :class => "textFilling",:id => "txtAreaExpand",  :style => "width:550px;height:50px;"  %>
     </div>
@@ -16,6 +17,7 @@
       </div>
     </div>
     <div style="padding:5px 5px 0px 5px;">
+      <input id="prosforitem" type="hidden" value="1" name="pros"/>
       <span style="float:right;">
         <%= f.fields_for :cons do |builder| %>
           <%= builder.label :title, "Cons:" %>
