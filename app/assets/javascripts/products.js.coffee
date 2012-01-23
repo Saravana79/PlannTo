@@ -2,26 +2,36 @@ root = exports ? this
 root.Product =
   load_buyer: ->
     $("#plan_to_buy").removeClass()
-    $("#plan_to_buy_span").removeClass().addClass "tabstyle"
+    $("#plan_to_buy_span").removeClass().addClass "action_btns btn_active"
+    $("#plan_to_buy").addClass "btn_plantobuy_icon"
     $("#plan_to_buy").attr "href", "javascript:void(0)"
     $("#plan_to_follow").removeClass()
-    $("#plan_to_follow_span").removeClass().addClass "tabstyle"
+    $("#plan_to_follow").addClass "btn_followthiscar_icon"
+    $("#plan_to_follow_span").removeClass().addClass "action_btns btn_active"
     $("#plan_to_follow").attr "href", "javascript:void(0)"
 
   load_owner: ->
     $("#plan_to_own").removeClass()
-    $("#plan_to_own_span").removeClass().addClass "tabstyle"
+    $("#plan_to_own").addClass "btn_iwonit_icon"
+    $("#plan_to_own_span").removeClass().addClass "action_btns btn_active"
+
     $("#plan_to_own").attr "href", "javascript:void(0)"
     $("#plan_to_buy").removeClass()
-    $("#plan_to_buy_span").removeClass().addClass "tabstyle"
+    $("#plan_to_buy").addClass "btn_plantobuy_icon"
+    $("#plan_to_buy_span").removeClass().addClass "action_btns"
     $("#plan_to_buy").attr "href", "javascript:void(0)"
     $("#plan_to_follow").removeClass()
-    $("#plan_to_follow_span").removeClass().addClass "tabstyle"
+    $("#plan_to_follow").addClass "btn_followthiscar_icon"
+    $("#plan_to_follow_span").removeClass().addClass "action_btns btn_active"
     $("#plan_to_follow").attr "href", "javascript:void(0)"
 
   load_follow: ->
     $("#plan_to_follow").removeClass()
-    $("#plan_to_follow_span").removeClass().addClass "tabstyle"
+    $("#plan_to_follow").addClass "btn_followthiscar_icon"
+    $("#plan_to_buy").addClass "btn_plantobuy_icon"
+    $("#plan_to_buy_span").removeClass("btn_active")
+    $("#plan_to_own_span").removeClass("btn_active")
+    $("#plan_to_follow_span").removeClass().addClass "action_btns btn_active"
     $("#plan_to_follow").attr "href", "javascript:void(0)"
 
   related_products: (related_product_url) ->
@@ -72,7 +82,7 @@ root.Product =
 
   detailed_specification: ->
     $("#detailed_specification").click ->
-      $("#usual2 ul").idTabs "tabs2"
+      $("#usual2 ul").idTabs "tabs5"
       $("#specification").trigger "click"
 
   show_notice: (flash_message)->

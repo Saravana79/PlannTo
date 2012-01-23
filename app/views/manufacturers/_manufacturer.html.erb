@@ -3,7 +3,7 @@
   <div class="feedcontentheader">
     <div class="productcontentmainmini">
       <div>
-        <%= link_to({}, :href => car_group_path(item.id)) do %>
+        <%= link_to(car_group_path(item.id)) do %>
           <%= image_tag(get_image_url(item, item.class.name), :title => item.name, :class => "productimage",
                         :style                        => "width:50px;height:50px;") %>
         <% end %>

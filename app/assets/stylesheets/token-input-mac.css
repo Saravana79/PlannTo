@@ -1,5 +1,5 @@
 /* Example tokeninput style #2: Mac Style */
-fieldset.token-input-mac {
+/*fieldset.token-input-mac {
   position: relative;
   padding: 0;
   margin: 5px 0;
@@ -201,4 +201,4 @@ div.token-input-dropdown-mac ul li.token-input-selected-dropdown-item-mac.odd {
 div.token-input-dropdown-mac ul li.token-input-selected-dropdown-item-mac span.token-input-dropdown-item-description-mac,
 div.token-input-dropdown-mac ul li.token-input-selected-dropdown-item-mac.odd span.token-input-dropdown-item-description-mac {
     color: #fff;
-}
+}*/

@@ -1,4 +1,7 @@
 class SearchAttribute < ActiveRecord::Base
+
+  CLICK = "Click"
+  
   set_table_name "search_display_attributes"
   attr_accessor_with_default :primary_key, 'id'
 

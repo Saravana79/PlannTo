@@ -1,29 +1,32 @@
-<div>
-  <%= image_tag(get_image_url(relateditem, relateditem.class.name), :title => relateditem.name, :class => "mediumimage") %>
+<% follower_count = Follow.get_followers(relateditem) %>
 
-  <div>
-    <%= relateditem.name %>
-  </div>
-  <div>
-    3 Star Rating
-  </div>
-  <div>
-    <% if current_user.blank? || !current_user.following?(relateditem) %>
-      <%= link_to("Buy", plan_to_buy_item_item_path(relateditem.id), :class => "feedlink", :remote => true) %>
-      <%= link_to("Own", own_a_item_item_path(relateditem.id), :class => "feedlink", :remote => true) %>
-      <%= link_to("Follow", follow_this_item_item_path(relateditem.id), :class => "feedlink", :remote => true) %>
+  <tr>
+    <td width="113" height="85">
 
-    <% end %>
-  </div>
-  <div>
-    <% related_follower = relateditem.related_followers(@follow_type) %>
-    <%= related_follower[0..2].collect{|user| user.email}.join(",") %>
-    <% if ((related_follower.count - 2) > 0) %>
-      and <%= (related_follower.count - 2) %> other people owns this.
-    <% elsif related_follower.count > 0 %>
-      owns this
-    <% end %>
+      <%= image_tag(get_image_url(relateditem, relateditem.class.name), :title => relateditem.name, :width => "101", :height => "68") %>
+    </td>
+    <td width="113">
+      <%= link_to relateditem.name, {:controller => relateditem.class.name.underscore.pluralize, :action => "show", :id => relateditem.id}, :class => "txt_black" %>
 
-  </div>
-  <hr/>
-</div>
+      <img src="../images/rating_stars.png" width="87" height="20"/><br/>
+
+      <% if current_user.blank? || !current_user.following?(relateditem) %>
+        <%= link_to("Buy (#{get_follow_count(follower_count, Follow::ProductFollowType::Buyer)})", plan_to_buy_item_item_path(relateditem.id), :class => "btn_follow", :remote => true) %>
+        <%= link_to("Own (#{get_follow_count(follower_count, Follow::ProductFollowType::Owner)})", own_a_item_item_path(relateditem.id), :class => "btn_follow", :remote => true) %>
+        <%= link_to("Follow (#{get_follow_count(follower_count, Follow::ProductFollowType::Follow)})", follow_this_item_item_path(relateditem.id), :class => "btn_follow", :remote => true) %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td height="40" colspan="2" class="dotted_border" valign="top">
+
+      <% related_follower = relateditem.related_followers(@follow_type) %>
+      <%= related_follower[0..2].collect { |user| user.name }.join(",") %>
+      <% if ((related_follower.count - 2) > 0) %>
+        and <%= (related_follower.count - 2) %> other people owns this.
+      <% elsif related_follower.count > 0 %>
+        owns this
+      <% end %>
+    </td>
+  </tr>
+

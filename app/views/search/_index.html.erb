@@ -1,34 +1,54 @@
+<div style="clear:both;"></div>
 
-<div class="col main_col w4_5">
-  <h1 class="heading">Total Search Results: <%=@items.total()%></h1>
-  <%@items.results.each do |item|%>
-    <div class="col w4_5 feed_item p1">
-      <div class="col w0_5">
-        <a>
-          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(item)%>"/>
-        </a>
-      </div>
-      <div class="e_col w3_5">
-        <h2>
-          <a href="<%=link_url(item)%>">
-            <%=item.name%>
-          </a>
-        </h2>
-        <div class="feed_item_question_info">
-        </div>
-      </div>
-    </div>
-  <%end%>
-  <div class="e_col w3_5" style="display:<%=@display%>">
-    <h2></h2>
-    <div>
-      <a id="nextItem" href="">
-        Show Next Items...
-      </a>
-    </div>
-  </div>
-</div>
+<table width="735" border="0" cellspacing="0" cellpadding="0">
+  <tr class="bg_border_topbottom">
+    <td width="375" height="50" class="txt_search_result">Total Search Results: <%=@items.total()%></td>
+    <td width="358" class="align_right txt_search_result">Sort By:
+      <%=select_tag "search_sort_by",
+        options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"]], params[:sort_by]), :class => "txt_normal width50" %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <%@items.results.each do |item|%>
+        <table width="735" border="0" cellspacing="0" cellpadding="0" style="border-bottom: solid 1px #CCCCCC;">
+          <tr>
+            <td colspan="3" height="15"></td>
+          </tr>
+          <tr>
+            <td width="120" height="25" class="img_product"><img src="<%=image_url(item)%>" width="175" height="114" onclick="parent.location='<%=link_url(item)%>'" /></td>
+            <td width="5"></td>
+            <td width="600" valign="top">
+              <span class="product_details">
+                <div class="float_rgt">
+                  <a class="txt_compare" id="btn_selected_compare"> COMPARE</a>
+                  <a  class="float_rgt"><input name="Compare" type="checkbox" value="" checked="checked" /></a>
+                </div>
+                <h1 onclick="parent.location='<%=link_url(item)%>'"><%=item.name%></h1>
+                <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
+                <a><img src="../images/rating_stars.png" width="87" height="20" /></a>
+                <a class="txt_normal">Ratings<span class="txt_blue"> (100 Reviews)</span></a><br />
+                <a class="txt_normal"><%=display_specifications(item)%><br /><span class="txt_blue">Detailed Specification</span></a>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td height="30" valign="top">
+              <a class="action_btns1" href="#">Plan to Buy</a>
+              <a class="action_btns1" href="#">I won it</a>
+              <a class="action_btns1" href="#">Follow this car</a>
+            </td>
+            <td width="20">&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      <%end%>
 
+    </td>
+  </tr>
+</table>
+<div class="push"></div><br/>
+<%= will_paginate @items.results , :page_links => true %>
 <script type="text/javascript">
   //this logic fails to display total if same attributes have two display values.
 
@@ -36,55 +56,29 @@
     var selectedCount = 0;
     var displayCount = true
   <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
-    <%#= search[:attribute_name]%>
       displayCount = false;
-      //selectedCount = <%#= @items.facet(:features, search[:attribute_name].to_sym).rows.count%>
   <%     elsif (search[:param_1][:vt] == "Click" )%>
-    <%#= search[:attribute_name]%>
     <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
       <%if search[:param_1][:av] == row.value%>
           selectedCount = <%=row.count%><%#=row.value%>
       <%end%>
-    <%end%>      
-
+    <%end%>
   <% elsif search[:param_1][:vt] == "ListOfValues"  %>
-    <%#= search[:attribute_name]%>
-     // selectedCount = <%#= @items.facet(:features_string, search[:attribute_name].to_sym).rows.count%>
-      displayCount = false;
+        displayCount = false;
   <%  end%>
-  //  alert(displayCount)
     if (displayCount == true){
-    var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
-    //alert("#attribute_menu_<%=index%>");
-    value = value + " ( " + selectedCount + " )"
-    $("#attribute_menu_<%=index%> b").html(" ")
-    $("#attribute_menu_<%=index%> b").html(value)
+      var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
+      value = value + " ( " + selectedCount + " )"
+      $("#attribute_menu_<%=index%> a").html(" ")
+      $("#attribute_menu_<%=index%> a").html(value)
     }
-<%end%>
-  
-   // selectedCount = <%#= @items.facet(:manufacturer).rows.count%>
- // var value = $("#manufacturerAtt").text().replace(/\(.*?\)/, "")
-
- // value = value + " ( " + selectedCount + " )"
- // $("#manufacturerAtt b").html(" ")
-//  $("#manufacturerAtt b").html(value)
-  
-  
-
-  $('#nextItem').click(function() {
-    var page = <%=@page%>
-    $("#page").val(page)
-    $.get('/search',$("#searchForm").serialize(),null,"script");
-    //$("#dialog").dialog("close");
-    return false;
-  });
+<%end%>  
 </script>
 
 <script type="text/javascript">
   function loadManufacturers(){
     var manufacturerList = [];
 <%if @items.facet(:manufacturer).rows.count > 0%>
-
   <% for row in @items.facet(:manufacturer).rows%>
         manufacturerList.push( {
           label: "<%="#{row.value} (#{row.count})"%>",
@@ -97,17 +91,17 @@ end%>
   }
 
   function loadTypes(){
-    var carTypeList = [];
-<%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
-
-  <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
-        carTypeList.push( {
-          label: "<%="#{row.value} (#{row.count})"%>",
-          value: "<%="#{row.value}"%>"
-
-        });
-  <%end
+    var typeList = [];
+<%if @items.facet(:features_string, 'Type'.to_sym)%>
+  <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
+    <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
+          typeList.push( {
+            label: "<%="#{row.value} (#{row.count})"%>",
+            value: "<%="#{row.value}"%>"
+          });
+    <%end
+  end
 end%>
-    return carTypeList;
+    return typeList;
   }
 </script>

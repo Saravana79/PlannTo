@@ -1,33 +1,74 @@
-<div id="header">
-  <div class="headerright">
-    <form name="form1" id="form1" method="post" action="" class="search">
-      <!--Search...-->
-      <input type="text" name="textfield" value="" class="search" id="plannToSearch"/><input class="button" type="submit" name="Submit" value="GO"/>
-    </form>
-  </div>
-  <ul class="headernav">
-    <li class="headerlinklogo ">
-      <a href="#" class="plannto">PlannTo</a>
-    </li>
-    <li class="headerlink ">
-      <a href="#">Home</a>
-    </li>
-    <li class="headerlink ">
-      <a href="" onclick="popup('popupwindowDiv');return false;">Explore</a>
-    </li>
-    <li class="headerlink ">
-      <a href="#">People</a>
-    </li>
-    <li class="headerlink ">
-      <%= link_to "Messages", messages_path %>
-    </li>
-    <li class="headerlink ">
-    <% if user_signed_in? %>
-      <%= link_to "Sign Out - #{current_user.email}(#{current_user.reputation})", destroy_user_session_path, :method => :delete %>
+<div class="header">
+  <span class="logo"><img src="../images/logo.png"/></span>
 
+  <div class="search">
+          <span class="search_txt">
+            <input name="Search" type="text" value="Search text here" id="plannToSearch"/>
+            <%=select_tag "plannto_search_type",
+        options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>
+
+                </span>
+    <a class="btn_search" href="#"></a>
+  </div>
+
+       <span>
+              <a class="icon_user" id="user_active" href="#"></a>
+              <a class="icon_chat" href="#"></a>
+         </span>
+
+
+  <span class="txt_welcome"><% if user_signed_in? %>
+           Welcome <%= link_to current_user.name, "#", :onclick => "showLoginLinks()", :class => 'divider_line' %> |
+      <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+      <div id="login_link" style="display:none">
+        <ul>
+          <li>
+            <%= link_to "Account Setting", accounts_path %>
+          </li>
+          <li>
+            <%= link_to "Profile", profile_path %>
+          </li>
+          <li>
+            <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+          </li>
+        </ul>
+      </div>
     <% else %>
+           Welcome <%= link_to "Guest", "#", :onclick => "showLogout()", :class => 'divider_line' %> |
+      <div id="logout_link" style="display:none">
+        <ul>
+          <li>
+            <%= link_to "Sign In", new_user_session_path %>
+          </li>
+          <li></li>
+          <%= link_to "Sign Up", new_registration_path('user') %>
+          </li>
+        </ul>
+      </div>
       <%= link_to "Sign In", new_user_session_path %>
     <% end %>
-    </li>
-  </ul>
+
+
+    |</a><a href="#">Home</a></span>
+
+  <div class="main_menu">
+    <%=raw navigation_sub_menu(params[:search_type])%>
+  </div>
 </div>
+
+
+
+
+
+<!-- WITH APOLOGIES, THIS FEATURE MIGHT HAVE BEEN LOST, PLEASE SEE THE COMMENTED CODE ABOVE-->
+<script type="text/javascript">
+
+
+  function showLoginLinks(){
+    $('#login_link').show();
+  }
+
+  function showLogout(){
+    $('#logout_link').show();
+  }
+</script>

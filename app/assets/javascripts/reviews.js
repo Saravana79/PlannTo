@@ -24,12 +24,12 @@ $(function(){
 //         });
     });
 
-$('#rating').raty({
-  starOff:	'assets/star-off.png',
-  starOn:	'assets/star2.gif',
-  scoreName:    'rating',
-  start:        ''
-});
+//$('#rating').raty({
+//  starOff:	'assets/star-off.png',
+ // starOn:	'assets/star2.gif',
+ // scoreName:    'rating',
+ // start:        ''
+//});
 
 $('div.rating').each(function(){
     $(this).raty({

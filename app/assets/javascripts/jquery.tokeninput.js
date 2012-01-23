@@ -7,7 +7,7 @@
  * choose which one suits your project best!
  *
  */
-
+/*
 (function ($) {
 // Default settings
 var DEFAULT_SETTINGS = {
@@ -790,4 +790,4 @@ $.TokenList.Cache = function (options) {
         return data[query];
     };
 };
-}(jQuery));
+}(jQuery));*/

@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  layout "product"
 
   def index
     @search_type = params[:search_type]
@@ -12,10 +13,10 @@ class SearchController < ApplicationController
       @search_attributes.each do |attr_rel|
         unless attr_rel.try(:attribute).nil?
           if (attr_rel.attribute.attribute_type == "Boolean" || attr_rel.value_type == "Click")
-            param_1 = {:vt => attr_rel.value_type, :adn => attr_rel.attribute_display_name, :min_v => attr_rel.minimum_value, :max_v => attr_rel.maximum_value, :av => attr_rel.actual_value, :ut => attr_rel.attribute.unit_of_measure, :vth => attr_rel.value_type.underscore.humanize}
+            param_1 = {:div_class_name => "boxClick", :vt => attr_rel.value_type, :adn => attr_rel.attribute_display_name, :min_v => attr_rel.minimum_value, :max_v => attr_rel.maximum_value, :av => attr_rel.actual_value, :ut => attr_rel.attribute.unit_of_measure, :vth => attr_rel.value_type.underscore.humanize}
             $search_info_lookups << {:attribute_name =>attr_rel.attribute.name, :id => attr_rel.attribute.id, :name => attr_rel.attribute_display_name, :param_1 =>param_1, :param_2 =>{:field_id => attr_rel.attribute.id, :value => attr_rel.actual_value, :display_name => attr_rel.attribute_display_name}}
           else
-            param_1 = {:vt => attr_rel.value_type, :adn => attr_rel.attribute_display_name, :min_v => attr_rel.minimum_value, :max_v => attr_rel.maximum_value, :av => attr_rel.actual_value, :ut => attr_rel.attribute.unit_of_measure, :step => attr_rel.step, :range => attr_rel.range, :vth => attr_rel.value_type.underscore.humanize}
+            param_1 = {:div_class_name => "box",:vt => attr_rel.value_type, :adn => attr_rel.attribute_display_name, :min_v => attr_rel.minimum_value, :max_v => attr_rel.maximum_value, :av => attr_rel.actual_value, :ut => attr_rel.attribute.unit_of_measure, :step => attr_rel.step, :range => attr_rel.range, :vth => attr_rel.value_type.underscore.humanize}
             $search_info_lookups << {:attribute_name =>attr_rel.attribute.name, :id => attr_rel.attribute.id, :name => attr_rel.attribute_display_name, :param_1 => param_1, :param_2 =>attr_rel.attribute.id}
           end
         end
@@ -78,8 +79,8 @@ class SearchController < ApplicationController
     preferences = Array.new
     if user_signed_in? && !request.xhr?
       search_ids = @search_attributes.collect{|item| item.id}
-      @preferences = Preference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", current_user.id, itemtype.id, search_ids).includes(:search_attribute)
-      @preferences_list = preferences = Preference.get_items(@preferences)
+      @preferences = BrowserPreference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", current_user.id, itemtype.id, search_ids).includes(:search_attribute)
+      @preferences_list = preferences = BrowserPreference.get_items(@preferences)
     end
     ############ PREFERENCE SECTION ENDS#############
 
@@ -100,8 +101,7 @@ class SearchController < ApplicationController
       list  = @manufacturer.split(',')
     end
 
-    #logger.info list.kind_of?(Array)
-
+    @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "name"
     @items = Sunspot.search($search_type.camelize.constantize) do
       keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
@@ -129,9 +129,9 @@ class SearchController < ApplicationController
           elsif search[:value_type] == "LessThen"
             with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           end
-          facet(search[:attribute_name].to_sym)
-          #order_by(:Price) #, :desc)
+          facet(search[:attribute_name].to_sym)          
         end
+        order_by :Price if sort_by_option == "Price" #, :desc)
       end
       dynamic :features_string do
         preferences.each do |preference|
@@ -153,19 +153,19 @@ class SearchController < ApplicationController
       end
 
       paginate(:page => params[:page], :per_page => 10)
-      order_by :name
+      order_by :name if sort_by_option == "Name"
       #   order_by :Price, :desc           # descending order , check Documentation link below
     
 
     end
     #order_by :class , :desc
 
-    if @items.results.count < 10
-      @display = "none;"
-    else
-      @display = "block;"
-      @page += 1
-    end
+   # if @items.results.count < 10
+   #   @display = "none;"
+   # else
+   #   @display = "block;"
+   #   @page += 1
+   # end
   end
 
   def search_items
@@ -189,32 +189,28 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
-
-    @items = Sunspot.search(Manufacturer,CarGroup) do
+search_type = Product.search_type(params[:search_type])
+    @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       order_by :class, :desc
       paginate(:page => 1, :per_page => 6)
       order_by :class , :desc
     end
     
-    render :json => @items.results.collect{|item|
+    results = @items.results.collect{|item|
       if item.type == "CarGroup"
         image_url = "http://plannto.com/images/car/" + item.imageurl
         type = "Car"
       else
-        image_url = "http://plannto.com/images/mobile/" + item.imageurl
+        image_url =item.image_url
         type = item.type.humanize
       end
       url = "/#{item.type.tableize}/#{item.id}"
-      
+     # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
-  end
-
-  def add_preference
-
-    Preference.add_preference(current_user.id, params[:search_type], params)   
-    render :nothing => true
+    render :json => results
+    
   end
 
   def autocomplete_manufacturers

@@ -10,7 +10,8 @@ gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'fb_graph'
 gem 'kaminari'
-gem 'therubyracer',:require => 'v8'
+gem 'will_paginate'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -18,7 +19,7 @@ group :assets do
   gem 'coffee-rails', "~> 3.1.0"
   gem 'uglifier'
 end
-
+gem 'paperclip'
 gem 'jquery-rails'
 gem 'acts-as-taggable-on', '~>2.1.1'
 gem 'acts_as_rateable'

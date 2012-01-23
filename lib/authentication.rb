@@ -35,7 +35,7 @@ module Authentication
     def require_authentication
       user = User.find_by_id(current_user || session[:current_user])
       session[:current_user] = user.facebook_id if user
-      authenticate (user.facebook || nil)
+      authenticate (user.facebook || user)
     rescue Unauthorized => e
       redirect_to root_url and return false
     end

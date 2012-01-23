@@ -23,7 +23,7 @@
         <div class="productspecification">
 
           <% @item.item_attributes.select("attribute_values.value, name, unit_of_measure, category_name").limit(5).each do |item_attribute| %>
-            <%= item_attribute.unit_of_measure %> <%= item_attribute.value %> ( <%= item_attribute.name %> ),
+            <%= item_attribute.name %> - <%= item_attribute.value %> ( <%= item_attribute.unit_of_measure %> ),
           <% end %>
           <%= link_to("...Detailed Specification", product_path(@item.id), :class => 'feedlink') %>
 

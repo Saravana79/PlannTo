@@ -1,7 +1,7 @@
 class Preference < ActiveRecord::Base
   belongs_to :search_attribute, :class_name => "SearchAttribute", :foreign_key => "search_display_attribute_id"
 
-   def self.add_preference(buying_plan_id, search_type, params)
+  def self.add_preference(buying_plan_id, search_type, params)
 
     itemtype = Itemtype.find_by_itemtype(search_type)
     search_attributes = SearchAttribute.by_itemtype(itemtype.id)
@@ -66,8 +66,17 @@ class Preference < ActiveRecord::Base
           Preference.create(:buying_plan_id => buying_plan_id, :search_display_attribute_id => search_attr.id, :value_1 => min_value, :value_2 => max_value)
         end
       else
-        attribute_field = search_attr.attribute_id
-        Preference.create(:buying_plan_id => buying_plan_id, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
+        save = false
+        if search_attr.value_type == SearchAttribute::CLICK
+          attribute_field = search_attr.attribute_id
+          save = true if search_attr.actual_value == "#{params["#{attribute_field}"]}"
+        else
+          attribute_field = search_attr.attribute_id
+          save = true
+        end
+        if save == true
+          Preference.create(:buying_plan_id => buying_plan_id, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
+        end   
       end
     end
   end

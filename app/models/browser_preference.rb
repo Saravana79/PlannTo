@@ -23,7 +23,7 @@ class BrowserPreference < ActiveRecord::Base
           min_attribute = "min_" + "#{preference.search_attribute.attribute_id}"
           max_attribute = "max_" + "#{preference.search_attribute.attribute_id}"
           unit = preference.search_attribute.attribute.unit_of_measure
-          search_criteria = "( #{preference.search_attribute.value_type.underscore.humanize} #{min_value} #{unit} - #{max_value} #{unit} )"
+          search_criteria = " #{preference.search_attribute.value_type.underscore.humanize} #{min_value} #{unit} - #{max_value} #{unit} "
           preferences_list << {:search_name => preference.search_attribute.attribute_display_name, :attribute_name => preference.search_attribute.attribute.name, :value_type => preference.search_attribute.value_type, :min_value => min_value, :min_attribute => min_attribute, :max_value => max_value, :attribute => preference.search_attribute.attribute_id, :max_attribute => max_attribute, :search_criteria => search_criteria}
         elsif value_type == "ListOfValues"
           value = preference.value_1.nil? ? "" : preference.value_1.split(',')
@@ -39,7 +39,7 @@ class BrowserPreference < ActiveRecord::Base
         else
           if ((value_type == "GreaterThan") || (value_type == "LessThen"))
             unit = preference.search_attribute.attribute.unit_of_measure
-            search_criteria = "(#{preference.search_attribute.value_type.underscore.humanize} #{preference.value_1} #{unit} )"
+            search_criteria = " #{preference.search_attribute.value_type.underscore.humanize} #{preference.value_1} #{unit} "
           else
             search_criteria = ""
           end
@@ -67,8 +67,17 @@ class BrowserPreference < ActiveRecord::Base
           Preference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => min_value, :value_2 => max_value)
         end
       else
-        attribute_field = search_attr.attribute_id
-        BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
+        save = false
+        if search_attr.value_type == SearchAttribute::CLICK          
+          attribute_field = search_attr.attribute_id  
+          save = true if search_attr.actual_value == "#{params["#{attribute_field}"]}"
+        else
+          attribute_field = search_attr.attribute_id
+          save = true
+        end
+        if save == true
+          BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
+        end
       end
     end
   end

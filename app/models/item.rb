@@ -55,7 +55,7 @@ class Item < ActiveRecord::Base
 
   def unfollowing_related_items(user, number)
     if user
-      car_groups.select{|item| !user.following?(item) }[0..number]
+      car_groups(1, false, 2).select{|item| !user.following?(item) }[0..number]
     else
       car_groups.limit(number)
     end
@@ -69,6 +69,28 @@ class Item < ActiveRecord::Base
       related_iteams.where("follows.follow_type" => [Follow::ProductFollowType::Buyer,
                                                      Follow::ProductFollowType::Owner,
                                                      Follow::ProductFollowType::Follow])
+    end
+  end
+
+  def priority_specification
+    specification.where(:priority => 1)
+  end
+
+  def specification
+    item_attributes.select("value, name, unit_of_measure, category_name")
+  end
+
+  def image_url
+    if self.type == "Mobile"
+      return configatron.mobile_image_url + self.imageurl
+    elsif self.type == "Car"
+      return configatron.car_image_url + self.imageurl
+    elsif self.type == "Tablet"
+      return configatron.tablet_image_url + self.imageurl
+    elsif self.type == "Camera"
+      return configatron.camera_image_url + self.imageurl
+    else
+      return ""
     end
   end
 

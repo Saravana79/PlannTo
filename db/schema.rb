@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120115060844) do
+ActiveRecord::Schema.define(:version => 20120121044858) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -69,6 +69,16 @@ ActiveRecord::Schema.define(:version => 20120115060844) do
     t.integer "attribute_id", :null => false
     t.integer "itemtype_id",  :null => false
     t.integer "Priority",     :null => false
+  end
+
+  create_table "avatars", :force => true do |t|
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "best_uses", :force => true do |t|
@@ -133,7 +143,6 @@ ActiveRecord::Schema.define(:version => 20120115060844) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -316,6 +325,8 @@ ActiveRecord::Schema.define(:version => 20120115060844) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "step"
+    t.string   "range"
   end
 
   create_table "taggings", :force => true do |t|
@@ -372,6 +383,12 @@ ActiveRecord::Schema.define(:version => 20120115060844) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.integer  "facebook_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
   end
 

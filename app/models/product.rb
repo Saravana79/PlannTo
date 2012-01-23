@@ -19,13 +19,11 @@ has_many :accessories,
          #:class_name => 'Accessory'
         # :source => :accessory
 
-  
-def priority_specification
-  specification.where(:priority => 1)
-end
+ def self.search_type(type)
+   return ["Manufacturer".camelize.constantize, "CarGroup".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
+   return type.camelize.constantize
+ end
 
-def specification
-  item_attributes.select("value, name, unit_of_measure, category_name")
-end
+
 
 end

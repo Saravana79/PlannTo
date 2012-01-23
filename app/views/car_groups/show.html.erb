@@ -1,42 +1,24 @@
 <div id="main-content">
-  <div>
-    <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande
-      Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
-  </div>
+  <%= render "shared/breadcrumb" %>
   <div id="comment-notice"></div>
   <%= render 'shared/follow_buttons', :follow_type => 'CarGroup', :follow_html => 'button' %>  
-  <div class="feedcontentheader">
-    <div>
-      <span class="producttitle"><%= @item.name %></span>
-    </div>
+  <div class="productdetails" style="float: left">
 
     <%= render "manufacturers/" + @item.car_groups.last.class.superclass.name.underscore + '_image', :image_type => 'CarGroup' unless @item.car_groups.blank? %>
-    
+    <span class="product_details">
+      <h1><%= @item.name %></h1>
+    </span>
+  </div>
+    <%=render :partial =>"items/related_products" %>
 
-    <div class="productcontentcreation">
-      <div class="">
-        <span class="buttonLink">Review Car</span>
-        <span class="buttonLink"><a class="feedlink">Ask a Question</a></span>
-        <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
-      </div>
-
-
-    </div>
-    <div id="usual2" class="usual">
-      <ul>
-        <li class="tabstyle">
-          <a href="#tabs1">All Models</a>
-        </li>
-        <li class="tabstyle">
-          <a class="" href="#tabs2" id="specification">Specification</a>
-
-        </li>
-        <li class="tabstyle">
-
-          <a href="#tabs3" class="">Questions</a>
-
-        </li>
-      </ul>
+<%= render :partial => "shared/review" %>
+<div id="usual2" class="usual">
+  <ul class="tabs">
+    <li class="tabstyle"><a href="#tabs1">Overview</a></li>
+    <li class="tabstyle"><a href="#tabs2" id="specification">Specification</a></li>
+    <li class="tabstyle"><a href="#tabs3">Questions</a></li>
+  </ul>
+ </div>
       <div id="tabs1" style="display: block; " class="main-content-section">
 
 
@@ -50,7 +32,9 @@
 
 
   </div>
+
 </div>
+
 <div id="dialog-form" title="Create new user">
   <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
     <%= render "shared/login_fields", {:f => f} %>
