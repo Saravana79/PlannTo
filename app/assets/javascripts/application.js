@@ -72,7 +72,7 @@ $('#plannToSearch').focus(function(){
 };
 
 $("#plannToSearch").autocomplete({
-    minLength: 3,
+    minLength: 2,
     format: "js",
     // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
     source: function( request, response )

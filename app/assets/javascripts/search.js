@@ -333,6 +333,7 @@ function openManufacturerBox(attr_name,elem){
                 $("#criteriaPopup #autocompleteField").val('');
                 setUpLOV("manufacturer");
                 //$("#autocompleteField").autocomplete('search','')
+                //$('#maincontainer').unbind('mouseover').unbind('mouseenter').unbind('mouseleave');
                 return false;
             }
         })
@@ -363,20 +364,13 @@ function openManufacturerBox(attr_name,elem){
 $(document).click(function(e) {
     if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
         if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
-     $("#criteriaPopup").hide();
-     $(".ui-autocomplete").hide();
-    }
+            $("#criteriaPopup").hide();
+            $(".ui-autocomplete").hide();
+        }
     }
 });
 
-$(document).mouseover(function(e) {
-    if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
-        if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
-    $("#criteriaPopup").hide();
-    $(".ui-autocomplete").hide();
-    }
-    }
-});
+
   
 $(document).ready(function(){
     $('#search_sort_by').live('change',function(){
@@ -576,15 +570,35 @@ $(document).ready(function(){
     });
 
     $(".boxClick").mouseenter(function(){
+        enableDocumentMouseOverEvent()
         $("#criteriaPopup").hide();
     })
 
     $('.boxClick').live('click', function(){
+        enableDocumentMouseOverEvent()
         $("#criteriaPopup").hide();
     });
   
     $(".box").mouseover(function() {
+        enableDocumentMouseOverEvent()
         $(this).click();
     })
 
+    $('#autocompleteField').mouseenter(function() {
+        //$("#maincontainer").disabled = true;
+        }).mouseout(function() {
+        $(document).unbind('mouseover').unbind('mouseenter').unbind('mouseleave');
+    });
+
 });
+
+function enableDocumentMouseOverEvent(){
+    $(document).mouseover(function(e) {
+        if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
+            if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
+                $("#criteriaPopup").hide();
+                $(".ui-autocomplete").hide();
+            }
+        }
+    });
+}

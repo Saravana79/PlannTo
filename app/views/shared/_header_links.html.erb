@@ -2,23 +2,23 @@
   <span class="logo"><img src="../images/logo.png"/></span>
 
   <div class="search">
-          <span class="search_txt">
-            <input name="Search" type="text" value="Search text here" id="plannToSearch"/>
-            <%=select_tag "plannto_search_type",
+    <span class="search_txt">
+      <input name="Search" type="text" value="Search text here" id="plannToSearch"/>
+      <%=select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>
 
-                </span>
+    </span>
     <a class="btn_search" href="#"></a>
   </div>
 
-       <span>
-              <a class="icon_user" id="user_active" href="#"></a>
-              <a class="icon_chat" href="#"></a>
-         </span>
+  <span>
+    <a class="icon_user" id="user_active" href="#"></a>
+    <a class="icon_chat" href="#"></a>
+  </span>
 
 
   <span class="txt_welcome"><% if user_signed_in? %>
-           Welcome <%= link_to current_user.name, "#", :onclick => "showLoginLinks()", :class => 'divider_line' %> |
+      Welcome <%= link_to current_user.name, "#", :onclick => "showLoginLinks()", :class => 'divider_line' %> |
       <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
       <div id="login_link" style="display:none">
         <ul>
@@ -34,7 +34,7 @@
         </ul>
       </div>
     <% else %>
-           Welcome <%= link_to "Guest", "#", :onclick => "showLogout()", :class => 'divider_line' %> |
+      Welcome <%= link_to "Guest", "#", :onclick => "showLogout()", :class => 'divider_line' %> |
       <div id="logout_link" style="display:none">
         <ul>
           <li>
@@ -56,11 +56,6 @@
   </div>
 </div>
 
-
-
-
-
-<!-- WITH APOLOGIES, THIS FEATURE MIGHT HAVE BEEN LOST, PLEASE SEE THE COMMENTED CODE ABOVE-->
 <script type="text/javascript">
 
 
