@@ -1,4 +1,5 @@
 class PreferencesController < ApplicationController
+  layout "product"
 
   def index
     @question = UserQuestion.find(:first)

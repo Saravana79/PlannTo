@@ -1,80 +1,28 @@
-<style type="text/css">
-
-  #content {
-    width: 100%;
-  }
-  #navbar {
-    float: left;
-    width: 20%;
-    background-color: #f2f2f2;
-  }
-  .box{
-    background-color: #ffffff;
-    border-bottom: 1px solid #E0E0E0;
-    min-height: 30px;
-    cursor:pointer;
-  }
-  .w4_5 {
-    width: 760px;
-  }
-
-  h1.heading {
-    border-bottom: 1px solid #B0B0B0;
-    margin-bottom: 1px;
-    padding-bottom: 0.4em;
-  }
-
-  .w0_5 {
-    width: 50px;
-  }
-  .col, .e_col {
-    float: left;
-    margin: 0 10px 0 0;
-  }
-  .feed_item {
-    border-bottom: 1px solid #E0E0E0;
-    float: left;
-    margin-left: 10px;
-    position: relative;
-  }
-  .p1 {
-    padding: 10px 0;
-  }
-</style>
-
 <div id="preferencesTag"><ul></ul></div><br/><br/><br/>
 <div id="tabs">
   <ul>
     <li><a href="#tabs-1">Recommendations</a></li>
   </ul>
-  <div id="tabs-1" style="height:500px">
-    <ul><li id='giveAdviceTag' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add a Recommendation</li></ul>
-
-    <p>My Question: <%=@question.question%></p>
-    <p>Advices</p>
-    <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
-    <div class="answerList">
-      <%=display_empty_row(@answers.size).html_safe%>
-      <%@answers.each_with_index do |ans, index|%>
-        <div class="box" id="box_<%=index%>"><%=ans.answer%><br/>
-          <%ans.recommendations.each_with_index do |reco, index|%>
-            <p>Recommendations<img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(reco.item)%>"/> <%=reco.item.name%></p>
-          <%end%></div>
+  <ul><li id='giveAdviceTag' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add a Recommendation</li></ul>
+  <p>My Question: <%=@question.question%></p>
+  <p>Advices</p>
+  <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
+  <div class="answerList">
+    <%=display_empty_row(@answers.size).html_safe%>
+    <%@answers.each_with_index do |ans, index|%>
+      <div class="box" id="box_<%=index%>"><%=ans.answer%><br/>
+        <%ans.recommendations.each_with_index do |reco, index|%>
+          <p>Recommendations<img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(reco.item)%>"/> <%=reco.item.name%></p>
+        <%end%></div>
       <%end%>
-    </div>
   </div>
-
 </div>
 
 <script type="text/javascript">
-  $(function() {
-    $( "#tabs" ).tabs();
-  });
   $('#giveAdviceTag').live('click', function(){
     $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
   })
 </script>
-
 <script type="text/javascript">
 <%@preferences_list.each do |preference|%>
     var lineHeight = "";
@@ -82,15 +30,23 @@
     var tagId = "";
     var searchName = "<%=preference[:search_name]%>"
   <%if preference[:value_type] == "Between"%>
-      searchCriteria = "<br/>"
+      searchCriteria = ""
       searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-      var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+      //      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+      //     var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
   <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
-      searchCriteria = "<br/>"
+      searchCriteria = ""
       searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-      var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      var value = searchCriteria
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+      //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+
+      // var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+      //    var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
   <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
       var value   = "<%="#{preference[:value]}"%>"
       var selectedList = value.split(',')
@@ -110,10 +66,7 @@
   <%end%>
     $(list).appendTo('#preferencesTag ul');
 <%end%>
+  //$("#deleteTag").hide()
 
 </script>
 
-<!--<h1>Tagger Demo</h1>
-<div id="tag_list"></div><br/><br/>
-
-<input type="text" name="test2" value="" id="tags_input" /><br/>-->

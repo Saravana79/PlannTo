@@ -160,12 +160,12 @@ class SearchController < ApplicationController
     end
     #order_by :class , :desc
 
-   # if @items.results.count < 10
-   #   @display = "none;"
-   # else
-   #   @display = "block;"
-   #   @page += 1
-   # end
+    # if @items.results.count < 10
+    #   @display = "none;"
+    # else
+    #   @display = "block;"
+    #   @page += 1
+    # end
   end
 
   def search_items
@@ -189,7 +189,7 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
-search_type = Product.search_type(params[:search_type])
+    search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       order_by :class, :desc
@@ -206,7 +206,7 @@ search_type = Product.search_type(params[:search_type])
         type = item.type.humanize
       end
       url = "/#{item.type.tableize}/#{item.id}"
-     # image_url = item.image_url
+      # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
     render :json => results
@@ -220,5 +220,30 @@ search_type = Product.search_type(params[:search_type])
     end
 
     render :json => @items.results.collect{|item| {:id => item.id, :value => "#{item.name}"}}
+  end
+
+  def preference_items
+    search_type = Preference.search_type(params[:search_type])
+    @items = Sunspot.search(search_type) do
+      keywords params[:term], :fields => :name
+      order_by :class, :desc
+      paginate(:page => 1, :per_page => 6)
+      order_by :class , :desc
+    end
+
+    results = @items.results.collect{|item|
+      if item.type == "CarGroup"
+        image_url = "http://plannto.com/images/car/" + item.imageurl
+        type = "Car"
+      else
+        image_url =item.image_url
+        type = item.type.humanize
+      end
+      url = "/#{item.type.tableize}/#{item.id}"
+      # image_url = item.image_url
+      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+    }
+    render :json => results
+
   end
 end

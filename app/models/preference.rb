@@ -1,6 +1,16 @@
 class Preference < ActiveRecord::Base
   belongs_to :search_attribute, :class_name => "SearchAttribute", :foreign_key => "search_display_attribute_id"
 
+  def self.search_type(type)
+   return ["Manufacturer".camelize.constantize, "CarGroup".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
+   search_item = Array.new
+    type.each do |st|
+      value = st.camelize.constantize
+     search_item << value
+   end
+    return search_item
+ end
+
   def self.add_preference(buying_plan_id, search_type, params)
 
     itemtype = Itemtype.find_by_itemtype(search_type)
