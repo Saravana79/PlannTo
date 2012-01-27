@@ -22,7 +22,7 @@
               <span class="product_details">
                 <div class="float_rgt">
                   <a class="txt_compare" id="btn_selected_compare"> COMPARE</a>
-                  <a  class="float_rgt"><input name="Compare" type="checkbox" value="" checked="checked" /></a>
+                  <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
                 </div>
                 <h1 onclick="parent.location='<%=link_url(item)%>'"><%=item.name%></h1>
                 <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
@@ -50,6 +50,10 @@
 <div class="push"></div><br/>
 <%= will_paginate @items.results , :page_links => true %>
 <script type="text/javascript">
+  $(document).ready(function(){
+setCompareCheckBox();
+  })
+
 
 <%@search_info_lookups.each_with_index do |search, index|%>
     var selectedCount = 0;

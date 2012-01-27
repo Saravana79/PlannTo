@@ -1,5 +1,6 @@
 
 var SEARCH_URL = '/search';
+var checkBoxIds= "";
 
 function showSearchPack(){
     if ($(".search_category").find("li").length == 0){
@@ -590,7 +591,52 @@ $(document).ready(function(){
         $(document).unbind('mouseover').unbind('mouseenter').unbind('mouseleave');
     });
 
+    ///////////////////////COMPARE ITEMS FEATURE //////////////////////////////////////
+
+    $("a#btn_selected_compare").live("click", function(){
+        var ids = checkBoxIds.split(",");
+        if (ids.length < 2){
+            alert("You must select atleast two items to compare.")
+            return
+        }
+        location.href = "/items/compare?ids=" + ids.toString();
+    })
+    $("input[name='Compare']").live("click",function(){
+        store_checkbox_ids(this)
+    });
+
+//////////////////////COMPARE ITEMS FEATURE ENDS ///////////////////////////////
+
 });
+
+function setCompareCheckBox(){
+    var ids = checkBoxIds.split(",")
+    $.each( ids, function( index, item ) {
+        $("input[value='" + item +"']").attr("checked",true)
+    });
+}
+function store_checkbox_ids(sender) {
+    if (checkBoxIds == "") {
+        var ids = [];
+    } else {
+        var ids = checkBoxIds.split(",");
+    }
+    if(sender.checked) {
+        if (ids.length == 4){
+            alert("You can only select 4 items to compare.")
+            $("input[value='" + sender.value +"']").attr("checked",false)
+            return
+        }
+        ids.push(sender.value);
+
+    } else {
+        var unchecked_value = sender.value;
+        ids = $.grep(ids, function(val) {
+            return val != unchecked_value;
+        })
+    }
+    checkBoxIds = ids.toString();
+};
 
 function enableDocumentMouseOverEvent(){
     $(document).mouseover(function(e) {
