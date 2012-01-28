@@ -534,7 +534,7 @@ $(document).ready(function(){
             })
 
             var listSpanId = "removableListofValues" + formId
-            $("#" + listSpanId).html(spanHTML)
+            $("span#" + listSpanId).html(spanHTML)
             $("#" + formId).val("" + updatedFormList.toString() + "")
 
         }
@@ -593,7 +593,7 @@ $(document).ready(function(){
 
     ///////////////////////COMPARE ITEMS FEATURE //////////////////////////////////////
 
-    $("a#btn_selected_compare").live("click", function(){
+    $("a.btn_selected_compare").live("click", function(){
         var ids = checkBoxIds.split(",");
         if (ids.length < 2){
             alert("You must select atleast two items to compare.")
@@ -602,17 +602,32 @@ $(document).ready(function(){
         location.href = "/items/compare?ids=" + ids.toString();
     })
     $("input[name='Compare']").live("click",function(){
-        store_checkbox_ids(this)
+        store_checkbox_ids(this)        
     });
 
 //////////////////////COMPARE ITEMS FEATURE ENDS ///////////////////////////////
 
 });
 
+function setUpCompareButton(id){
+    if (id){
+        var searchItem = "input[value='" + id + "']"
+        if ($(searchItem).closest("div").find('a.txt_compare').hasClass("btn_selected_compare"))
+        {
+            $(searchItem).closest("div").find('a.txt_compare').removeClass("btn_selected_compare")
+        }
+        else
+        {
+            $(searchItem).closest("div").find('a.txt_compare').addClass("btn_selected_compare")
+        }
+    }
+}
+
 function setCompareCheckBox(){
     var ids = checkBoxIds.split(",")
     $.each( ids, function( index, item ) {
         $("input[value='" + item +"']").attr("checked",true)
+        setUpCompareButton(item)
     });
 }
 function store_checkbox_ids(sender) {
@@ -636,6 +651,7 @@ function store_checkbox_ids(sender) {
         })
     }
     checkBoxIds = ids.toString();
+    setUpCompareButton(sender.value)
 };
 
 function enableDocumentMouseOverEvent(){

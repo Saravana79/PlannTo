@@ -31,12 +31,15 @@
     e) multiple - true/false true - user can add multiple tags, false - user can add only one tag.
     f) hidden_field -  id of the hidden field where selected item ids should be added as array.
     g) search_type_array - Array of class names from where search should happen. If not provided then search will happen from everywhere.
+    h)addFunctionName: "addSelect" - Name of the function you want to trigger on autocomplete select
+    i)deleteFunctionName: "removeSelect" - Name of the function you want to trigger on remove tag.
  *
  *
  */
 
 $(document).ready(function(){
     $.textTagger = function(fieldId, taggingField, options){
+        $(document).unbind('mouseover').unbind('mouseenter').unbind('mouseleave');
         $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
             var self = this;
             //if (settings.addNew){
@@ -60,7 +63,10 @@ $(document).ready(function(){
             color: 'black',
             multiple: true,
             rounded: false,
-            hidden_field: ""
+            hidden_field: "",
+            addFunctionName: "",
+            editFunctionName: "",
+            deleteFunctionName: ""
         },
         settings = $.extend({}, defaults, options);
         $("#"+ fieldId).each(function(){
@@ -101,7 +107,6 @@ $(document).ready(function(){
         });
         if (settings.addButton){
             var tagButton = "<button id='addTag'> Add </button>"
-
             $(tagButton).insertAfter("#"+ fieldId);
             var doneButton = "<button id='doneButton'> Done </button>"
             $(doneButton).insertAfter("#addTag");
@@ -157,6 +162,7 @@ $(document).ready(function(){
             return false;
             },
             select: function( event, ui ) {
+            $.selectEvent(ui.item, settings.addfunctionName)
             if (settings.hidden_field != "")
             {
             $.addIdToField(settings.hidden_field, ui.item.id)
@@ -194,6 +200,11 @@ $(document).ready(function(){
                 $.removeIdFromField(settings.hidden_field, deleteId);
             }
             $(this).closest('li').remove();
+            if (settings.deleteFunctionName){
+                data = new Object()
+                data.id = deleteId;
+                $.selectEvent(data, settings.deleteFunctionName)
+            }
             return false;
         })
 
@@ -213,6 +224,13 @@ $(document).ready(function(){
         });
     }
 
+    jQuery.selectEvent = function(data, functionName){
+        var fn = window[functionName];
+        if(typeof fn == 'function') {
+            fn(data);
+        }
+    }
+    
     jQuery.addIdToField = function(hidden_field, id){
         var formVal = $("#" + hidden_field).val();
         var formValArray = formVal == "" ? [] : formVal.split(",")
