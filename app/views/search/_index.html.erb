@@ -16,7 +16,7 @@
 	  <div class="img_product float_lft" style="width:180px;"><img src="<%=image_url(item)%>" width="175" height="125" onclick="parent.location='<%=link_url(item)%>'" /></div>
           <div class="float_rgt" style="width:520px;">
                     <div class="float_rgt">
-                            <a class="txt_compare" id="btn_selected_compare"> COMPARE</a>
+                  <a class="txt_compare"> COMPARE</a>
                             <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
                     </div>
             
@@ -43,10 +43,17 @@
 </table>
 <div class="push"></div><br/>
 <%= will_paginate @items.results , :page_links => true %>
+      <%end%>
+
+    </td>
+  </tr>
+</table>
+<div class="push"></div><br/>
+<%= will_paginate @items.results , :page_links => true %>
 <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
 <script type="text/javascript">
   $(document).ready(function(){
-setCompareCheckBox();
+    setCompareCheckBox();
   })
 
 
