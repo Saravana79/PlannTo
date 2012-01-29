@@ -159,7 +159,8 @@ function openInfoBox(displayInfo, attr_name, elem){
         }
         else{
             $('#Slider' + attr_name).next(".jslider").show()
-            $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
+            $('#Slider' + attr_name).slider( "value", parseFloat(displayInfo.min_v), parseFloat(displayInfo.max_v) )
+            //$( "#Slider" + attr_name).val( "" +parseFloat(displayInfo.min_v) + ";" + parseFloat(displayInfo.max_v) + "");
             var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
             $("#searchCriteriaLabel").html(searchCriteria)
         }
@@ -212,7 +213,8 @@ function openInfoBox(displayInfo, attr_name, elem){
         }
         else{
             $('#Slider' + attr_name).next(".jslider").show()
-            var searchCriteria = $("#which_type").val() + " "  + actual_value + " " + $("#which_unit").val()
+            var searchCriteria = $("#which_type").val() + " "  + actual_value + " " + $("#which_unit").val();
+            $('#Slider' + attr_name).slider( "value", actual_value )
             $("#searchCriteriaLabel").html(searchCriteria)
             $( "#form_field_val" ).val( actual_value );
         }
@@ -495,12 +497,12 @@ $(document).ready(function(){
 
     });
 
-    $('.attributeTag').live('click', function(){
-        var tagId = $(this).attr('id');
-        var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
-        $('#' + attributeId).trigger('click');
-        return false;
-    })
+    //$('.attributeTag').live('click', function(){
+    //    var tagId = $(this).attr('id');
+     //   var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+     //   $('#' + attributeId).trigger('click');
+    //    return false;
+   // })
 
     $('.removableList').live('click', function(){
         var deleteId = $(this).attr('id').replace("removeThis_",'');

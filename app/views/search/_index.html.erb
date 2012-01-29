@@ -2,7 +2,7 @@
   <div style="width:735" >
         <div class="bg_border_topbottom"></div>
         <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
-        <div width="375" height="50" class="txt_search_result float_lft">Total Search Results: 6</div>
+        <div width="375" height="50" class="txt_search_result float_lft">Total Search Results: <%=@items.total%></div>
         <div width="358" height="50" class="txt_search_result float_rgt">Sort By: 
           <%=select_tag "search_sort_by",
             options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"]], params[:sort_by]), :class => "txt_normal width50" %>
