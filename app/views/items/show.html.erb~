@@ -1,0 +1,110 @@
+<div id="main-content">
+  <div>
+    <span><a class="feedlink">Cars</a><span class="BreadCrumpG">></span><a class="feedlink">Fiat</a><span class="BreadCrumpG">></span><a class="feedlink">Grande
+      Punto</a><span class="BreadCrumpG">></span><a class="feedlink">Grande Punto Active 1.2</a></span>
+  </div>
+  <div id="comment-notice"></div>
+  
+  <div class="feedcontentheader">
+    <div class="productcontentmain">
+      <div>
+        <img class="productimage" src="/assets/Fiat_Grande_Punto__175.jpg"/>
+      </div>
+      <div>
+        <span class="producttitle"><%#= @item.name %></span>
+        <%#*</div>%>
+        <div class="productprice">
+          <%= @item.get_price_info('Price') %>
+        </div>
+        <div class="productreview">
+          <img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/star2.gif"/><img src="/assets/white.gif"/>Ratings
+          <a class="feedlink">(100 Reviews)</a>
+        </div>
+        <div class="productspecification">
+
+          <% @item.item_attributes.select("attribute_values.value, name, unit_of_measure, category_name").limit(5).each do |item_attribute| %>
+            <%= item_attribute.name %> - <%= item_attribute.value %> ( <%= item_attribute.unit_of_measure %> ),
+          <% end %>
+          <%= link_to("...Detailed Specification", product_path(@item.id), :class => 'feedlink') %>
+
+        </div>
+      </div>
+    </div>
+    <div class="productcontentcreation">
+      <div class="">
+        <span class="buttonLink">Review Car</span>
+        <span class="buttonLink"><a class="feedlink">Ask a Question</a></span>
+        <span class="buttonLink"><a class="feedlink">Share a Tip</a></span>
+      </div>
+
+      <%= render :partial => 'reviews/review_block',:locals => {:item => @item} %>
+
+    </div>
+
+    <div class="">
+      <span style="background-color:#E6E6E6;" class="tabstyle">
+        <a style="color:#000000;font-style:none;">All Feeds</a>
+      </span>
+      <span class="tabstyle" style="margin-left:-2px;">
+        <a class="" href="#">Specification</a>
+      </span>
+      <span class="tabstyle">
+        <a class="">Questions</a>
+      </span>
+    </div>
+
+    <div class="main-content-section">
+      <div class="feedcontentheader">
+        <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+        reviewed <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+
+        <div class="feeddate">
+          Reviewed on Sep 8th 2011
+        </div>
+        <div class="feedcontent">
+          I bought punto car last week, its one of the best car i have driven. Its road sense and stability is
+          excellent. Look of the care is also good. Only drawback is the interior of the
+          car.<a class="feedlink">more...</a>
+        </div>
+        <div class="feedcontent">
+          <span><a>10 people found it useful.</a></span>
+          <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+        </div>
+      </div>
+      <div class="feedcontentheader">
+        <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+        shared a tip on <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+
+        <div class="feeddate">
+          Shared on Sep 8th 2011
+        </div>
+        <div class="feedcontent">
+          I bought punto car last week, its one of the best car i have driven. Its road sense and stability is
+          excellent. Look of the care is also good. Only drawback is the interior of the
+          car.<a class="feedlink">more...</a>
+        </div>
+        <div class="feedcontent">
+          <span><a>10 people found it useful.</a></span>
+          <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+        </div>
+      </div>
+      <div class="feedcontentheader">
+        <img class="mediumimage" src="/assets/Saravana_50x50.jpg"/><a class="feedlink">Saravana Kumar</a>
+        asked a question on <a class="feedlink" href="Product.html">Fiat Grande Punto </a>
+
+        <div class="feeddate">
+          Asked on Sep 8th 2011
+        </div>
+        <div class="feedcontent">
+          I bought punto car last week, its one of the best car i have driven. Its road sense and stability is
+          excellent. Look of the care is also good. Only drawback is the interior of the
+          car.<a class="feedlink">more...</a>
+        </div>
+        <div class="feedcontent">
+          <span><a>10 people found it useful.</a></span>
+          <span><a class="feedlinkcomments">(5) Comments</a><a></a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

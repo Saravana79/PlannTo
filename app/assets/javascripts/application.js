@@ -4,7 +4,6 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require jquery
 //= require jquery_ujs
 //= require jquery-ui
 //= require_tree .
@@ -123,3 +122,37 @@ $("#plannToSearch").autocomplete({
 };
 
 });
+
+  
+$(document).ready(function() {
+        
+  $('span.buttonLink a#youtube_form').click(function() {
+          $("#image_share").hide();
+          $("#article_share").hide();
+          $("#youtube").toggle(2000);
+//          alert('Handler for .click() called.');
+          return false;
+        });
+
+
+  $('span.buttonLink a#image_form').click(function() {
+          $("#article_share").hide();
+          $("#youtube").hide(); 
+          $("#image_share").toggle(2000);
+          return false;
+        });
+
+
+  $('span.buttonLink a#article_form').click(function() {
+          $("#youtube").hide(); 
+          $("#image_share").hide();
+          $("#article_share").toggle(2000);
+          return false;
+        });
+
+});
+
+$("#share_an_article").click(function(){
+        $("share_an_article_form").show();
+    }
+);

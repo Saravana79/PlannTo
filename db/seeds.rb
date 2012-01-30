@@ -5,3 +5,4 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+share_type = ShareType.create([{ name: 'Tips' }, { name: 'Review' },{name: 'Q&A'},{name: 'Support'}])

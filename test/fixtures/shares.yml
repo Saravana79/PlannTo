@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  url: MyString
+  title: MyString
+  description: MyString
+  thumbnail: MyString
+  youtube: MyString
+  product: 
+
+two:
+  url: MyString
+  title: MyString
+  description: MyString
+  thumbnail: MyString
+  youtube: MyString
+  product: 
