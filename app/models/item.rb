@@ -77,7 +77,7 @@ class Item < ActiveRecord::Base
   end
 
   def specification
-    item_attributes.select("value, name, unit_of_measure, category_name")
+    item_attributes.select("value, name, unit_of_measure, category_name, attribute_type")
   end
 
   def image_url
