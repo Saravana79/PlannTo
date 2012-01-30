@@ -1,20 +1,12 @@
 <!--  breadcrumbs - Start -->
   <%= render "shared/breadcrumb" %>
-
 <!--  breadcrumbs - End -->
 <!-- buttons - Start -->
-<%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '' %>
-
-
+    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '' %>
 </div>
-
 <!-- buttons - End -->
-
-
-
 <div class="leftcolumnbig">
 <!-- Product Details - Start -->
-
   <div class="productdetails" >
     <span class="img_product"><img src="<%=get_image_url(@item, @item.class.name)%>" alt="<%=@item.name%>" width="175" height="125" /></span>
     <span class="product_details">
@@ -31,18 +23,8 @@
     </a>
     </span>
   </div>
-
-
 <br/>
-
 <%= render :partial => "shared/review" %>
-
-
-
-
-
-
-
 <div id="usual2" class="usual">
   <ul class="tabs">
     <li ><a href="#tabs1">Overview</a></li>
@@ -54,123 +36,49 @@
     <li><a href="#tabs7" >Videos</a></li>
   </ul>
 </div>
-
 <br>
-
-
-
 <div class="question_answer" id="tabs1">
-	<h3 class="yellow_border">Questions and Answers</h3>
-    <span class="sortby">
-    	<span><b>Sort by:</b></span>
-        <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:0px 5px;">|</span>
-        <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
-        <a class="txt_blue" href="#">Most Answers</a>
-    </span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="padding_topbottom15">
-      <tr height="70" valign="top">
-        <td width="67" valign="top">
-        <div class="rate_content">
-        <a class="bg_ratecontent">100</a>
-        <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-        </div></td>
-        <td width="580"><h4>What is the best car insurance?</h4>
-        <a class="txt_black">looking for best car insurance</a><br />
-       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
-        <td width="36"><img src="images/users.png" width="24" height="24" /></td>
-    </tr>
-
-       <tr height="70" valign="top">
-        <td width="67" valign="top"><div class="rate_content">
-        <a class="bg_ratecontent">100</a>
-        <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-        </div></td>
-        <td width="580"><h4>What is the best car insurance?</h4>
-        <a class="txt_black">looking for best car insurance</a><br />
-       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
-        <td width="36"><img src="images/users.png" width="24" height="24" /></td>
-    </tr>
-
-       <tr height="70" valign="top">
-        <td width="67" valign="top"><div class="rate_content">
-        <a class="bg_ratecontent">100</a>
-        <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-        </div></td>
-        <td width="580"><h4>What is the best car insurance?</h4>
-        <a class="txt_black">looking for best car insurance</a><br />
-       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
-        <td width="36"><img src="images/users.png" width="24" height="24" /></td>
-    </tr>
-
-       <tr height="70" valign="top">
-        <td width="67" valign="top"><div class="rate_content">
-        <a class="bg_ratecontent">100</a>
-        <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-        </div></td>
-        <td width="580"><h4>What is the best car insurance?</h4>
-        <a class="txt_black">looking for best car insurance</a><br />
-       	<a class="txt_gray"> In Insurance &amp; Registration - Asked by Kabir Shah - 2 answers - 2 days ago</a></td>
-        <td width="36"><img src="images/users.png" width="24" height="24" /></td>
-    </tr>
-
-</table>
-
-<!-- Add Answer or Ask Question - start -->
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top:solid 1px #e4e4e4;">
-      <tr>
-        <td height="55">
-        <span><span class="txt_lightgry">Add Answer </span><span class="txt_yellow">or Ask Question</span></span><br />
-        <span class="txt_black"><a>Saravana Kumar Add Bio</a> -  make ANonymous</span>
-
-        </td>
-      </tr>
-      <tr>
-        <td height="106" bgcolor="#eaeaea">&nbsp;</td>
-      </tr>
-      <tr>
-        <td height="52" align="right">
-        <a href="#" class="answer_later">Answer Later</a>
-        <a style="" href="#" class="btn_submitanswer">Submit Answer</a>
-        </td>
-      </tr>
-    </table>
-<!-- Add Answer or Ask Question - End -->
-
+    <%= render "/layouts/product_overview"%>
+    <%= render "/layouts/product_answer" %>
+</div>
+<div id="tabs5" style="display: none; " class="main-content-section">
+    <%= render :template => 'products/specification' %>
+    <%= render "/layouts/product_answer" %>
 </div>
 
-<div id="tabs5" style="display: none; " class="main-content-section">
-<%= render :template => 'products/specification' %>
-      </div>
-
-<div id="tabs3" style="display: none; " class="main-content-section"></div>
-<div id="tabs4" style="display: none; " class="main-content-section"></div>
-<div id="tabs2" style="display: none; " class="main-content-section"></div>
+<div id="tabs3" style="display: none; " class="main-content-section">
+    <%= render  "layouts/product_review" %>
+    <%= render "/layouts/product_answer" %>
+</div>
+<div id="tabs4" style="display: none; " class="main-content-section">
+  <%= render  "/layouts/product_qna" %>
+  <%= render "/layouts/product_answer" %>
+</div>
+<div id="tabs2" style="display: none; " class="main-content-section">
+  <%= render  "layouts/product_tip" %>
+  <%= render "/layouts/product_answer" %>
+</div>
 <div id="tabs6" style="display: none; " class="main-content-section"></div>
-<div id="tabs7" style="display: none; " class="main-content-section"></div>
+<div id="tabs7" style="display: none; " class="main-content-section">
+    <%= render "/layouts/product_video" %>
+    <%= render "/layouts/product_answer" %>
+</div>
 <!-- Q&A -  End -->
 </div>
 <div class="rightcolumnsmall">
 <br/>
 <div >
-
-
-<a class="btns" href="#">Compare Cars</a>
-<a class="btns" href="#">Ask Advices</a>
-<a class="btns" href="#">Top Questions</a>
-
+    <a class="btns" href="#">Compare Cars</a>
+    <a class="btns" href="#">Ask Advices</a>
+    <a class="btns" href="#">Top Questions</a>
 </div>
 <br/>
 <%=render :partial =>"items/related_products" %>
-
-
-
 <div id="dialog-form" title="Create new user">
   <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
     <%= render "shared/login_fields", {:f => f} %>
   <% end %>
 </div>
-
-
 <script type="text/javascript">
 <% if @user_follow && @user_follow.follow_type == "Buyer" %>
     Product.load_buyer();

@@ -1,0 +1,25 @@
+<div class="youtubedata" style="widht: 400px; min-height:300px">
+<div class="youtubeentyform" style="width:210px;float:left;">
+<%#= form_for([@item, @item.shares.build], :remote => true) do |f| %>
+<%= form_for([@item, @item.shares.build], :remote => true) do |f| %>
+  <div class="field">
+    <%= f.label "Share Article" %><br />
+    <%= f.text_field :url %>
+  </div>
+    <div class="field">
+    <%= f.label "Custome Description"%><br />
+    <%= f.text_area :user_description, :size => "30x10" %>
+  </div>
+  <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>   
+</div>
+<div id="article_contents" style="float:right;width:390;">
+        <% @item.shares.each do |share| %>
+                <h1><%= link_to share.title, "#" if share.title and share.youtube.nil?%></h1>
+
+        <% end %>
+</div>
+</div>

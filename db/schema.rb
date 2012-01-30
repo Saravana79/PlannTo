@@ -65,12 +65,6 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.datetime "updated_at"
   end
 
-  create_table "attributesrelationships", :force => true do |t|
-    t.integer "attribute_id", :null => false
-    t.integer "itemtype_id",  :null => false
-    t.integer "Priority",     :null => false
-  end
-
   create_table "avatars", :force => true do |t|
     t.string   "photo_file_name"
     t.string   "photo_content_type"
@@ -174,18 +168,6 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
-
-  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemID",                    :null => false
-    t.text    "URL",                       :null => false
-    t.string  "URLSource", :limit => 2000, :null => false
-  end
-
-  create_table "itemimages", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemId",                    :null => false
-    t.string  "ImageURL",  :limit => 4000, :null => false
-    t.boolean "IsDefault",                 :null => false
-  end
 
   create_table "itemrelationships", :force => true do |t|
     t.integer  "item_id",        :null => false
@@ -329,6 +311,33 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.string   "range"
   end
 
+  create_table "share_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "shares", :force => true do |t|
+    t.string   "url"
+    t.string   "title"
+    t.string   "description"
+    t.string   "thumbnail"
+    t.string   "youtube"
+    t.string   "user_description"
+    t.integer  "item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.integer  "user_id"
+    t.integer  "share_type_id"
+    t.string   "ip_address"
+  end
+
+  add_index "shares", ["item_id"], :name => "index_shares_on_item_id"
+
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
@@ -385,10 +394,6 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.datetime "updated_at"
     t.string   "name"
     t.integer  "facebook_id"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
   end
 

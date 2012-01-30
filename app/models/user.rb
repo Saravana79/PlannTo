@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
+  acts_as_voter
 
   # Message configurations
   acts_as_messageable :table_name => "messages",                        # default 'messages'
@@ -26,11 +27,15 @@ class User < ActiveRecord::Base
   has_many :reviews,:foreign_key => :created_by
   belongs_to :facebook
 
+
   USER_POINTS = {:new_review => {:points => 2,:self_update => true},
                  :new_question => {:points => 1,:self_update => true}, 
                  :new_answer => {:points => 1,:self_update => true}
                 }
 
   has_one :avatar
+
+
+  has_many :shares;
 
 end

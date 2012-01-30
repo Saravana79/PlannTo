@@ -10,7 +10,9 @@ gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'fb_graph'
 gem 'kaminari'
-
+gem 'youtube_it'
+gem 'nokogiri'
+#gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
