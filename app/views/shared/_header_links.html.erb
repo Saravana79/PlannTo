@@ -2,7 +2,7 @@
   <span class="logo"><img src="/images/logo.png"/></span>
 
   <div class="search">
-          <span class="search_txt">
+    <span class="search_txt" id="plannToSearchSpan">
             <input name="Search" type="text" placeholder="What are you looking for?" id="plannToSearch"/>
             <%=select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>

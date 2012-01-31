@@ -76,6 +76,19 @@ $("#plannToSearch").autocomplete({
     // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
     source: function( request, response )
     {
+      var opts = {
+        lines: 12, // The number of lines to draw
+        length: 7, // The length of each line
+        width: 4, // The line thickness
+        radius: 4, // The radius of the inner circle
+        color: '#000', // #rgb or #rrggbb
+        speed: 1, // Rounds per second
+        trail: 60, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false // Whether to use hardware acceleration
+    };
+  var target = document.getElementById('plannToSearchSpan');
+  var spinner = new Spinner(opts).spin(target);
     $.ajax(
     {
         url: "/search/autocomplete_items",
@@ -88,6 +101,7 @@ $("#plannToSearch").autocomplete({
         {
             return{ id: item.id, value: item.value, imgsrc: item.imgsrc, type: item.type, url: item.url }
             }));
+            spinner.stop();
         }
         });
     },
