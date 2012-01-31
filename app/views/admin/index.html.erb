@@ -1,0 +1,15 @@
+<table>
+  <thead>
+  <td>Id</td>
+  <td>Name</td>
+  <td>Type</td>
+</thead>
+<%@items.results.each do |item|%>
+  <tr>
+    <td><%=item.id%></td>
+    <td><%=item.name%></td>
+    <td><%=item.type%></td>
+  </tr>
+<%end%>
+</table>
+<%#= will_paginate @items.results , :page_links => true %>
