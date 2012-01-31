@@ -1,4 +1,5 @@
 class AdminController < ApplicationController
+  layout false
 
   def index
     search_type = Product.search_type(params[:type])
