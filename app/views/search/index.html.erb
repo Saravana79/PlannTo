@@ -179,7 +179,8 @@
     $(this).closest('li').remove();
     hideClearTag();
     hideSearchPack();
-    $.get('/search',$("#searchForm").serialize(),null,"script");
+    //$.get('/search',$("#searchForm").serialize(),null,"script");
+    searchData('spinner');
     return false;
   })
 </script>
