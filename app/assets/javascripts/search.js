@@ -28,15 +28,16 @@ function hideSearchPack(){
 
 
 function searchData(fieldName){
-    var opts = {
+
+var opts = {
         lines: 12, // The number of lines to draw
-        length: 7, // The length of each line
+        length: 5, // The length of each line
         width: 4, // The line thickness
-        radius: 10, // The radius of the inner circle
-        color: '#000', // #rgb or #rrggbb
+        radius: 5, // The radius of the inner circle
+        color: '#2EFE9A', // #rgb or #rrggbb
         speed: 1, // Rounds per second
-        trail: 60, // Afterglow percentage
-        shadow: false, // Whether to render a shadow
+        trail: 50, // Afterglow percentage
+        shadow: true, // Whether to render a shadow
         hwaccel: false // Whether to use hardware acceleration
     };
     var target = document.getElementById(fieldName);
@@ -251,7 +252,7 @@ function openInfoBox(displayInfo, attr_name, elem){
         $("#" + $("#which_attribute").val()).hide();
         $( "#" + booleanObject.field_id ).val( booleanObject.value );
         $("#page").val(1)
-        searchData('content')
+        searchData('spinner')
         //$.get('/search',$("#searchForm").serialize(),null,"script");
         return false
     }
@@ -396,7 +397,7 @@ $(document).ready(function(){
         if ($(this).val()){
             $("#sort_by").val($(this).val())
             $("#page").val(1)
-            searchData("content")
+            searchData("spinner")
         //$.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         }
         return false;
@@ -412,7 +413,7 @@ $(document).ready(function(){
             page = parseInt(current) + 1
         }
         $("#page").val(page)
-        searchData("content")
+        searchData("spinner")
         //$.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         return false;
     })
@@ -424,7 +425,7 @@ $(document).ready(function(){
         hidePreferenceTag();
         hideGetAdviceTag();
         hideSearchPack()
-        searchData("content");
+        searchData("spinner");
     });
 
     $('#addPreferenceTag').live('click', function(){
@@ -509,7 +510,7 @@ $(document).ready(function(){
         $(list).appendTo('.search_category');
 
         $("#page").val(1)
-        searchData("content")
+        searchData("spinner")
         //$.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         $("#criteriaPopup").hide();
         $("#" + $("#which_attribute").val()).hide();
@@ -560,7 +561,7 @@ $(document).ready(function(){
 
         }
         $("#page").val(1)
-        searchData("content")
+        searchData("spinner")
         //$.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         return false;
     });
