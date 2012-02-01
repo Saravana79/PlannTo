@@ -275,5 +275,5 @@ li.middlebg								{ height:auto; background-color:#fffce0; border:solid 1px #ef
 
 /*Added by Awijeet*/
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
-    display: none;
+/*    display: none;*/
 }

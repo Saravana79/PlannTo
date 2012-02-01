@@ -1,24 +1,99 @@
-<div class="youtubedata" style="widht: 400px; min-height:300px">
-<div class="youtubeentyform" style="width:210px;float:left;">
-<%#= form_for([@item, @item.shares.build], :remote => true) do |f| %>
+<!--<div class="youtubedata" style="widht: 400px; min-height:300px">
+<div class="youtubeentyform" style="width:210px;float:left;">-->
+<div id="ShareURLDiv" style="padding-top: 5px; padding-right: 5px; padding-bottom: 0px; padding-left: 5px; display: block; ">
 <%= form_for([@item, @item.shares.build], :remote => true) do |f| %>
-  <div class="field">
-    <%= f.label "Share YouTube Video" %><br />
-    <%= f.text_field :url %>
+<%#= form_for([@item, @item.shares.build]) do |f| %>
+  <div style="padding:5px 5px 0px 0px;">
+        <div class="title_header float_lft">URL :</div>
+	<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>
   </div>
-    <!--<div class="field">
-    <%#= f.label "Custome Description"%><br />
-    <%#= f.text_area :user_description, :size => "30x10" %>
-    <%#= f.hidden_field :youtube, :value => "1" %>
+   
+    <div style="padding:5px 5px 0px 0px;clear:both;">
+	    <div class="title_header float_lft">Select Share Type</div>
+	    <div class="float_lft">
+	       <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name, options ={:prompt => "-Select a Post Type"}, :class =>"post_type") %>      
+	    </div>
+  </div>
+   
+    	<input type="hidden" name = "save_instruction" value ="1" />
+  <div style="padding:5px 5px 0px 0px;clear:both;">
+	    <div class="title_header float_lft">Title :</div>
+	    <div class="float_lft"><input style="margin-left:5px;width:400px" type="text" name="txtTitle" id="txtTitle" width="400px"></div>
+
+    </div>
+
+  <div style="padding:5px 5px 0px 0px;clear:both;">
+    <div class="title_header float_lft">Thumbnail :</div>
+    <img src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft">
+    <div class="float_lft"><input type="checkbox">Don't Include Thumbnail</div>
+    </div>
+
+  <div style="padding:5px 5px 0px 5px;clear:both;">
+	    <div class="title_header float_lft">Description :</div>
+	    <div> <textarea class="textFilling" id="txtAreaExpand" value="" style="width:570px;height:50px;"></textarea>
+	      </div>
+    </div>
+    
+     <div style="padding:10px 5px 20px 5px;clear:both;">
+     <%= f.submit  %> 
+     </div>
+
+     <!--<div class="field">
+	 <%#= f.label "Custome Description"%><br />
+	 <%#= f.text_area :user_description, :size => "30x10" %>
+	 <%#= f.hidden_field :youtube, :value => "1" %>
+    </div>-->
+   
+<%#= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
+  <!--<div class="actions">
+    <%#= f.submit %>
   </div>-->
-   <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>   
 </div>
 
-<div id="youtube_contents" style="float:right;width:390;">
+
+<!-- ShareURLDIV-->
+<!--<div id="youtube_contents" style="float:right;width:390;">
 </div>
 
-</div>
+</div> -->
+
+<!-- Added from given HTML -->
+<!--<div id="ShareURLDiv" style="padding-top: 5px; padding-right: 5px; padding-bottom: 0px; padding-left: 5px; display: block; "> -->
+  
+<!--  <div style="padding:5px 5px 0px 0px;">
+    <div class="title_header float_lft">URL :</div>
+    <div class="float_lft"><input style="margin-left:5px;width:400px" type="text" name="txtURL" id="txtURL" width="400px"></div> 
+    
+    </div> -->
+<!--  <div style="padding:5px 5px 0px 0px;clear:both;">
+    <div class="title_header float_lft">Title :</div>
+    <div class="float_lft"><input style="margin-left:5px;width:400px" type="text" name="txtTitle" id="txtTitle" width="400px"></div> 
+    
+    </div>
+  <div style="padding:5px 5px 0px 0px;clear:both;">
+    <div class="title_header float_lft">Thumbnail :</div>
+    <img src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft">
+    <div class="float_lft"><input type="checkbox">Don't Include Thumbnail</div>
+    </div>
+  
+  <div style="padding:5px 5px 0px 5px;clear:both;">
+    <div class="title_header float_lft">Description :</div>
+    <div> <textarea class="textFilling" id="txtAreaExpand" value="" style="width:570px;height:50px;"></textarea>
+      </div>
+    </div>
+
+-->  
+<!--  <div style="padding:10px 5px 20px 5px;clear:both;">
+     <input class="btn_submitanswer" type="submit" name="Submit" value="Share This Content">
+     </div>
+
+  </div> -->
+<!-- Ends here -->
+<!--<script>
+  $("#share_url").click(function(){
+    var url = $("#share_url").value();
+  alert(url);
+  });
+
+</script>-->
