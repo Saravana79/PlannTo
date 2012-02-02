@@ -2,7 +2,7 @@
 <%- @item.car_groups.each do |item| %>
 
           <%= link_to({:controller => item.class.name.underscore.pluralize, :action => "show", :id => item.id}) do %>
-            <%= image_tag(get_image_url(item, item.class.name), :title => item.name, :class => "productimage", :width => "175", :height => "114" ) %>
+            <%= image_tag(item.image_url, :title => item.name, :class => "productimage", :width => "175", :height => "114" ) %>
 
         <% end %>
 
