@@ -9,5 +9,15 @@ class Attribute < ActiveRecord::Base
   has_many :search_display_attributes, :class_name => "SearchAttribute"
 
   #belongs_to :user, :foreign_key => 'created_by'
+
+  def lower_search_value
+    value = self.value.to_i - self.value.to_i/10
+    return value
+  end
+
+  def upper_search_value
+    value = self.value.to_i + self.value.to_i/10
+    return value
+  end
   
 end
