@@ -9,6 +9,8 @@ class SharesController < ApplicationController
               #render :text => share_type_id and return
               url = params['share']['url']
               user_description = params['share']['user_description']
+              save_instruction = params['save_instruction']
+                #render :text => save_instruction and return
               @share = @item.shares.create(:url => url, :user_description => user_description, :user_id => current_user.id, :share_type_id => share_type_id)
               #youtube_content = params['share']['youtube']
               #Following block for youtube
@@ -48,19 +50,30 @@ class SharesController < ApplicationController
                       end       
               end 
       end
-    respond_to do |format|
-      if @share.save!
-        # format.html { redirect_to(@share, :notice => 'Share was successfully created.') }
-         format.html { redirect_to product_path(@item) }
-        format.js
-        #format.xml  { render :xml => @share, :status => :created, :location => @share }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @share.errors, :status => :unprocessable_entity }
-      end
-  end     
+     #render :text => save_instruction.class and return
+     if save_instruction.eql? "1"
+	
+       render :js => 'document.getElementById("txtTitle").value="<%= escape_javascript(@share.title) %>"                    
+                      document.getElementById("txtAreaExpand").value="<%= escape_javascript(@share.description) %>"
+'
+
+#       format.js 
+       else
+        # Save Records
+       respond_to do |format|
+         if @share.save!
+           # format.html { redirect_to(@share, :notice => 'Share was successfully created.') }
+           format.html { redirect_to product_path(@item) }
+           format.js
+           #format.xml  { render :xml => @share, :status => :created, :location => @share }
+         else
+           format.html { render :action => "new" }
+           format.xml  { render :xml => @share.errors, :status => :unprocessable_entity }
+         end # if ends here
+       end # do ends here     
       #@share.save!
+   end # if ends here, which checks the value of save_instruction
       #redirect_to product_path(@item)
-  end
+  end # action ends here
 end
 
