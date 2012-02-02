@@ -81,17 +81,12 @@ class Item < ActiveRecord::Base
   end
 
   def image_url
-    if self.type == "Mobile"
-      return configatron.mobile_image_url + self.imageurl
-    elsif self.type == "Car"
-      return configatron.car_image_url + self.imageurl
-    elsif self.type == "Tablet"
-      return configatron.tablet_image_url + self.imageurl
-    elsif self.type == "Camera"
-      return configatron.camera_image_url + self.imageurl
+    if type == "CarGroup"
+      configatron.root_image_url + 'car' + '/' + imageurl
     else
-      return ""
+      configatron.root_image_url + type.downcase + '/' + imageurl
     end
+    
   end
 
 end
