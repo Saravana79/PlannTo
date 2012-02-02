@@ -1,7 +1,7 @@
 <div class="mb-inside">
   <div class="productcontentmain">
     <div>
-      <%= image_tag(get_image_url(item, 'Car'), :title => item.name, :class => "productimage") %>
+      <%= image_tag(item.image_url, :title => item.name, :class => "productimage") %>
     </div>
     <div>
       <span class="producttitle"><%= item.name %></span>

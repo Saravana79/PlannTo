@@ -33,6 +33,8 @@ PlanNto::Application.routes.draw do
         resources :shares
   end      
   resources :mobiles
+  resources :tablets
+  resources :cameras
   resources :manufacturers
   resources :car_groups
   resource :facebook, :except => :create do

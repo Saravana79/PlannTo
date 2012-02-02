@@ -1,7 +1,4 @@
 development:
-  car_image_url: "http://www.plannto.com/images/car/"
-  mobile_image_url: "http://www.plannto.com/images/mobile/"
-  camera_image_url: "http://www.plannto.com/images/camera/"
-  tablet_image_url: "http://www.plannto.com/images/tablet/"
+  root_image_url: "http://www.plannto.com/images/"
   no_of_main_item: 1
   no_of_item_in_tab: 10

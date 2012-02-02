@@ -8,7 +8,7 @@
 <div class="leftcolumnbig">
 <!-- Product Details - Start -->
   <div class="productdetails" >
-    <span class="img_product"><img src="<%=get_image_url(@item, @item.class.name)%>" alt="<%=@item.name%>" width="175" height="125" /></span>
+    <span class="img_product"><img src="<%=@item.image_url%>" alt="<%=@item.name%>" width="175" height="125" /></span>
     <span class="product_details">
       <h1><%= @item.name %></h1>
       <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
