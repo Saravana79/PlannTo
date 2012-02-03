@@ -10,13 +10,13 @@ class Attribute < ActiveRecord::Base
 
   #belongs_to :user, :foreign_key => 'created_by'
 
-  def lower_search_value
-    value = self.value.to_i - self.value.to_i/10
+  def lower_search_value(variance)
+    value = self.value.to_i - self.value.to_i/variance
     return value
   end
 
-  def upper_search_value
-    value = self.value.to_i + self.value.to_i/10
+  def upper_search_value(variance)
+    value = self.value.to_i + self.value.to_i/variance
     return value
   end
   
