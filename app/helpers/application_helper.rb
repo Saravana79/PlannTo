@@ -36,19 +36,6 @@ module ApplicationHelper
     end
   end
 
-  def get_image_url(item, type = 'Car')
-    case type
-    when 'Car', 'CarGroup'
-      configatron.car_image_url + item.imageurl
-    when 'Mobile'
-      configatron.mobile_image_url + item.imageurl
-    when 'Manufacturer'
-      configatron.car_image_url + item.imageurl
-    else
-      configatron.car_image_url + item.imageurl
-    end
-
-  end
 
   def get_the_follow_text(follow_type)
     case follow_type

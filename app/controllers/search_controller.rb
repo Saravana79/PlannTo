@@ -198,12 +198,12 @@ class SearchController < ApplicationController
     end
     
     results = @items.results.collect{|item|
+      
+      image_url = item.image_url
       if item.type == "CarGroup"
-        image_url = "http://plannto.com/images/car/" + item.imageurl
         type = "Car"
       else
-        image_url =item.image_url
-        type = item.type.humanize
+       type = item.type.humanize
       end
       url = "/#{item.type.tableize}/#{item.id}"
       # image_url = item.image_url
