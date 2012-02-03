@@ -10,6 +10,7 @@ module GlobalUtilities
       #puts  "#{item_attribute.name} - #{item_attribute.value}  #{item_attribute.attribute_type} "
       unless (item_attribute.value == "" || item_attribute.value.nil? || item_attribute.value == "0")
       if item_attribute.attribute_type == Attribute::NUMERIC
+        #puts item_attribute.value
         min_value = item_attribute.lower_search_value(variance)
         #puts min_value
         max_value = item_attribute.upper_search_value(variance)
