@@ -52,11 +52,9 @@ class SharesController < ApplicationController
       end
      #render :text => save_instruction.class and return
      if save_instruction.eql? "1"
-	
-       render :js => 'document.getElementById("txtTitle").value="<%= escape_javascript(@share.title) %>"                    
-                      document.getElementById("txtAreaExpand").value="<%= escape_javascript(@share.description) %>"
-'
-
+      respond_to do |format|
+	  format.js
+      end
 #       format.js 
        else
         # Save Records
@@ -64,7 +62,7 @@ class SharesController < ApplicationController
          if @share.save!
            # format.html { redirect_to(@share, :notice => 'Share was successfully created.') }
            format.html { redirect_to product_path(@item) }
-           format.js
+          format.js
            #format.xml  { render :xml => @share, :status => :created, :location => @share }
          else
            format.html { render :action => "new" }
