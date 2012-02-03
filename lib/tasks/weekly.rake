@@ -12,7 +12,7 @@ namespace :plannto do
     all_items.each do |item|
       #puts item.id
     item = Item.find(item.id)
-    variance = 10
+    variance = 20
     search_hash = get_item_priority_list(item, variance)
     numeric_hash = search_hash[:numeric_hash]
     boolean_hash = search_hash[:boolean_hash]
@@ -26,7 +26,7 @@ namespace :plannto do
 
     #if no of related items less than 5 then increase the variance
     if item_ids.size < 5
-        variance = 20
+        variance = 30
     search_hash = get_item_priority_list(item, variance)
     numeric_hash = search_hash[:numeric_hash]
     boolean_hash = search_hash[:boolean_hash]
