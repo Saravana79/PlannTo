@@ -56,7 +56,7 @@ class ItemsController < ApplicationController
     #    @facet_rows = result.facet(:manufacturer).rows
     #  end
      
-    @items = {}
+    @items = Car.find(:all, :limit => 10)
     render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
