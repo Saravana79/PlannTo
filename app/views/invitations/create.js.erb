@@ -1,0 +1,25 @@
+<% if @invitation.errors.any? %>
+  /*Hide the flash notice div*/
+  $(".notice").hide(300);
+
+  /*Update the html of the div post_errors with the new one*/
+  $("#invitation_errors").html("<%= errors_for(@invitation) %>");
+
+  /*Show the div post_errors*/
+  $("#invitation_errors").show(300);	
+
+<% else %>
+  /*Hide the div post_errors*/
+  $("#invitation_errors").hide(300);
+
+  /*Update the html of the div flash_notice with the new one*/
+  $(".notice").html("<%= escape_javascript(flash[:notice])%>");
+
+  /*Show the flash_notice div*/
+  $(".notice").show(300);
+ 
+ /* Close the dialog */
+  $("#dialog-invite-form").dialog("close");
+
+	
+<% end %>

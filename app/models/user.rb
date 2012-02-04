@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id
+  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
   has_many :items,:foreign_key => :created_by
   has_many :pros,:foreign_key => :created_by
   has_many :reviews,:foreign_key => :created_by
+  has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
+  belongs_to :invitation
   belongs_to :facebook
 
 
@@ -37,5 +39,13 @@ class User < ActiveRecord::Base
 
 
   has_many :shares;
+  
+  def invitation_token
+    invitation.token if invitation
+  end
+
+  def invitation_token=(token)
+    self.invitation = Invitation.find_by_token(token)
+  end
 
 end

@@ -87,3 +87,33 @@ root.Product =
 
   show_notice: (flash_message)->
     $("#comment-notice").html('<div class="flash notice">'+flash_message+'</div>').effect("highlight", {}, 3000);
+
+  invite_dialog: ->
+   $("#dialog-invite-form").dialog
+     autoOpen: false
+     height: 300
+     width: 350
+     modal: true
+     title: "Invite"
+     buttons:
+       "Send": ->
+         bValid = true
+         if bValid
+           $("#new_invitation").submit()
+
+       Cancel: ->
+         $(this).dialog "close"
+
+     close: ->
+       $(this).find(":input").val("").removeClass "ui-state-error"
+   
+  show_invite_dialog: (dom_elements) ->
+   $(dom_elements).click ->
+    id = $(this).attr('id');
+    if id=='invite_buy'
+      $('#invitation_follow_type').val(0);
+    else if id =='invite_own'
+     $('#invitation_follow_type').val(1);
+    else
+     $('#invitation_follow_type').val(2);
+    $("#dialog-invite-form").dialog "open"
