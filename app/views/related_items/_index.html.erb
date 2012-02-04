@@ -1,4 +1,16 @@
 <div style="clear:both;"/>
+<div style="width:735" >
+  <div class="bg_border_topbottom"></div>
+  <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+
+  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@related_items.total_entries%></div>
+  <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:7px"></div>
+  <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
+    <%=select_tag "related_items_sort_by",
+      options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"]], params[:sort_by]), :class => "txt_normal width50" %>
+  </div>
+  <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+</div>
 <%@related_items.each do |item|%>
   <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;">
     <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="175" height="125" onclick="parent.location='<%=link_url(item)%>'" /></div>
@@ -24,5 +36,7 @@
   </div>
 <%end%>
 <div class="push"></div><br/>
-<%= will_paginate @related_items , :page_links => true %>
+<div id="relatedItemsPaginate">
+  <%= will_paginate @related_items , :page_links => true %>
+</div>
 <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>

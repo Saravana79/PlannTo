@@ -403,7 +403,7 @@ $(document).ready(function(){
         return false;
     })
   
-    $('div.pagination a').live('click', function(){
+    $('#searchItemsPaginate div.pagination a').live('click', function(){
         var page = $(this).text()
         var current = $('em.current').text();
         if (page == "← Previous"){

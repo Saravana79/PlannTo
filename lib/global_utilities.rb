@@ -6,23 +6,46 @@ module GlobalUtilities
     numeric_hash = Array.new
     boolean_hash = Array.new
     text_hash = Array.new
-    item.priority_specification.each do |item_attribute|
-      #puts  "#{item_attribute.name} - #{item_attribute.value}  #{item_attribute.attribute_type} "
+    itemtype_id = item.itemtype.id
+    attribute_ids = AttributesRelationships.where("itemtype_id = #{itemtype_id} and priority = 1").collect(&:attribute_id)
+    attribute_values = AttributeValue.where(:attribute_id => attribute_ids, :item_id => item.id)
+    # puts "this item has " + "#{attribute_values.size}"
+    attribute_values.each do |item_attribute|
+      # puts  "#{item_attribute.attribute.name} - #{item_attribute.value}  #{item_attribute.attribute.attribute_type} "
+
       unless (item_attribute.value == "" || item_attribute.value.nil? || item_attribute.value == "0")
-      if item_attribute.attribute_type == Attribute::NUMERIC
-        #puts item_attribute.value
-        min_value = item_attribute.lower_search_value(variance)
-        #puts min_value
-        max_value = item_attribute.upper_search_value(variance)
-        #puts max_value
-        numeric_hash << {:attribute_name => item_attribute.name, :min_value => min_value, :max_value => max_value}
-      elsif item_attribute.attribute_type == Attribute::BOOLEAN
-        boolean_hash << {:attribute_name => item_attribute.name, :value => item_attribute.value}
-      elsif item_attribute.attribute_type == Attribute::TEXT
-        text_hash << {:attribute_name => item_attribute.name.to_sym, :value => item_attribute.value}
+        if item_attribute.attribute.attribute_type == Attribute::NUMERIC
+          #puts item_attribute.value
+          min_value = lower_search_value(item_attribute.value, variance)
+          #puts min_value
+          max_value = upper_search_value(item_attribute.value, variance)
+          #puts max_value
+          numeric_hash << {:attribute_name => item_attribute.attribute.name, :min_value => min_value, :max_value => max_value}
+        elsif item_attribute.attribute.attribute_type == Attribute::BOOLEAN
+          boolean_hash << {:attribute_name => item_attribute.attribute.name, :value => item_attribute.value}
+        elsif item_attribute.attribute.attribute_type == Attribute::TEXT
+          text_hash << {:attribute_name => item_attribute.attribute.name.to_sym, :value => item_attribute.value}
+        end
       end
-      end
+
     end
+    #item.priority_specification.each do |item_attribute|
+    #puts  "#{item_attribute.name} - #{item_attribute.value}  #{item_attribute.attribute_type} "
+    #  unless (item_attribute.value == "" || item_attribute.value.nil? || item_attribute.value == "0")
+    #  if item_attribute.attribute_type == Attribute::NUMERIC
+    #puts item_attribute.value
+    #    min_value = item_attribute.lower_search_value(variance)
+    #puts min_value
+    #   max_value = item_attribute.upper_search_value(variance)
+    #puts max_value
+    #   numeric_hash << {:attribute_name => item_attribute.name, :min_value => min_value, :max_value => max_value}
+    # elsif item_attribute.attribute_type == Attribute::BOOLEAN
+    #   boolean_hash << {:attribute_name => item_attribute.name, :value => item_attribute.value}
+    # elsif item_attribute.attribute_type == Attribute::TEXT
+    #    text_hash << {:attribute_name => item_attribute.name.to_sym, :value => item_attribute.value}
+    #  end
+    #  end
+    #end
         
     return {:numeric_hash => numeric_hash, :boolean_hash => boolean_hash, :text_hash => text_hash}  
       
@@ -60,6 +83,19 @@ module GlobalUtilities
       end
     end
     return item_ids
+  end
+
+
+  def lower_search_value(c_value, variance)
+    value = c_value.to_f
+    min_value = (value - (value*variance)/100).round(2)
+    return min_value.to_f
+  end
+
+  def upper_search_value(c_value, variance)
+    value = c_value.to_f
+    max_value = (value + (value*variance)/100).round(2)
+    return max_value.to_f
   end
      
 

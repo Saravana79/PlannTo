@@ -8,7 +8,7 @@ namespace :plannto do
     item_types = Itemtype.where("itemtype IN ('Car', 'Mobile', 'Camera', 'Tablet')").collect(&:id).join(',')
     #puts item_types
     all_items = Item.where("itemtype_id IN (#{item_types})")
-    puts all_items.size
+    #puts all_items.size
     all_items.each do |item|
       #puts item.id
       item = Item.find(item.id)
@@ -19,7 +19,7 @@ namespace :plannto do
       text_hash = search_hash[:text_hash]
       item_type = item.itemtype.itemtype
       items = get_sunspot_related_items(item_type, numeric_hash, boolean_hash, text_hash)
-
+      #puts item.name
       # puts "Total items without filter" + "#{items.total}"
       item_ids = filter_similar_group_ids(items, item_type, item)
       #puts "Total items after filter" + "#{item_ids.size}"
@@ -39,6 +39,7 @@ namespace :plannto do
       end
 
       #item_id_collection = item_ids.join(',')
+      #puts item_id_collection
       item_ids.each do |r_item|
         related_item = RelatedItem.find_or_create_by_item_id_and_related_item_id(item.id, r_item)
         #related_item.related_item_ids = item_id_collection

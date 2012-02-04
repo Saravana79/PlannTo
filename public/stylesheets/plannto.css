@@ -297,3 +297,4 @@ li.middlebg								{ height:auto; background-color:#fffce0; border:solid 1px #ef
 /* content details */
 .contenttitle							{ padding-bottom:3px; margin:0; font:bold 18px tahoma; color:#2a2929; }
 .contentDetailsMainDiv					{width:720px;}
+.leftcolumnbig							{   float: left; height:auto; width: 727px; margin: 0 0px 0 0;padding:0px 0px 0px 0px; }
