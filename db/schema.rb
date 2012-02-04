@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120121044858) do
+ActiveRecord::Schema.define(:version => 20120204073038) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -169,6 +169,19 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
 
+  create_table "invitations", :force => true do |t|
+    t.integer  "sender_id",                   :null => false
+    t.integer  "item_id"
+    t.integer  "item_type"
+    t.string   "email",                       :null => false
+    t.integer  "follow_type",                 :null => false
+    t.string   "message",     :limit => 2000
+    t.string   "token",                       :null => false
+    t.string   "user_ip",                     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "itemrelationships", :force => true do |t|
     t.integer  "item_id",        :null => false
     t.integer  "relateditem_id", :null => false
@@ -278,6 +291,14 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
   create_table "recommendations", :force => true do |t|
     t.integer  "user_answer_id"
     t.integer  "item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "related_items", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "related_item_id"
+    t.integer  "variance"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -395,6 +416,7 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.string   "name"
     t.integer  "facebook_id"
     t.integer  "reputation",                            :default => 0,  :null => false
+    t.integer  "invitation_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -94,4 +94,11 @@ module ApplicationHelper
     return search_type.camelize.constantize
   end
   
+  def errors_for(object, message=nil)
+    html=""
+    object.errors.full_messages.each do |msg| 
+      html ="<li>#{msg}</li>"
+    end
+    html
+  end
 end

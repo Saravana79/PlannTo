@@ -24,6 +24,7 @@
     </span>
   </div>
 <br/>
+
 <%= render :partial => "shared/review" %>
 <div id="usual2" class="usual">
   <ul class="tabs">
@@ -73,11 +74,29 @@
     <a class="btns" href="#">Top Questions</a>
 </div>
 <br/>
+<div>
+	<%= link_to("Invite buyer", "#", :id => "invite_buy") %>&nbsp;
+	<%= link_to("Invite owner", "#", :id => "invite_own") %>&nbsp;
+	<%= link_to("Invite follower", "#", :id => "invite_follow") %>
+	
+</div>
+<br />
 <%=render :partial =>"items/related_products" %>
 <div id="dialog-form" title="Create new user">
   <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
     <%= render "shared/login_fields", {:f => f} %>
   <% end %>
+</div>
+<div id="dialog-invite-form">
+	<%= form_for(@invitation, :remote => true ) do |f| %>
+	   <div id= "invitation_errors" style="display:none"></div>
+	   <%= f.hidden_field :item_id -%>
+	   <%= f.hidden_field :follow_type -%>
+		Email : <br /> <%= f.text_field :email %> <br />
+		Message : <br />
+		<%= f.text_area :message, :rows => 3, :cols => 50 %>
+	<% end %>
+	
 </div>
 <script type="text/javascript">
 <% if @user_follow && @user_follow.follow_type == "Buyer" %>
@@ -100,10 +119,12 @@
   Product.detailed_specification();
 <% if current_user.blank? %>
     Product.login_dialog();
-    Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow #plan_to_buy_select");
+    Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow #plan_to_buy_select,#invite_buy, #invite_own, #invite_follow");
     Product.show_login_dialog_change("#plan_to_buy_select");
 <% else %>
     Product.hide_login_dialog();
+	Product.invite_dialog();
+	Product.show_invite_dialog("#invite_buy, #invite_own, #invite_follow");
 <% end %>
 
 </script>

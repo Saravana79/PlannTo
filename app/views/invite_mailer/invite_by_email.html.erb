@@ -1,0 +1,8 @@
+<p>Hello ,</p>
+
+<p><%= @invitation.sender.name %> invited you to PlannTo as <%= @relation %></p>
+
+Follow this link <%= link_to "PlannTo", invite_url(@invitation.token) %> to join us 
+
+<p><%= @invitation.message %></p>
+
