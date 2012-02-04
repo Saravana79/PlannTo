@@ -13,7 +13,7 @@ class ProductsController < ApplicationController
 
   def show
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    related_item_ids = RelatedItem.where(:item_id => @item.id).order("RAND()").limit(3).collect(&:related_item_id)
+    related_item_ids = RelatedItem.where(:item_id => @item.id).limit(3).collect(&:related_item_id)
     @related_items = Item.where(:id => related_item_ids)
     user_follow_type
   end
