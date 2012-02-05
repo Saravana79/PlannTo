@@ -13,8 +13,9 @@ class ProductsController < ApplicationController
 
   def show
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    related_item_ids = RelatedItem.where(:item_id => @item.id).limit(3).collect(&:related_item_id)
-    @related_items = Item.where(:id => related_item_ids)
+   
+    related_item_ids = RelatedItem.where(:item_id => @item.id).collect(&:related_item_id)
+    @related_items = Item.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type
   end
