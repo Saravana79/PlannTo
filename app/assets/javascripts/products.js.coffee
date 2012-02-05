@@ -8,7 +8,7 @@ root.Product =
     $("#plan_to_buy").addClass "btn_plantobuy_icon"
     $("#plan_to_follow").removeClass()
     $("#plan_to_follow").addClass "btn_followthiscar_icon"
-    $("#plan_to_follow_span").removeClass().addClass "action_btns_selected"+medium    
+    $("#plan_to_follow_span").removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_own").removeClass()
     $("#plan_to_own").addClass "btn_iwonit_icon"
     $("#plan_to_own_span").removeClass().addClass "action_btns"+medium
@@ -33,7 +33,7 @@ root.Product =
     follow_href_follow = $("#plan_to_follow.btn_txt").attr("href")
     $("#plan_to_follow.btn_txt").attr("href", follow_href_follow+'&unfollow=true');
 
-  load_follow: (medium, follow_message) -> 
+  load_follow: (medium, follow_message) ->
     $("#plan_to_follow").removeClass()
     $("#plan_to_follow").addClass "btn_followthiscar_icon"
     $("#plan_to_follow_span").attr "title", follow_message
@@ -54,7 +54,7 @@ root.Product =
     follow_href_follow = $("#plan_to_follow.btn_txt").attr("href")
     $("#plan_to_follow.btn_txt").attr("href", remove_unfollow_query_string(follow_href_follow));
     buy_href_follow = $("#plan_to_buy.btn_txt").attr("href")
-    $("#plan_to_buy.btn_txt").attr("href", Product.remove_unfollow_query_string(buy_href_follow));    
+    $("#plan_to_buy.btn_txt").attr("href", Product.remove_unfollow_query_string(buy_href_follow));
 
   unload_owner: (medium, message, follow_message) ->
     $("#plan_to_own").removeClass("action_btns_selected"+medium)
@@ -76,7 +76,7 @@ root.Product =
     $("#plan_to_follow_span").attr "title", follow_message
     follow_href_follow = $("#plan_to_follow.btn_txt").attr("href")
     $("#plan_to_follow.btn_txt").attr("href", Product.remove_unfollow_query_string(follow_href_follow));
-    
+
   remove_unfollow_query_string: (url_path) ->
     urlparts= url_path.split('?');
     pars= urlparts[1].split(/[&;]/g);

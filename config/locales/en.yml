@@ -8,3 +8,10 @@ en:
   plan_to_buy_selected: "You are considering this as one of the option already,  please click this button if you like to remove it from that list"
   plan_to_own_selected: "You are already owning this , Click this button to remove it"
   plan_to_follow_selected: "You are already following this product"
+  follow_bnt: "Follow This Car"
+  unfollow_bnt: "UnFollow"
+  own_bnt: "I Own it"
+  unown_bnt: "UnFollow"
+  buy_bnt: "Plan to buy"
+  unbuy_bnt: "UnFollow"
+
