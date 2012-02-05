@@ -1,0 +1,15 @@
+<% if (@user_follow && @user_follow.follow_type == "Buyer") || (@type == "buy") %>
+    Product.load_buyer('<%= button_class %>',
+            '<%= I18n.t('plan_to_buy_selected') %>',
+            '<%= I18n.t('plan_to_follow_selected') %>');
+<% end %>
+<% if (@user_follow && @user_follow.follow_type == "Owner") || (@type == "own") %>
+    Product.load_owner('<%= button_class %>',
+            '<%= I18n.t('plan_to_own_selected') %>',
+            '<%= I18n.t('plan_to_follow_selected') %>');
+    Product.hover_follow_but($("#plan_to_own.btn_txt"),"I Own it", "UnFollow")
+    Product.hover_follow_but($("#plan_to_follow.btn_txt"),"Follow This Car", "UnFollow")
+<% end %>
+<% if (@user_follow && @user_follow.follow_type == "Follow") || (@type == "follow") %>
+    Product.load_follow('<%= button_class %>', '<%= I18n.t('plan_to_follow_selected') %>');
+<% end %>

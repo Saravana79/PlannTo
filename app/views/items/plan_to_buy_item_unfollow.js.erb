@@ -1,0 +1,12 @@
+Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
+<% if @type == "buy" %>
+  Product.unload_buyer("", '<%=I18n.t('plan_to_buy') %>', '<%= I18n.t('plan_to_follow') %>');
+<% elsif @type == "own" %>        
+  Product.unload_owner("", '<%= I18n.t('plan_to_own') %>', '<%= I18n.t('plan_to_follow') %>');
+  Product.hover_follow_but($("#plan_to_own.btn_txt"),"I Own it", "I Own it")
+    Product.hover_follow_but($("#plan_to_follow.btn_txt"),"Follow This Car", "Follow This Car")
+<% elsif @type == "follow" %>
+  Product.unload_follow("", '<%= I18n.t('plan_to_follow') %>');
+<% end %>
+
+$(".PlanntoBuyBtn span[title]").tooltip();        
