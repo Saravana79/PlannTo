@@ -87,7 +87,7 @@
     <%= render "shared/login_fields", {:f => f} %>
   <% end %>
 </div>
-<div id="dialog-invite-form">
+<div id="dialog-invite-form" style="display:none">
 	<%= form_for(@invitation, :remote => true ) do |f| %>
 	   <div id= "invitation_errors" style="display:none"></div>
 	   <%= f.hidden_field :item_id -%>
