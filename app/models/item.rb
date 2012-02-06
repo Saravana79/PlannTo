@@ -89,4 +89,10 @@ class Item < ActiveRecord::Base
     
   end
 
+  def self.get_related_items(item, limit)
+    related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
+    return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
+    return self.where(:id => related_item_ids).first(limit)
+  end
+
 end

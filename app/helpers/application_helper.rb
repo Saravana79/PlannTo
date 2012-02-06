@@ -101,4 +101,8 @@ module ApplicationHelper
     end
     html
   end
+
+  def display_item_type(item)
+    return item.type.pluralize.capitalize
+  end
 end

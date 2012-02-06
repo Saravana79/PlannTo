@@ -79,7 +79,7 @@ module GlobalUtilities
       if item_type == "Car"
         item_ids << item.id unless item.cargroup.id == original_item.cargroup.id
       else
-        item_ids << item.id
+        item_ids << item.id unless item.id == original_item.id
       end
     end
     return item_ids
