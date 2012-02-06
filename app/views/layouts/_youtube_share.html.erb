@@ -1,24 +1,24 @@
 <div id="ShareURLDiv" style="padding-top: 5px; padding-right: 5px; padding-bottom: 0px; padding-left: 5px; display: block; ">
-<%= form_for([@item, @item.shares.build], :remote => true) do |f| %>
-  <div style="padding:5px 5px 0px 0px;">
-        <div class="title_header float_lft">URL :</div>
-	<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>
-  </div>
-   
-    <div style="padding:5px 5px 0px 0px;clear:both;">
-	    <div class="title_header float_lft">Select Share Type</div>
-	    <div class="float_lft">
-	       <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name, options ={:prompt => "-Select a Post Type"}, :class =>"post_type") %>      
-	    </div>
-  </div>
-   
-    	<input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
-<div id="url_content_desc">	
-    </div>
-     <div style="padding:10px 5px 20px 5px;clear:both;">
-     <%= f.submit  %> 
-     </div>
-
-<% end %>   
+	<%= form_for([@item, @item.shares.build], :remote => true) do |f| %>
+		  <div style="padding:5px 5px 0px 0px;">
+				<div class="title_header float_lft">URL :</div>
+				<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div> 
+				<%= f.submit "Get Update" , :id => "get_update_from_url" %>
+		  </div>
+		   
+			<div style="padding:5px 5px 0px 0px;clear:both;">
+				<div class="title_header float_lft">Select Share Type</div>
+				<div class="float_lft">
+				   <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name, options ={:prompt => "-Select a Post Type"}, :class =>"post_type") %>      
+				</div>
+		  </div>
+		<input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
+			<div id="url_content_desc">	</div>
+			 <div style="padding:10px 5px 20px 5px;clear:both;display: none" id="share_submit_id">
+			 <%= f.submit %> 
+			 </div>
+	<% end %>   
 </div>
-
+<br />
+<br />
+<br />

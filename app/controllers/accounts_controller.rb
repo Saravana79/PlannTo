@@ -27,5 +27,4 @@ class AccountsController < ApplicationController
     @follow_item = Follow.for_follower(current_user).where(:followable_type => ['Car', 'Mobile']).group_by(&:followable_type)
     render :layout => "product"
   end
-
 end

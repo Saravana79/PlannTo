@@ -73,5 +73,10 @@ class SharesController < ApplicationController
    end # if ends here, which checks the value of save_instruction
       #redirect_to product_path(@item)
   end # action ends here
+  
+  def show
+	@share = Share.find(params[:id])  
+	@item = @share.item
+  end
 end
 
