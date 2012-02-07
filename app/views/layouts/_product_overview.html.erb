@@ -10,9 +10,9 @@
 
      else
   %>
-      <% @item.shares.each do |share| %>
+      <% @item.shares.reverse.each do |share| %>
           <%  if share.title %>
-<%= render share %>
+				<%= render share %>
              <% end %>
       <% end %>
 <% end %>

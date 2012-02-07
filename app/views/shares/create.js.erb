@@ -3,13 +3,15 @@ if (is_saved=="1"){
 $("#url_content_desc").append("<div style='padding:5px 5px 0px 0px;clear:both;'><div class='title_header float_lft'>Title :</div><div class='float_lft'><%= escape_javascript(link_to @share.title, @share.url) %></div></div></div>");
 $("#url_content_desc").append("<div style='padding:5px 5px 0px 0px;clear:both;'><div class='title_header float_lft'>Thumbnail :</div><div class='float_lft'><%= escape_javascript(image_tag  @share.thumbnail) %></div></div></div>");
 $("#url_content_desc").append("<div style='padding:5px 5px 0px 0px;clear:both;'><div class='title_header float_lft'>Description:</div><div class='float_lft'><%= escape_javascript( @share.description) %></div></div></div>");
-$("#share_instruction_id").attr('value', 'bar'); 
+$("#url_content_desc").append('<input id="get_update_from_url" name="commit" type="submit" value="Share This Content">');
+$("#share_instruction_id").attr('value', 'bar');
+$("#get_update_from_url").hide();
 }
 else
   {
    $("#share_instruction_id").attr('value', '1'); 
   $("#url_content_desc").html(" ");
-   $("#overview_sahre_id").append("<%= escape_javascript(render @share)%>");
-  
+   $("#overview_sahre_id").prepend("<%= escape_javascript(render @share)%>");
+  $("#get_update_from_url").show();
     }
   
