@@ -85,8 +85,10 @@ root.Product =
   hover_follow_but: (but_object, from_message, to_message) ->
     $(but_object).hover ( ->
         $(this).html(to_message)
+        $(".PlanntoBuyBtn span[title]").tooltip().getTip()[0].innerText = $(".PlanntoBuyBtn span[title]").tooltip().getTrigger()[0].getAttribute("title");
       ), ->
         $(this).html(from_message)
+        $(".PlanntoBuyBtn span[title]").tooltip().getTip()[0].innerText = $(".PlanntoBuyBtn span[title]").tooltip().getTrigger()[0].getAttribute("title");
 
 
   related_products: (related_product_url) ->
