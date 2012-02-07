@@ -76,18 +76,21 @@ class SearchController < ApplicationController
     end
 
     ############## PREFERENCES SECTION ######################
+    #save preferences
+    browse_user_id = user_signed_in? ? current_user.id : ""
+    BrowserPreference.save_browse_preferences(browse_user_id, params[:search_type], params, request.remote_ip) if request.xhr?
+
     preferences = Array.new
     if user_signed_in? && !request.xhr?
-      search_ids = @search_attributes.collect{|item| item.id}
-      @preferences = BrowserPreference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", current_user.id, itemtype.id, search_ids).includes(:search_attribute)
-      @preferences_list = preferences = BrowserPreference.get_items(@preferences)
+      @preferences_list = preferences = BrowserPreference.get_items_by_user(current_user.id, itemtype.id, @search_attributes.collect{|item| item.id})
+    end
+    if !user_signed_in? && !request.xhr?
+      @preferences_list = preferences = BrowserPreference.get_items_by_ip(request.remote_ip, itemtype.id, @search_attributes.collect{|item| item.id})
     end
     ############ PREFERENCE SECTION ENDS#############
-
     $search_type = @search_type
     @sunspot_search_fields = sunspot_search_fields
     @page  = params[:page].nil? ? 1 : params[:page].to_i    
-
 
     unless params[:manufacturer].present?
       if user_signed_in? && !request.xhr?
@@ -203,7 +206,7 @@ class SearchController < ApplicationController
       if item.type == "CarGroup"
         type = "Car"
       else
-       type = item.type.humanize
+        type = item.type.humanize
       end
       url = "/#{item.type.tableize}/#{item.id}"
       # image_url = item.image_url

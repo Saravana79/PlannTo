@@ -2,14 +2,11 @@ class BrowserPreference < ActiveRecord::Base
   
   belongs_to :search_attribute, :class_name => "SearchAttribute", :foreign_key => "search_display_attribute_id"
 
-  def self.add_preference(user, search_type, params)
-
+  def self.add_preference(user, search_type, params, ip= "") 
     itemtype = Itemtype.find_by_itemtype(search_type)
     search_attributes = SearchAttribute.by_itemtype(itemtype.id)
-    BrowserPreference.clear_items(user, itemtype.id, search_attributes.collect(&:id))
-
-    BrowserPreference.add_items(user, itemtype.id, search_attributes, params)
-
+    BrowserPreference.clear_items(user, itemtype.id, search_attributes.collect(&:id), ip)
+    BrowserPreference.add_items(user, itemtype.id, search_attributes, params, ip)
   end
 
   def self.get_items(preferences)
@@ -50,11 +47,10 @@ class BrowserPreference < ActiveRecord::Base
     return preferences_list
   end
 
-  def self.add_items(user, type, search_attributes, params)
-
+  def self.add_items(user, type, search_attributes, params, ip="")
     unless params["manufacturer"].blank?
       manufacturer_id = search_attributes.find {|s| s.attribute_id == 0 }
-      BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => manufacturer_id.id, :value_1 => params["manufacturer"])
+      BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => manufacturer_id.id, :value_1 => params["manufacturer"], :ip => ip)
     end
 
     search_attributes.each do |search_attr|
@@ -64,7 +60,7 @@ class BrowserPreference < ActiveRecord::Base
         unless params["#{min_attribute}"].blank? && params["#{max_attribute}"].blank?
           min_value = params["#{min_attribute}"]
           max_value = params["#{max_attribute}"]
-          Preference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => min_value, :value_2 => max_value)
+          BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => min_value, :value_2 => max_value, :ip => ip)
         end
       else
         save = false
@@ -76,13 +72,28 @@ class BrowserPreference < ActiveRecord::Base
           save = true
         end
         if save == true
-          BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"]) unless params["#{attribute_field}"].blank?
+          BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => search_attr.id, :value_1 => params["#{attribute_field}"], :ip => ip) unless params["#{attribute_field}"].blank?
         end
       end
     end
   end
 
-  def self.clear_items(user, type, ids)
-    BrowserPreference.delete_all(["user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", user, type, ids])
+  def self.clear_items(user, type, ids, ip="")
+    BrowserPreference.delete_all(["user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", user, type, ids]) unless user == " "
+    BrowserPreference.delete_all(["ip = ? and itemtype_id = ? and search_display_attribute_id in (?)", ip, type, ids]) if user == " "
+  end
+
+  def self.get_items_by_user(user, itemtype, search_ids)
+    preferences = BrowserPreference.where("user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", user, itemtype, search_ids).includes(:search_attribute)
+    BrowserPreference.get_items(preferences)
+  end
+
+  def self.get_items_by_ip(ip, itemtype, search_ids)
+    preferences = BrowserPreference.where("ip = ? and itemtype_id = ? and search_display_attribute_id in (?)", ip, itemtype, search_ids).includes(:search_attribute)
+    BrowserPreference.get_items(preferences)
+  end
+
+  def self.save_browse_preferences(user, itemtype, params, ip)
+    BrowserPreference.add_preference(user, itemtype, params, ip)
   end
 end
