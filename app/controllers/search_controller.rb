@@ -77,15 +77,23 @@ class SearchController < ApplicationController
 
     ############## PREFERENCES SECTION ######################
     #save preferences
-    browse_user_id = user_signed_in? ? current_user.id : ""
-    BrowserPreference.save_browse_preferences(browse_user_id, params[:search_type], params, request.remote_ip) if request.xhr?
+    if user_signed_in?
+      browser_user_id = current_user.id
+      browser_ip = ""
+    else
+      browser_user_id = ""
+      browser_ip = request.remote_ip
+    end
+
+
+    BrowserPreference.save_browse_preferences(browser_user_id, params[:search_type], params, browser_ip) if request.xhr?
 
     preferences = Array.new
     if user_signed_in? && !request.xhr?
       @preferences_list = preferences = BrowserPreference.get_items_by_user(current_user.id, itemtype.id, @search_attributes.collect{|item| item.id})
     end
     if !user_signed_in? && !request.xhr?
-      @preferences_list = preferences = BrowserPreference.get_items_by_ip(request.remote_ip, itemtype.id, @search_attributes.collect{|item| item.id})
+      @preferences_list = preferences = BrowserPreference.get_items_by_ip(browser_ip, itemtype.id, @search_attributes.collect{|item| item.id})
     end
     ############ PREFERENCE SECTION ENDS#############
     $search_type = @search_type

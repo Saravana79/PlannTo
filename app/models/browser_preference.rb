@@ -79,8 +79,8 @@ class BrowserPreference < ActiveRecord::Base
   end
 
   def self.clear_items(user, type, ids, ip="")
-    BrowserPreference.delete_all(["user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", user, type, ids]) unless user == " "
-    BrowserPreference.delete_all(["ip = ? and itemtype_id = ? and search_display_attribute_id in (?)", ip, type, ids]) if user == " "
+    BrowserPreference.delete_all(["user_id = ? and itemtype_id = ? and search_display_attribute_id in (?)", user, type, ids]) unless user == ""
+    BrowserPreference.delete_all(["ip = ? and itemtype_id = ? and search_display_attribute_id in (?)", ip, type, ids]) if user == ""
   end
 
   def self.get_items_by_user(user, itemtype, search_ids)
