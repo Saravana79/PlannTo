@@ -18,4 +18,8 @@ module SearchHelper
      return "/#{item.type.downcase.pluralize}/#{item.id}"
   end
 
+  def view_all_related_items_url(item)
+    return "/#{item.type.downcase}/related-items/#{item.id}"
+  end
+
 end

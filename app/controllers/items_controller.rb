@@ -56,7 +56,7 @@ class ItemsController < ApplicationController
     #    @facet_rows = result.facet(:manufacturer).rows
     #  end
      
-    @items = {}
+    @items = Car.find(:all, :limit => 10)
     render :layout => 'application'
     #respond_to do |format|
     #  format.html  index.html.erb
@@ -154,13 +154,17 @@ class ItemsController < ApplicationController
         follow_this_item
     end
     respond_to do |format|
-      format.js { render :action => 'plan_to_buy_item'}
+      unless params[:unfollow]
+        format.js { render :action => 'plan_to_buy_item'}
+      else
+        format.js { render :action => 'plan_to_buy_item_unfollow'}
+      end
     end
   end
 
   def plan_to_buy_item
     @type = "buy"
-    follow = follow_item(params[:follow_type])
+    follow = follow_item(params[:follow_type], params[:unfollow])
     if follow.blank?
       flash[:notice] = "You already buy this Item"      
     else
@@ -171,7 +175,7 @@ class ItemsController < ApplicationController
 
   def own_a_item
     @type = "own"
-    follow = follow_item(params[:follow_type])
+    follow = follow_item(params[:follow_type], params[:unfollow])
     if follow.blank?
       flash[:notice] = "You are already owning this Item"
     else
@@ -182,7 +186,7 @@ class ItemsController < ApplicationController
 
   def follow_this_item
     @type = "follow"
-    follow = follow_item(params[:follow_type])
+    follow = follow_item(params[:follow_type], params[:unfollow])
     if follow.blank?
       flash[:notice] = "You are already Following this Item"
     else
@@ -198,11 +202,15 @@ class ItemsController < ApplicationController
 
   private
 
-  def follow_item(follow_type)
-    Rails.cache.delete("item_follow"+current_user.id.to_s)
+  def follow_item(follow_type, unfollow= false)
+    Rails.cache.delete("item_follow_"+current_user.id.to_s)    
     @item = Item.find(params[:id])
     if !@item.blank?
-      current_user.follow(@item, follow_type)
+      if unfollow
+        current_user.stop_following(@item)
+      else
+        current_user.follow(@item, follow_type)
+      end      
     else
       false
     end

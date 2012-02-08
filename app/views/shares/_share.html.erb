@@ -1,0 +1,12 @@
+<tr height="70" valign="top">
+  <td width="67" valign="top"><div class="rate_content">
+  <a class="bg_ratecontent">100</a>
+  <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+  </div></td>
+  <td width="580"><h4><%= link_to share.title, "/shares/show/#{share.id}"%></h4>
+  <a class="txt_black"><%= share.description %></a><br>
+     <a class="txt_gray"> In <%= @item.name %> - <%= share.user.name %> - 2 answers - 2 days ago</a></td>
+  <% if share.thumbnail %>
+  <td width="36"><img src="<%=share.thumbnail%>" width="24" height="24"></td>
+  <% end %>
+  </tr>

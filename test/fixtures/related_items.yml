@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  item_id: 1
+  related_item_ids: MyString
+  priority: 1
+
+two:
+  item_id: 1
+  related_item_ids: MyString
+  priority: 1

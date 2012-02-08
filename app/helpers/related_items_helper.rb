@@ -1,0 +1,2 @@
+module RelatedItemsHelper
+end

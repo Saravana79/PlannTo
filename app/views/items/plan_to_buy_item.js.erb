@@ -1,8 +1,6 @@
 Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
-<% if @type == "buy" %>
-  Product.load_buyer();
-<% elsif @type == "own" %>
-  Product.load_owner();  
-<% elsif @type == "follow" %>
-  Product.load_follow();
-<% end %>
+<%= render "shared/javascript_button", :button_class => '' %>
+document.ready(function(){
+  $(".tooltip").remove();
+  $(".PlanntoBuyBtn span[title]").tooltip();  
+})

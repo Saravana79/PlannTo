@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120204085112) do
+ActiveRecord::Schema.define(:version => 20120201172400) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -311,6 +311,14 @@ ActiveRecord::Schema.define(:version => 20120204085112) do
     t.datetime "updated_at"
   end
 
+  create_table "related_items", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "related_item_id"
+    t.integer  "variance"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "reviews", :force => true do |t|
     t.string   "title",          :limit => 200
     t.string   "description",    :limit => 5000
@@ -430,6 +438,14 @@ ActiveRecord::Schema.define(:version => 20120204085112) do
     t.datetime "updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
     t.string   "name"
+    t.string   "name"
+    t.integer  "facebook_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.integer  "reputation",                            :default => 0,  :null => false
+    t.integer  "invitation_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

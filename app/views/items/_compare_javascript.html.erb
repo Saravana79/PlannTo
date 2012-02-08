@@ -1,0 +1,61 @@
+<script type="text/javascript">
+
+  keys = ($.cookie('allItems')||'').split(',')
+  keys = $.unique(keys);
+  keys = $.unique(keys);
+  keys = $.unique(keys);
+  url = $('#compare-items a').attr('href')
+  for(i=0; i < keys.length; i++){
+    value = $.cookie(keys[i]);
+    if(value != null){
+     $('#compare-list').append(value);
+     $('#add_to_compare_' + keys[i] ).attr('checked',true);
+     url = url + ',' + keys[i]
+    }
+  }
+  $('#compare-items a').attr('href', url);
+  if($('#compare-list div.compare-view').length == 0){
+    $('#compare-list').hide();
+  }else if($('#compare-list div.compare-view').length > 1){
+    $('#compare-list').show();
+    $('#compare-items').show();
+  }else{
+    $('#compare-list').show();
+    $('#compare-items').hide();
+  }
+  $('.add-compare').click(function(){
+    key = $(this).attr('rel');
+    if(jQuery(this).attr('checked')){
+      if($.cookie(key)!=null){
+        $("#comment-notice").html('<div class="flash notice">This item already added to compare.</div>').effect("highlight", {}, 3000);
+        jQuery(this).attr('checked','checked')
+      }else if($('#compare-list .compare-view').length == 4){
+        $("#comment-notice").html('<div class="flash notice">You can not add more then 4 items to compare.</div>').effect("highlight", {}, 3000);
+        jQuery(this).attr('checked','')
+      }else {
+        value = "<div class='compare-view' style='width:20%; float:left;'>" + $(this).parents('div').next('.compare-view').html() + "</div>";
+        $.cookie('allItems',$.cookie('allItems') + ',' + key)
+        $.cookie(key,value)
+        $('#compare-list').append(value)
+        url = $('#compare-items a').attr('href')
+        $('#compare-items a').attr('href', url + ',' + key);
+        $('#compare-list').show();
+        $('#compare-list .compare-view').show();
+        if($('#compare-list .compare-view').length > 1){
+           $('#compare-items').show();
+        }else{
+          $('#compare-items').hide();
+        }
+      }
+    }else{
+     obj = jQuery('#compare-list').find('a.remove-compare[rel='+jQuery(this).attr('rel')+']');
+     removeCompare($(obj));
+     jQuery(this).attr('checked','')
+    }
+  });
+
+  $('a.remove-compare').click(function(){
+     removeCompare($(this));
+  })
+
+</script>

@@ -3,7 +3,7 @@
   <tr>
     <td width="113" height="85">
 
-      <%= image_tag(get_image_url(relateditem, relateditem.class.name), :title => relateditem.name, :width => "101", :height => "68") %>
+      <%= image_tag(relateditem.image_url, :title => relateditem.name, :width => "101", :height => "68") %>
     </td>
     <td width="113">
       <%= link_to relateditem.name, {:controller => relateditem.class.name.underscore.pluralize, :action => "show", :id => relateditem.id}, :class => "txt_black" %>

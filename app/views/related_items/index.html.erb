@@ -1,0 +1,46 @@
+<div id="maincontainer" class="maincontainerCss">
+  <!--<div class="leftcolumnsmall">
+    <ul class="search_criteria">
+      <div class="hdr_search">Search Criteria:</div>    
+    </ul>
+  </div>-->
+  <div class="leftcolumnbig">
+    <div class="push"></div>
+    <div id="content">
+      <%= render :partial => "/related_items/index" %>
+    </div>
+    <div class="push"></div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#relatedItemsPaginate div.pagination a').live('click', function(){
+      var page = $(this).text()
+      var current = $('em.current').text();
+      if (page == "← Previous"){
+        page = parseInt(current) -1
+      }
+      else if (page == "Next →"){
+        page = parseInt(current) + 1
+      }
+        
+      var opts = {
+        lines: 12, // The number of lines to draw
+        length: 5, // The length of each line
+        width: 4, // The line thickness
+        radius: 5, // The radius of the inner circle
+        color: '#2EFE9A', // #rgb or #rrggbb
+        speed: 1, // Rounds per second
+        trail: 50, // Afterglow percentage
+        shadow: true, // Whether to render a shadow
+        hwaccel: false // Whether to use hardware acceleration
+      };
+      var target = document.getElementById('spinner');
+      var spinner = new Spinner(opts).spin(target);
+      $.get("",{page: page},null,"script").success(function() {
+        spinner.stop();
+      })
+      return false;
+    })
+  });
+</script>

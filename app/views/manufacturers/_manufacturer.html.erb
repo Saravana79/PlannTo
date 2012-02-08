@@ -4,7 +4,7 @@
     <div class="productcontentmainmini">
       <div>
         <%= link_to(car_group_path(item.id)) do %>
-          <%= image_tag(get_image_url(item, item.class.name), :title => item.name, :class => "productimage",
+          <%= image_tag(item.image_url, :title => item.name, :class => "productimage",
                         :style                        => "width:50px;height:50px;") %>
         <% end %>
       </div>
@@ -25,4 +25,4 @@
 
   </div>
 <%- end %>
-<%= paginate car_groups %>
+<%= will_paginate car_groups, :page_links => true %>

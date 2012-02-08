@@ -2,7 +2,7 @@
 <span class="img_product">
 <%- @item.car_groups.each do |item| %>
             <%= link_to(car_group_path(item.id)) do %>
-              <%= image_tag(image_path(get_image_url(item, item.class.name)), :title => item.name, :width => "175", :height => "114") %>
+              <%= image_tag(image_path(item.image_url), :title => item.name, :width => "175", :height => "114") %>
 
             <% end %>
 <%- end %>

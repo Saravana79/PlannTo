@@ -13,6 +13,7 @@ PlanNto::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
   match 'admin/search', :to => 'admin#index'
   match ':search_type/search' => 'search#index'
+  match ':search_type/related-items/:car_id' => 'related_items#index'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
 
   match 'profile', :to => "accounts#profile", :as => "profile"
@@ -33,6 +34,8 @@ PlanNto::Application.routes.draw do
         resources :shares
   end      
   resources :mobiles
+  resources :tablets
+  resources :cameras
   resources :manufacturers
   resources :car_groups
   resource :facebook, :except => :create do
@@ -69,11 +72,17 @@ PlanNto::Application.routes.draw do
   resources :answers
   resources :messages
   resources :tips
+  resources :invitations, :only => [:create]
 
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
-  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations" }
+  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations" } 
+  devise_scope :user do
+  get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
+  end
+  
+  
   # Sample resource route with options:
   #   resources :products do
   #     member do

@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
 
-  def get_follow_types(item, follow_type, type, options = {})
+  def get_follow_types(item, follow_type, type, button_class = '_medium', options = {})
     array_follow = get_follow_text(follow_type)
     if type == "select_box"
       select_tag("follow_type", options_for_select(array_follow),
@@ -16,7 +16,7 @@ module ApplicationHelper
       links_follow = ""
       array_follow.each do |text_val, id_val, follow|
 
-        links_follow += "<span class='action_btns' style='width:120px;' id=#{id_val+'_span'}>" +
+        links_follow += "<span class='action_btns#{button_class}' style='width:120px;' id=#{id_val+'_span'} , title = '#{I18n.t id_val}'>" +
           get_follow_link(text_val, follow_item_type_item_path(item, :follow_type => follow),
           options.merge(:id => id_val)) +
           '</span>'
@@ -36,19 +36,6 @@ module ApplicationHelper
     end
   end
 
-  def get_image_url(item, type = 'Car')
-    case type
-    when 'Car', 'CarGroup'
-      configatron.car_image_url + item.imageurl
-    when 'Mobile'
-      configatron.mobile_image_url + item.imageurl
-    when 'Manufacturer'
-      configatron.car_image_url + item.imageurl
-    else
-      configatron.car_image_url + item.imageurl
-    end
-
-  end
 
   def get_the_follow_text(follow_type)
     case follow_type
@@ -95,7 +82,7 @@ module ApplicationHelper
     end
     links = ["Cars", "Mobile", "Camera", "Travel", "Movies","Tablet"]
     items = ""
-    links.each do |link|      
+    links.each do |link|
       items+= "<a #{ "id= 'menu_active'" if active_menu == link}"
       items+= " href='/#{link.singularize.downcase}/search'>#{link}</a>"
     end
@@ -107,4 +94,15 @@ module ApplicationHelper
     return search_type.camelize.constantize
   end
   
+  def errors_for(object, message=nil)
+    html=""
+    object.errors.full_messages.each do |msg| 
+      html ="<li>#{msg}</li>"
+    end
+    html
+  end
+
+  def display_item_type(item)
+    return item.type.pluralize.capitalize
+  end
 end

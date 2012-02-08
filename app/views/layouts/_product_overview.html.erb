@@ -5,23 +5,14 @@
         <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Answers</a>
     </span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="padding_topbottom15">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="padding_topbottom15" id="overview_sahre_id">
   <% if @item.shares.blank?
 
      else
   %>
-      <% @item.shares.each do |share| %>
+      <% @item.shares.reverse.each do |share| %>
           <%  if share.title %>
-          <tr height="70" valign="top">
-  <td width="67" valign="top"><div class="rate_content">
-  <a class="bg_ratecontent">100</a>
-  <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-  </div></td>
-  <td width="580"><h4><%= link_to share.title, "#"%></h4>
-  <a class="txt_black"><%= share.description %></a><br>
-     <a class="txt_gray"> In <%= @item.name %> - <%= share.user.name %> - 2 answers - 2 days ago</a></td>
-  <td width="36"><img src="images/users.png" width="24" height="24"></td>
-  </tr>
+				<%= render share %>
              <% end %>
       <% end %>
 <% end %>

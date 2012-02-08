@@ -81,17 +81,18 @@ class Item < ActiveRecord::Base
   end
 
   def image_url
-    if self.type == "Mobile"
-      return configatron.mobile_image_url + self.imageurl
-    elsif self.type == "Car"
-      return configatron.car_image_url + self.imageurl
-    elsif self.type == "Tablet"
-      return configatron.tablet_image_url + self.imageurl
-    elsif self.type == "Camera"
-      return configatron.camera_image_url + self.imageurl
+    if type == "CarGroup"
+      configatron.root_image_url + 'car' + '/' + imageurl
     else
-      return ""
+      configatron.root_image_url + type.downcase + '/' + imageurl
     end
+    
+  end
+
+  def self.get_related_items(item, limit)
+    related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
+    return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
+    return self.where(:id => related_item_ids).first(limit)
   end
 
 end
