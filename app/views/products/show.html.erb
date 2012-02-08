@@ -38,7 +38,11 @@
 </div>
 <br>
 <div class="question_answer" id="tabs1">
-    <%= render "/layouts/product_overview"%>
+    <%= render "layouts/product_tip"%>
+    <div id="content_tips">
+      <%= render :partial => 'tips/tips',:collection => @contents %>
+    </div>
+    
     <%= render "/layouts/product_answer" %>
 </div>
 <div id="tabs5" style="display: none; " class="main-content-section">

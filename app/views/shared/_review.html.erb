@@ -1,19 +1,41 @@
 <div class="review_tabs">
 	<ul>    
-   	  <li class="icon_reviewcar" id="review_car"><a href="#" class="active_tabs" >Review Car</a></li>
-      <li class="icon_Askquestion" id="ask_a_question"><a href="#" class="review_tabs" >Ask a Question</a></li>
-      <li class="icon_sharetip" id="share_a_tip"><a href="#" class="review_tabs" >Share a Tip</a></li>
-	  <li class="icon_sharetip" id="start_a_discussion" ><a href="#" class="review_tabs" >Start a Discussion</a></li>
-	  <li class="icon_sharetip" id="share_an_article"><a href="#" class="review_tabs" >Share an Article/Video</a></li>
-	  <li class="icon_sharetip" id="share_an_image"><a href="#" class="review_tabs" >Share an Image</a></li>
+   	  <li class="icon_reviewcar clicked" id="review_car" data-div="review" ><a class="active_tabs" >Review Car</a></li>
+      <li class="icon_Askquestion" id="ask_a_question"><a class="review_tabs" >Ask a Question</a></li>
+      <li class="icon_sharetip" id="share_a_tip" data-div='tip' ><a class="review_tabs" >Share a Tip</a></li>
+	  <li class="icon_sharetip" id="start_a_discussion" ><a class="review_tabs" >Start a Discussion</a></li>
+	  <li class="icon_sharetip" id="share_an_article"><a class="review_tabs" >Share an Article/Video</a></li>
+	  <li class="icon_sharetip" id="share_an_image"><a class="review_tabs" >Share an Image</a></li>
 	   
     </ul>
 	</div>
-	<div class="txtAreaDiv" id="review_car_form">
-        <textarea   class="txtAreaReview"  style="height:30px;">What do you think of this car?
+
+  
+    <div class="txtAreaDiv" ID="newContentDiv"><textarea name="textarea" id="textarea_review_div"  class="txtAreaReview" onclick=" document.getElementById('textarea_review_div').style.display='none';document.getElementById('reviewDiv').style.display='block';document.getElementById('textTitle').focus();">What do you think of this car?
         </textarea>
-     </div>
-     <div id="share_an_article_form">
-        <%= render :partial => 'layouts/youtube_share'  %>
-     </div>
+        <%= render :partial => 'reviews/new_review' %>
+        <%= render :partial => 'tips/new_tip' %>
+    </div>
 <br/>
+ 
+
+<script type="text/javascript">
+$(function() {
+
+  $('.review_tabs ul li').click(function(){
+    if($(this).hasClass('clicked')){ return;}
+    $('#textarea_review_div').hide();
+    var previous_tab = $('.review_tabs ul li.clicked');
+    var previous_div = previous_tab.attr('data-div');
+    var current_div  = $(this).attr('data-div');
+
+    console.log($(this).children('a'));
+    previous_tab.children('a').removeClass('active_tabs').addClass('review_tabs');
+    $(this).children('a').removeClass('review_tabs').addClass('active_tabs');
+    previous_tab.removeClass('clicked');
+    $('#' + previous_div + 'Div').hide();
+    $('#' + current_div + 'Div').show();
+    $(this).addClass('clicked');
+  });
+});
+</script>

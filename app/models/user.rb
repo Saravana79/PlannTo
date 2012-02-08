@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
   has_many :items,:foreign_key => :created_by
   has_many :pros,:foreign_key => :created_by
   has_many :reviews,:foreign_key => :created_by
+  has_many :contents, :foreign_key => :created_by
+  has_many :contents, :foreign_key => :updated_by
   belongs_to :facebook
 
 

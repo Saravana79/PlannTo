@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120121044858) do
+ActiveRecord::Schema.define(:version => 20120204085112) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -63,6 +63,12 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.boolean  "is_filterable"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "attributesrelationships", :force => true do |t|
+    t.integer "attribute_id", :null => false
+    t.integer "itemtype_id",  :null => false
+    t.integer "Priority",     :null => false
   end
 
   create_table "avatars", :force => true do |t|
@@ -136,7 +142,18 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.string   "updater_ip"
   end
 
+  create_table "contents", :force => true do |t|
+    t.string   "title",       :limit => 200
+    t.text     "description"
+    t.string   "type",                       :null => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "debates", :force => true do |t|
+    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -168,6 +185,18 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
+  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemID",                    :null => false
+    t.text    "URL",                       :null => false
+    t.string  "URLSource", :limit => 2000, :null => false
+  end
+
+  create_table "itemimages", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemId",                    :null => false
+    t.string  "ImageURL",  :limit => 4000, :null => false
+    t.boolean "IsDefault",                 :null => false
+  end
 
   create_table "itemrelationships", :force => true do |t|
     t.integer  "item_id",        :null => false
@@ -307,8 +336,6 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "step"
-    t.string   "range"
   end
 
   create_table "share_types", :force => true do |t|
@@ -355,6 +382,15 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.string "name"
   end
 
+  create_table "tips", :force => true do |t|
+    t.string   "title"
+    t.string   "description"
+    t.integer  "item_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_answers", :force => true do |t|
     t.text     "answer"
     t.integer  "user_id"
@@ -392,9 +428,8 @@ ActiveRecord::Schema.define(:version => 20120121044858) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
-    t.integer  "facebook_id"
     t.integer  "reputation",                            :default => 0,  :null => false
+    t.string   "name"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

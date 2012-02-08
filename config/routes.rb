@@ -68,6 +68,7 @@ PlanNto::Application.routes.draw do
   resources :questions
   resources :answers
   resources :messages
+  resources :tips
 
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user

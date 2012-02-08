@@ -1,0 +1,60 @@
+<div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+        <div class="title_header float_lft">Title :</div>
+        <div class="float_lft"><input style="margin-left:5px;width:400px" type="text" name="textTitle" ID="textTitle" width="400px"/></div>
+    </div>
+    <div class="productreview" style="clear:both;">
+        <div class="title_header float_lft">Rating :</div>
+        <img src="/images/rating_stars.png" style="padding-left:3px;"/>
+        Click to Rate it.
+    </div>
+    <div style="padding:5px 5px 0px 0px; width:550px;">
+        <div class="title_header float_lft">Pros :</div>
+        <input style="margin-left:5px;width:400px;" type="text" name="textfield" placeholder="Start typing to get recommendations..."/>
+        <input class="btn_follow" type="submit" name="Submit" value="Add"/>
+    </div>
+    <div style="padding:5px 5px 0px 0px; width:550px;">
+        <div class="title_header float_lft">Cons :</div>
+        <input style="margin-left:5px;width:400px;" type="text" name="textfield" placeholder="Start typing to get recommendations..."/>
+        <input class="btn_follow" type="submit" name="Submit" value="Add"/>
+    </div>
+    <div style="padding:5px 5px 0px 5px;">
+        <div class="title_header float_lft">Description :</div>
+        <div>
+            <textarea class="textFilling" id="txtAreaExpand" value="" style="width:570px;height:50px;"></textarea>
+        </div>
+    </div>
+    <div style="padding:5px 5px 0px 80px; width:350px; ">
+        Would you recommend this product to your friend<input class="btn_follow" type="submit" name="Submit" value="Yes" onclick="divCarName.style.display='block';"/>
+        <input class="btn_follow" type="submit" name="Submit" value="No"/>
+    </div>
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
+        <input class="btn_submitanswer" type="submit" name="Submit" Value="Share This Review">
+    </input>
+</div>
+</div>
+<div ID="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;">
+  <div style="padding:5px 5px 0px 0px;">
+      <div class="title_header float_lft">URL :</div>
+      <div class="float_lft"><input style="margin-left:5px;width:400px" type="text" name="txtURL" ID="txtURL" width="400px"/></div>
+  </div>
+  <div style="padding:5px 5px 0px 0px;clear:both;">
+      <div class="title_header float_lft">Title :</div>
+      <div class="float_lft"><input style="margin-left:5px;width:400px" type="text" name="txtTitle" ID="txtTitle" width="400px"/></div>
+  </div>
+  <div style="padding:5px 5px 0px 0px;clear:both;">
+      <div class="title_header float_lft">Thumbnail :</div>
+      <img src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft"/>
+      <div class="float_lft"><input type="checkbox">Don't Include Thumbnail</input></div>
+  </div>
+  <div style="padding:5px 5px 0px 5px;clear:both;">
+  <div class="title_header float_lft">Description :</div>
+  <div>
+      <textarea class="textFilling" id="txtAreaExpand" value="" style="width:570px;height:50px;"></textarea>
+  </div>
+  </div>
+  <div style="padding:10px 5px 20px 5px;clear:both;">
+    <input class="btn_submitanswer" type="submit" name="Submit" Value="Share This Content">
+    </input>
+  </div>
+</div>

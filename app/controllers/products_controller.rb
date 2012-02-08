@@ -14,6 +14,8 @@ class ProductsController < ApplicationController
   def show
     @item = Item.where(:id => params[:id]).includes(:item_attributes).last
     user_follow_type
+    @tip = Tip.new
+    @contents = Tip.order('created_at desc').limit(5)
   end
 
   def related_products
