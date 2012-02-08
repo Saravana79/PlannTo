@@ -2,7 +2,7 @@
   <%= render "shared/breadcrumb" %>
 <!--  breadcrumbs - End -->
 <!-- buttons - Start -->
-    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '' %>
+    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '' %>
 </div>
 <!-- buttons - End -->
 <div class="leftcolumnbig">
@@ -86,6 +86,7 @@
   <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
     <%= render "shared/login_fields", {:f => f} %>
   <% end %>
+  <%= render 'shared/product_button_javascript', :button_class => '' %>
 </div>
 <div id="dialog-invite-form" style="display:none">
 	<%= form_for(@invitation, :remote => true ) do |f| %>
@@ -98,33 +99,6 @@
 	<% end %>
 	
 </div>
-<script type="text/javascript">
-<% if @user_follow && @user_follow.follow_type == "Buyer" %>
-    Product.load_buyer();
 
-<% end %>
-<% if @user_follow && @user_follow.follow_type == "Owner" %>
-    Product.load_owner();
-<% end %>
-<% if @user_follow && @user_follow.follow_type == "Follow" %>
-    Product.load_follow();
-<% end %>
-<% if current_user.blank? %>
-    Product.load_signout_user_link();
-<% end %>
 
-  Product.related_products('<%= related_products_product_path(@item, :follow_type => @user_follow ? @user_follow.follow_type : "") %>');
-
-  $("#usual2 ul").idTabs("tabs1");
-  Product.detailed_specification();
-<% if current_user.blank? %>
-    Product.login_dialog();
-    Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow #plan_to_buy_select,#invite_buy, #invite_own, #invite_follow");
-    Product.show_login_dialog_change("#plan_to_buy_select");
-<% else %>
-    Product.hide_login_dialog();
-	Product.invite_dialog();
-	Product.show_invite_dialog("#invite_buy, #invite_own, #invite_follow");
-<% end %>
-
-</script>
+  

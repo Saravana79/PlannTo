@@ -57,28 +57,4 @@
     <% end %>
   </div>
 
-  <script type="text/javascript">
-    <% if @user_follow && @user_follow.follow_type == "Buyer" %>
-    Product.load_buyer();
-    <% end %>
-    <% if @user_follow && @user_follow.follow_type == "Owner" %>
-    Product.load_owner();
-    <% end %>
-    <% if @user_follow && @user_follow.follow_type == "Follow" %>
-    Product.load_follow();
-    <% end %>
-    <% if current_user.blank? %>
-    Product.load_signout_user_link();
-    <% end %>
-
-    Product.related_products('<%= related_products_product_path(@item, :follow_type => @user_follow ? @user_follow.follow_type : "") %>');
-
-    $("#usual2 ul").idTabs("tabs1");
-    Product.detailed_specification();
-    <% if current_user.blank? %>
-    Product.login_dialog();
-    Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow");
-    <% else %>
-    Product.hide_login_dialog();
-    <% end %>
-  </script>
+  <%= render 'shared/product_button_javascript' %>

@@ -28,14 +28,14 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
-  def all_user_follow_item
-    Rails.cache.fetch("item_follow_"+current_user.id.to_s) do
+  def all_user_follow_item  
+    Rails.cache.fetch("item_follow_"+5.to_s) do
       current_user.follows.group_by(&:followable_id)
     end
   end
 
 
-  def user_follow_type    
+  def user_follow_type
     @user_follow = current_user.blank? || all_user_follow_item[@item.id].blank? ? false : all_user_follow_item[@item.id].last
   end
 

@@ -4,7 +4,7 @@
       <div class="hdr_search">Search Criteria:</div>
       <%@search_info_lookups.each_with_index do |lookup, index|%>
         <%if index == 0%>
-          <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" id="search_criteria_active">Manufacturer</a></li>
+          <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
 
         <%end%>
         <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
@@ -81,7 +81,7 @@
 <%end%>
   }
   //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
-<% if user_signed_in? %>
+<%# if user_signed_in? %>
     $("#page").val(1);
   <%if @preferences_list.size > 0%>
       showSearchPack()
@@ -148,7 +148,7 @@
     <%end%>
       $(list).appendTo('.search_category');
   <%end%>
-<%end%>
+<%#end%>
  
   
 
