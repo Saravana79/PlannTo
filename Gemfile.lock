@@ -85,8 +85,11 @@ GEM
       railties (~> 3.0)
       thor (~> 0.14)
     json (1.6.1)
+<<<<<<< HEAD
     kaminari (0.12.4)
       rails (>= 3.0.0)
+=======
+>>>>>>> 7ab71f6398dade11d101cb75146891a54a8bef41
     libv8 (3.3.10.4)
     mail (2.3.0)
       i18n (>= 0.4.0)
@@ -176,6 +179,7 @@ GEM
     uuidtools (2.1.2)
     warden (1.0.5)
       rack (>= 1.0)
+    will_paginate (3.0.2)
     yamler (0.1.0)
     youtube_it (2.0.1)
       builder
@@ -198,7 +202,6 @@ DEPENDENCIES
   execjs
   fb_graph
   jquery-rails
-  kaminari
   mysql2
   nokogiri
   paperclip
@@ -210,4 +213,5 @@ DEPENDENCIES
   turn
   uglifier
   uuidtools
+  will_paginate
   youtube_it

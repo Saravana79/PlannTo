@@ -40,7 +40,7 @@ class Manufacturer < Item
     if relate_car_groups.blank?
       sub_item = related_cars.where(:type => related_cars.first.class.name)
     end
-    sub_item.page(page_number).per(10)
+    sub_item.paginate(:page => page_number, :per_page => 10)
   end
 
 end

@@ -71,6 +71,7 @@ PlanNto::Application.routes.draw do
   resources :questions
   resources :answers
   resources :messages
+  resources :tips
   resources :invitations, :only => [:create]
 
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message

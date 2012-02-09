@@ -73,6 +73,8 @@ root.Product =
   unload_follow: (medium, follow_message) ->
     $("#plan_to_follow").removeClass("action_btns_selected"+medium)
     $("#plan_to_follow_span").removeClass().addClass "action_btns"+medium
+    $("#plan_to_buy_span").removeClass().addClass "action_btns"+medium
+    $("#plan_to_own_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_follow_span").attr "title", follow_message
     follow_href_follow = $("#plan_to_follow.btn_txt").attr("href")
     $("#plan_to_follow.btn_txt").attr("href", Product.remove_unfollow_query_string(follow_href_follow));

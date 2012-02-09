@@ -142,7 +142,18 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.string   "updater_ip"
   end
 
+  create_table "contents", :force => true do |t|
+    t.string   "title",       :limit => 200
+    t.text     "description"
+    t.string   "type",                       :null => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "debates", :force => true do |t|
+    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -333,8 +344,6 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "step"
-    t.string   "range"
   end
 
   create_table "share_types", :force => true do |t|
@@ -381,6 +390,15 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.string "name"
   end
 
+  create_table "tips", :force => true do |t|
+    t.string   "title"
+    t.string   "description"
+    t.integer  "item_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_answers", :force => true do |t|
     t.text     "answer"
     t.integer  "user_id"
@@ -418,6 +436,8 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "reputation",                            :default => 0,  :null => false
+    t.string   "name"
     t.string   "name"
     t.integer  "facebook_id"
     t.string   "photo_file_name"

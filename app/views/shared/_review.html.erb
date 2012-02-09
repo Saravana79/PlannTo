@@ -5,7 +5,7 @@
 		<li class="icon_sharetip"><a href="#" class="review_tabs">Share a Tip</a></li>
 		<li class="icon_sharetip" ><a href="#" class="review_tabs">Start a Discussion</a></li>
 		<li class="icon_sharetip" onclick="document.getElementById('ShareURLDiv').style.display='block';document.getElementById('reviewDiv').style.display='none'; document.getElementById('textarea').style.display='none';document.getElementById('txtAreaDiv').style.height='250px';document.getElementById('txtURL').focus();"><a href="#" class="review_tabs">Share an Article/Video</a></li>
-		<li class="icon_sharetip"><a href="#" class="review_tabs">Share an Image</a></li>
+		<li class="icon_sharetip"><a href="#" class="review_tabs">Share an Image</a></li
 	   
 	</ul>
 </div>
@@ -79,7 +79,40 @@
 	<!--<div style="padding:10px 5px 20px 5px;clear:both;">
 		 <input class="btn_submitanswer"  type="submit" name="Submit" Value="Share This Content"></input>
 	</div>
+<<<<<<< HEAD
+
+  
+    <div class="txtAreaDiv" ID="newContentDiv"><textarea name="textarea" id="textarea_review_div"  class="txtAreaReview" onclick=" document.getElementById('textarea_review_div').style.display='none';document.getElementById('reviewDiv').style.display='block';document.getElementById('textTitle').focus();">What do you think of this car?
+        </textarea>
+        <%= render :partial => 'reviews/new_review' %>
+        <%= render :partial => 'tips/new_tip' %>
+    </div>
+<br/>
+ 
+
+<script type="text/javascript">
+$(function() {
+
+  $('.review_tabs ul li').click(function(){
+    if($(this).hasClass('clicked')){ return;}
+    $('#textarea_review_div').hide();
+    var previous_tab = $('.review_tabs ul li.clicked');
+    var previous_div = previous_tab.attr('data-div');
+    var current_div  = $(this).attr('data-div');
+
+    console.log($(this).children('a'));
+    previous_tab.children('a').removeClass('active_tabs').addClass('review_tabs');
+    $(this).children('a').removeClass('review_tabs').addClass('active_tabs');
+    previous_tab.removeClass('clicked');
+    $('#' + previous_div + 'Div').hide();
+    $('#' + current_div + 'Div').show();
+    $(this).addClass('clicked');
+  });
+});
+</script>
+=======
 					</div>
 					</div>-->
 <!-- Tabs - Review Car | Ask Question | Share a Trip - End -->
 <br/>
+>>>>>>> 7ab71f6398dade11d101cb75146891a54a8bef41
