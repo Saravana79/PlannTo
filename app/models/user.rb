@@ -50,4 +50,9 @@ class User < ActiveRecord::Base
     self.invitation = Invitation.find_by_token(token)
   end
 
+  def get_photo(type = :thumb)
+    return avatar.photo.url(type) unless avatar.blank?
+    return (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?
+  end
+
 end
