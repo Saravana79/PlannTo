@@ -84,6 +84,9 @@ class Item < ActiveRecord::Base
     if type == "CarGroup"
       configatron.root_image_url + 'car' + '/' + imageurl
     else
+      Rails.logger.info "----------------"
+      Rails.logger.info configatron.root_image_url + type.downcase + '/' + imageurl
+      Rails.logger.info "----------------"
       configatron.root_image_url + type.downcase + '/' + imageurl
     end
     
