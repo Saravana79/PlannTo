@@ -33,6 +33,7 @@ gem 'devise'
 gem 'sunspot_rails'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
+gem 'tinymce-rails'
 # Use unicorn as the web server
 # gem 'unicorn'
 

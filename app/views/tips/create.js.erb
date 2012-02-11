@@ -1,0 +1,2 @@
+$('#new_tip')[0].reset();
+$('#content_tips').prepend("<%= escape_javascript( render :partial => 'tips/tips', :object => @tip) %>");
