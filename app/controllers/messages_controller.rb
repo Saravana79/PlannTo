@@ -69,13 +69,4 @@ class MessagesController < ApplicationController
     @messages = @messages.sort_by &:created_at
   end
 
-  def message_users
-    #and id !=?
-     @message_users = User.find(:all, :conditions => ['email like ? ',"%#{params[:term]}%"])
-
-       results = @message_users.collect{|item|
-      {:id => item.id, :value => "#{item.email}", :imgsrc =>"", :type => "", :url => "" }
-    }
-    render :json => results
-  end
 end
