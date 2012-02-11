@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  layout "product"
 
   before_filter :authenticate_user!
 
@@ -20,7 +21,7 @@ class MessagesController < ApplicationController
   end
 
   def create_message
-    @ids = params[:message][:message_users_tokens].split(",") rescue []
+    @ids = params[:message][:email_list].split(",") rescue []
     if @ids.empty? and params[:method] == 'new'
       flash[:error] = 'Error in Sending Message. No Receivers'
       return redirect_to :back
@@ -66,5 +67,15 @@ class MessagesController < ApplicationController
     @received_msg = current_user.messages.are_from(@sender)
     @messages = @send_msg + @received_msg
     @messages = @messages.sort_by &:created_at
+  end
+
+  def message_users
+    #and id !=?
+     @message_users = User.find(:all, :conditions => ['email like ? ',"%#{params[:term]}%"])
+
+       results = @message_users.collect{|item|
+      {:id => item.id, :value => "#{item.email}", :imgsrc =>"", :type => "", :url => "" }
+    }
+    render :json => results
   end
 end
