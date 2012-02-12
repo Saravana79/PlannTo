@@ -32,7 +32,16 @@ PlanNto::Application.routes.draw do
   end
   resources :cars do
         resources :shares
-  end      
+  end  
+  resources :mobiles do
+        resources :shares
+  end 
+  resources :tablets do
+        resources :shares
+  end 
+  resources :cameras do
+        resources :shares
+  end   
   resources :mobiles
   resources :tablets
   resources :cameras
