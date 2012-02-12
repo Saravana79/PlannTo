@@ -1,0 +1,13 @@
+<%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
+  <%= render "shared/login_fields", {:f => f} %>
+<% end %>
+
+<script type="text/javascript">
+  <% if current_user.blank? %>
+    Product.login_dialog();
+    Product.show_login_dialog("#plan_to_buy, #plan_to_own, #plan_to_follow, #plan_to_buy_select");
+    Product.show_login_dialog_change("#plan_to_buy_select");
+  <% else %>
+    Product.hide_login_dialog();
+  <% end %>
+</script>
