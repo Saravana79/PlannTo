@@ -54,7 +54,7 @@ div.buttons									{ width:280px; height:29px; display:block; }
 /* Button Active */
 
 /* enable this after implemting the new button approach */
-/*
+
 .action_btns										{  height:28px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #bababa; background-clip: border-box; border-radius:3px;margin-right:10px; padding:0px 0px; }
 .action_btns:hover									{  height:28px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #74ae58; line-height:30px; margin-right:10px;background-clip: border-box; border-radius:3px; padding:0px 0px;}
 .action_btns_selected								{  height:28px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:10px; padding:0px 0px; }
@@ -73,86 +73,86 @@ div.buttons									{ width:280px; height:29px; display:block; }
 .action_btns_selected_small:hover					{float:left; display:block;}
 .action_btns_disabled_small							{float:left; display:block;}
 
-.btn_plantobuy_icon	                        			{  height:26px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_plantobuy_icon:hover	        			{  height:26px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_plantobuy_icon_selected	                        {  height:26px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_plantobuy_icon_selected:hover	       		 {  height:26px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_plantobuy_icon_disabled	                        {  height:26px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none; }
+.plan_to_buy_icon	                        			{  height:26px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_buy_icon:hover	        			{  height:26px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_buy_icon_selected	                        {  height:26px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_buy_icon_selected:hover	       		 {  height:26px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_buy_icon_disabled	                        {  height:26px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none; }
 
-.btn_iwonit_icon	                        	{ height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
-.btn_iwonit_icon:hover				{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
-.btn_iwonit_icon_selected:hover	        { height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
-.btn_iwonit_icon_selected			{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
-.btn_iwonit_icon_disabled	                        	{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_own_icon	                        	{ height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
+.plan_to_own_icon:hover				{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
+.plan_to_own_icon_selected:hover	        { height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
+.plan_to_own_icon_selected			{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
+.plan_to_own_icon_disabled	                        	{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
 
-.btn_followthiscar_icon                    	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_followthiscar_icon:hover             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_followthiscar_icon_selected:hover              	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_followthiscar_icon_selected             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_followthiscar_icon_disabled                   	{ height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none; }
+.plan_to_follow_icon                    	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_follow_icon:hover             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_follow_icon_selected:hover              	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_follow_icon_selected             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_follow_icon_disabled                   	{ height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none; }
 
-.btn_plantobuy_icon_medium	                        			{  height:23px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_plantobuy_icon_medium:hover	        			{  height:23px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_plantobuy_icon_selected_medium	                        {  height:23px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_plantobuy_icon_selected_medium:hover	       		 {  height:22px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_plantobuy_icon_disabled_medium	                        {  height:22px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_buy_icon_medium	                        			{  height:23px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_buy_icon_medium:hover	        			{  height:23px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_buy_icon_selected_medium	                        {  height:23px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_buy_icon_selected_medium:hover	       		 {  height:22px; background:url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_buy_icon_disabled_medium	                        {  height:22px; background:url(../images/icon_plantobuy.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
 
-.btn_iwonit_icon_medium	                        	{ height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
-.btn_iwonit_icon_medium:hover				{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
-.btn_iwonit_icon_selected_medium:hover	        { height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
-.btn_iwonit_icon_selected_medium			{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
-.btn_iwonit_icon_disabled_medium			{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
+.plan_to_own_icon_medium	                        	{ height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
+.plan_to_own_icon_medium:hover				{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
+.plan_to_own_icon_selected_medium:hover	        { height:26px; background:url(../images/icon_iwonit_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none;  }
+.plan_to_own_icon_selected_medium			{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
+.plan_to_own_icon_disabled_medium			{ height:26px; background:url(../images/icon_iwonit.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block;padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;}
 
-.btn_followthiscar_icon_medium                    	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_followthiscar_icon_medium:hover             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_followthiscar_icon_selected_medium:hover              	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
-.btn_followthiscar_icon_selected_medium             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-.btn_followthiscar_icon_disabled_medium             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
-
-
-
-.btn_plantobuy_icon_small	                        			{ width:22px; height:21px; background:url(../images/map_icon.png) top left; display:block; float:left; }
-.btn_plantobuy_icon_small:hover	        			{  width:22px;height:21px; background:url(../images/map_icon.png) bottom left;  display:block; float:left;  }
-.btn_plantobuy_icon_selected_small	                        { width:22px; height:21px;background:url(../images/map_icon.png) bottom left; display:block; float:left;  }
-.btn_plantobuy_icon_selected_small:hover	       		 {  width:22px; height:21px; background:url(../images/map_icon.png) top left; display:block; float:left; }
-.btn_plantobuy_icon_disabled_small	                        { width:22px; height:21px; background:url(../images/map_icon.png) top left;  display:block; float:left;  }
+.plan_to_follow_icon_medium                    	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_follow_icon_medium:hover             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_follow_icon_selected_medium:hover              	{ height:26px; background:url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px; margin-left:8px; font:bold 11px/12px tahoma; color:#323232; text-decoration:none; }
+.plan_to_follow_icon_selected_medium             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
+.plan_to_follow_icon_disabled_medium             { height:26px; background:url(../images/icon_followthiscar.png) no-repeat 0px 6px;  float:left; border:solid 0px; display:block; padding:6px 10px 0px 25px;margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none;  }
 
 
-.btn_iwonit_icon_small	                        			{ width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px; display:block; float:left; }
-.btn_iwonit_icon_small:hover	        			{  width:21px;height:21px; background:url(../images/map_icon.png) no-repeat -22px -21px;;  display:block; float:left;  }
-.btn_iwonit_icon_selected_small	                        { width:21px; height:21px;background:url(../images/map_icon.png) no-repeat -22px -21px;; display:block; float:left;  }
-.btn_iwonit_icon_selected_small:hover	       		 {  width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px; display:block; float:left; }
-.btn_iwonit_icon_disabled_small	                        { width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px;  display:block; float:left;  }
+
+.plan_to_buy_icon_small	                        			{ width:22px; height:21px; background:url(../images/map_icon.png) top left; display:block; float:left; }
+.plan_to_buy_icon_small:hover	        			{  width:22px;height:21px; background:url(../images/map_icon.png) bottom left;  display:block; float:left;  }
+.plan_to_buy_icon_selected_small	                        { width:22px; height:21px;background:url(../images/map_icon.png) bottom left; display:block; float:left;  }
+.plan_to_buy_icon_selected_small:hover	       		 {  width:22px; height:21px; background:url(../images/map_icon.png) top left; display:block; float:left; }
+.plan_to_buy_icon_disabled_small	                        { width:22px; height:21px; background:url(../images/map_icon.png) top left;  display:block; float:left;  }
 
 
-.btn_followthiscar_icon_small	                        			{ width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;; display:block; float:left; }
-.btn_followthiscar_icon_small:hover	        			{  width:20px;height:21px; background:url(../images/map_icon.png) no-repeat -43px -21px;;;  display:block; float:left;  }
-.btn_followthiscar_icon_selected_small	                        { width:20px; height:21px;background:url(../images/map_icon.png) no-repeat -43px -21px;;; display:block; float:left;  }
-.btn_followthiscar_icon_selected_small:hover	       		 {  width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;; display:block; float:left; }
-.btn_followthiscar_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;;  display:block; float:left;  }
+.plan_to_own_icon_small	                        			{ width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px; display:block; float:left; }
+.plan_to_own_icon_small:hover	        			{  width:21px;height:21px; background:url(../images/map_icon.png) no-repeat -22px -21px;;  display:block; float:left;  }
+.plan_to_own_icon_selected_small	                        { width:21px; height:21px;background:url(../images/map_icon.png) no-repeat -22px -21px;; display:block; float:left;  }
+.plan_to_own_icon_selected_small:hover	       		 {  width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px; display:block; float:left; }
+.plan_to_own_icon_disabled_small	                        { width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px;  display:block; float:left;  }
 
-*/
+
+.plan_to_follow_icon_small	                        			{ width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;; display:block; float:left; }
+.plan_to_follow_icon_small:hover	        			{  width:20px;height:21px; background:url(../images/map_icon.png) no-repeat -43px -21px;;;  display:block; float:left;  }
+.plan_to_follow_icon_selected_small	                        { width:20px; height:21px;background:url(../images/map_icon.png) no-repeat -43px -21px;;; display:block; float:left;  }
+.plan_to_follow_icon_selected_small:hover	       		 {  width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;; display:block; float:left; }
+.plan_to_follow_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;;  display:block; float:left;  }
+
+
 
 /* comment this code after new implementation of follow buttons*/
 
 
 /* Button Active */
-.action_btns_selected								{  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}
-.action_btns_selected:hover							{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 7px; }
-.action_btns:hover								{  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}
-.action_btns							{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 7px; }
-.action_btns_disabled								{  height:29px; float:left; display:block; background:url(../images/btn_bg_disabled.png) repeat-x; border:solid 1px #d1d1d1; line-height:42px; margin-right:2px;background-clip: border-box; border-radius:3px;padding:0px 7px;}
+/*.action_btns_selected								{  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}*/
+/*.action_btns_selected:hover							{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 7px; }*/
+/*.action_btns:hover								{  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}*/
+/*.action_btns							{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 7px; }*/
+/*.action_btns_disabled								{  height:29px; float:left; display:block; background:url(../images/btn_bg_disabled.png) repeat-x; border:solid 1px #d1d1d1; line-height:42px; margin-right:2px;background-clip: border-box; border-radius:3px;padding:0px 7px;}*/
 
-.action_btns_selected_medium								{  height:23px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398;  margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 3px 2px;}
-.action_btns_selected_medium:hover							{  height:23px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 3px 2px; }
-.action_btns_medium:hover								{  height:23px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 3px 2px;}
-.action_btns_medium									{  height:23px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 3px 2px; }
-.action_btns_disabled_medium								{  height:23px; float:left; display:block; background:url(../images/btn_bg_disabled.png) repeat-x; border:solid 1px #d1d1d1;  margin-right:2px;background-clip: border-box; border-radius:3px;padding:0px 3px 2px;}
+/*.action_btns_selected_medium								{  height:23px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398;  margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 3px 2px;}*/
+/*.action_btns_selected_medium:hover							{  height:23px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 3px 2px; }*/
+/*.action_btns_medium:hover								{  height:23px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 3px 2px;}*/
+/*.action_btns_medium									{  height:23px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; background-clip: border-box; border-radius:3px;margin-right:6px; padding:0px 3px 2px; }*/
+/*.action_btns_disabled_medium								{  height:23px; float:left; display:block; background:url(../images/btn_bg_disabled.png) repeat-x; border:solid 1px #d1d1d1;  margin-right:2px;background-clip: border-box; border-radius:3px;padding:0px 3px 2px;}*/
 
-#btn_active									{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; }
-.btn_plantobuy_icon	                        { width:23px; height:26px; background:url(../images/btn_icons.png) no-repeat 6px 6px;  float:left; border:solid 0px; display:block;  }
-.btn_iwonit_icon	                        { width:23px; height:26px; background:url(../images/btn_icons.png) no-repeat -22px 6px;  float:left; border:solid 0px; display:block;  }
-.btn_followthiscar_icon                     { width:23px; height:26px; background:url(../images/btn_icons.png) no-repeat -48px 6px;  float:left; border:solid 0px; display:block;  }
+/*#btn_active									{  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; }*/
+/*.plan_to_buy_icon	                        { width:23px; height:26px; background:url(../images/btn_icons.png) no-repeat 6px 6px;  float:left; border:solid 0px; display:block;  }*/
+/*.btn_iwonit_icon	                        { width:23px; height:26px; background:url(../images/btn_icons.png) no-repeat -22px 6px;  float:left; border:solid 0px; display:block;  }*/
+/*.plan_to_follow_icon                     { width:23px; height:26px; background:url(../images/btn_icons.png) no-repeat -48px 6px;  float:left; border:solid 0px; display:block;  }*/
 
 
 /* comment till this line */
