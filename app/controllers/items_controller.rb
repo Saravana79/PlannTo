@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item]
+  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
 
   #before_filter :authenticate_user!
   # GET /items
@@ -159,6 +159,9 @@ class ItemsController < ApplicationController
       else
         format.js { render :action => 'plan_to_buy_item_unfollow'}
       end
+      format.html{
+        after_ajax_call_path_for
+      }
     end
   end
 

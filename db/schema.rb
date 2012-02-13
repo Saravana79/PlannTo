@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20120206174603) do
+=======
+ActiveRecord::Schema.define(:version => 20120210100744) do
+>>>>>>> 53f0cedb9fdcc9258977de6335d66585e46ace3c
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -399,6 +403,15 @@ ActiveRecord::Schema.define(:version => 20120206174603) do
   create_table "user_answers", :force => true do |t|
     t.text     "answer"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_images", :force => true do |t|
+    t.string   "uploaded_image_file_name"
+    t.string   "uploaded_image_content_type"
+    t.integer  "uploaded_image_file_size"
+    t.datetime "uploaded_image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

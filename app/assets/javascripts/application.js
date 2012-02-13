@@ -8,8 +8,9 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require_tree .
-
-
+//= require tinymce
+// To make this work on localhost
+document.domain = /(\w+)(.\w+)?$/.exec(location.hostname)[0];
 function removeCompare(obj){
     $(obj).parents('.compare-view').remove();
     key = $(obj).attr('rel') ;

@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   include Reputation
   protect_from_forgery
   before_filter :check_authentication
-
+  before_filter :store_session_url
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
 
   def check_authentication
@@ -18,6 +18,24 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource_or_scope)
     new_user_session_path
+  end
+
+  def store_session_url
+    if current_user.blank?
+      session["user_return_to"] = request.env["REQUEST_URI"]
+      if request.env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
+        session["js_call"] = true
+      else
+        session["previous_html_url"] = request.env["REQUEST_URI"]
+      end
+    end
+  end
+
+  def after_ajax_call_path_for
+    if session["js_call"] && !current_user.blank?
+      session["js_call"] = false
+      redirect_to session["previous_html_url"] 
+    end
   end
 
   def fb_graph_exception(e)

@@ -32,7 +32,16 @@ PlanNto::Application.routes.draw do
   end
   resources :cars do
         resources :shares
-  end      
+  end  
+  resources :mobiles do
+        resources :shares
+  end 
+  resources :tablets do
+        resources :shares
+  end 
+  resources :cameras do
+        resources :shares
+  end   
   resources :mobiles
   resources :tablets
   resources :cameras
@@ -73,7 +82,7 @@ PlanNto::Application.routes.draw do
   resources :messages
   resources :tips
   resources :invitations, :only => [:create]
-
+  resources :pages, :only => [:show] 
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg

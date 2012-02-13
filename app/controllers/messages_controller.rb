@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+  layout "product"
 
   before_filter :authenticate_user!
 
@@ -20,7 +21,7 @@ class MessagesController < ApplicationController
   end
 
   def create_message
-    @ids = params[:message][:message_users_tokens].split(",") rescue []
+    @ids = params[:message][:email_list].split(",") rescue []
     if @ids.empty? and params[:method] == 'new'
       flash[:error] = 'Error in Sending Message. No Receivers'
       return redirect_to :back
@@ -67,4 +68,5 @@ class MessagesController < ApplicationController
     @messages = @send_msg + @received_msg
     @messages = @messages.sort_by &:created_at
   end
+
 end

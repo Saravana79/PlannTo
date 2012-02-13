@@ -1,20 +1,13 @@
-<%= stylesheet_link_tag 'token-input-facebook' %>
-<%= javascript_include_tag 'jquery.tokeninput' %>
-
-<script type ="text/javascript">
-  $(document).ready(function() {
-    $("#message_message_users_tokens").tokenInput("/messages/message_users.json",{
-     preventDuplicates: true,
-     crossDomain: false,
-     theme: "facebook"
-    });
-  });
-</script>
+<%#= stylesheet_link_tag 'token-input-facebook' %>
+<%#= javascript_include_tag 'jquery.tokeninput' %>
 
 <%= form_for(:message, :url => create_message_path(current_user,'new')) do |f| %>
+
   <p>
     <%= label "message", "To :"%>
-    <%= f.text_field :message_users_tokens %>
+  <div id="emailList"></div>
+    <%= f.text_field :email %>
+    <%= f.hidden_field :email_list %>
   </p>
   <p>
     <%= label "message", "Message:" %>
@@ -22,3 +15,13 @@
   </p>
   <%= f.submit "Send" %>
 <% end %>
+
+  <script type ="text/javascript">
+  $(document).ready(function() {
+     $.textAutocomplete("message_email",
+    "emailList",
+    {xCrsfToken: '<%= form_authenticity_token.to_s %>', url: "/search/message_users", editMode: false, multiple: true, hidden_field: "message_email_list", search_type_array: [],image: false}
+  );
+
+  });
+</script>

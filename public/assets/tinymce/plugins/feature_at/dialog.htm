@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>@ Product</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+	<script type="text/javascript">
+
+	function closePopup(str){
+		tinyMCEPopup.execCommand('mceInsertContent', false,str);
+		tinyMCEPopup.close();	
+	}
+	$(document).ready(function(){
+
+		$('#inp_popup_product').keyup(function(event) {
+			if(event.keyCode == 13){
+				closePopup($('#inp_popup_product').val());
+			}
+		});
+	});	
+
+	</script>
+</head>
+<body marginheight="0" topmargin="0">
+<input id="inp_popup_product" type="text" size="80" />
+</body>
+</html>
