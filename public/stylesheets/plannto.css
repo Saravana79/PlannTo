@@ -22,7 +22,8 @@ div.search									{ width:450px; height:34px; display:block; float:left; border
 .txt_welcome								{ float:right; margin-top:20px; }
 .divider_line								{ padding:0px 10px 0px 10px; }
 
-.main_menu									{ border:solid 0px; float:left;  height:37px; width:100%;}
+.main_menu									{ border:solid 0px; float:left;  height:37px; width:100%;z-index: 1;
+position: relative;}
 .main_menu a								{ padding:0px 10px 0 px 10px; display:block; border:solid 0px; min-width:85px;  height:37px; float:left; font:bold 12px/40px tahoma; color:#333; text-align:center; text-decoration:none;  }
 .main_menu a:hover							{ padding:0px 10px 0 px 10px; display:block; border:solid 0px; min-width:85px;  height:37px; float:left; font:bold 12px/40px tahoma; color:#fff; text-align:center; background:url(../images/bg_menu.png) no-repeat 0px 7px; text-decoration:none;  }
 #menu_active								{ padding:0px 10px 0 px 10px; display:block; border:solid 0px; min-width:85px;  height:37px; float:left; font:bold 12px/40px tahoma; color:#fff; text-align:center; background:url(../images/bg_menu.png) no-repeat 0px 7px; text-decoration:none;  }

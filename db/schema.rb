@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120201172400) do
+ActiveRecord::Schema.define(:version => 20120206174603) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -65,12 +65,6 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.datetime "updated_at"
   end
 
-  create_table "attributesrelationships", :force => true do |t|
-    t.integer "attribute_id", :null => false
-    t.integer "itemtype_id",  :null => false
-    t.integer "Priority",     :null => false
-  end
-
   create_table "avatars", :force => true do |t|
     t.string   "photo_file_name"
     t.string   "photo_content_type"
@@ -100,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.integer  "itemtype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ip"
   end
 
   create_table "buying_plans", :force => true do |t|
@@ -153,7 +148,6 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -186,16 +180,17 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
 
-  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemID",                    :null => false
-    t.text    "URL",                       :null => false
-    t.string  "URLSource", :limit => 2000, :null => false
-  end
-
-  create_table "itemimages", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemId",                    :null => false
-    t.string  "ImageURL",  :limit => 4000, :null => false
-    t.boolean "IsDefault",                 :null => false
+  create_table "invitations", :force => true do |t|
+    t.integer  "sender_id",                   :null => false
+    t.integer  "item_id"
+    t.integer  "item_type"
+    t.string   "email",                       :null => false
+    t.integer  "follow_type",                 :null => false
+    t.string   "message",     :limit => 2000
+    t.string   "token",                       :null => false
+    t.string   "user_ip",                     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "itemrelationships", :force => true do |t|
@@ -344,6 +339,8 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "step"
+    t.string   "range"
   end
 
   create_table "share_types", :force => true do |t|
@@ -436,14 +433,8 @@ ActiveRecord::Schema.define(:version => 20120201172400) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "reputation",                            :default => 0,  :null => false
-    t.string   "name"
     t.string   "name"
     t.integer  "facebook_id"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
     t.integer  "invitation_id"
   end
