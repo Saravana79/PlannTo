@@ -1,5 +1,5 @@
 class Item < ActiveRecord::Base
-  #self.inheritance_column ='item_type'
+  self.inheritance_column ='type'
   belongs_to :itemtype
 #  has_many :itemrelationships
 #  has_many :relateditems, :through => :itemrelationships
