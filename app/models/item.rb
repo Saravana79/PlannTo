@@ -97,8 +97,12 @@ class Item < ActiveRecord::Base
   end
 
   def self.get_cached(id)
-    Rails.cache.fetch('item:'+ id.to_s) do
-      where(:id => id).includes(:item_attributes).last
+    begin
+      Rails.cache.fetch('item:'+ id.to_s) do
+        where(:id => id).includes(:item_attributes).last
+      end
+    rescue
+      where(:id => id).includes(:item_attributes).try(:last)
     end
 
   end
