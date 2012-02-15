@@ -1,13 +1,13 @@
 root = exports ? this
 root.Product =
   load_buyer: (medium, message, follow_message) ->
-    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon_selected"
+    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon_selected"+medium
     $("#plan_to_buy_span").removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_buy_span").attr "title", message    
     $("#plan_to_follow_span").attr "title", follow_message
-    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon_selected"
+    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon_selected"+medium
     $("#plan_to_follow_span").removeClass().addClass "action_btns_selected"+medium
-    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"
+    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"+medium
     $("#plan_to_own_span").removeClass().addClass "action_btns"+medium
     buy_href_follow = $("#plan_to_buy").attr("href")
     $("#plan_to_buy").attr("href", buy_href_follow+'&unfollow=true');
@@ -15,37 +15,37 @@ root.Product =
     $("#plan_to_follow").attr("href", buy_href_follow+'&unfollow=true');
 
   load_owner: (medium, message, follow_message) ->
-    $("#plan_to_own").removeClass().addClass "plan_to_own_icon_selected"
+    $("#plan_to_own").removeClass().addClass "plan_to_own_icon_selected"+medium
     $("#plan_to_own_span").removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_own_span").attr "title", message
     $("#plan_to_follow_span").attr "title", follow_message
-    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon_selected"
+    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon_selected"+medium
     $("#plan_to_follow_span").removeClass().addClass "action_btns_selected"+medium
     own_href_follow = $("#plan_to_own").attr("href")
     $("#plan_to_own").attr("href", own_href_follow+'&unfollow=true');
     follow_href_follow = $("#plan_to_follow").attr("href")
     $("#plan_to_follow").attr("href", follow_href_follow+'&unfollow=true');
     $("#plan_to_buy_span").removeClass()
-    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"
+    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span").addClass "action_btns"    
 
   load_follow: (medium, follow_message) ->
     $("#plan_to_follow").removeClass()
-    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon_selected"
+    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon_selected"+medium
     $("#plan_to_follow_span").removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_follow_span").attr "title", follow_message
-    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"
+    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_own_span").removeClass().addClass "action_btns"+medium
-    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"
+    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"+medium
     follow_href_follow = $("#plan_to_follow").attr("href")
     $("#plan_to_follow").attr("href", follow_href_follow+'&unfollow=true');
 
   unload_buyer: (medium, message, follow_message) =>
-    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"
+    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_buy_span").attr "title", message
-    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon"
+    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_follow_span").attr "title", follow_message
     follow_href_follow = $("#plan_to_follow").attr("href")
@@ -54,10 +54,10 @@ root.Product =
     $("#plan_to_buy").attr("href", Product.remove_unfollow_query_string(buy_href_follow, "Buyer"));
 
   unload_owner: (medium, message, follow_message) ->
-    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"
+    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"+medium
     $("#plan_to_own_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_own_span").attr "title", message
-    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon"
+    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_follow_span").attr "title", follow_message
     own_href_follow = $("#plan_to_own").attr("href")
@@ -68,11 +68,11 @@ root.Product =
 
 
   unload_follow: (medium, follow_message) ->
-    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon"
+    $("#plan_to_follow").removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span").removeClass().addClass "action_btns"+medium
-    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"
+    $("#plan_to_buy").removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span").removeClass().addClass "action_btns"+medium
-    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"
+    $("#plan_to_own").removeClass().addClass "plan_to_own_icon"+medium
     $("#plan_to_own_span").removeClass().addClass "action_btns"+medium
     $("#plan_to_follow_span").attr "title", follow_message
     follow_href_follow = $("#plan_to_follow").attr("href")

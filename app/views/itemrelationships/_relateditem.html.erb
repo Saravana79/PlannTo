@@ -11,9 +11,7 @@
       <img src="../images/rating_stars.png" width="87" height="20"/><br/>
 
       <% if current_user.blank? || !current_user.following?(relateditem) %>
-        <%= link_to("Buy (#{get_follow_count(follower_count, Follow::ProductFollowType::Buyer)})", plan_to_buy_item_item_path(relateditem.id), :class => "btn_follow", :remote => true) %>
-        <%= link_to("Own (#{get_follow_count(follower_count, Follow::ProductFollowType::Owner)})", own_a_item_item_path(relateditem.id), :class => "btn_follow", :remote => true) %>
-        <%= link_to("Follow (#{get_follow_count(follower_count, Follow::ProductFollowType::Follow)})", follow_this_item_item_path(relateditem.id), :class => "btn_follow", :remote => true) %>
+        <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small' %>
       <% end %>
     </td>
   </tr>
