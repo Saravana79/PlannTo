@@ -15,7 +15,7 @@
             <td width="113">
             <a href="<%=link_url(related_item)%>" class="txt_black"><%=related_item.name%></a>
             <img src="../images/rating_stars.png" width="87" height="20" /><br />
-            <a style="" href="#" class="btn_follow">Follow</a>
+            <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item %>
             </td>
           </tr>
           <tr>
