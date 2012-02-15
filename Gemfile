@@ -24,6 +24,9 @@ group :assets do
   gem 'coffee-rails', "~> 3.1.0"
   gem 'uglifier'
 end
+gem 'sqlite3'
+gem 'citier', '~>0.1.15'
+gem 'rails_sql_views', git: 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
 gem 'jquery-rails'
 gem 'acts-as-taggable-on', '~>2.1.1'
