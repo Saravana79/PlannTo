@@ -3,7 +3,6 @@
 
 class Product < Item
 
-
 has_one :itemrelationship, :foreign_key => :item_id
 has_many :itemrelationships, :foreign_key => :item_id
 
