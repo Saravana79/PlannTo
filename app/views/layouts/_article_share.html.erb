@@ -1,25 +1,74 @@
-<div class="youtubedata" style="widht: 400px; min-height:300px">
-<div class="youtubeentyform" style="width:210px;float:left;">
-<%#= form_for([@item, @item.shares.build], :remote => true) do |f| %>
-<%= form_for([@item, @item.shares.build], :remote => true) do |f| %>
-  <div class="field">
-    <%= f.label "Share Article" %><br />
-    <%= f.text_field :url %>
-  </div>
-    <div class="field">
-    <%= f.label "Custome Description"%><br />
-    <%= f.text_area :user_description, :size => "30x10" %>
-  </div>
-  <%= collection_select(:share, :share_type_id, ShareType.all, :id, :name) %>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>   
-</div>
-<div id="article_contents" style="float:right;width:390;">
-        <% @item.shares.each do |share| %>
-                <h1><%= link_to share.title, "#" if share.title and share.youtube.nil?%></h1>
 
-        <% end %>
+<%= form_for(ArticleContent.new,:url => download_article_contents_path, :remote => true) do |f| %>
+<div id="article_errors" style="display:none"></div>
+
+<%= hidden_field_tag 'articles_item_id' %>
+<div>
+	<input type="text" name="textfield" value="" id="article_product"/>
+	<ul id="article_product_list"></ul>
+	<div style="clear:both"></div>
 </div>
+
+	<div style="padding:5px 5px 0px 0px;">				
+		<div class="title_header float_lft" ><%= f.label :url %> :</div>
+		<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>								 
+		
+	</div >
+	<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url">		
+		<div class="title_header float_lft" >Title :</div>
+		<div class="float_lft"><%= f.text_field :title, :id => "txtArticleTitle", :style => "margin-left:5px;width:400px" %></div>								 
+		
+	</div >
+	<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url article_image">							
+		<div class="title_header float_lft article_image">Thumbnail :</div>
+		<img id="img_thumb" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+		<div class="float_lft article_image"><input type="checkbox" >Don't Include Thumbnail</input></div>
+	</div>
+	
+	<div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
+    	<div class="title_header float_lft" >Description :</div>
+		<div> <%= f.text_area :description, :id => "txtArticleDescription", :style => "width:570px;height:50px;" %></div>
+	</div>
+
+	<%= hidden_field_tag 'item_id',@item.id %>
+	<div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
+		 <%= f.submit "Share", :id => "submit_article" %> 
+	</div>
+<input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
+<div id="url_content_desc">	</div>
 </div>
+<% end %>
+<script type="text/javascript">
+$(function(){
+	$('#submit_article').live('click',function(){
+		rege = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$/;
+		if($('#article_content_url').val() && rege.test($('#article_content_url').val())){
+			$('form#new_article_content').attr('action','<%= article_contents_path %>');
+		} else {
+			return false;
+		}
+	});
+	$('#article_content_url').keyup(function(){
+		rege = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$/;
+		if($('#article_content_url').val() && rege.test($('#article_content_url').val())){
+			$('form#new_article_content').attr('action','<%= download_article_contents_path  %>');
+			$('form#new_article_content').submit();
+		} else {
+			$('div.dwnld_url').hide();
+		}
+	});
+	settings={
+		close:true, addButton: false,
+		url: "/search/autocomplete_items", 
+		editMode: false, multiple: true, 
+		hidden_field: "articles_item_id"
+	};
+	$.textTagger("article_product","article_product_list",settings);
+	$.addTag("article_product","article_product_list", settings,"<%= @item.name %>", "<%= @item.id %>");
+	$.addIdToField(settings.hidden_field, "<%= @item.id %>")
+	$("ul#article_product_list li:first span a.icon_close").remove();
+});
+
+</script>
+
+

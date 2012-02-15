@@ -1,0 +1,7 @@
+<% if @article.errors.any? %>
+  $("#article_errors").html("<%= errors_for(@article) %>");
+  $("#article_errors").show(300);	
+<% else %>
+$("#article_errors").hide();
+window.location = "/cars/<%= @item_id %>" ; 
+<% end %>

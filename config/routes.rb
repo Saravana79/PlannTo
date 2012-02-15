@@ -35,6 +35,13 @@ PlanNto::Application.routes.draw do
   resources :cars do
         resources :shares
   end  
+  resources :contents do
+  end
+  resources :article_contents do
+    collection do
+      post :download
+    end
+  end
   resources :mobiles do
         resources :shares
   end 

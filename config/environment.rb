@@ -1,6 +1,6 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
-
+require 'rails_sql_views'
 ActionMailer::Base.smtp_settings = {
   :address              => "smtp.gmail.com",
   :port                 => 587,
