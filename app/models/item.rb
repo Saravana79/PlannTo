@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+  #self.inheritance_column ='item_type'
   belongs_to :itemtype
 #  has_many :itemrelationships
 #  has_many :relateditems, :through => :itemrelationships
@@ -93,6 +94,13 @@ class Item < ActiveRecord::Base
     related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
     return self.where(:id => related_item_ids).first(limit)
+  end
+
+  def self.get_cached(id)
+    Rails.cache.fetch('item:'+ id.to_s) do
+      where(:id => id).includes(:item_attributes).last
+    end
+
   end
 
 end
