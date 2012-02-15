@@ -102,9 +102,6 @@ root.Product =
           $("#uisideRelatedProduct").html data
 
   load_signout_user_link: ->
-    $("#plan_to_own").attr "href", "javascript:void(0)"
-    $("#plan_to_buy").attr "href", "javascript:void(0)"
-    $("#plan_to_follow").attr "href", "javascript:void(0)"
     $("#plan_to_buy_select").attr "data-url", "javascript:void(0)"
 
   login_dialog: ->
