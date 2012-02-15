@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0'
+gem 'rails', '3.1.1'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -8,6 +8,7 @@ gem 'rails', '3.1.0'
 gem 'mysql2'
 gem 'uuidtools' 
 gem "configatron", "~> 2.8.4"
+gem 'dalli'
 gem 'fb_graph'
 #gem 'kaminari'
 gem 'will_paginate'
