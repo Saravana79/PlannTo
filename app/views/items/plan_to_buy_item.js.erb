@@ -1,5 +1,5 @@
 Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
-<%= render "shared/javascript_button", :button_class => '' %>
+<%= render "shared/javascript_button", :button_class => '', :item => @item %>
 document.ready(function(){
   $(".tooltip").remove();
   $(".PlanntoBuyBtn span[title]").tooltip();  

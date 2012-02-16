@@ -52,9 +52,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  helper_method :user_follow_type
 
-  def user_follow_type
-    @user_follow = current_user.blank? || all_user_follow_item[@item.id].blank? ? false : all_user_follow_item[@item.id].last
+  def user_follow_type(item, user = current_user)
+    @user_follow = user.blank? || all_user_follow_item[item.id].blank? ? false : all_user_follow_item[item.id].last
   end
 
 end

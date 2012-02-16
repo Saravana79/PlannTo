@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
   
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
-    user_follow_type
+    user_follow_type(@item, current_user)
     @tip = Tip.new
     @contents = Tip.order('created_at desc').limit(5)
   end
