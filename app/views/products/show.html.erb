@@ -2,7 +2,7 @@
   <%= render "shared/breadcrumb" %>
 <!--  breadcrumbs - End -->
 <!-- buttons - Start -->
-    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '' %>
+    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '', :item => @item %>
 </div>
 <!-- buttons - End -->
 <div class="leftcolumnbig">
@@ -86,11 +86,10 @@
 </div>
 <br />
 <%=render :partial =>"items/related_products" %>
+
 <div id="dialog-form" title="Create new user">
-  <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
-    <%= render "shared/login_fields", {:f => f} %>
-  <% end %>
-  <%= render 'shared/product_button_javascript', :button_class => '' %>
+  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item %>
+  <%= render "shared/login_dialog" %>  
 </div>
 <div id="dialog-invite-form" style="display:none">
 	<%= form_for(@invitation, :remote => true ) do |f| %>

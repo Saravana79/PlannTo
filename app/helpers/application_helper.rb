@@ -1,8 +1,7 @@
 module ApplicationHelper
 
   def get_follow_link(name, path, options = {})
-    link_to("", path, options).to_s +
-      link_to(name, path, options.merge(:class => "btn_txt")).to_s
+      link_to(name, path, options).to_s
   end
 
 
@@ -15,10 +14,10 @@ module ApplicationHelper
     else
       links_follow = ""
       array_follow.each do |text_val, id_val, follow|
-
-        links_follow += "<span class='action_btns#{button_class}' style='width:120px;' id=#{id_val+'_span'} , title = '#{I18n.t id_val}'>" +
+        text_val = "" if button_class == "_small"
+        links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s} title = '#{I18n.t id_val}'>" +
           get_follow_link(text_val, follow_item_type_item_path(item, :follow_type => follow),
-          options.merge(:id => id_val)) +
+          options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class)) +
           '</span>'
       end
       links_follow.html_safe

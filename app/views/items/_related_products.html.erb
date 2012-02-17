@@ -15,14 +15,14 @@
             <td width="113">
             <a href="<%=link_url(related_item)%>" class="txt_black"><%=related_item.name%></a>
             <img src="../images/rating_stars.png" width="87" height="20" /><br />
-            <a style="" href="#" class="btn_follow">Follow</a>
+            <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item %>
             </td>
           </tr>
           <tr>
             <td height="40" colspan="2" class="dotted_border" valign="top">
-              <% related_follower = related_item.related_followers(@follow_type) %>
+              <% related_follower = related_item.related_followers(@follow_type) %>              
               <%- related_follower[0..2].each do |user| %>
-                <%= image_tag user.get_photo, :title => user.name %>
+                <%= image_tag user.get_photo(:small), :title => user.name %>
               <% end %>
               <% if ((related_follower.count - 2) > 0) %>
                 and <%= (related_follower.count - 2) %> other people owns this.
@@ -31,6 +31,10 @@
               <% end %>
             </td>
           </tr>
+         <script type="text/javascript">
+           <%= render "shared/javascript_button", :formate => :js, :button_class => '_small', :item => related_item,
+           :related_follower => user_follow_type(related_item, current_user) %>
+         </script>
         <%end%>
 
         </table>

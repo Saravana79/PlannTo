@@ -40,17 +40,17 @@
         <% @follow_item['Car'].each do |follow| %>
           <% item = follow.followable %>
           <%= render("shared/product_info", {:item => item, :follow => follow}) %>
-        <% end %>
+        <% end rescue "" %>
 
 
       </ul>
     </div>
     <div id="tabs2" style="display: none; " class="main-content-section">
       <ul id="mobile_slider" class="mb-slider" >
-        <% @follow_item['Mobile'].each do |follow| %>
+        <% (@follow_item['Mobile']).each do |follow| %>
           <% item = follow.followable %>
           <%= render("shared/product_info", {:item => item, :follow => follow}) %>
-        <% end %>
+        <% end rescue ""%>
 
 
       </ul>
