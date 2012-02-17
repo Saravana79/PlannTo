@@ -1,8 +1,7 @@
-<div id="preferencesTag"><ul></ul></div><br/><br/><br/>
+<h1><%=@question.title%></h1>
+<div id="preferencesTag"><ul></ul></div> <%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%><br/><br/><br/>
 <div id="tabs">
-  <ul>
-    <li><a href="#tabs-1">Recommendations</a></li>
-  </ul>
+
   <ul><li id='giveAdviceTag' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add a Recommendation</li></ul>
   <p>My Question: <%=@question.question%></p>
   <p>Advices</p>
@@ -21,6 +20,13 @@
 <script type="text/javascript">
   $('#giveAdviceTag').live('click', function(){
     $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
+  })
+
+  $('#editPreferences').live('click', function(e){
+    e.preventDefault()
+    $.get('/preferences/edit_preference',{id: <%=@buying_plan.id%>},null,"script");
+    return false
+
   })
 </script>
 <script type="text/javascript">
@@ -44,25 +50,25 @@
       //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
       var className = "middlebg attributeTag"
       var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-
-      // var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-      //    var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
   <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
-      var value   = "<%="#{preference[:value]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"    
       var selectedList = value.split(',')
-      var searchCriteria = "<br/> "
+      var searchCriteria = ""
       var anchorId
-      searchCriteria = searchCriteria +  "<span id=''>"
+      searchCriteria = searchCriteria +  ""
+      var spanHTML = ""
       var updatedSearchList= [];
       $.each(selectedList, function(index, value) {
         updatedSearchList.push( value)
       })
-      searchCriteria = searchCriteria + updatedSearchList.toString() +  "</span>"
-      var className = "textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-      var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
+      searchCriteria = searchCriteria + spanHTML
+           var className = "middlebg attributeTag"
+          var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+
 
   <%else%>
-      var list = "<li id='" +tagId +"' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" + searchName + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
   <%end%>
     $(list).appendTo('#preferencesTag ul');
 <%end%>

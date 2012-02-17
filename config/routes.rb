@@ -27,7 +27,9 @@ PlanNto::Application.routes.draw do
       get :give_advice
       get :get_advice
       post :add_preference
+      get :edit_preference
       post :save_advice
+      get :update_preference
     end
   end
   resources :cars do

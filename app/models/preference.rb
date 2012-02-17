@@ -15,13 +15,27 @@ class Preference < ActiveRecord::Base
 
     itemtype = Itemtype.find_by_itemtype(search_type)
     search_attributes = SearchAttribute.by_itemtype(itemtype.id)
-    #Preference.clear_items(search_attributes.collect(&:id))
 
     Preference.add_items(buying_plan_id, search_attributes, params)
 
   end
 
-  def self.get_items(preferences)
+  def self.update_preferences(buying_plan_id, search_type, params)
+
+    itemtype = Itemtype.find_by_itemtype(search_type)
+    search_attributes = SearchAttribute.by_itemtype(itemtype.id)
+    Preference.clear_items(buying_plan_id)
+
+    Preference.add_items(buying_plan_id, search_attributes, params)
+
+  end
+
+    def self.get_preferences(buying_plan_id, itemtype, search_ids)
+    preferences = Preference.where("buying_plan_id = ? and search_display_attribute_id in (?)", buying_plan_id, search_ids).includes(:search_attribute)
+    Preference.get_items(preferences)
+  end
+
+    def self.get_items(preferences)
     preferences_list = Array.new
     preferences.each do |preference|
       unless preference.search_attribute.nil?
@@ -32,7 +46,7 @@ class Preference < ActiveRecord::Base
           min_attribute = "min_" + "#{preference.search_attribute.attribute_id}"
           max_attribute = "max_" + "#{preference.search_attribute.attribute_id}"
           unit = preference.search_attribute.attribute.unit_of_measure
-          search_criteria = "( #{preference.search_attribute.value_type.underscore.humanize} #{min_value} #{unit} - #{max_value} #{unit} )"
+          search_criteria = " #{preference.search_attribute.value_type.underscore.humanize} #{min_value} #{unit} - #{max_value} #{unit} "
           preferences_list << {:search_name => preference.search_attribute.attribute_display_name, :attribute_name => preference.search_attribute.attribute.name, :value_type => preference.search_attribute.value_type, :min_value => min_value, :min_attribute => min_attribute, :max_value => max_value, :attribute => preference.search_attribute.attribute_id, :max_attribute => max_attribute, :search_criteria => search_criteria}
         elsif value_type == "ListOfValues"
           value = preference.value_1.nil? ? "" : preference.value_1.split(',')
@@ -48,7 +62,7 @@ class Preference < ActiveRecord::Base
         else
           if ((value_type == "GreaterThan") || (value_type == "LessThen"))
             unit = preference.search_attribute.attribute.unit_of_measure
-            search_criteria = "(#{preference.search_attribute.value_type.underscore.humanize} #{preference.value_1} #{unit} )"
+            search_criteria = " #{preference.search_attribute.value_type.underscore.humanize} #{preference.value_1} #{unit} "
           else
             search_criteria = ""
           end
@@ -91,8 +105,8 @@ class Preference < ActiveRecord::Base
     end
   end
 
-  def self.clear_items(ids)
-    Preference.delete_all(["search_display_attribute_id in (?)", ids])
+  def self.clear_items(buying_plan_id)
+    Preference.delete_all(["buying_plan_id = ?", buying_plan_id])
   end
 
 end

@@ -20,7 +20,7 @@
       <br/>
       <div id="btnDiv" style="height:100px;display:block;">
         <a href="#" class="btn_gray float_lft" style="display:none;" id="clearTag">Clear All</a>
-        <a href="#" class="btn_submitanswer float_rgt" style="width:150px;display:none;" id="addPreferenceTag">Create Buying Plan</a>
+        <!--<a href="#" class="btn_submitanswer float_rgt" style="width:150px;display:none;" id="addPreferenceTag">Create Buying Plan</a>-->
         <a href="#" class="btn_submitanswer float_rgt" style="width:100px;display:none;" id="getAdviceTag">Ask Advice</a>
       </div>
     </div>
@@ -46,8 +46,6 @@
 
 <div class="push"></div>
 <script type="text/javascript">
-
-
   function resetUnwantedFormFields(){
 <%@search_info_lookups.each_with_index do |value, index|%>
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"
@@ -104,11 +102,8 @@
         $("#" + maxFieldId).val(maxValue)
         searchCriteria = ""
         searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-        //  var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-        //   var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
-        var className = "middlebg attributeTag"
+           var className = "middlebg attributeTag"
         var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-
     <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
         var fieldId = "<%="#{preference[:attribute]}"%>"
         var value   = "<%="#{preference[:value]}"%>"
@@ -117,12 +112,12 @@
         searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
         var value = searchCriteria
         var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-        //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
         var className = "middlebg attributeTag"
         var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-
-        // var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
     <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+        <%if preference[:value_type] == "manufacturer"%>      
+        tagId = "manufacturerAtt_tag"
+        <%end%>
         var fieldId = "<%="#{preference[:attribute]}"%>"
         var value   = "<%="#{preference[:value]}"%>"
         var selectedList = value.split(',')
@@ -148,9 +143,7 @@
     <%end%>
       $(list).appendTo('.search_category');
   <%end%>
-<%#end%>
- 
-  
+<%#end%>  
 
 
   $('#deleteTag').live('click', function(){
