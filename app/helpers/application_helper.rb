@@ -104,4 +104,15 @@ module ApplicationHelper
   def display_item_type(item)
     return item.type.pluralize.capitalize
   end
+
+  def follow_types_classes(follow_type)
+     case follow_type
+    when 'Buyer'
+      "bg_planetobuy"
+    when 'Owner'
+      "bg_iwonit"
+    when 'Follow'
+      "bg_following"
+    end
+  end
 end
