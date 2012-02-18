@@ -97,8 +97,10 @@
 
             <% @follow_item['Car'].each do |follow| %>
                 <% item = follow.followable %>
-                <div class="product">
-                  <span class="prod_img"><a id="icon_close2" href="#"></a><a id="produ_bgimg"><%= item.name %></a></span>
+                <div class="product" id="product_<%= item.id %>">
+                  <span class="prod_img">
+                    <%= link_to "", follow_item_type_item_path(item, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :id => "icon_close2", :remote => true %>
+                    <a id="produ_bgimg"><%= item.name %></a></span>
                   <a class="<%= follow_types_classes(follow.follow_type) %>" href="#" style=" font:bold 11px/22px arial; color:#fff;"><%= get_the_follow_text(follow.follow_type) %></a>
                 </div>
             <% end rescue "" %>

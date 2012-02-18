@@ -160,7 +160,7 @@ class ItemsController < ApplicationController
         format.js { render :action => 'plan_to_buy_item_unfollow'}
       end
       format.html{
-        after_ajax_call_path_for
+        after_ajax_call_path_for                
       }
     end
   end
