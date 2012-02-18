@@ -12,6 +12,49 @@ module ItemsHelper
     specifications.to_sentence
   end
 
+  def display_specification?(item)
+    return true unless (item.value == "" || item.value.nil? || item.value == "0")
+    return false
+  end
+
+  def display_specification_value(item)
+    content = ""
+          if item.attribute_type == Attribute::TEXT
+        content = "#{item.value}"
+      elsif item.attribute_type == Attribute::BOOLEAN
+        if item.value == "True"
+          content = "<img src='/images/check.png'>"
+        else
+          content = "<img src='/images/close.png'>"
+        end
+      elsif item.attribute_type == Attribute::NUMERIC
+        if (item.unit_of_measure == "GB" && item.value.to_f < 1)
+          value = convert_to_MB(item.value.to_f)
+          content = "#{value} MB" if value != 0
+        elsif (item.unit_of_measure == "MB" && item.value.to_f >= 1024)
+          value = convert_to_GB(item.value.to_f)
+          content = "#{value} GB" if value != 0
+        elsif (item.unit_of_measure == "GHz" && item.value.to_f < 1)
+          value = convert_to_MHz(item.value.to_f)
+          content = "#{value} MHz" if value != 0
+        elsif (item.unit_of_measure == "MHz" && item.value.to_f >= 1000)
+          value = convert_to_GHz(item.value.to_f)
+          content = "#{value} GHz" if value != 0
+        else
+          content += "#{item.value}"
+          unless (item.unit_of_measure == "" || item.unit_of_measure.nil?)
+            content += "  #{item.unit_of_measure}"
+          end
+        end
+      else
+        content = "#{item.value}"
+        unless (item.unit_of_measure == "" || item.unit_of_measure.nil?)
+          content += "  #{item.unit_of_measure}"
+        end
+      end
+      return content
+  end
+
   def get_content(item)
     content = ""   
     unless (item.value == "" || item.value.nil? || item.value == "0")
