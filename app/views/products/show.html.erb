@@ -41,12 +41,7 @@
 </div>
 <br/>
 <div class="question_answer" id="tabs1">
-    <%= render "layouts/product_tip"%>
-    <div id="content_tips">
-      <%= render :partial => 'tips/tips',:collection => @contents %>
-    </div>
-    
-    <%= render "/layouts/product_answer" %>
+    <%= render "contents/all"%>
 </div>
 <div id="tabs5" style="display: none; " class="main-content-section">
     <%#= render :template => 'products/specification' %>
@@ -73,6 +68,8 @@
     <%= render "/layouts/product_video" %>
     <%= render "/layouts/product_answer" %>
 </div>
+
+<%= render "/layouts/product_answer" %>
 <!-- Q&A -  End -->
 </div>
 <div class="rightcolumnsmall">

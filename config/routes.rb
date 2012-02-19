@@ -36,6 +36,9 @@ PlanNto::Application.routes.draw do
         resources :shares
   end  
   resources :contents do
+    collection do
+      get :feed
+    end
   end
   resources :article_contents do
     collection do

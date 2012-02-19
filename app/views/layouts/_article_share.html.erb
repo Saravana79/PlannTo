@@ -3,16 +3,19 @@
 <div id="article_errors" style="display:none"></div>
 
 <%= hidden_field_tag 'articles_item_id' %>
-<div>
-	<input type="text" name="textfield" value="" id="article_product"/>
-	<ul id="article_product_list"></ul>
-	<div style="clear:both"></div>
-</div>
+<div style="clear:both;">
 
-	<div style="padding:5px 5px 0px 0px;">				
+	<ul id="article_product_list"></ul>
+  <input type="text" name="textfield" value="" id="article_product"/>
+<div style="clear:both;"></div>
+</div>
+<%= f.hidden_field :type, :id => "new_article_type" %>
+<%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
+
+	<div style="padding:5px 5px 0px 0px;clear:both;">
 		<div class="title_header float_lft" ><%= f.label :url %> :</div>
 		<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>								 
-		
+		<div style="clear:both;"></div>
 	</div >
 	<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url">		
 		<div class="title_header float_lft" >Title :</div>
@@ -32,11 +35,12 @@
 
 	<%= hidden_field_tag 'item_id',@item.id %>
 	<div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
-		 <%= f.submit "Share", :id => "submit_article" %> 
+		 <%= f.submit "Share", :id => "submit_article", :class => "btn_submitanswer" %> 
+		<div style="clear:both;"></div>
 	</div>
 <input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
 <div id="url_content_desc">	</div>
-</div>
+
 <% end %>
 <script type="text/javascript">
 $(function(){

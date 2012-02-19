@@ -5,8 +5,30 @@
 <% end %>
 
 //  Product.related_products('<%= related_products_product_path(@item, :follow_type => @user_follow ? @user_follow.follow_type : "") %>');
-
-  $("#usual2 ul").idTabs("tabs1");
+var item_id = <%= item.id %>;
+var url = "<%= feed_contents_path(:items => item.id  ) %>";
+  $("#usual2 ul a").live("click",function(){
+	id=$(this).attr('href');
+	type="";
+	order="";
+	switch(id){
+		case "#tabs1" : type="";break;
+		case "#tabs2" : type="TipContent";break;
+		case "#tabs3" : type="ReviewContent";break;
+		case "#tabs4" : type="QuestionContent";break;
+		case "#tabs5" : type="SpecificationContent";break;
+		case "#tabs6" : type="ImageContent";break;
+		case "#tabs7" : type="VideoContent";break;
+		default : type="";break;
+	}
+	//Temporary needs to pull for every type after integration
+	if(type=="VideoContent"){
+		url=url+"&limit=5&type="+type;
+		$.get(url, function(data) {
+			$(id).html(data);
+		});
+	}
+	});
   Product.detailed_specification();
 
 $(".PlanntoBuyBtn span[title]").tooltip();
