@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
   def get_photo(type = :thumb)
     return avatar.photo.url(type) unless avatar.blank?
     return (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?
+    return "/images/photo_profile.png"
   end
 
 end
