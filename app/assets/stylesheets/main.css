@@ -277,3 +277,15 @@ li.middlebg								{ height:auto; background-color:#fffce0; border:solid 1px #ef
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
     display: none;
 }
+
+/* change for profile page on 19 Feb 2010 */
+.imgprofilediv								{width:160px; height:120px;position:relative;}
+.closeimg                     {position:relative;top:-120px;left:140px;}
+.imgpicbtnspan								{ position:absolute;top:0px;   height:125px; display:inline; cursor:pointer;}
+.imgtextspan								{ position:absolute;top:100px;   cursor:pointer;}
+
+
+.prod_img								{ width:160px; height:120px;display:block;}
+.produ_bgimg							{ width:160px; height:20px; display:block; background-color:#000000; opacity: 0.746;font:normal 11px/20px arial; color:#fff; text-align:left; text-indent:5px; margin:0px 0px 0px 0px;}
+
+/* end change for profile page on 19 Feb 2010 */
