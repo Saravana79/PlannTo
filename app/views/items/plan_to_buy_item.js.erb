@@ -1,5 +1,5 @@
 Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
-<%= render "shared/javascript_button", :button_class => '', :item => @item, :related_follower => @user_follow %>
+<%= render "shared/javascript_button", :button_class => params[:button_class], :item => @item, :related_follower => @user_follow %>
 
 document.ready(function(){
   $(".tooltip").remove();

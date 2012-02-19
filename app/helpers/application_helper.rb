@@ -16,7 +16,7 @@ module ApplicationHelper
       array_follow.each do |text_val, id_val, follow|
         text_val = "" if button_class == "_small"
         links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s} title = '#{I18n.t id_val}'>" +
-          get_follow_link(text_val, follow_item_type_item_path(item, :follow_type => follow),
+          get_follow_link(text_val, follow_item_type_item_path(item, :follow_type => follow, :button_class => button_class),
           options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class)) +
           '</span>'
       end

@@ -155,9 +155,9 @@ class ItemsController < ApplicationController
     end
     respond_to do |format|
       unless params[:unfollow]
-        format.js { render :action => 'plan_to_buy_item'}
+        format.js { render :action => 'plan_to_buy_item', :button_class => params[:button_class]}
       else
-        format.js { render :action => 'plan_to_buy_item_unfollow'}
+        format.js { render :action => 'plan_to_buy_item_unfollow', :button_class => params[:button_class]}
       end
       format.html{
         after_ajax_call_path_for                
