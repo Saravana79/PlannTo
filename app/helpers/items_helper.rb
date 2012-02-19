@@ -17,42 +17,78 @@ module ItemsHelper
     return false
   end
 
-  def display_specification_value(item)
-    content = ""
-          if item.attribute_type == Attribute::TEXT
-        content = "#{item.value}"
-      elsif item.attribute_type == Attribute::BOOLEAN
-        if item.value == "True"
-          content = "<img src='/images/check.png'>"
-        else
-          content = "<img src='/images/close.png'>"
-        end
-      elsif item.attribute_type == Attribute::NUMERIC
-        if (item.unit_of_measure == "GB" && item.value.to_f < 1)
-          value = convert_to_MB(item.value.to_f)
-          content = "#{value} MB" if value != 0
-        elsif (item.unit_of_measure == "MB" && item.value.to_f >= 1024)
-          value = convert_to_GB(item.value.to_f)
-          content = "#{value} GB" if value != 0
-        elsif (item.unit_of_measure == "GHz" && item.value.to_f < 1)
-          value = convert_to_MHz(item.value.to_f)
-          content = "#{value} MHz" if value != 0
-        elsif (item.unit_of_measure == "MHz" && item.value.to_f >= 1000)
-          value = convert_to_GHz(item.value.to_f)
-          content = "#{value} GHz" if value != 0
-        else
-          content += "#{item.value}"
-          unless (item.unit_of_measure == "" || item.unit_of_measure.nil?)
-            content += "  #{item.unit_of_measure}"
-          end
-        end
-      else
-        content = "#{item.value}"
-        unless (item.unit_of_measure == "" || item.unit_of_measure.nil?)
-          content += "  #{item.unit_of_measure}"
+  def display_items_specifications(items)
+    display_items = Array.new
+    items.each do |item|
+      display_item = Hash.new
+      count = 1
+      item.specification.group_by(&:category_name).each do |category, product_attributes|
+        display_item = display_item.merge!({:category_name => category})
+        product_attributes.each do |product_attribute|
+          display_items << display_item.merge!({"#{product_attribute.name}_#{count}".to_sym => display_specification_value(product_attribute)})
         end
       end
-      return content
+
+    end
+  end
+
+  def attribute_display_required?(ids, attribute_id)
+    attribute_values = AttributeValue.where("item_id in (?) and attribute_id =?", ids, attribute_id)
+    return true if attribute_values.size > 0
+    return false
+  end
+
+  def group_display_required?(attribute_ids, item_ids)
+    return false if attribute_ids.size == 0
+    attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?)", item_ids, attribute_ids)
+    return true if attribute_values.size > 0
+    return false
+  end
+
+  def show_item_value(item, attribute)
+    compare_item = AttributeValue.find_by_item_id_and_attribute_id( item.id, attribute.id) #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
+    return "" if compare_item.nil?
+    value = display_specification_value(compare_item, attribute)
+    return value
+  end
+
+  def display_specification_value(item, attribute="")
+    attribute = item if attribute == ""
+    content = ""
+    if attribute.attribute_type == Attribute::TEXT
+      content = "#{item.value}"
+    elsif attribute.attribute_type == Attribute::BOOLEAN
+      if item.value == "True"
+        content = "<img src='/images/check.png' width='12' height='12'>"
+      else
+        content = "<img src='/images/close.png' width='12' height='12'>"
+      end
+    elsif attribute.attribute_type == Attribute::NUMERIC
+      if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
+        value = convert_to_MB(item.value.to_f)
+        content = "#{value} MB" if value != 0
+      elsif (attribute.unit_of_measure == "MB" && item.value.to_f >= 1024)
+        value = convert_to_GB(item.value.to_f)
+        content = "#{value} GB" if value != 0
+      elsif (attribute.unit_of_measure == "GHz" && item.value.to_f < 1)
+        value = convert_to_MHz(item.value.to_f)
+        content = "#{value} MHz" if value != 0
+      elsif (attribute.unit_of_measure == "MHz" && item.value.to_f >= 1000)
+        value = convert_to_GHz(item.value.to_f)
+        content = "#{value} GHz" if value != 0
+      else
+        content += "#{item.value}"
+        unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+          content += "  #{attribute.unit_of_measure}"
+        end
+      end
+    else
+      content = "#{item.value}"
+      unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+        content += "  #{attribute.unit_of_measure}"
+      end
+    end
+    return content
   end
 
   def get_content(item)

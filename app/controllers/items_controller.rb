@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  layout "product"
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
 
   #before_filter :authenticate_user!
@@ -199,8 +200,11 @@ class ItemsController < ApplicationController
   end
 
   def compare
-    ids = params[:ids].split(',')
-    @items = Item.find_all_by_id(ids)
+    @ids = params[:ids].split(',')
+    @item1 = Item.find(@ids[0])
+    attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
+    @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
+    @items = Item.find_all_by_id(@ids)
   end
 
   private
