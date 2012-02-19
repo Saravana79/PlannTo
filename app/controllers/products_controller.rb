@@ -14,7 +14,7 @@ class ProductsController < ApplicationController
   def show
     @item = Item.get_cached(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
   
-    @related_items = Item.get_related_items(@item, 3)
+    @related_items = Item.all[0..2]
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
     @tip = Tip.new

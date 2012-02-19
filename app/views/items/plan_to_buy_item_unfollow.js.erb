@@ -1,18 +1,22 @@
-Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
+<% if params[:profile] %>
+$("#product_"+'<%= @item.id %>').remove();
+<% else %>
 <% if @type == "buy" %>
-  Product.hover_follow_but($("#plan_to_buy"+'<%= @item.id %>'),"Plan to buy", "Plan to buy")
-  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car")
-  Product.unload_buyer('<%= @item.id %>'', "", '<%=I18n.t('plan_to_buy') %>', '<%= I18n.t('plan_to_follow') %>');
+  Product.hover_follow_but($("#plan_to_buy"+'<%= @item.id %>'),"Plan to buy", "Plan to buy");
+  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car");
+  Product.unload_buyer('<%= '_'+@item.id.to_s %>', '<%=params[:button_class] %>', '<%=I18n.t('plan_to_buy') %>', '<%= I18n.t('plan_to_follow') %>');
 <% elsif @type == "own" %>
-  Product.unload_owner('<%= @item.id %>', "", '<%= I18n.t('plan_to_own') %>', '<%= I18n.t('plan_to_follow') %>');
-  $("#plan_to_buy"+'<%= @item.id %>').unbind("hover")
-  Product.hover_follow_but($("#plan_to_own"+'<%= @item.id %>'),"I Own it", "I Own it")
-  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car")
+  Product.unload_owner('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= I18n.t('plan_to_own') %>', '<%= I18n.t('plan_to_follow') %>');
+  $("#plan_to_buy"+'<%= @item.id %>').unbind("hover");
+  Product.hover_follow_but($("#plan_to_own"+'<%= @item.id %>'),"I Own it", "I Own it");
+  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car");
 <% elsif @type == "follow" %>
-  Product.unload_follow('<%= @item.id %>', "", '<%= I18n.t('plan_to_follow') %>');
-  $("#plan_to_own"+'<%= @item.id %>').unbind("hover")
-  $("#plan_to_buy"+'<%= @item.id %>').unbind("hover")
-  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car", '<%= I18n.t('plan_to_follow') %>')
+  Product.unload_follow('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= I18n.t('plan_to_follow') %>');
+  $("#plan_to_own"+'<%= @item.id %>').unbind("hover");
+  $("#plan_to_buy"+'<%= @item.id %>').unbind("hover");
+  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car", '<%= I18n.t('plan_to_follow') %>');
 <% end %>
 
 $(".PlanntoBuyBtn span[title]").tooltip();
+
+<% end %>

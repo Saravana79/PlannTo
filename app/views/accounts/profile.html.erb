@@ -1,65 +1,128 @@
 <script type="text/javascript" src="/javascripts/movingboxs.js"></script>
 <link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
 <script type="text/javascript">
-  	$(function(){
-      $('#car_slider').movingBoxes({
-        startPanel   : 1,      // start with this panel
-  	    width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-  	    wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-  	    buildNav     : true,   // if true, navigation links will be added
-  	    navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-  	     });
-      $(".tabing2").click(function(){
-        $('#mobile_slider').movingBoxes({
-        startPanel   : 1,      // start with this panel
-  	    width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-  	    wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-  	    buildNav     : true,   // if true, navigation links will be added
-  	    navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-  	     });  
-      });
+    $(function() {
+        $('#car_slider').movingBoxes({
+            startPanel   : 1,      // start with this panel
+            width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+            wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+            buildNav     : true,   // if true, navigation links will be added
+            navFormatter : function() {
+                return "&#9679;";
+            } // function which returns the navigation text for each panel
+        });
+        $(".tabing2").click(function() {
+            $('#mobile_slider').movingBoxes({
+                startPanel   : 1,      // start with this panel
+                width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+                wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+                buildNav     : true,   // if true, navigation links will be added
+                navFormatter : function() {
+                    return "&#9679;";
+                } // function which returns the navigation text for each panel
+            });
+        });
 
 
     });
 </script>
-<div id="main-content">
-  <div id="usual2" class="usual">
-    <ul>
-      <li class="tabstyle">
-        <a class="tabing1" href="#tabs1">Car</a>
-      </li>
-      <li class="tabstyle">
-        <a class="tabing2" href="#tabs2" id="specification">Mobile</a>
 
-      </li>
 
+<div id="maincontainer" class="maincontainerCss">
+
+  <!-- Left Nav - start -->
+  <div class="leftcolumnsmall">
+
+    <span class="profile_photo">
+      <%= image_tag(current_user.get_photo(:medium)) %>
+    </span>
+    <br/>
+
+    <h1><%= current_user.name %></h1>
+    <br/>
+    <ul class="menu_profile">
+      <li><a href="#" class="icon_profile" id="menu_profile_active">Profile</a></li>
+      <li><a href="#" class="icon_prefernce">Preference / Buying Plans</a></li>
+      <li><a href="#" class="icon_points">Points</a></li>
+      <li><a href="#" class="icon_awards">Awards</a></li>
+      <li><a href="#" class="icon_followers">Followers</a></li>
     </ul>
+  </div>
+  <!-- Left Nav - End -->
 
-    <div id="tabs1" style="display: block; " class="main-content-section">
-      <ul id="car_slider" class="mb-slider" >
-        <% @follow_item['Car'].each do |follow| %>
-          <% item = follow.followable %>
-          <%= render("shared/product_info", {:item => item, :follow => follow}) %>
-        <% end rescue "" %>
+  <!-- Right - start -->
+  <div class="rightcolumnbig">
 
+    <div style="border:solid 0px red; width:732px; float:left; margin-left:33px; margin-top:30px; ">
+      <div style="border:solid 0px green; float:left; width:385px; height:67px; float:left;"></div>
+      <div class="points">
+        <span class="indu_span"><a class="values">2</a><a class="text">Points</a></span>
+        <span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>
+        <span class="indu_span"><a class="values">3</a><a class="text">Following</a></span>
+        <span class="indu_span"><a class="values">12</a><a class="text">Reviews </a></span>
+        <span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>
 
-      </ul>
+      </div>
+
+      <div class="tab">
+        <ul class="tabs tab_border">
+          <li id="tab_active"><a href="#">Cars</a>
+
+          </li>
+          <li><a href="#">Mobile</a></li>
+          <li><a href="#">Camera</a></li>
+          <li><a href="#">Travel </a></li>
+          <li><a href="#">Movies</a></li>
+        </ul>
+      </div>
+      <div style="display:block;">
+        <div class="sortby">Sorty by: Most Reviewed A-Z
+          <div class="icon_share">Share:
+            <span> <img src="/images/icon_fb.png"/> </span>
+            <span> <img src="/images/icon_twitter.png"/> </span>
+            <span> <img src="/images/icon_in.png"/>  </span>
+            <span> <img src="/images/icon_su.png"/>  </span>
+            <span> <img src="/images/icon_t.png"/> </span>
+          </div>
+        </div>
+        <div class="listing_items">
+          <div class="txt_black add_car"><h2>Add car to your profile</h2>
+            <span class="txt_normal">or selct from the list below:</span></div>
+
+          <div class=".searchinprofile">
+            <input name="search" type="text" class="search_inputfield" value="Search Cars"/>
+            <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="images/icon_search_gray.png"/></a>
+          </div>
+
+          <div class="items_list" style="clear:both;">
+
+            <% @car_items.each do |follow| %>
+                <% item = follow.followable %>
+                <div class="product" id="product_<%= item.id %>">
+                  <span class="prod_img">
+                    <%= link_to "", follow_item_type_item_path(item, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :id => "icon_close2", :remote => true %>
+                    <a id="produ_bgimg"><%= item.name %></a></span>
+                  <a class="<%= follow_types_classes(follow.follow_type) %>" href="#" style=" font:bold 11px/22px arial; color:#fff;"><%= get_the_follow_text(follow.follow_type) %></a>
+                </div>
+            <% end rescue "" %>
+            <%= will_paginate @car_items , :page_links => true %>
+          </div>
+        </div>
+
+      </div>
+      <br/>
     </div>
-    <div id="tabs2" style="display: none; " class="main-content-section">
-      <ul id="mobile_slider" class="mb-slider" >
-        <% (@follow_item['Mobile']).each do |follow| %>
-          <% item = follow.followable %>
-          <%= render("shared/product_info", {:item => item, :follow => follow}) %>
-        <% end rescue ""%>
 
-
-      </ul>
-    </div>
 
   </div>
+  <!-- Right  - End -->
+
+
+  <!-- This will go into main layout -->
 </div>
+
 <script type="text/javascript">
-  $("#usual2 ul").idTabs("tabs1");
+    $("#usual2 ul").idTabs("tabs1");
 </script>
 
 

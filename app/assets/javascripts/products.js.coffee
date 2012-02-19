@@ -81,8 +81,8 @@ root.Product =
   remove_unfollow_query_string: (url_path, follow_type) ->
     urlparts= url_path.split('?');
     pars= urlparts[1].split(/[&;]/g);
-    follow_type_var = pars[0].split("=")[0]
-    urlparts[0] + "?" +follow_type_var+"="+follow_type
+    pars.pop();    
+    urlparts[0] + "?" +pars.join('&')
 
   hover_follow_but: (but_object, from_message, to_message) ->
     $(but_object).hover ( ->
