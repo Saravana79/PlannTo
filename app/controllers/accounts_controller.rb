@@ -24,9 +24,15 @@ class AccountsController < ApplicationController
   end
 
   def profile
-    require 'will_paginate/array'
-    @follow_item = Follow.for_follower(current_user).where(:followable_type => ['Car', 'Mobile']).group_by(&:followable_type)
-    @car_items = @follow_item['Car'].paginate(:page => params["page"], :per_page => 8) rescue [].paginate 
+    require 'will_paginate/array'    
+    @follow_item = Follow.for_follower(current_user).where(:followable_type => ['Car', 'Manufacturer', 'CarGroup', 'Mobile']).group_by(&:followable_type)
+    @car_items = get_array(@follow_item['Car']) + get_array(@follow_item['CarGroup']) + get_array(@follow_item['Manufacturer'])
+    @car_items = @car_items.paginate(:page => params["page"], :per_page => 8) rescue [].paginate
     render :layout => "product"
+  end
+
+  private
+  def get_array(array_obj)
+    array_obj.blank? ?  [] : array_obj
   end
 end
