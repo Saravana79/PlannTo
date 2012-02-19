@@ -33,11 +33,12 @@
   <!-- Left Nav - start -->
   <div class="leftcolumnsmall">
 
-    <span class="profile_photo"><img src="images/photo_profile.png"/></span>
+    <span class="profile_photo">
+      <%= image_tag(current_user.get_photo(:medium)) %>
+    </span>
     <br/>
 
-    <h1>Saravana Kumar</h1>
-    <a>joined on February 18, 2011</a>
+    <h1><%= current_user.name %></h1>
     <br/>
     <ul class="menu_profile">
       <li><a href="#" class="icon_profile" id="menu_profile_active">Profile</a></li>
