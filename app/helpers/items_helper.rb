@@ -156,7 +156,7 @@ module ItemsHelper
   end
 
   def empty_boxes_count(items)
-    return (4 - items.size)
+    return items.size+1
   end
 
 end
