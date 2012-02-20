@@ -140,6 +140,9 @@ root.Product =
     $("#detailed_specification").click ->
       $("#usual2 ul").idTabs "tabs5"
       $("#specification").trigger "click"
+      $("#specification").closest("ul").find("li").each (index) ->
+        $(this).removeClass "tab_active"  if $(this).hasClass("tab_active")
+        $("#specification").closest("li").addClass "tab_active"
 
   show_notice: (flash_message)->
     $("#comment-notice").html('<div class="flash notice">'+flash_message+'</div>').effect("highlight", {}, 3000);

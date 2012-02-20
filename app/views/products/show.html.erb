@@ -27,7 +27,6 @@
 
 <%= render :partial => "shared/review" %>
 
-<%= render :partial => "products/detailed_specifications" %>
 <br/>
 <div id="usual2" class="usual">
   <ul class="tabs">
@@ -40,7 +39,7 @@
     <li><a href="#tabs7" >Videos</a></li>
   </ul>
 </div>
-<br>
+<br/>
 <div class="question_answer" id="tabs1">
     <%= render "layouts/product_tip"%>
     <div id="content_tips">
@@ -50,7 +49,8 @@
     <%= render "/layouts/product_answer" %>
 </div>
 <div id="tabs5" style="display: none; " class="main-content-section">
-    <%= render :template => 'products/specification' %>
+    <%#= render :template => 'products/specification' %>
+    <%= render :partial => "products/detailed_specifications" %>
     <%= render "/layouts/product_answer" %>
 </div>
 

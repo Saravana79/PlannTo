@@ -119,7 +119,7 @@ ul.tabs li									{ width:103px; height:33px; background:url(../images/bg_tabs.
 ul.tabs li a								{ font:bold 11px/36px tahoma; color:#5f5f5f; text-decoration:none; border:solid 0px; width:100px; height:33px; display:block; text-align:center; }
 /*ul.tabs li:hover							{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px;} */
 #tab_active									{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px; color:#000;}
-
+ul.tabs .tab_active									{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px; color:#000;}
 /* Question & Answers */
 
 div.question_answer							{ width:680px; border:solid 0px; }
