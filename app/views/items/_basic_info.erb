@@ -1,0 +1,27 @@
+<td class="rowline" align="center">
+  <div class="comparebox" id="compareBasicInfo<%=count%>">
+    <%unless item == ""%>
+      <span class="img_product_cmp" >
+        <span class="closebtndiv"><a href="#" onclick="removeFromCompare(<%=count%>)"><span class="icon_close2" alt="" /></a></span>
+        <img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>"/></span>
+      <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p>
+
+      <div class="PlanntoBuyBtncnt">
+        <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
+        <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
+        <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
+      </div>
+      <div style="clear:both">
+        <a class="txt_price"><%=item.get_price_info('Price')%></a><br />
+        <img src="../images/rating_stars.png" width="87" height="20" /><br/>
+      </div>
+    <%end%>
+  </div>
+</td>
+
+<script type="text/javascript">
+  function removeFromCompare(index){
+    $("#compareBasicInfo" + index).html("")
+    $(".attributeInfo" + index).text("")
+  }
+</script>

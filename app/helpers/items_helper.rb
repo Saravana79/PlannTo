@@ -150,4 +150,13 @@ module ItemsHelper
     return converted_value.to_i
   end
 
+  def empty_boxes_required?(items)
+    return true if items.size < 4
+    return false
+  end
+
+  def empty_boxes_count(items)
+    return (4 - items.size)
+  end
+
 end

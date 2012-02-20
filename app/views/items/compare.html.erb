@@ -18,25 +18,14 @@
             <span style="margin-right:30px;"><a href="#" class="btn_submitanswer" style="float:center;margin-left:30px;margin-right:30px;">Ask Advice</a></span>
 
           </td>
-          <%@items.each do |item|%>
-          <td class="rowline" align="center">
-            <div class="comparebox">
-              <span class="img_product_cmp">
-                <span class="closebtndiv"><a href="#"><span class="icon_close2" alt="" /></a></span>
-                <img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>"/></span>
-              <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p>
-
-              <div class="PlanntoBuyBtncnt">
-                <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
-              </div>
-              <div style="clear:both">
-                <a class="txt_price"><%=item.get_price_info('Price')%></a><br />
-                <img src="../images/rating_stars.png" width="87" height="20" /><br/>
-              </div>
-            </div>
-          </td>
+          <%@items.each_with_index do |item, index|%>
+            <%=render :partial =>"items/basic_info",:locals => {:item => item, :count => index+1} %>
+            <%break if index == 3%>
+          <%end%>
+          <%if empty_boxes_required?(@items)%>
+            <%for i in empty_boxes_count(@items)+1..4%>
+              <%=render :partial =>"items/basic_info",:locals => {:item => "", :count => i } %>
+            <%end%>
           <%end%>
         </tr>
         <%@attributes.group_by(&:category_name).each do |group, attributes|%>
@@ -48,8 +37,14 @@
               <%if  attribute_display_required?(@ids, att.id)%>
                 <tr>
                   <td id="comp-info-start-here" class="top cell name bordered"><b><%=att.name%></b></td>
-                  <%@items.each do |item|%>
-                    <td align="center" class="top cell bordered"> <span class="price"><%=raw show_item_value(item, att)%></span></td>
+                  <%@items.each_with_index do |compare_item, index|%>
+                    <td align="center" class="top cell bordered attributeInfo<%=index+1%>"> <span class="price"><%=raw show_item_value(compare_item, att)%></span></td>
+                    <%break if index == 3%>
+                  <%end%>
+                  <%if empty_boxes_required?(@items)%>
+                    <%for i in 1..empty_boxes_count(@items)%>
+                      <td align="center" class="top cell bordered"> <span class="price"></span></td>
+                    <%end%>
                   <%end%>
                 </tr>
               <%end%>
@@ -77,7 +72,7 @@
     </div>
     <div>
       <div id="tabs2" class="main-content-section">
-        <%#= render :template => 'products/specification', :locals => { :@item => item } %>
+<%#= render :template => 'products/specification', :locals => { :@item => item } %>
       </div>
     </div>
   </div>
@@ -107,6 +102,6 @@
     $('#compare-items').hide();
   }
 
-        
+
 </script>
 -->
