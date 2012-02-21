@@ -24,13 +24,13 @@ class Content < ActiveRecord::Base
        attribute, order = value.split(" ") 
        scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
      when :limit
-       scope.scoped(:limit => value)
+       scope.limit(value)
      else 
        scope
      end
    end 
  else
-   Content.all
+   Content.limit(10)
  end
   end
   
