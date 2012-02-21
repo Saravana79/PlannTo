@@ -1262,7 +1262,7 @@ h3 {
     padding: 0;
     margin: 0;
     padding-bottom: 15px;
-    border:
+    
 }
 
 h4 {
@@ -2190,7 +2190,6 @@ div.listing_items {
 
 .icon_search {
     border: solid 0px;
-    left: left;
     width: 21px;
     height: 21px;
     float: left;
@@ -2439,4 +2438,4 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 
 /*Added by Awijeet*/
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
-    display: none;
+    display: none;}
