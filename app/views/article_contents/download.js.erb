@@ -2,8 +2,10 @@ $('div.dwnld_url').show();
 $("#txtArticleTitle").val("<%= escape_javascript(@article.title) %>");
 $("#txtArticleDescription").attr("value","<%= escape_javascript(@article.description) %>");
 
-$("#img_thumb").attr("src","<%= escape_javascript(@article.thumbnail) %>");
+$("#new_article_type").val("<%= escape_javascript(@article.type) %>");
 <% if @article.thumbnail.present? %>
+$("#img_thumb").attr("src","<%= escape_javascript(@article.thumbnail) %>");
+$("#new_article_thumbnail").val("<%= escape_javascript(@article.thumbnail) %>");
 $("#img_thumb").show();
 $(".article_image").show();
 <% else %>
