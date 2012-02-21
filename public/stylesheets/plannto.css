@@ -874,7 +874,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_small {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
     display: block;
@@ -882,7 +882,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_small:hover {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px -21px;;;
     display: block;
@@ -890,7 +890,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_selected_small {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px -21px;;;
     display: block;
@@ -898,7 +898,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_selected_small:hover {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
     display: block;
@@ -906,7 +906,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_disabled_small {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
     display: block;
@@ -1531,7 +1531,7 @@ div.rate_content {
 /* Related Cars - Start */
 
 .bg_widgethdr {
-    height: 38px;
+    height: 30px;
     background: url(../images/bg_widget_header.png) repeat-x top;
     text-indent: 17px;
 }
@@ -2394,3 +2394,33 @@ h2 {
 .btn_followthiscar_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;;  display:block; float:left;  }
 
 
+/* Followers Images */
+div.imgfollowers						{  width:251px; height:115px; border-bottom:solid 1px #e3e3e3; overflow:visible; margin-bottom:10px; }
+
+ul.imgfollowers							{ list-style:none; padding:0; margin:0; width:251px;  margin-top:5px;  }
+.imgfollowers li						{ float:left; margin:0px 2px 2px 2px;}
+
+
+.other_links							{ width:251px;list-style-image:url(../images/icon_arrow_small.png); display:block; }
+
+.menu_list 								{ width:251px;height:25px; color:#007dbd; display:block; border:solid 0px; background:url(../images/icon_arrow_small.png) no-repeat 0px 6px; padding-left:10px;}
+.menu_list a:hover						{ color:#c15f24; text-decoration:none;display:block; }
+.heading_others							{ width:251px; height:25px; padding-top:6px; display:block;text-indent:10px; margin-bottom:10px;border-bottom:solid 1px #cdd3d7; line-height:20px; background:#f5f5f5; }
+
+/* Plane to Buy - I Won IT - I Follow */
+
+div.followers							{ width:250px; height:84px; background-color:#f5f5f5; border-bottom:solid 1px #cdd3d7; border-top:solid 1px #cdd3d7; margin:15px 0px; display:block; }
+/* Plane to buy*/
+span.planetobuy, span.iwonit			{ width:82px; height:70px; display:block; border-right:solid 1px #e3e3e3; margin:7px 0px; float:left; }
+.icon_planetobuy						{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_plantobuy_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px; }
+.txt_planetobuy							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+
+/* I Won it */
+span.iwonit								{ width:82px; height:70px; display:block; border-right:solid 1px #e3e3e3; margin:7px 0px; float:left; }
+.icon_iwonit							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_iwonit_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px; }
+.txt_iwonit								{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+
+/* I Follow */
+span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; float:left; }
+.icon_ifollow							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_ifollow_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px;}
+.txt_ifollow							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
