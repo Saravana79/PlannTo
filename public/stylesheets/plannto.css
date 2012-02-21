@@ -874,7 +874,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_small {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
     display: block;
@@ -882,7 +882,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_small:hover {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px -21px;;;
     display: block;
@@ -890,7 +890,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_selected_small {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px -21px;;;
     display: block;
@@ -898,7 +898,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_selected_small:hover {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
     display: block;
@@ -906,7 +906,7 @@ div.buttons {
 }
 
 .plan_to_follow_icon_disabled_small {
-    width: 20px;
+    width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
     display: block;
@@ -1531,7 +1531,7 @@ div.rate_content {
 /* Related Cars - Start */
 
 .bg_widgethdr {
-    height: 38px;
+    height: 30px;
     background: url(../images/bg_widget_header.png) repeat-x top;
     text-indent: 17px;
 }
@@ -2266,7 +2266,7 @@ h2 {
     margin: 10px 37px;
     display: block;
     padding: 0;
-    border: solid 0px red;
+    
 }
 
 .bg_iwonit:hover {
@@ -2280,8 +2280,7 @@ h2 {
     text-align: center;
     margin: 10px 37px;
     display: block;
-    padding: 0;
-    border: solid 1px red;
+    padding: 0;    
 }
 
 .bg_following:hover {
@@ -2295,8 +2294,7 @@ h2 {
     text-align: center;
     margin: 10px 37px;
     display: block;
-    padding: 0;
-    border: solid 1px red;
+    padding: 0;    
 }
 
 .bg_planetobuy:hover {
@@ -2358,16 +2356,16 @@ h2 {
 .closebtndiv img  							{ border:none; outline:none;}
 .comparebox .img_product_cmp				{ clear:both; width:170px; height:125px; background:url(../images/bg_product_cmp.png) no-repeat; display:block; padding:8px 10px 10px 7px; text-align:right; float:left; border:solid 0px; }
 
-.comaredivbox .comparetbl td.cell.name 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:11px!important}
-.comaredivbox .comparetbl td.cell.titlename 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:12px!important;margin-left:-10px;}
-.comaredivbox .comparetbl td.cell.name 		{ padding:8px 0 8px 13px; width: 200px;}
+.comaredivbox .comparetbl td.insidebox.name 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:11px!important}
+.comaredivbox .comparetbl td.insidebox.titlename 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:12px!important;margin-left:-10px;}
+.comaredivbox .comparetbl td.insidebox.name 		{ padding:8px 0 8px 13px; width: 200px;}
 .comaredivbox .comparetbl td.bordered 		{ font-size: 11px; border-top:1px solid #cdd3d7; border-right:1px solid #cdd3d7;}
 .comaredivbox .comparetbl td.nobordered 	{  border-right:0px; border-top:1px solid #cdd3d7; }
 .comaredivbox .comparetbl td.btmbordered 	{  border-bottom:1px solid #cdd3d7; border-right:1px solid #cdd3d7; border-top:1px solid #cdd3d7;}
-.comaredivbox .comparetbl td.cell 			{ background-color: #fff;  padding:8px 0 8px 0px;}
+.comaredivbox .comparetbl td.insidebox 			{ background-color: #fff;  padding:8px 0 8px 0px;word-wrap:break-word;}
 .comaredivbox .comparetbl td.bordered 		{ width: 200px;}
-.comaredivbox .comparetbl td.cell 			{ padding-left: 10px;font-size:11px!important}
-.comaredivbox .comparetbl td.top 			{ vertical-align: top;}
+.comaredivbox .comparetbl td.insidebox 			{ padding-left: 10px;font-size:11px!important;word-wrap:break-word;}
+.comaredivbox .comparetbl td.high 			{ vertical-align: top;}
 
 .PlanntoBuyBtncnt 							{float:center;margin-left:60px;margin-bottom:10px;}
 .icon_close2							{ width:16px; height:16px; display:block; background:url(../images/icon_close.png) no-repeat;  margin:0px 0px 0px 150px; }
@@ -2394,3 +2392,51 @@ h2 {
 .btn_followthiscar_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;;  display:block; float:left;  }
 
 
+/* Followers Images */
+div.imgfollowers						{  width:251px; height:115px; border-bottom:solid 1px #e3e3e3; overflow:visible; margin-bottom:10px; }
+
+ul.imgfollowers							{ list-style:none; padding:0; margin:0; width:251px;  margin-top:5px;  }
+.imgfollowers li						{ float:left; margin:0px 2px 2px 2px;}
+
+
+.other_links							{ width:251px;list-style-image:url(../images/icon_arrow_small.png); display:block; }
+
+.menu_list 								{ width:251px;height:25px; color:#007dbd; display:block; border:solid 0px; background:url(../images/icon_arrow_small.png) no-repeat 0px 6px; padding-left:10px;}
+.menu_list a:hover						{ color:#c15f24; text-decoration:none;display:block; }
+.heading_others							{ width:251px; height:25px; padding-top:6px; display:block;text-indent:10px; margin-bottom:10px;border-bottom:solid 1px #cdd3d7; line-height:20px; background:#f5f5f5; }
+
+/* Plane to Buy - I Won IT - I Follow */
+
+div.followers							{ width:250px; height:84px; background-color:#f5f5f5; border-bottom:solid 1px #cdd3d7; border-top:solid 1px #cdd3d7; margin:15px 0px; display:block; }
+/* Plane to buy*/
+span.planetobuy, span.iwonit			{ width:82px; height:70px; display:block; border-right:solid 1px #e3e3e3; margin:7px 0px; float:left; }
+.icon_planetobuy						{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_plantobuy_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px; }
+.txt_planetobuy							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+
+/* I Won it */
+span.iwonit								{ width:82px; height:70px; display:block; border-right:solid 1px #e3e3e3; margin:7px 0px; float:left; }
+.icon_iwonit							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_iwonit_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px; }
+.txt_iwonit								{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+
+/* I Follow */
+span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; float:left; }
+.icon_ifollow							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_ifollow_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px;}
+.txt_ifollow							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+
+
+/* change for profile page on 19 Feb 2010 */
+.imgprofilediv								{width:160px; height:120px;position:relative;}
+.closeimg                     {position:relative;top:-120px;left:140px;}
+.imgpicbtnspan								{ position:absolute;top:0px;   height:125px; display:inline; cursor:pointer;}
+.imgtextspan								{ position:absolute;bottom:0px;   cursor:pointer;}
+
+
+.prod_img								{ width:160px; height:120px;display:block;}
+.produ_bgimg							{ width:155px;  display:block; background-color:#000000; opacity: 0.746;font:normal 11px/18px arial; color:#fff; text-align:left; padding-left:5px; margin:0px 0px 0px 0px;text-decoration:none;}
+
+/* end change for profile page on 19 Feb 2010 */
+
+
+/*Added by Awijeet*/
+#review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
+    display: none;}
