@@ -2266,7 +2266,7 @@ h2 {
     margin: 10px 37px;
     display: block;
     padding: 0;
-    border: solid 0px red;
+    
 }
 
 .bg_iwonit:hover {
@@ -2280,8 +2280,7 @@ h2 {
     text-align: center;
     margin: 10px 37px;
     display: block;
-    padding: 0;
-    border: solid 1px red;
+    padding: 0;    
 }
 
 .bg_following:hover {
@@ -2295,8 +2294,7 @@ h2 {
     text-align: center;
     margin: 10px 37px;
     display: block;
-    padding: 0;
-    border: solid 1px red;
+    padding: 0;    
 }
 
 .bg_planetobuy:hover {
@@ -2358,16 +2356,16 @@ h2 {
 .closebtndiv img  							{ border:none; outline:none;}
 .comparebox .img_product_cmp				{ clear:both; width:170px; height:125px; background:url(../images/bg_product_cmp.png) no-repeat; display:block; padding:8px 10px 10px 7px; text-align:right; float:left; border:solid 0px; }
 
-.comaredivbox .comparetbl td.cell.name 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:11px!important}
-.comaredivbox .comparetbl td.cell.titlename 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:12px!important;margin-left:-10px;}
-.comaredivbox .comparetbl td.cell.name 		{ padding:8px 0 8px 13px; width: 200px;}
+.comaredivbox .comparetbl td.insidebox.name 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:11px!important}
+.comaredivbox .comparetbl td.insidebox.titlename 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:12px!important;margin-left:-10px;}
+.comaredivbox .comparetbl td.insidebox.name 		{ padding:8px 0 8px 13px; width: 200px;}
 .comaredivbox .comparetbl td.bordered 		{ font-size: 11px; border-top:1px solid #cdd3d7; border-right:1px solid #cdd3d7;}
 .comaredivbox .comparetbl td.nobordered 	{  border-right:0px; border-top:1px solid #cdd3d7; }
 .comaredivbox .comparetbl td.btmbordered 	{  border-bottom:1px solid #cdd3d7; border-right:1px solid #cdd3d7; border-top:1px solid #cdd3d7;}
-.comaredivbox .comparetbl td.cell 			{ background-color: #fff;  padding:8px 0 8px 0px;}
+.comaredivbox .comparetbl td.insidebox 			{ background-color: #fff;  padding:8px 0 8px 0px;word-wrap:break-word;}
 .comaredivbox .comparetbl td.bordered 		{ width: 200px;}
-.comaredivbox .comparetbl td.cell 			{ padding-left: 10px;font-size:11px!important}
-.comaredivbox .comparetbl td.top 			{ vertical-align: top;}
+.comaredivbox .comparetbl td.insidebox 			{ padding-left: 10px;font-size:11px!important;word-wrap:break-word;}
+.comaredivbox .comparetbl td.high 			{ vertical-align: top;}
 
 .PlanntoBuyBtncnt 							{float:center;margin-left:60px;margin-bottom:10px;}
 .icon_close2							{ width:16px; height:16px; display:block; background:url(../images/icon_close.png) no-repeat;  margin:0px 0px 0px 150px; }
@@ -2424,3 +2422,21 @@ span.iwonit								{ width:82px; height:70px; display:block; border-right:solid 
 span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; float:left; }
 .icon_ifollow							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_ifollow_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px;}
 .txt_ifollow							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+
+
+/* change for profile page on 19 Feb 2010 */
+.imgprofilediv								{width:160px; height:120px;position:relative;}
+.closeimg                     {position:relative;top:-120px;left:140px;}
+.imgpicbtnspan								{ position:absolute;top:0px;   height:125px; display:inline; cursor:pointer;}
+.imgtextspan								{ position:absolute;bottom:0px;   cursor:pointer;}
+
+
+.prod_img								{ width:160px; height:120px;display:block;}
+.produ_bgimg							{ width:155px;  display:block; background-color:#000000; opacity: 0.746;font:normal 11px/18px arial; color:#fff; text-align:left; padding-left:5px; margin:0px 0px 0px 0px;text-decoration:none;}
+
+/* end change for profile page on 19 Feb 2010 */
+
+
+/*Added by Awijeet*/
+#review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
+    display: none;
