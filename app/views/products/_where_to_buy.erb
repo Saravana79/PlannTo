@@ -1,0 +1,7 @@
+<table  width="100%">
+  <tr class="wheretobuyheadder"><td width="25%" class="wheretobuytitletxt">Seller Name</td><td width="25%" class="wheretobuytitletxtothercolumns">Estimated Delivery Time</td><td width="25%" class="wheretobuytitletxtothercolumns">Price</td><td width="25%"></td></tr>
+  <% @where_to_buy_items.each do |item| %>
+    <tr class="wheretobuyrows"><td width="25%" class=""><img class="imagevendor" src="<%=item.image_url%>" alt="<%=item.vendor_name%>" /></td><td width="25%" class="wheretobuytext"><%=item.shipping%> business days</td><td class="wheretobuytext" style="font-style:bold">Rs <%=item.price%></td><td><input type="button" value="Visit Store"/></td></tr>
+      <%end%>
+  <tr></tr>
+</table>

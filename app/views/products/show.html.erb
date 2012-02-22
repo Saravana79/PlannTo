@@ -35,7 +35,7 @@
     <li><a href="#tabs3" >Review</a></li>
     <li><a href="#tabs4" >Q&amp;A</a></li>
     <li><a href="#tabs5" id="specification">Specification</a></li>
-    <li><a href="#tabs6" >Image</a></li>
+    <li><a href="#tabs6" >Where to Buy</a></li>
     <li><a href="#tabs7" >Videos</a></li>
   </ul>
 </div>
@@ -66,7 +66,9 @@
   <%= render  "layouts/product_tip" %>
   <%= render "/layouts/product_answer" %>
 </div>
-<div id="tabs6" style="display: none; " class="main-content-section"></div>
+<div id="tabs6" style="display: none; " class="main-content-section">
+  <%= render "products/where_to_buy" %>
+</div>
 <div id="tabs7" style="display: none; " class="main-content-section">
     <%= render "/layouts/product_video" %>
     <%= render "/layouts/product_answer" %>

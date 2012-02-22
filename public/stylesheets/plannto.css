@@ -2436,6 +2436,17 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 
 /* end change for profile page on 19 Feb 2010 */
 
+/* for where to buy options */
+
+.wheretobuytitletxt {font-size:13px; font-weight:bold; margin:0; padding:5px 0 5px 5px; }
+.wheretobuytitletxtothercolumns {font-size:13px; font-weight:bold; margin:0; padding:5px 0 5px 5px;}
+.wheretobuyheadder    {background-color:#e1f3f8;  border:1px solid #a8cfda; }
+
+.imagevendor	 {width:100px;height:32px;}
+.wheretobuytext { font-size:12px; margin:0; padding:5px 0 5px 5px;}
+.wheretobuyrows {border:1px solid #e1f3f8;}
+
+
 
 /*Added by Awijeet*/
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
