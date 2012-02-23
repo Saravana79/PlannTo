@@ -5,20 +5,22 @@
     <br/>
     <div class="specificationblckdiv">
       <% @item.specification.group_by(&:category_name).each do |category, product_attributes| %>
-        <ul class="specificationblckdivul">
-          <li class="specificationblckdivtitletxt"><%= category %></li>
-          <% reset_cycle("specificationinnerul float_lft") %>
-          <li class="specificationblckdivli">
-            <% product_attributes.each_with_index do |product_attribute| %>
-              <%if display_specification?(product_attribute)%>
-                <ul class="<%= cycle("specificationinnerul float_lft", "specificationinnerul float_rgt", :name => "specificationinnerul float_lft") -%>">
-                  <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong> <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
-                </ul >
-              <%end%>
-            <% end %>
-          </li>
-          <li class="specificationblckdivliempty dontfloat"></li>
-        </ul>
+        <%if group_display_required?(product_attributes.collect(&:attribute_id), [@item.id])%>
+          <ul class="specificationblckdivul">
+            <li class="specificationblckdivtitletxt"><%= category %></li>
+            <% reset_cycle("specificationinnerul float_lft") %>
+            <li class="specificationblckdivli">
+              <% product_attributes.each_with_index do |product_attribute| %>
+                <%if display_specification?(product_attribute)%>
+                  <ul class="<%= cycle("specificationinnerul float_lft", "specificationinnerul float_rgt", :name => "specificationinnerul float_lft") -%>">
+                    <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong> <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
+                  </ul >
+                <%end%>
+              <% end %>
+            </li>
+            <li class="specificationblckdivliempty dontfloat"></li>
+          </ul>
+        <%end%>
       <% end %>
     </div>
   </div>
