@@ -1,20 +1,19 @@
 <td class="rowline" align="center">
   <div class="comparebox" id="compareBasicInfo<%=count%>">
     <p><b>Add <%=itemtype%> to compare</b> </p> 
-      <span class="img_product_cmp" >
+    <span class="img_product_cmp" >
       <br/>
-      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%>" style="width: 150px;"/>
-       </span>    
-      <div class="PlanntoBuyBtncnt">
-         </div>
-      <div style="clear:both">
-       
-      </div>
+      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%>" style="width: 150px;"/><div id="moreCarsSearchDiv<%=count%>"></div>
+    </span>
+    <div class="PlanntoBuyBtncnt">
+    </div>
+    <div style="clear:both">
+    </div>
   </div>
 </td>
 
 <script type="text/javascript">
-   $(document).ready(function(){
+  $(document).ready(function(){
 
     $("#ui-active-menuitem").mouseout(function() {
       $("#ui-active-menuitem").hide();
@@ -49,7 +48,7 @@
           shadow: true, // Whether to render a shadow
           hwaccel: false // Whether to use hardware acceleration
         };
-        var target = document.getElementById('moreCarsSearch<%=count%>');
+        var target = document.getElementById('moreCarsSearchDiv<%=count%>');
         var spinner = new Spinner(opts).spin(target);
         $.ajax(
         {
@@ -80,15 +79,19 @@
         return false
       },
       select: function( event, ui ) {
-        var ids = compareIds.split(",");
+        var ids = compareIds.toString().split(",");
         if (ids.length == 4){
           alert("You have already selected four items.")
           return false;
         }
         var value = jQuery.inArray(ui.item.id.toString(), ids)
         if (value.toString() == "-1"){
+          var spinnerId = $(this).attr('id').replace("moreCarsSearch",'');
+          spinnerId = "moreCarsSearchDiv" +spinnerId  
           ids.push(ui.item.id);
-          location.href = "/items/compare?ids=" + ids.toString();
+          compareIds = ids;
+          reloadComparableItems(ids, spinnerId);
+          // location.href = "/items/compare?ids=" + ids.toString();
         }
         else{
           $(this).val('');

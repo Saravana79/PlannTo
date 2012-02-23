@@ -1,0 +1,42 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="comparetbl" style="table-layout: fixed">
+  <tr>
+    <td class="rowline" valign="bottom" align="center" width="200px">
+      <p class="lefttitle" style="margin-top:40px;">If you are not sure what <%=@item1.itemtype.itemtype.downcase!%> to buy.</p>
+      <br/>
+      <span style="margin-right:30px;"><a href="#" class="btn_submitanswer" style="float:center;margin-left:30px;margin-right:30px;">Ask Advice</a></span>
+
+    </td>
+    <%@items.each_with_index do |item, index|%>
+      <%=render :partial =>"items/basic_info",:locals => {:item => item, :count => index+1} %>
+      <%break if index == 3%>
+    <%end%>
+    <%if empty_boxes_required?(@items)%>
+      <%for i in empty_boxes_count(@items)..4%>
+        <%=render :partial =>"items/add_more_items",:locals => {:itemtype =>@item1.itemtype.itemtype, :count => i } %>
+      <%end%>
+    <%end%>
+  </tr>
+  <%@attributes.group_by(&:category_name).each do |group, attributes|%>
+    <%if group_display_required?(attributes.collect(&:id), @ids)%>
+      <tr>
+        <td id="comp-info-start-here" class="high insidebox titlename bordered" colspan="5" width="1000px"><b><%=group%></b></td>
+      </tr>
+      <%attributes.each do |att|%>
+        <%if  attribute_display_required?(@ids, att.id)%>
+          <tr>
+            <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%></b></td>
+            <%@items.each_with_index do |compare_item, index|%>
+              <td align="center" class="high insidebox bordered attributeInfo<%=index+1%>" width="200px"> <div class="price"><%=raw show_item_value(compare_item, att)%></div></td>
+              <%break if index == 3%>
+            <%end%>
+            <%if empty_boxes_required?(@items)%>
+              <%for i in empty_boxes_count(@items)..4%>
+                <td align="center" class="high insidebox bordered" width="200px"> <div class="price"></div></td>
+              <%end%>
+            <%end%>
+          </tr>
+        <%end%>
+      <%end%>
+    <%end%>
+  <%end%>
+</table>

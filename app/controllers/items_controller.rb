@@ -204,7 +204,7 @@ class ItemsController < ApplicationController
     @item1 = Item.find(@ids[0])
     attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
     @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
-    @items = Item.find_all_by_id(@ids)
+   @items = Item.find_all_and_sort_by_items(@ids)
   end
 
   private
