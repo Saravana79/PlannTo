@@ -36,6 +36,7 @@ PlanNto::Application.routes.draw do
         resources :shares
   end  
   resources :contents do
+      resources :comments
     collection do
       get :feed
     end
@@ -87,7 +88,6 @@ PlanNto::Application.routes.draw do
   end
   resources :reviews
   resources :pros
-  resources :comments
   resources :votes
   resources :questions
   resources :answers

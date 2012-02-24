@@ -1,0 +1,3 @@
+jQuery('.comments_<%= @content.id %>').show();
+jQuery('#new_comment_<%= @content.id %>').show();
+jQuery('#new_comment_<%= @content.id %>').before('<%=escape_javascript(@comments_string.html_safe) %>');
