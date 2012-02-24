@@ -8,6 +8,5 @@
 <% if !Content.filter(:items => [@item.id]).blank? %>
 <% for content in Content.filter(:items => [@item.id]) %>
 <%= render_content_type(content) %>
-<%=render :partial => "comments/new", :locals => { :content => content }  %>
 <% end %>
 <% end %>
