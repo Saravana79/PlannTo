@@ -2451,3 +2451,18 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 /*Added by Awijeet*/
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
     display: none;}
+
+.btn_like_default							{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) no-repeat left bottom; float:left; }
+.btn_like_default:hover						{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) 51px 20px; float:left;  }
+.btn_dislike_default						{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -26px 20px ; float:left; }
+.btn_dislike_default:hover					{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -78px 20px ;  float:left; }
+
+.btn_like_positive							{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) 51px 20px; float:left;  }
+.btn_like_positive:hover					{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) no-repeat left bottom; float:left; }			
+.btn_dislike_positive						{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) no-repeat right bottom; float:left; }
+.btn_dislike_positive:hover					{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -26px 20px ; float:left; }
+
+.btn_like_negative							{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) -104px 20px ; float:left; }
+.btn_like_negative:hover						{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) no-repeat left bottom; float:left; }
+.btn_dislike_negative						{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -78px 20px ;  float:left; }
+.btn_dislike_negative:hover					{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -26px 20px ; float:left; }		
