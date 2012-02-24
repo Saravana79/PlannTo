@@ -1,3 +1,13 @@
+jQuery('#previous_<%= @content.id %>').remove();
+element =  jQuery('[last_comment = <%= @content.id %>]');
+element.before('<%=escape_javascript(@comments_string.html_safe) %>');
+<% unless @page > 1 %>
 jQuery('.comments_<%= @content.id %>').show();
+jQuery('#anchor_comments_<%= @content.id %>').removeAttr("href");
+jQuery('#anchor_comments_<%= @content.id %>').removeAttr('data-remote');
+jQuery('#anchor_comments_<%= @content.id %>').unbind();
 jQuery('#new_comment_<%= @content.id %>').show();
-jQuery('#new_comment_<%= @content.id %>').before('<%=escape_javascript(@comments_string.html_safe) %>');
+jQuery('#new_comment_<%= @content.id %>').removeAttr('last_comment');
+<% else %>
+element.remove();
+<% end %>
