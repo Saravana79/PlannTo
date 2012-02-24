@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120225180249) do
+ActiveRecord::Schema.define(:version => 20120222170227) do
 
   create_table "answer_contents", :force => true do |t|
     t.integer "question_id"
@@ -227,19 +227,6 @@ ActiveRecord::Schema.define(:version => 20120225180249) do
   end
 
   create_table "itemdetails", :force => true do |t|
-    t.integer  "shippingunit"
-    t.integer  "guarantee"
-    t.integer  "guaranteeunit"
-    t.boolean  "iscashondeliveryavailable"
-    t.integer  "saveonpercentage"
-    t.integer  "savepercentage"
-    t.integer  "cashback"
-    t.boolean  "isemiavailable"
-    t.string   "site"
-    t.string   "shipping"
-    t.integer  "item_details_id"
-    t.integer  "itemid"
-    t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -509,6 +496,12 @@ ActiveRecord::Schema.define(:version => 20120225180249) do
     t.datetime "updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
     t.string   "name"
+    t.integer  "facebook_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.integer  "reputation",                            :default => 0,  :null => false
     t.integer  "invitation_id"
   end
 
@@ -516,15 +509,8 @@ ActiveRecord::Schema.define(:version => 20120225180249) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "vendors", :force => true do |t|
-    t.string   "name"
-    t.string   "baseurl"
-    t.string   "imageurl"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "video_contents", :force => true do |t|
-    t.string "youtube"
   end
 
   create_table "vote_counts", :force => true do |t|
