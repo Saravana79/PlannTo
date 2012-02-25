@@ -1,5 +1,6 @@
 class VideoContent < ArticleContent
   acts_as_citier
+  acts_as_voteable
 
   def self.CreateContent(url, user)
     @article = VideoContent.create(:url => url, :created_by => user.id)

@@ -1,4 +1,5 @@
 class VotesController < ApplicationController
+  skip_before_filter :verify_authenticity_token
 
   def create
     voter  = User.find(1)
@@ -16,6 +17,26 @@ class VotesController < ApplicationController
     @vote = voter.fetch_vote(voteable)
     respond_to do |format|
       format.js 
+    end
+  end
+
+  def add_vote
+    if user_signed_in?
+    voter = current_user
+    @voteable = voteable = params[:parent].camelize.constantize.find(params[:id])
+    if voter.voted_on?voteable
+      if voter.voted_which_way?(voteable, params[:vote].to_sym)
+        voter.clear_votes(voteable)
+      else
+        logger.error "Vote #{ params[:vote]}"
+
+        voter.vote voteable,{:direction => params[:vote], :exclusive => true ,:id => current_user.fetch_vote(voteable).try(:id)}
+      end
+    else
+      voter.vote voteable,:direction => params[:vote]
+    end
+    else
+      render :nothing => true
     end
   end
 

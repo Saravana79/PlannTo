@@ -34,9 +34,9 @@ module ThumbsUp #:nodoc:
       def vote_count(for_or_against = :all)
         v = Vote.where(:voter_id => id).where(:voter_type => self.class.name)
         v = case for_or_against
-          when :all   then v
-          when :up    then v.where(:vote => true)
-          when :down  then v.where(:vote => false)
+        when :all   then v
+        when :up    then v.where(:vote => true)
+        when :down  then v.where(:vote => false)
         end
         v.count
       end
@@ -49,13 +49,23 @@ module ThumbsUp #:nodoc:
         voted_which_way?(voteable, :down)
       end
 
+      def get_class_name(class_name)
+        parent_class_name = case class_name
+        when "VideoContent" then "Content"
+        when "ArticleContent" then "Content"
+        else class_name
+        end
+        return parent_class_name
+      end
+
       def voted_on?(voteable)
-         0 < Vote.where(
-              :voter_id => self.id,
-              :voter_type => self.class.name,
-              :voteable_id => voteable.id,
-              :voteable_type => voteable.class.name
-             ).count
+        class_name = get_class_name(voteable.class.name)
+        0 < Vote.where(
+          :voter_id => self.id,
+          :voter_type => self.class.name,
+          :voteable_id => voteable.id,
+          :voteable_type => class_name
+        ).count
       end
       
       def vote_exists?(id)
@@ -63,21 +73,24 @@ module ThumbsUp #:nodoc:
       end
 
       def fetch_updated_vote_count(voteable,direction)
-        vote = VoteCount.select(:vote_count).where(:voteable_id => voteable.id,:voteable_type => voteable.class.name).first
+        class_name = get_class_name(voteable.class.name)
+        vote = VoteCount.select(:vote_count).where(:voteable_id => voteable.id,:voteable_type => class_name).first
         direction ? vote.vote_count + 1 : vote.vote_count - 1
       end
 
       def fetch_vote_counter(voteable)
-        VoteCount.where(:voteable_id => voteable.id,:voteable_type => voteable.class.name).first
+        class_name = get_class_name(voteable.class.name)
+        VoteCount.where(:voteable_id => voteable.id,:voteable_type => class_name).first
       end
       
       def fetch_vote(voteable)
+        class_name = get_class_name(voteable.class.name)
         Vote.where(
-              :voter_id => self.id,
-              :voter_type => self.class.name,
-              :voteable_id => voteable.id,
-              :voteable_type => voteable.class.name
-             ).first
+          :voter_id => self.id,
+          :voter_type => self.class.name,
+          :voteable_id => voteable.id,
+          :voteable_type => class_name
+        ).first
       end  
 
       def vote_for(voteable)
@@ -101,54 +114,56 @@ module ThumbsUp #:nodoc:
         raise ArgumentError, "you must specify :up or :down in order to vote" unless options[:direction] && [:up, :down].include?(options[:direction].to_sym)
         direction = (options[:direction].to_sym == :up)
 
-#        if options[:exclusive]
-#          self.clear_votes(voteable,direction)
-#        end
+        #        if options[:exclusive]
+        #          self.clear_votes(voteable,direction)
+        #        end
 
         if options[:id]
           if self.vote_exists?(options[:id]) and !self.voted_which_way? voteable,options[:direction].to_sym
-           Vote.update(options[:id],:vote => direction, :voteable => voteable, :voter => self)
-           VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, direction))
+            Vote.update(options[:id],:vote => direction)
+            VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, direction))
           end
         else
+          #:voteable_type => voteable.class.name, :voteable_id => voteable.id,
           Vote.create!(:vote => direction, :voteable => voteable, :voter => self)
           VoteCount.create!(:vote_count => (direction ? 1 : -1), :voteable => voteable)
         end
       end
 
-#      #Added new method to update votes - Rahul
-#      def update_votes(voteable,vote_id = nil, direction )
-#        #raise ArgumentError, "you must specify :up or :down in order to vote" unless options[:direction] && [:up, :down].include?(options[:direction].to_sym)
-#        unless self.voted_on?(voteable)
-#          self.vote(voteable,options)
-#        end
-#        vote_id = vote_id || self.vote_id(voteable)
-#        direction = (options[:direction].to_sym == :up)
-#        Vote.update(:id => vote_id, :vote => direction, :voteable => voteable, :voter => self)
-#      end
-#
-#      #Added new method to fetch the vote id
-#      def vote_id(voteable)
-#        Vote.where(
-#              :voter_id => self.id,
-#              :voter_type => self.class.name,
-#              :voteable_id => voteable.id,
-#              :voteable_type => voteable.class.name
-#            ).id
-#      end
+      #      #Added new method to update votes - Rahul
+      #      def update_votes(voteable,vote_id = nil, direction )
+      #        #raise ArgumentError, "you must specify :up or :down in order to vote" unless options[:direction] && [:up, :down].include?(options[:direction].to_sym)
+      #        unless self.voted_on?(voteable)
+      #          self.vote(voteable,options)
+      #        end
+      #        vote_id = vote_id || self.vote_id(voteable)
+      #        direction = (options[:direction].to_sym == :up)
+      #        Vote.update(:id => vote_id, :vote => direction, :voteable => voteable, :voter => self)
+      #      end
+      #
+      #      #Added new method to fetch the vote id
+      #      def vote_id(voteable)
+      #        Vote.where(
+      #              :voter_id => self.id,
+      #              :voter_type => self.class.name,
+      #              :voteable_id => voteable.id,
+      #              :voteable_type => voteable.class.name
+      #            ).id
+      #      end
 
       def clear_votes(voteable,direction = true)
-#        Vote.where(
-#          :voter_id => self.id,
-#          :voter_type => self.class.name,
-#          :voteable_id => voteable.id,
-#          :voteable_type => voteable.class.name
-#        ).map(&:destroy)
+        #        Vote.where(
+        #          :voter_id => self.id,
+        #          :voter_type => self.class.name,
+        #          :voteable_id => voteable.id,
+        #          :voteable_type => voteable.class.name
+        #        ).map(&:destroy)
+        class_name = get_class_name(voteable.class.name)
         voted_object = Vote.where(
           :voter_id => self.id,
           :voter_type => self.class.name,
           :voteable_id => voteable.id,
-          :voteable_type => voteable.class.name
+          :voteable_type => class_name
         ).first
         Vote.update(voted_object.id, :vote => nil)
         VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, !direction)) unless self.fetch_vote_counter(voteable).nil? 
@@ -156,13 +171,14 @@ module ThumbsUp #:nodoc:
 
       def voted_which_way?(voteable, direction)
         raise ArgumentError, "expected :up or :down" unless [:up, :down].include?(direction)
+        class_name = get_class_name(voteable.class.name)
         0 < Vote.where(
-              :voter_id => self.id,
-              :voter_type => self.class.name,
-              :vote => direction == :up ? true : false,
-              :voteable_id => voteable.id,
-              :voteable_type => voteable.class.name
-            ).count
+          :voter_id => self.id,
+          :voter_type => self.class.name,
+          :vote => direction == :up ? true : false,
+          :voteable_id => voteable.id,
+          :voteable_type => class_name
+        ).count
       end
 
     end
