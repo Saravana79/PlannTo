@@ -1,6 +1,5 @@
 class ArticleContent < Content
   acts_as_citier
-  validates_presence_of :url
   validates_uniqueness_of :url
   
   def self.CreateContent(url, user)
@@ -29,5 +28,16 @@ class ArticleContent < Content
       end
     end
     @article
+  end
+  
+  def self.saveContent(val, user, ids)
+    if val['url'].include? "youtube.com"
+      @article=VideoContent.saveContent(val, user, ids)
+    else
+      @article=ArticleContent.create(val)
+      @article.user = user
+      @article.save_with_items!(ids) 
+      @article
+    end
   end
 end

@@ -1,5 +1,11 @@
+<div class="commentblock" style="display: block;"></div>
+<% if @previous %>
+<div class="subContentDiv_comments comments_bg">
+	<div class="subContentGap">
 
-
-<div class="commentblock" style="display: block; " >
-	<%= render :partial => 'comments/comment', :collection => comments %>
-</div>	
+		<%= link_to "View previous comments", content_comments_path({:content_id => content.id, :page => page+1 }), :remote => true,  :id => "previous_#{content.id}" %>
+	</div>
+</div>
+<div last_comment="<%= content.id %>"></div>
+<% end %>
+<%= render :partial => 'comments/comment', :collection => comments %>

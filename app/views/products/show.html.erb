@@ -27,7 +27,6 @@
 
 <%= render :partial => "shared/review" %>
 
-<%= render :partial => "products/detailed_specifications" %>
 <br/>
 <div id="usual2" class="usual">
   <ul class="tabs">
@@ -36,21 +35,17 @@
     <li><a href="#tabs3" >Review</a></li>
     <li><a href="#tabs4" >Q&amp;A</a></li>
     <li><a href="#tabs5" id="specification">Specification</a></li>
-    <li><a href="#tabs6" >Image</a></li>
+    <li><a href="#tabs6" >Where to Buy</a></li>
     <li><a href="#tabs7" >Videos</a></li>
   </ul>
 </div>
-<br>
+<br/>
 <div class="question_answer" id="tabs1">
-    <%= render "layouts/product_tip"%>
-    <div id="content_tips">
-      <%= render :partial => 'tips/tips',:collection => @contents %>
-    </div>
-    
-    <%= render "/layouts/product_answer" %>
+    <%= render "contents/all"%>
 </div>
 <div id="tabs5" style="display: none; " class="main-content-section">
-    <%= render :template => 'products/specification' %>
+    <%#= render :template => 'products/specification' %>
+    <%= render :partial => "products/detailed_specifications" %>
     <%= render "/layouts/product_answer" %>
 </div>
 
@@ -66,21 +61,59 @@
   <%= render  "layouts/product_tip" %>
   <%= render "/layouts/product_answer" %>
 </div>
-<div id="tabs6" style="display: none; " class="main-content-section"></div>
+<div id="tabs6" style="display: none; " class="main-content-section">
+  <%= render "products/where_to_buy" %>
+</div>
 <div id="tabs7" style="display: none; " class="main-content-section">
     <%= render "/layouts/product_video" %>
     <%= render "/layouts/product_answer" %>
 </div>
+
+<%= render "/layouts/product_answer" %>
 <!-- Q&A -  End -->
 </div>
 <div class="rightcolumnsmall">
 <br/>
-<div >
-    <a class="btns" href="#">Compare Cars</a>
-    <a class="btns" href="#">Ask Advices</a>
-    <a class="btns" href="#">Top Questions</a>
+<div class="other_links" >
+    <span class="txt_black heading_others">Quick Links</span>
+    <span class="menu_list"><a href="#">Compare Cars</a></span>
+    <span class="menu_list"><a href="#">Ask Advices</a></span>
+    <span class="menu_list"><a href="#">Top Questions</a></span>
 </div>
 <br/>
+<div class="followers">
+
+  <span class="planetobuy">
+      <a class="icon_planetobuy"></a>
+      <a class="txt_planetobuy">Plane to buy <br /><b>12</b></a>
+  </span>
+    
+  <span class="iwonit">
+      <a class="icon_iwonit"></a>
+      <a class="txt_iwonit">I won it <br /> <b>12</b></a>
+  </span>
+  
+  <span class="ifollow">
+      <a class="icon_ifollow" ></a>
+      <a class="txt_ifollow">I Follow <br /> <b>12</b></a>
+  </span>
+  
+</div>
+<div class="txt_black imgfollowers">Total Followers <a href="#">145236 PEOPLE</a>
+  <ul class="imgfollowers">
+    	<li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+  </ul>
+</div>
+<br/>
+
 <div>
 	<%= link_to("Invite buyer", "#", :id => "invite_buy") %>&nbsp;
 	<%= link_to("Invite owner", "#", :id => "invite_own") %>&nbsp;

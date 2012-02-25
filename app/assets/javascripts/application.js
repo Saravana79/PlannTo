@@ -151,6 +151,7 @@ $(document).ready(function(){
   
 $(document).ready(function() {
         
+	$('a.youtube').youtube();
     $('span.buttonLink a#youtube_form').click(function() {
         $("#image_share").hide();
         $("#article_share").hide();

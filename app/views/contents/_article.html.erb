@@ -1,0 +1,29 @@
+<div class="mainContentDiv">
+
+	<div class="rate_content float_lft">
+		<a class="bg_ratecontent">100</a>
+		<a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+	</div>
+	<div class="float_rgt">
+		<img src="images/users.png" class="userImageSmall">
+	</div>
+	<div class="subContentDiv">
+		<div><a class="title" href="google.com"><%= content.title %></a></div>
+		<div><a class="txt_brown"><%= content.user.name %> shared a video on Fiat Grande Punto - <%= time_ago_in_words(content.updated_at) %> ago </a></div>
+		<div>
+			<div><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></div>
+			<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+		</div>
+
+		<ul class="divCommentsConent dontfloat">
+			<li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
+			<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+			<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+			<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+		</ul>
+	</div>
+<%=render :partial => "comments/new", :locals => { :content => content }  %>
+</div>

@@ -10,6 +10,9 @@
 <div style="clear:both;"></div>
 </div>
 
+<%= f.hidden_field :type, :id => "new_article_type" %>
+<%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
+
 	<div style="padding:5px 5px 0px 0px;clear:both;">
 		<div class="title_header float_lft" ><%= f.label :url %> :</div>
 		<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>								 

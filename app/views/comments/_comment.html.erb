@@ -1,3 +1,14 @@
-<div id=<%= "comments#{comment.id}"%> class="commentblock" style="display: block; margin-left: 10px; " >
-	-<%= comment.comment %>
-</div>	
+<div class="subContentDiv_comments comments_bg">
+
+	<div class="float_rgt"><img src="images/users.png" class="userImageSmall"></div>
+	<div class="subContentGap">
+		<a class="txt_black_description"><%= comment.comment %> </a></div>			
+		<ul class="divCommentsConent ">
+			<li class="subContentGap float_lft"><a class="txt_gray "><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>				
+		</ul>
+	</div>

@@ -10,6 +10,7 @@ class Item < ActiveRecord::Base
    has_many :shares # to be removed
     has_many :content_item_relations
     has_many :contents, :through => :content_item_relations
+
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
 
@@ -25,9 +26,9 @@ class Item < ActiveRecord::Base
     :through => :itemrelationships
   
   scope :get_price_range, lambda {|item_ids| joins(:item_attributes).
-    where("attribute_values.item_id in (?) and attributes.name = 'Price'", item_ids).
-    select("min(CAST(value as SIGNED)) as min_value, max(CAST(value as SIGNED)) as max_value, attributes.unit_of_measure as measure_type, attribute_values.addition_comment as comment, attributes.name as name").
-    group("attribute_id")
+      where("attribute_values.item_id in (?) and attributes.name = 'Price'", item_ids).
+      select("min(CAST(value as SIGNED)) as min_value, max(CAST(value as SIGNED)) as max_value, attributes.unit_of_measure as measure_type, attribute_values.addition_comment as comment, attributes.name as name").
+      group("attribute_id")
   }
 
   acts_as_followable
@@ -70,8 +71,8 @@ class Item < ActiveRecord::Base
       related_iteams.where("follows.follow_type" => follow_type)
     else
       related_iteams.where("follows.follow_type" => [Follow::ProductFollowType::Buyer,
-                                                     Follow::ProductFollowType::Owner,
-                                                     Follow::ProductFollowType::Follow])
+          Follow::ProductFollowType::Owner,
+          Follow::ProductFollowType::Follow])
     end
   end
 
@@ -80,7 +81,7 @@ class Item < ActiveRecord::Base
   end
 
   def specification
-    item_attributes.select("value, name, unit_of_measure, category_name, attribute_type")
+    item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type")
   end
 
   def image_url
@@ -107,6 +108,20 @@ class Item < ActiveRecord::Base
       where(:id => id).includes(:item_attributes).try(:last)
     end
 
+  end
+
+  def self.find_all_and_sort_by_items(ids)
+    items = Item.find_all_by_id(ids)
+    sorted_items = Array.new
+    ids.each do |id|
+      items.each do |item|
+        if item.id.to_i == id.to_i
+          sorted_items << item
+          break
+        end
+      end
+    end
+    return sorted_items
   end
 
 end

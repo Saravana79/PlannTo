@@ -1,6 +1,6 @@
-<H2>Compare Cars</H2>
+<h2>Compare <%=@item1.itemtype.itemtype.pluralize.capitalize%></h2>
 <div class="comparedivcontainer">
-  <div class="comparetopdiv">
+  <div class="comparetopdiv">    
     <div class="rightcol">
       <ul>
         <li><a href="#" class="tweet">twitter</a></li>
@@ -9,60 +9,65 @@
       </ul>
     </div>
 
-    <div class="comaredivbox dontfloat">
-      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="comparetbl">
-        <tr>
-          <td class="rowline" valign="bottom" align="center">
-            <p class="lefttitle" style="margin-top:40px;">If you are not sure what car to buy.</p>
-            <br/>
-            <span style="margin-right:30px;"><a href="#" class="btn_submitanswer" style="float:center;margin-left:30px;margin-right:30px;">Ask Advice</a></span>
-
-          </td>
-          <%@items.each do |item|%>
-          <td class="rowline" align="center">
-            <div class="comparebox">
-              <span class="img_product_cmp">
-                <span class="closebtndiv"><a href="#"><span class="icon_close2" alt="" /></a></span>
-                <img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>"/></span>
-              <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p>
-
-              <div class="PlanntoBuyBtncnt">
-                <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
-              </div>
-              <div style="clear:both">
-                <a class="txt_price"><%=item.get_price_info('Price')%></a><br />
-                <img src="../images/rating_stars.png" width="87" height="20" /><br/>
-              </div>
-            </div>
-          </td>
-          <%end%>
-        </tr>
-        <%@attributes.group_by(&:category_name).each do |group, attributes|%>
-          <%if group_display_required?(attributes.collect(&:id), @ids)%>
-            <tr>
-              <td id="comp-info-start-here" class="top cell titlename bordered" colspan="5"><b><%=group%></b></td>
-            </tr>
-            <%attributes.each do |att|%>
-              <%if  attribute_display_required?(@ids, att.id)%>
-                <tr>
-                  <td id="comp-info-start-here" class="top cell name bordered"><b><%=att.name%></b></td>
-                  <%@items.each do |item|%>
-                    <td align="center" class="top cell bordered"> <span class="price"><%=raw show_item_value(item, att)%></span></td>
-                  <%end%>
-                </tr>
-              <%end%>
-            <%end%>
-          <%end%>
-        <%end%>
-      </table>
+    <div class="comaredivbox dontfloat" id="comparePage">
+      <%=render "items/compare"%>
     </div>
   </div>
   <br /><br />
 </div>
 
+<script type="text/javascript">
+  var compareIds= "<%=params[:ids]%>";
 
+  function removeFromCompare(index, item_id){
+    //$("#compareBasicInfo" + index).html("")
+    // $(".attributeInfo" + index).text("")
+    var ids = compareIds.toString().split(",");
+    if (ids.length == 2){
+      alert("You must have atleast two items to compare.")
+      return false;
+    }
+    ids = $.grep(ids, function(val) {
+      return val != item_id;
+    })
+    compareIds = ids.toString();
+    var spinnerId = "moreCarsSearchDiv" + index
+    reloadComparableItems(ids, spinnerId)
+    //location.href = "/items/compare?ids=" + ids.toString();
+  }
+
+  function reloadComparableItems(ids, spinnerId){
+    var opts = {
+      lines: 12, // The number of lines to draw
+      length: 5, // The length of each line
+      width: 4, // The line thickness
+      radius: 5, // The radius of the inner circle
+      color: '#2EFE9A', // #rgb or #rrggbb
+      speed: 1, // Rounds per second
+      trail: 50, // Afterglow percentage
+      shadow: true, // Whether to render a shadow
+      hwaccel: false // Whether to use hardware acceleration
+    };
+    var target = document.getElementById(spinnerId);
+    var spinner = new Spinner(opts).spin(target);
+
+    $.ajax(
+    {
+      url: "/items/compare",
+      data: {
+        ids: ids.toString(),
+        search_type: ''
+      },
+      type: "GET",
+      dataType: "script",
+      success: function( data )
+      {
+        spinner.stop();
+      }
+    });
+  }
+
+</script>
 <!--
 <div id="compare-list" class="productcontentmain" style="display:none">
   <span id="compare-items"><%#= link_to(("<span>Compare</span>").html_safe, compare_items_path + '?ids=0' , :class => "imageButtonAsk") %></span>
@@ -77,7 +82,7 @@
     </div>
     <div>
       <div id="tabs2" class="main-content-section">
-        <%#= render :template => 'products/specification', :locals => { :@item => item } %>
+<%#= render :template => 'products/specification', :locals => { :@item => item } %>
       </div>
     </div>
   </div>
@@ -107,6 +112,6 @@
     $('#compare-items').hide();
   }
 
-        
+
 </script>
 -->

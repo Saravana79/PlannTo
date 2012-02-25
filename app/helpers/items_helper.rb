@@ -40,7 +40,7 @@ module ItemsHelper
 
   def group_display_required?(attribute_ids, item_ids)
     return false if attribute_ids.size == 0
-    attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?)", item_ids, attribute_ids)
+    attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", item_ids, attribute_ids)
     return true if attribute_values.size > 0
     return false
   end
@@ -148,6 +148,15 @@ module ItemsHelper
   def convert_to_GHz(value)
     converted_value = (value/1000).round(2)
     return converted_value.to_i
+  end
+
+  def empty_boxes_required?(items)
+    return true if items.size < 4
+    return false
+  end
+
+  def empty_boxes_count(items)
+    return items.size+1
   end
 
 end

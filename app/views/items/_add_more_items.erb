@@ -1,0 +1,111 @@
+<td class="rowline" align="center">
+  <div class="comparebox" id="compareBasicInfo<%=count%>">
+    <p><b>Add <%=itemtype%> to compare</b> </p> 
+    <span class="img_product_cmp" >
+      <br/>
+      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%>" style="width: 150px;"/><div id="moreCarsSearchDiv<%=count%>"></div>
+    </span>
+    <div class="PlanntoBuyBtncnt">
+    </div>
+    <div style="clear:both">
+    </div>
+  </div>
+</td>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $("#ui-active-menuitem").mouseout(function() {
+      $("#ui-active-menuitem").hide();
+    });
+
+    $('#moreCarsSearch<%=count%>').focus(function(){
+      $(this).val('');
+      $(this).keydown();
+    });
+
+
+    $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
+      var self = this;
+      $.each(items, function(index, item) {
+        self._renderItem(ul, item, index);
+      });
+    };
+
+    $("#moreCarsSearch<%=count%>").autocomplete({
+      minLength: 2,
+      format: "js",
+      source: function( request, response )
+      {
+        var opts = {
+          lines: 12, // The number of lines to draw
+          length: 5, // The length of each line
+          width: 4, // The line thickness
+          radius: 5, // The radius of the inner circle
+          color: '#2EFE9A', // #rgb or #rrggbb
+          speed: 1, // Rounds per second
+          trail: 50, // Afterglow percentage
+          shadow: true, // Whether to render a shadow
+          hwaccel: false // Whether to use hardware acceleration
+        };
+        var target = document.getElementById('moreCarsSearchDiv<%=count%>');
+        var spinner = new Spinner(opts).spin(target);
+        $.ajax(
+        {
+          url: "/search/autocomplete_items",
+          data: {
+            term: request.term,
+            search_type: '<%=@item1.itemtype.itemtype%>'
+          },
+          type: "POST",
+          dataType: "json",
+          success: function( data )
+          {
+            response( $.map( data, function( item )
+            {
+              return{
+                id: item.id,
+                value: item.value,
+                imgsrc: item.imgsrc,
+                type: item.type,
+                url: item.url
+              }
+            }));
+            spinner.stop();
+          }
+        });
+      },
+      focus:function(e, ui) {
+        return false
+      },
+      select: function( event, ui ) {
+        var ids = compareIds.toString().split(",");
+        if (ids.length == 4){
+          alert("You have already selected four items.")
+          return false;
+        }
+        var value = jQuery.inArray(ui.item.id.toString(), ids)
+        if (value.toString() == "-1"){
+          var spinnerId = $(this).attr('id').replace("moreCarsSearch",'');
+          spinnerId = "moreCarsSearchDiv" +spinnerId  
+          ids.push(ui.item.id);
+          compareIds = ids;
+          reloadComparableItems(ids, spinnerId);
+          // location.href = "/items/compare?ids=" + ids.toString();
+        }
+        else{
+          $(this).val('');
+          alert("You have already selected this car.")
+          return false;
+        }
+      }
+    })
+    .data("autocomplete")._renderItem = function(ul, item, index) {
+      return $("<li></li>")
+      .data("item.autocomplete", item)
+      .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+      .appendTo(ul);
+    };
+
+  });
+</script>
