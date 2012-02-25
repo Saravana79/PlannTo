@@ -19,6 +19,7 @@ class ProductsController < ApplicationController
     user_follow_type(@item, current_user)
     @tip = Tip.new
     @contents = Tip.order('created_at desc').limit(5)
+    @review = ReviewContent.new
   end
 
   def related_products

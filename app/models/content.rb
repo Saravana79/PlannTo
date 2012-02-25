@@ -4,6 +4,7 @@ class Content < ActiveRecord::Base
 	belongs_to :user, :foreign_key => 'updated_by'
 	belongs_to :user, :foreign_key => 'created_by'
 	has_many :content_item_relations
+  has_many :items, :through => :content_item_relations
 
   
 	def save_with_items!(items)
