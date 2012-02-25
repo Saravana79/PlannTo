@@ -1,7 +1,6 @@
 class ArticleContent < Content
   acts_as_citier
-  validates_presence_of :url
-
+  validates_uniqueness_of :url
   
   def self.CreateContent(url, user)
     if url.include? "youtube.com"
