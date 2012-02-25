@@ -7,7 +7,9 @@ class Item < ActiveRecord::Base
 #  has_many :inverse_itemrelationships, :class_name => 'Itemrelationship', :foreign_key => 'relateditem_id'
 #  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :source => :item
 ##  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :
-   has_many :shares
+   has_many :shares # to be removed
+    has_many :content_item_relations
+    has_many :contents, :through => :content_item_relations
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
 
