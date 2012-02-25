@@ -6,9 +6,8 @@
     <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
 
     <div class="PlanntoBuyBtncnt">
-      <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
-      <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
-      <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
+      <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => item %>
+ 
     </div>
     <div style="clear:both">
       <a class="txt_price"><%=item.get_price_info('Price')%></a><br />
@@ -16,3 +15,8 @@
     </div>
   </div>
 </td>
+
+          <script type="text/javascript">
+           <%= render "shared/javascript_button", :formate => :js, :button_class => '_small', :item => item,
+           :related_follower => user_follow_type(item, current_user) %>
+         </script>

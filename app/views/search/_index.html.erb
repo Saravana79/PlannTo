@@ -31,10 +31,12 @@
           <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
         </span>
         <span class="float_rgt" style="display:inline;">
-          <span class="action_btns_selected_medium" style="width:110px;" ><a class="btn_plantobuy_icon"  href="#"></a><a class="btn_txt"  href="#">PlannTo Buy</a></span>
-          <span class="action_btns_medium" style="width:90px;"><a class="btn_iwonit_icon" href="#"></a><a class="btn_txt" href="#">I Own It</a></span>
-          <span class="action_btns_disabled_medium" style="width:120px;"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Car</a></span>
+          <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item %>
         </span>
+         <script type="text/javascript">
+           <%= render "shared/javascript_button", :formate => :js, :button_class => '_medium', :item => item,
+           :related_follower => user_follow_type(item, current_user) %>
+         </script>
       </div>
       <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
