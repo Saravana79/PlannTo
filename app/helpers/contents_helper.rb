@@ -15,4 +15,5 @@ module ContentsHelper
      #{link_to txt, content_comments_path(item), :remote => true, :class => "txt_blue comments_show", :id => "anchor_comments_#{item.id}"}
     END
   end
+
 end

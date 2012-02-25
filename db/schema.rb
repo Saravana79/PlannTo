@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120216173929) do
+ActiveRecord::Schema.define(:version => 20120224133423) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -68,6 +68,12 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
     t.boolean  "is_filterable"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "attributesrelationships", :force => true do |t|
+    t.integer "attribute_id", :null => false
+    t.integer "itemtype_id",  :null => false
+    t.integer "Priority",     :null => false
   end
 
   create_table "avatars", :force => true do |t|
@@ -161,6 +167,7 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
   end
 
   create_table "debates", :force => true do |t|
+    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -211,6 +218,18 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
     t.string   "user_ip",                     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemID",                    :null => false
+    t.text    "URL",                       :null => false
+    t.string  "URLSource", :limit => 2000, :null => false
+  end
+
+  create_table "itemimages", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemId",                    :null => false
+    t.string  "ImageURL",  :limit => 4000, :null => false
+    t.boolean "IsDefault",                 :null => false
   end
 
   create_table "itemrelationships", :force => true do |t|
@@ -334,6 +353,13 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
     t.datetime "updated_at"
   end
 
+  create_table "review_contents", :force => true do |t|
+    t.integer "rating"
+    t.boolean "recommend_this"
+    t.string  "pros"
+    t.string  "cons"
+  end
+
   create_table "reviews", :force => true do |t|
     t.string   "title",          :limit => 200
     t.string   "description",    :limit => 5000
@@ -359,8 +385,6 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "step"
-    t.string   "range"
   end
 
   create_table "share_types", :force => true do |t|
@@ -405,15 +429,6 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
 
   create_table "tags", :force => true do |t|
     t.string "name"
-  end
-
-  create_table "tips", :force => true do |t|
-    t.string   "title"
-    t.string   "description"
-    t.integer  "item_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "user_answers", :force => true do |t|
@@ -463,9 +478,8 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
-    t.integer  "facebook_id"
     t.integer  "reputation",                            :default => 0,  :null => false
+    t.string   "name"
     t.integer  "invitation_id"
   end
 
@@ -524,6 +538,22 @@ ActiveRecord::Schema.define(:version => 20120216173929) do
     v.column :image_content_content_type
     v.column :image_content_file_size
     v.column :image_content_updated_at
+  end
+
+  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :rating
+    v.column :recommend_this
+    v.column :pros
+    v.column :cons
   end
 
   create_view "view_video_contents", "select `view_article_contents`.`id` AS `id`,`view_article_contents`.`title` AS `title`,`view_article_contents`.`description` AS `description`,`view_article_contents`.`type` AS `type`,`view_article_contents`.`created_by` AS `created_by`,`view_article_contents`.`updated_by` AS `updated_by`,`view_article_contents`.`created_at` AS `created_at`,`view_article_contents`.`updated_at` AS `updated_at`,`view_article_contents`.`url` AS `url`,`view_article_contents`.`thumbnail` AS `thumbnail`,`video_contents`.`youtube` AS `youtube` from (`view_article_contents` join `video_contents`) where (`view_article_contents`.`id` = `video_contents`.`id`)", :force => true do |v|

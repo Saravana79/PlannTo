@@ -1,11 +1,13 @@
 class Content < ActiveRecord::Base
   acts_as_citier
+
   validates_presence_of :title 
   validates_presence_of :created_by  
   
 	belongs_to :user, :foreign_key => 'updated_by'
 	belongs_to :user, :foreign_key => 'created_by'
 	has_many :content_item_relations
+  has_many :items, :through => :content_item_relations
 
  scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
 
