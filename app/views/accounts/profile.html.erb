@@ -64,15 +64,13 @@
 
       </div>
 
-      <div class="tab">
+      <div id="usual2" class="usual">
         <ul class="tabs tab_border">
-          <li id="tab_active"><a href="#">Cars</a>
-
-          </li>
-          <li><a href="#">Mobile</a></li>
-          <li><a href="#">Camera</a></li>
-          <li><a href="#">Travel </a></li>
-          <li><a href="#">Movies</a></li>
+          <li id="tab_active"><%= link_to "Cars", profile_path(:follow => 'Cars') %></li>
+          <li><%= link_to "Mobile", profile_path(:follow => 'Mobile') %></li>
+          <li><%= link_to "Camera", profile_path(:follow => 'Camera') %></li>
+          <li><%= link_to "Travel", profile_path(:follow => 'Travel') %></li>
+          <li><%= link_to "Movies", profile_path(:follow => 'Movies') %></li>
         </ul>
       </div>
       <div style="display:block;">
@@ -85,39 +83,8 @@
             <span> <img src="/images/icon_t.png"/> </span>
           </div>
         </div>
-        <div class="listing_items">
-          <div class=""><span><h2>Add car that you own to your profile</h2></span>
-          <!--  <span class="txt_normal">[Cars that you own, had or following it]</span>-->
-          <span >
-            <input name="search" type="text" class="search_inputfield" placeholder="Search Cars"/>
-            <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="images/icon_search_gray.png"/></a>
-          </span>
-          </div>
-
-          <div class="items_list" style="clear:both;">
-
-            <% @car_items.each do |follow| %>
-                <% item = follow.followable %>
-                <div class="product" id="product_<%= item.id %>">
-                  <div class="imgprofilediv">
-                    <div class="imgpicbtnspan">
-                      <a href="<%=link_url(item)%>">
-                        <img src='<%= item.image_url %>' height="120" width="160">
-                      </a>
-                      <%= link_to(follow_item_type_item_path(item, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true ) do %>
-                        <img class="closeimg" alt="" src="images/icon_close.png" onmouseover="this.src='images/icon_close_hover.png'" onmouseout="this.src='images/icon_close.png'">
-                       <% end %>
-                    </div>
-                    <span class="imgtextspan">
-                      <%= link_to item.name, link_url(item), :class => "produ_bgimg" %>
-                    </span>
-                  </div>
-
-                  <a class="<%= follow_types_classes(follow.follow_type) %>" style=" font:bold 11px/22px arial; color:#fff;"><%= get_the_follow_text(follow.follow_type) %></a>
-                </div>
-            <% end rescue "" %>
-            <%= will_paginate @car_items , :page_links => true %>
-          </div>
+        <div class="listing_items" id="tabs1">
+          <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
         </div>
 
       </div>
