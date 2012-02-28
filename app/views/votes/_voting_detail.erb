@@ -3,8 +3,9 @@
   <%vote = user.nil? ? nil : user.fetch_vote(item)%>
   <div class="rate_content float_lft">
     <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=voters.size%></a>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :up}, :method => 'POST' , :remote => true, :class=> "btn_like", :id => "likeVote#{item.id}" %>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike", :id => "dislikeVote#{item.id}" %>
+    <%class_name = get_voting_class_name(user, item) %>
+    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :up}, :method => 'POST' , :remote => true, :class=> class_name[:positive], :id => "likeVote#{item.id}" %>
+    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :down}, :method => 'POST' , :remote => true, :class=> class_name[:negative], :id => "dislikeVote#{item.id}" %>
     <!--<a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>-->
   </div>
 <%else%>
