@@ -64,15 +64,13 @@
 
       </div>
 
-      <div class="tab">
+      <div id="usual2" class="usual">
         <ul class="tabs tab_border">
-          <li id="tab_active"><a href="#">Cars</a>
-
-          </li>
-          <li><a href="#">Mobile</a></li>
-          <li><a href="#">Camera</a></li>
-          <li><a href="#">Travel </a></li>
-          <li><a href="#">Movies</a></li>
+          <li id="tab_active"><%= link_to "Cars", profile_path(:follow => 'Cars') %></li>
+          <li><%= link_to "Mobile", profile_path(:follow => 'Mobile') %></li>
+          <li><%= link_to "Camera", profile_path(:follow => 'Camera') %></li>
+          <li><%= link_to "Travel", profile_path(:follow => 'Travel') %></li>
+          <li><%= link_to "Movies", profile_path(:follow => 'Movies') %></li>
         </ul>
       </div>
       <div style="display:block;">
@@ -85,8 +83,8 @@
             <span> <img src="/images/icon_t.png"/> </span>
           </div>
         </div>
-        <div class="listing_items">
-          <%= render 'cars', :items => @car_items %>
+        <div class="listing_items" id="tabs1">
+          <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
         </div>
 
       </div>
