@@ -7,7 +7,8 @@ module ThumbsUp
 
     module ClassMethods
       def acts_as_voteable
-        has_many :votes, :as => :voteable, :dependent => :destroy
+        #SELECT `votes`.* FROM planntodevelopment.votes WHERE `votes`.`voteable_id` = 2 AND `votes`.`voteable_type` = 'Content' and (vote !="" or Vote is not null)
+        has_many :votes, :as => :voteable, :dependent => :destroy, :conditions => ['vote != ? or vote is not null', ""]
         has_one :vote_count, :as => :voteable, :dependent => :destroy
 
         include ThumbsUp::ActsAsVoteable::InstanceMethods

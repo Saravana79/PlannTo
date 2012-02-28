@@ -115,4 +115,10 @@ module ApplicationHelper
       "bg_following"
     end
   end
+
+  def get_voting_class_name(user, item)
+    positive_class = user.voted_for?(item) ? "btn_like_negative" : "btn_like_positive"
+    negative_class = user.voted_against?(item) ? "btn_dislike_positive" : "btn_dislike_negative"
+    return {:positive => positive_class, :negative => negative_class}
+  end
 end
