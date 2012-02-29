@@ -1,11 +1,11 @@
 $("#votersResult<%=@voteable.id%>").text(<%=@voteable.voters_who_voted.size%>);
-
-<%positive_class = current_user.voted_for?(@voteable) ? "btn_like_negative" : "btn_like_positive"%>
-<%negative_class = current_user.voted_against?(@voteable) ? "btn_dislike_positive" : "btn_dislike_negative"%>
-
-$("#likeVote<%=@voteable.id%>")[0].className = '';
+<%class_name = get_voting_class_name(current_user, @voteable) %>
 $("#dislikeVote<%=@voteable.id%>")[0].className = '';
-$("#likeVote<%=@voteable.id%>").addClass("<%=positive_class%>");
-$("#dislikeVote<%=@voteable.id%>").addClass("<%=negative_class%>");
+$("#dislikeVote<%=@voteable.id%>").addClass("<%=class_name[:negative]%>");
+$("#likeVote<%=@voteable.id%>")[0].className = '';
+$("#likeVote<%=@voteable.id%>").addClass("<%=class_name[:positive]%>");
+
+
+
 
 
