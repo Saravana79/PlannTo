@@ -1,44 +1,56 @@
 
-<%= form_for(ArticleContent.new,:url => download_article_contents_path, :remote => true) do |f| %>
+<%= form_for(ArticleContent.new(:itemtype_id => @item.itemtype_id),:url => download_article_contents_path, :remote => true) do |f| %>
 <div id="article_errors" style="display:none"></div>
 
 <%= hidden_field_tag 'articles_item_id' %>
-<div style="clear:both;">
 
-	<ul id="article_product_list"></ul>
-  <input type="text" name="textfield" value="" id="article_product"/>
-<div style="clear:both;"></div>
-</div>
 
 <%= f.hidden_field :type, :id => "new_article_type" %>
+<%= f.hidden_field :itemtype_id %>
 <%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
+<div style="padding:5px 5px 0px 0px;clear:both;">
+	<div style="float:left">							 
+		<div class="title_header float_lft">Content Category :</div>
+		<div class="float_lft">
+			<%= f.select :article_category_id, ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }  %>
+		</div>			
+	</div>
+	<div style="clear:both;"></div>	
+</div>
+<div style="padding:5px 5px 0px 0px;clear:both;">
+	<div class="title_header float_lft" ><%= f.label :url %> :</div>
+	<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>								 
+	<div style="clear:both;"></div>
+</div >
+<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url">		
+	<div class="title_header float_lft" >Title :</div>
+	<div class="float_lft"><%= f.text_field :title, :id => "txtArticleTitle", :style => "margin-left:5px;width:400px" %></div>								 
 
-	<div style="padding:5px 5px 0px 0px;clear:both;">
-		<div class="title_header float_lft" ><%= f.label :url %> :</div>
-		<div class="float_lft"><%= f.text_field :url, :style => "margin-left:5px;width:400px" %></div>								 
-		<div style="clear:both;"></div>
-	</div >
-	<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url">		
-		<div class="title_header float_lft" >Title :</div>
-		<div class="float_lft"><%= f.text_field :title, :id => "txtArticleTitle", :style => "margin-left:5px;width:400px" %></div>								 
-		
-	</div >
-	<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url article_image">							
-		<div class="title_header float_lft article_image">Thumbnail :</div>
-		<img id="img_thumb" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
-		<div class="float_lft article_image"><input type="checkbox" >Don't Include Thumbnail</input></div>
-	</div>
-	
-	<div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
-    	<div class="title_header float_lft" >Description :</div>
-		<div> <%= f.text_area :description, :id => "txtArticleDescription", :style => "width:570px;height:50px;" %></div>
-	</div>
+</div >
+<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url article_image">							
+	<div class="title_header float_lft article_image">Thumbnail :</div>
+	<img id="img_thumb" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+	<div class="float_lft article_image"><input type="checkbox" >Don't Include Thumbnail</input></div>
+</div>
 
-	<%= hidden_field_tag 'item_id',@item.id %>
-	<div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
-		 <%= f.submit "Share", :id => "submit_article", :class => "btn_submitanswer" %> 
-		<div style="clear:both;"></div>
+<div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
+	<div class="title_header float_lft" >Description :</div>
+	<div> <%= f.text_area :description, :id => "txtArticleDescription", :style => "width:570px;height:50px;" %></div>
+</div>
+
+<%= hidden_field_tag 'item_id',@item.id %>
+<div style="padding:5px 5px 0px 0px;clear:both;">
+	<div class="title_header float_lft">Product  :</div>
+	<div class="taggingdiv" style="margin-left:5px;">
+		<ul id="article_product_list" class="tagging"></ul>
+		<div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="article_product"></div>	
+		<div style="clear:both;"></div>							 
 	</div>
+</div>
+<div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
+	<%= f.submit "Share this content", :id => "submit_article", :class => "btn_submitanswer" %> 
+	<div style="clear:both;"></div>
+</div>
 <input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
 <div id="url_content_desc">	</div>
 

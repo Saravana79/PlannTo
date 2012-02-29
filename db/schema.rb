@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120222170227) do
+ActiveRecord::Schema.define(:version => 20120226134522) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -26,9 +26,17 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
     t.datetime "updated_at"
   end
 
+  create_table "article_categories", :force => true do |t|
+    t.string   "name",                       :null => false
+    t.integer  "itemtype_id", :default => 0, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "article_contents", :force => true do |t|
-    t.string "url"
-    t.string "thumbnail"
+    t.string  "url"
+    t.string  "thumbnail"
+    t.integer "article_category_id"
   end
 
   create_table "attribute_values", :force => true do |t|
@@ -161,6 +169,7 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
     t.string   "type",                       :null => false
     t.integer  "created_by"
     t.integer  "updated_by"
+    t.integer  "itemtype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ip_address"
@@ -221,14 +230,21 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
   end
 
   create_table "itemdetails", :force => true do |t|
+    t.integer  "shippingunit"
+    t.integer  "guarantee"
+    t.integer  "guaranteeunit"
+    t.boolean  "iscashondeliveryavailable"
+    t.integer  "saveonpercentage"
+    t.integer  "savepercentage"
+    t.integer  "cashback"
+    t.boolean  "isemiavailable"
+    t.string   "site"
+    t.string   "shipping"
+    t.integer  "item_details_id"
+    t.integer  "itemid"
+    t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemID",                    :null => false
-    t.text    "URL",                       :null => false
-    t.string  "URLSource", :limit => 2000, :null => false
   end
 
   create_table "itemimages", :primary_key => "ID", :force => true do |t|
@@ -390,6 +406,8 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "step"
+    t.string   "range"
   end
 
   create_table "share_types", :force => true do |t|
@@ -434,6 +452,15 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
 
   create_table "tags", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "tips", :force => true do |t|
+    t.string   "title"
+    t.string   "description"
+    t.integer  "item_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "user_answers", :force => true do |t|
@@ -483,6 +510,8 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.integer  "facebook_id"
     t.integer  "reputation",                            :default => 0,  :null => false
     t.string   "name"
     t.integer  "facebook_id"
@@ -498,8 +527,15 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "vendors", :force => true do |t|
+    t.string   "name"
+    t.string   "baseurl"
+    t.string   "imageurl"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "video_contents", :force => true do |t|
+    t.string "youtube"
   end
 
   create_table "vote_counts", :force => true do |t|
@@ -524,26 +560,29 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
-  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
+  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`article_category_id` AS `article_category_id` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
     v.column :type
     v.column :created_by
     v.column :updated_by
+    v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
     v.column :url
     v.column :thumbnail
+    v.column :article_category_id
   end
 
-  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
+  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
     v.column :type
     v.column :created_by
     v.column :updated_by
+    v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
     v.column :image_content_file_name
@@ -552,33 +591,35 @@ ActiveRecord::Schema.define(:version => 20120222170227) do
     v.column :image_content_updated_at
   end
 
-  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
+  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
     v.column :type
     v.column :created_by
     v.column :updated_by
+    v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
-    v.column :ip_address
     v.column :rating
     v.column :recommend_this
     v.column :pros
     v.column :cons
   end
 
-  create_view "view_video_contents", "select `view_article_contents`.`id` AS `id`,`view_article_contents`.`title` AS `title`,`view_article_contents`.`description` AS `description`,`view_article_contents`.`type` AS `type`,`view_article_contents`.`created_by` AS `created_by`,`view_article_contents`.`updated_by` AS `updated_by`,`view_article_contents`.`created_at` AS `created_at`,`view_article_contents`.`updated_at` AS `updated_at`,`view_article_contents`.`url` AS `url`,`view_article_contents`.`thumbnail` AS `thumbnail`,`video_contents`.`youtube` AS `youtube` from (`view_article_contents` join `video_contents`) where (`view_article_contents`.`id` = `video_contents`.`id`)", :force => true do |v|
+  create_view "view_video_contents", "select `view_article_contents`.`id` AS `id`,`view_article_contents`.`title` AS `title`,`view_article_contents`.`description` AS `description`,`view_article_contents`.`type` AS `type`,`view_article_contents`.`created_by` AS `created_by`,`view_article_contents`.`updated_by` AS `updated_by`,`view_article_contents`.`itemtype_id` AS `itemtype_id`,`view_article_contents`.`created_at` AS `created_at`,`view_article_contents`.`updated_at` AS `updated_at`,`view_article_contents`.`url` AS `url`,`view_article_contents`.`thumbnail` AS `thumbnail`,`view_article_contents`.`article_category_id` AS `article_category_id`,`video_contents`.`youtube` AS `youtube` from (`view_article_contents` join `video_contents`) where (`view_article_contents`.`id` = `video_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
     v.column :type
     v.column :created_by
     v.column :updated_by
+    v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
     v.column :url
     v.column :thumbnail
+    v.column :article_category_id
     v.column :youtube
   end
 

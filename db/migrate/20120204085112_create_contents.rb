@@ -6,7 +6,7 @@ class CreateContents < ActiveRecord::Migration
       t.string		:type,			:null => false
       t.integer 	:created_by
       t.integer		:updated_by
-      
+      t.integer   :itemtype_id
       t.timestamps
     end
   end
