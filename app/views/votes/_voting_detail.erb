@@ -1,4 +1,4 @@
-<%voters = item.voters_who_voted%>
+<%voters = item.fetch_vote_counter.positive - item.fetch_vote_counter.negative%>
 <%if user_signed_in?%>
   <%vote = user.nil? ? nil : user.fetch_vote(item)%>
   <div class="rate_content float_lft">
@@ -11,7 +11,7 @@
 <%else%>
   <div class="rate_content float_lft">
     <a class="bg_ratecontent"><%=voters.size%></a>
-    <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+    <a class="btn_like_default" href="#"></a><a class="btn_dislike_default" href="#"></a>
   </div>
 <%end%>
 

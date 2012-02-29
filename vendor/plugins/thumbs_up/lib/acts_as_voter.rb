@@ -117,19 +117,43 @@ module ThumbsUp #:nodoc:
         #        if options[:exclusive]
         #          self.clear_votes(voteable,direction)
         #        end
-
+logger.info "DIRECTION" + "#{direction}"
         if options[:id]
           if self.vote_exists?(options[:id]) and !self.voted_which_way? voteable,options[:direction].to_sym
-            Vote.update(options[:id],:vote => direction)
-            VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, direction))
+            #Vote.update(options[:id],:vote => direction)
+            vote_obj = Vote.find(options[:id])
+            
+            vote_count_obj = VoteCount.find(self.fetch_vote_counter(voteable).id)
+            if direction == true
+                count = vote_count_obj.vote_count_positive + 1
+               # if
+                  negative_count = vote_obj.vote == false ? vote_count_obj.vote_count_negative - 1 : vote_count_obj.vote_count_negative
+                #end
+              vote_count_obj.update_attributes(:vote_count => self.fetch_updated_vote_count(voteable, direction), :vote_count_positive => count, :vote_count_negative => negative_count)
+            else
+              count = vote_count_obj.vote_count_negative + 1
+              positive_count = vote_obj.vote == true ? vote_count_obj.vote_count_positive - 1 : vote_count_obj.vote_count_positive
+              vote_count_obj.update_attributes(:vote_count => self.fetch_updated_vote_count(voteable, direction), :vote_count_negative => count, :vote_count_positive => positive_count)
+            end
+            vote_obj.update_attributes(:vote => direction)
+            #VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, direction))
           end
         else
           #:voteable_type => voteable.class.name, :voteable_id => voteable.id,
           Vote.create!(:vote => direction, :voteable => voteable, :voter => self)
           if fetch_vote_counter(voteable).nil?
-          VoteCount.create!(:vote_count => (direction ? 1 : -1), :voteable => voteable)
+            VoteCount.create!(:vote_count => (direction ? 1 : -1), :voteable => voteable, :vote_count_positive => (direction ? 1 : 0), :vote_count_negative => (direction ? 0 : 1))
           else
-            VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, direction))
+            logger.info "-----------------------------NOTICE A BUG HERE---------------------------------"
+            vote_count_obj = VoteCount.find(self.fetch_vote_counter(voteable).id)
+            if direction == true
+                count = vote_count_obj.vote_count_positive + 1
+              vote_count_obj.update_attributes(:vote_count => self.fetch_updated_vote_count(voteable, direction), :vote_count_positive => count)
+            else
+              count = vote_count_obj.vote_count_negative + 1
+              vote_count_obj.update_attributes(:vote_count => self.fetch_updated_vote_count(voteable, direction), :vote_count_negative => count)
+            end
+           # VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, direction))
           end
         end
       end
@@ -169,8 +193,22 @@ module ThumbsUp #:nodoc:
           :voteable_id => voteable.id,
           :voteable_type => class_name
         ).first
-        Vote.update(voted_object.id, :vote => nil)
-        VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, !direction)) unless self.fetch_vote_counter(voteable).nil? 
+        vote_obj = Vote.find(voted_object.id)
+        old_vote = vote_obj.vote
+        vote_obj.update_attributes(:vote => nil)
+        #Vote.update(voted_object.id, :vote => nil)
+        unless self.fetch_vote_counter(voteable).nil?
+          vote_count_obj = VoteCount.find(self.fetch_vote_counter(voteable).id)
+          logger.info "old vote DIRECTION" + "#{old_vote}"
+          if old_vote == true
+              count = vote_count_obj.vote_count_positive - 1
+            vote_count_obj.update_attributes(:vote_count => self.fetch_updated_vote_count(voteable, !direction), :vote_count_positive => count)
+          else
+            count = vote_count_obj.vote_count_negative - 1
+            vote_count_obj.update_attributes(:vote_count => self.fetch_updated_vote_count(voteable, !direction), :vote_count_negative => count)
+          end
+          #VoteCount.update(self.fetch_vote_counter(voteable).id, :vote_count => self.fetch_updated_vote_count(voteable, !direction)) unless self.fetch_vote_counter(voteable).nil?
+        end
       end
 
       def voted_which_way?(voteable, direction)
