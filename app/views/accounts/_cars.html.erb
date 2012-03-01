@@ -1,7 +1,9 @@
 <div class=""><span><h2>Add car that you own to your profile</h2></span>
   <!--  <span class="txt_normal">[Cars that you own, had or following it]</span>-->
           <span>
-            <input name="search" type="text" class="search_inputfield" placeholder="Search Cars"/>
+            <input name="search" type="text" class="search_inputfield" placeholder="Search Cars" id="search_car"/>
+            <%=select_tag "types",
+                  options_for_select([["I Own it", "Owner"], ["Plan to Buy", "Buyer"], ["Follow this car", "Follow"]]) %>
             <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="images/icon_search_gray.png"/></a>
           </span>
 </div>
@@ -29,4 +31,10 @@
   <% end rescue "" %>
   <%= will_paginate items, :page_links => true %>
 </div>
+
+
+<% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
+<%= hidden_field_tag "category", category %>
+
+
 
