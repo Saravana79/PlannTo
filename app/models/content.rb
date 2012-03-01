@@ -19,7 +19,8 @@ class Content < ActiveRecord::Base
      value= value.join(",") if is_a?(Array)
      case key.to_sym
      when :items
-       scope.scoped(:conditions => ['content_item_relations.item_id in (?)', value ], :joins => :content_item_relations)
+       all_items = Item.get_all_related_items_ids(value)
+       scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
      when :type
        scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
      when :order
