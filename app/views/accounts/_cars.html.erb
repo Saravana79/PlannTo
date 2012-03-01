@@ -29,10 +29,9 @@
       <a class="<%= follow_types_classes(follow.follow_type) %>" style=" font:bold 11px/22px arial; color:#fff;"><%= get_the_follow_text(follow.follow_type) %></a>
     </div>
   <% end rescue "" %>
-  <%= will_paginate items, :page_links => true %>
 </div>
 
-
+<%= will_paginate items, :page_links => true %>
 <% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
 <%= hidden_field_tag "category", category %>
 <script type="text/javascript">
