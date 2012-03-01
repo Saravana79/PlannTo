@@ -138,7 +138,6 @@ root.Product =
 
   detailed_specification: ->
     $("#detailed_specification").click ->
-      $("#usual2 ul").idTabs "tabs5"
       $("#specification").trigger "click"
       $("#specification").closest("ul").find("li").each (index) ->
         $(this).removeClass "tab_active"  if $(this).hasClass("tab_active")

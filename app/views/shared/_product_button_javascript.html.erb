@@ -21,6 +21,8 @@ var url = "<%= feed_contents_path(:items => item.id  ) %>";
 		case "#tabs7" : type="VideoContent";break;
 		default : type="";break;
 	}
+	$('.main-content-section,.question_answer').hide();
+	$(id).show();
 	//Temporary needs to pull for every type after integration
 	if(type=="VideoContent"){
 		url=url+"&limit=5&type="+type;
