@@ -1,4 +1,4 @@
-$("#votersResult<%=@voteable.id%>").text(<%=@voteable.voters_who_voted.size%>);
+$("#votersResult<%=@voteable.id%>").text(<%=@voteable.voting_count_result%>);
 <%class_name = get_voting_class_name(current_user, @voteable) %>
 $("#dislikeVote<%=@voteable.id%>")[0].className = '';
 $("#dislikeVote<%=@voteable.id%>").addClass("<%=class_name[:negative]%>");
