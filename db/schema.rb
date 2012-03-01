@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120226134522) do
+ActiveRecord::Schema.define(:version => 20120229161022) do
 
   create_table "answer_contents", :force => true do |t|
     t.integer "question_id"
@@ -82,12 +82,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.boolean  "is_filterable"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "attributesrelationships", :force => true do |t|
-    t.integer "attribute_id", :null => false
-    t.integer "itemtype_id",  :null => false
-    t.integer "Priority",     :null => false
   end
 
   create_table "avatars", :force => true do |t|
@@ -182,7 +176,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -251,12 +244,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "itemimages", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemId",                    :null => false
-    t.string  "ImageURL",  :limit => 4000, :null => false
-    t.boolean "IsDefault",                 :null => false
   end
 
   create_table "itemrelationships", :force => true do |t|
@@ -524,13 +511,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.string   "name"
     t.integer  "facebook_id"
     t.integer  "reputation",                            :default => 0,  :null => false
-    t.string   "name"
-    t.integer  "facebook_id"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
-    t.integer  "reputation",                            :default => 0,  :null => false
     t.integer  "invitation_id"
   end
 
@@ -550,11 +530,13 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
   end
 
   create_table "vote_counts", :force => true do |t|
-    t.integer  "voteable_id",   :null => false
-    t.string   "voteable_type", :null => false
-    t.integer  "vote_count",    :null => false
+    t.integer  "voteable_id",         :null => false
+    t.string   "voteable_type",       :null => false
+    t.integer  "vote_count",          :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "vote_count_positive"
+    t.integer  "vote_count_negative"
   end
 
   create_table "votes", :force => true do |t|
