@@ -170,7 +170,8 @@ $(document).ready(function(){
                     url:"/search/autocomplete_items",
                     data:{
                         term:$("#search_car").val(),
-                        search_type:$("#category").val()
+                        search_type:$("#category").val(),
+                        authenticity_token: window._token
                     },
                     type:"POST",
                     dataType:"json",
@@ -194,7 +195,7 @@ $(document).ready(function(){
         select: function( event, ui ) {
             $.ajax(
                 {
-                    url:"/items/"+ui.item.id+"/follow_item_type?button_class=&follow_type="+$("#types").val(),
+                    url:"/items/"+ui.item.id+"/follow_item_type?button_class=&follow_type="+$("#types").val()+"&authenticity_token="+window._token,
                     type:"GET",
                     dataType:"script",
                     complete:function (data) {

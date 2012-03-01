@@ -35,6 +35,8 @@
 
 <% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
 <%= hidden_field_tag "category", category %>
-
+<script type="text/javascript">
+    window._token = '<%= form_authenticity_token.to_s %>';
+</script>
 
 
