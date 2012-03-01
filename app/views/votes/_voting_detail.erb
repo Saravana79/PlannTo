@@ -1,4 +1,4 @@
-<%voters = item.fetch_vote_counter.positive - item.fetch_vote_counter.negative%>
+<% voters = 0 %>
 <%if user_signed_in?%>
   <%vote = user.nil? ? nil : user.fetch_vote(item)%>
   <div class="rate_content float_lft">
