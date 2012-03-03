@@ -5,7 +5,24 @@ class ApplicationController < ActionController::Base
   before_filter :check_authentication
   before_filter :store_session_url
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
-
+   
+  def set_access_control_headers
+     headers['Access-Control-Allow-Origin'] = '*'
+     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+     headers['Access-Control-Max-Age'] = '1000'
+     headers['Access-Control-Allow-Headers'] = '*,X-Requested-With'
+  end
+  
+  def cors_preflight_check
+    if request.method == :options
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+      headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
+      headers['Access-Control-Max-Age'] = '1728000'
+      render :text => '', :content_type => 'text/plain'
+    end
+  end
+  
   def check_authentication
     facebook_current_user
   end
@@ -57,5 +74,4 @@ class ApplicationController < ActionController::Base
   def user_follow_type(item, user = current_user)
     @user_follow = user.blank? || all_user_follow_item[item.id].blank? ? false : all_user_follow_item[item.id].last
   end
-
 end

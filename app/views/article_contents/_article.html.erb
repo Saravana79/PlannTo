@@ -1,0 +1,126 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>	
+<script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js"></script>
+<%= javascript_include_tag 'textTagger' %>
+<%= javascript_include_tag 'application' %>
+<%= form_for(@article, :as => :article_content, :url => article_contents_url, :remote => true) do |f| %>
+<div id="article_errors" style="display:none"></div>
+
+<%= hidden_field_tag 'articles_item_id' %>
+<%= hidden_field_tag 'external', @external %>
+
+<%= f.hidden_field :type, :id => "new_article_type" %>
+<%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
+<div style="padding:5px 5px 0px 0px;clear:both;">
+	<div style="float:left">
+		<% unless @item.blank? %>
+		<%= hidden_field_tag 'item_id',@item.id %>
+		<%= f.hidden_field :itemtype_id %>
+		<% else %>
+		<div class="title_header float_lft">Category :</div>
+		<div class="float_lft">
+			<%= f.select :itemtype_id, Itemtype.all.map { |e|[e.itemtype, e.id]  }  %>
+		</div>
+		<% end %>							 
+		<div class="title_header float_lft">Content Category :</div>
+		<div class="float_lft">
+			<% val = @item.blank? ? 0 : @item.itemtype_id %>
+			<%= f.select :article_category_id, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.id]  }  %>
+		</div>			
+	</div>
+	<div style="clear:both;"></div>	
+</div>
+<div style="padding:5px 5px 0px 0px;clear:both;">
+	<div class="title_header float_lft" ><%= f.label :url %> :</div>
+	<div class="float_lft"><%= f.text_field :url, :id => 'article_content_url',:style => "margin-left:5px;width:400px" %></div>								 
+	<div style="clear:both;"></div>
+</div >
+<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url">		
+	<div class="title_header float_lft" >Title :</div>
+	<div class="float_lft"><%= f.text_field :title, :id => "txtArticleTitle", :style => "margin-left:5px;width:400px" %></div>								 
+
+</div >
+<div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url article_image">							
+	<div class="title_header float_lft article_image">Thumbnail :</div>
+	<img id="img_thumb" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+	<div class="float_lft article_image"><input type="checkbox" >Don't Include Thumbnail</input></div>
+</div>
+
+<div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
+	<div class="title_header float_lft" >Description :</div>
+	<div> <%= f.text_area :description, :id => "txtArticleDescription", :style => "width:570px;height:50px;" %></div>
+</div>
+<div style="padding:5px 5px 0px 0px;clear:both;">
+	<div class="title_header float_lft">Product  :</div>
+	<div class="taggingdiv" style="margin-left:5px;">
+		<ul id="article_product_list" class="tagging"></ul>
+		<div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="article_product"></div>	
+		<div style="clear:both;"></div>							 
+	</div>
+</div>
+<div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
+	<%= f.submit "Share this content", :id => "submit_article", :class => "btn_submitanswer" %>
+	<%= link_to_function "Cancel","window.close()", :class => "btn_submitanswer"	%>
+	<div style="clear:both;"></div>
+</div>
+<input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
+<div id="url_content_desc">	</div>
+
+<% end %>
+<script type="text/javascript">
+$(function(){
+	$('#submit_article').live('click',function(){
+		rege = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \?=.-]*)*\/?$/;
+		if(!jQuery('#article_content_url').val() && rege.test(jQuery('#article_content_url').val())){
+			return false;
+		}
+	});
+	settings={
+		close:true, addButton: false,
+		url: "http://0.0.0.0:3000/search/autocomplete_items", 
+		editMode: false, multiple: true, 
+		hidden_field: "articles_item_id"
+	};
+	$.textTagger("article_product","article_product_list",settings);
+	<% unless @item.blank? %>
+	$.addTag("article_product","article_product_list", settings,"<%= @item.name %>", "<%= @item.id %>");
+	$.addIdToField(settings.hidden_field, "<%= @item.id %>")
+	$("ul#article_product_list li:first span a.icon_close").remove();
+	<% end %>
+	<% unless @article.url.blank? %>
+	$('div.dwnld_url').show();
+	<% if @article.thumbnail.present? %>
+	$("#img_thumb").show();
+	$("#img_thumb").attr("src","<%= escape_javascript(@article.thumbnail) %>");
+	$(".article_image").show();
+	<% else %>
+	$("#img_thumb").hide();
+	$(".article_image").hide();
+	<% end %>
+	<% end %>
+	
+});
+
+</script>
+
+<style type="text/css" media="screen">
+	.title_header { font:bold 11px tahoma; color:#b2884e; text-align:right;margin-top:2px;min-width:75px; margin-right:5px; }
+	.float_lft	{ float:left; }
+	.btn_submitanswer {
+	    height: 30px;
+	    margin-left: 10px;
+	    margin-bottom: 10px;
+	    font: bold 11px/30px tahoma;
+	    color: #fff;
+	    display: block;
+	    background: url(../images/btn_bg.png) repeat-x top;
+	    text-decoration: none;
+	    text-align: center;
+	    float: right;
+	    border: solid 1px #ea5a30;
+	    background-color: #ea5e30;
+	    border-radius: 3px;
+	    padding: 0px 10px;
+	}
+	
+</style>
+
