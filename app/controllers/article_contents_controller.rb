@@ -5,6 +5,9 @@ class ArticleContentsController < ApplicationController
     @item_id = params[:item_id]
     ids = params[:articles_item_id]
     @article=ArticleContent.saveContent(params[:article_content],current_user,ids) unless ids.empty?
+  
+    # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
+    Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
     flash[:notice]= "Article uploaded"
 
     respond_to do |format|
