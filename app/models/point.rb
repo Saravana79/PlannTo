@@ -48,7 +48,8 @@ class Point < ActiveRecord::Base
       else Point::CreationPoint::DEFAULT_CREATE_POINT
       end
     elsif reason == Point::PointReason::CONTENT_SHARE
-      category = object.article_category.name
+      #category = object.article_category.name
+      category = object.class.name
       points = case category
       when Point::CategoryName::TIP then Point::CreationPoint::SHARE_TIPS_POINT
       when Point::CategoryName::REVIEW then Point::CreationPoint::SHARE_REVIEW_POINT
