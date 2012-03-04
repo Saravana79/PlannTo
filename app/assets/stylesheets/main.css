@@ -255,31 +255,11 @@ div.buttons {
 
 /* enable this after implemting the new button approach */
 
-.action_btns {
-    height: 28px;
-    float: left;
-    display: block;
-    background: url(../images/btn_bg_active.png) repeat-x;
-    border: solid 1px #bababa;
-    background-clip: border-box;
-    border-radius: 3px;
-    margin-right: 10px;
-    padding: 0px 0px;
-}
+/* Button Active */
+.action_btns                                {  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}
+.action_btns:hover                          {  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; border-radius:3px; }
 
-.action_btns:hover {
-    height: 28px;
-    float: left;
-    display: block;
-    background: url(../images/btn_bg_hover.png) 0px -29px;
-    border: solid 1px #74ae58;
-    line-height: 30px;
-    margin-right: 10px;
-    background-clip: border-box;
-    border-radius: 3px;
-    padding: 0px 0px;
-}
-
+.btn_followthiscar_icon                     { width:23px; height:29px; background:url(../images/btn_icons.png) no-repeat -48px 6px;  float:left; border:solid 0px; display:block;  }
 .action_btns_selected {
     height: 28px;
     float: left;
@@ -305,18 +285,9 @@ div.buttons {
     padding: 0px 0px;
 }
 
-.action_btns_disabled {
-    height: 28px;
-    float: left;
-    display: block;
-    background: url(../images/btn_bg_disabled.png) repeat-x;
-    border: solid 1px #d1d1d1;
-    line-height: 42px;
-    margin-right: 10px;
-    background-clip: border-box;
-    border-radius: 3px;
-    padding: 0px 0px;
-}
+/* Disabled Button */
+.action_btns_disable                        {  height:29px; float:left; display:block; background:url(../images/btn_bg_disabled.png) repeat-x; border:solid 1px #d1d1d1; line-height:42px; margin-right:2px;}
+
 
 .action_btns_medium {
     height: 23px;
@@ -936,7 +907,7 @@ div.buttons {
 /* comment till this line */
 
 /* Button Text */
-.btn_txt {
+/*.btn_txt {
     height: 26px;
     display: block;
     border: solid 0px #000;
@@ -946,7 +917,9 @@ div.buttons {
     font: bold 11px/12px tahoma;
     color: #323232;
     text-decoration: none;
-}
+}*/
+
+.btn_txt                                    {   height:26px; display:block; border:solid 0px #000; padding-top:3px;float:left; margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none; line-height:22px; border-radius:12px;}
 
 .btn_txt:hover {
     height: 26px;

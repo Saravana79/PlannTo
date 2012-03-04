@@ -89,6 +89,7 @@ PlanNto::Application.routes.draw do
   end
   resources :reviews
   resources :review_contents
+  resources :question_contents
   resources :pros
   resources :votes
   resources :questions

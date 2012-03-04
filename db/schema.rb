@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120224133423) do
+ActiveRecord::Schema.define(:version => 20120225180249) do
+
+  create_table "answer_contents", :force => true do |t|
+    t.integer "question_id"
+    t.string  "format",         :limit => 1
+    t.boolean "mark_as_answer",              :default => false
+  end
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -220,6 +226,24 @@ ActiveRecord::Schema.define(:version => 20120224133423) do
     t.datetime "updated_at"
   end
 
+  create_table "itemdetails", :force => true do |t|
+    t.integer  "shippingunit"
+    t.integer  "guarantee"
+    t.integer  "guaranteeunit"
+    t.boolean  "iscashondeliveryavailable"
+    t.integer  "saveonpercentage"
+    t.integer  "savepercentage"
+    t.integer  "cashback"
+    t.boolean  "isemiavailable"
+    t.string   "site"
+    t.string   "shipping"
+    t.integer  "item_details_id"
+    t.integer  "itemid"
+    t.integer  "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
     t.integer "ItemID",                    :null => false
     t.text    "URL",                       :null => false
@@ -307,6 +331,11 @@ ActiveRecord::Schema.define(:version => 20120224133423) do
     t.integer  "updated_by"
     t.string   "creator_ip"
     t.string   "updater_ip"
+  end
+
+  create_table "question_contents", :force => true do |t|
+    t.string  "format",      :limit => 1
+    t.boolean "is_answered",              :default => false
   end
 
   create_table "questions", :force => true do |t|
@@ -486,6 +515,14 @@ ActiveRecord::Schema.define(:version => 20120224133423) do
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
+  create_table "vendors", :force => true do |t|
+    t.string   "name"
+    t.string   "baseurl"
+    t.string   "imageurl"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "video_contents", :force => true do |t|
     t.string "youtube"
   end
@@ -511,6 +548,21 @@ ActiveRecord::Schema.define(:version => 20120224133423) do
   add_index "votes", ["voteable_id", "voteable_type"], :name => "index_votes_on_voteable_id_and_voteable_type"
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
+
+  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`answer_contents`.`question_id` AS `question_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :question_id
+    v.column :format
+    v.column :mark_as_answer
+  end
 
   create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
     v.column :id
@@ -538,6 +590,20 @@ ActiveRecord::Schema.define(:version => 20120224133423) do
     v.column :image_content_content_type
     v.column :image_content_file_size
     v.column :image_content_updated_at
+  end
+
+  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :format
+    v.column :is_answered
   end
 
   create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|

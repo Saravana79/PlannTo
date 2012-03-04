@@ -6,6 +6,8 @@ module ContentsHelper
       render :partial => "contents/article", :locals => { :content => item }
     when "VideoContent" 
       render :partial => "contents/video", :locals => { :content => item }
+    when "QuestionContent" 
+      render :partial => "contents/question", :locals => { :content => item }  
     end
   end
   

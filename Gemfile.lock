@@ -209,7 +209,6 @@ DEPENDENCIES
   configatron (~> 2.8.4)
   dalli
   devise
-  execjs
   fb_graph
   jquery-rails
   mysql2

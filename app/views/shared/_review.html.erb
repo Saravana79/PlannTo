@@ -1,7 +1,7 @@
 <div class="review_tabs">
 	<ul>    
 		<li class="icon_reviewcar clicked" data-div="review"><a href="#" class="active_tabs" >Review Car</a></li>        
-		<li class="icon_Askquestion"><a href="#" class="review_tabs" >Ask a Question</a></li>        
+		<li class="icon_Askquestion"data-div="question_content"><a href="#" class="review_tabs" >Ask a Question</a></li>        
 		<li class="icon_sharetip" data-div="tip" ><a href="#" class="review_tabs" >Share a Tip</a></li>
 		<li class="icon_sharetip" ><a href="#" class="review_tabs">Start a Discussion</a></li>
 		<li class="icon_sharetip" onclick="document.getElementById('ShareURLDiv').style.display='block';document.getElementById('reviewDiv').style.display='none'; document.getElementById('textarea').style.display='none';document.getElementById('txtAreaDiv').style.height='350px';document.getElementById('txtURL').focus();"><a href="#" class="review_tabs">Share an Article/Video</a></li>
@@ -15,6 +15,7 @@
     <div class="txtAreaDiv" ID="newContentDiv"><textarea name="textarea" id="textarea_review_div"  class="txtAreaReview" onclick=" document.getElementById('textarea_review_div').style.display='none';document.getElementById('reviewDiv').style.display='block';document.getElementById('textTitle').focus();">What do you think of this car?
         </textarea>
         <%= render :partial => 'reviews/new_review' %>
+        <%= render :partial => 'question_contents/new_question_content' %>
         <%= render :partial => 'tips/new_tip' %>
     </div>
 <br/>
