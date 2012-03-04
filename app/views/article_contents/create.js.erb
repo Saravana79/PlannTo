@@ -4,9 +4,10 @@
   $("#article_errors").show(300);	
 <% else %>
   <% if @external.blank? %>
-  $("#article_errors").hide();
-  window.location = "/cars/<%= @item_id %>" ; 
+    $("#article_errors").hide();
+    window.location = "/cars/<%= @item_id %>" ; 
   <% else %>
-  window.close()
+    window.open('', '_self', '');
+    window.close();
   <% end %>
 <% end %>
