@@ -97,6 +97,16 @@ module GlobalUtilities
     max_value = (value + (value*variance)/100).round(2)
     return max_value.to_f
   end
+
+  def self.get_class_name(class_name)
+    parent_class_name = case class_name
+    when "VideoContent" then "Content"
+    when "ReviewContent" then "Content"
+    when "ArticleContent" then "Content"
+    else class_name
+    end
+    return parent_class_name
+  end
      
 
 end

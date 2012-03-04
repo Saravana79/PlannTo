@@ -7,7 +7,8 @@ module ThumbsUp
 
     module ClassMethods
       def acts_as_voteable
-        has_many :votes, :as => :voteable, :dependent => :destroy
+        #SELECT `votes`.* FROM planntodevelopment.votes WHERE `votes`.`voteable_id` = 2 AND `votes`.`voteable_type` = 'Content' and (vote !="" or Vote is not null)
+        has_many :votes, :as => :voteable, :dependent => :destroy, :conditions => ['vote != ? or vote is not null', ""]
         has_one :vote_count, :as => :voteable, :dependent => :destroy
 
         include ThumbsUp::ActsAsVoteable::InstanceMethods
@@ -154,6 +155,22 @@ module ThumbsUp
 
       def voters_who_voted
         self.votes.map(&:voter).uniq
+      end
+
+      def get_class_name(class_name)
+        parent_class_name = case class_name
+        when "VideoContent" then "Content"
+        when "ArticleContent" then "Content"
+        else class_name
+        end
+        return parent_class_name
+      end
+
+      def voting_count_result
+        class_name = get_class_name(self.class.name)
+        vote_res = VoteCount.where(:voteable_id => self.id,:voteable_type => class_name).first
+        return 0 if vote_res.nil?
+        return (vote_res.vote_count_positive - vote_res.vote_count_negative)
       end
 
       def voted_by?(voter)

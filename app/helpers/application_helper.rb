@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def get_follow_link(name, path, options = {})
-      link_to(name, path, options).to_s
+    link_to(name, path, options).to_s
   end
 
 
@@ -106,7 +106,7 @@ module ApplicationHelper
   end
 
   def follow_types_classes(follow_type)
-     case follow_type
+    case follow_type
     when 'Buyer'
       "bg_planetobuy"
     when 'Owner'
@@ -114,5 +114,24 @@ module ApplicationHelper
     when 'Follow'
       "bg_following"
     end
+  end
+
+  def get_voting_class_name(user, item)
+    reset = true
+    if  user.voted_for?(item)
+      negative_class = "btn_dislike_positive"
+      positive_class = "btn_like_positive"
+      reset = false
+    end
+    if user.voted_against?(item)
+      positive_class = "btn_like_negative"
+      negative_class = "btn_dislike_negative"
+      reset = false
+    end
+    if reset == true
+      positive_class = "btn_like_default"
+      negative_class = "btn_dislike_default"
+    end
+    return {:positive => positive_class, :negative => negative_class}
   end
 end

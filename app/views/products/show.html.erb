@@ -103,15 +103,15 @@
 </div>
 <div class="txt_black imgfollowers">Total Followers <a href="#">145236 PEOPLE</a>
   <ul class="imgfollowers">
-    	<li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-        <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+    	<li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
+        <li class="imgfollowers"><img src="../images/img_followers.png" /></li>
   </ul>
 </div>
 <br/>
@@ -127,7 +127,7 @@
 
 <div id="dialog-form" title="Create new user">
   <%= render 'shared/product_button_javascript', :button_class => '', :item => @item %>
-  <%= render "shared/login_dialog" %>  
+  <%= render "shared/login_dialog", :item => @item %>  
 </div>
 <div id="dialog-invite-form" style="display:none">
 	<%= form_for(@invitation, :remote => true ) do |f| %>

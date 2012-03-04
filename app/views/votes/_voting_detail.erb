@@ -1,16 +1,16 @@
-<%voters = item.voters_who_voted%>
+<% voters = item.voting_count_result %>
 <%if user_signed_in?%>
   <%vote = user.nil? ? nil : user.fetch_vote(item)%>
   <div class="rate_content float_lft">
-    <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=voters.size%></a>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :up}, :method => 'POST' , :remote => true, :class=> "btn_like", :id => "likeVote#{item.id}" %>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike", :id => "dislikeVote#{item.id}" %>
-    <!--<a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>-->
+    <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=voters%></a>
+    <%class_name = get_voting_class_name(user, item) %>
+    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :up}, :method => 'POST' , :remote => true, :class=> class_name[:positive], :id => "likeVote#{item.id}" %>
+    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote.try(:id),  :parent => "Content", :vote => :down}, :method => 'POST' , :remote => true, :class=> class_name[:negative], :id => "dislikeVote#{item.id}" %>
   </div>
 <%else%>
   <div class="rate_content float_lft">
-    <a class="bg_ratecontent"><%=voters.size%></a>
-    <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+    <a class="bg_ratecontent"><%=voters%></a>
+    <a class="btn_like_default" href="#"></a><a class="btn_dislike_default" href="#"></a>
   </div>
 <%end%>
 

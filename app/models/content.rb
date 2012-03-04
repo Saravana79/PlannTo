@@ -8,7 +8,7 @@ class Content < ActiveRecord::Base
 	belongs_to :user, :foreign_key => 'created_by'
 	has_many :content_item_relations
   has_many :items, :through => :content_item_relations
-
+  belongs_to :itemtype
  scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
 
 

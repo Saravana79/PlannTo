@@ -35,6 +35,7 @@ class VotesController < ApplicationController
     else
       voter.vote voteable,:direction => params[:vote]
     end
+    Point.add_voting_point(current_user, @voteable)
     else
       render :nothing => true
     end
