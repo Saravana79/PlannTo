@@ -59,7 +59,8 @@
 </div>
 <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
 	<%= f.submit "Share this content", :id => "submit_article", :class => "btn_submitanswer" %>
-	<%= link_to_function "Cancel","window.close()", :class => "btn_submitanswer"	%>
+	<%= link_to_function "Cancel","window.open('', '_self', '');
+	    window.close();", :class => "btn_submitanswer"	%>
 	<div style="clear:both;"></div>
 </div>
 <input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
