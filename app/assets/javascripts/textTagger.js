@@ -140,7 +140,7 @@ $(document).ready(function(){
                 term: request.term,
                 search_type: settings.search_type_array
                 },
-                type: "POST",
+                type: "GET",
                 dataType: "json",
                 success: function( data )
                 {
