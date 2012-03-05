@@ -45,6 +45,7 @@ PlanNto::Application.routes.draw do
   resources :article_contents do
     collection do
       post :download
+      get :bmarklet
     end
   end
   resources :mobiles do
