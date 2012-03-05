@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120226134522) do
+ActiveRecord::Schema.define(:version => 20120229161022) do
+
+  create_table "answer_contents", :force => true do |t|
+    t.integer "question_id"
+    t.string  "format",         :limit => 1
+    t.boolean "mark_as_answer",              :default => false
+  end
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -24,12 +30,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.string   "updator_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
- create_table "answer_contents", :force => true do |t|
-    t.integer "question_id"
-    t.string  "format",         :limit => 1
-    t.boolean "mark_as_answer",              :default => false
   end
 
   create_table "article_categories", :force => true do |t|
@@ -82,12 +82,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.boolean  "is_filterable"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "attributesrelationships", :force => true do |t|
-    t.integer "attribute_id", :null => false
-    t.integer "itemtype_id",  :null => false
-    t.integer "Priority",     :null => false
   end
 
   create_table "avatars", :force => true do |t|
@@ -182,7 +176,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -251,12 +244,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "itemimages", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemId",                    :null => false
-    t.string  "ImageURL",  :limit => 4000, :null => false
-    t.boolean "IsDefault",                 :null => false
   end
 
   create_table "itemrelationships", :force => true do |t|
@@ -524,13 +511,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     t.string   "name"
     t.integer  "facebook_id"
     t.integer  "reputation",                            :default => 0,  :null => false
-    t.string   "name"
-    t.integer  "facebook_id"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
-    t.integer  "reputation",                            :default => 0,  :null => false
     t.integer  "invitation_id"
   end
 
@@ -550,11 +530,13 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
   end
 
   create_table "vote_counts", :force => true do |t|
-    t.integer  "voteable_id",   :null => false
-    t.string   "voteable_type", :null => false
-    t.integer  "vote_count",    :null => false
+    t.integer  "voteable_id",         :null => false
+    t.string   "voteable_type",       :null => false
+    t.integer  "vote_count",          :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "vote_count_positive"
+    t.integer  "vote_count_negative"
   end
 
   create_table "votes", :force => true do |t|
@@ -570,7 +552,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
   add_index "votes", ["voteable_id", "voteable_type"], :name => "index_votes_on_voteable_id_and_voteable_type"
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
-
 
   create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`article_category_id` AS `article_category_id` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
     v.column :id
@@ -597,10 +578,10 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
-    v.column :image_content_file_name
-    v.column :image_content_content_type
-    v.column :image_content_file_size
-    v.column :image_content_updated_at
+    v.column :rating
+    v.column :recommend_this
+    v.column :pros
+    v.column :cons
   end
 
   create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
@@ -633,51 +614,6 @@ ActiveRecord::Schema.define(:version => 20120226134522) do
     v.column :thumbnail
     v.column :article_category_id
     v.column :youtube
-  end
-
-create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
-    v.column :id
-    v.column :title
-    v.column :description
-    v.column :type
-    v.column :created_by
-    v.column :updated_by
-    v.column :created_at
-    v.column :updated_at
-    v.column :ip_address
-    v.column :format
-    v.column :is_answered
-  end
-
-create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
-    v.column :id
-    v.column :title
-    v.column :description
-    v.column :type
-    v.column :created_by
-    v.column :updated_by
-    v.column :itemtype_id
-    v.column :created_at
-    v.column :updated_at
-    v.column :rating
-    v.column :recommend_this
-    v.column :pros
-    v.column :cons
-  end
-
-create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`answer_contents`.`question_id` AS `question_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
-    v.column :id
-    v.column :title
-    v.column :description
-    v.column :type
-    v.column :created_by
-    v.column :updated_by
-    v.column :created_at
-    v.column :updated_at
-    v.column :ip_address
-    v.column :question_id
-    v.column :format
-    v.column :mark_as_answer
   end
 
 end
