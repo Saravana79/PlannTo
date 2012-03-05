@@ -34,8 +34,6 @@ class Item < ActiveRecord::Base
   acts_as_followable
   acts_as_rateable
 
-
-
   searchable :auto_index => true, :auto_remove => true  do
 
     text :name, :boost => 4.0,  :as => :name_ac    
