@@ -317,7 +317,13 @@ $(document).ready(function(){
                 $("#"+ taggingField).find("li").remove();
             }
             var listTagId = 'textTaggers' + id
-            var list = "<li id='" + listTagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + value + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
+          //  <li class="taggingmain">
+			//								<span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
+			//
+			//							</li>
+            var list = "<li id='" + listTagId + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + value + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>" ;
+         //   var list = "<li id='" + listTagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + value + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
+             $('#' + taggingField).addClass("tagging");
             $(list).appendTo('#' + taggingField);
             $("#" + fieldId).val("")
             $('#' + fieldId).autocomplete("enable");
