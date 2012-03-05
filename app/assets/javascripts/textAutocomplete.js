@@ -48,15 +48,15 @@ $.textAutocomplete = function(fieldId, taggingField, options){
         {
         $.ajax(
         {
-            headers: {
-            'X-CSRF-Token': settings.xCrsfToken
-            },
+            //headers: {
+            //'X-CSRF-Token': settings.xCrsfToken
+            //},
             url: settings.url,
             data: {
             term: request.term,
             search_type: settings.search_type_array
             },
-            type: "POST",
+            type: "GET",
             dataType: "json",
             success: function( data )
             {
