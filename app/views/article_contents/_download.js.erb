@@ -12,4 +12,15 @@ $(".article_image").show();
 $("#img_thumb").hide();
 $(".article_image").hide();
 <% end %>
+<% if @images.present? and @images.count > 0 %>
+var images = new Array();
+<% @images.each do |image| %>
+    images.push("<%= image %>");
+<% end %>
+$('#current_image').html(1);
+$('#total_images').html("<%= @images.count %>");
+<% else %>
+$('#current_image').html(0);
+$('#total_images').html(0);
+<% end %>
 $("#share_instruction_id").attr('value', '0');
