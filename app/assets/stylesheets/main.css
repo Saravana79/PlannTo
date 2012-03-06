@@ -51,7 +51,7 @@ div.search {
 }
 
 .PlanntoBuyBtn {
-    /* float: right */
+    /*float: right*/
 }
 
 .search_txt {
@@ -255,11 +255,31 @@ div.buttons {
 
 /* enable this after implemting the new button approach */
 
-/* Button Active */
-.action_btns                                {  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}
-.action_btns:hover                          {  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; border-radius:3px; }
+.action_btns {
+    height: 28px;
+    float: left;
+    display: block;
+    background: url(../images/btn_bg_active.png) repeat-x;
+    border: solid 1px #bababa;
+    background-clip: border-box;
+    border-radius: 3px;
+    margin-right: 10px;
+    padding: 0px 0px;
+}
 
-.btn_followthiscar_icon                     { width:23px; height:29px; background:url(../images/btn_icons.png) no-repeat -48px 6px;  float:left; border:solid 0px; display:block;  }
+.action_btns:hover {
+    height: 28px;
+    float: left;
+    display: block;
+    background: url(../images/btn_bg_hover.png) 0px -29px;
+    border: solid 1px #74ae58;
+    line-height: 30px;
+    margin-right: 10px;
+    background-clip: border-box;
+    border-radius: 3px;
+    padding: 0px 0px;
+}
+
 .action_btns_selected {
     height: 28px;
     float: left;
@@ -285,9 +305,18 @@ div.buttons {
     padding: 0px 0px;
 }
 
-/* Disabled Button */
-.action_btns_disable                        {  height:29px; float:left; display:block; background:url(../images/btn_bg_disabled.png) repeat-x; border:solid 1px #d1d1d1; line-height:42px; margin-right:2px;}
-
+.action_btns_disabled {
+    height: 28px;
+    float: left;
+    display: block;
+    background: url(../images/btn_bg_disabled.png) repeat-x;
+    border: solid 1px #d1d1d1;
+    line-height: 42px;
+    margin-right: 10px;
+    background-clip: border-box;
+    border-radius: 3px;
+    padding: 0px 0px;
+}
 
 .action_btns_medium {
     height: 23px;
@@ -907,7 +936,7 @@ div.buttons {
 /* comment till this line */
 
 /* Button Text */
-/*.btn_txt {
+.btn_txt {
     height: 26px;
     display: block;
     border: solid 0px #000;
@@ -917,9 +946,7 @@ div.buttons {
     font: bold 11px/12px tahoma;
     color: #323232;
     text-decoration: none;
-}*/
-
-.btn_txt                                    {   height:26px; display:block; border:solid 0px #000; padding-top:3px;float:left; margin-left:8px; font:bold 11px/12px tahoma; color:#fff; text-decoration:none; line-height:22px; border-radius:12px;}
+}
 
 .btn_txt:hover {
     height: 26px;
@@ -1235,7 +1262,7 @@ h3 {
     padding: 0;
     margin: 0;
     padding-bottom: 15px;
-    
+    border:
 }
 
 h4 {
@@ -2163,6 +2190,7 @@ div.listing_items {
 
 .icon_search {
     border: solid 0px;
+    left: left;
     width: 21px;
     height: 21px;
     float: left;
@@ -2408,11 +2436,21 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 
 /* end change for profile page on 19 Feb 2010 */
 
+/* for where to buy options */
+
+.wheretobuytitletxt {font-size:13px; font-weight:bold; margin:0; padding:5px 0 5px 5px; }
+.wheretobuytitletxtothercolumns {font-size:13px; font-weight:bold; margin:0; padding:5px 0 5px 5px;}
+.wheretobuyheadder    {background-color:#e1f3f8;  border:1px solid #a8cfda; }
+
+.imagevendor	 {width:100px;height:32px;}
+.wheretobuytext { font-size:12px; margin:0; padding:5px 0 5px 5px;}
+.wheretobuyrows {border:1px solid #e1f3f8;}
+
+
 
 /*Added by Awijeet*/
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
     display: none;}
-
 
 .btn_like_default							{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) no-repeat left bottom; float:left; }
 .btn_like_default:hover						{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) 51px 20px; float:left;  }
@@ -2428,3 +2466,11 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 .btn_like_negative:hover						{ width:25px; height:20px; display:block; background:url(../images/ilike_icon.png) no-repeat left bottom; float:left; }
 .btn_dislike_negative						{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -78px 20px ;  float:left; }
 .btn_dislike_negative:hover					{ width:26px; height:20px; display:block; background:url(../images/ilike_icon.png) -26px 20px ; float:left; }		
+
+.taggingdiv								{height:auto;display:block;float:left;width:600px;}
+ul.tagging								{ padding:0; margin:0; list-style:none; }
+.taggingmain							{ height:auto; background-color:#fffce0; border:solid 1px #efd68b;border-radius:2px;  float:left; margin-right:6px;padding:2px 2px 2px 2px;margin-top:5px;}
+.txt_tagging							{ font:normal 11px tahoma ; color:#c15f24; text-decoration:none; border:solid 0px; float:left;margin:0px 2px 0px 2px;}
+.txt_tagging:hover					       { text-decoration:underline; cursor:pointer;}
+.icon_close_tagging								{ width:14px; height:14px; display:block; background:url(../images/btn_close1.png) no-repeat; border:solid 0px; float:right; margin-top:0px; margin-left:2px; margin-right:2px;}
+.icon_close_tagging:hover							{ background:url(../images/btn_close.png) no-repeat;}
