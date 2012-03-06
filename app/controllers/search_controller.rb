@@ -204,12 +204,18 @@ class SearchController < ApplicationController
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       order_by :class, :desc
-      paginate(:page => 1, :per_page => 6)
-      order_by :class , :desc
+      paginate(:page => 1, :per_page => 6)      
     end
-    
-    results = @items.results.collect{|item|
-      
+
+    if params[:from_profile]
+      exclude_selected = Follow.for_follower(current_user).where(:followable_type => params[:search_type]).collect(&:followable)
+      @items = @items.results - exclude_selected
+    else
+      @items = @items.results
+    end
+
+    results = @items.collect{|item|
+
       image_url = item.image_url
       if item.type == "CarGroup"
         type = "Car"

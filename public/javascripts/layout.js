@@ -160,7 +160,8 @@ $(document).ready(function(){
                     data:{
                         term:$("#search_car").val(),
                         search_type:$("#category").val(),
-                        authenticity_token: window._token
+                        authenticity_token: window._token,
+                        from_profile: true
                     },
                     type:"POST",
                     dataType:"json",
