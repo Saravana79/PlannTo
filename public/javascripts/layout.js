@@ -120,7 +120,7 @@ $(document).ready(function(){
         // return false;
         }
         })
-    .data("autocomplete")._renderItem = function(ul, item, index) {
+    $("#plannToSearch").data("autocomplete")._renderItem = function(ul, item, index) {
         if (index == -1) {
             return $("<li></li>")
             .data("item.autocomplete", item)
@@ -195,7 +195,7 @@ $(document).ready(function(){
                 });
         }
     })
-        .data("autocomplete")._renderItem = function (ul, item, index) {
+        $("#search_car").data("autocomplete")._renderItem = function (ul, item, index) {
         if (index == -1) {
             return $("<li></li>")
                 .data("item.autocomplete", item)
