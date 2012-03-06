@@ -20,6 +20,7 @@ class ProductsController < ApplicationController
     @tip = Tip.new
     @contents = Tip.order('created_at desc').limit(5)
     @review = ReviewContent.new
+    @article=ArticleContent.new(:itemtype_id => @item.itemtype_id)
     @questions = QuestionContent.all
   end
 
