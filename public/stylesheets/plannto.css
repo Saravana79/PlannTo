@@ -2444,3 +2444,6 @@ ul.tagging								{ padding:0; margin:0; list-style:none; }
 .txt_tagging:hover					       { text-decoration:underline; cursor:pointer;}
 .icon_close_tagging								{ width:14px; height:14px; display:block; background:url(../images/btn_close1.png) no-repeat; border:solid 0px; float:right; margin-top:0px; margin-left:2px; margin-right:2px;}
 .icon_close_tagging:hover							{ background:url(../images/btn_close.png) no-repeat;}
+
+
+.imageThumbnail{height:24px; width:24px;}

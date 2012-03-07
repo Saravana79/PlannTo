@@ -134,4 +134,9 @@ module ApplicationHelper
     end
     return {:positive => positive_class, :negative => negative_class}
   end
+
+  def get_contributor_info(user_id)
+    user = User.where("id = ?", user_id).includes(:avatar).first
+   return user
+  end
 end

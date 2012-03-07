@@ -21,6 +21,9 @@ class ProductsController < ApplicationController
     @contents = Tip.order('created_at desc').limit(5)
     @review = ReviewContent.new
     @questions = QuestionContent.all
+
+     @top_contributors = TopContributor.connection.execute("select * from view_top_contributors where item_id = #{@item.id} limit 5")
+ 
   end
 
   def related_products
