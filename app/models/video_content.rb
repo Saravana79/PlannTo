@@ -1,13 +1,14 @@
 class VideoContent < ArticleContent
   acts_as_citier
   acts_as_voteable
-  @@video_regexp = [ /^(?:https?:\/\/)?(?:www\.)?youtube\.com(?:\/v\/|\/watch\?v=)([A-Za-z0-9_-]{11})/, 
-                     /^(?:https?:\/\/)?(?:www\.)?youtu\.be\/([A-Za-z0-9_-]{11})/,
-                     /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/user\/[^\/]+\/?#(?:[^\/]+\/){1,4}([A-Za-z0-9_-]{11})/
-                     ]
-
+  
   def self.video_id(url)
-    @@video_regexp.each { |m| return m.match(url)[1] unless m.nil? }
+    uri = Addressable::URI.parse(url)
+    if uri.query_values && uri.query_values["v"]
+      uri.query_values["v"]
+    else
+      uri.path
+    end
   end
   
   def self.CreateContent(url, user)
