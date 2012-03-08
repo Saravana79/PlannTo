@@ -20,6 +20,7 @@ class ProductsController < ApplicationController
     @tip = Tip.new
     @contents = Tip.order('created_at desc').limit(5)
     @review = ReviewContent.new
+    @article=ArticleContent.new(:itemtype_id => @item.itemtype_id)
     @questions = QuestionContent.all
 
      @top_contributors = TopContributor.connection.execute("select * from view_top_contributors where item_id = #{@item.id} limit 5")

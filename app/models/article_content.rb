@@ -4,13 +4,16 @@ class ArticleContent < Content
   belongs_to :article_category
   
   def self.CreateContent(url, user)
+    @images=[]
     if url.include? "youtube.com"
       @article=VideoContent.CreateContent(url, user)
+      @images << @article.thumbnail if @article.thumbnail 
     else
       @article = ArticleContent.create(:url => url, :created_by => user.id)
       require 'nokogiri'
       require 'open-uri'
       begin
+        
         doc = Nokogiri::HTML(open(url))
         @title_info = doc.xpath('.//title')
         doc.xpath("//meta[@name='keywords']/@content").each do |attr|
@@ -20,15 +23,23 @@ class ArticleContent < Content
           @meta_description = attr.value
         end
         doc.xpath("//link[@rel='image_src']/@href").each do |attr|
-          @meta_image = attr.value
+          @images << attr.value
         end
+        doc.xpath("//meta[@property='og:image']/@content").each do |attr|
+          @images << attr.value
+        end
+        doc.xpath("/html/body//img[@src[contains(.,'://') 
+               and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
+          @images << attr.value
+        end
+        
         @article.title = @title_info.to_s.gsub(%r{</?[^>]+?>}, '') if @title_info
         @article.description = @meta_description if @meta_description
-        @article.thumbnail = @meta_image   if @meta_image
+        @article.thumbnail = @images.first   if @images.count>0
       rescue => e
       end
     end
-    @article
+    [@article,@images]
   end
   
   def self.saveContent(val, user, ids)
