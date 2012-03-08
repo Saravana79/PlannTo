@@ -1,26 +1,29 @@
 $('div.dwnld_url').show();
 $("#txtArticleTitle").val("<%= escape_javascript(@article.title) %>");
-$("#txtArticleDescription").attr("value","<%= escape_javascript(@article.description) %>");
+//$("#txtArticleDescription").attr("value","<%= escape_javascript(@article.description) %>");
 
 $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
-<% if @article.thumbnail.present? %>
-$("#img_thumb").attr("src","<%= escape_javascript(@article.thumbnail) %>");
-$("#new_article_thumbnail").val("<%= escape_javascript(@article.thumbnail) %>");
-$("#img_thumb").show();
-$(".article_image").show();
-<% else %>
-$("#img_thumb").hide();
-$(".article_image").hide();
-<% end %>
 <% if @images.present? and @images.count > 0 %>
 var images = new Array();
-<% @images.each do |image| %>
+var sizes = new Array();
+<% @images.each_with_index do |image,index| %>
     images.push("<%= image %>");
+    sizes.push("<%= @sizes[index] %>");
 <% end %>
 $('#current_image').html(1);
 $('#total_images').html("<%= @images.count %>");
 <% else %>
 $('#current_image').html(0);
 $('#total_images').html(0);
+<% end %>
+<% if @article.thumbnail.present? %>
+$("#img_thumb").attr("src","<%= escape_javascript(@article.thumbnail) %>");
+$("#new_article_thumbnail").val("<%= escape_javascript(@article.thumbnail) %>");
+$("#img_thumb").show();
+$(".article_image").show();
+$('#current_image_size').html(sizes[0]);
+<% else %>
+$("#img_thumb").hide();
+$(".article_image").hide();
 <% end %>
 $("#share_instruction_id").attr('value', '0');

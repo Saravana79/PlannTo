@@ -45,6 +45,7 @@
 <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
 	<div class="title_header float_lft article_image"></div>
 	<div class="float_lft article_image">
+		<span id="current_image_size"></span> <br />
 	<span id="current_image" class="txt_blue">0</span>/ <span id="total_images" class="txt_blue">0</span> &nbsp;
 	<a id="aPrev" class="txt_blue">Prev</a>
 	<a id="aNext" class="txt_blue">Next</a>
@@ -100,6 +101,7 @@ rege = /^(http|https|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{
 			images_index--;
 			$('#current_image').html(images_index+1);
 			$("#img_thumb").attr("src",images[images_index]);
+			$('#current_image_size').html(sizes[images_index]);
 			$("#new_article_thumbnail").val(images[images_index]);
 		}
 	});
@@ -107,6 +109,7 @@ rege = /^(http|https|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{
 		if(images && images.length>0 && images_index<images.length-1 ){
 			images_index++;
 			$('#current_image').html(images_index+1);
+			$('#current_image_size').html(sizes[images_index]);
 			$("#img_thumb").attr("src",images[images_index]);
 			$("#new_article_thumbnail").val(images[images_index]);
 		}

@@ -3,6 +3,8 @@ class ArticleContent < Content
   validates_presence_of :url
   belongs_to :article_category
   
+  MIN_SIZE =[25,25]
+  
   def self.CreateContent(url, user)
     @images=[]
     if url.include? "youtube.com"
@@ -39,7 +41,18 @@ class ArticleContent < Content
       rescue => e
       end
     end
-    [@article,@images]
+    @sizes=[]
+    @fimages=[]
+    if @images.count>0
+      @images.uniq.each do |image|
+        size = FastImage.size(image)
+        if(size[0] >= MIN_SIZE[0] && size[1] >= MIN_SIZE[1])
+          @fimages << image
+          @sizes << size
+        end
+      end
+    end
+    [@article,@fimages,@sizes]
   end
   
   def self.saveContent(val, user, ids)
@@ -52,4 +65,5 @@ class ArticleContent < Content
       @article
     end
   end
+  
 end
