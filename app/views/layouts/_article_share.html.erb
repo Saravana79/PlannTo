@@ -78,6 +78,9 @@
 
 <% end %>
 <script type="text/javascript">
+var MIN_SIZE=[25,25];
+var first=false;
+var images_index=0;	
 function validateUrl(url)
 {
     var regexp = /((ftp|http|https):\/\/)?(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
@@ -99,7 +102,6 @@ $(function(){
 			$('div.dwnld_url').hide();
 		}
 	});
-	var images_index=0;
 	$('#aPrev').live("click",function(){
 		if(images  && images.length>0 && images_index>0 ){
 			images_index--;
@@ -135,6 +137,31 @@ $(function(){
 	 <%= render "article_contents/download.js" %>
 	<% end %>
 });
+
+function check_imagesize_on_load(url){
+	var img = new Image();
+	img.onload = function() {
+	  if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1])
+		add_image_to_list(url,[this.width,this.height]);
+	}
+	img.src = url;	
+}
+function add_image_to_list(url,size){
+	images.push(url);
+	sizes.push(size[0]+"*"+size[1]);
+	if(first){
+		first=false;
+		$("#img_thumb").attr("src",url);
+		$("#new_article_thumbnail").val(url);
+		$("#img_thumb").show();
+		$(".article_image").show();
+		$('#current_image_size').html(size[0]+"*"+size[1]);
+		$('#current_image').html(1);
+		images_index=0;
+	}
+
+	$('#total_images').html(images.length);
+}
 
 </script>
 
