@@ -21,20 +21,20 @@ class ArticleContentsController < ApplicationController
     if url.nil?
       @article=ArticleContent.create(params[:article_content])
     else
-      @article = ArticleContent.CreateContent(url,current_user)
+      @article,@images,@sizes = ArticleContent.CreateContent(url,current_user)
     end
     respond_to do |format|
-      format.js
+      format.js {render :partial => "download"}
     end
   end # action ends here
   
   def bmarklet
-    @article = ArticleContent.CreateContent(params[:url],current_user)
+    @article,@images,@sizes = ArticleContent.CreateContent(params[:url],current_user)
     @external = params[:external]
-    @article_string = render_to_string :partial => "article" 
+    #@article_string = render_to_string :partial => "article" 
     respond_to do |format|
-      format.html { render :partial => "article" }
-      format.js
+      format.html { render :layout => false }
+      #format.js
     end
   end
   

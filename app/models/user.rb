@@ -56,4 +56,8 @@ class User < ActiveRecord::Base
     return "/images/photo_profile.png"
   end
 
+  def total_points
+    Point.find_by_sql("select points from view_rankings where user_id = #{self.id} limit 1").try(:first).try(:points)
+  end
+
 end

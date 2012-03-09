@@ -1,13 +1,13 @@
 <%if @related_items.size > 0%>
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-  <tr>
-    <td class="bg_widgethdr txt_white">Related <%=display_item_type(@item)%></td>
-  </tr>
-  <tr>
-    <td valign="top">
+  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Related <%=display_item_type(@item)%></td>
+    </tr>
+    <tr>
+      <td valign="top">
         <!--<table width="226" border="0" cellspacing="0" cellpadding="0" align="center" id="uisideRelatedProduct">
          </table>-->
-        
+
         <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
           <%@related_items.each do |related_item|%>
           <tr>
@@ -22,7 +22,7 @@
             <td height="40" colspan="2" class="dotted_border" valign="top">
               <% related_follower = related_item.related_followers(@follow_type) %>              
               <%- related_follower[0..2].each do |user| %>
-                <%= image_tag user.get_photo(:small), :title => user.name %>
+                <%= image_tag user.get_photo(:small), :title => user.name ,:class => "userImageSmall"%>
               <% end %>
               <% if ((related_follower.count - 2) > 0) %>
                 and <%= (related_follower.count - 2) %> other people owns this.
@@ -36,18 +36,17 @@
            :related_follower => user_follow_type(related_item, current_user) %>
          </script>
         <%end%>
-
         </table>
 
       </td>
     </tr>
-  <tr>
-    <td height="33" class="padding1_lft15"><a href="<%=view_all_related_items_url(@item)%>" class="txt_blue">View All</a></td>
-  </tr>
+    <tr>
+      <td height="33" class="padding1_lft15"><a href="<%=view_all_related_items_url(@item)%>" class="txt_blue">View All</a></td>
+    </tr>
   </table>
-<br/>
+  <br/>
 <%end%>
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+<!--<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
   <tr>
     <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
   </tr>
@@ -85,7 +84,40 @@
   <tr>
     <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
   </tr>
+</table>-->
+<%#if @top_contributors.nil?%>
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+  <tr>
+    <td class="bg_widgethdr txt_white">Top Contributors</td>
+  </tr>
+  <tr>
+    <td height="170" valign="top">
+      <ul class="imgContributors">
+        <%@top_contributors.each do |contributor|%>
+
+          <%user = get_contributor_info(contributor[0])%>
+          <li class="imgContributors">
+            <div>
+              <div class="float_lft">
+                <img  src="<%unless user.avatar.nil?%><%=user.avatar.photo.url(:thumb)%><%end%>" class="imgContributes imageThumbnail" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  <%=user.name%>
+                </a>
+              </div>
+              <div class="contributorpoints">
+                <%=contributor[2]%> Points
+              </div>
+            </div>
+
+          </li>
+
+        <%end%>
+      </ul>
+    </td></tr>
 </table>
+<%#end%>
 
 
 </div>

@@ -122,4 +122,20 @@ class Item < ActiveRecord::Base
     return sorted_items
   end
 
+  def self.get_all_related_items_ids(ids)
+    items = Item.find_all_by_id(ids)
+    items_array=[]
+    items.each do |item|
+      ritems=item.itemrelationships.map(&:relateditem_id).to_a
+      citems=Itemrelationship.all(:conditions => {:relateditem_id => item.id}).map(&:item_id).to_a
+      items_array.concat(ritems)
+      items_array.concat(citems)
+    end
+    if ids.is_a?(Array)
+      items_array.concat(ids).uniq
+    else
+      items_array << ids
+      items_array.uniq
+    end
+  end
 end

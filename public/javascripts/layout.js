@@ -120,7 +120,7 @@ $(document).ready(function(){
         // return false;
         }
         })
-    .data("autocomplete")._renderItem = function(ul, item, index) {
+    $("#plannToSearch").data("autocomplete")._renderItem = function(ul, item, index) {
         if (index == -1) {
             return $("<li></li>")
             .data("item.autocomplete", item)
@@ -160,7 +160,8 @@ $(document).ready(function(){
                     data:{
                         term:$("#search_car").val(),
                         search_type:$("#category").val(),
-                        authenticity_token: window._token
+                        authenticity_token: window._token,
+                        from_profile: true
                     },
                     type:"POST",
                     dataType:"json",
@@ -194,7 +195,7 @@ $(document).ready(function(){
                 });
         }
     })
-        .data("autocomplete")._renderItem = function (ul, item, index) {
+        $("#search_car").data("autocomplete")._renderItem = function (ul, item, index) {
         if (index == -1) {
             return $("<li></li>")
                 .data("item.autocomplete", item)
