@@ -4,8 +4,8 @@ $("#txtArticleTitle").val("<%= escape_javascript(@article.title) %>");
 
 $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
 <% if @images.present? and @images.count > 0 %>
-var images = new Array();
-var sizes = new Array();
+ images = new Array();
+ sizes = new Array();
 <% @images.each_with_index do |image,index| %>
     check_imagesize_on_load("<%= escape_javascript(image) %>");
 <% end %>
