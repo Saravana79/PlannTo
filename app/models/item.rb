@@ -63,7 +63,7 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def related_followers(follow_type)
+  def get_followers(follow_type=nil)
     related_iteams = followers_by_type('User')
     unless follow_type.blank?
       related_iteams.where("follows.follow_type" => follow_type)
