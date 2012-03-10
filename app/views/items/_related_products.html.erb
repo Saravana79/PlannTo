@@ -94,20 +94,19 @@
     <td height="170" valign="top">
       <ul class="imgContributors">
         <%@top_contributors.each do |contributor|%>
-
-          <%user = get_contributor_info(contributor[0])%>
+          <%user_info = contributor.split("_")%>
           <li class="imgContributors">
             <div>
               <div class="float_lft">
-                <img  src="<%unless user.avatar.nil?%><%=user.avatar.photo.url(:thumb)%><%end%>" class="imgContributes imageThumbnail" />
+                <img  src="<%=user_info[3]%>" class="imgContributes imageThumbnail" />
               </div>
               <div class="contributorname">
                 <a class="txt_black" href="#">
-                  <%=user.name%>
+                  <%=user_info[2]%>
                 </a>
               </div>
               <div class="contributorpoints">
-                <%=contributor[2]%> Points
+                <%=user_info[1]%> Points
               </div>
             </div>
 
