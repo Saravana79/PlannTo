@@ -20,7 +20,7 @@
           </tr>
           <tr>
             <td height="40" colspan="2" class="dotted_border" valign="top">
-              <% related_follower = related_item.related_followers(@follow_type) %>              
+              <% related_follower = related_item.get_followers(@follow_type) %>              
               <%- related_follower[0..2].each do |user| %>
                 <%= image_tag user.get_photo(:small), :title => user.name ,:class => "userImageSmall"%>
               <% end %>
@@ -34,7 +34,9 @@
          <script type="text/javascript">
            <%= render "shared/javascript_button", :formate => :js, :button_class => '_small', :item => related_item,
            :related_follower => user_follow_type(related_item, current_user) %>
+           Product.show_login_dialog("#plan_to_buy_<%= related_item.id %>, #plan_to_own_<%= related_item.id %>, #plan_to_follow_<%= related_item.id %>");
          </script>
+
         <%end%>
         </table>
 
@@ -94,20 +96,19 @@
     <td height="170" valign="top">
       <ul class="imgContributors">
         <%@top_contributors.each do |contributor|%>
-
-          <%user = get_contributor_info(contributor[0])%>
+          <%user_info = contributor.split("_")%>
           <li class="imgContributors">
             <div>
               <div class="float_lft">
-                <img  src="<%unless user.avatar.nil?%><%=user.avatar.photo.url(:thumb)%><%end%>" class="imgContributes imageThumbnail" />
+                <img  src="<%=user_info[3]%>" class="imgContributes imageThumbnail" />
               </div>
               <div class="contributorname">
                 <a class="txt_black" href="#">
-                  <%=user.name%>
+                  <%=user_info[2]%>
                 </a>
               </div>
               <div class="contributorpoints">
-                <%=contributor[2]%> Points
+                <%=user_info[1]%> Points
               </div>
             </div>
 

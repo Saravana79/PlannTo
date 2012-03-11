@@ -14,7 +14,6 @@ gem 'fb_graph'
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
-gem 'fastimage'
 #gem 'execjs'
 gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
@@ -27,7 +26,7 @@ group :assets do
 end
 gem 'sqlite3'
 gem 'citier', '~>0.1.15'
-gem 'rails_sql_views', git: 'https://github.com/morgz/rails_sql_views.git'
+gem 'rails_sql_views' , git: 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
 gem 'jquery-rails'
 gem 'acts-as-taggable-on', '~>2.1.1'
@@ -41,6 +40,7 @@ gem 'acts-as-messageable'
 gem 'tinymce-rails'
 # Use unicorn as the web server
 # gem 'unicorn'
+gem 'resque', :require => 'resque/server'  
 
 # Deploy with Capistrano
 # gem 'capistrano'

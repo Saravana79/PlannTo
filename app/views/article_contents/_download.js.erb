@@ -4,26 +4,16 @@ $("#txtArticleTitle").val("<%= escape_javascript(@article.title) %>");
 
 $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
 <% if @images.present? and @images.count > 0 %>
-var images = new Array();
-var sizes = new Array();
+ images = new Array();
+ sizes = new Array();
 <% @images.each_with_index do |image,index| %>
-    images.push("<%= image %>");
-    sizes.push("<%= @sizes[index] %>");
+    check_imagesize_on_load("<%= escape_javascript(image) %>");
 <% end %>
-$('#current_image').html(1);
-$('#total_images').html("<%= @images.count %>");
+$('#current_image').html(0);
 <% else %>
 $('#current_image').html(0);
 $('#total_images').html(0);
 <% end %>
-<% if @article.thumbnail.present? %>
-$("#img_thumb").attr("src","<%= escape_javascript(@article.thumbnail) %>");
-$("#new_article_thumbnail").val("<%= escape_javascript(@article.thumbnail) %>");
-$("#img_thumb").show();
-$(".article_image").show();
-$('#current_image_size').html(sizes[0]);
-<% else %>
-$("#img_thumb").hide();
-$(".article_image").hide();
-<% end %>
-$("#share_instruction_id").attr('value', '0');
+
+first=true;
+images_index=0;

@@ -41,18 +41,7 @@ class ArticleContent < Content
       rescue => e
       end
     end
-    @sizes=[]
-    @fimages=[]
-    if @images.count>0
-      @images.uniq.each do |image|
-        size = FastImage.size(image)
-        if(size[0] >= MIN_SIZE[0] && size[1] >= MIN_SIZE[1])
-          @fimages << image
-          @sizes << size
-        end
-      end
-    end
-    [@article,@fimages,@sizes]
+    [@article,@images]
   end
   
   def self.saveContent(val, user, ids)

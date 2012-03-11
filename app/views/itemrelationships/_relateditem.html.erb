@@ -1,4 +1,3 @@
-<% follower_count = Follow.get_followers(relateditem) %>
 
   <tr>
     <td width="113" height="85">
@@ -18,7 +17,7 @@
   <tr>
     <td height="40" colspan="2" class="dotted_border" valign="top">
 
-      <% related_follower = relateditem.related_followers(@follow_type) %>
+      <% related_follower = relateditem.get_followers(@follow_type) %>
       <%= related_follower[0..2].collect { |user| user.name }.join(",") %>
       <% if ((related_follower.count - 2) > 0) %>
         and <%= (related_follower.count - 2) %> other people owns this.
