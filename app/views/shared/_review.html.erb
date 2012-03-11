@@ -1,11 +1,11 @@
 <div class="review_tabs">
 	<ul>    
-		<li class="icon_reviewcar clicked" data-div="review"><a href="#" class="active_tabs" >Review Car</a></li>        
-		<li class="icon_Askquestion"data-div="question_content"><a href="#" class="review_tabs" >Ask a Question</a></li>        
-		<li class="icon_sharetip" data-div="tip" ><a href="#" class="review_tabs" >Share a Tip</a></li>
-		<li class="icon_sharetip" ><a href="#" class="review_tabs">Start a Discussion</a></li>
+		<li class="icon_reviewcar clicked" data-div="review"><a class="active_tabs" >Review Car</a></li>        
+		<li class="icon_Askquestion"data-div="question_content"><a class="review_tabs" >Ask a Question</a></li>        
+		<li class="icon_sharetip" data-div="tip" ><a class="review_tabs" >Share a Tip</a></li>
+		<li class="icon_sharetip" ><a class="review_tabs">Start a Discussion</a></li>
 		<li class="icon_sharetip" onclick="document.getElementById('ShareURLDiv').style.display='block';document.getElementById('reviewDiv').style.display='none'; document.getElementById('textarea').style.display='none';document.getElementById('txtAreaDiv').style.height='350px';document.getElementById('txtURL').focus();"><a href="#" class="review_tabs">Share an Article/Video</a></li>
-		<li class="icon_sharetip"><a href="#" class="review_tabs">Share an Image</a></li
+		<li class="icon_sharetip"><a class="review_tabs">Share an Image</a></li
 	   
 	</ul>
 </div>
@@ -19,28 +19,7 @@
         <%= render :partial => 'tips/new_tip' %>
     </div>
 <br/>
- 
 
-<script type="text/javascript">
-$(function() {
-
-  $('.review_tabs ul li').click(function(){
-    if($(this).hasClass('clicked')){ return;}
-    $('#textarea_review_div').hide();
-    var previous_tab = $('.review_tabs ul li.clicked');
-    var previous_div = previous_tab.attr('data-div');
-    var current_div  = $(this).attr('data-div');
-
-    console.log($(this).children('a'));
-    previous_tab.children('a').removeClass('active_tabs').addClass('review_tabs');
-    $(this).children('a').removeClass('review_tabs').addClass('active_tabs');
-    previous_tab.removeClass('clicked');
-    $('#' + previous_div + 'Div').hide();
-    $('#' + current_div + 'Div').show();
-    $(this).addClass('clicked');
-  });
-});
-</script>
 <!-- =======
 					</div>
 					</div> -->

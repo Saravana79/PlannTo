@@ -14,9 +14,9 @@
 ActiveRecord::Schema.define(:version => 20120308161622) do
 
   create_table "answer_contents", :force => true do |t|
-    t.integer "question_id"
-    t.string  "format",         :limit => 1
-    t.boolean "mark_as_answer",              :default => false
+    t.integer "question_content_id"
+    t.string  "format",              :limit => 1
+    t.boolean "mark_as_answer",                   :default => false
   end
 
   create_table "answers", :force => true do |t|
@@ -579,7 +579,7 @@ ActiveRecord::Schema.define(:version => 20120308161622) do
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
-  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`answer_contents`.`question_id` AS `question_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
+  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -589,7 +589,8 @@ ActiveRecord::Schema.define(:version => 20120308161622) do
     v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
-    v.column :question_id
+    v.column :ip_address
+    v.column :question_content_id
     v.column :format
     v.column :mark_as_answer
   end

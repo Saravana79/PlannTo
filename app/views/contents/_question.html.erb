@@ -1,9 +1,25 @@
-<div id="question-summary-8220137" class="question-summary narrow">
-	<div class="summary">
-		<h3><a title=<%= content.title %> class="question-hyperlink" href="/question/8220137/does-sql-standard-specify-the-order-of-constraint-validation-and-trigger-firing"><%= content.description %></a></h3>
-		<div class="started">
-			<a class="started-link" href="/question/8220137/does-sql-standard-specify-the-order-of-constraint-validation-and-trigger-firing/?lastactivity"><span class="relativetime" > <%= time_ago_in_words(content.created_at) %> </span></a>
-			<a href="/users/486620/mootinator"> by <%= content.user.name  %></a>
+<div class="mainContentDiv">
+		 <div class="rate_content float_lft">
+			<a class="bg_ratecontent">100</a>
+			<a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+		</div>
+		<div class="float_rgt">
+			<img src="images/users.png" class="userImageSmall">
+		</div>
+			<div class="subContentDiv">
+			<div><a class="title" href="google.com"><%= content.title %></a></div>
+			<div><a class="txt_brown"><%= content.user.name  %> asked in Fiat Grande Punto - <%= pluralize(content.answer_contents.count, 'Answer')%>  - <%= time_ago_in_words(content.created_at) %> </a></div>
+			<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+			<ul class="divCommentsConent">
+				<li class="subContentGap float_lft"><a class="txt_blue ">Comments (9) </a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+				<li class="subContentGap float_lft"><a class="txt_blue">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+					<li class="subContentGap float_lft"><a class="txt_blue ">Add Answer</a></li>
+                    <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+				<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+				<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+			</ul>
 		</div>
 	</div>
-</div>

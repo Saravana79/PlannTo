@@ -1,7 +1,7 @@
 class CreateAnswerContents < ActiveRecord::Migration
   def up
     create_table :answer_contents do |t|
-      t.references :question
+      t.references :question_content
       t.string     :format,      :limit => 1
       t.boolean    :mark_as_answer, :default => false
     end

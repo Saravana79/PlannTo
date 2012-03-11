@@ -2488,3 +2488,5 @@ ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  m
 
 
 .displayRating                          {display: inline;}
+
+.review_tabs ul li                      {cursor:pointer;}
