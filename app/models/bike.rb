@@ -1,0 +1,44 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+class Bike < Product
+  
+  has_many :compares, :as => :comparable
+
+  searchable :auto_index => true, :auto_remove => true  do
+    text :name , :boost => 4.0,  :as => :name_ac
+    string :name
+    string :manufacturer, :multiple => true do |product|
+      product.manufacturer.name
+    end
+
+    dynamic_float :features do |car|
+      car.attribute_values.inject({}) do |hash,attribute_value|
+        if attribute_value.attribute.search_display_attributes.nil?
+          hash
+        else
+          if attribute_value.attribute.attribute_type == "Numeric"
+            hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
+          else
+            hash
+          end
+        end
+      end
+    end
+
+    dynamic_string :features_string do |car|
+      car.attribute_values.inject({}) do |hash,attribute_value|
+        if attribute_value.attribute.search_display_attributes.nil?
+          hash
+        else
+          if attribute_value.attribute.attribute_type != "Numeric"
+            hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
+          else
+            hash
+          end
+
+        end
+      end
+    end
+  end
+end

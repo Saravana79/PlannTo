@@ -84,9 +84,9 @@ class Item < ActiveRecord::Base
 
   def image_url
     if type == "CarGroup"
-      configatron.root_image_url + 'car' + '/' + imageurl
+      configatron.root_image_url + 'car' + '/' + "#{imageurl}"
     else
-      configatron.root_image_url + type.downcase + '/' + imageurl
+      configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
     end
     
   end
