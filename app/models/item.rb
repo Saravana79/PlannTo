@@ -15,6 +15,7 @@ class Item < ActiveRecord::Base
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
 
   belongs_to :user, :foreign_key => 'created_by'
+  has_many :attribute_tags, :through => :item_attributes
   has_many :attribute_values
   has_many :item_attributes, :class_name => 'Attribute', :through => :attribute_values, :source => :attribute
   has_many :reviews
@@ -126,10 +127,15 @@ class Item < ActiveRecord::Base
     items = Item.find_all_by_id(ids)
     items_array=[]
     items.each do |item|
+      #Parent Items
       ritems=item.itemrelationships.map(&:relateditem_id).to_a
+      #Child Items
       citems=Itemrelationship.all(:conditions => {:relateditem_id => item.id}).map(&:item_id).to_a
+      #Tags
+      tags=item.attribute_tags.map(&:id).to_a
       items_array.concat(ritems)
       items_array.concat(citems)
+      items_array.concat(tags)
     end
     if ids.is_a?(Array)
       items_array.concat(ids).uniq

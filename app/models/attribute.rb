@@ -5,6 +5,8 @@ class Attribute < ActiveRecord::Base
   NUMERIC = "Numeric"
   
   has_many :attribute_values
+  has_many :item_attribute_tag_relations
+  has_many :attribute_tags, :through => :item_attribute_tag_relations
   has_many :items, :through => :attribute_values
   has_many :search_display_attributes, :class_name => "SearchAttribute"
 

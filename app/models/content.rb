@@ -20,7 +20,7 @@ class Content < ActiveRecord::Base
        case key.to_sym
        when :items
          all_items = Item.get_all_related_items_ids(value)
-         scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
+         scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations).uniq
        when :type
          scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
        when :order
