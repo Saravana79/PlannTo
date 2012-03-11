@@ -1,15 +1,15 @@
 class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   belongs_to :itemtype
-#  has_many :itemrelationships
-#  has_many :relateditems, :through => :itemrelationships
-#
-#  has_many :inverse_itemrelationships, :class_name => 'Itemrelationship', :foreign_key => 'relateditem_id'
-#  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :source => :item
-##  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :
-   has_many :shares # to be removed
-    has_many :content_item_relations
-    has_many :contents, :through => :content_item_relations
+  #  has_many :itemrelationships
+  #  has_many :relateditems, :through => :itemrelationships
+  #
+  #  has_many :inverse_itemrelationships, :class_name => 'Itemrelationship', :foreign_key => 'relateditem_id'
+  #  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :source => :item
+  ##  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :
+  has_many :shares # to be removed
+  has_many :content_item_relations
+  has_many :contents, :through => :content_item_relations
 
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
@@ -137,5 +137,26 @@ class Item < ActiveRecord::Base
       items_array << ids
       items_array.uniq
     end
+  end
+
+  def get_top_contributors
+    keyword_id = "items_#{self.id}_top_contributors"
+    top_contributors = $redis.smembers "#{keyword_id}"
+    if top_contributors.size == 0
+      #query to find top contributors
+      top_contributors = ActiveRecord::Base.connection.execute("select * from view_top_contributors where item_id = #{self.id} limit 5")
+      #save in cache
+      $redis.multi do
+        top_contributors.each do |cont|
+          user = User.where("id = ?", cont[0]).includes(:avatar).first
+          avatar_url = user.avatar.nil? ? "" : user.avatar.photo.url(:thumb)
+          #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
+          $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}"
+          #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
+        end
+      end
+      top_contributors = $redis.smembers "#{keyword_id}"
+    end
+    return top_contributors
   end
 end
