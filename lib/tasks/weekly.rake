@@ -8,7 +8,7 @@ namespace :plannto do
     puts "----TRUNCATED related_items--------"
 
     # include GlobalUtilities
-    item_types = Itemtype.where("itemtype IN ('Car', 'Mobile', 'Camera', 'Tablet')").collect(&:id).join(',')
+    item_types = Itemtype.where("itemtype IN ('Car', 'Mobile', 'Camera', 'Tablet','Cycle','Bike')").collect(&:id).join(',')
     #puts item_types
     all_items = Item.where("itemtype_id IN (#{item_types})")
     #puts all_items.size
