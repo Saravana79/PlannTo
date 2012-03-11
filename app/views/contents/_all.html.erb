@@ -1,4 +1,17 @@
 <h3 class="yellow_border">Content</h3>
+<div style="float:left">
+	<input type="checkbox" value="1" id="select_all" />Select All
+</div>
+
+<div id="filter_contents" style="float:left">
+<input type="checkbox" value="2" style="margin-left:2px;" class="ArticleContent" id="chk_article"/>Articles
+<input type="checkbox" value="3" style="margin-left:2px;" class="VideoContent" id="chk_video"/>Videos
+<input type="checkbox" value="4" style="margin-left:2px;" class="ReviewContent" id="chk_review"/>Reviews
+<input type="checkbox" value="5" style="margin-left:2px;" class="TipContent" id="chk_tip"/>Tips
+<a id="load_content" class="txt_blue" style="margin-left:2px;">Filter</a>
+</div>
+<div style="clear:both"></div>
+<div id="content_all">
 <span class="sortby">
 	<span><b>Sort by:</b></span>
 	<a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:0px 5px;">|</span>
@@ -10,3 +23,33 @@
 <%= render_content_type(content) %>
 <% end %>
 <% end %>
+</div>
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		$('#load_content').live("click",function(){
+			type='';
+			$('#filter_contents :checked').each(function(){
+				type+="&type[]="+$(this).attr("class");
+			});
+				<% unless @item.blank? %>
+			var url = "<%= feed_contents_path(:items => @item.id  ) %>";
+			<% else %>
+			var url = "<%= feed_contents_path %>";
+			<% end %>
+			$("#content_all").html("");
+			url=url+"&limit=5"+type;
+			$.get(url, function(data) {
+				$("#content_all").html(data);
+			});
+		});
+
+		$('#select_all').click(function(){
+			if($('#select_all').is(':checked')){
+			 $('#filter_contents input').attr('checked','checked');
+			}
+			else {
+				$('#filter_contents input').removeAttr('checked');
+			}
+		})
+	});
+</script>
