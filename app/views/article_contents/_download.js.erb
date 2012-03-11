@@ -1,5 +1,5 @@
 $('div.dwnld_url').show();
-$("#txtArticleTitle").val("<%= escape_javascript(@article.title) %>");
+$("#txtArticleTitle").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));
 //$("#txtArticleDescription").attr("value","<%= escape_javascript(@article.description) %>");
 
 $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
@@ -7,7 +7,7 @@ $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
  images = new Array();
  sizes = new Array();
 <% @images.each_with_index do |image,index| %>
-    check_imagesize_on_load("<%= escape_javascript(image) %>");
+    check_imagesize_on_load(unescapeHTML("<%= escape_javascript(image) %>"));
 <% end %>
 $('#current_image').html(0);
 <% else %>

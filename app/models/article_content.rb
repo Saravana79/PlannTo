@@ -25,17 +25,17 @@ class ArticleContent < Content
           @meta_description = attr.value
         end
         doc.xpath("//link[@rel='image_src']/@href").each do |attr|
-          @images << attr.value
+          @images << CGI.unescapeHTML(attr.value)
         end
         doc.xpath("//meta[@property='og:image']/@content").each do |attr|
-          @images << attr.value
+          @images << CGI.unescapeHTML(attr.value)
         end
         doc.xpath("/html/body//img[@src[contains(.,'://') 
                and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
-          @images << attr.value
+          @images << CGI.unescapeHTML(attr.value)
         end
         
-        @article.title = @title_info.to_s.gsub(%r{</?[^>]+?>}, '') if @title_info
+        @article.title = CGI.unescapeHTML(@title_info.to_s.gsub(%r{</?[^>]+?>}, '')) if @title_info
         @article.description = @meta_description if @meta_description
         @article.thumbnail = @images.first   if @images.count>0
       rescue => e

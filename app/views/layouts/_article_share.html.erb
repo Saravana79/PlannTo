@@ -78,7 +78,7 @@
 
 <% end %>
 <script type="text/javascript">
-var MIN_SIZE=[25,25];
+var MIN_SIZE=[100,100];
 var first=false;
 var images_index=0;	
 var images = new Array();
@@ -163,6 +163,13 @@ function add_image_to_list(url,size){
 	}
 
 	$('#total_images').html(images.length);
+}
+
+function unescapeHTML(html) {
+   return $("<div />").html(html).text();
+}
+function escapeHTML(html) {
+   return $("<div />").text(html).html();
 }
 
 </script>
