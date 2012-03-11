@@ -159,4 +159,13 @@ class Item < ActiveRecord::Base
     end
     return top_contributors
   end
+
+  def rating
+    ((self.average_rating * 2).round) / 2.0
+  end
+
+  def rated_users_count
+    Rating.where(:rateable_id => self.id, :rateable_type => 'Item').count
+  end  
+
 end

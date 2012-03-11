@@ -15,7 +15,8 @@
       <h1><%= @item.name %></h1>
       <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
     <a>
-      <a><img src="../images/rating_stars.png" width="87" height="20" /></a>
+      <%= render :partial => 'shared/rating',:locals => {:item => @item} %>
+      <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>
     <a class="txt_normal">Ratings
       <span class="txt_blue"> (100 Reviews)</span>

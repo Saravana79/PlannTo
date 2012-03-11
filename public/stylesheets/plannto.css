@@ -2486,3 +2486,5 @@ ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  m
 .contributorname							{float:left;margin:-2px 0px 0px 10px;width:150px;}
 .contributorpoints							{float:left;margin:2px 0px 5px 10px}
 
+
+.displayRating                          {display: inline;}
