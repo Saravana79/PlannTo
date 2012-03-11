@@ -66,20 +66,20 @@ module ApplicationHelper
     active_menu = case menu
     when 'Cars'
       "Cars"
+    when 'Bikes'
+      "Bike"
+    when 'Cycles'
+      "Cycle"
     when 'Mobiles'
       "Mobile"
-    when 'Cameras'
-      "Camera"
-    when 'Travels'
-      "Travel"
-    when 'Movies'
-      "Movie"
     when 'Tablets'
       "Tablet"
+    when 'Cameras'
+      "Camera"
     else
       ""
     end
-    links = ["Cars", "Mobile", "Camera", "Travel", "Movies","Tablet"]
+    links = ["Cars", "Bikes", "Cycles", "Mobiles", "Tablets","Cameras"]
     items = ""
     links.each do |link|
       items+= "<a #{ "id= 'menu_active'" if active_menu == link}"
