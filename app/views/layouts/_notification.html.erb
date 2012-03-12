@@ -1,0 +1,15 @@
+<div id="notification" style="position:fixed;margin:0 auto;width:300px;height:40px;font-size:12px;background:grey;display:none;"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+function notify(text){
+	jQuery('#notificaion').html(text);
+	jQuery('#notificaion').show();
+	
+}
+function clear_notification(){
+	jQuery('#notificaion').html('');
+	jQuery('#notificaion').hide();
+}
+
+</script>

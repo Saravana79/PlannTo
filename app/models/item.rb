@@ -15,7 +15,6 @@ class Item < ActiveRecord::Base
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
 
   belongs_to :user, :foreign_key => 'created_by'
-  has_many :attribute_tags, :through => :item_attributes
   has_many :attribute_values
   has_many :item_attributes, :class_name => 'Attribute', :through => :attribute_values, :source => :attribute
   has_many :reviews
@@ -122,7 +121,16 @@ class Item < ActiveRecord::Base
     end
     return sorted_items
   end
-
+  def self.get_attribute_tags(ids)
+    idstr= ids.is_a?(Array) ? ids.join(',') : ids
+    items=Item.find_by_sql ['SELECT distinct b.id from items AS a
+    INNER JOIN attribute_values ON attribute_values.item_id = a.id
+    INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value 
+    INNER JOIN items AS b on b.id=item_attribute_tag_relations.item_id and b.type="AttributeTag"
+    WHERE a.id in (?)', idstr]
+    items.map(&:id).to_a
+  end
+  
   def self.get_all_related_items_ids(ids)
     items = Item.find_all_by_id(ids)
     items_array=[]
@@ -132,7 +140,7 @@ class Item < ActiveRecord::Base
       #Child Items
       citems=Itemrelationship.all(:conditions => {:relateditem_id => item.id}).map(&:item_id).to_a
       #Tags
-      tags=item.attribute_tags.map(&:id).to_a
+      tags=Item.get_attribute_tags(ids)
       items_array.concat(ritems)
       items_array.concat(citems)
       items_array.concat(tags)
