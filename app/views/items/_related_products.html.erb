@@ -87,7 +87,7 @@
     <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
   </tr>
 </table>-->
-<%#if @top_contributors.nil?%>
+<%if @top_contributors.size > 0%>
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
   <tr>
     <td class="bg_widgethdr txt_white">Top Contributors</td>
@@ -118,7 +118,7 @@
       </ul>
     </td></tr>
 </table>
-<%#end%>
+<%end%>
 
 
 </div>
