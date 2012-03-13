@@ -118,12 +118,12 @@ module ApplicationHelper
 
   def get_voting_class_name(user, item)
     reset = true
-    if  user.voted_for?(item)
+    if  user.voted_positive?(item)
       negative_class = "btn_dislike_positive"
       positive_class = "btn_like_positive"
       reset = false
     end
-    if user.voted_against?(item)
+    if user.voted_negative?(item)
       positive_class = "btn_like_negative"
       negative_class = "btn_dislike_negative"
       reset = false

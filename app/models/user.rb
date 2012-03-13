@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token
@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
 
   # Message configurations
   acts_as_messageable :table_name => "messages",                        # default 'messages'
-                      :required   => :body,                             # default [:topic, :body]
-                      :class_name => "ActsAsMessageable::Message"       # default "ActsAsMessageable::Message"
+  :required   => :body,                             # default [:topic, :body]
+  :class_name => "ActsAsMessageable::Message"       # default "ActsAsMessageable::Message"
 
   #has_many :attributes,:foreign_key => :created_by
   has_many :attribute_values,:foreign_key => :created_by
@@ -33,9 +33,9 @@ class User < ActiveRecord::Base
 
 
   USER_POINTS = {:new_review => {:points => 2,:self_update => true},
-                 :new_question => {:points => 1,:self_update => true}, 
-                 :new_answer => {:points => 1,:self_update => true}
-                }
+    :new_question => {:points => 1,:self_update => true},
+    :new_answer => {:points => 1,:self_update => true}
+  }
 
   has_one :avatar
 
@@ -58,6 +58,30 @@ class User < ActiveRecord::Base
 
   def total_points
     Point.find_by_sql("select points from view_rankings where user_id = #{self.id} limit 1").try(:first).try(:points)
+  end
+
+  def voted_positive?(item)
+    redis_key = "user:#{self.id}:content:#{item.id}:vote"
+    vote = $redis.get redis_key
+    if vote.nil?
+      vote = self.voted_for?(item)      
+      $redis.set(redis_key, true) if vote
+      return vote
+    end
+    value =  vote == "true" ? true : false
+    return value
+  end
+
+  def voted_negative?(item)
+    redis_key = "user:#{self.id}:content:#{item.id}:vote"
+    vote = $redis.get redis_key
+    if vote.nil?
+      vote = self.voted_against?(item)      
+      $redis.set(redis_key, false) if vote
+      return vote
+    end
+    value =  vote == "false" ? true : false
+    return value
   end
 
 end
