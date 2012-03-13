@@ -8,6 +8,8 @@ module ContentsHelper
       render :partial => "contents/video", :locals => { :content => item }
     when "QuestionContent" 
       render :partial => "contents/question", :locals => { :content => item }  
+    when "ReviewContent" 
+      render :partial => "contents/review", :locals => { :content => item }    
     end
   end
   
