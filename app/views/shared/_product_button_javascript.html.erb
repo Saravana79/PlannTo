@@ -11,4 +11,10 @@ var url = "<%= feed_contents_path(:items => item.id  ) %>";
   Product.detailed_specification();
 
 $(".PlanntoBuyBtn span[title]").tooltip();
+
+  $(document).ajaxError(function(e, XHR, options){
+    if (XHR.status == 401){
+      $("#dialog-form").dialog("open");
+    }
+  });
 </script>
