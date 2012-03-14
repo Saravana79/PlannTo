@@ -55,7 +55,7 @@ class Content < ActiveRecord::Base
 	    self.save!
       items.split(",").each do |id|
         item = Item.find(id)
-        rel= ContentItemRelation.new(:item => item, :content => self)
+        rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
       end
     end

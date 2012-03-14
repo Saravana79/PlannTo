@@ -139,12 +139,18 @@ class Item < ActiveRecord::Base
       ritems=item.itemrelationships.map(&:relateditem_id).to_a
       #Child Items
       citems=Itemrelationship.all(:conditions => {:relateditem_id => item.id}).map(&:item_id).to_a
-      #Tags
-      tags=Item.get_attribute_tags(ids)
       items_array.concat(ritems)
       items_array.concat(citems)
-      items_array.concat(tags)
     end
+    #Attribute Tags
+    tags=Item.get_attribute_tags(ids)
+    items_array.concat(tags)
+
+    #ItemType Tags
+    itypes = items.map(&:type).map(&:pluralize).uniq
+    itags = Item.where(:name => itypes, :type => "ItemtypeTag").map(&:id).to_a
+    items_array.concat(itags)
+
     if ids.is_a?(Array)
       items_array.concat(ids).uniq
     else
