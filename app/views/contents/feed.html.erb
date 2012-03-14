@@ -1,10 +1,11 @@
+<% if @lks.blank? %>
 <span class="sortby">
    <span><b>Sort by:</b></span>
      <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:0px 5px;">|</span>
      <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
      <a class="txt_blue" href="#">Most Answers</a>
  </span>
-
+<% end %>
 <% if !@contents.blank? %>
 <% for content in @contents %>
 	 <%= render_content_type(content) %>
