@@ -1,0 +1,10 @@
+<% if !@contents.blank? %>
+<% for content in @contents %>
+	 <%= render_content_type(content) %>
+  <% end %>
+<% if @contents.current_page < @contents.total_pages %>
+<% params ||={}  %>
+<% params["page"] = @contents.current_page + 1 %>	
+<%= link_to "Next Page", feed_contents_path(params), :id => "content_next", :remote => true, :style => "display:none" %>
+<% end %>
+<% end  %>

@@ -12,7 +12,7 @@ class Content < ActiveRecord::Base
   belongs_to :itemtype
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
 
-
+  PER_PAGE = 10
   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")
     if count.nil?
@@ -27,10 +27,10 @@ class Content < ActiveRecord::Base
 
 
   def self.filter(options)
-    options= {:page => 1, :limit => 10} if options.blank?
-    options["page"]=1 if !options.has_key?("page")
-    options["limit"]=10 if !options.has_key?("limit")
-    options["order"]="created_at desc" if !options.has_key?("order")
+    options ||= {:page => 1, :limit => 10} 
+    options["page"]||=1 
+    options["limit"]||=PER_PAGE 
+    options["order"]||="created_at desc" 
     scope=options.inject(self) do |scope, (key, value)|
       return scope if value.blank?
       value= value.join(",") if is_a?(Array)

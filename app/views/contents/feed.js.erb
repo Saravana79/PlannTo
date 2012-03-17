@@ -1,0 +1,4 @@
+element= jQuery('#content_next')
+element.before('<%=escape_javascript(contents_string.html_safe) %>');
+element.remove();	
+running=false;
