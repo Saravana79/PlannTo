@@ -51,7 +51,10 @@ module ThumbsUp #:nodoc:
 
       def get_class_name(class_name)
         parent_class_name = case class_name
+        when "Tip" then "Content"
         when "VideoContent" then "Content"
+        when "QuestionContent" then "Content"
+        when "ReviewContent" then "Content"
         when "ArticleContent" then "Content"
         else class_name
         end
