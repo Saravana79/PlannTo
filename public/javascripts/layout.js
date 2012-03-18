@@ -27,16 +27,60 @@ function removeCompare(obj){
     return false;
 };
 
-
-
-
-
-
-
-
-
 //##################################### ADDED BY GANESH #####################################
+function reinitialiseVotingPoshyTip(){   
+    $('.btn_dislike_positive').poshytip('destroy')
+
+    $('.btn_like_positive').poshytip('destroy')
+
+    $('.btn_like_default').poshytip('destroy')
+
+    $('.btn_dislike_default').poshytip('destroy')
+
+    $('.btn_like_negative').poshytip('destroy')
+    $('.btn_dislike_negative').poshytip('destroy')
+
+
+    $('.btn_dislike_positive').poshytip({
+        content: 'Dislike It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_like_positive').poshytip({
+        content: 'Already Liked It, click to cancel it',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_like_default').poshytip({
+        content: 'Like It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_dislike_default').poshytip({
+        content: 'Dislike It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_like_negative').poshytip({
+        content: 'Like It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_dislike_negative').poshytip({
+        content: 'Alread Disliked it, click to cancel',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+}
+
 $(document).ready(function(){
+    reinitialiseVotingPoshyTip();
 
     $("#ui-active-menuitem").mouseout(function() {
         $("#ui-active-menuitem").hide();
@@ -67,59 +111,59 @@ $(document).ready(function(){
         // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
         source: function( request, response )
         {
-        var opts = {
-        lines: 12, // The number of lines to draw
-        length: 5, // The length of each line
-        width: 4, // The line thickness
-        radius: 5, // The radius of the inner circle
-        color: '#2EFE9A', // #rgb or #rrggbb
-        speed: 1, // Rounds per second
-        trail: 50, // Afterglow percentage
-        shadow: true, // Whether to render a shadow
-        hwaccel: false // Whether to use hardware acceleration
-    };
-        var target = document.getElementById('plannToSearchSpan');
-        var spinner = new Spinner(opts).spin(target);
-        $.ajax(
-        {
-            url: "/search/autocomplete_items",
-            data: {
-            term: request.term,
-        search_type: $("#plannto_search_type").val()
-            },
-            type: "POST",
-            dataType: "json",
-            success: function( data )
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 5, // The length of each line
+                width: 4, // The line thickness
+                radius: 5, // The radius of the inner circle
+                color: '#2EFE9A', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 50, // Afterglow percentage
+                shadow: true, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('plannToSearchSpan');
+            var spinner = new Spinner(opts).spin(target);
+            $.ajax(
             {
-            response( $.map( data, function( item )
-            {
-                return{
-                id: item.id,
-        value: item.value,
-        imgsrc: item.imgsrc,
-        type: item.type,
-        url: item.url
+                url: "/search/autocomplete_items",
+                data: {
+                    term: request.term,
+                    search_type: $("#plannto_search_type").val()
+                },
+                type: "POST",
+                dataType: "json",
+                success: function( data )
+                {
+                    response( $.map( data, function( item )
+                    {
+                        return{
+                            id: item.id,
+                            value: item.value,
+                            imgsrc: item.imgsrc,
+                            type: item.type,
+                            url: item.url
+                        }
+                    }));
+                    spinner.stop();
                 }
-                }));
-            spinner.stop();
-            }
             });
         },
         focus:function(e, ui) {
-        return false
+            return false
         },
         select: function( event, ui ) {
-        if (ui.item.id  == 0){
-        location.href = "/search/search_items?q=" + $("#plannToSearch").val();
+            if (ui.item.id  == 0){
+                location.href = "/search/search_items?q=" + $("#plannToSearch").val();
+            // return false;
+            }
+            else{
+                location.href = "" + ui.item.url
+            // return false;
+            }
         // return false;
         }
-        else{
-        location.href = "" + ui.item.url
-        // return false;
-        }
-        // return false;
-        }
-        })
+    })
     $("#plannToSearch").data("autocomplete")._renderItem = function(ul, item, index) {
         if (index == -1) {
             return $("<li></li>")
@@ -152,50 +196,50 @@ $(document).ready(function(){
                 shadow:true, // Whether to render a shadow
                 hwaccel:false // Whether to use hardware acceleration
             };
-//       var target = document.getElementById('search_car');
-//       var spinner = new Spinner(opts).spin(target);
+            //       var target = document.getElementById('search_car');
+            //       var spinner = new Spinner(opts).spin(target);
             $.ajax(
-                {
-                    url:"/search/autocomplete_items",
-                    data:{
-                        term:$("#search_car").val(),
-                        search_type:$("#category").val(),
-                        authenticity_token: window._token,
-                        from_profile: true
-                    },
-                    type:"POST",
-                    dataType:"json",
-                    success:function (data) {
-                        response($.map(data, function (item) {
-                            return{
-                                id:item.id,
-                                value:item.value,
-                                imgsrc:item.imgsrc,
-                                type:item.type,
-                                url:item.url
-                            }
-                        }));
-//           spinner.stop();
-                    }
-                });
+            {
+                url:"/search/autocomplete_items",
+                data:{
+                    term:$("#search_car").val(),
+                    search_type:$("#category").val(),
+                    authenticity_token: window._token,
+                    from_profile: true
+                },
+                type:"POST",
+                dataType:"json",
+                success:function (data) {
+                    response($.map(data, function (item) {
+                        return{
+                            id:item.id,
+                            value:item.value,
+                            imgsrc:item.imgsrc,
+                            type:item.type,
+                            url:item.url
+                        }
+                    }));
+                //           spinner.stop();
+                }
+            });
         },
         focus:function (e, ui) {
             return false
         },
         select: function( event, ui ) {
             $.ajax(
-                {
-                    url:"/items/"+ui.item.id+"/follow_item_type?button_class=&follow_type="+$("#types").val()+"&authenticity_token="+window._token,
-                    type:"GET",
-                    dataType:"script",
-                    complete:function (data) {
-                        location.reload();
-                    //           spinner.stop();
-                    }
-                });
+            {
+                url:"/items/"+ui.item.id+"/follow_item_type?button_class=&follow_type="+$("#types").val()+"&authenticity_token="+window._token,
+                type:"GET",
+                dataType:"script",
+                complete:function (data) {
+                    location.reload();
+                //           spinner.stop();
+                }
+            });
         }
     })
-        $("#search_car").data("autocomplete")._renderItem = function (ul, item, index) {
+/*  $("#search_car").data("autocomplete")._renderItem = function (ul, item, index) {
         if (index == -1) {
             return $("<li></li>")
                 .data("item.autocomplete", item)
@@ -208,7 +252,7 @@ $(document).ready(function(){
                 .append('<a>' + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
                 .appendTo(ul);
         }
-    }
+    }*/
 
 
 });
@@ -216,7 +260,7 @@ $(document).ready(function(){
   
 $(document).ready(function() {
         
-	$('a.youtube').youtube();
+    $('a.youtube').youtube();
     $('span.buttonLink a#youtube_form').click(function() {
         $("#image_share").hide();
         $("#article_share").hide();
@@ -244,6 +288,6 @@ $(document).ready(function() {
 });
 
 $("#share_an_article").click(function(){
-        $("share_an_article_form").show();
-    }
+    $("share_an_article_form").show();
+}
 );
