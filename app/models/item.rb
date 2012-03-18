@@ -1,3 +1,4 @@
+require 'json'
 class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   belongs_to :itemtype
@@ -132,6 +133,10 @@ class Item < ActiveRecord::Base
   end
   
   def self.get_all_related_items_ids(ids)
+    idstr= ids.is_a?(Array) ? ids.join('_') : ids
+    redis_key = "related_items_#{idstr}"
+    value = $redis.get redis_key
+    if value.nil?
     items = Item.find_all_by_id(ids)
     items_array=[]
     items.each do |item|
@@ -157,6 +162,11 @@ class Item < ActiveRecord::Base
       items_array << ids
       items_array.uniq
     end
+    $redis.set(redis_key,items_array.to_json)
+  else
+    items_array=JSON.parse(value)
+  end
+  return items_array
   end
 
   def get_top_contributors

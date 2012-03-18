@@ -18,11 +18,9 @@
 	<a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
 	<a class="txt_blue" href="#">Most Answers</a>
 </span>
-<% if !Content.filter(:items => [@item.id]).blank? %>
-<% for content in Content.filter(:items => [@item.id]) %>
-<%= render_content_type(content) %>
-<% end %>
-<% end %>
+<% params = {"items" => [@item.id] } %>
+<% @contents = Content.filter(params)  %>
+<%= render :partial => 'contents/contents', :locals => {:params => params} %>
 </div>
 <script type="text/javascript" charset="utf-8">
 	$(function(){
@@ -50,6 +48,15 @@
 			else {
 				$('#filter_contents input').removeAttr('checked');
 			}
-		})
+		});
+		var running =false;
+		$(window).scroll(function () {
+			
+			lnk = $('#content_next');
+		    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+			   running = true;
+               lnk.click();
+		    }
+		});
 	});
 </script>
