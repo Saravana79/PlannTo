@@ -280,6 +280,9 @@ div.buttons {
     padding: 0px 0px;
 }
 
+.ac/*tion_btns                                {  height:29px; float:left; display:block; background:url(../images/btn_bg_active.png) repeat-x; border:solid 1px #8e5398; line-height:30px; margin-right:6px;background-clip: border-box; border-radius:3px; padding:0px 7px;}
+.acti*/on_btns:hover                          {  height:29px; float:left; display:block; background:url(../images/btn_bg_hover.png) 0px -29px; border:solid 1px #7eb55e; border-radius:3px; }
+
 .action_btns_selected {
     height: 28px;
     float: left;
@@ -2489,4 +2492,6 @@ ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  m
 
 .displayRating                          {display: inline;}
 
+
+.PlanntoBuyBtn                              {float:right}
 .review_tabs ul li                      {cursor:pointer;}

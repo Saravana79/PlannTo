@@ -100,6 +100,7 @@ PlanNto::Application.routes.draw do
   resources :reviews
   resources :review_contents
   resources :question_contents
+  resources :answer_contents
   resources :pros
   resources :votes
   resources :questions
