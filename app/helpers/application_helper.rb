@@ -120,17 +120,17 @@ module ApplicationHelper
     reset = true
     if  user.voted_positive?(item)
       negative_class = "btn_dislike_positive"
-      positive_class = "btn_like_positive"
+      positive_class = "btn_like_positive"     
       reset = false
     end
     if user.voted_negative?(item)
       positive_class = "btn_like_negative"
-      negative_class = "btn_dislike_negative"
+      negative_class = "btn_dislike_negative"      
       reset = false
     end
     if reset == true
       positive_class = "btn_like_default"
-      negative_class = "btn_dislike_default"
+      negative_class = "btn_dislike_default"    
     end
     return {:positive => positive_class, :negative => negative_class}
   end

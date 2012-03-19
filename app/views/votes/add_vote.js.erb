@@ -4,6 +4,7 @@ $("#dislikeVote<%=@voteable.id%>")[0].className = '';
 $("#dislikeVote<%=@voteable.id%>").addClass("<%=class_name[:negative]%>");
 $("#likeVote<%=@voteable.id%>")[0].className = '';
 $("#likeVote<%=@voteable.id%>").addClass("<%=class_name[:positive]%>");
+reinitialiseVotingPoshyTip();
 
 
 
