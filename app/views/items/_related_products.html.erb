@@ -14,7 +14,7 @@
             <td width="113" height="85"><img src="<%=related_item.image_url%>" width="101" height="68" onclick="parent.location='<%=link_url(related_item)%>'"/></td>
             <td width="113">
             <a href="<%=link_url(related_item)%>" class="txt_black"><%=related_item.name%></a>
-            <img src="../images/rating_stars.png" width="87" height="20" /><br />
+            <%= render :partial => 'shared/rating',:locals => {:item => related_item} %><br />
             <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item %>
             </td>
           </tr>

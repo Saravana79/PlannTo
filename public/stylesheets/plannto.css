@@ -1080,6 +1080,14 @@ h1 {
     color: #2a2929;
 }
 
+.productTitle{
+     color: #2A2929;
+    font: bold 18px tahoma;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
 .txt_price {
     font: normal 11px/24px tahoma;
     color: #ac5e2d;
