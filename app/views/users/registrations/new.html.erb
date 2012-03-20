@@ -15,11 +15,6 @@
     <br/>
     <%= f.password_field :password_confirmation %></div>
   <br/>
-  <div><%= f.label :avatar %>
-  <%= f.fields_for Avatar.new do |photo| %>
-    <%= photo.file_field :photo %>
-  <% end %>
-</div>
 
   <div><%= f.submit "Sign up" %></div>
 <% end %>
