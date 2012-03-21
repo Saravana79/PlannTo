@@ -214,7 +214,7 @@ class Item < ActiveRecord::Base
     sql +=  manufacturer.get_hierarchy_sql(attribute_tags,"'CarGroup','BikeGroup','AttributeTag'") unless manufacturer.blank?
     sql +=  cargroup.get_hierarchy_sql(attribute_tags,"'AttributeTag'") unless cargroup.blank?
     sql += " Union
-    Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id in (#{attribute_tags})) and itemtype not in ('ItemTypeTag','Manufacturer','CarGroup','BikeGroup')"
+    select content_id from content_item_relations where content_id not in ( select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id in  (#{attribute_tags})) and itemtype in  ('ItemTypeTag','CarGroup','BikeGroup','AttributeTag')) and item_id in (#{attribute_tags})"
   end
     items=Item.find_by_sql(sql)
     items.map(&:content_id).to_a
@@ -223,26 +223,18 @@ class Item < ActiveRecord::Base
   def get_hierarchy_sql(attribute_tags,itemtypes="'Manufacturer','CarGroup','BikeGroup','AttributeTag'")
     " 
     Union
-    Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id = #{self.id}) and itemtype not in (#{itemtypes})
+    Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id = #{self.id}) and itemtype in (#{itemtypes}) and item_id = #{self.id}
      Union
       Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id = #{self.id}) and item_id in (#{attribute_tags})"
   end
 
  def self.get_related_content_for_items(ids)
    contents =[]
-   idstr= ids.is_a?(Array) ? ids.join(',') : ids
-   redis_key = "related_content_#{idstr}"
-   value = $redis.get redis_key
-   if value.nil?
    items = Item.find_all_by_id(ids)
    items.each do |item|
      contents.concat(item.related_content.to_a)
    end
    contents=contents.uniq
-   $redis.set(redis_key,contents.to_json)
- else
-   contents=JSON.parse(value)
-  end
   contents
  end
 end

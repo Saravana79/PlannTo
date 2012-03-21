@@ -31,6 +31,14 @@ class Content < ActiveRecord::Base
     options["page"]||=1 
     options["limit"]||=PER_PAGE 
     options["order"]||="created_at desc" 
+    idstr=''
+    idstr=options.inject("") do |idstr,(k,v)|
+      jn= v.is_a?(Array) ? v.join('_') : v
+      idstr+= "_#{k}_#{jn}"
+    end
+    redis_key = "content_for#{idstr.gsub(" ","_")}"
+    value = $redis.get redis_key
+    if value.nil?
     scope=options.inject(self) do |scope, (key, value)|
       return scope if value.blank?
       value= value.join(",") if is_a?(Array)
@@ -49,7 +57,12 @@ class Content < ActiveRecord::Base
         scope
       end
     end
-    scope.uniq.paginate(:page => options["page"], :per_page => options["limit"])
+    items = scope.uniq.paginate(:page => options["page"], :per_page => options["limit"])
+    $redis.set(redis_key,items.to_json)
+    items
+  else
+    JSON.parse(value)
+  end
   end
   
 	def save_with_items!(items)
