@@ -7,14 +7,13 @@ class AccountsController < ApplicationController
 
   def update
     if current_user.update_attributes(params[:user]) && current_user.errors.blank?
-      begin
         params[:user][:avatar][:user_id] = current_user.id
-        current_user.avatar.update_attributes(params[:user][:avatar])
-      rescue
+      if  Avatar.find_or_create_by_user_id(current_user.id) && current_user.avatar.update_attributes(params[:user][:avatar])
+        flash[:notice] = "Account update successfully"
+      else
         flash[:notice] = "please upload the avatar from profile page"
       end
-      flash[:message] = "Account update successfully"
-    end      
+    end
     render :action => :index
   end
 

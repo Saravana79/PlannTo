@@ -19,7 +19,7 @@
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>
     <a class="txt_normal">Ratings
-      <span class="txt_blue"> (100 Reviews)</span>
+      <span class="txt_blue"> (<%= pluralize(@item.contents.where(:type => 'ReviewContent').count,'Review') %>)</span>
     </a><br />
     <a class="txt_normal"><%=display_specifications(@item)%>
       <%= link_to("...Detailed Specification", "#tab5", :class => 'txt_blue', :id => "detailed_specification") %>
@@ -119,7 +119,7 @@
 <%=render :partial =>"items/related_products" %>
 
 <div id="dialog-form" title="Create new user">
-  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item %>
+  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => @user_follow %>
   <%= render "shared/login_dialog", :item => @item %>  
 </div>
 <div id="dialog-invite-form" style="display:none">

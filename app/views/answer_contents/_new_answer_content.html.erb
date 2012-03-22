@@ -1,0 +1,23 @@
+ <%= form_for AnswerContent.new, :remote => true do |f| %>
+<div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;display:none;">
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+        <div class="title_header float_lft">Title :</div>
+        <div class="float_lft">
+            <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+        </div>
+    </div>
+    <div class="productreview" style="clear:both;">
+        <div class="title_header float_lft" style="display:none;">Rating :</div></div>
+    <div style="padding:5px 5px 0px 5px;">
+        <div class="title_header float_lft">Description :</div>
+        <div>
+            <%= f.text_area :description, :class => 'textFilling', :style=> 'width:570px;height:50px;' %>
+        </div>
+    </div>
+        <%= f.hidden_field :question_content_id, :value => question_content.id %>
+        <input id="answer_content_item_id" name="item_id" type="hidden" value=<%= item.id %>  />
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+        <%= f.submit 'Publish your Answer', :class => 'btn_submitanswer' %>
+    </div>
+</div>
+<% end %>

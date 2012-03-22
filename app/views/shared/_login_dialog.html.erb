@@ -5,8 +5,7 @@
 <script type="text/javascript">
   <% if current_user.blank? %>
     Product.login_dialog();
-    Product.show_login_dialog("#plan_to_buy_<%= item.id %>, #plan_to_own_<%= item.id %>, #plan_to_follow_<%= item.id %>, #plan_to_buy_select_<%= item.id %>");
-    Product.show_login_dialog_change("#plan_to_buy_select");
+    Product.show_login_dialog("#plan_to_buy_<%= item.id %>, #plan_to_own_<%= item.id %>, #plan_to_follow_<%= item.id %>, #plan_to_buy_select_<%= item.id %>");    
   <% else %>
     Product.hide_login_dialog();
   <% end %>

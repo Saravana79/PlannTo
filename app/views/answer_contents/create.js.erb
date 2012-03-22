@@ -1,0 +1,3 @@
+$('#new_answer_content_block')[0].clear();
+// $('#new_answer_content_block').toggle();
+$(".contentDetailsMainDiv").append("<%= escape_javascript(render(:partial => 'answer_contents/answer_content',:object => @answer_content, :locals => {:item => @item} )) %>"); 
