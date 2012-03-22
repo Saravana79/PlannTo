@@ -119,7 +119,7 @@
 <%=render :partial =>"items/related_products" %>
 
 <div id="dialog-form" title="Create new user">
-  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item %>
+  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => @user_follow %>
   <%= render "shared/login_dialog", :item => @item %>  
 </div>
 <div id="dialog-invite-form" style="display:none">
