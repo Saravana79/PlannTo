@@ -1,10 +1,4 @@
-<h1><%=@question.title%></h1>
-<div id="preferencesTag"><ul></ul></div> <%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%><br/><br/><br/>
 <div id="tabs">
-
-  <ul><li id='giveAdviceTag' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >Add a Recommendation</li></ul>
-  <p>My Question: <%=@question.question%></p>
-  <p>Advices</p>
   <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
   <div class="answerList">
     <%=display_empty_row(@answers.size).html_safe%>
@@ -13,7 +7,7 @@
         <%ans.recommendations.each_with_index do |reco, index|%>
           <p>Recommendations<img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(reco.item)%>"/> <%=reco.item.name%></p>
         <%end%></div>
-      <%end%>
+    <%end%>
   </div>
 </div>
 
@@ -29,50 +23,439 @@
 
   })
 </script>
-<script type="text/javascript">
-<%@preferences_list.each do |preference|%>
-    var lineHeight = "";
-    var searchCriteria = "";
-    var tagId = "";
-    var searchName = "<%=preference[:search_name]%>"
-  <%if preference[:value_type] == "Between"%>
-      searchCriteria = ""
-      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-      //      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-      //     var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
-  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
-      searchCriteria = ""
-      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var value = searchCriteria
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-      //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
-      var value   = "<%="#{preference[:value]}"%>"    
-      var selectedList = value.split(',')
-      var searchCriteria = ""
-      var anchorId
-      searchCriteria = searchCriteria +  ""
-      var spanHTML = ""
-      var updatedSearchList= [];
-      $.each(selectedList, function(index, value) {
-        updatedSearchList.push( value)
-      })
-      spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
-      searchCriteria = searchCriteria + spanHTML
-           var className = "middlebg attributeTag"
-          var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
 
 
-  <%else%>
-      var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
+<div id="maincontainer" class="maincontainerCss">
+  <!-- Till this will go into main layout and common for all pages.-->
+
+  <div class="breadcrumpbtnDiv">
+    <!--  breadcrumbs - Start -->
+    <div id ="breadcrump" class="breadcrump">
+      <a class="alink" href="#">My Cars</a>
+      <a class="grayarrow">></a>
+      <a class="alink" href="#">Saravana</a>
+      <a class="grayarrow">></a>
+      <a class="alink" id="alink_active">Plannto Buy a Car</a>
+      <!--  breadcrumbs - End -->
+
+    </div>
+    <!-- buttons - Start -->
+
+
+  </div>
+
+
+  <br/><br/>
+  <div class="leftcolumnbig">
+    <!-- Product Details - Start -->
+    <div class="contentDetailsMainDiv">
+
+      <!-- Question - Start -->
+      <div  class="mainContentDiv">
+        <div class="rate_content float_lft">
+          <a class="bg_ratecontent">100</a>
+          <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
+        </div>
+        <div  class="float_rgt">
+          <img src="/images/users.png" class="userImageSmall" />
+        </div>
+        <div  class="subContentDiv">
+          <div><a class="title" href="google.com"><%=@question.title%></a></div>
+          <div><a class="txt_brown"><%=@buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%></a></div>
+          <div class="subContentGap">
+            <a class="txt_black_description"><%= @question.question.split(' ').slice(0,25).join(' ')%></a>
+            <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+
+
+          <br/>
+          <div style="float:left;">
+            <ul class="divCommentsConent">
+              <li class="subContentGap float_lft" ><a class="txt_blue ">Recommendations (9)</a></li>
+              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+              <li class="subContentGap float_lft" ><a class="txt_blue ">Comments (9)</a></li>
+              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+              <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+              <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+              <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+            </ul>
+          </div >
+          <div style="float:right;">
+            <a style="" href="#" class="btn_submitanswer">Ask Advice</a>
+          </div>
+        </div>
+
+        <br/><br/>
+        <div class="hdr_Category">Buying Preferences:</div>
+        <ul class="search_category" id="buyingPreferences">
+          <%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
+        </ul>
+        <br/>
+        <div>
+          <div class="listing_items" style="height:250px;">
+            <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types, 4)%>
+            <!-- Question - End -->
+
+            <br/>
+            <br/>
+            <br/>
+
+            <div  style="border-top:solid 1px #ccd4d8;clear:both;margin-top:100px;"></div>
+            <!-- Answer this question - Start -->
+            <div >
+              <div class="hdr_Category float_lft margin_lft10">3 Recommendations</div>
+              <div class="float_rgt" style="margin-top:8px;">
+                <a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+              </div>
+            </div>
+
+          </div>
+          <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
+          <!-- Answer this question - End -->
+
+          <!-- Answer - Start -->
+          <div  class="mainContentDiv">
+            <div class="rate_content float_lft">
+              <a class="bg_ratecontent">100</a>
+              <a class="btn_like" href="#" id="btn_like_inactive"></a>
+              <a class="btn_dislike" href="#"></a>
+            </div>
+            <div  class="float_rgt">
+              <img src="/images/users.png" class="userImageSmall" />
+            </div>
+            <div  class="subContentDiv">
+              <div><a class="txt_brown">Kabir Shah gave a recommendation - 2 days ago</a></div>
+              <div class="taggingdiv" style="margin-left:0px;">
+                <ul class="tagging">
+                  <li class="taggingmain">
+                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
+
+                  </li>
+                  <li class="taggingmain">
+                    <span ><a class="txt_tagging">Aston</a><a class="icon_close_tagging" href="#"></a></span>
+                  </li>
+                  <li class="taggingmain">
+                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
+
+                  </li>
+
+                </ul>
+
+              </div>
+              <div class="subContentGap">
+                <a class="txt_black_description">Looking for best car insurance Looking for best car insurance Looking for best car insurance Looking for best car insurance</a>
+                <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+              <ul class="divCommentsConent">
+                <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li>
+              </ul>
+
+            </div>
+          </div>
+          <!-- Answer - End -->
+
+
+          <!-- Answer - Start -->
+          <div  class="mainContentDiv">
+            <div class="rate_content float_lft">
+              <a class="bg_ratecontent">100</a>
+              <a class="btn_like" href="#"></a>
+              <a class="btn_dislike" href="#" id="btn_dislike_inactive"></a>
+            </div>
+            <div  class="float_rgt">
+              <img src="/images/users.png" class="userImageSmall" />
+            </div>
+            <div  class="subContentDiv">
+              <div><a class="txt_brown">Kabir Shah gave a recommendation - 2 days ago</a></div>
+              <div class="taggingdiv" style="margin-left:0px;">
+                <ul class="tagging">
+                  <li class="taggingmain">
+                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
+
+                  </li>
+                  <li class="taggingmain">
+                    <span ><a class="txt_tagging">Aston</a><a class="icon_close_tagging" href="#"></a></span>
+                  </li>
+                  <li class="taggingmain">
+                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
+
+                  </li>
+
+                </ul>
+
+              </div>
+              <div class="subContentGap">
+                <a class="txt_black_description">Looking for best car insurance Looking for best car insurance Looking for best car insurance Looking for best car insurance</a>
+                <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+              <ul class="divCommentsConent">
+                <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li>
+              </ul>
+            </div>
+            <br />
+
+            <a class="arrow_up" style=""></a>
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg">
+
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <div class="subContentGap" >
+                <a class="txt_black_description">Looking for best car insurance Looking for best car insurance Looking for best car insurance </a></div>
+              <ul class="divCommentsConent " >
+                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+              </ul>
+            </div>
+            <!-- Comments - End -->
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg" >
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <div class="subContentGap" >
+                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
+              <ul class="divCommentsConent " >
+                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+              </ul>
+            </div>
+            <!-- Comments - End -->
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg" >
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <div class="subContentGap" >
+                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
+              <ul class="divCommentsConent " >
+                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+              </ul>
+            </div>
+            <!-- Comments - End -->
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg" >
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <div class="subContentGap" >
+                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
+              <ul class="divCommentsConent " >
+                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+              </ul>
+            </div>
+            <!-- Comments - End -->
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg" >
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <div class="subContentGap" >
+                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
+              <ul class="divCommentsConent " >
+                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+              </ul>
+            </div>
+            <!-- Comments - End -->
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg" >
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <div class="subContentGap" >
+                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
+              <ul class="divCommentsConent " >
+                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+              </ul>
+            </div>
+            <!-- Comments - End -->
+            <!-- Comments - start -->
+            <div class="subContentDiv_comments comments_bg" >
+              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
+              <input name="Comments" type="text" class="txt_gray" value="Write a comments" size="80" />
+            </div>
+            <!-- Comments - End -->
+          </div>
+          <!-- Answer - End -->
+
+
+
+
+        </div>
+
+
+        <!-- Product Details - End -->
+      </div>
+    </div>
+  </div>
+
+
+    <div class="rightcolumnsmall">
+
+      <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+        <tr>
+          <td class="bg_widgethdr txt_white">Related Questions</td>
+        </tr>
+        <tr>
+          <td height="252" valign="top">
+
+            <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+                <td width="113">
+                  <a href="#" class="txt_black">Renault Pulse</a>
+                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                  <a style="" href="#" class="btn_follow">Follow</a>
+                </td>
+              </tr>
+              <tr>
+                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+              </tr>
+
+              <tr>
+                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+                <td width="113">
+                  <a href="#" class="txt_black">Renault Pulse</a>
+                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                  <a style="" href="#" class="btn_follow">Follow</a>
+                </td>
+              </tr>
+              <tr>
+                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+        </tr>
+      </table>
+
+      <!-- Related Cars -- End -->
+
+      <br />
+
+      <!-- Related Cars -- Start -->
+
+      <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+        <tr>
+          <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
+        </tr>
+        <tr>
+          <td height="252" valign="top">
+
+            <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+                <td width="113">
+                  <a href="#" class="txt_black">Renault Pulse</a>
+                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                  <a style="" href="#" class="btn_follow">Follow</a>
+                </td>
+              </tr>
+              <tr>
+                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+              </tr>
+
+              <tr>
+                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+                <td width="113">
+                  <a href="#" class="txt_black">Renault Pulse</a>
+                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                  <a style="" href="#" class="btn_follow">Follow</a>
+                </td>
+              </tr>
+              <tr>
+                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+        </tr>
+      </table>
+
+      <!-- Related Cars -- End -->
+    </div>
+
+    <script type="text/javascript">
+  <%@preferences_list.each do |preference|%>
+      var lineHeight = "";
+      var searchCriteria = "";
+      var tagId = "";
+      var searchName = "<%=preference[:search_name]%>"
+    <%if preference[:value_type] == "Between"%>
+        searchCriteria = ""
+        searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+        var className = "middlebg attributeTag"
+        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+        //      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+        //     var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+    <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+        searchCriteria = ""
+        searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+        var value = searchCriteria
+        var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+        //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+        var className = "middlebg attributeTag"
+        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+    <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+        var value   = "<%="#{preference[:value]}"%>"
+        var selectedList = value.split(',')
+        var searchCriteria = ""
+        var anchorId
+        searchCriteria = searchCriteria +  ""
+        var spanHTML = ""
+        var updatedSearchList= [];
+        $.each(selectedList, function(index, value) {
+          updatedSearchList.push( value)
+        })
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
+        searchCriteria = searchCriteria + spanHTML
+        var className = "middlebg attributeTag"
+        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+
+
+    <%else%>
+        var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
+    <%end%>
+      $(list).appendTo('ul#buyingPreferences');
   <%end%>
-    $(list).appendTo('#preferencesTag ul');
-<%end%>
-  //$("#deleteTag").hide()
+    //$("#deleteTag").hide()
 
-</script>
-
+    </script>

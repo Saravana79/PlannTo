@@ -1,0 +1,6 @@
+<% if @valid %>
+$("#plantobuyContent").html('<%= escape_javascript(render 'plan_to_buy_items', :items => get_items_with_constraint(@follow_item, @follow_types, 4)) %>');
+<%else%>
+alert("You already added this Item");
+<%end%>
+

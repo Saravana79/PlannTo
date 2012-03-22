@@ -11,11 +11,32 @@ class PreferencesController < ApplicationController
     @answers = @question.user_answers
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     @preferences_list = Preference.get_items(@preferences)
+
+    @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types).group_by(&:followable_type)
   end
 
   def add_preference
     BrowserPreference.add_preference(current_user.id, params[:search_type], params)
     render :nothing => true
+  end
+
+  def plan_to_buy
+    follow_type = params["follow_type"]
+    unless follow_type == ""
+      follow = follow_item(params[:follow_type])
+      if follow.blank?
+        flash[:notice] = "You already buy this Item"
+        @valid = false
+      else
+        @valid = true
+        flash[:notice] = "Planning is saved"
+        get_follow_items
+      end
+    else
+      @valid = true
+      get_follow_items
+    end
   end
 
   def edit_preference
@@ -68,6 +89,22 @@ class PreferencesController < ApplicationController
 
   private
 
+  def get_follow_items
+    @buying_plan = BuyingPlan.find(params[:buying_plan_id])
+    @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types).group_by(&:followable_type)
+  end
+
+  def follow_item(follow_type)
+    #Rails.cache.delete("item_follow_"+current_user.id.to_s)
+    @item = Item.find(params[:item_id])
+    if !@item.blank?     
+      current_user.follow(@item, follow_type)
+    else
+      false
+    end
+  end
+
   def sunspot_search_items
     @search_type = @buying_plan.itemtype.itemtype
     itemtype = Itemtype.find_by_itemtype(@buying_plan.itemtype.itemtype)
@@ -114,54 +151,14 @@ class PreferencesController < ApplicationController
       @search_form_lookups = $search_form_lookups
     end
 
-#    sunspot_search_fields = Array.new
-#    @search_attributes.each do |search_attr|
-#      unless search_attr.try(:attribute).nil?
-#        if search_attr.value_type == "Between"
-#          first_value = @search_form_lookups.find {|s| s[:attribute_name] == "#{search_attr.attribute.name}" && s[:lower] == true }
-#          first_value = first_value[:field_name] unless first_value.nil?
-#          second_value = @search_form_lookups.find {|s| s[:attribute_name] == "#{search_attr.attribute.name}" && s[:lower] == false }
-#          second_value = second_value[:field_name] unless second_value.nil?
-#        elsif search_attr.value_type == "ListOfValues"
-#          first_value = @search_form_lookups.find {|s| s[:attribute_name] == "#{search_attr.attribute.name}" }
-#          unless first_value.nil?
-#            selected_list = params[first_value[:field_name]]
-#            selected_list_of_values = selected_list.split(",") unless selected_list.nil?
-#            first_value = first_value[:field_name]
-#          end
-#        else
-#          first_value = @search_form_lookups.find {|s| s[:attribute_name] == "#{search_attr.attribute.name}" }
-#          first_value = first_value[:field_name] unless first_value.nil?
-#        end
-#        field = sunspot_search_fields.find {|s| s[:attribute_name] == search_attr.attribute.name.to_s}
-#        if field.nil?
-#          sunspot_search_fields << {:attribute_name => search_attr.attribute.name, :attribute_id => search_attr.attribute.id, :attribute_type => search_attr.attribute.attribute_type, :value_type => search_attr.value_type, :first_value => first_value, :second_value => second_value, :selected_list => selected_list_of_values}
-#        end
-#      end
-#    end
 
     ############## PREFERENCES SECTION ######################
 
     preferences = Array.new
-      @preferences_list = preferences = Preference.get_preferences(@buying_plan.id, itemtype.id, @search_attributes.collect{|item| item.id})
-     ############ PREFERENCE SECTION ENDS#############
+    @preferences_list = preferences = Preference.get_preferences(@buying_plan.id, itemtype.id, @search_attributes.collect{|item| item.id})
+    ############ PREFERENCE SECTION ENDS#############
     $search_type = @search_type
-#    @sunspot_search_fields = sunspot_search_fields
-#    @page  = params[:page].nil? ? 1 : params[:page].to_i
 
-#    unless params[:manufacturer].present?
-#      if user_signed_in? && !request.xhr?
-#        preference = @preferences_list.find {|s| s[:value_type] == "manufacturer" }
-#        list =  preference.nil? ? Array.new : preference[:value].split(',')
-#      else
-#        list = Array.new
-#      end
-#    else
-#      @manufacturer  = params[:manufacturer].blank? ? "" : params[:manufacturer]
-#      list  = @manufacturer.split(',')
-#    end
-
- #   @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "name"
     @items = Sunspot.search($search_type.camelize.constantize) do
       keywords "", :fields => :name
       #with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
@@ -170,50 +167,12 @@ class PreferencesController < ApplicationController
       facet :manufacturer
       #facet :cargroup
       dynamic :features do
-#        preferences.each do |preference|
-#          if preference[:value_type] == "Between"
-#            with(preference[:attribute_name].to_sym).greater_than(preference[:min_value]) if !params[preference[:min_attribute]].present?
-#            with(preference[:attribute_name].to_sym).less_than(preference[:max_value]) if !params[preference[:max_attribute]].present?
-#          elsif preference[:value_type] == "GreaterThan"
-#            with(preference[:attribute_name].to_sym).greater_than(preference[:value]) if !params[preference[:attribute]].present?
-#          elsif preference[:value_type] == "LessThen"
-#            with(preference[:attribute_name].to_sym).less_than(preference[:value]) if !params[preference[:attribute]].present?
-#          end
-#        end
-#        sunspot_search_fields.each do |search|
-#          if search[:value_type] == "Between"
-#            with(search[:attribute_name].to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
-#            with(search[:attribute_name].to_sym).less_than(params[search[:second_value]]) if !params[search[:second_value]].blank?
-#          elsif search[:value_type] == "GreaterThan"
-#            with(search[:attribute_name].to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
-#          elsif search[:value_type] == "LessThen"
-#            with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
-#          end
-#          facet(search[:attribute_name].to_sym)
-#        end
-#        order_by :Price if sort_by_option == "Price" #, :desc)
+
       end
       dynamic :features_string do
-#        preferences.each do |preference|
-#          if preference[:value_type] == "Click"
-#            with(preference[:attribute_name].to_sym, preference[:value]) if !params[preference[:attribute]].present?
-#          elsif preference[:value_type] == "ListOfValues"
-#            with(preference[:attribute_name].to_sym, preference[:search_value]) if !params[preference[:attribute]].present?
-#          end
-#        end
-#        sunspot_search_fields.each do |search|
-#          if search[:value_type] == "Click"
-#            with(search[:attribute_name].to_sym, params[search[:first_value]]) if !params[search[:first_value]].blank?
-#          elsif search[:value_type] == "ListOfValues" #&& search[:attribute_type] == "Text"
-#            with(search[:attribute_name].to_sym, search[:selected_list])  if !params[search[:first_value]].blank?
-#          end
-#          facet(search[:attribute_name].to_sym)
-#        end
 
       end
 
-  #    paginate(:page => params[:page], :per_page => 10)
-   #   order_by :name if sort_by_option == "Name"
    
     end
 
