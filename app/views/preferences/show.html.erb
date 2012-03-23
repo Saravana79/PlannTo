@@ -52,12 +52,9 @@
 
       <!-- Question - Start -->
       <div  class="mainContentDiv">
-        <div class="rate_content float_lft">
-          <a class="bg_ratecontent">100</a>
-          <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-        </div>
+        <%=render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
         <div  class="float_rgt">
-          <img src="/images/users.png" class="userImageSmall" />
+          <img src="<%=@buying_plan.user.avatar.photo.url(:thumb)%>" class="userImageSmall" />
         </div>
         <div  class="subContentDiv">
           <div><a class="title" href="google.com"><%=@question.title%></a></div>
