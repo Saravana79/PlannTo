@@ -26,6 +26,10 @@
 </head>
 <body marginheight="0" topmargin="0">
 <%= render 'shared/header_links' %>
+<div id="dialog-form" title="Create new user">
+  <%= render "shared/login_dialog" %>
+  <%= render 'shared/show_hide_login_form', :item => "" %>
+</div>
 <div id="maincontainer" class="maincontainerCss">
 <div class="breadcrumpbtnDiv">
 <%= yield %>

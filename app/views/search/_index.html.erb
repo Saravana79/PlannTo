@@ -40,9 +40,9 @@
       <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
   <%end%>
-  <div id="dialog-form" title="Create new user">
-    <%= render "shared/login_dialog", :item => "" %>
-  </div>
+
+    <%= render 'shared/show_hide_login_form', :item => "" %>
+
   <div class="push"></div><br/>
   <div id="searchItemsPaginate">
   <%= will_paginate @items.results , :page_links => true %>
