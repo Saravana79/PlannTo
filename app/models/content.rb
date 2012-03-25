@@ -76,7 +76,20 @@ class Content < ActiveRecord::Base
       end
     end
   end
-	
+  
+	def get_related_items_for_newcontent
+    items = ContentItemRelation.where(:content_id => self.id)
+    itemtypetag=items.where(:itemtype => "ItemTypeTag").first
+    attribute_tags=items.where(:itemtype => "AttributeTag")
+    manufacturer=items.where(:itemtype => "Manufacturer").first
+    cargroup=items.where(:itemtype => "CarGroup").first
+    sql ="select distinct table_0.`id` from cache_item_relations as table_0"
+    sql +=  itemtypetag.get_hierarchy_sql_for_new_content(attribute_tags,"'itemtype'") unless itemtypetag.blank?
+    sql +=  manufacturer.get_hierarchy_sql_for_new_content(attribute_tags,"'Car Manufacturer'",2) unless manufacturer.blank?
+    sql +=  cargroup.get_hierarchy_sql_for_new_content(attribute_tags,"'Car Group'",3) unless cargroup.blank?
+    sql +="where table_0.id in (#{item_ids.join(',')})"
+    Item.find_by_sql(sql).map(&:id).to_a
+  end
 	acts_as_rateable
   acts_as_voteable
   acts_as_commentable
