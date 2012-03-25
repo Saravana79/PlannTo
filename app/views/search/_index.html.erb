@@ -33,16 +33,16 @@
         <span class="float_rgt" style="display:inline;">
           <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item %>
         </span>
-        <div id="dialog-form" title="Create new user">
+
           <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) %>
-          <%= render "shared/login_dialog", :item => item %>
-        </div>
+
       </div>
       <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
   <%end%>
-
-
+  <div id="dialog-form" title="Create new user">
+    <%= render "shared/login_dialog", :item => "" %>
+  </div>
   <div class="push"></div><br/>
   <div id="searchItemsPaginate">
   <%= will_paginate @items.results , :page_links => true %>
