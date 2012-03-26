@@ -1,7 +1,10 @@
-<div class=""><span><h2>Add car that you own to your profile</h2></span>
+<div class="">
+  <span><h2>Add car that you own to your profile</h2></span>
   <span>
-    <input name="search" type="text" class="search_inputfield" placeholder="Search <%= params[:follow]%>" id="search_car"/>
-    <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="/images/icon_search_gray.png"/></a>
+    <%if can_update_preference?(@buying_plan)%>
+      <input name="search" type="text" class="search_inputfield" placeholder="Search <%= params[:follow]%>" id="search_car"/>
+      <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="/images/icon_search_gray.png"/></a>
+    <%end%>
   </span>
 </div>
 <div id="plantobuyContent">

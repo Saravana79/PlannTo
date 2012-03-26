@@ -1,16 +1,5 @@
-<div id="tabs">
   <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
-  <div class="answerList">
-    <%=display_empty_row(@answers.size).html_safe%>
-    <%@answers.each_with_index do |ans, index|%>
-      <div class="box" id="box_<%=index%>"><%=ans.answer%><br/>
-        <%ans.recommendations.each_with_index do |reco, index|%>
-          <p>Recommendations<img class="profile_photo_img" width="50" height="50" alt="image" src="<%=image_url(reco.item)%>"/> <%=reco.item.name%></p>
-        <%end%></div>
-    <%end%>
-  </div>
-</div>
-
+  
 <script type="text/javascript">
   $('#giveAdviceTag').live('click', function(){
     $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
@@ -54,11 +43,11 @@
       <div  class="mainContentDiv">
         <%=render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
         <div  class="float_rgt">
-          <img src="<%=@buying_plan.user.avatar.photo.url(:thumb)%>" class="userImageSmall" />
+          <img src="<%=@buying_plan.user.get_photo%>" class="userImageSmall" />
         </div>
         <div  class="subContentDiv">
           <div><a class="title" href="google.com"><%=@question.title%></a></div>
-          <div><a class="txt_brown"><%=@buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%></a></div>
+          <div><a class="txt_brown"><%=@buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%> ago</a></div>
           <div class="subContentGap">
             <a class="txt_black_description"><%= @question.question.split(' ').slice(0,25).join(' ')%></a>
             <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
@@ -93,7 +82,6 @@
           <div class="listing_items" style="height:250px;">
             <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types, 4)%>
             <!-- Question - End -->
-
             <br/>
             <br/>
             <br/>
@@ -110,38 +98,35 @@
           </div>
           <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
           <!-- Answer this question - End -->
+<%=display_empty_row(@answers.size).html_safe%>
+    <%@answers.each_with_index do |ans, index|%>
+           <!-- Answer - Start -->
+          <div  class="mainContentDiv" id="box_<%=index%>">
 
-          <!-- Answer - Start -->
-          <div  class="mainContentDiv">
             <div class="rate_content float_lft">
               <a class="bg_ratecontent">100</a>
               <a class="btn_like" href="#" id="btn_like_inactive"></a>
               <a class="btn_dislike" href="#"></a>
             </div>
             <div  class="float_rgt">
-              <img src="/images/users.png" class="userImageSmall" />
+              <img src="<%=ans.user.get_photo%>" class="userImageSmall" />
             </div>
             <div  class="subContentDiv">
-              <div><a class="txt_brown">Kabir Shah gave a recommendation - 2 days ago</a></div>
+              <div><a class="txt_brown"><%=ans.user.name%> gave a recommendation - <%= time_ago_in_words(ans.created_at)%> ago</a></div>
               <div class="taggingdiv" style="margin-left:0px;">
                 <ul class="tagging">
+                  <%ans.recommendations.each_with_index do |reco, index|%>
                   <li class="taggingmain">
-                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
+
+                    <span ><a class="txt_tagging"><%=reco.item.name%></a><a class="icon_close_tagging" href="#"></a></span>
 
                   </li>
-                  <li class="taggingmain">
-                    <span ><a class="txt_tagging">Aston</a><a class="icon_close_tagging" href="#"></a></span>
-                  </li>
-                  <li class="taggingmain">
-                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
-
-                  </li>
-
+                  <%end%>
                 </ul>
 
               </div>
               <div class="subContentGap">
-                <a class="txt_black_description">Looking for best car insurance Looking for best car insurance Looking for best car insurance Looking for best car insurance</a>
+                <a class="txt_black_description"><%=ans.answer%></a>
                 <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
               <ul class="divCommentsConent">
                 <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
@@ -158,158 +143,9 @@
             </div>
           </div>
           <!-- Answer - End -->
-
-
-          <!-- Answer - Start -->
-          <div  class="mainContentDiv">
-            <div class="rate_content float_lft">
-              <a class="bg_ratecontent">100</a>
-              <a class="btn_like" href="#"></a>
-              <a class="btn_dislike" href="#" id="btn_dislike_inactive"></a>
-            </div>
-            <div  class="float_rgt">
-              <img src="/images/users.png" class="userImageSmall" />
-            </div>
-            <div  class="subContentDiv">
-              <div><a class="txt_brown">Kabir Shah gave a recommendation - 2 days ago</a></div>
-              <div class="taggingdiv" style="margin-left:0px;">
-                <ul class="tagging">
-                  <li class="taggingmain">
-                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
-
-                  </li>
-                  <li class="taggingmain">
-                    <span ><a class="txt_tagging">Aston</a><a class="icon_close_tagging" href="#"></a></span>
-                  </li>
-                  <li class="taggingmain">
-                    <span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
-
-                  </li>
-
-                </ul>
-
-              </div>
-              <div class="subContentGap">
-                <a class="txt_black_description">Looking for best car insurance Looking for best car insurance Looking for best car insurance Looking for best car insurance</a>
-                <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
-              <ul class="divCommentsConent">
-                <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li>
-              </ul>
-            </div>
-            <br />
-
-            <a class="arrow_up" style=""></a>
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg">
-
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <div class="subContentGap" >
-                <a class="txt_black_description">Looking for best car insurance Looking for best car insurance Looking for best car insurance </a></div>
-              <ul class="divCommentsConent " >
-                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-              </ul>
-            </div>
-            <!-- Comments - End -->
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg" >
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <div class="subContentGap" >
-                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
-              <ul class="divCommentsConent " >
-                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-              </ul>
-            </div>
-            <!-- Comments - End -->
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg" >
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <div class="subContentGap" >
-                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
-              <ul class="divCommentsConent " >
-                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-              </ul>
-            </div>
-            <!-- Comments - End -->
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg" >
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <div class="subContentGap" >
-                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
-              <ul class="divCommentsConent " >
-                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-              </ul>
-            </div>
-            <!-- Comments - End -->
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg" >
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <div class="subContentGap" >
-                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
-              <ul class="divCommentsConent " >
-                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-              </ul>
-            </div>
-            <!-- Comments - End -->
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg" >
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <div class="subContentGap" >
-                <a class="txt_black_description">Looking for best car insurance Looking for best car </a></div>
-              <ul class="divCommentsConent " >
-                <li class="subContentGap float_lft"><a class="txt_gray ">Kabir Shah - 2 days ago</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-              </ul>
-            </div>
-            <!-- Comments - End -->
-            <!-- Comments - start -->
-            <div class="subContentDiv_comments comments_bg" >
-              <div  class="float_rgt"><img src="/images/users.png" class="userImageSmall" /></div>
-              <input name="Comments" type="text" class="txt_gray" value="Write a comments" size="80" />
-            </div>
-            <!-- Comments - End -->
-          </div>
-          <!-- Answer - End -->
-
-
-
-
+     
+    <%end%>
+      
         </div>
 
 

@@ -1,7 +1,7 @@
 <div class="rightcolumnbig">
   <div class="searchPack">
     <div class="hdr_Category">Search Preferences:</div>
-    <ul class="search_category">
+    <ul class="search_category" id="editBuyingPreferences">
     </ul>
     <br/>
     <%= form_for(:preference, :url =>{:action=>"preferences",:controller=>"update_preference"}, :html => { :method => :post, :id => "updatePreferencesForm"}) do |f| %>
@@ -141,7 +141,7 @@
       $("#" + fieldId).val(value)
       var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
   <%end%>
-    $(list).appendTo('.search_category');
+    $(list).appendTo('ul#editBuyingPreferences');
 <%end%>
 <%#end%>
 
