@@ -105,6 +105,10 @@
 
     <div id="container">
       <%= render 'shared/header_links' %>
+      <div id="dialog-form" title="Create new user">
+        <%= render "shared/login_dialog"%>
+        <%= render 'shared/show_hide_login_form', :item => "" %>
+      </div>
 
       <%= yield %>
 

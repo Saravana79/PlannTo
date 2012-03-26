@@ -1,0 +1,11 @@
+<script type="text/javascript">
+  <% if current_user.blank? %>
+    Product.login_dialog();
+  <% if !item.blank? %>
+    Product.show_login_dialog("#plan_to_buy_<%= item.id %>, #plan_to_own_<%= item.id %>, #plan_to_follow_<%= item.id %>, #plan_to_buy_select_<%= item.id %> , .sign_in");
+  <% end %>
+  Product.show_login_dialog(".sign_in")
+  <% else %>
+    Product.hide_login_dialog();
+  <% end %>
+</script>

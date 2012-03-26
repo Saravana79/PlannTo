@@ -38,14 +38,14 @@
       <div id="logout_link" style="display:none">
         <ul>
           <li>
-            <%= link_to "Sign In", new_user_session_path %>
+            <%= link_to "Sign In", "#", :class => "sign_in" %>
           </li>
           <li></li>
           <%= link_to "Sign Up", new_registration_path('user') %>
           </li>
         </ul>
       </div>
-      <%= link_to "Sign In", new_user_session_path %>
+      <%= link_to "Sign In", "#", :class => "sign_in" %>
     <% end %>
 
 
