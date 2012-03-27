@@ -10,4 +10,14 @@ class QuestionContentsController < ApplicationController
 			format.js
 		end
 	end	
+
+	def show
+		@questioncontent = QuestionContent.find params[:id]
+		@item = @questioncontent.items[0]
+		respond_to do |format|
+			format.html
+			format.js
+		end
+	end	
+
 end
