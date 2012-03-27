@@ -67,9 +67,11 @@
               <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
             </ul>
           </div >
-          <div style="float:right;">
-            <a style="" href="#" class="btn_submitanswer">Ask Advice</a>
-          </div>
+          <%if can_update_preference?(@buying_plan)%>
+            <div style="float:right;">
+              <a style="" href="#" class="btn_submitanswer">Ask Advice</a>
+            </div>
+          <%end%>
         </div>
 
         <br/><br/>
