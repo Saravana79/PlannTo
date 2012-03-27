@@ -8,23 +8,59 @@ Select Recommendation<input type="text" name="textfield" value="" id="recommenda
     <%= hidden_field_tag "recommendations[item_id]" %>
   <%end%>
   <%= f.hidden_field :user_id, :value => current_user.id %>
-  <%= f.text_area :answer, :rows=>2, :cols=>80, :class => "validate[required] text-input"%><br/>
+  <%= f.text_area :answer, :rows=>2, :cols=>60%><br/>
   <%= f.submit "Give Suggestion", :class=> 'suggestionButton' %>
 <% end %>
 
 <script type="text/javascript">
   jQuery(document).ready(function(){ 
-   // jQuery("#saveAdviceForm").validationEngine();
   });
   $(".suggestionButton").button();
   $(".suggestionButton").click(function (e) {
-    //if ($("#saveAdviceForm").validationEngine('validate'))
-   // {
+    var valid = validateGiveAdviceForm();
+      if (!valid){
+        return false;
+      }
       $.post('/preferences/save_advice',$("#saveAdviceForm").serialize(),null,"script");
       e.preventDefault();
   //  }
     return false;
   });
+
+    function validateGiveAdviceForm(){
+    $('#user_answer_answer').poshytip('destroy')
+    $('#recommendation').poshytip('destroy')
+    var valid = true;
+    if ($("#user_answer_answer").val() == ""){
+      $('#user_answer_answer').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please enter your suggestion.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#user_answer_answer').poshytip('show');
+      valid = false
+      
+    }
+    if ($("#recommendations_item_id").val() == ""){
+
+      $('#recommendation').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select your recommendation.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#recommendation').poshytip('show');
+      valid = false
+    }
+    return valid
+  }
 
 </script>
 <script type="text/javascript">
@@ -32,9 +68,5 @@ Select Recommendation<input type="text" name="textfield" value="" id="recommenda
     "recommendation_list",
     {close:true, addButton: false, url: "/search/preference_items", editMode: false, multiple: true, hidden_field: "recommendations_item_id", search_type_array: ["Mobile", "Car", "AttributeTag"]}
   );
-  jQuery(document).ready(function(){
-    
-  });
-
 </script>
 

@@ -6,65 +6,82 @@
   <%= f.radio_button :plannto_network, false, :checked => true %>
   Plannto Network:
   <%= f.radio_button :plannto_network, true %>
-  <%= f.text_area :question, :rows=>2, :cols=>80, :class => "validate[required] text-input"%><br/>
+  <%= f.text_area :question, :rows=>2, :cols=>60%><br/>
   <%= f.submit "Ask Question", :class=> 'button' %>
 <% end %>
 <script type="text/javascript">
-  jQuery(document).ready(function(){
-    //jQuery("#getAdviceForm").validationEngine();
+  $(document).ready(function(){
+    $('#getAdviceForm').click(function() {
+      var valid = validateGetAdviceForm();
+      if (!valid){
+        return false;
+      }
+    });
   });
+
+  function validateGetAdviceForm(){
+    $('#question_question').poshytip('destroy')
+    if ($("#question_question").val() == ""){
+
+      $('#question_question').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please enter your question.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#question_question').poshytip('show');
+      return false
+    }
+    return true
+  }
   $(".button").button();
 
+  $('#giveAdviceTag ul').empty();
 <%@preferences_list.each do |preference|%>
     var lineHeight = "";
     var searchCriteria = "";
     var tagId = "";
     var searchName = "<%=preference[:search_name]%>"
   <%if preference[:value_type] == "Between"%>
-     var searchCriteria = "<span class='txt_subcategories'>" + "<%=preference[:search_criteria]%>" +"</span>"
-        //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-        var className = "middlebg attributeTag"
-        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-
-      //searchCriteria = "<br/>"
-     // searchCriteria   = searchCriteria + "<%#=preference[:search_criteria]%>"
-     // var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-    //  var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+      //      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+      //     var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
   <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
       searchCriteria = ""
       searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-        var className = "middlebg attributeTag"
-        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-
-    //  var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-   //   var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      var value = searchCriteria
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+      //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
   <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
       var value   = "<%="#{preference[:value]}"%>"
       var selectedList = value.split(',')
-      var searchCriteria = " "
+      var searchCriteria = ""
       var anchorId
-      var spanId = 'removableListofValues' + fieldId
-      searchCriteria = searchCriteria +  "<span id='" + spanId + "'>"
+      searchCriteria = searchCriteria +  ""
+      var spanHTML = ""
       var updatedSearchList= [];
       $.each(selectedList, function(index, value) {
-        anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
-        //updatedSearchList.push( value + "<a id='" + anchorId + "' class='removableList'> x </a>")
+        updatedSearchList.push( value)
       })
+      spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
       searchCriteria = searchCriteria + spanHTML
-     // searchCriteria = searchCriteria + updatedSearchList.toString() +  "</span>"
-   //   var className = "textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-    //  var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
- var className = "middlebg attributeTag"
-        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-      
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+
+
   <%else%>
-
-        var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
-
-    //  var list = "<li id='" +tagId +"' style= 'line-height:35px;' class='textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable' >" + searchName + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
+      var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
   <%end%>
     $(list).appendTo('#giveAdviceTag ul');
 <%end%>
+  //$("#deleteTag").hide()
 
 </script>

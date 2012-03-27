@@ -1,3 +1,7 @@
 $("#giveAdviceDialog").dialog("destroy");
 $("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/give_advice')) %>');
-$("#giveAdviceDialog").dialog({width:400});
+$("#giveAdviceDialog").dialog({width:600,
+close: function(event, ui) {
+    $("#giveAdviceDialog").dialog('destroy');
+    $('#user_answer_answer').poshytip('destroy');
+  }});

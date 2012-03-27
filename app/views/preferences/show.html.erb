@@ -1,5 +1,5 @@
-  <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
-  
+<div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
+
 <script type="text/javascript">
   $('#giveAdviceTag').live('click', function(){
     $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
@@ -90,62 +90,64 @@
             <!-- Answer this question - Start -->
             <div >
               <div class="hdr_Category float_lft margin_lft10">3 Recommendations</div>
-              <div class="float_rgt" style="margin-top:8px;">
-                <a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
-              </div>
+              <%if can_add_recommendation?(@buying_plan)%>
+                <div class="float_rgt" style="margin-top:8px;">
+                  <a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+                </div>
+              <%end%>
             </div>
 
           </div>
           <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
           <!-- Answer this question - End -->
-<%=display_empty_row(@answers.size).html_safe%>
-    <%@answers.each_with_index do |ans, index|%>
-           <!-- Answer - Start -->
-          <div  class="mainContentDiv" id="box_<%=index%>">
+          <%=display_empty_row(@answers.size).html_safe%>
+          <%@answers.each_with_index do |ans, index|%>
+            <!-- Answer - Start -->
+            <div  class="mainContentDiv" id="box_<%=index%>">
 
-            <div class="rate_content float_lft">
-              <a class="bg_ratecontent">100</a>
-              <a class="btn_like" href="#" id="btn_like_inactive"></a>
-              <a class="btn_dislike" href="#"></a>
-            </div>
-            <div  class="float_rgt">
-              <img src="<%=ans.user.get_photo%>" class="userImageSmall" />
-            </div>
-            <div  class="subContentDiv">
-              <div><a class="txt_brown"><%=ans.user.name%> gave a recommendation - <%= time_ago_in_words(ans.created_at)%> ago</a></div>
-              <div class="taggingdiv" style="margin-left:0px;">
-                <ul class="tagging">
-                  <%ans.recommendations.each_with_index do |reco, index|%>
-                  <li class="taggingmain">
+              <div class="rate_content float_lft">
+                <a class="bg_ratecontent">100</a>
+                <a class="btn_like" href="#" id="btn_like_inactive"></a>
+                <a class="btn_dislike" href="#"></a>
+              </div>
+              <div  class="float_rgt">
+                <img src="<%=ans.user.get_photo%>" class="userImageSmall" />
+              </div>
+              <div  class="subContentDiv">
+                <div><a class="txt_brown"><%=ans.user.name%> gave a recommendation - <%= time_ago_in_words(ans.created_at)%> ago</a></div>
+                <div class="taggingdiv" style="margin-left:0px;">
+                  <ul class="tagging">
+                    <%ans.recommendations.each_with_index do |reco, index|%>
+                      <li class="taggingmain">
 
-                    <span ><a class="txt_tagging"><%=reco.item.name%></a><a class="icon_close_tagging" href="#"></a></span>
+                        <span ><a class="txt_tagging"><%=reco.item.name%></a><a class="icon_close_tagging" href="#"></a></span>
 
-                  </li>
-                  <%end%>
+                      </li>
+                    <%end%>
+                  </ul>
+
+                </div>
+                <div class="subContentGap">
+                  <a class="txt_black_description"><%=ans.answer%></a>
+                  <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+                <ul class="divCommentsConent">
+                  <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+                  <li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li>
                 </ul>
 
               </div>
-              <div class="subContentGap">
-                <a class="txt_black_description"><%=ans.answer%></a>
-                <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
-              <ul class="divCommentsConent">
-                <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-                <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                <li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li>
-              </ul>
-
             </div>
-          </div>
-          <!-- Answer - End -->
-     
-    <%end%>
-      
+            <!-- Answer - End -->
+
+          <%end%>
+
         </div>
 
 
@@ -155,140 +157,135 @@
   </div>
 
 
-    <div class="rightcolumnsmall">
+  <div class="rightcolumnsmall">
 
-      <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-        <tr>
-          <td class="bg_widgethdr txt_white">Related Questions</td>
-        </tr>
-        <tr>
-          <td height="252" valign="top">
+    <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+      <tr>
+        <td class="bg_widgethdr txt_white">Related Questions</td>
+      </tr>
+      <tr>
+        <td height="252" valign="top">
 
-            <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-              <tr>
-                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-                <td width="113">
-                  <a href="#" class="txt_black">Renault Pulse</a>
-                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                  <a style="" href="#" class="btn_follow">Follow</a>
-                </td>
-              </tr>
-              <tr>
-                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-              </tr>
+          <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+              <td width="113">
+                <a href="#" class="txt_black">Renault Pulse</a>
+                <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                <a style="" href="#" class="btn_follow">Follow</a>
+              </td>
+            </tr>
+            <tr>
+              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+            </tr>
 
-              <tr>
-                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-                <td width="113">
-                  <a href="#" class="txt_black">Renault Pulse</a>
-                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                  <a style="" href="#" class="btn_follow">Follow</a>
-                </td>
-              </tr>
-              <tr>
-                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-              </tr>
-            </table>
+            <tr>
+              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+              <td width="113">
+                <a href="#" class="txt_black">Renault Pulse</a>
+                <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                <a style="" href="#" class="btn_follow">Follow</a>
+              </td>
+            </tr>
+            <tr>
+              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+            </tr>
+          </table>
 
-          </td>
-        </tr>
-        <tr>
-          <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-        </tr>
-      </table>
+        </td>
+      </tr>
+      <tr>
+        <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+      </tr>
+    </table>
 
-      <!-- Related Cars -- End -->
+    <!-- Related Cars -- End -->
 
-      <br />
+    <br />
 
-      <!-- Related Cars -- Start -->
+    <!-- Related Cars -- Start -->
 
-      <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-        <tr>
-          <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
-        </tr>
-        <tr>
-          <td height="252" valign="top">
+    <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+      <tr>
+        <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
+      </tr>
+      <tr>
+        <td height="252" valign="top">
 
-            <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-              <tr>
-                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-                <td width="113">
-                  <a href="#" class="txt_black">Renault Pulse</a>
-                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                  <a style="" href="#" class="btn_follow">Follow</a>
-                </td>
-              </tr>
-              <tr>
-                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-              </tr>
+          <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+              <td width="113">
+                <a href="#" class="txt_black">Renault Pulse</a>
+                <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                <a style="" href="#" class="btn_follow">Follow</a>
+              </td>
+            </tr>
+            <tr>
+              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+            </tr>
 
-              <tr>
-                <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-                <td width="113">
-                  <a href="#" class="txt_black">Renault Pulse</a>
-                  <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                  <a style="" href="#" class="btn_follow">Follow</a>
-                </td>
-              </tr>
-              <tr>
-                <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-              </tr>
-            </table>
+            <tr>
+              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+              <td width="113">
+                <a href="#" class="txt_black">Renault Pulse</a>
+                <img src="/images/rating_stars.png" width="87" height="20" /><br />
+                <a style="" href="#" class="btn_follow">Follow</a>
+              </td>
+            </tr>
+            <tr>
+              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+            </tr>
+          </table>
 
-          </td>
-        </tr>
-        <tr>
-          <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-        </tr>
-      </table>
+        </td>
+      </tr>
+      <tr>
+        <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+      </tr>
+    </table>
 
-      <!-- Related Cars -- End -->
-    </div>
+    <!-- Related Cars -- End -->
+  </div>
 
-    <script type="text/javascript">
-  <%@preferences_list.each do |preference|%>
-      var lineHeight = "";
-      var searchCriteria = "";
-      var tagId = "";
-      var searchName = "<%=preference[:search_name]%>"
-    <%if preference[:value_type] == "Between"%>
-        searchCriteria = ""
-        searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-        var className = "middlebg attributeTag"
-        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-        //      var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-        //     var list = "<li id='" + tagId + "'" + lineHeight + " class='" + className + "'>" + searchName + searchCriteria + "<a id= 'deleteTag' class='textboxlist-bit-box-deletebutton'></a></li>" ;
-    <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
-        searchCriteria = ""
-        searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-        var value = searchCriteria
-        var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-        //var className = "attributeTag textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable "
-        var className = "middlebg attributeTag"
-        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-    <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
-        var value   = "<%="#{preference[:value]}"%>"
-        var selectedList = value.split(',')
-        var searchCriteria = ""
-        var anchorId
-        searchCriteria = searchCriteria +  ""
-        var spanHTML = ""
-        var updatedSearchList= [];
-        $.each(selectedList, function(index, value) {
-          updatedSearchList.push( value)
-        })
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
-        searchCriteria = searchCriteria + spanHTML
-        var className = "middlebg attributeTag"
-        var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+  <script type="text/javascript">
+<%@preferences_list.each do |preference|%>
+    var lineHeight = "";
+    var searchCriteria = "";
+    var tagId = "";
+    var searchName = "<%=preference[:search_name]%>"
+  <%if preference[:value_type] == "Between"%>
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var value = searchCriteria
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+      var value   = "<%="#{preference[:value]}"%>"
+      var selectedList = value.split(',')
+      var searchCriteria = ""
+      var anchorId
+      searchCriteria = searchCriteria +  ""
+      var spanHTML = ""
+      var updatedSearchList= [];
+      $.each(selectedList, function(index, value) {
+        updatedSearchList.push( value)
+      })
+      spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
+      searchCriteria = searchCriteria + spanHTML
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
 
 
-    <%else%>
-        var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
-    <%end%>
-      $(list).appendTo('ul#buyingPreferences');
+  <%else%>
+      var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
   <%end%>
-    //$("#deleteTag").hide()
-
-    </script>
+    $(list).appendTo('ul#buyingPreferences');
+<%end%>
+  </script>

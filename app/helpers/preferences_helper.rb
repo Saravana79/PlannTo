@@ -13,4 +13,9 @@ module PreferencesHelper
     return current_user == buying_plan.user
   end
 
+  def can_add_recommendation?(buying_plan)
+    return false if !user_signed_in?
+    return current_user != buying_plan.user
+  end
+
 end

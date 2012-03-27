@@ -6,6 +6,7 @@ class PreferencesController < ApplicationController
   end
 
   def show
+    require 'will_paginate/array'
     @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
     @question = @buying_plan.user_question
     @answers = @question.user_answers
@@ -13,7 +14,7 @@ class PreferencesController < ApplicationController
     @preferences_list = Preference.get_items(@preferences)
 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types).group_by(&:followable_type)
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
   end
 
   def add_preference
@@ -22,6 +23,7 @@ class PreferencesController < ApplicationController
   end
 
   def plan_to_buy
+    require 'will_paginate/array'
     follow_type = params["follow_type"]
     unless follow_type == ""
       follow = follow_item(params[:follow_type])
@@ -92,7 +94,7 @@ class PreferencesController < ApplicationController
   def get_follow_items
     @buying_plan = BuyingPlan.find(params[:buying_plan_id])
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types).group_by(&:followable_type)
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
   end
 
   def follow_item(follow_type)
