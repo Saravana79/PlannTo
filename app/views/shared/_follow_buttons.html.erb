@@ -4,25 +4,17 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function(){
-  $(".plan_to_own_icon").addClass("show_review_popup");
-  $(".show_review_popup").live("click", function(){
-      $( "#reviewDiv" ).dialog( "open" );
+    $(document).ready(function () {
+        $(".plan_to_own_icon").addClass("show_review_popup");
+        $(".show_review_popup").live("click", function () {
+            $("#reviewDiv").dialog("open");
+        });
+        $("#reviewDiv").dialog({
+            autoOpen:false,
+            height:300,
+            width:350,
+            modal:true,
+            title:"Review Your Car"
+        });
     });
-  $("#reviewDiv").dialog({
-    autoOpen: false,
-    height: 300,
-    width: 350,
-    modal: true,
-    title: "Invite",
-    buttons: {
-      "Submit": function() {
-          $(this).close();
-        },
-        "Cancel": function() {
-                  $(this).close();
-              }
-      }
-  });
-  });
 </script>
