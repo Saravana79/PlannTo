@@ -1,2 +1,18 @@
  $('#new_review_content')[0].reset();
  // $('#new_review_content #rating').raty('cancel');
+
+//write the dialog box with come contents
+$('<div />').attr('id', 'urlParagraph').text("URL: <a href='#' class ='question'> Answer the Question</a> ").appendTo('#reviewDiv');
+ $("#urlParagraph").dialog({
+     autoOpen:false,
+     height:300,
+     width:350,
+     modal:true,
+     title:"For now sample"
+ });
+ $("#urlParagraph").dialog("open");
+
+
+
+
+
