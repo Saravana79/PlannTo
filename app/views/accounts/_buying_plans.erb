@@ -1,0 +1,9 @@
+<br/>
+<table  width="100%" style="margin-left:55px">
+  <tr class="wheretobuyheadder"><td width="25%" class="wheretobuytitletxt">Title</td><td width="25%" class="wheretobuytitletxtothercolumns">Action</td></tr>
+  <% @buying_plans.each do |buying_plan| %>
+  <tr class="wheretobuyrows"><td width="25%" class="wheretobuytext"><%=buying_plan.try(:user_question).try(:title)%> business days</td><td class="wheretobuytext" style="font-style:bold"><a href="<%=buying_plan.preference_page_url%>">Edit</a></td></tr>
+      <%end%>
+  <tr></tr>
+</table>
+

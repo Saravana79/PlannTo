@@ -2,30 +2,30 @@
 <script type="text/javascript" src="/javascripts/search_profile_car.js"></script>
 <link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
 <script type="text/javascript">
-    $(function() {
-        $('#car_slider').movingBoxes({
-            startPanel   : 1,      // start with this panel
-            width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-            wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-            buildNav     : true,   // if true, navigation links will be added
-            navFormatter : function() {
-                return "&#9679;";
-            } // function which returns the navigation text for each panel
-        });
-        $(".tabing2").click(function() {
-            $('#mobile_slider').movingBoxes({
-                startPanel   : 1,      // start with this panel
-                width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-                wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-                buildNav     : true,   // if true, navigation links will be added
-                navFormatter : function() {
-                    return "&#9679;";
-                } // function which returns the navigation text for each panel
-            });
-        });
-
-
+  $(function() {
+    $('#car_slider').movingBoxes({
+      startPanel   : 1,      // start with this panel
+      width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+      wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+      buildNav     : true,   // if true, navigation links will be added
+      navFormatter : function() {
+        return "&#9679;";
+      } // function which returns the navigation text for each panel
     });
+    $(".tabing2").click(function() {
+      $('#mobile_slider').movingBoxes({
+        startPanel   : 1,      // start with this panel
+        width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+        wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+        buildNav     : true,   // if true, navigation links will be added
+        navFormatter : function() {
+          return "&#9679;";
+        } // function which returns the navigation text for each panel
+      });
+    });
+
+
+  });
 </script>
 
 
@@ -42,17 +42,45 @@
     <h1><%= current_user.name %></h1>
     <br/>
     <ul class="menu_profile">
-      <li><a href="#" class="icon_profile" id="menu_profile_active">Profile</a></li>
-      <li><a href="#" class="icon_prefernce">Preference / Buying Plans</a></li>
+      <li><a href="#" class="icon_profile menu_profile_active">Profile</a></li>
+      <li id="profile_preference_buying_plans"><a href="" class="icon_prefernce">Preference / Buying Plans</a></li>
       <li><a href="#" class="icon_points">Points</a></li>
       <li><a href="#" class="icon_awards">Awards</a></li>
       <li><a href="#" class="icon_followers">Followers</a></li>
     </ul>
   </div>
+  <script type="text/javascript">
+    $("ul.menu_profile li").click(function (e) {
+      $("ul.menu_profile .menu_profile_active").removeClass("menu_profile_active");
+      $(this).closest('li').addClass('menu_profile_active');
+      var id = $(this).attr('id');
+      if (id == "profile_preference_buying_plans"){
+        var url = "/accounts/buying_plans";
+        $.get(url,null,null,"script");
+      }
+      e.preventDefault();
+    });
+
+     /*$('#buyingPlansPaginate div.pagination a').live('click', function(){
+        var page = $(this).text()
+        var current = $('em.current').text();
+        if (page == "← Previous"){
+            page = parseInt(current) -1
+        }
+        else if (page == "Next →"){
+            page = parseInt(current) + 1
+        }
+
+        var url = "/accounts/buying_plans";
+        $.get(url,null,null,"script");
+
+        return false;
+    })*/
+  </script>
   <!-- Left Nav - End -->
 
   <!-- Right - start -->
-  <div class="rightcolumnbig">
+  <div class="rightcolumnbig"  id="profileInfo">
 
     <div style="border:solid 0px red; width:732px; float:left; margin-left:33px; margin-top:30px; ">
       <div style="border:solid 0px green; float:left; width:385px; height:67px; float:left;"></div>
@@ -101,7 +129,7 @@
 </div>
 
 <script type="text/javascript">
-    $("#usual2 ul").idTabs("tabs1");
+  $("#usual2 ul").idTabs("tabs1");
 </script>
 
 

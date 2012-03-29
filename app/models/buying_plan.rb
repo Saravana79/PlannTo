@@ -5,6 +5,10 @@ class BuyingPlan < ActiveRecord::Base
   belongs_to :user
   belongs_to :itemtype
 
+  def preference_page_url
+     return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
+  end
+
   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_BUYING_PLAN_VOTE_KEY_PREFIX}#{self.id}")
     if count.nil?

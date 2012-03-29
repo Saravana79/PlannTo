@@ -31,5 +31,9 @@ class AccountsController < ApplicationController
       format.html {render :layout => "product"}
     end
   end
+
+  def buying_plans
+    @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
+  end
   
 end

@@ -1273,7 +1273,7 @@ h3 {
     padding: 0;
     margin: 0;
     padding-bottom: 15px;
-    border:
+    
 }
 
 h4 {
@@ -2076,6 +2076,10 @@ ul.menu_profile {
 }
 
 #menu_profile_active {
+    background-color: #deeff3;
+}
+
+ul.menu_profile .menu_profile_active {
     background-color: #deeff3;
 }
 
