@@ -2,6 +2,8 @@
   <%= get_follow_types(item, follow_type, follow_html, button_class, {:remote => true, :class => "btn_plantobuy_icon"}) %>
 </div>
 
+<%=  render :partial => "shared/feilds_data_for_answer" %>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $(".plan_to_own_icon").addClass("show_review_popup");
