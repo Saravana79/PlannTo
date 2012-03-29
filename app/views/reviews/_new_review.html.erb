@@ -1,5 +1,5 @@
-<%= form_for ReviewContent.new, :remote => true do |f| %>
-    <div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">
+<div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">
+  <%= form_for ReviewContent.new, :remote => true do |f| %>
         <div style="padding:5px 5px 0px 0px;text-align:center">
             <div class="title_header float_lft">Title :</div>
             <div class="float_lft"> <%= f.text_field :title, :style=> "margin-left:5px;width:400px" %> </div>
@@ -11,7 +11,7 @@
         </div>
 
       <!-- <div class="productreview">
-        
+
       </div> -->
 
         <div style="padding:5px 5px 0px 0px; width:550px;">
@@ -40,9 +40,9 @@
             <%= f.submit 'Share This Review',:class => 'btn_submitanswer'   %>
         <!-- </input> -->
     </div>
-    </div>
     <% end %>
-     <div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;">
+</div>
+<div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;">
         <%= render :partial => 'layouts/article_share' %>
     </div>
 

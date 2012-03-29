@@ -1,0 +1,13 @@
+<% fields = Field.find_all_by_itemtype_id(@item.itemtype_id) %>
+
+<% fields.each do |fn| %>
+        <div>
+          <%= fn.name %>
+          <br/>
+          <%= text_field_tag "field_value[#{fn.id}]"  %>
+        </div>
+
+<% end %>
+
+<%=  submit_tag "Submit" %>
+

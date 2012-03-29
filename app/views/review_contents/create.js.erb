@@ -1,2 +1,31 @@
  $('#new_review_content')[0].reset();
  // $('#new_review_content #rating').raty('cancel');
+
+//write the dialog box with come contents
+$('<div />').attr('id', 'urlParagraph').html("URL: <a href='#' class ='question'> Answer the Question</a> ").appendTo('#reviewDiv');
+ $("#urlParagraph").dialog({
+     autoOpen:false,
+     height:300,
+     width:350,
+     modal:true,
+     title:"For now sample"
+ });
+ $("#reviewDiv").dialog("close");
+ $("#urlParagraph").dialog("open");
+
+ $(".question").live("click", function () {
+     $("#urlParagraph").dialog("close");
+     $("#popup_question_answer").dialog("open");
+ });
+ $("#popup_question_answer").dialog({
+     autoOpen:false,
+     height:300,
+     width:350,
+     modal:true,
+     title:"Question and Answer For Car"
+ });
+
+
+
+
+

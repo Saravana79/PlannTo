@@ -11,12 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120314122307) do
+ActiveRecord::Schema.define(:version => 20120327174641) do
 
   create_table "answer_contents", :force => true do |t|
-    t.integer "question_id"
-    t.string  "format",         :limit => 1
-    t.boolean "mark_as_answer",              :default => false
+    t.integer "question_content_id"
+    t.string  "format",              :limit => 1
+    t.boolean "mark_as_answer",                   :default => false
   end
 
   create_table "answers", :force => true do |t|
@@ -43,13 +43,6 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     t.string  "url"
     t.string  "thumbnail"
     t.integer "article_category_id"
-  end
-
-  create_table "attribute_tag_mapping", :force => true do |t|
-    t.integer "item_id",         :null => false
-    t.integer "attribute_id",    :null => false
-    t.text    "attribute_value", :null => false
-    t.integer "itemtype_id"
   end
 
   create_table "attribute_values", :force => true do |t|
@@ -89,6 +82,12 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     t.boolean  "is_filterable"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "attributesrelationships", :force => true do |t|
+    t.integer "attribute_id", :null => false
+    t.integer "itemtype_id",  :null => false
+    t.integer "Priority",     :null => false
   end
 
   create_table "avatars", :force => true do |t|
@@ -202,6 +201,21 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     t.datetime "updated_at"
   end
 
+  create_table "field_values", :force => true do |t|
+    t.integer  "field_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "fields", :force => true do |t|
+    t.integer  "itemtype_id"
+    t.string   "name"
+    t.string   "field_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "follows", :force => true do |t|
     t.integer  "followable_id",                      :null => false
     t.string   "followable_type",                    :null => false
@@ -261,6 +275,18 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemID",                    :null => false
+    t.text    "URL",                       :null => false
+    t.string  "URLSource", :limit => 2000, :null => false
+  end
+
+  create_table "itemimages", :primary_key => "ID", :force => true do |t|
+    t.integer "ItemId",                    :null => false
+    t.string  "ImageURL",  :limit => 4000, :null => false
+    t.boolean "IsDefault",                 :null => false
   end
 
   create_table "itemrelationships", :force => true do |t|
@@ -488,15 +514,6 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     t.datetime "updated_at"
   end
 
-  create_table "top_contributors", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "object_id"
-    t.string   "object_type"
-    t.integer  "rank"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "user_answers", :force => true do |t|
     t.text     "answer"
     t.integer  "user_id"
@@ -546,6 +563,10 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     t.datetime "updated_at"
     t.string   "name"
     t.integer  "facebook_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
     t.integer  "invitation_id"
   end
@@ -589,7 +610,7 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
-  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`answer_contents`.`question_id` AS `question_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
+  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -599,8 +620,7 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
-    v.column :ip_address
-    v.column :question_id
+    v.column :question_content_id
     v.column :format
     v.column :mark_as_answer
   end
@@ -636,7 +656,7 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     v.column :image_content_updated_at
   end
 
-  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
+  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -646,7 +666,6 @@ ActiveRecord::Schema.define(:version => 20120314122307) do
     v.column :itemtype_id
     v.column :created_at
     v.column :updated_at
-    v.column :ip_address
     v.column :format
     v.column :is_answered
   end
