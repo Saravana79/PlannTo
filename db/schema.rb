@@ -514,6 +514,14 @@ ActiveRecord::Schema.define(:version => 20120327174641) do
     t.datetime "updated_at"
   end
 
+  create_table "top_contributors", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "item_id"
+    t.integer  "rank"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_answers", :force => true do |t|
     t.text     "answer"
     t.integer  "user_id"

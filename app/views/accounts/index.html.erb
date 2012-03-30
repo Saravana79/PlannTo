@@ -41,7 +41,7 @@
         </div>
         <% if !@facebook_user.blank? %>
           <%= image_tag(@facebook_user.endpoint + "/picture") %>
-        <% else %>
+        <% elsif !@user.avatar.blank? %>
           <%= image_tag @user.avatar.photo.url(:thumb) %>
         <% end %>
 
