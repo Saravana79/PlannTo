@@ -31,6 +31,7 @@ PlanNto::Application.routes.draw do
       post :save_advice
       get :update_preference
       get :plan_to_buy
+      get :delete_buying_plan
     end
   end
   resources :cars do

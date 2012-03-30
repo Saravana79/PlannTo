@@ -89,6 +89,12 @@ class PreferencesController < ApplicationController
     @count = UserQuestion.find(:first, :conditions => {:id =>params[:user_question_answers][:user_question_id]}).user_answers.size
   end
 
+  def delete_buying_plan
+    @buying_plan = BuyingPlan.find(params[:id])
+    @buying_plan.destroy
+    render :nothing => true
+  end
+
   private
 
   def get_follow_items

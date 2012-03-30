@@ -1,7 +1,7 @@
 class BuyingPlan < ActiveRecord::Base
   include Extensions::UUID
 
-  has_one :user_question
+  has_one :user_question, :dependent => :destroy
   belongs_to :user
   belongs_to :itemtype
 
