@@ -21,7 +21,7 @@ PlanNto::Application.routes.draw do
     put :update
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
-  match 'preferences/:search_type/:uuid' => 'preferences#show'
+ 
   resources :preferences do
     collection do
       get :give_advice
@@ -32,8 +32,10 @@ PlanNto::Application.routes.draw do
       get :update_preference
       get :plan_to_buy
       get :delete_buying_plan
+      get :update_question
     end
   end
+   match 'preferences/:search_type/:uuid' => 'preferences#show'
   resources :cars do
         resources :shares
   end  

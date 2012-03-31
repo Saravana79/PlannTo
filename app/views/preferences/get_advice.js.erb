@@ -1,9 +1,11 @@
-$("#getAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/get_advice')) %>');
-$("#getAdviceDialog").dialog({
-  title: 'Planning to buy <%=@itemtype.itemtype%>',
+window.location.href = '<%="#{@buying_plan.preference_page_url}"%>'
+
+//$("#getAdviceDialog").html('<%#= escape_javascript(render(:partial => '/preferences/get_advice')) %>');
+/*$("#getAdviceDialog").dialog({
+  title: 'Planning to buy <%#=@itemtype.itemtype%>',
   close: function(event, ui) {
     $("#getAdviceDialog").dialog('destroy');
     $('#question_question').poshytip('destroy');
   },
   width:600});
-$("#question_buying_plan_id").val('<%=@buying_plan.id%>')
+$("#question_buying_plan_id").val('<%#=@buying_plan.id%>')*/

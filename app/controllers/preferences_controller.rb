@@ -56,19 +56,23 @@ class PreferencesController < ApplicationController
 
   def get_advice
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
-    search_attributes = SearchAttribute.where("itemtype_id =?", @itemtype.id)
-    @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+    #search_attributes = SearchAttribute.where("itemtype_id =?", @itemtype.id)
+    @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
     Preference.add_preference(@buying_plan.id, params[:search_type], params)    
-    search_ids = search_attributes.collect{|item| item.id}
-    @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
-    @preferences_list = Preference.get_items(@preferences)
+    #search_ids = search_attributes.collect{|item| item.id}
+    #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
+    #@preferences_list = Preference.get_items(@preferences)
+    @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
+    #@question.title = "Planning to buy a #{@question.buying_plan.itemtype.itemtype}"
+    @question.save
+    #url = "#{@buying_plan.preference_page_url}"
+    #render :nothing => true
   end
 
   def save_advice_question
     @question = UserQuestion.new(params[:question])
     @question.title = "Planning to buy a #{@question.buying_plan.itemtype.itemtype}"
-    @question.save
-    
+    @question.save    
     @question.reload
     redirect_to "/preferences/#{@question.buying_plan.itemtype.itemtype.downcase!}/#{@question.buying_plan.uuid}"
   end
@@ -76,6 +80,13 @@ class PreferencesController < ApplicationController
   def give_advice
     @question = UserQuestion.find_by_id(params[:question_id])
     @user_answer = UserAnswer.new
+  end
+
+  def update_question
+    @question = UserQuestion.find(params[:question_id])
+    @question.question = params[:question]
+    @question.plannto_network = params[:plannto_network]
+    @question.save
   end
 
   def save_advice

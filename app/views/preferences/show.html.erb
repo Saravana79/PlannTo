@@ -1,18 +1,5 @@
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
 
-<script type="text/javascript">
-  $('#giveAdviceTag').live('click', function(){
-    $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
-  })
-
-  $('#editPreferences').live('click', function(e){
-    e.preventDefault()
-    $.get('/preferences/edit_preference',{id: <%=@buying_plan.id%>},null,"script");
-    return false
-  })
-</script>
-
-
 <div id="maincontainer" class="maincontainerCss">
   <!-- Till this will go into main layout and common for all pages.-->
 
@@ -28,11 +15,7 @@
 
     </div>
     <!-- buttons - Start -->
-
-
   </div>
-
-
   <br/><br/>
   <div class="leftcolumnbig">
     <!-- Product Details - Start -->
@@ -48,10 +31,68 @@
           <div><a class="title" href="google.com"><%=@question.title%></a></div>
           <div><a class="txt_brown"><%=@buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%> ago</a></div>
           <div class="subContentGap">
-            <a class="txt_black_description"><%= @question.question.split(' ').slice(0,25).join(' ')%></a>
-            <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+            <div id="displayQuestion">
+              <a class="txt_black_description" id="question_part"><%= @question.question_part%></a>
+              <a href="google.com" class="padding_left10 txt_blue">more...</a>
+              <button onclick="$('#editQuestion').show();$('#displayQuestion').hide();">Edit</button>
+            </div>
+          </div>
+          <div id="editQuestion" style="display:none;">
+            <%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
+              <%=  f.hidden_field :buying_plan_id%><br/>
+              Send to Friends:
+              <%= f.radio_button :plannto_network, false, :checked => true %>
+              Plannto Network:
+              <%= f.radio_button :plannto_network, true %>
+              <%= f.text_area :question, :rows=>2, :cols=>60%><br/>
+              <%= f.submit "Update", :id => "preference_question" %>
+            <% end %>
+          </div>
+
+          <script type="text/javascript">
+            $('#giveAdviceTag').live('click', function(){
+              $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
+            })
+
+            $('#editPreferences').live('click', function(e){
+              e.preventDefault()
+              $.get('/preferences/edit_preference',{id: <%=@buying_plan.id%>},null,"script");
+              return false
+            })
+
+            $('#preference_question').live('click', function(e){
+              $('#question_question').poshytip('destroy')
+              if ($("#question_question").val() == ""){
+                $('#question_question').poshytip({
+                  className: 'tip-darkgray',
+                  content: 'Please enter your question.',
+                  showOn: 'none',
+                  alignTo: 'target',
+                  alignX: 'right',
+                  offsetX: 5,
+                  alignY: 'center'
+                });
+                $('#question_question').poshytip('show');
+                return false
+              }
+              e.preventDefault()
+              $.ajax(
+              {
+                url: "/preferences/update_question",
+                data: {
+                  question_id: <%=@question.id%>,
+                  question: $("#question_question").val(),
+                  plannto_network: $("input[name='question[plannto_network]']:checked").val()
+
+                },
+                type: "get",
+                dataType: "script"
+              });
+              return false
+            });
 
 
+          </script>
           <br/>
           <div style="float:left;">
             <ul class="divCommentsConent">
