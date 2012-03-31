@@ -58,7 +58,7 @@ class PreferencesController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     #search_attributes = SearchAttribute.where("itemtype_id =?", @itemtype.id)
     @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
-    Preference.add_preference(@buying_plan.id, params[:search_type], params)    
+    Preference.update_preferences(@buying_plan.id, params[:search_type], params)
     #search_ids = search_attributes.collect{|item| item.id}
     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     #@preferences_list = Preference.get_items(@preferences)
