@@ -1,4 +1,4 @@
-<div ID="reviewDiv" style="padding:5px 5px 0px 5px;display:none;">
+<div id="reviewDiv" style="padding:5px 5px 0px 5px;display:none;" class="contentSubContainer">
   <%= form_for ReviewContent.new, :remote => true do |f| %>
         <div style="padding:5px 5px 0px 0px;text-align:center">
             <div class="title_header float_lft">Title :</div>
@@ -42,7 +42,7 @@
     </div>
     <% end %>
 </div>
-<div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;">
+<div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;" class="contentSubContainer">
         <%= render :partial => 'layouts/article_share' %>
     </div>
 

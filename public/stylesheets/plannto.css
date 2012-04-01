@@ -2507,3 +2507,90 @@ ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  m
 
 .PlanntoBuyBtn                              {float:right}
 .review_tabs ul li                      {cursor:pointer;}
+
+/*------------------------REVIEW  BLOCK START HERE-----------------------------*/
+.Leftreviewblock { width:727px; float:left; padding:0 0 15px 0;}
+
+/*------------review big tabs----------------*/
+.Reviewbigtabs { width:100%; height:37px; float:left; background:url(../images/tabbg.png) repeat-x left bottom;}
+.Reviewbigtabs a { display:block; width:280px; height:auto; float:right; height:36px; font-size:12px; line-height:37px;
+					background:url(../images/review_tabs.png) no-repeat left -1px; text-align:center; color:#505050;
+					text-decoration:none;  font-weight:bold; font-family:Arial, Helvetica, sans-serif;
+					border:1px solid #cdd3d7; border-bottom:none; position:relative;}
+
+.Reviewbigtabs a span { display:none; height:6px; position:absolute; width:100%; bottom:-6px;
+					   background:url(../images/downarrow.png) no-repeat center bottom; float:left; left:0;}
+
+
+.Reviewbigtabs a:hover { color:#000000;}
+.Reviewbigtabs a.Activetab { background-position:left -37px; text-decoration:none; color: #FFFFFF;
+							border:1px solid #cdd3d7; border-bottom:none;}
+
+.Reviewbigtabs a.Activetab span { display:block;}
+.Reviewbigtabs a.Tabfirst { border-right:none;}
+
+
+.Leftreviewinner { width:725px; float:left; border:1px solid #cdd3d7; border-top:none;
+					background:url(../images/bggray.png) repeat-y left top;}
+
+.Leftreviewinner .Leftnavi { width:163px; float:left;}
+.Leftreviewinner .Leftnavi ul { padding:0; margin:0; list-style:none;}
+.Leftreviewinner .Leftnavi ul li { padding:0; margin:0;}
+
+body { width:auto !important;}
+.Leftreviewinner .Leftnavi ul li a {
+border-bottom:1px solid #cdd3d7; border-right:1px solid #cdd3d7; background:#f2f2f2;
+font-family:Arial, Helvetica, sans-serif; padding:0 0 0 37px; text-decoration:none;
+font-size:11px; color:#646464; height:30px; line-height:30px; display:block; }
+
+.Leftreviewinner .Leftnavi ul li a:hover { background:#FFFFFF; border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Review a { background:#f2f2f2 url(../images/review_tabsicon.png) no-repeat 11px 8px;}
+.Leftreviewinner .Leftnavi ul li.Review a:hover { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px 8px;
+												 border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Review.Active a { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px 8px;
+												 border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+.Leftreviewinner .Leftnavi ul li.Qatab a { background:#f2f2f2 url(../images/review_tabsicon.png) no-repeat 11px -23px;}
+.Leftreviewinner .Leftnavi ul li.Qatab a:hover { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px -23px;
+												 border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Qatab.Active a { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px -23px;
+												 border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+
+.Leftreviewinner .Leftnavi ul li.Tips a { background:#f2f2f2 url(../images/review_tabsicon.png) no-repeat 11px -54px;}
+.Leftreviewinner .Leftnavi ul li.Tips a:hover { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px -54px;
+												 border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Tips.Active a { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px -54px;
+												 border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+
+.Leftreviewinner .Leftnavi ul li.Photos a { background:#f2f2f2 url(../images/review_tabsicon.png) no-repeat 11px -84px;}
+.Leftreviewinner .Leftnavi ul li.Photos a:hover { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px -84px;
+												 border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Photos.Active a { background:#FFFFFF url(../images/review_tabsicon.png) no-repeat 11px -84px;
+												    border-right:1px solid #FFFFFF; font-weight:bold;}
+
+.Leftreviewinner .Leftnavi ul li.Showmore a { background:url(../images/blue_bg.png) repeat-x left -2px;
+											border-bottom:none; color:#b64a3a;}
+
+.Leftreviewinner .Leftnavi ul li.Showmore a:hover { background-position:left bottom; border-right:1px solid #cdd3d7;}
+.Leftreviewinner .Leftnavi ul li.Showmore.Active a
+{ background-position:left bottom; border-right:1px solid #cdd3d7; font-weight:bold;}
+
+
+
+/*------------------------------------------------------------*/
+.Tabsrightcontent { width:524px; float:right; padding:20px 20px 6px 0;}
+
+.Textarea { background:url(../images/input_bg.png) repeat-x left top; border:1px solid #c7ccd0;
+			padding:8px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#c3c3c3;}
+
+textarea { outline:none;}

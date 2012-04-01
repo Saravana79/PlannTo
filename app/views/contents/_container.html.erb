@@ -1,0 +1,73 @@
+<!--Write a review share to a friend-->
+<div class="Leftreviewblock">
+
+  <!--write tab start here-->
+  <div class="Reviewbigtabs">
+    <a href="#" class="">Share  to a Friend<span></span></a>
+    <a href="#" class="Activetab Tabfirst">Write a Review<span></span></a>
+
+  </div>
+  <!--write tab end here-->
+
+
+  <div class="Leftreviewinner">
+
+    <!--left navigation-->
+    <div class="Leftnavi" id="contentContainer">
+      <ul>
+        <li class="Review Active" id="contentReview"><a href="#">Reviews</a></li>
+        <li class="Qatab" id="contentQanda"><a href="#">Q&amp;A </a></li>
+        <li class="Tips" id="contentTips"><a href="#">Tips</a></li>
+        <li class="Photos" id="contentPhotos"><a href="#">Photo</a></li>
+        <li class="Showmore" id="contentShowmore"><a href="#" class="Showplus">Show more</a></li>
+        <li class="Tips" id="contentShare" style="display:none;"><a href="#">Share Article/Video</a></li>
+
+
+      </ul>
+    </div>
+    <!--left navigation-->
+
+
+    <div class="Tabsrightcontent">
+      <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="reviewContainer" class="contentSubContainer">What do you think of this car?
+      </textarea>
+      <%= render :partial => 'reviews/new_review' %>
+      <%= render :partial => 'question_contents/new_question_content' %>
+      <%= render :partial => 'tips/new_tip' %>
+
+    </div>
+
+  </div>
+
+
+
+
+
+</div>
+<!--Write a review share to a friend-->
+<script type="text/javascript">
+  $("div#contentContainer ul li").click(function (e) {
+    $("div#contentContainer ul li").removeClass("Active");
+    $(".contentSubContainer").hide();
+    $(this).closest('li').addClass('Active');
+    var id = $(this).attr('id');
+     
+    if (id == "contentShowmore"){
+      $("#contentShare").show();
+    }
+    else if (id == "contentShare"){
+      $("#ShareURLDiv").show();
+    }
+    else if (id == "contentReview"){
+      $("#reviewDiv").show();
+    }
+    else if (id == "contentReview"){
+      $("#reviewContainer").show();
+    }
+    else if (id == "contentQanda"){
+      $("#question_contentDiv").show();
+
+    }
+    e.preventDefault();
+  });
+</script>
