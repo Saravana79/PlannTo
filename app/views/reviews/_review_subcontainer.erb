@@ -1,0 +1,44 @@
+<div id="reviewSubContainer" class="contentSubContainer">
+  <%= form_for ReviewContent.new, :remote => true do |f| %>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Title :</div>
+      <div class="float_lft"> <%= f.text_field :title, :style=> "margin-left:5px;width:400px" %> </div>
+    </div>
+    <div class="productreview" style="clear:both;">
+      <div class="title_header float_lft">Rating :</div>
+      <!-- <img src="/images/rating_stars.png" style="padding-left:3px;"/> -->
+      <div id="rating" class="thereisnosuchclass"></div>
+    </div>
+
+    <!-- <div class="productreview">
+
+    </div> -->
+
+    <div style="padding:5px 5px 0px 0px; width:550px;">
+      <div class="title_header float_lft">Pros :</div>
+      <%= f.text_field :pros,:style => "margin-left:5px;width:400px;",:placeholder => "Start typing to get recommendations..." %>
+    </div>
+    <div style="padding:5px 5px 0px 0px; width:550px;">
+      <div class="title_header float_lft">Cons :</div>
+      <%= f.text_field :cons,:style => "margin-left:5px;width:400px;",:placeholder => "Start typing to get recommendations..." %>
+    </div>
+    <div style="padding:5px 5px 0px 5px;">
+      <div class="title_header float_lft">Description :</div>
+      <div>
+        <%= f.text_area :description, :class=>"textFilling", :style => "width:500px;height:50px;"  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 80px; width:350px; ">
+      Would you recommend this product to your friend
+      <button class="btn_follow review_content_reco" type="button" value="true" > Yes </button>
+      <button class="btn_follow review_content_reco" type="button" value="false" > No </button>
+      <%= f.hidden_field :recommend_this, :value => "" %>
+    </div>
+  <%#= f.hidden_field :item, :value => @item.id %>
+    <input id="review_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
+      <%= f.submit 'Share This Review',:class => 'btn_submitanswer'   %>
+      <!-- </input> -->
+    </div>
+  <% end %>
+</div>
