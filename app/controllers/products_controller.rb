@@ -22,6 +22,7 @@ class ProductsController < ApplicationController
     @review = ReviewContent.new
     @article=ArticleContent.new(:itemtype_id => @item.itemtype_id)
     @questions = QuestionContent.all
+    @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
 
     @top_contributors = @item.get_top_contributors
     

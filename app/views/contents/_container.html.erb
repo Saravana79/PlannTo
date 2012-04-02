@@ -3,8 +3,8 @@
 
   <!--write tab start here-->
   <div class="Reviewbigtabs">
-    <a href="#" class="">Submit a Review<span></span></a>
-    <a href="#" class="Activetab Tabfirst">Write a Review<span></span></a>
+    <a href="#" class="" id="contentSubmit">Submit a Review<span></span></a>
+    <a href="#" class="Activetab Tabfirst" id="contentWrite">Write a Review<span></span></a>
 
   </div>
   <!--write tab end here-->
@@ -20,7 +20,7 @@
         <li class="Tips" id="contentTips"><a href="#">Tips</a></li>
         <li class="Photos" id="contentPhotos"><a href="#">Photo</a></li>
         <li class="Showmore" id="contentShowmore"><a href="#" class="Showplus">Show more</a></li>
-        <li class="Tips" id="contentShare" style="display:none;"><a href="#">Share Article/Video</a></li>
+        <!--<li class="Tips" id="contentShare" style="display:none;"><a href="#">Share Article/Video</a></li>-->
 
 
       </ul>
@@ -29,8 +29,8 @@
 
 
     <div class="Tabsrightcontent">
-     <!-- <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="reviewContainer" class="contentSubContainer">What do you think of this car?
-      </textarea>-->
+      <!-- <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="reviewContainer" class="contentSubContainer">What do you think of this car?
+       </textarea>-->
       <%= render :partial => 'reviews/review_subcontainer' %>
       <%= render :partial => 'reviews/new_review' %>
       <%= render :partial => 'question_contents/new_question_content' %>
@@ -52,24 +52,46 @@
     $(".contentSubContainer").hide();
     $(this).closest('li').addClass('Active');
     var id = $(this).attr('id');
-     
     if (id == "contentShowmore"){
-      $("#contentShare").show();
+      // $("#contentShare").show();
     }
     else if (id == "contentShare"){
       $("#ShareURLDiv").show();
     }
     else if (id == "contentReview"){
       $("#reviewSubContainer").show();
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
       // $("#reviewContainer").show();
     }
     else if (id == "contentTips"){
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::TIPS)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
       $("#tipDiv").show();
     }
     else if (id == "contentQanda"){
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
-
     }
+    e.preventDefault();
+  });
+
+  $("div.Reviewbigtabs a#contentSubmit").click(function (e) {
+    $("div.Reviewbigtabs a#contentWrite").removeClass("Activetab")
+    $(this).addClass("Activetab")
+    $(".contentSubContainer").hide();
+
+    $("#ShareURLDiv").show();
+    e.preventDefault();
+  });
+
+  $("div.Reviewbigtabs a#contentWrite").click(function (e) {
+    $("div.Reviewbigtabs a#contentSubmit").removeClass("Activetab")
+    $(this).addClass("Activetab")
+    $("#ShareURLDiv").hide();
+    $("div#contentContainer ul li.Active").trigger("click");
+  
     e.preventDefault();
   });
 </script>

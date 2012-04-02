@@ -1,4 +1,8 @@
 class ArticleCategory < ActiveRecord::Base
+
+  REVIEWS = "Reviews"
+  TIPS = "Tips"
+  QANDA = "Q&A"
   has_one :article_content
   belongs_to :itemtype
   validates_uniqueness_of :name, :scope => [:itemtype_id]
