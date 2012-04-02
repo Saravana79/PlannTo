@@ -87,17 +87,17 @@
 
   <span class="planetobuy">
       <a class="icon_planetobuy"></a>
-      <a class="txt_planetobuy">Plane to buy <br /><b><%= @item.get_followers("Buyer").count %></b></a>
+      <a class="txt_planetobuy">Plane to buy <br /><b><%= @item.get_followers("Buyer").split(",").count %></b></a>
   </span>
     
   <span class="iwonit">
       <a class="icon_iwonit"></a>
-      <a class="txt_iwonit">I won it <br /> <b><%= @item.get_followers("Owner").count %></b></a>
+      <a class="txt_iwonit">I won it <br /> <b><%= @item.get_followers("Owner").split(",").count %></b></a>
   </span>
   
   <span class="ifollow">
       <a class="icon_ifollow" ></a>
-      <a class="txt_ifollow">I Follow <br /> <b><%= @item.get_followers("Follow").count %></b></a>
+      <a class="txt_ifollow">I Follow <br /> <b><%= @item.get_followers("Follow").split(",").count %></b></a>
   </span>
   
 </div>

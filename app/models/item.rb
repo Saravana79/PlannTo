@@ -1,6 +1,7 @@
 require 'json'
 class Item < ActiveRecord::Base
   self.inheritance_column ='type'
+  REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
@@ -65,14 +66,20 @@ class Item < ActiveRecord::Base
   end
 
   def get_followers(follow_type=nil)
-    related_iteams = followers_by_type('User')
-    unless follow_type.blank?
-      related_iteams.where("follows.follow_type" => follow_type)
-    else
-      related_iteams.where("follows.follow_type" => [Follow::ProductFollowType::Buyer,
-          Follow::ProductFollowType::Owner,
-          Follow::ProductFollowType::Follow])
-    end
+      related_iteams = followers_by_type('User')
+      unless follow_type.blank?
+        unless related_items_get = $redis.hget("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{id}", follow_type)
+          related_iteams = related_iteams.where("follows.follow_type" => follow_type).map(&:id).join(",")
+          $redis.hset("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{id}", follow_type, related_iteams)
+          related_iteams
+        else
+          related_items_get
+        end
+      else
+          related_iteams.where("follows.follow_type" => [Follow::ProductFollowType::Buyer,
+                                                         Follow::ProductFollowType::Owner,
+                                                         Follow::ProductFollowType::Follow])
+        end
   end
 
   def priority_specification
