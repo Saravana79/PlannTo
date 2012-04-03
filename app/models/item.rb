@@ -34,7 +34,7 @@ class Item < ActiveRecord::Base
   }
 
   acts_as_followable
-  acts_as_rateable
+  # acts_as_rateable
 
   searchable :auto_index => true, :auto_remove => true  do
 
@@ -201,8 +201,14 @@ class Item < ActiveRecord::Base
     ((self.average_rating * 2).round) / 2.0
   end
 
+  def average_rating
+    reviews = self.contents.where(:type => 'ReviewContent' )
+    return 0 if reviews.empty?
+    reviews.inject(0){|sum,review| sum += review.rating} / reviews.size.to_f
+  end  
+
   def rated_users_count
-    Rating.where(:rateable_id => self.id, :rateable_type => 'Item').count
+   self.contents.where(:type => 'ReviewContent').count
   end  
   
   def itemtypetag
