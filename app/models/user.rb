@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :trackable, :validatable
 
+  REDIS_USER_DETAIL_KEY_PREFIX = "user_details_"
+
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token
   attr_accessor :follow_type
@@ -51,9 +53,21 @@ class User < ActiveRecord::Base
   end
 
   def get_photo(type = :thumb)
-    return avatar.photo.url(type) unless avatar.blank?
-    return (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?
-    return "/images/photo_profile.png"
+    unless user_details = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url")
+      user_details = avatar.photo.url(type) unless avatar.blank?
+      user_details = (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?
+      user_details = "/images/photo_profile.png" if user_details.blank?
+      $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url", user_details)
+    end
+    user_details
+  end
+
+  def name
+    unless u_name = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name")
+      u_name = super
+      $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name", u_name)
+    end
+    u_name
   end
 
   def total_points

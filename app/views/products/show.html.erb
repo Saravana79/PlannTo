@@ -19,8 +19,8 @@
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>
     <a class="txt_normal">Ratings
-      <span class="txt_blue"> <%= "(" + pluralize(@item.contents.where(:type => 'ReviewContent').count,'Review') + ")" if @item.contents.where(:type => 'ReviewContent').count > 0 %></span>
-      <span class="txt_blue"> <%= "Be the first one to rate it" unless @item.contents.where(:type => 'ReviewContent').count > 0 %></span>
+      <span class="txt_blue"> <%= "(" + pluralize(@item.rated_users_count,'Review') + ")" if @item.rated_users_count > 0 %></span>
+      <span class="txt_blue"> <%= "Be the first one to rate it" unless @item.rated_users_count > 0 %></span>
     </a><br />
     <a class="txt_normal"><%=display_specifications(@item)%>
       <%= link_to("...Detailed Specification", "#tab5", :class => 'txt_blue', :id => "detailed_specification") %>
@@ -87,17 +87,17 @@
 
   <span class="planetobuy">
       <a class="icon_planetobuy"></a>
-      <a class="txt_planetobuy">Plane to buy <br /><b><%= @item.get_followers("Buyer").count %></b></a>
+      <a class="txt_planetobuy">Plane to buy <br /><b><%= @item.get_followers("Buyer").split(",").count %></b></a>
   </span>
     
   <span class="iwonit">
       <a class="icon_iwonit"></a>
-      <a class="txt_iwonit">I won it <br /> <b><%= @item.get_followers("Owner").count %></b></a>
+      <a class="txt_iwonit">I won it <br /> <b><%= @item.get_followers("Owner").split(",").count %></b></a>
   </span>
   
   <span class="ifollow">
       <a class="icon_ifollow" ></a>
-      <a class="txt_ifollow">I Follow <br /> <b><%= @item.get_followers("Follow").count %></b></a>
+      <a class="txt_ifollow">I Follow <br /> <b><%= @item.get_followers("Follow").split(",").count %></b></a>
   </span>
   
 </div>
