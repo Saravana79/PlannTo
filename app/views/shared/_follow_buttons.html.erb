@@ -2,7 +2,7 @@
   <%= get_follow_types(item, follow_type, follow_html, button_class, {:remote => true, :class => "btn_plantobuy_icon"}) %>
 </div>
 
-<%=  render :partial => "shared/feilds_data_for_answer", :item => item %>
+<%=  render :partial => "shared/feilds_data_for_answer", :locals => {:item => item} %>
 
 <script type="text/javascript">
     $(document).ready(function () {
