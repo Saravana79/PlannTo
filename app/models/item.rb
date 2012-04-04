@@ -245,7 +245,8 @@ class Item < ActiveRecord::Base
    contents =[]
    idstr= ids.is_a?(Array) ? ids.join(',') : ids
    redis_key = "related_content_#{idstr}"
-   value = $redis.get redis_key
+   #value = $redis.get redis_key
+   value = nil
    if value.nil?
    items = Item.find_all_by_id(ids)
    items.each do |item|
