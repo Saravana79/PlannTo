@@ -20,4 +20,9 @@ module ContentsHelper
     END
   end
 
+  def time_ago_format(content)
+    return "0 minutes" if content.try(:updated_at).nil?
+    return time_ago_in_words(content.updated_at)
+  end
+
 end
