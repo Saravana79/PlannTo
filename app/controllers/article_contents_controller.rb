@@ -2,7 +2,9 @@ class ArticleContentsController < ApplicationController
   before_filter :authenticate_user!
 
   def create
+    #not used anywhere
     @item_id = params[:item_id]
+    #for bookmark
     @external = params[:external]
     ids = params[:articles_item_id]
     @article=ArticleContent.saveContent(params[:article_content],current_user,ids)
@@ -22,9 +24,6 @@ class ArticleContentsController < ApplicationController
       @article=ArticleContent.create(params[:article_content])
     else
       @article,@images = ArticleContent.CreateContent(url,current_user)
-    end
-    respond_to do |format|
-      format.js {render :partial => "download"}
     end
   end # action ends here
   

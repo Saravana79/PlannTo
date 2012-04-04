@@ -1,0 +1,170 @@
+<div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;" class="contentSubContainer">
+  <%= form_for(@article, :as => :article_content,:html => { :id => "new_article_content" }, :url => download_article_contents_path, :remote => true) do |f| %>
+    <div id="article_errors" style="display:none"></div>
+    <%= hidden_field_tag 'articles_item_id' %>
+    <%= f.hidden_field :type, :id => "new_article_type" %>
+    <%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
+    <%= hidden_field_tag 'external', @external %>
+    <div style="padding:5px 5px 0px 0px;clear:both;">
+      <% if content_category == true %>
+        <div style="float:left">
+          <div class="title_header float_lft">Content Category :</div>
+          <div class="float_lft">
+            <% val = @item.blank? ? 0 : @item.itemtype_id %>
+            <%= f.select :article_category_id, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.id]  }  %>
+          </div>
+        </div>
+      <%else%>
+        <%=f.hidden_field :article_category_id%>
+      <%end%>
+      <div style="clear:both;"></div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;clear:both;">
+      <div class="title_header float_lft" ><%= f.label :url %> :</div>
+      <div class="float_lft"><%= f.text_field :url, :id => 'article_content_url', :style => "margin-left:5px;width:400px" %></div>
+      <div style="clear:both;"></div>
+    </div >
+    <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url">
+      <div class="title_header float_lft" >Title :</div>
+      <div class="float_lft"><%= f.text_field :title, :id => "txtArticleTitle", :style => "margin-left:5px;width:400px" %></div>
+
+    </div >
+    <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="dwnld_url article_image">
+      <div class="title_header float_lft article_image">Thumbnail :</div>
+      <img id="img_thumb" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+      <div class="float_lft article_image"><input type="checkbox" >Don't Include Thumbnail</input></div>
+    </div>
+    <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
+      <div class="title_header float_lft article_image"></div>
+      <div class="float_lft article_image">
+        <span id="current_image_size"></span> <br />
+        <span id="current_image" class="txt_blue">0</span>/ <span id="total_images" class="txt_blue">0</span> &nbsp;
+        <a id="aPrev" class="txt_blue">Prev</a>
+        <a id="aNext" class="txt_blue">Next</a>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="dwnld_url">
+      <div class="title_header float_lft" >Description :</div>
+      <div> <%= f.text_area :description, :id => "txtArticleDescription", :style => "width:570px;height:50px;" %></div>
+    </div>
+
+    <div style="padding:5px 5px 0px 0px;clear:both;">
+      <div class="title_header float_lft">Product  :</div>
+      <div class="taggingdiv" style="margin-left:5px;">
+        <ul id="article_product_list" class="tagging"></ul>
+        <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="article_product"/></div>
+        <div style="clear:both;"></div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
+      <%= f.submit "Share this content", :id => "submit_article", :class => "btn_submitanswer" %>
+      <% unless @external.blank? %>
+        <%= link_to_function "Cancel","window.open('', '_self', '');
+    window.close();", :class => "btn_submitanswer"	%>
+      <% end %>
+      <div style="clear:both;"></div>
+    </div>
+    <input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="1" />
+    <div id="url_content_desc">	</div>
+
+  <% end %>
+</div>
+<script type="text/javascript">
+  var MIN_SIZE=[100,100];
+  var first=false;
+  var images_index=0;
+  var images = new Array();
+  var sizes = new Array();
+  function validateUrl(url)
+  {
+    var regexp = /((ftp|http|https):\/\/)?(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(url);
+  }
+  $(function(){
+    $('#submit_article').live('click',function(){
+      if($('#article_content_url').val() && validateUrl($('#article_content_url').val())){
+        $('form#new_article_content').attr('action','<%= article_contents_path %>');
+      } else {
+        return false;
+      }
+    });
+    $('#article_content_url').keyup(function(){
+      if($('#article_content_url').val() && validateUrl($('#article_content_url').val())){
+        $('form#new_article_content').attr('action','<%= download_article_contents_path  %>');
+        $('form#new_article_content').submit();
+      } else {
+        $('div.dwnld_url').hide();
+      }
+    });
+    $('#aPrev').live("click",function(){
+      if(images  && images.length>0 && images_index>0 ){
+        images_index--;
+        $('#current_image').html(images_index+1);
+        $("#img_thumb").attr("src",images[images_index]);
+        $('#current_image_size').html(sizes[images_index]);
+        $("#new_article_thumbnail").val(images[images_index]);
+      }
+    });
+    $('#aNext').live("click",function(){
+      if(images && images.length>0 && images_index<images.length-1 ){
+        images_index++;
+        $('#current_image').html(images_index+1);
+        $('#current_image_size').html(sizes[images_index]);
+        $("#img_thumb").attr("src",images[images_index]);
+        $("#new_article_thumbnail").val(images[images_index]);
+      }
+    });
+    settings={
+      close:true, addButton: false,
+      url: "/search/autocomplete_items",
+      editMode: false, multiple: true,
+      hidden_field: "articles_item_id"
+    };
+    $.textTagger("article_product","article_product_list",settings);
+<% unless @item.blank? %>
+      $.addTag("article_product","article_product_list", settings,"<%= @item.name %>", "<%= @item.id %>");
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+      $("ul#article_product_list li:first span a.icon_close_tagging").remove();
+<% end %>
+
+<% unless @article.url.blank? %>
+  <%= render "article_contents/download.js" %>
+<% end %>
+  });
+
+  function check_imagesize_on_load(url){
+    var img = new Image();
+    img.onload = function() {
+      if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1])
+        add_image_to_list(url,[this.width,this.height]);
+    }
+    img.src = url;
+  }
+  function add_image_to_list(url,size){
+    images.push(url);
+    sizes.push(size[0]+"*"+size[1]);
+    if(first){
+      first=false;
+      $("#img_thumb").attr("src",url);
+      $("#new_article_thumbnail").val(url);
+      $("#img_thumb").show();
+      $(".article_image").show();
+      $('#current_image_size').html(size[0]+"*"+size[1]);
+      $('#current_image').html(1);
+      images_index=0;
+    }
+
+    $('#total_images').html(images.length);
+  }
+
+  function unescapeHTML(html) {
+    return $("<div />").html(html).text();
+  }
+  function escapeHTML(html) {
+    return $("<div />").text(html).html();
+  }
+
+</script>
+
+

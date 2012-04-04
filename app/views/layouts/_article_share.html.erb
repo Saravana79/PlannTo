@@ -22,9 +22,9 @@
 		<div class="title_header float_lft">Content Category :</div>
                 <div class="float_lft" style="display:none">
 			<% val = @item.blank? ? 0 : @item.itemtype_id %>
-			<%#= f.select :article_category_id, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.id]  }  %>
+			<%= f.select :article_category_id, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.id]  }  %>
 		</div>
-                <%=f.hidden_field :article_category_id%>
+                <%#=f.hidden_field :article_category_id%>
 	</div>
 	<div style="clear:both;"></div>	
 </div>
