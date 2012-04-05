@@ -15,11 +15,17 @@
     <!--left navigation-->
     <div class="Leftnavi" id="contentContainer">
       <ul>
-        <li class="Review Active" id="contentReview"><a href="#">Reviews</a></li>
+        <%article_categories.each_with_index do |article_category, index|%>
+          <%if index == 3%>
+            <li class="Showmore" id="contentShowmore"><a href="#" class="Showplus">Show more</a></li>
+          <%end%>
+          <li class="<%if index==0%>Active<%end%> <%=get_content_container_class(article_category[0])%>" id="content<%=article_category[0]%>" <%if index >2%> style="display:none;"<%end%>><a href="#"><%=article_category[0]%></a></li>
+        <%end%>
+        <!--<li class="Review Active" id="contentReview"><a href="#">Reviews</a></li>
         <li class="Qatab" id="contentQanda"><a href="#">Q&amp;A </a></li>
         <li class="Tips" id="contentTips"><a href="#">Tips</a></li>
         <li class="Photos" id="contentPhotos"><a href="#">Photo</a></li>
-        <li class="Showmore" id="contentShowmore"><a href="#" class="Showplus">Show more</a></li>
+        <li class="Showmore" id="contentShowmore"><a href="#" class="Showplus">Show more</a></li>-->
         <!--<li class="Tips" id="contentShare" style="display:none;"><a href="#">Share Article/Video</a></li>-->
 
 
@@ -53,13 +59,18 @@
     $(".contentSubContainer").hide();
     $(this).closest('li').addClass('Active');
     var id = $(this).attr('id');
-    if (id == "contentShowmore"){
-      // $("#contentShare").show();
+    if (id != "contentShowmore"){
+      setUpContentWrite($(this).text())
+      setUpContentSubmit($(this).text())
+    }
+    if (id == "contentShowmore"){     
+      $("div#contentContainer ul li").show();
+      $("#contentShowmore").hide();
     }
     else if (id == "contentShare"){
       $("#ShareURLDiv").show();
     }
-    else if (id == "contentReview"){
+    else if (id == "contentReviews"){
       $("#reviewSubContainer").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
@@ -70,7 +81,7 @@
       $("#article_content_article_category_id").val(article_category_id)
       $("#tipDiv").show();
     }
-    else if (id == "contentQanda"){
+    else if (id == "contentQ&A"){
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
       $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
@@ -95,4 +106,40 @@
   
     e.preventDefault();
   });
+
+  function setUpContentWrite(label){
+    var contentWrite = ""
+    switch(label){
+      case 'Reviews': contentWrite= "Write a Review";break;
+      case 'Q&A': contentWrite= "Ask a Question";break;
+      case 'Tips': contentWrite= "Add a Tip";break;
+      case 'Accessories': contentWrite= "Add a Accessory";break;
+      case 'Photo': contentWrite= "Add a Photo";break;
+      case 'News': contentWrite= "Add a News";break;
+      case 'Deals': contentWrite= "Add a deal";break;
+      case 'Event': contentWrite= "Add a Event";break;
+      case 'How To/KBs': contentWrite= "Add a HowTo/KB";break;
+      case 'Book': contentWrite= "Add a Book";break;
+      case 'Apps': contentWrite= "Add an Apps";break;
+    }
+    $("#contentWrite").text(contentWrite);
+  }
+
+  function setUpContentSubmit(label){
+    var contentWrite = ""
+    switch(label){
+      case 'Reviews': contentWrite= "Submit a Review";break;
+      case 'Q&A': contentWrite= "Submit a Questions & Answer";break;
+      case 'Tips': contentWrite= "Submit a Tip";break;
+      case 'Accessories': contentWrite= "Submit an Accessory";break;
+      case 'Photo': contentWrite= "Submit a Photo";break;
+      case 'News': contentWrite= "Submit a Latest News";break;
+      case 'Deals': contentWrite= "Submit a deal";break;
+      case 'Event': contentWrite= "Submit a Event";break;
+      case 'How To/KBs': contentWrite= "Submit a HowTo/KB";break;
+      case 'Book': contentWrite= "Submit a book";break;
+      case 'Apps': contentWrite= "Submit an Apps";break;
+    }
+    $("#contentSubmit").text(contentWrite);
+  }
 </script>

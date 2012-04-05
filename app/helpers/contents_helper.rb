@@ -1,16 +1,16 @@
 module ContentsHelper
 
   def render_content_type(item)
-   case item.type
-       when "ArticleContent" 
-         render :partial => "contents/article", :locals => { :content => item }
-       when "VideoContent" 
-         render :partial => "contents/video", :locals => { :content => item }
-       when "QuestionContent" 
-           render :partial => "contents/question", :locals => { :content => item }  
-       when "ReviewContent" 
-         render :partial => "contents/review", :locals => { :content => item }    
-       end
+    case item.type
+    when "ArticleContent"
+      render :partial => "contents/article", :locals => { :content => item }
+    when "VideoContent"
+      render :partial => "contents/video", :locals => { :content => item }
+    when "QuestionContent"
+      render :partial => "contents/question", :locals => { :content => item }
+    when "ReviewContent"
+      render :partial => "contents/review", :locals => { :content => item }
+    end
   end
   
   def render_comments_anchor(item)
@@ -23,6 +23,53 @@ module ContentsHelper
   def time_ago_format(content)
     return "0 minutes" if content.try(:updated_at).nil?
     return time_ago_in_words(content.updated_at)
+  end
+
+  def get_content_container_class(article_category)
+    class_name = case article_category
+    when "Reviews" then "Review"
+    when "Q&A" then "Qatab"
+    when "Tips" then "Tips"
+    when "Photos" then "Photo"
+    else ""
+    end
+    return class_name
+  end
+
+  def content_write_tab_label(name)
+    label = case name
+    when "Reviews" then "Write a Review"
+    when "Q&A" then "Ask a Question"
+    when "Tips" then "Add a Tip"
+    when "Accessories" then "Add a Accessory"
+    when "Photo" then "Add a Photo"
+    when "News" then "Add a News"
+    when "Deals" then "Add a deal"
+    when "Event" then "Add a Event"
+    when "How To/KBs" then "Add a HowTo/KB"
+    when "Book" then "Add a Book"
+    when "Apps" then "Add an Apps"
+    else ""
+    end
+    return label
+  end
+
+  def content_submit_tab_label(name)
+    label = case name
+    when "Reviews" then "Submit a Review"
+    when "Q&A" then "Submit a Questions & Answer"
+    when "Tips" then "Submit a Tip"
+    when "Accessories" then "Submit an Accessory"
+    when "Photo" then "Submit a Photo"
+    when "News" then "Submit a Latest News"
+    when "Deals" then "Submit a deal"
+    when "Event" then "Submit a Event"
+    when "How To/KBs" then "Submit a HowTo/KB"
+    when "Book" then "Submit a book"
+    when "Apps" then "Submit an Apps"
+    else ""
+    end
+    return label
   end
 
 end
