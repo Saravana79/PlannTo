@@ -8,7 +8,6 @@ class ArticleContentsController < ApplicationController
     @external = params[:external]
     ids = params[:articles_item_id]
     @article=ArticleContent.saveContent(params[:article_content],current_user,ids)
-  
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
     flash[:notice]= "Article uploaded"

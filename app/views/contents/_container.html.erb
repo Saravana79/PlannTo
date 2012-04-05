@@ -86,6 +86,10 @@
       $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
     }
+
+    //set active tab
+    $("div.Reviewbigtabs a#contentSubmit").removeClass("Activetab")
+    $("div.Reviewbigtabs a#contentWrite").addClass("Activetab")
     e.preventDefault();
   });
 
@@ -98,9 +102,7 @@
     e.preventDefault();
   });
 
-  $("div.Reviewbigtabs a#contentWrite").click(function (e) {
-    $("div.Reviewbigtabs a#contentSubmit").removeClass("Activetab")
-    $(this).addClass("Activetab")
+  $("div.Reviewbigtabs a#contentWrite").click(function (e) {    
     $("#ShareURLDiv").hide();
     $("div#contentContainer ul li.Active").trigger("click");
   
