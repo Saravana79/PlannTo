@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   layout "product"
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
+  after_filter  :cache_follow_items, :only => [:follow_item_type]
 
   #before_filter :authenticate_user!
   # GET /items
@@ -222,6 +223,13 @@ class ItemsController < ApplicationController
       false
     end
 
+  end
+
+
+  def cache_follow_items
+    unless current_user.blank?
+       @item.cache_follow_items(current_user)
+    end
   end
 
 end
