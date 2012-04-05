@@ -97,7 +97,9 @@
     $("div.Reviewbigtabs a#contentWrite").removeClass("Activetab")
     $(this).addClass("Activetab")
     $(".contentSubContainer").hide();
-
+    $("#article_errors").hide();
+    $('#article_content_url').val('');
+    $('#article_content_url').keyup();
     $("#ShareURLDiv").show();
     e.preventDefault();
   });
