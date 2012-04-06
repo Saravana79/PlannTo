@@ -5,7 +5,7 @@
 	</div>
 		<div id="content_<%= content.id  %>" class="subContentDiv">
 			<div><a class="title" href="google.com"><%= content.title %></a></div>
-			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content.created_at) %> </a></div>
+			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content) %> </a></div>
 		<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
 		<ul class="divCommentsConent">
 			<li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
