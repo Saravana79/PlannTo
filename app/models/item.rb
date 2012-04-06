@@ -220,8 +220,10 @@ class Item < ActiveRecord::Base
   def rating
     unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
       item_rating = self.average_rating
-      $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating)
-      $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count)
+      $redis.multi do
+        $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating)
+        $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count)
+      end if item_rating  > 0
     end  
     roundoff_rating item_rating.to_f
   end 
