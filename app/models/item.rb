@@ -82,6 +82,16 @@ class Item < ActiveRecord::Base
         end
   end
 
+  def cache_follow_items(current_user)
+    following_items = current_user.follows.group_by(&:follow_type)
+    following_items.each do |k, values|
+      $redis.hget("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{self.id}", k)
+      value_ids = values.collect { |value| value.try(:id) }
+      $redis.hset("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{self.id}", k, value_ids)
+    end
+  end
+
+
   def priority_specification
     specification.where(:priority => 1)
   end
@@ -197,20 +207,45 @@ class Item < ActiveRecord::Base
     return top_contributors
   end
 
-  def rating
-    ((self.average_rating * 2).round) / 2.0
-  end
+  def rated_users_count
+   ($redis.hget("items:ratings", "item:#{self.id}:review_count") || self.contents.where(:type => 'ReviewContent').count).to_i
+  end  
 
   def average_rating
     reviews = self.contents.where(:type => 'ReviewContent' )
     return 0 if reviews.empty?
     reviews.inject(0){|sum,review| sum += review.rating} / reviews.size.to_f
-  end  
+  end 
 
-  def rated_users_count
-   self.contents.where(:type => 'ReviewContent').count
-  end  
-  
+  def rating
+    unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
+      item_rating = self.average_rating
+      $redis.multi do
+        $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating)
+        $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count)
+      end if item_rating  > 0
+    end  
+    roundoff_rating item_rating.to_f
+  end 
+
+  def roundoff_rating item_rating
+    ((item_rating * 2).round) / 2.0
+  end
+
+  def add_new_rating rating
+    prev_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
+    unless prev_rating
+      $redis.hset("items:ratings", "item:#{self.id}:rating",rating)
+      $redis.hset("items:ratings", "item:#{self.id}:review_count",1)
+    else
+      prev_review_count = ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
+      prev_rating = prev_rating.to_f
+      new_average_rating = ((prev_rating * prev_review_count) + rating) / (prev_review_count + 1).to_f
+      $redis.hset("items:ratings", "item:#{self.id}:rating",new_average_rating)
+      $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)
+    end  
+  end
+
   def itemtypetag
     Item.find(:first,:conditions =>{:name => self.type.pluralize, :type => "ItemtypeTag"})
   end
