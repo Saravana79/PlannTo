@@ -6,7 +6,7 @@ class ReviewContentsController < ApplicationController
 		item_id = params['item_id']
 		@item = Item.find item_id
 		@reviewcontent.save_with_items!(item_id)
-		logger.error("User =>" + @reviewcontent.user.id.to_s)
+		@item.add_new_rating @reviewcontent.rating
     	#Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_SHARE) unless @reviewcontent.errors.any?
 		#@item.rate_it params['review_content']['rating'],@reviewcontent.user
 		respond_to do |format|
