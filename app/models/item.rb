@@ -208,7 +208,7 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-   $redis.hget("items:ratings", "item:#{self.id}:review_count") || self.contents.where(:type => 'ReviewContent').count
+   ($redis.hget("items:ratings", "item:#{self.id}:review_count") || self.contents.where(:type => 'ReviewContent').count).to_i
   end  
 
   def average_rating
@@ -218,17 +218,12 @@ class Item < ActiveRecord::Base
   end 
 
   def rating
-    if $redis.exists "items:ratings"
-      if item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
-        item_rating = self.roundoff_rating item_rating.to_f
-      end
-    else
+    unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
       item_rating = self.average_rating
       $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating)
       $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count)
-      item_rating = roundoff_rating item_rating
     end  
-    item_rating
+    roundoff_rating item_rating.to_f
   end 
 
   def roundoff_rating item_rating
