@@ -68,6 +68,7 @@ class User < ActiveRecord::Base
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name", u_name)
     end
     u_name
+    super
   end
 
   def total_points

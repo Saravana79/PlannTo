@@ -1,6 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
+    redirect_to root_path
   end
   
   def invited
