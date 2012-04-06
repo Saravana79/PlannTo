@@ -10,6 +10,8 @@ module ContentsHelper
       render :partial => "contents/question", :locals => { :content => item }
     when "ReviewContent"
       render :partial => "contents/review", :locals => { :content => item }
+    when "EventContent"
+      render :partial => "contents/event", :locals => { :content => item }
     end
   end
   

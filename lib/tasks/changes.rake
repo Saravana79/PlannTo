@@ -3,7 +3,7 @@ namespace :plannto do
   desc "load article categories"
    
   task :load_article_categories => :environment do
-    #ArticleCategory.delete_all
+    ArticleCategory.delete_all
 
     itemtype = Itemtype.where(:itemtype => "Car").first
 

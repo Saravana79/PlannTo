@@ -42,6 +42,7 @@
       <%= render :partial => 'article_contents/article_share', :locals => {:content_category => false} %>
       <%= render :partial => 'question_contents/new_question_content' %>
       <%= render :partial => 'tips/new_tip' %>
+      <%= render :partial => 'event_contents/new' %>
 
     </div>
 
@@ -66,6 +67,11 @@
     if (id == "contentShowmore"){     
       $("div#contentContainer ul li").show();
       $("#contentShowmore").hide();
+    }
+    else if(id == "contentEvent"){
+      $("#subContainerEvent").show();
+       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
     }
     else if (id == "contentShare"){
       $("#ShareURLDiv").show();

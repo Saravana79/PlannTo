@@ -46,6 +46,8 @@ PlanNto::Application.routes.draw do
       get :feed
     end
   end
+
+  resources :event_contents 
   resources :article_contents do
     collection do
       post :download

@@ -1,0 +1,70 @@
+<div id="notification" class="notificationStyle">Thank You, Event has been created.</div>
+<div id="subContainerEvent" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+
+  <%= form_for EventContent.new, :remote => true do |f| %>
+    <div id="article_errors" style="line-height:20px;color: red;"></div>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Title :</div>
+      <div class="float_lft">
+        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 5px;">
+      <div class="title_header float_lft">Description :</div>
+      <div>
+        <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;' %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Url :</div>
+      <div class="float_lft">
+        <%= f.text_field :url, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Start date :</div>
+      <div class="float_lft">
+        <%= f.text_field :start_date, {:style=>"margin-left:5px;width:150px"}  %>
+      </div>
+      <div class="title_header float_lft">End date :</div>
+      <div class="float_lft">
+        <%= f.text_field :end_date, {:style=>"margin-left:5px;width:150px"}  %>
+      </div>
+    </div>
+    <input id="event_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+      <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'event_content_submit' %>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    
+    $('#event_content_start_date,#event_content_end_date').datepicker();
+    $("#event_content_submit").click(function(){
+      $("#subContainerEvent div#article_errors").html("");
+      /*$('#new_event_content').validate({
+        errorPlacement: $.datepicker.errorPlacement,
+        rules: {
+          event_content_start_date: {
+            required: true,
+            dpDate: true
+          },
+          event_content_start_date: {
+            dpCompareDate: ['before', '#event_content_end_date']
+          },
+          event_content_end_date: {
+            dpCompareDate: {after: '#event_content_start_date'}
+          }
+        },
+        messages: {
+          validFormatDatepicker: 'Please enter a valid date (yyyy-mm-dd)',
+          validRangeDatepicker: 'Please enter a valid date range',
+          validMultiDatepicker: 'Please enter at most three valid dates',
+          validAfterDatepicker: 'Please enter a date after the previous value'
+        }});*/
+      //return false
+    })
+    
+  });
+</script>
