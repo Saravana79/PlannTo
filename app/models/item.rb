@@ -208,7 +208,7 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-   self.contents.where(:type => 'ReviewContent').count
+   $redis.hget("items:ratings", "item:#{self.id}:review_count") || self.contents.where(:type => 'ReviewContent').count
   end  
 
   def average_rating
@@ -221,7 +221,6 @@ class Item < ActiveRecord::Base
     if $redis.exists "items:ratings"
       if item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
         item_rating = self.roundoff_rating item_rating.to_f
-        logger.error "Inside rating"
       end
     else
       item_rating = self.average_rating
