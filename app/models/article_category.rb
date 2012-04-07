@@ -9,4 +9,8 @@ class ArticleCategory < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:itemtype_id]
   
   scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => [0,id])}
+
+  def need_date?
+    self.name == EVENT
+  end
 end

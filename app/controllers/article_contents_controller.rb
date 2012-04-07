@@ -11,13 +11,13 @@ class ArticleContentsController < ApplicationController
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
     flash[:notice]= "Article uploaded"
-
     respond_to do |format|
       format.js
     end
   end
   
   def download
+    @article_category = ArticleCategory.find(params[:article_content][:article_category_id])
     url=params['article_content']['url']
     if url.nil?
       @article=ArticleContent.create(params[:article_content])

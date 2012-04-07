@@ -1,5 +1,5 @@
-<div id="notification" class="notificationStyle">Thank You, Event has been created.</div>
 <div id="subContainerEvent" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+<div id="notification" class="notificationStyle">Thank You, Event has been created.</div>
 
   <%= form_for EventContent.new, :remote => true do |f| %>
     <div id="article_errors" style="line-height:20px;color: red;"></div>
@@ -29,6 +29,12 @@
       <div class="title_header float_lft">End date :</div>
       <div class="float_lft">
         <%= f.text_field :end_date, {:style=>"margin-left:5px;width:150px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Location :</div>
+      <div class="float_lft">
+        <%= f.text_field :location, {:style=>"margin-left:5px;width:150px",:width=>"400px"}  %>
       </div>
     </div>
     <input id="event_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />

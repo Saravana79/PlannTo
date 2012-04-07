@@ -56,6 +56,7 @@
 <!--Write a review share to a friend-->
 <script type="text/javascript">
   $("div#contentContainer ul li").click(function (e) {
+    hideShareContainerOptFields()
     $("div#contentContainer ul li").removeClass("Active");
     $(".contentSubContainer").hide();
     $(this).closest('li').addClass('Active');

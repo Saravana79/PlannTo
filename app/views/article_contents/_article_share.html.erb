@@ -1,6 +1,9 @@
 <div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;" class="contentSubContainer">
+ <div id="notification" class="notificationStyle">Thank You, Article has been created.</div>
+
+  <div id="article_errors" style="display:none"></div>
   <%= form_for(@article, :as => :article_content,:html => { :id => "new_article_content" }, :url => download_article_contents_path, :remote => true) do |f| %>
-    <div id="article_errors" style="display:none"></div>
+
     <%= hidden_field_tag 'articles_item_id' %>
     <%= f.hidden_field :type, :id => "new_article_type" %>
     <%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
@@ -57,6 +60,26 @@
       </div>
       <div style="clear:both;"></div>
     </div>
+    <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="sharefield1">
+      <div class="title_header float_lft" id="sharefield1Label">Start date :</div>
+      <div class="float_lft">
+        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="sharefield2">
+      <div class="title_header float_lft" id="sharefield2Label">End date :</div>
+      <div class="float_lft">
+        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="sharefield3">
+      <div class="title_header float_lft" id="sharefield3Label">Location :</div>
+      <div class="float_lft">
+        <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px"}  %>
+      </div>
+    </div>
+    <!-- FIELD ENDS -->
     <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="dwnld_url">
       <%= f.submit "Share this content", :id => "submit_article", :class => "btn_submitanswer" %>
       <% unless @external.blank? %>
@@ -163,8 +186,73 @@
   }
   function escapeHTML(html) {
     return $("<div />").text(html).html();
+  }   
+
+
+  function validateArticleShareForm(){
+    $('#txtArticleTitle').poshytip('destroy')
+    $('#txtArticleDescription').poshytip('destroy')
+    var valid = true;
+    if ($("#txtArticleTitle").val() == ""){
+      $('#txtArticleTitle').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#txtArticleTitle').poshytip('show');
+      valid = false
+
+    }
+    if ($("#txtArticleDescription").val() == ""){
+      $('#txtArticleDescription').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please add some description.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#txtArticleDescription').poshytip('show');
+      valid = false
+    }
+    return valid
   }
 
+  function hideShareContainerOptFields(){
+    $("#new_article_content #article_content_field1").val('');
+     $("#new_article_content #article_content_field2").val('');
+      $("#new_article_content #article_content_field2").val('');  
+    $("#sharefield1").hide();
+    $("#sharefield2").hide();
+    $("#sharefield3").hide();
+  }
+
+  function showShareContainerOptFields(){
+    $("#new_article_content #article_content_field1").val('');
+     $("#new_article_content #article_content_field2").val('');
+      $("#new_article_content #article_content_field2").val('');
+    $("#sharefield1").show();
+    $("#sharefield2").show();
+    $("#sharefield3").show();
+  }
+
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#submit_article").click(function(){
+      $("#ShareURLDivEvent div#article_errors").html("");
+      var valid = validateArticleShareForm();
+      if (!valid){
+        return false;
+      }
+    });
+  });
 </script>
 
 

@@ -1,13 +1,18 @@
 
 <% if @article.errors.any? %>
-  $("#article_errors").html("<%= errors_for(@article) %>");
-  $("#article_errors").show(300);	
+  $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article) %>");
+  $("#article_errors").show(300);
 <% else %>
   <% if @external.blank? %>
+  $('div#ShareURLDiv div#notification').fadeIn('slow');
+  setTimeout("$('div#ShareURLDiv div#notification').fadeOut('slow');", 5000);
     $("#article_errors").hide();
    $('#article_content_url').val('');
    $('#article_content_url').keyup();
-   $("#newContentList").html('<%= escape_javascript(render_content_type(@article)) %>');
+   $("#sharefield1").hide();
+    $("#sharefield2").hide();
+     $("#sharefield3").hide();
+   $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
   <% else %>   
     window.open('', '_self', '');
     window.close();
