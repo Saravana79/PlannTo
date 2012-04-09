@@ -69,14 +69,29 @@
       $("div#contentContainer ul li").show();
       $("#contentShowmore").hide();
     }
+    else if(id == "contentBooks"){
+      //$("#subContainerEvent").show();
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
+    }
+    else if(id == "contentAccessories"){
+      //$("#subContainerEvent").show();
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
+    }
+    else if(id == "contentTravelogue"){
+      //$("#subContainerEvent").show();
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::TRAVELOGUE)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
+    }
     else if(id == "contentApps"){
       //$("#subContainerEvent").show();
-       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if(id == "contentEvent"){
       $("#subContainerEvent").show();
-       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if (id == "contentShare"){
@@ -137,6 +152,7 @@
       case 'How To/KBs': contentWrite= "Add a HowTo/KB";break;
       case 'Book': contentWrite= "Add a Book";break;
       case 'Apps': contentWrite= "Add an Apps";break;
+      case 'Travelogue': contentWrite= "Add a Travelogue";break;
     }
     $("#contentWrite").text(contentWrite);
   }
@@ -155,6 +171,7 @@
       case 'How To/KBs': contentWrite= "Submit a HowTo/KB";break;
       case 'Book': contentWrite= "Submit a book";break;
       case 'Apps': contentWrite= "Submit an Apps";break;
+      case 'Travelogue': contentWrite= "Submit a Travelogue";break;
     }
     $("#contentSubmit").text(contentWrite);
   }

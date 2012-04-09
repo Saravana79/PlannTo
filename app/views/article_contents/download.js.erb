@@ -14,6 +14,10 @@ $(document).ready(function(){
   $(document).ready(function(){
   showShareAppOptFields();
   });
+  <%elsif (@article_category.is_books? || @article_category.is_accessories?)%>
+  $(document).ready(function(){
+  showShareBooksAccessoriesOptFields();
+  });
 <%end%>
 <% if @images.present? and @images.count > 0 %>
  images = new Array();

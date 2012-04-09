@@ -5,6 +5,9 @@ class ArticleCategory < ActiveRecord::Base
   QANDA = "Q&A"
   EVENT = "Event"
   APPS = "Apps"
+  ACCESSORIES = "Accessories"
+  BOOKS = "Books"
+  TRAVELOGUE = "Travelogue"
   has_one :article_content
   belongs_to :itemtype
   validates_uniqueness_of :name, :scope => [:itemtype_id]
@@ -17,5 +20,13 @@ class ArticleCategory < ActiveRecord::Base
 
   def is_app?
     self.name == APPS
+  end
+
+  def is_books?
+    self.name == BOOKS
+  end
+
+  def is_accessories?
+    self.name == ACCESSORIES
   end
 end

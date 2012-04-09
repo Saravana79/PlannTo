@@ -256,6 +256,14 @@
     $("#sharefield3").hide();
   }
 
+ function showShareBooksAccessoriesOptFields(){alert("acce")
+   $("#sharefield1Label").text("Sub Category:")
+    $("#new_article_content #article_content_field1").replaceWith("<%=get_books_accessories_subcategory_html_list%>");
+    $("#sharefield1").show();
+     $("#sharefield2").hide();
+    $("#sharefield3").hide();
+ }
+
   function hideField1(){
     $("#sharefield1").hide();
     $("#sharefield1Label").text("Start Date:")
