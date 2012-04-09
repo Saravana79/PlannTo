@@ -9,9 +9,10 @@
     $("#article_errors").hide();
    $('#article_content_url').val('');
    $('#article_content_url').keyup();
-   $("#sharefield1").hide();
-    $("#sharefield2").hide();
-     $("#sharefield3").hide();
+   hideField1();
+   hideField2();
+   hideField3();
+   
    $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
   <% else %>   
     window.open('', '_self', '');

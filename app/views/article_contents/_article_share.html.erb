@@ -1,5 +1,5 @@
 <div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;" class="contentSubContainer">
- <div id="notification" class="notificationStyle">Thank You, Article has been created.</div>
+  <div id="notification" class="notificationStyle">Thank You, Article has been created.</div>
 
   <div id="article_errors" style="display:none"></div>
   <%= form_for(@article, :as => :article_content,:html => { :id => "new_article_content" }, :url => download_article_contents_path, :remote => true) do |f| %>
@@ -207,7 +207,7 @@
       valid = false
 
     }
-    if ($("#txtArticleDescription").val() == ""){
+    /*if ($("#txtArticleDescription").val() == ""){
       $('#txtArticleDescription').poshytip({
         className: 'tip-darkgray',
         content: 'Please add some description.',
@@ -219,26 +219,64 @@
       });
       $('#txtArticleDescription').poshytip('show');
       valid = false
-    }
+    }*/
     return valid
   }
 
   function hideShareContainerOptFields(){
     $("#new_article_content #article_content_field1").val('');
-     $("#new_article_content #article_content_field2").val('');
-      $("#new_article_content #article_content_field2").val('');  
+    $("#new_article_content #article_content_field2").val('');
+    $("#new_article_content #article_content_field2").val('');
     $("#sharefield1").hide();
     $("#sharefield2").hide();
     $("#sharefield3").hide();
   }
 
   function showShareContainerOptFields(){
+    $("#sharefield1Label").text("Start Date:")
+    $("#new_article_content #article_content_field1").replaceWith("<input id='article_content_field1' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
+    $("#sharefield2Label").text("End Date:")
+    $("#new_article_content #article_content_field2").replaceWith("<input id='article_content_field2' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
+
     $("#new_article_content #article_content_field1").val('');
-     $("#new_article_content #article_content_field2").val('');
-      $("#new_article_content #article_content_field2").val('');
+    $("#new_article_content #article_content_field2").val('');
+    $("#new_article_content #article_content_field2").val('');
     $("#sharefield1").show();
     $("#sharefield2").show();
     $("#sharefield3").show();
+  }
+
+  function showShareAppOptFields(){
+    $("#sharefield1Label").text("Sub Category:")
+    $("#new_article_content #article_content_field1").replaceWith("<%=get_apps_subcategory_html_list%>");
+    $("#sharefield1").show();
+    $("#sharefield2Label").text("Type:")
+    $("#new_article_content #article_content_field2").replaceWith("<%=get_apps_type_html_list%>");
+    $("#sharefield2").show();
+    $("#sharefield3").hide();
+  }
+
+  function hideField1(){
+    $("#sharefield1").hide();
+    $("#sharefield1Label").text("Start Date:")
+    $("#new_article_content #article_content_field1").replaceWith("<input id='article_content_field1' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
+    $("#new_article_content #article_content_field1").val('');
+
+  }
+
+  function hideField2(){
+    $("#sharefield2").hide();
+    $("#sharefield2Label").text("End Date:")
+    $("#new_article_content #article_content_field2").replaceWith("<input id='article_content_field2' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
+    $("#new_article_content #article_content_field2").val('');
+
+  }
+
+  function hideField3(){
+    $("#sharefield3").hide();
+    $("#sharefield3Label").text("Location:")
+    $("#new_article_content #article_content_field3").replaceWith("<input id='article_content_field3' name='article_content[field3]' type='text' style='margin-left:5px;width:150px'/>");
+    $("#new_article_content #article_content_field2").val('');  
   }
 
 </script>

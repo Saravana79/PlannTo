@@ -69,6 +69,11 @@
       $("div#contentContainer ul li").show();
       $("#contentShowmore").hide();
     }
+    else if(id == "contentApps"){
+      //$("#subContainerEvent").show();
+       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
+      $("#article_content_article_category_id").val(article_category_id)
+    }
     else if(id == "contentEvent"){
       $("#subContainerEvent").show();
        var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>

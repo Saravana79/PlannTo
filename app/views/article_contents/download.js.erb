@@ -4,11 +4,15 @@ $("#txtArticleTitle").val(unescapeHTML("<%= escape_javascript(@article.title) %>
 
 $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
 
-<%if @article_category.need_date?%>
+<%if @article_category.is_event?%>
 showShareContainerOptFields();
 $(document).ready(function(){
     $('#article_content_field1,#article_content_field2').datepicker();
     
+  });
+  <%elsif @article_category.is_app?%>
+  $(document).ready(function(){
+  showShareAppOptFields();
   });
 <%end%>
 <% if @images.present? and @images.count > 0 %>

@@ -74,4 +74,18 @@ module ContentsHelper
     return label
   end
 
+  def get_apps_subcategory_html_list
+    dropdown = "<select id='article_content_field1' name='article_content[field1]'><option value='Books'>Books</option><option value='Business & Finance'>Business & Finance</option><option value='Education'>Education</option><option value='Entertainment'>Entertainment</option><option value='Games'>Games</option><option value='Health & Fitness'>Health & Fitness</option><option value='Kids'>Kids</option><option value='Lifestyle'>Lifestyle</option><option value='Music'>Music</option><option value='News'>News</option>"
+    dropdown += "<option value='Photography'>Photography</option><option value='Productivity'>Productivity</option><option value='Shopping'>Shopping</option>"
+    dropdown += "<option value='Travel'>Travel</option><option value='Utilities'>Utilities</option><option value='Arts & Design'>Arts & Design</option>"
+    dropdown += "<option value='Navigation'>Navigation</option><option value='Medical'>Medical</option><option value='Social Networking'>Social Networking</option>"
+    dropdown += "<option value='Sports'>Sports</option><option value='Weather'>Weather</option></select>"
+    return dropdown.html_safe
+  end
+
+  def get_apps_type_html_list
+    dropdown = "<select id='article_content_field2' name='article_content[field2]'><option value='Free'>Free</option><option value='Not Free'>Not Free</option></select>"
+  return dropdown.html_safe
+  end
+
 end
