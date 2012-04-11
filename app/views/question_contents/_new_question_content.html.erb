@@ -6,8 +6,54 @@
             <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
         </div>
     </div>
-    <div class="productreview" style="clear:both;">
-        <div class="title_header float_lft" style="display:none;">Rating :</div></div>
+        <div style="padding:5px 5px 0px 0px;clear:both;" id="questionProducts">
+      <div class="title_header float_lft">Product  :</div>
+      <div class="taggingdiv" style="margin-left:5px;">
+        <ul id="question_product_item_list" class="tagging"></ul>
+        <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="question_product_item"/></div>
+        <div style="clear:both;"></div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+      settings={
+      close:true, addButton: false,
+      url: "/search/autocomplete_items",
+      editMode: false, multiple: true,
+      hidden_field: "question_content_item"
+    };
+    $.textTagger("question_product_item","question_product_item_list",settings);
+    <% unless @item.blank? %>
+      $.addTag("question_product_item","question_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+      $("ul#question_product_item_list li:first span a.icon_close_tagging").remove();
+<% end %>
+  });
+
+   function validateQuestionForm(){
+    $('#question_content_title').poshytip('destroy')
+    var valid = true;
+    if ($("#question_content_title").val() == ""){
+      $('#question_content_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#question_content_title').poshytip('show');
+      valid = false
+
+    }
+
+    return valid
+  }
+    </script>
+
+  <input id="question_content_item" name="question_item_id" type="hidden" value=<%= @item.id %>  />
     <div style="padding:5px 5px 0px 5px;">
         <div class="title_header float_lft">Description :</div>
         <div>
@@ -16,7 +62,18 @@
     </div>
         <input id="question_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
-        <%= f.submit 'Publish your Question', :class => 'btn_submitanswer' %>
+        <%= f.submit 'Publish your Question', :class => 'btn_submitanswer', :id => "publishQuestion" %>
     </div>
 </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#publishQuestion").click(function(){     
+      var valid = validateQuestionForm();
+      if (!valid){
+        return false;
+      }
+    });
+  });
+</script>

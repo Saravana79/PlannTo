@@ -10,10 +10,59 @@
       <div id="rating" class="thereisnosuchclass"></div>
     </div>
 
-    <!-- <div class="productreview">
+    <div style="padding:5px 5px 0px 0px;clear:both;" id="reviewProducts">
+      <div class="title_header float_lft">Product  :</div>
+      <div class="taggingdiv" style="margin-left:5px;">
+        <ul id="review_product_item_list" class="tagging"></ul>
+        <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="review_product_item"/></div>
+        <div style="clear:both;"></div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+      settings={
+      close:true, addButton: false,
+      url: "/search/autocomplete_items",
+      editMode: false, multiple: true,
+      hidden_field: "review_content_item"
+    };
+    $.textTagger("review_product_item","review_product_item_list",settings);
+    <% unless @item.blank? %>
+      $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+      $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
+<% end %>
+  });
+  
+  function validateReviewForm(){
+    $('#review_content_title').poshytip('destroy')
+    var valid = true;
+    if ($("#review_content_title").val() == ""){
+      $('#review_content_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#review_content_title').poshytip('show');
+      valid = false
+    }
+    return valid
+  }
 
-    </div> -->
-
+  $(document).ready(function(){
+    $("#publishReview").click(function(){
+      var valid = validateReviewForm();
+      if (!valid){
+        return false;
+      }
+    });
+  });
+    </script>
     <div style="padding:5px 5px 0px 0px; width:550px;">
       <div class="title_header float_lft">Pros :</div>
       <%= f.text_field :pros,:style => "margin-left:5px;width:400px;",:placeholder => "Start typing to get recommendations..." %>
@@ -37,7 +86,7 @@
   <%#= f.hidden_field :item, :value => @item.id %>
     <input id="review_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
-      <%= f.submit 'Share This Review',:class => 'btn_submitanswer'   %>
+      <%= f.submit 'Share This Review',:class => 'btn_submitanswer', :id => "publishReview"   %>
       <!-- </input> -->
     </div>
   <% end %>

@@ -38,7 +38,8 @@
       <!-- <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="reviewContainer" class="contentSubContainer">What do you think of this car?
        </textarea>-->
       <%= render :partial => 'reviews/review_subcontainer' %>
-      <%= render :partial => 'reviews/new_review' %>
+      <!-- move above partial contents to below commented partial-->
+      <%#= render :partial => 'reviews/new_review' %>
       <%= render :partial => 'article_contents/article_share', :locals => {:content_category => false} %>
       <%= render :partial => 'question_contents/new_question_content' %>
       <%= render :partial => 'tips/new_tip' %>
@@ -57,6 +58,7 @@
 <script type="text/javascript">
   $("div#contentContainer ul li").click(function (e) {
     hideShareContainerOptFields()
+    hideProductTag()
     $("div#contentContainer ul li").removeClass("Active");
     $(".contentSubContainer").hide();
     $(this).closest('li').addClass('Active');

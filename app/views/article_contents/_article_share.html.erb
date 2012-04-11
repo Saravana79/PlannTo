@@ -51,7 +51,7 @@
       <div> <%= f.text_area :description, :id => "txtArticleDescription", :style => "width:400px;height:50px;" %></div>
     </div>
 
-    <div style="padding:5px 5px 0px 0px;clear:both;">
+    <div style="padding:5px 5px 0px 0px;clear:both;display:none;" id="shareProduct">
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
         <ul id="article_product_list" class="tagging"></ul>
@@ -223,6 +223,25 @@
     return valid
   }
 
+  function showProductTag(){
+    var itemId = <%= @item.id %>
+    var defaultId = "textTaggers" + itemId
+    $("ul#article_product_list li").each(function (i) {
+      var id = $(this).attr('id');
+      if (id != defaultId){
+        $(this).remove();
+      }
+    });
+    $("#shareProduct").show();
+    $("#articles_item_id").val(itemId);
+  }
+
+  function hideProductTag(){
+    var itemId = <%= @item.id %>
+    $("#shareProduct").hide();
+    $("#articles_item_id").val(itemId);
+  }
+
   function hideShareContainerOptFields(){
     $("#new_article_content #article_content_field1").val('');
     $("#new_article_content #article_content_field2").val('');
@@ -256,13 +275,13 @@
     $("#sharefield3").hide();
   }
 
- function showShareBooksAccessoriesOptFields(){alert("acce")
-   $("#sharefield1Label").text("Sub Category:")
+  function showShareBooksAccessoriesOptFields(){alert("acce")
+    $("#sharefield1Label").text("Sub Category:")
     $("#new_article_content #article_content_field1").replaceWith("<%=get_books_accessories_subcategory_html_list%>");
     $("#sharefield1").show();
-     $("#sharefield2").hide();
+    $("#sharefield2").hide();
     $("#sharefield3").hide();
- }
+  }
 
   function hideField1(){
     $("#sharefield1").hide();

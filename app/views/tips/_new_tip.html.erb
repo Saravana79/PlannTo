@@ -15,7 +15,37 @@
         </div>
     </div>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
-        <%= f.submit 'Share This Tip', :class => 'btn_submitanswer' %>
+        <%= f.submit 'Share This Tip', :class => 'btn_submitanswer', :id => 'publishTip' %>
     </div>
 </div>
 <% end %>
+
+<script type="text/javascript">
+  function validateTipForm(){
+    $('#tip_title').poshytip('destroy')
+    var valid = true;
+    if ($("#tip_title").val() == ""){
+      $('#tip_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#tip_title').poshytip('show');
+      valid = false
+    }
+    return valid
+  }
+
+  $(document).ready(function(){
+    $("#publishTip").click(function(){
+      var valid = validateTipForm();
+      if (!valid){
+        return false;
+      }
+    });
+  });
+</script>
