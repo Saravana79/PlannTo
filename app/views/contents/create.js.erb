@@ -1,0 +1,11 @@
+<% if @content.errors.any? %>
+  $("#subContainerDefaultContent div#article_errors").html("<%= raw errors_for(@event_content) %>");
+  $("#subContainerDefaultContent div#article_errors").show(300);
+<% else %>
+   $('div#subContainerDefaultContent #notification').fadeIn('slow');
+   setTimeout("$('div#subContainerDefaultContent #notification').fadeOut('slow');", 4000);
+   $("#article_errors").hide();
+   $('#new_content')[0].reset();
+   showDefaultProductTag("default_product_item_list", "default_content_item");
+   $("#newContentList").append('<%= escape_javascript(render_content_type(@content)) %>');
+<% end %>

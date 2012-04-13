@@ -1,0 +1,20 @@
+<div class="mainContentDiv">
+	  <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
+	<div class="float_rgt">
+		<img src="images/users.png" class="userImageSmall">
+	</div>
+		<div id="content_<%= content.id  %>" class="subContentDiv">
+			<div><a class="title" href="google.com"><%= content.title %></a></div>
+			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content) %> ago. </a></div>
+		<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+		<ul class="divCommentsConent">
+			<li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
+	        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+	        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+	        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+		</ul>
+	</div>
+</div>

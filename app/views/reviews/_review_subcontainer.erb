@@ -1,4 +1,4 @@
-<div id="reviewSubContainer" class="contentSubContainer">
+<div id="reviewSubContainer" class="contentSubContainer" style="display:none;">
   <%= form_for ReviewContent.new, :remote => true do |f| %>
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
@@ -14,7 +14,7 @@
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
         <ul id="review_product_item_list" class="tagging"></ul>
-        <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="review_product_item"/></div>
+        <!--<div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="review_product_item"/></div>-->
         <div style="clear:both;"></div>
       </div>
       <div style="clear:both;"></div>
@@ -27,7 +27,7 @@
       editMode: false, multiple: true,
       hidden_field: "review_content_item"
     };
-    $.textTagger("review_product_item","review_product_item_list",settings);
+    /*$.textTagger("review_product_item","review_product_item_list",settings);*/
     <% unless @item.blank? %>
       $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
       $.addIdToField(settings.hidden_field, "<%= @item.id %>")

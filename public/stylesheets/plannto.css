@@ -2585,6 +2585,107 @@ font-size:11px; color:#646464; height:30px; line-height:30px; display:block; }
 .Leftreviewinner .Leftnavi ul li.Showmore.Active a
 { background-position:left bottom; border-right:1px solid #cdd3d7; font-weight:bold;}
 
+/*---------Accessories----------*/
+
+.Leftreviewinner .Leftnavi ul li.Accessories a
+ { background:#f2f2f2 url(../images/show_moreicon.png) no-repeat 11px 8px;}
+
+.Leftreviewinner .Leftnavi ul li.Accessories a:hover
+{ background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px 8px; border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Accessories.Active a {
+background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px 8px; 												    border-right:1px solid #FFFFFF; font-weight:bold;}
+
+/*---------Videos----------*/
+.Leftreviewinner .Leftnavi ul li.Videos a {
+background:#f2f2f2 url(../images/show_moreicon.png) no-repeat 11px -20px;}
+
+.Leftreviewinner .Leftnavi ul li.Videos a:hover {
+background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px -20px;
+border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.Videos.Active a {
+background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px -20px;
+border-right:1px solid #FFFFFF; font-weight:bold;}
+
+/*---------News----------*/
+.Leftreviewinner .Leftnavi ul li.News a
+{ background:#f2f2f2 url(../images/show_moreicon.png) no-repeat 11px -53px;}
+
+.Leftreviewinner .Leftnavi ul li.News a:hover {
+background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px -53px; border-right:1px solid #FFFFFF;}
+
+.Leftreviewinner .Leftnavi ul li.News.Active a {
+background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px -53px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+/*---------Deals----------*/
+.Leftreviewinner .Leftnavi ul li.Deals a {
+background:#f2f2f2 url(../images/show_moreicon.png) no-repeat 11px -85px;}
+
+.Leftreviewinner .Leftnavi ul li.Deals a:hover {
+ background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px -85px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Deals.Active a {
+background:#FFFFFF url(../images/show_moreicon.png) no-repeat 11px -85px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+/*---------Travelogue----------*/
+.Leftreviewinner .Leftnavi ul li.Travelogue a {
+background:#f2f2f2 url(../images/show_moreicon2.png) no-repeat 11px 7px;}
+
+.Leftreviewinner .Leftnavi ul li.Travelogue a:hover {
+ background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px 7px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Travelogue.Active a {
+background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px 7px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+/*---------Video2----------*/
+.Leftreviewinner .Leftnavi ul li.Video2 a {
+background:#f2f2f2 url(../images/show_moreicon2.png) no-repeat 11px -25px;}
+
+.Leftreviewinner .Leftnavi ul li.Video2 a:hover {
+ background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -25px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Video2.Active a {
+background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -25px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+/*---------Event----------*/
+.Leftreviewinner .Leftnavi ul li.Event a {
+background:#f2f2f2 url(../images/show_moreicon2.png) no-repeat 11px -55px;}
+
+.Leftreviewinner .Leftnavi ul li.Event a:hover {
+ background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -55px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Event.Active a {
+background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -55px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+/*---------Howkb----------*/
+.Leftreviewinner .Leftnavi ul li.Howkb a {
+background:#f2f2f2 url(../images/show_moreicon2.png) no-repeat 11px -87px;}
+
+.Leftreviewinner .Leftnavi ul li.Howkb a:hover {
+ background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -87px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Howkb.Active a {
+background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -87px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+/*---------Apps----------*/
+.Leftreviewinner .Leftnavi ul li.Apps a {
+background:#f2f2f2 url(../images/show_moreicon2.png) no-repeat 11px -120px;}
+
+.Leftreviewinner .Leftnavi ul li.Apps a:hover {
+ background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -120px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Apps.Active a {
+background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -120px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
+
+/*---------Apps----------*/
+.Leftreviewinner .Leftnavi ul li.Books a {
+background:#f2f2f2 url(../images/show_moreicon2.png) no-repeat 11px -148px;}
+
+.Leftreviewinner .Leftnavi ul li.Books a:hover {
+ background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -148px; border-right:1px solid #FFFFFF;}
+.Leftreviewinner .Leftnavi ul li.Books.Active a {
+background:#FFFFFF url(../images/show_moreicon2.png) no-repeat 11px -148px; border-right:1px solid #FFFFFF; font-weight:bold;}
+
 
 
 /*------------------------------------------------------------*/

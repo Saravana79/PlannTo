@@ -21,43 +21,32 @@
           <%end%>
           <li class="<%if index==0%>Active<%end%> <%=get_content_container_class(article_category[0])%>" id="content<%=article_category[0]%>" <%if index >2%> style="display:none;"<%end%>><a href="#"><%=article_category[0]%></a></li>
         <%end%>
-        <!--<li class="Review Active" id="contentReview"><a href="#">Reviews</a></li>
-        <li class="Qatab" id="contentQanda"><a href="#">Q&amp;A </a></li>
-        <li class="Tips" id="contentTips"><a href="#">Tips</a></li>
-        <li class="Photos" id="contentPhotos"><a href="#">Photo</a></li>
-        <li class="Showmore" id="contentShowmore"><a href="#" class="Showplus">Show more</a></li>-->
-        <!--<li class="Tips" id="contentShare" style="display:none;"><a href="#">Share Article/Video</a></li>-->
-
 
       </ul>
     </div>
     <!--left navigation-->
 
-
     <div class="Tabsrightcontent">
-      <!-- <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="reviewContainer" class="contentSubContainer">What do you think of this car?
-       </textarea>-->
+      <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="defaultContainer" class="contentSubContainer" onclick="$('div#contentContainer ul li.Active').trigger('click');$('#defaultContainer').hide();">What do you think of this car?
+      </textarea>
       <%= render :partial => 'reviews/review_subcontainer' %>
       <!-- move above partial contents to below commented partial-->
-      <%#= render :partial => 'reviews/new_review' %>
+<%#= render :partial => 'reviews/new_review' %>
       <%= render :partial => 'article_contents/article_share', :locals => {:content_category => false} %>
       <%= render :partial => 'question_contents/new_question_content' %>
-      <%= render :partial => 'tips/new_tip' %>
+<%#= render :partial => 'tips/new_tip' %>
       <%= render :partial => 'event_contents/new' %>
+      <%= render :partial => 'contents/new_default' %>
 
     </div>
 
   </div>
-
-
-
-
-
 </div>
 <!--Write a review share to a friend-->
 <script type="text/javascript">
   $("div#contentContainer ul li").click(function (e) {
     hideShareContainerOptFields()
+    showDefaultProductTag("default_product_item_list", "default_content_item");
     hideProductTag()
     $("div#contentContainer ul li").removeClass("Active");
     $(".contentSubContainer").hide();
@@ -72,22 +61,18 @@
       $("#contentShowmore").hide();
     }
     else if(id == "contentBooks"){
-      //$("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if(id == "contentAccessories"){
-      //$("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if(id == "contentTravelogue"){
-      //$("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::TRAVELOGUE)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if(id == "contentApps"){
-      //$("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
@@ -105,15 +90,25 @@
       $("#article_content_article_category_id").val(article_category_id)
       // $("#reviewContainer").show();
     }
-    else if (id == "contentTips"){
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::TIPS)}"%>
-      $("#article_content_article_category_id").val(article_category_id)
-      $("#tipDiv").show();
-    }
+    // else if (id == "contentTips"){
+    //  var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::TIPS)}"%>
+    //  $("#article_content_article_category_id").val(article_category_id)
+    //   $("#tipDiv").show();
+    // }
     else if (id == "contentQ&A"){
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
       $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
+    }
+    else{
+    <%article_categories.each do |category|%>
+        if (id.replace("content",'') == '<%=category[0]%>'){
+          var article_category_id = '<%=category[1]%>'
+        }
+    <%end%>
+      $("#content_type").val(id.replace("content",''))
+      $("#article_content_article_category_id").val(article_category_id)
+      $("#subContainerDefaultContent").show();
     }
 
     //set active tab

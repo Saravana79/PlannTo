@@ -1,0 +1,92 @@
+<div id="subContainerDefaultContent" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+<div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
+
+  <%= form_for Content.new, :remote => true do |f| %>
+    <div id="article_errors" style="line-height:20px;color: red;"></div>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Title :</div>
+      <div class="float_lft">
+        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 5px;">
+      <div class="title_header float_lft">Description:</div>
+      <div>
+        <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;' %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;clear:both;" id="defaultProducts">
+      <div class="title_header float_lft">Product  :</div>
+      <div class="taggingdiv" style="margin-left:5px;">
+        <ul id="default_product_item_list" class="tagging"></ul>
+        <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="default_product_item"/></div>
+        <div style="clear:both;"></div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    <input id="content_type" name="type" type="hidden" value=<%= @item.id %>  />
+    <input id="default_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+      <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'default_content_submit' %>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    settings={
+      close:true, addButton: false,
+      url: "/search/autocomplete_items",
+      editMode: false, multiple: true,
+      hidden_field: "default_content_item"
+    };
+    $.textTagger("default_product_item","default_product_item_list",settings);
+    <% unless @item.blank? %>
+      $.addTag("default_product_item","default_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+      $("ul#default_product_item_list li:first span a.icon_close_tagging").remove();
+<% end %>
+
+
+    
+    $("#default_content_submit").click(function(){
+       var valid = validateDefaultContentForm();
+      if (!valid){
+        return false;
+      }
+    })
+    
+  });
+
+  function showDefaultProductTag(id, hidden_text_field_id){
+    var itemId = <%= @item.id %>
+    var defaultId = "textTaggers" + itemId
+    $("ul#" +id + " li").each(function (i) {
+      var id = $(this).attr('id');
+      if (id != defaultId){
+        $(this).remove();
+      }
+    });
+    $("#" + hidden_text_field_id).val(itemId);
+  }
+
+
+  function validateDefaultContentForm(){
+    $('#content_title').poshytip('destroy')
+    var valid = true;
+    if ($("#content_title").val() == ""){
+      $('#content_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('#content_title').poshytip('show');
+      valid = false
+    }
+    return valid
+  }
+</script>

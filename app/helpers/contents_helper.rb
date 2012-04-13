@@ -12,6 +12,8 @@ module ContentsHelper
       render :partial => "contents/review", :locals => { :content => item }
     when "EventContent"
       render :partial => "contents/event", :locals => { :content => item }
+    when "PlanntoContent"
+      render :partial => "contents/default", :locals => { :content => item }
     end
   end
   
@@ -33,9 +35,20 @@ module ContentsHelper
     when "Q&A" then "Qatab"
     when "Tips" then "Tips"
     when "Photos" then "Photo"
+    when "Accessories" then "Accessories"
+    when "Video" then "Videos"
+    when "News" then "News"
+    when "Deals" then "Deals"
+    when "Travelogue" then "Travelogue"
+    when "Video" then "Video2"
+    when "Event" then "Event"
+    when "HowTo/KB" then "Howkb"
+    when "Apps" then "Apps"
+    when "Books" then "Books"
     else ""
     end
     return class_name
+
   end
 
   def content_write_tab_label(name)
@@ -85,7 +98,7 @@ module ContentsHelper
 
   def get_apps_type_html_list
     dropdown = "<select id='article_content_field2' name='article_content[field2]'><option value='Free'>Free</option><option value='Not Free'>Not Free</option></select>"
-  return dropdown.html_safe
+    return dropdown.html_safe
   end
 
   def get_books_accessories_subcategory_html_list
