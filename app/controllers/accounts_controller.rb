@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
   end
 
   def update
-    if current_user.update_attributes!(params[:user]) && current_user.errors.blank?
+    if current_user.update_attributes(params[:user]) && current_user.errors.blank?
       $redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "avatar_url")
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "name", current_user.name)
       params[:user][:password] = ""
@@ -18,6 +18,8 @@ class AccountsController < ApplicationController
       else
         flash[:notice] = "please upload the avatar from profile page"
       end
+    else
+      flash[:notice] = current_user.errors.full_messages.join(", ")
     end
     redirect_to :action => :index
   end
