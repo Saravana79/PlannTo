@@ -1,4 +1,4 @@
-<div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display:none;" class="contentSubContainer">
+<div id="ShareURLDiv" style="padding:5px 5px 0px 5px;" class="contentSubContainer">
   <div id="notification" class="notificationStyle">Thank You, Article has been created.</div>
 
   <div id="article_errors" style="display:none"></div>
@@ -152,7 +152,7 @@
 <% end %>
 
 <% unless @article.url.blank? %>
-  <%= render "article_contents/download.js" %>
+  <%= render :file =>"article_contents/download.js" %>
 <% end %>
   });
 
@@ -222,7 +222,7 @@
     }*/
     return valid
   }
-
+<% unless @item.blank? %>
   function showProductTag(){
     var itemId = <%= @item.id %>
     var defaultId = "textTaggers" + itemId
@@ -241,7 +241,7 @@
     $("#shareProduct").hide();
     $("#articles_item_id").val(itemId);
   }
-
+<%end%>
   function hideShareContainerOptFields(){
     $("#new_article_content #article_content_field1").val('');
     $("#new_article_content #article_content_field2").val('');
@@ -275,7 +275,7 @@
     $("#sharefield3").hide();
   }
 
-  function showShareBooksAccessoriesOptFields(){alert("acce")
+  function showShareBooksAccessoriesOptFields(){
     $("#sharefield1Label").text("Sub Category:")
     $("#new_article_content #article_content_field1").replaceWith("<%=get_books_accessories_subcategory_html_list%>");
     $("#sharefield1").show();

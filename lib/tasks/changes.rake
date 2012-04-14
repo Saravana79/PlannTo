@@ -63,5 +63,24 @@ namespace :plannto do
   
   end
 
+  desc "load bookmark article categories"
+
+  task :load_bookmark_article_categories => :environment do
+    ArticleCategory.create(:name => "Reviews", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Q&A", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Tips", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Accessories", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Apps", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Video", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Photo", :itemtype_id => 0)
+    ArticleCategory.create(:name => "News", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Deals", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Event", :itemtype_id => 0)
+    ArticleCategory.create(:name => "HowTo/KB", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Travelogue", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Apps", :itemtype_id => 0)
+    ArticleCategory.create(:name => "Books", :itemtype_id => 0)
+  end
+
 
 end

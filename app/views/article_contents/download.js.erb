@@ -3,6 +3,8 @@ $("#txtArticleTitle").val(unescapeHTML("<%= escape_javascript(@article.title) %>
 //$("#txtArticleDescription").attr("value","<%= escape_javascript(@article.description) %>");
 
 $("#new_article_type").val("<%= escape_javascript(@article.type) %>");
+
+<%unless @article_category.nil?%>
 showProductTag();
 <%if @article_category.is_event?%>
 showShareContainerOptFields();
@@ -19,6 +21,8 @@ $(document).ready(function(){
   showShareBooksAccessoriesOptFields();
   });
 <%end%>
+  <%else%>
+  <%end%>
 <% if @images.present? and @images.count > 0 %>
  images = new Array();
  sizes = new Array();
