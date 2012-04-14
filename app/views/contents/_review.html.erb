@@ -5,7 +5,7 @@
 	</div>
 		<div id="content_<%= content.id  %>" class="subContentDiv">
 			<div><a class="title" href="google.com"><%= content.title %></a></div>
-			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_in_words(content.created_at) %> </a></div>
+			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content) %> ago. </a></div>
 		<div class="subContentGap"><a class="titlePro">Pro:</a><a class="txt_black_description"><%= content.pros %></a></div>
 		<div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%= content.cons %></a></div>
 		<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>

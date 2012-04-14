@@ -11,8 +11,10 @@ class ArticleCategory < ActiveRecord::Base
   has_one :article_content
   belongs_to :itemtype
   validates_uniqueness_of :name, :scope => [:itemtype_id]
-  
-  scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => [0,id])}
+
+  #why zero is hardcoded here?
+  #scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => [0,id])}
+  scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => id)}
 
   def is_event?
     self.name == EVENT

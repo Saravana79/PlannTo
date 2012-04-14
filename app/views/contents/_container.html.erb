@@ -40,7 +40,7 @@
     showDefaultProductTag("default_product_item_list", "default_content_item");
     hideProductTag()
     $("div#contentContainer ul li").removeClass("Active");
-    $(".contentSubContainer").hide();
+    $('#new_content')[0].reset();
     $(this).closest('li').addClass('Active');
     var id = $(this).attr('id');
     if (id != "contentShowmore"){
@@ -50,9 +50,9 @@
     if (id == "contentShowmore"){     
       $("div#contentContainer ul li").show();
       $("#contentShowmore").hide();
-      $('#defaultContainer').show();
     }
     else if(id == "contentBooks"){
+      $(".contentSubContainer").hide();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
@@ -69,14 +69,17 @@
       $("#article_content_article_category_id").val(article_category_id)
     }*/
     else if(id == "contentEvent"){
+      $(".contentSubContainer").hide();
       $("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if (id == "contentShare"){
+      $(".contentSubContainer").hide();
       $("#ShareURLDiv").show();
     }
     else if (id == "contentReviews"){
+      $(".contentSubContainer").hide();
       $("#reviewSubContainer").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
@@ -88,11 +91,13 @@
     //   $("#tipDiv").show();
     // }
     else if (id == "contentQ&A"){
+      $(".contentSubContainer").hide();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
       $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
     }
     else{
+      $(".contentSubContainer").hide();
 <%article_categories.each do |category|%>
         if (id.replace("content",'') == '<%=category[0]%>'){
           var article_category_id = '<%=category[1]%>'
@@ -130,40 +135,40 @@
   function setUpContentWrite(label){
     var contentWrite = ""
     switch(label){
-      case 'Reviews': contentWrite= "Write a Review";break;
-      case 'Q&A': contentWrite= "Ask a Question";break;
-      case 'Tips': contentWrite= "Add a Tip";break;
-      case 'Accessories': contentWrite= "Add a Accessory";break;
-      case 'Photo': contentWrite= "Add a Photo";break;
-      case 'News': contentWrite= "Add a News";break;
-      case 'Deals': contentWrite= "Add a deal";break;
-      case 'Event': contentWrite= "Add a Event";break;
-      case 'HowTo/KB': contentWrite= "Add a HowTo/KB";break;
-      case 'Book': contentWrite= "Add a Book";break;
-      case 'Apps': contentWrite= "Add an Apps";break;
-      case 'Travelogue': contentWrite= "Add a Travelogue";break;
-      case 'Video': contentWrite= "Add a Video";break;
+      case 'Reviews': contentWrite= "Write a Review<span></span>";break;
+      case 'Q&A': contentWrite= "Ask a Question<span></span>";break;
+      case 'Tips': contentWrite= "Add a Tip<span></span>";break;
+      case 'Accessories': contentWrite= "Add a Accessory<span></span>";break;
+      case 'Photo': contentWrite= "Add a Photo<span></span>";break;
+      case 'News': contentWrite= "Add a News<span></span>";break;
+      case 'Deals': contentWrite= "Add a deal<span></span>";break;
+      case 'Event': contentWrite= "Add a Event<span></span>";break;
+      case 'HowTo/KB': contentWrite= "Add a HowTo/KB<span></span>";break;
+      case 'Book': contentWrite= "Add a Book<span></span>";break;
+      case 'Apps': contentWrite= "Add an Apps<span></span>";break;
+      case 'Travelogue': contentWrite= "Add a Travelogue<span></span>";break;
+      case 'Video': contentWrite= "Add a Video<span></span>";break;
     }
-    $("#contentWrite").text(contentWrite);
+    $("#contentWrite").html(contentWrite);
   }
 
   function setUpContentSubmit(label){
     var contentWrite = ""
     switch(label){
-      case 'Reviews': contentWrite= "Submit a Review";break;
-      case 'Q&A': contentWrite= "Submit a Questions & Answer";break;
-      case 'Tips': contentWrite= "Submit a Tip";break;
-      case 'Accessories': contentWrite= "Submit an Accessory";break;
-      case 'Photo': contentWrite= "Submit a Photo";break;
-      case 'News': contentWrite= "Submit a Latest News";break;
-      case 'Deals': contentWrite= "Submit a deal";break;
-      case 'Event': contentWrite= "Submit a Event";break;
-      case 'HowTo/KB': contentWrite= "Submit a HowTo/KB";break;
-      case 'Book': contentWrite= "Submit a book";break;
-      case 'Apps': contentWrite= "Submit an Apps";break;
-      case 'Travelogue': contentWrite= "Submit a Travelogue";break;
-      case 'Video': contentWrite= "Submit a Video";break;
+      case 'Reviews': contentWrite= "Submit a Review<span></span>";break;
+      case 'Q&A': contentWrite= "Submit a Questions & Answer<span></span>";break;
+      case 'Tips': contentWrite= "Submit a Tip<span></span>";break;
+      case 'Accessories': contentWrite= "Submit an Accessory<span></span>";break;
+      case 'Photo': contentWrite= "Submit a Photo<span></span>";break;
+      case 'News': contentWrite= "Submit a Latest News<span></span>";break;
+      case 'Deals': contentWrite= "Submit a deal<span></span>";break;
+      case 'Event': contentWrite= "Submit a Event<span></span>";break;
+      case 'HowTo/KB': contentWrite= "Submit a HowTo/KB<span></span>";break;
+      case 'Book': contentWrite= "Submit a book<span></span>";break;
+      case 'Apps': contentWrite= "Submit an Apps<span></span>";break;
+      case 'Travelogue': contentWrite= "Submit a Travelogue<span></span>";break;
+      case 'Video': contentWrite= "Submit a Video<span></span>";break;
     }
-    $("#contentSubmit").text(contentWrite);
+    $("#contentSubmit").html(contentWrite);
   }
 </script>
