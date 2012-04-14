@@ -6,7 +6,9 @@ class User < ActiveRecord::Base
     :recoverable, :rememberable, :trackable, :validatable
 
   REDIS_USER_DETAIL_KEY_PREFIX = "user_details_"
-
+  CACHE_USER_ITEM_HASH = {Follow::ProductFollowType::Owner => "owned_item_ids" ,
+                          Follow::ProductFollowType::Follow => "follow_item_ids",
+                          Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token
   attr_accessor :follow_type
@@ -69,6 +71,37 @@ class User < ActiveRecord::Base
     end
     u_name
     super
+  end
+
+  def set_user_follow_item
+    CACHE_USER_ITEM_HASH.each do |item_type, cache_key|
+      follow_ids = $redis.hexists("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", cache_key)
+      if follow_ids.blank?
+        $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", cache_key, get_follow_items(item_type))
+      end
+    end
+  end
+
+  def get_user_follow_item(item_id)
+    Struct.new("FollowItem", :follow_type)
+    CACHE_USER_ITEM_HASH.each do |item_type, cache_key|
+      item_ids = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", cache_key)
+      if !item_ids.blank? && item_ids.split(",").include?(item_id)
+        Struct::FollowItem.new(item_type)
+      else
+        Struct::FollowItem.new("")
+      end
+    end
+  end
+
+  def clear_user_follow_item
+    CACHE_USER_ITEM_HASH.each do |item_type, cache_key|
+      $redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", cache_key)
+    end
+  end
+
+  def get_follow_items(item_type)    
+    (follows.group_by(&:follow_type)[item_type]).map(&:followable_id).join(",")
   end
 
   def total_points

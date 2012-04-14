@@ -82,15 +82,6 @@ class Item < ActiveRecord::Base
         end
   end
 
-  def cache_follow_items(current_user)
-    following_items = current_user.follows.group_by(&:follow_type)
-    following_items.each do |k, values|
-      $redis.hget("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{self.id}", k)
-      value_ids = values.collect { |value| value.try(:id) }
-      $redis.hset("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{self.id}", k, value_ids)
-    end
-  end
-
 
   def priority_specification
     specification.where(:priority => 1)
