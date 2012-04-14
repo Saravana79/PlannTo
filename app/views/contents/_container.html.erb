@@ -1,17 +1,12 @@
 <!--Write a review share to a friend-->
 <div class="Leftreviewblock">
-
   <!--write tab start here-->
   <div class="Reviewbigtabs">
     <a href="#" class="" id="contentSubmit">Submit a Review<span></span></a>
     <a href="#" class="Activetab Tabfirst" id="contentWrite">Write a Review<span></span></a>
-
   </div>
   <!--write tab end here-->
-
-
   <div class="Leftreviewinner">
-
     <!--left navigation-->
     <div class="Leftnavi" id="contentContainer">
       <ul>
@@ -21,13 +16,11 @@
           <%end%>
           <li class="<%if index==0%>Active<%end%> <%=get_content_container_class(article_category[0])%>" id="content<%=article_category[0]%>" <%if index >2%> style="display:none;"<%end%>><a href="#"><%=article_category[0]%></a></li>
         <%end%>
-
       </ul>
     </div>
     <!--left navigation-->
-
     <div class="Tabsrightcontent">
-      <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="defaultContainer" class="contentSubContainer" onclick="$('div#contentContainer ul li.Active').trigger('click');$('#defaultContainer').hide();">What do you think of this car?
+      <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="defaultContainer" class="contentSubContainer" onclick="$('div#contentContainer ul li.Active').trigger('click');$('#defaultContainer').hide();">What do you think of this <%=@item.itemtype.itemtype%>?
       </textarea>
       <%= render :partial => 'reviews/review_subcontainer' %>
       <!-- move above partial contents to below commented partial-->
@@ -37,9 +30,7 @@
 <%#= render :partial => 'tips/new_tip' %>
       <%= render :partial => 'event_contents/new' %>
       <%= render :partial => 'contents/new_default' %>
-
     </div>
-
   </div>
 </div>
 <!--Write a review share to a friend-->
@@ -59,23 +50,24 @@
     if (id == "contentShowmore"){     
       $("div#contentContainer ul li").show();
       $("#contentShowmore").hide();
+      $('#defaultContainer').show();
     }
     else if(id == "contentBooks"){
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
-    else if(id == "contentAccessories"){
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
+    /* else if(id == "contentAccessories"){
+      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if(id == "contentTravelogue"){
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::TRAVELOGUE)}"%>
+      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::TRAVELOGUE)}"%>
       $("#article_content_article_category_id").val(article_category_id)
     }
     else if(id == "contentApps"){
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
+      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
-    }
+    }*/
     else if(id == "contentEvent"){
       $("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
@@ -101,11 +93,11 @@
       $("#question_contentDiv").show();
     }
     else{
-    <%article_categories.each do |category|%>
+<%article_categories.each do |category|%>
         if (id.replace("content",'') == '<%=category[0]%>'){
           var article_category_id = '<%=category[1]%>'
         }
-    <%end%>
+<%end%>
       $("#content_type").val(id.replace("content",''))
       $("#article_content_article_category_id").val(article_category_id)
       $("#subContainerDefaultContent").show();
@@ -146,10 +138,11 @@
       case 'News': contentWrite= "Add a News";break;
       case 'Deals': contentWrite= "Add a deal";break;
       case 'Event': contentWrite= "Add a Event";break;
-      case 'How To/KBs': contentWrite= "Add a HowTo/KB";break;
+      case 'HowTo/KB': contentWrite= "Add a HowTo/KB";break;
       case 'Book': contentWrite= "Add a Book";break;
       case 'Apps': contentWrite= "Add an Apps";break;
       case 'Travelogue': contentWrite= "Add a Travelogue";break;
+      case 'Video': contentWrite= "Add a Video";break;
     }
     $("#contentWrite").text(contentWrite);
   }
@@ -165,10 +158,11 @@
       case 'News': contentWrite= "Submit a Latest News";break;
       case 'Deals': contentWrite= "Submit a deal";break;
       case 'Event': contentWrite= "Submit a Event";break;
-      case 'How To/KBs': contentWrite= "Submit a HowTo/KB";break;
+      case 'HowTo/KB': contentWrite= "Submit a HowTo/KB";break;
       case 'Book': contentWrite= "Submit a book";break;
       case 'Apps': contentWrite= "Submit an Apps";break;
       case 'Travelogue': contentWrite= "Submit a Travelogue";break;
+      case 'Video': contentWrite= "Submit a Video";break;
     }
     $("#contentSubmit").text(contentWrite);
   }
