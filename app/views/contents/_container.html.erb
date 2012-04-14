@@ -98,12 +98,16 @@
     }
     else{
       $(".contentSubContainer").hide();
+      var value = id.replace("content",'')
 <%article_categories.each do |category|%>
-        if (id.replace("content",'') == '<%=category[0]%>'){
+        if (value == '<%=category[0]%>'){
           var article_category_id = '<%=category[1]%>'
+          
         }
 <%end%>
+      var button_name =  setButtonName(value);
       $("#content_type").val(id.replace("content",''))
+      $("#default_content_submit").val(button_name)
       $("#article_content_article_category_id").val(article_category_id)
       $("#subContainerDefaultContent").show();
     }
@@ -131,6 +135,27 @@
   
     e.preventDefault();
   });
+
+
+  function setButtonName(label){
+    var contentWrite = ""
+    switch(label){
+      case 'Reviews': contentWrite= "Save Review";break;
+      case 'Q&A': contentWrite= "Save Question";break;
+      case 'Tips': contentWrite= "Save Tip";break;
+      case 'Accessories': contentWrite= "Save Accessory";break;
+      case 'Photo': contentWrite= "Save Photo";break;
+      case 'News': contentWrite= "Save News";break;
+      case 'Deals': contentWrite= "Save deal";break;
+      case 'Event': contentWrite= "Save Event";break;
+      case 'HowTo/KB': contentWrite= "Save HowTo/KB";break;
+      case 'Book': contentWrite= "Save Book";break;
+      case 'Apps': contentWrite= "Save Apps";break;
+      case 'Travelogue': contentWrite= "Save Travelogue";break;
+      case 'Video': contentWrite= "Save Video";break;
+    }
+    return contentWrite
+  }
 
   function setUpContentWrite(label){
     var contentWrite = ""
