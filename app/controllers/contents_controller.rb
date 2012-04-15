@@ -11,6 +11,11 @@ class ContentsController < ApplicationController
     end
   end
 
+  def show
+    @content = Content.find(params[:id])
+    render :layout => "product"
+  end
+
   def create
     @content = PlanntoContent.new params[:content]
     @content.field1 = params[:type]

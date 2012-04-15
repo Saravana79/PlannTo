@@ -16,6 +16,23 @@ module ContentsHelper
       render :partial => "contents/default", :locals => { :content => item }
     end
   end
+
+  def display_content_type(item)
+    case item.type
+    when "ArticleContent"
+      render :partial => "contents/show_default", :locals => { :content => item }
+    when "VideoContent"
+      render :partial => "contents/show_default", :locals => { :content => item }
+    when "QuestionContent"
+      render :partial => "contents/show_question_details", :locals => { :content => item }
+    when "ReviewContent"
+      render :partial => "contents/show_default", :locals => { :content => item }
+    when "EventContent"
+      render :partial => "contents/show_default", :locals => { :content => item }
+    when "PlanntoContent"
+      render :partial => "contents/show_default", :locals => { :content => item }
+    end
+  end
   
   def render_comments_anchor(item)
     txt= "Comments ( #{item.comments.count})"
