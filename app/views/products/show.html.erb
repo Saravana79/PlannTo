@@ -121,7 +121,7 @@
 <br />
 <%=render :partial =>"items/related_products" %>
 
-  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => user_follow_type(@item, current_user) %>
+  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => @user_follow %>
   <%= render 'shared/show_hide_login_form', :item => @item %>
 
 <div id="dialog-invite-form" style="display:none">
