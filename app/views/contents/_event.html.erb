@@ -4,7 +4,7 @@
 		<img src="images/users.png" class="userImageSmall">
 	</div>
 		<div id="content_<%= content.id  %>" class="subContentDiv">
-			<div><a class="title" href="google.com"><%= content.title %></a></div>
+			<div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
 			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content) %> ago. Start date: <%=content.start_date%> End date: <%=content.end_date%> Location: <%=content.location%></a></div>
 		<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
 		<ul class="divCommentsConent">

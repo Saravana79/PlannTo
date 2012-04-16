@@ -5,7 +5,7 @@
   </div>
   <div class="subContentDiv">
     <div><a class="title" href="google.com"><%= answer_content.title %></a></div>
-    <div><a class="txt_brown"><%= answer_content.user.name unless answer_content.user.nil?   %> answered in <%= answer_content.items.first.name %> <%= time_ago_in_words(answer_content.created_at) unless answer_content.created_at.nil? %> </a></div>
+    <div><a class="txt_brown"><%= answer_content.user.name unless answer_content.user.nil?   %> answered in <%= answer_content.question_content.items.first.name %> <%= time_ago_in_words(answer_content.created_at) unless answer_content.created_at.nil? %> </a></div>
     <div class="subContentGap"><a class="txt_black_description"><%= answer_content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue ">Comments (9) </a></li>

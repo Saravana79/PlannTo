@@ -12,6 +12,10 @@ class Content < ActiveRecord::Base
   belongs_to :itemtype
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
 
+  def related_items
+    return ContentItemRelation.where('content_id = ?', self.id)  
+  end
+
   PER_PAGE = 10
   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")
