@@ -81,7 +81,8 @@ class ApplicationController < ActionController::Base
   helper_method :user_follow_type
 
   def user_follow_type(item, user = current_user)
-    user_follow_items = all_user_follow_item(item.id)
-    user.blank? || user_follow_items.blank? ? false : user_follow_items
+    user_follow_items = ""
+    user_follow_items = all_user_follow_item(item.id) if !user.blank?
+    user_follow_items.blank? ? false : user_follow_items
   end
 end
