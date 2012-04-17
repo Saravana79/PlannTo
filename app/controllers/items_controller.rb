@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
   layout "product"
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
-  after_filter  :cache_follow_items, :only => [:follow_item_type]
 
   #before_filter :authenticate_user!
   # GET /items
@@ -170,6 +169,7 @@ class ItemsController < ApplicationController
   def plan_to_buy_item
     @type = "buy"
     follow = follow_item(params[:follow_type], params[:unfollow])
+    current_user.clear_user_follow_item
     if follow.blank?
       flash[:notice] = "You already buy this Item"      
     else
@@ -181,6 +181,7 @@ class ItemsController < ApplicationController
   def own_a_item
     @type = "own"
     follow = follow_item(params[:follow_type], params[:unfollow])
+    current_user.clear_user_follow_item
     if follow.blank?
       flash[:notice] = "You are already owning this Item"
     else
@@ -192,6 +193,7 @@ class ItemsController < ApplicationController
   def follow_this_item
     @type = "follow"
     follow = follow_item(params[:follow_type], params[:unfollow])
+    current_user.clear_user_follow_item
     if follow.blank?
       flash[:notice] = "You are already Following this Item"
     else
@@ -223,13 +225,6 @@ class ItemsController < ApplicationController
       false
     end
 
-  end
-
-
-  def cache_follow_items
-    unless current_user.blank?
-       @item.cache_follow_items(current_user)
-    end
   end
 
 end
