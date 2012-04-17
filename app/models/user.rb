@@ -102,7 +102,6 @@ class User < ActiveRecord::Base
   end
 
   def get_follow_items(item_type)
-    Rails.logger.info (follows.group_by(&:follow_type)[item_type]).map(&:followable_id).join(",").inspect
     begin
       (follows.group_by(&:follow_type)[item_type]).map(&:followable_id).join(",")
     rescue
