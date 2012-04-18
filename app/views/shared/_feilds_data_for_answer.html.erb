@@ -1,5 +1,5 @@
 <div id ="popup_question_answer" style="display: none;">
-<%= form_tag("/field_values/create", :remote => true ) do  %>
+<%= form_tag(field_values_path(:item_id => item.id), :remote => true ) do  %>
   <%= render "shared/question_answer_fields", :item => item %>
       <% end %>
 </div>

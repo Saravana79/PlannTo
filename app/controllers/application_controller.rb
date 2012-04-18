@@ -5,6 +5,17 @@ class ApplicationController < ActionController::Base
   before_filter :check_authentication
   before_filter :store_session_url
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
+
+  before_filter :cache_follow_items 
+
+  def cache_follow_items
+    user = current_user
+    if user
+      user.set_user_follow_item
+    else
+      false
+    end
+  end
    
   def set_access_control_headers
      headers['Access-Control-Allow-Origin'] = '*'
@@ -63,15 +74,15 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
-  def all_user_follow_item  
-    Rails.cache.fetch("item_follow_"+5.to_s) do
-      current_user.follows.group_by(&:followable_id)
-    end
+  def all_user_follow_item(item_id = params[:id])
+    current_user.get_user_follow_item(item_id)
   end
 
   helper_method :user_follow_type
 
   def user_follow_type(item, user = current_user)
-    @user_follow = user.blank? || all_user_follow_item[item.id].blank? ? false : all_user_follow_item[item.id].last
+    user_follow_items = ""
+    user_follow_items = all_user_follow_item(item.id) if !user.blank?
+    user_follow_items.blank? ? false : user_follow_items
   end
 end

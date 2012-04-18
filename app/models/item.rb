@@ -23,6 +23,7 @@ class Item < ActiveRecord::Base
   has_many :pros
   has_many :cons
   has_many :best_uses
+  has_many :field_values
   has_many :itemrelationships, :foreign_key => :item_id
   has_many :relateditems,
     :through => :itemrelationships
@@ -80,15 +81,6 @@ class Item < ActiveRecord::Base
                                                          Follow::ProductFollowType::Owner,
                                                          Follow::ProductFollowType::Follow])
         end
-  end
-
-  def cache_follow_items(current_user)
-    following_items = current_user.follows.group_by(&:follow_type)
-    following_items.each do |k, values|
-      $redis.hget("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{self.id}", k)
-      value_ids = values.collect { |value| value.try(:id) }
-      $redis.hset("#{REDIS_FOLLOW_ITEM_KEY_PREFIX}#{self.id}", k, value_ids)
-    end
   end
 
 

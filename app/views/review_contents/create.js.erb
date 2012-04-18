@@ -5,7 +5,7 @@
  // $('#new_review_content #rating').raty('cancel');
 
 //write the dialog box with come contents
-$('<div />').attr('id', 'urlParagraph').html("URL: <a href='#' class ='question'> Answer the Question</a> ").appendTo('#reviewDiv');
+$('<div />').attr('id', 'urlParagraph').html("URL: <a href='#' class ='question'> Answer the Question</a> ").appendTo('#reviewSubContainer');
  $("#urlParagraph").dialog({
      autoOpen:false,
      height:300,
@@ -13,7 +13,7 @@ $('<div />').attr('id', 'urlParagraph').html("URL: <a href='#' class ='question'
      modal:true,
      title:"For now sample"
  });
- $("#reviewDiv").dialog("close");
+ $("#reviewSubContainer").dialog("close");
  $("#urlParagraph").dialog("open");
 
  $(".question").live("click", function () {
