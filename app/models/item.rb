@@ -23,6 +23,7 @@ class Item < ActiveRecord::Base
   has_many :pros
   has_many :cons
   has_many :best_uses
+  has_many :field_values
   has_many :itemrelationships, :foreign_key => :item_id
   has_many :relateditems,
     :through => :itemrelationships

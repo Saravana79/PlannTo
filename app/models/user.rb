@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
   belongs_to :facebook
+  has_many :field_values
+
 
 
   USER_POINTS = {:new_review => {:points => 2,:self_update => true},

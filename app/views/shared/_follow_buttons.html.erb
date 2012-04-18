@@ -8,9 +8,9 @@
     $(document).ready(function () {
         $(".plan_to_own_icon").addClass("show_review_popup");
         $(".show_review_popup").live("click", function () {
-            $("#reviewDiv").dialog("open");
+            $("#reviewSubContainer").dialog("open");
         });
-        $("#reviewDiv").dialog({
+        $("#reviewSubContainer").dialog({
             autoOpen:false,
             height:300,
             width:350,
