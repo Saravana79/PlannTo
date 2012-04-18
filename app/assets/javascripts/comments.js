@@ -14,3 +14,10 @@ $(function(){
     });
     
 })
+
+
+$(function(){
+	$('#comment_this_content').click(function(){
+		$('#new_comment_block').toggle();
+	});
+});

@@ -1,13 +1,18 @@
 class CommentsController < ApplicationController
 
   def create
+    @detail = params[:detail]
     @content= Content.find(params[:content_id])
     @comment = Comment.new(params[:comment])
     @comment.commentable = @content
     @comment.user = current_user
 
     if @comment.save
-       @comment_string = render_to_string :partial => "comment", :locals => { :comment => @comment } 
+      if @detail
+        @comment_string = render_to_string :partial => "detailed_comment", :locals => { :comment => @comment }
+      else
+        @comment_string = render_to_string :partial => "comment", :locals => { :comment => @comment }
+      end
       respond_to do|format|
         format.js { render :create, :status => 201 }
       end

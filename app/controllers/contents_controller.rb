@@ -13,6 +13,7 @@ class ContentsController < ApplicationController
 
   def show
     @content = Content.find(params[:id])
+    @comment = Comment.new
     render :layout => "product"
   end
 

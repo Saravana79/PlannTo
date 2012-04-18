@@ -1,0 +1,5 @@
+<div id="commentsList">
+  <%content.comments.each do |comment|%>
+  <%= render :partial => 'comments/detailed_comment',:locals => {:comment => comment} %>
+  <%end%>
+</div>

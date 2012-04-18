@@ -59,16 +59,16 @@
       <div  style="border-bottom:solid 1px #ccd4d8;">
         <div class="hdr_Category float_lft margin_lft10"><%= pluralize(content.comments.count,'Comments') %> </div>
         <div class="float_rgt" style="margin-top:8px;">
-                <a style="" class="btn_submitanswer" id="answer_this_question" >Comment this Content</a>
+                <a style="" class="btn_submitanswer" id="comment_this_content" >Comment this Content</a>
                 <div class="PlanntoBuyBtn"><span class="action_btns"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Content</a></span></div>
                 </div>
 
       </div>
       <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
     <!-- Answer this question - End -->
-        <%#= render :partial => 'answer_contents/new_answer_content', :locals => {:question_content => content, :item => @item} %>
-
-    <%#= render :partial => 'answer_contents/answer_content',:collection => content.answer_contents %>
+    <%= render :partial => 'comments/new_detail_comment', :locals => {:content => content, :parent => content.class.name, :parent_id => content.id, :detail => true}  %>
+    
+    <%= render :partial => 'comments/detailed_comments_list',:locals => {:content =>content} %>
 
 
 </div>

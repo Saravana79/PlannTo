@@ -1,1 +1,6 @@
-jQuery('#new_comment_<%= @content.id %>').before('<%=escape_javascript(@comment_string.html_safe) %>');
+<% if @detail %>
+ $('#new_comment')[0].reset();
+   $("#commentsList").prepend('<%=escape_javascript(@comment_string.html_safe) %>');
+<%else%>
+ jQuery('#new_comment_<%= @content.id %>').before('<%=escape_javascript(@comment_string.html_safe) %>');
+<%end%>
