@@ -37,3 +37,36 @@ $('#total_images').html(0);
 
 first=true;
 images_index=0;
+
+<%if @external%>
+//default form is hidden and so do the following operations
+$("#ShareURLDiv").show();
+//change of dropdown
+ $(document).ready(function(){
+   var category = $('select#article_content_article_category_id :selected').text();
+    setUpExtraFields(category);
+ });
+  // when the #country field changes
+  $("#article_content_article_category_id").change(function() {
+    //var category_id = $('select#article_content_article_category_id :selected').val();
+    var category = $('select#article_content_article_category_id :selected').text();
+    setUpExtraFields(category);
+    return false;
+  });
+
+function setUpExtraFields(category){
+  if (category == "<%=ArticleCategory::EVENT%>"){
+    showShareContainerOptFields();
+    $('#article_content_field1,#article_content_field2').datepicker();
+  }
+  else if (category == "<%=ArticleCategory::APPS%>"){
+    showShareAppOptFields();
+  }
+  else if ((category == "<%=ArticleCategory::BOOKS%>")|| (category == "<%=ArticleCategory::ACCESSORIES%>")) {
+   showShareBooksAccessoriesOptFields();
+  }
+  else{
+    hideShareContainerOptFields();
+  }
+}
+<%end%>

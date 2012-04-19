@@ -3,7 +3,7 @@
 <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
 <%= javascript_include_tag 'textTagger' %>
 <%= javascript_include_tag 'application' %>
-<%= render :partial => "layouts/article_share" %>
+<%= render :partial => "article_contents/article_share", :locals => {:content_category => true} %>
 <%#= render :partial => 'article_contents/article_share', :locals => {:content_category => true} %>
 <style type="text/css" media="screen">
 .title_header { font:bold 11px tahoma; color:#b2884e; text-align:right;margin-top:2px;min-width:75px; margin-right:5px; }
@@ -23,5 +23,9 @@
 	background-color: #ea5e30;
 	border-radius: 3px;
 	padding: 0px 10px;
+}
+
+.notificationStyle {
+  display:none;
 }
 </style>

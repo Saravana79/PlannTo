@@ -190,44 +190,48 @@
 
 
   function validateArticleShareForm(){
-    $('#txtArticleTitle').poshytip('destroy')
-    $('#txtArticleDescription').poshytip('destroy')
+   
     var valid = true;
-    if ($("#txtArticleTitle").val() == ""){
-      $('#txtArticleTitle').poshytip({
-        className: 'tip-darkgray',
-        content: 'Please select a title.',
-        showOn: 'none',
-        alignTo: 'target',
-        alignX: 'right',
-        offsetX: 5,
-        alignY: 'center'
-      });
-      $('#txtArticleTitle').poshytip('show');
-      valid = false
+<%unless @external%>
+      $('#txtArticleTitle').poshytip('destroy')
+      $('#txtArticleDescription').poshytip('destroy')
+      if ($("#txtArticleTitle").val() == ""){
+        $('#txtArticleTitle').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a title.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('#txtArticleTitle').poshytip('show');
+        valid = false
 
-    }   
+      }
+
+<%end%>
     return valid
   }
 <% unless @item.blank? %>
-  function showProductTag(){
-    var itemId = <%= @item.id %>
-    var defaultId = "textTaggers" + itemId
-    $("ul#article_product_list li").each(function (i) {
-      var id = $(this).attr('id');
-      if (id != defaultId){
-        $(this).remove();
-      }
-    });
-    $("#shareProduct").show();
-    $("#articles_item_id").val(itemId);
-  }
+    function showProductTag(){
+      var itemId = <%= @item.id %>
+      var defaultId = "textTaggers" + itemId
+      $("ul#article_product_list li").each(function (i) {
+        var id = $(this).attr('id');
+        if (id != defaultId){
+          $(this).remove();
+        }
+      });
+      $("#shareProduct").show();
+      $("#articles_item_id").val(itemId);
+    }
 
-  function hideProductTag(){
-    var itemId = <%= @item.id %>
-    $("#shareProduct").hide();
-    $("#articles_item_id").val(itemId);
-  }
+    function hideProductTag(){
+      var itemId = <%= @item.id %>
+      $("#shareProduct").hide();
+      $("#articles_item_id").val(itemId);
+    }
 <%end%>
   function hideShareContainerOptFields(){
     $("#new_article_content #article_content_field1").val('');
