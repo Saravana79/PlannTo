@@ -73,6 +73,29 @@
       $("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
       $("#article_content_article_category_id").val(article_category_id)
+      $("#article_create_article_category_id").val(article_category_id)
+       showCreateEventOptFields();
+    }
+    else if(id == "contentApps"){
+      $(".contentSubContainer").hide();
+      $("#subContainerEvent").show();
+      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
+      $("#article_create_article_category_id").val(article_category_id)
+       showCreateAppOptFields();
+    }
+    else if ((id == "contentAccessories")|| (id == "contentBooks")){
+      $(".contentSubContainer").hide();
+      $("#subContainerEvent").show();
+      if (id == "contentAccessories"){
+        var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
+      }
+      if (id == "contentBooks"){
+        var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
+      }
+      
+      $("#article_content_article_category_id").val(article_category_id)
+      $("#article_create_article_category_id").val(article_category_id)
+       showCreateBooksAccessoriesOptFields();
     }
     else if (id == "contentShare"){
       $(".contentSubContainer").hide();
@@ -80,7 +103,7 @@
     }
     else if (id == "contentReviews"){
       $(".contentSubContainer").hide();
-      $("#reviewSubContainer").show();
+      $("#articleReviewSubContainer").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
       $("#article_content_article_category_id").val(article_category_id)
       // $("#reviewContainer").show();

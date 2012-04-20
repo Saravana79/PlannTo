@@ -1,6 +1,6 @@
  $('#new_review_content')[0].reset();
-  $('div#reviewSubContainer div#notification').fadeIn('slow');
-  setTimeout("$('div#reviewSubContainer div#notification').fadeOut('slow');", 5000);
+  $('div#articleReviewSubContainer div#notification').fadeIn('slow');
+  setTimeout("$('div#articleReviewSubContainer div#notification').fadeOut('slow');", 5000);
   $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
  // $('#new_review_content #rating').raty('cancel');
 

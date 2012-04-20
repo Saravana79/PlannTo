@@ -258,17 +258,17 @@
 
   function showShareAppOptFields(){
     $("#sharefield1Label").text("Sub Category:")
-    $("#new_article_content #article_content_field1").replaceWith("<%=get_apps_subcategory_html_list%>");
+    $("#new_article_content #article_content_field1").replaceWith("<%=get_apps_subcategory_html_list("article_content_field1", "article_content[field1]")%>");
     $("#sharefield1").show();
     $("#sharefield2Label").text("Type:")
-    $("#new_article_content #article_content_field2").replaceWith("<%=get_apps_type_html_list%>");
+    $("#new_article_content #article_content_field2").replaceWith("<%=get_apps_type_html_list("article_content_field2", "article_content[field2]")%>");
     $("#sharefield2").show();
     $("#sharefield3").hide();
   }
 
   function showShareBooksAccessoriesOptFields(){
     $("#sharefield1Label").text("Sub Category:")
-    $("#new_article_content #article_content_field1").replaceWith("<%=get_books_accessories_subcategory_html_list%>");
+    $("#new_article_content #article_content_field1").replaceWith("<%=get_books_accessories_subcategory_html_list("article_content_field1", "article_content[field1]")%>");
     $("#sharefield1").show();
     $("#sharefield2").hide();
     $("#sharefield3").hide();

@@ -3,6 +3,14 @@
   $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article) %>");
   $("#article_errors").show(300);
 <% else %>
+  <%if @article_create%>
+  $('div#subContainerEvent #notification').fadeIn('slow');
+   setTimeout("$('div#subContainerEvent #notification').fadeOut('slow');", 4000);
+   $("#article_errors").hide();
+   $('div#subContainerEvent form')[0].reset();
+   $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
+   showCreateProductTag();
+  <%else%>
   <% if @external.blank? %>
   $('div#ShareURLDiv div#notification').fadeIn('slow');
   setTimeout("$('div#ShareURLDiv div#notification').fadeOut('slow');", 5000);
@@ -19,4 +27,5 @@
     window.open('', '_self', '');
     window.close();
   <% end %>
+    <%end%>
 <% end %>

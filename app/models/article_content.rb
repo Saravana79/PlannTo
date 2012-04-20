@@ -1,6 +1,6 @@
 class ArticleContent < Content
   acts_as_citier
-  validates_presence_of :url
+  #validates :url, :presence => true
   belongs_to :article_category
   
   MIN_SIZE =[25,25]
