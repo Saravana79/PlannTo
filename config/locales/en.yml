@@ -14,4 +14,17 @@ en:
   unown_bnt: "UnFollow"
   buy_bnt: "Plan to buy"
   unbuy_bnt: "UnFollow"
+  EventContent:
+    plan_to_follow: "Are you interested to know about this , then follow this product"
+    plan_to_buy: "I might go for the event."
+    plan_to_own: "Planning to go for the event."
+    plan_to_buy_selected: "You already marked as might go for this event, click to cancel it."
+    plan_to_own_selected: "You already marked as going for this event, click to cancel this."
+    plan_to_follow_selected: "You are already following this product"
+    follow_bnt: "Follow"
+    unfollow_bnt: "UnFollow"
+    own_bnt: "Am Going"
+    unown_bnt: "UnFollow"
+    buy_bnt: "May Go"
+    unbuy_bnt: "UnFollow"
 

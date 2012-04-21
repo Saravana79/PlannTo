@@ -21,7 +21,12 @@
 
     </div>
 
+<div class="float_rgt">
+    <%= render 'shared/follow_buttons',:follow_type => @content.type, :follow_html => '', :button_class => '', :item => @content %>
+</div>
 
+<%= render 'shared/product_button_javascript', :button_class => '', :item => @content, :related_follower => user_follow_type(@content, current_user) %>
+<%= render 'shared/show_hide_login_form', :item => @content %>
 <br/><br/>
 <div class="leftcolumnbig">
 <!-- Product Details - Start -->

@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
-
+  
   layout 'product'
   
   def index
