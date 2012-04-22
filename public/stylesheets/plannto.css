@@ -1924,8 +1924,14 @@ li.middlebg {
 }
 
 .uploadedvideoContentdisplay {
-    width: 200px;
-    height: 100px;
+    width: 160px;
+    height: 120px;
+    padding-right: 10px;
+}
+
+.uploadedarticleContentdisplay {
+    width: 75px;
+    height: 75px;
     padding-right: 10px;
 }
 
