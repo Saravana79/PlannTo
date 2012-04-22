@@ -22,7 +22,7 @@
     </div>
 
 <div class="float_rgt">
-    <%= render 'shared/follow_buttons',:follow_type => @content.type, :follow_html => '', :button_class => '', :item => @content %>
+    <%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content %>
 </div>
 
 <%= render 'shared/product_button_javascript', :button_class => '', :item => @content, :related_follower => user_follow_type(@content, current_user) %>
