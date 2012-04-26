@@ -1,7 +1,4 @@
 Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
-<%= render "shared/javascript_button", :button_class => params[:button_class], :item => @item, :related_follower => user_follow_type(@item, current_user) %>
+<%= render "shared/javascript_button", :button_class => params[:button_class], :item => @item, :related_follower => user_follow_type(@item, current_user), :related_items => @related_items %>
 
-document.ready(function(){
-  $(".tooltip").remove();
-  $(".PlanntoBuyBtn span[title]").tooltip();  
-})
+

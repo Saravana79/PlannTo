@@ -6,7 +6,7 @@
     <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
 
     <div class="PlanntoBuyBtncnt">
-      <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => item %>
+      <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => item, :related_items => true %>
  
     </div>
     <div style="clear:both">
@@ -18,5 +18,5 @@
 
           <script type="text/javascript">
            <%= render "shared/javascript_button", :formate => :js, :button_class => '_small', :item => item,
-           :related_follower => user_follow_type(item, current_user) %>
+           :related_follower => user_follow_type(item, current_user), :related_items => true %>
          </script>

@@ -1,5 +1,6 @@
 module FollowMethods
   def follow_item_type
+    @related_items = params[:related_items] == "true"    
     case params[:follow_type]
       when 'Buyer'
         plan_to_buy_item

@@ -10,7 +10,7 @@
       <img src="../images/rating_stars.png" width="87" height="20"/><br/>
 
       <% if current_user.blank? || !current_user.following?(relateditem) %>
-        <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small' %>
+        <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :related_items => true %>
       <% end %>
     </td>
   </tr>

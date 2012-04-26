@@ -31,7 +31,7 @@
           <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
         </span>
         <span class="float_rgt" style="display:inline;">
-          <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item %>
+          <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item, :related_items => false %>
         </span>
 
           <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) %>

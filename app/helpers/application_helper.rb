@@ -15,9 +15,10 @@ module ApplicationHelper
       links_follow = ""
       array_follow.each do |text_val, id_val, follow|
         text_val = "" if button_class == "_small"
-        links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s} title = '#{I18n.t item.class.to_s+'.'+id_val}'>" +
-          get_follow_link(text_val, url_for(:action => 'follow_item_type', :controller => item.class.superclass.to_s.downcase.pluralize, :id => item, :button_class => button_class, :follow_type => follow),
-          options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class)) +
+        title_value = !options[:related_items] ? (I18n.t item.class.superclass.to_s+'.'+id_val) : " "
+        links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s}>" +
+          get_follow_link(text_val, url_for(:action => 'follow_item_type', :controller => item.class.superclass.to_s.downcase.pluralize, :id => item, :button_class => button_class, :follow_type => follow, :related_items => options[:related_items]),
+          options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class, :title => title_value)) +
           '</span>'
       end
       links_follow.html_safe

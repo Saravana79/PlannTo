@@ -1,5 +1,5 @@
 <script type="text/javascript">
-<%= render "shared/javascript_button", :formate => :js, :button_class => button_class, :item => item, :related_follower => related_follower %>
+<%= render "shared/javascript_button", :formate => :js, :button_class => button_class, :item => item, :related_follower => related_follower, :related_items => related_items %>
 <% if current_user.blank? %>
     Product.load_signout_user_link();
 <% end %>
@@ -8,7 +8,14 @@ var url = "<%= feed_contents_path(:items => item.id  ) %>";
   $("#usual2 ul").idTabs("tabs1");
   Product.detailed_specification();
 
-$(".PlanntoBuyBtn span[title]").tooltip();
+<% unless related_items %>
+$('<%= "#plan_to_buy_#{item.id}, #plan_to_own_#{item.id}, #plan_to_follow_#{item.id}" %>').poshytip({
+  content: this.title,
+  className: "tip-darkgray",
+  bgImageFrameSize: 11,
+  offsetX: -25
+});
+<% end %>
 
   $(document).ajaxError(function(e, XHR, options){
     if (XHR.status == 401){
