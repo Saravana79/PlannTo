@@ -1,0 +1,3 @@
+class BikesController < ProductsController  
+
+end

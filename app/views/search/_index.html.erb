@@ -34,7 +34,7 @@
           <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item, :related_items => false %>
         </span>
 
-          <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) %>
+          <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
 
       </div>
       <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
