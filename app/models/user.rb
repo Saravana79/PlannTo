@@ -66,6 +66,10 @@ class User < ActiveRecord::Base
     user_details
   end
 
+  def username
+    email.split("@")[0]
+  end
+
   def name
     unless u_name = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name")
       u_name = super

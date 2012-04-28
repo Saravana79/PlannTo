@@ -23,7 +23,7 @@
       <div id="login_link" style="display:none">
         <ul>
           <li>
-            <%= link_to "Account Setting", accounts_path %>
+            <%= link_to "Account Setting", accounts_path(current_user.username) %>
           </li>
           <li>
             <%= link_to "Profile", profile_path %>
