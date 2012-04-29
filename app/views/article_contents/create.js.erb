@@ -7,7 +7,7 @@
   $('div#subContainerEvent #notification').fadeIn('slow');
    setTimeout("$('div#subContainerEvent #notification').fadeOut('slow');", 4000);
    $("#article_errors").hide();
-   $('div#subContainerEvent form')[0].reset();
+   $('div#subContainerEvent form#new_create_article_form')[0].reset();
    $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
    showCreateProductTag();
   <%else%>
@@ -15,8 +15,8 @@
   $('div#ShareURLDiv div#notification').fadeIn('slow');
   setTimeout("$('div#ShareURLDiv div#notification').fadeOut('slow');", 5000);
     $("#article_errors").hide();
-   $('#article_content_url').val('');
-   $('#article_content_url').keyup();
+   $('div#ShareURLDiv #new_share_url').val('');
+   $('div#ShareURLDiv #new_share_url').keyup();
    hideField1();
    hideField2();
    hideField3();

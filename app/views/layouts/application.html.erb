@@ -319,7 +319,7 @@
       select: function( event, ui ) {
         if (settings.hidden_field != "")
         {
-          $.addIdToField(settings.hidden_field, ui.item.id)
+          $.addIdToField(settings.hidden_field, ui.item.id, settings)
         }
         $.addTag(fieldId, taggingField, settings, ui.item.value, ui.item.id);
         $("#" + fieldId).val("");
@@ -374,7 +374,7 @@
     });
   }
 
-  jQuery.addIdToField = function(hidden_field, id){
+  jQuery.addIdToField = function(hidden_field, id, settings){
     var formVal = $("#" + hidden_field).val();
     var formValArray = formVal == "" ? [] : formVal.split(",")
     var add = true

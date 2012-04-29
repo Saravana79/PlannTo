@@ -1,8 +1,14 @@
 <div id="subContainerEvent" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
 <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
 <!-- along with event creation this form is used for many other types -->
-  <%= form_for :article_create, :url => article_contents_url, :remote => true do |f| %>
-    <div id="article_errors" style="line-height:20px;color: red;"></div>
+<%if @content.nil?%>
+<%@form_id = "new_create_article_form"%>
+<%else%>
+<%@form_id = "edit_create_article_form"%>
+<%end%>
+  <%= form_for @content || ArticleContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+<%= hidden_field_tag 'default_item_id', @item.try(:id) %>
+<div id="article_errors" style="line-height:20px;color: red;"></div>
     <%=f.hidden_field :article_category_id%>
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
@@ -16,29 +22,44 @@
         <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;' %>
       </div>
     </div>
-    <div style="padding:5px 5px 0px 0px;text-align:center">
+    <!--<div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Url:</div>
       <div class="float_lft">
-        <%= f.text_field :url, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+        <%= f.hidden_field :url, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
       </div>
-    </div>
+    </div>-->
     <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->
     <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="sharefield1">
       <div class="title_header float_lft" id="sharefield1Label">Start date :</div>
       <div class="float_lft">
-        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px"}  %>
+        <%if @content.nil?%>
+        <%@field1_id = "new_field1_#{@item.id}"%>
+        <%else%>
+        <%@field1_id = "edit_field1_#{@item.id}"%>
+        <%end%>
+        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id =>  @field1_id}%>
       </div>
     </div>
     <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="sharefield2">
       <div class="title_header float_lft" id="sharefield2Label">End date :</div>
+      <%if @content.nil?%>
+        <%@field2_id = "new_field2_#{@item.id}"%>
+        <%else%>
+        <%@field2_id = "edit_field2_#{@item.id}"%>
+        <%end%>
       <div class="float_lft">
-        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px"}  %>
+        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px", :id =>  @field2_id}  %>
       </div>
     </div>
     <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="sharefield3">
       <div class="title_header float_lft" id="sharefield3Label">Location :</div>
+      <%if @content.nil?%>
+        <%@field3_id = "new_field3_#{@item.id}"%>
+        <%else%>
+        <%@field3_id = "edit_field3_#{@item.id}"%>
+        <%end%>
       <div class="float_lft">
-        <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px"}  %>
+        <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px", :id =>  @field3_id}  %>
       </div>
     </div>
     <!-- FIELD ENDS -->
@@ -59,35 +80,34 @@
   </div>
 <% end %>
 <script type="text/javascript">
-  
   function showCreateEventOptFields(){
     $("div#subContainerEvent #sharefield1Label").text("Start Date:")
-    $("div#subContainerEvent #article_create_field1").replaceWith("<input id='article_create_field1' name='article_create[field1]' type='text' style='margin-left:5px;width:150px'/>");
+    $("div#subContainerEvent form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
     $("div#subContainerEvent #sharefield2Label").text("End Date:")
-    $("div#subContainerEvent #article_create_field2").replaceWith("<input id='article_create_field2' name='article_create[field2]' type='text' style='margin-left:5px;width:150px'/>");
+    $("div#subContainerEvent form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
 
-    $("div#subContainerEvent #article_create_field1").val('');
-    $("div#subContainerEvent #article_create_field2").val('');
-    $("div#subContainerEvent #article_create_field2").val('');
+    $("div#subContainerEvent form#<%=@form_id%> #<%=@field1_id%>").val('');
+    $("div#subContainerEvent form#<%=@form_id%> #<%=@field2_id%>").val('');
+    $("div#subContainerEvent form#<%=@form_id%> #<%=@field3_id%>").val('');
     $("div#subContainerEvent #sharefield1").show();
     $("div#subContainerEvent #sharefield2").show();
     $("div#subContainerEvent #sharefield3").show();
-    $('div#subContainerEvent #article_create_field1,div#subContainerEvent #article_create_field2').datepicker();
+    $('div#subContainerEvent form#<%=@form_id%> #<%=@field1_id%>,div#subContainerEvent #<%=@field2_id%>').datepicker();
   }
 
   function showCreateAppOptFields(){
     $("div#subContainerEvent #sharefield1Label").text("Sub Category:")
-    $("div#subContainerEvent #article_create_field1").replaceWith("<%=get_apps_subcategory_html_list("article_create_field1", "article_create[field1]")%>");
+    $("div#subContainerEvent #<%=@field1_id%>").replaceWith("<%=get_apps_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
     $("div#subContainerEvent #sharefield1").show();
     $("div#subContainerEvent #sharefield2Label").text("Type:")
-    $("div#subContainerEvent #article_create_field2").replaceWith("<%=get_apps_type_html_list("article_create_field2", "article_create[field2]")%>");
+    $("div#subContainerEvent #<%=@field2_id%>").replaceWith("<%=get_apps_type_html_list("#{@field2_id}", "article_content[field2]")%>");
     $("div#subContainerEvent #sharefield2").show();
     $("div#subContainerEvent #sharefield3").hide();
   }
 
   function showCreateBooksAccessoriesOptFields(){
     $("div#subContainerEvent #sharefield1Label").text("Sub Category:")
-    $("div#subContainerEvent #article_create_field1").replaceWith("<%=get_books_accessories_subcategory_html_list("article_create_field1", "article_create[field1]")%>");
+    $("div#subContainerEvent #<%=@field1_id%>").replaceWith("<%=get_books_accessories_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
     $("div#subContainerEvent #sharefield1").show();
     $("div#subContainerEvent #sharefield2").hide();
     $("div#subContainerEvent #sharefield3").hide();
@@ -106,6 +126,7 @@
     }
 
   $(document).ready(function(){
+    <%if @content.nil?%>
     settings={
       close:true, addButton: false,
       url: "/search/autocomplete_items",
@@ -113,28 +134,59 @@
       hidden_field: "article_create_item_id"
     };
     $.textTagger("article_create_product","article_create_product_list",settings);
-<% unless @item.blank? %>
-      $.addTag("article_create_product","article_create_product_list", settings,"<%= @item.name %>", "<%= @item.id %>");
-      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+    <% unless @item.blank? %>
+      $.addTag("article_create_product","article_create_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
       $("ul#article_create_product_list li:first span a.icon_close_tagging").remove();
 <% end %>
+    <%else%>
+      settings={
+        has_parent:true,
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "#contentEditView #article_create_item_id"
+      };
+  <% @items.each do |item| %>
+        $.addTag("#contentEditView #default_product_item","div#contentEditView ul#default_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+    <%if item.id == @item.id%>
+          $("ul#article_create_product_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
+    <%end%>
+  <%end%>
+    $.textTagger("#contentEditView #article_create_product","#contentEditView #article_create_product_list",settings);
+
+      <%end%>
+
     
     //$('#event_content_start_date,#event_content_end_date').datepicker();
-    $("#event_content_submit").click(function(){
+    $("form#<%=@form_id%> #event_content_submit").click(function(e){
       $("#subContainerEvent div#article_errors").html("");
        var valid = validateEventForm();
       if (!valid){
         return false;
+      }
+      else{
+        <%if @content.nil?%>
+          // $('form#<%#=@form_id%>').attr('action','<%#= article_contents_path %>');
+          $.post('/article_contents/create',$("#<%=@form_id%>").serialize(),"script");
+<%else%>
+          $.post('/article_contents/update/<%=@content.id%>',$("#<%=@form_id%>").serialize(),"script");
+          return false;
+<%end%>
+  e.preventDefault()
+   return false;
       }
     })
     
   });
 
   function validateEventForm(){
-    $('#article_create_title').poshytip('destroy')
+     <%if @content.nil?%>
+    $('div#subContainerEvent form#<%=@form_id%> #article_content_title').poshytip('destroy')
     var valid = true;
-    if ($("#article_create_title").val() == ""){
-      $('#article_create_title').poshytip({
+    if ($("div#subContainerEvent form#<%=@form_id%> #article_content_title").val() == ""){
+      $('div#subContainerEvent form#<%=@form_id%> #article_content_title').poshytip({
         className: 'tip-darkgray',
         content: 'Please select a title.',
         showOn: 'none',
@@ -143,11 +195,30 @@
         offsetX: 5,
         alignY: 'center'
       });
-      $('#article_create_title').poshytip('show');
+      $('div#subContainerEvent form#<%=@form_id%> #article_content_title').poshytip('show');
       valid = false
 
-    }    
+    }
 
+    <%else%>
+
+      $('div#subContainerEvent form#<%=@form_id%> #article_content_title').poshytip('destroy')
+    var valid = true;
+    if ($("div#subContainerEvent form#<%=@form_id%> #article_content_title").val() == ""){
+      $('div#subContainerEvent #article_content_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('div#subContainerEvent form#<%=@form_id%> #article_content_title').poshytip('show');
+      valid = false
+
+    }
+<%end%>
     return valid
   }
 </script>

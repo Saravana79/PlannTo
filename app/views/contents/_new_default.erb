@@ -1,7 +1,15 @@
 <div id="subContainerDefaultContent" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
-<div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
-
-  <%= form_for Content.new, :remote => true do |f| %>
+  <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
+  <%if @content.nil?%>
+    <%@form_id = "new_content"%>
+    <%@title_id = "content_title"%>
+  <%else%>
+    <%@form_id = "edit_content_#{@content.id}"%>
+    <%@title_id ="edit_content_#{@content.id}"%>
+  <%end%>
+<%#= form_for @content || Content.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+  <%= form_for @content || Content.new,:html => { :id => "#{@form_id}" } do |f| %>
+    <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <div id="article_errors" style="line-height:20px;color: red;"></div>
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
@@ -33,25 +41,53 @@
 <% end %>
 <script type="text/javascript">
   $(document).ready(function(){
-
-    settings={
-      close:true, addButton: false,
-      url: "/search/autocomplete_items",
-      editMode: false, multiple: true,
-      hidden_field: "default_content_item"
-    };
-    $.textTagger("default_product_item","default_product_item_list",settings);
-    <% unless @item.blank? %>
-      $.addTag("default_product_item","default_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
-      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
-      $("ul#default_product_item_list li:first span a.icon_close_tagging").remove();
-<% end %>
-
-
-    
-    $("#default_content_submit").click(function(){
-       var valid = validateDefaultContentForm();
+<%if @content.nil?%>
+      settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "default_content_item"
+      };
+      $.textTagger("default_product_item","default_product_item_list",settings);
+  <% unless @item.blank? %>
+        $.addTag("default_product_item","default_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
+        $("ul#default_product_item_list li:first span a.icon_close_tagging").remove();
+  <% end %>
+<%else%>
+      settings={
+        has_parent:true,
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "#contentEditView #default_content_item"
+      };
+  <% @items.each do |item| %>
+        $.addTag("#contentEditView #default_product_item","div#contentEditView ul#default_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+    <%if item.id == @item.id%>
+          $("ul#default_product_item_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
+    <%end%>
+  <%end%>
+      $.textTagger("#contentEditView #default_product_item","#contentEditView #default_product_item_list",settings);
+<%end%>
+    $('form#<%=@form_id%> #default_content_submit').live('click',function(e){
+      e.preventDefault()
+      // $("#default_content_submit").click(function(){alert("submit")
+      var valid = validateDefaultContentForm();
       if (!valid){
+        return false;
+      }
+      else{
+<%if @content.nil?%>
+          $.post('/contents/create',$("#<%=@form_id%>").serialize(),"script");
+          e.preventDefault()
+          return false;
+<%else%>
+          $.post('/contents/update/<%=@content.id%>',$("#<%=@form_id%>").serialize(),"script");
+          e.preventDefault()
+          return false;
+<%end%>
         return false;
       }
     })
@@ -72,21 +108,39 @@
 
 
   function validateDefaultContentForm(){
-    $('#content_title').poshytip('destroy')
-    var valid = true;
-    if ($("#content_title").val() == ""){
-      $('#content_title').poshytip({
-        className: 'tip-darkgray',
-        content: 'Please select a title.',
-        showOn: 'none',
-        alignTo: 'target',
-        alignX: 'right',
-        offsetX: 5,
-        alignY: 'center'
-      });
-      $('#content_title').poshytip('show');
-      valid = false
-    }
+<%if @content.nil?%>
+      $('#content_title').poshytip('destroy')
+      var valid = true;
+      if ($("#content_title").val() == ""){
+        $('#content_title').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a title.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('#content_title').poshytip('show');
+        valid = false
+      }
+<%else%>
+      $('form#<%=@form_id%> input[name$="plannto_content[title]"]').poshytip('destroy')
+      var valid = true;
+      if ($('form#<%=@form_id%> input[name$="plannto_content[title]"]').val() == ""){
+        $('form#<%=@form_id%> input[name$="plannto_content[title]"]').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a title.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('form#<%=@form_id%> input[name$="plannto_content[title]"]').poshytip('show');
+        valid = false
+      }
+<%end%>
     return valid
   }
 </script>

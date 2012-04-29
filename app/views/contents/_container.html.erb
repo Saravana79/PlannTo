@@ -36,6 +36,7 @@
 <!--Write a review share to a friend-->
 <script type="text/javascript">
   $("div#contentContainer ul li").click(function (e) {
+    <%@content = Content.new%>
     hideShareContainerOptFields()
     showDefaultProductTag("default_product_item_list", "default_content_item");
     hideProductTag()
@@ -54,33 +55,23 @@
     else if(id == "contentBooks"){
       $(".contentSubContainer").hide();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
-      $("#article_content_article_category_id").val(article_category_id)
-    }
-    /* else if(id == "contentAccessories"){
-      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
-      $("#article_content_article_category_id").val(article_category_id)
-    }
-    else if(id == "contentTravelogue"){
-      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::TRAVELOGUE)}"%>
-      $("#article_content_article_category_id").val(article_category_id)
-    }
-    else if(id == "contentApps"){
-      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
-      $("#article_content_article_category_id").val(article_category_id)
-    }*/
+      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
+      $("div#subContainerEvent #article_content_article_category_id").val(article_category_id)
+    }    
     else if(id == "contentEvent"){
       $(".contentSubContainer").hide();
       $("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
-      $("#article_content_article_category_id").val(article_category_id)
-      $("#article_create_article_category_id").val(article_category_id)
+      $("div#subContainerEvent #article_content_article_category_id").val(article_category_id)
+      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
        showCreateEventOptFields();
     }
     else if(id == "contentApps"){
       $(".contentSubContainer").hide();
       $("#subContainerEvent").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
-      $("#article_create_article_category_id").val(article_category_id)
+      $("div#subContainerEvent #article_content_article_category_id").val(article_category_id)
+       $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
        showCreateAppOptFields();
     }
     else if ((id == "contentAccessories")|| (id == "contentBooks")){
@@ -93,8 +84,8 @@
         var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
       }
       
+      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
       $("#article_content_article_category_id").val(article_category_id)
-      $("#article_create_article_category_id").val(article_category_id)
        showCreateBooksAccessoriesOptFields();
     }
     else if (id == "contentShare"){
@@ -105,17 +96,14 @@
       $(".contentSubContainer").hide();
       $("#articleReviewSubContainer").show();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
+      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
       $("#article_content_article_category_id").val(article_category_id)
       // $("#reviewContainer").show();
-    }
-    // else if (id == "contentTips"){
-    //  var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::TIPS)}"%>
-    //  $("#article_content_article_category_id").val(article_category_id)
-    //   $("#tipDiv").show();
-    // }
+    }    
     else if (id == "contentQ&A"){
       $(".contentSubContainer").hide();
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
+      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
       $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
     }
@@ -131,6 +119,7 @@
       var button_name =  setButtonName(value);
       $("#content_type").val(id.replace("content",''))
       $("#default_content_submit").val(button_name)
+      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
       $("#article_content_article_category_id").val(article_category_id)
       $("#subContainerDefaultContent").show();
     }
@@ -142,13 +131,15 @@
   });
 
   $("div.Reviewbigtabs a#contentSubmit").click(function (e) {
+    <%#@content = nil%>
     $("div.Reviewbigtabs a#contentWrite").removeClass("Activetab")
     $(this).addClass("Activetab")
     $(".contentSubContainer").hide();
     $("#article_errors").hide();
-    $('#article_content_url').val('');
-    $('#article_content_url').keyup();
+    $('#new_share_url').val('');
+    $('#new_share_url').keyup();
     $("#ShareURLDiv").show();
+    hideShareContainerOptFields();
     e.preventDefault();
   });
 

@@ -1,5 +1,15 @@
- <%= form_for QuestionContent.new, :remote => true do |f| %>
-<div ID="question_contentDiv" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+ <div ID="question_contentDiv" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+
+ <%if @content.nil?%>
+    <%@form_id = "new_question_content"%>
+    <%@title_id = "review_content_title"%>
+  <%else%>
+    <%@form_id = "edit_question_content_#{@content.id}"%>
+    <%@title_id ="edit_question_content_#{@content.id}"%>
+  <%end%>
+
+ <%= form_for QuestionContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+<%= hidden_field_tag 'default_item_id', @item.try(:id) %>
   <div id="notification" class="notificationStyle">Thank You, Question has been created.</div>
     <div style="padding:5px 5px 0px 0px;text-align:center">
         <div class="title_header float_lft">Title :</div>
@@ -17,6 +27,7 @@
       <div style="clear:both;"></div>
     </div>
     <script type="text/javascript">
+      <%if @content.nil?%>
       $(document).ready(function(){
       settings={
       close:true, addButton: false,
@@ -26,17 +37,36 @@
     };
     $.textTagger("question_product_item","question_product_item_list",settings);
     <% unless @item.blank? %>
-      $.addTag("question_product_item","question_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
-      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+      $.addTag("question_product_item","question_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
       $("ul#question_product_item_list li:first span a.icon_close_tagging").remove();
 <% end %>
+
+  <%else%>
+  settings={
+        has_parent:true,
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "#contentEditView #question_content_item"
+      };
+  <% @items.each do |item| %>
+        $.addTag("#contentEditView #question_product_item","div#contentEditView ul#question_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+    <%if item.id == @item.id%>
+          $("ul#question_product_item_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
+    <%end%>
+  <%end%>
+      $.textTagger("#contentEditView #question_product_item","#contentEditView #question_product_item_list",settings);
+
+    <%end%>
   });
 
    function validateQuestionForm(){
-    $('#question_content_title').poshytip('destroy')
+    $('form#<%=@form_id%> #question_content_title').poshytip('destroy')
     var valid = true;
-    if ($("#question_content_title").val() == ""){
-      $('#question_content_title').poshytip({
+    if ($("form#<%=@form_id%> #question_content_title").val() == ""){
+      $('form#<%=@form_id%> #question_content_title').poshytip({
         className: 'tip-darkgray',
         content: 'Please select a title.',
         showOn: 'none',
@@ -45,7 +75,7 @@
         offsetX: 5,
         alignY: 'center'
       });
-      $('#question_content_title').poshytip('show');
+      $('form#<%=@form_id%> #question_content_title').poshytip('show');
       valid = false
 
     }
@@ -70,7 +100,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $("#publishQuestion").click(function(){     
+    $("form#<%=@form_id%> #publishQuestion").click(function(){
       var valid = validateQuestionForm();
       if (!valid){
         return false;

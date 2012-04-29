@@ -1,0 +1,81 @@
+<%if @content.is_article_content?%>
+  <%unless @content.url.blank?%>
+    <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
+  <%end%>
+<%end%>
+$("#contentEditView").dialog('destroy');
+$("#contentEditView").html('<%= escape_javascript(display_content_form(@content)) %>');
+$("#contentEditView").dialog({
+title: 'Edit <%=@content.type%>',
+height: 400,
+width:600});
+<%if @content.is_plannto_content?%>
+  $("div#contentEditView #subContainerDefaultContent").show();
+<%elsif @content.is_question_content?%>
+  $("div#contentEditView #question_contentDiv").show();
+<%elsif @content.is_review_content?%>
+  $("div#contentEditView #articleReviewSubContainer").show();
+  $('#contentEditView #review_content_item').val('');
+  settings={
+  close:true, addButton: false,
+  url: "/search/autocomplete_items",
+  editMode: false, multiple: true,
+  has_parent: true,
+  hidden_field: "#contentEditView #review_content_item"
+  };
+  <% @items.each do |item| %>
+    $.addTag("#contentEditView #review_content_item","div#contentEditView ul#review_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+    $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+    $("div#contentEditView ul#review_product_item_list li:first span a.icon_close_tagging").remove();
+  <%end%>
+<%elsif @content.is_article_content?%>
+  <%if @content.url.blank?%>
+    $("div#contentEditView #subContainerEvent").show();
+    settings={
+    close:true, addButton: false,
+    url: "/search/autocomplete_items",
+    has_parent:true,
+    editMode: false, multiple: true,
+    hidden_field: "#contentEditView #article_create_item_id"
+    };
+    $.textTagger("#contentEditView #article_create_product","#contentEditView #article_create_product_list",settings);
+    <% @items.each do |item| %>
+      $.addTag("#contentEditView #article_create_product","div#contentEditView ul#article_create_product_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+      $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+      <%if item.id == @item.id%>
+        $("#contentEditView ul li#textTaggers<%=@item.id%> a.icon_close_tagging").remove();
+      <%end%>
+    <%end%>
+
+    <%if @content.article_category.is_event?%>
+      <%field1_id = "edit_field1_#{@item.id}"%>
+      <%field2_id = "edit_field2_#{@item.id}"%>
+      $("div#contentEditView div#subContainerEvent #sharefield1Label").text("Start Date:")
+      $("div#contentEditView div#subContainerEvent #sharefield2Label").text("End Date:")
+      $("div#contentEditView div#subContainerEvent #sharefield1").show();
+      $("div#contentEditView div#subContainerEvent #sharefield2").show();
+      $("div#contentEditView div#subContainerEvent #sharefield3").show();
+      $('div#contentEditView #<%=field1_id%>,div#contentEditView #<%=field2_id%>').datepicker();
+    <%end%>
+  <%else%>
+    $("div#contentEditView #ShareURLDiv").show();
+    $("div#contentEditView #shareProduct").show();
+    <%if @content.article_category.is_event?%>
+      showShareContainerOptFields();
+      $(document).ready(function(){
+      $('#<%="edit_share_field1_#{@item.id}"%>,#<%="edit_share_field2_#{@item.id}"%>').datepicker();
+
+      });
+    <%elsif @content.article_category.is_app?%>
+      $(document).ready(function(){
+      showShareAppOptFields();
+      });
+    <%elsif (@content.article_category.is_books? || @content.article_category.is_accessories?)%>
+      $(document).ready(function(){
+      showShareBooksAccessoriesOptFields();
+      });
+    <%end%>
+  <%end%>
+<%end%>
+$(".edit_dwnld_url_<%=@item.id%>").show();
+

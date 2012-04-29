@@ -153,7 +153,7 @@ $(function(){
 	$.textTagger("article_product","article_product_list",settings);
 	<% unless @item.blank? %>
 	$.addTag("article_product","article_product_list", settings,"<%= @item.name %>", "<%= @item.id %>");
-	$.addIdToField(settings.hidden_field, "<%= @item.id %>")
+	$.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
 	$("ul#article_product_list li:first span a.icon_close_tagging").remove();
 	<% end %>
 	

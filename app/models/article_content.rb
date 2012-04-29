@@ -45,6 +45,7 @@ class ArticleContent < Content
   end
   
   def self.saveContent(val, user, ids)
+    if val['url'].present?
     if val['url'].include? "youtube.com"
       @article=VideoContent.saveContent(val, user, ids)
     else
@@ -53,6 +54,32 @@ class ArticleContent < Content
       @article.save_with_items!(ids) 
       @article
     end
+    else
+      @article=ArticleContent.create(val)
+      @article.user = user
+      @article.save_with_items!(ids)
+      @article
+    end
+  end
+
+  def self.update_content(id, val, user, ids)
+    if val['url'].present?
+    if val['url'].include? "youtube.com"
+      @article=VideoContent.updateContent(id, val, user, ids)
+    else
+      ArticleContent.update_article_content(id, val, user, ids)
+    end
+    else
+      ArticleContent.update_article_content(id, val, user, ids)
+    end
+  end
+
+  def self.update_article_content(id, val, user, ids)
+    @article = ArticleContent.find(id)
+      #@article.update_attributes(val)
+      #@article.user = user
+      @article.update_with_items!(val, ids)
+      @article
   end
   
 end

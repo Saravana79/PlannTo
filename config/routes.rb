@@ -48,11 +48,15 @@ PlanNto::Application.routes.draw do
     end
   end
 
-  resources :event_contents 
+  resources :event_contents
+  resources :plannto_contents
   resources :article_contents do
+    put :download
     collection do
       post :download
       get :bmarklet
+      post :update
+      put :download
     end
   end
   resources :mobiles do

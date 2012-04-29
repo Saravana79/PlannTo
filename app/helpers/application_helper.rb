@@ -139,4 +139,8 @@ module ApplicationHelper
     user = User.where("id = ?", user_id).includes(:avatar).first
    return user
   end
+
+  def get_tag_list(item)
+    return "<li id='textTaggers#{item.id}' class='taggingmain'><span><a class='txt_tagging'>#{item.name}</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>".html_safe
+  end
 end

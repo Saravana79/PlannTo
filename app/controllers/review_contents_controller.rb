@@ -2,7 +2,7 @@ class ReviewContentsController < ApplicationController
 
 	def create
 		@reviewcontent = ReviewContent.new(params['review_content'])
-		@reviewcontent.user = User.last
+		@reviewcontent.user = current_user
 		item_id = params['item_id']
 		@item = Item.find item_id
 		@reviewcontent.save_with_items!(item_id)
@@ -14,6 +14,11 @@ class ReviewContentsController < ApplicationController
 			format.js
 		end
 	
-	end	
+	end
+
+  def update
+    @reviewcontent = Content.find(params[:id])
+    @reviewcontent.update_with_items!(params['review_content'], params[:item_id])
+  end
 
 end

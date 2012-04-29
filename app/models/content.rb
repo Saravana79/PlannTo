@@ -67,7 +67,42 @@ class Content < ActiveRecord::Base
       end
     end
   end
-	
+
+  def update_with_items!(params, items)
+    Content.transaction do
+	    self.update_attributes(params)
+      content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
+      content_item_relations.destroy_all
+      items.split(",").each do |id|
+        item = Item.find(id)
+        rel= ContentItemRelation.new(:item => item, :content => self)
+        rel.save!
+      end
+    end
+  end
+
+  def can_update_content?(user)
+    return false if !user
+    return false if user.id != self.created_by
+    return true
+  end
+
+	def is_review_content?
+    self.type == "ReviewContent"
+  end
+
+  def is_article_content?
+    self.type == "ArticleContent"
+  end
+
+  def is_question_content?
+    self.type == "QuestionContent"
+  end
+
+  def is_plannto_content?
+    self.type == "PlanntoContent"
+  end
+
 	acts_as_rateable
   acts_as_voteable
   acts_as_commentable

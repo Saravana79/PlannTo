@@ -1,7 +1,11 @@
 <div class="mainContentDiv">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
-    <img src="images/users.png" class="userImageSmall">
+    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
+    <%if content.can_update_content?(current_user)%>
+      <%=link_to "Edit", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue comments_show", :id => "#{content.id}", :item_id => "#{@item.try(:id)}"%>
+      <a>Delete</a>
+    <%end%>
   </div>
   <div class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>

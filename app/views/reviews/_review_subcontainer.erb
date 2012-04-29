@@ -1,7 +1,15 @@
 <div id="articleReviewSubContainer" class="contentSubContainer" style="display:none;">
   <div id="notification" class="notificationStyle">Thank You, Review has been created.</div>
-  <%= form_for ReviewContent.new, :remote => true do |f| %>
-    <div style="padding:5px 5px 0px 0px;text-align:center">
+<%if @content.nil?%>
+    <%@form_id = "new_review_content"%>
+    <%@title_id = "review_content_title"%>
+  <%else%>
+    <%@form_id = "edit_review_content_#{@content.id}"%>
+    <%@title_id ="edit_review_content_#{@content.id}"%>
+  <%end%>
+<%= form_for @content || ReviewContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+  <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
+  <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
       <div class="float_lft"> <%= f.text_field :title, :style=> "margin-left:5px;width:400px" %> </div>
     </div>
@@ -21,42 +29,43 @@
       <div style="clear:both;"></div>
     </div>
     <script type="text/javascript">
-      $(document).ready(function(){
-      settings={
-      close:true, addButton: false,
-      url: "/search/autocomplete_items",
-      editMode: false, multiple: true,
-      hidden_field: "review_content_item"
-    };
+      $(document).ready(function(){     
+
+    settings={
+close:true, addButton: false,
+url: "/search/autocomplete_items",
+editMode: false, multiple: true,
+has_parent: false,
+hidden_field: "review_content_item"
+};
     /*$.textTagger("review_product_item","review_product_item_list",settings);*/
     <% unless @item.blank? %>
-      $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>");
-      $.addIdToField(settings.hidden_field, "<%= @item.id %>")
+      $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+      $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
       $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
 <% end %>
-  });
-  
+    });
   function validateReviewForm(){
-    $('#review_content_title').poshytip('destroy')
-    var valid = true;
-    if ($("#review_content_title").val() == ""){
-      $('#review_content_title').poshytip({
-        className: 'tip-darkgray',
-        content: 'Please select a title.',
-        showOn: 'none',
-        alignTo: 'target',
-        alignX: 'right',
-        offsetX: 5,
-        alignY: 'center'
-      });
-      $('#review_content_title').poshytip('show');
-      valid = false
-    }
+    $('form#<%=@form_id%> input[name$="review_content[title]"]').poshytip('destroy')
+      var valid = true;
+      if ($('form#<%=@form_id%> input[name$="review_content[title]"]').val() == ""){
+        $('form#<%=@form_id%> input[name$="review_content[title]"]').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a title.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('form#<%=@form_id%> input[name$="review_content[title]"]').poshytip('show');
+        valid = false
+      }
     return valid
   }
 
   $(document).ready(function(){
-    $("#publishReview").click(function(){
+    $("form#<%=@form_id%> #publishReview").click(function(){
       var valid = validateReviewForm();
       if (!valid){
         return false;
@@ -85,9 +94,9 @@
       <%= f.hidden_field :recommend_this, :value => "" %>
     </div>
   <%#= f.hidden_field :item, :value => @item.id %>
-    <input id="review_content_item" name="item_id" type="hidden" value=<%= @item.id %>  />
+    <input id="review_content_item" name="item_id" type="hidden" value=<%= @item.try(:id) %>  />
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
-      <%= f.submit 'Save Review',:class => 'btn_submitanswer', :id => "publishReview"   %>
+      <%= f.submit 'Save Review',:class => 'btn_submitanswer', :id => "publishReview", 'data-disable-with'=>"Saving..."   %>
       <!-- </input> -->
     </div>
   <% end %>

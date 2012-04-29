@@ -6,9 +6,9 @@ class ArticleContentsController < ApplicationController
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
-
+    @item = Item.find(params[:default_item_id])
     #for article content create or submit
-    @article_create = params[:article_create] 
+    @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
@@ -18,8 +18,17 @@ class ArticleContentsController < ApplicationController
       format.js
     end
   end
+
+  def update
+    @default_id= params[:default_item_id]
+    ids = params["edit_articles_item_id_#{@default_id}"] || params[:article_create_item_id]
+    #ids = params[:articles_item_id] || params[:article_create_item_id]
+    @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
+  end
   
   def download
+    @edit_form  = params[:save_instruction ] == "1" ? false : true
+    @default_item_id = params[:default_item_id]
     @article_category = ArticleCategory.find(params[:article_content][:article_category_id])
     url=params['article_content']['url']
     if url.nil?

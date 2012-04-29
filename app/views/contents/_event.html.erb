@@ -1,21 +1,25 @@
 <div class="mainContentDiv">
-	  <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
-	<div class="float_rgt">
-		<img src="images/users.png" class="userImageSmall">
-	</div>
-		<div id="content_<%= content.id  %>" class="subContentDiv">
-			<div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-			<div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content) %> ago. Start date: <%=content.start_date%> End date: <%=content.end_date%> Location: <%=content.location%></a></div>
-		<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
-		<ul class="divCommentsConent">
-			<li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
-	        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-	        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-	        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
-		</ul>
-	</div>
+  <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
+  <div class="float_rgt">
+    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
+    <%if content.can_update_content?(current_user)%>
+      <%=link_to "Edit", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue comments_show", :id => "#{content.id}"%>
+      <a>Delete</a>
+    <%end%>
+  </div>
+  <div id="content_<%= content.id  %>" class="subContentDiv">
+    <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
+    <div><a class="txt_brown"><%= content.user.name  %> reviewed <%= content.items.first.name %> - <%= time_ago_format(content) %> ago. Start date: <%=content.start_date%> End date: <%=content.end_date%> Location: <%=content.location%></a></div>
+    <div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+    <ul class="divCommentsConent">
+      <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
+      <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+      <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+      <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+    </ul>
+  </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>
 </div>

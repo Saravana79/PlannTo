@@ -1,6 +1,7 @@
 class QuestionContentsController < ApplicationController
 
 	def create
+    @item = Item.find(params[:default_item_id])
 		@questioncontent = QuestionContent.new params[:question_content]
 		@questioncontent.user = User.first
 		#@item = Item.find params['item_id']
@@ -18,6 +19,11 @@ class QuestionContentsController < ApplicationController
 			format.html
 			format.js
 		end
-	end	
+	end
+
+  def update
+    @questioncontent = Content.find(params[:id])
+    @questioncontent.update_with_items!(params['question_content'], params[:item_id])
+  end
 
 end

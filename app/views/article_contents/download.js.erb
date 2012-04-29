@@ -1,73 +1,87 @@
-$('div.dwnld_url').show();
-$("#txtArticleTitle").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));
-//$("#txtArticleDescription").attr("value","<%= escape_javascript(@article.description) %>");
 
-$("#new_article_type").val("<%= escape_javascript(@article.type) %>");
+<%if @edit_form%>
+  <%@title_id = "edit_txtArticleTitle_#{@default_item_id}"%>
+  <%@dwnld_url = "edit_dwnld_url_#{@default_item_id}"%>
+  <%@current_image_id = "edit_current_image_#{@default_item_id}"%>
+  <%@total_images = "edit_total_images_#{@default_item_id}"%>
+  <%@txtArticleDescription =  "edit_txtArticleDescription_#{@default_item_id}"%>
+  <%@new_article_type ="edit_article_type_#{@default_item_id}"%>
+
+<%else%>
+  <%@title_id = "txtArticleTitle"%>
+  <%@dwnld_url = "dwnld_url"%>
+  <%@current_image_id = "current_image"%>
+  <%@total_images = "total_images"%>
+  <%@txtArticleDescription =  "txtArticleDescription"%>
+  <%@new_article_type ="new_article_type"%>
+
+<%end%>
+$('div.<%=@dwnld_url%>').show();
+$("#<%=@title_id%>").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));
+$("#<%=@txtArticleDescription%>").attr("value","<%= escape_javascript(@article.description) %>");
+
+$("#<%=@new_article_type%>").val("<%= escape_javascript(@article.type) %>");
 
 <%unless @article_category.nil?%>
-showProductTag();
-<%if @article_category.is_event?%>
-showShareContainerOptFields();
-$(document).ready(function(){
-    $('#article_content_field1,#article_content_field2').datepicker();
-    
-  });
-  <%elsif @article_category.is_app?%>
-  $(document).ready(function(){
-  showShareAppOptFields();
-  });
-  <%elsif (@article_category.is_books? || @article_category.is_accessories?)%>
-  $(document).ready(function(){
-  showShareBooksAccessoriesOptFields();
-  });
-<%end%>
-  <%else%>
+  <%unless @edit_form%>
+    showProductTag();
   <%end%>
-<% if @images.present? and @images.count > 0 %>
- images = new Array();
- sizes = new Array();
-<% @images.each_with_index do |image,index| %>
+  <%if @article_category.is_event?%>
+    showShareContainerOptFields();
+    $('#new_share_field1_<%=@default_item_id%>,#new_share_field2_<%=@default_item_id%>').datepicker();
+  <%elsif @article_category.is_app?%>
+    showShareAppOptFields();
+  <%elsif (@article_category.is_books? || @article_category.is_accessories?)%>
+    showShareBooksAccessoriesOptFields();
+  <%end%>
+<%else%>
+<%end%>
+
+<% if @images.present? and @images.count > 0 %>  
+  images = new Array();
+  sizes = new Array();
+  <% @images.each_with_index do |image,index| %>
     check_imagesize_on_load(unescapeHTML("<%= escape_javascript(image) %>"));
-<% end %>
-$('#current_image').html(0);
+  <% end %>
+  $('#<%=@current_image_id%>').html(0);
 <% else %>
-$('#current_image').html(0);
-$('#total_images').html(0);
+  $('#<%=@current_image_id%>').html(0);
+  $('#<%=@total_images%>').html(0);
 <% end %>
 
 first=true;
 images_index=0;
 
 <%if @external%>
-//default form is hidden and so do the following operations
-$("#ShareURLDiv").show();
-$("#shareProduct").show();
-//change of dropdown
- $(document).ready(function(){
-   var category = $('select#article_content_article_category_id :selected').text();
-    setUpExtraFields(category);
- });
+  //default form is hidden and so do the following operations
+  $("#ShareURLDiv").show();
+  $("#shareProduct").show();
+  //change of dropdown
+  $(document).ready(function(){
+  var category = $('select#article_content_article_category_id :selected').text();
+  setUpExtraFields(category);
+  });
   // when the #country field changes
   $("#article_content_article_category_id").change(function() {
-    //var category_id = $('select#article_content_article_category_id :selected').val();
-    var category = $('select#article_content_article_category_id :selected').text();
-    setUpExtraFields(category);
-    return false;
+  //var category_id = $('select#article_content_article_category_id :selected').val();
+  var category = $('select#article_content_article_category_id :selected').text();
+  setUpExtraFields(category);
+  return false;
   });
 
-function setUpExtraFields(category){
+  function setUpExtraFields(category){
   if (category == "<%=ArticleCategory::EVENT%>"){
-    showShareContainerOptFields();
-    $('#article_content_field1,#article_content_field2').datepicker();
+  showShareContainerOptFields();
+  $('#article_content_field1,#article_content_field2').datepicker();
   }
   else if (category == "<%=ArticleCategory::APPS%>"){
-    showShareAppOptFields();
+  showShareAppOptFields();
   }
   else if ((category == "<%=ArticleCategory::BOOKS%>")|| (category == "<%=ArticleCategory::ACCESSORIES%>")) {
-   showShareBooksAccessoriesOptFields();
+  showShareBooksAccessoriesOptFields();
   }
   else{
-    hideShareContainerOptFields();
+  hideShareContainerOptFields();
   }
-}
+  }
 <%end%>

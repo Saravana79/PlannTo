@@ -33,6 +33,33 @@ module ContentsHelper
       render :partial => "contents/show_default", :locals => { :content => item }
     end
   end
+
+  def display_content_form(item)
+    case item.type
+      #when "ArticleContent"
+      #  render :partial => "article_contents/article_share", :locals => { :content => item }
+    when "VideoContent"
+      render :partial => "contents/new_default", :locals => { :content => item }
+    when "QuestionContent"
+      render :partial => "question_contents/new_question_content", :locals => { :content => item }
+    when "ReviewContent"
+      render :partial => "reviews/review_subcontainer", :locals => { :content => item }
+    when "EventContent"
+      render :partial => "contents/new_default", :locals => { :content => item }
+    when "PlanntoContent"
+      render :partial => "contents/new_default", :locals => { :content => item }
+    else   
+      if (item.type == "ArticleContent" && item.url.blank?)
+        render :partial => "event_contents/new", :locals => { :content => item }
+      elsif (item.type == "ArticleContent" && item.url != "")
+        render :partial => "article_contents/article_share", :locals => {:content_category => false,  :content => item}
+      else
+        render :partial => "contents/new_default", :locals => { :content => item }
+      end
+     
+    end
+
+  end
   
   def render_comments_anchor(item)
     txt= "Comments ( #{item.comments.count})"

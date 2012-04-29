@@ -61,6 +61,7 @@ $(document).ready(function(){
             search_type_array: [],
             addButton: true,
             color: 'black',
+            has_parent: false,
             multiple: true,
             rounded: false,
             hidden_field: "",
@@ -69,45 +70,16 @@ $(document).ready(function(){
             deleteFunctionName: ""
         },
         settings = $.extend({}, defaults, options);
-        $("#"+ fieldId).each(function(){
+       
+        $(""+ fieldId).each(function(){
             $(this).bind('keypress', function(e) {
-                if(e.keyCode==13){
-            //  var text = $("#"+ fieldId).val();
-
-            //  var add = true;
-            //  $("#tag_list").find("li").each(function(index) {
-            // var compText = text + "href='#'>"
-            //   if ($(this).text().toString() == text.toString())  {
-            //      add = false;
-            //    }
-            //  });
-
-            // if ((text != "") && add == true)
-            // {
-            //    if (settings.multiple == false){
-            //remove old tags is multiple tags are not allowed.
-            //    $("#"+ taggingField).find("li").remove();
-            //   }
-            //  var str = "<li   style= 'line-height:35px;' id = 'textTaggers' class = 'textboxlist-bit textboxlist-bit-box textboxlist-bit-box-deletable '>" +text +"<a id= 'deleteTaggers' class='textboxlist-bit-box-deletebutton'></a></li>"
-            //$(str).insertAfter('#' + taggingField);
-            //    $(str).appendTo('#' + taggingField);
-            //   $("#" + fieldId).val("")
-            //    $('#' + fieldId).autocomplete("enable");
-            //    if (settings.editMode){
-            //       $(".textboxlist-bit-box-deletebutton").show();
-            //     }
-            //    else{
-            //      $(".textboxlist-bit-box-deletebutton").hide();
-            //     }
-            //   }
-            //    $("#"+ fieldId).val("");
-            //  $(".textboxlist-bit-box-deletebutton").hide();
+                if(e.keyCode==13){            
             }
             });
         });
         if (settings.addButton){
             var tagButton = "<button id='addTag'> Add </button>"
-            $(tagButton).insertAfter("#"+ fieldId);
+            $(tagButton).insertAfter(""+ fieldId);
             var doneButton = "<button id='doneButton'> Done </button>"
             $(doneButton).insertAfter("#addTag");
         }
@@ -128,7 +100,11 @@ $(document).ready(function(){
         // }
         // self._renderItem(ul, item, -1);
         };
-        $( "#" + fieldId ).autocomplete({
+
+        if (settings.has_parent == false){
+           fieldId = "#" + fieldId;
+        }
+        $( "" + fieldId ).autocomplete({
             minLength: 0,
             format: "js",
             source: function( request, response )
@@ -165,14 +141,15 @@ $(document).ready(function(){
             $.selectEvent(ui.item, settings.addfunctionName)
             if (settings.hidden_field != "")
             {
-            $.addIdToField(settings.hidden_field, ui.item.id)
+            $.addIdToField(settings.hidden_field, ui.item.id, settings.has_parent)
             }
-            $.addTag(fieldId, taggingField, settings, ui.item.value, ui.item.id);
-            $("#" + fieldId).val("");
+            $.addTag(fieldId, taggingField, settings, ui.item.value, ui.item.id, settings.has_parent);
+            $("" + fieldId).val("");
             return false;
             }
             })
-        .data("autocomplete")._renderItem = function(ul, item, index) {
+            if ($( "" + fieldId ).index() != -1) {
+        $( "" + fieldId ).data("autocomplete")._renderItem = function(ul, item, index) {
             // if (index == -1) {
             //     return $("<li></li>")
             //     .data("item.autocomplete", item)
@@ -185,10 +162,11 @@ $(document).ready(function(){
             .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
             .appendTo(ul);
         //  }
-        };
+        }
+            }
 
         $('#addTag').live( 'click', function(){
-            $.addTag(fieldId, taggingField, settings, $("#" + fieldId).val(), '');
+            $.addTag(fieldId, taggingField, settings, $("" + fieldId).val(), '', settings.has_parent);
         })
 
         $('#textTaggers').live('click', function(){
@@ -197,7 +175,7 @@ $(document).ready(function(){
         $('#deleteTag').live('click', function(){
             if (settings.hidden_field != ""){
                 var deleteId = $(this).closest('li').attr('id').replace("textTaggers",'');
-                $.removeIdFromField(settings.hidden_field, deleteId);
+                $.removeIdFromField(settings.hidden_field, deleteId, settings.has_parent);
             }
             $(this).closest('li').remove();
             if (settings.deleteFunctionName){
@@ -231,8 +209,12 @@ $(document).ready(function(){
         }
     }
     
-    jQuery.addIdToField = function(hidden_field, id){
-        var formVal = $("#" + hidden_field).val();
+    jQuery.addIdToField = function(hidden_field, id, has_parent){
+        if (has_parent == false){
+           hidden_field = "#" + hidden_field
+        }
+        var formVal = $("" + hidden_field).val();
+        //alert(hidden_field + "this" +formVal)
         var formValArray = formVal == "" ? [] : formVal.split(",")
         var add = true
         $.each(formValArray, function(index, value) {
@@ -243,11 +225,14 @@ $(document).ready(function(){
         if (add == true){
             formValArray.push(id)
         }
-        $("#" + hidden_field).val(formValArray.toString())
+        $("" + hidden_field).val(formValArray.toString())
     }
 
-    jQuery.removeIdFromField = function(hidden_field, deleteId){
-        var formVal = $("#" + hidden_field).val();
+    jQuery.removeIdFromField = function(hidden_field, deleteId, has_parent){
+        if (has_parent == false){
+            hidden_field = "#" + hidden_field
+        }
+        var formVal = $("" + hidden_field).val();
         var formValArray =  formVal == "" ?  [] : formVal.split(",")
         var idList = [];
         $.each(formValArray, function(index, value) {
@@ -255,11 +240,11 @@ $(document).ready(function(){
                 idList.push(value);
             }
         })
-        $("#" + hidden_field).val(idList);
+        $("" + hidden_field).val(idList);
     }
     jQuery.doneEvent = function(fieldId, taggingField, editMode){
         if(editMode){
-            $("#" + fieldId).hide();
+            $("" + fieldId).hide();
             $("#addTag").hide();
             $("#doneButton").hide();
             $("#editTag").show();
@@ -270,7 +255,7 @@ $(document).ready(function(){
         if(editMode){
             var tagButton = "<button id='editTag'>Edit</button>"
             $(tagButton).insertAfter("#"+ taggingField);
-            $("#" + fieldId).hide();
+            $("" + fieldId).hide();
             var hideField = "ul#" +taggingField + " li span a.icon_close";
             $(hideField).show();
         }
@@ -284,11 +269,11 @@ $(document).ready(function(){
     jQuery.editTag = function(fieldId, taggingField, addButton) {
         if(addButton)
         {
-            $("#" + fieldId).val("")
-            $("#" + fieldId).show();
+            $("" + fieldId).val("")
+            $("" + fieldId).show();
             if (!$('#addTag').length) {
                 var tagButton = "<button id=" + '"' +"addTag" + '"' + "> Add </button>"
-                $(tagButton).insertAfter("#"+ fieldId);
+                $(tagButton).insertAfter(""+ fieldId);
             }
             else{
                 $("#addTag").show();
@@ -303,10 +288,13 @@ $(document).ready(function(){
         }
     }
 
-    jQuery.addTag = function(fieldId, taggingField, settings, value, id) {
+    jQuery.addTag = function(fieldId, taggingField, settings, value, id, has_parent) {
         var text = value;
         var add = true;
-        $("#" + taggingField).find("li").each(function(index) {
+        if (has_parent == false){
+            taggingField = "#" + taggingField
+        }
+        $("" + taggingField).find("li").each(function(index) {
             if ($(this).text().toString() == text.toString())  {
                 add = false;
             }
@@ -314,29 +302,36 @@ $(document).ready(function(){
         if ((text != "") && add == true)
         {
             if (settings.multiple == false){
-                $("#"+ taggingField).find("li").remove();
+                $(""+ taggingField).find("li").remove();
             }
             var listTagId = 'textTaggers' + id
-          //  <li class="taggingmain">
-			//								<span ><a class="txt_tagging">Aston Martin DB6</a><a class="icon_close_tagging" href="#"></a></span>
-			//
-			//							</li>
             var list = "<li id='" + listTagId + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + value + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>" ;
-         //   var list = "<li id='" + listTagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + value + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
-             $('#' + taggingField).addClass("tagging");
-            $(list).appendTo('#' + taggingField);
-            $("#" + fieldId).val("")
-            $('#' + fieldId).autocomplete("enable");
+             $('' + taggingField).addClass("tagging");
+             
+            $(list).appendTo('' + taggingField);
+            $("" + fieldId).val("")
+            $('' + fieldId).autocomplete("enable");
             if (settings.editMode || settings.close){
-                var hideField = "ul#" +taggingField + " li span a.icon_close"
+                if (settings.has_parent == false){
+                var hideField = "ul" +taggingField + " li span a.icon_close"
+                }
+                else{
+                    var hideField = "" +taggingField + " li span a.icon_close"
+                }
                 $(hideField).show();
             }
             else{
+                if (settings.has_parent == false){
+                var hideField = "ul" +taggingField + " li span a.icon_close"
+                }
+                else{
+                    var hideField = "" +taggingField + " li span a.icon_close"
+                }
                 var hideField = "ul#" +taggingField + " li span a.icon_close"
                 $(hideField).hide();
             }
         }
-        $("#"+ fieldId).val("");
+        $(""+ fieldId).val("");
     }
 
 });
