@@ -22,6 +22,7 @@ PlanNto::Application.routes.draw do
     put :update
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
+  match '/:username', :to => "accounts#index", :as => "accounts"
  
   resources :preferences do
     collection do

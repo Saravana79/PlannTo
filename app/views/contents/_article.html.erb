@@ -9,7 +9,7 @@
 	</div>
 	<div id="content_<%= content.id  %>" class="subContentDiv">
 		<div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-		<div><a class="txt_brown"><%= content.user.name %> shared a video on <%= content.items.first.name %> - <%= time_ago_format(content)%> ago </a></div>
+		<div><a class="txt_brown"><%= content.user.name %> shared a article on <%= content.items.first.name %> - <%= time_ago_format(content)%> ago </a></div>
 		<div>
 			<div><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"/></div>
 			<div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>

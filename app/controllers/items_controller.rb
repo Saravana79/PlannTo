@@ -2,6 +2,8 @@ class ItemsController < ApplicationController
   layout "product"
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
 
+  include FollowMethods
+
   #before_filter :authenticate_user!
   # GET /items
   # GET /items.json
@@ -145,86 +147,12 @@ class ItemsController < ApplicationController
     end
   end
 
-  def follow_item_type
-    case params[:follow_type]
-      when 'Buyer'
-        plan_to_buy_item
-      when 'Owner'
-        own_a_item
-      when 'Follow'
-        follow_this_item
-    end
-    respond_to do |format|
-      unless params[:unfollow]
-        format.js { render :action => 'plan_to_buy_item', :button_class => params[:button_class]}
-      else
-        format.js { render :action => 'plan_to_buy_item_unfollow', :button_class => params[:button_class]}
-      end
-      format.html{
-        after_ajax_call_path_for                
-      }
-    end
-  end
-
-  def plan_to_buy_item
-    @type = "buy"
-    follow = follow_item(params[:follow_type], params[:unfollow])
-    current_user.clear_user_follow_item
-    if follow.blank?
-      flash[:notice] = "You already buy this Item"      
-    else
-      flash[:notice] = "Planning is saved"
-    end
-
-  end
-
-  def own_a_item
-    @type = "own"
-    follow = follow_item(params[:follow_type], params[:unfollow])
-    current_user.clear_user_follow_item
-    if follow.blank?
-      flash[:notice] = "You are already owning this Item"
-    else
-      flash[:notice] = "Owner is saved"
-    end
-
-  end
-
-  def follow_this_item
-    @type = "follow"
-    follow = follow_item(params[:follow_type], params[:unfollow])
-    current_user.clear_user_follow_item
-    if follow.blank?
-      flash[:notice] = "You are already Following this Item"
-    else
-      flash[:notice] = "Follow is saved"
-    end
-    
-  end
-
   def compare
     @ids = params[:ids].split(',')
     @item1 = Item.find(@ids[0])
     attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
     @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
    @items = Item.find_all_and_sort_by_items(@ids)
-  end
-
-  private
-
-  def follow_item(follow_type, unfollow= false)
-    Rails.cache.delete("item_follow_"+current_user.id.to_s)    
-    @item = Item.find(params[:id])
-    if !@item.blank?
-      if unfollow
-        current_user.stop_following(@item)
-      else
-        current_user.follow(@item, follow_type)
-      end      
-    else
-      false
-    end
-
   end
 
 end

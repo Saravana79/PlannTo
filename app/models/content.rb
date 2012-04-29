@@ -16,6 +16,10 @@ class Content < ActiveRecord::Base
     return ContentItemRelation.where('content_id = ?', self.id)  
   end
 
+  def content_type
+    'Event'
+  end
+
   PER_PAGE = 10
   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")

@@ -3,7 +3,7 @@
 <!--  breadcrumbs - End -->
 <!-- buttons - Start -->
 <div class="float_rgt">
-    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '', :item => @item %>
+    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
 </div>
 <!-- buttons - End -->
@@ -71,7 +71,6 @@
     <%= render "/layouts/product_answer" %>
 </div>
 
-<%= render "/layouts/product_answer" %>
 <!-- Q&A -  End -->
 </div>
 <div class="rightcolumnsmall">
@@ -83,24 +82,43 @@
     <span class="menu_list"><a href="#">Top Questions</a></span>
 </div>
 <br/>
-<div class="followers">
 
-  <span class="planetobuy">
-      <a class="icon_planetobuy"></a>
-      <a class="txt_planetobuy">Plane to buy <br /><b><%= @item.get_followers("Buyer").split(",").count %></b></a>
-  </span>
-    
-  <span class="iwonit">
-      <a class="icon_iwonit"></a>
-      <a class="txt_iwonit">I won it <br /> <b><%= @item.get_followers("Owner").split(",").count %></b></a>
-  </span>
-  
-  <span class="ifollow">
-      <a class="icon_ifollow" ></a>
-      <a class="txt_ifollow">I Follow <br /> <b><%= @item.get_followers("Follow").split(",").count %></b></a>
-  </span>
-  
+<!--follower block start here-->
+<div class="Commandiv">
+  <div class="Detailfeature">
+    <span class="Headingtxt">Plan to Buy</span>
+    <div class="Featurecontent">
+      <div class="Iconblock">
+        <span class="Planbuy"><%= @item.get_followers("Buyer").split(",").count %></span>
+      </div>
+        <%= link_to("Invite a friend", "#", :id => "invite_buy", :class => "Bluesmall") %>
+      </div>
+      <div class="Smalltext">who plans to buy</div>  
+  </div>
+  <div class="Detailfeature">
+    <span class="Headingtxt">Owners</span>
+    <div class="Featurecontent">
+      <div class="Iconblock">
+        <span class="Wonit"><%= @item.get_followers("Owner").split(",").count %></span>
+      </div>
+        <%= link_to("Invite a friend", "#", :id => "invite_own", :class => "Bluesmall") %>
+      </div>
+      <div class="Smalltext">who owns it</div>
+    </div>
+  <div class="Detailfeature">
+    <span class="Headingtxt">Followers</span>
+    <div class="Featurecontent" style="border-right:none;">
+    <div class="Iconblock">
+      <span class="Followcar"><%= @item.get_followers("Follow").split(",").count %></span>
+    </div>
+      <%= link_to("Invite a friend", "#", :id => "invite_follow", :class => "Bluesmall") %>
+      
+      </div>
+      <div class="Smalltext">who is an expert</div>
+  </div>
 </div>
+<!--follower block end here-->
+
 <div class="txt_black imgfollowers">Followers
   <ul class="imgfollowers">
       <% @item.get_followers.each do |follower| %>
@@ -111,7 +129,7 @@
   </ul>
 </div>
 <br/>
-
+<!--
 <div>
 	<%= link_to("Invite buyer", "#", :id => "invite_buy") %>&nbsp;
 	<%= link_to("Invite owner", "#", :id => "invite_own") %>&nbsp;
@@ -119,8 +137,9 @@
 	
 </div>
 <br />
+-->
 <%=render :partial =>"items/related_products" %>
-  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => user_follow_type(@item, current_user) %>
+  <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => user_follow_type(@item, current_user), :related_items => false %>
   <%= render 'shared/show_hide_login_form', :item => @item %>
 
 <div id="dialog-invite-form" style="display:none">

@@ -23,7 +23,7 @@
       <div id="login_link" style="display:none">
         <ul>
           <li>
-            <%= link_to "Account Setting", accounts_path %>
+            <%= link_to "Account Setting", accounts_path(current_user.username) %>
           </li>
           <li>
             <%= link_to "Profile", profile_path %>
@@ -51,10 +51,10 @@
 
     |</a><a href="#">Home</a></span>
 
-  <div class="main_menu">
+  
     <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
     <%= render "/layouts/navigation" %>
-  </div>
+  
 </div>
 
 <script type="text/javascript">

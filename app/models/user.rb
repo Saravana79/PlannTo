@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
                           Follow::ProductFollowType::Follow => "follow_item_ids",
                           Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token
+  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, :avatar
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
@@ -64,6 +64,10 @@ class User < ActiveRecord::Base
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url", user_details)
     end
     user_details
+  end
+
+  def username
+    email.split("@")[0]
   end
 
   def name

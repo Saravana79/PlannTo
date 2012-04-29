@@ -1,6 +1,8 @@
 class ContentsController < ApplicationController
-
+  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
+  before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   layout :false
+  include FollowMethods
   def feed
     
     @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
@@ -41,6 +43,8 @@ class ContentsController < ApplicationController
 
   end
 
-  
-
+  private
+  def get_item_object
+    @item = Content.find(params[:id])
+  end
 end

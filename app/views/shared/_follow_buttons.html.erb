@@ -1,5 +1,5 @@
 <div class="PlanntoBuyBtn">
-  <%= get_follow_types(item, follow_type, follow_html, button_class, {:remote => true, :class => "btn_plantobuy_icon"}) %>
+  <%= get_follow_types(item, follow_type, follow_html, button_class, {:remote => true, :class => "btn_plantobuy_icon", :related_items => related_items}) %>
 </div>
 
 <%=  render :partial => "shared/feilds_data_for_answer", :locals => {:item => item} %>

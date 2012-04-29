@@ -1,8 +1,12 @@
 class ProductsController < ApplicationController
+  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
+  before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
-
+  
   layout 'product'
   
+  include FollowMethods
+
   def index
 
   end
@@ -35,5 +39,11 @@ class ProductsController < ApplicationController
       format.js { render :partial=> 'itemrelationships/relateditem', :collection => @item.unfollowing_related_items(current_user, 2) }
     end
 
+  end
+
+  private
+
+  def get_item_object
+    @item = Item.find(params[:id])
   end
 end

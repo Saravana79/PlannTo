@@ -3,8 +3,8 @@ root.Product =
   load_buyer: (item_id, medium, message, follow_message) ->
     $("#plan_to_buy"+item_id).removeClass().addClass "plan_to_buy_icon_selected"+medium
     $("#plan_to_buy_span"+item_id).removeClass().addClass "action_btns_selected"+medium
-    $("#plan_to_buy_span"+item_id).attr "title", message
-    $("#plan_to_follow_span"+item_id).attr "title", follow_message
+    $("#plan_to_buy"+item_id).attr("title", message)
+    $("#plan_to_follow"+item_id).attr("title", follow_message)
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon_selected"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon"+medium
@@ -17,11 +17,11 @@ root.Product =
   load_owner: (item_id, medium, message, follow_message) ->
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon_selected"+medium
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns_selected"+medium
-    $("#plan_to_own_span"+item_id).attr "title", message
-    $("#plan_to_follow_span"+item_id).attr "title", follow_message
+    $("#plan_to_own"+item_id).attr("title", message)
+    $("#plan_to_follow"+item_id).attr("title", follow_message)
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon_selected"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns_selected"+medium
-    own_href_follow = $("#plan_to_own"+item_id).attr("href")
+    own_href_follow = $("#plan_to_own"+item_id).attr("href")    
     $("#plan_to_own"+item_id).attr("href", own_href_follow+'&unfollow=true');
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
     $("#plan_to_follow"+item_id).attr("href", follow_href_follow+'&unfollow=true');
@@ -33,7 +33,7 @@ root.Product =
     $("#plan_to_follow"+item_id).removeClass()
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon_selected"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns_selected"+medium
-    $("#plan_to_follow_span"+item_id).attr "title", follow_message
+    $("#plan_to_follow"+item_id).attr("title", follow_message)
     $("#plan_to_buy"+item_id).removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span"+item_id).removeClass().addClass "action_btns"+medium
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns"+medium
@@ -44,10 +44,10 @@ root.Product =
   unload_buyer: (item_id, medium, message, follow_message) =>
     $("#plan_to_buy"+item_id).removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span"+item_id).removeClass().addClass "action_btns"+medium
-    $("#plan_to_buy_span"+item_id).attr "title", message
+    $("#plan_to_buy"+item_id).attr("title", message)
+    $("#plan_to_follow"+item_id).attr("title", follow_message)
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
-    $("#plan_to_follow_span").attr "title", follow_message
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
     $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "Follow"));
     buy_href_follow = $("#plan_to_buy"+item_id).attr("href")
@@ -56,10 +56,10 @@ root.Product =
   unload_owner: (item_id, medium, message, follow_message) ->
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon"+medium
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns"+medium
-    $("#plan_to_own_span"+item_id).attr "title", message
+    $("#plan_to_own"+item_id).attr("title", message)
+    $("#plan_to_follow"+item_id).attr("title", follow_message)
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
-    $("#plan_to_follow_span"+item_id).attr "title", follow_message
     own_href_follow = $("#plan_to_own"+item_id).attr("href")
     $("#plan_to_own"+item_id).attr("href", Product.remove_unfollow_query_string(own_href_follow, "Owner"));
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
@@ -74,7 +74,7 @@ root.Product =
     $("#plan_to_buy_span"+item_id).removeClass().addClass "action_btns"+medium
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon"+medium
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns"+medium
-    $("#plan_to_follow_span"+item_id).attr "title", follow_message
+    $("#plan_to_follow"+item_id).attr("title", follow_message)
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
     $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "Follow"));
 
@@ -87,10 +87,8 @@ root.Product =
   hover_follow_but: (but_object, from_message, to_message) ->
     $(but_object).hover ( ->
         $(this).html(to_message)
-        $(".PlanntoBuyBtn span[title]").tooltip().getTip()[0].innerText = $(".PlanntoBuyBtn span[title]").tooltip().getTrigger()[0].getAttribute("title");
       ), ->
         $(this).html(from_message)
-        $(".PlanntoBuyBtn span[title]").tooltip().getTip()[0].innerText = $(".PlanntoBuyBtn span[title]").tooltip().getTrigger()[0].getAttribute("title");
 
 
   related_products: (related_product_url) ->

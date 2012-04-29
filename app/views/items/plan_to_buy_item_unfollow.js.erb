@@ -2,21 +2,28 @@
 $("#product_"+'<%= @item.id %>').remove();
 <% else %>
 <% if @type == "buy" %>
-  Product.hover_follow_but($("#plan_to_buy"+'<%= @item.id %>'),"Plan to buy", "Plan to buy");
-  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car");
-  Product.unload_buyer('<%= '_'+@item.id.to_s %>', '<%=params[:button_class] %>', '<%=I18n.t('plan_to_buy') %>', '<%= I18n.t('plan_to_follow') %>');
+  Product.hover_follow_but($("#plan_to_buy_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{@item.class.superclass}.buy_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{@item.class.superclass}.buy_bnt") : '' %>");
+  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : ''%>");
+  Product.unload_buyer('<%= '_'+@item.id.to_s %>', '<%=params[:button_class] %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_buy") : "" %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : "" %>');
 <% elsif @type == "own" %>
-  Product.unload_owner('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= I18n.t('plan_to_own') %>', '<%= I18n.t('plan_to_follow') %>');
+  Product.unload_owner('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_own") : "" %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : "" %>');
   $("#plan_to_buy"+'<%= @item.id %>').unbind("hover");
-  Product.hover_follow_but($("#plan_to_own"+'<%= @item.id %>'),"I Own it", "I Own it");
-  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car");
+  Product.hover_follow_but($("#plan_to_own_"+'<%= @item.id %>'),"<%=!@related_items ? I18n.t("#{@item.class.superclass}.own_bnt") : '' %>", "<%=!@related_items ? I18n.t("#{@item.class.superclass}.own_bnt") : '' %>");
+  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%=!@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", "<%=!@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>");
 <% elsif @type == "follow" %>
-  Product.unload_follow('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= I18n.t('plan_to_follow') %>');
+  Product.unload_follow('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : "" %>');
   $("#plan_to_own"+'<%= @item.id %>').unbind("hover");
   $("#plan_to_buy"+'<%= @item.id %>').unbind("hover");
-  Product.hover_follow_but($("#plan_to_follow"+'<%= @item.id %>'),"Follow This Car", "Follow This Car", '<%= I18n.t('plan_to_follow') %>');
+  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : '' %>');
 <% end %>
 
-$(".PlanntoBuyBtn span[title]").tooltip();
+<% unless @related_items %>
+$('<%= "#plan_to_buy_#{@item.id}, #plan_to_own_#{@item.id}, #plan_to_follow_#{@item.id}" %>').poshytip({
+  content: this.title,
+  className: "tip-darkgray",
+  bgImageFrameSize: 11,
+  offsetX: -25
+});
+<% end %>
 
 <% end %>

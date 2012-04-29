@@ -6,14 +6,16 @@ class AccountsController < ApplicationController
   end
 
   def update
-    if current_user.update_attributes(params[:user]) && current_user.errors.blank?
+    avatar_attributes = params[:user][:avatar]
+    current_user.update_attributes(params[:user].delete(:avatar))
+    if current_user.errors.blank?
       $redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "avatar_url")
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "name", current_user.name)
       params[:user][:password] = ""
       params[:user][:password_confirmation] = ""
-      if params[:user][:avatar]
-        params[:user][:avatar][:user_id] = current_user.id
-        Avatar.find_or_create_by_user_id(current_user.id) && current_user.avatar.update_attributes(params[:user][:avatar])
+      if avatar_attributes
+        avatar_attributes[:user_id] = current_user.id
+        Avatar.find_or_create_by_user_id(current_user.id) && current_user.avatar.update_attributes(avatar_attributes)
         flash[:notice] = "Account update successfully"
       else
         flash[:notice] = "please upload the avatar from profile page"

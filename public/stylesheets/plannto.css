@@ -1924,8 +1924,14 @@ li.middlebg {
 }
 
 .uploadedvideoContentdisplay {
-    width: 200px;
-    height: 100px;
+    width: 160px;
+    height: 120px;
+    padding-right: 10px;
+}
+
+.uploadedarticleContentdisplay {
+    width: 75px;
+    height: 75px;
     padding-right: 10px;
 }
 
@@ -2512,8 +2518,8 @@ ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  m
 .Leftreviewblock { width:727px; float:left; padding:0 0 15px 0;}
 
 /*------------review big tabs----------------*/
-.Reviewbigtabs { width:100%; height:37px; float:left; background:url(../images/tabbg.png) repeat-x left bottom;}
-.Reviewbigtabs a { display:block; width:280px; height:auto; float:right; height:36px; font-size:12px; line-height:37px;
+.Reviewbigtabs { width:100%; height:32px; float:left; background:url(../images/tabbg.png) repeat-x left bottom;}
+.Reviewbigtabs a { display:block; width:280px; height:auto; float:right; height:30px; font-size:12px; line-height:30px;
 					background:url(../images/review_tabs.png) no-repeat left -1px; text-align:center; color:#505050;
 					text-decoration:none;  font-weight:bold; font-family:Arial, Helvetica, sans-serif;
 					border:1px solid #cdd3d7; border-bottom:none; position:relative;}
@@ -2706,3 +2712,207 @@ textarea { outline:none;}
     top: 0;
     z-index: 5000;
 }
+
+
+/*========================================================================================================================
+======================================MEGA DROPDOWN====================================================================*/
+#Megadropdown {list-style:none; width:100%; margin:0px auto 0px auto; height:47px; float:left; padding:0; position:relative;
+                z-index:10; line-height:21px;}
+#Megadropdown li {float:left; display:block; text-align:center; position:relative; padding: 0px 0px 0px 18px; 
+                    margin-top:7px; border:none;}
+#Megadropdown li span { display:block; padding: 3px 17px 4px 0px; float:left;}
+#Megadropdown li:hover {background:url(../images/li_bg.png) no-repeat left top;}
+#Megadropdown li:hover span  {background:url(../images/li_bg.png) no-repeat right -30px ; }
+
+#Megadropdown li a {font-family:Tahoma,Arial, Helvetica, sans-serif; font-size:13px; color: #2a2929;
+                    display:block; outline:0; text-decoration:none; font-weight:bold;}
+
+#Megadropdown li:hover a {color:#2a2929;}
+
+.dropdown_4columns {
+margin:25px auto 0 0; float:left; position:absolute; left:-999em; text-align:left; 
+padding:10px 14px 20px 11px; border:1px solid #508baa; background:#ecf1f2;  width: 550px;
+-moz-border-radius: 0px 5px 5px 5px; -webkit-border-radius: 0px 5px 5px 5px; border-radius: 0px 5px 5px 5px;
+-moz-box-shadow: 0px 5px 3px 0px #bbbbbb; -webkit-box-shadow: 0px 5px 3px 0px #bbbbbb; box-shadow: 0px 5px 3px 0px #bbbbbb;
+}
+
+#Megadropdown li:hover .dropdown_4columns {left:-0px; top:auto;}
+.col_1 { display:inline; float: left; position: relative; margin-left: 5px; margin-right: 5px; width:182px;}
+.col_2 { display:inline; float: left; position: relative;  width:127px;}
+
+.Topcarcol { width:170px; height:auto; float:left; padding:10px 5px 10px 14px; border:1px solid #8bbfd8; 
+            background:#FFFFFF; -moz-border-radius:5px; -webkit-border-radius: 5px; border-radius: 5px;}
+
+#Megadropdown h3 {font-family:Tahoma,Arial, Helvetica, sans-serif; line-height:21px; font-size:12px; 
+                text-align:left; text-shadow: 1px 1px 1px #FFFFFF;}
+
+#Megadropdown p {line-height:18px; margin:0 0 10px 0;}
+#Megadropdown li:hover div a {font-size:12px; color:#333434; padding:0;}
+#Megadropdown li:hover div a:hover {color:#508baa;}
+#Megadropdown li ul {list-style:none; padding:0; margin:0;}
+#Megadropdown li ul li {font-size:12px; line-height:20px; position:relative; text-align:left;
+                        padding:0; margin:0; color:#333434; float:none; width:100%;}
+#Megadropdown li:hover div ul li a { font-weight:bold;}
+#Megadropdown li:hover div ul li ul li a { font-weight:normal;}
+#Megadropdown li:hover div ul li ul { padding:0 0 4px 10px; margin:0;}
+#Megadropdown li ul li:hover {background:none; border:none; padding:0; margin:0;}
+#Megadropdown li:hover .Divmain { display:block; position:absolute; width:99%;  height:5px; left:1px; background:#ecf1f2;
+                                bottom:-2px; z-index:1000; margin-left:0px;}    
+.Divmain { display:none;}
+/*********** main menu end  ******************************/
+
+/*==================================================Follow Count Details=========================*/
+.Commandiv { width:100%; float:left; padding-bottom:18px; border-bottom: 1px solid #E3E3E3; margin-bottom:10px;}  
+.Detailfeature { width:84px; height:auto; float:left;}
+.Detailfeature span.Headingtxt { display:block; height:26px; background:url(../images/plan_tobg.png) repeat-x left top;
+                            font-family:Tahoma ,Arial, Helvetica, sans-serif; font-size:9px; font-weight:bold; color:#FFFFFF;
+                            text-align:center; line-height:26px; border-right:1px solid #bde2f6; text-transform:uppercase;}
+
+.Detailfeature .Iconblock { padding:13px 0 12px 0; width:100%; float:left;}
+.Detailfeature .Iconblock span.Planbuy { background:url(../images/plan_buy.png) no-repeat left top; display:block;
+                                        padding:0 0 0 28px; margin-left:13px; font-family:Tahoma, Arial, Helvetica, sans-serif;
+                                        font-size:12px; font-weight:bold; color:#222222; height:24px; line-height:24px;}
+                                        
+.Detailfeature .Iconblock span.Wonit { background:url(../images/won_it.png) no-repeat left top; display:block;
+                                        padding:0 0 0 28px; margin-left:13px; font-family:Tahoma, Arial, Helvetica, sans-serif;
+                                        font-size:12px; font-weight:bold; color:#222222; height:24px; line-height:24px;}
+                                        
+.Detailfeature .Iconblock span.Followcar { background:url(../images/follow_car.png) no-repeat left top; display:block;
+                                        padding:0 0 0 28px; margin-left:13px; font-family:Tahoma, Arial, Helvetica, sans-serif;
+                                        font-size:12px; font-weight:bold; color:#222222; height:24px; line-height:24px;}
+                                        
+
+                                        
+a.Bluesmall { background:url(../images/blue_small.png) no-repeat left top; font-family:Tahoma ,Arial, Helvetica, sans-serif;
+             font-size:9px; color:#FFFFFF; text-align:center; line-height:19px; display:block; width:75px; clear:both;
+             text-decoration:none; margin:auto;}
+             
+a.Bluesmall:hover { background-position:left bottom;}
+.Featurecontent { width:83px; border-right:1px solid #cdd3d7; float:left;}
+
+.Smalltext { clear:both; font-size:9px; font-family:Tahoma, Arial, Helvetica, sans-serif; text-align:center;
+            padding:3px 0 0 0; color:#828587;}
+
+div.imgfollowers { clear:both;}
+
+/***************************************************************************/
+                                
+/*======================FILTER BY OPTIONS START HERE 05-APRIL-2012===============================*/
+#Filterby { width:100%; float:left; padding:0 0 0px 0;}
+#Filterby .Filternav { width:638px; float:left;margin-top:5px;}
+#Filterby .Filternav ul         { padding:0; margin:0; list-style:none;}
+#Filterby .Filternav ul li      { padding:0; margin:0; float:left;}
+#Filterby .Filternav ul li a    { 
+display:block; padding:4px 14px; font-size:11px; color:#626262;
+font-family:Tahoma, Arial, Helvetica, sans-serif; text-decoration:none;font-weight:bold;}
+
+#Filterby .Filternav ul li a:hover { color:#000000; text-decoration:underline;}
+#Filterby .Filternav ul li.Currentfilter a {
+ padding:3px 10px; border-radius:10px; -moz-border-radius:10px; -webkit-border-radius:10px;
+ background:#aae5f7; border:1px solid #5eb5d0; rgb(16, 92, 182); text-decoration:none;}
+ 
+#Filterby .Labeltext { font-size:11px; font-weight:bold;  color: rgb(51, 51, 51); padding:4px 6px 0 0px;}
+
+
+/*---------FILTER BY----------*/
+#navigation { float:left;}
+#navigation ul#nav {
+    z-index: 5000;
+    float:left;
+    padding:0 0 0 10px;
+    margin:0;
+    
+
+}
+
+#navigation ul#nav li {
+    list-style:none;
+    position: relative;
+    float: left;
+    padding:0 5px 0 0;
+    text-align: center;
+    line-height: 1em;
+
+}
+
+#navigation ul#nav li a {
+    display: block; padding: 9px 10px;
+    -moz-border-radius:5px 0 0 0 ; border-radius:5px 5px 0 0; -webkit-border-radius:5px 5px 0 0;
+    color:#2680B9; text-decoration:none; font-size:12px;
+}
+
+#navigation ul#nav li a span {
+    padding: 0 15px 0 10px;
+    background: url(../images/up_downarrow.png) no-repeat right -25px;
+}
+
+#navigation ul#nav li:hover a span { background-position:right 6px;}
+
+#navigation ul#nav  li ul {
+    display: block;
+    position: absolute;
+/* hidding submenus based on: http://css-class.com/articles/ursidae/  */
+    left: -999em;/* this makes it more accessible than display:none; */
+    width: 162px;
+    padding: 0;
+    background:#FFFFFF;
+    border:1px solid #2680B9;
+    border-bottom:none;
+}
+
+#navigation ul#nav  li:hover ul,
+#navigation ul#nav  li.over ul /* This is for Internet Explorer 6  */
+{
+    display: block;
+    left: 0;
+    top: 100%;
+    position: absolute;
+    z-index: 4000;
+    width: 146px;
+}
+
+#navigation ul#nav  li ul li {
+    width: 146px;
+    height: auto;
+    background: transparent;
+    text-indent: 0;
+    padding: 0;
+}
+
+#navigation ul#nav  li:hover ul li a,
+#navigation ul#nav  li.over ul li a {
+    display: block;
+    width: 126px;/*this is to adjust if used some background image for dropdown */
+    background: transparent;
+    padding: 8px 10px;
+    text-decoration: none;
+    margin: 0;
+    color:#2680B9 !important;
+    text-indent: 0;
+    text-align: left;
+    border: 0;
+    white-space: nowrap;
+    border-radius:0px;
+    -moz-border-radius:0px;
+    -webkit-border-radius:0px;
+    border-bottom:1px solid #2680B9;
+}
+
+#navigation ul#nav li ul li a:hover {
+    color: #fff;
+    background: #bee6ff;
+    
+}
+
+#navigation ul#nav li.active a,
+#navigation ul#nav li a:hover,
+#navigation ul#nav li:hover a,
+#navigation ul#nav li.over a {
+    background: #FFFFFF;
+    border:1px solid #2680B9;
+    border-bottom:none;
+    padding: 8px 9px 9px 9px; 
+}
+
+h3.Questionans { padding:4px 0 0 0!important; margin:0px !important; float:left;}
+/****************************************

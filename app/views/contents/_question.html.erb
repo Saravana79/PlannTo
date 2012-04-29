@@ -9,7 +9,7 @@
   </div>
   <div class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-    <div><a class="txt_brown"><%= content.user.name  %> asked in Fiat Grande Punto - <%= pluralize(content.answer_contents.count, 'Answer')%>  - <%= time_ago_format(content) %> ago. </a></div>
+    <div><a class="txt_brown"><%= content.user.name  %> asked in <%= content.items.first.name %> - <%= pluralize(content.answer_contents.count, 'Answer')%>  - <%= time_ago_format(content) %> ago. </a></div>
     <div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
