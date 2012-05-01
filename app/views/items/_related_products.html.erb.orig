@@ -1,0 +1,127 @@
+<%if @related_items.size > 0%>
+  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Related <%=display_item_type(@item)%></td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <!--<table width="226" border="0" cellspacing="0" cellpadding="0" align="center" id="uisideRelatedProduct">
+         </table>-->
+
+        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+          <%@related_items.each do |related_item|%>
+          <tr>
+            <td width="113" height="85"><img src="<%=related_item.image_url%>" width="101" height="68" onclick="parent.location='<%=link_url(related_item)%>'"/></td>
+            <td width="113">
+            <a href="<%=link_url(related_item)%>" class="txt_black"><%=related_item.name%></a>
+            <img src="../images/rating_stars.png" width="87" height="20" /><br />
+            <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item %>
+            </td>
+          </tr>
+          <tr>
+            <td height="40" colspan="2" class="dotted_border" valign="top">
+              <% related_follower = related_item.related_followers(@follow_type) %>              
+              <%- related_follower[0..2].each do |user| %>
+                <%= image_tag user.get_photo(:small), :title => user.name ,:class => "userImageSmall"%>
+              <% end %>
+              <% if ((related_follower.count - 2) > 0) %>
+                and <%= (related_follower.count - 2) %> other people owns this.
+              <% elsif related_follower.count > 0 %>
+                owns this
+              <% end %>
+            </td>
+          </tr>
+         <script type="text/javascript">
+           <%= render "shared/javascript_button", :formate => :js, :button_class => '_small', :item => related_item,
+           :related_follower => user_follow_type(related_item, current_user) %>
+         </script>
+        <%end%>
+<<<<<<< HEAD
+=======
+
+>>>>>>> bee279e6d61a8652279652df5bacf6b338f6d595
+        </table>
+
+      </td>
+    </tr>
+    <tr>
+      <td height="33" class="padding1_lft15"><a href="<%=view_all_related_items_url(@item)%>" class="txt_blue">View All</a></td>
+    </tr>
+  </table>
+  <br/>
+<%end%>
+<!--<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+  <tr>
+    <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
+  </tr>
+  <tr>
+    <td height="252" valign="top">
+
+        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+          <tr>
+            <td width="113" height="85"><img src="../images/car1.png" width="101" height="68" /></td>
+            <td width="113">
+            <a href="#" class="txt_black">Renault Pulse</a>
+            <img src="../images/rating_stars.png" width="87" height="20" /><br />
+            <a style="" href="#" class="btn_follow">Follow</a>
+            </td>
+          </tr>
+          <tr>
+            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+          </tr>
+
+           <tr>
+            <td width="113" height="85"><img src="../images/car1.png" width="101" height="68" /></td>
+            <td width="113">
+            <a href="#" class="txt_black">Renault Pulse</a>
+            <img src="../images/rating_stars.png" width="87" height="20" /><br />
+            <a style="" href="#" class="btn_follow">Follow</a>
+            </td>
+          </tr>
+          <tr>
+            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+          </tr>
+        </table>
+
+    </td>
+  </tr>
+  <tr>
+    <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+  </tr>
+</table>-->
+<%#if @top_contributors.nil?%>
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+  <tr>
+    <td class="bg_widgethdr txt_white">Top Contributors</td>
+  </tr>
+  <tr>
+    <td height="170" valign="top">
+      <ul class="imgContributors">
+        <%@top_contributors.each do |contributor|%>
+
+          <%user = get_contributor_info(contributor[0])%>
+          <li class="imgContributors">
+            <div>
+              <div class="float_lft">
+                <img  src="<%unless user.avatar.nil?%><%=user.avatar.photo.url(:thumb)%><%end%>" class="imgContributes imageThumbnail" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  <%=user.name%>
+                </a>
+              </div>
+              <div class="contributorpoints">
+                <%=contributor[2]%> Points
+              </div>
+            </div>
+
+          </li>
+
+        <%end%>
+      </ul>
+    </td></tr>
+</table>
+<%#end%>
+
+
+</div>
