@@ -2,10 +2,6 @@
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
     <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
-    <%if content.can_update_content?(current_user)%>
-      <%=link_to "Edit", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue comments_show", :id => "#{content.id}", :item_id => "#{@item.try(:id)}"%>
-      <a>Delete</a>
-    <%end%>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
@@ -15,10 +11,12 @@
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-      <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-      <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-      <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-      <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+      <%if content.can_update_content?(current_user)%>
+        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+        <li class="subContentGap float_lft"><%=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+        <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+      <%end%>
     </ul>
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>

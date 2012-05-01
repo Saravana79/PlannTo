@@ -43,6 +43,11 @@ class ContentsController < ApplicationController
 
   end
 
+  def destroy
+    get_item_object
+    #@item.destroy
+  end
+
   private
   def get_item_object
     @item = Content.find(params[:id])
