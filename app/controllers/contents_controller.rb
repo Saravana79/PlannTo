@@ -1,7 +1,7 @@
 class ContentsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
-  layout :false
+  #layout :false
   include FollowMethods
   def feed
     
@@ -34,6 +34,7 @@ class ContentsController < ApplicationController
     #@article,@images = ArticleContent.CreateContent(url,current_user)
     @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
     @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+
   end
 
   def update
