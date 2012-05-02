@@ -1,4 +1,7 @@
 class QuestionContentsController < ApplicationController
+  
+  before_filter :authenticate_user!
+  layout :false
 
 	def create
     @item = Item.find(params[:default_item_id])
@@ -6,11 +9,8 @@ class QuestionContentsController < ApplicationController
 		@questioncontent.user = User.first
 		#@item = Item.find params['item_id']
 		@questioncontent.save_with_items!(params['question_item_id'])
-		respond_to do |format|
-			format.html
-			format.js
-		end
-	end	
+    
+  end
 
 	def show
 		@questioncontent = QuestionContent.find params[:id]

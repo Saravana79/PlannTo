@@ -3,12 +3,15 @@
     <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
   <%end%>
 <%end%>
+$(document).ready(function(){
 $("#contentEditView").dialog('destroy');
+$("#contentEditView").html('');
 $("#contentEditView").html('<%= escape_javascript(display_content_form(@content)) %>');
 $("#contentEditView").dialog({
 title: 'Edit <%=@content.type%>',
 height: 400,
 width:600});
+ });
 <%if @content.is_plannto_content?%>
   $("div#contentEditView #subContainerDefaultContent").show();
 <%elsif @content.is_question_content?%>

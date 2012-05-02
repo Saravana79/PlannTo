@@ -1,4 +1,4 @@
- <div ID="question_contentDiv" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+ <div id="question_contentDiv" style="display:none;" class="contentSubContainer">
 
  <%if @content.nil?%>
     <%@form_id = "new_question_content"%>
@@ -100,9 +100,19 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $("form#<%=@form_id%> #publishQuestion").click(function(){
+    $("form#<%=@form_id%> #publishQuestion").click(function(e){
       var valid = validateQuestionForm();
       if (!valid){
+        return false;
+      }
+      else{e.preventDefault()
+  <%if @content.nil?%>
+          $.post('/question_contents/create',$("#<%=@form_id%>").serialize(),null, "script");
+          return false;
+  <%else%>
+          $.post('/question_contents/update/<%=@content.id%>',$("#<%=@form_id%>").serialize(),null, "script");
+          return false;
+  <%end%>
         return false;
       }
     });

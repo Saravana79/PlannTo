@@ -30,7 +30,7 @@
     </div>
     <script type="text/javascript">
       $(document).ready(function(){
-
+<%if @content.nil?%>
         settings={
           close:true, addButton: false,
           url: "/search/autocomplete_items",
@@ -44,6 +44,7 @@
       $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
       $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
   <% end %>
+    <%end%>
   });
   function validateReviewForm(){
     $('form#<%=@form_id%> input[name$="review_content[title]"]').poshytip('destroy')
