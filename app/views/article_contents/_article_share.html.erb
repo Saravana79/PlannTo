@@ -346,7 +346,7 @@
     $("#<%=@sharefield3%>").hide();
   }
 
-  function showShareContainerOptFields(){alert("#<%=@form_id%> #article_content_field1")
+  function showShareContainerOptFields(){
     $("#<%=@sharefield1Label%>").text("Start Date:")
     $("#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
     $("#<%=@sharefield2Label%>").text("End Date:")
@@ -360,7 +360,7 @@
     $("#<%=@sharefield3%>").show();
   }
 
-  function showShareAppOptFields(){alert("shareapp")
+  function showShareAppOptFields(){
     $("#<%=@sharefield1Label%>").text("Sub Category:")
     $("#<%=@form_id%> #<%=@field1_id%>").replaceWith("<%=get_apps_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
     $("#<%=@sharefield1%>").show();
@@ -370,7 +370,7 @@
     $("#<%=@sharefield3%>").hide();
   }
 
-  function showShareBooksAccessoriesOptFields(){alert("shareacce")
+  function showShareBooksAccessoriesOptFields(){
     $("#<%=@sharefield1Label%>").text("Sub Category:")
     $("#<%=@form_id%> #<%=@field1_id%>").replaceWith("<%=get_books_accessories_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
     $("#<%=@sharefield1%>").show();
