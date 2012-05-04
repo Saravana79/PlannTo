@@ -29,6 +29,7 @@
       <%= render :partial => 'question_contents/new_question_content' %>
 <%#= render :partial => 'tips/new_tip' %>
       <%= render :partial => 'event_contents/new' %>
+      <%= render :partial => 'image_contents/new' %>
       <%= render :partial => 'contents/new_default' %>
     </div>
   </div>
@@ -118,6 +119,10 @@
       var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
       $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
+    }
+    else if (id == "contentPhoto") {
+      $(".contentSubContainer").hide();
+      $("#photo_content_div").show();
     }
     else{
       $(".contentSubContainer").hide();
