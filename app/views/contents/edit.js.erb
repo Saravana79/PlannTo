@@ -3,7 +3,6 @@
     <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
   <%end%>
 <%end%>
-$(document).ready(function(){
 $("#contentEditView").dialog('destroy');
 $("#contentEditView").html('');
 $("#contentEditView").html('<%= escape_javascript(display_content_form(@content)) %>');
@@ -11,10 +10,9 @@ $("#contentEditView").dialog({
 title: 'Edit <%=@content.type%>',
 height: 400,
 width:600});
- });
-<%if @content.is_plannto_content?%>
-  $("div#contentEditView #subContainerDefaultContent").show();
-<%elsif @content.is_question_content?%>
+<%#if @content.is_plannto_content?%>
+// $("div#contentEditView #subContainerDefaultContent").show();
+<%if @content.is_question_content?%>
   $("div#contentEditView #question_contentDiv").show();
 <%elsif @content.is_review_content?%>
   $("div#contentEditView #articleReviewSubContainer").show();
@@ -33,7 +31,7 @@ width:600});
   <%end%>
 <%elsif @content.is_article_content?%>
   <%if @content.url.blank?%>
-    $("div#contentEditView #subContainerEvent").show();
+    $("div#contentEditView #subContainerContentCreate").show();
     settings={
     close:true, addButton: false,
     url: "/search/autocomplete_items",
@@ -50,35 +48,22 @@ width:600});
       <%end%>
     <%end%>
 
-    <%if @content.article_category.is_event?%>
-      <%field1_id = "edit_field1_#{@item.id}"%>
-      <%field2_id = "edit_field2_#{@item.id}"%>
-      $("div#contentEditView div#subContainerEvent #sharefield1Label").text("Start Date:")
-      $("div#contentEditView div#subContainerEvent #sharefield2Label").text("End Date:")
-      $("div#contentEditView div#subContainerEvent #sharefield1").show();
-      $("div#contentEditView div#subContainerEvent #sharefield2").show();
-      $("div#contentEditView div#subContainerEvent #sharefield3").show();
-      $('div#contentEditView #<%=field1_id%>,div#contentEditView #<%=field2_id%>').datepicker();
-    <%end%>
+    <%#if @content.is_event?%>
+    //  setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
+    <%#elsif @content.is_app?%>
+    //  setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
+    <%#elsif (@content.is_books? || @content.is_accessories?)%>
+   //   setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
+    <%#end%>
   <%else%>
     $("div#contentEditView #ShareURLDiv").show();
     $("div#contentEditView #shareProduct").show();
-    <%if @content.article_category.is_event?%>
-      showShareContainerOptFields();
-      $(document).ready(function(){
-      $('#<%="edit_share_field1_#{@item.id}"%>,#<%="edit_share_field2_#{@item.id}"%>').datepicker();
-
-      });
-    <%elsif @content.article_category.is_app?%>
-      $(document).ready(function(){
-      showShareAppOptFields();
-      });
-    <%elsif (@content.article_category.is_books? || @content.article_category.is_accessories?)%>
-      $(document).ready(function(){
-      showShareBooksAccessoriesOptFields();
-      });
-    <%end%>
+    setDefaultFieldsArticleSubmit("<%=@content.sub_type%>");
+    <%#if @content.is_event?%>
+    <%#elsif @content.is_app?%>
+    <%#elsif (@content.is_books? || @content.is_accessories?)%>
+    <%#end%>
   <%end%>
 <%end%>
-$(".edit_dwnld_url_<%=@item.id%>").show();
+$(".edit_dwnld_url_<%=@content.id%>").show();
 

@@ -20,25 +20,29 @@ class ArticleContentsController < ApplicationController
   end
 
   def update
-    @default_id= params[:default_item_id]
-    ids = params["edit_articles_item_id_#{@default_id}"] || params[:article_create_item_id]
+    #@default_id= params[:default_item_id]
+    @item = Item.find(params[:default_item_id])
+    ids = params["edit_articles_item_id_#{params[:id]}"] || params[:article_create_item_id]
     #ids = params[:articles_item_id] || params[:article_create_item_id]
     @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
   end
   
   def download
     @edit_form  = params[:save_instruction ] == "1" ? false : true
-    @default_item_id = params[:default_item_id]
-    @article_category = ArticleCategory.find(params[:article_content][:article_category_id])
+    
+    #@default_item_id = params[:default_item_id]
+    #@article_category = ArticleCategory.find(params[:article_content][:article_category_id])
     url=params['article_content']['url']
     if url.nil?
       @article=ArticleContent.create(params[:article_content])
     else
       @article,@images = ArticleContent.CreateContent(url,current_user)
+      @article.sub_type = params[:article_content][:sub_type]
     end
   end # action ends here
   
   def bmarklet
+    @article_content = ArticleContent.new
     @article,@images = ArticleContent.CreateContent(params[:url],current_user)
     @external = params[:external]
     #@article_string = render_to_string :partial => "article" 

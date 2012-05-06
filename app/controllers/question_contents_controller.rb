@@ -4,7 +4,7 @@ class QuestionContentsController < ApplicationController
   layout :false
 
 	def create
-    @item = Item.find(params[:default_item_id])
+    @item = Item.find(params[:question_content][:itemtype_id])
 		@questioncontent = QuestionContent.new params[:question_content]
 		@questioncontent.user = User.first
 		#@item = Item.find params['item_id']

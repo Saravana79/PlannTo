@@ -28,100 +28,134 @@
       <%= render :partial => 'article_contents/article_share', :locals => {:content_category => false} %>
       <%= render :partial => 'question_contents/new_question_content' %>
 <%#= render :partial => 'tips/new_tip' %>
-      <%= render :partial => 'event_contents/new' %>
-      <%= render :partial => 'contents/new_default' %>
+<%#= render :partial => 'event_contents/new' %>
+      <%= render :partial => 'article_contents/create_new' %>
+<%#= render :partial => 'contents/new_default' %>
     </div>
   </div>
 </div>
 <!--Write a review share to a friend-->
 <script type="text/javascript">
   $("div#contentContainer ul li").click(function (e) {
-    <%#@content = Content.new%>
-    hideShareContainerOptFields()
-    showDefaultProductTag("default_product_item_list", "default_content_item");
+    var id = $(this).attr('id');
+    var category = id.replace("content",'')
+    if (id == "contentShowmore"){
+      $("div#contentContainer ul li").show();
+      $("#contentShowmore").hide();
+      return false
+    }
+    //first hide all forms
+    $(".contentSubContainer").hide();
+    // hide article create form optional fields
+    hideAllOptionalFieldsArticleCreate();
+
+    //category for article share
+    $("form#new_share_form #article_content_sub_type").val(category)
+
+    //function to set the default values for optional items(for edit form)
+
+    //hideShareContainerOptFields()
+    // showDefaultProductTag("default_product_item_list", "default_content_item");
     hideProductTag()
     $("div#contentContainer ul li").removeClass("Active");
-    $('#new_content')[0].reset();
+    // $('#new_content')[0].reset();
     $(this).closest('li').addClass('Active');
-    var id = $(this).attr('id');
+
+     
+    //below if condition is not required. set the label directly.
     if (id != "contentShowmore"){
       setUpContentWrite($(this).text())
       setUpContentSubmit($(this).text())
     }
-    if (id == "contentShowmore"){     
-      $("div#contentContainer ul li").show();
-      $("#contentShowmore").hide();
-    }
-    else if(id == "contentBooks"){
+    
+    
+    /* else if(id == "contentBooks"){
       $(".contentSubContainer").hide();
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
+      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
+      $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
       $("div#subContainerEvent #article_content_article_category_id").val(article_category_id)
     }    
     else if(id == "contentEvent"){
       $(".contentSubContainer").hide();
       $("#subContainerEvent").show();
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
+      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::EVENT)}"%>
       $("div#subContainerEvent #article_content_article_category_id").val(article_category_id)
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
+      $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
        showCreateEventOptFields();
     }
     else if(id == "contentApps"){
       $(".contentSubContainer").hide();
       $("#subContainerEvent").show();
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
+      var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::APPS)}"%>
       $("div#subContainerEvent #article_content_article_category_id").val(article_category_id)
-       $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
+       $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
        showCreateAppOptFields();
     }
     else if ((id == "contentAccessories")|| (id == "contentBooks")){
       $(".contentSubContainer").hide();
       $("#subContainerEvent").show();
       if (id == "contentAccessories"){
-        var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
+        var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::ACCESSORIES)}"%>
       }
       if (id == "contentBooks"){
-        var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
+        var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::BOOKS)}"%>
       }
       
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
+      $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
       $("#article_content_article_category_id").val(article_category_id)
        showCreateBooksAccessoriesOptFields();
     }
     else if (id == "contentShare"){
       $(".contentSubContainer").hide();
       $("#ShareURLDiv").show();
-    }
-    else if (id == "contentReviews"){
+    }*/
+    if (id == "contentReviews"){
       $(".contentSubContainer").hide();
       $("#articleReviewSubContainer").show();
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
-      $("#article_content_article_category_id").val(article_category_id)
+      //set sub type for all hidden forms of review, qa and article share
+      $("#review_content_sub_type").val(category);
+      // var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
+      //  $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
+      //  $("#article_content_article_category_id").val(article_category_id)
       // $("#reviewContainer").show();
     }    
     else if (id == "contentQ&A"){
       $(".contentSubContainer").hide();
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
-      $("#article_content_article_category_id").val(article_category_id)
+      //set sub type for all hidden forms of review, qa and article share
+      $("#question_content_sub_type").val(category);
+      //  var article_category_id = <%#="#{find_article_category(article_categories, ArticleCategory::QANDA)}"%>
+      //   $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
+      //  $("#article_content_article_category_id").val(article_category_id)
       $("#question_contentDiv").show();
     }
     else{
-      $(".contentSubContainer").hide();
-      var value = id.replace("content",'')
-<%article_categories.each do |category|%>
-        if (value == '<%=category[0]%>'){
-          var article_category_id = '<%=category[1]%>'
+      
+      //   $(".contentSubContainer").hide();
+      //set sub type for all hidden forms of review, qa and article share
+      $("form#new_create_article_content_form #article_content_sub_type").val(category);
+      //open the relevant form
+
+      $("#subContainerContentCreate").show();
+
+
+      //function to set the optional default items
+      setDefaultFieldsArticleCreate(category);
+     
+      //    var value = id.replace("content",'')
+<%#article_categories.each do |category|%>
+      // if (value == '<%#=category[0]%>'){
+      //    var article_category_id = '<%#=category[1]%>'
           
-        }
-<%end%>
-      var button_name =  setButtonName(value);
+      //  }
+<%#end%>
+
+      //set the form button name
+      var button_name =  setButtonName(category);
       $("#content_type").val(id.replace("content",''))
-      $("#default_content_submit").val(button_name)
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
-      $("#article_content_article_category_id").val(article_category_id)
-      $("#subContainerDefaultContent").show();
+      $("form#new_create_article_content_form #article_content_create_submit").val(button_name)
+      // $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
+      // $("#article_content_article_category_id").val(article_category_id)
+      // $("#subContainerDefaultContent").show();
     }
 
     //set active tab
@@ -131,7 +165,6 @@
   });
 
   $("div.Reviewbigtabs a#contentSubmit").click(function (e) {
-    <%#@content = nil%>
     $("div.Reviewbigtabs a#contentWrite").removeClass("Activetab")
     $(this).addClass("Activetab")
     $(".contentSubContainer").hide();
@@ -139,14 +172,14 @@
     $('#new_share_url').val('');
     $('#new_share_url').keyup();
     $("#ShareURLDiv").show();
-    hideShareContainerOptFields();
+     hideAllOptionalFieldsArticleSubmit();
+    //hideShareContainerOptFields();
     e.preventDefault();
   });
 
   $("div.Reviewbigtabs a#contentWrite").click(function (e) {    
     $("#ShareURLDiv").hide();
     $("div#contentContainer ul li.Active").trigger("click");
-  
     e.preventDefault();
   });
 
@@ -212,11 +245,11 @@
   }
 
 
-    $(document).ready(function(){
-      //setting default category id to fill it on load.
-      var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
-      $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
-      $("#article_content_article_category_id").val(article_category_id)
+  $(document).ready(function(){
+    //setting default category id to fill it on load.
+    var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
+    $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
+    $("#article_content_article_category_id").val(article_category_id)
 
-      });
+  });
 </script>

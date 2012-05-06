@@ -65,7 +65,7 @@ class ArticleContent < Content
   def self.update_content(id, val, user, ids)
     if val['url'].present?
     if val['url'].include? "youtube.com"
-      @article=VideoContent.updateContent(id, val, user, ids)
+      @article=VideoContent.update_video_content(id, val, user, ids)
     else
       ArticleContent.update_article_content(id, val, user, ids)
     end

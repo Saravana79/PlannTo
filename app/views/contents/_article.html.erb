@@ -1,4 +1,4 @@
-<div class="mainContentDiv">
+<div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
     <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   

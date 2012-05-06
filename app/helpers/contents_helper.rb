@@ -10,10 +10,10 @@ module ContentsHelper
       render :partial => "contents/question", :locals => { :content => item }
     when "ReviewContent"
       render :partial => "contents/review", :locals => { :content => item }
-    when "EventContent"
-      render :partial => "contents/event", :locals => { :content => item }
-    when "PlanntoContent"
-      render :partial => "contents/default", :locals => { :content => item }
+   # when "EventContent"
+   #   render :partial => "contents/event", :locals => { :content => item }
+    #when "PlanntoContent"
+    #  render :partial => "contents/default", :locals => { :content => item }
     end
   end
 
@@ -27,10 +27,10 @@ module ContentsHelper
       render :partial => "contents/show_question_details", :locals => { :content => item }
     when "ReviewContent"
       render :partial => "contents/show_default", :locals => { :content => item }
-    when "EventContent"
-      render :partial => "contents/show_default", :locals => { :content => item }
-    when "PlanntoContent"
-      render :partial => "contents/show_default", :locals => { :content => item }
+    #when "EventContent"
+    #  render :partial => "contents/show_default", :locals => { :content => item }
+    #when "PlanntoContent"
+    #  render :partial => "contents/show_default", :locals => { :content => item }
     end
   end
 
@@ -38,23 +38,23 @@ module ContentsHelper
     case item.type
       #when "ArticleContent"
       #  render :partial => "article_contents/article_share", :locals => { :content => item }
-    when "VideoContent"
-      render :partial => "contents/new_default", :locals => { :content => item }
+   # when "VideoContent"
+   #   render :partial => "contents/new_default", :locals => { :content => item }
     when "QuestionContent"
       render :partial => "question_contents/new_question_content", :locals => { :content => item }
     when "ReviewContent"
       render :partial => "reviews/review_subcontainer", :locals => { :content => item }
-    when "EventContent"
-      render :partial => "contents/new_default", :locals => { :content => item }
-    when "PlanntoContent"
-      render :partial => "contents/new_default", :locals => { :content => item }
+   # when "EventContent"
+    #  render :partial => "contents/new_default", :locals => { :content => item }
+   # when "PlanntoContent"
+   #   render :partial => "contents/new_default", :locals => { :content => item }
     else   
       if (item.type == "ArticleContent" && item.url.blank?)
-        render :partial => "event_contents/new", :locals => { :content => item }
+        render :partial => "article_contents/create_new", :locals => { :content => item }
       elsif (item.type == "ArticleContent" && item.url != "")
         render :partial => "article_contents/article_share", :locals => {:content_category => false,  :content => item}
       else
-        render :partial => "contents/new_default", :locals => { :content => item }
+        render :partial => "article_contents/article_share", :locals => {:content_category => false, :content => item }
       end
      
     end

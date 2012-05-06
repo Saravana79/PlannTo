@@ -4,10 +4,10 @@
   $("#article_errors").show(300);
 <% else %>
   <%if @article_create%>
-  $('div#subContainerEvent #notification').fadeIn('slow');
-   setTimeout("$('div#subContainerEvent #notification').fadeOut('slow');", 4000);
+  $('div#subContainerContentCreate #notification').fadeIn('slow');
+   setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 4000);
    $("#article_errors").hide();
-   $('div#subContainerEvent form#new_create_article_form')[0].reset();
+   $('div#subContainerContentCreate form#new_create_article_content_form')[0].reset();
    $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
    showCreateProductTag();
   <%else%>

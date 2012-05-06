@@ -30,10 +30,11 @@ class ContentsController < ApplicationController
   def edit
     @item = Item.find(params[:item_id])
     @article_content= @content = Content.find(params[:id])
+    @edit_form = true
     #put an if loop to check if its an article share. if yes then uncomment the link below
     #@article,@images = ArticleContent.CreateContent(url,current_user)
     @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
-    @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+    @article_categories = ArticleCategory.by_itemtype_id(@content.itemtype_id).map { |e|[e.name, e.id]  }
 
   end
 

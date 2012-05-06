@@ -99,13 +99,29 @@ class Content < ActiveRecord::Base
     self.type == "ArticleContent"
   end
 
-  def is_question_content?
-    self.type == "QuestionContent"
+  def is_event?
+    self.sub_type == ArticleCategory::EVENT
   end
 
-  def is_plannto_content?
-    self.type == "PlanntoContent"
+  def is_review?
+    self.sub_type == ArticleCategory::REVIEWS
   end
+
+  def is_app?
+    self.sub_type == ArticleCategory::APPS
+  end
+
+  def is_books?
+    self.sub_type == ArticleCategory::BOOKS
+  end
+
+  def is_accessories?
+    self.sub_type == ArticleCategory::ACCESSORIES
+  end
+
+  def is_question_content?
+    self.type == "QuestionContent"
+  end  
 
 	acts_as_rateable
   acts_as_voteable

@@ -1,0 +1,261 @@
+<div id="subContainerContentCreate" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
+  <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
+  <!-- along with event creation this form is used for many other types -->
+  <%if @content.nil?%>
+    <%@form_id = "new_create_article_content_form"%>
+  <%else%>
+    <%@form_id = "edit_create_article_content_form_#{@content.id}"%>
+  <%end%>
+  <%= form_for @content || ArticleContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+   <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+  <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
+    <%= f.hidden_field :sub_type %>
+    <div id="article_errors" style="line-height:20px;color: red;"></div>
+    <div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Title :</div>
+      <div class="float_lft">
+        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 5px;">
+      <div class="title_header float_lft">Description:</div>
+      <div>
+        <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;' %>
+      </div>
+    </div>
+    <!--<div style="padding:5px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Url:</div>
+      <div class="float_lft">
+    <%= f.hidden_field :url, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+      </div>
+    </div>-->
+    <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->
+    <%if @content.nil?%>
+      <%@field1_id = "new_article_create_field1"%>
+      <%@sharefield1 = "sharefield1"%>
+      <%@sharefield1Label = "sharefield1Label"%>
+    <%else%>
+      <%@field1_id = "edit_article_create_field1_#{@content.id}"%>
+      <%@sharefield1 = "edit_sharefield1_#{@content.id}"%>
+      <%@sharefield1Label = "edit_sharefield1Label_#{@content.id}"%>
+    <%end%>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield1%>">
+      <div class="title_header float_lft" id="<%=@sharefield1Label%>">Start date :</div>
+      <div class="float_lft">
+        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id =>  @field1_id}%>
+      </div>
+    </div>
+    <%if @content.nil?%>
+      <%@field2_id = "new_article_create_field2"%>
+      <%@sharefield2 = "sharefield2"%>
+      <%@sharefield2Label = "sharefield1Label2"%>
+    <%else%>
+      <%@field2_id = "edit_article_create_field2_#{@content.id}"%>
+      <%@sharefield2 = "edit_article_create_sharefield2"%>
+      <%@sharefield2Label = "edit_article_create_sharefield1Label2_#{@content.id}"%>
+    <%end%>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield2%>">
+      <div class="title_header float_lft" id="<%=@sharefield2Label%>">End date :</div>
+
+      <div class="float_lft">
+        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px", :id =>  @field2_id}  %>
+      </div>
+    </div>
+    <%if @content.nil?%>
+      <%@field3_id = "new_article_create_field3"%>
+      <%@sharefield3 = "sharefield3"%>
+      <%@sharefield3Label = "sharefield1Label3"%>
+    <%else%>
+      <%@field3_id = "edit_article_create_field3_#{@content.id}"%>
+      <%@sharefield3 = "edit_article_create_sharefield3_#{@content.id}"%>
+      <%@sharefield3Label = "edit_article_create_sharefield1Label3_#{@content.id}"%>
+    <%end%>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield3%>">
+      <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>
+
+      <div class="float_lft">
+        <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px", :id =>  @field3_id}  %>
+      </div>
+    </div>
+    <!-- FIELD ENDS -->
+    <div style="padding:5px 5px 0px 0px;clear:both;" id="shareProduct">
+      <div class="title_header float_lft">Product  :</div>
+      <div class="taggingdiv" style="margin-left:5px;">
+        <ul id="article_create_product_list" class="tagging"></ul>
+        <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="article_create_product"/></div>
+        <div style="clear:both;"></div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    <input id="article_content_create" name="article_content_create" type="hidden" value="true"  />
+    <%= hidden_field_tag 'article_create_item_id' %>
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+      <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'article_content_create_submit', 'data-disable-with'=>"Saving..." %>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  function showDefaultProductTag(id, hidden_text_field_id){
+    var itemId = <%= @item.id %>
+    var defaultId = "textTaggers" + itemId
+    $("ul#" +id + " li").each(function (i) {
+      var id = $(this).attr('id');
+      if (id != defaultId){
+        $(this).remove();
+      }
+    });
+    $("#" + hidden_text_field_id).val(itemId);
+  }
+
+  function hideAllOptionalFieldsArticleCreate(){
+    $("#<%=@form_id%> #<%=@field1_id%>").val('');
+    $("#<%=@form_id%> #<%=@field2_id%>").val('');
+    $("#<%=@form_id%> #<%=@field3_id%>").val('');
+    $("div#subContainerContentCreate #<%=@sharefield1%>").hide();
+    $("div#subContainerContentCreate #<%=@sharefield2%>").hide();
+    $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
+  }
+  function setDefaultFieldsArticleCreate(category){
+    hideAllOptionalFieldsArticleCreate();
+    if (category == "<%=ArticleCategory::EVENT%>"){
+      showArticleCreateEventOptFields();
+    }
+    else if((category == "<%=ArticleCategory::BOOKS%>")|| (category == "<%=ArticleCategory::ACCESSORIES%>")){
+      showArticleCreateBooksAccessoriesOptFields();
+    }
+    else if (category == "<%=ArticleCategory::APPS%>"){
+      showArticleCreateAppOptFields();
+    }
+  }
+  function showArticleCreateEventOptFields(){
+    $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("Start Date:")
+    $("div#subContainerContentCreate #<%=@sharefield2Label%>").text("End Date:")
+<%if @content.nil?%>
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
+
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").val('');
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").val('');
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").val('');
+<%else%>
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+<%end%>
+    $("div#subContainerContentCreate #<%=@sharefield1%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield2%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield3%>").show();
+    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>,div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>').datepicker();
+  }
+
+  function showArticleCreateAppOptFields(){
+    $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("Sub Category:")
+    $("div#subContainerContentCreate #<%=@field1_id%>").replaceWith("<%=get_apps_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
+    $("div#subContainerContentCreate #<%=@sharefield1%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield2Label%>").text("Type:")
+    $("div#subContainerContentCreate #<%=@field2_id%>").replaceWith("<%=get_apps_type_html_list("#{@field2_id}", "article_content[field2]")%>");
+<%unless @content.nil?%>
+      $("div#subContainerContentCreate #<%=@field1_id%>").val("<%=@content.field1%>")
+      $("div#subContainerContentCreate #<%=@field2_id%>").val("<%=@content.field2%>")
+<%end%>
+    $("div#subContainerContentCreate #<%=@sharefield2%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
+  }
+
+  function showArticleCreateBooksAccessoriesOptFields(){
+    $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("Sub Category:")
+    $("div#subContainerContentCreate #<%=@field1_id%>").replaceWith("<%=get_books_accessories_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
+<%unless @content.nil?%>
+      $("div#subContainerContentCreate #<%=@field1_id%>").val("<%=@content.field1%>")
+<%end%>
+    $("div#subContainerContentCreate #<%=@sharefield1%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield2%>").hide();
+    $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
+  }
+
+  function showCreateProductTag(){
+    var itemId = <%= @item.id %>
+    var defaultId = "textTaggers" + itemId
+    $("ul#article_create_product_list li").each(function (i) {
+      var id = $(this).attr('id');
+      if (id != defaultId){
+        $(this).remove();
+      }
+    });
+    $("#article_create_item_id").val(itemId);
+  }
+
+  $(document).ready(function(){
+<%if @content.nil?%>
+      settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "article_create_item_id"
+      };
+      $.textTagger("article_create_product","article_create_product_list",settings);
+  <% unless @item.blank? %>
+        $.addTag("article_create_product","article_create_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
+        $("ul#article_create_product_list li:first span a.icon_close_tagging").remove();
+  <% end %>
+<%else%>
+      settings={
+        has_parent:true,
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "#contentEditView #article_create_item_id"
+      };
+  <% @items.each do |item| %>
+        $.addTag("#contentEditView #default_product_item","div#contentEditView ul#default_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+    <%if item.id == @item.id%>
+          $("ul#article_create_product_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
+    <%end%>
+  <%end%>
+      $.textTagger("#contentEditView #article_create_product","#contentEditView #article_create_product_list",settings);
+
+<%end%>
+
+
+    $("form#<%=@form_id%> #article_content_create_submit").click(function(e){
+      $("#subContainerContentCreate div#article_errors").html("");
+      var valid = validateEventForm();
+      if (!valid){
+        return false;
+      }
+      else{
+<%if @content.nil?%>
+          // $('form#<%#=@form_id%>').attr('action','<%#= article_contents_path %>');
+          $.post('/article_contents/create',$("#<%=@form_id%>").serialize(),"script");
+<%else%>
+          $.post('/article_contents/update/<%=@content.id%>',$("#<%=@form_id%>").serialize(),"script");
+          return false;
+<%end%>
+        e.preventDefault()
+        return false;
+      }
+    })
+  });
+
+  function validateEventForm(){
+    $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip('destroy')
+    var valid = true;
+    if ($("div#subContainerContentCreate form#<%=@form_id%> #article_content_title").val() == ""){
+      $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip('show');
+      valid = false
+    }
+    return valid
+  }
+</script>
+

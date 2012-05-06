@@ -1,4 +1,3 @@
-
 <%if @edit_form%>
   <%@title_id = "edit_txtArticleTitle_#{@default_item_id}"%>
   <%@dwnld_url = "edit_dwnld_url_#{@default_item_id}"%>
@@ -20,22 +19,33 @@ $('div.<%=@dwnld_url%>').show();
 $("#<%=@title_id%>").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));
 $("#<%=@txtArticleDescription%>").attr("value","<%= escape_javascript(@article.description) %>");
 
-$("#<%=@new_article_type%>").val("<%= escape_javascript(@article.type) %>");
-
-<%unless @article_category.nil?%>
+//$("#<%#=@new_article_type%>").val("<%#= escape_javascript(@article.type) %>");
+$("#<%=@new_article_type%>").val("ArticleContent");
+<%#unless @article_category.nil?%>
   <%unless @edit_form%>
     showProductTag();
+     <%if @article.is_review?%>
+    $("div#ShareURLDiv input#<%="new_article_product"%>").hide();
   <%end%>
-  <%if @article_category.is_event?%>
-    showShareContainerOptFields();
-    $('#new_share_field1_<%=@default_item_id%>,#new_share_field2_<%=@default_item_id%>').datepicker();
-  <%elsif @article_category.is_app?%>
-    showShareAppOptFields();
-  <%elsif (@article_category.is_books? || @article_category.is_accessories?)%>
-    showShareBooksAccessoriesOptFields();
+    <%else%>
+      <%if @article.is_review?%>
+    $("div#ShareURLDiv input#<%="edit_article_product_#{@article.id}"%>").hide();
   <%end%>
-<%else%>
-<%end%>
+  <%end%>
+  
+
+    
+  <%#if @article.is_event?%>
+   setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
+  //showShareContainerOptFields();
+   // $('#new_share_field1_<%#=@default_item_id%>,#new_share_field2_<%#=@default_item_id%>').datepicker();
+  <%#elsif @article.is_app?%>
+   // showShareAppOptFields();
+  <%#elsif (@article.is_books? || @article.is_accessories?)%>
+   // showShareBooksAccessoriesOptFields();
+  <%#end%>
+<%#else%>
+<%#end%>
 
 <% if @images.present? and @images.count > 0 %>  
   images = new Array();
