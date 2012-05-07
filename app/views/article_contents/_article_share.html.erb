@@ -265,8 +265,8 @@
     $("div#ShareURLDiv input#<%=@search_field_id%>").hide();
   <%end%>
 <%end%>
-
-<% unless @article_content.url.blank? %>
+   
+<% unless @article_content.url.blank? %> 
  <%= render :file =>"article_contents/download.js" %>
 <% end %>
   });

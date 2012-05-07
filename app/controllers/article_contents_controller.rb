@@ -6,7 +6,7 @@ class ArticleContentsController < ApplicationController
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
-    @item = Item.find(params[:default_item_id])
+    @item = Item.find(params[:default_item_id]) unless params[:default_item_id].empty?
     #for article content create or submit
     @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
@@ -42,8 +42,9 @@ class ArticleContentsController < ApplicationController
   end # action ends here
   
   def bmarklet
-    @article_content = ArticleContent.new
+    #@article_content = ArticleContent.new
     @article,@images = ArticleContent.CreateContent(params[:url],current_user)
+    @article_content= @article
     @external = params[:external]
     #@article_string = render_to_string :partial => "article" 
     respond_to do |format|

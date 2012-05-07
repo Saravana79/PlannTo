@@ -2,6 +2,15 @@ class ArticleContent < Content
   acts_as_citier
   #validates :url, :presence => true
   belongs_to :article_category
+
+
+#  validate :validate_end_date_before_start_date
+#
+#  def validate_end_date_before_start_date
+#    if end_date && start_date
+#      errors.add(:end_date, "should be greater than start date") if end_date < start_date
+#    end
+#  end
   
   MIN_SIZE =[25,25]
   
