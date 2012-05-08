@@ -116,6 +116,12 @@
     $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
   }
   function setDefaultFieldsArticleCreate(category){
+    <%if @content.nil?%>
+        var saveButtonName = "Save " + category
+    <%else%>
+      var saveButtonName = "Update " + category
+    <%end%>
+    $("form#<%=@form_id%> input#article_content_create_submit").val(saveButtonName);
     hideAllOptionalFieldsArticleCreate();
     if (category == "<%=ArticleCategory::EVENT%>"){
       showArticleCreateEventOptFields();

@@ -360,6 +360,12 @@ function hideAllOptionalFieldsArticleSubmit(){
     $("div#ShareURLDiv #<%=@sharefield3%>").hide();
   }
   function setDefaultFieldsArticleSubmit(category){
+    <%if @article_content.new_record?%>
+        var saveButtonName = "Share this " + category
+    <%else%>
+      var saveButtonName = "Update this " + category
+    <%end%>
+      $("form#<%=@form_id%> #submit_article").val(saveButtonName)
     hideAllOptionalFieldsArticleSubmit();
     if (category == "<%=ArticleCategory::EVENT%>"){
       showArticleSubmitEventOptFields();
