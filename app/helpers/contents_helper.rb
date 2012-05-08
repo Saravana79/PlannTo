@@ -2,18 +2,18 @@ module ContentsHelper
 
   def render_content_type(item)
     case item.type
-    when "ArticleContent"
-      render :partial => "contents/article", :locals => { :content => item }
-    when "VideoContent"
-      render :partial => "contents/video", :locals => { :content => item }
-    when "QuestionContent"
+     when "QuestionContent"
       render :partial => "contents/question", :locals => { :content => item }
     when "ReviewContent"
       render :partial => "contents/review", :locals => { :content => item }
-   # when "EventContent"
-   #   render :partial => "contents/event", :locals => { :content => item }
-    #when "PlanntoContent"
-    #  render :partial => "contents/default", :locals => { :content => item }
+    else
+     if (item.type == "ArticleContent" && item.url.blank?)
+        render :partial => "contents/article", :locals => { :content => item }
+      elsif (item.type == "ArticleContent" && item.video?)
+        render :partial => "contents/video", :locals => {:content => item}
+      else
+        render :partial => "contents/article", :locals => {:content => item }
+      end
     end
   end
 

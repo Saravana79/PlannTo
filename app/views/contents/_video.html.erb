@@ -1,13 +1,12 @@
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
-  <div class="float_rgt">
-    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
+  <div class="float_rgt"><img src="<%=content.user.get_photo%>" class="userImageSmall"/>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
     <div><a class="txt_brown"><%= content.user.name %> shared a video on <%= time_ago_format(content) %> ago </a></div>
     <div>
-      <div><a href="#" rel="<%= content.field4  %>" class="youtube" title="<%= content.title  %>"><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
+      <div><a href="" rel="<%= content.field4  %>" class="youtube" title="<%= content.title  %>"><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
       <div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
     </div>
     <ul class="divCommentsConent dontfloat">

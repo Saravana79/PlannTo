@@ -66,7 +66,7 @@ class Content < ActiveRecord::Base
       items.split(",").each do |id|
         item = Item.find(id)
         # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
-        rel= ContentItemRelation.new(:item => item, :content => self)
+        rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
       end
     end
@@ -79,7 +79,7 @@ class Content < ActiveRecord::Base
       content_item_relations.destroy_all
       items.split(",").each do |id|
         item = Item.find(id)
-        rel= ContentItemRelation.new(:item => item, :content => self)
+        rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
       end
     end
