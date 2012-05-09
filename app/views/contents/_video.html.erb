@@ -7,7 +7,7 @@
     <div><a class="txt_brown"><%= content.user.name %> shared a video on <%= time_ago_format(content) %> ago </a></div>
     <div>
       <div><a href="" rel="<%= content.field4  %>" class="youtube" title="<%= content.title  %>"><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
-      <div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+      <div class="subContentGap"><%= raw get_content_description(content)%></div>
     </div>
     <ul class="divCommentsConent dontfloat">
       <li class="subContentGap float_lft"><%= render_comments_anchor(content).html_safe  %></li>

@@ -40,8 +40,7 @@
                 <div><a class="title"><%= content.title %></a></div>
                 <div><a class="txt_brown">Asked by <%= content.user.name %></a></div>
                 <div class="subContentGap">
-                <a class="txt_black_description"><%= content.description %></a>
-                <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+                <%= raw get_content_description(content)%></div>
                 <ul class="divCommentsConent">
                     <li class="subContentGap float_lft" ><a class="txt_blue ">Comments (9)</a></li>
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
