@@ -4,6 +4,7 @@
   $("#article_errors").show(300);
 <% else %>
   <%if @article_create%>
+    $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.");
   $('div#subContainerContentCreate #notification').fadeIn('slow');
    setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 4000);
    $("#article_errors").hide();
@@ -12,6 +13,8 @@
    showCreateProductTag();
   <%else%>
   <% if @external.blank? %>
+     $('div#ShareURLDiv #notification').text("Thanks for sharing this <%=@article.sub_type.singularize %>.");
+
   $('div#ShareURLDiv div#notification').fadeIn('slow');
   setTimeout("$('div#ShareURLDiv div#notification').fadeOut('slow');", 5000);
     $("#article_errors").hide();

@@ -18,6 +18,8 @@ PlanNto::Application.routes.draw do
 
   match 'profile', :to => "accounts#profile", :as => "profile"
   resources :field_values, :only => [:create]
+
+  resources :answer_contents
   resources :accounts, :only => [:index] do
     put :update
   end
@@ -112,7 +114,6 @@ PlanNto::Application.routes.draw do
   resources :reviews
   resources :review_contents
   resources :question_contents
-  resources :answer_contents
   resources :pros
   resources :votes
   resources :questions
