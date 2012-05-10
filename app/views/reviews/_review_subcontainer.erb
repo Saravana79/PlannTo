@@ -8,8 +8,8 @@
     <%@title_id ="edit_review_content_#{@content.id}"%>
   <%end%>
   <%= form_for @content || ReviewContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
-    <%#= hidden_field_tag 'default_item_id', @item.try(:id) %>
-  <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+  <%#= hidden_field_tag 'default_item_id', @item.try(:id) %>
+    <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
@@ -21,6 +21,7 @@
       <div id="rating" class="thereisnosuchclass"></div>
     </div>
 
+    <div id="star"></div>
     <div style="padding:5px 5px 0px 0px;clear:both;" id="reviewProducts">
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
@@ -32,21 +33,21 @@
     </div>
     <script type="text/javascript">
       $(document).ready(function(){
-<%if @content.nil?%>
-        settings={
-          close:true, addButton: false,
-          url: "/search/autocomplete_items",
-          editMode: false, multiple: true,
-          has_parent: false,
-          hidden_field: "review_content_item"
-        };
-        /*$.textTagger("review_product_item","review_product_item_list",settings);*/
-  <% unless @item.blank? %>
-      $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
-      $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
-      $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
-  <% end %>
-    <%end%>
+  <%if @content.nil?%>
+      settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        has_parent: false,
+        hidden_field: "review_content_item"
+      };
+      /*$.textTagger("review_product_item","review_product_item_list",settings);*/
+    <% unless @item.blank? %>
+        $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
+        $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
+    <% end %>
+  <%end%>
   });
   function validateReviewForm(){
     $('form#<%=@form_id%> input[name$="review_content[title]"]').poshytip('destroy')
@@ -67,6 +68,18 @@
     return valid
   }
 
+  <%if @content.nil?%>
+    var score = 0;
+  <%else%>
+    var score = '<%=@content.rating%>';
+  <%end%>
+  $('form#<%=@form_id%> #rating').raty({
+    starOff:  'assets/star-off.png',
+    starOn: 'assets/star-on.png',
+    scoreName:    'review_content[rating]',
+    start: score,
+    width:  '200px'
+  });
   $(document).ready(function(){
     $('form#<%=@form_id%> #publishReview').live('click',function(e){
       // $("form#<%#=@form_id%> #publishReview").click(function(e){

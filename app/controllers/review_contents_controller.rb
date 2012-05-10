@@ -18,6 +18,7 @@ class ReviewContentsController < ApplicationController
 	end
 
   def update
+    @item = Item.find params['item_id']
     @reviewcontent = Content.find(params[:id])
     @reviewcontent.update_with_items!(params['review_content'], params[:item_id])
   end
