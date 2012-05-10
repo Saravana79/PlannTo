@@ -46,6 +46,14 @@
                 <div><a class="txt_brown">Asked by <%= @content.user.name %></a></div>
                 <div class="subContentGap">
                 <%= raw get_content_description(@content)%></div>
+                <div class="articleContentDetails">
+                  <% case @content.sub_type %>
+                  <% when "Event" %>
+                    Start Date: <%= @article_content.field1 %> <br />
+                    End Date: <%= @article_content.field2 %> <br />
+                    Location: <%= @article_content.field3 %>
+                  <% end %>
+                </div>
                 <ul class="divCommentsConent">
                     <li class="subContentGap float_lft" ><a class="txt_blue ">Comments (9)</a></li>
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
