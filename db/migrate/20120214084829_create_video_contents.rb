@@ -3,7 +3,7 @@ class CreateVideoContents < ActiveRecord::Migration
     create_table :video_contents do |t|
       t.string :youtube
     end
-   # create_citier_view(VideoContent)
+    create_citier_view(VideoContent)
   end
   
   def down
