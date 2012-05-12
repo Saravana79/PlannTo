@@ -1,7 +1,7 @@
 <div class="Homepopupgraybox">
 
   <div class="Boxtopblock">
-    <div class="Headingtext">Car - Quick Navigation Wizard</div>
+    <div class="Headingtext"><%=@itemtype.itemtype%> - Quick Navigation Wizard</div>
     <span class="Openclosebut"><a href="" id="wizardbutton" class="Close">Close</a></span>
   </div>
 
@@ -17,7 +17,7 @@
         <div class="Textdescriptions">
           <h2>PlannTo Buy</h2>
           <p>
-            Are you planning to buy a car? Not sure about what are the options available or confused about which one to buy?
+            Are you planning to buy a <%=@itemtype.itemtype.downcase%>? Not sure about what are the options available or confused about which one to buy?
           </p>
 
         </div>
@@ -34,7 +34,7 @@
         <div class="Textdescriptions">
           <h2>Owners</h2>
           <p>
-            Are you a proud owner of a car. Do you like to know what are the tips/tricks for using the item effectively or talk to fellow owners and experts to troubleshoot any issues.
+            Are you a proud owner of a <%=@itemtype.itemtype.downcase%>. Do you like to know what are the tips/tricks for using the item effectively or talk to fellow owners and experts to troubleshoot any issues.
           </p>
 
         </div>
@@ -50,7 +50,7 @@
         <div class="Textdescriptions">
           <h2>Experts/Enthusiastic</h2>
           <p>
-            Are you interested in car and like to know about latest happening on those items or network with like-minded people.
+            Are you interested in <%=@itemtype.itemtype.downcase%> and like to know about latest happening on those items or network with like-minded people.
           </p>
         </div>
 
@@ -65,9 +65,9 @@
         <span class="Redcar"></span>
 
         <div class="Textdescriptions">
-          <h2>Browse Cars</h2>
+          <h2>Browse <%=@itemtype.itemtype.pluralize%></h2>
           <p>
-            Are you looking for various cars available in market <br />
+            Are you looking for various <%=@itemtype.itemtype.downcase.pluralize%> available in market <br />
             <a href="#" class="Blacklink">Click here to check that options.</a>
           </p>
         </div>
@@ -85,9 +85,350 @@
   <div class="Boxbotcorner"></div>
 </div>
 
-<div class="push"></div>
-<!-- Product Details - End -->
-
+<div class="leftcolumnbig">
+  <!-- Product Details - Start -->
+  <!-- Overview Tabs -  Start -->
+  <br/><br/>
+  <!-- Product Details - End -->
+  <div id="usual2" class="usual" style="clear:both;">
+    <ul class="tabs" id="tabs">
+      <li id="tab_active"><a href="#">All Feeds</a></li>
+      <li><a href="#">Friends Feed</a></li>
+      <li><a href="#">My Feed</a></li>
+    </ul>
+  </div>
+  <div id="content_all">
+    <!--filter by block start here-->
+    <div id="Filterby">
+      <div class="Filternav">
+        <ul>
+          <li class="Labeltext" style="padding-right:2px;">Filter by:</li>
+          <li class="Currentfilter" id="All"><a href="#">All</a></li>
+          <li id="Reviews"><a href="">Reviews</a></li>
+          <li id="Apps"><a href="">Apps</a></li>
+          <li id="Qanda"><a href="">Questions & Answers</a></li>
+          <li id="Tips"><a href="">Tips</a></li>
+          <li id="Videos"><a href="">Videos</a></li>
+          <li id="Photos"><a href="">Photos</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+    <div >
+      <span class="sortby">
+        <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
+        <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
+        <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
+        <a class="txt_blue" href="#">Most Answers</a>
+      </span>
+    </div>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+    <% params = {"sub_type" => [ArticleCategory::EVENT, ArticleCategory::REVIEWS, ArticleCategory::APPS, ArticleCategory::BOOKS, ArticleCategory::ACCESSORIES], "itemtype_id" => @itemtype.id } %>
+    <% @contents = Content.filter(params)  %>
+    <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+      </div>
+  </div>
+  <!-- This will go into main layout -->
+</div>
 <script type="text/javascript">
- 
+  $(document).ready(function(){
+  $("div#Filterby div.Filternav ul li").click(function (e) {
+    if ($(this).text() != "Labeltext"){
+    var id = $(this).attr('id');
+    switch(id){
+     case 'All' :  var sub_type = "<%=ArticleCategory::EVENT%>, <%=ArticleCategory::REVIEWS%>, <%=ArticleCategory::APPS%>, <%=ArticleCategory::BOOKS%>, <%=ArticleCategory::ACCESSORIES%>";break;
+      case 'Reviews':  var sub_type ="<%=ArticleCategory::REVIEWS%>";break;
+      case 'Apps':  var sub_type ="<%=ArticleCategory::APPS%>";break;
+      case 'Qanda':  var sub_type ="<%=ArticleCategory::QANDA%>";break;
+      case 'Tips':  var sub_type ="<%=ArticleCategory::TIPS%>";break;
+     case 'Videos':  var sub_type ="<%=ArticleCategory::VIDEO%>";break;
+      case 'Photos':  var sub_type ="<%=ArticleCategory::PHOTO%>";break;
+    }
+    $.ajax(
+              {
+                url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>" + "<%#= filter_contents_path(:subtype => search_type  ) %>",
+                type: "get",
+                dataType: "script"
+              });
+  return false
+  }
+  });
+  });
+</script>
+
+
+<div class="rightcolumnsmall">
+  <br/>
+  <br/>
+
+  <div >
+
+
+    <!-- Buttons - start-->
+    <div class="other_links" >
+      <span class="txt_black heading_others">Quick Links</span>
+      <span class="menu_list"><a href="#">Compare Cars</a></span>
+      <span class="menu_list"><a href="#">Ask Advices</a></span>
+      <span class="menu_list"><a href="#">Top Questions</a></span>
+    </div>
+    <!-- Buttons - End-->
+
+  </div>
+
+  <!--follower block start here-->
+  <div class="Commandiv">
+    <div class="Detailfeature">
+      <span class="Headingtxt">Plan to Buy</span>
+      <div class="Featurecontent">
+        <div class="Iconblock">
+          <span class="Planbuy">10</span>
+        </div>
+        <a href="#" class="Bluesmall">Invite a friend</a>
+      </div>
+      <div class="Smalltext">who plans to buy</div>
+    </div>
+    <div class="Detailfeature">
+      <span class="Headingtxt">Owners</span>
+      <div class="Featurecontent">
+        <div class="Iconblock">
+          <span class="Wonit">100</span>
+        </div>
+        <a href="#" class="Bluesmall">Invite a friend</a>
+      </div>
+      <div class="Smalltext">who owns it</div>
+    </div>
+    <div class="Detailfeature">
+      <span class="Headingtxt">Followers</span>
+      <div class="Featurecontent" style="border-right:none;">
+        <div class="Iconblock">
+          <span class="Followcar">1000</span>
+        </div>
+        <a href="#" class="Bluesmall">Invite a friend</a>
+      </div>
+      <div class="Smalltext">who is an expert on this</div>
+    </div>
+  </div>
+  <!--follower block end here-->
+
+
+
+  <div class="txt_black imgfollowers">Followed by <a href="#">145236 PEOPLE</a>
+    <ul class="imgfollowers">
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+    </ul>
+  </div>
+  <br/>
+  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Related Cars</td>
+    </tr>
+    <tr>
+      <td height="252" valign="top">
+
+        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+          <tr>
+            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
+            <td width="113">
+              <a href="#" class="txt_black">Renault Pulse</a>
+              <img src="images/rating_stars.png" width="87" height="20" /><br />
+
+            </td>
+          </tr>
+          <tr>
+            <td height="40" colspan="2"  valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+          </tr>
+          <tr>
+            <td class="dotted_border" colspan="2"  style="width:100%"><div class="float_rgt" style="margin-bottom:-1px;">
+                <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
+                <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
+                <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
+            <td width="113">
+              <a href="#" class="txt_black">Renault Pulse</a>
+              <img src="images/rating_stars.png" width="87" height="20" /><br />
+
+            </td>
+          </tr>
+          <tr>
+            <td height="40" colspan="2"  valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+          </tr>
+          <tr>
+            <td class="dotted_border" colspan="2"  style="width:100%"><div class="float_rgt" style="margin-bottom:-1px;">
+                <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
+                <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
+                <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+    <tr>
+      <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+    </tr>
+  </table>
+
+  <!-- Related Cars -- End -->
+
+  <br />
+
+  <!-- Related Cars -- Start -->
+
+  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Top Contributors</td>
+    </tr>
+    <tr>
+      <td height="170" valign="top">
+        <ul class="imgContributors">
+          <li class="imgContributors">
+            <div>
+              <div class="float_lft">
+                <img src="images/img_followers.png" class="imgContributes" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  Saravana Kumar
+                </a>
+              </div>
+              <div class="contributorpoints">
+                1000 Points
+              </div>
+            </div>
+
+          </li>
+          <li class="imgContributors">
+            <div style="clear:both;">
+              <div class="float_lft">
+                <img src="images/img_followers.png" class="imgContributes" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  Saravana Kumar
+                </a>
+              </div>
+              <div class="contributorpoints">
+                1000 Points
+              </div>
+            </div>
+
+          </li>
+          <li class="imgContributors" >
+            <div style="clear:both">
+              <div class="float_lft">
+                <img src="images/img_followers.png" class="imgContributes" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  Saravana Kumar
+                </a>
+              </div>
+              <div class="contributorpoints">
+                1000 Points
+              </div>
+            </div>
+
+          </li>
+          <li class="imgContributors" >
+            <div style="clear:both">
+              <div class="float_lft">
+                <img src="images/img_followers.png" class="imgContributes" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  Saravana Kumar
+                </a>
+              </div>
+              <div class="contributorpoints">
+                1000 Points
+              </div>
+            </div>
+
+          </li>
+          <li class="imgContributors" >
+            <div style="clear:both">
+              <div class="float_lft">
+                <img src="images/img_followers.png" class="imgContributes" />
+              </div>
+              <div class="contributorname">
+                <a class="txt_black" href="#">
+                  Saravana Kumar
+                </a>
+              </div>
+              <div class="contributorpoints">
+                1000 Points
+              </div>
+            </div>
+
+          </li>
+        </ul>
+
+
+      </td></tr>
+  </table>
+
+
+  <!-- Related Cars -- End -->
+</div>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $('#load_content').live("click",function(){
+      type='';
+      $('#filter_contents :checked').each(function(){
+        type+="&type[]="+$(this).attr("class");
+      });
+<% unless @item.blank? %>
+        var url = "<%= feed_contents_path(:items => @item.id  ) %>";
+<% else %>
+        var url = "<%= feed_contents_path %>";
+<% end %>
+      $("#content_all").html("");
+      url=url+"&limit=5"+type;
+      $.get(url, function(data) {
+        $("#content_all").html(data);
+      });
+    });
+
+    $('#select_all').click(function(){
+      if($('#select_all').is(':checked')){
+        $('#filter_contents input').attr('checked','checked');
+      }
+      else {
+        $('#filter_contents input').removeAttr('checked');
+      }
+    });
+    var running =false;
+    $(window).scroll(function () {
+
+      lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+        running = true;
+        lnk.click();
+      }
+    });
+  });
 </script>

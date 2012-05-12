@@ -8,6 +8,7 @@ class ProductsController < ApplicationController
   include FollowMethods
 
   def index
+    @itemtype = Itemtype.find_by_itemtype(params[:search_type].singularize.camelize.constantize)
 
   end
 

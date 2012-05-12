@@ -13,6 +13,13 @@ class ContentsController < ApplicationController
     end
   end
 
+  def filter
+    filter_params = {"sub_type" => params[:sub_type].split(","), :itemtype_id => params[:itemtype_id] }
+
+     @contents = Content.filter(filter_params)
+   
+  end
+
   def show
     @content = Content.find(params[:id])
     @comment = Comment.new

@@ -40,11 +40,14 @@ PlanNto::Application.routes.draw do
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
+   match '/:search_type', :to => "products#index"
   resources :cars do
         resources :shares
   end  
   resources :contents do
-
+  collection do
+    get :filter
+  end
   resources :comments
     collection do
       get :feed
@@ -166,7 +169,7 @@ PlanNto::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  match '/:search_type', :to => "products#index"
+ 
   root :to => 'items#index'
   #root :controller => :item, :action => :index
   # See how all your routes lay out with "rake routes"

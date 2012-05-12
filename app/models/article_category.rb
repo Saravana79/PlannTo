@@ -5,6 +5,8 @@ class ArticleCategory < ActiveRecord::Base
   QANDA = "Q&A"
   EVENT = "Event"
   APPS = "Apps"
+  VIDEO = "Video"
+  PHOTO = "Photo"
   ACCESSORIES = "Accessories"
   BOOKS = "Books"
   TRAVELOGUE = "Travelogue"

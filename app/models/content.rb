@@ -43,16 +43,21 @@ class Content < ActiveRecord::Base
     options["limit"]||=PER_PAGE 
     options["order"]||="created_at desc" 
     scope=options.inject(self) do |scope, (key, value)|
+
       return scope if value.blank?
       value= value.join(",") if is_a?(Array)
       case key.to_sym
       when :items
-       # all_items = Item.get_all_related_items_ids(value)
-      #  scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
-      all_items = Item.get_related_content_for_items(value)
-       scope.scoped(:conditions => ['id in (?)',all_items])
+        # all_items = Item.get_all_related_items_ids(value)
+        #  scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
+        all_items = Item.get_related_content_for_items(value)
+        scope.scoped(:conditions => ['id in (?)',all_items])
+      when :itemtype_id
+        scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
+      when :sub_type
+        scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value ])
       when :order
         attribute, order = value.split(" ")
         scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
@@ -61,6 +66,7 @@ class Content < ActiveRecord::Base
       end
     end
     scope.uniq.paginate(:page => options["page"], :per_page => options["limit"])
+  
   end
   
 	def save_with_items!(items)

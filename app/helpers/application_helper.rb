@@ -93,7 +93,7 @@ module ApplicationHelper
 
   def default_search_type(search_type)
     return "" if (search_type == " " || search_type.nil?)
-    return search_type.camelize.constantize
+    return search_type.singularize.camelize.constantize
   end
   
   def errors_for(object, message=nil)
