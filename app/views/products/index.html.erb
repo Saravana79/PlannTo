@@ -123,7 +123,7 @@
       </span>
     </div>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-    <% params = {"sub_type" => [ArticleCategory::EVENT, ArticleCategory::REVIEWS, ArticleCategory::APPS, ArticleCategory::BOOKS, ArticleCategory::ACCESSORIES], "itemtype_id" => @itemtype.id } %>
+    <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id } %>
     <% @contents = Content.filter(params)  %>
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
       </div>
@@ -136,8 +136,9 @@
     if ($(this).text() != "Labeltext"){
     var id = $(this).attr('id');
     switch(id){
-     case 'All' :  var sub_type = "<%=ArticleCategory::EVENT%>, <%=ArticleCategory::REVIEWS%>, <%=ArticleCategory::APPS%>, <%=ArticleCategory::BOOKS%>, <%=ArticleCategory::ACCESSORIES%>";break;
-      case 'Reviews':  var sub_type ="<%=ArticleCategory::REVIEWS%>";break;
+     //case 'All' :  var sub_type = "<%#=ArticleCategory::EVENT%>, <%#=ArticleCategory::REVIEWS%>, <%=ArticleCategory::APPS%>, <%#=ArticleCategory::BOOKS%>, <%#=ArticleCategory::ACCESSORIES%>";break;
+     case 'All' :  var sub_type = "All";break;
+     case 'Reviews':  var sub_type ="<%=ArticleCategory::REVIEWS%>";break;
       case 'Apps':  var sub_type ="<%=ArticleCategory::APPS%>";break;
       case 'Qanda':  var sub_type ="<%=ArticleCategory::QANDA%>";break;
       case 'Tips':  var sub_type ="<%=ArticleCategory::TIPS%>";break;
