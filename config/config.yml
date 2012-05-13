@@ -2,3 +2,7 @@ development:
   root_image_url: "http://www.plannto.com/images/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
+ production:
+  root_image_url: "http://www.plannto.com/images/"
+  no_of_main_item: 1
+  no_of_item_in_tab: 10 
