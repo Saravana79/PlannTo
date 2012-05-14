@@ -245,7 +245,6 @@ DEPENDENCIES
   thumbs_up!
   tinymce-rails
   turn
-  uglifier
   uuidtools
   will_paginate
   youtube_it
