@@ -211,10 +211,6 @@ GEM
       faraday (>= 0.7.3)
       oauth (>= 0.4.4)
       simple_oauth (>= 0.1.5)
-    therubyracer (0.10.1)
-      libv8 (~> 3.3.10)
-    uglifier (1.2.4)
-      execjs (>= 0.3.0)
 
 PLATFORMS
   ruby
@@ -245,8 +241,7 @@ DEPENDENCIES
   thumbs_up!
   tinymce-rails
   turn
+  uglifier
   uuidtools
   will_paginate
   youtube_it
-  therubyracer
-  uglifier (>= 1.0.3)
