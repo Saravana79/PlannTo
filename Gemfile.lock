@@ -212,7 +212,7 @@ GEM
       oauth (>= 0.4.4)
       simple_oauth (>= 0.1.5)
     therubyracer (0.10.1)
-    libv8 (~> 3.3.10)
+      libv8 (~> 3.3.10)
 
 
 PLATFORMS
