@@ -211,6 +211,9 @@ GEM
       faraday (>= 0.7.3)
       oauth (>= 0.4.4)
       simple_oauth (>= 0.1.5)
+    therubyracer (0.10.1)
+    libv8 (~> 3.3.10)
+
 
 PLATFORMS
   ruby
@@ -245,3 +248,5 @@ DEPENDENCIES
   uuidtools
   will_paginate
   youtube_it
+  therubyracer
+  uglifier (>= 1.0.3)
