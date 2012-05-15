@@ -12,4 +12,5 @@ staging:
 <<: *defaults
 
 production:
-<<: *defaults
+host: localhost
+port: 6379
