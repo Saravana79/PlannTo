@@ -17,9 +17,7 @@ class Car < Product
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
-    string :cargroup, :multiple => true do |product|
-      product.cargroup.name
-    end
+ 
       
   dynamic_float :features do |car|
       car.attribute_values.inject({}) do |hash,attribute_value|
