@@ -5,7 +5,7 @@ gem 'rails', '3.1.1'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'mysql'
 gem 'uuidtools' 
 gem "configatron", "~> 2.8.4"
 gem 'dalli'
@@ -15,7 +15,7 @@ gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
 #gem 'execjs'
-#gem 'therubyracer'
+gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
@@ -24,7 +24,7 @@ group :assets do
   gem 'coffee-rails', "~> 3.1.0"
   gem 'uglifier'
 end
-gem 'sqlite3'
+#gem 'sqlite3'
 gem 'citier', '~>0.1.15'
 gem 'rails_sql_views' , git: 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
