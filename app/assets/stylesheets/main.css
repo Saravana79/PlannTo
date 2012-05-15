@@ -852,7 +852,7 @@ div.buttons {
 .plan_to_own_icon_selected_small {
     width: 21px;
     height: 21px;
-    background: url(../images/map_icon.png) no-repeat -22px -21px;;
+    background: url(../images/map_icon.png) no-repeat -22px -21px;
     display: block;
     float: left;
 }
@@ -876,15 +876,14 @@ div.buttons {
 .plan_to_follow_icon_small {
     width: 23px;
     height: 21px;
-    background: url(../images/map_icon.png) no-repeat -43px 0px;;
+    background: url(../images/map_icon.png) no-repeat -43px 0px;
     display: block;
-    float: left;
-}
+    float: left;}
 
 .plan_to_follow_icon_small:hover {
     width: 23px;
     height: 21px;
-    background: url(../images/map_icon.png) no-repeat -43px -21px;;;
+    background: url(../images/map_icon.png) no-repeat -43px -21px;
     display: block;
     float: left;
 }
@@ -892,7 +891,7 @@ div.buttons {
 .plan_to_follow_icon_selected_small {
     width: 23px;
     height: 21px;
-    background: url(../images/map_icon.png) no-repeat -43px -21px;;;
+    background: url(../images/map_icon.png) no-repeat -43px -21px;
     display: block;
     float: left;
 }
@@ -900,7 +899,7 @@ div.buttons {
 .plan_to_follow_icon_selected_small:hover {
     width: 23px;
     height: 21px;
-    background: url(../images/map_icon.png) no-repeat -43px 0px;;
+    background: url(../images/map_icon.png) no-repeat -43px 0px;
     display: block;
     float: left;
 }
@@ -908,7 +907,7 @@ div.buttons {
 .plan_to_follow_icon_disabled_small {
     width: 23px;
     height: 21px;
-    background: url(../images/map_icon.png) no-repeat -43px 0px;;
+    background: url(../images/map_icon.png) no-repeat -43px 0px;
     display: block;
     float: left;
 }
@@ -1119,7 +1118,6 @@ div.review_tabs {
     display: block;
 }
 
-/*div.review_tabs a:hover						{ font:bold 11px tahoma; color:#ac5e2d; text-decoration:none; border:solid 0px; height:34px; display:block; z-index:0;}*/
 .active_tabs {
     font: bold 11px tahoma;
     color: #ac5e2d;
@@ -1247,8 +1245,6 @@ ul.tabs li:hover {
     margin: 0px 1px 0px 0px;
 }
 
-/*#tab_active									{ width:103px; height:33px; background:url(../images/bg_tabs.png) no-repeat left top; float:left; margin:0px 1px 0px 0px; color:#000;}*/
-
 /* Question & Answers */
 
 div.question_answer {
@@ -1262,7 +1258,6 @@ h3 {
     padding: 0;
     margin: 0;
     padding-bottom: 15px;
-    border:
 }
 
 h4 {
@@ -2320,7 +2315,7 @@ h2 {
 .specificationblckdivli {list-style:none;  margin:0; padding:5px 0 5px 5px; }
 .specificationblckdivliempty{list-style:none;  margin:0; padding:5px 0 5px 5px;min-height:10px; }
 
-.specificationblcksublvltxt {list-style:none;; margin-left:-10px;display: list-item; line-height:12px; font-size:11px; margin:0; padding:5px 0 5px 5px;  border-right:0px solid #a8cfda;  border-bottom:1px solid #a8cfda;}
+.specificationblcksublvltxt {list-style:none; margin-left:-10px;display: list-item; line-height:12px; font-size:11px; margin:0; padding:5px 0 5px 5px;  border-right:0px solid #a8cfda;  border-bottom:1px solid #a8cfda;}
 
 
 /* Compare page */
@@ -2379,17 +2374,17 @@ h2 {
 .btn_plantobuy_icon_disabled_small	                        { width:22px; height:21px; background:url(../images/map_icon.png) top left;  display:block; float:left;  }
 
 .btn_iwonit_icon_small	                        			{ width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px; display:block; float:left; }
-.btn_iwonit_icon_small:hover	        			{  width:21px;height:21px; background:url(../images/map_icon.png) no-repeat -22px -21px;;  display:block; float:left;  }
-.btn_iwonit_icon_selected_small	                        { width:21px; height:21px;background:url(../images/map_icon.png) no-repeat -22px -21px;; display:block; float:left;  }
+.btn_iwonit_icon_small:hover	        			{  width:21px;height:21px; background:url(../images/map_icon.png) no-repeat -22px -21px;  display:block; float:left;  }
+.btn_iwonit_icon_selected_small	                        { width:21px; height:21px;background:url(../images/map_icon.png) no-repeat -22px -21px; display:block; float:left;  }
 .btn_iwonit_icon_selected_small:hover	       		 {  width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px; display:block; float:left; }
 .btn_iwonit_icon_disabled_small	                        { width:21px; height:21px; background:url(../images/map_icon.png) no-repeat -22px 0px;  display:block; float:left;  }
 
 
-.btn_followthiscar_icon_small	                        			{ width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;; display:block; float:left; }
-.btn_followthiscar_icon_small:hover	        			{  width:20px;height:21px; background:url(../images/map_icon.png) no-repeat -43px -21px;;;  display:block; float:left;  }
-.btn_followthiscar_icon_selected_small	                        { width:20px; height:21px;background:url(../images/map_icon.png) no-repeat -43px -21px;;; display:block; float:left;  }
-.btn_followthiscar_icon_selected_small:hover	       		 {  width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;; display:block; float:left; }
-.btn_followthiscar_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;;  display:block; float:left;  }
+.btn_followthiscar_icon_small	                        			{ width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px; display:block; float:left; }
+.btn_followthiscar_icon_small:hover	        			{  width:20px;height:21px; background:url(../images/map_icon.png) no-repeat -43px -21px;  display:block; float:left;  }
+.btn_followthiscar_icon_selected_small	                        { width:20px; height:21px;background:url(../images/map_icon.png) no-repeat -43px -21px; display:block; float:left;  }
+.btn_followthiscar_icon_selected_small:hover	       		 {  width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;display:block; float:left; }
+.btn_followthiscar_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px; display:block; float:left;  }
 
 
 /* Followers Images */
