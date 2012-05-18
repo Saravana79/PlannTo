@@ -1,13 +1,13 @@
 $(function(){
 
-  $('#new_review_content #rating').raty({
+ /* $('#new_review_content #rating').raty({
       starOff:  'assets/star-off.png',
       starOn: 'assets/star-on.png',
       scoreName:    'review_content[rating]',
       width:  '200px'
-  });
-
-  $('.displayRating').each(function(){
+  });*/
+//below rating is conflicting with product page rating.
+  /*$('.displayRating').each(function(){
       $(this).raty({
         readOnly: true,
         starOff:  'assets/star-off.png',
@@ -15,7 +15,7 @@ $(function(){
         starHalf:   'assets/star-half.png',
         start:  $(this).attr('data-rating')
       });
-  });
+  });*/
 
 
   $('.review_tabs ul li').click(function(){

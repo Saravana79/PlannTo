@@ -18,7 +18,7 @@
     <div class="productreview" style="clear:both;">
       <div class="title_header float_lft">Rating :</div>
       <!-- <img src="/images/rating_stars.png" style="padding-left:3px;"/> -->
-      <div id="rating" class="thereisnosuchclass"></div>
+      <div id="reviewRating" class="thereisnosuchclass"></div>
     </div>
 
     <div id="star"></div>
@@ -73,7 +73,7 @@
   <%else%>
     var score = '<%=@content.rating%>';
   <%end%>
-  $('form#<%=@form_id%> #rating').raty({
+  $('form#<%=@form_id%> #reviewRating').raty({
     starOff:  'assets/star-off.png',
     starOn: 'assets/star-on.png',
     scoreName:    'review_content[rating]',

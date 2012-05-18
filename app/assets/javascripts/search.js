@@ -1,4 +1,3 @@
-
 var SEARCH_URL = '/search';
 var checkBoxIds= "";
 

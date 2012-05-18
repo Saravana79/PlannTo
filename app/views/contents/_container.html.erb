@@ -48,14 +48,10 @@
     $("form#new_share_form #article_content_sub_type").val(category)
 
     //function to set the default values for optional items(for edit form)
-
-    //hideShareContainerOptFields()
-    // showDefaultProductTag("default_product_item_list", "default_content_item");
     hideProductTag()
     $("div#contentContainer ul li").removeClass("Active");
     // $('#new_content')[0].reset();
     $(this).closest('li').addClass('Active');
-
      
     //below if condition is not required. set the label directly.
     if (id != "contentShowmore"){
@@ -75,32 +71,20 @@
       $("#question_content_sub_type").val(category);
         $("#question_contentDiv").show();
     }
-    else{      
-      //   $(".contentSubContainer").hide();
+    else{  
       //set sub type for all hidden forms of review, qa and article share
       $("form#new_create_article_content_form #article_content_sub_type").val(category);
       //open the relevant form
       $("#subContainerContentCreate").show();
 
       //function to set the optional default items
-      setDefaultFieldsArticleCreate(category);
-     
-      //    var value = id.replace("content",'')
-<%#article_categories.each do |category|%>
-      // if (value == '<%#=category[0]%>'){
-      //    var article_category_id = '<%#=category[1]%>'
-          
-      //  }
-<%#end%>
+      setDefaultFieldsArticleCreate(category);   
 
       //set the form button name
       var button_name =  setButtonName(category);
       $("#content_type").val(id.replace("content",''))
       $("form#new_create_article_content_form #article_content_create_submit").val(button_name)
-      // $("#new_share_article_category_<%#=@item.id%>").val(article_category_id)
-      // $("#article_content_article_category_id").val(article_category_id)
-      // $("#subContainerDefaultContent").show();
-    }
+     }
 
     //set active tab
     $("div.Reviewbigtabs a#contentSubmit").removeClass("Activetab")
@@ -117,7 +101,6 @@
     $('#new_share_url').keyup();
     $("#ShareURLDiv").show();
      hideAllOptionalFieldsArticleSubmit();
-    //hideShareContainerOptFields();
     e.preventDefault();
   });
 
@@ -126,7 +109,6 @@
     $("div#contentContainer ul li.Active").trigger("click");
     e.preventDefault();
   });
-
 
   function setButtonName(label){
     var contentWrite = ""
@@ -187,8 +169,7 @@
     }
     $("#contentSubmit").html(contentWrite);
   }
-
-
+  
   $(document).ready(function(){
     //setting default category id to fill it on load.
     var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>

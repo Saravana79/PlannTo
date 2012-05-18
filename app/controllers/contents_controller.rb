@@ -19,9 +19,10 @@ class ContentsController < ApplicationController
     else
       sub_type = params[:sub_type].split(",")
     end
-    filter_params = {"sub_type" => sub_type, :itemtype_id => params[:itemtype_id] }
-
-     @contents = Content.filter(filter_params)
+    filter_params = {"sub_type" => sub_type}
+    filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
+    filter_params["items"] = params[:items].split(",") if params[:items].present?
+    @contents = Content.filter(filter_params)
    
   end
 

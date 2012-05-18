@@ -90,13 +90,12 @@
   <!-- Overview Tabs -  Start -->
   <br/><br/>
   <!-- Product Details - End -->
-  <div id="usual2" class="usual" style="clear:both;">
-    <ul class="tabs" id="tabs">
-      <li id="tab_active"><a href="#">All Feeds</a></li>
-      <li><a href="#">Friends Feed</a></li>
-      <li><a href="#">My Feed</a></li>
-    </ul>
-  </div>
+  <ul id="Newtabs">
+    <li id="tab_active"><a href="#">All Feeds</a></li>
+    <li><a href="#">Friends Feed</a></li>
+    <li><a href="#">My Feed</a></li>
+  </ul>
+
   <div id="content_all">
     <!--filter by block start here-->
     <div id="Filterby">
@@ -104,12 +103,9 @@
         <ul>
           <li class="Labeltext" style="padding-right:2px;">Filter by:</li>
           <li class="Currentfilter" id="All"><a href="#">All</a></li>
-          <li id="Reviews"><a href="">Reviews</a></li>
-          <li id="Apps"><a href="">Apps</a></li>
-          <li id="Qanda"><a href="">Questions & Answers</a></li>
-          <li id="Tips"><a href="">Tips</a></li>
-          <li id="Videos"><a href="">Videos</a></li>
-          <li id="Photos"><a href="">Photos</a></li>
+          <%@article_categories.each do |category|%>
+            <li id="<%=category.name%>"><a href=""><%=category.name%></a></li>
+          <%end%>
         </ul>
       </div>
     </div>
@@ -123,38 +119,39 @@
       </span>
     </div>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-    <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id } %>
-    <% @contents = Content.filter(params)  %>
-    <%= render :partial => 'contents/contents', :locals => {:params => params} %>
-      </div>
+      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id } %>
+      <% @contents = Content.filter(params)  %>
+      <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+    </div>
   </div>
   <!-- This will go into main layout -->
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-  $("div#Filterby div.Filternav ul li").click(function (e) {
-    if ($(this).text() != "Labeltext"){
-    var id = $(this).attr('id');
-    switch(id){
-     //case 'All' :  var sub_type = "<%#=ArticleCategory::EVENT%>, <%#=ArticleCategory::REVIEWS%>, <%=ArticleCategory::APPS%>, <%#=ArticleCategory::BOOKS%>, <%#=ArticleCategory::ACCESSORIES%>";break;
-     case 'All' :  var sub_type = "All";break;
-     case 'Reviews':  var sub_type ="<%=ArticleCategory::REVIEWS%>";break;
-      case 'Apps':  var sub_type ="<%=ArticleCategory::APPS%>";break;
-      case 'Qanda':  var sub_type ="<%=ArticleCategory::QANDA%>";break;
-      case 'Tips':  var sub_type ="<%=ArticleCategory::TIPS%>";break;
-     case 'Videos':  var sub_type ="<%=ArticleCategory::VIDEO%>";break;
-      case 'Photos':  var sub_type ="<%=ArticleCategory::PHOTO%>";break;
-    }
-    $.ajax(
-              {
-                url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>" + "<%#= filter_contents_path(:subtype => search_type  ) %>",
-                type: "get",
-                dataType: "script"
-              });
-  return false
-  }
-  });
-  });
+    $("div#Filterby div.Filternav ul li").click(function (e) {
+      if ($(this).text() != "Labeltext"){
+        var id = $(this).attr('id');
+        switch(id){
+          //case 'All' :  var sub_type = "<%#=ArticleCategory::EVENT%>, <%#=ArticleCategory::REVIEWS%>, <%=ArticleCategory::APPS%>, <%#=ArticleCategory::BOOKS%>, <%#=ArticleCategory::ACCESSORIES%>";break;
+          case 'All' :  var sub_type = "All";break;
+            //case 'Reviews':  var sub_type ="<%#=ArticleCategory::REVIEWS%>";break;
+            //  case 'Apps':  var sub_type ="<%#=ArticleCategory::APPS%>";break;
+            //  case 'Qanda':  var sub_type ="<%#=ArticleCategory::QANDA%>";break;
+            //  case 'Tips':  var sub_type ="<%#=ArticleCategory::TIPS%>";break;
+            // case 'Videos':  var sub_type ="<%#=ArticleCategory::VIDEO%>";break;
+            //  case 'Photos':  var sub_type ="<%#=ArticleCategory::PHOTO%>";break;
+            default:  var sub_type = id;
+            }
+            $.ajax(
+            {
+              url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>" + "<%#= filter_contents_path(:subtype => search_type  ) %>",
+              type: "get",
+              dataType: "script"
+            });
+            return false
+          }
+      });
+    });
 </script>
 
 
@@ -396,40 +393,40 @@
   <!-- Related Cars -- End -->
 </div>
 <script type="text/javascript" charset="utf-8">
-  $(function(){
-    $('#load_content').live("click",function(){
-      type='';
-      $('#filter_contents :checked').each(function(){
-        type+="&type[]="+$(this).attr("class");
-      });
+    $(function(){
+      $('#load_content').live("click",function(){
+        type='';
+        $('#filter_contents :checked').each(function(){
+          type+="&type[]="+$(this).attr("class");
+        });
 <% unless @item.blank? %>
-        var url = "<%= feed_contents_path(:items => @item.id  ) %>";
+          var url = "<%= feed_contents_path(:items => @item.id  ) %>";
 <% else %>
-        var url = "<%= feed_contents_path %>";
+          var url = "<%= feed_contents_path %>";
 <% end %>
-      $("#content_all").html("");
-      url=url+"&limit=5"+type;
-      $.get(url, function(data) {
-        $("#content_all").html(data);
+        $("#content_all").html("");
+        url=url+"&limit=5"+type;
+        $.get(url, function(data) {
+          $("#content_all").html(data);
+        });
+      });
+
+      $('#select_all').click(function(){
+        if($('#select_all').is(':checked')){
+          $('#filter_contents input').attr('checked','checked');
+        }
+        else {
+          $('#filter_contents input').removeAttr('checked');
+        }
+      });
+      var running =false;
+      $(window).scroll(function () {
+
+        lnk = $('#content_next');
+        if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+          running = true;
+          lnk.click();
+        }
       });
     });
-
-    $('#select_all').click(function(){
-      if($('#select_all').is(':checked')){
-        $('#filter_contents input').attr('checked','checked');
-      }
-      else {
-        $('#filter_contents input').removeAttr('checked');
-      }
-    });
-    var running =false;
-    $(window).scroll(function () {
-
-      lnk = $('#content_next');
-      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-        running = true;
-        lnk.click();
-      }
-    });
-  });
 </script>

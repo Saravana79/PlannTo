@@ -9,6 +9,7 @@ class ProductsController < ApplicationController
 
   def index
     @itemtype = Itemtype.find_by_itemtype(params[:search_type].singularize.camelize.constantize)
+@article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
 
   end
 
