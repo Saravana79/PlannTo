@@ -3014,6 +3014,7 @@ ul#Newtabs li a { font-family:Arial, Helvetica, sans-serif; font-size:12px; colo
 
 ul#Newtabs li a:hover { color:#4b85a4; text-decoration:none;}
 ul#Newtabs li#tab_active a { background:url(../images/tabs_navibg.png) no-repeat left top; color:#4b85a4;}
+ul#Newtabs li.tab_active a { background:url(../images/tabs_navibg.png) no-repeat left top; color:#4b85a4;}
 
 
 .Rightouter { width:732px; float:right;}

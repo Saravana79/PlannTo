@@ -30,9 +30,6 @@
 <br/>
 <div id="contentEditView"></div>
 <%= render :partial => "contents/container", :locals => {:article_categories => @article_categories} %>
-
-<%#= render :partial => "shared/review" %>
-
 <br/>
 <div>
   <ul id="Newtabs">
@@ -42,7 +39,7 @@
   </ul>
 </div>
 <br/>
-<div class="question_answer" id="tabs1">
+<div class="question_answer main-content-section" id="tabs1">
     <%= render "contents/all"%>
 </div>
 <div id="tabs5" style="display: none; " class="main-content-section">
