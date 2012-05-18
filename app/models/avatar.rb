@@ -7,5 +7,5 @@ class Avatar < ActiveRecord::Base
     :s3_credentials => {
       :access_key_id => ENV['AKIAJWDCN4DJWNL2FK5A'],
       :secret_access_key => ENV['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']
-
+      	}
 end
