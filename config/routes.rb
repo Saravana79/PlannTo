@@ -15,6 +15,7 @@ PlanNto::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
   match 'admin/search', :to => 'admin#index'
   match ':search_type/search' => 'search#index'
+  resources :search
   match ':search_type/related-items/:car_id' => 'related_items#index'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
 
