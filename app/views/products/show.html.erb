@@ -115,7 +115,8 @@
   </div>
 </div>
 <!--follower block end here-->
-
+<% if @item.get_followers.empty? %>
+<% else %>
 <div class="txt_black imgfollowers">Followers
   <ul class="imgfollowers">
       <% @item.get_followers.each do |follower| %>
@@ -125,6 +126,7 @@
       <% end %>
   </ul>
 </div>
+<%end %>
 <br/>
 <!--
 <div>
