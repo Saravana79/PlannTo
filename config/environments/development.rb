@@ -30,7 +30,6 @@ PlanNto::Application.configure do
   config.assets.debug = true
   config.action_controller.asset_host = "localhost:3000"
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }  
-  Paperclip.options[:command_path] = "G:\Saravana\Ruby\PlannTo\img"  
-  ENV["REDISTOGO_URL"] = 'redis://:@localhost:6789'
+  Paperclip.options[:command_path] = "/usr/local/bin/"  
+  ENV["REDISTOGO_URL"] = 'redis://:@localhost:6379'
 end
- 
