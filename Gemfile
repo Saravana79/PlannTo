@@ -15,7 +15,7 @@ gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
 #gem 'execjs'
-gem 'therubyracer'
+#gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
@@ -34,7 +34,7 @@ gem 'acts_as_rateable'
 gem 'acts_as_commentable'
 gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
 gem 'devise'
-gem 'sunspot_rails', '~>1.3.1'
+gem 'sunspot_rails', '~>1.2.1'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
 gem 'tinymce-rails'
