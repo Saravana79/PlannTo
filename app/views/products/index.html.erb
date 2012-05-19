@@ -91,7 +91,7 @@
   <br/><br/>
   <!-- Product Details - End -->
   <ul id="Newtabs">
-    <li id="tab_active"><a href="#">All Feeds</a></li>
+    <li class="tab_active"><a href="#">All Feeds</a></li>
     <li><a href="#">Friends Feed</a></li>
     <li><a href="#">My Feed</a></li>
   </ul>
@@ -132,19 +132,12 @@
       if ($(this).text() != "Labeltext"){
         var id = $(this).attr('id');
         switch(id){
-          //case 'All' :  var sub_type = "<%#=ArticleCategory::EVENT%>, <%#=ArticleCategory::REVIEWS%>, <%=ArticleCategory::APPS%>, <%#=ArticleCategory::BOOKS%>, <%#=ArticleCategory::ACCESSORIES%>";break;
           case 'All' :  var sub_type = "All";break;
-            //case 'Reviews':  var sub_type ="<%#=ArticleCategory::REVIEWS%>";break;
-            //  case 'Apps':  var sub_type ="<%#=ArticleCategory::APPS%>";break;
-            //  case 'Qanda':  var sub_type ="<%#=ArticleCategory::QANDA%>";break;
-            //  case 'Tips':  var sub_type ="<%#=ArticleCategory::TIPS%>";break;
-            // case 'Videos':  var sub_type ="<%#=ArticleCategory::VIDEO%>";break;
-            //  case 'Photos':  var sub_type ="<%#=ArticleCategory::PHOTO%>";break;
-            default:  var sub_type = id;
+           default:  var sub_type = id;
             }
             $.ajax(
             {
-              url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>" + "<%#= filter_contents_path(:subtype => search_type  ) %>",
+              url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>",
               type: "get",
               dataType: "script"
             });
