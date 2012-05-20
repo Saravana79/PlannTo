@@ -133,11 +133,11 @@ module ContentsHelper
   end
 
   def get_books_accessories_subcategory_html_list(id, name)
-    dropdown = "<select id='#{id}' name='#{name}'><option value='Books'>Books</option><option value='Business & Finance'>Business & Finance</option><option value='Education'>Education</option><option value='Entertainment'>Entertainment</option><option value='Games'>Games</option><option value='Health & Fitness'>Health & Fitness</option><option value='Kids'>Kids</option><option value='Lifestyle'>Lifestyle</option><option value='Music'>Music</option><option value='News'>News</option>"
-    dropdown += "<option value='Photography'>Photography</option><option value='Productivity'>Productivity</option><option value='Shopping'>Shopping</option>"
-    dropdown += "<option value='Travel'>Travel</option><option value='Utilities'>Utilities</option><option value='Arts & Design'>Arts & Design</option>"
-    dropdown += "<option value='Navigation'>Navigation</option><option value='Medical'>Medical</option><option value='Social Networking'>Social Networking</option>"
-    dropdown += "<option value='Sports'>Sports</option><option value='Weather'>Weather</option></select>"
+    dropdown = "<select id='#{id}' name='#{name}'><option value='Bags'> Bags</option><option value='Digital Photo Frame'>Digital Photo Frame</option><option value='Binoculars'> Binoculars</option><option value='Lenses'> Lenses</option><option value='Memory Cards'> Memory Cards</option><option value='Lens Cleaner'> Lens Cleaner</option><option value='Lens Cap'> Lens Cap</option><option value='Lens Hood'> Lens Hood</option><option value='Filters'> Filters</option><option value='Flashes'> Flashes</option><option value='Tripods'> Tripods</option><option value='Straps'> Straps</option><option value='Camera Remote Controls'> Camera Remote Controls</option>"
+    dropdown += "<option value='Batteries'> Batteries</option><option value='Chargers'> Chargers</option><option value='Headsets'> Headsets</option><option value='Speakers'> Speakers</option><option value='Case & Covers'> Case & Covers</option><option value='Screen Guards'> Screen Guards</option>"
+    dropdown += "<option value='TFT Monitors'> TFT Monitors</option><option value='Lights'> Lights</option><option value='Locks'> Locks</option><option value='Reverse Parking Aid'> Reverse Parking Aid</option><option value='Navigators'> Navigators</option>"
+    dropdown += "<option value='Helmets'> Helmets</option><option value='Gears'> Gears</option><option value='Pumps'> Pumps</option><option value='Cycle Computers'> Cycle Computers</option>"
+    dropdown += "<option value='Others'> Others</option></select>"
     return dropdown.html_safe
   end
 

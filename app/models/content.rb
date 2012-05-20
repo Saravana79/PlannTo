@@ -20,7 +20,7 @@ class Content < ActiveRecord::Base
   end
 
   def content_type
-    'Event'
+    return self.sub_type
   end
 
   PER_PAGE = 10
