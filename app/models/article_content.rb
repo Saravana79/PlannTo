@@ -15,6 +15,7 @@ class ArticleContent < Content
   MIN_SIZE =[25,25]
   
   def self.CreateContent(url, user)
+    logger.info "here"
     @images=[]
     if url.include? "youtube.com"
       @article=VideoContent.CreateContent(url, user)
@@ -33,14 +34,19 @@ class ArticleContent < Content
         doc.xpath("//meta[@name='description']/@content").each do |attr|
           @meta_description = attr.value
         end
-        doc.xpath("//link[@rel='image_src']/@href").each do |attr|
+        doc.xpath("//link[@rel='image_src']").each do |attr|
+          @images << CGI.unescapeHTML(attr.value)
+        end
+        doc.xpath("//link[@src]").each do |attr|
           @images << CGI.unescapeHTML(attr.value)
         end
         doc.xpath("//meta[@property='og:image']/@content").each do |attr|
           @images << CGI.unescapeHTML(attr.value)
         end
-        doc.xpath("/html/body//img[@src[contains(.,'://') 
-               and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
+        #doc.xpath("/html/body//img[@src[contains(.,'://')
+        #       and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
+        doc.xpath("/html/body//img[@src[contains(.,'://')
+               and not(contains(.,'ads.') or contains(.,'ad.'))]]//@src") .each do |attr|
           @images << CGI.unescapeHTML(attr.value)
         end
         
