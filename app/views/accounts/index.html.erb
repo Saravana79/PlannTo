@@ -4,6 +4,9 @@
       <li class="tabstyle">
         <a href="#tabs1">Basic Info</a>
       </li>
+      <li>
+        <%= link_to "Change Password", "#tabs4"%>
+      </li>
       <li class="tabstyle">
         <a class="" href="#tabs2" id="specification">Email Notifications</a>
 
@@ -49,6 +52,8 @@
       <% end %>
 
     </div>
+
+
     <div id="tabs2" style="display: none; " class="main-content-section">
       Email Settings goes here
     </div>
@@ -66,6 +71,24 @@
       <% end %>
     </div>
   </div>
+
+  <div id="tabs4" style="display:none">
+      <%= form_for(@user, :url => change_password_account_path(current_user.id), :method => :put) do |f| %>
+           <%= f.label :current_password, 'Current Password' %>:
+          <%= f.password_field :current_password %>
+          <br/>
+          <%= f.label :password, 'Password' %>:
+          <%= f.password_field :password %>
+          <br/>
+          <br/>
+          <%= f.label :password_confirmation, 'Password Confirmation' %>:
+          <%= f.password_field :password_confirmation %>
+          <br/>
+          <%= f.submit %>
+      <% end %>
+    </div>
+
+
 </div>
 <script type="text/javascript">
   $("#usual2 ul").idTabs("tabs1");

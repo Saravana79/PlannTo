@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :get_user_info
   def index
-    
+
   end
 
   def update
@@ -24,6 +24,16 @@ class AccountsController < ApplicationController
       flash[:notice] = current_user.errors.full_messages.join(", ")
     end
     redirect_to :action => :index
+  end
+
+  def change_password
+    if @user.update_with_password(params[:user])
+       sign_in(@user, :bypass => true)
+       flash[:notice] =  "Password successfully update"
+    else
+      flash[:notice] = @user.errors.full_messages.join(", ")
+    end
+      redirect_to :action => :index
   end
 
   def get_user_info

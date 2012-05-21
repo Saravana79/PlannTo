@@ -21,10 +21,12 @@ PlanNto::Application.routes.draw do
 
   match 'profile', :to => "accounts#profile", :as => "profile"
   resources :field_values, :only => [:create]
-
-  resources :answer_contents
-  resources :accounts, :only => [:index] do
+resources :answer_contents  
+resources :accounts do
     put :update
+    member do
+      put :change_password
+    end
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
   #match '/:username', :to => "accounts#index", :as => "accounts"
