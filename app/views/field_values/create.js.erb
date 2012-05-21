@@ -1,1 +1,3 @@
-window.location.reload();
+<% if @field_value.errors.empty? %>
+    $("#add_item_info").hide();
+<%end%>

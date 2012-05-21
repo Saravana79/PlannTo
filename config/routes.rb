@@ -105,6 +105,8 @@ resources :accounts do
     member do
       get 'related_products'
       get 'specification'
+      get 'review_it'
+      get 'add_item_info'
     end
   end
   resources :items do

@@ -3019,3 +3019,48 @@ ul#Newtabs li.tab_active a { background:url(../images/tabs_navibg.png) no-repeat
 
 .Rightouter { width:732px; float:right;}
 
+/****************************************/
+
+
+#Toptips { clear:both; overflow:hidden; padding-top:25px;}
+#Toptips h1 { background:#528ead; font-family:Arial, Helvetica, sans-serif; font-size:14px; padding:0 0 0 15px; margin:0;
+			line-height:27px; color:#FFFFFF;}
+
+#Toptips .Tipsmidder { clear:both; overflow:hidden; padding:12px; background:#e8fbff;}
+#Toptips .Tipsmidder ol { padding:0 0px 0 21px; margin:0; clear:both; font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+#Toptips .Tipsmidder ol li { clear:both; padding:0 0 14px 0; margin:0; color:#000000;}
+
+
+
+
+.Mainreviewleft { width:100%; float:left; padding-top:15px;}
+.Mainreviewleft .Entrytile { clear:both; border-bottom:1px solid #c8c8c8; padding:0 0 9px 0;}
+.Mainreviewleft .Entrytile h1 {
+font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold;
+padding:0px; margin:0px;}
+
+.Mainreviewleft .Reviewlist { width:727px; float:left; padding:18px 0 20px 0; border-bottom:1px solid #d5d5d5;}
+.Mainreviewleft .Reviewlist span.Number {
+display:block; float:left; width:24px; height:25px; text-align:center;
+background:url(../images/number_bg.png) no-repeat left top;
+font-size:14px; color:#FFFFFF; margin-right:9px; line-height:20px;}
+
+.Mainreviewleft .Reviewlist .Reviewlistdetail {
+width:690px; float:right;}
+
+.Mainreviewleft .Reviewlist .Reviewlistdetail h1 { font-size:14px; font-weight:bold; padding:2px 0 2px 0; margin:0;
+font-family:Arial, Helvetica, sans-serif;}
+.Mainreviewleft .Reviewlist .Reviewlistdetail h1 a { color:#2d2929; text-decoration:none;}
+.Mainreviewleft .Reviewlist .Reviewlistdetail h1 a:hover { text-decoration:underline;}
+.Mainreviewleft .Reviewlist .Reviewlistdetail p { font-size:12px; color:#2d2929; padding:0 0 10px 0; margin:0px;}
+
+
+.Bluebutton { width:25%; float:left;}
+.Bluebutton a { display:block; float:left; background:url(../images/blue_buttonleftbg.png) no-repeat left top;
+			padding:0 0 0 13px; font-family:Arial, Helvetica, sans-serif; font-size:12px; font-weight:bold; color:#FFFFFF;
+			text-decoration:none; cursor:pointer;}
+.Bluebutton a span { display:block; float:left; background:url(../images/blue_buttonrightbg.png) no-repeat right top;
+padding:5px 13px 6px 0;}
+
+.Bluebutton a:hover { background-position:left -26px; text-decoration:none;}
+.Bluebutton a:hover span { background-position:right  -26px;}
