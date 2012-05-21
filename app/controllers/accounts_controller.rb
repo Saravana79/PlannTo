@@ -33,7 +33,6 @@ class AccountsController < ApplicationController
     else
       flash[:notice] = @user.errors.full_messages.join(", ")
     end
-      redirect_to :action => :index
   end
 
   def get_user_info
