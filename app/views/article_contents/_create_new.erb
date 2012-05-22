@@ -76,11 +76,11 @@
       <%@sharefield4 = "edit_article_create_sharefield4_#{@content.id}"%>
       <%@sharefield4Label = "edit_article_create_sharefield1Label4_#{@content.id}"%>
     <%end%>
-    <div style="padding:5px 5px 0px 0px;display:none" id="<%=@sharefield3%>">
+    <div style="padding:5px 5px 0px 0px;display:none;clear:both;" id="<%=@sharefield3%>">
       <br/>
       <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>
       <div class="float_lft">
-        <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px", :id =>  @field3_id}  %>
+        <%= f.text_field :field3, {:style=>"margin-left:5px;",:width=>"400px", :id =>  @field3_id}  %>
       </div>
        <div style="clear:both;"></div>
     </div>
