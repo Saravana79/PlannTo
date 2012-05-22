@@ -470,6 +470,13 @@ function hideAllOptionalFieldsArticleSubmit(){
     $("#<%=@form_id%> #<%=@field3_id%>").val('');
   }
 
+  function hideField4(){
+    $("#<%=@sharefield4%>").hide();
+    $("#<%=@sharefield4Label%>").text("Itune url:")
+    $("#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px'/>");
+    $("#<%=@form_id%> #<%=@field4_id%>").val('');
+  }
+
 </script>
 
 <script type="text/javascript">
