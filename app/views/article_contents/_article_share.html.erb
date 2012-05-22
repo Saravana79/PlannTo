@@ -142,18 +142,33 @@
       <%@field3_id = "new_share_field3"%>
       <%@sharefield3 = "sharefield3"%>
       <%@sharefield3Label = "sharefield1Label3"%>
+    <%@field4_id = "new_share_field4"%>
+      <%@sharefield4 = "sharefield4"%>
+      <%@sharefield4Label = "sharefield1Label4"%>
     <%button_name = "Share this content"%>
     <%else%>
       <%@field3_id = "edit_share_field3_#{@article_content.id}"%>
       <%@sharefield3 = "edit_sharefield3_#{@article_content.id}"%>
       <%@sharefield3Label = "edit_sharefield1Label3_#{@article_content.id}"%>
+    <%@field4_id = "edit_share_field4_#{@article_content.id}"%>
+      <%@sharefield4 = "edit_sharefield4_#{@article_content.id}"%>
+      <%@sharefield4Label = "edit_sharefield1Label4_#{@article_content.id}"%>
     <%button_name = "Update this content"%>
     <%end%>
-    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield3%>">
+    <div style="padding:5px 5px 0px 0px;display:none" id="<%=@sharefield3%>">
       <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>
       <div class="float_lft">
         <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px", :id => @field3_id}  %>
       </div>
+       <div style="clear:both;"></div>
+    </div>
+
+    <div style="padding:5px 5px 0px 0px;display:none" id="<%=@sharefield4%>">
+      <div class="title_header float_lft" id="<%=@sharefield4Label%>">Itune url:</div>
+      <div class="float_lft">
+        <%= f.text_field :field4, {:style=>"margin-left:5px;width:400px",:width=>"400px", :id => @field4_id}  %>
+      </div>
+      <div style="clear:both;"></div>
     </div>
     <!-- FIELD ENDS -->
     <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
@@ -355,9 +370,11 @@ function hideAllOptionalFieldsArticleSubmit(){
     $("#<%=@form_id%> #<%=@field1_id%>").val('');
     $("#<%=@form_id%> #<%=@field2_id%>").val('');
     $("#<%=@form_id%> #<%=@field3_id%>").val('');
+    $("#<%=@form_id%> #<%=@field4_id%>").val('');
     $("div#ShareURLDiv #<%=@sharefield1%>").hide();
     $("div#ShareURLDiv #<%=@sharefield2%>").hide();
     $("div#ShareURLDiv #<%=@sharefield3%>").hide();
+    $("div#ShareURLDiv #<%=@sharefield4%>").hide();
   }
   function setDefaultFieldsArticleSubmit(category){
     <%if @article_content.new_record?%>
@@ -407,9 +424,16 @@ function hideAllOptionalFieldsArticleSubmit(){
 <%unless @content.nil?%>
       $("div#ShareURLDiv #<%=@field1_id%>").val("<%=@content.field1%>")
       $("div#ShareURLDiv #<%=@field2_id%>").val("<%=@content.field2%>")
+         $("div#ShareURLDiv #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+         $("div#ShareURLDiv #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+  
 <%end%>
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").hide();
+    $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Android Url:")
+     $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Itune Url:")
+     $("div#ShareURLDiv #<%=@sharefield4%>").show();
+    $("div#ShareURLDiv #<%=@sharefield3%>").show();
   }
 
   function showArticleSubmitBooksAccessoriesOptFields(){

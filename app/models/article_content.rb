@@ -15,7 +15,6 @@ class ArticleContent < Content
   MIN_SIZE =[25,25]
   
   def self.CreateContent(url, user)
-    logger.info "here"
     @images=[]
     if url.include? "youtube.com"
       @article=VideoContent.CreateContent(url, user)

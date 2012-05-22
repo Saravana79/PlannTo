@@ -65,17 +65,32 @@
       <%@field3_id = "new_article_create_field3"%>
       <%@sharefield3 = "sharefield3"%>
       <%@sharefield3Label = "sharefield1Label3"%>
+    <%@field4_id = "new_article_create_field4"%>
+      <%@sharefield4 = "sharefield4"%>
+      <%@sharefield4Label = "sharefield1Label4"%>
     <%else%>
       <%@field3_id = "edit_article_create_field3_#{@content.id}"%>
       <%@sharefield3 = "edit_article_create_sharefield3_#{@content.id}"%>
       <%@sharefield3Label = "edit_article_create_sharefield1Label3_#{@content.id}"%>
+    <%@field4_id = "edit_article_create_field4_#{@content.id}"%>
+      <%@sharefield4 = "edit_article_create_sharefield4_#{@content.id}"%>
+      <%@sharefield4Label = "edit_article_create_sharefield1Label4_#{@content.id}"%>
     <%end%>
-    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield3%>">
+    <div style="padding:5px 5px 0px 0px;display:none" id="<%=@sharefield3%>">
+      <br/>
       <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>
-
       <div class="float_lft">
         <%= f.text_field :field3, {:style=>"margin-left:5px;width:150px",:width=>"400px", :id =>  @field3_id}  %>
       </div>
+       <div style="clear:both;"></div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;display:none" id="<%=@sharefield4%>">
+      <br/>
+      <div class="title_header float_lft" id="<%=@sharefield4Label%>">Itune url:</div>
+      <div class="float_lft">
+        <%= f.text_field :field4, {:style=>"margin-left:5px;width:400px",:width=>"400px", :id =>  @field4_id}  %>
+      </div>
+       <div style="clear:both;"></div>
     </div>
     <!-- FIELD ENDS -->
     <div style="padding:5px 5px 0px 0px;clear:both;" id="shareProduct">
@@ -111,9 +126,11 @@
     $("#<%=@form_id%> #<%=@field1_id%>").val('');
     $("#<%=@form_id%> #<%=@field2_id%>").val('');
     $("#<%=@form_id%> #<%=@field3_id%>").val('');
+    $("#<%=@form_id%> #<%=@field4_id%>").val('');
     $("div#subContainerContentCreate #<%=@sharefield1%>").hide();
     $("div#subContainerContentCreate #<%=@sharefield2%>").hide();
     $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
+    $("div#subContainerContentCreate #<%=@sharefield4%>").hide();
   }
   function setDefaultFieldsArticleCreate(category){
     <%if @content.nil?%>
@@ -139,7 +156,8 @@
 <%if @content.nil?%>
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
-
+$("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px'/>");
+$("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").val('');
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").val('');
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").val('');
@@ -147,6 +165,7 @@
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
 <%end%>
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
@@ -163,9 +182,15 @@
 <%unless @content.nil?%>
       $("div#subContainerContentCreate #<%=@field1_id%>").val("<%=@content.field1%>")
       $("div#subContainerContentCreate #<%=@field2_id%>").val("<%=@content.field2%>")
+         $("div#subContainerContentCreate #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+         $("div#subContainerContentCreate #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+  
 <%end%>
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
-    $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
+     $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Android Url:")
+     $("div#subContainerContentCreate #<%=@sharefield4Label%>").text("Itune Url:")
+     $("div#subContainerContentCreate #<%=@sharefield4%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield3%>").show();
   }
 
   function showArticleCreateBooksAccessoriesOptFields(){
@@ -177,6 +202,7 @@
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").hide();
     $("div#subContainerContentCreate #<%=@sharefield3%>").hide();
+    $("div#subContainerContentCreate #<%=@sharefield4%>").hide();
   }
 
   function showCreateProductTag(){
