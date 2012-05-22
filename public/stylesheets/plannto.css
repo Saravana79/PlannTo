@@ -2334,7 +2334,7 @@ h2 {
 .spacificationdiv							{ margin:0; padding:0;}
 
 .specificationblckdivul { margin:5px 5px 0 0; padding:0; list-style:none;  width:100%; border-top:1px solid #a8cfda; border-left:0px solid #a8cfda; float:left;}
-.specificationinnerul {list-style:none;width:49%;padding:0;}
+.specificationinnerul {list-style:none;width:100%;padding:0;}
 
 .specificationblckdivtitletxt { list-style:none;	font-size:12px; font-weight:bold; margin:0; padding:5px 0 5px 5px; background-color:#e1f3f8;  border-right:1px solid #a8cfda;  border-bottom:1px solid #a8cfda;}
 

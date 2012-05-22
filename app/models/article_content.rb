@@ -33,12 +33,13 @@ class ArticleContent < Content
         doc.xpath("//meta[@name='description']/@content").each do |attr|
           @meta_description = attr.value
         end
-        doc.xpath("//link[@rel='image_src']").each do |attr|
-          @images << CGI.unescapeHTML(attr.value)
-        end
-        doc.xpath("//link[@src]").each do |attr|
-          @images << CGI.unescapeHTML(attr.value)
-        end
+       # doc.xpath("//link[@rel='image_src']").each do |attr|
+       #   @images << CGI.unescapeHTML(attr.value)
+       # end
+       # doc.xpath("//link[@src]").each do |attr|
+       #   @images << CGI.unescapeHTML(attr.value)
+       # end
+       # */
         doc.xpath("//meta[@property='og:image']/@content").each do |attr|
           @images << CGI.unescapeHTML(attr.value)
         end
@@ -52,7 +53,7 @@ class ArticleContent < Content
         @article.title = CGI.unescapeHTML(@title_info.to_s.gsub(%r{</?[^>]+?>}, '')) if @title_info
         @article.description = @meta_description if @meta_description
         @article.thumbnail = @images.first   if @images.count>0
-      rescue => e
+     # rescue => e
       end
     end
     [@article,@images]
