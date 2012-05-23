@@ -159,4 +159,35 @@ module ItemsHelper
     return items.size+1
   end
 
+  def display_item_details(item)    
+    if item.status ==1 && !item.IsError?
+      return true
+    else
+      return false
+    end
+  end
+
+  def display_shipping_detail(item)
+    unless item.shipping.blank?
+      unit = ""
+      if item.shippingunit == 1
+        unit = "hours"
+      elsif item.shippingunit == 2
+        unit = "Business days"
+      elsif item.shippingunit == 3
+        unit = "Months"
+      elsif item.shippingunit == 4
+        unit = "Years"
+      end
+      "#{item.shipping} #{unit}"
+    else
+      "N/A"
+    end
+
+  end
+
+  def display_price_detail(item)
+    item.price.blank? ? "" :  "Rs #{item.price}"
+  end
+
 end

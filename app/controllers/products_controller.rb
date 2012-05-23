@@ -19,7 +19,7 @@ class ProductsController < ApplicationController
 
   def show
     @item = Item.get_cached(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
-    @where_to_buy_items = Itemdetail.where("itemid = ?", params[:id]).includes(:vendor)
+    @where_to_buy_items = Itemdetail.where("itemid = ?", params[:id]).includes(:vendor).order(:price)
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
