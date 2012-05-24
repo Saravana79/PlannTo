@@ -1,91 +1,93 @@
 <div id="content_all">
-<!--filter by block start here-->
-<div id="Filterby">
-	<div class="Filternav">
- <div style="float:left;width:60px;">
-              <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>     
-            </div>
-            <div style="float:left;width:630px;">
-            			<ul>
-			<li class="Currentfilter"><a href="#">All</a></li>
-	                <%@article_categories.each do |category|%>
-	                <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
-	                <%end%>	
-			</ul>
-		</div>
-	</div>
-</div>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $("div#Filterby div.Filternav ul li").click(function (e) {
-      if ($(this).text() != "Labeltext"){
-        var id = $(this).attr('id');
-        switch(id){
-          case 'All' :  var sub_type = "All";break;
-          default:  var sub_type = id;
-            }
-            $.ajax(
-            {
-              url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>" ,
-              type: "get",
-              dataType: "script"
-            });
-            return false
+  <!--filter by block start here-->
+  <div id="Filterby">
+    <div class="Filternav">
+      <div style="float:left;width:60px;">
+        <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>
+      </div>
+      <div style="float:left;width:630px;">
+        <ul>
+          <li class="Currentfilter" id="All"><a href="#">All</a></li>
+          <%@article_categories.each do |category|%>
+            <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
+          <%end%>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("div#Filterby div.Filternav ul li").click(function (e) {
+        $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+        $(this).closest('li').addClass("Currentfilter");
+        if ($(this).text() != "Labeltext"){
+          var id = $(this).attr('id');          
+          switch(id){
+            case 'All' :  var sub_type = "All";break;
+            default:  var sub_type = id;
           }
+          $.ajax(
+          {
+            url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>" ,
+            type: "get",
+            dataType: "script"
+          });
+          return false
+        }
       });
     });
-</script>
-<div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
-<div>
-	<span class="sortby">
-    	<span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
-        <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
-        <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
-        <a class="txt_blue" href="#">Most Answers</a>
+  </script>
+  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+  <div>
+    <span class="sortby">
+      <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
+      <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
+      <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
+      <a class="txt_blue" href="#">Most Answers</a>
     </span>    
-</div>
-<div style="border-bottom:solid 1px #e4e4e4;;clear:both;"></div>
-<div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-<% params = {"items" => [@item.id] } %>
-<% @contents = Content.filter(params)  %>
-<%= render :partial => 'contents/contents', :locals => {:params => params} %>
-</div>
+  </div>
+  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;"></div>
+  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+    <% params = {"items" => [@item.id] } %>
+    <% @contents = Content.filter(params)  %>
+    <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+  </div>
 </div>
 <script type="text/javascript" charset="utf-8">
-	$(function(){
-		$('#load_content').live("click",function(){
-			type='';
-			$('#filter_contents :checked').each(function(){
-				type+="&type[]="+$(this).attr("class");
-			});
-				<% unless @item.blank? %>
-			var url = "<%= feed_contents_path(:items => @item.id  ) %>";
-			<% else %>
-			var url = "<%= feed_contents_path %>";
-			<% end %>
-			$("#content_all").html("");
-			url=url+"&limit=5"+type;
-			$.get(url, function(data) {
-				$("#content_all").html(data);
-			});
-		});
+  $(function(){
+    $('#load_content').live("click",function(){
+      type='';
+      $('#filter_contents :checked').each(function(){
+        type+="&type[]="+$(this).attr("class");
+      });
+<% unless @item.blank? %>
+        var url = "<%= feed_contents_path(:items => @item.id  ) %>";
+<% else %>
+        var url = "<%= feed_contents_path %>";
+<% end %>
+      $("#content_all").html("");
+      url=url+"&limit=5"+type;
+      $.get(url, function(data) {
+        $("#content_all").html(data);
+      });
+    });
 
-		$('#select_all').click(function(){
-			if($('#select_all').is(':checked')){
-			 $('#filter_contents input').attr('checked','checked');
-			}
-			else {
-				$('#filter_contents input').removeAttr('checked');
-			}
-		});
-		var running =false;
-		$(window).scroll(function () {
+    $('#select_all').click(function(){
+      if($('#select_all').is(':checked')){
+        $('#filter_contents input').attr('checked','checked');
+      }
+      else {
+        $('#filter_contents input').removeAttr('checked');
+      }
+    });
+    var running =false;
+    $(window).scroll(function () {
 			
-			lnk = $('#content_next');
-		    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-			   running = true;
-               lnk.click();
-		    }
-		});
-	});
+      lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+        running = true;
+        lnk.click();
+      }
+    });
+  });
 </script>

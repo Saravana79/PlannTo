@@ -2,6 +2,7 @@ class ReviewContentsController < ApplicationController
   before_filter :authenticate_user!
 	def create
 		@reviewcontent = ReviewContent.new(params['review_content'])
+    @reviewcontent.ip_address = request.remote_ip
 		@reviewcontent.user = current_user
 		item_id = params['item_id']
 		@item = Item.find item_id
@@ -20,6 +21,7 @@ class ReviewContentsController < ApplicationController
   def update
     @item = Item.find params['item_id']
     @reviewcontent = Content.find(params[:id])
+    @reviewcontent.ip_address = request.remote_ip
     @reviewcontent.update_with_items!(params['review_content'], params[:item_id])
   end
 

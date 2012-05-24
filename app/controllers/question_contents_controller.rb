@@ -6,6 +6,7 @@ class QuestionContentsController < ApplicationController
 	def create
     @item = Item.find(params[:question_content][:itemtype_id])
 		@questioncontent = QuestionContent.new params[:question_content]
+    @questioncontent.ip_address = request.remote_ip
 		@questioncontent.user = User.first
 		#@item = Item.find params['item_id']
 		@questioncontent.save_with_items!(params['question_item_id'])
@@ -23,6 +24,7 @@ class QuestionContentsController < ApplicationController
 
   def update
     @questioncontent = Content.find(params[:id])
+    @questioncontent.ip_address = request.remote_ip
     @questioncontent.update_with_items!(params['question_content'], params[:item_id])
   end
 

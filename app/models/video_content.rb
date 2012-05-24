@@ -25,7 +25,7 @@ class VideoContent < ArticleContent
     @article
   end
   
-  def self.saveContent(val,user,ids)
+  def self.saveContent(val,user,ids, ip="")
     @article = VideoContent.create(val)
     @article.video = true
     url = @article.url
@@ -36,6 +36,7 @@ class VideoContent < ArticleContent
     end
     
     @article.field4 = video_id
+    @article.ip_address = ip
     @article.type = "ArticleContent"
     @article.user=user
     @article.save_with_items!(ids) 

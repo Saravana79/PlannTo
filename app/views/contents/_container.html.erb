@@ -172,9 +172,8 @@
   
   $(document).ready(function(){
     //setting default category id to fill it on load.
-    var article_category_id = <%="#{find_article_category(article_categories, ArticleCategory::REVIEWS)}"%>
-    $("#new_share_article_category_<%=@item.id%>").val(article_category_id)
-    $("#article_content_article_category_id").val(article_category_id)
+    $("#article_content_article_category_id").val('<%=ArticleCategory::REVIEWS%>')
+    $("form#new_share_form #article_content_sub_type").val('<%=ArticleCategory::REVIEWS%>')
 
   });
 </script>
