@@ -76,6 +76,10 @@
       <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
       <img id="<%=@img_thumb%>" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
       <div class="float_lft <%=@article_image%>"><input type="checkbox" >Don't Include Thumbnail</input></div>
+      <div class="float_lft"><input type="checkbox" id="manuallySetImage" >Add Image Url</input>
+       <%=f.text_field :thumbnail, :style => "display:none;width:400px"%>
+      </div>
+ 
     </div>
 
     <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
@@ -488,7 +492,18 @@ function hideAllOptionalFieldsArticleSubmit(){
         return false;
       }
     });
+$("#manuallySetImage").click(function(event){
+
+       if ($('#manuallySetImage').is(':checked')) {$("#article_content_thumbnail").show(); } else { $("#article_content_thumbnail").hide(); }
+   });
+  
   });
+
+  function hideAddImageUrl(){
+    $('#manuallySetImage').attr('checked', false)
+    $("#article_content_thumbnail").val('');
+    $("#article_content_thumbnail").hide();
+  }
 </script>
 
 
