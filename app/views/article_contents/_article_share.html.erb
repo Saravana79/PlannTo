@@ -7,11 +7,11 @@
     <%@form_id = "new_share_form"%>
     <%@title_id = "txtArticleTitle"%>
     <%@current_image_id = "current_image"%>
-    <%#@share_article_category_id = "new_share_article_category"%>
+  <%#@share_article_category_id = "new_share_article_category"%>
   <%else%>
     <%@url_id = "edit_share_url_#{@article_content.id}"%>
     <%@form_id = "edit_share_form_#{@article_content.id}"%>
-    <%#@share_article_category_id = "edit_share_article_category_#{@item.id}"%>
+  <%#@share_article_category_id = "edit_share_article_category_#{@item.id}"%>
     <%@title_id = "edit_txtArticleTitle_#{@article_content.id}"%>
     <%@current_image_id = "edit_current_image_#{@article_content.id}"%>
   <%end%>
@@ -27,6 +27,8 @@
     <%@total_images = "total_images"%>
     <%@new_article_thumbnail = "new_article_thumbnail"%>
     <%@articles_item_id = "articles_item_id"%>
+    <%@manual_image= "new_manual_image"%>
+    <%@thumbnail_id = "new_thumbnail_url"%>
   <%else%>
     <%@articles_item_id = "edit_articles_item_id_#{@article_content.id}"%>
     <%@img_thumb = "edit_img_thumb_#{@article_content.id}"%>
@@ -37,12 +39,15 @@
     <%@new_article_thumbnail = "edit_new_article_thumbnail_#{@article_content.id}"%>
     <%@txtArticleDescription =  "edit_txtArticleDescription_#{@article_content.id}"%>
     <%@new_article_type ="edit_article_type_#{@article_content.id}"%>
+    <%@manual_image= "edit_manual_image_#{@article_content.id}"%>
+    <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
 
   <%end%>
+
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
-    
+
     <%= hidden_field_tag "#{@articles_item_id}" %>
     <%= f.hidden_field :type, :id => "#{@new_article_type}" %>
     <%= f.hidden_field :thumbnail, :id => "#{@new_article_thumbnail}" %>
@@ -71,15 +76,15 @@
       <div class="title_header float_lft" >Title :</div>
       <div class="float_lft"><%= f.text_field :title, :id => "#{@title_id}", :style => "margin-left:5px;width:400px" %></div>
 
-    </div >
+    </div>
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
       <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
       <img id="<%=@img_thumb%>" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
       <div class="float_lft <%=@article_image%>"><input type="checkbox" >Don't Include Thumbnail</input></div>
-      <div class="float_lft"><input type="checkbox" id="manuallySetImage" >Add Image Url</input>
-       <%=f.text_field :thumbnail, :style => "display:none;width:400px"%>
+      <div class="float_lft"><input type="checkbox" id="<%=@manual_image%>">Add Image Url</input>
+        <%=f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px"%>
       </div>
- 
+
     </div>
 
     <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
@@ -146,25 +151,25 @@
       <%@field3_id = "new_share_field3"%>
       <%@sharefield3 = "sharefield3"%>
       <%@sharefield3Label = "sharefield1Label3"%>
-    <%@field4_id = "new_share_field4"%>
+      <%@field4_id = "new_share_field4"%>
       <%@sharefield4 = "sharefield4"%>
       <%@sharefield4Label = "sharefield1Label4"%>
-    <%button_name = "Share this content"%>
+      <%button_name = "Share this content"%>
     <%else%>
       <%@field3_id = "edit_share_field3_#{@article_content.id}"%>
       <%@sharefield3 = "edit_sharefield3_#{@article_content.id}"%>
       <%@sharefield3Label = "edit_sharefield1Label3_#{@article_content.id}"%>
-    <%@field4_id = "edit_share_field4_#{@article_content.id}"%>
+      <%@field4_id = "edit_share_field4_#{@article_content.id}"%>
       <%@sharefield4 = "edit_sharefield4_#{@article_content.id}"%>
       <%@sharefield4Label = "edit_sharefield1Label4_#{@article_content.id}"%>
-    <%button_name = "Update this content"%>
+      <%button_name = "Update this content"%>
     <%end%>
     <div style="padding:5px 5px 0px 0px;display:none;clear:both;" id="<%=@sharefield3%>">
       <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>
       <div class="float_lft">
         <%= f.text_field :field3, {:style=>"margin-left:5px;",:width=>"400px", :id => @field3_id}  %>
       </div>
-       <div style="clear:both;"></div>
+      <div style="clear:both;"></div>
     </div>
 
     <div style="padding:0px 5px 0px 0px;display:none" id="<%=@sharefield4%>">
@@ -249,15 +254,15 @@
         $("#<%=@new_article_thumbnail%>").val(images[images_index]);
       }
     });
-   
+
 <%if @article_content.new_record?%>
- settings={
-      close:true, addButton: false,
-      url: "/search/autocomplete_items",
-      editMode: false, multiple: true,
-      hidden_field: "<%=@articles_item_id%>"
-    };
-    $.textTagger("<%=@search_field_id%>","<%=@ul_list_id%>",settings);
+      settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "<%=@articles_item_id%>"
+      };
+      $.textTagger("<%=@search_field_id%>","<%=@ul_list_id%>",settings);
   <% unless @item.blank? %>
         $.addTag("<%=@search_field_id%>","<%=@ul_list_id%>", settings,"<%= @item.name %>", "<%= @item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
@@ -265,7 +270,7 @@
   <% end %>
 <%else%>
 
-   settings={
+      settings={
         has_parent:true,
         close:true, addButton: false,
         url: "/search/autocomplete_items",
@@ -279,14 +284,14 @@
           $("ul#<%=@ul_list_id%> li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
     <%end%>
   <%end%>
-    <%if @article_content.is_review_content?%>
-      $.textTagger("#contentEditView #<%=@search_field_id%>","#contentEditView #<%=@ul_list_id%>",settings);
-    $("div#ShareURLDiv input#<%=@search_field_id%>").hide();
+  <%if @article_content.is_review_content?%>
+        $.textTagger("#contentEditView #<%=@search_field_id%>","#contentEditView #<%=@ul_list_id%>",settings);
+        $("div#ShareURLDiv input#<%=@search_field_id%>").hide();
   <%end%>
 <%end%>
-   
+
 <% unless @article_content.url.blank? %> 
- <%= render :file =>"article_contents/download.js" %>
+  <%= render :file =>"article_contents/download.js" %>
 <% end %>
   });
 
@@ -369,8 +374,8 @@
     }
 <%end%>
 
-////////////////////////////////////////////////////////////
-function hideAllOptionalFieldsArticleSubmit(){
+  ////////////////////////////////////////////////////////////
+  function hideAllOptionalFieldsArticleSubmit(){
     $("#<%=@form_id%> #<%=@field1_id%>").val('');
     $("#<%=@form_id%> #<%=@field2_id%>").val('');
     $("#<%=@form_id%> #<%=@field3_id%>").val('');
@@ -381,12 +386,12 @@ function hideAllOptionalFieldsArticleSubmit(){
     $("div#ShareURLDiv #<%=@sharefield4%>").hide();
   }
   function setDefaultFieldsArticleSubmit(category){
-    <%if @article_content.new_record?%>
-        var saveButtonName = "Share this " + category
-    <%else%>
+<%if @article_content.new_record?%>
+      var saveButtonName = "Share this " + category
+<%else%>
       var saveButtonName = "Update this " + category
-    <%end%>
-      $("form#<%=@form_id%> #submit_article").val(saveButtonName)
+<%end%>
+    $("form#<%=@form_id%> #submit_article").val(saveButtonName)
     hideAllOptionalFieldsArticleSubmit();
     if (category == "<%=ArticleCategory::EVENT%>"){
       showArticleSubmitEventOptFields();
@@ -428,15 +433,15 @@ function hideAllOptionalFieldsArticleSubmit(){
 <%unless @content.nil?%>
       $("div#ShareURLDiv #<%=@field1_id%>").val("<%=@content.field1%>")
       $("div#ShareURLDiv #<%=@field2_id%>").val("<%=@content.field2%>")
-         $("div#ShareURLDiv #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
-         $("div#ShareURLDiv #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
-  
+      $("div#ShareURLDiv #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#ShareURLDiv #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+
 <%end%>
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").hide();
     $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Android Url:")
-     $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Itune Url:")
-     $("div#ShareURLDiv #<%=@sharefield4%>").show();
+    $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Itune Url:")
+    $("div#ShareURLDiv #<%=@sharefield4%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
   }
 
@@ -492,17 +497,18 @@ function hideAllOptionalFieldsArticleSubmit(){
         return false;
       }
     });
-$("#manuallySetImage").click(function(event){
+    
+    $("#<%=@manual_image%>").click(function(event){
 
-       if ($('#manuallySetImage').is(':checked')) {$("#article_content_thumbnail").show(); } else { $("#article_content_thumbnail").hide(); }
-   });
+      if ($('#<%=@manual_image%>').is(':checked')) {$("#<%=@thumbnail_id%>").show(); } else { $("#<%=@thumbnail_id%>").hide(); }
+    });
   
   });
 
   function hideAddImageUrl(){
-    $('#manuallySetImage').attr('checked', false)
-    $("#article_content_thumbnail").val('');
-    $("#article_content_thumbnail").hide();
+    $('#<%=@manual_image%>').attr('checked', false)
+    $("#<%=@thumbnail_id%>").val('');
+    $("#<%=@thumbnail_id%>").hide();
   }
 </script>
 
