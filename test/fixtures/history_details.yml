@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  site_url: MyString
+  ip_address: MyString
+  plannto_location: MyString
+  redirection_time: 2012-05-25 19:56:15
+
+two:
+  user_id: 1
+  site_url: MyString
+  ip_address: MyString
+  plannto_location: MyString
+  redirection_time: 2012-05-25 19:56:15

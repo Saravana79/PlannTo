@@ -2,6 +2,8 @@ class ProductsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
+  before_filter :store_location, :only => [:show]
+
   
   layout 'product'
   
@@ -9,7 +11,7 @@ class ProductsController < ApplicationController
 
   def index
     @itemtype = Itemtype.find_by_itemtype(params[:search_type].singularize.camelize.constantize)
-@article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
+    @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
 
   end
 
@@ -54,4 +56,9 @@ class ProductsController < ApplicationController
   def get_item_object
     @item = Item.find(params[:id])
   end
+
+  def store_location
+    session[:return_to] = request.env['REQUEST_URI'] if request.get? and controller_name != "user_sessions" and controller_name != "sessions"
+  end
+
 end

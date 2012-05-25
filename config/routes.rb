@@ -13,6 +13,7 @@ PlanNto::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   #  match 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
+  resources :history_details
   match 'admin/search', :to => 'admin#index'
   match ':search_type/search' => 'search#index'
   resources :search do
