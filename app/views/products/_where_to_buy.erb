@@ -1,11 +1,11 @@
-<div style="float:right">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>
+<div style="float:right">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).first %></div>
 <table  width="100%" style="float:left">
   <tr class="wheretobuyheadder"><td width="25%" class="wheretobuytitletxt">Seller Name</td><td width="25%" class="wheretobuytitletxtothercolumns">Price</td><td width="25%" class="wheretobuytitletxtothercolumns">Estimated Delivery Time</td><td width="25%"></td></tr>
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
     <%items.each_with_index do |item, index|%>
       <%if display_item_details(item)%>
         <%if index == 0%>
-          <tr class="wheretobuyrows"><td width="25%" class=""><img class="imagevendor" src="<%=item.image_url%>" alt="<%=item.vendor_name%>" /></td><td class="wheretobuytext" style="font-style:bold"><%=display_price_detail(item)%></td><td width="25%" class="wheretobuytext"><%=display_shipping_detail(item)%></td><td><input type="button" value="Visit Store" onclick="window.open('<%=item.url%>')"/></td></tr>
+          <tr class="wheretobuyrows"><td width="25%" class=""><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td><td class="wheretobuytext" style="font-style:bold"><%=display_price_detail(item)%></td><td width="25%" class="wheretobuytext"><%=display_shipping_detail(item)%></td><td><input type="button" value="Visit Store" onclick="window.open('<%=item.url%>')"/></td></tr>
         <%else%>
           <%if index == 1%>
             <tr class="wheretobuyrows"><td width="25%" class="">Other variants</td><td class="wheretobuytext" style="font-style:bold"><a><%=display_price_detail(item)%></a> |
