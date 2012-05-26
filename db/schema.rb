@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "article_categories", :force => true do |t|
-    t.string   "name",        :default => "", :null => false
-    t.integer  "itemtype_id", :default => 0,  :null => false
+    t.string   "name",                       :null => false
+    t.integer  "itemtype_id", :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -49,17 +49,10 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.boolean "video"
   end
 
-  create_table "attribute_tag_mapping", :force => true do |t|
-    t.integer "item_id",         :null => false
-    t.integer "attribute_id",    :null => false
-    t.text    "attribute_value", :null => false
-    t.integer "itemtype_id"
-  end
-
   create_table "attribute_values", :force => true do |t|
     t.integer  "attribute_id",                                       :null => false
     t.integer  "item_id",                                            :null => false
-    t.string   "value",            :limit => 5000, :default => "",   :null => false
+    t.string   "value",            :limit => 5000,                   :null => false
     t.string   "addition_comment", :limit => 5000
     t.boolean  "is_visible",                       :default => true
     t.datetime "created_at"
@@ -73,8 +66,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   add_index "attribute_values", ["item_id"], :name => "ItemIdBasedKey"
 
   create_table "attributes", :force => true do |t|
-    t.string   "name",            :limit => 500, :default => "", :null => false
-    t.string   "attribute_type",  :limit => 100, :default => "", :null => false
+    t.string   "name",            :limit => 500, :null => false
+    t.string   "attribute_type",  :limit => 100, :null => false
     t.string   "unit_of_measure", :limit => 100
     t.string   "category_name",   :limit => 50
     t.integer  "priority"
@@ -112,8 +105,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "best_uses", :force => true do |t|
-    t.string   "title",      :limit => 50, :default => "", :null => false
-    t.integer  "item_id",                                  :null => false
+    t.string   "title",      :limit => 50, :null => false
+    t.integer  "item_id",                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by"
@@ -163,8 +156,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "cons", :force => true do |t|
-    t.string   "title",      :limit => 50, :default => "", :null => false
-    t.integer  "item_id",                                  :null => false
+    t.string   "title",      :limit => 50, :null => false
+    t.integer  "item_id",                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by"
@@ -184,7 +177,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   create_table "contents", :force => true do |t|
     t.string   "title",       :limit => 200
     t.text     "description"
-    t.string   "type",                       :default => "", :null => false
+    t.string   "type",                       :null => false
     t.integer  "created_by"
     t.integer  "updated_by"
     t.integer  "itemtype_id"
@@ -195,9 +188,9 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "debates", :force => true do |t|
-    t.integer  "review_id",                     :null => false
-    t.integer  "argument_id",                   :null => false
-    t.string   "argument_type", :default => "", :null => false
+    t.integer  "review_id",     :null => false
+    t.integer  "argument_id",   :null => false
+    t.string   "argument_type", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by"
@@ -239,9 +232,9 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
 
   create_table "follows", :force => true do |t|
     t.integer  "followable_id",                      :null => false
-    t.string   "followable_type", :default => "",    :null => false
+    t.string   "followable_type",                    :null => false
     t.integer  "follower_id",                        :null => false
-    t.string   "follower_type",   :default => "",    :null => false
+    t.string   "follower_type",                      :null => false
     t.boolean  "blocked",         :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -252,30 +245,30 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
 
   create_table "image_contents", :force => true do |t|
-    t.string "image_content_file_name"
-    t.string "image_content_content_type"
-    t.string "image_content_file_size"
-    t.string "image_content_updated_at"
+    t.string   "image_content_file_name"
+    t.string   "image_content_content_type"
+    t.integer  "image_content_file_size"
+    t.datetime "image_content_updated_at"
   end
 
   create_table "invitations", :force => true do |t|
-    t.integer  "sender_id",                                   :null => false
+    t.integer  "sender_id",                   :null => false
     t.integer  "item_id"
     t.integer  "item_type"
-    t.string   "email",                       :default => "", :null => false
-    t.integer  "follow_type",                                 :null => false
+    t.string   "email",                       :null => false
+    t.integer  "follow_type",                 :null => false
     t.string   "message",     :limit => 2000
-    t.string   "token",                       :default => "", :null => false
-    t.string   "user_ip",                     :default => "", :null => false
+    t.string   "token",                       :null => false
+    t.string   "user_ip",                     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "item_attribute_tag_relations", :force => true do |t|
-    t.integer  "attribute_id",                                 :null => false
-    t.integer  "item_id",                                      :null => false
-    t.string   "value",        :limit => 5000, :default => "", :null => false
-    t.integer  "itemtype_id",                                  :null => false
+    t.integer  "attribute_id",                 :null => false
+    t.integer  "item_id",                      :null => false
+    t.string   "value",        :limit => 5000, :null => false
+    t.integer  "itemtype_id",                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -299,27 +292,27 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "itemexternalurls", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemID",                                    :null => false
-    t.text    "URL",                                       :null => false
-    t.string  "URLSource", :limit => 2000, :default => "", :null => false
+    t.integer "ItemID",                    :null => false
+    t.text    "URL",                       :null => false
+    t.string  "URLSource", :limit => 2000, :null => false
   end
 
   create_table "itemimages", :primary_key => "ID", :force => true do |t|
-    t.integer "ItemId",                                    :null => false
-    t.string  "ImageURL",  :limit => 4000, :default => "", :null => false
-    t.boolean "IsDefault",                                 :null => false
+    t.integer "ItemId",                    :null => false
+    t.string  "ImageURL",  :limit => 4000, :null => false
+    t.boolean "IsDefault",                 :null => false
   end
 
   create_table "itemrelationships", :force => true do |t|
-    t.integer  "item_id",                        :null => false
-    t.integer  "relateditem_id",                 :null => false
-    t.string   "relationtype",   :default => "", :null => false
+    t.integer  "item_id",        :null => false
+    t.integer  "relateditem_id", :null => false
+    t.string   "relationtype",   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "items", :force => true do |t|
-    t.string   "name",               :limit => 2000, :default => "",    :null => false
+    t.string   "name",               :limit => 2000,                    :null => false
     t.text     "description",                                           :null => false
     t.string   "imageurl",           :limit => 2000
     t.integer  "itemtype_id"
@@ -337,8 +330,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "itemtypes", :force => true do |t|
-    t.string   "itemtype",    :limit => 2000, :default => "", :null => false
-    t.string   "description", :limit => 5000, :default => "", :null => false
+    t.string   "itemtype",    :limit => 2000, :null => false
+    t.string   "description", :limit => 5000, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by"
@@ -391,8 +384,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "pros", :force => true do |t|
-    t.string   "title",      :limit => 50, :default => "", :null => false
-    t.integer  "item_id",                                  :null => false
+    t.string   "title",      :limit => 50, :null => false
+    t.integer  "item_id",                  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by"
@@ -557,8 +550,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   create_table "user_images", :force => true do |t|
     t.string   "uploaded_image_file_name"
     t.string   "uploaded_image_content_type"
-    t.string   "uploaded_image_file_size"
-    t.string   "uploaded_image_updated_at"
+    t.integer  "uploaded_image_file_size"
+    t.datetime "uploaded_image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -596,6 +589,10 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.datetime "updated_at"
     t.string   "name"
     t.integer  "facebook_id"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
     t.integer  "invitation_id"
   end
@@ -616,9 +613,9 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   end
 
   create_table "vote_counts", :force => true do |t|
-    t.integer  "voteable_id",                         :null => false
-    t.string   "voteable_type",       :default => "", :null => false
-    t.integer  "vote_count",                          :null => false
+    t.integer  "voteable_id",         :null => false
+    t.string   "voteable_type",       :null => false
+    t.integer  "vote_count",          :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "vote_count_positive"
@@ -628,7 +625,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   create_table "votes", :force => true do |t|
     t.boolean  "vote",          :default => false
     t.integer  "voteable_id",                      :null => false
-    t.string   "voteable_type", :default => "",    :null => false
+    t.string   "voteable_type",                    :null => false
     t.integer  "voter_id"
     t.string   "voter_type"
     t.datetime "created_at"
@@ -638,5 +635,137 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   add_index "votes", ["voteable_id", "voteable_type"], :name => "index_votes_on_voteable_id_and_voteable_type"
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
+
+  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :sub_type
+    v.column :question_content_id
+    v.column :format
+    v.column :mark_as_answer
+  end
+
+  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`field1` AS `field1`,`article_contents`.`field2` AS `field2`,`article_contents`.`field3` AS `field3`,`article_contents`.`field4` AS `field4`,`article_contents`.`video` AS `video` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :sub_type
+    v.column :url
+    v.column :thumbnail
+    v.column :field1
+    v.column :field2
+    v.column :field3
+    v.column :field4
+    v.column :video
+  end
+
+  create_view "view_event_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`event_contents`.`url` AS `url`,`event_contents`.`start_date` AS `start_date`,`event_contents`.`end_date` AS `end_date`,`event_contents`.`location` AS `location` from (`contents` join `event_contents`) where (`contents`.`id` = `event_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :url
+    v.column :start_date
+    v.column :end_date
+    v.column :location
+  end
+
+  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :sub_type
+    v.column :image_content_file_name
+    v.column :image_content_content_type
+    v.column :image_content_file_size
+    v.column :image_content_updated_at
+  end
+
+  create_view "view_plannto_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`plannto_contents`.`field1` AS `field1` from (`contents` join `plannto_contents`) where (`contents`.`id` = `plannto_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :field1
+  end
+
+  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :sub_type
+    v.column :format
+    v.column :is_answered
+  end
+
+  create_view "view_rankings", "select `points`.`user_id` AS `user_id`,sum(`points`.`points`) AS `points` from `points` group by `points`.`user_id` order by sum(`points`.`points`)", :force => true do |v|
+    v.column :user_id
+    v.column :points
+  end
+
+  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
+    v.column :id
+    v.column :title
+    v.column :description
+    v.column :type
+    v.column :created_by
+    v.column :updated_by
+    v.column :itemtype_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :ip_address
+    v.column :sub_type
+    v.column :rating
+    v.column :recommend_this
+    v.column :pros
+    v.column :cons
+  end
+
+  create_view "view_top_contributors", "select `p`.`user_id` AS `user_id`,`r`.`item_id` AS `item_id`,sum(`p`.`points`) AS `points` from (`points` `p` join `content_item_relations` `r` on((`p`.`object_id` = `r`.`content_id`))) where (`p`.`object_type` = 'Content') group by `r`.`item_id`,`p`.`user_id` order by sum(`p`.`points`)", :force => true do |v|
+    v.column :user_id
+    v.column :item_id
+    v.column :points
+  end
 
 end
