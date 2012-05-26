@@ -7,15 +7,15 @@
     <%@form_id = "new_share_form"%>
     <%@title_id = "txtArticleTitle"%>
     <%@current_image_id = "current_image"%>
-  <%@productReviewRating = "new_product_review_rating"%>
-  <%@productReviewRatingField = "new_productReviewRatingField"%>
+    <%@productReviewRating = "new_product_review_rating"%>
+    <%@productReviewRatingField = "new_productReviewRatingField"%>
   <%else%>
     <%@url_id = "edit_share_url_#{@article_content.id}"%>
     <%@form_id = "edit_share_form_#{@article_content.id}"%>
-  <%@productReviewRating = "edit_product_review_rating_#{@article_content.id}"%>
+    <%@productReviewRating = "edit_product_review_rating_#{@article_content.id}"%>
     <%@title_id = "edit_txtArticleTitle_#{@article_content.id}"%>
     <%@current_image_id = "edit_current_image_#{@article_content.id}"%>
-  <%@productReviewRatingField = "new_productReviewRatingField_#{@article_content.id}"%>
+    <%@productReviewRatingField = "new_productReviewRatingField_#{@article_content.id}"%>
   <%end%>
 
   <%if @article_content.new_record?%>
@@ -280,18 +280,20 @@
         close:true, addButton: false,
         url: "/search/autocomplete_items",
         editMode: false, multiple: true,
-        hidden_field: "#contentEditView #<%=@articles_item_id%>"
+        hidden_field: "#ShareURLDiv #<%=@articles_item_id%>"
       };
   <% @items.each do |item| %>
         $.addTag("#contentEditView #<%=@search_field_id%>","div#contentEditView ul#<%=@ul_list_id%>", settings,"<%= item.name %>", "<%= item.id %>", true);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-    <%if item.id == @item.id%>
+    <%if item.id == @item.try(:id) || @article_content.is_review?%>
           $("ul#<%=@ul_list_id%> li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
     <%end%>
   <%end%>
-  <%if @article_content.is_review_content?%>
-        $.textTagger("#contentEditView #<%=@search_field_id%>","#contentEditView #<%=@ul_list_id%>",settings);
-        $("div#ShareURLDiv input#<%=@search_field_id%>").hide();
+  <%unless @article_content.is_review_content?%>
+        $.textTagger("#ShareURLDiv #<%=@search_field_id%>","#ShareURLDiv #<%=@ul_list_id%>",settings);
+        $("#ShareURLDiv input#<%=@search_field_id%>").show();
+  <%else%>
+        $("#ShareURLDiv input#<%=@search_field_id%>").hide();
   <%end%>
 <%end%>
 
@@ -332,12 +334,12 @@
     return $("<div />").text(html).html();
   }   
 
-
   function validateArticleShareForm(){
    
     var valid = true;
 <%unless @external%>
       $('#<%=@url_id%>').poshytip('destroy')
+      $('#<%=@ul_list_id%>').poshytip('destroy')
       // $('#txtArticleDescription').poshytip('destroy')
       if ($("#<%=@url_id%>").val() == ""){
         $('#<%=@url_id%>').poshytip({
@@ -353,6 +355,22 @@
         valid = false
 
       }
+      //alert($("#<%#=@articles_item_id%>").val())
+
+      if ($("#<%=@articles_item_id%>").val() == ""){
+        $('#<%=@ul_list_id%>').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a product to tag with.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('#<%=@ul_list_id%>').poshytip('show');
+        valid = false
+      }
+      // return false
 
 <%end%>
     return valid
@@ -412,8 +430,8 @@
       showArticleSubmitAppOptFields();
     }
     else if (category == "<%=ArticleCategory::REVIEWS%>"){
-        $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
-      }
+      $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
+    }
   }
   function showArticleSubmitEventOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("Start Date:")
@@ -501,11 +519,11 @@
 </script>
 
 <script type="text/javascript">
-   <%if @article_content.new_record?%>
+<%if @article_content.new_record?%>
     var score = 0;
-  <%else%>
+<%else%>
     var score = '<%=@article_content.rating%>';
-  <%end%>
+<%end%>
   $('div#<%=@productReviewRatingField%>').raty({
     starOff:  'assets/star-off.png',
     starOn: 'assets/star-on.png',

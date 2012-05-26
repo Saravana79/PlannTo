@@ -41,7 +41,8 @@ class ContentsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:item_id])
+
+    @item = Item.find(params[:item_id]) unless params[:item_id] == ""
     @article_content= @content = Content.find(params[:id])
     @edit_form = true
     #put an if loop to check if its an article share. if yes then uncomment the link below

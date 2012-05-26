@@ -47,22 +47,11 @@ width:600});
         $("#contentEditView ul li#textTaggers<%=@item.id%> a.icon_close_tagging").remove();
       <%end%>
     <%end%>
-
-    <%#if @content.is_event?%>
       setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
-    <%#elsif @content.is_app?%>
-    //  setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
-    <%#elsif (@content.is_books? || @content.is_accessories?)%>
-   //   setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
-    <%#end%>
   <%else%>
     $("div#contentEditView #ShareURLDiv").show();
     $("div#contentEditView #shareProduct").show();
     setDefaultFieldsArticleSubmit("<%=@content.sub_type%>");
-    <%#if @content.is_event?%>
-    <%#elsif @content.is_app?%>
-    <%#elsif (@content.is_books? || @content.is_accessories?)%>
-    <%#end%>
   <%end%>
 <%end%>
 $(".edit_dwnld_url_<%=@content.id%>").show();
