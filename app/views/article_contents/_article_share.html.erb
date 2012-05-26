@@ -7,13 +7,15 @@
     <%@form_id = "new_share_form"%>
     <%@title_id = "txtArticleTitle"%>
     <%@current_image_id = "current_image"%>
-  <%#@share_article_category_id = "new_share_article_category"%>
+  <%@productReviewRating = "new_product_review_rating"%>
+  <%@productReviewRatingField = "new_productReviewRatingField"%>
   <%else%>
     <%@url_id = "edit_share_url_#{@article_content.id}"%>
     <%@form_id = "edit_share_form_#{@article_content.id}"%>
-  <%#@share_article_category_id = "edit_share_article_category_#{@item.id}"%>
+  <%@productReviewRating = "edit_product_review_rating_#{@article_content.id}"%>
     <%@title_id = "edit_txtArticleTitle_#{@article_content.id}"%>
     <%@current_image_id = "edit_current_image_#{@article_content.id}"%>
+  <%@productReviewRatingField = "new_productReviewRatingField_#{@article_content.id}"%>
   <%end%>
 
   <%if @article_content.new_record?%>
@@ -75,7 +77,10 @@
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%>">
       <div class="title_header float_lft" >Title :</div>
       <div class="float_lft"><%= f.text_field :title, :id => "#{@title_id}", :style => "margin-left:5px;width:400px" %></div>
-
+    </div>
+    <div class="productreview" style="clear:both;display:none" id="<%=@productReviewRating%>">
+      <div class="title_header float_lft">Rating :</div>
+      <div id="<%=@productReviewRatingField%>" class="thereisnosuchclass"></div>
     </div>
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
       <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
@@ -383,7 +388,11 @@
     $("div#ShareURLDiv #<%=@sharefield1%>").hide();
     $("div#ShareURLDiv #<%=@sharefield2%>").hide();
     $("div#ShareURLDiv #<%=@sharefield3%>").hide();
-    $("div#ShareURLDiv #<%=@sharefield4%>").hide();
+    $("div#ShareURLDiv #<%=@sharefield4%>").hide();    
+  }
+
+  function hideReview(){
+    $("div#ShareURLDiv div#<%=@productReviewRating%>").hide();
   }
   function setDefaultFieldsArticleSubmit(category){
 <%if @article_content.new_record?%>
@@ -402,6 +411,9 @@
     else if (category == "<%=ArticleCategory::APPS%>"){
       showArticleSubmitAppOptFields();
     }
+    else if (category == "<%=ArticleCategory::REVIEWS%>"){
+        $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
+      }
   }
   function showArticleSubmitEventOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("Start Date:")
@@ -489,6 +501,19 @@
 </script>
 
 <script type="text/javascript">
+   <%if @article_content.new_record?%>
+    var score = 0;
+  <%else%>
+    var score = '<%=@article_content.rating%>';
+  <%end%>
+  $('div#<%=@productReviewRatingField%>').raty({
+    starOff:  'assets/star-off.png',
+    starOn: 'assets/star-on.png',
+    scoreName:    'article_content[rating]',
+    start: score,
+    width:  '200px'
+  });
+
   $(document).ready(function(){
     $("form#<%=@form_id%> #submit_article").click(function(){
       $("#ShareURLDivEvent div#article_errors").html("");
