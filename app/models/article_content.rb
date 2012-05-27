@@ -59,14 +59,15 @@ class ArticleContent < Content
     [@article,@images]
   end
   
-  def self.saveContent(val, user, ids, ip="")
+  def self.saveContent(val, user, ids, ip="", score="")
     if val['url'].present?
     if val['url'].include? "youtube.com"
-      @article=VideoContent.saveContent(val, user, ids, ip)
+      @article=VideoContent.saveContent(val, user, ids, ip, score)
     else
       @article=ArticleContent.create(val)
       @article.user = user
       @article.ip_address = ip
+      @article.field1 = score if score != ""
       @article.save_with_items!(ids) 
       @article
     end
@@ -74,6 +75,7 @@ class ArticleContent < Content
       @article=ArticleContent.create(val)
       @article.user = user
       @article.ip_address = ip
+      @article.field1 = score if score != ""
       @article.save_with_items!(ids)
       @article
     end

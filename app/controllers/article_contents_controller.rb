@@ -10,7 +10,8 @@ class ArticleContentsController < ApplicationController
     #for article content create or submit
     @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
-    @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip)
+   score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
+    @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
     flash[:notice]= "Article uploaded"

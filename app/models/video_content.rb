@@ -25,8 +25,9 @@ class VideoContent < ArticleContent
     @article
   end
   
-  def self.saveContent(val,user,ids, ip="")
+  def self.saveContent(val,user,ids, ip="", score="")
     @article = VideoContent.create(val)
+    @article.field1 =  score if score != ""
     @article.video = true
     url = @article.url
     if url.split('v=')[1]
