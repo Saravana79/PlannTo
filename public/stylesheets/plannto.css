@@ -1366,7 +1366,7 @@ div.rate_content {
 .mainContentDiv {
     margin-top: 5px;
     padding-top: 5px;
-    padding-bottom: 20px;
+    padding-bottom: 12x;
     border-bottom: solid 1px #e4e4e4;
 }
 
@@ -3006,16 +3006,16 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; text-decoratio
 
 
 ul#Newtabs { width:100%; float:left; height:36px; background:url(../images/navigation_bgbot.png) repeat-x left bottom;
-			padding:0 0 0 0px; margin:0 0 10px 0;}
+            padding:0 0 0 0px; margin:0 0 10px 0;}
 ul#Newtabs li:first-child { margin-left:13px;}
-ul#Newtabs li { display:block; float:left; padding:0; margin:0;}
-ul#Newtabs li a { font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#2a2929; text-decoration:none;
-				  display:block; line-height:36px; text-align:center; width:73px; font-weight:bold;}
-
+ul#Newtabs li { display:block; float:left; padding:0; margin:0; list-style:none;}
+ul#Newtabs li a { font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#2a2929; text-decoration:none; 
+                  display:block; line-height:36px; text-align:center;  font-weight:bold;
+                  padding:0 0 0 12px; float:left;}
+ul#Newtabs li a span { display:block; float:left; padding:0 12px 0 0px;}  
 ul#Newtabs li a:hover { color:#4b85a4; text-decoration:none;}
-ul#Newtabs li#tab_active a { background:url(../images/tabs_navibg.png) no-repeat left top; color:#4b85a4;}
-ul#Newtabs li.tab_active a { background:url(../images/tabs_navibg.png) no-repeat left top; color:#4b85a4;}
-
+ul#Newtabs li.tab_active a { background:url(../images/tabs_navi_bg.png) no-repeat left top; color:#4b85a4;}
+ul#Newtabs li.tab_active a span { background:url(../images/tabs_navi_bg.png) no-repeat right bottom;}
 
 .Rightouter { width:732px; float:right;}
 
@@ -3064,3 +3064,53 @@ padding:5px 13px 6px 0;}
 
 .Bluebutton a:hover { background-position:left -26px; text-decoration:none;}
 .Bluebutton a:hover span { background-position:right  -26px;}
+
+/*---------------------------------12-may-2012--------------------------*/
+.Headerrightpart { width:auto; float:right;}
+
+.Headerrightbuttons { width:auto; float:left; padding:10px 0 0 0;}
+.Headerrightbuttons ul { padding:0px; margin:0;}
+.Headerrightbuttons ul li { position:relative; float:left; list-style:none; z-index:100; margin:0 5px 0 0;}
+.Headerrightbuttons a { display:block; float:left; padding:0 0 0 10px;
+background:url(../images/button_submitblue.png) no-repeat left top;  color:#FFFFFF; font-weight:bold;
+font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:13px; text-decoration:none; cursor:pointer; 
+}
+
+.Headerrightbuttons a span { display:block; float:left;
+ background:url(../images/button_submitrightcorner.png) no-repeat right top; padding:6px 10px 7px 0;}
+ 
+.Headerrightbuttons a span span.Arrow {
+  float:right; background:url(../images/white_arrow.png) no-repeat right top;
+  margin-top:5px; margin-left:3px; padding:6px 10px 5px 0;}
+
+.Headerrightbuttons ul li:hover span span.Arrow { background-position:right -24px;}
+
+.Headerrightbuttons a:hover { background-position:left -29px; text-decoration:none;}
+.Headerrightbuttons a:hover span { background-position:right  -29px;}
+
+.Headerrightbuttons ul li:hover .Useraccountinfo { display:block;}
+
+
+span.Usrdropdown { width:auto; float:left; display:block; padding:10px 0 0 0;}
+span.Usrdropdown img { float:left; padding:1px; background:#4b85a4; border:1px solid #114660; margin:0 5px 0 0;}
+span.Usrdropdown span.Usernamedp { 
+padding:7px 16px 7px 4px; font-family:Arial, Helvetica, sans-serif; font-size:12px; display:block; float:left;
+color:#FFFFFF; background:url(../images/user_dropdownarrow.png) no-repeat 95% 12px; cursor:pointer;
+position:relative; z-index:90;}
+
+span.Usrdropdown span.Usernamedp a { color:#FFFFFF; text-decoration:none;}
+
+span.Usrdropdown span.Usernamedp:hover  {background: #FFFFFF url(../images/user_dropdownarrow.png) no-repeat 95% -12px;
+border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 3px;}
+
+
+span.Usrdropdown span.Usernamedp:hover a { color:#000000;}
+span.Usrdropdown span.Usernamedp:hover .Useraccountinfo { display:block;}
+
+.Useraccountinfo { width:150px; float:left; position:absolute; background:#FFFFFF;
+border:1px solid #528fae; display:none; top:28px; right:-1px;}
+
+.Useraccountinfo a { color:#000000; border-bottom:1px solid #528fae; display:block; padding:5px 0 5px 3px;
+                    font-size:11px; float:none; background:none; font-weight:normal;}
+.Useraccountinfo a:hover { background:#528fae; color:#FFFFFF !important;}
+/******************************************/
