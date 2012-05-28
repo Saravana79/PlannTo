@@ -30,7 +30,8 @@ class ArticleContentsController < ApplicationController
   
   def download
     @edit_form  = params[:save_instruction ] == "1" ? false : true
-    
+    @article = ArticleContent.new
+    @images = Array.new
     #@default_item_id = params[:default_item_id]
     #@article_category = ArticleCategory.find(params[:article_content][:article_category_id])
     url=params['article_content']['url']

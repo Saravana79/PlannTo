@@ -311,6 +311,9 @@
     img.src = url;
   }
   function add_image_to_list(url,size){
+     images_index=0;
+  images = new Array();
+  sizes = new Array();
     images.push(url);
     sizes.push(size[0]+"*"+size[1]);
     if(first){

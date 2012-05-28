@@ -5,6 +5,7 @@
   <%@total_images = "edit_total_images_#{@default_item_id}"%>
   <%@txtArticleDescription =  "edit_txtArticleDescription_#{@default_item_id}"%>
   <%@new_article_type ="edit_article_type_#{@default_item_id}"%>
+  <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
 
 <%else%>
   <%@title_id = "txtArticleTitle"%>
@@ -13,6 +14,8 @@
   <%@total_images = "total_images"%>
   <%@txtArticleDescription =  "txtArticleDescription"%>
   <%@new_article_type ="new_article_type"%>
+  <%@thumbnail_id = "new_thumbnail_url"%>
+  $("#<%=@thumbnail_id%>").val('<%=@article.thumbnail%>');
 
 <%end%>
 $('div.<%=@dwnld_url%>').show();
@@ -31,7 +34,7 @@ $("#<%=@new_article_type%>").val("ArticleContent");
       $("div#ShareURLDiv input#<%="edit_article_product_#{@article.id}"%>").hide();
     <%end%>
   <%end%>
-setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
+  setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
 <%end%>
 
 <% if @images.present? and @images.count > 0 %>  
