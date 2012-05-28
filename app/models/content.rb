@@ -85,7 +85,9 @@ class Content < ActiveRecord::Base
   def get_itemtype(item)
     itemtype_id = case item.type
     when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", item.id).first.try(:itemtype_id)
-    when "Manufacturer" then item.products.first.itemtype_id
+    when "Manufacturer" then item.itemrelationships.first.related.itemtype_id
+    when "CarGroup" then item.itemrelationships.first.items.itemtype_id
+    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
     else item.itemtype_id
     end
     return itemtype_id
