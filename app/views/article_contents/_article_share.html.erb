@@ -358,7 +358,6 @@
         valid = false
 
       }
-      //alert($("#<%#=@articles_item_id%>").val())
 
       if ($("#<%=@articles_item_id%>").val() == ""){
         $('#<%=@ul_list_id%>').poshytip({
@@ -529,7 +528,6 @@
   <%if @article_content.is_review?%>
       var score = '<%=@article_content.field1%>';
   <%end%>
-    alert(score)
 <%end%>
   $('div#<%=@productReviewRatingField%>').raty({
     starOff:  'assets/star-off.png',

@@ -72,13 +72,23 @@ class Content < ActiveRecord::Base
 	def save_with_items!(items)
 	  Content.transaction do
 	    self.save!
-      items.split(",").each do |id|
+      items.split(",").each_with_index do |id, index|
         item = Item.find(id)
         # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+        self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
       end
     end
+  end
+
+  def get_itemtype(item)
+    itemtype_id = case item.type
+    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", item.id).first.try(:itemtype_id)
+    when "Manufacturer" then item.products.first.itemtype_id
+    else item.itemtype_id
+    end
+    return itemtype_id
   end
 
   def update_with_items!(params, items)
@@ -86,8 +96,9 @@ class Content < ActiveRecord::Base
 	    self.update_attributes(params)
       content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
       content_item_relations.destroy_all
-      items.split(",").each do |id|
+      items.split(",").each_with_index do |id, index|
         item = Item.find(id)
+        self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
       end
