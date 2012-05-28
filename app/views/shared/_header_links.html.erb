@@ -16,9 +16,49 @@
     <a class="icon_chat" href="#"></a>
   </span>
 
+       
+      <!--header right part start here-->
+    <div class="Headerrightpart">
+      
+      <!--buttons-->
+      <div class="Headerrightbuttons">
+        <ul>
+          <li>
+            <a href="#"><span>Create<span class="Arrow"></span></span></a>
+              <div class="Useraccountinfo">
+                 <a href="#">Review</a>
+                 <a href="#">Question</a>
+                 <a href="#">Apps</a>
+              </div>
+          </li>
+          <li>
+            <a href="#"><span>Submit<span class="Arrow"></span></span></a>
+              <div class="Useraccountinfo">
+                 <a href="#">Review</a>
+                 <a href="#">Tips</a>
+                 <a href="#">Apps</a>
+              </div>
+          </li>
+        </ul>
+      </div>
+  
 
-  <span class="txt_welcome"><% if user_signed_in? %>
-      Welcome <%= link_to current_user.name, "#", :onclick => "showLoginLinks()", :class => 'divider_line' %> |
+  <span ><% if user_signed_in? %>
+
+    <span class="Usrdropdown">
+       
+       <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" style="width:25px;height:25px;"/>
+       
+         <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
+           <div class="Useraccountinfo">
+             <%= link_to "Account Setting", accounts_path(current_user.username) %>
+             <%= link_to "Profile", profile_path %>
+             <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+           </div>
+         </span>
+       
+    </span> 
+    <!--  Welcome <%= link_to current_user.name, "#", :onclick => "showLoginLinks()", :class => 'divider_line' %> |
       <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
       <div id="login_link" style="display:none">
         <ul>
@@ -33,8 +73,10 @@
           </li>
         </ul>
       </div>
+
+    -->
     <% else %>
-      Welcome <%= link_to "Guest", "#", :onclick => "showLogout()", :class => 'divider_line' %> |
+     <!-- Welcome <%= link_to "Guest", "#", :onclick => "showLogout()", :class => 'divider_line' %> |
       <div id="logout_link" style="display:none">
         <ul>
           <li>
@@ -44,13 +86,17 @@
           <%= link_to "Sign Up", new_registration_path('user') %>
           </li>
         </ul>
-      </div>
-      <%= link_to "Sign In", "#", :class => "sign_in" %>
+      </div>-->
+      <span class="txt_welcome">
+      <%= link_to "Sign In", "#", :class => "sign_in" %> | <%= link_to "Sign Up", new_registration_path('user') %>
+    </span>
     <% end %>
 
-
-    |</a><a href="#">Home</a></span>
-
+<!--
+    |</a>
+    <a href="#">Home</a>-->
+  </span>
+</div>
   
     <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
     <%= render "/layouts/navigation" %>

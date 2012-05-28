@@ -9,10 +9,7 @@ PlanNto::Application.configure do
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_assets = false
   config.serve_static_assets = true
-
-  # Compress JavaScripts and CSS
 
   # Compress JavaScripts and CSS
   config.assets.compress = false 
@@ -22,6 +19,8 @@ PlanNto::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
+
+  config.assets.initialize_on_precompile = true
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
