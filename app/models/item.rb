@@ -263,7 +263,7 @@ class Item < ActiveRecord::Base
   def get_hierarchy_sql(attribute_tags,itemtypes="'Manufacturer','CarGroup','BikeGroup','AttributeTag'")
     " 
     Union
-    Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id = #{self.id}) and itemtype not in (#{itemtypes})
+    Select content_id from content_item_relations where content_id not in (select  content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id = #{self.id}) and itemtype  in (#{itemtypes})) and item_id = #{self.id}
      Union
       Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id = #{self.id}) and item_id in (#{attribute_tags})"
   end
