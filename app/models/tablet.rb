@@ -3,7 +3,7 @@ class Tablet < Product
   has_many :compares, :as => :comparable
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :name , :boost => 4.0,  :as => :name_ac
+    text :name , :boost => 2.0,  :as => :name_ac
     string :name
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name

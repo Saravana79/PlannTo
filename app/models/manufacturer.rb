@@ -12,6 +12,11 @@ class Manufacturer < Item
     :through => :related_car_groups
   before_save :add_relation_type
 
+  searchable :auto_index => true, :auto_remove => true  do
+    text :name , :boost => 5.0,  :as => :name_ac
+    string :name
+   end
+
   def car_groups(page_number = 1, is_pagination = false, no_of_car = configatron.no_of_main_item)
     if is_pagination
       get_paginated_items(page_number)

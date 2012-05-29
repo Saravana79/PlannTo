@@ -19,7 +19,7 @@ has_many :accessories,
         # :source => :accessory
 
  def self.search_type(type)
-   return ["Manufacturer".camelize.constantize, "CarGroup".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize, "AttributeTag".camelize.constantize, "ItemtypeTag".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
+   return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
    return type.camelize.constantize
  end
 

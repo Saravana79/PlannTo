@@ -204,7 +204,7 @@ class SearchController < ApplicationController
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       order_by :class, :desc
-      paginate(:page => 1, :per_page => 6)      
+      paginate(:page => 1, :per_page => 10)      
     end
 
     if params[:from_profile]
@@ -217,11 +217,11 @@ class SearchController < ApplicationController
     results = @items.collect{|item|
 
       image_url = item.image_url
-      if item.type == "CarGroup"
-        type = "Car"
-      else
+     # if item.type == "CarGroup"
+     #   type = "Car"
+     # else
         type = item.type.humanize
-      end
+     # end
       url = "/#{item.type.tableize}/#{item.id}"
       # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }

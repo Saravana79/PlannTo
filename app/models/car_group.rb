@@ -7,10 +7,10 @@ class CarGroup < Manufacturer
       related_cars.where(:type => related_cars.first.class.name).limit(no_of_car)
     end
   end
-#  searchable :auto_index => true, :auto_remove => true  do
-#      text :name, :boost => 4.0,  :as => :name_ac
-#     # string :types
-#    end
+  searchable :auto_index => true, :auto_remove => true  do
+    text :name , :boost => 3.0,  :as => :name_ac
+    string :name
+   end
 
 
 end 

@@ -37,10 +37,10 @@ class Item < ActiveRecord::Base
   acts_as_followable
   # acts_as_rateable
 
-  searchable :auto_index => true, :auto_remove => true  do
+#  searchable :auto_index => true, :auto_remove => true  do
 
-    text :name, :boost => 4.0,  :as => :name_ac    
-  end
+#    text :name, :boost => 2.0,  :as => :name_ac    
+#  end
 
   def get_price_info(item_type)    
     item_attribute = item_attributes.select{|a| a.name == item_type}.last
