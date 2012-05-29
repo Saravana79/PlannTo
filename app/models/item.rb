@@ -254,7 +254,7 @@ class Item < ActiveRecord::Base
     sql +=  manufacturer.get_hierarchy_sql(attribute_tags,"'CarGroup','BikeGroup','AttributeTag'") unless manufacturer.blank?
     sql +=  cargroup.get_hierarchy_sql(attribute_tags,"'AttributeTag'") unless cargroup.blank?
     sql += " Union
-    Select content_id from content_item_relations where content_id in (select content_id from content_item_relations where item_id in (#{attribute_tags})) and itemtype not in ('ItemTypeTag','Manufacturer','CarGroup','BikeGroup')"
+    Select content_id from content_item_relations where content_id not in (select content_id from content_item_relations where content_id in     (select content_id from content_item_relations where item_id in (#{attribute_tags}) ) and itemtype in ('ItemTypeTag','Manufacturer','CarGroup','BikeGroup')) and item_id in (#{attribute_tags})"
   end
     items=Item.find_by_sql(sql)
     items.map(&:content_id).to_a
