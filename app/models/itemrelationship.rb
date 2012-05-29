@@ -6,6 +6,7 @@ class Itemrelationship < ActiveRecord::Base
   belongs_to :cargroup, :foreign_key => :relateditem_id , :class_name => "CarGroup"
   belongs_to :relate_car_groups, :foreign_key => :item_id , :class_name => "CarGroup"
   belongs_to :related_cars, :foreign_key => :item_id , :class_name => "Item"
+  belongs_to :items, :foreign_key => :item_id , :class_name => "Item"
   belongs_to :relateditems, :class_name => 'Item', :foreign_key => :relateditem_id
 end
 
