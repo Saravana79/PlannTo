@@ -142,8 +142,25 @@ module ContentsHelper
   end
 
 
-  def get_content_description(content)    
+  def get_content_description(content, detail=false)
     wordcount = Content::WORDCOUNT
-    "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
+    if detail == false
+      "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
+    else
+      "<a class='txt_black_description'>" + content.description + "</a>"
+    end
+  end
+
+  def get_content_title(content)
+    if content.url.blank?
+      "<a class='title'>#{content.title }</a>"
+    else
+      "<a class='title' onclick=" +'window.open(' + "'/history_details?detail_id=#{content.id}&type=Content')" + ">#{content.title }</a>"
+    end
+
+  end
+
+  def history_redirection_url(id, type)
+    return "/history_details?detail_id=#{id}&type=#{type}"
   end
 end

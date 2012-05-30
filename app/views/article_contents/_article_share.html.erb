@@ -214,10 +214,24 @@
     var regexp = /((ftp|http|https):\/\/)?(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
     return regexp.test(url);
   }
-  $(function(){
-    $('form#<%=@form_id%> #submit_article').live('click',function(){
 
+ // $("form#<%#=@form_id%> #submit_article").click(function(){
+  //    $("#ShareURLDivEvent div#article_errors").html("");
+  //    var valid = validateArticleShareForm();
+  //    if (!valid){
+   //     return false;
+   //   }
+   // });
+  $(function(){
+    $('form#<%=@form_id%> #submit_article').click(function(){
+ var valid = validateArticleShareForm();
+      if (!valid){
+        return false;
+      }
       if($('#<%=@url_id%>').val() && validateUrl($('#<%=@url_id%>').val())){
+       $('form#<%=@form_id%> #submit_article').attr("disabled", "true")
+      // $('input[type="submit"]').removeAttr('disabled');
+
 <%if @article_content.new_record?%>
           // $('form#<%#=@form_id%>').attr('action','<%#= article_contents_path %>');
           $.post('/article_contents/create',$("#<%=@form_id%>").serialize(),"script");
@@ -528,6 +542,8 @@
 <%else%>
   <%if @article_content.is_review?%>
       var score = '<%=@article_content.field1%>';
+      <%else%>
+         var score = 0;
   <%end%>
 <%end%>
   $('div#<%=@productReviewRatingField%>').raty({
@@ -545,14 +561,7 @@
   });
 
   $(document).ready(function(){
-    $("form#<%=@form_id%> #submit_article").click(function(){
-      $("#ShareURLDivEvent div#article_errors").html("");
-      var valid = validateArticleShareForm();
-      if (!valid){
-        return false;
-      }
-    });
-    
+        
     $("#<%=@manual_image%>").click(function(event){
 
       if ($('#<%=@manual_image%>').is(':checked')) {$("#<%=@thumbnail_id%>").show(); } else { $("#<%=@thumbnail_id%>").hide(); }

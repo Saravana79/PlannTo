@@ -1,25 +1,3 @@
-<div id="maincontainer" class="maincontainerCss">
-<!-- Till this will go into main layout and common for all pages.-->
-
-    <div class="breadcrumpbtnDiv">
-    <!--  breadcrumbs - Start -->
-      <div id ="breadcrump" class="breadcrump">
-      <a class="alink" href="#">Cars</a>
-      <a class="grayarrow">></a>
-      <a class="alink" href="#">Fiat</a>
-      <a class="grayarrow">></a>
-      <a class="alink" href="#">Grande Punto</a>
-      <a class="grayarrow">></a>
-      <a class="alink" href="#">Grande Punto Active 1.2</a>
-      <a class="grayarrow">></a>
-      <a class="alink" id="alink_active">Questions & Answers</a>
-      <!--  breadcrumbs - End -->
-
-      </div>
-      <!-- buttons - Start -->
-
-
-    </div>
 
 <div class="float_rgt">
     <%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
@@ -42,18 +20,20 @@
                 <img src="images/users.png" class="userImageSmall" />
             </div>
       <div  class="subContentDiv">
-                <div><a class="title"><%= @content.title %></a></div>
+        <div><%= raw get_content_title(@content)%> </div>
                 <div><a class="txt_brown">Asked by <%= @content.user.name %></a></div>
                 <div class="subContentGap">
-                <%= raw get_content_description(@content)%></div>
+                <%= raw get_content_description(@content, true)%></div>
                 <ul class="divCommentsConent">
                     <li class="subContentGap float_lft" ><a class="txt_blue ">Comments (9)</a></li>
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
                     <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+                    <%if content.can_update_content?(current_user)%>
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                    <li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+                    <li class="subContentGap float_lft"><%=link_to "Delete This", content_path(content), :method => "delete", :remote => true, :class => "txt_blue"%></li>
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                    <li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+                    <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :detail => true), :remote => true, :class => "txt_blue"%></li>
+                    <%end%>
                 </ul>
       </div>
     </div>

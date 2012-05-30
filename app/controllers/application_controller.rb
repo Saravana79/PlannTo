@@ -85,4 +85,9 @@ class ApplicationController < ActionController::Base
     user_follow_items = all_user_follow_item(item.id) if !user.blank?
     user_follow_items.blank? ? false : user_follow_items
   end
+
+
+  def store_location
+    session[:return_to] = request.env['REQUEST_URI'] if request.get? and controller_name != "user_sessions" and controller_name != "sessions"
+  end
 end

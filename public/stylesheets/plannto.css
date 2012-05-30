@@ -1857,6 +1857,7 @@ li.middlebg {
     padding: 0;
     margin: 0;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .titlePro {

@@ -57,8 +57,5 @@ class ProductsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
-  def store_location
-    session[:return_to] = request.env['REQUEST_URI'] if request.get? and controller_name != "user_sessions" and controller_name != "sessions"
-  end
 
 end

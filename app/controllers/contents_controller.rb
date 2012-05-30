@@ -1,6 +1,7 @@
 class ContentsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
+  before_filter :store_location, :only => [:show]
   #layout :false
   include FollowMethods
   def feed
@@ -41,8 +42,9 @@ class ContentsController < ApplicationController
   end
 
   def edit
-
-    @item = Item.find(params[:item_id]) unless params[:item_id] == ""
+    if params[:item_id].present?
+      @item = Item.find(params[:item_id]) unless params[:item_id] == ""
+    end
     @article_content= @content = Content.find(params[:id])
     @edit_form = true
     #put an if loop to check if its an article share. if yes then uncomment the link below
@@ -57,6 +59,10 @@ class ContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_with_items!(params[:plannto_content], params[:item_id])
 
+  end
+
+  def delete
+    get_item_object
   end
 
   def destroy
