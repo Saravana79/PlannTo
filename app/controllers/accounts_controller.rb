@@ -7,12 +7,10 @@ class AccountsController < ApplicationController
 
   def update
     avatar_attributes = params[:user][:avatar]
-    current_user.update_attributes(params[:user].delete(:avatar))
+    current_user.update_attributes(params[:user].delete_if{|key, value| key ==:avatar})
     if current_user.errors.blank?
       $redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "avatar_url")
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "name", current_user.name)
-      params[:user][:password] = ""
-      params[:user][:password_confirmation] = ""
       if avatar_attributes
         avatar_attributes[:user_id] = current_user.id
         Avatar.find_or_create_by_user_id(current_user.id) && current_user.avatar.update_attributes(avatar_attributes)
@@ -33,7 +31,6 @@ class AccountsController < ApplicationController
     else
       flash[:notice] = @user.errors.full_messages.join(", ")
     end
-      redirect_to :action => :index
   end
 
   def get_user_info
