@@ -123,7 +123,7 @@ module ContentsHelper
     dropdown += "<option value='Photography'>Photography</option><option value='Productivity'>Productivity</option><option value='Shopping'>Shopping</option>"
     dropdown += "<option value='Travel'>Travel</option><option value='Utilities'>Utilities</option><option value='Arts & Design'>Arts & Design</option>"
     dropdown += "<option value='Navigation'>Navigation</option><option value='Medical'>Medical</option><option value='Social Networking'>Social Networking</option>"
-    dropdown += "<option value='Sports'>Sports</option><option value='Weather'>Weather</option></select>"
+    dropdown += "<option value='Sports'>Sports</option><option value='Weather'>Weather</option><option value='Video'>Video</option><option value='Media'>Media</option><option value='Personalization'>Personalization</option><option value='Others'>Others</option></select>"
     return dropdown.html_safe
   end
 
