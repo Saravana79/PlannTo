@@ -5,7 +5,7 @@
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-    <div><a class="txt_brown"><%= content.user.name %> shared a <%= content.sub_type.singularize %> on </a><a class="txt_brown" href="<%=link_url(content.items.first)%>"><%= content.items.first.name %> </a> <a class="txt_brown" style="onhover text:underline">- <%= time_ago_format(content)%> ago </a></div>
+    <div><a class="txt_brown"><%= content.user.name %> shared a <%= content.sub_type.singularize %> on </a><a class="txt_brown" href="<%=link_url(content.items.first)%>"><%= content.items.first.name %> </a> <a class="txt_brown"- <%= time_ago_format(content)%> ago </a</div>
     <div>
       <%if content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div><%end%>
       <div class="subContentGap"><%= raw get_content_description(content)%></div>
