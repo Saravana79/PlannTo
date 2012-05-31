@@ -317,6 +317,9 @@
   });
 
   function check_imagesize_on_load(url){
+    images_index=0;
+  images = new Array();
+  sizes = new Array();
     var img = new Image();
     img.onload = function() {
       if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1])
@@ -325,9 +328,7 @@
     img.src = url;
   }
   function add_image_to_list(url,size){
-     images_index=0;
-  images = new Array();
-  sizes = new Array();
+     
     images.push(url);
     sizes.push(size[0]+"*"+size[1]);
     if(first){
