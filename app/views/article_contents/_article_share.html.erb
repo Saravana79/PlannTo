@@ -229,7 +229,7 @@
         return false;
       }
       if($('#<%=@url_id%>').val() && validateUrl($('#<%=@url_id%>').val())){
-       $('form#<%=@form_id%> #submit_article').attr("disabled", "true")
+      // $('form#<%#=@form_id%> #submit_article').attr("disabled", "true")
       // $('input[type="submit"]').removeAttr('disabled');
 
 <%if @article_content.new_record?%>

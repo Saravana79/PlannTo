@@ -163,4 +163,27 @@ module ContentsHelper
   def history_redirection_url(id, type)
     return "/history_details?detail_id=#{id}&type=#{type}"
   end
+
+  def get_optional_contents(content)
+    if content.sub_type == "#{ArticleCategory::EVENT}"
+      "<label>Start Date:</label>#{content.field1}<br/><label>End Date:</label>#{content.field2}<br/><label>Location:</label>#{content.field3}"
+    elsif content.sub_type == "#{ArticleCategory::BOOKS}"
+      "<label>Sub Category:</label>#{content.field1}<br/>"
+    elsif content.sub_type == "#{ArticleCategory::ACCESSORIES}"
+      "<label>Sub Category:</label>#{content.field1}<br/>"
+    elsif content.sub_type == "#{ArticleCategory::APPS}"
+      "<label>Sub Category:</label>#{content.field1}<br/><label>Type:</label>#{content.field2}<br/><label>Android Url:</label>#{content.field3}<br/><label>Itune Url:</label>#{content.field4}<br/>"
+    elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
+      "<label>Rating:</label>#{content.field1}<br/>"
+    else
+      ""
+    end
+  end
+
+  def display_product_tag(item, display)
+    list = "<li id='textTaggers#{item.id}'" + " class='taggingmain'><span><a class='txt_tagging'>" + item.name + "</a>"
+    list += "<a id= 'deleteTag' class='icon_close_tagging' href='#'></a>" if display == true
+    list += "</span></li>" ;
+
+  end
 end
