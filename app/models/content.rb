@@ -1,7 +1,7 @@
 require 'will_paginate/array'
 class Content < ActiveRecord::Base
   #used for content description split.
-  WORDCOUNT = 100
+  WORDCOUNT = 50
   
   acts_as_citier
 
@@ -15,6 +15,12 @@ class Content < ActiveRecord::Base
   belongs_to :itemtype
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
 
+  searchable :auto_index => true, :auto_remove => true  do
+    text :title, :boost => 3.0, :more_like_this =>true
+    text :description
+    string :sub_type
+  end
+  
   def related_items
     return ContentItemRelation.where('content_id = ?', self.id)  
   end
