@@ -1,7 +1,7 @@
 require 'will_paginate/array'
 class Content < ActiveRecord::Base
   #used for content description split.
-  WORDCOUNT = 100
+  WORDCOUNT = 50
   
   acts_as_citier
 
