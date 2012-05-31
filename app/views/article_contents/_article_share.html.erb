@@ -57,7 +57,7 @@
     <div style="padding:5px 5px 0px 0px;clear:both;">
       <% if content_category == true %>
         <div style="float:left">
-          <div class="title_header float_lft">Content Category :</div>
+          <div class="title_header float_lft">Category :</div>
           <div class="float_lft">
             <% val = @item.blank? ? 0 : @item.itemtype_id %>
             <%= f.select :sub_type, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.name]  }  %>
