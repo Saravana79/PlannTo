@@ -1635,7 +1635,7 @@ div.hdr_search {
 /* Search Category */
 div.hdr_Category {
     width: 220px;
-    height: 45px;
+    height: 40px;
     font: bold 12px/45px tahoma;
     color: #000;
     text-transform: uppercase;

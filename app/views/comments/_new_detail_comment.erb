@@ -1,17 +1,18 @@
-<div style="padding:5px 5px 0px 5px;height:150px;display:none;" id="new_comment_block">
+<div style="padding:5px 5px 0px 0px;height:150px;" id="new_comment_block">
   <%= form_for Comment.new, :url => content_comments_path(content), :remote => true do |f|  %>
     <%= hidden_field_tag :parent, parent %>
     <%= hidden_field_tag :parent_id,parent_id %>
-  <div style="padding:5px 5px 0px 5px;">
-        <div class="title_header float_lft">Comment :</div>
-        <div>
-            <%= f.text_area :comment, :class => 'textFilling', :style=> 'width:570px;height:50px;' %>
+  <div class="title_header" style="padding:5px 0px 5px 55px;float:left;">Add Comment :</div>
+  <div style="padding:5px 5px 0px 0px;">
+        
+        <div style="clear:both;">
+            <%= f.text_area :comment, :class => '', :style=> 'width:550px;height:50px;margin-left:55px;' %>
         </div>
     </div>
 
   <%= hidden_field_tag :detail,true %>
    
-    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:100px; margin-top:20px ">
       <%= f.submit :value => "Comment", :id => "comment_submit_3", 'data-disable-with'=>"Commenting...", :class => 'btn_submitanswer' %>
     </div>
   <% end %>

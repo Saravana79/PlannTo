@@ -1,4 +1,4 @@
-<div id=<%= "answers#{answer.id}"%> class="answerblock" style="display: block; min-height: 60px;" >
+<div id=<%= "answers#{answer.id}"%> class="answerblock" style="min-height: 60px;" >
 	<%= render :partial => 'votes/vote_block', :locals => {:parent => answer, :vote => nil } %>
 	<%= answer.content %>
 	<div class="answercomments">

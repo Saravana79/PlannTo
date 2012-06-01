@@ -1,7 +1,7 @@
 <br />
 <a class="arrow_up comments_<%= content.id %>" style="display:none"></a>
 <div id="new_comment_<%= content.id %>" class="subContentDiv_comments comments_bg" style="display:none" last_comment="<%= content.id %>">
-	<div class="float_rgt"><img src="images/users.png" class="userImageSmall"></div>
+	<div class="float_rgt"><img src="<%= current_user.get_photo %>" class="userImageSmall"></div>
 	<%=	 form_for Comment.new, :url => content_comments_path(content), :remote => true do |f| -%>
 	<%= f.text_field :comment, :class => "txt_gray new_comment", :size => "80" %>
 	<% end -%>      			

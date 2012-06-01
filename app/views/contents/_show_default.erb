@@ -1,37 +1,81 @@
 
-<div class="float_rgt">
-  <%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
-</div>
+
 
 <%= render 'shared/product_button_javascript', :button_class => '', :item => @content, :related_follower => user_follow_type(@content, current_user) , :related_items => false%>
 <%= render 'shared/show_hide_login_form', :item => @content %>
-<br/><br/>
+
+    <div style="padding-left:60px;width:600px;">
+
+          <ul id="productList" class="tagging">
+             <%@items.each do |item|%>
+               <%=display_product_tag(item, false).html_safe%>
+             <%end%>
+           </ul>
+      </div>
+      <div class="float_rgt" >
+        <%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
+      </div>
 <div class="leftcolumnbig">
   <!-- Product Details - Start -->
   <div class="contentDetailsMainDiv">
 
     <!-- Question - Start -->
-    <div  class="mainContentDiv">
+
+    <div  class="mainContentDiv" style="border-bottom:0px;">
+
+      <div style="clear:both;width=100%;">
       <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
+
       <div  class="float_rgt">
         <img src="<%=@content.user.get_photo%>" class="userImageSmall"/>
       </div>
       <div  class="subContentDiv">
         <div><%= raw get_content_title(@content)%> </div>
-        <div><a class="txt_brown">Asked by <%= @content.user.name %></a></div>
+        <div><a class="txt_brown">Shared by <%= @content.user.name %></a></div>
         <div class="subContentGap">
-          <%= raw get_content_description(@content, true)%><br/><br/>
-          <%= raw get_optional_contents(@content)%> <br/>
-          <label>Product:</label>
-          <ul id="productList" class="tagging">
-            <%@items.each do |item|%>
-              <%=display_product_tag(item, false).html_safe%>
-            <%end%>
-          </ul><br/>
+        <%= raw get_rating_or_category_contents(@content)%> 
+        <% if @content.sub_type == "#{ArticleCategory::APPS}" %>
+         <div>
+              <div style="float:left;">
+                  <label >Category : <%= @content.field1%> </label></br>
+                   <% if @content.field2 == "Free"%>
+                      <label>Cost: Free</label>
+                   <%end%>
+              </div>
+              <div style="float:right;">
+                <% if !@content.field3.empty? %>
+                    <a href="<%= @content.field3%>"> <img src="/images/andriodshop.png" style="height:30px;width:100px"/> </a>
+                <%end%>
+                <% if !@content.field4.empty? %>
+                <a href="<%= @content.field4%>"> <img src="/images/itunesshop.png" style="height:30px;width:100px"/> </a>
+                <%end%>
+              </div>
+          </div>
+        <%end%>
+           <% if @content.sub_type == "#{ArticleCategory::EVENT}" %>
+         <div>
+              <div style="float:left;">
+                  <% if !@content.field1.empty? %>
+                   <label >Start Date : <%= @content.field1%> </label></br>
+                 <%end%>
+                   <% if !@content.field3.empty? %>
+                   <label >Location : <%= @content.field3%> </label></br>
+                 <%end%>
+              </div>
+              <div style="float:right;">
+                <% if !@content.field2.empty? %>
+                   <label >End  Date : <%= @content.field2%> </label></br>
+                 <%end%>
+              </div>
+          </div>
+        <%end%>
+          <div style="padding:3px 0px 3px 0px;">
+            <%= raw get_content_description(@content, true)%><br/>
+          </div>
+          
+          
         </div>
-        <ul class="divCommentsConent">
-          <li class="subContentGap float_lft" ><a class="txt_blue ">Comments (9)</a></li>
-          <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+        <ul class="divCommentsConent" style="clear:both;">
           <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
           <%if content.can_update_content?(current_user)%>
             <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
@@ -41,25 +85,24 @@
           <%end%>
         </ul>
       </div>
+      </div>
     </div>
 
     <!-- Question - End -->
 
     <!-- Answer this question - Start -->
-    <div  style="border-bottom:solid 1px #ccd4d8;">
-      <div class="hdr_Category float_lft margin_lft10"><%= pluralize(content.comments.count,'Comments') %> </div>
-      <div class="float_rgt" style="margin-top:8px;">
+    <div  style="border-bottom:solid 1px #ccd4d8;margin-left:55px;">
+      <div class="float_lft margin_lft10 title" style="height:30px;text-align:middle;padding:10px 0px 0px 0px;font-weight:bold;"><%= pluralize(content.comments.count,'Comment') %> </div>
+      <!--<div class="float_rgt" style="margin-top:8px;">
         <a style="" class="btn_submitanswer" id="comment_this_content" >Comment this Content</a>
         <div class="PlanntoBuyBtn"><span class="action_btns"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Content</a></span></div>
       </div>
-
+      -->
     </div>
-    <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
+    <div  style="border-top:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>
     <!-- Answer this question - End -->
-    <%= render :partial => 'comments/new_detail_comment', :locals => {:content => content, :parent => content.class.name, :parent_id => content.id, :detail => true}  %>
-
     <%= render :partial => 'comments/detailed_comments_list',:locals => {:content =>content} %>
-
+    <%= render :partial => 'comments/new_detail_comment', :locals => {:content => content, :parent => content.class.name, :parent_id => content.id, :detail => true}  %>
 
   </div>
 
@@ -70,7 +113,8 @@
 </div>
 
 <div class="rightcolumnsmall">
-
+  <br/>
+  <!--
   <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
       <td class="bg_widgethdr txt_white">Related Questions</td>
@@ -78,85 +122,16 @@
     <tr>
       <td height="252" valign="top">
 
-        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-              <a href="#" class="txt_black">Renault Pulse</a>
-              <img src="images/rating_stars.png" width="87" height="20" /><br />
-              <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-              <a href="#" class="txt_black">Renault Pulse</a>
-              <img src="images/rating_stars.png" width="87" height="20" /><br />
-              <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-        </table>
-
+      
       </td>
     </tr>
     <tr>
       <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
     </tr>
   </table>
-
-  <!-- Related Cars -- End -->
 
   <br />
-
-  <!-- Related Cars -- Start -->
-
-  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-    <tr>
-      <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
-    </tr>
-    <tr>
-      <td height="252" valign="top">
-
-        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-              <a href="#" class="txt_black">Renault Pulse</a>
-              <img src="images/rating_stars.png" width="87" height="20" /><br />
-              <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-              <a href="#" class="txt_black">Renault Pulse</a>
-              <img src="images/rating_stars.png" width="87" height="20" /><br />
-              <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-        </table>
-
-      </td>
-    </tr>
-    <tr>
-      <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-    </tr>
-  </table>
-
+-->
   <!-- Related Cars -- End -->
 </div>
 
