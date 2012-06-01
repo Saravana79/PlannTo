@@ -28,7 +28,6 @@
       </div>
       <div  class="subContentDiv">
         <div><%= raw get_content_title(@content)%>     <div>
-            <%= link_to content.title, content_path(content.id), :class => "title" %>
         <% if content.url?  %>
         - <a class="txt_black_description">(<%=  URI.parse(content.url).host.gsub("www.","") %> </a>)
        <%end%>
