@@ -28,19 +28,19 @@ module ApplicationHelper
   def get_follow_text(follow_type)
     case follow_type
     when 'Manufacturer', 'CarGroup'
-      [["Follow", "plan_to_follow", "Follow"]]
+      [["Follow This", "plan_to_follow", "Follow"]]
     when 'Car'
-      [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This Car", "plan_to_follow", "Follow"]]
+      [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
     when 'Event'
-      [[ "May Go", "plan_to_buy", "Buyer"], ["Am Going", "plan_to_own", "Owner"], ["Follow", "plan_to_follow", "Follow"]]
+      [[ "May Go", "plan_to_buy", "Buyer"], ["Am Going", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
     when 'Accessories'
-      [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow", "plan_to_follow", "Follow"]]
+      [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
     when 'Apps'
-      [[ "Plan to get", "plan_to_buy", "Buyer"], ["I have it", "plan_to_own", "Owner"], ["Follow", "plan_to_follow", "Follow"]]
+      [["I have it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
     when 'Books'
-      [[ "Plan to read", "plan_to_buy", "Buyer"], ["I read it", "plan_to_own", "Owner"], ["Follow", "plan_to_follow", "Follow"]]
+      [[ "Plan to read", "plan_to_buy", "Buyer"], ["I read it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
     else
-      [["Follow", "plan_to_follow", "Follow"]]
+      [["Follow This", "plan_to_follow", "Follow"]]
     end
   end
 

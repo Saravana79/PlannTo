@@ -1,17 +1,21 @@
-<div class="mainContentDiv">
+<div class="mainContentDiv" style="border-bottom:0px;">
   <%#=render :partial => "votes/voting_detail", :locals => {:item => answer_content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
-    <img src="images/users.png" class="userImageSmall">
+    <img src="<%= comment.user.get_photo %>" class="userImageSmall">
   </div>
-  <div class="subContentDiv">
-    <div><a class="title" href=""><%= comment.comment %></a></div>
+  <div class="subContentDiv" style="padding-bottom:0px;">
+    <div><a class="txt_brown" ><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></div>
+    <div style="padding:3px 0px 2px 0px"><a class="txt_black_description" href="" ><%= comment.comment %></a></div>
     <ul class="divCommentsConent ">
-			<li class="subContentGap float_lft"><a class="txt_gray "><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></li>
+			
 			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
 		</ul>
+
   </div>
+  
 </div>
+<div  style="border-bottom:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>

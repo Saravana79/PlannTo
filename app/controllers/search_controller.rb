@@ -203,7 +203,6 @@ class SearchController < ApplicationController
     search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
-      order_by :class, :desc
       paginate(:page => 1, :per_page => 10)      
     end
 

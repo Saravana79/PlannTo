@@ -145,7 +145,8 @@ module ContentsHelper
   def get_content_description(content, detail=false)
     wordcount = Content::WORDCOUNT
     if detail == false
-      "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
+      "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "...": "")
+        #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
     else
       "<a class='txt_black_description'>" + content.description + "</a>"
     end
@@ -164,21 +165,14 @@ module ContentsHelper
     return "/history_details?detail_id=#{id}&type=#{type}"
   end
 
-  def get_optional_contents(content)
-    if content.sub_type == "#{ArticleCategory::EVENT}"
-      "<label>Start Date:</label>#{content.field1}<br/><label>End Date:</label>#{content.field2}<br/><label>Location:</label>#{content.field3}"
-    elsif content.sub_type == "#{ArticleCategory::BOOKS}"
-      "<label>Sub Category:</label>#{content.field1}<br/>"
-    elsif content.sub_type == "#{ArticleCategory::ACCESSORIES}"
-      "<label>Sub Category:</label>#{content.field1}<br/>"
-    elsif content.sub_type == "#{ArticleCategory::APPS}"
-      "<label>Sub Category:</label>#{content.field1}<br/><label>Type:</label>#{content.field2}<br/><label>Android Url:</label>#{content.field3}<br/><label>Itune Url:</label>#{content.field4}<br/>"
+ def get_rating_or_category_contents(content)
+    if content.sub_type == "#{ArticleCategory::ACCESSORIES}"
+      "<label>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
-      "<label>Rating:</label>#{content.field1}<br/>"
-    else
-      ""
+      "<label>Rating :</label>#{content.field1}<br/><div class ='displayRating' data-rating='2'></div>"
     end
   end
+
 
   def display_product_tag(item, display)
     list = "<li id='textTaggers#{item.id}'" + " class='taggingmain'><span><a class='txt_tagging'>" + item.name + "</a>"
