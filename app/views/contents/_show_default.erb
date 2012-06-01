@@ -27,7 +27,12 @@
         <img src="<%=@content.user.get_photo%>" class="userImageSmall"/>
       </div>
       <div  class="subContentDiv">
-        <div><%= raw get_content_title(@content)%> </div>
+        <div><%= raw get_content_title(@content)%>     <div>
+            <%= link_to content.title, content_path(content.id), :class => "title" %>
+        <% if content.url?  %>
+        - <a class="txt_black_description">(<%=  URI.parse(content.url).host.gsub("www.","") %> </a>)
+       <%end%>
+    </div></div>
         <div><a class="txt_brown">Shared by <%= @content.user.name %></a></div>
         <div class="subContentGap">
         <%= raw get_rating_or_category_contents(@content)%> 
