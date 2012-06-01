@@ -9,6 +9,7 @@ class Item < ActiveRecord::Base
   #  has_many :inverse_itemrelationships, :class_name => 'Itemrelationship', :foreign_key => 'relateditem_id'
   #  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :source => :item
   ##  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :
+  has_many :item_contents_relations_cache, :class_name => "ItemContentsRelationsCache"
   has_many :shares # to be removed
   has_many :content_item_relations
   has_many :contents, :through => :content_item_relations
@@ -259,6 +260,10 @@ class Item < ActiveRecord::Base
     items=Item.find_by_sql(sql)
     items.map(&:content_id).to_a
   end
+
+  def related_content_from_cache
+    self.item_contents_relations_cache.collect(&:content_id)
+  end
   
   def get_hierarchy_sql(attribute_tags,itemtypes="'Manufacturer','CarGroup','BikeGroup','AttributeTag'")
     " 
@@ -277,7 +282,7 @@ class Item < ActiveRecord::Base
    if value.nil?
    items = Item.find_all_by_id(ids)
    items.each do |item|
-     contents.concat(item.related_content.to_a)
+     contents.concat(item.related_content_from_cache.to_a)
    end
    contents=contents.uniq
    $redis.set(redis_key,contents.to_json)

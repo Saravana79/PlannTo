@@ -55,4 +55,19 @@ namespace :plannto do
   end
 
 
+  desc "task to set content item relations"
+
+  task :set_item_contents_relations_cache => :environment do
+    ItemContentsRelationsCache.delete_all
+
+    items = Item.all
+    items.each do |item|
+      related_contents = item.related_content
+      related_contents.each do |id|
+        ItemContentsRelationsCache.create(:item_id => item.id, :content_id => id)
+      end
+    end
+  end
+
+
 end
