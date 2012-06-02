@@ -26,7 +26,8 @@ PlanNto::Application.routes.draw do
 
   match 'profile', :to => "accounts#profile", :as => "profile"
   resources :field_values, :only => [:create]
-resources :answer_contents  
+resources :answer_contents
+  match 'accounts/:username', :to => "accounts#index", :as => "accounts"
 resources :accounts do
     put :update
     member do
@@ -34,7 +35,7 @@ resources :accounts do
     end
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
-  #match '/:username', :to => "accounts#index", :as => "accounts"
+
  
   resources :preferences do
     collection do
@@ -50,10 +51,10 @@ resources :accounts do
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
-   match '/:search_type', :to => "products#index"
+#   match '/:search_type', :to => "products#index"
   resources :cars do
         resources :shares
-  end  
+  end
   resources :contents do
   collection do
     get :filter
