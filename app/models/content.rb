@@ -87,8 +87,8 @@ class Content < ActiveRecord::Base
         rel.save!
       end
       logger.info "-----------------------------------------"
-      #Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
-      self.update_item_contents_relations_cache(items.split(","))
+      Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
+     # self.update_item_contents_relations_cache(items.split(","))
       
     end
   end
