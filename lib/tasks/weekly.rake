@@ -57,11 +57,13 @@ namespace :plannto do
 
   desc "task to set content item relations"
 
-  task :set_item_contents_relations_cache => :environment do
-    ItemContentsRelationsCache.delete_all
-
-    items = Item.all
+  task :set_item_contents_relations_cache ,:arg1, :needs => :environment do | t, args|
+    #ItemContentsRelationsCache.delete_all
+    puts args[:arg1]
+    arg1 = args[:arg1]
+    items = Item.find(:all, :conditions=>["id > ?" , arg1])
     items.each do |item|
+      puts item.id
       related_contents = item.related_content
       related_contents.each do |id|
         ItemContentsRelationsCache.create(:item_id => item.id, :content_id => id)
