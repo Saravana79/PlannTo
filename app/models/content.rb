@@ -144,7 +144,7 @@ class Content < ActiveRecord::Base
     sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
   end
   items=Item.find_by_sql(sql)
-  self.save_content_relations_cache(items.collect(&:id)
+  self.save_content_relations_cache(items.collect(&:id))
 end
 
   def save_content_relations_cache(related_items)
