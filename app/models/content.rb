@@ -44,12 +44,12 @@ class Content < ActiveRecord::Base
 
 
   def self.filter(options)
-    options ||= {:page => 1, :limit => 10} 
+   
+    options ||= {:page => 1, :limit => 10}
     options["page"]||=1 
     options["limit"]||=PER_PAGE 
-    options["order"]||="created_at desc" 
+    options["order"]||="created_at desc"
     scope=options.inject(self) do |scope, (key, value)|
-
       return scope if value.blank?
       value= value.join(",") if is_a?(Array)
       case key.to_sym
@@ -88,14 +88,12 @@ class Content < ActiveRecord::Base
       end
       logger.info "-----------------------------------------"
       Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
-     # self.update_item_contents_relations_cache(items.split(","))
+      # self.update_item_contents_relations_cache(items.split(","))
       
     end
   end
 
   def update_item_contents_relations_cache(items)
-    logger.info "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    logger.info items.size
     item_ids = Array.new
     itemtype_id = ""
     car_group_item_ids = Array.new
@@ -106,10 +104,8 @@ class Content < ActiveRecord::Base
       if item.type == "AttributeTag"
         attribute_item_ids = Array.new
       elsif item.type == "Manufacturer"
-        logger.info item.itemrelationships
         manufacturer_item_ids = item.itemrelationships.collect(&:relateditem_id)
       elsif item.type == "CarGroup"
-        logger.info item.itemrelationships.collect(&:relateditem_id)
         car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
       elsif item.type == "ItemtypeTag"
         itemtype_id = Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
@@ -117,34 +113,26 @@ class Content < ActiveRecord::Base
         item_ids << item.id
       end
     end
-    logger.info item_ids.size
-    logger.info itemtype_id
-    logger.info manufacturer_item_ids
-    logger.info car_group_item_ids
-    logger.info attribute_item_ids
-sql=    "select * from items where "
+    sql=    "select * from items where "
 
-sql += " id in (#{item_ids.join(",")})" unless item_ids.size == 0 # /*needs to add only when products are directly associated to content*/
+    sql += " id in (#{item_ids.join(",")})" unless item_ids.size == 0 # /*needs to add only when products are directly associated to content*/
 
-sql += " and itemtype_id = #{itemtype_id}" unless itemtype_id == "" #/* needs to be added only when itemtypetag is associated to the content */
+    sql += " and itemtype_id = #{itemtype_id}" unless itemtype_id == "" #/* needs to be added only when itemtypetag is associated to the content */
 
-sql += " or id in (select item_id from itemrelationships where relateditem_id in (#{manufacturer_item_ids.join(",")},#{car_group_item_ids.join(",")})) "  unless (manufacturer_item_ids.size == 0) && (car_group_item_ids.size == 0) #/* needs to be added only when manufacturer or car group is associated to it */
+    sql += " or id in (select item_id from itemrelationships where relateditem_id in (#{manufacturer_item_ids.join(",")},#{car_group_item_ids.join(",")})) "  unless (manufacturer_item_ids.size == 0) && (car_group_item_ids.size == 0) #/* needs to be added only when manufacturer or car group is associated to it */
 
- sql += " and item_id in (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr
+    sql += " and item_id in (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr
  on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id = #{attribute_item_ids.join(",")})"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
-items=Item.find_by_sql(sql)
-logger.info items
-self.save_content_relations_cache(items.collect(&:id))
-
-
+    items=Item.find_by_sql(sql)
+    self.save_content_relations_cache(items.collect(&:id))
   end
 
   def save_content_relations_cache(related_items)
     new_records = Array.new
-      related_items.each do |item|
+    related_items.each do |item|
       new_records << {:item_id => item, :content_id => self.id}
-      end
-ItemContentsRelationsCache.create(new_records)
+    end
+    ItemContentsRelationsCache.create(new_records)
   end
 
   def get_itemtype(item)

@@ -57,6 +57,8 @@ resources :accounts do
   resources :contents do
   collection do
     get :filter
+    get :feed
+    get :feeds
   end
   resources :comments
     collection do

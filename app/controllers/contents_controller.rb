@@ -9,8 +9,8 @@ class ContentsController < ApplicationController
     @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
     
     respond_to do |format|
-      format.html { render "feed", :locals => {:params => params} }
-      format.js { render "feed", :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
+      format.html { render "feed", :layout =>false, :locals => {:params => params} }
+      format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
     end
   end
 
@@ -24,7 +24,24 @@ class ContentsController < ApplicationController
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     @contents = Content.filter(filter_params)
-   
+  end
+
+  def feeds
+
+    #@contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
+    if params[:sub_type] =="All"
+      sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
+    else
+      sub_type = params[:sub_type].split(",")
+    end
+    filter_params = {"sub_type" => sub_type}
+    filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
+    filter_params["items"] = params[:items].split(",") if params[:items].present?
+    filter_params["page"] = params[:page] if params[:page].present?
+    @contents = Content.filter(filter_params)
+    respond_to do |format|
+      format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
+    end
   end
 
   def show
