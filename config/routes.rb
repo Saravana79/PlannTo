@@ -51,7 +51,7 @@ resources :accounts do
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
-#   match '/:search_type', :to => "products#index"
+   match '/:search_type', :to => "products#index"
   resources :cars do
         resources :shares
   end
