@@ -130,6 +130,7 @@
       <% @contents = Content.filter(params)  %>
       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
     </div>
+    <a id="content_next" style="display:none"></a>
   </div>
   <!-- This will go into main layout -->
 </div>
@@ -153,6 +154,29 @@
             return false
           }
       });
+
+      
+       var running =false;
+    $(window).scroll(function () {
+
+      lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+
+      running = true;
+        $.ajax(
+          {
+            url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>",
+            type: "get",
+            dataType: "script",
+            success    : function(data)
+                {
+                  running = false;
+                }
+          });
+          return false
+        //lnk.click();
+      }
+    });
     });
 </script>
 
