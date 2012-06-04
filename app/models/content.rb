@@ -87,7 +87,7 @@ class Content < ActiveRecord::Base
         rel.save!
       end
       logger.info "-----------------------------------------"
-      Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
+     # Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
      # self.update_item_contents_relations_cache(items.split(","))
       
     end
@@ -152,7 +152,7 @@ end
       related_items.each do |item|
       new_records << {:item_id => item, :content_id => self.id}
       end
-ItemContentsRelationsCache.create(new_records)
+    ItemContentsRelationsCache.create(new_records)
   end
 
   def get_itemtype(item)
