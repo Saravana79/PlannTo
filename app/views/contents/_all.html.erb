@@ -54,6 +54,7 @@
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
   </div>
   <a id="content_next" style="display:none"></a>
+  <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
 </div>
 <script type="text/javascript" charset="utf-8">
   $(function(){
