@@ -14,6 +14,8 @@ gem 'fb_graph'
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
+#gem 'aws-s3'
+gem 'aws-sdk'
 #gem 'execjs'
 gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
