@@ -141,6 +141,7 @@
        $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
         $(this).closest('li').addClass("Currentfilter");
       if ($(this).text() != "Labeltext"){
+        $("#filter_page_no").val('2');
         var id = $(this).attr('id');
         switch(id){
           case 'All' :  var sub_type = "All";break;
