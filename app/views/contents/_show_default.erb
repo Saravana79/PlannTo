@@ -45,10 +45,10 @@
               </div>
               <div style="float:right;">
                 <% if !@content.field3.empty? %>
-                    <a href="<%= @content.field3%>"> <img src="/images/andriodshop.png" style="height:30px;width:100px"/> </a>
+                    <a href="<%= @content.field3%>" target="_blank"> <img src="/images/andriodshop.png" style="height:30px;width:100px"/> </a>
                 <%end%>
                 <% if !@content.field4.empty? %>
-                <a href="<%= @content.field4%>"> <img src="/images/itunesshop.png" style="height:30px;width:100px"/> </a>
+                <a href="<%= @content.field4%>" target="_blank"> <img src="/images/itunesshop.png" style="height:30px;width:100px"/> </a>
                 <%end%>
               </div>
           </div>
@@ -72,7 +72,7 @@
           </div>
           <br/>
         <%end%>
-          <div style="padding:3px 0px 3px 0px;">
+          <div style="padding:3px 0px 3px 0px;clear:both;">
              <%if @content.thumbnail?%>
              <div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
              <%end%>
