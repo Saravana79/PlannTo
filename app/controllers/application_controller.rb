@@ -48,6 +48,10 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
+  def stored_location_for(resource_or_scope)
+    session["previous_html_url"] || root_path
+  end
+
   def store_session_url
     if current_user.blank?
       session["user_return_to"] = request.env["REQUEST_URI"]
@@ -62,7 +66,7 @@ class ApplicationController < ActionController::Base
   def after_ajax_call_path_for
     if session["js_call"] && !current_user.blank?
       session["js_call"] = false
-      redirect_to session["previous_html_url"] 
+      redirect_to session["previous_html_url"]
     end
   end
 
