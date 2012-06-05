@@ -7,7 +7,8 @@ class AccountsController < ApplicationController
 
   def update
     avatar_attributes = params[:user][:avatar]
-    current_user.update_attributes(params[:user].delete_if{|key, value| key ==:avatar})
+    user_attribute = params[:user].delete("avatar")
+    current_user.update_attributes(user_attribute)
     if current_user.errors.blank?
       $redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "avatar_url")
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "name", current_user.name)
