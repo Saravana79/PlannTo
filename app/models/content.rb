@@ -44,12 +44,12 @@ class Content < ActiveRecord::Base
 
 
   def self.filter(options)
-   
-    options ||= {:page => 1, :limit => 10}
+    options ||= {:page => 1, :limit => 10} 
     options["page"]||=1 
     options["limit"]||=PER_PAGE 
-    options["order"]||="created_at desc"
+    options["order"]||="created_at desc" 
     scope=options.inject(self) do |scope, (key, value)|
+
       return scope if value.blank?
       value= value.join(",") if is_a?(Array)
       case key.to_sym
@@ -86,13 +86,15 @@ class Content < ActiveRecord::Base
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
       end
-      #Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
-      # self.update_item_contents_relations_cache(items.split(","))      
+      logger.info "-----------------------------------------"
+      Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
+   # self.update_item_contents_relations_cache(items.split(","))
+      
     end
   end
 
   def update_item_contents_relations_cache(items)
-    item_ids = Array.new
+     item_ids = Array.new
     itemtype_id = Array.new
     car_group_item_ids = Array.new
     manufacturer_and_cargroup_item_ids = Array.new
@@ -119,38 +121,37 @@ class Content < ActiveRecord::Base
     logger.info itemtype_id
     logger.info manufacturer_and_cargroup_item_ids
     logger.info attribute_item_ids
-    sql=    "select * from items where "
+  sql=    "select * from items where "
 
-    sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
+  sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
   
-    if itemtype_id.size != 0
-      sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
-    end
-
-    sql += " id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
-
-    if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
-      sql += " or " unless item_ids.size == 0
-      sql += " id in ( "
-      sql += "  select item_id from itemrelationships where " unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
-      sql += " relateditem_id in (#{manufacturer_and_cargroup_item_ids.join(",")}) "  unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
-      sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
-      sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")})"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
-      sql += ")"
-    end
-    if itemtype_id.size != 0
-      sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
-    end
-    items=Item.find_by_sql(sql)
-    self.save_content_relations_cache(items.collect(&:id))
+  if itemtype_id.size != 0
+    sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
   end
+
+  sql += " id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+
+  if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
+    sql += " or " unless item_ids.size == 0 
+    sql += " id in ( "
+    sql += "  select item_id from itemrelationships where " unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
+    sql += " relateditem_id in (#{manufacturer_and_cargroup_item_ids.join(",")}) "  unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
+    sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
+    sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")})"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
+    sql += ")"
+  end
+  if itemtype_id.size != 0
+    sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
+  end
+  items=Item.find_by_sql(sql)
+  self.save_content_relations_cache(items.collect(&:id))
+end
 
   def save_content_relations_cache(related_items)
     new_records = Array.new
-    related_items.each do |item|
+      related_items.each do |item|
       new_records << {:item_id => item, :content_id => self.id}
-
-    end
+      end
     ItemContentsRelationsCache.create(new_records)
   end
 
