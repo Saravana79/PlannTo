@@ -1,6 +1,6 @@
 
 <% if @article.errors.any? %>
-  $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article) %>");
+  $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article).html_safe %>");
   $("#article_errors").show(300);
 <% else %>
   <%if @article_create%>

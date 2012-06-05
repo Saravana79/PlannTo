@@ -14,10 +14,8 @@ class ArticleContentsController < ApplicationController
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-    flash[:notice]= "Article uploaded"
-    respond_to do |format|
-      format.js
-    end
+   # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
+
   end
 
   def update

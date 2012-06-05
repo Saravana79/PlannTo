@@ -77,7 +77,7 @@ class Content < ActiveRecord::Base
   end
   
 	def save_with_items!(items)
-	  Content.transaction do
+	 # Content.transaction do
 	    self.save!
       items.split(",").each_with_index do |id, index|
         item = Item.find(id)
@@ -90,7 +90,7 @@ class Content < ActiveRecord::Base
       Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
    # self.update_item_contents_relations_cache(items.split(","))
       
-    end
+    #end
   end
 
   def update_item_contents_relations_cache(items)

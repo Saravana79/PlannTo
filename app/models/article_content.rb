@@ -1,5 +1,7 @@
 class ArticleContent < Content
   acts_as_citier
+
+  validates :url, :uniqueness => true, :if => Proc.new {  |c|  !c.url.blank? }
   #validates :url, :presence => true
   belongs_to :article_category
 
@@ -64,21 +66,27 @@ class ArticleContent < Content
     if val['url'].include? "youtube.com"
       @article=VideoContent.saveContent(val, user, ids, ip, score)
     else
-      @article=ArticleContent.create(val)
-      @article.user = user
-      @article.ip_address = ip
-      @article.field1 = score if score != ""
-      @article.save_with_items!(ids) 
-      @article
-    end
-    else
+      Content.transaction do
       @article=ArticleContent.create(val)
       @article.user = user
       @article.ip_address = ip
       @article.field1 = score if score != ""
       @article.save_with_items!(ids)
+      end
       @article
     end
+    else
+      Content.transaction do
+      @article=ArticleContent.create(val)
+      @article.user = user
+      @article.ip_address = ip
+      @article.field1 = score if score != ""
+      @article.save_with_items!(ids)
+      end
+      @article    
+    end
+    rescue
+      @article
   end
 
   def self.update_content(id, val, user, ids)
