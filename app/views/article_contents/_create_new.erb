@@ -111,7 +111,7 @@
 <% end %>
 <script type="text/javascript">
   function showDefaultProductTag(id, hidden_text_field_id){
-    var itemId = <%= @item.id %>
+    var itemId = <%= @item.try(:id) %>
     var defaultId = "textTaggers" + itemId
     $("ul#" +id + " li").each(function (i) {
       var id = $(this).attr('id');
@@ -206,7 +206,7 @@ $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWi
   }
 
   function showCreateProductTag(){
-    var itemId = <%= @item.id %>
+    var itemId = <%= @item.try(:id) %>
     var defaultId = "textTaggers" + itemId
     $("ul#article_create_product_list li").each(function (i) {
       var id = $(this).attr('id');
@@ -242,7 +242,7 @@ $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWi
   <% @items.each do |item| %>
         $.addTag("#contentEditView #default_product_item","div#contentEditView ul#default_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-    <%if item.id == @item.id%>
+    <%if item.id == @item.try(:id)%>
           $("ul#article_create_product_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
     <%end%>
   <%end%>

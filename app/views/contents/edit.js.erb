@@ -43,7 +43,7 @@ width:600});
     <% @items.each do |item| %>
       $.addTag("#contentEditView #article_create_product","div#contentEditView ul#article_create_product_list", settings,"<%= item.name %>", "<%= item.id %>", true);
       $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-      <%if item.id == @item.id%>
+      <%if item.id == @item.try(:id)%>
         $("#contentEditView ul li#textTaggers<%=@item.id%> a.icon_close_tagging").remove();
       <%end%>
     <%end%>

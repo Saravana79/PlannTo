@@ -10,7 +10,7 @@ class ContentRelationsCache
       #and then run content.save_content_relations_cache(items)
 
     end
-    content.save_content_relations_cache(items)
+    content.update_item_contents_relations_cache(content)
     puts "Backend job processed for content item relations cache for content id: #{content.id}"
    end
 end
