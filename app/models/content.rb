@@ -121,7 +121,7 @@ class Content < ActiveRecord::Base
     end
   if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0 || item_ids.size !=0)
 
-    sql=    "select * from items "
+    sql=    "select * from items where "
 
    # sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
     
@@ -129,7 +129,7 @@ class Content < ActiveRecord::Base
    #   sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
    # end
 
-    sql += "where  id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+    sql += "  id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
 
     if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
       sql += " or " unless item_ids.size == 0 
