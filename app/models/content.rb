@@ -88,6 +88,7 @@ class Content < ActiveRecord::Base
       end
       logger.info "-----------------------------------------"
       Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
+      self.save_content_relations_cache(items)
    # self.update_item_contents_relations_cache(items.split(","))
       
     #end
@@ -117,10 +118,6 @@ class Content < ActiveRecord::Base
         item_ids << item.id
       end
     end
-    logger.info item_ids.size
-    logger.info itemtype_id
-    logger.info manufacturer_and_cargroup_item_ids
-    logger.info attribute_item_ids
   sql=    "select * from items where "
 
   sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
@@ -178,6 +175,8 @@ end
         rel.save!
       end
     end
+    #Resque.enqueue(ContentRelationsCache, self.id, items.split(","), true)
+    self.save_content_relations_cache(items)
   end
 
   def can_update_content?(user)

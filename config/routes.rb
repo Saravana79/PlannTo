@@ -51,7 +51,7 @@ resources :accounts do
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
-   match '/:search_type', :to => "products#index"
+   
   resources :cars do
         resources :shares
   end
@@ -147,6 +147,7 @@ resources :accounts do
   devise_scope :user do
   get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
   end
+ # match '/:search_type', :to => "products#index"
   
   
   # Sample resource route with options:

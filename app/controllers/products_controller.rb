@@ -3,14 +3,14 @@ class ProductsController < ApplicationController
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
   before_filter :store_location, :only => [:show]
-
   
   layout 'product'
   
   include FollowMethods
 
   def index
-    @itemtype = Itemtype.find_by_itemtype(params[:search_type].singularize.camelize.constantize)
+    search_type = request.path.split("/").last
+    @itemtype = Itemtype.find_by_itemtype(search_type.singularize.camelize.constantize)
     @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
 
   end
