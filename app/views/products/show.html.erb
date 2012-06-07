@@ -3,18 +3,22 @@
 <!--  breadcrumbs - End -->
 <!-- buttons - Start -->
 <div class="float_rgt">
-    <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
+    <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
+
 </div>
 <!-- buttons - End -->
-<div class="leftcolumnbig" id="item_info">
+<div class="leftcolumnbig" id="item_info" style="clear:both;">
 <!-- Product Details - Start -->
   <div class="productdetails" >
+    <%if(!@item.image_url.blank?)%>
     <span class="img_product"><img src="<%=@item.image_url%>" alt="<%=@item.name%>" width="175" height="125" /></span>
+    <%end%>
     <span class="product_details">
       <h1><%= @item.name %></h1>
+    <% if @item.is_a? Product %>
       <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
-    <a>
+      <a>
       <%= render :partial => 'shared/rating',:locals => {:item => @item} %>
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>
@@ -23,8 +27,19 @@
       <span class="txt_blue"> <%= "Be the first one to review it" unless @item.rated_users_count > 0 %></span>
     </a><br />
     <a class="txt_normal"><%=display_specifications(@item)%>
-      <%= link_to("...Detailed Specification", "#tab5", :class => 'txt_blue', :id => "detailed_specification") %>
+      <%= link_to("...more", "#tab5", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
+    <% else %>
+        <%if @item.is_a? CarGroup %>
+           <a class="txt_price">Groups</a><br />   
+        <%else%>
+          <a class="txt_price"><%=@item.type%></a><br />             
+          </a>
+        <%end%>
+        <% if @item.show_models%>
+        <a class="txt_normal"> <%= link_to( @item.related_cars.count.to_s +  " Models", "#tab7", :class => 'txt_blue', :id => "models") %>
+        <%end%>
+    <% end %>
     </span>
   </div>
 <br/>
@@ -47,24 +62,11 @@
     <%= render :partial => "products/detailed_specifications" %>
 </div>
 
-<div id="tabs3" style="display: none; " class="main-content-section">
-    <%= render  "layouts/product_review" %>
-    <%= render "/layouts/product_answer" %>
-</div>
-<div id="tabs4" style="display: none; " class="main-content-section">
-  <%= render  "/layouts/product_qna" %>
-  <%= render "/layouts/product_answer" %>
-</div>
-<div id="tabs2" style="display: none; " class="main-content-section">
-  <%= render  "layouts/product_tip" %>
-  <%= render "/layouts/product_answer" %>
-</div>
 <div id="tabs6" style="display: none; " class="main-content-section">
   <%= render "products/where_to_buy" %>
 </div>
 <div id="tabs7" style="display: none; " class="main-content-section">
-    <%= render "/layouts/product_video" %>
-    <%= render "/layouts/product_answer" %>
+ <!-- Render all the models of manufacturer/cargroup -->
 </div>
 
 <!-- Q&A -  End -->
@@ -80,6 +82,7 @@
 <br/>
 
 <!--follower block start here-->
+<% if( (@item.is_a? Product) )%>
 <div class="Commandiv">
   <div class="Detailfeature">
     <span class="Headingtxt">Plan to Buy</span>
@@ -113,6 +116,7 @@
       <div class="Smalltext">who is an expert</div>
   </div>
 </div>
+<%end%>
 <!--follower block end here-->
 <% if @item.get_followers.empty? %>
 <% else %>

@@ -50,7 +50,12 @@
   </div>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;"></div>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-    <% params = {"items" => [@item.id] } %>
+    <%if @item.show_models %>
+       <% params = {"items" => @item.related_cars.collect(&:id) } %>
+    <% else %>
+       <% params = {"items" => [@item.id] } %>
+    <% end %>
+    
     <% @contents = Content.filter(params)  %>
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
   </div>

@@ -29,7 +29,7 @@ module ApplicationHelper
     case follow_type
     when 'Manufacturer', 'CarGroup'
       [["Follow This", "plan_to_follow", "Follow"]]
-    when 'Car'
+    when 'Car','Cycle','Bike','Tablet','Mobile','Camera'
       [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
     when 'Event'
       [[ "May Go", "plan_to_buy", "Buyer"], ["Am Going", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]

@@ -1,8 +1,8 @@
 class ManufacturersController < ProductsController
 
-  def show
+#  def show
 #    @item = Item.where(:id => params[:id]).includes(:item_attributes).last
-    super
-  end
+#    super
+#  end
   
 end

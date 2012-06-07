@@ -25,12 +25,17 @@ class ProductsController < ApplicationController
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
-    @tip = Tip.new
-    @contents = Tip.order('created_at desc').limit(5)
+    #@tip = Tip.new
+    #@contents = Tip.order('created_at desc').limit(5)
     @review = ReviewContent.new
     @article_content=ArticleContent.new(:itemtype_id => @item.itemtype_id)
     @questions = QuestionContent.all
-    @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+    if (@item.is_a? Product)
+      @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+    else
+      @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
+    end
+    
 
     @top_contributors = @item.get_top_contributors
     
