@@ -15,6 +15,7 @@ module ProductsHelper
     end
      
 
+
   end
   
   def display_item_type_url(item)
