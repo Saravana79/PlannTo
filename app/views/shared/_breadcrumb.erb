@@ -5,7 +5,7 @@
   <a class="grayarrow">></a>
   <a class="alink" href="<%= display_item_manufacturer_url(@item) %>"><%= display_item_manufacturer(@item) %></a>
   <%end%>
-  <% if(@item.is_a? Product)
+  <% if((@item.is_a? (Product)) && !(@item.cargroup.nil?))
   %>
   <a class="grayarrow">></a>
   <a class="alink" href="<%= display_item_group_url(@item) %>"><%= display_item_group(@item) %></a>
