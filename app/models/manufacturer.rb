@@ -3,12 +3,10 @@
 
 class Manufacturer < Item
   has_many :itemrelationships, :foreign_key => :relateditem_id
-  has_many :products,
-    :through => :itemrelationships
+  has_many :products, :through => :itemrelationships
   has_many :related_car_groups, :class_name => 'Itemrelationship', :foreign_key => :relateditem_id
-  has_many :relate_car_groups,
-    :through => :related_car_groups
-  has_many :related_cars,
+  has_many :relate_car_groups, :through => :related_car_groups
+  has_many :related_cars, 
     :through => :related_car_groups
   before_save :add_relation_type
 
@@ -17,7 +15,19 @@ class Manufacturer < Item
     string :name
    end
 
-  def car_groups(page_number = 1, is_pagination = false, no_of_car = configatron.no_of_main_item)
+  def show_specification
+    has_specificiation = false
+  end 
+
+  def show_buytheprice
+    has_buytheprice = false
+  end 
+
+  def show_models
+    has_models = true
+  end 
+
+  def items(page_number = 1, is_pagination = false, no_of_car = configatron.no_of_main_item)
     if is_pagination
       get_paginated_items(page_number)
     else
@@ -47,5 +57,7 @@ class Manufacturer < Item
     end
     sub_item.paginate(:page => page_number, :per_page => 10)
   end
+
+
 
 end

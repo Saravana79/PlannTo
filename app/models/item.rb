@@ -94,12 +94,7 @@ class Item < ActiveRecord::Base
   end
 
   def image_url
-    if type == "CarGroup"
-      configatron.root_image_url + 'car' + '/' + "#{imageurl}"
-    else
       configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
-    end
-    
   end
 
   def self.get_related_items(item, limit)
@@ -291,4 +286,20 @@ class Item < ActiveRecord::Base
   end
   contents
  end
+
+
+
+def show_specification
+  has_specificiation = true
+end 
+
+def show_buytheprice
+  has_buytheprice = true
+end 
+
+
+def show_models
+  has_models = false
+end 
+
 end

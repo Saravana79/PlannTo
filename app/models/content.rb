@@ -68,6 +68,8 @@ class Content < ActiveRecord::Base
       when :order
         attribute, order = value.split(" ")
         scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
+     when :user
+        scope.scoped(:conditions => ["#{self.table_name}.created_by = ?", value ])
       else
         scope
       end
@@ -114,35 +116,38 @@ class Content < ActiveRecord::Base
         #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
         manufacturer_and_cargroup_item_ids << item.id
       elsif item.type == "ItemtypeTag"
-        itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
+      #  itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
       else
         item_ids << item.id
       end
     end
-  sql=    "select * from items where "
+  if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0 || item_ids.size !=0)
 
- # sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
-  
- #if itemtype_id.size != 0
- #   sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
- # end
+    sql=    "select * from items where "
 
-  sql += " id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+   # sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
+    
+   #if itemtype_id.size != 0
+   #   sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
+   # end
 
-  if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
-    sql += " or " unless item_ids.size == 0 
-    sql += " id in ( "
-    sql += "  select item_id from itemrelationships where " unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
-    sql += " relateditem_id in (#{manufacturer_and_cargroup_item_ids.join(",")}) "  unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
-    sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
-    sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")})"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
-    sql += ")"
+    sql += "  id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+
+    if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
+      sql += " or " unless item_ids.size == 0 
+      sql += " id in ( "
+      sql += "  select item_id from itemrelationships where " unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
+      sql += " relateditem_id in (#{manufacturer_and_cargroup_item_ids.join(",")}) "  unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
+      sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
+      sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")}))"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
+      sql += ")"
+    end
+    #if itemtype_id.size != 0
+    #  sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
+    #end
+    relateditems=Item.find_by_sql(sql)
+    self.save_content_relations_cache(relateditems.collect(&:id))
   end
-  #if itemtype_id.size != 0
-  #  sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
-  #end
-  relateditems=Item.find_by_sql(sql)
-  self.save_content_relations_cache(relateditems.collect(&:id))
 end
 
   def save_content_relations_cache(related_items)

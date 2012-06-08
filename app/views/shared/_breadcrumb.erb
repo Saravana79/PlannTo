@@ -1,11 +1,11 @@
 <div id="breadcrump" class="breadcrump">
-  <a class="alink" href="<%= display_item_type_url(@item) %>"><%= display_item_type(@item) %></a>
-  <% if(@item.type != 'Manufacturer')
+  <%= raw display_item_type(@item) %>
+  <% if( (@item.is_a? Product) || (@item.is_a? CarGroup))
   %>
   <a class="grayarrow">></a>
   <a class="alink" href="<%= display_item_manufacturer_url(@item) %>"><%= display_item_manufacturer(@item) %></a>
   <%end%>
-  <% if(@item.type == 'Car')
+  <% if((@item.is_a? (Product)) && !(@item.cargroup.nil?))
   %>
   <a class="grayarrow">></a>
   <a class="alink" href="<%= display_item_group_url(@item) %>"><%= display_item_group(@item) %></a>

@@ -219,7 +219,18 @@ class SearchController < ApplicationController
      # if item.type == "CarGroup"
      #   type = "Car"
      # else
+     if(item.is_a? (Product))
         type = item.type.humanize
+     elsif(item.is_a? (CarGroup))
+        type = "Groups"
+     elsif(item.is_a? (AttributeTag))
+        type = "Groups"
+     elsif(item.is_a? (ItemtypeTag))
+        type = "Topics"
+     else
+        type = item.type.humanize
+    end 
+    
      # end
       url = "/#{item.type.tableize}/#{item.id}"
       # image_url = item.image_url
