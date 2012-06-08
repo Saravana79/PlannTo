@@ -68,6 +68,8 @@ class Content < ActiveRecord::Base
       when :order
         attribute, order = value.split(" ")
         scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
+     when :user
+        scope.scoped(:conditions => ["#{self.table_name}.created_by = ?", value ])
       else
         scope
       end

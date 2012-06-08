@@ -29,7 +29,7 @@ class ProductsController < ApplicationController
     #@contents = Tip.order('created_at desc').limit(5)
     @review = ReviewContent.new
     @article_content=ArticleContent.new(:itemtype_id => @item.itemtype_id)
-    @questions = QuestionContent.all
+    #@questions = QuestionContent.all
     if (@item.is_a? Product)
       @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else

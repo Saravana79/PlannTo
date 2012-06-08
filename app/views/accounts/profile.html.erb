@@ -82,24 +82,26 @@
   <!-- Right - start -->
   <div class="rightcolumnbig"  id="profileInfo">
 
-    <div style="border:solid 0px red; width:732px; float:left; margin-left:33px; margin-top:30px; ">
-      <div style="border:solid 0px green; float:left; width:385px; height:67px; float:left;"></div>
+    <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
+      <div style="border:solid 0px green; float:left;  height:67px;"></div>
       <div class="points">
-        <span class="indu_span"><a class="values">2</a><a class="text">Points</a></span>
-        <span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>
+        <span class="indu_span"><a class="values"><%= current_user.total_points  %></a><a class="text">Points</a></span>
+        <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
         <span class="indu_span"><a class="values">3</a><a class="text">Following</a></span>
         <span class="indu_span"><a class="values">12</a><a class="text">Reviews </a></span>
         <span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>
 
       </div>
 
-      <div id="usual2" class="usual">
-        <ul class="tabs tab_border">
-          <li id="tab_active"><%= link_to "Cars", profile_path(:follow => 'Cars') %></li>
-          <li><%= link_to "Mobile", profile_path(:follow => 'Mobile') %></li>
-          <li><%= link_to "Camera", profile_path(:follow => 'Camera') %></li>
-          <li><%= link_to "Travel", profile_path(:follow => 'Travel') %></li>
-          <li><%= link_to "Movies", profile_path(:follow => 'Movies') %></li>
+      <div style="clear:both;">
+        <ul id="Newtabs">
+          <li class="tab_active"><a href="<%= profile_path(:follow => 'Cars') %>"><span>Cars</span></a></li>
+          <li class=""><a href="<%= profile_path(:follow => 'Mobile') %>"><span>Mobile</span></a></li>
+          <li class=""><a href="<%= profile_path(:follow => 'Tablet') %>"><span>Tablet</span></a></li>
+          <li class=""><a href="<%= profile_path(:follow => 'Camera') %>"><span>Camera</span></a></li>
+          <li class=""><a href="<%= profile_path(:follow => 'Bike') %>"><span>Bike</span></a></li>
+          <li class=""><a href="<%= profile_path(:follow => 'Cycle') %>"><span>Cycle</span></a></li>
+          
         </ul>
       </div>
       <div style="display:block;">
@@ -120,6 +122,94 @@
       <br/>
     </div>
 
+
+
+      <div id="content_all">
+        <!--filter by block start here-->
+        <div id="Filterby">
+          <div class="Filternav">
+                <div style="float:left;width:60px;">
+                  <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>     
+                </div>
+                <div style="float:left;width:630px;">
+                  <ul>
+                  <!--  <li class="Labeltext" style="padding-right:2px;">Filter by:</li>-->
+                    <li class="Currentfilter" id="All"><a href="#">All</a></li>
+                    <%@article_categories.each do |category|%>
+                      
+                    <%end%>
+                  </ul>
+                </div>
+          </div>
+        </div>
+        <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+        <div >
+          <span class="sortby">
+            <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
+            <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
+            <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
+            <a class="txt_blue" href="#">Most Answers</a>
+          </span>
+        </div>
+        <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+          <%
+           
+          %>
+          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id }%>
+          <% @contents = Content.filter(params)  %>
+          <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+        </div>
+        <a id="content_next" style="display:none"></a>
+         <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
+      </div>
+      <!-- This will go into main layout -->
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("div#Filterby div.Filternav ul li").click(function (e) {
+           $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+            $(this).closest('li').addClass("Currentfilter");
+          if ($(this).text() != "Labeltext"){
+            $("#filter_page_no").val('2');
+            var id = $(this).attr('id');
+            switch(id){
+              case 'All' :  var sub_type = "All";break;
+               default:  var sub_type = id;
+                }
+                $.ajax(
+                {
+                  url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>",
+                  type: "get",
+                  dataType: "script"
+                });
+                return false
+              }
+          });
+
+          
+           var running =false;
+        $(window).scroll(function () {
+
+          lnk = $('#content_next');
+          if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+
+          running = true;
+            $.ajax(
+              {
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>",
+                type: "get",
+                dataType: "script",
+                success    : function(data)
+                    {
+                      running = false;
+                    }
+              });
+              return false
+            //lnk.click();
+          }
+        });
+        });
+    </script>
 
   </div>
   <!-- Right  - End -->
