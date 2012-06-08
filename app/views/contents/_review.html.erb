@@ -5,7 +5,7 @@
     </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-    <div><a class="txt_brown"><%= content.user.name  %> reviewed <a class="txt_brown" href="<%=link_url(content.items.first)%>"><%= content.items.first.name %> </a> - <%= time_ago_format(content) %> ago. </a></div>
+    <div><a class="txt_brown"><%= content.user.name  %> reviewed <a class="txt_brown"href="<%= "/" + content.items.first.type.tableize + "/" + content.items.first.id.to_s %>"><%= content.items.first.name %> </a> - <%= time_ago_format(content) %> ago. </a></div>
     <div class="subContentGap"><a class="titlePro">Pro:</a><a class="txt_black_description"><%= content.pros %></a></div>
     <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%= content.cons %></a></div>
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
