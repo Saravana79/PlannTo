@@ -7,6 +7,7 @@
   <%@new_article_type ="edit_article_type_#{@default_item_id}"%>
   <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
 
+
 <%else%>
   <%@title_id = "txtArticleTitle"%>
   <%@dwnld_url = "dwnld_url"%>
@@ -37,7 +38,8 @@ $("#<%=@new_article_type%>").val("ArticleContent");
   setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
 <%end%>
 
-<% if @images.present? and @images.count > 0 %>  
+<% if @images.present? and @images.count > 0 %>
+ 
   images = new Array();
   sizes = new Array();
   <% @images.each_with_index do |image,index| %>

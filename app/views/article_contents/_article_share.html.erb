@@ -322,16 +322,17 @@
   sizes = new Array();
     var img = new Image();
     img.onload = function() {
-      if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1])
+      if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1]){
         add_image_to_list(url,[this.width,this.height]);
+      }
     }
     img.src = url;
   }
   function add_image_to_list(url,size){
-     
+      
     images.push(url);
     sizes.push(size[0]+"*"+size[1]);
-    if(first){
+    if(images.length == 1){
       first=false;
       $("#<%=@img_thumb%>").attr("src",url);
       $("#<%=@new_article_thumbnail%>").val(url);
@@ -340,6 +341,7 @@
       $('#<%=@current_image_size%>').html(size[0]+"*"+size[1]);
       $('#<%=@current_image_id%>').html(1);
       images_index=0;
+      
     }
 
     $('#<%=@total_images%>').html(images.length);
