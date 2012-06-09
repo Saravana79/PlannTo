@@ -101,6 +101,7 @@ resources :accounts do
   resources :bike_groups
   resources :manufacturers
   resources :car_groups
+  resources :attribute_tags
   resource :facebook, :except => :create do
     get :callback, :to => :create
     get :friends

@@ -1,0 +1,4 @@
+class AttributeTagsController < ProductsController
+
+  
+end
