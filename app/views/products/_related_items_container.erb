@@ -1,18 +1,7 @@
-<div id="maincontainer" class="maincontainerCss">
-  <!--<div class="leftcolumnsmall">
-    <ul class="search_criteria">
-      <div class="hdr_search">Search Criteria:</div>    
-    </ul>
-  </div>-->
-  <div class="leftcolumnbig">
-    <div class="push"></div>
-    <div id="content">
-      <%= render :partial => "/products/related_items" %>
+<div id="content">
+      <%= render :partial => "/related_items/index" %>
     </div>
-    <div class="push"></div>
-  </div>
-</div>
-<script type="text/javascript">
+  <script type="text/javascript">
   $(document).ready(function(){
     $('#relatedItemsPaginate div.pagination a').live('click', function(){
       var page = $(this).text()
@@ -23,7 +12,7 @@
       else if (page == "Next →"){
         page = parseInt(current) + 1
       }
-        
+
       var opts = {
         lines: 12, // The number of lines to draw
         length: 5, // The length of each line
@@ -37,7 +26,7 @@
       };
       var target = document.getElementById('spinner');
       var spinner = new Spinner(opts).spin(target);
-      $.get("",{page: page},null,"script").success(function() {
+      $.get("/products/related_items",{item_id: <%=@item.id%>, page: page},null,"script").success(function() {
         spinner.stop();
       })
       return false;

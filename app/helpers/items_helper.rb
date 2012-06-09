@@ -190,4 +190,23 @@ module ItemsHelper
     item.price.blank? ? "" :  "Rs #{item.price}"
   end
 
+  def display_product_page_tabs(item)
+    html_list = ""
+    html_list = case item.type
+    when "Manufacturer"
+      then '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
+    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
+    <li><a href="#tabs7" ><span>Related Items</span></a></li>'
+    when "CarGroup"
+      then '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
+    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
+    <li><a href="#tabs7" ><span>Related Items</span></a></li>'
+    else
+      '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
+    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
+    <li><a href="#tabs6" ><span>Where to Buy</span></a></li>'
+    end
+    return html_list.html_safe
+  end
+
 end

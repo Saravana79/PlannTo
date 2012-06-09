@@ -103,6 +103,12 @@ class Item < ActiveRecord::Base
     return self.where(:id => related_item_ids).first(limit)
   end
 
+  def self.get_related_item_list(item, limit=10, page=1)
+   # return item.relateditems.paginate(:page => page, :per_page => limit)
+     related_item_ids = Itemrelationship.where(:relateditem_id => item).collect(&:item_id)
+    Item.where(:id => related_item_ids).paginate(:page => page, :per_page => limit)
+  end
+
   def self.get_cached(id)
     begin
       Rails.cache.fetch('item:'+ id.to_s) do
@@ -300,6 +306,12 @@ end
 
 def show_models
   has_models = false
-end 
+end
+
+def can_display_related_item?
+ return true if self.type == "CarGroup"
+ return true if self.type == "Manufacturer"
+ return false
+end
 
 end

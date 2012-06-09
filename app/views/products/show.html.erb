@@ -48,9 +48,7 @@
 <br/>
 <div>
   <ul id="Newtabs">
-    <li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
-    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
-    <li><a href="#tabs6" ><span>Where to Buy</span></a></li>
+    <%= display_product_page_tabs(@item) %>
   </ul>
 </div>
 <br/>
@@ -66,7 +64,10 @@
   <%= render "products/where_to_buy" %>
 </div>
 <div id="tabs7" style="display: none; " class="main-content-section">
- <!-- Render all the models of manufacturer/cargroup -->
+ <%if @item.can_display_related_item?%>
+  <%= render :partial => "products/related_items_container" %>
+  
+  <%end%>
 </div>
 
 <!-- Q&A -  End -->

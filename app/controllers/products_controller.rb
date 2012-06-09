@@ -34,11 +34,15 @@ class ProductsController < ApplicationController
       @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
       @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
-    end
-    
+    end    
 
     @top_contributors = @item.get_top_contributors
-    
+    @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
+   
+  end
+
+  def related_items
+    @related_items = Item.get_related_item_list(params[:item_id], 10, params[:page])
   end
 
   def related_products
