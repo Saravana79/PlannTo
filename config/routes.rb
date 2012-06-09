@@ -110,7 +110,9 @@ resources :accounts do
     post :wall_content
   end
   resources :products do
-   
+    collection do
+      get 'related_items'
+    end
     member do
       get 'related_products'
       get 'specification'
