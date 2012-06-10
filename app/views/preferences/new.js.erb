@@ -1,0 +1,5 @@
+$("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/new_preference')) %>');
+$("#giveAdviceDialog").dialog({
+title: 'New Buying Plan',
+height: 600,
+width:800});

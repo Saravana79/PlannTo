@@ -14,7 +14,7 @@
       <div class="Blueblockhome smallhomeblock">
         <span class="Buytag"></span>
 
-        <div class="Textdescriptions">
+        <div class="Textdescriptions" id="plantobuySection">
           <h2>PlannTo Buy</h2>
           <p>
             Are you planning to buy a <%=@itemtype.itemtype.downcase%>? Not sure about what are the options available or confused about which one to buy?
@@ -25,6 +25,17 @@
 
 
       </div>
+      <div id="giveAdviceDialog"></div>
+      <script type="text/javascript">
+  $(document).ready(function(){
+    $('#plantobuySection').live('click', function(){
+
+            $.get('/preferences/new',{search_type: "<%=@itemtype.itemtype%>"},null,"script");
+            return false;
+
+    });
+     });
+</script>
       <!--Planning to buy-->
 
       <!--Owners-->

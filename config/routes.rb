@@ -42,6 +42,7 @@ resources :accounts do
       get :give_advice
       get :get_advice
       post :add_preference
+      post :create_preference
       get :edit_preference
       post :save_advice
       get :update_preference

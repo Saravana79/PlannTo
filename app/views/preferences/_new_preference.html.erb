@@ -1,0 +1,557 @@
+<div class="rightcolumnbig">
+  <div class="searchPack">
+    <div class="hdr_Category">Search Preferences:</div>
+    <ul class="search_category" id="editBuyingPreferences">
+    </ul>
+    <br/>
+    <%= form_for(:preference, :url =>{:action=>"preferences",:controller=>"update_preference"}, :html => { :method => :post, :id => "updatePreferencesForm"}) do |f| %>
+      <%=hidden_field_tag :id, @buying_plan.id%>
+      <%= hidden_field_tag :page %>
+      <%= hidden_field_tag :search_type, @search_type %>
+      <%= hidden_field_tag :sort_by, @sort_by %>
+      <%=hidden_field_tag :manufacturer%>
+      <%@search_form_lookups.each do |form_list|%>
+        <%=hidden_field_tag form_list[:field_name].to_sym%>
+      <%end%>
+    <%end%>
+    <div id="btnDiv" style="height:100px;display:block;">
+      <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Create Preference</a>
+      <div id="preferenceSpinner"></div>
+    </div>
+  </div>
+</div>
+<div style=" border: 0 solid;float: left;height: auto;width: 500px;">
+  <ul class="search_criteria">
+    <div class="hdr_search">Search Criteria:</div>
+    <%@search_info_lookups.each_with_index do |lookup, index|%>
+      <%if index == 0%>
+        <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
+
+      <%end%>
+      <li style="float:<%if index%2==0%> right<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+    <%end%>
+  </ul>
+</div>
+<%= render :partial => "shared/search_popup" %>
+<div class="push"></div>
+
+
+<div id="getAdviceDialog" title="I am looking for an advice" style="display:none">
+</div>
+
+<div class="push"></div>
+<script type="text/javascript">
+  $('#updatePreference').click(function() {
+    updatePreferences('preferenceSpinner');
+  })
+
+  function updatePreferences(fieldName){
+    var opts = {
+      lines: 12, // The number of lines to draw
+      length: 5, // The length of each line
+      width: 4, // The line thickness
+      radius: 5, // The radius of the inner circle
+      color: '#2EFE9A', // #rgb or #rrggbb
+      speed: 1, // Rounds per second
+      trail: 50, // Afterglow percentage
+      shadow: true, // Whether to render a shadow
+      hwaccel: false // Whether to use hardware acceleration
+    };
+    var target = document.getElementById(fieldName);
+    var spinner = new Spinner(opts).spin(target);
+    $.post('/preferences/create_preference',$("#updatePreferencesForm").serialize(),null,"script").success(function() {
+      spinner.stop();
+      $("#giveAdviceDialog").dialog("destroy");
+      //window.location.href = '<%#="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'
+    })
+
+  }
+ 
+
+  function resetUnwantedFormFields(){
+<%@search_info_lookups.each_with_index do |value, index|%>
+      var searchListId = "attribute_menu_" + <%=index%> + "_tag"
+      if ($(".search_category").find("#" + searchListId).length == 0){
+        var formId = <%= value[:id] %>
+        var valueType = "<%= value[:param_1][:vt] %>"
+        if (valueType == "Between"){
+          $("#min_" + formId).val('')
+          $("#max_" + formId).val('')
+        }
+        else{
+          $("#" + formId).val('')
+        }
+      }
+<%end%>
+  }
+
+  //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
+<%@preferences_list.each do |preference|%>
+    var lineHeight = "";
+    var searchCriteria = "";
+    var index = "<%=@search_info_lookups.index{|x|x[:id]== preference[:attribute]}%>"
+    var searchName = "<%=preference[:search_name]%>"
+    var tagId = "attribute_menu_" + index + "_tag"
+  <%if preference[:value_type] == "Between"%>
+      var minFieldId = "<%=preference[:min_attribute]%>"
+      var maxFieldId = "<%=preference[:max_attribute]%>"
+      var minValue   = "<%=preference[:min_value]%>"
+      var maxValue   = "<%=preference[:max_value]%>"
+      $("#" + minFieldId).val(minValue)
+      $("#" + maxFieldId).val(maxValue)
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deletePreferenceTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+
+  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      $("#" + fieldId).val(value)
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var value = searchCriteria
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deletePreferenceTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+      <%if preference[:value_type] == "manufacturer"%>      
+        tagId = "manufacturerAtt_tag"
+     <%end%>
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      var selectedList = value.split(',')
+      var searchCriteria = ""
+      var anchorId
+      var spanId = 'removablePreferenceListofValues' + fieldId
+      var spanHTML = ""
+      $.each(selectedList, function(index, value) {
+        anchorId = "removeThis_" + index + "_" + fieldId
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+      })
+      searchCriteria = searchCriteria + spanHTML
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deletePreferenceTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      $("#" + fieldId).val(value)
+  <%else%>
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      $("#" + fieldId).val(value)
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
+  <%end%>
+    $(list).appendTo('ul#editBuyingPreferences');
+<%end%>
+<%#end%>
+
+
+  $('#deletePreferenceTag').live('click', function(){
+    var tagId = $(this).closest('li').attr('id');
+    var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+    $("#" + attributeId).show();
+    if (attributeId == "manufacturerAtt"){
+      $("#manufacturer").val('');
+    }
+    else{
+      var attributeIndex = attributeId.replace('attribute_menu_',''); //substring(0, tagId.indexOf("attribute_menu_"));
+<%@search_info_lookups.each_with_index do |lookup, index|%>
+        if (<%=index%> == attributeIndex){
+          var valueType = "<%=lookup[:param_1][:vt]%>"
+          var attributeId = "<%=lookup[:id]%>"
+          if (valueType == "Between"){
+            $("#min_" + attributeId).val('');
+            $("#max_" + attributeId).val('');
+          }
+          else{
+            $("#" + attributeId).val('');
+          }
+        }
+<%end%>
+    }
+    $(this).closest('li').remove();
+    return false;
+  })
+</script>
+<script type="text/javascript">
+  function resetFormData(){
+    $("#page").val(1);
+    $("#manufacturer").val('')
+<%@search_form_lookups.each do |form_list|%>
+      $("#" + '<%=form_list[:field_name]%>').val('')
+<%end%>
+  }
+
+  function removeMultipleAttributeInstance(fieldId, tagId){
+<%@search_info_lookups.each_with_index do |value, index|%>
+      var searchListId = "attribute_menu_" + <%=index%> + "_tag"
+      var formId = <%= value[:id] %>
+      if ((formId == fieldId) && (searchListId != tagId)){
+        if ($(".search_category").find("#" + searchListId).length != 0){
+          $("#" + searchListId).remove();
+          var attrField = searchListId.replace("_tag", "")
+          $("#" + attrField).show();
+        }
+      }
+<%end%>
+  }
+  function loadManufacturers(){
+    var manufacturerList = [];
+<%if @items.facet(:manufacturer).rows.count > 0%>
+  <% for row in @items.facet(:manufacturer).rows%>
+        manufacturerList.push( {
+          label: "<%="#{row.value} (#{row.count})"%>",
+          value: "<%="#{row.value}"%>"
+
+        });
+  <%end
+end%>
+    return manufacturerList;
+  }
+
+  function loadTypes(){
+    var typeList = [];
+<%if @items.facet(:features_string, 'Type'.to_sym)%>
+  <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
+    <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
+          typeList.push( {
+            label: "<%="#{row.value} (#{row.count})"%>",
+            value: "<%="#{row.value}"%>"
+          });
+    <%end
+  end
+end%>
+    return typeList;
+  }
+
+  function openPreferenceInfoBox(displayInfo, attr_name, elem){
+    var searchCriteriaFieldId = $(elem).attr('id');
+    resetUnwantedFormFields();
+    $( "#searchCriteriaLabel" ).html(" ")
+    $( "#criteriaHeading" ).html(" ")
+    $("#which_attribute").val($(elem).attr('id'));
+    $("#which_form_field").val(attr_name);
+    $("#which_type").val(displayInfo.vth);
+    $("#which_unit").val(displayInfo.ut);
+    $(".ui-autocomplete").hide();
+    $("#criteriaPopup #autocompleteField").hide();
+    $(".jslider").hide()
+    if (displayInfo.vt == "Between"){
+      var min_v;
+      var max_v;
+      min_v = $( "#min_" + attr_name ).val() == "" ? displayInfo.min_v : $( "#min_" + attr_name ).val()
+      max_v = $( "#max_" + attr_name ).val() == "" ? displayInfo.max_v : $( "#max_" + attr_name ).val()
+      $("#which_type").val('Between');
+      var position = $("#" + searchCriteriaFieldId).position();
+      $("#criteriaPopup").hide();
+      $("#criteriaPopup").css({
+        "position": "absolute",
+        "top": (position.top -15)+ "px",
+        "left":(position.left+210) + "px"
+      }).show();
+      $( "#criteriaHeading" ).html(displayInfo.adn)
+      var  rangeVal = displayInfo.range.split(",")
+      var heteroVal1 = "25/" + rangeVal[1]
+      var heteroVal2 = "50/" + rangeVal[2]
+      var heteroVal3 = "75/" + rangeVal[3]
+      $( "#Slider" + attr_name).val( "" +displayInfo.min_v + ";" + displayInfo.max_v + "");
+      if ($('#Slider' + attr_name).next(".jslider").length == 0){
+        jQuery("#Slider" + attr_name).slider({
+          from: parseFloat(displayInfo.min_v),
+          to: parseFloat(displayInfo.max_v),
+          step: displayInfo.step,
+          round: 0,
+          dimension: "&nbsp;" + displayInfo.ut,
+          heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
+          scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
+          skin: "plastic",
+          calculate: function(value){
+            return value
+          },
+          onstatechange: function(value) {
+            var  sliderVal = value.split(";")
+            $("#form_field_val").val(value);
+            var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
+            $("#searchCriteriaLabel").html(searchCriteria)
+          }
+        });
+      }
+      else{
+        $('#Slider' + attr_name).next(".jslider").show()
+        $('#Slider' + attr_name).slider( "value", parseFloat(displayInfo.min_v), parseFloat(displayInfo.max_v) )
+        var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
+        $("#searchCriteriaLabel").html(searchCriteria)
+      }
+      return false;
+    }
+    else if ((displayInfo.vt == "GreaterThan") || (displayInfo.vt == "LessThen")){
+      var actual_value;
+      if (displayInfo.vt == "GreaterThan"){
+        actual_value = $( "#" + attr_name ).val() == "" ? parseFloat(displayInfo.av) : parseFloat($( "#" + attr_name ).val())
+      }
+      else{
+        actual_value = $( "#" + attr_name ).val() == "" ? parseFloat(displayInfo.max_v) : parseFloat($( "#" + attr_name ).val())
+      }
+      var position = $("#" + searchCriteriaFieldId).position();
+      $("#criteriaPopup").css({
+        "position": "absolute",
+        "top": (position.top -15)+ "px",
+        "left":(position.left+210) + "px"
+      }).show();
+      $( "#criteriaHeading" ).html(displayInfo.adn)
+      var  rangeVal = displayInfo.range.split(",")
+      var heteroVal1 = "25/" + rangeVal[1]
+      var heteroVal2 = "50/" + rangeVal[2]
+      var heteroVal3 = "75/" + rangeVal[3]
+
+      $( "#Slider" +attr_name ).val( actual_value );
+      if ($('#Slider' + attr_name).next(".jslider").length == 0){
+        jQuery("#Slider" + attr_name).slider({
+          from: parseFloat(displayInfo.min_v),
+          to: parseFloat(displayInfo.max_v),
+          step: displayInfo.step,
+          round: 1,
+          dimension: "&nbsp;" + displayInfo.ut,
+          heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
+          scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
+          skin: "plastic",
+          calculate: function(value){
+            return parseFloat(value)
+          },
+          onstatechange: function(value) {
+            var  sliderVal = value
+            $( "#form_field_val").val( sliderVal );
+            var searchCriteria = $("#which_type").val() + " "  + sliderVal + " " + $("#which_unit").val()
+            $("#searchCriteriaLabel").html(searchCriteria)
+          }
+        });
+      }
+      else{
+        $('#Slider' + attr_name).next(".jslider").show()
+        var searchCriteria = $("#which_type").val() + " "  + actual_value + " " + $("#which_unit").val();
+        $('#Slider' + attr_name).slider( "value", actual_value )
+        $("#searchCriteriaLabel").html(searchCriteria)
+        $( "#form_field_val" ).val( actual_value );
+      }
+      return false;
+    }
+    else if (displayInfo.vt == "Click"){
+      var booleanObject = jQuery.parseJSON(attr_name);
+      $("#which_form_field").val(booleanObject.field_id);
+      var tagId = $("#which_attribute").val() + "_tag"
+      //if this attribute already has a different tag then lets remove it.
+      removeMultipleAttributeInstance(booleanObject.field_id, tagId);
+
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
+      $(list).appendTo('.search_category');
+      $("#" + $("#which_attribute").val()).hide();
+      $( "#" + booleanObject.field_id ).val( booleanObject.value ); 
+      return false
+    }
+    else if (displayInfo.vt == "ListOfValues"){
+      var position = $("#" + searchCriteriaFieldId).position();
+      $("#criteriaPopup").css({
+        "position": "absolute",
+        "top": (position.top -15)+ "px",
+        "left":(position.left+210) + "px"
+      }).show();
+      $( "#criteriaHeading" ).html(displayInfo.adn)
+      $("#searchCriteriaLabel").text('');
+      $("#" + attr_name).val('');
+      if ($("#criteriaPopup #autocompleteField").size() > 0){
+        var typeList =loadTypes();
+        $( "#criteriaPopup #autocompleteField" ).autocomplete({
+          minLength: 0,
+          minChars: 0,
+          max:10,
+          source: typeList,
+          focus:function(e,ui) {
+            return false
+          },
+          select: function( event, ui ) {
+            //store_info_div("searchCriteriaLabel", ui.item)
+            store_ids(attr_name, ui.item)
+            $("#criteriaPopup #autocompleteField").val('');
+            setUpLOV(attr_name);
+            return false;
+          }
+        })
+        $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
+          var self = this;
+          $.each( items, function( index, item ) {
+            if (index < 10)
+            {
+              self._renderItem( ul, item );
+            }
+          });
+        } 
+        $( "#criteriaPopup #autocompleteField" ).show();
+        $("#autocompleteField").select();
+        $("#autocompleteField").autocomplete('search','')
+
+      }
+    }
+    return false
+    //  });
+  }
+
+
+  function openPreferenceManufacturerBox(attr_name,elem){
+    $(".jslider").hide()
+    $("#which_attribute").val($(elem).attr('id'));
+    $("#which_form_field").val("manufacturer");
+    $("#which_type").val("manufacturer");
+    $("#" + $("#which_form_field").val()).val('');
+    $(".ui-autocomplete").hide();
+    $("#searchCriteriaLabel").text('');
+    var position = $("#" + $(elem).attr('id')).position();
+    $("#criteriaPopup").css({
+      "position": "absolute",
+      "top": (position.top -15)+ "px",
+      "left":(position.left+210) + "px"
+    }).show();
+    $( "#criteriaHeading" ).html("Manufacturer")
+    //$("#criteriaPopup").dialog({title: "Manufacturer"});
+    if ($("#criteriaPopup #autocompleteField").size() > 0){
+      var manufacturerList = loadManufacturers();
+      $( "#criteriaPopup #autocompleteField" ).autocomplete({
+        minLength: 0,
+        cacheLength:5,
+        max:5,
+        minChars: 0,
+        source: manufacturerList,
+        focus:function(e,ui) {
+          return false
+        },
+        select: function( event, ui ) {
+          //store_info_div("searchCriteriaLabel", ui.item)
+          store_ids("manufacturer", ui.item)
+          $("#criteriaPopup #autocompleteField").val('');
+          setUpLOV("manufacturer");
+          //$("#autocompleteField").autocomplete('search','')
+          //$('#maincontainer').unbind('mouseover').unbind('mouseenter').unbind('mouseleave');
+          return false;
+        }
+      })
+      $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
+        var self = this;
+        $.each( items, function( index, item ) {
+          if (index < 10)
+          {
+            self._renderItem( ul, item );
+          }
+        });
+      }
+      $( "#criteriaPopup #autocompleteField" ).show();
+      $("#autocompleteField").select();
+      $("#autocompleteField").autocomplete('search','')
+    }
+  }
+
+  $('#criteriaSubmit').click(function() {
+    var tagId = $("#which_attribute").val() + "_tag"
+    if ($(".search_category").find("#" + tagId).length > 0){
+      $("#" +tagId).remove();
+    }
+    var fieldId = $("#which_form_field").val()
+    if ($("#which_type").val() == "Between"){
+      var  sliderVal = $("#form_field_val").val().split(";")
+      $("#min_" + fieldId).val(sliderVal[0])
+      $("#max_" + fieldId).val(sliderVal[1])
+      var minValue = $( "#min_" + fieldId ).val()
+      var maxValue = $("#max_" + fieldId).val()
+      if ((minValue == "")|| (maxValue == "")){
+        alert("Please select a search criteria.");
+        return false
+      }
+      var value = "" + $("#which_type").val() + " "  + minValue + " " + $("#which_unit").val() + " - " + maxValue + " "  + $("#which_unit").val() + ""
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+    }
+    else if (($("#which_type").val() == "Greater than") || ($("#which_type").val() == "Less then"))
+    {
+      $("#" + fieldId).val($("#form_field_val").val())
+      var selectedValue = $("#" + fieldId).val()
+      if (selectedValue == ""){
+        alert("Please select a search criteria.");
+        return false
+      }
+      var value = "" + $("#which_type").val() + " "  + selectedValue + " " + $("#which_unit").val() +  ""
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+
+    }
+    else{
+      var selectedValue = $("#" + fieldId).val()
+      if (selectedValue == ""){
+        alert("Please select a search criteria.");
+        return false
+      }
+      var value = " ( " + selectedValue + " " +  ") "
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+    }
+    if (($("#which_type").val() == "List of values") || ($("#which_type").val() == "manufacturer"))
+    {
+
+      var selectedList = selectedValue.split(',')
+      var formFieldId = $("#which_form_field").val();
+      var searchCriteria = "" // + selectedValue + " " +  ")"
+      var anchorId
+      var spanId = 'removablePreferenceListofValues' + formFieldId
+      searchCriteria = searchCriteria +  "<span id='" + spanId + "'>"
+      var anchorId;
+      var spanHTML = ""
+      $.each(selectedList, function(index, value) {
+        anchorId = "removeThis_" + index + "_" + formFieldId
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+      })
+      searchCriteria = searchCriteria + spanHTML
+      var className = "middlebg"
+    }
+    else{
+      var className = "middlebg attributeTag"
+    }
+    var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" +$("#criteriaHeading").text()+ "<a id= 'deletePreferenceTag' class='icon_close'></a></span>" +searchCriteria + "</li>" ;
+    $(list).appendTo('.search_category');
+    $("#criteriaPopup").hide();
+    $("#" + $("#which_attribute").val()).hide();
+
+  });
+
+
+      $('.removablePreferenceList').live('click', function(){
+        var deleteId = $(this).attr('id').replace("removeThis_",'');
+        var indexArray  = deleteId.split("_")
+        var removableIndex = indexArray[0]
+        var formId = indexArray[1]
+        var formVal = $("#" + formId).val()
+        var formValArray = formVal.split(",")
+        formVal  = ""
+        if(formValArray.length == 1){
+            var tagId = $(this).closest('li').attr('id');
+            var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
+            $("#" + attributeId).show();
+            $(this).closest('li').remove()
+            $("#" + formId).val("")
+        }
+        else{
+            var updatedFormList = [];
+            $.each(formValArray, function(index, value) {
+                if(index != removableIndex){
+                    updatedFormList.push(value)
+                }
+            })
+            var anchorId;
+            //var updatedSearchList= [];
+            var spanHTML = ""
+            $.each(updatedFormList, function(index, value) {
+                anchorId = "removeThis_" + index + "_" + formId
+                //updatedSearchList.push( value + "<a id='" + anchorId + "' class='removablePreferenceList'> x </a>")
+                spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+            })
+            var listSpanId = "removablePreferenceListofValues" + formId
+            $("span#" + listSpanId).html(spanHTML)
+            $("#" + formId).val("" + updatedFormList.toString() + "")
+        }
+        return false;
+    });
+
+</script>

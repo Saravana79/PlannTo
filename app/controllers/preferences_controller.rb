@@ -41,12 +41,25 @@ class PreferencesController < ApplicationController
     end
   end
 
+  def new
+    @buying_plan = BuyingPlan.new
+    @question = @buying_plan.user_question
+    @search_type = params[:search_type]
+   sunspot_search_items
+  end
+
   def edit_preference
     @buying_plan = BuyingPlan.find(params[:id])
     @question = @buying_plan.user_question
 
     sunspot_search_items
   end
+  
+   def create_preference
+      @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+        @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+    Preference.update_preferences(@buying_plan.id, params[:search_type], params)
+   end
 
   def update_preference
     @buying_plan = BuyingPlan.find(params[:id])
@@ -125,8 +138,8 @@ class PreferencesController < ApplicationController
   end
 
   def sunspot_search_items
-    @search_type = @buying_plan.itemtype.itemtype
-    itemtype = Itemtype.find_by_itemtype(@buying_plan.itemtype.itemtype)
+    @search_type = @buying_plan.try(:itemtype).try(:itemtype) || @search_type
+    itemtype = Itemtype.find_by_itemtype(@buying_plan.try(:itemtype).try(:itemtype) || @search_type)
 
     @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute)
     unless ($search_info_lookups.nil? || $search_type != params[:search_type])
