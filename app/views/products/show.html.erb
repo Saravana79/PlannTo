@@ -6,7 +6,7 @@
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
 
-</div>
+
 <!-- buttons - End -->
 <div class="leftcolumnbig" id="item_info" style="clear:both;">
 <!-- Product Details - Start -->
@@ -43,8 +43,9 @@
     </span>
   </div>
 <br/>
-<div id="contentEditView"></div>
+<div id="contentEditView">
 <%= render :partial => "contents/container", :locals => {:article_categories => @article_categories} %>
+</div>
 <br/>
 <div>
   <ul id="Newtabs">
@@ -69,9 +70,10 @@
   
   <%end%>
 </div>
-</div>
+
 <!-- Q&A -  End -->
 </div>
+
 <div class="rightcolumnsmall">
 <br/>
 <div class="other_links" >
@@ -157,5 +159,5 @@
 	
 </div>
 
-
+</div>
   
