@@ -15,7 +15,7 @@
       <%end%>
     <%end%>
     <div id="btnDiv" style="height:100px;display:block;">
-      <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Create Preference</a>
+      <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Next</a>
       <div id="preferenceSpinner"></div>
     </div>
   </div>
@@ -61,7 +61,7 @@
     var spinner = new Spinner(opts).spin(target);
     $.post('/preferences/create_preference',$("#updatePreferencesForm").serialize(),null,"script").success(function() {
       spinner.stop();
-      $("#giveAdviceDialog").dialog("destroy");
+    //  $("#giveAdviceDialog").dialog("destroy");
       //window.location.href = '<%#="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'
     })
 

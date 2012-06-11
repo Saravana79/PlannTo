@@ -1,1 +1,3 @@
- window.location.href = '<%="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'
+$("#giveAdviceDialog").html('<%= escape_javascript(render 'items', :items => get_items_with_constraint(@follow_item, @follow_types, 8)) %>');
+
+//window.location.href = '<%#="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'

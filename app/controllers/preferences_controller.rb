@@ -15,6 +15,7 @@ class PreferencesController < ApplicationController
 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
+
   end
 
   def add_preference
@@ -23,6 +24,7 @@ class PreferencesController < ApplicationController
   end
 
   def plan_to_buy
+    @page = params[:page]
     require 'will_paginate/array'
     follow_type = params["follow_type"]
     unless follow_type == ""
@@ -59,6 +61,17 @@ class PreferencesController < ApplicationController
       @itemtype = Itemtype.find_by_itemtype(params[:search_type])
         @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
+
+      require 'will_paginate/array'
+
+
+     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
+    #@preferences_list = Preference.get_items(@preferences)
+
+    @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
+logger.info @follow_types
+logger.info @follow_item
    end
 
   def update_preference

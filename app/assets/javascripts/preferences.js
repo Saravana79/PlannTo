@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $("#search_car").autocomplete({
+//$(document).ready(function() {
+$(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomplete({
         minLength:2,
         format:"js",
         // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
