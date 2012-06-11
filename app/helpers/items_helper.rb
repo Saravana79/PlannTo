@@ -195,12 +195,10 @@ module ItemsHelper
     html_list = case item.type
     when "Manufacturer"
       then '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
-    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
-    <li><a href="#tabs7" ><span>Related Items</span></a></li>'
+            <li><a href="#tabs7" ><span>All Models</span></a></li>'
     when "CarGroup"
       then '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
-    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
-    <li><a href="#tabs7" ><span>Related Items</span></a></li>'
+        <li><a href="#tabs7" ><span>All Variants</span></a></li>'
     else
       '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
     <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
