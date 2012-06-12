@@ -164,6 +164,7 @@ end
     when "Manufacturer" then item.itemrelationships.first.related_cars.itemtype_id
     when "CarGroup" then item.itemrelationships.first.items.itemtype_id
     when "ItemtypeTag" then Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
+    when "Topic" then TopicItemtypeRelation.find_by_item_id(item.id).itemtype_id
     else item.itemtype_id
     end
     return itemtype_id
