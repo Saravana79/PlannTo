@@ -25,6 +25,7 @@ class PreferencesController < ApplicationController
 
   def plan_to_buy
     @page = params[:page]
+    @per_page = params[:per_page] || 4
     require 'will_paginate/array'
     follow_type = params["follow_type"]
     unless follow_type == ""

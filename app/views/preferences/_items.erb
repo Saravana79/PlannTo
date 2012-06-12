@@ -17,6 +17,7 @@
   <%= render "plan_to_buy_items", :items => items %>
 </div>
 <%= hidden_field_tag "buying_plan_id", @buying_plan.id %>
+<%= hidden_field_tag "per_page_value", @per_page || ""%>
 <script type="text/javascript">
   $('#updatePreference').click(function() {
 window.location.href = '<%="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'

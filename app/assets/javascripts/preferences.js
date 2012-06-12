@@ -48,7 +48,7 @@ $(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomp
         select: function( event, ui ) {
             $.ajax(
             {
-                url:"/preferences/plan_to_buy?item_id="+ui.item.id+"&follow_type="+ "Buyer&buying_plan_id=" + $("#buying_plan_id").val(),
+                url:"/preferences/plan_to_buy?item_id="+ui.item.id+"&follow_type="+ "Buyer&buying_plan_id=" + $("#buying_plan_id").val() + "&per_page=" + $("#per_page_value").val(),
                 type:"GET",
                 dataType:"script"
             });
@@ -71,8 +71,8 @@ $(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomp
         }
     }
 
-
-    $('#plantobuyPaginate div.pagination a').live('click', function(){
+    $('#plantobuyPaginate div.pagination a').click(function() {
+    //$('#plantobuyPaginate div.pagination a').live('click', function(){
         var page = $(this).text()
         var current = $('em.current').text();
         if (page == "← Previous"){
@@ -84,7 +84,7 @@ $(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomp
 
         $.ajax(
         {
-            url:"/preferences/plan_to_buy?follow_type=" + ""+ "&buying_plan_id=" + $("#buying_plan_id").val() + "&page=" + page,
+            url:"/preferences/plan_to_buy?follow_type=" + ""+ "&buying_plan_id=" + $("#buying_plan_id").val() + "&page=" + page + "&per_page=" + $("#per_page_value").val(),
             type:"GET",
             dataType:"script"
         });
