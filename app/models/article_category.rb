@@ -33,4 +33,25 @@ class ArticleCategory < ActiveRecord::Base
   def is_accessories?
     self.name == ACCESSORIES
   end
+
+  def self.get_by_itemtype(itemtype_id)
+    keyword_id = "article_categories_#{itemtype_id}_list"
+    article_categories = $redis.smembers "#{keyword_id}"
+    if article_categories.size == 0
+      article_categories = self.by_itemtype_id(itemtype_id)
+      #save in cache
+      $redis.multi do
+        article_categories.each do |cont|
+          $redis.sadd "#{keyword_id}", "#{cont.id}_#{cont.name}"
+        end
+      end
+      article_categories = $redis.smembers "#{keyword_id}"
+    end
+    articles_list = Array.new
+    article_categories.each do |category|
+      sub_cat = category.split("_")
+      articles_list << [sub_cat[1], sub_cat[0]]
+    end
+    return articles_list
+  end
 end

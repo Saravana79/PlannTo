@@ -31,9 +31,11 @@ class ProductsController < ApplicationController
     @article_content=ArticleContent.new(:itemtype_id => @item.itemtype_id)
     #@questions = QuestionContent.all
     if (@item.is_a? Product)
-      @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+      @article_categories = ArticleCategory.get_by_itemtype(@item.itemtype_id)
+     # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
-      @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
+      @article_categories = ArticleCategory.get_by_itemtype(0)
+     # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end    
 
     @top_contributors = @item.get_top_contributors
