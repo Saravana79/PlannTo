@@ -1,4 +1,5 @@
 class PreferencesController < ApplicationController
+  #before_filter :authenticate_user!, :only => [:new]
   layout "product"
 
   def index
@@ -45,10 +46,11 @@ class PreferencesController < ApplicationController
   end
 
   def new
-    @buying_plan = BuyingPlan.new
+    @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    @buying_plan = BuyingPlan.find_or_create_by_itemtype_id(@itemtype.id)
     @question = @buying_plan.user_question
     @search_type = params[:search_type]
-   sunspot_search_items
+    sunspot_search_items
   end
 
   def edit_preference
@@ -58,22 +60,21 @@ class PreferencesController < ApplicationController
     sunspot_search_items
   end
   
-   def create_preference
-      @itemtype = Itemtype.find_by_itemtype(params[:search_type])
-        @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+  def create_preference
+    @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
 
-      require 'will_paginate/array'
+    require 'will_paginate/array'
 
 
-     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
+    #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     #@preferences_list = Preference.get_items(@preferences)
 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
-logger.info @follow_types
-logger.info @follow_item
-   end
+    
+  end
 
   def update_preference
     @buying_plan = BuyingPlan.find(params[:id])
