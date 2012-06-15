@@ -10,8 +10,8 @@ class Vote < ActiveRecord::Base
 
   attr_accessible :vote, :voter, :voteable
 
-<% if options[:unique_voting] == true %>
+#<% if options[:unique_voting] == true %>
   # Comment out the line below to allow multiple votes per user.
-  validates_uniqueness_of :voteable_id, :scope => [:voteable_type, :voter_type, :voter_id]
-<% end %>
+#  validates_uniqueness_of :voteable_id, :scope => [:voteable_type, :voter_type, :voter_id]
+#<% end %>
 end

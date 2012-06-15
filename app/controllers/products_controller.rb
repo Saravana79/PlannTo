@@ -20,6 +20,7 @@ class ProductsController < ApplicationController
   end
 
   def show
+    Vote.get_vote_list(current_user) if user_signed_in?
     @item = Item.get_cached(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
     @where_to_buy_items = Itemdetail.where("itemid = ?", params[:id]).includes(:vendor).order(:price)
     @related_items = Item.get_related_items(@item, 3)

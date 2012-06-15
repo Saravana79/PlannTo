@@ -126,16 +126,21 @@ module ApplicationHelper
   end
 
   def get_voting_class_name(user, item)
+    keyword_id = "votes_#{user.id}_list"
+    vote_list = $redis.smembers "#{keyword_id}"
+    value = vote_list.find {|s| s.to_s == "type_Content_voteableid_#{item.id}".to_s}
     reset = true
-    if  user.voted_positive?(item)
-      negative_class = "btn_dislike_positive"
-      positive_class = "btn_like_positive"     
-      reset = false
-    end
-    if user.voted_negative?(item)
-      positive_class = "btn_like_negative"
-      negative_class = "btn_dislike_negative"      
-      reset = false
+    unless value.nil?
+      if  user.voted_positive?(item)
+        negative_class = "btn_dislike_positive"
+        positive_class = "btn_like_positive"
+        reset = false
+      end
+      if user.voted_negative?(item)
+        positive_class = "btn_like_negative"
+        negative_class = "btn_dislike_negative"
+        reset = false
+      end
     end
     if reset == true
       positive_class = "btn_like_default"
@@ -146,7 +151,7 @@ module ApplicationHelper
 
   def get_contributor_info(user_id)
     user = User.where("id = ?", user_id).includes(:avatar).first
-   return user
+    return user
   end
 
   def get_tag_list(item)
