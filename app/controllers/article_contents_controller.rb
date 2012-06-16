@@ -3,6 +3,7 @@ class ArticleContentsController < ApplicationController
 
   def create
     #not used anywhere
+    
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
@@ -11,13 +12,18 @@ class ArticleContentsController < ApplicationController
     @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
    score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
+    if params[:article_content][:sub_type]!= "Photo"
+       params.delete("content_photos_attributes")
+    end  
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
-
+    flash[:notice]= "Article uploaded"
+    respond_to do |format|
+      format.js
   end
-
+ end
   def update
     #@default_id= params[:default_item_id]
     @item = Item.find(params[:default_item_id]) if params[:default_item_id] != ""
