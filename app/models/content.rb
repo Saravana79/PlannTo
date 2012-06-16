@@ -35,7 +35,7 @@ class Content < ActiveRecord::Base
     if result.nil?
       vote = VoteCount.search_vote(self).first
       count = vote.nil? ? 0 : (vote.vote_count_positive - vote.vote_count_negative)
-      comment_count = vote.nil? ?  0 : vote.comment_count
+      comment_count = self.comments.nil? ?  0 : self.comments.count
       $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}", "#{count}_#{comment_count}")
       return count
     else
