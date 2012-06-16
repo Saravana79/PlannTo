@@ -1,5 +1,5 @@
 module ApplicationHelper
-
+# require 'global_utilities'
   def get_follow_link(name, path, options = {})
     link_to(name, path, options).to_s
   end
@@ -125,10 +125,23 @@ module ApplicationHelper
     end
   end
 
+   def get_class_name(class_name)
+    parent_class_name = case class_name
+    when "Tip" then "Content"
+    when "VideoContent" then "Content"
+    when "QuestionContent" then "Content"
+    when "ReviewContent" then "Content"
+    when "ArticleContent" then "Content"
+    else class_name
+    end
+    return parent_class_name
+  end
+
   def get_voting_class_name(user, item)
     keyword_id = "votes_#{user.id}_list"
     vote_list = $redis.smembers "#{keyword_id}"
-    value = vote_list.find {|s| s.to_s == "type_Content_voteableid_#{item.id}".to_s}
+    class_type = get_class_name(item.class.name)
+    value = vote_list.find {|s| s.to_s == "type_#{class_type}_voteableid_#{item.id}".to_s}
     reset = true
     unless value.nil?
       if  user.voted_positive?(item)

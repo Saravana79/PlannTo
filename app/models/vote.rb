@@ -30,6 +30,7 @@ class Vote < ActiveRecord::Base
     $redis.multi do
       voters.each do |cont|
         $redis.sadd "#{keyword_id}", "type_#{cont.voteable_type}_voteableid_#{cont.voteable_id}"
+        $redis.set "user_#{user.id}_item_#{cont.voteable_id}", "#{cont.id}"
       end
     end
     vote_list = $redis.smembers "#{keyword_id}"

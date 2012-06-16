@@ -18,6 +18,7 @@ class VideoContent < ArticleContent
     video_id=self.video_id(url)
     @article.field4 = video_id
     #    @article.youtube = video_id
+    
     youtube_data = client.video_by(video_id)
     @article.title = youtube_data.title if youtube_data.title
     @article.description = youtube_data.description if youtube_data.description
