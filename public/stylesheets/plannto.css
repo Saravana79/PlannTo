@@ -1021,10 +1021,10 @@ div.buttons {
 
 .productdetails {
     width: 727px;
-    height: 166px;
+    height: 100%;
     display: block;
     border: solid 0px;
-    border-bottom: solid 1px #cdd3d7;
+    min-height:50px;
 }
 
 .leftcolumnbig {
@@ -1069,7 +1069,7 @@ div.buttons {
 
 .product_details {
     width: 510px;
-    height: 130px;
+    height: 100%;
     display: block;
     border: solid 0px;
     float: left;
