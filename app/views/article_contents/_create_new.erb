@@ -7,20 +7,35 @@
     <%@form_id = "edit_create_article_content_form_#{@content.id}"%>
   <%end%>
   <% @article_content= ArticleContent.new %>
-  <% @article_content.content_photos.build %>
+  <% @article_content.build_content_photo %>
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
    <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
   <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
-    <%= hidden_field_tag 'article_content[sub_type]'%>
+    <%= f.hidden_field :sub_type%>
     <div id="article_errors" style="line-height:20px;color: red;"></div>
     <div style="padding:5px 5px 0px 0px;text-align:center">
      <div style="display:none;" id="photo">
       <div class="title_header float_lft" id="photo">Photo:</div>
-        <%= f.fields_for :content_photos do |photo| %>
+        <%= f.fields_for :content_photo do |photo| %>
          <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
        <%end%>
+        
+       
     <div style="clear:both;"></div>
      </div>
+      <%if @content %>
+        <%if @content.sub_type == 'Photo' %>
+           <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></imag></div><%end%>
+           <br />
+           <br /> 
+       <div class="title_header float_lft" id="photo">Photo:</div>
+       
+        <%= f.fields_for :content_photo do |photo| %>
+         <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
+       <%end%>
+      <%end%>
+       <%end%>
+        
      <div class="title_header float_lft">Title :</div>
       <div class="float_lft">
         <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
@@ -119,7 +134,7 @@
   </div>
 <% end %>
 <script type="text/javascript">
-    <%article_categories.each_with_index do |article_category, index|%>
+    <%@article_categories.each_with_index do |article_category, index|%>
          $("#content<%=article_category[0]%>").click(function(){
            if ($(this).attr('id')!= 'contentPhoto')
            {
