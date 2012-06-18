@@ -35,14 +35,15 @@ class Content < ActiveRecord::Base
 
   PER_PAGE = 10
   def content_vote_count
-    count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")
-    if count.nil?
+    result = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")
+    if result.nil?
       vote = VoteCount.search_vote(self).first
       count = vote.nil? ? 0 : (vote.vote_count_positive - vote.vote_count_negative)
-      $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}", count)
+      comment_count = self.comments.nil? ?  0 : self.comments.count
+      $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}", "#{count}_#{comment_count}")
       return count
     else
-      return count
+      return result.split("_")[0]
     end
   end
 

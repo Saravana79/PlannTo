@@ -21,6 +21,23 @@ class Vote < ActiveRecord::Base
     end
   end
 
+  def self.get_vote_list(user)
+    keyword_id = "votes_#{user.id}_list"
+
+    voters = Vote.where(:voter_id => user.id, :voter_type => "User")
+    logger.info voters
+    #save in cache
+    $redis.multi do
+      voters.each do |cont|
+        $redis.sadd "#{keyword_id}", "type_#{cont.voteable_type}_voteableid_#{cont.voteable_id}"
+        $redis.set "user_#{user.id}_item_#{cont.voteable_id}", "#{cont.id}"
+      end
+    end
+    vote_list = $redis.smembers "#{keyword_id}"
+   
+    return vote_list
+  end
+
 
   # Comment out the line below to allow multiple votes per user.
   #  validates_uniqueness_of :voteable_id, :scope => [:voteable_type, :voter_type, :voter_id]

@@ -7,8 +7,8 @@ class User < ActiveRecord::Base
 
   REDIS_USER_DETAIL_KEY_PREFIX = "user_details_"
   CACHE_USER_ITEM_HASH = {Follow::ProductFollowType::Owner => "owned_item_ids" ,
-                          Follow::ProductFollowType::Follow => "follow_item_ids",
-                          Follow::ProductFollowType::Buyer => "buyer_item_ids"}
+    Follow::ProductFollowType::Follow => "follow_item_ids",
+    Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, :avatar
   attr_accessor :follow_type
@@ -141,6 +141,11 @@ class User < ActiveRecord::Base
     end
     value =  vote == "false" ? true : false
     return value
+  end
+
+  def fetch_content_user_vote?(item)
+    value = $redis.get "user_#{self.id}_item_#{item.id}"
+    return value.nil? ?  nil : value  
   end
 
 end

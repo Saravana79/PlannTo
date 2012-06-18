@@ -103,6 +103,7 @@ resources :accounts do
   resources :manufacturers
   resources :car_groups
   resources :attribute_tags
+  resources :topics
   resource :facebook, :except => :create do
     get :callback, :to => :create
     get :friends

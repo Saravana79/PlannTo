@@ -50,7 +50,10 @@ module ContentsHelper
   end
   
   def render_comments_anchor(item)
-    txt= "Comments ( #{item.comments.count})"
+    count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{item.id}")
+    comment_count = count.nil? ? item.comments.count : count.split("_")[1]
+    
+    txt= "Comments ( #{comment_count})"
     <<-END
      #{link_to txt, content_comments_path(item), :remote => true, :class => "txt_blue comments_show", :id => "anchor_comments_#{item.id}"}
     END
@@ -146,7 +149,7 @@ module ContentsHelper
     wordcount = Content::WORDCOUNT
     if detail == false
       "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "...": "")
-        #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
+      #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
     else
       "<a class='txt_black_description'>" + content.description + "</a>"
     end
@@ -165,7 +168,7 @@ module ContentsHelper
     return "/history_details?detail_id=#{id}&type=#{type}"
   end
 
- def get_rating_or_category_contents(content)
+  def get_rating_or_category_contents(content)
     if content.sub_type == "#{ArticleCategory::ACCESSORIES}"
       "<label>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
@@ -179,5 +182,11 @@ module ContentsHelper
     list += "<a id= 'deleteTag' class='icon_close_tagging' href='#'></a>" if display == true
     list += "</span></li>" ;
 
+  end
+
+  def get_anchor_name_link(content)
+    first_item = content.items.first
+    content = "<a class='txt_brown' href=" + "/#{first_item.type.tableize}/#{first_item.id.to_s}" + "> #{first_item.name}</a> "
+    return content.html_safe
   end
 end

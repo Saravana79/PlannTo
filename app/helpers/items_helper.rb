@@ -187,7 +187,7 @@ module ItemsHelper
   end
 
   def display_price_detail(item)
-    item.price.blank? ? "" :  "Rs #{item.price}"
+    item.price == 0.0 ? "N/A" :  "Rs #{item.price}"
   end
 
   def display_product_page_tabs(item)
