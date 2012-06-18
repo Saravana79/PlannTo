@@ -94,7 +94,9 @@ class Item < ActiveRecord::Base
   end
 
   def image_url
-      configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
+      if(!imageurl.blank?)
+        configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
+      end
   end
 
   def self.get_related_items(item, limit)

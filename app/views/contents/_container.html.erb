@@ -1,9 +1,13 @@
 <!--Write a review share to a friend-->
 <div class="Leftreviewblock">
-  <!--write tab start here-->
+
+  
+ </div>
   <div class="Reviewbigtabs">
+  
     <a href="#" class="" id="contentSubmit">Submit a Review<span></span></a>
     <a href="#" class="Activetab Tabfirst" id="contentWrite">Write a Review<span></span></a>
+   
   </div>
   <!--write tab end here-->
   <div class="Leftreviewinner">
@@ -25,7 +29,7 @@
       <%= render :partial => 'reviews/review_subcontainer' %> 
       <%= render :partial => 'article_contents/article_share', :locals => {:content_category => false} %>
       <%= render :partial => 'question_contents/new_question_content' %>
-      <%= render :partial => 'article_contents/create_new' %>
+      <%= render :partial => 'article_contents/create_new' ,:locals => {:article_categories => article_categories}%>
     </div>
   </div>
 </div>

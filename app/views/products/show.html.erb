@@ -10,9 +10,12 @@
 <!-- buttons - End -->
 <div class="leftcolumnbig" id="item_info" style="clear:both;">
 <!-- Product Details - Start -->
-  <div class="productdetails" >
+  
     <%if(!@item.image_url.blank?)%>
+    <div class="productdetails" style="height:150px;">
     <span class="img_product"><img src="<%=@item.image_url%>" alt="<%=@item.name%>" width="175" height="125" /></span>
+    <%else%>
+    <div class="productdetails">
     <%end%>
     <span class="product_details">
       <h1><%= @item.name %></h1>
@@ -41,8 +44,11 @@
         <%end%>
     <% end %>
     </span>
+
   </div>
-<br/>
+  <br/>
+  <div style="border-bottom: solid 1px #cdd3d7;display:block;" ></div>
+  <br/>
 <div id="contentEditView">
 <%= render :partial => "contents/container", :locals => {:article_categories => @article_categories} %>
 </div>

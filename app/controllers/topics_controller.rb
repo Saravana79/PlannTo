@@ -1,0 +1,4 @@
+class TopicsController < ProductsController
+
+  
+end

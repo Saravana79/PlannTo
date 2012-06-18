@@ -13,6 +13,8 @@ class Content < ActiveRecord::Base
 	has_many :content_item_relations
   has_many :items, :through => :content_item_relations
   belongs_to :itemtype
+  has_one :content_photo
+  accepts_nested_attributes_for :content_photo, :allow_destroy => true
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
 
   searchable :auto_index => true, :auto_remove => true  do
@@ -20,6 +22,8 @@ class Content < ActiveRecord::Base
     text :description
     string :sub_type
   end
+  
+  
   
   def related_items
     return ContentItemRelation.where('content_id = ?', self.id)  

@@ -75,7 +75,7 @@ resources :accounts do
     collection do
       post :download
       get :bmarklet
-      post :update
+      #post :update - by shanmukha I have confused why they defined update as collection with  post method .  Actualy in restful method update is put method
       put :download
     end
   end
@@ -103,6 +103,7 @@ resources :accounts do
   resources :manufacturers
   resources :car_groups
   resources :attribute_tags
+  resources :topics
   resource :facebook, :except => :create do
     get :callback, :to => :create
     get :friends

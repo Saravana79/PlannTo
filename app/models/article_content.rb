@@ -4,8 +4,9 @@ class ArticleContent < Content
   validates :url, :uniqueness => true, :if => Proc.new {  |c|  !c.url.blank? }
   #validates :url, :presence => true
   belongs_to :article_category
+  has_one :content_photo,  :foreign_key => 'content_id'
 
-
+ 
 #  validate :validate_end_date_before_start_date
 #
 #  def validate_end_date_before_start_date
@@ -15,6 +16,7 @@ class ArticleContent < Content
 #  end
   
   MIN_SIZE =[25,25]
+  
   
   def self.CreateContent(url, user)
     @images=[]
