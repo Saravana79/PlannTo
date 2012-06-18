@@ -45,6 +45,17 @@ module ItemsHelper
     return false
   end
 
+  def item_group_display_required?(attribute_ids, item)
+    return false if attribute_ids.size == 0
+    attribute_values = Array.new
+    item.attribute_values.each do |att|
+      attribute_values << att if attribute_ids.include?(att.attribute_id) && att.value != ""
+    end
+    # attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", item_ids, attribute_ids)
+    return true if attribute_values.size > 0
+    return false
+  end
+
   def show_item_value(item, attribute)
     compare_item = AttributeValue.find_by_item_id_and_attribute_id( item.id, attribute.id) #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
     return "" if compare_item.nil?

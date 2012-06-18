@@ -5,7 +5,7 @@
     
     <div class="specificationblckdiv">
       <% @item.specification.group_by(&:category_name).each do |category, product_attributes| %>
-        <%if group_display_required?(product_attributes.collect(&:attribute_id), [@item.id])%>
+         <%if item_group_display_required?(product_attributes.collect(&:attribute_id), @item)%>
           <ul class="specificationblckdivul">
             <li class="specificationblckdivtitletxt"><%= category %></li>
             <% reset_cycle("specificationinnerul") %>
