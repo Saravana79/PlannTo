@@ -74,7 +74,7 @@
         <%end%>
           <div style="padding:3px 0px 3px 0px;clear:both;">
              <%if @content.thumbnail?%>
-             <div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
+             <div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft" style="width:230px;height:230px;"/></div>
              <%end%>
               <%= raw get_content_description(@content, true)%>
               <br/>

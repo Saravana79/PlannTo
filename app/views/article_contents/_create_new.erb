@@ -14,23 +14,22 @@
     <%= f.hidden_field :sub_type%>
     <div id="article_errors" style="line-height:20px;color: red;"></div>
     <div style="padding:5px 5px 0px 0px;text-align:center">
+     <%unless @content %>
      <div style="display:none;" id="photo">
       <div class="title_header float_lft" id="photo">Photo:</div>
         <%= f.fields_for :content_photo do |photo| %>
          <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
        <%end%>
-        
-       
-    <div style="clear:both;"></div>
+     <div style="clear:both;"></div>
      </div>
+     <%end%>
       <%if @content %>
         <%if @content.sub_type == 'Photo' %>
            <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></imag></div><%end%>
            <br />
            <br /> 
        <div class="title_header float_lft" id="photo">Photo:</div>
-       
-        <%= f.fields_for :content_photo do |photo| %>
+         <%= f.fields_for :content_photo do |photo| %>
          <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
        <%end%>
       <%end%>
@@ -133,6 +132,7 @@
     </div>
   </div>
 <% end %>
+
 <script type="text/javascript">
     <%@article_categories.each_with_index do |article_category, index|%>
          $("#content<%=article_category[0]%>").click(function(){

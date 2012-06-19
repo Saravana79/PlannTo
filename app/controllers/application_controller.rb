@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_filter :check_authentication
   before_filter :store_session_url
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
-
+  prepend_before_filter { |c| RecordCache::Strategy::RequestCache.clear }
   before_filter :cache_follow_items 
 
   def cache_follow_items
