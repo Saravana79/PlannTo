@@ -7,12 +7,39 @@ class Itemtype < ActiveRecord::Base
 
   def self.get_followable_types(item_type)
     case item_type
-      when 'Car'
-        return ['Car', 'Manufacturer', 'CarGroup']
+      when 'Cars'
+        return ['Car', 'CarGroup']
       when 'Mobile'
         return ['Mobile']
+      when 'Camera'
+        return ['Camera']
+      when 'Cycle'
+        return ['Cycle']
+      when 'Tablet'
+        return ['Tablet']
+      when 'Bike'
+        return ['Bike']
       else
-        return ['Car', 'Manufacturer', 'CarGroup']
+        return ['Car', 'CarGroup']
     end
   end
+  def self.get_item_type_from_params(item_type)
+    case item_type
+      when 'Cars'
+        return 'Car'
+      when 'Mobile'
+        return 'Mobile'
+      when 'Camera'
+        return 'Camera'
+      when 'Cycle'
+        return 'Cycle'
+      when 'Tablet'
+        return 'Tablet'
+      when 'Bike'
+        return 'Bike'
+      else
+        return ['Car']
+    end
+  end
+
 end
