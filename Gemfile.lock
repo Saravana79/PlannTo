@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/orslumen/record-cache.git
+  revision: d10f247181f7c6ceb36d0be0649469461854004d
+  specs:
+    record-cache (0.1.2)
+      rails (>= 3.0)
+GIT
   remote: https://github.com/morgz/rails_sql_views.git
   revision: 0c92f229f743bb3f85ff036e4f1745130459830f
   specs:
@@ -251,6 +257,7 @@ DEPENDENCIES
   paperclip
   rails (= 3.1.1)
   rails_sql_views!
+  record-cache!
   remotipart (~> 1.0)
   resque
   sass-rails (~> 3.1.0)

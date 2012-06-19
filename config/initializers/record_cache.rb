@@ -1,6 +1,7 @@
 # --- Version Store
 # All Workers that use the Record Cache should point to the same Version Store
 # E.g. a MemCached cluster or a Redis Store (defaults to Rails.cache)
+#RecordCache::Base.version_store = Rails.cache
 RecordCache::Base.version_store = Rails.cache
 
 # --- Record Stores
