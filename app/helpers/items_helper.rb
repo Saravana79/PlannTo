@@ -1,15 +1,63 @@
 module ItemsHelper
 
-  def display_specifications(item)
-    # specifications = item.priority_specification.collect{|item_attribute|
-    #   "#{item_attribute.name} - #{item_attribute.value} ( #{item_attribute.unit_of_measure} )"
-    #   }
+  def display_specifications(item)  
     specifications = Array.new
-    item.priority_specification.each do |item_attribute|
-      content = get_content(item_attribute)
-      specifications << content if content != ""
+    attributes_list = Array.new
+    attributes_list =  Rails.cache.fetch("attributes_list")
+    if attributes_list.nil?
+      attributes_list = Attribute.where(:priority => true).to_a
+      Rails.cache.write('attributes_list', attributes_list)
+    end
+    item.attribute_values.each do |att|
+      field = ""
+      attributes_list.each do |list|
+        field = list if list.id == att.attribute_id
+      end
+      if field != ""
+        content = get_displayable_content(att, field)
+        specifications << content if content != ""
+      end
     end
     specifications.to_sentence
+  end
+
+  def get_displayable_content(item, attribute)
+    content = ""
+    unless (item.value == "" || item.value.nil? || item.value == "0")
+      if attribute.attribute_type == Attribute::TEXT
+        content = "#{item.value}"
+      elsif attribute.attribute_type == Attribute::BOOLEAN
+        if item.value == "True"
+          content = "Has #{attribute.name}"
+        end
+      elsif attribute.attribute_type == Attribute::NUMERIC
+        if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
+          value = convert_to_MB(item.value.to_f)
+          content = "#{attribute.name} - #{value} MB" if value != 0
+        elsif (attribute.unit_of_measure == "MB" && item.value.to_f >= 1024)
+          value = convert_to_GB(item.value.to_f)
+          content = "#{attribute.name} - #{value} GB" if value != 0
+        elsif (attribute.unit_of_measure == "GHz" && item.value.to_f < 1)
+          value = convert_to_MHz(item.value.to_f)
+          content = "#{attribute.name} - #{value} MHz" if value != 0
+        elsif (attribute.unit_of_measure == "MHz" && item.value.to_f >= 1000)
+          value = convert_to_GHz(item.value.to_f)
+          content = "#{attribute.name} - #{value} GHz" if value != 0
+        else
+          content += "#{attribute.name} - #{item.value}"
+          unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+            content += "  #{attribute.unit_of_measure}"
+          end
+        end
+      else
+        content = "#{attribute.name} - #{item.value}"
+        unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+          content += "  #{attribute.unit_of_measure}"
+        end
+      end
+    end
+
+    return content
   end
 
   def display_specification?(item)

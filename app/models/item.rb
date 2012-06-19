@@ -28,6 +28,8 @@ class Item < ActiveRecord::Base
   has_many :itemrelationships, :foreign_key => :item_id
   has_many :relateditems,
     :through => :itemrelationships
+
+   default_scope includes(:attribute_values)
   
   scope :get_price_range, lambda {|item_ids| joins(:item_attributes).
       where("attribute_values.item_id in (?) and attributes.name = 'Price'", item_ids).
