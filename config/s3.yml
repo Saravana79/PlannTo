@@ -1,0 +1,14 @@
+development:
+  bucket: planntodev
+  access_key_id: AKIAJWDCN4DJWNL2FK5A
+  secret_access_key: 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
+
+test:
+  bucket: plannto
+  access_key_id: AKIAJWDCN4DJWNL2FK5A
+  secret_access_key: 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
+
+production:
+  bucket: Plannto
+  access_key_id: AKIAJWDCN4DJWNL2FK5A
+  secret_access_key: 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
