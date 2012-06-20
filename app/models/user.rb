@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :trackable, :validatable
-
+  cache_records :store => :local, :key => "users",:request_cache => true
   REDIS_USER_DETAIL_KEY_PREFIX = "user_details_"
   CACHE_USER_ITEM_HASH = {Follow::ProductFollowType::Owner => "owned_item_ids" ,
     Follow::ProductFollowType::Follow => "follow_item_ids",
@@ -59,8 +59,7 @@ class User < ActiveRecord::Base
   def get_photo(type = :thumb)
     unless user_details = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url")
       user_details = avatar.photo.url(type) unless avatar.blank?
-      user_details = (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?
-      user_details = "/images/photo_profile.png" if user_details.blank?
+      user_details = (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?      
       $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url", user_details)
     end
     user_details
