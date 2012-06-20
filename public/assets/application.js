@@ -14583,34 +14583,24 @@ $(document).ready(function() {
     load_signout_user_link: function() {
       return $("#plan_to_buy_select").attr("data-url", "javascript:void(0)");
     },
-    login_dialog: function() {
+    login_dialog: function() { 
       return $("#dialog-form").dialog({
         autoOpen: false,
-        height: 300,
+        height: 560,
         width: 350,
         modal: true,
-        title: "Login",
-        buttons: {
-          "Sign in": function() {
-            var bValid;
-            bValid = true;
-            if (bValid) {
-              $("#user_new").submit();
-              return $(this).dialog("close");
-            }
-          },
-          Cancel: function() {
-            return $(this).dialog("close");
-          }
-        },
         close: function() {
           return allFields.val("").removeClass("ui-state-error");
         }
       });
     },
     show_login_dialog: function(dom_elements) {
+     
       return $(dom_elements).click(function() {
+        $(".Close_dialog").show();
+        $(".ui-dialog-titlebar").hide();
         return $("#dialog-form").dialog("open");
+       
       });
     },
     show_login_dialog_change: function(dom_elements) {

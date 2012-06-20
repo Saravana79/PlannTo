@@ -1,0 +1,6 @@
+<div id="Loginpoup">
+<%= form_for(User.new, :as => :user, :url => registration_path(:user) ) do |f| %>
+   <%= render "/shared/sign_up_fields",{:f => f} %>
+<% end %>
+<div class="Dontsignup">Do  you have an account. <%= link_to "Sign in now" ,"#", :onclick =>"$('.sign_in_home').show();$('.sign_up').hide();" %></div> 
+</div>

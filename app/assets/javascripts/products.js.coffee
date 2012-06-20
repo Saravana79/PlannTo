@@ -105,25 +105,18 @@ root.Product =
   login_dialog: ->
     $("#dialog-form").dialog
       autoOpen: false
-      height: 300
-      width: 350
+      height: 500
+      width: 300
       modal: true
-      title: "Login"
-      buttons:
-        "Sign in": ->
-          bValid = true
-          if bValid
-            $("#user_new").submit()
-            $(this).dialog "close"
-
-        Cancel: ->
-          $(this).dialog "close"
-
+     
+      
       close: ->
         allFields.val("").removeClass "ui-state-error"
 
   show_login_dialog: (dom_elements) ->
     $(dom_elements).click ->
+      $(".Close_dialog").show();
+      $(".ui-dialog-titlebar").hide();
       $("#dialog-form").dialog "open"
 
 

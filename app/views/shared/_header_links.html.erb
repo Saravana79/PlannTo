@@ -88,7 +88,8 @@
         </ul>
       </div>-->
       <span class="txt_welcome">
-      <%= link_to "Sign In", "#", :class => "sign_in" %> | <%= link_to "Sign Up", new_registration_path('user') %>
+      <%= link_to "Sign In", "#", :class => "sign_in" %> | <%= link_to "Sign Up", "#",:onclick =>"$('#sign_up_dialog').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
+        $('.ui-dialog-titlebar').hide();" %>
     </span>
     <% end %>
 
