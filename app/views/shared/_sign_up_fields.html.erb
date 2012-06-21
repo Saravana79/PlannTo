@@ -1,0 +1,66 @@
+<!--popup heading bar-->
+<div class="Popuptitlebar">
+<center> <h1>Sign up</h1> </center>
+
+</div>
+<!--popup heading bar-->
+
+
+<!--poupmidder container-->
+<div class="Popupmiddercontent">
+
+
+<!--content goes here-->
+
+<div class="Popupfacebook">
+<p>Sign up to PlannTo using Facebook</p>
+<div class="FaceImg"><a href="#"><img alt="facebook" border="0" src="images/facebook_btn_signup.jpg"></a></div>
+</div>
+
+<div class="PopupOr"><img alt="" src="images/or_icon.png"></div>
+
+
+
+       <div class="Popupinputblock">
+                <label>Name</label>
+                <span class="Textinput">
+                  <%= f.text_field :name,:size =>"25" %>
+               	 
+                  </span>
+            </div>
+         
+       <div class="Popupinputblock">
+                <label>Email</label>
+                <span class="Textinput">
+                  <%= f.text_field :email,:size =>"25" %>
+               	 
+                  </span>
+            </div>   
+             <div class="Popupinputblock">
+                <label>Password</label>
+                <span class="Textinput">
+                  <%= f.password_field :password,:size =>"25" %>
+               	 
+                  </span>
+            </div>  
+       <div class="Popupinputblock">
+                <label>Paassword Confirmation</label>
+                <span class="Textinput">
+                <%= f.password_field :password_confirmation,:size =>"25" %>
+               	
+         </span>
+            </div>
+            
+        <div class="Popupinputblock">
+        <div class="float_lft PadL6"></div>
+       
+         </div>
+         
+         <div class="Bluesubmit"><%= f.submit "Sign up" %> </div>           
+         
+        </div>
+<!--poupmidder container-->
+
+<div class="Clearboth"></div>
+
+

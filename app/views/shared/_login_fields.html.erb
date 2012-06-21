@@ -1,11 +1,50 @@
-
-<div><%= f.label :email %>
-  <br/>
-  <%= f.email_field :email %>
+<div class="Popuptitlebar">
+<span class="Popuptitle"><center> <h1>Sign In</h1> </center></span>
+</div>
+<div class="Popupmiddercontent">
+<div class="Popupfacebook">
+<p>Sign in to PlannTo using Facebook</p>
+<div class="FaceImg"><a href="#"><img alt="facebook" border="0" src="images/facebook_btn.png"></a></div>
 </div>
 
-<div><%= f.label :password %>
-  <br/>
-  <%= f.password_field :password %>
+<div class="PopupOr"><img alt="" src="images/or_icon.png"></div>
+   <div class="Popupinputblock">
+                <label>Email</label>
+                <span class="Textinput">
+                  <%= f.text_field :email,:size =>"25" %>
+               	 
+                  </span>
+            </div>
+            
+       <div class="Popupinputblock">
+                <label>Password</label>
+                <span class="Textinput">
+                <%= f.password_field :password,:size =>"25" %>
+               	
+         </span>
+            </div>
+            
+        <div class="Popupinputblock">
+      
+        <div class="Rememberme">Remember me</div>
+         <div><%= f.check_box :remember_me %> </div>
+         </div>
+         
+         <div class="Bluesubmit"><%= f.submit "Sign In" %> </div>           
+         
+         <div class="Forgotpassword"><%= link_to "forgot password?",new_password_path(:user) %></a></div>
+
 </div>
+
+<div class="Clearboth"></div>
+
+
+
+
+
+
+
+
+
+
 

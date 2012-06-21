@@ -47,7 +47,7 @@
 
     <span class="Usrdropdown">
        
-       <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" style="width:25px;height:25px;"/>
+       <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" style="width:24px;height:24x;"/>
        
          <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
            <div class="Useraccountinfo">
@@ -88,7 +88,8 @@
         </ul>
       </div>-->
       <span class="txt_welcome">
-      <%= link_to "Sign In", "#", :class => "sign_in" %> | <%= link_to "Sign Up", new_registration_path('user') %>
+      <%= link_to "Sign In", "#", :class => "sign_in" %> | <%= link_to "Sign Up", "#",:onclick =>"$('#sign_up_dialog').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
+        $('.ui-dialog-titlebar').hide();" %>
     </span>
     <% end %>
 

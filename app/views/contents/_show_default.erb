@@ -74,7 +74,13 @@
         <%end%>
           <div style="padding:3px 0px 3px 0px;clear:both;">
              <%if @content.thumbnail?%>
-             <div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft" style="width:230px;height:230px;"/></div>
+             <%if ((@content.sub_type == "#{ArticleCategory::PHOTO}") && (!@content.content_photo.nil?)) %>
+               <div><img src="<%= @content.content_photo.photo.url(:large) %>" class="uploadedarticleContentdisplay float_lft" style="width:560px;height:360px;"/></div>
+              <br/>
+              <br/>
+              <% else %>
+               <div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
+               <%end%>
              <%end%>
               <%= raw get_content_description(@content, true)%>
               <br/>

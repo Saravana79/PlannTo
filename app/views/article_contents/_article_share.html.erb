@@ -84,7 +84,7 @@
     </div>
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
       <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
-      <img id="<%=@img_thumb%>" src="images/users.png" style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+      <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
       <div class="float_lft <%=@article_image%>"><input type="checkbox" >Don't Include Thumbnail</input></div>
       <div class="float_lft"><input type="checkbox" id="<%=@manual_image%>">Add Image Url</input>
         <%=f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px"%>

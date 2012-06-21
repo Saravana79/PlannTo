@@ -1,3 +1,33 @@
+#Popupouter { width:100%; height:500px; padding:100px 0; float:left;
+background:url(../images/poup_samplebg.jpg) no-repeat center top;}
+
+#Loginpoup { width:250px; height:auto; margin:auto; background:#f9f9f9; box-shadow:0px 0px 9px #3f3f3f;
+-moz-border-radius:5px; border-radius:5px; -webkit-border-radius:5px; padding:0 0 12px 0; position:absolute;}
+
+#Loginpoup span.Popuptitle {
+    color: #313131; font-family: Arial,Helvetica,sans-serif; font-size: 30px; font-weight: bold;
+    margin: 0; text-align: center; display:block;}
+
+#Loginpoup .Popuptitlebar a.Closebut {
+display:block; width:43px; height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
+
+#Loginpoup h1 a.Closebut:hover { background-position:left -41px;}
+
+
+
+.Popupfacebook { clear:both;}
+
+.Popupfacebook p {margin: 0; padding: 3px 0 5px 0; text-align: center; font-family:Tahoma,Geneva,sans-serif; font-size:14px;}
+
+.Popupfacebook .FaceImg {text-align: center;}
+.Popupfacebook .FaceImg a img{filter: alpha(opacity=100); opacity:1; -moz-opacity:1; -webkit-opacity:1; }
+.Popupfacebook .FaceImg a:hover img{filter: alpha(opacity=90); opacity:.9; -moz-opacity:.9; -webkit-opacity:.9; }
+
+.PopupOr {
+    background: url(../images/border_popup.png) no-repeat 50% 20px transparent;
+    margin: 15px 0 0; text-align: center;}
+
 @charset
 "utf-8"
 ;
@@ -2918,22 +2948,50 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; text-decoration:none;font-weig
 h3.Questionans { padding:4px 0 0 0!important; margin:0px !important; float:left;}
 
 /*---------------HOME POPUP GRAY BOX-----------*/
-.Homeinnercontent { width:924px; height:auto; margin:auto; overflow:hidden; padding-top:30px;}
+
+#Popupouter { width:100%; height:500px; padding:100px 0; float:left;
+background:url(../images/poup_samplebg.jpg) no-repeat center top;}
+
+#Loginpoup { width:250px; height:auto; margin:auto; background:#f9f9f9; box-shadow:0px 0px 9px #3f3f3f;
+-moz-border-radius:5px; border-radius:5px; -webkit-border-radius:5px; padding:0 0 12px 0; position:absolute;}
+
+#Loginpoup span.Popuptitle {
+    color: #313131; font-family: Arial,Helvetica,sans-serif; font-size: 30px; font-weight: bold;
+    margin: 0; text-align: center; display:block;}
+
+#Loginpoup .Popuptitlebar a.Closebut {
+display:block; width:43px; height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
+
+#Loginpoup h1 a.Closebut:hover { background-position:left -41px;}
+
+
+
+.Popupfacebook { clear:both;}
+
+.Popupfacebook p {margin: 0; padding: 3px 0 5px 0; text-align: center; font-family:Tahoma,Geneva,sans-serif; font-size:14px;}
+
+.Popupfacebook .FaceImg {text-align: center;}
+.Popupfacebook .FaceImg a img{filter: alpha(opacity=100); opacity:1; -moz-opacity:1; -webkit-opacity:1; }
+.Popupfacebook .FaceImg a:hover img{filter: alpha(opacity=90); opacity:.9; -moz-opacity:.9; -webkit-opacity:.9; }
+
+.PopupOr {
+    background: url(../images/border_popup.png) no-repeat 50% 20px transparent;
+    margin: 15px 0 0; text-align: center;}
+
+
+.Homeinnercontent { width:900px; height:auto; margin:auto; overflow:hidden; padding-top:44px;}
 .Titledes { font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#2d2d2d; text-align:center;
-			Clear:both; font-weight:bold; padding:0 0 40px 0;}
+Clear:both; font-weight:bold; padding:0 0 47px 0;}
 
 
 .Homefourblocks { width:100%; float:left; padding-bottom:15px;}
-.Blueblockhome {  float:left; margin-right:44px; text-align:center;
+.Blueblockhome { width:150px; height:auto; float:left; margin-right:44px;
 background:#FFFFFF url(../images/blue_boxbg.png) repeat-x left top; padding:0 9px 0px 9px;
 border:1px solid #dadada; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;}
-
-
-.smallhomeblock{width:178px;height:250px;}
-.bighomeblock{width:240px; height:auto;}
-
+.Loginblockhome { width:150px; height:auto; float:left; margin-right:44px; padding:0 9px 0px 9px; }
+.Loginblockhome.Lastblock { margin-right:0px;}
 .Blueblockhome.Lastblock { margin-right:0px;}
-
 .Blueblockhome h2 { font-family:Tahoma, Arial, Helvetica, sans-serif; margin:0;
 font-size:16px; text-align:center; color:#4b85a4; font-weight:bold; padding:0 0 3px 0;}
 
@@ -2941,6 +2999,26 @@ font-size:16px; text-align:center; color:#4b85a4; font-weight:bold; padding:0 0 
 font-size:12px; color:#282929; padding:0px 0 0px 0;}
 
 .Textdescriptions { clear:both; padding:0 0 15px 0; min-height:191px;}
+.Popupinputblock { width:180px; float:left; padding:0 0 5px 16px;}
+.Popupinputblock label {display:block; font-size:14px; color:#666161; padding:3px 0 3px 10px;}
+.Popupinputblock span.Textinput { width:50%; float:left; display:block;}
+.Popupinputblock .Rememberme {color: #818181; font-family: Arial,Helvetica,sans-serif; font-size: 13px;
+float:left; margin: 0; padding: 2px 0 0 5px;}
+.Popupinputblock .PadL6 { padding:0 0 0 6px; width:20px; height:20px;}
+.Bluesubmit { width:50%; float:left; padding:3px 0 15px 20px;}
+.Bluesubmit input[type="submit"]
+{background: url(../images/blut_inputbut.png) no-repeat left top; width: 115px; height: 42px;
+    border: none; cursor: pointer; margin: 0; text-shadow:0 1px 0 #1e779a; font-weight:bold;
+font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF; padding:0 0 5px 0;}
+.Bluesubmit input:hover[type="submit"] { background-position:left bottom;}
+
+.Forgotpassword { float:right; padding:16px 48px 0 0; color:#9a9a9a;}
+.Forgotpassword a { color:#9a9a9a; text-decoration:none; font-size:13px;}
+.Forgotpassword a:hover { text-decoration:underline;}
+
+.Dontsignup { clear:both; padding:3px 0 2px 0; text-align:center; font-size:12px;}
+.Dontsignup a { color:#3f434d; text-decoration:none;}
+.Dontsignup a:hover { text-decoration:underline;}
 
 
 .Blueblockhome span.Buytag { height:128px; background:url(../images/buy_tag.png) no-repeat center center;
@@ -2957,6 +3035,8 @@ clear:both; display:block; margin-top:28px; margin-bottom:16px;}
 a.Blacklink { color:#282929; text-decoration:none;}
 a.Blacklink:hover { text-decoration: underline;}
 
+
+/*---------------HOME POPUP GRAY BOX-----------*/
 .Homepopupgraybox { width:1008px; float:left; margin-left:-2px;}
 .Homepopupgraybox .Boxtopblock { width:1008px; float:left; background:url(../images/gray_blocktop.png) no-repeat left top;
 height:38px; font-family:Tahoma, Arial, Helvetica, sans-serif;}
@@ -2973,9 +3053,9 @@ display:block; float:right; width:40px; height:20px; line-height:18px;
 text-decoration:none; background:url(../images/open_closetab.png) no-repeat left top; padding:0 16px 0 0;
 font-size:12px; font-family:Tahoma, Arial, Helvetica, sans-serif; color:#505050; text-align:center;
  }
-
+ 
 .Homepopupgraybox .Boxtopblock span.Openclosebut a.Close { background-position:left bottom;}
-
+ 
 .Homepopupgraybox .Boxtopblock span.Openclosebut a:hover { color:#000000;}
 
 .Homepopupgraybox .Grayboxmid .Homeinnercontent { padding:0px;}
@@ -2983,18 +3063,18 @@ font-size:12px; font-family:Tahoma, Arial, Helvetica, sans-serif; color:#505050;
 .Homepopupgraybox .Boxbotcorner { width:100%; float:left; height:11px;
  background:url(../images/gray_blockbotbg.png) no-repeat left bottom;}
 
-.Homepopupgraybox .Grayboxmid .Blueblockhome:hover  { border:1px solid #797979;}
+.Homepopupgraybox .Grayboxmid .Blueblockhome:hover { border:1px solid #797979;}
 
 .Homepopupgraybox .Grayboxmid .Bluecyanbut { width:134px; margin:auto; clear:both; padding-bottom:8px; overflow:hidden;}
-.Homepopupgraybox .Grayboxmid  .Bluecyanbut a { display:block; float:left; padding:0 0 0 13px;
-background:url(../images/blue_left_corner.png) no-repeat left top;  color:#FFFFFF;
+.Homepopupgraybox .Grayboxmid .Bluecyanbut a { display:block; float:left; padding:0 0 0 13px;
+background:url(../images/blue_left_corner.png) no-repeat left top; color:#FFFFFF;
 font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; text-decoration:none; cursor:pointer;}
 
-.Homepopupgraybox .Grayboxmid  .Bluecyanbut a span { display:block; float:left;
+.Homepopupgraybox .Grayboxmid .Bluecyanbut a span { display:block; float:left;
  background:url(../images/blue_rightcorner.png) no-repeat right top; padding:6px 13px 8px 0;}
 
-.Homepopupgraybox .Grayboxmid  .Bluecyanbut a:hover { background-position:left -28px; text-decoration:none;}
-.Homepopupgraybox .Grayboxmid  .Bluecyanbut a:hover span { background-position:right  -28px;}
+.Homepopupgraybox .Grayboxmid .Bluecyanbut a:hover { background-position:left -28px; text-decoration:none;}
+.Homepopupgraybox .Grayboxmid .Bluecyanbut a:hover span { background-position:right -28px;}
 
 
 .Homepopupgraybox .Grayboxmid .Blueblockhome span.Buytag,
@@ -3004,6 +3084,14 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; text-decoratio
  {margin-top:5px; margin-bottom:7px;}
 
 .Homepopupgraybox .Grayboxmid .Blueblockhome .Textdescriptions { padding-bottom:10px;}
+
+
+/*----------POPUP UPDATES-------------*/
+.Popuptitlebar { clear:both; background: url(../images/border_popup.png) no-repeat 50% 100% transparent; padding:10px 0;
+position:relative; }
+
+.Popupmiddercontent { clear:both; padding:15px; overflow:hidden; font-size:12px;}
+.Popupmiddercontent p { font-size:12px; padding:0 0 10px 0; line-height:18px;} 
 
 
 ul#Newtabs { width:100%; float:left; height:36px; background:url(../images/navigation_bgbot.png) repeat-x left bottom;

@@ -15,7 +15,7 @@ class ArticleContent < Content
 #    end
 #  end
   
-  MIN_SIZE =[25,25]
+  MIN_SIZE =[50,50]
   
   
   def self.CreateContent(url, user)

@@ -30,7 +30,7 @@ class Item < ActiveRecord::Base
   has_many :relateditems,
     :through => :itemrelationships
 
-   default_scope includes(:attribute_values)
+  # default_scope includes(:attribute_values)
   
   scope :get_price_range, lambda {|item_ids| joins(:item_attributes).
       where("attribute_values.item_id in (?) and attributes.name = 'Price'", item_ids).
@@ -115,13 +115,13 @@ class Item < ActiveRecord::Base
   end
 
   def self.get_cached(id)
-    begin
-      Rails.cache.fetch('item:'+ id.to_s) do
-        where(:id => id).includes(:item_attributes).last
-      end
-    rescue
-      where(:id => id).includes(:item_attributes).try(:last)
-    end
+    #begin
+    #  Rails.cache.fetch('item:'+ id.to_s) do
+    #    where(:id => id).includes(:item_attributes).last
+    #  end
+    #rescue
+      where(:id => id).includes(:item_attributes)
+    #end
 
   end
 

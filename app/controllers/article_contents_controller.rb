@@ -11,14 +11,14 @@ class ArticleContentsController < ApplicationController
     #for article content create or submit
     @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
-   score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
+    score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
     if params[:article_content][:sub_type]!= "Photo"
        params.delete("content_photos_attributes")
    end 
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
    if params[:article_content][:sub_type] == "Photo"
-         @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
+      @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
    end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
@@ -36,7 +36,9 @@ class ArticleContentsController < ApplicationController
        params.delete("content_photos_attributes")
     end 
     @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
-    @article.update_attribute('thumbnail',@article.content_photo.photo.url) if params[:article_content][:sub_type]
+    if params[:article_content][:sub_type] ==  "Photo"
+       @article.update_attribute('thumbnail',@article.content_photo.photo.url)
+     end   
   end
   
   def download

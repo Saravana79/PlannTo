@@ -7,6 +7,7 @@
   <%= javascript_include_tag 'application' %>
   <!---->
   <%= stylesheet_link_tag 'application' %>
+
   <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet"/>
   <!--<script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-1.5.1.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js"></script>-->
@@ -27,7 +28,15 @@
 <body marginheight="0" topmargin="0">
 <%= render 'shared/header_links' %>
 <div id="dialog-form" title="Create new user">
-  <%= render "shared/login_dialog" %>
+    <div id="login">
+       <%= render "shared/login_dialog" %>
+          <div class="Dontsignup">Don't have an account. <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" %></div>
+   </div>
+  <div id="sign_up_dialog_1" style="display:none;">
+
+       <%= render "/shared/signup_dialog" %>
+<div class="Dontsignup">Do you have an account. <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();" %></div>
+</div>
   <%= render 'shared/show_hide_login_form', :item => "" %>
 </div>
 <div id="maincontainer" class="maincontainerCss">
@@ -36,12 +45,29 @@
 <!-- This will go into main layout -->
 </div>
 <br />
+
+
 <div class="footerdiv">
 <%= render 'shared/footer' %>
   <div style="display:none;">
   <%= render "shared/login_dialog", :item => @item %>
   </div>
 </div>
+<div id="sign_up_dialog" style="display:none">
+    <div id="login1" style="display:none;">
+       <%= render "shared/login_dialog" %>
+        <div class="Dontsignup">Don't have an account. <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog2').show();$('#login1').hide();" %></div>
+   </div>
+   
+  <div id="sign_up_dialog2">
+
+       <%= render "/shared/signup_dialog" %>
+<div class="Dontsignup">Do you have an account. <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();" %></div>
+
+</div></div>
+
+<%= render("shared/google_analytics") if Rails.env.production? %>
+
 </body>
 </html>
 
