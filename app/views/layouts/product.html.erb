@@ -64,6 +64,9 @@
 <div class="Dontsignup">Do you have an account. <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();" %></div>
 
 </div></div>
+
+<%= render("shared/google_analytics") if Rails.env.production? %>
+
 </body>
 </html>
 
