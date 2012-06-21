@@ -14230,8 +14230,8 @@ $(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomp
     login_dialog: function() {
       return $("#dialog-form").dialog({
         autoOpen: false,
-        height: 500,
-        width: 300,
+        height: 600,
+        width: 350,
         modal: true,
         close: function() {
           return allFields.val("").removeClass("ui-state-error");

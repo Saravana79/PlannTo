@@ -105,8 +105,8 @@ root.Product =
   login_dialog: ->
     $("#dialog-form").dialog
       autoOpen: false
-      height: 500
-      width: 300
+      height: 600
+      width: 350
       modal: true
      
       
