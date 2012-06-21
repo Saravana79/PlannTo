@@ -186,7 +186,9 @@ module ContentsHelper
 
   def get_anchor_name_link(content)
     first_item = content.items.first
-    content = "<a class='txt_brown' href=" + "/#{first_item.type.tableize}/#{first_item.id.to_s}" + "> #{first_item.name}</a> "
+    if (first_item?)
+        content = "<a class='txt_brown' href=" + "/#{first_item.type.tableize}/#{first_item.id.to_s}" + "> #{first_item.name}</a> "
+    end
     return content.html_safe
   end
 end
