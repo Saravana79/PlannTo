@@ -42,7 +42,7 @@ class AccountsController < ApplicationController
 
   def profile
     require 'will_paginate/array'
-
+    @user = User.find(:first, :conditions => ["email like ?","#{params[:user_name]}@%"])
     @follow_types = Itemtype.get_followable_types(params[:follow])
     @itemtype=Itemtype.find_by_itemtype(Itemtype.get_item_type_from_params(params[:follow]))
     @itemtype_id = @itemtype.id
