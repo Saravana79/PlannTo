@@ -13,6 +13,12 @@
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
     <div id="notification" class="notificationStyle">Thank You, Question has been created.</div>
+    <%if @content %>
+     <div class="Close_dialog" style="display:none;width:43px; 
+overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('#contentEditView').dialog('destroy');"></div>
+ <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
+ <%end%>
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
       <div class="float_lft">
