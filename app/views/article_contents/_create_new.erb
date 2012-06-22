@@ -139,10 +139,21 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
   </div>
 <% end %>
 
+
+
 <script type="text/javascript">
+ $(".Howkb").click(function(){
+        $('#photo').hide();
+    });
+  $(".Qatab").click(function(){
+          $('#photo').hide();
+   });
     <%@article_categories.each_with_index do |article_category, index|%>
-         $("#content<%=article_category[0]%>").click(function(){
+        
+         $("#content<%= article_category[0]%>").click(function(){
+            
            if ($(this).attr('id')!= 'contentPhoto')
+           
            {
              $('#photo').hide();
            }
