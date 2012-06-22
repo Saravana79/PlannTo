@@ -2980,9 +2980,9 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
     margin: 15px 0 0; text-align: center;}
 
 
-.Homeinnercontent { width:900px; height:auto; margin:auto; overflow:hidden; padding-top:44px;}
+.Homeinnercontent { width:900px; height:auto; margin:auto; overflow:hidden; padding-top:30px;}
 .Titledes { font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#2d2d2d; text-align:center;
-Clear:both; font-weight:bold; padding:0 0 47px 0;}
+Clear:both; font-weight:bold; padding:0 0 30px 0;}
 
 
 .Homefourblocks { width:100%; float:left; padding-bottom:15px;}
@@ -3037,6 +3037,45 @@ a.Blacklink:hover { text-decoration: underline;}
 
 
 /*---------------HOME POPUP GRAY BOX-----------*/
+.Homeinnercontent { width:924px; height:auto; margin:auto; overflow:hidden; padding-top:20px;}
+.Titledes { font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#2d2d2d; text-align:center;
+            Clear:both; font-weight:bold; padding:0 0 30px 0;}
+
+
+.Homefourblocks { width:100%; float:left; padding-bottom:15px;}
+.Blueblockhome {  float:left; margin-right:44px; text-align:center;
+background:#FFFFFF url(../images/blue_boxbg.png) repeat-x left top; padding:0 9px 0px 9px;
+border:1px solid #dadada; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;}
+
+
+.smallhomeblock{width:178px;height:250px;}
+.bighomeblock{width:170px; height:450px;}
+
+.Blueblockhome.Lastblock { margin-right:0px;}
+
+.Blueblockhome h2 { font-family:Tahoma, Arial, Helvetica, sans-serif; margin:0;
+font-size:16px; text-align:center; color:#4b85a4; font-weight:bold; padding:0 0 3px 0;}
+
+.Blueblockhome p {font-family:Tahoma, Arial, Helvetica, sans-serif; margin:0;
+font-size:12px; color:#282929; padding:0px 0 0px 0;}
+
+.Textdescriptions { clear:both; padding:0 0 15px 0; min-height:191px;}
+
+
+.Blueblockhome span.Buytag { height:128px; background:url(../images/buy_tag.png) no-repeat center center;
+clear:both; display:block; margin-top:28px; margin-bottom:16px;}hom
+.Blueblockhome span.Ownertag { height:128px; background:url(../images/owner.png) no-repeat center center;
+clear:both; display:block; margin-top:28px; margin-bottom:16px;}
+
+.Blueblockhome span.Expertstar { height:128px; background:url(../images/expers_star.png) no-repeat center center;
+clear:both; display:block; margin-top:28px; margin-bottom:16px;}
+
+.Blueblockhome span.Redcar { height:128px; background:url(../images/red_car.png) no-repeat center center;
+clear:both; display:block; margin-top:28px; margin-bottom:16px;}
+
+a.Blacklink { color:#282929; text-decoration:none;}
+a.Blacklink:hover { text-decoration: underline;}
+
 .Homepopupgraybox { width:1008px; float:left; margin-left:-2px;}
 .Homepopupgraybox .Boxtopblock { width:1008px; float:left; background:url(../images/gray_blocktop.png) no-repeat left top;
 height:38px; font-family:Tahoma, Arial, Helvetica, sans-serif;}
@@ -3053,9 +3092,9 @@ display:block; float:right; width:40px; height:20px; line-height:18px;
 text-decoration:none; background:url(../images/open_closetab.png) no-repeat left top; padding:0 16px 0 0;
 font-size:12px; font-family:Tahoma, Arial, Helvetica, sans-serif; color:#505050; text-align:center;
  }
- 
+
 .Homepopupgraybox .Boxtopblock span.Openclosebut a.Close { background-position:left bottom;}
- 
+
 .Homepopupgraybox .Boxtopblock span.Openclosebut a:hover { color:#000000;}
 
 .Homepopupgraybox .Grayboxmid .Homeinnercontent { padding:0px;}
@@ -3063,18 +3102,18 @@ font-size:12px; font-family:Tahoma, Arial, Helvetica, sans-serif; color:#505050;
 .Homepopupgraybox .Boxbotcorner { width:100%; float:left; height:11px;
  background:url(../images/gray_blockbotbg.png) no-repeat left bottom;}
 
-.Homepopupgraybox .Grayboxmid .Blueblockhome:hover { border:1px solid #797979;}
+.Homepopupgraybox .Grayboxmid .Blueblockhome:hover  { border:1px solid #797979;}
 
 .Homepopupgraybox .Grayboxmid .Bluecyanbut { width:134px; margin:auto; clear:both; padding-bottom:8px; overflow:hidden;}
-.Homepopupgraybox .Grayboxmid .Bluecyanbut a { display:block; float:left; padding:0 0 0 13px;
-background:url(../images/blue_left_corner.png) no-repeat left top; color:#FFFFFF;
+.Homepopupgraybox .Grayboxmid  .Bluecyanbut a { display:block; float:left; padding:0 0 0 13px;
+background:url(../images/blue_left_corner.png) no-repeat left top;  color:#FFFFFF;
 font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; text-decoration:none; cursor:pointer;}
 
-.Homepopupgraybox .Grayboxmid .Bluecyanbut a span { display:block; float:left;
+.Homepopupgraybox .Grayboxmid  .Bluecyanbut a span { display:block; float:left;
  background:url(../images/blue_rightcorner.png) no-repeat right top; padding:6px 13px 8px 0;}
 
-.Homepopupgraybox .Grayboxmid .Bluecyanbut a:hover { background-position:left -28px; text-decoration:none;}
-.Homepopupgraybox .Grayboxmid .Bluecyanbut a:hover span { background-position:right -28px;}
+.Homepopupgraybox .Grayboxmid  .Bluecyanbut a:hover { background-position:left -28px; text-decoration:none;}
+.Homepopupgraybox .Grayboxmid  .Bluecyanbut a:hover span { background-position:right  -28px;}
 
 
 .Homepopupgraybox .Grayboxmid .Blueblockhome span.Buytag,
@@ -3084,8 +3123,6 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; text-decoratio
  {margin-top:5px; margin-bottom:7px;}
 
 .Homepopupgraybox .Grayboxmid .Blueblockhome .Textdescriptions { padding-bottom:10px;}
-
-
 /*----------POPUP UPDATES-------------*/
 .Popuptitlebar { clear:both; background: url(../images/border_popup.png) no-repeat 50% 100% transparent; padding:10px 0;
 position:relative; }
