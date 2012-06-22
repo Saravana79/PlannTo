@@ -24,7 +24,11 @@
      </div>
      <%end%>
       <%if @content %>
+       <div class="Close_dialog" style="display:none;width:43px; 
+overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#contentEditView').dialog('destroy');"></div>
         <%if @content.sub_type == 'Photo' %>
+        
            <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></imag></div><%end%>
            <br />
            <br /> 
