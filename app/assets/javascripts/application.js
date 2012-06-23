@@ -7,7 +7,13 @@
 //= require jquery-ui
 //= require_tree .
 //= require tinymce
-//= require jquery_ujs
 //= require jquery.remotipart
+
+
+
+var plannto_popup_login_id = "";
+var login_flag = "";
+
+
 
 
