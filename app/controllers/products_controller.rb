@@ -38,7 +38,9 @@ class ProductsController < ApplicationController
       @article_categories = ArticleCategory.get_by_itemtype(0)
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end    
-
+    if((@item.is_a? Product) &&  (!@item.manu.nil?))
+      @dealer_locators =  DealerLocator.find_by_item_id(@item.manu.id)
+    end 
     @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
    

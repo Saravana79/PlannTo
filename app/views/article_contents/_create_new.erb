@@ -139,19 +139,31 @@
   </div>
 <% end %>
 
+
+
 <script type="text/javascript">
-<%@article_categories.each_with_index do |article_category, index|%>
-    $("#content<%=article_category[0]%>").click(function(){
-      if ($(this).attr('id')!= 'contentPhoto')
-      {
+
+ $(".Howkb").click(function(){
         $('#photo').hide();
-      }
-      if ($(this).attr('id') == 'contentPhoto')
-      {
-        $('#photo').show();
-      }
     });
-<%end%>    
+  $(".Qatab").click(function(){
+          $('#photo').hide();
+   });
+    <%@article_categories.each_with_index do |article_category, index|%>
+        
+         $("#content<%= article_category[0]%>").click(function(){
+            
+           if ($(this).attr('id')!= 'contentPhoto')
+           
+           {
+             $('#photo').hide();
+           }
+           if ($(this).attr('id') == 'contentPhoto')
+           {
+             $('#photo').show();
+          }
+       });  
+     <%end%>    
    
    
   function showDefaultProductTag(id, hidden_text_field_id){

@@ -30,12 +30,13 @@ class ArticleContent < Content
       begin
         
         doc = Nokogiri::HTML(open(url))
-        @title_info = doc.xpath('.//title')
+        @title_info = doc.xpath('.//title').to_s.strip
         doc.xpath("//meta[@name='keywords']/@content").each do |attr|
           @meta_keywords = attr.value
         end
+        @meta_description = ''
         doc.xpath("//meta[@name='description']/@content").each do |attr|
-          @meta_description = attr.value
+          @meta_description = attr.value.strip
         end
        # doc.xpath("//link[@rel='image_src']").each do |attr|
        #   @images << CGI.unescapeHTML(attr.value)

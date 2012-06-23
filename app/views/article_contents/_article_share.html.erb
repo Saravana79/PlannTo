@@ -85,7 +85,7 @@
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
       <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
       <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
-      <div class="float_lft <%=@article_image%>"><input type="checkbox" >Don't Include Thumbnail</input></div>
+      <div class="float_lft <%=@article_image%>"><input type="checkbox" id="noincludethumbnail" name="noincludethumbnail">Don't Include Thumbnail</input></div>
       <div class="float_lft"><input type="checkbox" id="<%=@manual_image%>">Add Image Url</input>
         <%=f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px"%>
       </div>
@@ -262,6 +262,8 @@
         $("#<%=@img_thumb%>").attr("src",images[images_index]);
         $('#<%=@current_image_size%>').html(sizes[images_index]);
         $("#<%=@new_article_thumbnail%>").val(images[images_index]);
+        $("#<%=@thumbnail_id%>").val(images[images_index]);
+
       }
     });
     $('#aNext').live("click",function(){
@@ -271,6 +273,7 @@
         $('#<%=@current_image_size%>').html(sizes[images_index]);
         $("#<%=@img_thumb%>").attr("src",images[images_index]);
         $("#<%=@new_article_thumbnail%>").val(images[images_index]);
+        $("#<%=@thumbnail_id%>").val(images[images_index]);
       }
     });
 
@@ -336,6 +339,7 @@
       first=false;
       $("#<%=@img_thumb%>").attr("src",url);
       $("#<%=@new_article_thumbnail%>").val(url);
+      $("#<%=@thumbnail_id%>").val(url);
       $("#<%=@img_thumb%>").show();
       $(".<%=@article_image%>").show();
       $('#<%=@current_image_size%>').html(size[0]+"*"+size[1]);
