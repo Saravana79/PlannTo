@@ -61,6 +61,10 @@ class ApplicationController < ActionController::Base
         session["previous_html_url"] = request.env["REQUEST_URI"]
       end
     end
+
+
+    #this is used to reset login through ajax request.
+    $logged_in = false
   end
 
   def after_ajax_call_path_for

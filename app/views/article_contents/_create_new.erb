@@ -9,39 +9,39 @@
   <% @article_content= ArticleContent.new %>
   <% @article_content.build_content_photo %>
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
-   <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
-  <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
+    <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+    <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :sub_type%>
     <div id="article_errors" style="line-height:20px;color: red;"></div>
     <div style="padding:5px 5px 0px 0px;text-align:center">
-     <%unless @content %>
-     <div style="display:none;" id="photo">
-      <div class="title_header float_lft" id="photo">Photo:</div>
-        <%= f.fields_for :content_photo do |photo| %>
-         <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
-       <%end%>
-     <div style="clear:both;"></div>
-     </div>
-     <%end%>
-      <%if @content %>
-     
-       <div class="Close_dialog" style="display:none;width:43px; 
-overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
-position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#contentEditView').dialog('destroy');"></div>
- <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
-        <%if @content.sub_type == 'Photo' %>
-        
-           <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></imag></div><%end%>
-           <br />
-           <br /> 
-       <div class="title_header float_lft" id="photo">Photo:</div>
-         <%= f.fields_for :content_photo do |photo| %>
-         <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
-       <%end%>
+      <%unless @content %>
+        <div style="display:none;" id="photo">
+          <div class="title_header float_lft" id="photo">Photo:</div>
+          <%= f.fields_for :content_photo do |photo| %>
+            <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
+          <%end%>
+          <div style="clear:both;"></div>
+        </div>
       <%end%>
-       <%end%>
-        
-     <div class="title_header float_lft">Title :</div>
+      <%if @content %>
+
+        <div class="Close_dialog" style="display:none;width:43px;
+             overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+             position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#contentEditView').dialog('destroy');"></div>
+        <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
+        <%if @content.sub_type == 'Photo' %>
+
+          <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></imag></div><%end%>
+          <br />
+          <br />
+          <div class="title_header float_lft" id="photo">Photo:</div>
+          <%= f.fields_for :content_photo do |photo| %>
+            <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
+          <%end%>
+        <%end%>
+      <%end%>
+
+      <div class="title_header float_lft">Title :</div>
       <div class="float_lft">
         <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
       </div>
@@ -94,14 +94,14 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
       <%@field3_id = "new_article_create_field3"%>
       <%@sharefield3 = "sharefield3"%>
       <%@sharefield3Label = "sharefield1Label3"%>
-    <%@field4_id = "new_article_create_field4"%>
+      <%@field4_id = "new_article_create_field4"%>
       <%@sharefield4 = "sharefield4"%>
       <%@sharefield4Label = "sharefield1Label4"%>
     <%else%>
       <%@field3_id = "edit_article_create_field3_#{@content.id}"%>
       <%@sharefield3 = "edit_article_create_sharefield3_#{@content.id}"%>
       <%@sharefield3Label = "edit_article_create_sharefield1Label3_#{@content.id}"%>
-    <%@field4_id = "edit_article_create_field4_#{@content.id}"%>
+      <%@field4_id = "edit_article_create_field4_#{@content.id}"%>
       <%@sharefield4 = "edit_article_create_sharefield4_#{@content.id}"%>
       <%@sharefield4Label = "edit_article_create_sharefield1Label4_#{@content.id}"%>
     <%end%>
@@ -111,7 +111,7 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
       <div class="float_lft">
         <%= f.text_field :field3, {:style=>"margin-left:5px;",:width=>"400px", :id =>  @field3_id}  %>
       </div>
-       <div style="clear:both;"></div>
+      <div style="clear:both;"></div>
     </div>
     <div style="padding:5px 5px 0px 0px;display:none" id="<%=@sharefield4%>">
       <br/>
@@ -119,7 +119,7 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
       <div class="float_lft">
         <%= f.text_field :field4, {:style=>"margin-left:5px;width:400px",:width=>"400px", :id =>  @field4_id}  %>
       </div>
-       <div style="clear:both;"></div>
+      <div style="clear:both;"></div>
     </div>
     <!-- FIELD ENDS -->
     <div style="padding:5px 5px 0px 0px;clear:both;" id="shareProduct">
@@ -140,18 +140,18 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
 <% end %>
 
 <script type="text/javascript">
-    <%@article_categories.each_with_index do |article_category, index|%>
-         $("#content<%=article_category[0]%>").click(function(){
-           if ($(this).attr('id')!= 'contentPhoto')
-           {
-             $('#photo').hide();
-           }
-           if ($(this).attr('id') == 'contentPhoto')
-           {
-             $('#photo').show();
-          }
-       });  
-     <%end%>    
+<%@article_categories.each_with_index do |article_category, index|%>
+    $("#content<%=article_category[0]%>").click(function(){
+      if ($(this).attr('id')!= 'contentPhoto')
+      {
+        $('#photo').hide();
+      }
+      if ($(this).attr('id') == 'contentPhoto')
+      {
+        $('#photo').show();
+      }
+    });
+<%end%>    
    
    
   function showDefaultProductTag(id, hidden_text_field_id){
@@ -177,11 +177,11 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
     $("div#subContainerContentCreate #<%=@sharefield4%>").hide();
   }
   function setDefaultFieldsArticleCreate(category){
-    <%if @content.nil?%>
-        var saveButtonName = "Save " + category
-    <%else%>
+<%if @content.nil?%>
+      var saveButtonName = "Save " + category
+<%else%>
       var saveButtonName = "Update " + category
-    <%end%>
+<%end%>
     $("form#<%=@form_id%> input#article_content_create_submit").val(saveButtonName);
     hideAllOptionalFieldsArticleCreate();
     if (category == "<%=ArticleCategory::EVENT%>"){
@@ -200,8 +200,8 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('#con
 <%if @content.nil?%>
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
-$("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px'/>");
-$("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").val('');
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").val('');
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").val('');
@@ -209,7 +209,7 @@ $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWi
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
-       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
 <%end%>
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
@@ -226,14 +226,14 @@ $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWi
 <%unless @content.nil?%>
       $("div#subContainerContentCreate #<%=@field1_id%>").val("<%=@content.field1%>")
       $("div#subContainerContentCreate #<%=@field2_id%>").val("<%=@content.field2%>")
-         $("div#subContainerContentCreate #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
-         $("div#subContainerContentCreate #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
-  
+      $("div#subContainerContentCreate #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#subContainerContentCreate #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+
 <%end%>
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
-     $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Android Url:")
-     $("div#subContainerContentCreate #<%=@sharefield4Label%>").text("Itune Url:")
-     $("div#subContainerContentCreate #<%=@sharefield4%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Android Url:")
+    $("div#subContainerContentCreate #<%=@sharefield4Label%>").text("Itune Url:")
+    $("div#subContainerContentCreate #<%=@sharefield4%>").show();
     $("div#subContainerContentCreate #<%=@sharefield3%>").show();
   }
 
@@ -301,6 +301,12 @@ $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWi
       if (!valid){
         return false;
       }
+      <%unless user_signed_in?%>
+        if (login_flag != true){
+          openLoginPopup("form#<%=@form_id%> #article_content_create_submit", "submit");
+          return false
+        }
+      <% end%>
        
     })
   });

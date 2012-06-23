@@ -11,9 +11,4 @@
 
 
 
-var plannto_popup_login_id = "";
-var login_flag = "";
-
-
-
 
