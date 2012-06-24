@@ -8,8 +8,10 @@ position:relative; left:296px; text-indent:-9999px; top:-12px;" onclick="$('#sig
 <script type="text/javascript">
 function myfunc() {
   FB.login(function(response) {
+    location.href = '<%= facebook_path %>';
     if (response.session) {
       if (response.perms) {
+        
     } else {
    }
     } else {
