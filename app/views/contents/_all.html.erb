@@ -62,6 +62,17 @@
   <a id="content_next" style="display:none"></a>
   <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
 </div>
+<script type="text/javascript">
+  $("div.rate_content a").click(function(e){
+   <%unless user_signed_in?%>
+        if (login_flag != true){
+          openLoginPopup("#" +$(this).attr('id'), "click");
+          return false
+        }
+      <% end%>
+
+    })
+</script>
 <script type="text/javascript" charset="utf-8">
   $(function(){
     $('#load_content').live("click",function(){
