@@ -202,6 +202,7 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
+  config.navigational_formats = [:"*/*", "*/*", :html, :js]
   # config.warden do |manager|
   #   manager.failure_app   = AnotherApp
   #   manager.intercept_401 = false

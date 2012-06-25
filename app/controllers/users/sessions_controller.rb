@@ -19,16 +19,16 @@ class Users::SessionsController < Devise::SessionsController
     set_flash_message(:notice, :signed_in) if is_navigational_format?
     sign_in(resource_name, resource)
     respond_with resource, :location => after_sign_in_path_for(resource)
-    else
+    #else
    
-      if user_signed_in?
+    #  if user_signed_in?
         #ajax signed in
-        $logged_in = true
+     #   $logged_in = true
 
-      else
-        $logged_in = false
+     # else
+     #   $logged_in = false
         #ajax sign in failed.
-      end
+    #  end
     end
   
   end
