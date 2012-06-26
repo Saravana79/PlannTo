@@ -6,15 +6,17 @@
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
     <%items.each_with_index do |item, index|%>
       <%if display_item_details(item)%>
+       
         <%if index == 0%>
-          <tr class="wheretobuyrows"><td width="25%" class=""><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td><td class="wheretobuytext" style="font-style:bold"><%=display_price_detail(item)%></td><td width="25%" class="wheretobuytext"><%=display_shipping_detail(item)%></td><td><input type="button" value="Visit Store" onclick="window.open('/history_details?detail_id=<%=item.item_details_id%>')"/></td></tr>
+          <tr class="wheretobuyrows" ><td width="25%" style="padding-top:5px;"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td><td class="wheretobuytext" style="font-style:bold"><%=display_price_detail(item)%></td><td width="25%" class="wheretobuytext"><%=display_shipping_detail(item)%></td><td align="center"><input type="button" value="Visit Store" onclick="window.open('/history_details?detail_id=<%=item.item_details_id%>')"/></td>
+          </tr>
         <%else%>
           <%if index == 1%>
-            <tr class="wheretobuyrows"><td width="25%" class="">Other variants</td><td class="wheretobuytext" style="font-style:bold"><a><%=display_price_detail(item)%></a> |
+            <tr class="wheretobuyrows" ><td width="25%" colspan="4">Other variants <a target="_blank" style="padding:0px 5px 0px 10px;" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>
             <%elsif (items.size == index + 1) && index > 1%>
-           <a><%=display_price_detail(item)%></a> | </td></tr>
-          <%else%>
-            <a><%=display_price_detail(item)%></a>|
+             |  <a style="padding:0px 0px 0px 5px;" target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>  </td></tr>
+            <%else%>
+             | <a target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a> 
           <%end%>
         <%end%>
       <%end%>
