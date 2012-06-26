@@ -246,7 +246,12 @@ module ItemsHelper
   end
 
   def display_price_detail(item)
-    item.price == 0.0 ? "N/A" :  "Rs #{item.price}"
+    if(!item.cashback.nil? && item.cashback != 0.0)
+      item.price == 0.0 ? "N/A" :  number_to_indian_currency(item.price - item.cashback).to_s
+    else
+      item.price == 0.0 ? "N/A" :  number_to_indian_currency(item.price).to_s
+    end 
+    
   end
 
   def display_product_page_tabs(item)
@@ -264,6 +269,15 @@ module ItemsHelper
     <li><a href="#tabs6" ><span>Where to Buy</span></a></li>'
     end
     return html_list.html_safe
+  end
+
+
+  def number_to_indian_currency(number)
+    if number
+      string = number.to_s
+      number = string.to_s.gsub(/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/, "\\1,")    
+    end
+    "Rs #{number}"
   end
 
 end
