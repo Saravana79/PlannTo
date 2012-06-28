@@ -95,12 +95,12 @@
 
       <div style="clear:both;">
         <ul id="Newtabs">
-          <li class="tab_active"><a href="<%= profile_path(@user.username, :follow => 'Cars') %>"><span>Cars</span></a></li>
-          <li class=""><a href="<%= profile_path(@user.username, :follow => 'Mobile') %>"><span>Mobile</span></a></li>
-          <li class=""><a href="<%= profile_path(@user.username, :follow => 'Tablet') %>"><span>Tablet</span></a></li>
-          <li class=""><a href="<%= profile_path(@user.username, :follow => 'Camera') %>"><span>Camera</span></a></li>
-          <li class=""><a href="<%= profile_path(@user.username, :follow => 'Bike') %>"><span>Bike</span></a></li>
-          <li class=""><a href="<%= profile_path(@user.username, :follow => 'Cycle') %>"><span>Cycle</span></a></li>
+          <li class="tab_active"><a href="<%= "#{@user.try(:username)}?follow='Cars'" %>"><span>Cars</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Mobile'" %>"><span>Mobile</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Tablet'" %>"><span>Tablet</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Camera'" %>"><span>Camera</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Bike'" %>"><span>Bike</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Cycle'" %>"><span>Cycle</span></a></li>
           
         </ul>
       </div>

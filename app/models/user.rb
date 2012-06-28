@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
     Follow::ProductFollowType::Follow => "follow_item_ids",
     Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, :avatar
+  attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, :avatar, :username
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
@@ -35,6 +35,8 @@ class User < ActiveRecord::Base
   belongs_to :invitation
   belongs_to :facebook
   has_many :field_values
+
+  after_create :populate_username
 
 
 
@@ -65,9 +67,9 @@ class User < ActiveRecord::Base
     user_details
   end
 
-  def username
-    email.split("@")[0]
-  end
+  # def username
+  #   email.split("@")[0]
+  # end
 
   def name
     unless u_name = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name")
@@ -145,6 +147,31 @@ class User < ActiveRecord::Base
   def fetch_content_user_vote?(item)
     value = $redis.get "user_#{self.id}_item_#{item.id}"
     return value.nil? ?  nil : value  
+  end
+
+  private
+
+  def populate_username
+    # Extract email address from Email address provided by user
+    user_name = email.split("@")[0]
+
+    #check if the same username is already present in the db
+    existing_user_names = User.where("username like ? OR username like ?", "#{user_name}%", "#{user_name}.%")
+
+    if existing_user_names.present?
+      # write logic here to increment the last digit of username
+      arr = existing_user_names.last.username.split(".")
+      if arr.size > 1 
+        counter = arr.last.to_i + 1     
+        new_username = "#{user_name}.#{counter}"
+      else
+        new_username = "#{user_name}.1"
+      end
+      update_attribute(:username, new_username)
+    else
+      update_attribute(:username, user_name)
+    end
+
   end
 
 end

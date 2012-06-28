@@ -51,42 +51,13 @@
        
          <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
            <div class="Useraccountinfo">
-             <%= link_to "Account Setting", accounts_path(current_user.username) %>
-             <%= link_to "Profile", profile_path(current_user.username) %>
+             <%= link_to "Account Setting", accounts_path %>
+             <%= link_to "Profile",  URI.escape(CGI.escape("#{current_user.username}"),'.') %>
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>
          </span>
        
     </span> 
-    <!--  Welcome <%= link_to current_user.name, "#", :onclick => "showLoginLinks()", :class => 'divider_line' %> |
-      <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
-      <div id="login_link" style="display:none">
-        <ul>
-          <li>
-            <%= link_to "Account Setting", accounts_path(current_user.username) %>
-          </li>
-          <li>
-            <%= link_to "Profile", profile_path(current_user.username) %>
-          </li>
-          <li>
-            <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
-          </li>
-        </ul>
-      </div>
-
-    -->
-    <% else %>
-     <!-- Welcome <%= link_to "Guest", "#", :onclick => "showLogout()", :class => 'divider_line' %> |
-      <div id="logout_link" style="display:none">
-        <ul>
-          <li>
-            <%= link_to "Sign In", "#", :class => "sign_in" %>
-          </li>
-          <li></li>
-          <%= link_to "Sign Up", new_registration_path('user') %>
-          </li>
-        </ul>
-      </div>-->
       <span class="txt_welcome">
       <%= link_to "Sign In", "#", :class => "sign_in" %> | <%= link_to "Sign Up", "#",:onclick =>"$('#sign_up_dialog').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
         $('.ui-dialog-titlebar').hide();" %>
