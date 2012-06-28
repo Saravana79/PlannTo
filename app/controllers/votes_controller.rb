@@ -1,4 +1,5 @@
 class VotesController < ApplicationController
+   before_filter :authenticate_user!
   require "resque"
   skip_before_filter :verify_authenticity_token
 

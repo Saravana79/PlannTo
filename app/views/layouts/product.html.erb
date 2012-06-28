@@ -82,6 +82,29 @@
   });
 </script>
 
+<script type="text/javascript">
+  $("div.rate_content a").click(function(e){
+<%unless user_signed_in?%>
+      if (login_flag != true){
+        openLoginPopup("#" +$(this).attr('id'), "click");
+        return false
+      }
+<% end%>
+
+  })
+
+  $("form.new_comment").submit(function(e){
+    //     alert($("form#" + $(this).attr('id') + " :input.new_comment").attr("id"))
+<%unless user_signed_in?%>
+      if (login_flag != true){
+        openLoginPopup("#" + $(this).attr('id'), "submit");
+        return false
+      }
+<% end%>
+  })
+
+</script>
+
 
 
 
