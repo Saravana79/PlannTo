@@ -232,7 +232,42 @@ class SearchController < ApplicationController
     end 
     
      # end
-      url = "/#{item.type.tableize}/#{item.id}"
+      url = item.get_url()
+      # image_url = item.image_url
+      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+    }
+    render :json => results
+    
+  end
+
+  def search_items_by_relavance
+    search_type = Product.search_type(params[:search_type])
+    @items = Sunspot.search(search_type) do
+        fulltext params[:term] do
+          minimum_match 1
+        end
+      order_by :score,:desc
+      paginate(:page => 1, :per_page => 10)      
+    end
+
+    results = @items.collect{|item|
+
+      image_url = item.image_url
+    
+     if(item.is_a? (Product))
+        type = item.type.humanize
+     elsif(item.is_a? (CarGroup))
+        type = "Groups"
+     elsif(item.is_a? (AttributeTag))
+        type = "Groups"
+     elsif(item.is_a? (ItemtypeTag))
+        type = "Topics"
+     else
+        type = item.type.humanize
+    end 
+    
+     # end
+      url = item.get_url()
       # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
@@ -266,7 +301,7 @@ class SearchController < ApplicationController
         image_url =item.image_url
         type = item.type.humanize
       end
-      url = "/#{item.type.tableize}/#{item.id}"
+      url = item.get_url()
       # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
