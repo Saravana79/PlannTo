@@ -178,7 +178,7 @@ module ContentsHelper
 
 
   def display_product_tag(item, display)
-    list = "<li id='textTaggers#{item.id}'" + " class='taggingmain'><span><a class='txt_tagging'>" + item.name + "</a>"
+    list = "<li id='textTaggers#{item.id}'" + " class='taggingmain'><span><a class='txt_tagging' href="+  item.get_url() + ">" + item.name + "</a>"
     list += "<a id= 'deleteTag' class='icon_close_tagging' href='#'></a>" if display == true
     list += "</span></li>" ;
 
@@ -187,7 +187,7 @@ module ContentsHelper
   def get_anchor_name_link(content)
     first_item = content.items.first
     if (!first_item.nil?)
-        content = "<a class='txt_brown' href=" + "/#{first_item.type.tableize}/#{first_item.id.to_s}" + "> #{first_item.name}</a> "
+        content = "<a class='txt_brown' href=" + first_item.get_url() + "> #{first_item.name}</a> "
         return content.html_safe
     end
     
