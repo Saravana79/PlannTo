@@ -328,4 +328,12 @@ end
     "Rs #{number}"
   end
 
+def get_url()
+   if (self.is_a? ItemtypeTag)
+    "/#{self.name.downcase.pluralize}"
+   else
+    "/#{self.type.downcase.pluralize}/#{self.id.to_s}"
+   end
 end
+end
+

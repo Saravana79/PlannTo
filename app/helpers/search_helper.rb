@@ -15,7 +15,7 @@ module SearchHelper
   end
 
   def link_url(item)
-     return "/#{item.type.downcase.pluralize}/#{item.id}"
+     return item.get_url()
   end
 
   def view_all_related_items_url(item)

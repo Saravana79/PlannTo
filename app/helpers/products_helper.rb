@@ -32,7 +32,7 @@ module ProductsHelper
   end
 
   def display_item_manufacturer_url(item)
-    "/#{item.manu.type.downcase.pluralize}/#{item.manu.id.to_s}"
+    item.manu.get_url()
   end
 
   def display_item_group(item)
@@ -40,7 +40,7 @@ module ProductsHelper
     end
 
   def display_item_group_url(item)
-    "/car_groups/#{item.cargroup.id.to_s}"
+    item.cargroup.get_url()
   end
 
   def display_item(item)
@@ -48,6 +48,6 @@ module ProductsHelper
   end
 
   def display_item_url(item)
-    "/#{item.type.pluralize}/#{item.id}"
+    item.get_url()
   end
 end
