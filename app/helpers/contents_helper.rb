@@ -40,9 +40,9 @@ module ContentsHelper
       if (item.type == "ArticleContent" && item.url.blank?)
         render :partial => "article_contents/create_new", :locals => { :content => item }
       elsif (item.type == "ArticleContent" && item.url != "")
-        render :partial => "article_contents/article_share", :locals => {:content_category => false,  :content => item}
+        render :partial => "article_contents/article_share", :locals => {:content_category => true,  :content => item}
       else
-        render :partial => "article_contents/article_share", :locals => {:content_category => false, :content => item }
+        render :partial => "article_contents/article_share", :locals => {:content_category => true, :content => item }
       end
      
     end
@@ -187,7 +187,7 @@ module ContentsHelper
   def get_anchor_name_link(content)
     first_item = content.items.first
     if (!first_item.nil?)
-        content = "<a class='txt_brown' href=" + first_item.get_url() + "> #{first_item.name}</a> "
+        content = "<a class='txt_brown_bold' href=" + first_item.get_url() + "> #{first_item.name}</a> "
         return content.html_safe
     end
     

@@ -3,15 +3,16 @@
     <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
   <%end%>
 <%end%>
-$("#contentEditView").dialog('destroy');
-$("#contentEditView").html('');
+//$("#contentEditView").dialog('destroy');
+//$("#contentEditView").html('');
 $("#contentEditView").html('<%= escape_javascript(display_content_form(@content)) %>');
 $("#contentEditView").dialog({
 title: 'Edit <%=@content.type.underscore.humanize%>',
 height: 500,
 width:600});
 $(".Close_dialog").show();
- $(".ui-dialog-titlebar").hide();
+ //$(".ui-dialog-titlebar").hide();
+ 
 <%#if @content.is_plannto_content?%>
 // $("div#contentEditView #subContainerDefaultContent").show();
 <%if @content.is_question_content?%>

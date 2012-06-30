@@ -27,10 +27,13 @@ PlanNto::Application.routes.draw do
   match ':search_type/related-items/:car_id' => 'related_items#index'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
 
-  match 'profile', :to => "accounts#profile", :as => "profile"
-  resources :field_values, :only => [:create]
-resources :answer_contents
-  match 'accounts/:username', :to => "accounts#index", :as => "accounts"
+  
+resources :field_values, :only => [:create]
+resources :answer_contents  
+
+# match 'accounts/:username', :to => "accounts#index", :as => "accounts"
+
+  
 resources :accounts do
     put :update
     member do
@@ -198,9 +201,14 @@ resources :accounts do
   #root :controller => :item, :action => :index
   # See how all your routes lay out with "rake routes"
 
+
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   match ':controller(/:action(/:id(.:format)))'
 
-  mount Resque::Server, :at => "/resque"
+  mount Resque::Server, :at => "/resque"  
+
+  match '/:username', :to => "accounts#profile", :as => "profile"
+  
+  
 end
