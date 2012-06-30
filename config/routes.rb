@@ -1,5 +1,6 @@
 PlanNto::Application.routes.draw do
-
+ 
+  
   get "home/index"
 
   # The priority is based upon order of creation:
@@ -14,6 +15,8 @@ PlanNto::Application.routes.draw do
   #  match 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
   resources :history_details
+  match 'external_contents/:content_id' => 'external_contents#show', :as => 'external_content'
+  
   match 'admin/search', :to => 'admin#index'
   match ':search_type/search' => 'search#index'
   resources :search do
