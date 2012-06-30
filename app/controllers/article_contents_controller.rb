@@ -15,9 +15,12 @@ class ArticleContentsController < ApplicationController
     if params[:article_content][:sub_type]!= "Photo"
        params.delete("content_photos_attributes")
    end 
+   if (params[:noincludethumbnail] == 'on')
+      params[:article_content][:thumbnail] = ''
+   end  
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-   if params[:article_content][:sub_type] == "Photo"
+   if ((params[:article_content][:sub_type] == "Photo") && (!@article.content_photo.nil?))
       @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
    end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?

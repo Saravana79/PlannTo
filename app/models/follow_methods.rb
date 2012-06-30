@@ -25,11 +25,11 @@ module FollowMethods
     @type = "buy"
     follow = follow_item(params[:follow_type], params[:unfollow])
     current_user.clear_user_follow_item
-    if follow.blank?
-      flash[:notice] = "You already buy this Item"
-    else
-      flash[:notice] = "Planning is saved"
-    end
+    #if follow.blank?
+    #  flash[:notice] = "You already buy this Item"
+    #else
+    #  flash[:notice] = "Planning is saved"
+    #end
 
   end
 
@@ -37,11 +37,11 @@ module FollowMethods
     @type = "own"
     follow = follow_item(params[:follow_type], params[:unfollow])
     current_user.clear_user_follow_item
-    if follow.blank?
-      flash[:notice] = "You are already owning this Item"
-    else
-      flash[:notice] = "Owner is saved"
-    end
+  #  if follow.blank?
+  #    flash[:notice] = "You are already owning this Item"
+  #  else
+  #    flash[:notice] = "Owner is saved"
+  #  end
 
   end
 
@@ -49,11 +49,11 @@ module FollowMethods
     @type = "follow"
     follow = follow_item(params[:follow_type], params[:unfollow])
     current_user.clear_user_follow_item
-    if follow.blank?
-      flash[:notice] = "You are already Following this Item"
-    else
-      flash[:notice] = "Follow is saved"
-    end
+ #   if follow.blank?
+ #     flash[:notice] = "You are already Following this Item"
+ #   else
+ #     flash[:notice] = "Follow is saved"
+ #   end
 
   end
 

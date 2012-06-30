@@ -8,8 +8,10 @@ $("#contentEditView").html('');
 $("#contentEditView").html('<%= escape_javascript(display_content_form(@content)) %>');
 $("#contentEditView").dialog({
 title: 'Edit <%=@content.type.underscore.humanize%>',
-height: 400,
+height: 500,
 width:600});
+$(".Close_dialog").show();
+ $(".ui-dialog-titlebar").hide();
 <%#if @content.is_plannto_content?%>
 // $("div#contentEditView #subContainerDefaultContent").show();
 <%if @content.is_question_content?%>
@@ -24,11 +26,7 @@ width:600});
   has_parent: true,
   hidden_field: "#contentEditView #review_content_item"
   };
-  <% @items.each do |item| %>
-    $.addTag("#contentEditView #review_content_item","div#contentEditView ul#review_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
-    $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-    $("div#contentEditView ul#review_product_item_list li:first span a.icon_close_tagging").remove();
-  <%end%>
+
 <%elsif @content.is_article_content?%>
   <%if @content.url.blank?%>
     $("div#contentEditView #subContainerContentCreate").show();

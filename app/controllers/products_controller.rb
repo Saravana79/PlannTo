@@ -22,7 +22,7 @@ class ProductsController < ApplicationController
   def show
     Vote.get_vote_list(current_user) if user_signed_in?
     @item = Item.find_by_id(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
-    @where_to_buy_items = Itemdetail.where("itemid = ?", params[:id]).includes(:vendor).order(:price)
+    @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", params[:id]).includes(:vendor).order(:price)
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
@@ -38,7 +38,9 @@ class ProductsController < ApplicationController
       @article_categories = ArticleCategory.get_by_itemtype(0)
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end    
-
+    if((@item.is_a? Product) &&  (!@item.manu.nil?))
+      @dealer_locators =  DealerLocator.find_by_item_id(@item.manu.id)
+    end 
     @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
    

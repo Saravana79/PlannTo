@@ -9,12 +9,16 @@ var url = "<%= feed_contents_path(:items => item.id  ) %>";
   Product.detailed_specification();
 
 <% unless related_items %>
-$('<%= "#plan_to_buy_#{item.id}, #plan_to_own_#{item.id}, #plan_to_follow_#{item.id}" %>').poshytip({
+<%
+=begin
+$('<= "#plan_to_buy_#{item.id}, #plan_to_own_#{item.id}, #plan_to_follow_#{item.id}" >').poshytip({
   content: this.title,
   className: "tip-darkgray",
   bgImageFrameSize: 11,
   offsetX: -25
 });
+=end
+%>
 <% end %>
 
   $(document).ajaxError(function(e, XHR, options){

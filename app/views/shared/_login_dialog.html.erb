@@ -3,6 +3,27 @@
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
 position:relative; left:296px; text-indent:-9999px; top:-12px;" onclick="$('#sign_up_dialog').dialog('close');$('#dialog-form').dialog('close');"></div>
   <%= render "shared/login_fields", {:f => f} %> 
- <% end %>
-
+ <%end%>
+ 
+<script type="text/javascript">
+function myfunc() {
+  FB.login(function(response) {
+    location.href = '<%= facebook_path %>';
+    if (response.session) {
+      if (response.perms) {
+        
+    } else {
+   }
+    } else {
+      
+    }
+  }, {perms:'offline_access,read_stream'});
+}
+ FB.init({
+    appId: "<%= Facebook.config[:client_id] %>",
+    cookie: true,
+    xfbml: true,
+    oauth: true
+  });
+</script>
 

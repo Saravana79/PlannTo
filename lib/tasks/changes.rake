@@ -17,7 +17,7 @@ namespace :plannto do
     ArticleCategory.create(:name => "News", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Deals", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Event", :itemtype_id => itemtype.id)
-    ArticleCategory.create(:name => "HowTo/KB", :itemtype_id => itemtype.id)
+    ArticleCategory.create(:name => "HowTo/Guide", :itemtype_id => itemtype.id)
 
     itemtype = Itemtype.where(:itemtype => "Mobile").first
 
@@ -31,7 +31,7 @@ namespace :plannto do
     ArticleCategory.create(:name => "News", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Deals", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Event", :itemtype_id => itemtype.id)
-    ArticleCategory.create(:name => "HowTo/KB", :itemtype_id => itemtype.id)
+    ArticleCategory.create(:name => "HowTo/Guide", :itemtype_id => itemtype.id)
 
     itemtype = Itemtype.where(:itemtype => "Camera").first
 
@@ -45,7 +45,7 @@ namespace :plannto do
     ArticleCategory.create(:name => "News", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Deals", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Event", :itemtype_id => itemtype.id)
-    ArticleCategory.create(:name => "HowTo/KB", :itemtype_id => itemtype.id)
+    ArticleCategory.create(:name => "HowTo/Guide", :itemtype_id => itemtype.id)
 
     itemtype = Itemtype.where(:itemtype => "Tablet").first
     ArticleCategory.create(:name => "Reviews", :itemtype_id => itemtype.id)
@@ -58,7 +58,7 @@ namespace :plannto do
     ArticleCategory.create(:name => "News", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Deals", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "Event", :itemtype_id => itemtype.id)
-    ArticleCategory.create(:name => "HowTo/KB", :itemtype_id => itemtype.id)
+    ArticleCategory.create(:name => "HowTo/Guide", :itemtype_id => itemtype.id)
 
   
   end
@@ -76,7 +76,7 @@ namespace :plannto do
     ArticleCategory.create(:name => "News", :itemtype_id => 0)
     ArticleCategory.create(:name => "Deals", :itemtype_id => 0)
     ArticleCategory.create(:name => "Event", :itemtype_id => 0)
-    ArticleCategory.create(:name => "HowTo/KB", :itemtype_id => 0)
+    ArticleCategory.create(:name => "HowTo/Guide", :itemtype_id => 0)
     ArticleCategory.create(:name => "Travelogue", :itemtype_id => 0)
     ArticleCategory.create(:name => "Apps", :itemtype_id => 0)
     ArticleCategory.create(:name => "Books", :itemtype_id => 0)

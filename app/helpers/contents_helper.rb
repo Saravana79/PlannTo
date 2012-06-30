@@ -76,7 +76,7 @@ module ContentsHelper
     when "Travelogue" then "Travelogue"
     when "Video" then "Video2"
     when "Event" then "Event"
-    when "HowTo/KB" then "Howkb"
+    when "HowTo/Guide" then "Howkb"
     when "Apps" then "Apps"
     when "Books" then "Books"
     else ""
@@ -95,7 +95,7 @@ module ContentsHelper
     when "News" then "Add a News"
     when "Deals" then "Add a deal"
     when "Event" then "Add a Event"
-    when "How To/KBs" then "Add a HowTo/KB"
+    when "How To/Guides" then "Add a How To/Guide"
     when "Book" then "Add a Book"
     when "Apps" then "Add an Apps"
     else ""
@@ -106,14 +106,14 @@ module ContentsHelper
   def content_submit_tab_label(name)
     label = case name
     when "Reviews" then "Submit a Review"
-    when "Q&A" then "Submit a Questions & Answer"
+    when "Q&A" then "Submit a FAQ"
     when "Tips" then "Submit a Tip"
     when "Accessories" then "Submit an Accessory"
     when "Photo" then "Submit a Photo"
     when "News" then "Submit a Latest News"
     when "Deals" then "Submit a deal"
     when "Event" then "Submit a Event"
-    when "How To/KBs" then "Submit a HowTo/KB"
+    when "How To/Guides" then "Submit a How To/Guide"
     when "Book" then "Submit a book"
     when "Apps" then "Submit an Apps"
     else ""
@@ -178,7 +178,7 @@ module ContentsHelper
 
 
   def display_product_tag(item, display)
-    list = "<li id='textTaggers#{item.id}'" + " class='taggingmain'><span><a class='txt_tagging'>" + item.name + "</a>"
+    list = "<li id='textTaggers#{item.id}'" + " class='taggingmain'><span><a class='txt_tagging' href="+  item.get_url() + ">" + item.name + "</a>"
     list += "<a id= 'deleteTag' class='icon_close_tagging' href='#'></a>" if display == true
     list += "</span></li>" ;
 
@@ -187,7 +187,7 @@ module ContentsHelper
   def get_anchor_name_link(content)
     first_item = content.items.first
     if (!first_item.nil?)
-        content = "<a class='txt_brown' href=" + "/#{first_item.type.tableize}/#{first_item.id.to_s}" + "> #{first_item.name}</a> "
+        content = "<a class='txt_brown' href=" + first_item.get_url() + "> #{first_item.name}</a> "
         return content.html_safe
     end
     

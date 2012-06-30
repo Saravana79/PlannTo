@@ -21,6 +21,7 @@
     <script type="text/javascript" src="/javascripts/jslider/jquery.slider-min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.tools.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.youtube.js"></script>
+    <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
     <script type="text/javascript" src="/javascripts/poshytip-1.1/src/jquery.poshytip.js"></script>
     <link type="text/css" href="/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" rel="stylesheet"/>
 <script type="text/javascript" src="/javascripts/layout.js"></script>
@@ -39,6 +40,7 @@
 </div>
   <%= render 'shared/show_hide_login_form', :item => "" %>
 </div>
+<%= render "shared/signup_popup" %>
 <div id="maincontainer" class="maincontainerCss">
 <div class="breadcrumpbtnDiv">
 <%= yield %>
@@ -71,7 +73,37 @@
 </body>
 </html>
 
+<script type="text/javascript">
+  FB.init({
+    appId: "<%= Facebook.config[:client_id] %>",
+    cookie: true,
+    xfbml: true,
+    oauth: true
+  });
+</script>
 
+<script type="text/javascript">
+  $("div.rate_content a").click(function(e){
+<%unless user_signed_in?%>
+      if (login_flag != true){
+        openLoginPopup("#" +$(this).attr('id'), "click");
+        return false
+      }
+<% end%>
+
+  })
+
+  $("form.new_comment").submit(function(e){
+    //     alert($("form#" + $(this).attr('id') + " :input.new_comment").attr("id"))
+<%unless user_signed_in?%>
+      if (login_flag != true){
+        openLoginPopup("#" + $(this).attr('id'), "submit");
+        return false
+      }
+<% end%>
+  })
+
+</script>
 
 
 

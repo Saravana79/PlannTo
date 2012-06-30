@@ -1,18 +1,22 @@
-<div style="float:right">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).first %></div>
-<table  width="100%" style="float:left">
+<% if (!@where_to_buy_items.empty?) %>
+<div style="float:right;margin:10px 0px 10px 0px;">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).first %></div>
+<div style="display:block;width:100%;height:auto;">
+<table  width="100%" >
   <tr class="wheretobuyheadder"><td width="25%" class="wheretobuytitletxt">Seller Name</td><td width="25%" class="wheretobuytitletxtothercolumns">Price</td><td width="25%" class="wheretobuytitletxtothercolumns">Estimated Delivery Time</td><td width="25%"></td></tr>
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
     <%items.each_with_index do |item, index|%>
       <%if display_item_details(item)%>
+       
         <%if index == 0%>
-          <tr class="wheretobuyrows"><td width="25%" class=""><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td><td class="wheretobuytext" style="font-style:bold"><%=display_price_detail(item)%></td><td width="25%" class="wheretobuytext"><%=display_shipping_detail(item)%></td><td><input type="button" value="Visit Store" onclick="window.open('/history_details?detail_id=<%=item.item_details_id%>')"/></td></tr>
+          <tr class="wheretobuyrows" ><td width="25%" style="padding-top:5px;"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td><td class="wheretobuytext" style="font-style:bold"><%=display_price_detail(item)%></td><td width="25%" class="wheretobuytext"><%=display_shipping_detail(item)%></td><td align="center"><input type="button" value="Visit Store" onclick="window.open('/history_details?detail_id=<%=item.item_details_id%>')"/></td>
+          </tr>
         <%else%>
           <%if index == 1%>
-            <tr class="wheretobuyrows"><td width="25%" class="">Other variants</td><td class="wheretobuytext" style="font-style:bold"><a><%=display_price_detail(item)%></a> |
+            <tr class="wheretobuyrows" ><td width="25%" colspan="4">Other variants <a target="_blank" style="padding:0px 5px 0px 10px;" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>
             <%elsif (items.size == index + 1) && index > 1%>
-           <a><%=display_price_detail(item)%></a> | </td></tr>
-          <%else%>
-            <a><%=display_price_detail(item)%></a>|
+             |  <a style="padding:0px 0px 0px 5px;" target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>  </td></tr>
+            <%else%>
+             | <a target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a> 
           <%end%>
         <%end%>
       <%end%>
@@ -20,3 +24,19 @@
   <%end%>
   <tr></tr>
 </table>
+</div>
+<%end%>
+<div style="clear:both;margin:10px 0px 5px 0px;">
+  Are you a dealer/seller of this product? If you like to include your listing, <a href=""> please get in touch with us.</a>.
+</div>
+
+
+<% if (!@dealer_locators.nil?) %>
+ 
+  <div style="display:block;clear:both;margin:30px 0px 5px 0px;">
+  Find out the various dealers/sellers from  <a href="<%=  @dealer_locators.url%>" target="_blank"`>  Manufacturer dealer locator page. </a>
+  </div>
+
+</br>
+<%end%>
+

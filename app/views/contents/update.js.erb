@@ -1,4 +1,5 @@
 $("#contentEditView").dialog('destroy');
+$(".ui-dialog-content").dialog('destroy')
 <%if @detail == true%>
   $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
 <%else%>

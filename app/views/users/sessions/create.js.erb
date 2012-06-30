@@ -1,0 +1,10 @@
+<%if user_signed_in?%>
+
+$(plannto_popup_login_id).trigger('click');
+ closeLoginPopup();
+
+<% else%>
+  $("#loginnotification").fadeIn('slow');
+   setTimeout("$('#loginnotification').fadeOut('slow');", 4000);
+
+<% end%>

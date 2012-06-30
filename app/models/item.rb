@@ -46,13 +46,14 @@ class Item < ActiveRecord::Base
 #    text :name, :boost => 2.0,  :as => :name_ac    
 #  end
 
-  def get_price_info(item_type)    
+  def get_price_info(item_type)   
+    price = "0"; 
     item_attribute = item_attributes.select{|a| a.name == item_type}.last
     if item_attribute
       attribute_value = item_attribute.attribute_values.where(:item_id => id).last
       if !attribute_value.blank?
-        item_attribute.name + ' - ' + (item_attribute.unit_of_measure || "") + ' ' +
-          attribute_value.value +
+          item_attribute.name + ' - '  +
+          number_to_indian_currency(attribute_value.value.to_i) +
           (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
       else
         ""
@@ -319,4 +320,20 @@ def can_display_related_item?
  return false
 end
 
+  def number_to_indian_currency(number)
+    if number
+      string = number.to_s
+      number = string.to_s.gsub(/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/, "\\1,")    
+    end
+    "Rs #{number}"
+  end
+
+def get_url()
+   if (self.is_a? ItemtypeTag)
+    "/#{self.name.downcase.pluralize}"
+   else
+    "/#{self.type.downcase.pluralize}/#{self.id.to_s}"
+   end
 end
+end
+

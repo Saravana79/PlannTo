@@ -24,7 +24,7 @@
 
 
         <span>
-          <h1><a class="productTitle" href="<%=link_url(item)%>"><%=item.name%></a></h1>
+          <h1><a class="productTitle" href="<%=item.get_url()%>"><%=item.name%></a></h1>
           <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
           <%= render :partial => 'shared/rating',:locals => {:item => item} %>
           <a class="txt_normal">Ratings<span class="txt_blue"> (100 Reviews)</span></a><br />

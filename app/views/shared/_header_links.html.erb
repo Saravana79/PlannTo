@@ -3,16 +3,16 @@
 
   <div class="search">
     <span class="search_txt" id="plannToSearchSpan">
-            <input name="Search" type="text" placeholder="What are you looking for?" id="plannToSearch"/>
-            <%=select_tag "plannto_search_type",
+           <input name="Search" type="text" placeholder="What are you looking for?" id="plannToSearch"/>
+            <!--<= select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>
-
+      -->
     </span>
     <a class="btn_search" href="#"></a>
   </div>
 
   <span>
-    <a class="icon_user" id="user_active" href="#"></a>
+    <a class="icon_user" href="#"></a>
     <a class="icon_chat" href="#"></a>
   </span>
 
@@ -21,6 +21,7 @@
     <div class="Headerrightpart">
       
       <!--buttons-->
+      <!--
       <div class="Headerrightbuttons">
         <ul>
           <li>
@@ -41,7 +42,7 @@
           </li>
         </ul>
       </div>
-  
+    -->
 
   <span ><% if user_signed_in? %>
 

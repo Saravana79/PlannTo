@@ -18,12 +18,16 @@ $("#product_"+'<%= @item.id %>').remove();
 <% end %>
 
 <% unless @related_items %>
+<%
+=begin
 $('<%= "#plan_to_buy_#{@item.id}, #plan_to_own_#{@item.id}, #plan_to_follow_#{@item.id}" %>').poshytip({
   content: this.title,
   className: "tip-darkgray",
   bgImageFrameSize: 11,
   offsetX: -25
 });
+=end
+%>
 <% end %>
 
 <% end %>

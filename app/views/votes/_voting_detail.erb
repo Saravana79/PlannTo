@@ -8,10 +8,14 @@
   </div>
 <%else%>
   <div class="rate_content float_lft">
-    <a class="bg_ratecontent"><%=item.content_vote_count%></a>
-    <a class="btn_like_default" href="#"></a><a class="btn_dislike_default" href="#"></a>
+    <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=item.content_vote_count%></a>
+     <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> "btn_like_default", :id => "likeVote#{item.id}" %>
+    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike_default", :id => "dislikeVote#{item.id}" %>
+
+ <!--   <a class="btn_like_default"></a><a class="btn_dislike_default" href="#"></a>-->
   </div>
 <%end%>
+
 
 
 
