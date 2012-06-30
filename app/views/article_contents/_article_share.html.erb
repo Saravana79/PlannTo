@@ -394,7 +394,21 @@
         valid = false
       }
       // return false
+<%else%>
 
+if ($("#article_content_sub_type").val() == ""){
+        $('#article_content_sub_type').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a content category.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('#article_content_sub_type').poshytip('show');
+        valid = false
+      }
 <%end%>
     return valid
   }
