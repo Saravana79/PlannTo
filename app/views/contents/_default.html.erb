@@ -1,11 +1,11 @@
 <div class="mainContentDiv">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
-    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
+    <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-    <div><a class="txt_brown"><%= content.user.name  %> reviewed <a class="txt_brown" href="<%= "/" + content.items.first.type.tableize + "/" + content.items.first.id.to_s %>"><%= content.items.first.name %> </a> - <%= time_ago_format(content) %> ago. </a></div>
+    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name  %> </a> <a class="txt_brown">reviewed <%=get_anchor_name_link(content)%> - <%= time_ago_format(content) %> ago. </a></div>
     <div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>

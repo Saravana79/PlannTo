@@ -1,7 +1,7 @@
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
-    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   
+   <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
 
@@ -12,7 +12,7 @@
         - (<a class="txt_black_description" style="cursor: pointer; cursor: hand;" onclick=window.open("/history_details?detail_id=<%= content.id %>&type=Content")><%=  URI.parse(content.url).host.gsub("www.","") %> </a>)
        <%end%>
     </div>
-    <div><a class="txt_brown"><%= content.user.name %> shared a <%= content.sub_type.singularize %> on </a><%=get_anchor_name_link(content)%> <a class="txt_brown">- <%= time_ago_format(content)%> ago </a></div>
+    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><%=get_anchor_name_link(content)%> <a class="txt_brown">- <%= time_ago_format(content)%> ago </a></div>
     <div>
       <%if content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div><%end%>
       <div class="subContentGap"><%= raw get_content_description(content)%></div>
