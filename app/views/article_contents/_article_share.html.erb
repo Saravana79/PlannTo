@@ -60,7 +60,7 @@
           <div class="title_header float_lft">Category :</div>
           <div class="float_lft">
             <% val = @item.blank? ? 0 : @item.itemtype_id %>
-            <%= f.select :sub_type, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.name]  }  %>
+            <%= f.select :sub_type, ArticleCategory.by_itemtype_id(val).map { |e|[e.name, e.name]  } , { :include_blank => true } %>
           </div>
         </div>
       <%else%>
@@ -573,6 +573,15 @@
 
       if ($('#<%=@manual_image%>').is(':checked')) {$("#<%=@thumbnail_id%>").show(); } else { $("#<%=@thumbnail_id%>").hide(); }
     });
+    
+   <%unless @article_content.new_record?%> 
+    //this is to trigger sub type change event.
+  $("#article_content_sub_type").change(function() {//alert($('#article_content_sub_type :selected').text());
+  var category = $('#article_content_sub_type :selected').text();
+  setDefaultFieldsArticleSubmit(category);
+  return false;
+  });
+  <%end%>
   
   });
 

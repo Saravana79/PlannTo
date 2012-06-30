@@ -40,9 +40,9 @@ module ContentsHelper
       if (item.type == "ArticleContent" && item.url.blank?)
         render :partial => "article_contents/create_new", :locals => { :content => item }
       elsif (item.type == "ArticleContent" && item.url != "")
-        render :partial => "article_contents/article_share", :locals => {:content_category => false,  :content => item}
+        render :partial => "article_contents/article_share", :locals => {:content_category => true,  :content => item}
       else
-        render :partial => "article_contents/article_share", :locals => {:content_category => false, :content => item }
+        render :partial => "article_contents/article_share", :locals => {:content_category => true, :content => item }
       end
      
     end
