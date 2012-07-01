@@ -13,7 +13,6 @@ gem 'fb_graph'
 
 gem "omniauth-facebook"
 gem 'devise', '~> 2.0.0'
- 
 
 #gem 'kaminari'
 gem 'will_paginate'
