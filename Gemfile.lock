@@ -103,7 +103,7 @@ GEM
       rack (>= 1.1.0, < 2)
     fb_graph (2.4.16)
       httpclient (>= 2.2.0.2)
-      rack-oauth2 (>= 0.14.4
+      rack-oauth2 (>= 0.14.4)
 	  tzinfo
     hike (1.2.1)
     httparty (0.8.3)
