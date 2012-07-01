@@ -244,7 +244,8 @@ GEM
       builder
       faraday (>= 0.7.3)
       oauth (>= 0.4.4)
-      simple_oauth (>= 0.1.5)
+	  oauth2 (~> 0.5.2)
+      simple_oauth (~> 0.1.5)      
 
 PLATFORMS
   ruby
