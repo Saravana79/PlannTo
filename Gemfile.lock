@@ -88,10 +88,11 @@ GEM
     configatron (2.8.4)
       yamler (>= 0.1.0)
     dalli (1.1.4)
-    devise (1.4.7)
+    devise (2.0.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
-      warden (~> 1.0.3)
+      railties (~> 3.1)
+      warden (~> 1.1.1)
     erubis (2.7.0)
     escape (0.0.4)
     execjs (1.2.6)
@@ -126,6 +127,17 @@ GEM
     nokogiri (1.5.0)
     nokogiri (1.5.0-x86-mingw32)
     oauth (0.4.5)
+	oauth2 (0.5.2)
+      faraday (~> 0.7)
+      multi_json (~> 1.0)
+    omniauth (1.1.0)
+      hashie (~> 1.2)
+      rack
+    omniauth-facebook (1.2.0)
+      omniauth-oauth2 (~> 1.0.0)
+    omniauth-oauth2 (1.0.0)
+      oauth2 (~> 0.5.0)
+      omniauth (~> 1.0)
     orm_adapter (0.0.5)
     paperclip (2.5.0)
       activerecord (>= 2.3.0)
@@ -249,11 +261,12 @@ DEPENDENCIES
   coffee-rails (~> 3.1.0)
   configatron (~> 2.8.4)
   dalli
-  devise
+  devise (~> 2.0.0)
   fb_graph
   jquery-rails
   mysql2
   nokogiri
+  omniauth-facebook
   paperclip
   rails (= 3.1.1)
   rails_sql_views!
