@@ -14,7 +14,8 @@ Devise.setup do |config|
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
   require 'devise/orm/active_record'
-
+  require "omniauth-facebook"
+  
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
   # just :email. You can configure it to use [:username, :subdomain], so for
@@ -202,6 +203,8 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
+  config.omniauth :facebook, '493135047369168', 'eb773d85c636d3ffc7708b1a5e5391cb', 
+                  :scope => "email,read_stream,read_friendlists,offline_access,publish_stream", :display => 'popup'
   config.navigational_formats = [:"*/*", "*/*", :html, :js]
   # config.warden do |manager|
   #   manager.failure_app   = AnotherApp

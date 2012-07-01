@@ -10,6 +10,11 @@ gem 'uuidtools'
 gem "configatron", "~> 2.8.4"
 gem 'dalli'
 gem 'fb_graph'
+
+gem "omniauth-facebook"
+gem 'devise', '~> 2.0.0'
+ 
+
 #gem 'kaminari'
 gem 'will_paginate'
 gem 'youtube_it'
@@ -37,7 +42,7 @@ gem 'acts_as_rateable'
 gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
 gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
-gem 'devise'
+#gem 'devise'
 gem 'sunspot_rails', '~>1.3.1'
 gem 'sunspot_solr'
 gem 'acts_as_follower'
