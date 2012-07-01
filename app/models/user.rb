@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   end
   
   def get_url()
-      "/" + "#{self.username}"
+      "/#{self.username}"
   end
   # def username
   #   email.split("@")[0]

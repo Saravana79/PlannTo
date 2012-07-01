@@ -159,7 +159,7 @@ module ContentsHelper
     if content.url.blank?
       "<a class='title'>#{content.title }</a>"
     else
-      "<a class='title' onclick=" +'window.open(' + "'/history_details?detail_id=#{content.id}&type=Content')" + ">#{content.title }</a>"
+      link_to content.title, external_content_path(content.id) , :class => 'title'
     end
 
   end
