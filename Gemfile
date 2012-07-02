@@ -8,7 +8,7 @@ gem 'rails', '3.1.1'
 gem 'mysql2'
 gem 'uuidtools' 
 gem "configatron", "~> 2.8.4"
-gem 'dalli', '~>1.1.4'
+gem 'dalli'
 gem 'fb_graph'
 
 gem "oauth"
