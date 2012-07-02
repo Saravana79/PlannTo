@@ -66,11 +66,11 @@ class ArticleContent < Content
   end
 
   def find_subtype(title)  
-    title_words = title #.split
+    title_words = title.downcase #.split
     
-    tips = %w[Tips Trick Tip]
-    reviews = %w[Review vs]
-    how_to = ["tutorial", "guide", "how to", "How To"]
+    tips = %w[tip trick]
+    reviews = %w[review vs]
+    how_to = ["tutorial", "guide", "how to"]
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
