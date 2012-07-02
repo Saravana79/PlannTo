@@ -17,7 +17,9 @@ class ArticleCategory < ActiveRecord::Base
 
   #why zero is hardcoded here?
   #scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => [0,id])}
-  scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => id)}
+  scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => id).order_by_orderby}
+  scope :order_by_orderby, order("orderby ASC")
+
 
   def is_event?
     self.name == EVENT
