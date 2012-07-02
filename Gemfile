@@ -16,6 +16,7 @@ gem "oauth2"
 gem "omniauth"
 gem "omniauth-facebook"
 gem "omniauth-oauth2"
+gem "hashie"
 gem 'devise', '~> 2.0.0'
 
 #gem 'kaminari'
