@@ -11,7 +11,11 @@ gem "configatron", "~> 2.8.4"
 gem 'dalli'
 gem 'fb_graph'
 
+gem "oauth"
+gem "oauth2"
+gem "omniauth"
 gem "omniauth-facebook"
+gem "omniauth-oauth2"
 gem 'devise', '~> 2.0.0'
 
 #gem 'kaminari'
