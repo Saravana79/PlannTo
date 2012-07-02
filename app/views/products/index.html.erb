@@ -2,10 +2,10 @@
 
   <div class="Boxtopblock">
     <div class="Headingtext"><%=@itemtype.itemtype%> - Quick Navigation Wizard</div>
-    <span class="Openclosebut"><a href="" id="wizardbutton" class="Close">Close</a></span>
+    <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>
   </div>
 
-  <div class="Grayboxmid">
+  <div class="Grayboxmid" style="display:none;">
 
 
     <div class="Homeinnercontent">
@@ -105,8 +105,7 @@
   <!-- Product Details - End -->
   <ul id="Newtabs">
     <li class="tab_active"><a href="#"><span>All Feeds</span></a></li>
-    <li><a href="#"><span>Friends</span></a></li>
-    <li><a href="#"><span>My Feed</span></a></li>
+        <li><a href="#"><span>My Feed</span></a></li>
   </ul>
 
   <div id="content_all">
@@ -211,45 +210,10 @@
     <!-- Buttons - End-->
 
   </div>
-
-  <!--follower block start here-->
-  <div class="Commandiv">
-    <div class="Detailfeature">
-      <span class="Headingtxt">Plan to Buy</span>
-      <div class="Featurecontent">
-        <div class="Iconblock">
-          <span class="Planbuy">10</span>
-        </div>
-        <a href="#" class="Bluesmall">Invite a friend</a>
-      </div>
-      <div class="Smalltext">who plans to buy</div>
-    </div>
-    <div class="Detailfeature">
-      <span class="Headingtxt">Owners</span>
-      <div class="Featurecontent">
-        <div class="Iconblock">
-          <span class="Wonit">100</span>
-        </div>
-        <a href="#" class="Bluesmall">Invite a friend</a>
-      </div>
-      <div class="Smalltext">who owns it</div>
-    </div>
-    <div class="Detailfeature">
-      <span class="Headingtxt">Followers</span>
-      <div class="Featurecontent" style="border-right:none;">
-        <div class="Iconblock">
-          <span class="Followcar">1000</span>
-        </div>
-        <a href="#" class="Bluesmall">Invite a friend</a>
-      </div>
-      <div class="Smalltext">who is an expert on this</div>
-    </div>
-  </div>
-  <!--follower block end here-->
+  <br/>
 
 
-
-  <div class="txt_black imgfollowers">Followed by <a href="#">145236 PEOPLE</a>
+  <div class="txt_black imgfollowers" >Followed by <a href="#">145236 PEOPLE</a>
     <ul class="imgfollowers">
       <li class="imgfollowers"><img src="images/img_followers.png" /></li>
       <li class="imgfollowers"><img src="images/img_followers.png" /></li>
@@ -274,67 +238,20 @@
     </ul>
   </div>
   <br/>
-  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-    <tr>
-      <td class="bg_widgethdr txt_white">Related Cars</td>
-    </tr>
-    <tr>
-      <td height="252" valign="top">
-
-        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-              <a href="#" class="txt_black">Renault Pulse</a>
-              <img src="images/rating_stars.png" width="87" height="20" /><br />
-
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2"  valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-          <tr>
-            <td class="dotted_border" colspan="2"  style="width:100%"><div class="float_rgt" style="margin-bottom:-1px;">
-                <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-              <a href="#" class="txt_black">Renault Pulse</a>
-              <img src="images/rating_stars.png" width="87" height="20" /><br />
-
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2"  valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-          <tr>
-            <td class="dotted_border" colspan="2"  style="width:100%"><div class="float_rgt" style="margin-bottom:-1px;">
-                <span class="action_btns_selected_small"><a class="btn_plantobuy_icon_selected_small"  href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_iwonit_icon_small" href="#"></a></span>
-                <span class="action_btns_small" ><a class="btn_followthiscar_icon_disabled_small" href="#"></a></span>
-              </div>
-            </td>
-          </tr>
-        </table>
-
-      </td>
-    </tr>
-    <tr>
-      <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-    </tr>
-  </table>
-
-  <!-- Related Cars -- End -->
-
-  <br />
-
   <!-- Related Cars -- Start -->
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Bookmarklet</td>
+    </tr>
+    <tr>
+        <td>Share the contents easily using this bookmarklet, drag and drop the following button in your bookmark toolbar.</td>
+    </tr>
+    <tr>
+        <td><a href="javascript:void((function(){ var f='http://plannto.heroku.com/article_contents/bmarklet?url='+encodeURIComponent(window.location.href);var cw=window.open(f+'&external=yes','PlannTo','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660');if(!cw)location.href=f+'&external=yes';})());">Add To Plannto</a></td>
+    </tr>
+</table>
 
+<br/>
   <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
       <td class="bg_widgethdr txt_white">Top Contributors</td>
