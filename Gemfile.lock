@@ -266,6 +266,7 @@ DEPENDENCIES
   dalli
   devise (~> 2.0.0)
   fb_graph
+  hashie
   jquery-rails
   mysql2
   nokogiri
