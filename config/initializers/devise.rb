@@ -203,8 +203,17 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  config.omniauth :facebook, '493135047369168', 'eb773d85c636d3ffc7708b1a5e5391cb', 
-                  :scope => "email,read_stream,read_friendlists,offline_access,publish_stream", :display => 'popup'
+  if Rails.env.production?
+    client_id = '312988822129373'
+    client_secret = '0ac33e9ad4c7f47dcbca5fba5791f4b0'
+  else
+    client_id = '493135047369168'
+    client_secret = 'eb773d85c636d3ffc7708b1a5e5391cb'
+  end
+  
+  config.omniauth :facebook, client_id, client_secret, :display => 'popup', 
+                  :scope => "email,read_stream,read_friendlists,offline_access,publish_stream"
+                  
   config.navigational_formats = [:"*/*", "*/*", :html, :js]
   # config.warden do |manager|
   #   manager.failure_app   = AnotherApp
