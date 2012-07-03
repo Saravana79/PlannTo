@@ -156,7 +156,8 @@ resources :accounts do
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
   devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
   devise_scope :user do
-  get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
+    get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
+    get '/users/sign_out' => 'devise/sessions#destroy'
   end
  # match '/:search_type', :to => "products#index"
   
