@@ -14,7 +14,6 @@
  * not apart of the newer specifications for HTML and XHTML.
  */
 
-
 (function(tinymce) {
 	// Override inline_styles setting to force TinyMCE to produce deprecated contents
 	tinymce.onAddEditor.addToTop(function(tinymce, editor) {
@@ -69,7 +68,7 @@
 					},
 
 					// Setup font elements for colors as well
-					forecolor : {inline : 'font', styles : {color : '%value'}},
+					forecolor : {inline : 'font', attributes : {color : '%value'}},
 					hilitecolor : {inline : 'font', styles : {backgroundColor : '%value'}}
 				});
 

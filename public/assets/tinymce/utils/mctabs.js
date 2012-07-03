@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 function MCTabs() {
 	this.settings = [];
 	this.onChange = tinyMCEPopup.editor.windowManager.createInstance('tinymce.util.Dispatcher');

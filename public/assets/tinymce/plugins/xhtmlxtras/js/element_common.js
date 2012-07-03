@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 tinyMCEPopup.requireLangPack();
 
 function initCommonAttributes(elm) {
@@ -228,4 +227,3 @@ function insertInlineElement(en) {
 			dom.replace(dom.create(en, {'data-mce-new' : 1}), n, 1);
 	});
 }
-;

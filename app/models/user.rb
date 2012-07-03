@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :omniauthable, :registerable, :recoverable, :rememberable, 
+         :trackable, :validatable
   cache_records :store => :local, :key => "users",:request_cache => true
   REDIS_USER_DETAIL_KEY_PREFIX = "user_details_"
   CACHE_USER_ITEM_HASH = {Follow::ProductFollowType::Owner => "owned_item_ids" ,
@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   belongs_to :invitation
   belongs_to :facebook
   has_many :field_values
-
+  
   after_create :populate_username
 
 

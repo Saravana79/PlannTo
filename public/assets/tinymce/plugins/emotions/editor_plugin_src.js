@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 (function(tinymce) {
 	tinymce.create('tinymce.plugins.EmotionsPlugin', {
 		init : function(ed, url) {

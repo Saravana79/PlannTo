@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 function init() {
 	SXE.initElementDialog('cite');
 	if (SXE.currentAction == "update") {

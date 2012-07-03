@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 var TinyMCE_EditableSelects = {
 	editSelectElm : null,
 

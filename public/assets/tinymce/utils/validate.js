@@ -22,7 +22,6 @@
 		alert('Invalid email.');
 */
 
-
 var Validator = {
 	isEmail : function(s) {
 		return this.test(s, '^[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+$');

@@ -43,7 +43,6 @@
  * TinyMCE editor instance is attached to.
  */
 
-
 (function(tinymce) {
 	// Setup constants to help the compressor to reduce script size
 	var PLUGIN_NAME = 'autosave',
@@ -137,8 +136,10 @@
 
 					// Auto save contents each interval time
 					setInterval(function() {
-						self.storeDraft();
-						ed.nodeChanged();
+						if (!ed.removed) {
+							self.storeDraft();
+							ed.nodeChanged();
+						}
 					}, settings.autosave_interval);
 				}
 			});

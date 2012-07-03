@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 var themeBaseURL = tinyMCEPopup.editor.baseURI.toAbsolute('themes/' + tinyMCEPopup.getParam("theme"));
 
 function getColorPickerHTML(id, target_form_element) {
@@ -209,4 +208,3 @@ function getStyle(elm, attrib, style) {
 
 	return tinyMCEPopup.dom.getStyle(elm, style);
 }
-;

@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 (function() {
 	tinymce.create('tinymce.plugins.Directionality', {
 		init : function(ed, url) {

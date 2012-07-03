@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 (function() {
 	tinymce.create('tinymce.plugins.Nonbreaking', {
 		init : function(ed, url) {

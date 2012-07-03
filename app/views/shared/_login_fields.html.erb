@@ -4,7 +4,9 @@
 <div class="Popupmiddercontent">
 <div class="Popupfacebook">
 <p>Sign in to PlannTo using Facebook</p>
-<div class="FaceImg"><a href="#" onclick="myfunc();" ><img alt="facebook" border="0" src="/images/facebook_btn.png"></a></div>
+<div class="FaceImg">
+  <%= link_to image_tag('facebook_btn.png'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>
+</div>
 </div>
 
 <div class="PopupOr"><img alt="" src="/images/or_icon.png"></div>

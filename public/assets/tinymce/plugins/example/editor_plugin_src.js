@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 (function() {
 	// Load plugin specific language pack
 	tinymce.PluginManager.requireLangPack('example');

@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 (function() {
 	tinymce.create('tinymce.plugins.AdvancedHRPlugin', {
 		init : function(ed, url) {

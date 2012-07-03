@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 tinyMCEPopup.requireLangPack();
 
 var charmap = [
@@ -362,4 +361,3 @@ function previewChar(codeA, codeB, codeN) {
 	elmA.innerHTML = '&amp;' + codeB;
 	elmN.innerHTML = codeN;
 }
-;

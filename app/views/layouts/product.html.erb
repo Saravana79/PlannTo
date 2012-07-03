@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>PlannTo - Empowered Customers</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-  <%= javascript_include_tag 'application' %>
+
   <!---->
   <%= stylesheet_link_tag 'application' %>
 
@@ -13,7 +13,6 @@
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js"></script>-->
     <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <script src="/javascripts/formValidator2.5/js/jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/javascripts/formValidator2.5/js/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery.idTabs.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.cookie.js"></script>
@@ -23,8 +22,9 @@
     <script type="text/javascript" src="/javascripts/jquery.youtube.js"></script>
     <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
     <script type="text/javascript" src="/javascripts/poshytip-1.1/src/jquery.poshytip.js"></script>
+    <%= javascript_include_tag 'application' %>
     <link type="text/css" href="/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" rel="stylesheet"/>
-<script type="text/javascript" src="/javascripts/layout.js"></script>
+    <script type="text/javascript" src="/javascripts/layout.js"></script>
 </head>
 <body marginheight="0" topmargin="0">
 <%= render 'shared/header_links' %>
@@ -69,6 +69,13 @@
 </div></div>
 
 <%= render("shared/google_analytics") if Rails.env.production? %>
+
+<script type="text/javascript">
+  if(window.opener) {
+    window.opener.location.reload(true);
+    window.close()
+  }
+</script>
 
 </body>
 </html>

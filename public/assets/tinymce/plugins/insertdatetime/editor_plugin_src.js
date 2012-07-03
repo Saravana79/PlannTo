@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 (function() {
 	tinymce.create('tinymce.plugins.InsertDateTime', {
 		init : function(ed, url) {

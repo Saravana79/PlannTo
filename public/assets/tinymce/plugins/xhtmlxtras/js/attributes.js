@@ -8,7 +8,6 @@
  * Contributing: http://tinymce.moxiecode.com/contributing
  */
 
-
 function init() {
 	tinyMCEPopup.resizeToInnerSize();
 	var inst = tinyMCEPopup.editor;
