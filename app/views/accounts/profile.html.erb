@@ -35,11 +35,11 @@
   <div class="leftcolumnsmall">
 
     <span class="profile_photo">
-      <%= image_tag(current_user.get_photo(:medium)) %>
+      <%= image_tag(@user.get_photo(:medium)) %>
     </span>
     <br/>
 
-    <h1><%= current_user.name %></h1>
+    <h1><%= @user.name %></h1>
     <br/>
     <ul class="menu_profile">
       <li><a href="#" class="icon_profile menu_profile_active">Profile</a></li>
@@ -85,22 +85,22 @@
     <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
       <div style="border:solid 0px green; float:left;  height:67px;"></div>
       <div class="points">
-        <span class="indu_span"><a class="values"><%= current_user.total_points  %></a><a class="text">Points</a></span>
+        <span class="indu_span"><a class="values"><%= @user.total_points  %></a><a class="text">Points</a></span>
         <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
         <span class="indu_span"><a class="values">3</a><a class="text">Following</a></span>
         <span class="indu_span"><a class="values">12</a><a class="text">Reviews </a></span>
         <span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>
 
       </div>
-
+-
       <div style="clear:both;">
         <ul id="Newtabs">
-          <li class="tab_active"><a href="<%= "#{@user.try(:username)}?follow='Cars'" %>"><span>Cars</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Mobile'" %>"><span>Mobile</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Tablet'" %>"><span>Tablet</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Camera'" %>"><span>Camera</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Bike'" %>"><span>Bike</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow='Cycle'" %>"><span>Cycle</span></a></li>
+          <li class="tab_active"><a href="<%= "#{@user.try(:username)}?follow=Cars" %>"><span>Cars</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Mobile" %>"><span>Mobile</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Tablet" %>"><span>Tablet</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Camera" %>"><span>Camera</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Bike" %>"><span>Bike</span></a></li>
+          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Cycle" %>"><span>Cycle</span></a></li>
           
         </ul>
       </div>
