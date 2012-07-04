@@ -157,7 +157,7 @@
           <%
            
           %>
-          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id }%>
+          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id ,"user" => @user.id}%>
           <% @contents = Content.filter(params)  %>
           <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         </div>
