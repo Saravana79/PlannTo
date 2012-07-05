@@ -39,6 +39,9 @@ class Item < ActiveRecord::Base
   }
 
   acts_as_followable
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+  
   # acts_as_rateable
 
 #  searchable :auto_index => true, :auto_remove => true  do
