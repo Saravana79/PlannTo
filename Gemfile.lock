@@ -98,6 +98,7 @@ GEM
       httpclient (>= 2.2.0.2)
       rack-oauth2 (>= 0.14.4)
       tzinfo
+    friendly_id (4.0.7)
     hashie (1.2.0)
     hike (1.2.1)
     httparty (0.8.3)
@@ -258,6 +259,7 @@ DEPENDENCIES
   dalli
   devise (~> 2.0.0)
   fb_graph
+  friendly_id (~> 4.0.1)
   hashie
   jquery-rails
   mysql2
