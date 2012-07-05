@@ -40,7 +40,7 @@ class Item < ActiveRecord::Base
 
   acts_as_followable
   extend FriendlyId
-  #friendly_id :name, use: :slugged
+  friendly_id :name, use: :slugged
   
   # acts_as_rateable
 

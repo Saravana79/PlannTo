@@ -87,7 +87,7 @@ class Content < ActiveRecord::Base
 	 # Content.transaction do
 	    self.save!
       items.split(",").each_with_index do |id, index|
-        item = Item.find(id)
+        item = Item.find_by_id(id)
         # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0        
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
