@@ -92,16 +92,12 @@
         <span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>
 
       </div>
--
+
       <div style="clear:both;">
         <ul id="Newtabs">
-          <li class="tab_active"><a href="<%= "#{@user.try(:username)}?follow=Cars" %>"><span>Cars</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Mobile" %>"><span>Mobile</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Tablet" %>"><span>Tablet</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Camera" %>"><span>Camera</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Bike" %>"><span>Bike</span></a></li>
-          <li class=""><a href="<%= "#{@user.try(:username)}?follow=Cycle" %>"><span>Cycle</span></a></li>
-          
+          <% ['Cars','Mobile','Tablet','Camera','Bike'].each do |item_type|%>
+            <%= link_for_item_type(item_type, params[:follow], @user) %>
+          <%end%>    
         </ul>
       </div>
       <div style="display:block;">
