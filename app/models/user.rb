@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-
+  require 'open-uri'
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :omniauthable, :registerable, :recoverable, :rememberable, 
@@ -162,6 +162,24 @@ class User < ActiveRecord::Base
     return value.nil? ?  nil : value  
   end
 
+  def follow_facebook_friends
+    graph_api.get_connections("me", "friends").each do |friend|
+      facebook_user = User.find_by_uid(friend['id'])
+      if facebook_user
+          self.follow(facebook_user, 'Facebook')
+          facebook_user.follow(self, 'Facebook')
+        end
+    end
+  end
+  
+  def self.create_from_fb_callback(auth)
+    user = User.new(email:auth.info.email, name:auth.extra.raw_info.name, password:Devise.friendly_token[0,20], 
+                      uid:auth.uid, token:auth.credentials.token)
+    user.avatar = open(auth.info.image.gsub('square', 'large')) #http://graph.facebook.com/626630268/picture?type=square 
+    user.save
+    user
+  end
+  
   private
 
   def populate_username
@@ -187,6 +205,10 @@ class User < ActiveRecord::Base
 
   end
 
-
+  def graph_api
+    Koala::Facebook::API.new(self.token)
+  end
+  
+  
 
 end
