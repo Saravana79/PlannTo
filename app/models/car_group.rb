@@ -19,7 +19,7 @@ def items(page_number = 1, is_pagination = false, no_of_car = configatron.no_of_
   end
 end
 
-def image_url
+def image_url(imagetype = :medium)
       firstcar = related_cars.first
       firstcar.image_url
 end

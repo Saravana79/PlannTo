@@ -53,7 +53,7 @@
          <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
            <div class="Useraccountinfo">
              <%= link_to "Account Setting", accounts_path %>
-             <%= link_to "Profile",  "/" + current_user.username %>
+             <%= link_to "Profile",  "/" + "#{current_user.username}" %>
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>
          </span>
