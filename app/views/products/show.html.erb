@@ -30,7 +30,7 @@
       <span class="txt_blue"> <%= "Be the first one to review it" unless @item.rated_users_count > 0 %></span>
     </a><br />
     <a class="txt_normal"><%=display_specifications(@item)%>
-      <%= link_to("...more", "#tab5", :class => 'txt_blue', :id => "detailed_specification") %>
+      <%= link_to("...more", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
     <% else %>
         <%if @item.is_a? CarGroup %>
@@ -55,19 +55,19 @@
 <br/>
 <div>
   <ul id="Newtabs">
-    <%= display_product_page_tabs(@item) %>
+    <%= display_product_page_tabs(@item, params[:at] || "overview") %>
   </ul>
 </div>
 <br/>
-<div class="question_answer main-content-section" id="tabs1">
+<div class="question_answer main-content-section" id="overview" style="<%=display_required(params[:at] || "overview", "overview")%>">
     <%= render "contents/all"%>
 </div>
-<div id="tabs5" style="display: none; " class="main-content-section">
+<div id="specification" style="<%=display_required(params[:at] || "overview", "specification")%>" class="main-content-section">
     <%#= render :template => 'products/specification' %>
     <%= render :partial => "products/detailed_specifications" %>
 </div>
 
-<div id="tabs6" style="display: none; " class="main-content-section">
+<div id="where_to_buy" style="<%=display_required(params[:at] || "overview", "where_to_buy")%>" class="main-content-section">
   <%= render "products/where_to_buy" %>
 </div>
 <div id="tabs7" style="display: none; " class="main-content-section">
