@@ -24,6 +24,7 @@ gem "friendly_id", "~> 4.0.1"
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
+gem "haml-rails"
 #gem 'aws-s3'
 gem 'aws-sdk'
 gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'

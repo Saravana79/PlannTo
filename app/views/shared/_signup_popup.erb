@@ -11,7 +11,7 @@ position:relative; left:296px; text-indent:-9999px; top:-12px;" onclick="$('#pla
 <div class="Popupmiddercontent">
 <div class="Popupfacebook">
 <p>Sign in to PlannTo using Facebook</p>
-<div class="FaceImg"><a href="#" onclick="myfunc();" ><img alt="facebook" border="0" src="/images/facebook_btn.png"></a></div>
+<%= link_to image_tag('facebook_btn.png'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>
 </div>
 
 <div class="PopupOr"><img alt="" src="/images/or_icon.png"></div>
@@ -48,28 +48,6 @@ position:relative; left:296px; text-indent:-9999px; top:-12px;" onclick="$('#pla
 
  <%end%>
 
-<script type="text/javascript">
-function myfunc() {
-  FB.login(function(response) {
-    location.href = '<%= facebook_path %>';
-    if (response.session) {
-      if (response.perms) {           
-    } else {
-   }
-    } else {
-      
-    }
-  }, {perms:'offline_access,read_stream'});
-}
- FB.init({
-    appId: "<%= Facebook.config[:client_id] %>",
-    cookie: true,
-    xfbml: true,
-    oauth: true
-  });
-</script>
-
-
-          <div class="Dontsignup">Don't have an account. <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" %></div>
+ <div class="Dontsignup">Don't have an account. <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" %></div>
    </div>
  </div>
