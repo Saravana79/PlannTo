@@ -17,6 +17,15 @@
     <script type="text/javascript" src="/javascripts/jslider/jquery.slider-min.js"></script>
     <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery.idTabs.min.js"></script>
+    
+    <script type="text/javascript">
+      // to close the facebook popup on callback 
+      if(window.opener) {
+         window.opener.location.reload(true);
+         window.close()
+      }
+    </script>
+
     <script type="text/javascript">
       //  $("#ui-active-menuitem").mouseout(function() {
       //    $("#ui-active-menuitem").hide();

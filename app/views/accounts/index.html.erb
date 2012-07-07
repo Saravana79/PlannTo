@@ -22,7 +22,7 @@
       <% @user.errors.full_messages.each do |error_message| %>
         <%= error_message %>
       <% end %>
-      <%= form_for(@user, :url => account_update_path, :method => :put) do |f| %>
+      <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
         <%= f.label :name, 'Full Name' %>:
         <%= f.text_field :name %>
         <br/>
@@ -34,14 +34,13 @@
         <br/>
 
         <div><%= f.label "Profile Picture: " %>
-          <%= f.fields_for Avatar.new do |photo| %>
-            <%= photo.file_field :photo %>
-          <% end %>
+             <%= f.file_field :avatar %>
+ 
         </div>
         <% if !@facebook_user.blank? %>
           <%= image_tag(@facebook_user.endpoint + "/picture") %>
         <% elsif !@user.avatar.blank? %>
-          <%= image_tag @user.avatar.photo.url(:thumb) %>
+          <%= image_tag @user.get_photo(:thumb) %>
         <% end %>
 
         <%= f.submit %>

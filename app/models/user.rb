@@ -36,6 +36,14 @@ class User < ActiveRecord::Base
   belongs_to :invitation
   belongs_to :facebook
   has_many :field_values
+  #has_attached_file :uploaded_image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  
+  has_attached_file :avatar, 
+                    :styles => {  :medium => "120x120>", :thumb => "24x24>" },
+                    :storage => :s3,
+                    :bucket => ENV['plannto'],
+                    :s3_credentials => "config/s3.yml",
+                    :path => "images/users/:id/:style/:filename"
   
   after_create :populate_username
 
@@ -46,7 +54,7 @@ class User < ActiveRecord::Base
     :new_answer => {:points => 1,:self_update => true}
   }
 
-  has_one :avatar
+  #has_one :avatar
 
 
   has_many :shares;
@@ -60,12 +68,13 @@ class User < ActiveRecord::Base
   end
 
   def get_photo(type = :thumb)
-    unless user_details = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url")
-      user_details = avatar.photo.url(type) unless avatar.blank?
-      user_details = (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?      
-      $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url", user_details)
-    end
-    user_details
+    #unless user_details = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url")
+      #user_details = avatar.photo.url(type) unless avatar.blank?
+     # user_details = (@facebook_user.endpoint + "/picture") unless @facebook_user.blank?      
+     # $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "avatar_url", user_details)
+   # end
+   # user_details
+    avatar.url(type)
   end
   
   def get_url()

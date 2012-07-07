@@ -7,19 +7,21 @@ class AccountsController < ApplicationController
   end
 
   def update
-    avatar_attributes = params[:user][:avatar]
-    user_attribute = params[:user].delete("avatar")
-    current_user.update_attributes(user_attribute)
-    if current_user.errors.blank?
-      $redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "avatar_url")
-      $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "name", current_user.name)
-      if avatar_attributes
-        avatar_attributes[:user_id] = current_user.id
-        Avatar.find_or_create_by_user_id(current_user.id) && current_user.avatar.update_attributes(avatar_attributes)
-        flash[:notice] = "Account update successfully"
-      else
-        flash[:notice] = "please upload the avatar from profile page"
-      end
+    #avatar_attributes = params[:user][:avatar]
+    #user_attribute = params[:user].delete("avatar")
+    #current_user.update_attributes(user_attribute)
+    #if current_user.errors.blank?
+      #$redis.hdel("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "avatar_url")
+      #$redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{current_user.id}", "name", current_user.name)
+      #if avatar_attributes
+        #avatar_attributes[:user_id] = current_user.id
+        #Avatar.find_or_create_by_user_id(current_user.id) && current_user.avatar.update_attributes(avatar_attributes)
+        #flash[:notice] = "Account update successfully"
+      #else
+        #flash[:notice] = "please upload the avatar from profile page"
+      #end
+    if current_user.update_attributes(params[:user])  
+      flash[:notice] = "Account update successfully"
     else
       flash[:notice] = current_user.errors.full_messages.join(", ")
     end

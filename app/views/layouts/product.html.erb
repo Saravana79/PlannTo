@@ -72,6 +72,7 @@
 <%= render("shared/google_analytics") if Rails.env.production? %>
 
 <script type="text/javascript">
+  // to close the facebook popup on callback 
   if(window.opener) {
     window.opener.location.reload(true);
     window.close()
