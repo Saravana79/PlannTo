@@ -167,7 +167,9 @@
           }
       });
 
-      
+     <%if !@filter_by.nil?%>
+      $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
+      <%end%> 
        var running =false;
     $(window).scroll(function () {
 

@@ -9,6 +9,7 @@ class ProductsController < ApplicationController
   include FollowMethods
 
   def index
+    @filter_by = params["fl"]
     search_type = request.path.split("/").last
     @itemtype = Itemtype.find_by_itemtype(search_type.singularize.camelize.constantize)
     @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
