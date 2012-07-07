@@ -204,8 +204,8 @@ class Item < ActiveRecord::Base
       #save in cache
       $redis.multi do
         top_contributors.each do |cont|
-          user = User.where("id = ?", cont[0]).includes(:avatar).first
-          avatar_url =  user.get_photo(:thumb)
+          user = User.find_by_id(cont[0])
+          avatar_url =  user.get_photo
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
           $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}"
           #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
@@ -341,7 +341,7 @@ def get_url()
    if (self.is_a? ItemtypeTag)
     "/#{self.name.downcase.pluralize}"
    else
-    "/#{self.type.downcase.pluralize}/#{self.id.to_s}"
+    "/#{self.type.downcase.pluralize}/#{self.slug.to_s}"
    end
 end
 end
