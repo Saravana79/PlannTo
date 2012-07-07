@@ -2,7 +2,7 @@ require 'json'
 class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
-  cache_records :store => :local, :key => "items",:request_cache => true
+  #cache_records :store => :local, :key => "items",:request_cache => true
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
@@ -100,9 +100,15 @@ class Item < ActiveRecord::Base
     item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type")
   end
 
-  def image_url
+  def image_url(imagetype = :medium)
       if(!imageurl.blank?)
-        configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
+        if(imagetype == :medium)
+             configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
+        else
+             configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
+        end
+
+        
       end
   end
 
