@@ -215,7 +215,7 @@ class SearchController < ApplicationController
 
     results = @items.collect{|item|
 
-      image_url = item.image_url
+      image_url = item.image_url(:small)
      # if item.type == "CarGroup"
      #   type = "Car"
      # else
@@ -252,7 +252,7 @@ class SearchController < ApplicationController
 
     results = @items.collect{|item|
 
-      image_url = item.image_url
+      image_url = item.image_url(:small)
     
      if(item.is_a? (Product))
         type = item.type.humanize
@@ -295,10 +295,10 @@ class SearchController < ApplicationController
 
     results = @items.results.collect{|item|
       if item.type == "CarGroup"
-        image_url = "http://plannto.com/images/car/" + item.imageurl
+        image_url = item.image_url(:small)
         type = "Car"
       else
-        image_url =item.image_url
+        image_url =item.image_url(:small)
         type = item.type.humanize
       end
       url = item.get_url()

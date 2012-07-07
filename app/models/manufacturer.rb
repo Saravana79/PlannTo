@@ -8,7 +8,7 @@ class Manufacturer < Item
   has_many :relate_car_groups, :through => :related_car_groups
   has_many :related_cars, 
     :through => :related_car_groups
-  before_save :add_relation_type
+  #before_save :add_relation_type
 
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 5.0,  :as => :name_ac
@@ -37,7 +37,7 @@ class Manufacturer < Item
   end
   
   def add_relation_type
-    self.relationtype = 'Manufacturer'
+    #self.relationtype = 'Manufacturer'
   end
 
   private

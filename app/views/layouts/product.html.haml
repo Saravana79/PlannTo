@@ -1,0 +1,85 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title PlannTo - Empowered Customers
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag '/stylesheets/plannto.css'
+    = stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"
+    = stylesheet_link_tag "/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" 
+    
+    = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" 
+    = javascript_include_tag "/javascripts/jquery-ui-1.8.14.custom/development-bundle/jquery-1.5.1.js" 
+    = javascript_include_tag 'application'
+ 
+    %script{:charset => "utf-8", :src => "/javascripts/formValidator2.5/js/jquery.validationEngine-en.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jquery-ui-1.8.14.custom/js/jquery.idTabs.min.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jquery.cookie.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jslider/jquery.dependClass.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jslider/jquery.slider-min.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jquery.tools.min.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jquery.youtube.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/poshytip-1.1/src/jquery.poshytip.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/layout.js", :type => "text/javascript"}
+    
+  %body
+    = render 'shared/header_links'
+    #dialog-form{:title => "Create new user"}
+      #login
+        = render "shared/login_dialog"
+        .Dontsignup
+          Don't have an account. 
+          = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();"
+      #sign_up_dialog_1{:style => "display:none;"}
+        = render "/shared/signup_dialog"
+        .Dontsignup
+          Do you have an account. 
+          =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"
+      = render 'shared/show_hide_login_form', :item => ""
+    = render "shared/signup_popup"
+    #maincontainer.maincontainerCss
+      .breadcrumpbtnDiv
+        = yield
+        / This will go into main layout
+      %br/
+      .footerdiv
+        = render 'shared/footer'
+        %div{:style => "display:none;"}
+          = render "shared/login_dialog", :item => @item
+      #sign_up_dialog{:style => "display:none"}
+        #login1{:style => "display:none;"}
+          = render "shared/login_dialog"
+          .Dontsignup
+            Don't have an account. 
+            = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog2').show();$('#login1').hide();"
+        #sign_up_dialog2
+          = render "/shared/signup_dialog"
+          .Dontsignup
+            Do you have an account. 
+            = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();"
+            
+      = render("shared/google_analytics") if Rails.env.production?
+      
+    :javascript
+      // to close the facebook popup on callback 
+      if(window.opener) {
+        window.opener.location.reload(true);
+        window.close()
+      }      
+ 
+    - unless user_signed_in?
+      :javascript
+        $("div.rate_content a").click(function(e){
+          if (login_flag != true){
+            openLoginPopup("#" +$(this).attr('id'), "click");
+            return false
+          }
+        })
+
+        $("form.new_comment").submit(function(e){
+          if (login_flag != true){
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          }
+        })

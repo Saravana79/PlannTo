@@ -99,6 +99,12 @@ GEM
       rack-oauth2 (>= 0.14.4)
       tzinfo
     friendly_id (4.0.7)
+    haml (3.1.6)
+    haml-rails (0.3.4)
+      actionpack (~> 3.0)
+      activesupport (~> 3.0)
+      haml (~> 3.0)
+      railties (~> 3.0)
     hashie (1.2.0)
     hike (1.2.1)
     httparty (0.8.3)
@@ -260,6 +266,7 @@ DEPENDENCIES
   devise (~> 2.0.0)
   fb_graph
   friendly_id (~> 4.0.1)
+  haml-rails
   hashie
   jquery-rails
   mysql2

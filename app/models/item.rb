@@ -2,7 +2,7 @@ require 'json'
 class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
-  cache_records :store => :local, :key => "items",:request_cache => true
+  #cache_records :store => :local, :key => "items",:request_cache => true
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
@@ -40,7 +40,7 @@ class Item < ActiveRecord::Base
 
   acts_as_followable
   extend FriendlyId
-  #friendly_id :name, use: :slugged
+  friendly_id :name, use: :slugged
   
   # acts_as_rateable
 
@@ -100,9 +100,15 @@ class Item < ActiveRecord::Base
     item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type")
   end
 
-  def image_url
+  def image_url(imagetype = :medium)
       if(!imageurl.blank?)
-        configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
+        if(imagetype == :medium)
+             configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
+        else
+             configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
+        end
+
+        
       end
   end
 
@@ -198,8 +204,8 @@ class Item < ActiveRecord::Base
       #save in cache
       $redis.multi do
         top_contributors.each do |cont|
-          user = User.where("id = ?", cont[0]).includes(:avatar).first
-          avatar_url = user.avatar.nil? ? "" : user.avatar.photo.url(:thumb)
+          user = User.find_by_id(cont[0])
+          avatar_url =  user.get_photo
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
           $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}"
           #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
@@ -335,7 +341,7 @@ def get_url()
    if (self.is_a? ItemtypeTag)
     "/#{self.name.downcase.pluralize}"
    else
-    "/#{self.type.downcase.pluralize}/#{self.id.to_s}"
+    "/#{self.type.downcase.pluralize}/#{self.slug.to_s}"
    end
 end
 end
