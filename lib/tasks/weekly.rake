@@ -70,6 +70,18 @@ namespace :plannto do
       end
     end
   end
+  desc "task to set content item relations"
 
+  task :populate_slug ,:arg1, :arg2, :needs => :environment do | t, args|
+    #ItemContentsRelationsCache.delete_all
+    puts args[:arg1]
+    arg1 = args[:arg1]
+    arg2 = args[:arg2]
+    items = Item.find(:all,:limit => arg2.to_i, :conditions=>["id > ?" , arg1])
+    items.each do |item|
+      puts item.id
+        item.save
+    end
+  end
 
 end
