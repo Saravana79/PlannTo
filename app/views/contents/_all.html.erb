@@ -37,6 +37,9 @@
           return false
         }
       });
+      <%if params[:fl].present?%>
+      $("div#Filterby div.Filternav ul li#<%=params[:fl]%>").trigger("click");
+      <%end%>
     });
   </script>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
