@@ -40,7 +40,7 @@
           </a>
         <%end%>
         <% if @item.show_models%>
-        <a class="txt_normal"> <%= link_to( @item.related_cars.count.to_s +  " Models", "#tab7", :class => 'txt_blue', :id => "models") %>
+        <a class="txt_normal"> <%=link_to_function @item.related_cars.count.to_s +  " Models","setActiveTab('all_variants')", :class => 'txt_blue'%>
         <%end%>
     <% end %>
     </span>
@@ -70,7 +70,7 @@
 <div id="where_to_buy" style="<%=display_required(params[:at] || "overview", "where_to_buy")%>" class="main-content-section">
   <%= render "products/where_to_buy" %>
 </div>
-<div id="tabs7" style="display: none; " class="main-content-section">
+<div id="all_variants" style="<%=display_required(params[:at] || "overview", "all_variants")%>" class="main-content-section">
  <%if @item.can_display_related_item?%>
   <%= render :partial => "products/related_items_container" %>
   

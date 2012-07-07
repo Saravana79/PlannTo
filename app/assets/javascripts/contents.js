@@ -4,7 +4,14 @@ $("ul#Newtabs li a").live('click', function(){
         $(this).closest('li').addClass("tab_active");
         $(".main-content-section").hide();
         var activeTab = $(this).attr("href");
-        $(activeTab).show();
+        $("div" + activeTab).show();
         return false;
 
   })
+  
+  
+  function setActiveTab(id){
+  	$("ul#Newtabs").find('li').removeClass('tab_active');
+  	$('li#all_variant').addClass('tab_active');
+  	$('div#all_variants').show();  	
+  }
