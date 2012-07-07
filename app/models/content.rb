@@ -5,7 +5,7 @@ class Content < ActiveRecord::Base
   
   acts_as_citier
   extend FriendlyId
-  friendly_id :name, use: :slugged
+  friendly_id :title, use: :slugged
   
   validates_presence_of :title 
   validates_presence_of :created_by  
