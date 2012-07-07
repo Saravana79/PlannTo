@@ -4,8 +4,8 @@ class Content < ActiveRecord::Base
   WORDCOUNT = 50
   
   acts_as_citier
-  extend FriendlyId
-  friendly_id :title, use: :slugged
+ # extend FriendlyId
+ # friendly_id :title, use: :slugged
   
   validates_presence_of :title 
   validates_presence_of :created_by  
