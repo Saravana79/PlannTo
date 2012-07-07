@@ -3,7 +3,21 @@
  * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
  * the top of the compiled file, but it's generally better to create a new file per style scope.
 */
-
+#login_link, #logout_link {
+list-style-type: none;
+background-color: #EFEFEF;
+padding: 0;
+position: absolute;
+top: 15px;
+z-index: 2;
+right: -5px;
+border-radius: 5px;
+font: normal 12px "Trebuchet MS",Arial,Helvetica,sans-serif;
+width: 135px;
+border: 1px solid #999595;
+box-shadow: 0 1px 5px 0 #505050;
+border-image: initial;
+}
 
   .jslider_blue .jslider-bg i,
   .jslider_blue .jslider-pointer
