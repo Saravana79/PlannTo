@@ -40,7 +40,7 @@ class Item < ActiveRecord::Base
 
   acts_as_followable
   extend FriendlyId
-  #friendly_id :name, use: :slugged
+  friendly_id :name, use: :slugged
   
   # acts_as_rateable
 
@@ -205,7 +205,7 @@ class Item < ActiveRecord::Base
       $redis.multi do
         top_contributors.each do |cont|
           user = User.where("id = ?", cont[0]).includes(:avatar).first
-          avatar_url = user.avatar.nil? ? "" : user.avatar.photo.url(:thumb)
+          avatar_url =  user.get_photo(:thumb)
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
           $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}"
           #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
