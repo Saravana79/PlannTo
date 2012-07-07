@@ -1,6 +1,5 @@
 module ItemsHelper
-
-  def display_specifications(item)  
+  def display_specifications(item)
     specifications = Array.new
     attributes_list = Array.new
     attributes_list =  Rails.cache.fetch("attributes_list")
@@ -151,11 +150,11 @@ module ItemsHelper
   end
 
   def get_content(item)
-    content = ""   
+    content = ""
     unless (item.value == "" || item.value.nil? || item.value == "0")
       if item.attribute_type == Attribute::TEXT
         content = "#{item.value}"
-      elsif item.attribute_type == Attribute::BOOLEAN       
+      elsif item.attribute_type == Attribute::BOOLEAN
         if item.value == "True"
           content = "Has #{item.name}"
         end
@@ -189,7 +188,7 @@ module ItemsHelper
     return content
   end
 
-  def convert_to_MB(value)   
+  def convert_to_MB(value)
     converted_value = value*1024
     return converted_value.to_i
   end
@@ -218,11 +217,11 @@ module ItemsHelper
     return items.size+1
   end
 
-  def display_item_details(item)    
+  def display_item_details(item)
     if item.status ==1 && !item.IsError?
-      return true
+    return true
     else
-      return false
+    return false
     end
   end
 
@@ -249,33 +248,49 @@ module ItemsHelper
     if(!item.cashback.nil? && item.cashback != 0.0)
       item.price == 0.0 ? "N/A" :  number_to_indian_currency(item.price - item.cashback).to_s
     else
-      item.price == 0.0 ? "N/A" :  number_to_indian_currency(item.price).to_s
-    end 
-    
+    item.price == 0.0 ? "N/A" :  number_to_indian_currency(item.price).to_s
+    end
+
   end
 
-  def display_product_page_tabs(item)
+  def display_product_page_tabs(item, tab_type)
     html_list = ""
     html_list = case item.type
     when "Manufacturer"
-      then '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
-            <li><a href="#tabs7" ><span>All Models</span></a></li>'
+      then
+      str = '<li '
+      str = str + "#{'class="tab_active"' if tab_type == "overview"}"
+      str = str +'><a href="#tabs1"><span>Overview</span></a></li>
+            <li '
+      str = str + "#{'class="tab_active"' if tab_type == "all_models"}"
+      str = str + '><a href="#tabs7" ><span>All Models</span></a></li>'
     when "CarGroup"
       then '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
         <li><a href="#tabs7" ><span>All Variants</span></a></li>'
     else
-      '<li class="tab_active"><a href="#tabs1"><span>Overview</span></a></li>
-    <li><a href="#tabs5" id="specification"><span>Specification</span></a></li>
-    <li><a href="#tabs6" ><span>Where to Buy</span></a></li>'
+    str = '<li '
+    str = str + "#{'class="tab_active"' if tab_type == "overview"}"
+    str = str +'><a href="#overview"><span>Overview</span></a></li>'
+    str = str + "<li "
+    str = str + "#{'class="tab_active"' if tab_type == "specification"}"
+    str = str + '><a href="#specification"><span>Specification</span></a></li>'
+    str = str + "<li "
+    str = str + "#{'class="tab_active"' if tab_type == "where_to_buy"}"
+    str = str + '><a href="#where_to_buy" ><span>Where to Buy</span></a></li>'
     end
     return html_list.html_safe
   end
-
+  
+  def display_required(value, required)
+    logger.info value
+    logger.info required
+    return "display: none;" if value != required
+  end
 
   def number_to_indian_currency(number)
     if number
       string = number.to_s
-      number = string.to_s.gsub(/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/, "\\1,")    
+      number = string.to_s.gsub(/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/, "\\1,")
     end
     "Rs #{number}"
   end
