@@ -274,6 +274,18 @@
   }
 
   $(document).ready(function(){
+  	
+  	//onfocus logic
+  	
+  	$("#contentEditView #article_create_product").mouseover(function(){   		
+  		if ($(this).autocomplete("widget").is(":visible")) {
+                return;
+            }  
+          //  $(this).trigger('keydown.autocomplete');
+          $(this).data("autocomplete").search($(this).val());
+    });
+  	//ends
+  	
 <%if @content.nil?%>
       settings={
         close:true, addButton: false,
