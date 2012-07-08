@@ -37,12 +37,8 @@
              <%= f.file_field :avatar %>
  
         </div>
-        <% if !@facebook_user.blank? %>
-          <%= image_tag(@facebook_user.endpoint + "/picture") %>
-        <% elsif !@user.avatar.blank? %>
-          <%= image_tag @user.get_photo(:thumb) %>
-        <% end %>
-
+        <%= image_tag @user.get_photo(:thumb) %>
+ 
         <%= f.submit %>
       <% end %>
 
@@ -52,19 +48,7 @@
     <div id="tabs2" style="display: none; " class="main-content-section">
       Email Settings goes here
     </div>
-    <div id="tabs3" style="display: none; ">
-      <dl>
-        <dd>
-          <fb:login-button length="long" onlogin="location.href = '<%= facebook_path %>'" scope="<%= Facebook.config[:scope] %>"></fb:login-button>
-        </dd>
-
-      </dl>
-      <% if !@facebook_user.blank? %>
-        Name: <%= @facebook_user.name %>
-        <br/>
-        Profile Picture: <%= image_tag(@facebook_user.endpoint + "/picture") %>
-      <% end %>
-    </div>
+    
   </div>
 
   <div id="tabs4" style="display:none">

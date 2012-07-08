@@ -11,3 +11,9 @@ vendor/bundle/
 log/
 public/cache/
 config/database.yml
+tmp/**/*
+*.sw?
+*~
+*.orig
+rerun.txt
+db/schema.rb
