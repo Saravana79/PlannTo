@@ -133,7 +133,7 @@
   <ul class="imgfollowers">
       <% @item.get_followers.each do |follower| %>
         <li class="imgfollowers">
-          <%= image_tag follower.get_photo(:small), :title => follower.name ,:class => "userImageSmall"%>
+          <%= image_tag follower.get_photo(:thumb), :title => follower.name ,:class => "userImageSmall"%>
         </li>
       <% end %>
   </ul>

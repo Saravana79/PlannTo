@@ -23,7 +23,7 @@
             <td  colspan="2"  valign="top">
               <% related_follower = related_item.get_followers(@follow_type) %>              
               <%- related_follower[0..2].each do |user| %>
-                <%= image_tag user.get_photo(:small), :title => user.name ,:class => "userImageSmall"%>
+                <%= image_tag user.get_photo(:thumb), :title => user.name ,:class => "userImageSmall"%>
               <% end %>
               <% if ((related_follower.count - 2) > 0) %>
                 and <%= (related_follower.count - 2) %> other people owns this.
