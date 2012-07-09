@@ -18,7 +18,7 @@ class ArticleCategory < ActiveRecord::Base
   #why zero is hardcoded here?
   #scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => [0,id])}
   scope  :by_itemtype_id, lambda{|id| where(:itemtype_id => id).order_by_orderby}
-  scope :order_by_orderby, order("name ASC")
+  scope :order_by_orderby, order("orderby ASC")
 
 
   def is_event?
@@ -39,16 +39,18 @@ class ArticleCategory < ActiveRecord::Base
 
   def self.get_by_itemtype(itemtype_id)
     keyword_id = "article_categories_#{itemtype_id}_list"
-    article_categories = $redis.smembers "#{keyword_id}"
+    article_categories = $redis.zrange "#{keyword_id}", 0, -1
     if article_categories.size == 0
       article_categories = self.by_itemtype_id(itemtype_id)
       #save in cache
       $redis.multi do
         article_categories.each do |cont|
-          $redis.sadd "#{keyword_id}", "#{cont.id}_#{cont.name}"
+        logger.info cont.name
+          $redis.zadd "#{keyword_id}", cont.orderby, "#{cont.id}_#{cont.name}"
         end
       end
-      article_categories = $redis.smembers "#{keyword_id}"
+      article_categories = $redis.zrange "#{keyword_id}", 0 ,-1
+
     end
     articles_list = Array.new
     article_categories.each do |category|
