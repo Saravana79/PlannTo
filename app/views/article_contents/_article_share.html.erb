@@ -590,7 +590,7 @@ if ($("#article_content_sub_type").val() == ""){
                 return;
             }  
           //  $(this).trigger('keydown.autocomplete');
-          $(this).data("autocomplete").search($(this).val());
+          $(this).data("autocomplete").search($("#<%=@title_id%>").val());
     });
   	//ends
   	
