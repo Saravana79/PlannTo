@@ -29,7 +29,7 @@
       </div>
       <div  class="subContentDiv">
         <div><%= raw get_content_title(@content)%>
-        <% if content.url?  %>
+        <% if ((content.is_a?ArticleContent) && (content.url?))  %>
         - <a class="txt_black_description">(<%=  URI.parse(content.url).host.gsub("www.","") %> </a>)
        <%end%>
       </div>
@@ -74,7 +74,7 @@
           <br/>
         <%end%>
           <div style="padding:3px 0px 3px 0px;clear:both;">
-             <%if @content.thumbnail?%>
+             <%if ((@content.is_a?ArticleContent) && (@content.thumbnail?))%>
              <%if ((@content.sub_type == "#{ArticleCategory::PHOTO}") && (!@content.content_photo.nil?)) %>
                <div><img src="<%= @content.content_photo.photo.url(:large) %>" class="uploadedarticleContentdisplay float_lft" style="width:560px;height:360px;"/></div>
               <br/>

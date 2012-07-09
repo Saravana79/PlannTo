@@ -1,41 +1,31 @@
-<div id="maincontainer" class="maincontainerCss">
-<!-- Till this will go into main layout and common for all pages.-->
+<%= render 'shared/product_button_javascript', :button_class => '', :item => @content, :related_follower => user_follow_type(@content, current_user) , :related_items => false %>
 
-    <div class="breadcrumpbtnDiv">
-    <!--  breadcrumbs - Start -->
-      <div id ="breadcrump" class="breadcrump">
-      <a class="alink" href="#">Cars</a> 
-      <a class="grayarrow">></a> 
-      <a class="alink" href="#">Fiat</a>
-      <a class="grayarrow">></a>
-      <a class="alink" href="#">Grande Punto</a>
-      <a class="grayarrow">></a>
-      <a class="alink" href="#">Grande Punto Active 1.2</a>
-      <a class="grayarrow">></a>
-      <a class="alink" id="alink_active">Questions & Answers</a>
-      <!--  breadcrumbs - End -->
+<%= render 'shared/show_hide_login_form', :item => @content %>
+<div style="padding-left:60px;width:600px;">
+  <ul id="productList" class="tagging">
+    <% @items.each do |item|%>
+       <%=display_product_tag(item, false).html_safe%>
+    <% end%>
+  </ul>
+</div>
 
-      </div>
-      <!-- buttons - Start -->
-      
+<div class="float_rgt" >
+   <%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
+</div>
 
-    </div>
-
-
-<br/><br/>
-<div class="leftcolumnbig">
+<div class="leftcolumnbig" style="clear:both;">
 <!-- Product Details - Start -->
 <div class="contentDetailsMainDiv">
       
         <!-- Question - Start -->
         <div  class="mainContentDiv">   
-             <div class="rate_content float_lft">
-                <a class="bg_ratecontent">100</a>
-                <a class="btn_like" href="#"></a><a class="btn_dislike" href="#"></a>
-            </div>
-            <div  class="float_rgt">
-                <img src="images/users.png" class="userImageSmall" />
-            </div>
+                   
+      <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
+      
+      <div  class="float_rgt">
+        <img src="<%=@content.user.get_photo%>" class="userImageSmall"/>
+      </div>
+
       <div  class="subContentDiv">
                 <div><a class="title"><%= content.title %></a></div>
                 <div><a class="txt_brown">Asked by <%= content.user.name %></a></div>
@@ -61,15 +51,15 @@
         <div class="hdr_Category float_lft margin_lft10"><%= pluralize(content.answer_contents.count,'Answers') %> </div>
         <div class="float_rgt" style="margin-top:8px;">
                 <a style="" class="btn_submitanswer" id="answer_this_question" >Answer this Question</a> 
-                <div class="PlanntoBuyBtn"><span class="action_btns"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Question</a></span></div>
+                
                 </div>
                 
       </div>
       <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
     <!-- Answer this question - End -->
-        <%= render :partial => 'answer_contents/new_answer_content', :locals => {:question_content => content, :item => @item} %>
         
     <%= render :partial => 'answer_contents/answer_content',:collection => content.answer_contents %>
+        <%= render :partial => 'answer_contents/new_answer_content', :locals => {:question_content => content, :item => @item} %>
       
     
 </div>
@@ -82,96 +72,10 @@
 
 <div class="rightcolumnsmall">
 
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-  <tr>
-    <td class="bg_widgethdr txt_white">Related Questions</td>
-  </tr>
-  <tr>
-    <td height="252" valign="top">
-    
-        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-            <a href="#" class="txt_black">Renault Pulse</a>
-            <img src="images/rating_stars.png" width="87" height="20" /><br />
-            <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-          
-           <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-            <a href="#" class="txt_black">Renault Pulse</a>
-            <img src="images/rating_stars.png" width="87" height="20" /><br />
-            <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-        </table>  
-          
-    </td>
-  </tr>
-  <tr>
-    <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-  </tr>
-</table>
 
-<!-- Related Cars -- End -->
-
-<br />
-
-<!-- Related Cars -- Start -->
-
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-  <tr>
-    <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
-  </tr>
-  <tr>
-    <td height="252" valign="top">
-    
-        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-            <a href="#" class="txt_black">Renault Pulse</a>
-            <img src="images/rating_stars.png" width="87" height="20" /><br />
-            <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-          
-           <tr>
-            <td width="113" height="85"><img src="images/car1.png" width="101" height="68" /></td>
-            <td width="113">
-            <a href="#" class="txt_black">Renault Pulse</a>
-            <img src="images/rating_stars.png" width="87" height="20" /><br />
-            <a style="" href="#" class="btn_follow">Follow</a>
-            </td>
-          </tr>
-          <tr>
-            <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-          </tr>
-        </table>  
-          
-    </td>
-  </tr>
-  <tr>
-    <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-  </tr>
-</table>
 
 <!-- Related Cars -- End -->
 </div>
 
 <!-- This will go into main layout -->
 </div>
-
-<br />

@@ -156,7 +156,7 @@ module ContentsHelper
   end
 
   def get_content_title(content)
-    if content.url.blank?
+    if ((content.is_a?ArticleContent) && (content.url.blank?)) 
       "<a class='title'>#{content.title }</a>"
     else
       link_to content.title, external_content_path(content.id) , :class => 'title'
@@ -172,7 +172,11 @@ module ContentsHelper
     if content.sub_type == "#{ArticleCategory::ACCESSORIES}"
       "<label>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
+      if(content.is_a?ArticleContent)
       "<label>Rating :</label>#{content.field1}<br/><div class ='displayRating' data-rating='2'></div>"
+      else
+        "<label>Rating :</label>#{content.rating}<br/><div class ='displayRating' data-rating='2'></div><label>Pro :</label>#{content.pros}<br/><label>Con :</label>#{content.cons}<br/>"
+      end
     end
   end
 
