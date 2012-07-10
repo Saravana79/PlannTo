@@ -18,7 +18,8 @@ module ActsAsFollower
       def follow(followable, follow_type=nil)
         follow = get_follow(followable)
         if follow.blank? && self != followable
-          Follow.create(:followable_type => followable.class.name, :followable_id => followable.id,
+          followable_type = followable.class.name.ends_with?("Content") ? followable.sub_type : followable.class.name
+          Follow.create(:followable_type => followable_type, :followable_id => followable.id,
                         :follower_type => self.class.name, :follower_id => self.id, :follow_type => follow_type)
         else
           follow.update_attribute(:follow_type, follow_type)
