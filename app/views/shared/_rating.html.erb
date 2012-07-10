@@ -1,2 +1,14 @@
-<div class ="displayRating" data-rating=<%="#{item.rating}"%> ></div>
+<div class ="displayRating"></div>
+<script type="text/javascript">
+	$('div.displayRating').raty({
+    starOff:  'assets/star-off.png',
+    starHalf   : 'assets/star-half.png',
+    half       : true,
+    //precision  : true,
+    // size       : 24,
+    starOn: 'assets/star-on.png',
+    start: <%="#{item.rating}"%>
+    
+  });
+</script>
 
