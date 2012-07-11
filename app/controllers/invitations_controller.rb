@@ -18,14 +18,15 @@ class InvitationsController < ApplicationController
   def accept
     invitation = Invitation.find_by_token(params[:token])
     unless invitation.blank?
-      user = User.find_by_email(invitation.email)
+      user = User.find_by_email(invitation.email.strip)
       if user.blank?
         redirect_to new_user_registration_path(:token => invitation.token)
       else
         flash[:notice] = 'Invitation is successfully accepted.'
         sign_in(user)
+ 
         invitation.accept(user)
-        redirect_to root_path
+        redirect_to invitation.item.get_url
       end  
     else
       flash[:notice] = 'This is not a valid invitation or might have expired already. Please contact PlannTo adiministrator.'
