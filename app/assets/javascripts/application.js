@@ -25,5 +25,13 @@ $(document).ready(function() {
     e.preventDefault();
     return false;
   });
+  
+  $(".invite").live('click', function(){
+    id = $(this).attr('id');
+    $('#invitation_follow_type').val(id);
+    $("#dialog-invite-form").dialog({height: 500,
+      width: 550,
+      modal: true});
+  });
 });
 
