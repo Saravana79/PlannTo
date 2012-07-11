@@ -1,6 +1,7 @@
-<div class ="displayRating"></div>
+<% rating_id = rating_id || "displayRating"%>
+<div class ="displayRating" id="<%=rating_id%>"></div>
 <script type="text/javascript">
-	$('div.displayRating').raty({
+	$('div#<%=rating_id%>').raty({
     starOff:  'assets/star-off.png',
     starHalf   : 'assets/star-half.png',
     half       : true,
