@@ -2,151 +2,179 @@
 
 <%= render 'shared/show_hide_login_form', :item => @content %>
 <div style="padding-left:60px;width:600px;">
-  <ul id="productList" class="tagging">
-    <% @items.each do |item|%>
-       <%=display_product_tag(item, false).html_safe%>
-    <% end%>
-  </ul>
+	<ul id="productList" class="tagging">
+		<% @items.each do |item|%>
+		<%= display_product_tag(item, false).html_safe%>
+		<% end%>
+	</ul>
 </div>
 
 <div class="float_rgt" >
-   <%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
+	<%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
 </div>
 
 <div class="leftcolumnbig" style="clear:both;">
-  <!-- Product Details - Start -->
-  <div class="contentDetailsMainDiv">
+	<!-- Product Details - Start -->
+	<div class="contentDetailsMainDiv">
 
-    <!-- Question - Start -->
+		<!-- Question - Start -->
 
-    <div  class="mainContentDiv" style="border-bottom:0px;">
+		<div  class="mainContentDiv" style="border-bottom:0px;">
 
-      <div style="clear:both;width=100%;">
-      <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
-      
-      <div  class="float_rgt">
-        <img src="<%=@content.user.get_photo%>" class="userImageSmall"/>
-      </div>
-      <div  class="subContentDiv">
-        <div><%= raw get_content_title(@content)%>
-        <% if ((content.is_a?ArticleContent) && (content.url?))  %>
-        - <a class="txt_black_description">(<%=  URI.parse(content.url).host.gsub("www.","") %> </a>)
-       <%end%>
-      </div>
-        <div><a class="txt_brown">Shared by <%= @content.user.name %></a></div>
-        <div class="subContentGap">
-        <%= raw get_rating_or_category_contents(@content)%> 
-        <% if @content.sub_type == "#{ArticleCategory::APPS}" %>
-         <div>
-              <div style="float:left;">
-                  <label >Category : <%= @content.field1%> </label></br>
-                   <% if @content.field2 == "Free"%>
-                      <label>Cost: Free</label>
-                   <%end%>
-              </div>
-              <div style="float:right;">
-                <% if !@content.field3.empty? %>
-                    <a href="<%= @content.field3%>" target="_blank"> <img src="/images/andriodshop.png" style="height:30px;width:100px"/> </a>
-                <%end%>
-                <% if !@content.field4.empty? %>
-                <a href="<%= @content.field4%>" target="_blank"> <img src="/images/itunesshop.png" style="height:30px;width:100px"/> </a>
-                <%end%>
-              </div>
-          </div>
-          <br/>
-        <%end%>
-           <% if @content.sub_type == "#{ArticleCategory::EVENT}" %>
-         <div>
-              <div style="float:left;">
-                  <% if !@content.field1.empty? %>
-                   <label >Start Date : <%= @content.field1%> </label></br>
-                 <%end%>
-                   <% if !@content.field3.empty? %>
-                   <label >Location : <%= @content.field3%> </label></br>
-                 <%end%>
-              </div>
-              <div style="float:right;">
-                <% if !@content.field2.empty? %>
-                   <label >End  Date : <%= @content.field2%> </label></br>
-                 <%end%>
-              </div>
-          </div>
-          <br/>
-        <%end%>
-          <div style="padding:3px 0px 3px 0px;clear:both;">
-             <%if ((@content.is_a?ArticleContent) && (@content.thumbnail?))%>
-             <%if ((@content.sub_type == "#{ArticleCategory::PHOTO}") && (!@content.content_photo.nil?)) %>
-               <div><img src="<%= @content.content_photo.photo.url(:large) %>" class="uploadedarticleContentdisplay float_lft" style="width:560px;height:360px;"/></div>
-              <br/>
-              <br/>
-              <% else %>
-               <div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
-               <%end%>
-             <%end%>
-              <%= raw get_content_description(@content, true)%>
-              <br/>
-          </div>
-                    
-        </div>
-        <ul class="divCommentsConent" style="clear:both;">
-          <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-          <%if content.can_update_content?(current_user)%>
-            <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-            <li class="subContentGap float_lft"><%=link_to "Delete This", content_path(content), :method => "delete", :remote => true, :class => "txt_blue"%></li>
-            <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-            <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :detail => true), :remote => true, :class => "txt_blue"%></li>
-          <%end%>
-        </ul>
-      </div>
-      </div>
-    </div>
+			<div style="clear:both;width=100%;">
+				<%= render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
 
-    <!-- Question - End -->
+				<div  class="float_rgt">
+					<img src="<%= @content.user.get_photo%>" class="userImageSmall"/>
+				</div>
+				<div  class="subContentDiv">
+					<div>
+						<%= raw get_content_title(@content)%>
+						<% if ((content.is_a?ArticleContent) && (content.url?))  %>
+						- <a class="txt_black_description">(<%= URI.parse(content.url).host.gsub("www.","") %> </a>)
+						<%end%>
+					</div>
+					<div>
+						<a class="txt_brown">Shared by <%= @content.user.name %></a>
+					</div>
+					<div class="subContentGap">
+						<%= raw get_rating_or_category_contents(@content)%>
+						<% if @content.sub_type == "#{ArticleCategory::REVIEWS}" %>
+						<% rating =  (content.is_a?ArticleContent) ? content.field1 : content.rating %>
+						<script type="text/javascript">
+							$('div#content_show_<%= @content.id%>').raty({
+							starOff:  'assets/star-off.png',
+							starHalf   : 'assets/star-half.png',
+							half       : true,
+							//precision  : true,
+							// size       : 24,
+							starOn: 'assets/star-on.png',
+							start: <%= "#{rating}"%>
+									});
+						</script>
+						<%end%>
+						<% if @content.sub_type == "#{ArticleCategory::APPS}" %>
+						<div>
+							<div style="float:left;">
+								<label >Category : <%= @content.field1%> </label></br>
+								<% if @content.field2 == "Free"%>
+								<label>Cost: Free</label>
+								<%end%>
+							</div>
+							<div style="float:right;">
+								<% if !@content.field3.empty? %>
+								<a href="<%= @content.field3%>" target="_blank"> <img src="/images/andriodshop.png" style="height:30px;width:100px"/> </a>
+								<%end%>
+								<% if !@content.field4.empty? %>
+								<a href="<%= @content.field4%>" target="_blank"> <img src="/images/itunesshop.png" style="height:30px;width:100px"/> </a>
+								<%end%>
+							</div>
+						</div>
+						<br/>
+						<%end%>
+						<% if @content.sub_type == "#{ArticleCategory::EVENT}" %>
+						<div>
+							<div style="float:left;">
+								<% if !@content.field1.empty? %>
+								<label >Start Date : <%= @content.field1%> </label></br>
+								<%end%>
+								<% if !@content.field3.empty? %>
+								<label >Location : <%= @content.field3%> </label></br>
+								<%end%>
+							</div>
+							<div style="float:right;">
+								<% if !@content.field2.empty? %>
+								<label >End  Date : <%= @content.field2%> </label></br>
+								<%end%>
+							</div>
+						</div>
+						<br/>
+						<%end%>
+						<div style="padding:3px 0px 3px 0px;clear:both;">
+							<%if ((@content.is_a?ArticleContent) && (@content.thumbnail?))%>
+							<%if ((@content.sub_type == "#{ArticleCategory::PHOTO}") && (!@content.content_photo.nil?)) %>
+							<div><img src="<%= @content.content_photo.photo.url(:large) %>" class="uploadedarticleContentdisplay float_lft" style="width:560px;height:360px;"/>
+							</div>
+							<br/>
+							<br/>
+							<% else %>
+							<div><img src="<%= @content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/>
+							</div>
+							<%end%>
+							<%end%>
+							<%= raw get_content_description(@content, true)%>
+							<br/>
+						</div>
 
-    <!-- Answer this question - Start -->
-    <br/>
-    <div  style="border-bottom:solid 1px #ccd4d8;margin-left:55px;clear:both;">
-      <div class="float_lft margin_lft10 title" style="height:30px;text-align:middle;padding:10px 0px 0px 0px;font-weight:bold;"><%= pluralize(content.comments.count,'Comment') %> </div>
-      <!--<div class="float_rgt" style="margin-top:8px;">
-        <a style="" class="btn_submitanswer" id="comment_this_content" >Comment this Content</a>
-        <div class="PlanntoBuyBtn"><span class="action_btns"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Content</a></span></div>
-      </div>
-      -->
-    </div>
-    <div  style="border-top:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>
-    <!-- Answer this question - End -->
-    <%= render :partial => 'comments/detailed_comments_list',:locals => {:content =>content} %>
-    <%= render :partial => 'comments/new_detail_comment', :locals => {:content => content, :parent => content.class.name, :parent_id => content.id, :detail => true}  %>
+					</div>
+					<ul class="divCommentsConent" style="clear:both;">
+						<li class="subContentGap float_lft">
+							<a class="txt_blue ">Report</a>
+						</li>
+						<%if content.can_update_content?(current_user)%>
+						<li class="subContentGap float_lft">
+							<a class="txt_gray ">|</a>
+						</li>
+						<li class="subContentGap float_lft">
+							<%= link_to "Delete This", content_path(content), :method => "delete", :remote => true, :class => "txt_blue"%>
+						</li>
+						<li class="subContentGap float_lft">
+							<a class="txt_gray ">|</a>
+						</li>
+						<li class="subContentGap float_lft">
+							<%= link_to "Update This", edit_content_path(content, :detail => true), :remote => true, :class => "txt_blue"%>
+						</li>
+						<%end%>
+					</ul>
+				</div>
+			</div>
+		</div>
 
-  </div>
+		<!-- Question - End -->
 
+		<!-- Answer this question - Start -->
+		<br/>
+		<div  style="border-bottom:solid 1px #ccd4d8;margin-left:55px;clear:both;">
+			<div class="float_lft margin_lft10 title" style="height:30px;text-align:middle;padding:10px 0px 0px 0px;font-weight:bold;">
+				<%= pluralize(content.comments.count,'Comment') %>
+			</div>
+			<!--<div class="float_rgt" style="margin-top:8px;">
+			<a style="" class="btn_submitanswer" id="comment_this_content" >Comment this Content</a>
+			<div class="PlanntoBuyBtn"><span class="action_btns"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Content</a></span></div>
+			</div>
+			-->
+		</div>
+		<div  style="border-top:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>
+		<!-- Answer this question - End -->
+		<%= render :partial => 'comments/detailed_comments_list',:locals => {:content =>content} %>
+		<%= render :partial => 'comments/new_detail_comment', :locals => {:content => content, :parent => content.class.name, :parent_id => content.id, :detail => true}  %>
 
-  <!-- Product Details - End -->
+	</div>
 
+	<!-- Product Details - End -->
 
 </div>
 
 <div class="rightcolumnsmall">
-  
-  <!--
-  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-    <tr>
-      <td class="bg_widgethdr txt_white">Related Questions</td>
-    </tr>
-    <tr>
-      <td height="252" valign="top">
 
-      
-      </td>
-    </tr>
-    <tr>
-      <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-    </tr>
-  </table>
+	<!--
+	<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+	<tr>
+	<td class="bg_widgethdr txt_white">Related Questions</td>
+	</tr>
+	<tr>
+	<td height="252" valign="top">
 
-  <br />
--->
-  <!-- Related Cars -- End -->
+	</td>
+	</tr>
+	<tr>
+	<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+	</tr>
+	</table>
+
+	<br />
+	-->
+	<!-- Related Cars -- End -->
 </div>
 
 <!-- This will go into main layout -->

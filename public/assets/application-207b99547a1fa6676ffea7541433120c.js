@@ -25370,7 +25370,7 @@ $(document).ready(function(){
             //$( "#project" ).val( ui.item.label );
             return false;
             },
-            select: function( event, ui ) {
+            select: function( event, ui ) {alert("hey")
             $.selectEvent(ui.item, settings.addfunctionName)
             if (settings.hidden_field != "")
             {
