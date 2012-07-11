@@ -38,7 +38,7 @@ class ArticleCategory < ActiveRecord::Base
   end
 
   def self.get_by_itemtype(itemtype_id)
-    keyword_id = "article_categories_#{itemtype_id}_list"
+    keyword_id = "article_categories_#{itemtype_id}_lista"
     article_categories = $redis.zrange "#{keyword_id}", 0, -1
     if article_categories.size == 0
       article_categories = self.by_itemtype_id(itemtype_id)

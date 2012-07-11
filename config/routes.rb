@@ -2,7 +2,13 @@ PlanNto::Application.routes.draw do
  
   
   get "home/index"
-
+  
+  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
+  devise_scope :user do
+    #get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
+    get '/users/sign_out' => 'devise/sessions#destroy'
+  end
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -150,16 +156,14 @@ resources :accounts do
   resources :answers
   resources :messages
   resources :tips
-  resources :invitations, :only => [:create]
+  resources :invitations
+  match 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
+    
   resources :pages, :only => [:show] 
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
-  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
-  devise_scope :user do
-    get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
-    get '/users/sign_out' => 'devise/sessions#destroy'
-  end
+  
  # match '/:search_type', :to => "products#index"
   
   

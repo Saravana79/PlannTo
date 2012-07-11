@@ -27,12 +27,12 @@ PlanNto::Application.configure do
   # Do not compress assets
   config.assets.compress = false
   #config.cache_store = :dalli_store, '127.0.0.1'
-  
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   # Expands the lines which load the assets
   config.assets.debug = true
-  config.action_controller.asset_host = "localhost:3000"
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  #config.action_controller.asset_host = "localhost:3000"
+  #config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   Paperclip.options[:command_path] = "/usr/local/bin/"
   ENV["REDISTOGO_URL"] = 'redis://:@localhost:6379'
 end
