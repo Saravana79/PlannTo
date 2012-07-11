@@ -3,7 +3,7 @@
           <span>
             <input name="search" type="text" class="search_inputfield" placeholder="Search <%= params[:follow]%>" id="search_car"/>
             <%=select_tag "types",
-                  options_for_select([["I Own it", "Owner"], ["Plan to Buy", "Buyer"], ["Follow this car", "Follow"]]) %>
+                  options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], ["Follow this car", "follower"]]) %>
             <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="images/icon_search_gray.png"/></a>
           </span>
 </div>

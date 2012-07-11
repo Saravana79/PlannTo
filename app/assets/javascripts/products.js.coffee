@@ -49,9 +49,9 @@ root.Product =
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "Follow"));
+    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "follower"));
     buy_href_follow = $("#plan_to_buy"+item_id).attr("href")
-    $("#plan_to_buy"+item_id).attr("href", Product.remove_unfollow_query_string(buy_href_follow, "Buyer"));
+    $("#plan_to_buy"+item_id).attr("href", Product.remove_unfollow_query_string(buy_href_follow, "buyer"));
 
   unload_owner: (item_id, medium, message, follow_message) ->
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon"+medium
@@ -61,9 +61,9 @@ root.Product =
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
     own_href_follow = $("#plan_to_own"+item_id).attr("href")
-    $("#plan_to_own"+item_id).attr("href", Product.remove_unfollow_query_string(own_href_follow, "Owner"));
+    $("#plan_to_own"+item_id).attr("href", Product.remove_unfollow_query_string(own_href_follow, "owner"));
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "Follow"));
+    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "follower"));
 
 
 
@@ -76,7 +76,7 @@ root.Product =
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns"+medium
     $("#plan_to_follow"+item_id).attr("title", follow_message)
     follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "Follow"));
+    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "follower"));
 
   remove_unfollow_query_string: (url_path, follow_type) ->
     urlparts= url_path.split('?');

@@ -97,9 +97,9 @@
     <span class="Headingtxt">Plan to Buy</span>
     <div class="Featurecontent">
       <div class="Iconblock">
-        <span class="Planbuy"><%= @item.get_followers("Buyer").split(",").count %></span>
+        <span class="Planbuy"><%= @item.get_followers("buyer").split(",").count %></span>
       </div>
-        <%= link_to("Invite a friend", "#", :id => "invite_buy", :class => "Bluesmall") %>
+        <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite") %>
       </div>
       <div class="Smalltext">who plans to buy</div>  
   </div>
@@ -107,9 +107,9 @@
     <span class="Headingtxt">Owners</span>
     <div class="Featurecontent">
       <div class="Iconblock">
-        <span class="Wonit"><%= @item.get_followers("Owner").split(",").count %></span>
+        <span class="Wonit"><%= @item.get_followers("owner").split(",").count %></span>
       </div>
-        <%= link_to("Invite a friend", "#", :id => "invite_own", :class => "Bluesmall") %>
+        <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite") %>
       </div>
       <div class="Smalltext">who owns it</div>
     </div>
@@ -117,9 +117,9 @@
     <span class="Headingtxt">Followers</span>
     <div class="Featurecontent" style="border-right:none;">
     <div class="Iconblock">
-      <span class="Followcar"><%= @item.get_followers("Follow").split(",").count %></span>
+      <span class="Followcar"><%= @item.get_followers("follower").split(",").count %></span>
     </div>
-      <%= link_to("Invite a friend", "#", :id => "invite_follow", :class => "Bluesmall") %>
+      <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite") %>
       
       </div>
       <div class="Smalltext">who is an expert</div>
@@ -133,7 +133,7 @@
   <ul class="imgfollowers">
       <% @item.get_followers.each do |follower| %>
         <li class="imgfollowers">
-          <%= image_tag follower.get_photo(:thumb), :title => follower.name ,:class => "userImageSmall"%>
+          <%= image_tag follower.get_photo(:small), :title => follower.name ,:class => "userImageSmall"%>
         </li>
       <% end %>
   </ul>
@@ -154,14 +154,21 @@
   <%= render 'shared/show_hide_login_form', :item => @item %>
 
 <div id="dialog-invite-form" style="display:none">
-	<%= form_for(@invitation, :remote => true ) do |f| %>
-	   <div id= "invitation_errors" style="display:none"></div>
-	   <%= f.hidden_field :item_id -%>
-	   <%= f.hidden_field :follow_type -%>
-		Email : <br /> <%= f.text_field :email %> <br />
-		Message : <br />
-		<%= f.text_area :message, :rows => 3, :cols => 50 %>
-	<% end %>
+  <% if current_user %>
+    <%= form_for(@invitation, :remote => true ) do |f| %>
+	    <div id= "invitation_errors" style="display:none"></div>
+	    <%= f.hidden_field :item_id, :value => @item.id -%>
+	    <%= f.hidden_field :item_type, :value => @item.class.to_s -%>
+	    <%= f.hidden_field :follow_type -%>
+		  Email : <br /> <%= f.text_field :email %> <br />
+		  Message : <br />
+	  	<%= f.text_area :message, :rows => 3, :cols => 50 %>
+		  <%= f.submit 'Invite', :class => 'btn_submitanswer', 'data-disable-with'=>"Sending invite..." %>
+	  <% end %>
+	<%else-%>
+	   Please sign in to invite others.
+	   <%= render "shared/home_login" %>
+	<%end%>  
 	
 </div>
 

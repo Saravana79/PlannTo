@@ -174,8 +174,7 @@ class User < ActiveRecord::Base
   
   def self.create_from_fb_callback(auth)
     user = User.new(email:auth.info.email, name:auth.extra.raw_info.name, password:Devise.friendly_token[0,20], 
-                      uid:auth.uid, token:auth.credentials.token)
-    #defualt http://graph.facebook.com/626630268/picture?type=square                      
+                      uid:auth.uid, token:auth.credentials.token)                 
     user.avatar = open(auth.info.image.gsub('square', 'large')) 
     user.save
     user

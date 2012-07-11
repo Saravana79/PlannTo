@@ -1,0 +1,8 @@
+<p>Hello ,</p>
+
+<p><%= "#{@invitation.sender.name} invited you to PlannTo as #{@invitation.follow_type.humanize}" %></p>
+
+Follow this link <%= link_to "PlannTo", accept_invitation_url(:token => @invitation.token) %> to join us 
+
+<p><%= @invitation.message %></p>
+

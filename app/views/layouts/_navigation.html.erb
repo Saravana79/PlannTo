@@ -1,27 +1,38 @@
 <ul id="Megadropdown">
    <li>
-        <span><a href="/Cars">Cars</a></span>
+        <span><a href="/cars">Cars</a></span>
         <div class="Divmain"></div>
             <div class="dropdown_4columns">
                 <div class="col_1">
                     <ul>
-                        <li><a href="/cars">All Feeds</a></li>
-                        <li>
-                            <a href="/car/search">Browse</a>
+                         <li>
+                            <a href="/car/search">Browse Cars</a>
                             <ul>
                                 <li><a href="/car/search">All Cars</a></li>
                                 <li><a href="#">Latest Cars</a></li>
-                                <li><a href="#">Upcoming Cars</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Questions & Answers</a></li>
                             </ul>
                         </li>
-                         <li><a href="#">Buy Old Car</a></li>
-                         <li><a href="#">Sell Old Car</a></li>
+                        <li><a href="/cars">Browse Articles</a>
+                        <ul>
+                         <li><a href="/cars">All</a></li>
+                         <li><a href="/cars?fl=Reviews">Reviews</a></li>
+                         <li><a href="/cars?fl=Travelogue">Travelogue</a></li>
+                         <li><a href="/cars?fl=Accessories">Accessories</a></li>
+                         <li><a href="/cars?fl=Tips">Tips</a></li>
+                         <li><a href="/cars?fl=HowTo">How Tos/Guide</a></li>
+                         </ul>
+                        </li>
                     </ul>   
+                    <%if user_signed_in? %>
+                     <ul>
+                         <li>
+                            <a href="<%="/"+ current_user.username%>">My Garage</a>
+                        </li>
+                     </ul>
+                     <%end%>
                 </div>
 
-                <div class="col_2">
+        <!--         <div class="col_2">
                     <ul>
                         <li><a href="/Profile">My Feeds </a></li>
                         <li><a href="/Profile">My Garage</a> </li>
@@ -30,15 +41,22 @@
                         <li><a href="/Profile">My Advices</a></li>
                         <li><a href="/Profile">My Buying Plan</a></li>
                     </ul>   
-                </div>              
+                </div> -->              
                   <div class="Topcarcol">
                     <ul>
-                        <li><a href="#">Top Cars</a>
+                        <li><a href="#">Popular Cars</a>
                             <ul>
-                                <li><a href="/cars/207">Fiat Grande Punto 1.2 Dynamic</a></li>
-                                <li><a href="/cars/253">Ford Figo Petrol LXI</a></li>
-                                <li><a href="/cars/878">Tata Nano</a></li>
-                    
+                                <li><a href="/groups/audi-q3">Audi Q3</a></li>
+                                <li><a href="/groups/hyundai-i10">Hyundai i10</a></li>
+                                <li><a href="/groups/ford-figo">Ford Figo</a></li>
+                                <li><a href="/groups/maruti-alto">Maruti Alto</a></li>
+                                <li><a href="/groups/maruti-swift">Maruti Swift</a></li>
+                                <li><a href="/groups/maruti-new-dzire">Maruti Swift New Dzire</a></li>
+                                <li><a href="/groups/mahindra-scorpio">Mahindra Scorpio</a></li>
+                                <li><a href="/groups/mahindra-xuv-500">Mahindra XUV 500</a></li>
+                                <li><a href="/groups/toyota-innova">Toyota Innova</a></li>
+                                <li><a href="/groups/volkswagen-polo">Volkswagen Polo</a></li>
+                                <li><a href="/groups/volkswagen-vento">Volkswagen Vento</a></li>                   
                             </ul>
                         </li>
                     </ul>   
@@ -46,28 +64,39 @@
             </div>
     </li>
     <li>
-        <span><a href="/Bikes">Bikes</a></span>
+        <span><a href="/bikes">Bikes</a></span>
         <div class="Divmain"></div>
             <div class="dropdown_4columns">
                 <div class="col_1">
                     <ul>
-                        <li><a href="/Bikes">All Feeds</a></li>
-                        <li>
-                            <a href="/bike/search">Browse</a>
+                         <li>
+                            <a href="/bike/search">Browse Bikes</a>
                             <ul>
                                 <li><a href="/bike/search">All Bikes</a></li>
                                 <li><a href="#">Latest Bikes</a></li>
-                                <li><a href="#">Upcoming Bikes</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Questions & Answers</a></li>
                             </ul>
                         </li>
-                         <li><a href="#">Buy Old Bike</a></li>
-                         <li><a href="#">Sell Old Bike</a></li>
+                        <li><a href="/bikes">Browse Articles</a>
+                        <ul>
+                         <li><a href="/bikes">All</a></li>
+                         <li><a href="/bikes?fl=Reviews">Reviews</a></li>
+                         <li><a href="/bikes?fl=Travelogue">Travelogue</a></li>
+                         <li><a href="/bikes?fl=Accessories">Accessories</a></li>
+                         <li><a href="/bikes?fl=Tips">Tips</a></li>
+                         <li><a href="/bikes?fl=HowTo">How Tos/Guide</a></li>
+                         </ul>
+                        </li>
                     </ul>   
+                    <%if user_signed_in? %>
+                     <ul>
+                         <li>
+                            <a href="<%="/"+ current_user.username + "?follow=bike"%>">My Garage</a>
+                        </li>
+                     </ul>
+                     <%end%>
                 </div>
-              
-                <div class="col_2">
+
+        <!--         <div class="col_2">
                     <ul>
                         <li><a href="/Profile">My Feeds </a></li>
                         <li><a href="/Profile">My Garage</a> </li>
@@ -76,15 +105,21 @@
                         <li><a href="/Profile">My Advices</a></li>
                         <li><a href="/Profile">My Buying Plan</a></li>
                     </ul>   
-                </div>              
+                </div> -->              
                   <div class="Topcarcol">
                     <ul>
-                        <li><a href="#">Top Bikes</a>
+                        <li><a href="#">Popular Bikes</a>
                             <ul>
-                                <li><a href="/bikes/2262">Bajaj Pulsar 150 DTSi</a></li>
-                                <li><a href="/bikes/2103">Royal Enfield Bullet 350 UCE</a></li>
-                                <li><a href="/bikes/2120">Honda CBR 250R</a></li>
-                    
+                                <li><a href="/groups/tvs-apache-rtr-180--2">TVS Apache 180 R</a></li>
+                                <li><a href="/groups/bajaj-pulsar-150">Bajaj Pulsar 150</a></li>
+                                <li><a href="/groups/royal-enfield-classic-500--2">Royal Enfield Classic 500</a></li>
+                                <li><a href="/groups/tvs-scooty-streak—2">TVS Scooty Streak</a></li>
+                                <li><a href="/groups/yamaha-yzf-r15">Yamaha YZF R15</a></li>
+                                <li><a href="/groups/kawasaki-ninja-250r--2">Kawasaki Ninja 250R</a></li>
+                                <li><a href="/groups/honda-cbr-250r--2">Honda CBR 250R</a></li>
+                                <li><a href="/groups/hyosung-gt650n ">Hyosung GT650N</a></li>
+                                <li><a href="/groups/honda-dio—2">Honda Dio</a></li>
+                                <li><a href="/groups/mahindra-rodeo--2">Mahindra Rodeo</a></li>                                
                             </ul>
                         </li>
                     </ul>   
@@ -92,28 +127,39 @@
             </div>
     </li>
      <li>
-        <span><a href="/Cycles">Cycles</a></span>
+        <span><a href="/cycles">Cycles</a></span>
         <div class="Divmain"></div>
             <div class="dropdown_4columns">
-                <div class="col_1">
+                 <div class="col_1">
                     <ul>
-                        <li><a href="/Cycles">All Feeds</a></li>
-                        <li>
-                            <a href="/cycle/search">Browse</a>
+                         <li>
+                            <a href="/cycle/search">Browse Cycles</a>
                             <ul>
                                 <li><a href="/cycle/search">All Cycles</a></li>
-                                <li><a href="#">MTB Cycles</a></li>
-                                <li><a href="#">Road Cycles</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Questions & Answers</a></li>
+                                <li><a href="#">Latest Cycles</a></li>
                             </ul>
                         </li>
-                         <li><a href="#">Buy Old Cycle</a></li>
-                         <li><a href="#">Sell Old Cycle</a></li>
+                        <li><a href="/cycles">Browse Articles</a>
+                        <ul>
+                         <li><a href="/cycles">All</a></li>
+                         <li><a href="/cycles?fl=Reviews">Reviews</a></li>
+                         <li><a href="/cycles?fl=HowTo">How Tos/Guide</a></li>
+                         <li><a href="/cycles?fl=Travelogue">Travelogue</a></li>
+                         <li><a href="/cycles?fl=Accessories">Accessories</a></li>
+                         <li><a href="/cycles?fl=Events">Events</a></li>                         
+                         </ul>
+                        </li>
                     </ul>   
+                    <%if user_signed_in? %>
+                     <ul>
+                         <li>
+                            <a href="<%="/"+ current_user.username + "?follow=bike"%>">My Garage</a>
+                        </li>
+                     </ul>
+                     <%end%>
                 </div>
-              
-                <div class="col_2">
+
+        <!--         <div class="col_2">
                     <ul>
                         <li><a href="/Profile">My Feeds </a></li>
                         <li><a href="/Profile">My Garage</a> </li>
@@ -122,15 +168,21 @@
                         <li><a href="/Profile">My Advices</a></li>
                         <li><a href="/Profile">My Buying Plan</a></li>
                     </ul>   
-                </div>              
+                </div> -->              
                   <div class="Topcarcol">
                     <ul>
-                        <li><a href="#">Top Cycles</a>
+                        <li><a href="#">Popular Cycles</a>
                             <ul>
-                                <li><a href="/cycles/2532">Trek 3700</a></li>
-                                <li><a href="/cycles/2588">KHS Alite 300</a></li>
-                                <li><a href="/cycles/2755">GTR 2011</a></li>
-                    
+                                <li><a href="/cycles/rockrider-5-2">bTwin Rock Rider 5.2 </a></li>
+                                <li><a href="/cycles/scott-sportster-60">Scott Sportster 60 </a></li>
+                                <li><a href="/cycles/khs-alite-1000">KHS Alite 1000</a></li>
+                                <li><a href="/cycles/khs-flite-300">KHS Flite 300</a></li>
+                                <li><a href="/cycles/cannondale-trail-6">Cannondale Trail</a></li>
+                                <li><a href="/cycles/trek-3700">Trek 3700 </a></li>
+                                <li><a href="/cycles/bianchi-nirone-7-tiagra-mix">bianchi-nirone-7-tiagra-mix</a></li>
+                                <li><a href="/cycles/bergamont-vitox-6-2">Bergamount Vitox 6.2</a></li>
+                                <li><a href="/cycles/schwinn-sporterra-2012">Schwinn Sporterra</a></li>
+                                            
                             </ul>
                         </li>
                     </ul>   
@@ -138,45 +190,62 @@
             </div>
     </li>
      <li>
-        <span><a href="/Mobiles">Mobiles</a></span>
+        <span><a href="/mobiles">Mobiles</a></span>
         <div class="Divmain"></div>
             <div class="dropdown_4columns">
                 <div class="col_1">
-                    <ul>
-                        <li><a href="/Mobiles">All Feeds</a></li>
-                        <li>
-                            <a href="/mobile/search">Browse</a>
+                         <ul>
+                         <li>
+                            <a href="/mobile/search">Browse Mobiles</a>
                             <ul>
                                 <li><a href="/mobile/search">All Mobiles</a></li>
                                 <li><a href="#">Latest Mobiles</a></li>
-                                <li><a href="#">Upcoming Mobiles</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Questions & Answers</a></li>
                             </ul>
                         </li>
-                         <li><a href="#">Buy Old Mobile</a></li>
-                         <li><a href="#">Sell Old Mobile</a></li>
+                        <li><a href="/mobiles">Browse Articles</a>
+                        <ul>
+                         <li><a href="/mobiles">All</a></li>
+                         <li><a href="/mobiles?fl=Reviews">Reviews</a></li>
+                         <li><a href="/mobiles?fl=Apps">Apps</a></li>
+                         <li><a href="/mobiles?fl=Accessories">Accessories</a></li>
+                         <li><a href="/mobiles?fl=HowTo">How Tos/Guide</a></li>
+                         <li><a href="/mobiles?fl=Tips">Tips</a></li>                         
+                         </ul>
+                        </li>
                     </ul>   
+                    <%if user_signed_in? %>
+                     <ul>
+                         <li>
+                            <a href="<%="/"+ current_user.username + "?follow=mobile"%>">My Gadget Box</a>
+                        </li>
+                     </ul>
+                     <%end%>
                 </div>
-              
-                <div class="col_2">
+
+        <!--         <div class="col_2">
                     <ul>
                         <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Gadgets</a> </li>
+                        <li><a href="/Profile">My Garage</a> </li>
                         <li><a href="/Profile">My Reviews</a></li>
                         <li><a href="/Profile">My Questions</a></li>
                         <li><a href="/Profile">My Advices</a></li>
                         <li><a href="/Profile">My Buying Plan</a></li>
                     </ul>   
-                </div>              
+                </div> -->              
                   <div class="Topcarcol">
                     <ul>
-                        <li><a href="#">Top Mobiles</a>
+                        <li><a href="#">Popular Mobiles</a>
                             <ul>
-                                <li><a href="/mobiles/1790">IPhone 4S 64GB</a></li>
-                                <li><a href="/mobiles/1882">Samsung Galaxy S II I9100</a></li>
-                                <li><a href="/mobiles/1469">Samsugn Galaxy Y S5630</a></li>
-                    
+                                <li><a href="/mobiles/apple-iphone-4s-64-gb">Apple Iphone 4s</a></li>
+                                <li><a href="/mobiles/samsung-galaxy-s-iii">Samsung Galaxy S III </a></li>
+                                <li><a href="/mobiles/samsung-galaxy-note-n7000">Samsung Galaxy Note N7000</a></li>
+                                <li><a href="/mobiles/htc-one-v">HTC One V</a></li>
+                                <li><a href="/mobiles/nokia-808-pureview">Nokia 808 PureView</a></li>
+                                <li><a href="/mobiles/sony-ericsson-neo-v">Sony Ericsson Neo V</a></li>
+                                <li><a href="/mobiles/nokia-asha-300">Nokia Asha 300</a></li>
+                                <li><a href="/mobiles/Micromax A85">micromax-a85</a></li>
+                                <li><a href="/mobiles/nokia-c2-06">Nokia C2-06</a></li>
+                                            
                             </ul>
                         </li>
                     </ul>   
@@ -184,94 +253,128 @@
             </div>
     </li>
     <li>
-        <span><a href="/Tablets">Tablets</a></span>
+        <span><a href="/tablets">Tablets</a></span>
         <div class="Divmain"></div>
             <div class="dropdown_4columns">
                 <div class="col_1">
-                    <ul>
-                        <li><a href="/Tablets">All Feeds</a></li>
-                        <li>
-                            <a href="/tablet/search">Browse</a>
+                         <ul>
+                         <li>
+                            <a href="/tablet/search">Browse Tablets</a>
                             <ul>
                                 <li><a href="/tablet/search">All Tablets</a></li>
                                 <li><a href="#">Latest Tablets</a></li>
-                                <li><a href="#">Upcoming Tablets</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Questions & Answers</a></li>
                             </ul>
                         </li>
-                         <li><a href="#">Buy Old Tablet</a></li>
-                         <li><a href="#">Sell Old Tablet</a></li>
+                        <li><a href="/tablets">Browse Articles</a>
+                        <ul>
+                         <li><a href="/tablets">All</a></li>
+                         <li><a href="/tablets?fl=Reviews">Reviews</a></li>
+                         <li><a href="/tablets?fl=Apps">Apps</a></li>
+                         <li><a href="/tablets?fl=Accessories">Accessories</a></li>
+                         <li><a href="/tablets?fl=HowTo">How Tos/Guide</a></li>
+                         <li><a href="/tablets?fl=Tips">Tips</a></li>                         
+                         </ul>
+                        </li>
                     </ul>   
+                    <%if user_signed_in? %>
+                     <ul>
+                         <li>
+                            <a href="<%="/"+ current_user.username + "?follow=tablet"%>">My Gadget Box</a>
+                        </li>
+                     </ul>
+                     <%end%>
                 </div>
-              
-                <div class="col_2">
+
+        <!--         <div class="col_2">
                     <ul>
                         <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Gadgets</a> </li>
+                        <li><a href="/Profile">My Garage</a> </li>
                         <li><a href="/Profile">My Reviews</a></li>
                         <li><a href="/Profile">My Questions</a></li>
                         <li><a href="/Profile">My Advices</a></li>
                         <li><a href="/Profile">My Buying Plan</a></li>
                     </ul>   
-                </div>              
+                </div> -->              
                   <div class="Topcarcol">
                     <ul>
-                        <li><a href="#">Top Tablets</a>
+                        <li><a href="#">Popular Tablets</a>
                             <ul>
-                                <li><a href="/tablets/2487">Apple iPad 2 Wi-Fi+3G 64GB</a></li>
-                                <li><a href="/tablets/1730">Samsung Galaxy Tab 730</a></li>
-                                <li><a href="/tablets/1746">Sony Tablet S</a></li>
-                    
+                                <li><a href="/tablets/apple-new-ipad-64gb-wifi-3g">Apple New Ipad</a></li>
+                                <li><a href="/tablets/samsung-galaxy-tab-p1010">Samsung Galaxy Tab P1010</a></li>
+                                <li><a href="/tablets/micromax-funbook">Micromax Funbook</a></li>
+                                <li><a href="/tablets/hcl-me-x1">HCL ME X1</a></li>
+                                <li><a href="/tablets/blackberry-playbook-64gb">BlackBerry PlayBook</a></li>
+                                <li><a href="/tablets/samsung-galaxy-tab-2-7-0">Samsung Galaxy Tab 2 7.0</a></li>
+                                <li><a href="/tablets/zync-z999">Zync Z999</a></li>
+                                <li><a href="/tablets/karbonn-smart-tab-1">Karbonn Smart Tab 1</a></li>
+                                <li><a href="/tablets/sony-sgpt113in-s">Sony SGPT113IN/S</a></li>
+                                            
                             </ul>
                         </li>
-                    </ul>   
+                    </ul> 
                 </div>
             </div>
     </li>
       <li>
-        <span><a href="/Cameras">Cameras</a></span>
+        <span><a href="/cameras">Cameras</a></span>
         <div class="Divmain"></div>
             <div class="dropdown_4columns">
                 <div class="col_1">
-                    <ul>
-                        <li><a href="/Cameras">All Feeds</a></li>
-                        <li>
-                            <a href="/camera/search">Browse</a>
+                         <ul>
+                         <li>
+                            <a href="/camera/search">Browse Cameras</a>
                             <ul>
                                 <li><a href="/camera/search">All Cameras</a></li>
                                 <li><a href="#">Latest Cameras</a></li>
-                                <li><a href="#">Upcoming Cameras</a></li>
-                                <li><a href="#">Reviews</a></li>
-                                <li><a href="#">Questions & Answers</a></li>
                             </ul>
                         </li>
-                         <li><a href="#">Buy Old Camera</a></li>
-                         <li><a href="#">Sell Old Camera</a></li>
+                        <li><a href="/cameras">Browse Articles</a>
+                        <ul>
+                         <li><a href="/cameras">All</a></li>
+                         <li><a href="/cameras?fl=Reviews">Reviews</a></li>
+                         <li><a href="/cameras?fl=Apps">Apps</a></li>
+                         <li><a href="/cameras?fl=Accessories">Accessories</a></li>
+                         <li><a href="/cameras?fl=HowTo">How Tos/Guide</a></li>
+                         <li><a href="/cameras?fl=Tips">Tips</a></li>                         
+                         </ul>
+                        </li>
                     </ul>   
+                    <%if user_signed_in? %>
+                     <ul>
+                         <li>
+                            <a href="<%="/"+ current_user.username + "?follow=camera"%>">My Camera Bag</a>
+                        </li>
+                     </ul>
+                     <%end%>
                 </div>
-              
-                <div class="col_2">
+
+        <!--         <div class="col_2">
                     <ul>
                         <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Photo Gear</a> </li>
+                        <li><a href="/Profile">My Garage</a> </li>
                         <li><a href="/Profile">My Reviews</a></li>
                         <li><a href="/Profile">My Questions</a></li>
                         <li><a href="/Profile">My Advices</a></li>
                         <li><a href="/Profile">My Buying Plan</a></li>
                     </ul>   
-                </div>              
+                </div> -->              
                   <div class="Topcarcol">
                     <ul>
-                        <li><a href="#">Top Cameras</a>
+                        <li><a href="#">Popular Cameras</a>
                             <ul>
-                                <li><a href="/cameras/1676">Nikon D90</a></li>
-                                <li><a href="/cameras/1678">Canon EOS 1100D</a></li>
-                                <li><a href="/cameras/1473">Nikon Coolpix L120</a></li>
-                    
+                                <li><a href="/cameras/canon-eos-600d-with-body-only">Canon EOS 600D</a></li>
+                                <li><a href="/cameras/nikon-d5100-body-only">Nikon D5100</a></li>
+                                <li><a href="/cameras/nikon-d800">Nikon D800</a></li>
+                                <li><a href="/cameras/canon-eos-5d-with-mark-ii-kit-ef-24-105mm">Canon EOS 5D mark III</a></li>
+                                <li><a href="/cameras/nikon-d3200">Nikon D3200</a></li>
+                                <li><a href="/cameras/nikon-coolpix-l810">Nikon coolpix L810</a></li>
+                                <li><a href="/cameras/sony-nex-7-mirrorless-with-18-55-mm-lens">Sony NEX-7</a></li>
+                                <li><a href="/cameras/fujifilm-finepix-x100">Fujifilm FinePix X100</a></li>
+                                <li><a href="/cameras/sony-cybershot-dsc-hx7v">Sony CyberShot DSC-HX7V</a></li>
+                                <li><a href="/cameras/panasonic-lumix-dmc-lx5">Panasonic Lumix DMC-LX5</a></li>           
                             </ul>
                         </li>
-                    </ul>   
+                    </ul> 
                 </div>
             </div>
     </li>
