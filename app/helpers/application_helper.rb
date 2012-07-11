@@ -28,30 +28,30 @@ module ApplicationHelper
   def get_follow_text(follow_type)
     case follow_type
     when 'Manufacturer', 'CarGroup'
-      [["Follow This", "plan_to_follow", "Follow"]]
+      [["Follow This", "plan_to_follow", "follower"]]
     when 'Car','Cycle','Bike','Tablet','Mobile','Camera'
-      [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
+      [[ "Plan to buy", "plan_to_buy", "buyer"], ["I Own it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     when 'Event'
-      [[ "May Go", "plan_to_buy", "Buyer"], ["Am Going", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
+      [[ "May Go", "plan_to_buy", "buyer"], ["Am Going", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     when 'Accessories'
-      [[ "Plan to buy", "plan_to_buy", "Buyer"], ["I Own it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
+      [[ "Plan to buy", "plan_to_buy", "buyer"], ["I Own it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     when 'Apps'
-      [["I have it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
+      [["I have it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     when 'Books'
-      [[ "Plan to read", "plan_to_buy", "Buyer"], ["I read it", "plan_to_own", "Owner"], ["Follow This", "plan_to_follow", "Follow"]]
+      [[ "Plan to read", "plan_to_buy", "buyer"], ["I read it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     else
-      [["Follow This", "plan_to_follow", "Follow"]]
+      [["Follow This", "plan_to_follow", "follower"]]
     end
   end
 
 
   def get_the_follow_text(follow_type)
     case follow_type
-    when 'Buyer'
+    when 'buyer'
       "Plan to buy"
-    when 'Owner'
+    when 'owner'
       "Own it"
-    when 'Follow'
+    when 'follower'
       "Following"
     end
   end
@@ -116,11 +116,11 @@ module ApplicationHelper
 
   def follow_types_classes(follow_type)
     case follow_type
-    when 'Buyer'
+    when 'buyer'
       "bg_planetobuy"
-    when 'Owner'
+    when 'owner'
       "bg_iwonit"
-    when 'Follow'
+    when 'follower'
       "bg_following"
     end
   end

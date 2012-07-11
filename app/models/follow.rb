@@ -19,9 +19,9 @@ class Follow < ActiveRecord::Base
   belongs_to :follower,   :polymorphic => true
 
   module ProductFollowType
-    Buyer = "Buyer"
-    Owner = "Owner"
-    Follow = "Follow"
+    Buyer = "buyer"
+    Owner = "owner"
+    Follow = "follower"
   end
   
   def block!

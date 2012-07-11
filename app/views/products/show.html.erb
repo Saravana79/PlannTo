@@ -117,7 +117,7 @@
     <span class="Headingtxt">Followers</span>
     <div class="Featurecontent" style="border-right:none;">
     <div class="Iconblock">
-      <span class="Followcar"><%= @item.get_followers("follow").split(",").count %></span>
+      <span class="Followcar"><%= @item.get_followers("follower").split(",").count %></span>
     </div>
       <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite") %>
       

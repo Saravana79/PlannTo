@@ -9,8 +9,8 @@ class Invitation < ActiveRecord::Base
   
   def accept(user)
     self.transaction do
-      user.follow(item, 'Owner')
-      self.update_attributes(:token => '', :accepted_at => Time.now)
+      user.follow(item, self.follow_type)
+      self.update_attributes(:token => '')
     end
   end
   

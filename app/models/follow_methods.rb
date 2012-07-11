@@ -2,11 +2,11 @@ module FollowMethods
   def follow_item_type
     @related_items = params[:related_items] == "true"    
     case params[:follow_type]
-      when 'Buyer'
+      when 'buyer'
         plan_to_buy_item
-      when 'Owner'
+      when 'owner'
         own_a_item
-      when 'Follow'
+      when 'follower'
         follow_this_item
     end
     respond_to do |format|
