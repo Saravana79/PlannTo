@@ -22,7 +22,7 @@
     <% if @item.is_a? Product %>
       <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
       <a>
-      <%= render :partial => 'shared/rating',:locals => {:item => @item} %>
+      <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id  => "product_item_#{@item.id}"} %>
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>
     <a class="txt_normal">Ratings
