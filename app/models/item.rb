@@ -340,6 +340,8 @@ end
 def get_url()
    if (self.is_a? ItemtypeTag)
     "/#{self.name.downcase.pluralize}"
+   elsif (self.is_a? CarGroup)
+    "/groups/#{self.slug.to_s}"
    else
     "/#{self.type.downcase.pluralize}/#{self.slug.to_s}"
    end
