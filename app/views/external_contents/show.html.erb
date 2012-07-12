@@ -50,10 +50,36 @@
     </div> 
       
     <div  class="header_midder_box" >
-      <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1"></iframe>
+      <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1" onload="resizeIframe(this);"></iframe>
     </div>  
    
 </body>
+
+<script language="javascript" type="text/javascript">
+ function resizeIframe(obj)
+ {
+        var winW = 0, winH = 0;
+      if (document.body && document.body.offsetWidth) {
+       winW = document.body.offsetWidth;
+       winH = document.body.offsetHeight;
+      }
+      if (document.compatMode=='CSS1Compat' &&
+          document.documentElement &&
+          document.documentElement.offsetWidth ) {
+       winW = document.documentElement.offsetWidth;
+       winH = document.documentElement.offsetHeight;
+      }
+      if (window.innerWidth && window.innerHeight) {
+       winW = window.innerWidth;
+       winH = window.innerHeight;
+      }
+      if(winH != 0)  
+      {
+       obj.style.height = (winH - 52) + 'px';
+      }
+   //obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';                        
+ }
+ </script>
 
  
 </html>
