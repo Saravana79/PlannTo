@@ -159,7 +159,7 @@ module ContentsHelper
     if ((content.is_a?ArticleContent) && (content.url.blank?)) 
       "<a class='title'>#{content.title }</a>"
     else
-      link_to content.title, external_content_path(content.id) , :class => 'title'
+      link_to content.title, external_content_path(content.id) , :class => 'title',:target => "_blank"
     end
 
   end
