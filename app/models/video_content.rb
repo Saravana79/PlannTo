@@ -3,9 +3,10 @@ class VideoContent < ArticleContent
   acts_as_voteable
   
   def self.video_id(url)
-    uri = Addressable::URI.parse(url)
-    if uri.query_values && uri.query_values["v"]
-      uri.query_values["v"]
+    uri = URI.parse(url)
+    cgiuri = CGI.parse(uri.query)
+    if cgiuri["v"]
+      cgiuri["v"].first
     else
       uri.path
     end
