@@ -173,7 +173,9 @@ module ContentsHelper
       "<label>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
-      "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.field1}'></div>"
+        if(content.field1 != '' && content.field1 != '0')
+          "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.field1}'></div>"
+        end
       else
         "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.rating}'></div><br/><label>Pro :</label>#{content.pros}<br/><label>Con :</label>#{content.cons}<br/>"
       end
