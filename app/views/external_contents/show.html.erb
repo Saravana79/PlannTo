@@ -8,30 +8,48 @@
 		<meta name="description" content="">
 		<%= csrf_meta_tags%>
 
-		<%= stylesheet_link_tag "external_contents" %>
+    <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>		
-		
+		<style type="text/css">
+      iframe { width:100%; float:left; margin:0; padding:0px; height:1200px; overflow:auto; border:none;}
+    </style>
 		<%= csrf_meta_tags %>
 </head>
 
-<body>
-    <div id="topbar">
-      <div class='container clearfix'>
-         <div class='float_lft'> <img src="/images/logo.png"> </div>    
-         <div class='float_lft padding-left'> 
+<body class="Inner_page">
+    <div class="header_fix">
+      <div class="header_fix_inner">      
+         <div class="fix_logo"><img src="images/header_fix_logo.png" /></div>   
+         <div class="vote_thumb"> 
            <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
          </div>
-         <div class='float_lft padding-left padding-top'> 
+         <span class='comment_no'> 
            <%= link_to "Write comments", content_path(@content) %>
-         </div>
-         <div class='float_rgt padding-top'>
-           <%= link_to image_tag('icon_close_hover.png'), content_path(@content) %>
-         </div>
+         </span>
+         <a href="<%=@content.url %>" class="h_close">close</a>  
+         <div class="dropdown_main">
+              <div class="selected_text">              
+                <span class="tile_select">Related Articles:</span>
+                <span class="description_text">Iphone 4S Review.</span>
+              </div>
+              <span class="drop_arrow"></span>
+              <div class="dropdown_open">
+                <ul>
+                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+               </ul>
+              </div>
+          </div>
+
       </div>  
     </div> 
       
-    <div id='content_body' width="100%" height="100%">
-      <iframe id="iframe" src="<%=@content.url %>" width="100%" height="100%" border="0" frameborder="0" hspace="0" vspace="0" marginheight="0" marginwidth="0"></iframe>
+    <div  class="header_midder_box" >
+      <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1"></iframe>
     </div>  
    
 </body>
