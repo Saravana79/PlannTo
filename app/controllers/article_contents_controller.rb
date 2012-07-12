@@ -23,9 +23,9 @@ class ArticleContentsController < ApplicationController
    if ((params[:article_content][:sub_type] == "Photo") && (!@article.content_photo.nil?))
       @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
    end
-   unless @article.errors.any?     
-    @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
-    end
+  # unless @article.errors.any?     
+  #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
+  #  end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
     flash[:notice]= "Article uploaded"
