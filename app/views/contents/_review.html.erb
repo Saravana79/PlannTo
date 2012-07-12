@@ -22,8 +22,9 @@
 									});
 						</script>
 						<%end%>
-    	<!--<a class="titlePro">Pro:</a><a class="txt_black_description"><%#= content.pros %></a></div>
-    <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%#= content.cons %></a></div>-->
+    </div>
+    <div class="subContentGap">	<a class="titlePro">Pro:</a><a class="txt_black_description"><%#= content.pros %></a></div>
+    <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%#= content.cons %></a></div>-
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
