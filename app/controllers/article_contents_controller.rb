@@ -23,6 +23,9 @@ class ArticleContentsController < ApplicationController
    if ((params[:article_content][:sub_type] == "Photo") && (!@article.content_photo.nil?))
       @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
    end
+   unless @article.errors.any?     
+    @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
+    end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
     flash[:notice]= "Article uploaded"
@@ -30,6 +33,8 @@ class ArticleContentsController < ApplicationController
       format.js
   end
  end
+ 
+ 
   def update
     #@default_id= params[:default_item_id]
     @item = Item.find(params[:default_item_id]) if params[:default_item_id] != ""
@@ -57,7 +62,48 @@ class ArticleContentsController < ApplicationController
       @article,@images = ArticleContent.CreateContent(url,current_user)
       @article.sub_type = params[:article_content][:sub_type]
     end
+    
+    @related_items = article_search_by_relevance(@article)
+    for row in @related_items
+    logger.info row[:value]
+    end
   end # action ends here
+  
+  def article_search_by_relevance(article)
+  
+  search_type = Product.search_type(params[:search_type])
+    @items = Sunspot.search(search_type) do
+        fulltext article.title do
+          minimum_match 1
+        end
+      order_by :score,:desc
+      #paginate(:page => 1, :per_page => 10)      
+    end
+
+    results = @items.results.collect{|item|
+
+      image_url = item.image_url(:small)
+    
+     if(item.is_a? (Product))
+        type = item.type.humanize
+     elsif(item.is_a? (CarGroup))
+        type = "Groups"
+     elsif(item.is_a? (AttributeTag))
+        type = "Groups"
+     elsif(item.is_a? (ItemtypeTag))
+        type = "Topics"
+     else
+        type = item.type.humanize
+    end 
+    
+     # end
+      url = item.get_url()
+      # image_url = item.image_url
+      
+      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+    }
+    return results
+ end
   
   def bmarklet
     #@article_content = ArticleContent.new
