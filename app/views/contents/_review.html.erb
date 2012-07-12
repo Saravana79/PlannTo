@@ -6,8 +6,24 @@
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
     <div><a class="txt_brown"><%= content.user.name  %> reviewed <%=get_anchor_name_link(content)%> <a class="txt_brown">- <%= time_ago_format(content) %> ago. </a></div>
-    <div class="subContentGap"><a class="titlePro">Pro:</a><a class="txt_black_description"><%= content.pros %></a></div>
-    <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%= content.cons %></a></div>
+    <div class="subContentGap">
+    	<%= raw get_rating_or_category_contents(content)%>
+						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
+						<% rating =  (content.is_a?ArticleContent) ? content.field1 : content.rating %>
+						<script type="text/javascript">
+							$('div#content_show_<%= content.id%>').raty({
+							starOff:  'assets/star-off.png',
+							starHalf   : 'assets/star-half.png',
+							half       : true,
+							//precision  : true,
+							// size       : 24,
+							starOn: 'assets/star-on.png',
+							start: <%= "#{rating}"%>
+									});
+						</script>
+						<%end%>
+    	<!--<a class="titlePro">Pro:</a><a class="txt_black_description"><%#= content.pros %></a></div>
+    <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%#= content.cons %></a></div>-->
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
