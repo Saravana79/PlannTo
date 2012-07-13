@@ -7,7 +7,7 @@
     <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:7px"></div>
     <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
       <%=select_tag "search_sort_by",
-        options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"]], params[:sort_by]), :class => "txt_normal width50" %>
+        options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]), :class => "txt_normal width50" %>
     </div>
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
   </div>
@@ -27,7 +27,7 @@
           <h1><a class="productTitle" href="<%=item.get_url()%>"><%=item.name%></a></h1>
           <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
           <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "search_index_#{item.id}"} %>
-          <a class="txt_normal">Ratings<span class="txt_blue"> (100 Reviews)</span></a><br />
+          <a class="txt_normal">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a><br />
           <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
         </span>
         <span class="float_rgt" style="display:inline;">

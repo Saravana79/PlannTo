@@ -237,7 +237,8 @@ class Item < ActiveRecord::Base
       shared_avg = 0
     end
    return (created_avg + shared_avg)/2
-  end 
+    #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
+   end 
 
   def rating
     unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")

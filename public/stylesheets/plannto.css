@@ -3365,4 +3365,6 @@ a.h_close:hover { background-position:left bottom;}
 
                 
 
-    
+.video_play { background:url(../images/play_button.png) no-repeat center 36px; width:170px; height:139px; display:block; position:absolute;} 
+                
+.video_play:hover { background-position:center -94px;}
