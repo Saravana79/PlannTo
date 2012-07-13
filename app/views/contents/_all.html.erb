@@ -44,9 +44,7 @@
           return false
         }
       });
-      <%if params[:fl].present? && params[:f1].downcase.gsub("howto")%>
-      $("div#Filterby div.Filternav ul li#<%=HowTo/Guide%>").trigger("click");
-      <%else%>
+      <%if params[:fl].present?%>
       $("div#Filterby div.Filternav ul li#<%=params[:fl]%>").trigger("click");
       <%end%>
     });

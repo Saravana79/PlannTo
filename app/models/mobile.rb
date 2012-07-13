@@ -15,6 +15,9 @@ class Mobile < Product
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
+    float :rating  do |item|
+      item.average_rating
+    end
 
     dynamic_float :features do |car|
       car.attribute_values.inject({}) do |hash,attribute_value|

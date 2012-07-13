@@ -112,7 +112,7 @@ class SearchController < ApplicationController
       list  = @manufacturer.split(',')
     end
 
-    @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "name"
+    @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "Rating"
     @items = Sunspot.search($search_type.camelize.constantize) do
       keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
@@ -165,6 +165,8 @@ class SearchController < ApplicationController
 
       paginate(:page => params[:page], :per_page => 10)
       order_by :name if sort_by_option == "Name"
+      order_by :rating,:desc if sort_by_option == "Rating"
+
       #   order_by :Price, :desc           # descending order , check Documentation link below
     
 
