@@ -217,22 +217,35 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-   ($redis.hget("items:ratings", "item:#{self.id}:review_count") || self.contents.where(:type => 'ReviewContent').count).to_i
+    created_reviews_count = self.contents.where(:sub_type => 'ReviewContent').count.to_i
+    shared_reviews_count = self.contents.where("sub_type = '#{ArticleCategory::REVIEWS}' and type != 'ReviewContent'" ).count.to_i
+   return ($redis.hget("items:ratings", "item:#{self.id}:review_count") || created_reviews_count + shared_reviews_count).to_i
   end  
 
   def average_rating
-    reviews = self.contents.where(:type => 'ReviewContent' )
-    return 0 if reviews.empty?
-    reviews.inject(0){|sum,review| sum += review.rating} / reviews.size.to_f
+    created_reviews = self.contents.where(:type => 'ReviewContent' )
+    shared_reviews = self.contents.where("sub_type = '#{ArticleCategory::REVIEWS}' and type != 'ReviewContent'" )
+    return 0 if (created_reviews.empty? && shared_reviews.empty?)
+    unless created_reviews.empty?
+    created_avg = created_reviews.inject(0){|sum,review| sum += review.rating} / created_reviews.size.to_f 
+    else
+      created_avg = 0
+    end
+    unless shared_reviews.empty?
+    shared_avg = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i} / shared_reviews.size.to_f
+    else
+      shared_avg = 0
+    end
+   return (created_avg + shared_avg)/2
   end 
 
   def rating
     unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
       item_rating = self.average_rating
-      $redis.multi do
-        $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating)
-        $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count)
-      end if item_rating  > 0
+     # $redis.multi do
+        $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
+        $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count) if item_rating  > 0
+     # end if item_rating  > 0
     end  
     roundoff_rating item_rating.to_f
   end 
