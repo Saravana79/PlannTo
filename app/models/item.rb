@@ -223,8 +223,16 @@ class Item < ActiveRecord::Base
   end  
 
   def average_rating
-    created_reviews = self.contents.where(:type => 'ReviewContent' )
-    shared_reviews = self.contents.where("sub_type = '#{ArticleCategory::REVIEWS}' and type != 'ReviewContent'" )
+  created_reviews = Array.new
+    complete_created_reviews = self.contents.where(:type => 'ReviewContent' )    
+    complete_created_reviews.each do |rev|
+    created_reviews << rev unless (rev.rating.to_i == 0 || rev.rating.nil?)
+    end
+    shared_reviews = Array.new
+    complete_shared_reviews = self.contents.where("sub_type = '#{ArticleCategory::REVIEWS}' and type != 'ReviewContent'" )   
+    complete_shared_reviews.each do |rev|   
+    shared_reviews << rev unless (rev.field1.to_i == 0 || rev.field1.nil?)
+    end
     return 0 if (created_reviews.empty? && shared_reviews.empty?)
     unless created_reviews.empty?
     created_avg = created_reviews.inject(0){|sum,review| sum += review.rating} / created_reviews.size.to_f 
