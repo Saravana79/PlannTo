@@ -235,16 +235,20 @@ class Item < ActiveRecord::Base
     end
     return 0 if (created_reviews.empty? && shared_reviews.empty?)
     unless created_reviews.empty?
-    created_avg = created_reviews.inject(0){|sum,review| sum += review.rating} / created_reviews.size.to_f 
+    created_avg_sum = created_reviews.inject(0){|sum,review| sum += review.rating} 
     else
-      created_avg = 0
+      created_avg_sum = 0
     end
     unless shared_reviews.empty?
-    shared_avg = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i} / shared_reviews.size.to_f
+    shared_avg_sum = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i}
     else
-      shared_avg = 0
+      shared_avg_sum = 0
     end
-   return (created_avg + shared_avg)/2
+    if(created_avg_sum == 0 && shared_avg_sum == 0)
+      return 0
+    else
+       return (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f)
+    end
     #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
    end 
 
