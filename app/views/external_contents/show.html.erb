@@ -24,7 +24,7 @@
            <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
          </div>
          <span class='comment_no'> 
-           <%= link_to @content.comments.count + " comments", content_path(@content) %>
+           <%= link_to @content.comments.count.to_s + " comments", content_path(@content) %>
          </span>
          <a href="<%=@content.url %>" class="h_close">close</a>  
          <!--
