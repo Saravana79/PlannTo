@@ -9,7 +9,7 @@ class Camera < Product
       product.manufacturer.name
     end
     float :rating  do |item|
-      item.average_rating
+      item.rating
     end
     dynamic_float :features do |car|
       car.attribute_values.inject({}) do |hash,attribute_value|

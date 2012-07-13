@@ -9,7 +9,7 @@ class Tablet < Product
       product.manufacturer.name
     end
     float :rating  do |item|
-      item.average_rating
+      item.rating
     end
 
     dynamic_float :features do |car|

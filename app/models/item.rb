@@ -222,6 +222,7 @@ class Item < ActiveRecord::Base
 
   def average_rating
     reviews = self.contents.where(:type => 'ReviewContent' )
+    #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
     return 0 if reviews.empty?
     reviews.inject(0){|sum,review| sum += review.rating} / reviews.size.to_f
   end 

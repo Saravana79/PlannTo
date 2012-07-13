@@ -23,6 +23,10 @@ class ArticleContentsController < ApplicationController
    if ((params[:article_content][:sub_type] == "Photo") && (!@article.content_photo.nil?))
       @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
    end
+     if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
+        @defaultitem = Item.find(ids[0])
+        @defaultitem.add_new_rating(params[:article_content][:field1].to_f)
+     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
   #  end
