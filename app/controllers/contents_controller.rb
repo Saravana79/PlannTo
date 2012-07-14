@@ -25,6 +25,24 @@ class ContentsController < ApplicationController
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     @contents = Content.filter(filter_params)
   end
+  
+  def search_contents
+    sub_type = params[:content_search][:sub_type]== "All" ? "" : params[:content_search][:sub_type]
+    page = params[:content_search][:page] || 1
+    search_list = Sunspot.search(Content ) do
+      fulltext params[:content_search][:search] , :field => :name
+      #with :sub_type, sub_type
+     #fulltext params[:content_search][:search] do
+   #    keywords "", :fields => :name
+      # keywords "", :fields => :description
+       #:fields =>(:name => 2.0, :description)
+     #end
+     paginate(:page => page, :per_page => 10 )
+     end
+     @contents = search_list.results
+     
+     render "contents/filter"
+  end
 
   def feeds
 
