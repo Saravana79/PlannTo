@@ -74,7 +74,10 @@ resources :accounts do
     get :filter
     get :feed
     get :feeds
+    post :search_contents
   end
+  match "/contents/search" => 'contents#search'
+  post :search
   resources :comments
     collection do
       get :feed
