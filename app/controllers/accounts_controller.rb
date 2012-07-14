@@ -46,10 +46,12 @@ class AccountsController < ApplicationController
     require 'will_paginate/array'
     @user = User.find(:first, :conditions => ["username like ?","#{params[:username]}"])
     @follow_types = Itemtype.get_followable_types(params[:follow])
-    @itemtype=Itemtype.find_by_itemtype(Itemtype.get_item_type_from_params(params[:follow]))
+    @itemtype = Itemtype.find_by_itemtype(Itemtype.get_item_type_from_params(params[:follow]))
     @itemtype_id = @itemtype.id
+    
     @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id).map { |e|[e.name, e.id]  } 
     @follow_item = Follow.for_follower(@user).where(:followable_type => @follow_types).group_by(&:followable_type)
+    puts "pppppppppppppppppppppppppppppppppp #{@follow_item}"
     respond_to do|format|      
       format.html {render :layout => "product"}
     end

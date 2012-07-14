@@ -9,21 +9,12 @@ class Itemtype < ActiveRecord::Base
     case item_type
       when 'Cars'
         return ['Car', 'CarGroup']
-      when 'Mobile'
-        return ['Mobile']
-      when 'Camera'
-        return ['Camera']
-      when 'Cycle'
-        return ['Cycle']
-      when 'Tablet'
-        return ['Tablet']
-      when 'Bike'
-        return ['Bike']
       else
-        return ['Car', 'CarGroup']
+        return [item_type]
     end
   end
-  def self.get_item_type_from_params(item_type)
+  
+  def self.get_item_type_from_params(item_type) 
     case item_type
       when 'Cars'
         return 'Car'

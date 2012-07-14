@@ -10,7 +10,12 @@
 
 <div class="items_list" style="clear:both;">
   <% items.each do |follow| %>
-    <% item = follow.followable %>
+    <% unless follow.content?(follow.followable_type) %>
+      <% item = follow.followable %>
+    <%else%>
+      <% item = follow.content_followable %>
+    <%end%>
+    
     <div class="product" id="product_<%= item.id %>">
       <div class="imgprofilediv">
         <div class="imgpicbtnspan">

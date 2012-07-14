@@ -95,7 +95,7 @@
 
       <div style="clear:both;">
         <ul id="Newtabs">
-          <% ['Cars','Mobile','Tablet','Camera','Bike'].each do |item_type|%>
+          <% ['Cars','Mobile','Tablet','Camera','Bike', 'Apps', 'Accessories'].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
         </ul>
