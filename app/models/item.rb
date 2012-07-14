@@ -217,9 +217,10 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-    created_reviews_count = self.contents.where(:sub_type => 'ReviewContent').count.to_i
-    shared_reviews_count = self.contents.where("sub_type = '#{ArticleCategory::REVIEWS}' and type != 'ReviewContent'" ).count.to_i
-   return ($redis.hget("items:ratings", "item:#{self.id}:review_count") || created_reviews_count + shared_reviews_count).to_i
+    unless($redis.hget("items:ratings", "item:#{self.id}:review_count"))
+      item_rating = self.average_rating
+    end
+   return ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
   end  
 
   def average_rating
@@ -235,26 +236,29 @@ class Item < ActiveRecord::Base
     end
     return 0 if (created_reviews.empty? && shared_reviews.empty?)
     unless created_reviews.empty?
-    created_avg = created_reviews.inject(0){|sum,review| sum += review.rating} / created_reviews.size.to_f 
+    created_avg_sum = created_reviews.inject(0){|sum,review| sum += review.rating} 
     else
-      created_avg = 0
+      created_avg_sum = 0
     end
     unless shared_reviews.empty?
-    shared_avg = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i} / shared_reviews.size.to_f
+    shared_avg_sum = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i}
     else
-      shared_avg = 0
+      shared_avg_sum = 0
     end
-   return (created_avg + shared_avg)/2
+    if(created_avg_sum == 0 && shared_avg_sum == 0)
+      item_rating =  0
+    else
+       item_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f)
+    end
+     $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
+     $redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
+     return item_rating
     #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
    end 
 
   def rating
     unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
       item_rating = self.average_rating
-     # $redis.multi do
-        $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
-        $redis.hset("items:ratings", "item:#{self.id}:review_count",self.rated_users_count) if item_rating  > 0
-     # end if item_rating  > 0
     end  
     roundoff_rating item_rating.to_f
   end 
