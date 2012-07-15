@@ -180,6 +180,10 @@ class User < ActiveRecord::Base
     user
   end
   
+  def facebook_friends
+    graph_api.get_connections("me", "friends")
+  end
+  
   private
 
   def populate_username

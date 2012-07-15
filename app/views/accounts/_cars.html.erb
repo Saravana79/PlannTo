@@ -12,24 +12,35 @@
   <% items.each do |follow| %>
     <% unless follow.content?(follow.followable_type) %>
       <% item = follow.followable %>
-    <%else%>
-      <% item = follow.content_followable %>
-    <%end%>
-    
-    <div class="product" id="product_<%= item.id %>">
+      <div class="product" id="product_<%= item.id %>">
       <div class="imgprofilediv">
         <div class="imgpicbtnspan">
-          <a href="<%= link_url(item) %>">
-            <img src='<%= item.image_url %>' height="120" width="160">
-          </a>
+          <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item) %>
           <%= link_to(follow_item_type_item_path(item, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true) do %>
-            <img class="closeimg" alt="" src="images/icon_close.png" onmouseover="this.src='images/icon_close_hover.png'" onmouseout="this.src='images/icon_close.png'">
+          <img class="closeimg" alt="" src="images/icon_close.png" onmouseover="this.src='images/icon_close_hover.png'" onmouseout="this.src='images/icon_close.png'">
           <% end %>
         </div>
-                    <span class="imgtextspan">
-                      <%= link_to item.name, link_url(item), :class => "produ_bgimg" %>
-                    </span>
+        <span class="imgtextspan">
+            <%= link_to item.name, link_url(item), :class => "produ_bgimg" %>
+        </span>
       </div>
+    <%else%><!--It is a content type follow. so handle differently-->
+      <% content = follow.content_followable %>
+      <div class="product" id="product_<%= content.id %>">
+      <div class="imgprofilediv">
+        <div class="imgpicbtnspan">
+          <%= link_to image_tag(content.thumbnail, height: "120", width: "160"),  content_path(content) %>
+          <%= link_to(follow_item_type_item_path(content, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true) do %>
+          <img class="closeimg" alt="" src="images/icon_close.png" onmouseover="this.src='images/icon_close_hover.png'" onmouseout="this.src='images/icon_close.png'">
+          <% end %>
+        </div>
+        <span class="imgtextspan">
+            <%= link_to content.title, content_path(content), :class => "produ_bgimg" %>
+        </span>
+      </div>
+    <%end%>
+    
+    
 
       <a class="<%= follow_types_classes(follow.follow_type) %>" style=" font:bold 11px/22px arial; color:#fff;"><%= get_the_follow_text(follow.follow_type) %></a>
     </div>

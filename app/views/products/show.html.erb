@@ -165,6 +165,7 @@
 	  	<%= f.text_area :message, :rows => 3, :cols => 50 %>
 		  <%= f.submit 'Invite', :class => 'btn_submitanswer', 'data-disable-with'=>"Sending invite..." %>
 	  <% end %>
+	  
 	<%else-%>
 	   Please sign in to invite others.
 	   <%= render "shared/home_login" %>

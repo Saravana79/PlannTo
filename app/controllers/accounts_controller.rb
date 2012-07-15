@@ -51,7 +51,6 @@ class AccountsController < ApplicationController
     
     @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id).map { |e|[e.name, e.id]  } 
     @follow_item = Follow.for_follower(@user).where(:followable_type => @follow_types).group_by(&:followable_type)
-    puts "pppppppppppppppppppppppppppppppppp #{@follow_item}"
     respond_to do|format|      
       format.html {render :layout => "product"}
     end
