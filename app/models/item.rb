@@ -217,10 +217,10 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-    unless($redis.hget("items:ratings", "item:#{self.id}:review_count"))
+    unless($redis.hget("items:ratings", "item:#{self.id}:review_count_total"))
       item_rating = self.average_rating
     end
-   return ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
+   return ($redis.hget("items:ratings", "item:#{self.id}:review_count_total")).to_i
   end  
 
   def average_rating
@@ -252,6 +252,7 @@ class Item < ActiveRecord::Base
     end
      $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
      $redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
+     $redis.hset("items:ratings", "item:#{self.id}:review_count_total",(complete_shared_reviews.size.to_f + complete_created_reviews.size.to_f))
      return item_rating
     #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
    end 
@@ -272,13 +273,20 @@ class Item < ActiveRecord::Base
     unless prev_rating
       $redis.hset("items:ratings", "item:#{self.id}:rating",rating)
       $redis.hset("items:ratings", "item:#{self.id}:review_count",1)
+      
     else
       prev_review_count = ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
       prev_rating = prev_rating.to_f
       new_average_rating = ((prev_rating * prev_review_count) + rating) / (prev_review_count + 1).to_f
       $redis.hset("items:ratings", "item:#{self.id}:rating",new_average_rating)
-      $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)
-    end  
+      $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)      
+    end
+      prev_count_total = $redis.hget("items:ratings", "item:#{self.id}:review_count_total")
+      unless prev_count_total
+        $redis.hset("items:ratings", "item:#{self.id}:review_count_total",1)
+      else
+        $redis.hset("items:ratings", "item:#{self.id}:review_count_total",prev_count_total.to_i + 1)
+      end  
   end
 
   def itemtypetag
