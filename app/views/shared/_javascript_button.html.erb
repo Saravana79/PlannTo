@@ -1,4 +1,4 @@
-<% if (related_follower && related_follower.follow_type == "Buyer") || (@type == "buy") %>
+<% if (related_follower && related_follower.follow_type == "buyer") || (@type == "buy") %>
     Product.load_buyer('<%= "_"+item.id.to_s %>', '<%= button_class %>',
             '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_buy_selected") : "" %>',
             '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_follow_selected") : ""%>');
