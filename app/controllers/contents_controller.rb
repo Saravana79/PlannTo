@@ -27,11 +27,14 @@ class ContentsController < ApplicationController
   end
   
   def search_contents
-    sub_type = params[:content_search][:sub_type]== "All" ? "" : params[:content_search][:sub_type]
+    sub_type = params[:content_search][:sub_type]== "All" ? Array.new : params[:content_search][:sub_type].split(",")
+    item_ids = params[:content_search][:item_ids] == "" ? Array.new : params[:content_search][:sub_type].split(",")
     page = params[:content_search][:page] || 1
+       
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
-      #with :sub_type, sub_type
+      with :sub_type, sub_type if sub_type.size > 0
+      with :item_ids, item_ids if item_ids.size > 0
      #fulltext params[:content_search][:search] do
    #    keywords "", :fields => :name
       # keywords "", :fields => :description

@@ -137,6 +137,12 @@
         <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
         <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Answers</a>
+         <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
+	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+	<%= f.hidden_field :sub_type %>
+	<%= f.hidden_field :item_ids, :value => ""%>
+	<%= f.hidden_field :page, :value =>1%>
+	<% end -%>  
       </span>
     </div>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
@@ -162,6 +168,8 @@
           case 'HowTo': var sub_type = "HowTo/Guide";break;
            default:  var sub_type = id;
             }
+            $("#content_search_search").val("")
+          $("#content_search_sub_type").val(sub_type);
             $.ajax(
             {
               url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>",
@@ -182,6 +190,7 @@
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
 
       running = true;
+       if ($("#content_search_search").val().toString() == ""){
         $.ajax(
           {
             url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>",
@@ -193,6 +202,12 @@
                 }
           });
           return false
+           }
+        else
+      {
+      	$("#content_search_page").val($("#filter_page_no").val())
+    	$("#contentSearchForm").submit();
+      }
         //lnk.click();
       }
     });
