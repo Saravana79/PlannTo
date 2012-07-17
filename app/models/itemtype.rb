@@ -29,7 +29,7 @@ class Itemtype < ActiveRecord::Base
       when 'Bike'
         return 'Bike'
       else
-        return ['Car']
+        return 'Car'
     end
   end
 
