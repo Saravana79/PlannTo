@@ -18,7 +18,13 @@ class Comment < ActiveRecord::Base
   after_destroy :update_cache_comments_count
 
   def update_cache_comments_count
-    value = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.commentable.id}").split("_")
+    cached_value = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.commentable_id}")
+    unless cached_value.nil?
+      value = cached_value.split("_")
     $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.commentable.id}", "#{value[0]}_#{self.commentable.comments.count}")
+    
+  end
+  self.commentable.update_attributes(:comments_count => self.commentable.comments.count)
+
   end
 end
