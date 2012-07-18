@@ -25,6 +25,9 @@ class Content < ActiveRecord::Base
     text :title, :boost => 3.0, :more_like_this =>true
     text :description
     string :sub_type
+    integer :itemtype_ids,  :multiple => true do |content|
+      content.itemtype_id
+    end
     integer :item_ids,  :multiple => true do
       item_contents_relations_cache.map {|items| items.item_id}
     end
