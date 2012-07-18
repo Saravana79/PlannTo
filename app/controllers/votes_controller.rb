@@ -31,12 +31,7 @@ class VotesController < ApplicationController
           voter.clear_votes(voteable)
         else
           logger.error "Vote #{ params[:vote]}"
-         # if (params[:vote_id])
-         #   @vote_id = params[:vote_id]
-         # else
-         #   @vote_id = current_user.fetch_vote(voteable).try(:id)
-         # end 
-          voter.vote voteable,{:direction => params[:vote]}
+          voter.vote voteable,{:direction => params[:vote], :exclusive => true ,:id => current_user.fetch_vote(voteable).try(:id)}
         end
       else
         voter.vote voteable,:direction => params[:vote]
