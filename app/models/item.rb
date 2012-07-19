@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   has_many :item_contents_relations_cache, :class_name => "ItemContentsRelationsCache"
   has_many :shares # to be removed
   has_many :content_item_relations
-  has_many :contents, :through => :content_item_relations
+  has_many :contents, :through => :item_contents_relations_cache
 
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
