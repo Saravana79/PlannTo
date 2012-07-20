@@ -35,6 +35,7 @@
             case 'HowTo': var sub_type = "HowTo/Guide";break;
             default:  var sub_type = id;
           }
+          $("#content_search_page").val(1)
           $("#content_search_search").val("")
           $("#content_search_sub_type").val(sub_type);
           $.ajax(
