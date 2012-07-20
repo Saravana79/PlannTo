@@ -45,7 +45,7 @@ class ContentsController < ApplicationController
      end
      @contents = search_list.results
      
-     render "contents/filter"
+    # render "contents/filter"
   end
 
   def feeds
