@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   has_many :item_contents_relations_cache, :class_name => "ItemContentsRelationsCache"
   has_many :shares # to be removed
   has_many :content_item_relations
-  has_many :contents, :through => :content_item_relations
+  has_many :contents, :through => :item_contents_relations_cache
 
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
@@ -48,6 +48,18 @@ class Item < ActiveRecord::Base
 
 #    text :name, :boost => 2.0,  :as => :name_ac    
 #  end
+
+  def get_base_itemtypeid
+    itemtype_id = case self.type
+    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", self.id).first.try(:itemtype_id)
+    when "Manufacturer" then self.itemrelationships.first.related_cars.itemtype_id
+    when "CarGroup" then self.itemrelationships.first.items.itemtype_id
+    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", self.name.singularize).first.try(:id)
+    when "Topic" then TopicItemtypeRelation.find_by_item_id(self.id).itemtype_id
+    else self.itemtype_id
+    end
+    return itemtype_id
+  end
 
   def get_price_info(item_type)   
     price = "0"; 

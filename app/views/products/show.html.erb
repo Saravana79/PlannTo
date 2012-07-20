@@ -6,7 +6,7 @@
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
 
-
+<% content_for :title, @item.name + " - " %>
 <!-- buttons - End -->
 <div class="leftcolumnbig" id="item_info" style="clear:both;">
 <!-- Product Details - Start -->

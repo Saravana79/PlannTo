@@ -6,7 +6,7 @@
 		<% end%>
 	</ul>
 </div>
-
+<% content_for :title, @content.title + " - " %>
 <div class="float_rgt" >
 	<%= render 'shared/follow_buttons',:follow_type => @content.content_type, :follow_html => '', :button_class => '', :item => @content, :related_items => false %>
 </div>

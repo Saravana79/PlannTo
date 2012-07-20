@@ -25,6 +25,9 @@ class Content < ActiveRecord::Base
     text :title, :boost => 3.0, :more_like_this =>true
     text :description
     string :sub_type
+    integer :itemtype_ids,  :multiple => true do |content|
+      content.itemtype_id
+    end
     integer :item_ids,  :multiple => true do
       item_contents_relations_cache.map {|items| items.item_id}
     end
@@ -171,15 +174,7 @@ end
   end
 
   def get_itemtype(item)
-    itemtype_id = case item.type
-    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", item.id).first.try(:itemtype_id)
-    when "Manufacturer" then item.itemrelationships.first.related_cars.itemtype_id
-    when "CarGroup" then item.itemrelationships.first.items.itemtype_id
-    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
-    when "Topic" then TopicItemtypeRelation.find_by_item_id(item.id).itemtype_id
-    else item.itemtype_id
-    end
-    return itemtype_id
+      item.get_base_itemtypeid()
   end
 
   def update_with_items!(params, items)

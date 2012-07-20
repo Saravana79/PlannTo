@@ -39,7 +39,7 @@
           $("#content_search_sub_type").val(sub_type);
           $.ajax(
           {
-            url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>&itemtype_id=<%=@item.itemtype_id%>" ,
+            url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>&itemtype_id=<%=@item.get_base_itemtypeid()%>" ,
             type: "get",
             dataType: "script"
           });
@@ -122,7 +122,7 @@
         if ($("#content_search_search").val().toString() == ""){
         $.ajax(
         {
-          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.try(:itemtype_id)%>",
+          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>",
           type: "get",
           dataType: "script",
           success    : function(data)
