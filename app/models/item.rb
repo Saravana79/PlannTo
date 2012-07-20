@@ -49,6 +49,18 @@ class Item < ActiveRecord::Base
 #    text :name, :boost => 2.0,  :as => :name_ac    
 #  end
 
+  def get_base_itemtypeid
+    itemtype_id = case self.type
+    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", self.id).first.try(:itemtype_id)
+    when "Manufacturer" then self.itemrelationships.first.related_cars.itemtype_id
+    when "CarGroup" then self.itemrelationships.first.items.itemtype_id
+    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", self.name.singularize).first.try(:id)
+    when "Topic" then TopicItemtypeRelation.find_by_item_id(self.id).itemtype_id
+    else self.itemtype_id
+    end
+    return itemtype_id
+  end
+
   def get_price_info(item_type)   
     price = "0"; 
     item_attribute = item_attributes.select{|a| a.name == item_type}.last

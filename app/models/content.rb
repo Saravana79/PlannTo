@@ -174,15 +174,7 @@ end
   end
 
   def get_itemtype(item)
-    itemtype_id = case item.type
-    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", item.id).first.try(:itemtype_id)
-    when "Manufacturer" then item.itemrelationships.first.related_cars.itemtype_id
-    when "CarGroup" then item.itemrelationships.first.items.itemtype_id
-    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
-    when "Topic" then TopicItemtypeRelation.find_by_item_id(item.id).itemtype_id
-    else item.itemtype_id
-    end
-    return itemtype_id
+      item.get_base_itemtypeid()
   end
 
   def update_with_items!(params, items)
