@@ -5,13 +5,19 @@
       <img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>" onclick="location.href = '<%=link_url(item)%>'"/></span>
     <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
 
-    <div class="PlanntoBuyBtncnt">
+    <div class="PlanntoBuyBtncnt" style="align:center;margin-right:60px;">
       <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => item, :related_items => true %>
  
     </div>
     <div style="clear:both">
       <a class="txt_price"><%=item.get_price_info('Price')%></a><br />
-      <img src="../images/rating_stars.png" width="87" height="20" /><br/>
+         <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "compare_id#{item.id}"} %><br />
+         <% if item.rated_users_count > 0 %>
+         <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+          <span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")"  %> </span>
+          </a>
+          <% end%>
+    <br/>
     </div>
   </div>
 </td>
