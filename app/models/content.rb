@@ -15,6 +15,7 @@ class Content < ActiveRecord::Base
 	has_many :content_item_relations
   has_many :items, :through => :content_item_relations
   belongs_to :itemtype
+  has_and_belongs_to_many :guides
   has_one :content_photo
   accepts_nested_attributes_for :content_photo, :allow_destroy => true
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}

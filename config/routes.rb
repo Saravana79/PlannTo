@@ -69,6 +69,9 @@ resources :accounts do
   resources :cars do
         resources :shares
   end
+   
+  match "/contents/update_guide" => 'contents#update_guide'
+
   resources :contents do
   collection do
     get :filter
@@ -77,6 +80,7 @@ resources :accounts do
     post :search_contents
   end
   match "/contents/search" => 'contents#search'
+ 
   post :search
   resources :comments
     collection do

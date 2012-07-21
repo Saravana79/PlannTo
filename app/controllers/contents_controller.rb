@@ -7,6 +7,8 @@ class ContentsController < ApplicationController
   def feed
     
     @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
+
+    logger.error("slice params " + params.slice(:items, :type, :order, :limit, :page).to_s)
     
     respond_to do |format|
       format.html { render "feed", :layout =>false, :locals => {:params => params} }
@@ -45,7 +47,7 @@ class ContentsController < ApplicationController
   end
 
   def feeds
-
+    logger.error 'Inside feeds'
     #@contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
     if params[:sub_type] =="All"
       sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
@@ -105,6 +107,20 @@ class ContentsController < ApplicationController
     get_item_object
     #@item.destroy
   end
+
+  def update_guide
+    @content = Content.find params[:content]
+    guide_ids = params[:guide].split ";"
+    guides = []
+    guide_ids.each do |g| 
+      guide = Guide.find g.to_i 
+      guides << guide
+    end  
+    @content.guides = guides
+    respond_to do |format|
+        format.js 
+      end  
+  end  
 
   private
   def get_item_object
