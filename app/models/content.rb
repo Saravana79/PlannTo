@@ -27,6 +27,7 @@ class Content < ActiveRecord::Base
     string :sub_type
     integer :total_votes
     integer :comments_count
+     time :created_at
     integer :itemtype_ids,  :multiple => true do |content|
       content.itemtype_id
     end

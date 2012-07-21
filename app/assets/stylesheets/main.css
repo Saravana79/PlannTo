@@ -177,6 +177,12 @@ div.search {
     text-decoration: none;
 }
 
+a.link_active {
+    font: normal 11px tahoma;
+    color: #ac5e2d;
+    text-decoration: none;
+}
+
 .grayarrow {
     font: normal 9px tahoma;
     color: #5f5f5f;
@@ -1295,6 +1301,10 @@ span.sortby a:hover {
 }
 
 #link_active {
+    border-bottom: solid 2px #e7d597;
+}
+
+.link_active {
     border-bottom: solid 2px #e7d597;
 }
 
