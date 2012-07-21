@@ -12,7 +12,6 @@
 //= require jquery.remotipart
 //= require_self
 
-
 $(document).ready(function() { 
   $('a.fbpopup').click(function(e) {
     var width = 600, height = 400;
