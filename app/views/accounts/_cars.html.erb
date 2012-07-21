@@ -1,4 +1,3 @@
-
 <div class="Blockheading">
          <div class="Headingtext">Add <%= @follow_types.first %> to your profile</div>
   <!--  <span class="txt_normal">[Cars that you own, had or following it]</span>-->
@@ -37,17 +36,30 @@
               <tr>
                 <td><div class="btn-group">
                       <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(follow.follow_type) %></a>
-                      <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#"><i class="icon-pencil"></i> Add a Review</a></li>
-                        <li><a href="#"><i class="icon-trash"></i> Add additional information</a></li>
-                        <li><a href="#"><i class="icon-ban-circle"></i> Add a Tip</a></li>
-                        <li class="divider"></li>
-                        <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %> </li>
-                      </ul>
+                      <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
+                      <% if @user == current_user %>
+                        <ul class="dropdown-menu">
+                          <li><a href="#" id='write_review'><i class="icon-pencil"></i> Add a Review</a></li>
+                          <li><a href="#"><i class="icon-trash"></i> Add additional information</a></li>
+                          <li><a href="#"><i class="icon-ban-circle"></i> Add a Tip</a></li>
+                          <li class="divider"></li>
+                          <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %> </li>
+                        </ul>
+                      <% else %>
+                        <ul class="dropdown-menu">
+                          <li><a href="#" >I Own It</a></li>
+                          <li><a href="#">Plan To Buy</a></li>
+                          <li><a href="#">Follow This</a></li>
+                        </ul>
+                      <%end%>
                     </div></td>
               </tr>
             </table>
+            
+            <div id='write_review_form' style="display:none;">
+              <%= render 'reviews/review_subcontainer', {:item => item} %>
+            </div>
+              
           </div>    
       </div>
     <%else%><!--It is a content type follow. so handle differently-->
@@ -72,11 +84,20 @@
                 <td><div class="btn-group">
                       <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(follow.follow_type) %></a>
                       <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#"><i class="icon-pencil"></i> Add a comment</a></li>
-                        <li class="divider"></li>
-                        <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %></li>
-                      </ul>
+                      <% if @user == current_user %>
+                        <ul class="dropdown-menu">
+                          <li><a href="#"><i class="icon-pencil"></i> Add a comment</a></li>
+                          <li class="divider"></li>
+                          <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %></li>
+                        </ul>
+                       <% else %>
+                        <ul class="dropdown-menu">
+                          <li><a href="#" >I Own It</a></li>
+                          <li><a href="#">Plan To Buy</a></li>
+                          <li><a href="#">Follow This</a></li>
+                        </ul>
+                      <%end%>
+                        
                     </div></td>
               </tr>
             </table>
@@ -91,7 +112,7 @@
 <% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
 <%= hidden_field_tag "category", category %>
 <script type="text/javascript">
-    window._token = '<%= form_authenticity_token.to_s %>';
+  window._token = '<%= form_authenticity_token.to_s %>';
     /* ============================================================
  * bootstrap-dropdown.js v2.0.4
  * http://twitter.github.com/bootstrap/javascript.html#dropdowns

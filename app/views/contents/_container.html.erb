@@ -25,7 +25,7 @@
     <div class="Tabsrightcontent">
       <textarea cols="" rows="" class="Textarea contentSubContainer" style="width:507px; height:106px; resize: none;" id="defaultContainer" class="contentSubContainer" onclick="$('div#contentContainer ul li.Active').trigger('click');$('#defaultContainer').hide();">What do you think of this <%=@item.itemtype.itemtype%>?
       </textarea>
-      <%= render :partial => 'reviews/review_subcontainer' %> 
+      <%= render 'reviews/review_subcontainer', {:item => @item} %> 
       <%= render :partial => 'article_contents/article_share', :locals => {:content_category => false} %>
       <%= render :partial => 'question_contents/new_question_content' %>
       <%= render :partial => 'article_contents/create_new' ,:locals => {:article_categories => article_categories}%>
