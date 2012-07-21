@@ -17,6 +17,7 @@ class ContentsController < ApplicationController
   end
 
   def filter
+ 
     if params[:sub_type] =="All"
       sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
     else
@@ -24,6 +25,18 @@ class ContentsController < ApplicationController
     end
     filter_params = {"sub_type" => sub_type}
     filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+     sort_by_value = params[:sort_by]
+    if sort_by_value == "Newest"
+     filter_params["order"] = "created_at desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")    
+    elsif sort_by_value == "Votes"
+      filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+    elsif sort_by_value == "Most Comments"
+      filter_params["order"] = "comments_count desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+      
+    else
+       filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+    end
+    
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     @contents = Content.filter(filter_params)

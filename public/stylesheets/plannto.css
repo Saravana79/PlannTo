@@ -14,6 +14,15 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 #Loginpoup h1 a.Closebut:hover { background-position:left -41px;}
 
+a.link_active {
+    font: normal 11px tahoma;
+    color: #ac5e2d;
+    text-decoration: none;
+}
+
+.link_active {
+    border-bottom: solid 2px #e7d597;
+}
 
 
 .Popupfacebook { clear:both;}

@@ -164,16 +164,32 @@
   	$("span#sortBy a").click(function (e) {
   		 $("span#sortBy").find('a').removeClass('link_active');
         $(this).addClass("link_active");
+          if ($("#content_search_search").val().toString() == ""){
+        $.ajax(
+          {
+            url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@itemtype.id%>",
+            type: "get",
+            dataType: "script",
+            success    : function(data)
+                {
+                  running = false;
+                }
+          });
+          return false
+           }
+           else{
          $("#content_search_page").val(1);
          $("#content_search_sort_by").val($(this).text());
+          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
          $("#contentSearchForm").submit();
+         }
   	});
   	
     $("div#Filterby div.Filternav ul li").click(function (e) {
        $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
         $(this).closest('li').addClass("Currentfilter");
       if ($(this).text() != "Labeltext"){
-        $("#filter_page_no").val('2');
+        $("#filter_page_no").val('1');
         var id = $(this).attr('id');
         switch(id){
           case 'All' :  var sub_type = "All";break;
@@ -182,10 +198,10 @@
             }
             $("#content_search_page").val(1)
             $("#content_search_search").val("")
-          $("#content_search_sub_type").val(sub_type);
+          	$("#content_search_sub_type").val(sub_type);
             $.ajax(
             {
-              url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>",
+              url: "contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@itemtype.id%>",
               type: "get",
               dataType: "script"
             });
@@ -218,7 +234,7 @@
            }
         else
       {
-      	
+      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
     	$("#contentSearchForm").submit();
       }
         //lnk.click();
