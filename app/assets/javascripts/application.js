@@ -40,6 +40,17 @@ $(document).ready(function() {
     });
   });
   
+ 
+  $( "#search_item" ).autocomplete({
+			source: "/search/autocomplete_items",
+			minLength: 2,
+			select: function( event, ui ) {
+			  $('#follow_followable_id').val(ui.item.id);
+			  $('#follow_followable_type').val(ui.item.type);
+			  $('.follow_form').submit();
+			}	 
+	});
+ 
 });
 
 
