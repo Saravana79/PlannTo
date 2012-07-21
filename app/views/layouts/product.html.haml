@@ -2,7 +2,8 @@
 %html{:lang => "en"}
   %head
     %meta{:charset => "utf-8"}/
-    %title PlannTo - Empowered Customers
+    %title= yield(:title) + "PlannTo"
+
     = stylesheet_link_tag 'application'
     = stylesheet_link_tag '/stylesheets/plannto.css'
     = stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"

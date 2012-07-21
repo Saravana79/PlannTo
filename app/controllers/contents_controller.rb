@@ -23,17 +23,23 @@ class ContentsController < ApplicationController
       sub_type = params[:sub_type].split(",")
     end
     filter_params = {"sub_type" => sub_type}
+    filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     @contents = Content.filter(filter_params)
   end
   
   def search_contents
-    sub_type = params[:content_search][:sub_type]== "All" ? "" : params[:content_search][:sub_type]
+    sub_type = params[:content_search][:sub_type]== "All" ? Array.new : params[:content_search][:sub_type].split(",")
+    item_ids = params[:content_search][:item_ids] == "" ? Array.new : params[:content_search][:item_ids].split(",")
+    itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1
+    
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
-      #with :sub_type, sub_type
+      with :sub_type, sub_type if sub_type.size > 0
+      with :item_ids, item_ids if item_ids.size > 0
+      with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0
      #fulltext params[:content_search][:search] do
    #    keywords "", :fields => :name
       # keywords "", :fields => :description
@@ -43,7 +49,7 @@ class ContentsController < ApplicationController
      end
      @contents = search_list.results
      
-     render "contents/filter"
+    # render "contents/filter"
   end
 
   def feeds

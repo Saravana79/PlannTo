@@ -35,11 +35,12 @@
             case 'HowTo': var sub_type = "HowTo/Guide";break;
             default:  var sub_type = id;
           }
+          $("#content_search_page").val(1)
           $("#content_search_search").val("")
           $("#content_search_sub_type").val(sub_type);
           $.ajax(
           {
-            url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>&itemtype_id=<%=@item.itemtype_id%>" ,
+            url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>&itemtype_id=<%=@item.get_base_itemtypeid()%>" ,
             type: "get",
             dataType: "script"
           });
@@ -61,6 +62,8 @@
       <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
 	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
 	<%= f.hidden_field :sub_type %>
+	<%= f.hidden_field :itemtype_ids, :value => @item.try(:itemtype_id) %>
+	<%= f.hidden_field :item_ids, :value => @item.id%>
 	<%= f.hidden_field :page, :value =>1%>
 	<% end -%>  
     </span>    
@@ -120,7 +123,7 @@
         if ($("#content_search_search").val().toString() == ""){
         $.ajax(
         {
-          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.try(:itemtype_id)%>",
+          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>",
           type: "get",
           dataType: "script",
           success    : function(data)
@@ -133,8 +136,9 @@
       }
         else
       {
-      	$("#content_search_page").val($("#filter_page_no").val())
     	$("#contentSearchForm").submit();
+    	 return false 
+    	 
       }
       }
     

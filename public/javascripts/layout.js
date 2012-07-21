@@ -131,7 +131,7 @@ $(document).ready(function(){
                     term: request.term,
                     search_type: $("#plannto_search_type").val()
                 },
-                type: "POST",
+                type: "get",
                 dataType: "json",
                 success: function( data )
                 {

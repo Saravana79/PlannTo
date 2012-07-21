@@ -44,7 +44,7 @@ class ProductsController < ApplicationController
     end 
     @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
-   
+
   end
 
   def related_items

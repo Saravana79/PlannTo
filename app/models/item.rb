@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   has_many :item_contents_relations_cache, :class_name => "ItemContentsRelationsCache"
   has_many :shares # to be removed
   has_many :content_item_relations
-  has_many :contents, :through => :content_item_relations
+  has_many :contents, :through => :item_contents_relations_cache
 
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
@@ -48,6 +48,18 @@ class Item < ActiveRecord::Base
 
 #    text :name, :boost => 2.0,  :as => :name_ac    
 #  end
+
+  def get_base_itemtypeid
+    itemtype_id = case self.type
+    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", self.id).first.try(:itemtype_id)
+    when "Manufacturer" then self.itemrelationships.first.related_cars.itemtype_id
+    when "CarGroup" then self.itemrelationships.first.items.itemtype_id
+    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", self.name.singularize).first.try(:id)
+    when "Topic" then TopicItemtypeRelation.find_by_item_id(self.id).itemtype_id
+    else self.itemtype_id
+    end
+    return itemtype_id
+  end
 
   def get_price_info(item_type)   
     price = "0"; 
@@ -205,9 +217,10 @@ class Item < ActiveRecord::Base
       $redis.multi do
         top_contributors.each do |cont|
           user = User.find_by_id(cont[0])
-          avatar_url =  user.get_photo
+          avatar_url =  user.get_photo(:thumb)
+          userurl = user.get_url()
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
-          $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}"
+          $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}_#{userurl}"
           #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
         end
       end
@@ -217,10 +230,10 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-    unless($redis.hget("items:ratings", "item:#{self.id}:review_count"))
+    unless($redis.hget("items:ratings", "item:#{self.id}:review_count_total"))
       item_rating = self.average_rating
     end
-   return ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
+   return ($redis.hget("items:ratings", "item:#{self.id}:review_count_total")).to_i
   end  
 
   def average_rating
@@ -252,6 +265,7 @@ class Item < ActiveRecord::Base
     end
      $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
      $redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
+     $redis.hset("items:ratings", "item:#{self.id}:review_count_total",(complete_shared_reviews.size.to_f + complete_created_reviews.size.to_f))
      return item_rating
     #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
    end 
@@ -272,13 +286,20 @@ class Item < ActiveRecord::Base
     unless prev_rating
       $redis.hset("items:ratings", "item:#{self.id}:rating",rating)
       $redis.hset("items:ratings", "item:#{self.id}:review_count",1)
+      
     else
       prev_review_count = ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
       prev_rating = prev_rating.to_f
       new_average_rating = ((prev_rating * prev_review_count) + rating) / (prev_review_count + 1).to_f
       $redis.hset("items:ratings", "item:#{self.id}:rating",new_average_rating)
-      $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)
-    end  
+      $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)      
+    end
+      prev_count_total = $redis.hget("items:ratings", "item:#{self.id}:review_count_total")
+      unless prev_count_total
+        $redis.hset("items:ratings", "item:#{self.id}:review_count_total",1)
+      else
+        $redis.hset("items:ratings", "item:#{self.id}:review_count_total",prev_count_total.to_i + 1)
+      end  
   end
 
   def itemtypetag
