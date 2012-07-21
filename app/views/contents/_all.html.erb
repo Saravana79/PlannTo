@@ -62,7 +62,7 @@
       <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
 	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
 	<%= f.hidden_field :sub_type %>
-	<%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+	<%= f.hidden_field :itemtype_ids, :value => @item.try(:itemtype_id) %>
 	<%= f.hidden_field :item_ids, :value => @item.id%>
 	<%= f.hidden_field :page, :value =>1%>
 	<% end -%>  
@@ -135,8 +135,10 @@
         //lnk.click();
       }
         else
-      {      	
+      {
     	$("#contentSearchForm").submit();
+    	 return false 
+    	 
       }
       }
     
