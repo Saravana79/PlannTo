@@ -6,3 +6,4 @@ $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/co
 <%end%>
 value = <%=params[:content_search][:page]%> ;
 $("#content_search_page").val(value+1)
+running=false;
