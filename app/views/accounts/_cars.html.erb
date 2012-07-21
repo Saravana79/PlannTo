@@ -43,7 +43,7 @@
                         <li><a href="#"><i class="icon-trash"></i> Add additional information</a></li>
                         <li><a href="#"><i class="icon-ban-circle"></i> Add a Tip</a></li>
                         <li class="divider"></li>
-                        <li><a href="#"><i class="i"></i> Delete from my profile</a></li>
+                        <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %> </li>
                       </ul>
                     </div></td>
               </tr>
@@ -75,7 +75,7 @@
                       <ul class="dropdown-menu">
                         <li><a href="#"><i class="icon-pencil"></i> Add a comment</a></li>
                         <li class="divider"></li>
-                        <li><a href="#"><i class="i"></i> Delete from my profile</a></li>
+                        <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %></li>
                       </ul>
                     </div></td>
               </tr>

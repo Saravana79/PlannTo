@@ -40,7 +40,8 @@ resources :answer_contents
 
 # match 'accounts/:username', :to => "accounts#index", :as => "accounts"
 
-  
+resources :follows
+ 
 resources :accounts do
     put :update
     member do
