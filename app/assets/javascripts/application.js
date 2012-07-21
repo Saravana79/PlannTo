@@ -5,6 +5,7 @@
 // the compiled file.
 //
 //= require jquery
+//= require jquery_ujs
 //= require jquery-ui
 //= require_tree .
 //= require tinymce
@@ -14,7 +15,6 @@
 
 $(document).ready(function() { 
   $('a.fbpopup').click(function(e) {
-    console.log('here');
     var width = 600, height = 400;
     var left = (screen.width / 2) - (width / 2);
     var top = (screen.height / 2) - (2 * height / 3);
@@ -32,5 +32,17 @@ $(document).ready(function() {
       width: 550,
       modal: true});
   });
+  
+  $("#write_review").live('click', function(){
+    $("#articleReviewSubContainer").show();
+    $("#write_review_form").dialog({height: 450,
+      width: 600,
+      modal: true
+    });
+  });
+  
 });
+
+
+
 

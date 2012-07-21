@@ -13,7 +13,7 @@ development:
   encoding: utf8
   database: planntouser
   username: root
-  password:
+  password: isiri
   #socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -24,12 +24,12 @@ test:
   encoding: utf8
   database: test_planntouser
   username: root
-  password:
+  password: isiri
 
 production:
   adapter: mysql2
   encoding: utf8
   database: production_planntouser
   username: root
-  password:
+  password: isiri
 

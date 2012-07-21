@@ -1,3 +1,3 @@
 
-$('#review_it').html('<%= escape_javascript(render :partial => "reviews/review_subcontainer") %>')
+$('#review_it').html('<%= escape_javascript(render "reviews/review_subcontainer", {:item => @item}) %>')
 $('#articleReviewSubContainer').show();

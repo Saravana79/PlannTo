@@ -1,0 +1,11 @@
+ <ul class="dropdown-menu">
+   <li>
+      <%= link_to 'I Own It', follows_path(:follow => {followable_id: item.id, followable_type: item.class.to_s, follow_type: 'owner'}), :method => :post %> 
+    </li>
+    <li>
+      <%= link_to 'Plan To Buy', follows_path(:follow => {followable_id: item.id, followable_type: item.class.to_s, follow_type: 'buyer'}), :method => :post %> 
+    </li>
+    <li> 
+      <%= link_to 'Follow This', follows_path(:follow => {followable_id: item.id, followable_type: item.class.to_s, follow_type: 'follower'}), :method => :post %> 
+     </li>
+ </ul>

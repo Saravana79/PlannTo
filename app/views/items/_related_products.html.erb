@@ -16,7 +16,7 @@
             <div>
             <a href="<%=related_item.get_url()%>" class="txt_black"><%=related_item.name%></a>
            </div>
-            <%= render :partial => 'shared/rating',:locals => {:item => related_item} %><br />
+            <%= render :partial => 'shared/rating',:locals => {:item => related_item, :rating_id => "related_item_id#{related_item.id}"} %><br />
             </td>
           </tr>
           <tr>
