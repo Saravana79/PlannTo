@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120509160526) do
+ActiveRecord::Schema.define(:version => 20120715140056) do
 
   create_table "answer_contents", :force => true do |t|
     t.integer "question_content_id"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.integer  "itemtype_id", :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "orderby"
   end
 
   create_table "article_contents", :force => true do |t|
@@ -136,6 +137,21 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
 
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
 
+  create_table "chat_channels", :force => true do |t|
+    t.integer  "sender",     :null => false
+    t.integer  "receiver",   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "chat_messages", :force => true do |t|
+    t.integer  "chat_channel_id"
+    t.integer  "user_id"
+    t.text     "message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "comments", :force => true do |t|
     t.string   "title",            :limit => 50, :default => ""
     t.text     "comment"
@@ -174,6 +190,14 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.string   "itemtype"
   end
 
+  create_table "content_photos", :force => true do |t|
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.integer  "content_id"
+  end
+
   create_table "contents", :force => true do |t|
     t.string   "title",       :limit => 200
     t.text     "description"
@@ -185,9 +209,28 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.datetime "updated_at"
     t.string   "ip_address"
     t.string   "sub_type"
+    t.boolean  "deleted"
+    t.string   "slug"
+  end
+
+  add_index "contents", ["slug"], :name => "index_contents_on_slug"
+
+  create_table "contents_guides", :force => true do |t|
+    t.integer  "content_id"
+    t.integer  "guides_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "dealer_locators", :force => true do |t|
+    t.integer  "item_id"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "debates", :force => true do |t|
+    t.integer  "item_id",       :null => false
     t.integer  "review_id",     :null => false
     t.integer  "argument_id",   :null => false
     t.string   "argument_type", :null => false
@@ -244,6 +287,22 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
 
+  create_table "guides", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "history_details", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "site_url"
+    t.string   "ip_address"
+    t.string   "plannto_location"
+    t.datetime "redirection_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "image_contents", :force => true do |t|
     t.string   "image_content_file_name"
     t.string   "image_content_content_type"
@@ -254,9 +313,9 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   create_table "invitations", :force => true do |t|
     t.integer  "sender_id",                   :null => false
     t.integer  "item_id"
-    t.integer  "item_type"
+    t.string   "item_type"
     t.string   "email",                       :null => false
-    t.integer  "follow_type",                 :null => false
+    t.string   "follow_type",                 :null => false
     t.string   "message",     :limit => 2000
     t.string   "token",                       :null => false
     t.string   "user_ip",                     :null => false
@@ -269,6 +328,13 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.integer  "item_id",                      :null => false
     t.string   "value",        :limit => 5000, :null => false
     t.integer  "itemtype_id",                  :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_contents_relations_cache", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "content_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -327,7 +393,11 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.integer  "updated_by"
     t.string   "creator_ip"
     t.string   "updater_ip"
+    t.string   "status"
+    t.string   "slug"
   end
+
+  add_index "items", ["slug"], :name => "index_items_on_slug"
 
   create_table "itemtypes", :force => true do |t|
     t.string   "itemtype",    :limit => 2000, :null => false
@@ -475,8 +545,6 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.string   "actual_value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "step"
-    t.string   "range"
   end
 
   create_table "share_types", :force => true do |t|
@@ -523,19 +591,18 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.string "name"
   end
 
-  create_table "tips", :force => true do |t|
-    t.string   "title"
-    t.string   "description"
-    t.integer  "item_id"
+  create_table "top_contributors", :force => true do |t|
     t.integer  "user_id"
+    t.integer  "object_id"
+    t.string   "object_type"
+    t.integer  "rank"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "top_contributors", :force => true do |t|
-    t.integer  "user_id"
+  create_table "topic_itemtype_relations", :force => true do |t|
     t.integer  "item_id"
-    t.integer  "rank"
+    t.integer  "itemtype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -587,18 +654,21 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
-    t.integer  "facebook_id"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
     t.integer  "reputation",                            :default => 0,  :null => false
+    t.string   "name"
     t.integer  "invitation_id"
+    t.string   "username"
+    t.string   "uid"
+    t.string   "token"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["uid"], :name => "index_users_on_uid"
 
   create_table "vendors", :force => true do |t|
     t.string   "name"
@@ -620,6 +690,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     t.datetime "updated_at"
     t.integer  "vote_count_positive"
     t.integer  "vote_count_negative"
+    t.integer  "comment_count"
   end
 
   create_table "votes", :force => true do |t|
@@ -636,7 +707,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
-  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
+  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -648,12 +719,14 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :updated_at
     v.column :ip_address
     v.column :sub_type
+    v.column :deleted
+    v.column :slug
     v.column :question_content_id
     v.column :format
     v.column :mark_as_answer
   end
 
-  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`field1` AS `field1`,`article_contents`.`field2` AS `field2`,`article_contents`.`field3` AS `field3`,`article_contents`.`field4` AS `field4`,`article_contents`.`video` AS `video` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
+  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`field1` AS `field1`,`article_contents`.`field2` AS `field2`,`article_contents`.`field3` AS `field3`,`article_contents`.`field4` AS `field4`,`article_contents`.`video` AS `video` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -665,6 +738,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :updated_at
     v.column :ip_address
     v.column :sub_type
+    v.column :deleted
+    v.column :slug
     v.column :url
     v.column :thumbnail
     v.column :field1
@@ -691,7 +766,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :location
   end
 
-  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
+  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -703,6 +778,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :updated_at
     v.column :ip_address
     v.column :sub_type
+    v.column :deleted
+    v.column :slug
     v.column :image_content_file_name
     v.column :image_content_content_type
     v.column :image_content_file_size
@@ -723,7 +800,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :field1
   end
 
-  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
+  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -735,6 +812,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :updated_at
     v.column :ip_address
     v.column :sub_type
+    v.column :deleted
+    v.column :slug
     v.column :format
     v.column :is_answered
   end
@@ -744,7 +823,7 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :points
   end
 
-  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
+  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -756,6 +835,8 @@ ActiveRecord::Schema.define(:version => 20120509160526) do
     v.column :updated_at
     v.column :ip_address
     v.column :sub_type
+    v.column :deleted
+    v.column :slug
     v.column :rating
     v.column :recommend_this
     v.column :pros

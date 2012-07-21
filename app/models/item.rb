@@ -217,9 +217,10 @@ class Item < ActiveRecord::Base
       $redis.multi do
         top_contributors.each do |cont|
           user = User.find_by_id(cont[0])
-          avatar_url =  user.get_photo
+          avatar_url =  user.get_photo(:thumb)
+          userurl = user.get_url()
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
-          $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}"
+          $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}_#{userurl}"
           #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
         end
       end
