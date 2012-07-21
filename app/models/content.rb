@@ -25,6 +25,8 @@ class Content < ActiveRecord::Base
     text :title, :boost => 3.0, :more_like_this =>true
     text :description
     string :sub_type
+    integer :total_votes
+    integer :comments_count
     integer :itemtype_ids,  :multiple => true do |content|
       content.itemtype_id
     end
