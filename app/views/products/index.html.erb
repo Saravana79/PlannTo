@@ -143,7 +143,7 @@
 	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
 	<%= f.hidden_field :sub_type %>
 	<%= f.hidden_field :item_ids, :value => ""%>
-	<%= f.hidden_field :itemtype_ids, :value => ""%>
+	<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
 	<%= f.hidden_field :page, :value =>1%>
 	<% end -%>  
       </span>
