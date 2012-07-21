@@ -46,11 +46,7 @@
                           <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %> </li>
                         </ul>
                       <% else %>
-                        <ul class="dropdown-menu">
-                          <li><a href="#" >I Own It</a></li>
-                          <li><a href="#">Plan To Buy</a></li>
-                          <li><a href="#">Follow This</a></li>
-                        </ul>
+                       <%= render 'shared/follow_links', {:item => item} %>
                       <%end%>
                     </div></td>
               </tr>
@@ -89,12 +85,6 @@
                           <li><a href="#"><i class="icon-pencil"></i> Add a comment</a></li>
                           <li class="divider"></li>
                           <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %></li>
-                        </ul>
-                       <% else %>
-                        <ul class="dropdown-menu">
-                          <li><a href="#" >I Own It</a></li>
-                          <li><a href="#">Plan To Buy</a></li>
-                          <li><a href="#">Follow This</a></li>
                         </ul>
                       <%end%>
                         
