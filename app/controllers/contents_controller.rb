@@ -7,6 +7,8 @@ class ContentsController < ApplicationController
   def feed
     
     @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
+
+    logger.error("slice params " + params.slice(:items, :type, :order, :limit, :page).to_s)
     
     respond_to do |format|
       format.html { render "feed", :layout =>false, :locals => {:params => params} }
@@ -32,17 +34,31 @@ class ContentsController < ApplicationController
     item_ids = params[:content_search][:item_ids] == "" ? Array.new : params[:content_search][:item_ids].split(",")
     itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1
+    sort_by_value = params[:content_search][:sort_by]
+    if sort_by_value == "Newest"
+      sort_by =   "created_at"
+      order_by_value = "desc"
+    elsif sort_by_value == "Votes"
+      sort_by = "total_votes"
+      order_by_value = "desc"
+    elsif sort_by_value == "Most Comments"
+      sort_by = "comments_count"
+      order_by_value = "desc"
+    else
+      sort_by =   ""
+      order_by_value = ""
+    end
+    
     
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
       with :sub_type, sub_type if sub_type.size > 0
       with :item_ids, item_ids if item_ids.size > 0
-      with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0
-     #fulltext params[:content_search][:search] do
+      with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0 
    #    keywords "", :fields => :name
       # keywords "", :fields => :description
        #:fields =>(:name => 2.0, :description)
-     #end
+     order_by sort_by.to_sym, order_by_value.to_sym unless sort_by == "" 
      paginate(:page => page, :per_page => 10 )
      end
      @contents = search_list.results
@@ -51,7 +67,7 @@ class ContentsController < ApplicationController
   end
 
   def feeds
-
+    logger.error 'Inside feeds'
     #@contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
     if params[:sub_type] =="All"
       sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
@@ -111,6 +127,20 @@ class ContentsController < ApplicationController
     get_item_object
     #@item.destroy
   end
+
+  def update_guide
+    @content = Content.find params[:content]
+    guide_ids = params[:guide].split ";"
+    guides = []
+    guide_ids.each do |g| 
+      guide = Guide.find g.to_i 
+      guides << guide
+    end  
+    @content.guides = guides
+    respond_to do |format|
+        format.js 
+      end  
+  end  
 
   private
   def get_item_object

@@ -1105,7 +1105,7 @@ div.buttons {
 .img_product {
     width: 180px;
     height: 140px;
-    background: url(../images/bg_product.png) no-repeat;
+    background: /*url(../images/bg_product.png) no-repeat*/;
     display: block;
     padding: 10px;
     float: left;
@@ -1384,6 +1384,7 @@ span.sortby a:hover {
     background-color: #ea5e30;
     border-radius: 3px;
     padding: 0px 10px;
+    cursor: hand;
 }
 
 .answer_later {
@@ -1821,6 +1822,7 @@ li.middlebg {
     font: bold 11px/22px tahoma;
     color: #fff;
     text-align: center;
+    cursor:hand;
 }
 
 .btn_selected_compare {
@@ -1835,6 +1837,7 @@ li.middlebg {
     font: bold 11px/22px arial;
     color: #fff;
     text-align: center;
+    cursor:hand;
 }
 
 .pagination {
@@ -3722,3 +3725,11 @@ line-height: 18px; *line-height: 20px; color: #333333; text-align: center;
 
 
 .btn .caret,.btn2 .caret,.btn3 .caret {*margin-bottom:9px;}
+
+
+
+
+.txt_onhover:hover 
+{
+text-decoration: underline;
+}

@@ -23,13 +23,13 @@
 				<%= render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
 
 				<div  class="float_rgt">
-					<img src="<%= @content.user.get_photo%>" class="userImageSmall"/>
+					<a href="<%= @content.user.get_url()%>"> <img src="<%= @content.user.get_photo%>" class="userImageSmall"/></a>
 				</div>
 				<div  class="subContentDiv">
 					<div>
 						<%= raw get_content_title(@content)%>
 						<% if ((content.is_a?ArticleContent) && (content.url?))  %>
-						- <a class="txt_black_description">(<%= URI.parse(content.url).host.gsub("www.","") %> </a>)
+						- <a class="txt_black_description txt_onhover" href="<%=external_content_path(content.id)%>">(<%= URI.parse(content.url).host.gsub("www.","") %> </a>)
 						<%end%>
 					</div>
 					<div>
