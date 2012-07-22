@@ -63,4 +63,9 @@ class AccountsController < ApplicationController
     @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
   end
   
+  #TODO. not restful
+  def followers
+    @user = User.find(params[:id])
+    @followers = Follow.follow_type('Plannto').for_followable(@user)
+  end
 end

@@ -188,6 +188,10 @@ class User < ActiveRecord::Base
     self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
   end
   
+  #def following_users
+    #self.follows.for_followable_type('User').follow_type('Plannto')
+  #end
+  
   private
 
   def populate_username

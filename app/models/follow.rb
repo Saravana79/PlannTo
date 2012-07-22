@@ -7,6 +7,9 @@ class Follow < ActiveRecord::Base
                                                            followable.id, followable.class.name]) }
   scope :for_follower_type,   lambda { |follower_type| where("follower_type = ?", follower_type) }
   scope :for_followable_type, lambda { |followable_type| where("followable_type = ?", followable_type) }
+  
+  scope :follow_type, lambda{|type| where(follow_type: type)}
+  
   scope :recent,              lambda { |from| where(["created_at > ?", (from || 2.weeks.ago).to_s(:db)]) }
   scope :descending,          order("follows.created_at DESC")
   scope :unblocked,           where(:blocked => false)

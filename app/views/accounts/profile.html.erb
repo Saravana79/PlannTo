@@ -46,7 +46,7 @@
       <li id="profile_preference_buying_plans"><a href="" class="icon_prefernce">Preference / Buying Plans</a></li>
       <li><a href="#" class="icon_points">Points</a></li>
       <li><a href="#" class="icon_awards">Awards</a></li>
-      <li><a href="#" class="icon_followers">Followers</a></li>
+      <li><%= link_to 'Followers', followers_account_path(@user), remote: true, class: "icon_followers" %></li>
       <% unless @user == current_user %>
         <li>
            <% unless current_user.follow_by_type(@user, 'Plannto')  %>
