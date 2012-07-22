@@ -63,13 +63,6 @@
             = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();"
             
       = render("shared/google_analytics") if Rails.env.production?
-      
-    :javascript
-      // to close the facebook popup on callback 
-      if(window.opener) {
-        window.opener.location.reload(true);
-        window.close()
-      }      
  
     - unless user_signed_in?
       :javascript

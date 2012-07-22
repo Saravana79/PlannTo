@@ -44,7 +44,7 @@
                       <% if @user == current_user %>
                         <ul class="dropdown-menu">
                           <li><a href="#" id='write_review'><i class="icon-pencil"></i> Add a Review</a></li>
-                          <li><a href="#"><i class="icon-trash"></i> Add additional information</a></li>
+                          <li><a href="#" id='add_info'><i class="icon-trash"></i> Add additional information</a></li>
                           <li><a href="#"><i class="icon-ban-circle"></i> Add a Tip</a></li>
                           <li class="divider"></li>
                           <li><%= link_to 'Delete from my profile', follow, :method => :delete, :confirm => "Are you sure?"  %> </li>
@@ -59,7 +59,10 @@
             <div id='write_review_form' style="display:none;">
               <%= render 'reviews/review_subcontainer', {:item => item} %>
             </div>
-              
+            
+            <div id='add_item_info' style="display:none;">
+               <%= render 'shared/feilds_data_for_answer', {:item => item} %>
+            </div>   
           </div>    
       </div>
     <%else%><!--It is a content type follow. so handle differently-->

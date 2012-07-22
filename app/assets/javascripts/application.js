@@ -40,7 +40,15 @@ $(document).ready(function() {
     });
   });
   
+  $("#add_info").live('click', function(){
  
+    $("#popup_question_answer").dialog({
+      height: 350,
+      width: 500,
+      modal: true
+    });
+  });
+  
   $( "#search_item" ).autocomplete({
 			source: "/search/autocomplete_items",
 			minLength: 2,
