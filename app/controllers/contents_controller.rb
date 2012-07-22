@@ -24,18 +24,18 @@ class ContentsController < ApplicationController
       sub_type = params[:sub_type].split(",")
     end
     filter_params = {"sub_type" => sub_type}
-    filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+    filter_params["order"] = "total_votes desc" 
      sort_by_value = params[:sort_by]
     if sort_by_value == "Newest"
-     filter_params["order"] = "created_at desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")    
+     filter_params["order"] = "created_at desc" 
     elsif sort_by_value == "Votes"
-      filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+      filter_params["order"] = "total_votes desc" 
     elsif sort_by_value == "Most Comments"
-      filter_params["order"] = "comments_count desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
-      
+        filter_params["order"] = "comments_count desc"      
     else
-       filter_params["order"] = "total_votes desc" unless (params[:sub_type] =="All" || params[:sub_type] == "Event")
+       filter_params["order"] = "total_votes desc" 
     end
+    logger.info sort_by_value
     
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
@@ -47,6 +47,7 @@ class ContentsController < ApplicationController
     item_ids = params[:content_search][:item_ids] == "" ? Array.new : params[:content_search][:item_ids].split(",")
     itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1
+    
     sort_by_value = params[:content_search][:sort_by]
     if sort_by_value == "Newest"
       sort_by =   "created_at"
@@ -60,8 +61,7 @@ class ContentsController < ApplicationController
     else
       sort_by =   ""
       order_by_value = ""
-    end
-    
+    end    
     
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
@@ -91,6 +91,18 @@ class ContentsController < ApplicationController
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     filter_params["page"] = params[:page] if params[:page].present?
+    
+    sort_by_value = params[:sort_by]
+    if sort_by_value == "Newest"
+     param_values["order"] = "created_at desc" 
+    elsif sort_by_value == "Votes"
+      param_values["order"] = "total_votes desc" 
+    elsif sort_by_value == "Most Comments"
+      param_values["order"] = "comments_count desc"       
+    else
+       filter_params["order"] = "total_votes desc" 
+    end
+  
     @contents = Content.filter(filter_params)
     respond_to do |format|
       format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
