@@ -1,16 +1,20 @@
-<div class="Blockheading">
-         <div class="Headingtext">Add <%= @follow_types.first %> to your profile</div>
-  <!--  <span class="txt_normal">[Cars that you own, had or following it]</span>-->
-          <div class="Searchform">
-            <input name="search" type="text" placeholder="Search <%= params[:follow]%>" id="search_car"/>
-            <input name="" type="button" class="Searchbut">
-            <%=select_tag "types",
-                  options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], ["Follow this car", "follower"]]), :class=>"float_rgt1" %>
-            
-            <!--<a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="images/icon_search_gray.png"/></a>-->
-          </div>
+<div class="ui-widget Blockheading">
+  <div class="Headingtext">Add <%= @follow_types.first %> to your profile</div>
+  <div class="Searchform">
+     <input type="text" placeholder="Search <%= params[:follow]%>" id="search_item" /> 
+     <input name="" type="button" class="Searchbut">
+    
+     <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
+       <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
+                                                     ["Follow this car", "follower"]]) %>
+       <%= f.hidden_field :followable_id %>
+       <%= f.hidden_field :followable_type %>               
+     <%end%>
+  </div>
+  <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
 </div>
-
+ 
+ 
 <div class="Searchlisting" style="clear:both;">
   <% items.each do |follow| %>
     <% unless follow.content?(follow.followable_type) %>

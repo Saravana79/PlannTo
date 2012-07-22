@@ -12,7 +12,6 @@
 //= require jquery.remotipart
 //= require_self
 
-
 $(document).ready(function() { 
   $('a.fbpopup').click(function(e) {
     var width = 600, height = 400;
@@ -41,6 +40,17 @@ $(document).ready(function() {
     });
   });
   
+ 
+  $( "#search_item" ).autocomplete({
+			source: "/search/autocomplete_items",
+			minLength: 2,
+			select: function( event, ui ) {
+			  $('#follow_followable_id').val(ui.item.id);
+			  $('#follow_followable_type').val(ui.item.type);
+			  $('.follow_form').submit();
+			}	 
+	});
+ 
 });
 
 
