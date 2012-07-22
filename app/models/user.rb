@@ -184,6 +184,10 @@ class User < ActiveRecord::Base
     graph_api.get_connections("me", "friends")
   end
   
+  def follow_by_type(obj, type)
+    self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
+  end
+  
   private
 
   def populate_username

@@ -32,6 +32,8 @@ class Follow < ActiveRecord::Base
     Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
   end
   
+  
+  
   #TODO this is not so good. but current implementation of follow forces to do this
   def content?(type)
     ['Apps', 'Accessories'].include?(type)
