@@ -16,10 +16,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
       @invitation.accept(resource) unless @invitation.blank?
       if resource.active_for_authentication?
         sign_in(resource_name, resource)
-        redirect_to @item.get_url || root_url, notice: "Successfully registered"
+        redirect_to @item.get_url || mobiles_url, notice: "Successfully registered"
       else
         expire_session_data_after_sign_in!
-        redirect_to @item.get_url || root_url, notice: "Successfully registered"
+        redirect_to @item.get_url || mobiles_url, notice: "Successfully registered"
       end
     else
       clean_up_passwords resource
