@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
   belongs_to :invitation
   belongs_to :facebook
   has_many :field_values
+  has_many :flagged_contents, :class_name => 'Flag', :foreign_key => 'flagged_by'
+  has_many :verified_contents, :class_name => 'Flag', :foreign_key => 'verified_by'
   #has_attached_file :uploaded_image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
   
   has_attached_file :avatar, 

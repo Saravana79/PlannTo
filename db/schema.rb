@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120715140056) do
+ActiveRecord::Schema.define(:version => 20120723162538) do
 
   create_table "answer_contents", :force => true do |t|
     t.integer "question_content_id"
@@ -199,9 +199,9 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
   end
 
   create_table "contents", :force => true do |t|
-    t.string   "title",       :limit => 200
+    t.string   "title",          :limit => 200
     t.text     "description"
-    t.string   "type",                       :null => false
+    t.string   "type",                          :null => false
     t.integer  "created_by"
     t.integer  "updated_by"
     t.integer  "itemtype_id"
@@ -211,13 +211,18 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     t.string   "sub_type"
     t.boolean  "deleted"
     t.string   "slug"
+    t.integer  "no_of_votes"
+    t.integer  "positive_votes"
+    t.integer  "negative_votes"
+    t.integer  "total_votes"
+    t.integer  "comments_count"
   end
 
   add_index "contents", ["slug"], :name => "index_contents_on_slug"
 
   create_table "contents_guides", :force => true do |t|
     t.integer  "content_id"
-    t.integer  "guides_id"
+    t.integer  "guide_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -269,6 +274,17 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     t.integer  "itemtype_id"
     t.string   "name"
     t.string   "field_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "flags", :force => true do |t|
+    t.integer  "content_id"
+    t.integer  "flagged_by"
+    t.string   "type"
+    t.text     "reason"
+    t.boolean  "verfied"
+    t.integer  "verified_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -707,7 +723,7 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
   add_index "votes", ["voter_id", "voter_type", "voteable_id", "voteable_type"], :name => "fk_one_vote_per_user_per_entity", :unique => true
   add_index "votes", ["voter_id", "voter_type"], :name => "index_votes_on_voter_id_and_voter_type"
 
-  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
+  create_view "view_answer_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`answer_contents`.`question_content_id` AS `question_content_id`,`answer_contents`.`format` AS `format`,`answer_contents`.`mark_as_answer` AS `mark_as_answer` from (`contents` join `answer_contents`) where (`contents`.`id` = `answer_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -721,12 +737,17 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :sub_type
     v.column :deleted
     v.column :slug
+    v.column :no_of_votes
+    v.column :positive_votes
+    v.column :negative_votes
+    v.column :total_votes
+    v.column :comments_count
     v.column :question_content_id
     v.column :format
     v.column :mark_as_answer
   end
 
-  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`field1` AS `field1`,`article_contents`.`field2` AS `field2`,`article_contents`.`field3` AS `field3`,`article_contents`.`field4` AS `field4`,`article_contents`.`video` AS `video` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
+  create_view "view_article_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`article_contents`.`url` AS `url`,`article_contents`.`thumbnail` AS `thumbnail`,`article_contents`.`field1` AS `field1`,`article_contents`.`field2` AS `field2`,`article_contents`.`field3` AS `field3`,`article_contents`.`field4` AS `field4`,`article_contents`.`video` AS `video` from (`contents` join `article_contents`) where (`contents`.`id` = `article_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -740,6 +761,11 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :sub_type
     v.column :deleted
     v.column :slug
+    v.column :no_of_votes
+    v.column :positive_votes
+    v.column :negative_votes
+    v.column :total_votes
+    v.column :comments_count
     v.column :url
     v.column :thumbnail
     v.column :field1
@@ -766,7 +792,7 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :location
   end
 
-  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
+  create_view "view_image_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`image_contents`.`image_content_file_name` AS `image_content_file_name`,`image_contents`.`image_content_content_type` AS `image_content_content_type`,`image_contents`.`image_content_file_size` AS `image_content_file_size`,`image_contents`.`image_content_updated_at` AS `image_content_updated_at` from (`contents` join `image_contents`) where (`contents`.`id` = `image_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -780,6 +806,11 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :sub_type
     v.column :deleted
     v.column :slug
+    v.column :no_of_votes
+    v.column :positive_votes
+    v.column :negative_votes
+    v.column :total_votes
+    v.column :comments_count
     v.column :image_content_file_name
     v.column :image_content_content_type
     v.column :image_content_file_size
@@ -800,7 +831,7 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :field1
   end
 
-  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
+  create_view "view_question_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`question_contents`.`format` AS `format`,`question_contents`.`is_answered` AS `is_answered` from (`contents` join `question_contents`) where (`contents`.`id` = `question_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -814,6 +845,11 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :sub_type
     v.column :deleted
     v.column :slug
+    v.column :no_of_votes
+    v.column :positive_votes
+    v.column :negative_votes
+    v.column :total_votes
+    v.column :comments_count
     v.column :format
     v.column :is_answered
   end
@@ -823,7 +859,7 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :points
   end
 
-  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
+  create_view "view_review_contents", "select `contents`.`id` AS `id`,`contents`.`title` AS `title`,`contents`.`description` AS `description`,`contents`.`type` AS `type`,`contents`.`created_by` AS `created_by`,`contents`.`updated_by` AS `updated_by`,`contents`.`itemtype_id` AS `itemtype_id`,`contents`.`created_at` AS `created_at`,`contents`.`updated_at` AS `updated_at`,`contents`.`ip_address` AS `ip_address`,`contents`.`sub_type` AS `sub_type`,`contents`.`deleted` AS `deleted`,`contents`.`slug` AS `slug`,`contents`.`no_of_votes` AS `no_of_votes`,`contents`.`positive_votes` AS `positive_votes`,`contents`.`negative_votes` AS `negative_votes`,`contents`.`total_votes` AS `total_votes`,`contents`.`comments_count` AS `comments_count`,`review_contents`.`rating` AS `rating`,`review_contents`.`recommend_this` AS `recommend_this`,`review_contents`.`pros` AS `pros`,`review_contents`.`cons` AS `cons` from (`contents` join `review_contents`) where (`contents`.`id` = `review_contents`.`id`)", :force => true do |v|
     v.column :id
     v.column :title
     v.column :description
@@ -837,6 +873,11 @@ ActiveRecord::Schema.define(:version => 20120715140056) do
     v.column :sub_type
     v.column :deleted
     v.column :slug
+    v.column :no_of_votes
+    v.column :positive_votes
+    v.column :negative_votes
+    v.column :total_votes
+    v.column :comments_count
     v.column :rating
     v.column :recommend_this
     v.column :pros

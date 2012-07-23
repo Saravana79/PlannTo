@@ -21,6 +21,7 @@ class Content < ActiveRecord::Base
   has_one :content_photo
   accepts_nested_attributes_for :content_photo, :allow_destroy => true
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
+  has_many :flags
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true
