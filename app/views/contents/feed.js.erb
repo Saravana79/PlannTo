@@ -1,6 +1,6 @@
 element= jQuery('#content_next')
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
-$("#contentsList").append('<%=escape_javascript(contents_string.html_safe) %>');
+$("#contentsList").append("<%=escape_javascript(contents_string.html_safe) %>");
 element.remove();
 running=false;
 $("#filter_page_no").val("<%=@contents.current_page+ 1%>");
