@@ -61,6 +61,8 @@ input {
     min-height: 18px;
 }
 
+a img {border: none; }
+
 /* Header */
 .header {
     width: 1000px;
