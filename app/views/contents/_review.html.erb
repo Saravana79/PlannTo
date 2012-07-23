@@ -36,11 +36,7 @@
       <li class="subContentGap float_lft"><%=link_to "Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
-       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-       <li class="subContentGap float_lft"> Guide:
-        <%= select_tag("content_guide_#{content.id}", options_from_collection_for_select(Guide.all,"id","name",content.guides.collect { |u| u.id}),:include_blank => true, :class => 'content_guide','data-content' => "#{content.id}",:multiple => true ) %>
-
-       </li>
+        <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
       <%end%>
     </ul>
   </div>
