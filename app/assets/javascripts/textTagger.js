@@ -100,15 +100,15 @@ $(document).ready(function(){
         // }
         // self._renderItem(ul, item, -1);
         };
-/
+
+        if (settings.has_parent == false){
            fieldId = "#" + fieldId;
         }
-        if (settings.preLoaded == false){
         $( "" + fieldId ).autocomplete({
             minLength: 0,
             format: "js",
             source: function( request, response )
-            {            	
+            {
             $.ajax(
             {
                 url: settings.url,
@@ -132,7 +132,6 @@ $(document).ready(function(){
                     }));
                 }
                 });
-              
             },
             focus: function( event, ui ) {
             //$( "#project" ).val( ui.item.label );
@@ -149,9 +148,6 @@ $(document).ready(function(){
             return false;
             }
             })
-            
-             }
-          
             if ($( "" + fieldId ).index() != -1) {
         $( "" + fieldId ).data("autocomplete")._renderItem = function(ul, item, index) {
             // if (index == -1) {
