@@ -43,6 +43,7 @@
         <li class="subContentGap float_lft"><%=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
         <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+        <%= render :partial  => 'contents/guide', :locals => {:content => content} %>        
       <%end%>
     </ul>
   </div>
