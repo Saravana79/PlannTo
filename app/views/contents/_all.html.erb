@@ -161,7 +161,7 @@
         if ($("#content_search_search").val().toString() == ""){
         $.ajax(
         {
-          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>",
+          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
           type: "get",
           dataType: "script",
           success    : function(data)

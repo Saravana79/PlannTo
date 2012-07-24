@@ -33,7 +33,7 @@ class ContentsController < ApplicationController
     elsif sort_by_value == "Most Comments"
         filter_params["order"] = "comments_count desc"      
     else
-       filter_params["order"] = "total_votes desc" 
+       filter_params["order"] = "created_at desc" 
     end
     logger.info sort_by_value
     
@@ -59,8 +59,8 @@ class ContentsController < ApplicationController
       sort_by = "comments_count"
       order_by_value = "desc"
     else
-      sort_by =   ""
-      order_by_value = ""
+      sort_by =   "created_at"
+      order_by_value = "desc"
     end    
     
     search_list = Sunspot.search(Content ) do
@@ -94,13 +94,13 @@ class ContentsController < ApplicationController
     
     sort_by_value = params[:sort_by]
     if sort_by_value == "Newest"
-     param_values["order"] = "created_at desc" 
+     filter_params["order"] = "created_at desc" 
     elsif sort_by_value == "Votes"
-      param_values["order"] = "total_votes desc" 
+      filter_params["order"] = "total_votes desc" 
     elsif sort_by_value == "Most Comments"
-      param_values["order"] = "comments_count desc"       
+      filter_params["order"] = "comments_count desc"       
     else
-       filter_params["order"] = "total_votes desc" 
+       filter_params["order"] = "created_at desc" 
     end
   
     @contents = Content.filter(filter_params)
