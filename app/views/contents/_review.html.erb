@@ -16,7 +16,7 @@
 							starHalf   : 'assets/star-half.png',
 							half       : true
 							starOn: 'assets/star-on.png',
-							start: <%= "#{rating}"%>
+							start: <%= "#{rating.to_f.round(1)}"%>
 									});
 						</script>
 						<%end%>
