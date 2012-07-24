@@ -1,5 +1,6 @@
        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
  <li class="subContentGap float_lft"> Guide:
-        <%= select_tag("content_guide_#{content.id}", options_from_collection_for_select(Guide.all,"id","name",content.guides.collect { |u| u.id}),:include_blank => true, :class => 'content_guide','data-content' => "#{content.id}",:multiple => true ) %>
+ 	<!-- for now comments as there is design issue, once design is ready we can uncomment it -->
+        <%#= select_tag("content_guide_#{content.id}", options_from_collection_for_select(Guide.all,"id","name",content.guides.collect { |u| u.id}),:include_blank => true, :class => 'content_guide','data-content' => "#{content.id}",:multiple => true ) %>
 
   </li>
