@@ -38,8 +38,8 @@
         .Dontsignup
           Do you have an account. 
           =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"
-      = render 'shared/show_hide_login_form', :item => ""
-    = render "shared/signup_popup"
+        = render 'shared/show_hide_login_form', :item => ""
+      = render "shared/signup_popup"
     #maincontainer.maincontainerCss
       .breadcrumpbtnDiv
         = yield
