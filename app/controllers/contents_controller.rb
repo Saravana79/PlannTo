@@ -105,7 +105,10 @@ class ContentsController < ApplicationController
   
     @contents = Content.filter(filter_params)
     respond_to do |format|
-      format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
+      format.js { 
+      render "contents/filter"
+      #render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }
+      }
     end
   end
 
