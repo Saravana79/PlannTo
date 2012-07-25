@@ -37,9 +37,8 @@
         = render "/shared/signup_dialog"
         .Dontsignup
           Do you have an account. 
-          =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"
-        = render 'shared/show_hide_login_form', :item => ""
-      = render "shared/signup_popup"
+          =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"        
+        = render "shared/signup_popup"
     #maincontainer.maincontainerCss
       .breadcrumpbtnDiv
         = yield
@@ -62,7 +61,7 @@
             = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();"
             
       = render("shared/google_analytics") if Rails.env.production?
- 
+      = render 'shared/show_hide_login_form', :item => "" 
     - unless user_signed_in?
       :javascript
         $("div.rate_content a").click(function(e){
