@@ -5,11 +5,11 @@ class ContentsController < ApplicationController
   #layout :false
   include FollowMethods
   def feed
-    
+
     @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
 
     logger.error("slice params " + params.slice(:items, :type, :order, :limit, :page).to_s)
-    
+
     respond_to do |format|
       format.html { render "feed", :layout =>false, :locals => {:params => params} }
       format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
@@ -17,37 +17,41 @@ class ContentsController < ApplicationController
   end
 
   def filter
- 
+
     if params[:sub_type] =="All"
       sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
     else
       sub_type = params[:sub_type].split(",")
     end
     filter_params = {"sub_type" => sub_type}
-    filter_params["order"] = "total_votes desc" 
-     sort_by_value = params[:sort_by]
+    filter_params["order"] = "total_votes desc"
+    sort_by_value = params[:sort_by]
     if sort_by_value == "Newest"
-     filter_params["order"] = "created_at desc" 
+      filter_params["order"] = "created_at desc"
     elsif sort_by_value == "Votes"
-      filter_params["order"] = "total_votes desc" 
+      filter_params["order"] = "total_votes desc"
     elsif sort_by_value == "Most Comments"
-        filter_params["order"] = "comments_count desc"      
+      filter_params["order"] = "comments_count desc"
     else
-       filter_params["order"] = "created_at desc" 
+      if params[:sub_type] =="All"
+        filter_params["order"] = "created_at desc"
+      else
+        filter_params["order"] = "total_votes desc"
+      end
     end
     logger.info sort_by_value
-    
+
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     @contents = Content.filter(filter_params)
   end
-  
+
   def search_contents
     sub_type = params[:content_search][:sub_type]== "All" ? Array.new : params[:content_search][:sub_type].split(",")
     item_ids = params[:content_search][:item_ids] == "" ? Array.new : params[:content_search][:item_ids].split(",")
     itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1
-    
+
     sort_by_value = params[:content_search][:sort_by]
     if sort_by_value == "Newest"
       sort_by =   "created_at"
@@ -59,24 +63,28 @@ class ContentsController < ApplicationController
       sort_by = "comments_count"
       order_by_value = "desc"
     else
-      sort_by =   "created_at"
       order_by_value = "desc"
-    end    
-    
+      if params[:sub_type] =="All"
+        sort_by =   "created_at"
+      else
+        sort_by =   "total_votes"
+      end
+    end
+
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
       with :sub_type, sub_type if sub_type.size > 0
       with :item_ids, item_ids if item_ids.size > 0
-      with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0 
-   #    keywords "", :fields => :name
+      with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0
+      #    keywords "", :fields => :name
       # keywords "", :fields => :description
-       #:fields =>(:name => 2.0, :description)
-     order_by sort_by.to_sym, order_by_value.to_sym unless sort_by == "" 
-     paginate(:page => page, :per_page => 10 )
-     end
-     @contents = search_list.results
-     
-    # render "contents/filter"
+      #:fields =>(:name => 2.0, :description)
+      order_by sort_by.to_sym, order_by_value.to_sym unless sort_by == ""
+      paginate(:page => page, :per_page => 10 )
+    end
+    @contents = search_list.results
+
+  # render "contents/filter"
   end
 
   def feeds
@@ -91,22 +99,26 @@ class ContentsController < ApplicationController
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     filter_params["page"] = params[:page] if params[:page].present?
-    
+
     sort_by_value = params[:sort_by]
     if sort_by_value == "Newest"
-     filter_params["order"] = "created_at desc" 
+      filter_params["order"] = "created_at desc"
     elsif sort_by_value == "Votes"
-      filter_params["order"] = "total_votes desc" 
+      filter_params["order"] = "total_votes desc"
     elsif sort_by_value == "Most Comments"
-      filter_params["order"] = "comments_count desc"       
+      filter_params["order"] = "comments_count desc"
     else
-       filter_params["order"] = "created_at desc" 
+      if params[:sub_type] =="All"
+        filter_params["order"] = "created_at desc"
+      else
+        filter_params["order"] = "total_votes desc"
+      end
     end
-  
+
     @contents = Content.filter(filter_params)
     respond_to do |format|
-      format.js { 
-      render "contents/filter"
+      format.js {
+        render "contents/filter"
       #render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }
       }
     end
@@ -123,7 +135,7 @@ class ContentsController < ApplicationController
     @item = Item.find(params[:default_item_id])
     @content = PlanntoContent.new params[:content]
     @content.field1 = params[:type]
-		@content.user = current_user	
+    @content.user = current_user
     @content.save_with_items!(params[:item_id])
   end
 
@@ -153,24 +165,25 @@ class ContentsController < ApplicationController
 
   def destroy
     get_item_object
-    #@item.destroy
+  #@item.destroy
   end
 
   def update_guide
     @content = Content.find params[:content]
     guide_ids = params[:guide].split ";"
     guides = []
-    guide_ids.each do |g| 
-      guide = Guide.find g.to_i 
+    guide_ids.each do |g|
+      guide = Guide.find g.to_i
       guides << guide
-    end  
+    end
     @content.guides = guides
     respond_to do |format|
-        format.js 
-      end  
-  end  
+      format.js
+    end
+  end
 
   private
+
   def get_item_object
     @item = Content.find(params[:id])
   end
