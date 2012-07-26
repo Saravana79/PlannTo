@@ -7,7 +7,11 @@
  
 		<meta name="description" content="">
 		<%= csrf_meta_tags%>
-
+		<%= stylesheet_link_tag 'application'%>
+    <%= stylesheet_link_tag '/stylesheets/plannto.css'%>
+    <%= stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"%>
+    <%= stylesheet_link_tag "/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" %>
+	<%= javascript_include_tag 'application'%>
     <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>		
 		<style type="text/css">
@@ -52,7 +56,7 @@
     <div  class="header_midder_box" >
       <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1" onload="resizeIframe(this);"></iframe>
     </div>  
-   
+   <%= render "shared/signup_popup"%>
 </body>
 
 <script language="javascript" type="text/javascript">
@@ -79,6 +83,19 @@
       }
    //obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';                        
  }
+ 
+ 
+   <%unless user_signed_in?%>
+        $("div.rate_content a").click(function(e){
+          if (login_flag != true){
+            openLoginPopup("#" +$(this).attr('id'), "click");
+            return false
+          }
+        })
+        
+  <%end%>
+  
+ 
  </script>
 
  
