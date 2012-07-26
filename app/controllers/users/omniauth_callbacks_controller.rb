@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
- 
+  layout "product"
   
   def facebook
     auth = request.env["omniauth.auth"]

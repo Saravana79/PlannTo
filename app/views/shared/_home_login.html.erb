@@ -1,4 +1,4 @@
-<div id="Loginpoup">
+<div id="Loginpoup" style="height:440px;">
 <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
   <%= render "shared/login_fields", {:f => f} %> 
 <% end %>

@@ -1,9 +1,9 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-
+  layout "product"
   def new
     @invitation = Invitation.find_by_token(params[:token])
     build_resource
-    resource.email = @invitation.email
+    resource.email = @invitation.email unless @invitation.nil?
   end
 
   def create

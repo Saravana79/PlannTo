@@ -1,7 +1,7 @@
-<div class="Popuptitlebar" sytle="display:none;">
+<div class="Popuptitlebar">
 <span class="Popuptitle"><center> <h1>Sign In</h1> </center></span>
 </div>
-<div class="Popupmiddercontent">
+<div class="Popupmiddercontent" >
 <div class="Popupfacebook">
 <p>Sign in to PlannTo using Facebook</p>
 <div class="FaceImg">
@@ -13,15 +13,15 @@
    <div class="Popupinputblock">
                 <label>Email</label>
                 <span class="Textinput">
-                  <%= f.text_field :email,:size =>"25" %>
+                  <%= f.text_field :email,:size =>"30" %>
                	 
                   </span>
             </div>
             
        <div class="Popupinputblock">
-                <label>Password</label>
+                <label></label>Password<span class="Forgotpassword"><%= link_to "forgot password?",new_password_path(:user) %></a></span>
                 <span class="Textinput">
-                <%= f.password_field :password,:size =>"25" %>
+                <%= f.password_field :password,:size =>"30" %>
                	
          </span>
             </div>
@@ -31,10 +31,9 @@
         <div class="Rememberme">Remember me</div>
          <div><%= f.check_box :remember_me %> </div>
          </div>
+        <div class="Bluesubmit"><%= f.submit "Sign In" %> </div>             
          
-         <div class="Bluesubmit"><%= f.submit "Sign In" %> </div>           
          
-         <div class="Forgotpassword"><%= link_to "forgot password?",new_password_path(:user) %></a></div>
 
 </div>
 

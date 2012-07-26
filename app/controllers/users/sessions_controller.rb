@@ -1,4 +1,5 @@
 class Users::SessionsController < Devise::SessionsController
+  layout "product"
   skip_before_filter :check_authentication, :store_session_url
   skip_before_filter :facebook_friends
   skip_before_filter :require_no_authentication, :only => [ :new, :create ] #, :if => request.xhr?
