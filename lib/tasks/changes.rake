@@ -1,7 +1,7 @@
 namespace :plannto do
- 
+
   desc "load article categories"
-   
+
   task :load_article_categories => :environment do
     ArticleCategory.delete_all
 
@@ -60,7 +60,6 @@ namespace :plannto do
     ArticleCategory.create(:name => "Event", :itemtype_id => itemtype.id)
     ArticleCategory.create(:name => "HowTo/Guide", :itemtype_id => itemtype.id)
 
-  
   end
 
   desc "load bookmark article categories"
@@ -82,5 +81,23 @@ namespace :plannto do
     ArticleCategory.create(:name => "Books", :itemtype_id => 0)
   end
 
+  desc "load content itemtype relations"
+
+  task :load_content_itemtype_relations => :environment do
+  ContentItemtypeRelation.destroy_all
+    contents = Content.all
+    contents.each do |content|
+      item_ids = ContentItemRelation.where(:content_id => content.id).collect(&:item_id)
+      itemtype_ids = Array.new
+      item_ids.each do |item_id|
+        item = Item.find(item_id)
+        itemtype_ids << content.get_itemtype(item)
+      end
+      itemtype_ids.uniq.each do |itemtype_id|
+        ContentItemtypeRelation.create(:itemtype_id => itemtype_id, :content_id => content.id)
+      end
+    end
+
+  end
 
 end

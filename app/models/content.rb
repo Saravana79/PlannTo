@@ -22,6 +22,8 @@ class Content < ActiveRecord::Base
   accepts_nested_attributes_for :content_photo, :allow_destroy => true
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
   has_many :flags
+  has_many :content_itemtype_relations
+  has_many :itemtypes, :through => :content_itemtype_relations
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true
@@ -30,8 +32,9 @@ class Content < ActiveRecord::Base
     integer :total_votes
     integer :comments_count
      time :created_at
-    integer :itemtype_ids,  :multiple => true do |content|
-      content.itemtype_id
+    integer :itemtype_ids,  :multiple => true do 
+      content_itemtype_relations.map {|items| items.itemtype_id}
+      #content.itemtype_id
     end
     integer :item_ids,  :multiple => true do
       item_contents_relations_cache.map {|items| items.item_id}
@@ -78,9 +81,10 @@ class Content < ActiveRecord::Base
         #  scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
      
         all_items = Item.get_related_content_for_items(value)
-        scope.scoped(:conditions => ['id in (?)',all_items])
+        scope.scoped(:conditions => ["#{self.table_name}.id in (?)",all_items])
       when :itemtype_id
-        scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
+        scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id = ?", value )
+      #  scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type
