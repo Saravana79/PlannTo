@@ -33,7 +33,7 @@
       <%= link_to("...more", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
     <% else %>
-        <%if @item.is_a? CarGroup %>
+        <%if @item.is_a? CarGroup || @item.is_a? AttributeTag%>
            <a class="txt_price">Groups</a><br />   
         <%else%>
           <a class="txt_price"><%=@item.type%></a><br />             
