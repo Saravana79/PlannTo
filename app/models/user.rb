@@ -199,6 +199,7 @@ class User < ActiveRecord::Base
   def populate_username
     # Extract email address from Email address provided by user
     user_name = email.split("@")[0]
+    user_name = user_name.gsub(".","_")
 
     #check if the same username is already present in the db
     existing_user_names = User.where("username like ? OR username like ?", "#{user_name}%", "#{user_name}.%")
