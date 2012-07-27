@@ -389,6 +389,8 @@ def get_url()
     "/#{self.name.downcase.pluralize}"
    elsif (self.is_a? CarGroup)
     "/groups/#{self.slug.to_s}"
+   elsif (self.is_a? AttributeTag)
+    "/groups/#{self.slug.to_s}"
    else
     "/#{self.type.downcase.pluralize}/#{self.slug.to_s}"
    end
