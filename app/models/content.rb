@@ -100,13 +100,18 @@ class Content < ActiveRecord::Base
   
 	def save_with_items!(items)
 	 # Content.transaction do
+	   item_type_ids = Array.new
 	    self.save!
       items.split(",").each_with_index do |id, index|
         item = Item.find_by_id(id)
         # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+        item_type_ids << get_itemtype(item)
         self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0        
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
+      end
+      item_type_ids.uniq.each do |id|
+      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
       end
       logger.info "-----------------------------------------"
 
@@ -183,6 +188,7 @@ end
   end
 
   def update_with_items!(params, items)
+    item_type_ids = Array.new
     Content.transaction do
 	    self.update_attributes(params)
       content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
@@ -191,7 +197,13 @@ end
         item = Item.find(id)
         self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+        item_type_ids << get_itemtype(item)
         rel.save!
+      end
+      
+      ContentItemtypeRelation.delete_all(["content_id = ?", self.id])     
+      item_type_ids.uniq.each do |id|
+      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
       end
     end
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","), true)
