@@ -39,10 +39,10 @@ class ContentsController < ApplicationController
         filter_params["order"] = "total_votes desc"
       end
     end
-    logger.info sort_by_value
 
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
+    filter_params["status"] = 1
     @contents = Content.filter(filter_params)
   end
 
@@ -75,6 +75,7 @@ class ContentsController < ApplicationController
       fulltext params[:content_search][:search] , :field => :name
       with :sub_type, sub_type if sub_type.size > 0
       with :item_ids, item_ids if item_ids.size > 0
+      with :status, 1
       with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0
       #    keywords "", :fields => :name
       # keywords "", :fields => :description
@@ -99,6 +100,7 @@ class ContentsController < ApplicationController
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     filter_params["page"] = params[:page] if params[:page].present?
+    filter_params["status"] = 1
 
     sort_by_value = params[:sort_by]
     if sort_by_value == "Newest"
@@ -165,6 +167,7 @@ class ContentsController < ApplicationController
 
   def destroy
     get_item_object
+    @item.update_attribute(:status, Content::DELETE_STATUS)
   #@item.destroy
   end
 

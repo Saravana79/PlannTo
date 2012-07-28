@@ -51,7 +51,7 @@ module ContentsHelper
   
   def render_comments_anchor(item)
     count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{item.id}")
-    comment_count = count.nil? ? item.comments.count : count.split("_")[1]
+    comment_count = count.nil? ? item.comments.where("status = 1").count : count.split("_")[1]
     
     txt= "Comments ( #{comment_count})"
     <<-END

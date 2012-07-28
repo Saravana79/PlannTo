@@ -5,6 +5,8 @@ class Comment < ActiveRecord::Base
   belongs_to :commentable, :polymorphic => true
 
   default_scope :order => 'created_at DESC'
+  
+  DELETE_STATUS = 5
 
   # NOTE: install the acts_as_votable plugin if you
   # want user to vote on the quality of comments.
@@ -19,12 +21,24 @@ class Comment < ActiveRecord::Base
 
   def update_cache_comments_count
     cached_value = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.commentable_id}")
+    comments_count = self.commentable.comments.where("status =1").count
+   
     unless cached_value.nil?
-      value = cached_value.split("_")
-    $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.commentable.id}", "#{value[0]}_#{self.commentable.comments.count}")
+      value = cached_value.split("_")      
+    $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.commentable.id}", "#{value[0]}_#{comments_count}")
     
   end
-  self.commentable.update_attributes(:comments_count => self.commentable.comments.count)
+  self.commentable.update_attributes(:comments_count => comments_count)
 
+  end
+  
+    def set_comment_status(type)
+    status = case type
+    when "create" then 1
+    when "update" then 1
+    else
+    1
+    end
+    return status
   end
 end

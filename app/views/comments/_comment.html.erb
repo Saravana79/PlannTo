@@ -1,4 +1,4 @@
-<div class="subContentDiv_comments comments_bg">
+<div class="subContentDiv_comments comments_bg" id="subContentDiv<%=comment.id%>">
 
 	<div class="float_rgt"><img src="<%= comment.user.get_photo %>" class="userImageSmall"></div>
 	<div class="subContentGap">
@@ -7,7 +7,7 @@
 			<li class="subContentGap float_lft"><a class="txt_gray "><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
+			<li class="subContentGap float_lft"><%=link_to "Delete This",{:controller => "comments", :action => "destroy", :id => comment.id}, :remote => true, :confirm => "Are you sure you want to delete this comment?", :method => :delete, :class => "txt_blue"%></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>				
 		</ul>

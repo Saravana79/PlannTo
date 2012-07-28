@@ -99,5 +99,14 @@ namespace :plannto do
     end
 
   end
+  
+  desc "activate contents"
+
+  task :activate_contents => :environment do
+  contents = Content.all
+  contents.each do |content|
+  content.update_attribute(:status, 1)
+  end
+  end
 
 end

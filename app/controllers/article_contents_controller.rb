@@ -108,6 +108,12 @@ class ArticleContentsController < ApplicationController
     }
     return results
  end
+ 
+ def destroy
+    @content = Content.find(params[:id])
+    @content.update_attribute(:status, Content::DELETE_STATUS)
+  #@item.destroy
+  end
   
   def bmarklet
     #@article_content = ArticleContent.new

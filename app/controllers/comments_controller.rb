@@ -5,6 +5,7 @@ class CommentsController < ApplicationController
     @content= Content.find(params[:content_id])
     @comment = Comment.new(params[:comment])
     @comment.commentable = @content
+    @comment.status = @comment.set_comment_status("create")
     @comment.user = current_user
 
     if @comment.save
@@ -23,8 +24,14 @@ class CommentsController < ApplicationController
     @content= Content.find(params[:content_id])
     @page =  params[:page].blank? ? 1 : params[:page].to_i
     per_page = 5 
-    @previous = (@content.comments.count - per_page * @page )> 0 ? true : false
-    @comments= @content.comments.paginate(:page => @page, :per_page => 5)
+    @previous = (@content.comments.where("status=1").count - per_page * @page )> 0 ? true : false
+    @comments= @content.comments.where("status=1").paginate(:page => @page, :per_page => 5)
     @comments_string = render_to_string :partial => "comments", :locals => { :comments => @comments , :page => @page, :content => @content, :previous  => @previous} 
+  end
+  
+  def destroy
+    @comment = Comment.find(params[:id])
+    @comment.update_attribute(:status, Comment::DELETE_STATUS)
+    
   end
 end

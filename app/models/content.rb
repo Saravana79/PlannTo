@@ -1,19 +1,21 @@
 require 'will_paginate/array'
+
 class Content < ActiveRecord::Base
   #used for content description split.
   WORDCOUNT = 50
-  
+  DELETE_STATUS = 5
+
   acts_as_citier
- # extend FriendlyId
- # friendly_id :title, use: :slugged
-  
-  validates_presence_of :title 
-  validates_presence_of :created_by  
-  
-	belongs_to :user, :foreign_key => 'updated_by'
-	belongs_to :user, :foreign_key => 'created_by'
-	has_many :votes
-	has_many :content_item_relations
+  # extend FriendlyId
+  # friendly_id :title, use: :slugged
+
+  validates_presence_of :title
+  validates_presence_of :created_by
+
+  belongs_to :user, :foreign_key => 'updated_by'
+  belongs_to :user, :foreign_key => 'created_by'
+  has_many :votes
+  has_many :content_item_relations
   has_many :item_contents_relations_cache
   has_many :items, :through => :content_item_relations
   belongs_to :itemtype
@@ -30,21 +32,20 @@ class Content < ActiveRecord::Base
     text :description
     string :sub_type
     integer :total_votes
+    integer :status
     integer :comments_count
-     time :created_at
-    integer :itemtype_ids,  :multiple => true do 
+    time :created_at
+    integer :itemtype_ids,  :multiple => true do
       content_itemtype_relations.map {|items| items.itemtype_id}
-      #content.itemtype_id
+    #content.itemtype_id
     end
     integer :item_ids,  :multiple => true do
       item_contents_relations_cache.map {|items| items.item_id}
     end
   end
-  
-  
-  
+
   def related_items
-    return ContentItemRelation.where('content_id = ?', self.id)  
+    return ContentItemRelation.where('content_id = ?', self.id)
   end
 
   def content_type
@@ -52,6 +53,7 @@ class Content < ActiveRecord::Base
   end
 
   PER_PAGE = 10
+
   def content_vote_count
     result = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")
     if result.nil?
@@ -59,18 +61,17 @@ class Content < ActiveRecord::Base
       count = vote.nil? ? 0 : (vote.vote_count_positive - vote.vote_count_negative)
       comment_count = self.comments.nil? ?  0 : self.comments.count
       $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}", "#{count}_#{comment_count}")
-      return count
+    return count
     else
       return result.split("_")[0]
     end
   end
 
-
   def self.filter(options)
-    options ||= {:page => 1, :limit => 10} 
-    options["page"]||=1 
-    options["limit"]||=PER_PAGE 
-    options["order"]||="created_at desc" 
+    options ||= {:page => 1, :limit => 10}
+    options["page"]||=1
+    options["limit"]||=PER_PAGE
+    options["order"]||="created_at desc"
     scope=options.inject(self) do |scope, (key, value)|
 
       return scope if value.blank?
@@ -79,7 +80,7 @@ class Content < ActiveRecord::Base
       when :items
         # all_items = Item.get_all_related_items_ids(value)
         #  scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
-     
+
         all_items = Item.get_related_content_for_items(value)
         scope.scoped(:conditions => ["#{self.table_name}.id in (?)",all_items])
       when :itemtype_id
@@ -92,41 +93,54 @@ class Content < ActiveRecord::Base
       when :order
         attribute, order = value.split(" ")
         scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
-     when :user
+      when :user
         scope.scoped(:conditions => ["#{self.table_name}.created_by = ?", value ])
+      when :status      
+        scope.scoped(:conditions => ["#{self.table_name}.status = ?", 1])
       else
-        scope
+      scope
       end
     end
     scope.uniq.paginate(:page => options["page"], :per_page => options["limit"])
-  
-  end
-  
-	def save_with_items!(items)
-	 # Content.transaction do
-	   item_type_ids = Array.new
-	    self.save!
-      items.split(",").each_with_index do |id, index|
-        item = Item.find_by_id(id)
-        # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
-        item_type_ids << get_itemtype(item)
-        self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0        
-        rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
-        rel.save!
-      end
-      item_type_ids.uniq.each do |id|
-      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
-      end
-      logger.info "-----------------------------------------"
 
-      #Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
-      self.update_item_contents_relations_cache(self)
-      
-    #end
+  end
+
+  def get_content_status(type)
+    status = case type
+    when "create" then 1
+    when "update" then 1
+    else
+    1
+    end
+    return status
+  end
+
+  def save_with_items!(items)
+    # Content.transaction do
+    item_type_ids = Array.new
+    self.status = get_content_status("create")
+    self.save!
+    items.split(",").each_with_index do |id, index|
+      item = Item.find_by_id(id)
+      # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+      item_type_ids << get_itemtype(item)
+      self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
+      rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+      rel.save!
+    end
+    item_type_ids.uniq.each do |id|
+      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
+    end
+    logger.info "-----------------------------------------"
+
+    #Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
+    self.update_item_contents_relations_cache(self)
+
+  #end
   end
 
   def update_item_contents_relations_cache(content)
-     item_ids = Array.new
+    item_ids = Array.new
     itemtype_id = Array.new
     car_group_item_ids = Array.new
     manufacturer_and_cargroup_item_ids = Array.new
@@ -134,67 +148,68 @@ class Content < ActiveRecord::Base
     attribute_item_ids = Array.new
     items = content.items
     items.each do |item|
-      #item = Item.find(item)
+    #item = Item.find(item)
       if item.type == "AttributeTag"
-        attribute_item_ids << item.id
+      attribute_item_ids << item.id
       elsif item.type == "Manufacturer"
-        #manufacturer_item_ids = item.itemrelationships.collect(&:relateditem_id)
-        manufacturer_and_cargroup_item_ids << item.id
+      #manufacturer_item_ids = item.itemrelationships.collect(&:relateditem_id)
+      manufacturer_and_cargroup_item_ids << item.id
       elsif item.type == "CarGroup"
-        #logger.info item.itemrelationships.collect(&:relateditem_id)
-        #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
-        manufacturer_and_cargroup_item_ids << item.id
+      #logger.info item.itemrelationships.collect(&:relateditem_id)
+      #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
+      manufacturer_and_cargroup_item_ids << item.id
       elsif item.type == "ItemtypeTag"
       #  itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
       else
-        item_ids << item.id
+      item_ids << item.id
       end
     end
-  if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0 || item_ids.size !=0)
+    if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0 || item_ids.size !=0)
 
-    sql=    "select * from items where "
+      sql=    "select * from items where "
 
-   # sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
-    
-   #if itemtype_id.size != 0
-   #   sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
-   # end
+      # sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
 
-    sql += "  id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+      #if itemtype_id.size != 0
+      #   sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
+      # end
 
-    if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
-      sql += " or " unless item_ids.size == 0 
-      sql += " id in ( "
-      sql += "  select item_id from itemrelationships where " unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
-      sql += " relateditem_id in (#{manufacturer_and_cargroup_item_ids.join(",")}) "  unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
-      sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
-      sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")}))"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
-      sql += ")"
+      sql += "  id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+
+      if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
+        sql += " or " unless item_ids.size == 0
+        sql += " id in ( "
+        sql += "  select item_id from itemrelationships where " unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
+        sql += " relateditem_id in (#{manufacturer_and_cargroup_item_ids.join(",")}) "  unless manufacturer_and_cargroup_item_ids.size == 0  #/* needs to be added only when manufacturer or car group is associated to it */
+        sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
+        sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")}))"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
+        sql += ")"
+      end
+      #if itemtype_id.size != 0
+      #  sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
+      #end
+      relateditems=Item.find_by_sql(sql)
+      self.save_content_relations_cache(relateditems.collect(&:id))
     end
-    #if itemtype_id.size != 0
-    #  sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)  
-    #end
-    relateditems=Item.find_by_sql(sql)
-    self.save_content_relations_cache(relateditems.collect(&:id))
   end
-end
 
   def save_content_relations_cache(related_items)
     new_records = Array.new
-      related_items.each do |item|
+    related_items.each do |item|
       new_records << {:item_id => item, :content_id => self.id}
-      end
+    end
     ItemContentsRelationsCache.create(new_records)
   end
 
   def get_itemtype(item)
-      item.get_base_itemtypeid()
+    item.get_base_itemtypeid()
   end
 
   def update_with_items!(params, items)
     item_type_ids = Array.new
     Content.transaction do
-	    self.update_attributes(params)
+      self.status = get_content_status("update")
+      self.update_attributes(params)
       content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
       content_item_relations.destroy_all
       items.split(",").each_with_index do |id, index|
@@ -204,10 +219,10 @@ end
         item_type_ids << get_itemtype(item)
         rel.save!
       end
-      
-      ContentItemtypeRelation.delete_all(["content_id = ?", self.id])     
+
+      ContentItemtypeRelation.delete_all(["content_id = ?", self.id])
       item_type_ids.uniq.each do |id|
-      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
+        ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
       end
     end
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","), true)
@@ -225,7 +240,7 @@ end
     return true
   end
 
-	def is_review_content?
+  def is_review_content?
     self.type == "ReviewContent"
   end
 
@@ -255,9 +270,9 @@ end
 
   def is_question_content?
     self.type == "QuestionContent"
-  end  
+  end
 
-	acts_as_rateable
+  acts_as_rateable
   acts_as_voteable
   acts_as_commentable
 
