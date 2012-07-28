@@ -434,7 +434,7 @@ if ($("#article_content_sub_type").val() == ""){
     }
 <%end%>
 
-  ////////////////////////////////////////////////////////////
+
   function hideAllOptionalFieldsArticleSubmit(){
     $("#<%=@form_id%> #<%=@field1_id%>").val('');
     $("#<%=@form_id%> #<%=@field2_id%>").val('');
@@ -562,17 +562,19 @@ if ($("#article_content_sub_type").val() == ""){
     var score = 0;
 <%else%>
   <%if @article_content.is_review?%>
-      var score = '<%=@article_content.field1%>';
+      var score = '<%=@article_content.field1.to_f.round(1)%>';
       <%else%>
          var score = 0;
   <%end%>
 <%end%>
+
+
+  $(document).ready(function(){
+  	
   $('div#<%=@productReviewRatingField%>').raty({
     starOff:  'assets/star-off.png',
     starHalf   : 'assets/star-half.png',
     half       : true,
-    //precision  : true,
-    // size       : 24,
     starOn: 'assets/star-on.png',
     start: score,
     width:  '200px',
@@ -580,8 +582,6 @@ if ($("#article_content_sub_type").val() == ""){
       $("#<%=@form_id%> #<%=@field1_id%>").val("" + score);
     }
   });
-
-  $(document).ready(function(){
   	
   	//onfocus logic
   	

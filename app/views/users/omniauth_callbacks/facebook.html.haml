@@ -1,0 +1,12 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title= yield(:title) + "PlannTo"
+  %body    
+    :javascript
+      // to close the facebook popup on callback 
+      if(window.opener) {
+        window.opener.location.href = "#{mobiles_path}"
+        window.close()
+      }    

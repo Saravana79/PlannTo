@@ -12,6 +12,11 @@ class VoteCount < ActiveRecord::Base
 
   def update_cache
     count = self.vote_count_positive - self.vote_count_negative
+    if self.voteable_type == "Content"
+      #update content table
+      self.voteable.update_attributes(:no_of_votes => self.voteable.votes.count, :positive_votes => self.vote_count_positive, :negative_votes => self.vote_count_negative, :total_votes => count, :comments_count => self.comment_count)
+    end
+    
     redis_key_prefix = get_cache_prefix
     $redis.set("#{redis_key_prefix}#{self.voteable_id}", count)
   end

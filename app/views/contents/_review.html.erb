@@ -1,10 +1,10 @@
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
-    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
+    <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
     </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
-    <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
+    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
     <div><a class="txt_brown"><%= content.user.name  %> reviewed <%=get_anchor_name_link(content)%> <a class="txt_brown">- <%= time_ago_format(content) %> ago. </a></div>
     <div class="subContentGap">
     	<%= raw get_rating_or_category_contents(content)%>
@@ -14,17 +14,16 @@
 							$('div#content_show_<%= content.id%>').raty({
 							starOff:  'assets/star-off.png',
 							starHalf   : 'assets/star-half.png',
-							half       : true,
-							//precision  : true,
-							// size       : 24,
+							half       : true
 							starOn: 'assets/star-on.png',
-							start: <%= "#{rating}"%>
+							start: <%= "#{rating.to_f.round(1)}"%>
 									});
 						</script>
 						<%end%>
     </div>
-    <div class="subContentGap">	<a class="titlePro">Pro:</a><a class="txt_black_description"><%#= content.pros %></a></div>
+   <!-- <div class="subContentGap">	<a class="titlePro">Pro:</a><a class="txt_black_description"><%#= content.pros %></a></div>
     <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%#= content.cons %></a></div>-
+  -->
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
@@ -35,6 +34,7 @@
       <li class="subContentGap float_lft"><%=link_to "Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+        <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
       <%end%>
     </ul>
   </div>

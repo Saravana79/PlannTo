@@ -157,9 +157,9 @@ module ContentsHelper
 
   def get_content_title(content)
     if ((content.is_a?ArticleContent) && (content.url.blank?)) 
-      "<a class='title'>#{content.title }</a>"
+      "<a class='title txt_onhover'>#{content.title }</a>"
     else
-      link_to content.title, external_content_path(content.id) , :class => 'title',:target => "_blank"
+      link_to content.title, external_content_path(content.id) , :class => 'title txt_onhover',:target => "_blank"
     end
 
   end

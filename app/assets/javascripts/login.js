@@ -3,7 +3,6 @@ var login_flag = "";
 var click_type = "";
 
 function openLoginPopup(clickable_link_id, c_type){
-   
     if (login_flag != true){
         plannto_popup_login_id = clickable_link_id;
         click_type = c_type;

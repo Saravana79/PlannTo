@@ -1,11 +1,11 @@
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
-    <img src="<%=content.user.get_photo%>" class="userImageSmall"/>
+    <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
 
   </div>
   <div class="subContentDiv">
-    <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
+    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
     <div><a class="txt_brown_bold"><%= content.user.name  %> asked in <%=get_anchor_name_link(content)%> - <%= pluralize(content.answer_contents.count, 'Answer')%>  - <%= time_ago_format(content) %> ago. </a></div>
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
     <ul class="divCommentsConent">
@@ -19,6 +19,7 @@
         <li class="subContentGap float_lft"><%=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
         <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+        <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
       <%end%>
     </ul>
   </div>

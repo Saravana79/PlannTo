@@ -12,7 +12,18 @@
 
 <%#= link_to "Next Page", feed_contents_path(params), :id => "content_next", :remote => true, :style => "display:none" %>
 <%#= link_to "Next Page", {:controller => "contents", :action => "filter", :page => @contents.current_page + 1}, :id => "content_next", :remote => true, :style => "display:none" %>
-
+<%#= link_to "More...", {:method => "post"}, "data-disable-with" => "Loading...", :id => "content_next", :remote => true%>
   <%# end %>
-<% end  %>
+ <% end  %>
+ <script type="text/javascript">
+ $(document).ready(function(){
+ 	$("#contentSearchForm").bind('submit', function() {   
+  	if ($("#content_search_search").val().toString() != $("#content_search_previous_search_value").val().toString())
+  	{
+  		$("#content_search_previous_search_value").val($("#content_search_search").val())
+  		$("#content_search_page").val(1);
+  	}
+  	});
+ });
+ </script>
 

@@ -1,7 +1,9 @@
 <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
-<div class="Close_dialog" style="display:none;width:43px; 
+<div class="Close_dialog" style="display:none;">
+<div  style="width:43px; 
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
 position:relative; left:296px; text-indent:-9999px; top:-12px;" onclick="$('#sign_up_dialog').dialog('close');$('#dialog-form').dialog('close');"></div>
   <%= render "shared/login_fields", {:f => f} %> 
+</div>
  <%end%>
 

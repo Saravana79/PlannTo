@@ -170,4 +170,5 @@ module ApplicationHelper
   def get_tag_list(item)
     return "<li id='textTaggers#{item.id}' class='taggingmain'><span><a class='txt_tagging' href='#{item.get_url()}' >#{item.name}</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>".html_safe
   end
+ 
 end

@@ -9,6 +9,11 @@ class ReviewContentsController < ApplicationController
 		@reviewcontent.save_with_items!(item_id)
 		@item.add_new_rating @reviewcontent.rating
 
+    respond_to do |format|
+      format.html{ redirect_to :back}
+      format.js
+    end
+    
     #Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_SHARE) unless @reviewcontent.errors.any?
 		#@item.rate_it params['review_content']['rating'],@reviewcontent.user
     #		respond_to do |format|

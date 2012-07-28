@@ -1,7 +1,7 @@
 PlanNto::Application.routes.draw do
- 
-  
+
   get "home/index"
+  resources :follows
   
   devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
   devise_scope :user do
@@ -40,11 +40,12 @@ resources :answer_contents
 
 # match 'accounts/:username', :to => "accounts#index", :as => "accounts"
 
-  
+
 resources :accounts do
     put :update
     member do
       put :change_password
+      get :followers
     end
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
@@ -69,12 +70,19 @@ resources :accounts do
   resources :cars do
         resources :shares
   end
+   
+  match "/contents/update_guide" => 'contents#update_guide'
+
   resources :contents do
   collection do
     get :filter
     get :feed
     get :feeds
+    post :search_contents
   end
+  match "/contents/search" => 'contents#search'
+ 
+  post :search
   resources :comments
     collection do
       get :feed

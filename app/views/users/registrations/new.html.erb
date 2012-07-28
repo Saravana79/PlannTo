@@ -1,7 +1,11 @@
 <%= form_for(resource, :as => :user, :url => user_registration_path ) do |f| %>
      <%= devise_error_messages! %>
-   <%= hidden_field_tag :token,   @invitation.token %>
+     <%= hidden_field_tag :token,   @invitation? @invitation.token : "" %>
+   <div style="height:450px;left:center;width: 50%; margin: 0 auto;">
+   	<div style="width:300px">
    <%= render "/shared/sign_up_fields",{:f => f} %>
+   	</div>
+   </div>
 <% end %>
 
 

@@ -18,11 +18,26 @@ border: 1px solid #999595;
 box-shadow: 0 1px 5px 0 #505050;
 border-image: initial;
 }
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+
+.clear{clear: both;}
 @charset
 "utf-8"
 ;
 /* CSS Document */
-
+/* 
 body {
     background: url(../images/bg_header1.png) repeat-x top;
     margin: 0 auto;
@@ -40,9 +55,10 @@ hr {
 input {
     font: 11px tahoma;
     min-height: 18px;
-}
+}*/
 
 /* Header */
+/* 
 .header {
     width: 1000px;
     height: 102px;
@@ -70,9 +86,9 @@ div.search {
     float: left
 }
 
-.PlanntoBuyBtn {
+.PlanntoBuyBtn {*/
     /*float: right*/
-}
+/*}
 
 .search_txt {
     width: 411px;
@@ -176,9 +192,9 @@ div.search {
     text-align: center;
     background: url(../images/bg_menu.png) no-repeat 0px 7px;
     text-decoration: none;
-}
+}*/
 
-/* Breadcrumbs */
+/* Breadcrumbs *//*
 .alink {
     font: normal 11px tahoma;
     color: #6ca2bc;
@@ -197,13 +213,19 @@ div.search {
     text-decoration: none;
 }
 
+a.link_active {
+    font: normal 11px tahoma;
+    color: #ac5e2d;
+    text-decoration: none;
+}
+
 .grayarrow {
     font: normal 9px tahoma;
     color: #5f5f5f;
     text-decoration: none;
-}
+}*/
 
-/* Icons */
+/* Icons *//* 
 .icon_user {
     width: 32px;
     height: 30px;
@@ -262,19 +284,19 @@ div.search {
     border: solid 0px;
     float: left;
     margin: 12px 0px 0px 3px;
-}
+}*/
 
 /* Button outter Div  */
-div.buttons {
+/* div.buttons {
     width: 280px;
     height: 29px;
     display: block;
-}
+}*/
 
 /* Button Active */
 
 /* enable this after implemting the new button approach */
-
+/*
 .action_btns {
     height: 28px;
     float: left;
@@ -955,7 +977,7 @@ div.buttons {
 /* comment till this line */
 
 /* Button Text */
-.btn_txt {
+/*.btn_txt {
     height: 26px;
     display: block;
     border: solid 0px #000;
@@ -1002,13 +1024,13 @@ div.buttons {
     color: #323232;
     text-decoration: none;
 }
-
-/* include this css style for one line menu - like (I won it) */
+*/
+/* include this css style for one line menu - like (I won it) 
 .line_height {
     line-height: 22px;
-}
+} */
 
-/* Disabled Button */
+/* Disabled Button 
 .action_btns_disable {
     height: 29px;
     float: left;
@@ -1017,9 +1039,9 @@ div.buttons {
     border: solid 1px #d1d1d1;
     line-height: 42px;
     margin-right: 2px;
-}
+}*/
 
-/* product details - Start */
+/* product details - Start 
 
 .breadcrumpbtnDiv {
     width: 1000px;
@@ -1121,9 +1143,9 @@ h1 {
     font: normal 11px/16px tahoma;
     color: #267fd9;
     text-decoration: underline;
-}
+}*/
 
-/* tabs - Review Car | Ask Question | Share a tip */
+/* tabs - Review Car | Ask Question | Share a tip
 
 div.review_tabs {
     border: solid 0px;
@@ -1224,9 +1246,9 @@ textarea1 {
     min-height: 20px;
     padding: 0px 5px 5px 5px;
     margin-top: -5px;
-}
+} */
 
-/* Tab 2 */
+/* Tab 2 
 
 ul.tabs {
     width: 728px;
@@ -1265,7 +1287,7 @@ ul.tabs li:hover {
     margin: 0px 1px 0px 0px;
 }
 
-/* Question & Answers */
+/* Question & Answers 
 
 div.question_answer {
     width: 680px;
@@ -1315,6 +1337,10 @@ span.sortby a:hover {
 }
 
 #link_active {
+    border-bottom: solid 2px #e7d597;
+}
+
+.link_active {
     border-bottom: solid 2px #e7d597;
 }
 
@@ -1472,9 +1498,9 @@ div.rate_content {
     margin-left: 80px;
     margin-top: -10px;
     display: block;
-}
+}*/
 
-/* button style - start */
+/* button style - start 
 .btns {
     width: 250px;
     height: 46px;
@@ -1501,9 +1527,9 @@ div.rate_content {
     text-decoration: none;
     text-indent: 25px;
     margin-bottom: 2px;
-}
+}*/
 
-/* Footer  - Start */
+/* Footer  - Start 
 .footerdiv {
     float: left;
     width: 100%;
@@ -1541,9 +1567,9 @@ div.rate_content {
 
 .padding_lftrgt {
     padding: 0px 3px;
-}
+}*/
 
-/* Related Cars - Start */
+/* Related Cars - Start 
 
 .bg_widgethdr {
     height: 30px;
@@ -1585,9 +1611,9 @@ div.rate_content {
 
 .padding_left10 {
     padding-left: 10px;
-}
+}*/
 
-/* Search Criteria */
+/* Search Criteria 
 
 ul.search_criteria {
     padding: 0;
@@ -1634,9 +1660,9 @@ div.hdr_search {
     text-transform: uppercase;
     border-bottom: solid 1px #ccd4d8;
     background: url(../images/icon_search.png) no-repeat right;
-}
+}*/
 
-/* Search Category */
+/* Search Category 
 div.hdr_Category {
     width: 220px;
     height: 45px;
@@ -1730,9 +1756,9 @@ li.middlebg {
     margin-left: 0px;
     padding: 0px 10px;
     border-radius: 3px
-}
+}*/
 
-/* Search Result -- Start */
+/* Search Result -- Start 
 
 .txt_search_result {
     font: bold 11px tahoma;
@@ -1801,9 +1827,9 @@ li.middlebg {
     padding: 0;
     margin: 0;
     float: right;
-}
+}*/
 
-/* Pagination style */
+/* Pagination style 
 .pagination li {
     float: left;
     padding: 0px 0px;
@@ -1852,9 +1878,9 @@ li.middlebg {
     font: normal 11px tahoma;
     color: #fff;
     padding: 4px 7px;
-}
+}*/
 
-/* Search Result -- Start */
+/* Search Result -- Start 
 .title {
     font: bold 12px tahoma;
     color: #111111;
@@ -1931,9 +1957,9 @@ li.middlebg {
     width: 200px;
     height: 100px;
     padding-right: 10px;
-}
+}*/
 
-/* Popup */
+/* Popup 
 
 .width356 {
     width: 356px;
@@ -1996,9 +2022,9 @@ li.middlebg {
     margin-top: 2px;
     min-width: 75px;
     margin-right: 5px;
-}
+}*/
 
-/* content details */
+/* content details 
 .contenttitle {
     padding-bottom: 3px;
     margin: 0;
@@ -2018,9 +2044,9 @@ li.middlebg {
     width: 160px;
     padding: 25px;
     color: #fff;
-}
+}*/
 
-/* profile */
+/* profile 
 div.profile {
     width: 1000px;
     border: solid 0px;
@@ -2320,9 +2346,9 @@ h2 {
     border-bottom: solid 1px #CCCCCC;
     clear: both;
     padding-top: 10px;
-}
+}*/
 
-/* Spec Page */
+/* Spec Page 
 
 .specificationcontainer 					{ margin:0; padding:20px 0 0px 0;}
 .spacificationdiv							{ margin:0; padding:0;}
@@ -2336,9 +2362,9 @@ h2 {
 .specificationblckdivliempty{list-style:none;  margin:0; padding:5px 0 5px 5px;min-height:10px; }
 
 .specificationblcksublvltxt {list-style:none; margin-left:-10px;display: list-item; line-height:12px; font-size:11px; margin:0; padding:5px 0 5px 5px;  border-right:0px solid #a8cfda;  border-bottom:1px solid #a8cfda;}
+*/
 
-
-/* Compare page */
+/* Compare page 
 
 .comparedivcontainer					{ clear:both; margin:0; padding:0px 0 0 0; border:0px solid #000;}
 .comparedivcontainer .comparetopdiv		{margin:0; padding:0 0 10px 0; border:0px solid #000;}
@@ -2405,9 +2431,9 @@ h2 {
 .btn_followthiscar_icon_selected_small	                        { width:20px; height:21px;background:url(../images/map_icon.png) no-repeat -43px -21px; display:block; float:left;  }
 .btn_followthiscar_icon_selected_small:hover	       		 {  width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px;display:block; float:left; }
 .btn_followthiscar_icon_disabled_small	                        { width:20px; height:21px; background:url(../images/map_icon.png) no-repeat -43px 0px; display:block; float:left;  }
+*/
 
-
-/* Followers Images */
+/* Followers Images 
 div.imgfollowers						{  width:251px; height:115px; border-bottom:solid 1px #e3e3e3; overflow:visible; margin-bottom:10px; }
 
 ul.imgfollowers							{ list-style:none; padding:0; margin:0; width:251px;  margin-top:5px;  }
@@ -2419,27 +2445,27 @@ ul.imgfollowers							{ list-style:none; padding:0; margin:0; width:251px;  marg
 .menu_list 								{ width:251px;height:25px; color:#007dbd; display:block; border:solid 0px; background:url(../images/icon_arrow_small.png) no-repeat 0px 6px; padding-left:10px;}
 .menu_list a:hover						{ color:#c15f24; text-decoration:none;display:block; }
 .heading_others							{ width:251px; height:25px; padding-top:6px; display:block;text-indent:10px; margin-bottom:10px;border-bottom:solid 1px #cdd3d7; line-height:20px; background:#f5f5f5; }
+*/
+/* Plane to Buy - I Won IT - I Follow 
 
-/* Plane to Buy - I Won IT - I Follow */
-
-div.followers							{ width:250px; height:84px; background-color:#f5f5f5; border-bottom:solid 1px #cdd3d7; border-top:solid 1px #cdd3d7; margin:15px 0px; display:block; }
-/* Plane to buy*/
+div.followers							{ width:250px; height:84px; background-color:#f5f5f5; border-bottom:solid 1px #cdd3d7; border-top:solid 1px #cdd3d7; margin:15px 0px; display:block; }*/
+/* Plane to buy
 span.planetobuy, span.iwonit			{ width:82px; height:70px; display:block; border-right:solid 1px #e3e3e3; margin:7px 0px; float:left; }
 .icon_planetobuy						{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_plantobuy_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px; }
 .txt_planetobuy							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
-
-/* I Won it */
+*/
+/* I Won it 
 span.iwonit								{ width:82px; height:70px; display:block; border-right:solid 1px #e3e3e3; margin:7px 0px; float:left; }
 .icon_iwonit							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_iwonit_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px; }
 .txt_iwonit								{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
-
-/* I Follow */
+*/
+/* I Follow 
 span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; float:left; }
 .icon_ifollow							{ border:solid 0px; width:27px; height:27px; background:url(../images/icon_ifollow_gray.png) no-repeat; display:block; margin:6px 26px 0px 26px;}
 .txt_ifollow							{ display:block; width:70px; text-align:center; margin:5px; color:#828587;  }
+*/
 
-
-/* change for profile page on 19 Feb 2010 */
+/* change for profile page on 19 Feb 2010 
 .imgprofilediv								{width:160px; height:120px;position:relative;}
 .closeimg                     {position:relative;top:-120px;left:140px;}
 .imgpicbtnspan								{ position:absolute;top:0px;   height:125px; display:inline; cursor:pointer;}
@@ -2448,10 +2474,10 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 
 .prod_img								{ width:160px; height:120px;display:block;}
 .produ_bgimg							{ width:155px;  display:block; background-color:#000000; opacity: 0.746;font:normal 11px/18px arial; color:#fff; text-align:left; padding-left:5px; margin:0px 0px 0px 0px;text-decoration:none;}
-
+*/
 /* end change for profile page on 19 Feb 2010 */
 
-/* for where to buy options */
+/* for where to buy options 
 
 .wheretobuytitletxt {font-size:13px; font-weight:bold; margin:0; padding:5px 0 5px 5px; }
 .wheretobuytitletxtothercolumns {font-size:13px; font-weight:bold; margin:0; padding:5px 0 5px 5px;}
@@ -2461,9 +2487,9 @@ span.ifollow							{ width:82px; height:70px; display:block; margin:7px 0px; flo
 .wheretobuytext { font-size:12px; margin:0; padding:5px 0 5px 5px;}
 .wheretobuyrows {border:1px solid #e1f3f8;}
 
+*/
 
-
-/*Added by Awijeet*/
+/*Added by Awijeet
 #review_car_form, #ask_a_question_form, #share_a_tip_form, #start_a_discussion_form, #share_an_article_form, #share_an_image_form{
     display: none;}
 
@@ -2489,6 +2515,7 @@ ul.tagging								{ padding:0; margin:0; list-style:none; }
 .txt_tagging:hover					       { text-decoration:underline; cursor:pointer;}
 .icon_close_tagging								{ width:14px; height:14px; display:block; background:url(../images/btn_close1.png) no-repeat; border:solid 0px; float:right; margin-top:0px; margin-left:2px; margin-right:2px;}
 .icon_close_tagging:hover							{ background:url(../images/btn_close.png) no-repeat;}
+*/
 /*
 */
 /* line 8, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
@@ -2920,4 +2947,86 @@ iframe {
 	border:1px solid #aaaaaa;
 	padding:4px 6px 4px 6px;
 	margin:0px 0px 4px 0px;
+}
+/** Minimal stand-alone css for dropdownchecklist support
+    We highly recommend using JQuery ThemeRoller instead  
+*/
+
+.ui-dropdownchecklist {
+	font-size: medium;
+	color: black;
+}
+.ui-dropdownchecklist-selector {
+	height: 20px;
+	border: 1px solid #ddd;
+	background: #fff;
+}
+.ui-state-hover, .ui-state-active {
+	border-color: #5794bf;
+}
+.ui-dropdownchecklist-dropcontainer {
+	background-color: #fff;
+	border: 1px solid #999;
+}
+.ui-dropdownchecklist-item {
+}
+.ui-state-hover {
+	background-color: #39f;
+}
+.ui-state-disabled label {
+	color: #ccc;
+}
+.ui-dropdownchecklist-group {
+	font-weight: bold;
+	font-style: italic;
+}
+.ui-dropdownchecklist-indent {
+	padding-left: 7px;
+}
+/* Font size of 0 on the -selector and an explicit medium on -text required to eliminate 
+   descender problems within the containers and still have a valid size for the text */
+.ui-dropdownchecklist-selector-wrapper {
+	vertical-align: middle;
+	font-size: 0px;
+}
+.ui-dropdownchecklist-selector {
+	padding: 1px 2px 2px 2px;
+	font-size: 0px;
+}
+.ui-dropdownchecklist-text {
+	font-size: medium;
+	/* line-height: 20px; */
+}
+.ui-dropdownchecklist-group {
+	padding: 1px 2px 2px 2px;
+}
+/** Simple modifications needed for DropDownCheckList to take advantage of ThemeRoller settings */
+
+.ui-dropdownchecklist .ui-widget-content
+, .ui-dropdownchecklist .ui-widget-header {
+	border: none;
+}
+.ui-dropdownchecklist-indent {
+	padding-left: 7px;
+}
+/* Font size of 0 on the -selector and an explicit medium on -text required to eliminate 
+   descender problems within the containers and still have a valid size for the text */
+.ui-dropdownchecklist-selector-wrapper
+, .ui-widget.ui-dropdownchecklist-selector-wrapper {
+	vertical-align: middle;
+	font-size: 0px;
+}
+.ui-dropdownchecklist-selector {
+	padding: 1px 2px 2px 2px;
+	font-size: 0px;
+}
+.ui-dropdownchecklist-text {
+	font-size: medium;
+}
+.ui-dropdownchecklist-item
+, .ui-dropdownchecklist-item input {
+    vertical-align: middle;
+}
+.ui-dropdownchecklist-group {
+	padding: 1px 2px 2px 2px;
 }

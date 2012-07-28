@@ -46,7 +46,17 @@
       <li id="profile_preference_buying_plans"><a href="" class="icon_prefernce">Preference / Buying Plans</a></li>
       <li><a href="#" class="icon_points">Points</a></li>
       <li><a href="#" class="icon_awards">Awards</a></li>
-      <li><a href="#" class="icon_followers">Followers</a></li>
+      <li><%= link_to 'Followers', followers_account_path(@user), remote: true, class: "icon_followers" %></li>
+      <% unless @user == current_user %>
+        <li>
+           <% unless current_user.follow_by_type(@user, 'Plannto')  %>
+             <%= link_to 'Follow This User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'icon_followers' %>
+           <%else-%>
+             <%= link_to 'Unfollow This User', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'icon_followers' %> 
+           <%end%>  
+        </li> 
+      <%end-%>  
+  
     </ul>
   </div>
   <script type="text/javascript">
@@ -83,7 +93,7 @@
   <div class="rightcolumnbig"  id="profileInfo">
 
     <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
-      <div style="border:solid 0px green; float:left;  height:67px;"></div>
+      <div style="border:solid 0px green; float:left; "></div>
       <div class="points">
         <span class="indu_span"><a class="values"><%= @user.total_points  %></a><a class="text">Points</a></span>
         <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
@@ -92,16 +102,18 @@
         <span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>
 
       </div>
-
-      <div style="clear:both;">
+  </div>
+  <br/>
+  <br/>
+  <div style="clear:both;margin-top:60px;">
         <ul id="Newtabs">
-          <% ['Cars','Mobile','Tablet','Camera','Bike'].each do |item_type|%>
+          <% ['Cars','Mobile','Tablet','Camera','Bike','Cycle', 'Apps', 'Accessories'].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
         </ul>
       </div>
       <div style="display:block;">
-        <div class="sortby">
+      <!--  <div class="sortby">
           <div class="icon_share">Share:
             <span> <img src="/images/icon_fb.png"/> </span>
             <span> <img src="/images/icon_twitter.png"/> </span>
@@ -110,18 +122,23 @@
             <span> <img src="/images/icon_t.png"/> </span>
           </div>
         </div>
-        <div class="listing_items" id="tabs1">
+        -->
+        <div class="Rightouter" id="tabs1">
           <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
         </div>
 
       </div>
       <br/>
-    </div>
+    
 
     <br/>
+    <br/>
+    <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
     
-    <div style="border-bottom: solid 1px #cdd3d7;display:block;clear:both;padding-top:20px;" ></div>
-
+    <div style="clear:both;background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:10px;">
+        <h2>Activities in <%=params[:follow]%></h2>
+    </div>
+    <br/>
       <div id="content_all">
         <!--filter by block start here-->
         <div id="Filterby">
@@ -208,7 +225,7 @@
         });
         });
     </script>
-
+    <%end%>
   </div>
   <!-- Right  - End -->
 

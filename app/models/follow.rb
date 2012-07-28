@@ -7,6 +7,9 @@ class Follow < ActiveRecord::Base
                                                            followable.id, followable.class.name]) }
   scope :for_follower_type,   lambda { |follower_type| where("follower_type = ?", follower_type) }
   scope :for_followable_type, lambda { |followable_type| where("followable_type = ?", followable_type) }
+  
+  scope :follow_type, lambda{|type| where(follow_type: type)}
+  
   scope :recent,              lambda { |from| where(["created_at > ?", (from || 2.weeks.ago).to_s(:db)]) }
   scope :descending,          order("follows.created_at DESC")
   scope :unblocked,           where(:blocked => false)
@@ -32,4 +35,14 @@ class Follow < ActiveRecord::Base
     Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
   end
   
+  
+  
+  #TODO this is not so good. but current implementation of follow forces to do this
+  def content?(type)
+    ['Apps', 'Accessories'].include?(type)
+  end
+  
+  def content_followable
+    Content.find(self.followable_id)
+  end
 end

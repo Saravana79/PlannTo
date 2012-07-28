@@ -21,3 +21,18 @@ border: 1px solid #999595;
 box-shadow: 0 1px 5px 0 #505050;
 border-image: initial;
 }
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+
+.clear{clear: both;}

@@ -7,7 +7,11 @@
  
 		<meta name="description" content="">
 		<%= csrf_meta_tags%>
-
+		<%= stylesheet_link_tag 'application'%>
+    <%= stylesheet_link_tag '/stylesheets/plannto.css'%>
+    <%= stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"%>
+    <%= stylesheet_link_tag "/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" %>
+	<%= javascript_include_tag 'application'%>
     <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>		
 		<style type="text/css">
@@ -19,12 +23,12 @@
 <body class="Inner_page">
     <div class="header_fix">
       <div class="header_fix_inner">      
-         <div class="fix_logo"><img src="/images/header_fix_logo.png" /></div>   
+         <div class="fix_logo"><a href="/"><img src="/images/header_fix_logo.png" /></a></div>   
          <div class="vote_thumb"> 
            <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
          </div>
          <span class='comment_no'> 
-           <%= link_to @content.comments.count + " comments", content_path(@content) %>
+           <%= link_to @content.comments.count.to_s + " comments", content_path(@content) %>
          </span>
          <a href="<%=@content.url %>" class="h_close">close</a>  
          <!--
@@ -52,7 +56,7 @@
     <div  class="header_midder_box" >
       <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1" onload="resizeIframe(this);"></iframe>
     </div>  
-   
+   <%= render "shared/signup_popup"%>
 </body>
 
 <script language="javascript" type="text/javascript">
@@ -79,6 +83,19 @@
       }
    //obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';                        
  }
+ 
+ 
+   <%unless user_signed_in?%>
+        $("div.rate_content a").click(function(e){
+          if (login_flag != true){
+            openLoginPopup("#" +$(this).attr('id'), "click");
+            return false
+          }
+        })
+        
+  <%end%>
+  
+ 
  </script>
 
  

@@ -16,14 +16,14 @@
             <div>
             <a href="<%=related_item.get_url()%>" class="txt_black"><%=related_item.name%></a>
            </div>
-            <%= render :partial => 'shared/rating',:locals => {:item => related_item} %><br />
+            <%= render :partial => 'shared/rating',:locals => {:item => related_item, :rating_id => "related_item_id#{related_item.id}"} %><br />
             </td>
           </tr>
           <tr>
             <td  colspan="2"  valign="top">
               <% related_follower = related_item.get_followers(@follow_type) %>              
               <%- related_follower[0..2].each do |user| %>
-                <%= image_tag user.get_photo(:thumb), :title => user.name ,:class => "userImageSmall"%>
+                <a href="<%= user.get_url()%>"> <%= image_tag user.get_photo(:thumb), :title => user.name ,:class => "userImageSmall"%></a>
               <% end %>
               <% if ((related_follower.count - 2) > 0) %>
                 and <%= (related_follower.count - 2) %> other people owns this.
@@ -104,10 +104,10 @@
           <li class="imgContributors">
             <div style="clear:both;">
               <div class="float_lft">
-                <img  src="<%=user_info[3]%>" class="imgContributes imageThumbnail" />
+               <a href="<%=user_info[4]%>"> <img  src="<%=user_info[3]%>" class="imgContributes imageThumbnail" /></a>
               </div>
               <div class="contributorname">
-                <a class="txt_black" href="#">
+                <a class="txt_black" href="<%=user_info[4]%>">
                   <%=user_info[2]%>
                 </a>
               </div>

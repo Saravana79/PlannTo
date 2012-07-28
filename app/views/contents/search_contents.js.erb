@@ -1,0 +1,9 @@
+$("#content_next").remove();
+<%if params[:content_search][:page] == "#{1}"%>
+$("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
+<%else%>
+$("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
+<%end%>
+value = <%=params[:content_search][:page]%> ;
+$("#content_search_page").val(value+1)
+running=false;

@@ -12,17 +12,33 @@ class Content < ActiveRecord::Base
   
 	belongs_to :user, :foreign_key => 'updated_by'
 	belongs_to :user, :foreign_key => 'created_by'
+	has_many :votes
 	has_many :content_item_relations
+  has_many :item_contents_relations_cache
   has_many :items, :through => :content_item_relations
   belongs_to :itemtype
+  has_and_belongs_to_many :guides
   has_one :content_photo
   accepts_nested_attributes_for :content_photo, :allow_destroy => true
   scope :item_contents, lambda { |item_id| joins(:content_item_relations).where('content_item_relations.item_id = ?', item_id)}
+  has_many :flags
+  has_many :content_itemtype_relations
+  has_many :itemtypes, :through => :content_itemtype_relations
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true
     text :description
     string :sub_type
+    integer :total_votes
+    integer :comments_count
+     time :created_at
+    integer :itemtype_ids,  :multiple => true do 
+      content_itemtype_relations.map {|items| items.itemtype_id}
+      #content.itemtype_id
+    end
+    integer :item_ids,  :multiple => true do
+      item_contents_relations_cache.map {|items| items.item_id}
+    end
   end
   
   
@@ -65,9 +81,10 @@ class Content < ActiveRecord::Base
         #  scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
      
         all_items = Item.get_related_content_for_items(value)
-        scope.scoped(:conditions => ['id in (?)',all_items])
+        scope.scoped(:conditions => ["#{self.table_name}.id in (?)",all_items])
       when :itemtype_id
-        scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
+        scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id = ?", value )
+      #  scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type
@@ -87,13 +104,18 @@ class Content < ActiveRecord::Base
   
 	def save_with_items!(items)
 	 # Content.transaction do
+	   item_type_ids = Array.new
 	    self.save!
       items.split(",").each_with_index do |id, index|
         item = Item.find_by_id(id)
         # rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+        item_type_ids << get_itemtype(item)
         self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0        
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
         rel.save!
+      end
+      item_type_ids.uniq.each do |id|
+      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
       end
       logger.info "-----------------------------------------"
 
@@ -166,18 +188,11 @@ end
   end
 
   def get_itemtype(item)
-    itemtype_id = case item.type
-    when "AttributeTag" then ItemAttributeTagRelation.where("item_id = ? ", item.id).first.try(:itemtype_id)
-    when "Manufacturer" then item.itemrelationships.first.related_cars.itemtype_id
-    when "CarGroup" then item.itemrelationships.first.items.itemtype_id
-    when "ItemtypeTag" then Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
-    when "Topic" then TopicItemtypeRelation.find_by_item_id(item.id).itemtype_id
-    else item.itemtype_id
-    end
-    return itemtype_id
+      item.get_base_itemtypeid()
   end
 
   def update_with_items!(params, items)
+    item_type_ids = Array.new
     Content.transaction do
 	    self.update_attributes(params)
       content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
@@ -186,7 +201,13 @@ end
         item = Item.find(id)
         self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
         rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+        item_type_ids << get_itemtype(item)
         rel.save!
+      end
+      
+      ContentItemtypeRelation.delete_all(["content_id = ?", self.id])     
+      item_type_ids.uniq.each do |id|
+      ContentItemtypeRelation.create(:itemtype_id => id, :content_id => self.id)
       end
     end
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","), true)

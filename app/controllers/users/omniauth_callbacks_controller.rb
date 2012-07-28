@@ -1,5 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
- 
+  layout "product"
+  
   def facebook
     auth = request.env["omniauth.auth"]
     user = User.find_by_email(auth.info.email)
@@ -12,6 +13,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
     
     sign_in user
-    redirect_to root_path
+    render :layout => false
   end
 end

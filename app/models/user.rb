@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
   belongs_to :invitation
   belongs_to :facebook
   has_many :field_values
+  has_many :flagged_contents, :class_name => 'Flag', :foreign_key => 'flagged_by'
+  has_many :verified_contents, :class_name => 'Flag', :foreign_key => 'verified_by'
   #has_attached_file :uploaded_image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
   
   has_attached_file :avatar, 
@@ -180,11 +182,24 @@ class User < ActiveRecord::Base
     user
   end
   
+  def facebook_friends
+    graph_api.get_connections("me", "friends")
+  end
+  
+  def follow_by_type(obj, type)
+    self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
+  end
+  
+  #def following_users
+    #self.follows.for_followable_type('User').follow_type('Plannto')
+  #end
+  
   private
 
   def populate_username
     # Extract email address from Email address provided by user
     user_name = email.split("@")[0]
+    user_name = user_name.gsub(".","_")
 
     #check if the same username is already present in the db
     existing_user_names = User.where("username like ? OR username like ?", "#{user_name}%", "#{user_name}.%")

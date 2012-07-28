@@ -47,7 +47,17 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
-
+  
+  def after_sign_up_path_for(resource)
+    #profile_path(username: current_user.username)
+    mobiles_path
+  end
+  
+  def after_sign_in_path_for(resource_or_scope)
+    #profile_path(username: current_user.username)
+    mobiles_path
+  end
+  
   def stored_location_for(resource_or_scope)
     session["previous_html_url"] || root_path
   end
