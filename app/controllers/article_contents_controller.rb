@@ -3,7 +3,6 @@ class ArticleContentsController < ApplicationController
 
   def create
     #not used anywhere
-    
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
