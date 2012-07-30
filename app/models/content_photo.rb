@@ -9,10 +9,11 @@ class ContentPhoto < ActiveRecord::Base
     :s3_credentials => "config/s3.yml",
     :path => "images/content/:id/:style/:filename"
   
-  def self.save_image(article,url)
+  def self.save_url_content_to_local(article,url)
     photo = ContentPhoto.new
     photo.photo= open(url)
     photo.content_id = article.id
     photo.save
+    @article.update_attribute('thumbnail',@article.content_photo.photo.url)
  end
 end   

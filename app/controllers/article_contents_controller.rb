@@ -48,7 +48,7 @@ class ArticleContentsController < ApplicationController
     else
       @article,@images = ArticleContent.CreateContent(url,current_user)
       @article.sub_type = params[:article_content][:sub_type]
-      ContentPhoto.save_image(@article,url)
+      ContentPhoto.save_url_content_to_local(@article,url)
     end
   end # action ends here
   
