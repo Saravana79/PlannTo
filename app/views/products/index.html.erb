@@ -151,7 +151,7 @@
       </span>
     </div>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id } %>
+      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1 } %>
       <% @contents = Content.filter(params)  %>
       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
     </div>
