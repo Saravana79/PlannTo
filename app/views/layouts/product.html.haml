@@ -27,9 +27,9 @@
  
   %body
     = render 'shared/header_links'
-    #dialog-form{:title => "Create new user"}
+    #dialog-form
       #login
-        = render "shared/login_dialog"
+        = render "/shared/login_dialog"
         .Dontsignup
           Don't have an account. 
           = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();"
