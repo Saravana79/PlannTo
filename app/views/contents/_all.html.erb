@@ -113,7 +113,7 @@
     <%if @item.show_models %>
       <% params = {"items" => @item.related_cars.collect(&:id), "status" => 1 } %>
     <% else %>
-      <% params = {"items" => [@item.id] }, "status" => 1 %>
+      <% params = {"items" => [@item.id], "status" => 1  }%>
     <% end %>
 
     <% @contents = Content.filter(params)  %>
