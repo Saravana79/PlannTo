@@ -20,8 +20,13 @@ class ContentPhoto < ActiveRecord::Base
     end
     file.rewind
     photo.photo = file
+    photo.url = url
+    photo.save
+  end
+ 
+  def self.update_url_content_to_local(article,url)
+    photo = ContentPhoto.find_by_url(url)
     photo.content_id = article.id
     photo.save
-    article.update_attribute('thumbnail',article.content_photo.photo.url)
- end
-end   
+   end
+ end   

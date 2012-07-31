@@ -1,6 +1,6 @@
 class ArticleContentsController < ApplicationController
   before_filter :authenticate_user!
-
+ 
   def create
     #not used anywhere
     @item_id = params[:item_id]
@@ -16,7 +16,10 @@ class ArticleContentsController < ApplicationController
    end 
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-    @article.update_attribute('thumbnail',@article.content_photo.photo.url) if params[:article_content][:sub_type]
+    ContentPhoto.update_url_content_to_local(@article,params['article_content']['url']) if params['article_content']['url']
+    if params[:article_content][:sub_type]=="Photo" && !@article.content_photo.nil?
+       @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
+    end  
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
     flash[:notice]= "Article uploaded"
@@ -42,13 +45,14 @@ class ArticleContentsController < ApplicationController
     @images = Array.new
     #@default_item_id = params[:default_item_id]
     #@article_category = ArticleCategory.find(params[:article_content][:article_category_id])
-    url=params['article_content']['url']
+    url= params['article_content']['url']
     if url.nil?
       @article=ArticleContent.create(params[:article_content])
     else
       @article,@images = ArticleContent.CreateContent(url,current_user)
       @article.sub_type = params[:article_content][:sub_type]
       ContentPhoto.save_url_content_to_local(@article,url)
+      
     end
   end # action ends here
   
