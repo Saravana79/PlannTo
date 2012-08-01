@@ -13,7 +13,7 @@
   <div class="productdetails" >
     <%if(!@item.image_url.blank?)%>
   <span class="img_product"><img src="<%=@item.image_url%>" onclick= "$('#product_images').dialog({
-height: 'auto',width:600});$('.ui-dialog-titlebar').hide();" alt="<%=@item.name%>" width="175" height="125" /></span> 
+height: 'auto',width:600});$('.ui-dialog-titlebar').hide();" alt="<%=@item.name%>" width="175" height="125" style= "cursor: pointer;"/></span> 
   <%end%>
     <div id="product_images" style='display:none'>
        <%= render "product_images", :locals => {:item=> @item} %>
