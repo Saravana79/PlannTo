@@ -93,10 +93,21 @@ class Item < ActiveRecord::Base
     item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type")
   end
 
-  def image_url
-      configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
+  #def image_url
+   #   configatron.root_image_url + type.downcase + '/' + "#{imageurl}"
+  #end
+   
+   
+   def image_url(imagetype = :medium)
+      if(!imageurl.blank?)
+        if(imagetype == :medium)
+             configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
+        else
+             configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
+        end
+      end   
   end
-
+  
   def self.get_related_items(item, limit)
     related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR

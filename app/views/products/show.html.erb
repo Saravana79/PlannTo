@@ -12,8 +12,18 @@
 <!-- Product Details - Start -->
   <div class="productdetails" >
     <%if(!@item.image_url.blank?)%>
-    <span class="img_product"><img src="<%=@item.image_url%>" alt="<%=@item.name%>" width="175" height="125" /></span>
-    <%end%>
+  <span class="img_product"><img src="<%=@item.image_url%>" onclick= "$('#product_images').dialog({
+height: 'auto',width:600});$('.ui-dialog-titlebar').hide();" alt="<%=@item.name%>" width="175" height="125" /></span> 
+  <%end%>
+    <div id="product_images" style='display:none'>
+       <%= render "product_images", :locals => {:item=> @item} %>
+    </div> 
+    <script language="javascript">
+			$(document).ready(
+				function (){
+				  $("#pikame").PikaChoose();
+				});
+		</script>
     <span class="product_details">
       <h1><%= @item.name %></h1>
     <% if @item.is_a? Product %>
