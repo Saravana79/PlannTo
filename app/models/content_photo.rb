@@ -11,8 +11,8 @@ class ContentPhoto < ActiveRecord::Base
   
   def self.save_url_content_to_local(article,url)
     photo = ContentPhoto.new
-    extname = File.extname(url)
-    basename = File.basename(url, extname)
+    extname = File.extname(url).delete("%")
+    basename = File.basename(url, extname).delete("%")
     file = Tempfile.new([basename, extname])
     file.binmode
     open(URI.parse(url)) do |data|  
@@ -25,7 +25,7 @@ class ContentPhoto < ActiveRecord::Base
   end
  
   def self.update_url_content(article,url)
-    photo = ContentPhoto.find_by_url(url)
+    photo = ContentPhoto.where(:url => url).last
     photo.content_id = article.id
     photo.save
    end

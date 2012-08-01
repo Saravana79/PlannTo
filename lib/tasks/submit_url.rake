@@ -4,8 +4,8 @@ puts "save content to local by url ***"
   ArticleContent.all.each do |article|
     unless article.url.nil?
       photo = article.content_photo
-      extname = File.extname(article.url)
-      basename = File.basename(article.url, extname)
+      extname = File.extname(article.url).delete("%")
+      basename = File.basename(article.url, extname).delete("%")
       file = Tempfile.new([basename, extname])
       file.binmode
       open(URI.parse(article.url)) do |data|  
