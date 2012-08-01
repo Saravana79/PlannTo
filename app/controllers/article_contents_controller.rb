@@ -16,7 +16,7 @@ class ArticleContentsController < ApplicationController
    end 
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-    ContentPhoto.update_url_content_to_local(@article,params['article_content']['url']) if params['article_content']['url']
+    ContentPhoto.update_url_content(@article,params['article_content']['url']) if params['article_content']['url']
     if params[:article_content][:sub_type]=="Photo" && !@article.content_photo.nil?
        @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
     end  
