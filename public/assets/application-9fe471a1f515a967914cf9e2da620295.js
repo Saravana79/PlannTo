@@ -24524,14 +24524,14 @@ function openManufacturerBox(attr_name,elem){
 }
 
 
-$(document).click(function(e) {
+/*$(document).click(function(e) {
     if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
         if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
             $("#criteriaPopup").hide();
             $(".ui-autocomplete").hide();
         }
     }
-});
+});*/
 
 
   
@@ -24818,9 +24818,9 @@ function store_checkbox_ids(sender) {
     }
     checkBoxIds = ids.toString();
     setUpCompareButton(sender.value)
-}
+};
 
-function enableDocumentMouseOverEvent(){
+/*function enableDocumentMouseOverEvent(){
     $(document).mouseover(function(e) {
         if((!$(e.target).parents().andSelf().is('.box')) && (!$(e.target).parents().andSelf().is('.ui-autocomplete'))){
             if (!$(e.target).parents().andSelf().is('#criteriaPopup')) {
@@ -24829,7 +24829,7 @@ function enableDocumentMouseOverEvent(){
             }
         }
     });
-}
+}*/
 ;
 (function() {
 

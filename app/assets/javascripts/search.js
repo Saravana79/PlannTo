@@ -593,20 +593,20 @@ $(document).ready(function(){
         return false;
     });
 
-    $(".boxClick").mouseenter(function(){
-        enableDocumentMouseOverEvent()
-        $("#criteriaPopup").hide();
-    })
+    //$(".boxClick").mouseenter(function(){
+    //    enableDocumentMouseOverEvent()
+    //    $("#criteriaPopup").hide();
+    //})
 
     $('.boxClick').live('click', function(){
         enableDocumentMouseOverEvent()
         $("#criteriaPopup").hide();
     });
   
-    $(".box").mouseover(function() {
-        enableDocumentMouseOverEvent()
-        $(this).click();
-    })
+  //  $(".box").mouseover(function() {
+   //     enableDocumentMouseOverEvent()
+   //     $(this).click();
+  //  })
 
     $('#autocompleteField').mouseenter(function() {
         //$("#maincontainer").disabled = true;
@@ -675,7 +675,7 @@ function store_checkbox_ids(sender) {
     }
     checkBoxIds = ids.toString();
     setUpCompareButton(sender.value)
-};
+}
 
 function enableDocumentMouseOverEvent(){
     $(document).mouseover(function(e) {

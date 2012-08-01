@@ -40,7 +40,7 @@ class BrowserPreference < ActiveRecord::Base
           else
             search_criteria = ""
           end
-          preferences_list << {:search_name => preference.search_attribute.attribute_display_name, :attribute_name => preference.search_attribute.attribute.name, :value_type => preference.search_attribute.value_type, :value => preference.value_1, :attribute => preference.search_attribute.attribute_id, :search_criteria => search_criteria}
+          preferences_list << {:search_name => preference.search_attribute.attribute_display_name, :attribute_name => preference.search_attribute.attribute.try(:name), :value_type => preference.search_attribute.value_type, :value => preference.value_1, :attribute => preference.search_attribute.attribute_id, :search_criteria => search_criteria}
         end
       end
     end
