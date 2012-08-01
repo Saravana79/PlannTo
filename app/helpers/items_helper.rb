@@ -80,7 +80,14 @@ module ItemsHelper
   end
 
   def attribute_display_required?(ids, attribute_id)
-    attribute_values = AttributeValue.where("item_id in (?) and attribute_id =?", ids, attribute_id)
+  value = false 
+    attribute_values = AttributeValue.where("item_id in (?) and attribute_id =? and value != ''", ids, attribute_id)
+    #if all values are empty or False then no need of dispalying it.
+    attribute_values.each do |att|     
+     value = true unless (att.value.blank? || att.value == "False")
+    end
+    
+    return false if value == false
     return true if attribute_values.size > 0
     return false
   end
