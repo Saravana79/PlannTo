@@ -246,7 +246,11 @@ function openInfoBox(displayInfo, attr_name, elem){
         var tagId = $("#which_attribute").val() + "_tag"
         //if this attribute already has a different tag then lets remove it.
         removeMultipleAttributeInstance(booleanObject.field_id, tagId);
-
+		//to remove duplicate search criteria
+	 	 if ($("#" +tagId + " span").text() == booleanObject.display_name){
+	 	 	$("#" + $("#which_attribute").val()).hide();
+	 	 	return false
+	 	 }
         var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deleteTag' class='icon_close'></a></span></li>" ;
         $(list).appendTo('.search_category');
         $("#" + $("#which_attribute").val()).hide();
