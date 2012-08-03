@@ -50,7 +50,7 @@
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <% if @article_content %>
-   <div class="Close_dialog" style="width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+   <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
     <%end%>
     <%= hidden_field_tag "#{@articles_item_id}" %>
     <%= f.hidden_field :type, :id => "#{@new_article_type}" %>
