@@ -32,7 +32,7 @@
           	$("#filter_page_no").val(1)
         $.ajax(
           {
-            url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@item.itemtype_id%>",
+            url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@item.get_base_itemtypeid%>",
             type: "get",
             dataType: "script",
             success    : function(data)
