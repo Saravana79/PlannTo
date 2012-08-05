@@ -21519,7 +21519,7 @@ function popup(windowname) {
 }
 ;
 
-$(function(){
+/*$(function(){
   $('select.content_guide').dropdownchecklist({
       width: 150,
       onComplete: function(selector){
@@ -21540,7 +21540,7 @@ $(function(){
     }
   });
 });
-
+*/
 //for tabs
 $("ul#Newtabs li a").live('click', function(){
     $("ul#Newtabs").find('li').removeClass('tab_active');
