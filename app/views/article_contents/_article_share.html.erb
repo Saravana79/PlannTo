@@ -477,6 +477,7 @@ if ($("#article_content_sub_type").val() == ""){
   function showArticleSubmitEventOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("Start Date:")
     $("div#ShareURLDiv #<%=@sharefield2Label%>").text("End Date:")
+    $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Location:")
 <%if @content.nil?%>
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");

@@ -29,5 +29,10 @@ class ReviewContentsController < ApplicationController
     @reviewcontent.ip_address = request.remote_ip
     @reviewcontent.update_with_items!(params['review_content'], params[:item_id])
   end
+  
+  def destroy
+    @content = Content.find(params[:id])
+    @content.update_attribute(:status, Content::DELETE_STATUS)
+  end
 
 end

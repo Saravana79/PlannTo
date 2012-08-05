@@ -209,6 +209,8 @@
   function showArticleCreateEventOptFields(){
     $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("Start Date:")
     $("div#subContainerContentCreate #<%=@sharefield2Label%>").text("End Date:")
+    $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Location:")
+    
 <%if @content.nil?%>
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
