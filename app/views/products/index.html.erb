@@ -168,9 +168,16 @@
         $(this).addClass("link_active");
           if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
+          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
+        switch(id){
+          case 'All' :  var sub_type = "All";break;
+          case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
+           default:  var sub_type = id;
+            }
         $.ajax(
           {
-            url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@itemtype.id%>",
+            url: "/contents/filter?sub_type=" + sub_type + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@itemtype.id%>",
             type: "get",
             dataType: "script",
             success    : function(data)
@@ -197,6 +204,7 @@
         switch(id){
           case 'All' :  var sub_type = "All";break;
           case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
            default:  var sub_type = id;
             }
             $("#content_search_page").val(1)
@@ -204,7 +212,7 @@
           	$("#content_search_sub_type").val(sub_type);
             $.ajax(
             {
-              url: "contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $("span#sortBy a.link_active").text()+ "&itemtype_id=<%=@itemtype.id%>",
+              url: "contents/filter?sub_type=" + sub_type + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $("span#sortBy a.link_active").text()+ "&itemtype_id=<%=@itemtype.id%>",
               type: "get",
               dataType: "script"
             });
@@ -223,9 +231,16 @@
 
       running = true;
        if ($("#content_search_search").val().toString() == ""){
+       	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
+       	switch(id){
+          case 'All' :  var sub_type = "All";break;
+          case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
+           default:  var sub_type = id;
+            }
         $.ajax(
           {
-            url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
+            url: "/contents/feeds?sub_type=" + sub_type + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
             type: "get",
             dataType: "script",
             success    : function(data)

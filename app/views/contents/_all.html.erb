@@ -66,6 +66,7 @@
           switch(id){
             case 'All' :  var sub_type = "All";break;
             case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
             default:  var sub_type = id;
           }
           
@@ -160,9 +161,16 @@
      
         running = true;
         if ($("#content_search_search").val().toString() == ""){
+        	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();          
+          switch(id){
+            case 'All' :  var sub_type = "All";break;
+            case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
+            default:  var sub_type = id;
+          }
         $.ajax(
         {
-          url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
+          url: "/contents/feeds?sub_type=" + sub_type + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
           type: "get",
           dataType: "script",
           success    : function(data)
