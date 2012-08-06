@@ -1,6 +1,7 @@
 class QuestionContentsController < ApplicationController
   
   before_filter :authenticate_user!
+  # => skip_before_filter :verify_authenticity_token
   layout :false
 
 	def create
@@ -26,6 +27,11 @@ class QuestionContentsController < ApplicationController
     @questioncontent = Content.find(params[:id])
     @questioncontent.ip_address = request.remote_ip
     @questioncontent.update_with_items!(params['question_content'], params[:item_id])
+  end
+  
+  def destroy
+    @content = Content.find(params[:id])
+    @content.update_attribute(:status, Content::DELETE_STATUS)
   end
 
 end
