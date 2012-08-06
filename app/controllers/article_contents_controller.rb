@@ -22,7 +22,7 @@ class ArticleContentsController < ApplicationController
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
    ContentPhoto.update_url_content(@article,params['article_content']['url']) if params['article_content']['url']
    if ((params[:article_content][:sub_type] == "Photo" || params[:submit_url] == 'submit_url') && (!@article.content_photo.nil?))
-       @article.update_attribute('thumbnail',@article.content_photo.photo.url) 
+       @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb)) 
     end  
      if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
         @defaultitem = Item.find(ids[0])
@@ -53,7 +53,7 @@ class ArticleContentsController < ApplicationController
     end
     @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
-       @article.update_attribute('thumbnail',@article.content_photo.photo.url)
+       @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb))
      end   
   end
   
