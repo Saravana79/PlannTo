@@ -1,6 +1,6 @@
-<!--  breadcrumbs - Start -->
+<!-- breadcrumbs - Start -->
   <%= render "shared/breadcrumb" %>
-<!--  breadcrumbs - End -->
+<!-- breadcrumbs - End -->
 <!-- buttons - Start -->
 <div class="float_rgt">
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
@@ -11,18 +11,27 @@
 <div class="leftcolumnbig" id="item_info" style="clear:both;">
 <!-- Product Details - Start -->
   
-    <%if(!@item.image_url.blank?)%>
+   <%if(!@item.image_url.blank?)%>
     <div class="productdetails" style="height:150px;">
-    <span class="img_product"><img src="<%=@item.image_url%>" alt="<%=@item.name%>" width="176" height="132" /></span>
+    <span class="img_product"><img src="<%=@item.image_url%>" onclick= "$('#product_images').dialog({height: 'auto',width:600});$('.ui-dialog-titlebar').hide();" alt="<%=@item.name%>" width="175" height="125" style= "cursor: pointer;"/></span> 
     <%else%>
     <div class="productdetails">
     <%end%>
+    <div id="product_images" style='display:none'>
+       <%= render "product_images", :locals => {:item=> @item} %>
+    </div> 
+   <script language="javascript">
+			$(document).ready(
+				function (){
+					$("#pikame").PikaChoose({carousel:true});
+				});
+		</script>
     <span class="product_details">
       <h1><%= @item.name %></h1>
     <% if @item.is_a? Product %>
       <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
       <a>
-      <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id  => "product_item_#{@item.id}"} %>
+      <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>
     <a class="txt_normal" href="<%= @item.get_url + '?fl=Reviews'%>">Ratings
@@ -34,13 +43,13 @@
     </a>
     <% else %>
         <%if @item.is_a? CarGroup %>
-           <a class="txt_price">Groups</a><br />   
+           <a class="txt_price">Groups</a><br />
         <%else%>
-          <a class="txt_price"><%=@item.type%></a><br />             
+          <a class="txt_price"><%=@item.type%></a><br />
           </a>
         <%end%>
         <% if @item.show_models%>
-        <a class="txt_normal"> <%=link_to_function @item.related_cars.count.to_s +  " Models","setActiveTab('all_variants')", :class => 'txt_blue'%>
+        <a class="txt_normal"> <%=link_to_function @item.related_cars.count.to_s + " Models","setActiveTab('all_variants')", :class => 'txt_blue'%>
         <%end%>
     <% end %>
     </span>
@@ -77,7 +86,7 @@
   <%end%>
 </div>
 
-<!-- Q&A -  End -->
+<!-- Q&A - End -->
 </div>
 
 <div class="rightcolumnsmall">
@@ -101,7 +110,7 @@
       </div>
         <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite") %>
       </div>
-      <div class="Smalltext">who plans to buy</div>  
+      <div class="Smalltext">who plans to buy</div>
   </div>
   <div class="Detailfeature">
     <span class="Headingtxt">Owners</span>
@@ -142,10 +151,9 @@
 <br/>
 <!--
 <div>
-	<%= link_to("Invite buyer", "#", :id => "invite_buy") %>&nbsp;
-	<%= link_to("Invite owner", "#", :id => "invite_own") %>&nbsp;
-	<%= link_to("Invite follower", "#", :id => "invite_follow") %>
-	
+<%= link_to("Invite buyer", "#", :id => "invite_buy") %>&nbsp;
+<%= link_to("Invite owner", "#", :id => "invite_own") %>&nbsp;
+<%= link_to("Invite follower", "#", :id => "invite_follow") %>
 </div>
 <br />
 -->
@@ -156,21 +164,36 @@
 <div id="dialog-invite-form" style="display:none">
   <% if current_user %>
     <%= form_for(@invitation, :remote => true ) do |f| %>
-	    <div id= "invitation_errors" style="display:none"></div>
-	    <%= f.hidden_field :item_id, :value => @item.id -%>
-	    <%= f.hidden_field :item_type, :value => @item.class.to_s -%>
-	    <%= f.hidden_field :follow_type -%>
-		  Email : <br /> <%= f.text_field :email %> <br />
-		  Message : <br />
-	  	<%= f.text_area :message, :rows => 3, :cols => 50 %>
-		  <%= f.submit 'Invite', :class => 'btn_submitanswer', 'data-disable-with'=>"Sending invite..." %>
-	  <% end %>
-	<%else-%>
-	   Please sign in to invite others.
-	   <%= render "shared/home_login" %>
-	<%end%>  
-	
+<div id= "invitation_errors" style="display:none"></div>
+<%= f.hidden_field :item_id, :value => @item.id -%>
+<%= f.hidden_field :item_type, :value => @item.class.to_s -%>
+<%= f.hidden_field :follow_type -%>
+Email : <br /> <%= f.text_field :email %> <br />
+Message : <br />
+<%= f.text_area :message, :rows => 3, :cols => 50 %>
+<%= f.submit 'Invite', :class => 'btn_submitanswer', 'data-disable-with'=>"Sending invite..." %>
+<% end %>
+<%else-%>
+Please sign in to invite others.
+<%= render "shared/home_login" %>
+<%end%>
+
 </div>
 
 </div>
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

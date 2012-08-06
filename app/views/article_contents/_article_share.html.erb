@@ -48,6 +48,7 @@
 
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
+     <%= hidden_field_tag 'submit_url','submit_url' %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <% if @article_content %>
    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
