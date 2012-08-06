@@ -465,8 +465,8 @@ if ($("#article_content_sub_type").val() == ""){
     if (category == "<%=ArticleCategory::EVENT%>"){
       showArticleSubmitEventOptFields();
     }
-    else if((category == "<%=ArticleCategory::BOOKS%>")|| (category == "<%=ArticleCategory::ACCESSORIES%>")){
-      showArticleSubmitBooksAccessoriesOptFields();
+    else if(category == "<%=ArticleCategory::ACCESSORIES%>"){
+      showArticleSubmitAccessoriesOptFields();
     }
     else if (category == "<%=ArticleCategory::APPS%>"){
       showArticleSubmitAppOptFields();
@@ -518,7 +518,7 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
   }
 
-  function showArticleSubmitBooksAccessoriesOptFields(){
+  function showArticleSubmitAccessoriesOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("Sub Category:")
     $("div#ShareURLDiv #<%=@field1_id%>").replaceWith("<%=get_books_accessories_subcategory_html_list("#{@field1_id}", "article_content[field1]")%>");
 <%unless @content.nil?%>
