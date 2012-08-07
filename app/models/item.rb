@@ -113,15 +113,15 @@ class Item < ActiveRecord::Base
   end
 
   def image_url(imagetype = :medium)
-      if(!imageurl.blank?)
-        if(imagetype == :medium)
-             configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
-        else
-             configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
-        end
-
-        
-      end
+    if(!imageurl.blank?)
+      if(imagetype == :medium)
+        configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
+      elsif (imagetype == :org)
+         configatron.root_image_url + type.downcase + '/org/' + "#{imageurl}"
+       else   
+          configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
+       end
+     end
   end
 
   def self.get_related_items(item, limit)

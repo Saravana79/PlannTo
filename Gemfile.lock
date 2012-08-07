@@ -179,6 +179,7 @@ GEM
       activesupport (= 3.1.1)
       bundler (~> 1.0)
       railties (= 3.1.1)
+    rails_exception_handler (2.0.2)
     railties (3.1.1)
       actionpack (= 3.1.1)
       activesupport (= 3.1.1)
@@ -282,6 +283,7 @@ DEPENDENCIES
   omniauth-oauth2
   paperclip
   rails (= 3.1.1)
+  rails_exception_handler (~> 2)
   rails_sql_views!
   record-cache!
   remotipart (~> 1.0)

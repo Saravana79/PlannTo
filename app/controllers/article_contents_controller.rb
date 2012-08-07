@@ -67,7 +67,7 @@ class ArticleContentsController < ApplicationController
     if url.nil?
       @article=ArticleContent.create(params[:article_content])
     else
-      @article,@images = ArticleContent.CreateContent(url,current_user)
+      #@article,@images = ArticleContent.CreateContent(url,current_user)
       @article.sub_type = params[:article_content][:sub_type]
       ContentPhoto.save_url_content_to_local(@article,url)
     end

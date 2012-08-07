@@ -1,0 +1,10 @@
+<h1><center>Error Messages</center></h1>
+<ul>
+  <% for m in @error_messages %> 
+    <h2>Date:<%= m.created_at %></h2>
+    <h2>Message: <%=link_to m.message,error_message_path(m) %></h2>
+ <h3>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------  </h3> 
+    <br />
+    <br />
+  <% end %>
+</ul>

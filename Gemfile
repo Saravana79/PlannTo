@@ -4,13 +4,11 @@ gem 'rails', '3.1.1'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
 gem 'mysql2'
 gem 'uuidtools' 
 gem "configatron", "~> 2.8.4"
 gem 'dalli'
 gem 'fb_graph'
-
 gem "oauth"
 gem "oauth2"
 gem "omniauth"
@@ -20,12 +18,12 @@ gem "hashie"
 gem 'devise', '~> 2.0.0'
 gem "friendly_id", "~> 4.0.1"
 gem "koala"
-
 #gem 'kaminari'
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
 gem "haml-rails"
+gem 'rails_exception_handler', "~> 2"
 #gem 'aws-s3'
 gem 'aws-sdk'
 gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'

@@ -16,7 +16,14 @@ class ApplicationController < ActionController::Base
       false
     end
   end
-   
+  
+  def authenticate_admin_user!
+    authenticate_user!
+    unless current_user.is_admin?
+      redirect_to root_path
+    end  
+  end 
+     
   def set_access_control_headers
      headers['Access-Control-Allow-Origin'] = '*'
      headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
