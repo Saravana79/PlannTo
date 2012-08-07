@@ -20,6 +20,8 @@ class ContentsController < ApplicationController
 
     if params[:sub_type] =="All"
       sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
+     elsif params[:sub_type] =="QandA"
+      sub_type = "Q&A"
     else
       sub_type = params[:sub_type].split(",")
     end
@@ -93,6 +95,8 @@ class ContentsController < ApplicationController
     #@contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
     if params[:sub_type] =="All"
       sub_type = ArticleCategory.where("itemtype_id = ?", params[:itemtype_id]).collect(&:name)
+      elsif params[:sub_type] =="QandA"
+      sub_type = "Q&A"
     else
       sub_type = params[:sub_type].split(",")
     end
