@@ -11,9 +11,9 @@ puts "save content to local by url ***"
         file.write data.read
       end
       file.rewind
-      p = ContentPhoto.create(:photo => file,:url => article.url,:content_id => article.id)
+      p = ContentPhoto.create(:photo => file,:content_id => article.id)
       cp = ContentPhoto.find_by_content_id(article.id)
       article.update_attribute('thumbnail',cp.photo.url(:thumb)) 
      end 
- end  
-end
+   end  
+ end

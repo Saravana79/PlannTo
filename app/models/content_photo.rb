@@ -17,18 +17,12 @@ class ContentPhoto < ActiveRecord::Base
     end
     file.rewind
     photo.photo = file
-    photo.url = url
-    photo.save
-  end
- 
-  def self.update_url_content(article,url)
-    photo = ContentPhoto.where(:url => url).last
     photo.content_id = article.id
     photo.save
     rescue
-      return true
+     return true
   end
-  
+ 
   def self.update_url_content_to_local(article,url)
     photo = article.content_photo
     extname = File.extname(article.url).delete("%")
