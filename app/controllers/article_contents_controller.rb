@@ -71,7 +71,6 @@ class ArticleContentsController < ApplicationController
       @article.sub_type = params[:article_content][:sub_type]
       ContentPhoto.save_url_content_to_local(@article,url)
     end
-    
     @related_items = article_search_by_relevance(@article)
     for row in @related_items
     logger.info row[:value]
