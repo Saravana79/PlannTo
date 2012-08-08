@@ -190,6 +190,7 @@
 <%else%>
       var saveButtonName = "Update " + category
 <%end%>
+
     $("form#<%=@form_id%> input#article_content_create_submit").val(saveButtonName);
     hideAllOptionalFieldsArticleCreate();
     if (category == "<%=ArticleCategory::EVENT%>"){
@@ -204,6 +205,38 @@
     else if (category == "<%=ArticleCategory::TRAVELOGUE%>"){
       showArticleCreateTravelogueOptFields();
     }
+    else if (category == "<%=ArticleCategory::MILES%>"){
+      showArticleCreateMileOptFields();
+    }
+  }
+  
+  function showArticleCreateMileOptFields(){
+    $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("City:")
+    $("div#subContainerContentCreate #<%=@sharefield2Label%>").text("Route:")
+    $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Total Distance:")
+    $("div#subContainerContentCreate #<%=@sharefield4Label%>").text("Time Taken:")
+    
+<%if @content.nil?%>
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").val('');
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").val('');
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").val('');
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").val('');
+<%else%>
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+<%end%>
+    $("div#subContainerContentCreate #<%=@sharefield1%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield2%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield3%>").show();
+    $("div#subContainerContentCreate #<%=@sharefield4%>").show();
+   
+    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>').css("width","400px");
   }
   
   function showArticleCreateTravelogueOptFields(){

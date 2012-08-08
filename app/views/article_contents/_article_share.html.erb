@@ -478,6 +478,34 @@ if ($("#article_content_sub_type").val() == ""){
     else if (category == "<%=ArticleCategory::REVIEWS%>"){
       $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
     }
+    else if (category == "<%=ArticleCategory::MILES%>"){
+      showArticleSubmitMileOptFields();
+    }
+  }
+  
+  function showArticleSubmitMileOptFields(){
+    $("div#ShareURLDiv #<%=@sharefield1Label%>").text("City:")
+    $("div#ShareURLDiv #<%=@sharefield2Label%>").text("Route:")
+    $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Total Distance:")
+    $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Time Taken:")
+<%if @content.nil?%>
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
+
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").val('');
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").val('');
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").val('');
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").val('');
+<%else%>
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+<%end%>
+    $("div#ShareURLDiv #<%=@sharefield1%>").show();
+    $("div#ShareURLDiv #<%=@sharefield2%>").show();
+    $("div#ShareURLDiv #<%=@sharefield3%>").show();
+    $("div#ShareURLDiv #<%=@sharefield4%>").show();
   }
   
   function showArticleSubmitTravelogueOptFields(){
