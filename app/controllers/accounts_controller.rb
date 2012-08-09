@@ -66,6 +66,6 @@ class AccountsController < ApplicationController
   #TODO. not restful
   def followers
     @user = User.find(params[:id])
-    @followers = Follow.follow_type('Plannto').for_followable(@user)
+    @followers = Follow.follow_type(['Plannto', 'Facebook']).for_followable(@user)
   end
 end
