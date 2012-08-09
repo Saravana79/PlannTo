@@ -17,6 +17,7 @@ class ContentPhoto < ActiveRecord::Base
       file.write data.read
     end
     file.rewind
+    photo.url = article.url
     photo.photo = file
     photo.content_id = article.id
     photo.save
@@ -35,6 +36,7 @@ class ContentPhoto < ActiveRecord::Base
       file.write data.read
     end
     file.rewind
+    photo.url = article.url
     photo.photo = file
     photo.save 
     rescue
