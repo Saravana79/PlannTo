@@ -5,10 +5,10 @@ position:relative; left:544px; text-indent:-9999px; top:-7px;" onclick="$('.ui-d
 	<ul id="pikame" class="jcarousel-skin-pika" >
 	  <li><img src="<%= @item.image_url(:org) %>"/></li>
 	  <% Itemimage.find_all_by_ItemId(@item.id).each do|itemimage| %>
-		<li><img src="<%= itemimage.image_url(:org) %>"/></li>
+		   <li><img src="<%= itemimage.image_url(:org) %>"/></li>
 	   <%end%>
-	</ul>
-</div>
+	 </ul>
+ </div>
 
 
 

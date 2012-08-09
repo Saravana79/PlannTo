@@ -21,15 +21,15 @@ class ArticleContentsController < ApplicationController
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
    if params[:submit_url] == 'submit_url'
-      ContentPhoto.save_url_content_to_local(@article,params['article_content']['url']) 
+     ContentPhoto.save_url_content_to_local(@article) 
    end   
    if ((params[:article_content][:sub_type] == "Photo" || params[:submit_url] == 'submit_url') && (!@article.content_photo.nil?))
-       @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb)) 
-    end  
-     if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
-        @defaultitem = Item.find(ids[0])
-        @defaultitem.add_new_rating(params[:article_content][:field1].to_f)
-     end
+     @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb)) 
+   end  
+    if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
+     @defaultitem = Item.find(ids[0])
+     @defaultitem.add_new_rating(params[:article_content][:field1].to_f)
+    end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
   #  end
@@ -50,10 +50,10 @@ class ArticleContentsController < ApplicationController
     if params[:article_content][:sub_type]!= "Photo"
        params.delete("content_photos_attributes")
     end 
-     if params[:submit_url] == 'submit_url'
-       ContentPhoto.update_url_content_to_local(@article,params[:article_content][:url])
-    end
     @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
+    if params[:submit_url] == 'submit_url'
+       ContentPhoto.update_url_content_to_local(@article)
+    end
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
        @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb))
      end   
@@ -69,7 +69,7 @@ class ArticleContentsController < ApplicationController
     if url.nil?
       @article=ArticleContent.create(params[:article_content])
     else
-      #@article,@images = ArticleContent.CreateContent(url,current_user)
+      @article,@images = ArticleContent.CreateContent(url,current_user)
       @article.sub_type = params[:article_content][:sub_type]
     end
     @related_items = article_search_by_relevance(@article)
