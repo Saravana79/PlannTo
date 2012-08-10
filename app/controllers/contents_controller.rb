@@ -177,13 +177,14 @@ class ContentsController < ApplicationController
 
   def update_guide
     @content = Content.find params[:content]
-    guide_ids = params[:guide].split ";"
-    guides = []
-    guide_ids.each do |g|
-      guide = Guide.find g.to_i
-      guides << guide
-    end
-    @content.guides = guides
+    guide = Guide.find params[:guide]
+
+    if @content.guides.include? guide
+      @content.guides.delete guide
+    else
+      @content.guides.push guide
+    end  
+
     respond_to do |format|
       format.js
     end

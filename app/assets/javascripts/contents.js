@@ -1,26 +1,18 @@
+$(function(){
+  $('ul.navdrop a').click(function(){
+    
+    $(this).parent().toggleClass('selected');
+    var guide = $(this).data('guide');
+    var content = $(this).closest('ul.navdrop').data('content');
+    $.ajaxSetup({
+      'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+    });
 
-/*$(function(){
-  $('select.content_guide').dropdownchecklist({
-      width: 150,
-      onComplete: function(selector){
-        var values = "";
-        var content = "";
-          for( i=0; i < selector.options.length; i++ ) {
-              if (selector.options[i].selected && (selector.options[i].value != "")) {
-                  if ( values != "" ) values += ";";
-                  values += selector.options[i].value;
-              }
-          }
-        $.ajaxSetup({
-            'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
-        });
+    $.post('/contents/update_guide',{'content' : content, 'guide' : guide });
 
-        $.post('/contents/update_guide',{'content' : $('#' + selector.id).data('content'), 'guide' : values });
-
-    }
   });
 });
-*/
+
 //for tabs
 $("ul#Newtabs li a").live('click', function(){
     $("ul#Newtabs").find('li').removeClass('tab_active');
