@@ -36,9 +36,17 @@ class ContentPhoto < ActiveRecord::Base
       file.write data.read
     end
     file.rewind
-    photo.url = article.thumbnail
-    photo.photo = file
-    photo.save 
+    unless photo.nil?
+      photo.url = article.thumbnail
+      photo.photo = file
+      photo.save
+    else
+      cp = ContentPhoto.new
+      cp.content_id = article.id
+      cp.url = article.thumbnail
+      cp.photo = file
+      cp.save
+    end     
     rescue
      return true
   end
