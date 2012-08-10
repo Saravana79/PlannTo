@@ -89,6 +89,42 @@
 						</div>
 						<br/>
 						<%end%>
+						<% if @content.sub_type == "#{ArticleCategory::TRAVELOGUE}" %>
+						<div>
+							<div style="float:left;">
+								<% if !@content.field1.empty? %>
+								<label >From : <%= @content.field1%> </label></br>
+								<%end%>
+								<% if !@content.field3.empty? %>
+								<label >Date : <%= @content.field3%> </label></br>
+								<%end%>
+							</div>
+							<div style="float:right;">
+								<% if !@content.field2.empty? %>
+								<label >To : <%= @content.field2%> </label></br>
+								<%end%>
+							</div>
+						</div>
+						<br/>
+						<%end%>
+						<% if @content.sub_type == "#{ArticleCategory::MILES}" %>
+						<div>
+							<div style="float:left;">
+								<% if !@content.field1.empty? %>
+								<label >Distance : <%= @content.field1%> </label></br>
+								<%end%>
+								<% if !@content.field3.empty? %>
+								<label >Route : <%= @content.field3%> </label></br>
+								<%end%>
+							</div>
+							<div style="float:right;">
+								<% if !@content.field2.empty? %>
+								<label >Time : <%= @content.field2%> </label></br>
+								<%end%>
+							</div>
+						</div>
+						<br/>
+						<%end%>
 						<div style="padding:3px 0px 3px 0px;clear:both;">
 							<%if ((@content.is_a?ArticleContent) && (@content.thumbnail?))%>
 							<%if ((@content.sub_type == "#{ArticleCategory::PHOTO}") && (!@content.content_photo.nil?)) %>
