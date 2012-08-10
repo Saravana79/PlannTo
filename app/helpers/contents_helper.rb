@@ -53,7 +53,7 @@ module ContentsHelper
     count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{item.id}")
     comment_count = count.nil? ? item.comments.where("status = 1").count : count.split("_")[1]
     
-    txt= "Comments ( #{comment_count})"
+    txt= "Comments (#{comment_count})"
     <<-END
      #{link_to txt, content_comments_path(item), :remote => true, :class => "txt_blue comments_show", :id => "anchor_comments_#{item.id}"}
     END

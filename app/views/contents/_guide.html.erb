@@ -5,7 +5,7 @@
 		<ul >
 			<% content_list = content.guides.map{|c| c.id } %>
 			<% Guide.all.each do |g| %>
-				<li <%= "class='selected'" if content_list.include? g.id %> ><a title="Demo" href="#nogo" data-guide=<%= g.id %> ><%= g.name %></a></li>
+				<li <%= "class='selected'" if content_list.include? g.id %> ><a title="Demo" data-guide=<%= g.id %> ><%= g.name %></a></li>
 			<% end %>
 		</ul>
 	</li>

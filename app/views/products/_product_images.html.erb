@@ -2,8 +2,8 @@
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
 position:relative; left:544px; text-indent:-9999px; top:-7px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
 <div class="pikachoose">
-	<ul id="pikame" class="jcarousel-skin-pika" >	  
-	  <% Itemimage.find_all_by_ItemId(@item.id).each do|itemimage| %>
+	<ul id="pikame" class="jcarousel-skin-pika" >
+	    <% Itemimage.find_all_by_ItemId(@item.id).each do|itemimage| %>
 		   <li><img src="<%= itemimage.image_url(:org) %>"/></li>
 	   <%end%>
 	 </ul>
