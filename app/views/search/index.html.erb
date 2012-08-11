@@ -55,19 +55,16 @@
       //click option has multiple values and hence before we reset the values we need
       //to check whether other field values is already set in search criteria or not.
        if (valueType == "Click"){
-       	var reset = true
-       	<%@search_info_lookups.each_with_index do |form_value, index|%>
-       		
-        	if (formId == <%=form_value[:id]%>)
-        	{
-        		var multipleClickSearchListId = "attribute_menu_" + <%=index%> + "_tag"
-        		if ($(".search_category").find("#" + searchListId).length != 0){
-        			reset = false
-        			return true
-        		}        	
-        	}
-        <%end%>	
-        if (reset == true){
+       	var reset = "true"
+       	<%@search_info_lookups.select {|s| s[:id] == value[:id]}.each do |form_value|%>
+       	
+       	<%index = @search_info_lookups.index(form_value)%>
+       	var multipleClickSearchListId = "attribute_menu_" + <%=index%> + "_tag"
+       	if ($(".search_category").find("#" +multipleClickSearchListId).length != 0){
+        			reset = "false"
+        		}    
+       	<%end%>   
+        if (reset == "true"){
         	 $("#" + formId).val('')
         }         
         } 
@@ -175,11 +172,27 @@
     }
     else{
       var attributeIndex = attributeId.replace('attribute_menu_',''); //substring(0, tagId.indexOf("attribute_menu_"));
-<%@search_info_lookups.each_with_index do |lookup, index|%>
+		<%@search_info_lookups.each_with_index do |lookup, index|%>
         if (<%=index%> == attributeIndex){
           var valueType = "<%=lookup[:param_1][:vt]%>"
           var attributeId = "<%=lookup[:id]%>"
-          if (valueType == "Between"){
+           //click option has multiple values and hence before we reset the values we need
+      //to check whether other field values is already set in search criteria or not.
+          if (valueType == "Click"){
+      var reset = "true"
+       	<%@search_info_lookups.select {|s| s[:id] == lookup[:id]}.each do |form_value|%>
+       	
+       	<%index = @search_info_lookups.index(form_value)%>
+       	var multipleClickSearchListId = "attribute_menu_" + <%=index%> + "_tag"
+       	if ($(".search_category").find("#" +multipleClickSearchListId).length != 0){
+        			reset = "false"
+        		}    
+       	<%end%>   
+        if (reset == "true"){
+        	 $("#" + lookup).val('')
+        }          
+        } 
+         else if (valueType == "Between"){
             $("#min_" + attributeId).val('');
             $("#max_" + attributeId).val('');
           }
