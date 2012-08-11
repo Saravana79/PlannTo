@@ -22,9 +22,8 @@
           <%end%>
           <div style="clear:both;"></div>
         </div>
-      <%end%>
-      <%if @content %>
-
+      <%else%>
+      <%#if @content %>
         <div class="Close_dialog" style="display:none;width:43px;
              overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
              position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
@@ -57,34 +56,9 @@
       <%@field1_id = "new_article_create_field1"%>
       <%@sharefield1 = "sharefield1"%>
       <%@sharefield1Label = "sharefield1Label"%>
-    <%else%>
-      <%@field1_id = "edit_article_create_field1_#{@content.id}"%>
-      <%@sharefield1 = "edit_sharefield1_#{@content.id}"%>
-      <%@sharefield1Label = "edit_sharefield1Label_#{@content.id}"%>
-    <%end%>
-    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield1%>">
-      <div class="title_header float_lft" id="<%=@sharefield1Label%>">Start date :</div>
-      <div class="float_lft">
-        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id =>  @field1_id}%>
-      </div>
-    </div>
-    <%if @content.nil?%>
-      <%@field2_id = "new_article_create_field2"%>
+       <%@field2_id = "new_article_create_field2"%>
       <%@sharefield2 = "sharefield2"%>
       <%@sharefield2Label = "sharefield1Label2"%>
-    <%else%>
-      <%@field2_id = "edit_article_create_field2_#{@content.id}"%>
-      <%@sharefield2 = "edit_article_create_sharefield2"%>
-      <%@sharefield2Label = "edit_article_create_sharefield1Label2_#{@content.id}"%>
-    <%end%>
-    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield2%>">
-      <div class="title_header float_lft" id="<%=@sharefield2Label%>">End date :</div>
-
-      <div class="float_lft">
-        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px", :id =>  @field2_id}  %>
-      </div>
-    </div>
-    <%if @content.nil?%>
       <%@field3_id = "new_article_create_field3"%>
       <%@sharefield3 = "sharefield3"%>
       <%@sharefield3Label = "sharefield1Label3"%>
@@ -92,6 +66,12 @@
       <%@sharefield4 = "sharefield4"%>
       <%@sharefield4Label = "sharefield1Label4"%>
     <%else%>
+      <%@field1_id = "edit_article_create_field1_#{@content.id}"%>
+      <%@sharefield1 = "edit_sharefield1_#{@content.id}"%>
+      <%@sharefield1Label = "edit_sharefield1Label_#{@content.id}"%>
+       <%@field2_id = "edit_article_create_field2_#{@content.id}"%>
+      <%@sharefield2 = "edit_article_create_sharefield2"%>
+      <%@sharefield2Label = "edit_article_create_sharefield1Label2_#{@content.id}"%>
       <%@field3_id = "edit_article_create_field3_#{@content.id}"%>
       <%@sharefield3 = "edit_article_create_sharefield3_#{@content.id}"%>
       <%@sharefield3Label = "edit_article_create_sharefield1Label3_#{@content.id}"%>
@@ -99,6 +79,19 @@
       <%@sharefield4 = "edit_article_create_sharefield4_#{@content.id}"%>
       <%@sharefield4Label = "edit_article_create_sharefield1Label4_#{@content.id}"%>
     <%end%>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield1%>">
+      <div class="title_header float_lft" id="<%=@sharefield1Label%>">Start date :</div>
+      <div class="float_lft">
+        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id =>  @field1_id}%>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield2%>">
+      <div class="title_header float_lft" id="<%=@sharefield2Label%>">End date :</div>
+
+      <div class="float_lft">
+        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px", :id =>  @field2_id}  %>
+      </div>
+    </div>
     <div style="padding:5px 5px 0px 0px;display:none;clear:both;" id="<%=@sharefield3%>">
       <br/>
       <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>

@@ -9,6 +9,17 @@
     <%@current_image_id = "current_image"%>
     <%@productReviewRating = "new_product_review_rating"%>
     <%@productReviewRatingField = "new_productReviewRatingField"%>
+    <%@dwnld_url = "dwnld_url"%>
+    <%@article_image = "article_image"%>
+    <%@current_image_size = "current_image_size"%>
+    <%@img_thumb = "img_thumb"%>
+    <%@txtArticleDescription =  "txtArticleDescription"%>
+    <%@new_article_type ="new_article_type"%>
+    <%@total_images = "total_images"%>
+    <%@new_article_thumbnail = "new_article_thumbnail"%>
+    <%@articles_item_id = "articles_item_id"%>
+    <%@manual_image= "new_manual_image"%>
+    <%@thumbnail_id = "new_thumbnail_url"%>
   <%else%>
     <%@url_id = "edit_share_url_#{@article_content.id}"%>
     <%@form_id = "edit_share_form_#{@article_content.id}"%>
@@ -16,22 +27,6 @@
     <%@title_id = "edit_txtArticleTitle_#{@article_content.id}"%>
     <%@current_image_id = "edit_current_image_#{@article_content.id}"%>
     <%@productReviewRatingField = "new_productReviewRatingField_#{@article_content.id}"%>
-  <%end%>
-
-  <%if @article_content.new_record?%>
-    <%@dwnld_url = "dwnld_url"%>
-    <%@article_image = "article_image"%>
-    <%@current_image_size = "current_image_size"%>
-    <%@img_thumb = "img_thumb"%>
-    <%@txtArticleDescription =  "txtArticleDescription"%>
-    <%@new_article_type ="new_article_type"%>
-
-    <%@total_images = "total_images"%>
-    <%@new_article_thumbnail = "new_article_thumbnail"%>
-    <%@articles_item_id = "articles_item_id"%>
-    <%@manual_image= "new_manual_image"%>
-    <%@thumbnail_id = "new_thumbnail_url"%>
-  <%else%>
     <%@articles_item_id = "edit_articles_item_id_#{@article_content.id}"%>
     <%@img_thumb = "edit_img_thumb_#{@article_content.id}"%>
     <%@dwnld_url = "edit_dwnld_url_#{@article_content.id}"%>
@@ -43,7 +38,6 @@
     <%@new_article_type ="edit_article_type_#{@article_content.id}"%>
     <%@manual_image= "edit_manual_image_#{@article_content.id}"%>
     <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
-
   <%end%>
 
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
@@ -129,33 +123,9 @@
       <%@field1_id = "new_share_field1"%>
       <%@sharefield1 = "sharefield1"%>
       <%@sharefield1Label = "sharefield1Label"%>
-    <%else%>
-      <%@field1_id = "edit_share_field1_#{@article_content.id}"%>
-      <%@sharefield1 = "edit_sharefield1_#{@article_content.id}"%>
-      <%@sharefield1Label = "edit_sharefield1Label_#{@article_content.id}"%>
-    <%end%>
-    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield1%>">
-      <div class="title_header float_lft" id="<%=@sharefield1Label%>">Start date :</div>
-      <div class="float_lft">
-        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id => @field1_id}  %>
-      </div>
-    </div>
-    <%if @article_content.new_record?%>
       <%@field2_id = "new_share_field2"%>
       <%@sharefield2 = "sharefield2"%>
       <%@sharefield2Label = "sharefield1Label2"%>
-    <%else%>
-      <%@field2_id = "edit_share_field2_#{@article_content.id}"%>
-      <%@sharefield2 = "edit_sharefield2"%>
-      <%@sharefield2Label = "edit_sharefield1Label2_#{@article_content.id}"%>
-    <%end%>
-    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield2%>">
-      <div class="title_header float_lft" id="<%=@sharefield2Label%>">End date :</div>
-      <div class="float_lft">
-        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px", :id => @field2_id}  %>
-      </div>
-    </div>
-    <%if @article_content.new_record?%>
       <%@field3_id = "new_share_field3"%>
       <%@sharefield3 = "sharefield3"%>
       <%@sharefield3Label = "sharefield1Label3"%>
@@ -163,7 +133,14 @@
       <%@sharefield4 = "sharefield4"%>
       <%@sharefield4Label = "sharefield1Label4"%>
       <%button_name = "Share this content"%>
+      <%@save_instruction_value = "1"%>
     <%else%>
+      <%@field1_id = "edit_share_field1_#{@article_content.id}"%>
+      <%@sharefield1 = "edit_sharefield1_#{@article_content.id}"%>
+      <%@sharefield1Label = "edit_sharefield1Label_#{@article_content.id}"%>
+      <%@field2_id = "edit_share_field2_#{@article_content.id}"%>
+      <%@sharefield2 = "edit_sharefield2"%>
+      <%@sharefield2Label = "edit_sharefield1Label2_#{@article_content.id}"%>
       <%@field3_id = "edit_share_field3_#{@article_content.id}"%>
       <%@sharefield3 = "edit_sharefield3_#{@article_content.id}"%>
       <%@sharefield3Label = "edit_sharefield1Label3_#{@article_content.id}"%>
@@ -171,7 +148,20 @@
       <%@sharefield4 = "edit_sharefield4_#{@article_content.id}"%>
       <%@sharefield4Label = "edit_sharefield1Label4_#{@article_content.id}"%>
       <%button_name = "Update this content"%>
+       <%@save_instruction_value = "0"%>
     <%end%>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield1%>">
+      <div class="title_header float_lft" id="<%=@sharefield1Label%>">Start date :</div>
+      <div class="float_lft">
+        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id => @field1_id}  %>
+      </div>
+    </div>
+    <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield2%>">
+      <div class="title_header float_lft" id="<%=@sharefield2Label%>">End date :</div>
+      <div class="float_lft">
+        <%= f.text_field :field2, {:style=>"margin-left:5px;width:150px", :id => @field2_id}  %>
+      </div>
+    </div>
     <div style="padding:5px 5px 0px 0px;display:none;clear:both;" id="<%=@sharefield3%>">
       <div class="title_header float_lft" id="<%=@sharefield3Label%>">Location :</div>
       <div class="float_lft">
@@ -195,12 +185,7 @@
     window.close();", :class => "btn_submitanswer"	%>
       <% end %>
       <div style="clear:both;"></div>
-    </div>
-    <%if @article_content.new_record?%>
-      <%@save_instruction_value = "1"%>
-    <%else%>
-      <%@save_instruction_value = "0"%>
-    <%end%>
+    </div>    
     <input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="<%=@save_instruction_value%>"/>
     <div id="url_content_desc">	</div>
 
@@ -294,7 +279,6 @@
         $("ul#<%=@ul_list_id%> li:first span a.icon_close_tagging").remove();
   <% end %>
 <%else%>
-
       settings={
         has_parent:true,
         close:true, addButton: false,
