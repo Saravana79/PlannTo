@@ -8,7 +8,7 @@ desc "save url content to local"
     articles.each do |article|
     unless article.url.nil? or article.thumbnail.nil? or article.thumbnail == ""
       puts article.id
-      safe_thumbnail_url = URI.encode(article.thumbnail)
+      safe_thumbnail_url = URI.encode(URI.decode(article.thumbnail))
       extname = File.extname(safe_thumbnail_url).delete("%")
       basename = File.basename(safe_thumbnail_url, extname).delete("%")
       file = Tempfile.new([basename, extname])

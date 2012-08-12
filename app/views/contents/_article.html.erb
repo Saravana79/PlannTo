@@ -9,7 +9,7 @@
     <div>
       <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
        <% if content.url?  %>
-        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(content.url)).host.gsub("www.","") %> </a>)
+        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
        <%end%>
     </div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><%=get_anchor_name_link(content)%> <a class="txt_brown">- <%= time_ago_format(content)%> ago </a></div>
