@@ -8,7 +8,7 @@ class ContentPhoto < ActiveRecord::Base
   
   def self.save_url_content_to_local(article)
     photo = ContentPhoto.new
-    safe_thumbnail_url = URI.encode(article.thumbnail, "[],{},()")
+    safe_thumbnail_url = URI.encode(article.thumbnail)
     extname = File.extname(safe_thumbnail_url).delete("%")
     basename = File.basename(safe_thumbnail_url, extname).delete("%")
     file = Tempfile.new([basename, extname])
@@ -27,7 +27,7 @@ class ContentPhoto < ActiveRecord::Base
 
   def self.update_url_content_to_local(article)
     photo = article.content_photo
-    safe_thumbnail_url = URI.encode(article.thumbnail, "[],{},()")
+    safe_thumbnail_url = URI.encode(article.thumbnail)
     extname = File.extname(safe_thumbnail_url).delete("%")
     basename = File.basename(safe_thumbnail_url, extname).delete("%")
     file = Tempfile.new([basename, extname])
