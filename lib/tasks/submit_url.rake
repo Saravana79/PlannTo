@@ -1,7 +1,11 @@
 desc "save url content to local"
-task :submit_url, [:argument] => :environment do
-puts "save content to local by url ***"
-  ArticleContent.all.each do |article|
+  task :submit_url,:arg1, :needs => :environment do | t, args|
+    #ItemContentsRelationsCache.delete_all
+    puts args[:arg1]
+    arg1 = args[:arg1]
+    puts "save content to local by url ***"
+    articles = ArticleContent.find(:all, :conditions=>["id > ?" , arg1])
+    articles.each do |article|
     unless article.url.nil? or article.thumbnail.nil? or article.thumbnail == ""
       puts article.id
       safe_thumbnail_url = URI.encode(article.thumbnail, "[],{},()")
