@@ -29,7 +29,7 @@
 					<div>
 						<%= raw get_content_title(@content)%>
 						<% if ((content.is_a?ArticleContent) && (content.url?))  %>
-						- <a class="txt_black_description txt_onhover" href="<%=external_content_path(content.id)%>">(<%= URI.parse(content.url).host.gsub("www.","") %> </a>)
+						- <a class="txt_black_description txt_onhover" href="<%=external_content_path(content.id)%>">(<%= URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
 						<%end%>
 					</div>
 					<div>
