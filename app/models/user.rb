@@ -49,8 +49,11 @@ class User < ActiveRecord::Base
   
   after_create :populate_username
 
-
-
+  scope :follow_type, lambda { |follow_type| where("follows.follow_type = ?", follow_type)}
+  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type)}
+  scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
+  scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
+  
   USER_POINTS = {:new_review => {:points => 2,:self_update => true},
     :new_question => {:points => 1,:self_update => true},
     :new_answer => {:points => 1,:self_update => true}
@@ -190,10 +193,19 @@ class User < ActiveRecord::Base
     self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
   end
   
-  def self.followers_of(item)
+=begin  
+  def self.followers_of(followable_id = nil, followable_type = nil, follow_type = nil)
+    conditions = ''
+    conditions = conditions + "follows.followable_id = #{followable_id}" unless followable_id.blank?
+    conditions = conditions + " AND " unless conditions.blank?
+    conditions = conditions + "follows.followable_type = '#{followable_type}'" unless followable_type.blank?
+    #conditions = conditions + " AND " unless conditions.blank?
+    conditions = conditions + "follows.follow_type = #{follow_type}" unless follow_type.blank?
+    
     self.all( :joins => "INNER JOIN `follows` ON follows.follower_id = users.id",
-              :conditions => "follows.followable_id = #{item.id} AND follows.followable_type = '#{item.type}'")
+              :conditions => conditions)
   end
+=end
   
   #def following_users
     #self.follows.for_followable_type('User').follow_type('Plannto')
