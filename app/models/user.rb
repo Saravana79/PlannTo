@@ -54,6 +54,8 @@ class User < ActiveRecord::Base
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
   scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
   
+  scope :friends, lambda {|user| join_follows.followable_type('User').where("follows.follower_id = #{user.id}")}
+  
   USER_POINTS = {:new_review => {:points => 2,:self_update => true},
     :new_question => {:points => 1,:self_update => true},
     :new_answer => {:points => 1,:self_update => true}
