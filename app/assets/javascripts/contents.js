@@ -1,3 +1,6 @@
+var running = false;
+
+
 $(function(){
   $('ul.navdrop a').click(function(){
     

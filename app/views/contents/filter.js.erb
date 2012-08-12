@@ -1,12 +1,12 @@
 element= jQuery('#content_next')
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
 
+running=false;
 <%if params[:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
 <%else%>
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
 <%end%>
 element.remove();
-running=false;
 $("#filter_page_no").val("<%=@contents.current_page+ 1%>");
 
