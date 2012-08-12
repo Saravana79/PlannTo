@@ -190,6 +190,11 @@ class User < ActiveRecord::Base
     self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
   end
   
+  def self.followers_of(item)
+    self.all( :joins => "INNER JOIN `follows` ON follows.follower_id = users.id",
+              :conditions => "follows.followable_id = #{item.id} AND follows.followable_type = '#{item.type}'")
+  end
+  
   #def following_users
     #self.follows.for_followable_type('User').follow_type('Plannto')
   #end

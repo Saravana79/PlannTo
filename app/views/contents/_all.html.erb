@@ -30,38 +30,31 @@
         $(this).addClass("link_active");
           if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val(1)
-        $.ajax(
-          {
-            url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@item.get_base_itemtypeid%>",
-            type: "get",
-            dataType: "script",
-            success    : function(data)
-                {
-                  running = false;
-                }
-          });
+          	
+          	var sub_type =  $("div#Filterby div.Filternav ul li.Currentfilter").text()
+          	var items = "<%=@item.id%>"
+          var filter_page_no = $("#filter_page_no").val()
+          var itemtype_id = "<%=@item.get_base_itemtypeid()%>"
+          var sort_by = $(this).text()
+          var action = "filter"
+          contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by);         
           return false
            }
            else{
          $("#content_search_page").val(1);
          $("#content_search_sort_by").val($(this).text());
          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
-         $("#contentSearchForm").submit()
-         
+         $("#contentSearchForm").submit()        
        
          }
         
   	});
-  //	jQuery(function($){ 
- //  $("#contentSearchForm")
-  //    .bind('ajax:complete', function() {   alert("complete");	running = false});
-//});
 
       $("div#Filterby div.Filternav ul li").click(function (e) {
         $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
         $(this).closest('li').addClass("Currentfilter");
         if ($(this).text() != "Labeltext"){
-          $("#filter_page_no").val('1');
+          
           var id = $(this).attr('id');          
           switch(id){
             case 'All' :  var sub_type = "All";break;
@@ -69,20 +62,17 @@
             case 'Q&A': var sub_type = "QandA";break;
             default:  var sub_type = id;
           }
-          
+          $("#filter_page_no").val('1');
           $("#content_search_page").val(1)
           $("#content_search_search").val("")
           $("#content_search_sub_type").val(sub_type);
-          $.ajax(
-          {
-            url: "/contents/filter?sub_type=" + sub_type + "&items=<%=@item.id%>&itemtype_id=<%=@item.get_base_itemtypeid()%>" + "&sort_by=" + $("span#sortBy a.link_active").text() + "&page=" + $("#filter_page_no").val(),
-            type: "get",
-            dataType: "script",
-            success    : function(data)
-          {
-            running = false;
-          }
-          });
+          
+          var items = "<%=@item.id%>"
+          var filter_page_no = $("#filter_page_no").val()
+          var itemtype_id = "<%=@item.get_base_itemtypeid()%>"
+          var sort_by = $("span#sortBy a.link_active").text();
+          var action = "filter"
+          contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by); 
           return false
         }
       });
@@ -99,13 +89,13 @@
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Comments</a>
         <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
-	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
-	<%= f.hidden_field :sub_type %>
-	<%= f.hidden_field :itemtype_ids, :value => @item.try(:itemtype_id) %>
-	<%= f.hidden_field :item_ids, :value => @item.id%>	
-	<%= f.hidden_field :previous_search_value%>
-	<%= f.hidden_field :page, :value =>1%>
-	<% end -%>  
+			<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+			<%= f.hidden_field :sub_type %>
+			<%= f.hidden_field :itemtype_ids, :value => @item.try(:itemtype_id) %>
+			<%= f.hidden_field :item_ids, :value => @item.id%>	
+			<%= f.hidden_field :previous_search_value%>
+			<%= f.hidden_field :page, :value =>1%>
+		<% end -%>  
     </span>    
      
   </div>
@@ -153,7 +143,6 @@
     });
     
       $(document).ready(function(){
-    var running =false;
     $(window).scroll(function () {
 		
       lnk = $('#content_next');
@@ -168,16 +157,12 @@
             case 'Q&A': var sub_type = "QandA";break;
             default:  var sub_type = id;
           }
-        $.ajax(
-        {
-          url: "/contents/feeds?sub_type=" + sub_type + "&items=<%=@item.id%>&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@item.get_base_itemtypeid()%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
-          type: "get",
-          dataType: "script",
-          success    : function(data)
-          {
-            running = false;
-          }
-        });
+          var items = "<%=@item.id%>"
+          var filter_page_no = $("#filter_page_no").val()
+          var itemtype_id = "<%=@item.get_base_itemtypeid()%>"
+          var sort_by = $("span#sortBy a.link_active").text();
+          var action = "feeds"
+          contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by);        
         return false
         //lnk.click();
       }
@@ -194,4 +179,15 @@
     });
    }); 
   });
+  
+  function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by){
+  	 $.get("/contents/" + action ,
+  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by},
+     
+          function(data, status, xhr)
+          {
+            running = false;
+          }
+        );  
+       }
 </script>

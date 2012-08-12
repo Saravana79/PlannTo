@@ -7,6 +7,7 @@ class Follow < ActiveRecord::Base
                                                            followable.id, followable.class.name]) }
   scope :for_follower_type,   lambda { |follower_type| where("follower_type = ?", follower_type) }
   scope :for_followable_type, lambda { |followable_type| where("followable_type = ?", followable_type) }
+  scope :for_followable_id, lambda { |followable_id| where("followable_id = ?", followable_id) }
   
   scope :follow_type, lambda{|type| where(follow_type: type)}
   
@@ -16,6 +17,7 @@ class Follow < ActiveRecord::Base
   scope :blocked,             where(:blocked => true)
   scope :all_follower_type,        lambda { |follower, followable| where(["follower_id = ? AND follower_type = ? AND followable_type = ? AND followable_id = ?",
                                                          follower.id, parent_class_name(follower), followable.class.name, followable.id]) }
+  
   
   # NOTE: Follows belong to the "followable" interface, and also to followers
   belongs_to :followable, :polymorphic => true

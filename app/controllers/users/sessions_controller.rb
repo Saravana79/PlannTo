@@ -16,7 +16,7 @@ class Users::SessionsController < Devise::SessionsController
     # resource = warden.authenticate!(auth_options)
     resource = warden.authenticate(auth_options)
  # if resource
-    unless request.xhr?
+    unless request.xhr? && !authentication.user.present?
     set_flash_message(:notice, :signed_in) if is_navigational_format?
     sign_in(resource_name, resource)
     respond_with resource, :location => after_sign_in_path_for(resource)
@@ -31,7 +31,9 @@ class Users::SessionsController < Devise::SessionsController
         #ajax sign in failed.
     #  end
     end
-  
+    rescue #temporary solution for produce exception after login fail.
+      sign_out(resource_name)
+     render :new 
   end
 
   def auth_options
