@@ -3809,6 +3809,7 @@ ul.navdrop  li ul li {
     background: transparent;
     text-indent: 0;
     padding: 0;
+    cursor:pointer;
 }
 
 ul.navdrop  li:hover ul li a,
