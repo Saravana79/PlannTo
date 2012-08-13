@@ -2,8 +2,9 @@ var running = false;
 
 
 $(function(){
-  $('ul.navdrop a').click(function(){
-    
+
+  $('ul.navdrop a').live("click",function(){
+
     $(this).parent().toggleClass('selected');
     var guide = $(this).data('guide');
     var content = $(this).closest('ul.navdrop').data('content');
@@ -33,6 +34,28 @@ $("ul#Newtabs li a").live('click', function(){
   	$('div#overview').hide();	
   } 
   
+  
+  
+   function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by){
+  	 $.get("/contents/" + action ,
+  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by},
+     
+          function(data, status, xhr)
+          {
+            running = false;
+          }
+        );  
+       }
+       
+   function find_sub_type(id){
+   	switch(id){
+            case 'All' :  var sub_type = "All";break;
+            case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
+            default:  var sub_type = id;
+          }
+          return sub_type
+   }
   
 
 
