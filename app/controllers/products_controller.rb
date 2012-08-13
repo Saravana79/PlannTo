@@ -13,8 +13,9 @@ class ProductsController < ApplicationController
     search_type = request.path.split("/").last
     @itemtype = Itemtype.find_by_itemtype(search_type.singularize.camelize.constantize)
     @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
-
-  end
+    @followers =  User.get_followers(request.url) 
+    @top_contributors =  User.get_top_contributors
+   end
 
   def specification
     @item = Item.find(params[:id])

@@ -90,7 +90,27 @@ class User < ActiveRecord::Base
   # def username
   #   email.split("@")[0]
   # end
-
+  
+  def self.get_followers(request_url)
+    if request_url.match('cars')
+      User.join_follows.followable_type('Car')
+    elsif request_url.match('mobiles')
+      User.join_follows.followable_type('Mobile')
+    elsif request_url.match('bikes')
+      User.join_follows.followable_type('Bike')
+    elsif request_url.match('tablets')
+      User.join_follows.followable_type('Tablet')
+    elsif request_url.match('cycles')
+      User.join_follows.followable_type('Cycle') 
+    elsif request_url.match('cameras')
+       User.join_follows.followable_type('Camera') 
+     end        
+  end
+  
+  def self.get_top_contributors 
+    ActiveRecord::Base.connection.execute("select user_id, sum(points) from view_top_contributors group by user_id order by sum(points) desc limit 5")
+  end
+    
   def name
     unless u_name = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name")
       u_name = super

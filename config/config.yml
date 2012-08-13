@@ -1,11 +1,14 @@
 development:
-  #root_image_url: "http://www.plannto.com/images/"
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
+  EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em 
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
+  EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
+  EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  
