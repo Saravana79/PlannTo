@@ -2,8 +2,9 @@ var running = false;
 
 
 $(function(){
-  $('ul.navdrop a').click(function(){
-    
+
+  $('ul.navdrop a').live("click",function(){
+
     $(this).parent().toggleClass('selected');
     var guide = $(this).data('guide');
     var content = $(this).closest('ul.navdrop').data('content');
