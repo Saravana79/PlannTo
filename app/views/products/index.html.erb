@@ -281,8 +281,9 @@
   </div>
   <br/>
 
-
- <div class="txt_black imgfollowers" >Followed by <a href="#"><%= @followers.count rescue 0%></a>
+<% if @followers.empty? %>
+<% else %>
+ <div class="txt_black imgfollowers" >Followed by - <%= @followers.count rescue 0%>
     <ul class="imgfollowers">
      <% @followers.limit(20).each do |follower | %>
       <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
@@ -290,6 +291,7 @@
     </ul>
   </div>
   <br/>
+<%end%>
   <!-- Related Cars -- Start -->
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
