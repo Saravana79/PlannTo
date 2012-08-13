@@ -21546,16 +21546,27 @@ $("ul#Newtabs li a").live('click', function(){
         return false;
 
   });
-  
-  
-  function setActiveTab(id){
+ function setActiveTab(id){
   	$("ul#Newtabs").find('li').removeClass('tab_active');
   	$('li#all_variant').addClass('tab_active');
-  	$('div#all_variants').show();  	
-  }
+  	$('div#all_variants').show();  
+  	$('div#overview').hide();	
+  } 
+  
+  
 
 
 ;
+(function() {
+
+
+
+}).call(this);
+(function() {
+
+
+
+}).call(this);
 (function() {
 
 
@@ -28581,6 +28592,7 @@ tinymce.html.Styles = function(settings, schema) {
 				if (elements[item])
 					delete elements[item];
 			});
+
 		}
 
 		// If the user didn't allow span only allow internal spans
@@ -42140,6 +42152,7 @@ tinymce.ForceBlocks = function(editor) {
 						return false;
 					}
 				});
+
 				
 				// get the index of the bookmarks
 				each(node.childNodes, function(n, index) {

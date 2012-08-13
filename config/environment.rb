@@ -14,3 +14,4 @@ ActionMailer::Base.smtp_settings = {
 
 # Initialize the rails application
 PlanNto::Application.initialize!
+

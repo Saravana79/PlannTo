@@ -282,28 +282,11 @@
   <br/>
 
 
-  <div class="txt_black imgfollowers" >Followed by <a href="#">145236 PEOPLE</a>
+ <div class="txt_black imgfollowers" >Followed by <a href="#"><%= @followers.count rescue 0%></a>
     <ul class="imgfollowers">
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
-      <li class="imgfollowers"><img src="images/img_followers.png" /></li>
+     <% @followers.limit(20).each do |follower | %>
+      <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
+     <%end%>
     </ul>
   </div>
   <br/>
@@ -325,89 +308,31 @@
     <tr>
       <td class="bg_widgethdr txt_white">Top Contributors</td>
     </tr>
+    
     <tr>
       <td height="170" valign="top">
         <ul class="imgContributors">
+          <% @top_contributors.each(:as => :hash) do |top_c| %>
+  <li class="imgfollowers"></li>
+          <% user= User.find(top_c['user_id']) %>
           <li class="imgContributors">
             <div>
               <div class="float_lft">
-                <img src="images/img_followers.png" class="imgContributes" />
+                <a href="<%= user.get_url()%>"><%= image_tag user.get_photo , :class => "userImageSmall"%></a>
               </div>
               <div class="contributorname">
                 <a class="txt_black" href="#">
-                  Saravana Kumar
+                  <%= user.name %>
                 </a>
               </div>
               <div class="contributorpoints">
-                1000 Points
+                 <%= top_c["sum(points)"] %> Points
               </div>
             </div>
 
           </li>
-          <li class="imgContributors">
-            <div style="clear:both;">
-              <div class="float_lft">
-                <img src="images/img_followers.png" class="imgContributes" />
-              </div>
-              <div class="contributorname">
-                <a class="txt_black" href="#">
-                  Saravana Kumar
-                </a>
-              </div>
-              <div class="contributorpoints">
-                1000 Points
-              </div>
-            </div>
-
-          </li>
-          <li class="imgContributors" >
-            <div style="clear:both">
-              <div class="float_lft">
-                <img src="images/img_followers.png" class="imgContributes" />
-              </div>
-              <div class="contributorname">
-                <a class="txt_black" href="#">
-                  Saravana Kumar
-                </a>
-              </div>
-              <div class="contributorpoints">
-                1000 Points
-              </div>
-            </div>
-
-          </li>
-          <li class="imgContributors" >
-            <div style="clear:both">
-              <div class="float_lft">
-                <img src="images/img_followers.png" class="imgContributes" />
-              </div>
-              <div class="contributorname">
-                <a class="txt_black" href="#">
-                  Saravana Kumar
-                </a>
-              </div>
-              <div class="contributorpoints">
-                1000 Points
-              </div>
-            </div>
-
-          </li>
-          <li class="imgContributors" >
-            <div style="clear:both">
-              <div class="float_lft">
-                <img src="images/img_followers.png" class="imgContributes" />
-              </div>
-              <div class="contributorname">
-                <a class="txt_black" href="#">
-                  Saravana Kumar
-                </a>
-              </div>
-              <div class="contributorpoints">
-                1000 Points
-              </div>
-            </div>
-
-          </li>
+          <%end%>
+         
         </ul>
 
 

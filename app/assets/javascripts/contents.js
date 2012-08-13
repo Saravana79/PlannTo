@@ -27,12 +27,13 @@ $("ul#Newtabs li a").live('click', function(){
         return false;
 
   });
-  
-  
-  function setActiveTab(id){
+ function setActiveTab(id){
   	$("ul#Newtabs").find('li').removeClass('tab_active');
   	$('li#all_variant').addClass('tab_active');
-  	$('div#all_variants').show();  	
-  }
+  	$('div#all_variants').show();  
+  	$('div#overview').hide();	
+  } 
+  
+  
 
 

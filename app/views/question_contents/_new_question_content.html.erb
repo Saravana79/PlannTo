@@ -1,3 +1,4 @@
+<script  type="text/javascript" src="/javascripts/expanding.js"></script>
 <div id="question_contentDiv" style="display:none;" class="contentSubContainer">
 
   <%if @content.nil?%>
@@ -102,6 +103,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
        textarea, .textareaClone {
         min-height: 6em;
         width: 400px;
+        max-height: <%= configatron.EXPANDING_TEXT_AREA_MAX_HEIGHT %>;
      }
    </style> 
     </div>
