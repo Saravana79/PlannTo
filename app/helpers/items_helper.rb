@@ -267,13 +267,14 @@ module ItemsHelper
       then
       str = '<li '
       str = str + "#{'class="tab_active"' if tab_type == "overview"}"
-      str = str +'><a href="#tabs1"><span>Overview</span></a></li>
+      str = str +'><a href="#overview"><span>Overview</span></a></li>
             <li '
       str = str + "#{'class="tab_active"' if tab_type == "all_models"}"
-      str = str + '><a href="#all_models" ><span>All Models</span></a></li>'
+      str = str + ' id="all_variant"><a href="#all_variants" ><span>All Models</span></a></li>'
+      
     when "CarGroup"
       then 
-       str = '<li '
+      str = '<li '
       str = str + "#{'class="tab_active"' if tab_type == "overview"}"
       str = str +'><a href="#overview"><span>Overview</span></a></li>
             <li '
