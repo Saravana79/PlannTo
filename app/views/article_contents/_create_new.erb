@@ -1,3 +1,4 @@
+<script  type="text/javascript" src="/javascripts/expanding.js"></script>
 <div id="subContainerContentCreate" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
   <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
   <!-- along with event creation this form is used for many other types -->
@@ -56,9 +57,11 @@
        textarea, .textareaClone {
         min-height: 6em;
         width: 400px;
+        max-height: 25em;
      }
       </style>
     </div>
+    
     <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->
     <%if @content.nil?%>
       <%@field1_id = "new_article_create_field1"%>
