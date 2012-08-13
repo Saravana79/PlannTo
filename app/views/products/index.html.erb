@@ -316,7 +316,7 @@
   <li class="imgfollowers"></li>
           <% user= User.find(top_c['user_id']) %>
           <li class="imgContributors">
-            <div>
+            <div style="clear:both;">
               <div class="float_lft">
                 <a href="<%= user.get_url()%>"><%= image_tag user.get_photo , :class => "userImageSmall"%></a>
               </div>
