@@ -14,3 +14,4 @@ ActionMailer::Base.smtp_settings = {
 
 # Initialize the rails application
 PlanNto::Application.initialize!
+EXPANDING_TEXT_AREA_MAX_HEIGHT = '25em' 
