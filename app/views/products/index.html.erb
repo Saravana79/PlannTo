@@ -280,12 +280,12 @@
 
   </div>
   <br/>
-
+  
 <% if @followers.empty? %>
 <% else %>
- <div class="txt_black imgfollowers" >Followed by - <%= @followers.count rescue 0%>
+ <div class="txt_black imgfollowers" >Followed by - <%= @followers_count rescue 0%>
     <ul class="imgfollowers">
-     <% @followers.limit(20).each do |follower | %>
+     <% @followers.each do |follower | %>
       <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
      <%end%>
     </ul>

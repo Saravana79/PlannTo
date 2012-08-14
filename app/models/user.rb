@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   after_create :populate_username
 
   scope :follow_type, lambda { |follow_type| where("follows.follow_type = ?", follow_type)}
-  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type)}
+  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id").limit(20)}
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
   scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
   
@@ -101,12 +101,27 @@ class User < ActiveRecord::Base
     elsif request_url.match('tablets')
       User.join_follows.followable_type('Tablet')
     elsif request_url.match('cycles')
-      User.join_follows.followable_type('Cycle') 
+      User.join_follows.followable_type('Cycle')
     elsif request_url.match('cameras')
-       User.join_follows.followable_type('Camera') 
+       User.join_follows.followable_type('Camera')
      end        
   end
   
+  def self.get_followers_count(request_url)
+    if request_url.match('cars')
+      User.join_follows.followable_type('Car').length
+    elsif request_url.match('mobiles')
+      User.join_follows.followable_type('Mobile').length
+    elsif request_url.match('bikes')
+      User.join_follows.followable_type('Bike').length
+    elsif request_url.match('tablets')
+      User.join_follows.followable_type('Tablet').length
+    elsif request_url.match('cycles')
+      User.join_follows.followable_type('Cycle').length
+    elsif request_url.match('cameras')
+       User.join_follows.followable_type('Camera').length
+     end        
+  end
   def self.get_top_contributors 
     ActiveRecord::Base.connection.execute("select user_id, sum(points) from view_top_contributors group by user_id order by sum(points) desc limit 5")
   end
