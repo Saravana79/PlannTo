@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   after_create :populate_username
 
   scope :follow_type, lambda { |follow_type| where("follows.follow_type = ?", follow_type)}
-  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id").limit(20)}
+  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id")}
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
   scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
   
@@ -93,17 +93,17 @@ class User < ActiveRecord::Base
   
   def self.get_followers(request_url)
     if request_url.match('cars')
-      User.join_follows.followable_type('Car')
+      User.join_follows.followable_type('Car').limit(20)
     elsif request_url.match('mobiles')
-      User.join_follows.followable_type('Mobile')
+      User.join_follows.followable_type('Mobile').limit(20)
     elsif request_url.match('bikes')
-      User.join_follows.followable_type('Bike')
+      User.join_follows.followable_type('Bike').limit(20)
     elsif request_url.match('tablets')
-      User.join_follows.followable_type('Tablet')
+      User.join_follows.followable_type('Tablet').limit(20)
     elsif request_url.match('cycles')
-      User.join_follows.followable_type('Cycle')
+      User.join_follows.followable_type('Cycle').limit(20)
     elsif request_url.match('cameras')
-       User.join_follows.followable_type('Camera')
+       User.join_follows.followable_type('Camera').limit(20)
      end        
   end
   
