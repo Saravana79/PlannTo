@@ -71,7 +71,8 @@ resources :accounts do
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
-   match ':itemtype/:guides/:guide_type' => 'contents#search_guide'
+   match ':itemtype/guides/:guide_type' => 'contents#search_guide'
+   match ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
    
   resources :cars do
         resources :shares

@@ -37,6 +37,8 @@ class ContentsController < ApplicationController
     itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1    
     sort_by = get_sort_by(params[:content_search][:sort_by])
+    guide_ids = params[:content_search][:guide_ids] == "" ? Array.new : params[:content_search][:guide_ids].split(",")
+    
 
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
@@ -71,14 +73,16 @@ class ContentsController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
     @guide = Guide.find_by_name params[:guide_type]
     @article_categories=  ArticleCategory.where("itemtype_id = ?", @itemtype.id)
+    @item_id = params[:item_id] if params[:item_id].present?
     sub_type = @article_categories.collect(&:name)
     filter_params = {"sub_type" => sub_type}
     filter_params["order"] = get_sort_by(params[:sort_by])  
-    filter_params = {"sub_type" => sub_type}
+    filter_params["items"] = params[:item_id].split(",") if params[:item_id].present?
     filter_params["itemtype_id"] = @itemtype.id
     filter_params["guide"] = @guide.id
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
+    logger.info @item_id
     @contents = Content.filter(filter_params)
   end
 

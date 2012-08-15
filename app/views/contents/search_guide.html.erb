@@ -38,14 +38,14 @@
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Comments</a>
          <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
-	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
-	<%= f.hidden_field :sub_type %>
-	<%= f.hidden_field :item_ids, :value => ""%>
-	<%= f.hidden_field :sort_by, :value => ""%>
-	<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
-	<%= f.hidden_field :previous_search_value%>
-	<%= f.hidden_field :page, :value =>1%>
-	<% end -%>  
+		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+		<%= f.hidden_field :sub_type %>
+		<%= f.hidden_field :item_ids, :value => ""%>
+		<%= f.hidden_field :sort_by, :value => ""%>
+		<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
+		<%= f.hidden_field :previous_search_value%>
+		<%= f.hidden_field :page, :value =>1%>
+		<% end -%>  
       </span>
     </div>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">      
@@ -71,7 +71,8 @@
             var itemtype_id = <%=@itemtype.id%>;
             var sort_by = $(this).text();
             var guide = <%=@guide.id%>
-            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, guide);       
+            var items = <%= @item_id || ""%>
+            contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, guide);       
           return false
            }
            else{
@@ -96,7 +97,8 @@
             var itemtype_id = <%=@itemtype.id%>;
             var sort_by = $("span#sortBy a.link_active").text();
             var guide = <%=@guide.id%>
-            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, guide);
+            var items = <%= @item_id || ""%>
+            contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, guide);
         
             return false
           }
@@ -118,7 +120,8 @@
             var itemtype_id = <%=@itemtype.id%>;
             var sort_by = $("span#sortBy a.link_active").text();
             var guide = <%=@guide.id%>
-            contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, guide);
+            var items = <%= @item_id || ""%>
+            contentSearchFilterAction("feeds", sub_type, items, filter_page_no, itemtype_id, sort_by, guide);
         
           return false
            }
