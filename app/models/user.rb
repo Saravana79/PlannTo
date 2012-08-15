@@ -122,6 +122,7 @@ class User < ActiveRecord::Base
        User.join_follows.followable_type('Camera').length
      end        
   end
+  
   def self.get_top_contributors 
     ActiveRecord::Base.connection.execute("select user_id, sum(points) from view_top_contributors group by user_id order by sum(points) desc limit 5")
   end
@@ -220,6 +221,10 @@ class User < ActiveRecord::Base
     user.avatar = open(auth.info.image.gsub('square', 'large')) 
     user.save
     user
+  end
+  
+  def is_moderator?
+    self.is_admin?
   end
   
   def facebook_friends
