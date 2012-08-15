@@ -238,15 +238,18 @@
 
    <%= render "shared/quick_links", :search_type => request.path.split("/").last%>
   </div>
-  <br/>
- <div class="txt_black imgfollowers" >Followed by <a href="#"><%= @followers.count rescue 0%></a>
+  <br/>  
+<% if @followers.empty? %>
+<% else %>
+ <div class="txt_black imgfollowers" >Followed by - <%= @followers_count rescue 0%>
     <ul class="imgfollowers">
-     <% @followers.limit(20).each do |follower | %>
+     <% @followers.each do |follower | %>
       <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
      <%end%>
     </ul>
   </div>
   <br/>
+<%end%>
   <!-- Related Cars -- Start -->
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
@@ -273,7 +276,7 @@
   <li class="imgfollowers"></li>
           <% user= User.find(top_c['user_id']) %>
           <li class="imgContributors">
-            <div>
+            <div style="clear:both;">
               <div class="float_lft">
                 <a href="<%= user.get_url()%>"><%= image_tag user.get_photo , :class => "userImageSmall"%></a>
               </div>

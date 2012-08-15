@@ -1,3 +1,4 @@
+
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt"><a href="<%= content.user.get_url()%>"> <img src="<%=content.user.get_photo%>" class="userImageSmall"/></a>
@@ -6,8 +7,8 @@
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %> shared a video on <%=get_anchor_name_link(content)%> - <%= time_ago_format(content) %> ago </a></div>
     <div>
-      <div><a href="" rel="<%= content.field4%>" class="youtube" title="<%= content.title%>"><span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
-
+       <div id="youtube_image<%=content.id %>"> <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
+<div id="video<%=content.id%>" style="display:none"> <a id="youtube_2" data-id="<%= content.field4%>" alt='{"width":"400","height":"300"}'> </div> 
       <div class="subContentGap"><%= raw get_content_description(content)%></div>
     </div>
     <ul class="divCommentsConent dontfloat">
@@ -23,4 +24,13 @@
     </ul>
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>
-</div>
+  <script type="text/javascript">
+    $("#youtube_image<%= content.id %>").click(function(){
+       $("#video<%=content.id%>").show();
+       $("#youtube_image<%= content.id %>").hide();
+    });
+  </script>
+   <script>
+       $('#youtube_2').youtube();
+    </script>     
+  </div>
