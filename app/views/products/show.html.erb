@@ -91,12 +91,7 @@
 
 <div class="rightcolumnsmall">
 <br/>
-<div class="other_links" >
-    <span class="txt_black heading_others">Quick Links</span>
-    <span class="menu_list"><a href="#">Compare Cars</a></span>
-    <span class="menu_list"><a href="#">Ask Advices</a></span>
-    <span class="menu_list"><a href="#">Top Questions</a></span>
-</div>
+<%= render "shared/quick_links", :search_type => "#{request.path}"%>
 <br/>
 
 <!--follower block start here-->
