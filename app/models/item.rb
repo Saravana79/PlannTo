@@ -111,7 +111,8 @@ class Item < ActiveRecord::Base
   def specification
     item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type")
   end
-
+  
+ 
   def image_url(imagetype = :medium)
     if(!imageurl.blank?)
       if(imagetype == :medium)
@@ -383,8 +384,12 @@ end
     end
     "Rs #{number}"
   end
-
-def get_url()
+  
+  def self.get_item_object(name)
+    Item.find_by_name(name) 
+  end
+ 
+ def get_url()
    if (self.is_a? ItemtypeTag)
     "/#{self.name.downcase.pluralize}"
    elsif (self.is_a? CarGroup)
@@ -395,5 +400,28 @@ def get_url()
     "/#{self.type.downcase.pluralize}/#{self.slug.to_s}"
    end
 end
-end
+
+  def self.popular_items(item_t,display_count=:Ten)
+    case item_t.to_s
+    when "Car"
+      items = configatron.popular_cars.split(",")
+    when "Bike"
+      items = configatron.popular_bikes.split(",") 
+    when "Cycle"
+      items = configatron.popular_cycles.split(",") 
+    when "Mobile"
+      items = configatron.popular_mobiles.split(",")  
+    when "Tablet"
+      items = configatron.popular_tablets.split(",")
+    when "Camera"
+      items = configatron.popular_cameras.split(",")
+    end      
+    if display_count == :Ten
+      return items
+    else
+      count = configatron.popular_count.to_i - 1
+      return items[0.."#{count}".to_i] #5 items display
+    end
+  end
+ end
 

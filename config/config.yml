@@ -1,14 +1,51 @@
 development:
-  root_image_url: "http://s3.amazonaws.com/Plannto/items/"
+  root_image_url: "http://localhost:3000/images/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
-  EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em 
+  EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  popular_cars: "Aston Martin DB9 6 L V12,Hyundai i10,Ford Figo,Maruti Alto,Maruti Swift,Maruti Swift New Dzire,Mahindra Scorpio,Mahindra XUV 500,Toyota Innova,Volkswagen Polo,Volkswagen Vento"
+  
+  popular_bikes: "TVS Apache 180 R,Bajaj Pulsar 150,Royal Enfield Classic 500,TVS Scooty Streak,Yamaha YZF R15,Kawasaki Ninja 250R,Honda CBR 250R,Hyosung GT650N,Honda Dio,Mahindra Rodeo"
+  
+  popular_cycles: "Btwin Rock Rider 5.2,Scott Sportster 60,KHS Alite 1000,KHS Flite 300,Cannondale Trail,Trek 3700,Bianchi Nirone 7 Tiagra Mix,Bergamount Vitox 6.2,Schwinn Sporterra"
+  
+  popular_mobiles: "Apple Iphone 4S,Samsung Galaxy S III,Samsung Galaxy Note N7000,HTC One V,Nokia 808 PureView,Sony Ericsson Neo V,Nokia Asha 300,micromax-a85,Nokia C2-06"
+  
+  popular_tablets: "Apple New Ipad,Samsung Galaxy Tab P1010,Micromax Funbook,HCL ME X1,BlackBerry PlayBook,Samsung Galaxy Tab 2 7.0,Zync Z999,Karbonn Smart Tab 1,Sony SGPT113IN/S"
+  
+  popular_cameras: "Canon EOS 600D,Nikon D5100,Nikon D800,Canon EOS 5D mark III,Nikon D3200,Nikon coolpix L810,Sony NEX-7,Fujifilm FinePix X100,Sony CyberShot DSC-HX7V,Panasonic Lumix DMC-LX5"
+  popular_count: 5
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  popular_cars: "Audi Q3,Hyundai i10,Ford Figo,Maruti Alto,Maruti Swift,Maruti Swift New Dzire,Mahindra Scorpio,Mahindra XUV 500,Toyota Innova,Volkswagen Polo,Volkswagen Vento"
+  
+  popular_bikes: "TVS Apache 180 R,Bajaj Pulsar 150,Royal Enfield Classic 500,TVS Scooty Streak,Yamaha YZF R15,Kawasaki Ninja 250R,Honda CBR 250R,Hyosung GT650N,Honda Dio,Mahindra Rodeo"
+  
+  popular_cycles: "Btwin Rock Rider 5.2,Scott Sportster 60,KHS Alite 1000,KHS Flite 300,Cannondale Trail,Trek 3700,Bianchi Nirone 7 Tiagra Mix,Bergamount Vitox 6.2,Schwinn Sporterra"
+  
+  popular_mobiles: "Apple Iphone 4S,Samsung Galaxy S III,Samsung Galaxy Note N7000,HTC One V,Nokia 808 PureView,Sony Ericsson Neo V,Nokia Asha 300,micromax-a85,Nokia C2-06"
+  
+  popular_tablets: "Apple New Ipad,Samsung Galaxy Tab P1010,Micromax Funbook,HCL ME X1,BlackBerry PlayBook,Samsung Galaxy Tab 2 7.0,Zync Z999,Karbonn Smart Tab 1,Sony SGPT113IN/S"
+  
+  popular_cameras: "Canon EOS 600D,Nikon D5100,Nikon D800,Canon EOS 5D mark III,Nikon D3200,Nikon coolpix L810,Sony NEX-7,Fujifilm FinePix X100,Sony CyberShot DSC-HX7V,Panasonic Lumix DMC-LX5"
+  popular_count: 5
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  popular_cars: "Audi Q3,Hyundai i10,Ford Figo,Maruti Alto,Maruti Swift,Maruti Swift New Dzire,Mahindra Scorpio,Mahindra XUV 500,Toyota Innova,Volkswagen Polo,Volkswagen Vento"
   
+  popular_bikes: "TVS Apache 180 R,Bajaj Pulsar 150,Royal Enfield Classic 500,TVS Scooty Streak,Yamaha YZF R15,Kawasaki Ninja 250R,Honda CBR 250R,Hyosung GT650N,Honda Dio,Mahindra Rodeo"
+  
+  popular_cycles: "Btwin Rock Rider 5.2,Scott Sportster 60,KHS Alite 1000,KHS Flite 300,Cannondale Trail,Trek 3700,Bianchi Nirone 7 Tiagra Mix,Bergamount Vitox 6.2,Schwinn Sporterra"
+  
+  popular_mobiles: "Apple Iphone 4S,Samsung Galaxy S III,Samsung Galaxy Note N7000,HTC One V,Nokia 808 PureView,Sony Ericsson Neo V,Nokia Asha 300,micromax-a85,Nokia C2-06"
+  
+  popular_tablets: "Apple New Ipad,Samsung Galaxy Tab P1010,Micromax Funbook,HCL ME X1,BlackBerry PlayBook,Samsung Galaxy Tab 2 7.0,Zync Z999,Karbonn Smart Tab 1,Sony SGPT113IN/S"
+  
+  popular_cameras: "Canon EOS 600D,Nikon D5100,Nikon D800,Canon EOS 5D mark III,Nikon D3200,Nikon coolpix L810,Sony NEX-7,Fujifilm FinePix X100,Sony CyberShot DSC-HX7V,Panasonic Lumix DMC-LX5"
+  popular_count: 5
+  
+ 

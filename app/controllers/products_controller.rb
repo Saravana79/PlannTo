@@ -11,7 +11,8 @@ class ProductsController < ApplicationController
   def index
     @filter_by = params["fl"]
     search_type = request.path.split("/").last
-    @itemtype = Itemtype.find_by_itemtype(search_type.singularize.camelize.constantize)
+    @type = search_type.singularize.camelize.constantize
+    @itemtype = Itemtype.find_by_itemtype(@type)
     @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
     @followers =  User.get_followers(search_type)
     count = @followers.length
@@ -21,7 +22,7 @@ class ProductsController < ApplicationController
       @followers_count = User.get_followers_count(search_type) 
     end    
     @top_contributors =  User.get_top_contributors
-   end
+ end
 
   def specification
     @item = Item.find(params[:id])
