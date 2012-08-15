@@ -21522,8 +21522,9 @@ var running = false;
 
 
 $(function(){
-  $('ul.navdrop a').click(function(){
-    
+
+  $('ul.navdrop a').live("click",function(){
+
     $(this).parent().toggleClass('selected');
     var guide = $(this).data('guide');
     var content = $(this).closest('ul.navdrop').data('content');
@@ -21555,9 +21556,9 @@ $("ul#Newtabs li a").live('click', function(){
   
   
   
-   function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by){
+   function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
   	 $.get("/contents/" + action ,
-  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by},
+  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by, guide: guide},
      
           function(data, status, xhr)
           {

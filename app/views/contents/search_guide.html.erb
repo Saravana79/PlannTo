@@ -1,0 +1,133 @@
+<div class="leftcolumnbig">
+  <!-- Product Details - Start -->
+  <!-- Overview Tabs -  Start -->
+  <br/><br/>
+  <!-- Product Details - End -->
+  <ul id="Newtabs">
+    <li class="tab_active"><a href="#"><span>All Feeds</span></a></li>
+        <li><a href="#"><span>My Feed</span></a></li>
+  </ul>
+
+  <div id="content_all">
+    <!--filter by block start here-->
+    <div id="Filterby">
+      <div class="Filternav">
+            <div style="float:left;width:60px;">
+              <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>     
+            </div>
+            <div style="float:left;width:630px;">
+              <ul>
+              <!--  <li class="Labeltext" style="padding-right:2px;">Filter by:</li>-->
+                <li class="Currentfilter" id="All"><a href="#">All</a></li>
+                <%@article_categories.each do |category|%>
+                <%if category.name == "HowTo/Guide"%>
+                  <li id="HowTo"><a href=""><%=category.name%></a></li>
+                <%else%>
+                <li id="<%=category.name%>"><a href=""><%=category.name%></a></li>
+                <%end%>
+                <%end%>
+              </ul>
+            </div>
+      </div>
+    </div>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+    <div >
+      <span class="sortby" id="sortBy">
+        <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
+         <a class="txt_blue" href="#"  class="link_active">Newest</a> <span style="padding:0px 5px;">|</span>
+        <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
+        <a class="txt_blue" href="#">Most Comments</a>
+         <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
+	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+	<%= f.hidden_field :sub_type %>
+	<%= f.hidden_field :item_ids, :value => ""%>
+	<%= f.hidden_field :sort_by, :value => ""%>
+	<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
+	<%= f.hidden_field :previous_search_value%>
+	<%= f.hidden_field :page, :value =>1%>
+	<% end -%>  
+      </span>
+    </div>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">      
+      <%= render :partial => 'contents/contents'%>
+    </div>
+    <a id="content_next" style="display:none"></a>
+     <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
+  </div>
+  <!-- This will go into main layout -->
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  	
+  	$("span#sortBy a").click(function (e) {
+  		 $("span#sortBy").find('a').removeClass('link_active');
+        $(this).addClass("link_active");
+          if ($("#content_search_search").val().toString() == ""){
+          	$("#filter_page_no").val('1');
+          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
+	        var sub_type = find_sub_type(id);  
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $(this).text();
+            var guide = <%=@guide.id%>
+            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, guide);       
+          return false
+           }
+           else{
+         $("#content_search_page").val(1);
+         $("#content_search_sort_by").val($(this).text());
+          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+         $("#contentSearchForm").submit();
+         }
+  	});
+  	
+    $("div#Filterby div.Filternav ul li").click(function (e) {
+       $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+       $(this).closest('li').addClass("Currentfilter");
+      	if ($(this).text() != "Labeltext"){
+      		$("#filter_page_no").val('1');
+        	var id = $(this).attr('id');
+        	var sub_type = find_sub_type(id);        
+        	$("#content_search_page").val(1)
+            $("#content_search_search").val("")
+          	$("#content_search_sub_type").val(sub_type);  
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $("span#sortBy a.link_active").text();
+            var guide = <%=@guide.id%>
+            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, guide);
+        
+            return false
+          }
+      });
+
+     <%if !@filter_by.nil?%>
+      $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
+      <%end%> 
+       var running =false;
+    $(window).scroll(function () {
+
+      lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+      running = true;
+       if ($("#content_search_search").val().toString() == ""){
+       		id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
+       		var sub_type = find_sub_type(id);
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $("span#sortBy a.link_active").text();
+            var guide = <%=@guide.id%>
+            contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, guide);
+        
+          return false
+           }
+        else
+      {
+      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+    	$("#contentSearchForm").submit();
+      }
+      }
+    });
+    });
+</script>

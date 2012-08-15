@@ -169,22 +169,12 @@
           if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
           	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
-        switch(id){
-          case 'All' :  var sub_type = "All";break;
-          case 'HowTo': var sub_type = "HowTo/Guide";break;
-            case 'Q&A': var sub_type = "QandA";break;
-           default:  var sub_type = id;
-            }
-        $.ajax(
-          {
-            url: "/contents/filter?sub_type=" + sub_type + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $(this).text()+ "&itemtype_id=<%=@itemtype.id%>",
-            type: "get",
-            dataType: "script",
-            success    : function(data)
-                {
-                  running = false;
-                }
-          });
+	        var sub_type = find_sub_type(id);
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $(this).text();
+            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");       
+        
           return false
            }
            else{
@@ -201,21 +191,15 @@
       if ($(this).text() != "Labeltext"){
         $("#filter_page_no").val('1');
         var id = $(this).attr('id');
-        switch(id){
-          case 'All' :  var sub_type = "All";break;
-          case 'HowTo': var sub_type = "HowTo/Guide";break;
-            case 'Q&A': var sub_type = "QandA";break;
-           default:  var sub_type = id;
-            }
+        var sub_type = find_sub_type(id);
             $("#content_search_page").val(1)
             $("#content_search_search").val("")
           	$("#content_search_sub_type").val(sub_type);
-            $.ajax(
-            {
-              url: "contents/filter?sub_type=" + sub_type + "&page=" + $("#filter_page_no").val() + "&sort_by=" + $("span#sortBy a.link_active").text()+ "&itemtype_id=<%=@itemtype.id%>",
-              type: "get",
-              dataType: "script"
-            });
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $("span#sortBy a.link_active").text();
+            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");
+        
             return false
           }
       });
@@ -232,22 +216,11 @@
       running = true;
        if ($("#content_search_search").val().toString() == ""){
        	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
-       	switch(id){
-          case 'All' :  var sub_type = "All";break;
-          case 'HowTo': var sub_type = "HowTo/Guide";break;
-            case 'Q&A': var sub_type = "QandA";break;
-           default:  var sub_type = id;
-            }
-        $.ajax(
-          {
-            url: "/contents/feeds?sub_type=" + sub_type + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
-            type: "get",
-            dataType: "script",
-            success    : function(data)
-                {
-                  running = false;
-                }
-          });
+       var sub_type = find_sub_type(id);
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $("span#sortBy a.link_active").text();
+            contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, "");        
           return false
            }
         else
@@ -255,33 +228,17 @@
       	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
     	$("#contentSearchForm").submit();
       }
-        //lnk.click();
       }
     });
     });
 </script>
-
-
 <div class="rightcolumnsmall">
-  <br/>
-  <br/>
-
+  <br/><br/>
   <div >
 
-
-    <!-- Buttons - start-->
-    <div class="other_links" >
-      <span class="txt_black heading_others">Quick Links</span>
-      <span class="menu_list"><a href="#">Compare Cars</a></span>
-      <span class="menu_list"><a href="#">Ask Advices</a></span>
-      <span class="menu_list"><a href="#">Top Questions</a></span>
-    </div>
-    <!-- Buttons - End-->
-
+   <%= render "shared/quick_links", :search_type => request.path.split("/").last%>
   </div>
   <br/>
-
-
  <div class="txt_black imgfollowers" >Followed by <a href="#"><%= @followers.count rescue 0%></a>
     <ul class="imgfollowers">
      <% @followers.limit(20).each do |follower | %>

@@ -14,13 +14,18 @@ PlanNto::Application.routes.draw do
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
+  # Keep in mind you can assign values other than :contfroller and :action
 
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   #  match 'products/:id' => 'products#show', :as => :products
   # This route can be invoked with purchase_url(:id => product.id)
-  resources :history_details
+  resources :history_details  
+  resources :votes do
+    collection do
+      post "add_vote"
+    end
+  end
   match 'external_contents/:content_id' => 'external_contents#show', :as => 'external_content'
   
   match 'admin/search', :to => 'admin#index'
@@ -66,16 +71,18 @@ resources :accounts do
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
+   match ':itemtype/:guides/:guide_type' => 'contents#search_guide'
    
   resources :cars do
         resources :shares
   end
    
-  match "/contents/update_guide" => 'contents#update_guide'
+  #match "/contents/update_guide" => 'contents#update_guide'
 
   resources :contents do
   collection do
     get :filter
+    post :update_guide
     get :feed
     get :feeds
     post :search_contents
@@ -159,7 +166,6 @@ resources :accounts do
   resources :review_contents
   resources :question_contents
   resources :pros
-  resources :votes
   resources :questions
   resources :answers
   resources :messages

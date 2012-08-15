@@ -10,7 +10,9 @@ class Content < ActiveRecord::Base
   # friendly_id :title, use: :slugged
 
   validates_presence_of :title
-  validates_presence_of :created_by
+  
+  #below line not required.
+  #validates_presence_of :created_by
 
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :user, :foreign_key => 'created_by'
@@ -86,6 +88,8 @@ class Content < ActiveRecord::Base
       when :itemtype_id
         scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id = ?", value )
       #  scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
+      when :guide
+        scope.joins(:guides).where("contents_guides.guide_id = ?", value )      
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type

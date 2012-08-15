@@ -36,9 +36,9 @@ $("ul#Newtabs li a").live('click', function(){
   
   
   
-   function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by){
+   function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
   	 $.get("/contents/" + action ,
-  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by},
+  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by, guide: guide},
      
           function(data, status, xhr)
           {

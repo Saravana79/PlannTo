@@ -33,7 +33,7 @@
           	var itemtype_id = "<%=@item.get_base_itemtypeid()%>"
           	var sort_by = $(this).text()
           	var action = "filter"
-          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by);         
+          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, "");         
           	return false
           }
           else{
@@ -52,13 +52,19 @@
           $("#filter_page_no").val('1');
           $("#content_search_page").val(1)
           $("#content_search_search").val("")
-          $("#content_search_sub_type").val(sub_type);          
+          $("#content_search_sub_type").val(sub_type);    
+          <%if @item%>      
           var items = "<%=@item.id%>"
-          var filter_page_no = $("#filter_page_no").val()
           var itemtype_id = "<%=@item.get_base_itemtypeid()%>"
+          <%else%>
+          var items=""
+          var itemtype_id = ""
+          <%end%>
+          var filter_page_no = $("#filter_page_no").val()
+          
           var sort_by = $("span#sortBy a.link_active").text();
           var action = "filter"
-          contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by); 
+          contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, ""); 
           return false
         }
       });
@@ -140,7 +146,7 @@
           	var itemtype_id = "<%=@item.get_base_itemtypeid()%>"
           	var sort_by = $("span#sortBy a.link_active").text();
           	var action = "feeds"
-          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by);        
+          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, "");        
         	return false
       	}
         else

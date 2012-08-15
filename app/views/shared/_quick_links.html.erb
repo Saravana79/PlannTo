@@ -1,0 +1,9 @@
+ <!-- Buttons - start-->
+    <div class="other_links" >
+      <span class="txt_black heading_others">Quick Links</span>
+      <%@guides = Guide.all%>
+      <%@guides.each do |guide|%>
+      <span class="menu_list"><a href="/<%=search_type%>/guides/<%=guide.name%>"><%=guide.name%></a></span>
+    <%end%>
+    </div>
+    <!-- Buttons - End-->
