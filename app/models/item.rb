@@ -385,9 +385,6 @@ end
     "Rs #{number}"
   end
   
-  def self.get_item_object(name)
-    Item.find_by_name(name) 
-  end
  
  def get_url()
    if (self.is_a? ItemtypeTag)
@@ -404,24 +401,25 @@ end
   def self.popular_items(item_t,display_count=:Ten)
     case item_t.to_s
     when "Car"
-      items = configatron.popular_cars.split(",")
+      ids = configatron.popular_cars.split(",")
     when "Bike"
-      items = configatron.popular_bikes.split(",") 
+      ids = configatron.popular_bikes.split(",") 
     when "Cycle"
-      items = configatron.popular_cycles.split(",") 
+      ids = configatron.popular_cycles.split(",") 
     when "Mobile"
-      items = configatron.popular_mobiles.split(",")  
+       ids = configatron.popular_mobiles.split(",")  
     when "Tablet"
-      items = configatron.popular_tablets.split(",")
+      ids = configatron.popular_tablets.split(",")
     when "Camera"
-      items = configatron.popular_cameras.split(",")
+       ids = configatron.popular_cameras.split(",")
     end      
     if display_count == :Ten
-      return items
+      item_ids = ids
     else
       count = configatron.popular_count.to_i - 1
-      return items[0.."#{count}".to_i] #5 items display
+      item_ids =  ids[0.."#{count}".to_i] #5 items display
     end
+     Item.where('id in (?)',item_ids)
   end
  end
 

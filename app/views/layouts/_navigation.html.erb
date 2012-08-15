@@ -46,17 +46,9 @@
                     <ul>
                         <li><a href="#">Popular Cars</a>
                             <ul>
-                                <li><a href="/groups/audi-q3">Audi Q3</a></li>
-                                <li><a href="/groups/hyundai-i10">Hyundai i10</a></li>
-                                <li><a href="/groups/ford-figo">Ford Figo</a></li>
-                                <li><a href="/groups/maruti-alto">Maruti Alto</a></li>
-                                <li><a href="/groups/maruti-swift">Maruti Swift</a></li>
-                                <li><a href="/groups/maruti-new-dzire">Maruti Swift New Dzire</a></li>
-                                <li><a href="/groups/mahindra-scorpio">Mahindra Scorpio</a></li>
-                                <li><a href="/groups/mahindra-xuv-500">Mahindra XUV 500</a></li>
-                                <li><a href="/groups/toyota-innova">Toyota Innova</a></li>
-                                <li><a href="/groups/volkswagen-polo">Volkswagen Polo</a></li>
-                                <li><a href="/groups/volkswagen-vento">Volkswagen Vento</a></li>                   
+                               <% Item.popular_items("Car").each do |item| %> 
+                                <li><a href="<%=item.get_url()%>"> <%= item.name rescue '' %> </a></li>
+                           <%end%>    
                             </ul>
                         </li>
                     </ul>   
@@ -110,16 +102,10 @@
                     <ul>
                         <li><a href="#">Popular Bikes</a>
                             <ul>
-                                <li><a href="/groups/tvs-apache-rtr-180--2">TVS Apache 180 R</a></li>
-                                <li><a href="/groups/bajaj-pulsar-150">Bajaj Pulsar 150</a></li>
-                                <li><a href="/groups/royal-enfield-classic-500--2">Royal Enfield Classic 500</a></li>
-                                <li><a href="/groups/tvs-scooty-streak—2">TVS Scooty Streak</a></li>
-                                <li><a href="/groups/yamaha-yzf-r15">Yamaha YZF R15</a></li>
-                                <li><a href="/groups/kawasaki-ninja-250r--2">Kawasaki Ninja 250R</a></li>
-                                <li><a href="/groups/honda-cbr-250r--2">Honda CBR 250R</a></li>
-                                <li><a href="/groups/hyosung-gt650n ">Hyosung GT650N</a></li>
-                                <li><a href="/groups/honda-dio—2">Honda Dio</a></li>
-                                <li><a href="/groups/mahindra-rodeo--2">Mahindra Rodeo</a></li>                                
+                                 <% Item.popular_items("Bike").each do |item| %> 
+                                  
+                                <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>
+                           <%end%> 
                             </ul>
                         </li>
                     </ul>   
@@ -173,15 +159,10 @@
                     <ul>
                         <li><a href="#">Popular Cycles</a>
                             <ul>
-                                <li><a href="/cycles/rockrider-5-2">Btwin Rock Rider 5.2 </a></li>
-                                <li><a href="/cycles/scott-sportster-60">Scott Sportster 60 </a></li>
-                                <li><a href="/cycles/khs-alite-1000">KHS Alite 1000</a></li>
-                                <li><a href="/cycles/khs-flite-300">KHS Flite 300</a></li>
-                                <li><a href="/cycles/cannondale-trail-6">Cannondale Trail</a></li>
-                                <li><a href="/cycles/trek-3700">Trek 3700 </a></li>
-                                <li><a href="/cycles/bianchi-nirone-7-tiagra-mix">Bianchi Nirone 7 Tiagra Mix</a></li>
-                                <li><a href="/cycles/bergamont-vitox-6-2">Bergamount Vitox 6.2</a></li>
-                                <li><a href="/cycles/schwinn-sporterra-2012">Schwinn Sporterra</a></li>
+                                 <% Item.popular_items("Cycle").each do |item| %> 
+                                 
+                                <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue '' %> </a></li>
+                           <%end%> 
                                             
                             </ul>
                         </li>
@@ -236,16 +217,9 @@
                     <ul>
                         <li><a href="#">Popular Mobiles</a>
                             <ul>
-                                <li><a href="/mobiles/apple-iphone-4s-64-gb">Apple Iphone 4S</a></li>
-                                <li><a href="/mobiles/samsung-galaxy-s-iii">Samsung Galaxy S III </a></li>
-                                <li><a href="/mobiles/samsung-galaxy-note-n7000">Samsung Galaxy Note N7000</a></li>
-                                <li><a href="/mobiles/htc-one-v">HTC One V</a></li>
-                                <li><a href="/mobiles/nokia-808-pureview">Nokia 808 PureView</a></li>
-                                <li><a href="/mobiles/sony-ericsson-neo-v">Sony Ericsson Neo V</a></li>
-                                <li><a href="/mobiles/nokia-asha-300">Nokia Asha 300</a></li>
-                                <li><a href="/mobiles/Micromax A85">micromax-a85</a></li>
-                                <li><a href="/mobiles/nokia-c2-06">Nokia C2-06</a></li>
-                                            
+                               <% Item.popular_items("Mobile").each do |item| %> 
+                               <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>      
+                                <%end%>  
                             </ul>
                         </li>
                     </ul>   
@@ -299,15 +273,9 @@
                     <ul>
                         <li><a href="#">Popular Tablets</a>
                             <ul>
-                                <li><a href="/tablets/apple-new-ipad-64gb-wifi-3g">Apple New Ipad</a></li>
-                                <li><a href="/tablets/samsung-galaxy-tab-p1010">Samsung Galaxy Tab P1010</a></li>
-                                <li><a href="/tablets/micromax-funbook">Micromax Funbook</a></li>
-                                <li><a href="/tablets/hcl-me-x1">HCL ME X1</a></li>
-                                <li><a href="/tablets/blackberry-playbook-64gb">BlackBerry PlayBook</a></li>
-                                <li><a href="/tablets/samsung-galaxy-tab-2-7-0">Samsung Galaxy Tab 2 7.0</a></li>
-                                <li><a href="/tablets/zync-z999">Zync Z999</a></li>
-                                <li><a href="/tablets/karbonn-smart-tab-1">Karbonn Smart Tab 1</a></li>
-                                <li><a href="/tablets/sony-sgpt113in-s">Sony SGPT113IN/S</a></li>
+                                    <% Item.popular_items("Tablet").each do |item| %> 
+                                    <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>      
+                                <%end%>  
                                             
                             </ul>
                         </li>
@@ -362,16 +330,9 @@
                     <ul>
                         <li><a href="#">Popular Cameras</a>
                             <ul>
-                                <li><a href="/cameras/canon-eos-600d-with-body-only">Canon EOS 600D</a></li>
-                                <li><a href="/cameras/nikon-d5100-body-only">Nikon D5100</a></li>
-                                <li><a href="/cameras/nikon-d800">Nikon D800</a></li>
-                                <li><a href="/cameras/canon-eos-5d-with-mark-ii-kit-ef-24-105mm">Canon EOS 5D mark III</a></li>
-                                <li><a href="/cameras/nikon-d3200">Nikon D3200</a></li>
-                                <li><a href="/cameras/nikon-coolpix-l810">Nikon coolpix L810</a></li>
-                                <li><a href="/cameras/sony-nex-7-mirrorless-with-18-55-mm-lens">Sony NEX-7</a></li>
-                                <li><a href="/cameras/fujifilm-finepix-x100">Fujifilm FinePix X100</a></li>
-                                <li><a href="/cameras/sony-cybershot-dsc-hx7v">Sony CyberShot DSC-HX7V</a></li>
-                                <li><a href="/cameras/panasonic-lumix-dmc-lx5">Panasonic Lumix DMC-LX5</a></li>           
+                                   <% Item.popular_items("Camera").each do |item| %> 
+                                     <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue'' %> </a></li>      
+                                <%end%>  
                             </ul>
                         </li>
                     </ul> 

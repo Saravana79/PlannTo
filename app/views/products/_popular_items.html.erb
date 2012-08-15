@@ -5,13 +5,12 @@
     <tr>
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <% Item.popular_items(@type,:Five).each do |name|%>
-           <% item= Item.get_item_object(name)%>
-          <tr>
+          <% Item.popular_items(@type,:Five).each do |item|%>
+           <tr>
             <td width="113" height="85"><img src="<%= item.image_url rescue ''%>" width="92" height="69" onclick="parent.location='<%=(item.get_url()) rescue ''%>'"/></td>
             <td width="113">
             <div>
-            <a href="<%=item.get_url() rescue ''%>" class="txt_black"><%= name%></a>
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black"><%= item.name rescue ''%></a>
            </div>
             </td>
           </tr>
