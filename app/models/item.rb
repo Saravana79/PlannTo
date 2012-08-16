@@ -356,7 +356,9 @@ class Item < ActiveRecord::Base
   contents
  end
 
-
+ def self.get_follows_item_ids_for_user(user)
+   Follow.where(:follower_id => user.id).collect(&:followable_id)
+ end
 
 def show_specification
   has_specificiation = true

@@ -36,9 +36,26 @@ class ContentsController < ApplicationController
     item_ids = params[:content_search][:item_ids] == "" ? Array.new : params[:content_search][:item_ids].split(",")
     itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1    
-    sort_by = get_sort_by(params[:content_search][:sort_by])
-    #guide_ids = params[:content_search][:guide_ids] == "" ? Array.new : params[:content_search][:guide_ids].split(",")
+    #sort_by = get_sort_by(params[:content_search][:sort_by])
     
+    sort_by_value = params[:content_search][:sort_by]
+    if sort_by_value == "Newest"
+      sort_by =   "created_at"
+      order_by_value = "desc"
+    elsif sort_by_value == "Votes"
+      sort_by = "total_votes"
+      order_by_value = "desc"
+    elsif sort_by_value == "Most Comments"
+      sort_by = "comments_count"
+      order_by_value = "desc"
+    else
+      order_by_value = "desc"
+      if params[:sub_type] =="All"
+        sort_by =   "created_at"
+     else
+        sort_by =   "total_votes"
+     end
+    end
 
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
@@ -82,7 +99,6 @@ class ContentsController < ApplicationController
     filter_params["guide"] = @guide.id
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
-    logger.info @item_id
     @contents = Content.filter(filter_params)
   end
 
