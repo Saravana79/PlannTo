@@ -46,7 +46,7 @@ class ContentsController < ApplicationController
       with :item_ids, item_ids if item_ids.size > 0
       with :status, 1
       with :itemtype_ids, itemtype_ids if itemtype_ids.size > 0   
-      order_by sort_by.to_sym, order_by_value.to_sym unless sort_by == ""
+      order_by sort_by.to_sym unless sort_by == ""
       paginate(:page => page, :per_page => 10 )
     end
     @contents = search_list.results
