@@ -239,31 +239,8 @@
    <%= render "shared/quick_links", :search_type => request.path.split("/").last%>
   </div>
   <br/>  
-<% if @followers.empty? %>
-<% else %>
- <div class="txt_black imgfollowers" >Followed by - <%= @followers_count rescue 0%>
-    <ul class="imgfollowers">
-     <% @followers.each do |follower | %>
-      <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
-     <%end%>
-    </ul>
-  </div>
-  <br/>
-<%end%>
-<%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
-  <!-- Related Cars -- Start -->
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-    <tr>
-      <td class="bg_widgethdr txt_white">Bookmarklet</td>
-    </tr>
-    <tr>
-        <td>Share the contents easily using this bookmarklet, drag and drop the following button in your bookmark toolbar.</td>
-    </tr>
-    <tr>
-        <td><a href="javascript:void((function(){ var f='http://www.plannto.com/article_contents/bmarklet?url='+encodeURIComponent(window.location.href);var cw=window.open(f+'&external=yes','PlannTo','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660');if(!cw)location.href=f+'&external=yes';})());">Add To Plannto</a></td>
-    </tr>
-</table>
 
+<%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
 <br/>
   <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
@@ -299,6 +276,33 @@
 
       </td></tr>
   </table>
+
+  <br/>
+<% if @followers.empty? %>
+<% else %>
+ <div class="txt_black imgfollowers" >Followed by - <%= @followers_count rescue 0%>
+    <ul class="imgfollowers">
+     <% @followers.each do |follower | %>
+      <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
+     <%end%>
+    </ul>
+  </div>
+  <br/>
+<%end%>
+
+  <!-- Related Cars -- Start -->
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Bookmarklet</td>
+    </tr>
+    <tr>
+        <td>Share the contents easily using this bookmarklet, drag and drop the following button in your bookmark toolbar.</td>
+    </tr>
+    <tr>
+        <td><a href="javascript:void((function(){ var f='http://www.plannto.com/article_contents/bmarklet?url='+encodeURIComponent(window.location.href);var cw=window.open(f+'&external=yes','PlannTo','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660');if(!cw)location.href=f+'&external=yes';})());">Add To Plannto</a></td>
+    </tr>
+</table>
+
 
 
   <!-- Related Cars -- End -->
