@@ -3,34 +3,34 @@ development:
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
-  popular_cars: "5,6,7,8,9,10,11,12,13,14"
-  popular_bikes: "15,16,17,18,19,20,21,22,23,24"
-  popular_cycles: "25,26,27,28,29,30,31,32,33,34"
-  popular_mobiles: "35,36,37,38,39,40,41,42,43,44"
-  popular_tablets: "45,46,47,48,49,50,51,52,53,54"
-  popular_cameras: "55,56,57,58,59,60,61,62,63,64"
+  popular_cars: "252,331,4098,580,1017,1038,4111,976,522,453"
+  popular_bikes: "2862,2932,2120,2812,2194,2243,2836,2133,2438,2971"
+  popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"
+  popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
+  popular_tablets: "4103,4075,4453,2489,3790,2505,3556,3901,4073,2503"
+  popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
   popular_count: 5
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
-  popular_cars: "5,6,7,8,9,10,11,12,13,14"
-  popular_bikes: "15,16,17,18,19,20,21,22,23,24"
-  popular_cycles: "25,26,27,28,29,30,31,32,33,34"
-  popular_mobiles: "35,36,37,38,39,40,41,42,43,44"
-  popular_tablets: "45,46,47,48,49,50,51,52,53,54"
-  popular_cameras: "55,56,57,58,59,60,61,62,63,64"
+  popular_cars: "252,331,4098,580,1017,1038,4111,976,522,453"
+  popular_bikes: "2862,2932,2120,2812,2194,2243,2836,2133,2438,2971"
+  popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"
+  popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
+  popular_tablets: "4103,4075,4453,2489,3790,2505,3556,3901,4073,2503"
+  popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
   popular_count: 5
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
-  popular_cars: "5,6,7,8,9,10,11,12,13,14"
-  popular_bikes: "15,16,17,18,19,20,21,22,23,24"
-  popular_cycles: "25,26,27,28,29,30,31,32,33,34"
-  popular_mobiles: "35,36,37,38,39,40,41,42,43,44"
-  popular_tablets: "45,46,47,48,49,50,51,52,53,54"
-  popular_cameras: "55,56,57,58,59,60,61,62,63,64"
+  popular_cars: "252,331,4098,580,1017,1038,4111,976,522,453"
+  popular_bikes: "2862,2932,2120,2812,2194,2243,2836,2133,2438,2971"
+  popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"
+  popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
+  popular_tablets: "4103,4075,4453,2489,3790,2505,3556,3901,4073,2503"
+  popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
   popular_count: 5
   
  
