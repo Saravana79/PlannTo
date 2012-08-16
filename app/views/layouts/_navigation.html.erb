@@ -104,7 +104,7 @@
                             <ul>
                                  <% Item.popular_items("Bike").each do |item| %> 
                                   
-                                <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>
+                                <li><a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>
                            <%end%> 
                             </ul>
                         </li>
@@ -161,7 +161,7 @@
                             <ul>
                                  <% Item.popular_items("Cycle").each do |item| %> 
                                  
-                                <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue '' %> </a></li>
+                                <li><a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue '' %> </a></li>
                            <%end%> 
                                             
                             </ul>
@@ -218,7 +218,7 @@
                         <li><a href="#">Popular Mobiles</a>
                             <ul>
                                <% Item.popular_items("Mobile").each do |item| %> 
-                               <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>      
+                               <li><a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>      
                                 <%end%>  
                             </ul>
                         </li>
@@ -274,7 +274,7 @@
                         <li><a href="#">Popular Tablets</a>
                             <ul>
                                     <% Item.popular_items("Tablet").each do |item| %> 
-                                    <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>      
+                                    <li><a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a></li>      
                                 <%end%>  
                                             
                             </ul>
@@ -331,7 +331,7 @@
                         <li><a href="#">Popular Cameras</a>
                             <ul>
                                    <% Item.popular_items("Camera").each do |item| %> 
-                                     <li><a href="<%= item.get_item_object(name).get_url() rescue ''%>"> <%= item.name rescue'' %> </a></li>      
+                                     <li><a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue'' %> </a></li>      
                                 <%end%>  
                             </ul>
                         </li>
