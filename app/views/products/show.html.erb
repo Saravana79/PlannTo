@@ -144,14 +144,6 @@
 </div>
 <%end %>
 <br/>
-<!--
-<div>
-<%= link_to("Invite buyer", "#", :id => "invite_buy") %>&nbsp;
-<%= link_to("Invite owner", "#", :id => "invite_own") %>&nbsp;
-<%= link_to("Invite follower", "#", :id => "invite_follow") %>
-</div>
-<br />
--->
 <%=render :partial =>"items/related_products" %>
   <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => user_follow_type(@item, current_user), :related_items => false %>
   <%= render 'shared/show_hide_login_form', :item => @item %>

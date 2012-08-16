@@ -206,30 +206,7 @@
 
      <%if !@filter_by.nil?%>
       $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
-      <%end%> 
-       var running =false;
-    $(window).scroll(function () {
-
-      lnk = $('#content_next');
-      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-
-      running = true;
-       if ($("#content_search_search").val().toString() == ""){
-       	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
-       var sub_type = find_sub_type(id);
-            var filter_page_no = $("#filter_page_no").val();
-            var itemtype_id = <%=@itemtype.id%>;
-            var sort_by = $("span#sortBy a.link_active").text();
-            contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, "");        
-          return false
-           }
-        else
-      {
-      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
-    	$("#contentSearchForm").submit();
-      }
-      }
-    });
+      <%end%>     
     });
 </script>
 <div class="rightcolumnsmall">
@@ -330,14 +307,12 @@
           $('#filter_contents input').removeAttr('checked');
         }
       });
-      var running =false;
-      $(window).scroll(function () {
-
-        lnk = $('#content_next');
-        if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-          running = true;
-          lnk.click();
-        }
-      });
+      
+	 $(document).ready(function(){
+   		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
+        var items = ""        
+        var itemtype_id = <%=@itemtype.id%>;
+   		triggerScrollFunction(sub_type, items, itemtype_id, ""); 
+   	}); 
     });
 </script>
