@@ -37,7 +37,7 @@ class ContentsController < ApplicationController
     itemtype_ids = params[:content_search][:itemtype_ids] == "" ? Array.new : params[:content_search][:itemtype_ids].split(",")
     page = params[:content_search][:page] || 1    
     sort_by = get_sort_by(params[:content_search][:sort_by])
-    guide_ids = params[:content_search][:guide_ids] == "" ? Array.new : params[:content_search][:guide_ids].split(",")
+    #guide_ids = params[:content_search][:guide_ids] == "" ? Array.new : params[:content_search][:guide_ids].split(",")
     
 
     search_list = Sunspot.search(Content ) do
@@ -58,7 +58,7 @@ class ContentsController < ApplicationController
     filter_params["items"] = params[:items].split(",") if params[:items].present?
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
-    filter_params["guide"] = params[:guide] if params[:guide].present?
+    #filter_params["guide"] = params[:guide] if params[:guide].present?
     filter_params["order"] = get_sort_by(params[:sort_by])   
     @contents = Content.filter(filter_params)
     respond_to do |format|
