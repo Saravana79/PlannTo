@@ -150,8 +150,9 @@
 	<% end -%>  
       </span>
     </div>
-    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList" >
+  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contents_filter_feed" >
     </div>
+    
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="feeds" >
      <span id="all_feeds">
       <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
@@ -160,7 +161,8 @@
       </span>
       <span id="my_feed" style="display:none;">
         <%if current_user %>
-         <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => Item.get_follows_item_ids_for_user(current_user)} %>
+        <% items = Item.get_follows_item_ids_for_user(current_user) %>
+         <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
       
       <% @contents = Content.filter(params_2)  %>
       
@@ -191,11 +193,12 @@
 	        var sub_type = find_sub_type(id);
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = <%=@itemtype.id%>;
+            var items =  <%= items %>;
             var sort_by = $(this).text();
             <%if current_user %>
               if ($('#my_feed_tab').attr("class") == "tab_active")
                { 
-            contentSearchFilterAction("filter", sub_type, <%= Item.get_follows_item_ids_for_user(current_user) %>, filter_page_no, itemtype_id, sort_by, "");       
+            contentSearchFilterAction("filter", sub_type,items, filter_page_no, itemtype_id, sort_by, "");       
               }
              else
              {
@@ -227,11 +230,12 @@
           	$("#content_search_sub_type").val(sub_type);
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = <%=@itemtype.id%>;
+            var items =  <%= items %>;
             var sort_by = $("span#sortBy a.link_active").text();
            <%if current_user %>
               if ($('#my_feed_tab').attr("class") == "tab_active")
                { 
-            contentSearchFilterAction("filter", sub_type, <%= Item.get_follows_item_ids_for_user(current_user) %>, filter_page_no, itemtype_id, sort_by, "");       
+            contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
               }
              else
              {
@@ -261,10 +265,11 @@
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = <%=@itemtype.id%>;
             var sort_by = $("span#sortBy a.link_active").text();
+            var items =  <%= items %>;
            <%if current_user %>
               if ($('#my_feed_tab').attr("class") == "tab_active")
                { 
-            contentSearchFilterAction("feeds", sub_type, <%= Item.get_follows_item_ids_for_user(current_user) %>, filter_page_no, itemtype_id, sort_by, "");       
+            contentSearchFilterAction("feeds", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
               }
              else
              {
@@ -402,7 +407,7 @@
   	    $("#feeds").show();
   	    $("#my_feed").show();
   	    $("#all_feeds").hide();
-  	    $("#contentsList").hide();
+  	    $("#contents_filter_feed").hide();
   	  <%else%>
   	   $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
   	   $('.Close_dialog').show();
@@ -420,7 +425,7 @@
   	$("#feeds").show();
   	$("#my_feed").hide();
   	$("#all_feeds").show();
-  	$("#contentsList").hide();
+  	$("#contents_filter_feed").hide();
   });  
  </script>
  
