@@ -1,5 +1,5 @@
-<% content_for :title, @itemtype.itemtype.pluralize.humanize + " - " %>
 
+<% content_for :title, @itemtype.itemtype.pluralize.humanize + " - " %>
 <div class="Homepopupgraybox">
 
   <div class="Boxtopblock">
@@ -106,8 +106,8 @@
   <br/><br/>
   <!-- Product Details - End -->
   <ul id="Newtabs">
-    <li class="tab_active"><a href="#"><span>All Feeds</span></a></li>
-        <li><a href="#"><span>My Feed</span></a></li>
+    <li id="all_feeds_tab"><a href="#"><span>All Feeds</span></a></li>
+        <li id="my_feed_tab"><a href="#"><span>My Feed</span></a></li>
   </ul>
 
   <div id="content_all">
@@ -120,7 +120,7 @@
             <div style="float:left;width:630px;">
               <ul>
               <!--  <li class="Labeltext" style="padding-right:2px;">Filter by:</li>-->
-                <li class="Currentfilter" id="All"><a href="#">All</a></li>
+                <li class="Currentfilter feeds_filter" id="All"><a href="#">All</a></li>
                 <%@article_categories.each do |category|%>
                 <%if category.name == "HowTo/Guide"%>
                   <li id="HowTo"><a href=""><%=category.name%></a></li>
@@ -150,16 +150,35 @@
 	<% end -%>  
       </span>
     </div>
-    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1 } %>
-      <% @contents = Content.filter(params)  %>
-      <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList" >
+    </div>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="feeds" >
+     <span id="all_feeds">
+      <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
+       <% @contents = Content.filter(params_1)%>
+       <%= render :partial => 'contents/contents', :locals => {:params => params_1} %>
+      </span>
+      <span id="my_feed" style="display:none;">
+        <%if current_user %>
+         <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => Item.get_follows_item_ids_for_user(current_user)} %>
+      
+      <% @contents = Content.filter(params_2)  %>
+      
+      <%= render :partial => 'contents/contents', :locals => {:params => params_2} %>
+       <%if @contents.empty? %>
+         <center> <h3> Follow an item or user to have my feed content</h3> </center>
+       <%end%>
+         
+    <%end%> 
+    </span>
     </div>
     <a id="content_next" style="display:none"></a>
      <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
   </div>
   <!-- This will go into main layout -->
 </div>
+
+
 <script type="text/javascript">
   $(document).ready(function(){
   	
@@ -173,8 +192,19 @@
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = <%=@itemtype.id%>;
             var sort_by = $(this).text();
-            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");       
-        
+            <%if current_user %>
+              if ($('#my_feed_tab').attr("class") == "tab_active")
+               { 
+            contentSearchFilterAction("filter", sub_type, <%= Item.get_follows_item_ids_for_user(current_user) %>, filter_page_no, itemtype_id, sort_by, "");       
+              }
+             else
+             {
+              contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+             }
+             <%else%>
+              contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+             <%end%>
+             
           return false
            }
            else{
@@ -198,7 +228,18 @@
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = <%=@itemtype.id%>;
             var sort_by = $("span#sortBy a.link_active").text();
-            contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");
+           <%if current_user %>
+              if ($('#my_feed_tab').attr("class") == "tab_active")
+               { 
+            contentSearchFilterAction("filter", sub_type, <%= Item.get_follows_item_ids_for_user(current_user) %>, filter_page_no, itemtype_id, sort_by, "");       
+              }
+             else
+             {
+              contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+             }
+             <%else%>
+              contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+             <%end%>
         
             return false
           }
@@ -206,7 +247,41 @@
 
      <%if !@filter_by.nil?%>
       $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
-      <%end%>     
+      <%end%> 
+       var running =false;
+    $(window).scroll(function () {
+
+      lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+
+      running = true;
+       if ($("#content_search_search").val().toString() == ""){
+       	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
+       var sub_type = find_sub_type(id);
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = <%=@itemtype.id%>;
+            var sort_by = $("span#sortBy a.link_active").text();
+           <%if current_user %>
+              if ($('#my_feed_tab').attr("class") == "tab_active")
+               { 
+            contentSearchFilterAction("feeds", sub_type, <%= Item.get_follows_item_ids_for_user(current_user) %>, filter_page_no, itemtype_id, sort_by, "");       
+              }
+             else
+             {
+              contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+             }
+             <%else%>
+              contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+             <%end%>
+          return false
+           }
+        else
+      {
+      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+    	$("#contentSearchForm").submit();
+      }
+      }
+    });
     });
 </script>
 <div class="rightcolumnsmall">
@@ -316,3 +391,54 @@
    	}); 
     });
 </script>
+
+ <script>  
+    $("#my_feed_tab").click(function(){
+      <%if current_user %>
+        $("ul#Newtabs").find('li').removeClass('tab_active');
+  	    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+  	    $("li.feeds_filter").addClass('Currentfilter');
+  	    $('li#my_feed_tab').addClass('tab_active');
+  	    $("#feeds").show();
+  	    $("#my_feed").show();
+  	    $("#all_feeds").hide();
+  	    $("#contentsList").hide();
+  	  <%else%>
+  	   $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
+  	   $('.Close_dialog').show();
+  	   $('.ui-dialog-titlebar').hide();
+  	  <%end%>  
+  	});
+</script>	
+
+ <script>
+  $("#all_feeds_tab").click(function(){
+    $("ul#Newtabs").find('li').removeClass('tab_active');
+    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+    $("li.feeds_filter").addClass('Currentfilter');
+  	$('li#all_feeds_tab').addClass('tab_active');
+  	$("#feeds").show();
+  	$("#my_feed").hide();
+  	$("#all_feeds").show();
+  	$("#contentsList").hide();
+  });  
+ </script>
+ 
+ <script>
+   <% if current_user %>
+      $("ul#Newtabs").find('li').removeClass('tab_active');
+      $('li#my_feed_tab').addClass('tab_active');
+  	   $("#feeds").show();
+  	   $("#my_feed").show();
+  	   $("#all_feeds").hide();
+  	   
+  	   
+   <%else%>
+     $("ul#Newtabs").find('li').removeClass('tab_active');
+  	 $('li#all_feeds_tab').addClass('tab_active');
+  	 $("#feeds").show();
+  	 $("#my_feed").hide();
+  	 $("#all_feeds").show();
+  	 
+  <%end%>
+  </script> 	   
