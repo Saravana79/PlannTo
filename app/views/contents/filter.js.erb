@@ -1,7 +1,7 @@
 element= jQuery('#content_next')
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
-
-running=false;
+$("#contentsList").show();
+$("#feeds").hide();
 <%if params[:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
 <%else%>
