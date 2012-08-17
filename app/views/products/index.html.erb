@@ -400,9 +400,9 @@
       
 	 $(document).ready(function(){
    		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
-        var items = ""        
-        var itemtype_id = <%=@itemtype.id%>;
-   		triggerScrollFunction(sub_type, items, itemtype_id, ""); 
+       var items = ""        
+       var itemtype_id = <%=@itemtype.id%>;
+   		 triggerScrollFunctionFeeds(sub_type, items, itemtype_id, ""); 
    	}); 
     });
 </script>
