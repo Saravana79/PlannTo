@@ -1,4 +1,3 @@
-
 <% content_for :title, @itemtype.itemtype.pluralize.humanize + " - " %>
 <div class="Homepopupgraybox">
 
@@ -150,18 +149,23 @@
 	<% end -%>  
       </span>
     </div>
-  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contents_filter_feed" >
+  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;display:none;" id="contents_filter_feed" >
+
     </div>
     
-    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="feeds" >
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="feeds_content">
+    
      <span id="all_feeds">
       <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
-       <% @contents = Content.filter(params_1)%>
+      <% @contents = Content.filter(params_1)%>
        <%= render :partial => 'contents/contents', :locals => {:params => params_1} %>
       </span>
       <span id="my_feed" style="display:none;">
+      <% items = [] %>
         <%if current_user %>
+        
         <% items = Item.get_follows_item_ids_for_user(current_user) %>
+        <%= hidden_field_tag :items,items.join(",") %>
          <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
       
       <% @contents = Content.filter(params_2)  %>
@@ -177,7 +181,8 @@
     <a id="content_next" style="display:none"></a>
      <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
   </div>
-  <!-- This will go into main layout -->
+   <div id="feeds">
+ </div>
 </div>
 
 
@@ -261,6 +266,7 @@
       running = true;
        if ($("#content_search_search").val().toString() == ""){
        	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
+       	
        var sub_type = find_sub_type(id);
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = <%=@itemtype.id%>;
@@ -408,9 +414,11 @@
   	    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
   	    $("li.feeds_filter").addClass('Currentfilter');
   	    $('li#my_feed_tab').addClass('tab_active');
-  	    $("#feeds").show();
+  	    $("#feeds_content").show();
   	    $("#my_feed").show();
   	    $("#all_feeds").hide();
+  	    $("#feeds").hide();
+  	    $("#filter_page_no").val(2);
   	    $("#contents_filter_feed").hide();
   	  <%else%>
   	   $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
@@ -426,9 +434,11 @@
     $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
     $("li.feeds_filter").addClass('Currentfilter');
   	$('li#all_feeds_tab').addClass('tab_active');
-  	$("#feeds").show();
+  	$("#feeds_content").show();
   	$("#my_feed").hide();
   	$("#all_feeds").show();
+  	$("#feeds").hide();
+  	$("#filter_page_no").val(2);
   	$("#contents_filter_feed").hide();
   });  
  </script>
