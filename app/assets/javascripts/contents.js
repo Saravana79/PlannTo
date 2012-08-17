@@ -59,7 +59,7 @@ $("ul#Newtabs li a").live('click', function(){
    
     function triggerScrollFunction(sub_type, items, itemtype_id, guide){
    	$(window).scroll(function () {		
-      //lnk = $('#content_next');
+      lnk = $('#content_next');
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
         running = true;
         if ($("#content_search_search").val().toString() == ""){       	
