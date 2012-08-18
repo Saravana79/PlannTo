@@ -83,8 +83,10 @@ class Content < ActiveRecord::Base
         # all_items = Item.get_all_related_items_ids(value)
         #  scope.scoped(:conditions => ['content_item_relations.item_id in (?)', all_items ], :joins => :content_item_relations)
 
-        all_items = Item.get_related_content_for_items(value)
-        scope.scoped(:conditions => ["#{self.table_name}.id in (?)",all_items])
+        #all_items = Item.get_related_content_for_items(value)
+         idstr= value.is_a?(Array) ? value.join(',') : value
+        scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", idstr ) 
+        #scope.scoped(:conditions => ["#{self.table_name}.id in (?)",all_items])
       when :itemtype_id
         scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id = ?", value )
       #  scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
