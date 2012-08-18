@@ -74,6 +74,7 @@ class ContentsController < ApplicationController
         item = Item.find(item_ids[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           item_ids = item.related_cars.collect(&:id)
+          itemtype_ids = Array.new
         end
       end
     search_list = Sunspot.search(Content ) do
