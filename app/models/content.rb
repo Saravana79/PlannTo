@@ -38,7 +38,7 @@ class Content < ActiveRecord::Base
     integer :comments_count
     time :created_at
     integer :itemtype_ids,  :multiple => true do
-      content_itemtype_relations.map {|items| items.itemtype_id}
+      content_itemtype_relations.map {|items| items.itemtype_id}    
     #content.itemtype_id
     end
     integer :item_ids,  :multiple => true do
@@ -94,6 +94,8 @@ class Content < ActiveRecord::Base
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type
         scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value ])
+      when :item_relations 
+        scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", value )
       when :order
         attribute, order = value.split(" ")
         scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")

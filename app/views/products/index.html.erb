@@ -314,7 +314,7 @@
       <td height="170" valign="top">
         <ul class="imgContributors">
           <% @top_contributors.each(:as => :hash) do |top_c| %>
-  <li class="imgfollowers"></li>
+  		<li class="imgfollowers"></li>
           <% user= User.find(top_c['user_id']) %>
           <li class="imgContributors">
             <div style="clear:both;">

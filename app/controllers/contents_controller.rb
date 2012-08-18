@@ -24,7 +24,21 @@ class ContentsController < ApplicationController
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], params[:itemtype_id])}    
     filter_params["order"] = get_sort_by(params[:sort_by]) 
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
-    filter_params["items"] = params[:items].split(",") if params[:items].present?
+    
+    if params[:items].present?
+      items = params[:items].split(",")
+      if items.size == 1
+        item = Item.find(items[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
+          filter_params["items"] = items
+        end
+      else
+      filter_params["items"] = items
+      end
+    end
+    
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
@@ -55,8 +69,13 @@ class ContentsController < ApplicationController
      else
         sort_by =   "total_votes"
      end
-    end
-
+    end   
+      if item_ids.size == 1
+        item = Item.find(item_ids[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          item_ids = item.related_cars.collect(&:id)
+        end
+      end
     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
       with :sub_type, sub_type if sub_type.size > 0
@@ -72,7 +91,19 @@ class ContentsController < ApplicationController
   def feeds
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], params[:itemtype_id])}
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
-    filter_params["items"] = params[:items].split(",") if params[:items].present?
+    if params[:items].present?
+      items = params[:items].split(",")
+      if items.size == 1
+        item = Item.find(items[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
+          filter_params["items"] = items
+        end
+      else
+      filter_params["items"] = items
+      end
+    end
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
     #filter_params["guide"] = params[:guide] if params[:guide].present?
@@ -90,11 +121,22 @@ class ContentsController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
     @guide = Guide.find_by_name params[:guide_type]
     @article_categories=  ArticleCategory.where("itemtype_id = ?", @itemtype.id)
-    @item_id = params[:item_id] if params[:item_id].present?
+    
+    
+   # @item_id = params[:item_id] if params[:item_id].present?
     sub_type = @article_categories.collect(&:name)
     filter_params = {"sub_type" => sub_type}
     filter_params["order"] = get_sort_by(params[:sort_by])  
-    filter_params["items"] = params[:item_id].split(",") if params[:item_id].present?
+    if params[:item_id].present?
+      @item_id = params[:item_id]
+        item = Item.find(@item_id)
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
+          filter_params["items"] = @item_id
+        end
+    end
+    #filter_params["items"] = params[:item_id].split(",") if params[:item_id].present?
     filter_params["itemtype_id"] = @itemtype.id
     filter_params["guide"] = @guide.id
     filter_params["page"] = params[:page] if params[:page].present?
