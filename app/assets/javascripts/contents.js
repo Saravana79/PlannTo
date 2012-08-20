@@ -63,7 +63,7 @@ $("ul#Newtabs li a").live('click', function(){
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
         running = true;
         if ($("#content_search_search").val().toString() == ""){       	
-        	
+        	var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text()) 
           	var filter_page_no = $("#filter_page_no").val()
           	var sort_by = $("span#sortBy a.link_active").text();
           	var action = "feeds"
