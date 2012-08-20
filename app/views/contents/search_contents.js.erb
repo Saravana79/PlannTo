@@ -1,4 +1,5 @@
 $("#content_next").remove();
+running=false;
 <%if params[:content_search][:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
 <%else%>
