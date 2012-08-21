@@ -26,8 +26,13 @@ class ContentsController < ApplicationController
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     
     if params[:items].present?
-      items = params[:items].split(",")
-      if items.size == 1
+   
+        if params[:items].is_a?  Array
+          items = params[:items] 
+        else
+          items = params[:items].split(",")
+         end 
+        if items.size == 1
         item = Item.find(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
@@ -93,7 +98,11 @@ class ContentsController < ApplicationController
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], params[:itemtype_id])}
     filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
     if params[:items].present?
-      items = params[:items].split(",")
+       if params[:items].is_a?  Array
+          items = params[:items] 
+        else
+          items = params[:items].split(",")
+        end 
       if items.size == 1
         item = Item.find(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
