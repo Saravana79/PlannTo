@@ -149,46 +149,39 @@
 	<% end -%>  
       </span>
     </div>
-  <div style="border-bottom:solid 1px #e4e4e4;;clear:both;display:none;" id="contents_filter_feed" >
-
-    </div>
-    
-    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="feeds_content">
-    
-     <span id="all_feeds">
-      <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
-      <% @contents = Content.filter(params_1)%>
-       <%= render :partial => 'contents/contents', :locals => {:params => params_1} %>
+ 
+    <% items = [] %>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+     <%if current_user.nil? %>
+      <span id="all_feeds">
+        <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
+        <% @contents = Content.filter(params_1)%>
+         <%= render :partial => 'contents/contents', :locals => {:params => params_1} %>
       </span>
+     
+      <%else%>
       <span id="my_feed" style="display:none;">
-      <% items = [] %>
-        <%if current_user %>
-        
-        <% items = Item.get_follows_item_ids_for_user(current_user) %>
-        <%= hidden_field_tag :items,items.join(",") %>
-         <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
-      
-      <% @contents = Content.filter(params_2)  %>
-      
-      <%= render :partial => 'contents/contents', :locals => {:params => params_2} %>
-       <%if @contents.empty? %>
-         <center> <h3> Follow an item or user to have my feed content</h3> </center>
-       <%end%>
-         
-    <%end%> 
+       <% items = Item.get_follows_item_ids_for_user(current_user,@itemtype.itemtype) %>
+        <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
+         <% @contents = Content.filter(params_2)  %>
+         <%= render :partial => 'contents/contents', :locals => {:params => params_2} %>
+      <%end%> 
     </span>
     </div>
-    <a id="content_next" style="display:none"></a>
-     <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
-  </div>
-   <div id="feeds">
- </div>
+    <div id="my_feed_content">
+     <%if @contents.empty? and !current_user.nil? %>
+       <center> <h3> Follow an item or user to have my feed content</h3> </center>
+        <a id="content_next" style="display:none"></a>
+     <%end%>
+    </div> 
+    <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+  </div> 
+  
 </div>
 
 
 <script type="text/javascript">
   $(document).ready(function(){
-  	
   	$("span#sortBy a").click(function (e) {
   		 $("span#sortBy").find('a').removeClass('link_active');
         $(this).addClass("link_active");
@@ -203,7 +196,7 @@
             <%if current_user %>
               if ($('#my_feed_tab').attr("class") == "tab_active")
                { 
-            contentSearchFilterAction("filter", sub_type,items, filter_page_no, itemtype_id, sort_by, "");       
+            contentSearchFilterAction("filter",sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
               }
              else
              {
@@ -247,7 +240,16 @@
               contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
              }
              <%else%>
-              contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
+               if ($('#my_feed_tab').attr("class") == "tab_active")
+               {
+              $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
+  	          $('.Close_dialog').show();
+  	          $('.ui-dialog-titlebar').hide();
+  	          }
+  	          else
+  	          {
+             contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");
+             }  
              <%end%>
         
             return false
@@ -258,41 +260,7 @@
       $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
       <%end%> 
        var running =false;
-    $(window).scroll(function () {
-
-      lnk = $('#content_next');
-      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-
-      running = true;
-       if ($("#content_search_search").val().toString() == ""){
-       	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
-       	
-       var sub_type = find_sub_type(id);
-            var filter_page_no = $("#filter_page_no").val();
-            var itemtype_id = <%=@itemtype.id%>;
-            var sort_by = $("span#sortBy a.link_active").text();
-            var items =  <%= items %>;
-           <%if current_user %>
-              if ($('#my_feed_tab').attr("class") == "tab_active")
-               { 
-            contentSearchFilterAction("feeds", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
-              }
-             else
-             {
-              contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
-             }
-             <%else%>
-              contentSearchFilterAction("feeds", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
-             <%end%>
-          return false
-           }
-        else
-      {
-      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
-    	$("#contentSearchForm").submit();
-      }
-      }
-    });
+   
     });
 </script>
 <div class="rightcolumnsmall">
@@ -399,10 +367,10 @@
       });
       
 	 $(document).ready(function(){
-   		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
-       var items = ""        
-       var itemtype_id = <%=@itemtype.id%>;
-   		 triggerScrollFunctionFeeds(sub_type, items, itemtype_id, ""); 
+   		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())
+   		var items = <%= items %>;
+      var itemtype_id = <%=@itemtype.id%>;
+   		triggerScrollFunctionfeeds(sub_type, items, itemtype_id, ""); 
    	}); 
     });
 </script>
@@ -414,16 +382,19 @@
   	    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
   	    $("li.feeds_filter").addClass('Currentfilter');
   	    $('li#my_feed_tab').addClass('tab_active');
-  	    $("#feeds_content").show();
-  	    $("#my_feed").show();
-  	    $("#all_feeds").hide();
-  	    $("#feeds").hide();
-  	    $("#filter_page_no").val(2);
-  	    $("#contents_filter_feed").hide();
-  	  <%else%>
-  	   $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
+  	    $("#filter_page_no").val('1');
+        var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
+        var filter_page_no = $("#filter_page_no").val();
+        var itemtype_id = <%=@itemtype.id%>;
+        var items =  <%= items %>;
+        var sort_by = $("span#sortBy a.link_active").text();
+           contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
+       <%else%>
+       $("#contentsList").html("<center> <h3>Please login for my feed content.</h3> </center>");
+       $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
   	   $('.Close_dialog').show();
   	   $('.ui-dialog-titlebar').hide();
+  	  
   	  <%end%>  
   	});
 </script>	
@@ -434,12 +405,13 @@
     $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
     $("li.feeds_filter").addClass('Currentfilter');
   	$('li#all_feeds_tab').addClass('tab_active');
-  	$("#feeds_content").show();
-  	$("#my_feed").hide();
-  	$("#all_feeds").show();
-  	$("#feeds").hide();
-  	$("#filter_page_no").val(2);
-  	$("#contents_filter_feed").hide();
+  	$("#filter_page_no").val('1');
+  	var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
+    var filter_page_no = $("#filter_page_no").val();
+    var itemtype_id = <%=@itemtype.id%>;
+    var items = "";
+    var sort_by = $("span#sortBy a.link_active").text();
+    contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, ""); 
   });  
  </script>
  
@@ -447,17 +419,12 @@
    <% if current_user %>
       $("ul#Newtabs").find('li').removeClass('tab_active');
       $('li#my_feed_tab').addClass('tab_active');
-  	   $("#feeds").show();
-  	   $("#my_feed").show();
-  	   $("#all_feeds").hide();
-  	   
-  	   
-   <%else%>
+  	  $("#my_feed").show();
+  	  $("#all_feeds").hide();
+  <%else%>
      $("ul#Newtabs").find('li').removeClass('tab_active');
   	 $('li#all_feeds_tab').addClass('tab_active');
-  	 $("#feeds").show();
   	 $("#my_feed").hide();
   	 $("#all_feeds").show();
-  	 
   <%end%>
   </script> 	   
