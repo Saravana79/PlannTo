@@ -171,9 +171,10 @@
     <div id="my_feed_content">
      <%if @contents.empty? and !current_user.nil? %>
        <center> <h3> Follow an item or user to have my feed content</h3> </center>
-        <a id="content_next" style="display:none"></a>
+       
      <%end%>
     </div> 
+     <a id="content_next" style="display:none"></a>
     <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
   </div> 
   
@@ -375,15 +376,21 @@
     });
 </script>
 
- <script>  
+ <script> 
     $("#my_feed_tab").click(function(){
-      <%if current_user %>
+      if ($('li#my_feed_tab').attr("class") == "tab_active")
+        { 
+        }
+        else
+        {
+      <%if current_user  %>
+        
         $("ul#Newtabs").find('li').removeClass('tab_active');
   	    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
   	    $("li.feeds_filter").addClass('Currentfilter');
   	    $('li#my_feed_tab').addClass('tab_active');
   	    $("#filter_page_no").val('1');
-        var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
+  	    var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
         var filter_page_no = $("#filter_page_no").val();
         var itemtype_id = <%=@itemtype.id%>;
         var items =  <%= items %>;
@@ -394,25 +401,36 @@
        $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
   	   $('.Close_dialog').show();
   	   $('.ui-dialog-titlebar').hide();
-  	  
-  	  <%end%>  
+  	 
+  	  <%end%> 
+  	  } 
   	});
+  	
 </script>	
 
  <script>
+  
   $("#all_feeds_tab").click(function(){
+    if ($('li#all_feeds_tab').attr("class") == "tab_active")
+     { 
+     }
+    else
+    {
     $("ul#Newtabs").find('li').removeClass('tab_active');
     $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
     $("li.feeds_filter").addClass('Currentfilter');
   	$('li#all_feeds_tab').addClass('tab_active');
   	$("#filter_page_no").val('1');
+  	$("#my_feed_content").html('');
   	var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
     var filter_page_no = $("#filter_page_no").val();
     var itemtype_id = <%=@itemtype.id%>;
     var items = "";
     var sort_by = $("span#sortBy a.link_active").text();
     contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, ""); 
-  });  
+  }
+  }); 
+  
  </script>
  
  <script>

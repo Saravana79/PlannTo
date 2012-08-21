@@ -6,7 +6,10 @@ $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/cont
 <%else%>
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
  <%end%>
- $("#my_feed_content").show();
+
+ <%if @contents.empty? and !current_user.nil? %>
+   $("#my_feed_content").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>");    
+ <%end%>
 element.remove();
 $("#filter_page_no").val("<%=@contents.current_page+ 1%>");
 
