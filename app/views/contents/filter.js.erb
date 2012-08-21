@@ -1,6 +1,8 @@
 element= jQuery('#content_next')
 jQuery.noConflict();
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
+running=false;
+$("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 <%if params[:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
 <%else%>
@@ -11,5 +13,6 @@ $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/co
    $("#my_feed_content").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>");    
  <%end%>
 element.remove();
-$("#filter_page_no").val("<%=@contents.current_page+ 1%>");
+
+//$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
 

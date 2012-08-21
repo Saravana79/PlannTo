@@ -139,14 +139,14 @@
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Comments</a>
          <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
-	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
-	<%= f.hidden_field :sub_type %>
-	<%= f.hidden_field :item_ids, :value => ""%>
-	<%= f.hidden_field :sort_by, :value => ""%>
-	<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
-	<%= f.hidden_field :previous_search_value%>
-	<%= f.hidden_field :page, :value =>1%>
-	<% end -%>  
+		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+		<%= f.hidden_field :sub_type %>
+		<%= f.hidden_field :item_ids, :value => ""%>
+		<%= f.hidden_field :sort_by, :value => ""%>
+		<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
+		<%= f.hidden_field :previous_search_value%>
+		<%= f.hidden_field :page, :value =>1%>
+		<% end -%>  
       </span>
     </div>
  
@@ -177,7 +177,6 @@
      <a id="content_next" style="display:none"></a>
     <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
   </div> 
-  
 </div>
 
 
