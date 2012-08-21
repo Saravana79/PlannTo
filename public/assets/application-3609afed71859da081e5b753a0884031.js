@@ -21579,6 +21579,123 @@ $("ul#Newtabs li a").live('click', function(){
    
    function triggerScrollFunction(sub_type, items, itemtype_id, guide){
    	$(window).scroll(function () {		
+      //lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
+        running = true;
+        if ($("#content_search_search").val().toString() == ""){       	
+        	  
+          	var filter_page_no = $("#filter_page_no").val()
+          	var sort_by = $("span#sortBy a.link_active").text();
+          	var action = "feeds"
+          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide);        
+        	return false
+      	}
+        else
+      {
+      	$("#contentSearchForm").bind('ajax:complete', function() { running = false});
+    	$("#contentSearchForm").submit()    	
+    	 return false     	 
+      }
+      }    
+    });
+   }
+  
+ function triggerScrollFunctionFeeds(sub_type, items, itemtype_id, guide){
+   	$(window).scroll(function () {		
+      //lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
+        running = true;
+        if ($("#content_search_search").val().toString() == ""){       	
+        		var id = $("div#Filterby div.Filternav ul li.Currentfilter").attr("id");
+       	
+       var sub_type = find_sub_type(id);
+          	var filter_page_no = $("#filter_page_no").val()
+          	var sort_by = $("span#sortBy a.link_active").text();
+          	var items = $("#items").val();
+          	var action = "feeds"
+          	
+          	 if ($('#my_feed_tab').attr("class") == "tab_active")
+               { 
+          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide); 
+          	}
+          	else
+          	{
+          		contentSearchFilterAction(action, sub_type, '', filter_page_no, itemtype_id, sort_by, guide); 
+          	 }   
+        	return false
+      	}
+        else
+      {
+      	$("#contentSearchForm").bind('ajax:complete', function() { running = false});
+    	$("#contentSearchForm").submit()    	
+    	 return false     	 
+      }
+      }    
+    });
+   }
+
+;
+var running = false;
+
+
+$(function(){
+
+  $('ul.navdrop a').live("click",function(){
+
+    $(this).parent().toggleClass('selected');
+    var guide = $(this).data('guide');
+    var content = $(this).closest('ul.navdrop').data('content');
+    $.ajaxSetup({
+      'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+    });
+
+    $.post('/contents/update_guide',{'content' : content, 'guide' : guide });
+
+  });
+});
+
+//for tabs
+$("ul#Newtabs li a").live('click', function(){
+    $("ul#Newtabs").find('li').removeClass('tab_active');
+        $(this).closest('li').addClass("tab_active");
+        $(".main-content-section").hide();
+        var activeTab = $(this).attr("href");
+        $("div" + activeTab).show();
+        return false;
+
+  });
+ function setActiveTab(id){
+  	$("ul#Newtabs").find('li').removeClass('tab_active');
+  	$('li#all_variant').addClass('tab_active');
+  	$('div#all_variants').show();  
+  	$('div#overview').hide();	
+  } 
+  
+  
+  
+   function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
+  	 $.get("/contents/" + action ,
+  	 {sub_type: sub_type, items: items, page: filter_page_no, itemtype_id: itemtype_id, sort_by: sort_by, guide: guide},
+     
+          function(data, status, xhr)
+          {
+            running = false;
+          }
+        );  
+       }
+       
+   function find_sub_type(id){
+   	switch(id){
+            case 'All' :  var sub_type = "All";break;
+            case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'Q&A': var sub_type = "QandA";break;
+            default:  var sub_type = id;
+          }
+          return sub_type
+   }
+   
+   function triggerScrollFunction(sub_type, items, itemtype_id, guide){
+   	$(window).scroll(function () {		
       lnk = $('#content_next');
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
         running = true;
@@ -21600,8 +21717,7 @@ $("ul#Newtabs li a").live('click', function(){
     });
    }
   
- 
- function triggerScrollFunctionfeeds(sub_type, items, itemtype_id, guide){
+ function triggerScrollFunctionFeeds(sub_type, items, itemtype_id, guide){
    	$(window).scroll(function () {		
       lnk = $('#content_next');
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
@@ -21614,15 +21730,15 @@ $("ul#Newtabs li a").live('click', function(){
           	var sort_by = $("span#sortBy a.link_active").text();
           	if ($('#my_feed_tab').attr("class") == 'tab_active')
              {  
-               var i = items;  
+                var items = items; 
               }
               else
               {
-               var i = '';
+                var items = '';
               }       
           	var action = "feeds"
           	
-          	contentSearchFilterAction(action, sub_type, i, filter_page_no, itemtype_id, sort_by, guide); 
+          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide); 
           	 
         	return false
       	}
@@ -28568,7 +28684,6 @@ tinymce.html.Styles = function(settings, schema) {
 					if (!inline)
 						blockElementsMap[name] = {};
 
-
 					// Add custom elements at span/div positions
 					each(children, function(element, child) {
 						if (element[cloneName])
@@ -30067,7 +30182,6 @@ tinymce.html.Writer = function(settings) {
 
 			if (indent)
 				html.push('\n');
-
 		},
 
 		doctype: function(text) {
@@ -38195,7 +38309,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 			p2 = DOM.getPos(e);
 			DOM.setStyles(t.id + '_menu', {
 				left : p2.x,
-
 				top : p2.y + e.firstChild.clientHeight,
 				zIndex : 200000
 			});
@@ -42641,7 +42754,6 @@ tinymce.ForceBlocks = function(editor) {
 					}
 
 					// Never split block elements if the format is mixed
-
 					if (split && (!format.mixed || !isBlock(format_root)))
 						container = dom.split(format_root, container);
 

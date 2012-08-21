@@ -1,20 +1,16 @@
 element= jQuery('#content_next')
+jQuery.noConflict();
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
 running=false;
 $("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 <%if params[:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#contents_filter_feed").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#contents_filter_feed").show();
-$("#feeds_content").hide();
-$("#feeds").hide();
 <%else%>
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#feeds").show();
-$("#feeds").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-<%if params[:page] == 2 %>
- $("#contents_filter_feed").show();
  <%end%>
+
+ <%if @contents.empty? and !current_user.nil? %>
+   $("#my_feed_content").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>");    
  <%end%>
 element.remove();
 

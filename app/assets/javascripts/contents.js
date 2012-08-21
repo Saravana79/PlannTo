@@ -80,7 +80,7 @@ $("ul#Newtabs li a").live('click', function(){
     });
    }
   
- function triggerScrollFunctionFeeds(sub_type, items, itemtype_id, guide){
+ function triggerScrollFunctionfeeds(sub_type, items, itemtype_id, guide){
    	$(window).scroll(function () {		
       lnk = $('#content_next');
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
@@ -91,17 +91,18 @@ $("ul#Newtabs li a").live('click', function(){
        var sub_type = find_sub_type(id);
           	var filter_page_no = $("#filter_page_no").val()
           	var sort_by = $("span#sortBy a.link_active").text();
-          	var items = $("#items").val();
+          	if ($('#my_feed_tab').attr("class") == 'tab_active')
+             {  
+               var i = items;  
+              }
+              else
+              {
+               var i = '';
+              }       
           	var action = "feeds"
           	
-          	 if ($('#my_feed_tab').attr("class") == "tab_active")
-               { 
-          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide); 
-          	}
-          	else
-          	{
-          		contentSearchFilterAction(action, sub_type, '', filter_page_no, itemtype_id, sort_by, guide); 
-          	 }   
+          	contentSearchFilterAction(action, sub_type, i, filter_page_no, itemtype_id, sort_by, guide); 
+          	 
         	return false
       	}
         else
@@ -113,4 +114,5 @@ $("ul#Newtabs li a").live('click', function(){
       }    
     });
    }
+
 

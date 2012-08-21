@@ -21600,7 +21600,6 @@ $("ul#Newtabs li a").live('click', function(){
     });
    }
   
- 
  function triggerScrollFunctionfeeds(sub_type, items, itemtype_id, guide){
    	$(window).scroll(function () {		
       lnk = $('#content_next');
@@ -28568,7 +28567,6 @@ tinymce.html.Styles = function(settings, schema) {
 					if (!inline)
 						blockElementsMap[name] = {};
 
-
 					// Add custom elements at span/div positions
 					each(children, function(element, child) {
 						if (element[cloneName])
@@ -30067,7 +30065,6 @@ tinymce.html.Writer = function(settings) {
 
 			if (indent)
 				html.push('\n');
-
 		},
 
 		doctype: function(text) {
@@ -38195,7 +38192,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 			p2 = DOM.getPos(e);
 			DOM.setStyles(t.id + '_menu', {
 				left : p2.x,
-
 				top : p2.y + e.firstChild.clientHeight,
 				zIndex : 200000
 			});
@@ -42641,7 +42637,6 @@ tinymce.ForceBlocks = function(editor) {
 					}
 
 					// Never split block elements if the format is mixed
-
 					if (split && (!format.mixed || !isBlock(format_root)))
 						container = dom.split(format_root, container);
 
