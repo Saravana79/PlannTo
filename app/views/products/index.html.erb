@@ -162,18 +162,18 @@
       <%else%>
       <span id="my_feed" style="display:none;">
        <% items = Item.get_follows_item_ids_for_user(current_user,@itemtype.itemtype) %>
-        <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
-         <% @contents = Content.filter(params_2)  %>
+        <% unless items.size == 0%>
+          <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
+           <% @contents = Content.filter(params_2)  %>
          <%= render :partial => 'contents/contents', :locals => {:params => params_2} %>
-      <%end%> 
-    </span>
-    </div>
-    <div id="my_feed_content">
-     <%if @contents.empty? and !current_user.nil? %>
-       <center> <h3> Follow an item or user to have my feed content</h3> </center>
-       
-     <%end%>
-    </div> 
+         <%else%>
+         <div id="my_feed_content">
+            <center> <h3> Follow an item or user to have my feed content</h3> </center>
+          </div>
+         <%end%> 
+       <%end%>
+       </span>
+       </div>
      <a id="content_next" style="display:none"></a>
     <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
   </div> 
@@ -395,7 +395,13 @@
         var itemtype_id = <%=@itemtype.id%>;
         var items =  <%= items %>;
         var sort_by = $("span#sortBy a.link_active").text();
-           contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
+        if (items.length > 0)
+         {
+          	contentSearchFilterAction(action, sub_type, i, filter_page_no, itemtype_id, sort_by, guide);   }
+         else
+          {
+         $("#contentsList").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>")
+        }
        <%else%>
        $("#contentsList").html("<center> <h3>Please login for my feed content.</h3> </center>");
        $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
