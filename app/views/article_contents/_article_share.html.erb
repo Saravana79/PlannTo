@@ -82,7 +82,20 @@
     </div>
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
       <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
-      <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+      
+     <%unless @article_content.new_record? %>
+     <div id="share_1" style="display:none;">
+      <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px; display:none;" class="float_lft" />
+     </div> 
+      
+        <div id="share_2">
+         <img src="<%= @article_content.thumbnail%>"  style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+         </div>
+       <%else%>
+         <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px; display:none;" class="float_lft" />
+      
+         <%end%>
+         
       <div class="float_lft <%=@article_image%>"><input type="checkbox" id="noincludethumbnail" name="noincludethumbnail">Don't Include Thumbnail</input></div>
       <div class="float_lft"><input type="checkbox" id="<%=@manual_image%>">Add Image Url</input>
         <%=f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px"%>
@@ -94,7 +107,7 @@
       <div class="title_header float_lft <%=@article_image%>"></div>
       <div class="float_lft <%=@article_image%>">
         <span id="<%=@current_image_size%>"></span> <br />
-        <span id="<%=@current_image_id%>" class="txt_blue">0</span>/ <span id="<%=@total_images%>" class="txt_blue">0</span> &nbsp;
+        <span id="<%=@current_image_id%>" class="txt_blue"><%if @article_content.new_record?%>0 <%else%> 1 <%end%></span>/ <span id="<%=@total_images%>" class="txt_blue total_img">0</span> &nbsp;
         <a id="aPrev" class="txt_blue">Prev</a>
         <a id="aNext" class="txt_blue">Next</a>
       </div>
@@ -265,6 +278,8 @@
     $('#aNext').live("click",function(){
       if(images && images.length>0 && images_index<images.length-1 ){
         images_index++;
+        $("#share_2").hide();
+        $("#share_1").show();
         $('#<%=@current_image_id%>').html(images_index+1);
         $('#<%=@current_image_size%>').html(sizes[images_index]);
         $("#<%=@img_thumb%>").attr("src",images[images_index]);
@@ -327,14 +342,18 @@
     img.src = url;
   }
   function add_image_to_list(url,size){
-      
+ ; 
+     
     images.push(url);
     sizes.push(size[0]+"*"+size[1]);
     if(images.length == 1){
       first=false;
+     
       $("#<%=@img_thumb%>").attr("src",url);
       $("#<%=@new_article_thumbnail%>").val(url);
-      $("#<%=@thumbnail_id%>").val(url);
+      <%if @article_content.new_record?%>
+        $("#<%=@thumbnail_id%>").val(url);
+      <%end%>  
       $("#<%=@img_thumb%>").show();
       $(".<%=@article_image%>").show();
       $('#<%=@current_image_size%>').html(size[0]+"*"+size[1]);
@@ -342,8 +361,11 @@
       images_index=0;
       
     }
-
-    $('#<%=@total_images%>').html(images.length);
+    <%if @article_content.new_record?%>
+      $('#<%=@total_images%>').html(images.length);
+    <%else%>
+       $('.total_img').html(images.length);
+     <%end%>
   }
 
   function unescapeHTML(html) {
