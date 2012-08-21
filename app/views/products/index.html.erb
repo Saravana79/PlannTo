@@ -139,14 +139,14 @@
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Comments</a>
          <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
-	<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
-	<%= f.hidden_field :sub_type %>
-	<%= f.hidden_field :item_ids, :value => ""%>
-	<%= f.hidden_field :sort_by, :value => ""%>
-	<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
-	<%= f.hidden_field :previous_search_value%>
-	<%= f.hidden_field :page, :value =>1%>
-	<% end -%>  
+		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+		<%= f.hidden_field :sub_type %>
+		<%= f.hidden_field :item_ids, :value => ""%>
+		<%= f.hidden_field :sort_by, :value => ""%>
+		<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
+		<%= f.hidden_field :previous_search_value%>
+		<%= f.hidden_field :page, :value =>1%>
+		<% end -%>  
       </span>
     </div>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;display:none;" id="contents_filter_feed" >
@@ -166,7 +166,7 @@
         
         <% items = Item.get_follows_item_ids_for_user(current_user) %>
         <%= hidden_field_tag :items,items.join(",") %>
-         <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
+         <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items, :page => 1 }%>
       
       <% @contents = Content.filter(params_2)  %>
       
@@ -179,7 +179,7 @@
     </span>
     </div>
     <a id="content_next" style="display:none"></a>
-     <%=hidden_field_tag :filter_page_no, @contents.current_page+ 1%>
+     <%=hidden_field_tag :filter_page_no, 2%>
   </div>
    <div id="feeds">
  </div>

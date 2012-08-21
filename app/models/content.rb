@@ -86,10 +86,8 @@ class Content < ActiveRecord::Base
         #all_items = Item.get_related_content_for_items(value)
          idstr= value.is_a?(Array) ? value.join(',') : value
         scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", idstr ) 
-        #scope.scoped(:conditions => ["#{self.table_name}.id in (?)",all_items])
       when :itemtype_id
         scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id = ?", value )
-      #  scope.scoped(:conditions => ["#{self.table_name}.itemtype_id = ?", value ])
       when :guide
         scope.joins(:guides).where("contents_guides.guide_id = ?", value )      
       when :type
@@ -105,11 +103,13 @@ class Content < ActiveRecord::Base
         scope.scoped(:conditions => ["#{self.table_name}.created_by = ?", value ])
       when :status      
         scope.scoped(:conditions => ["#{self.table_name}.status = ?", 1])
+      when :page
+        scope.paginate(:page => options["page"], :per_page => options["limit"])
       else
       scope
       end
     end
-    scope.uniq.paginate(:page => options["page"], :per_page => options["limit"])
+    scope.uniq #.paginate(:page => options["page"], :per_page => options["limit"])
 
   end
 

@@ -1,5 +1,7 @@
 element= jQuery('#content_next')
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
+running=false;
+$("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 <%if params[:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
 $("#contents_filter_feed").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
@@ -15,5 +17,6 @@ $("#feeds").append('<%= escape_javascript(render :partial => 'contents/contents'
  <%end%>
  <%end%>
 element.remove();
-$("#filter_page_no").val("<%=@contents.current_page+ 1%>");
+
+//$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
 
