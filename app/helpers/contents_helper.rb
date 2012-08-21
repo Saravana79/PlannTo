@@ -50,10 +50,11 @@ module ContentsHelper
   end
   
   def render_comments_anchor(item)
-    count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{item.id}")
-    comment_count = count.nil? ? item.comments.where("status = 1").count : count.split("_")[1]
+    #count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{item.id}")
+    #comment_count = count.nil? ? item.comments_count : count.split("_")[1]
     
-    txt= "Comments (#{comment_count})"
+    txt= "Comments "
+    txt += "(#{item.comments_count})" unless item.comments_count.nil?
     <<-END
      #{link_to txt, content_comments_path(item), :remote => true, :class => "txt_blue comments_show", :id => "anchor_comments_#{item.id}"}
     END
