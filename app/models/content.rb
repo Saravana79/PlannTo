@@ -59,11 +59,11 @@ class Content < ActiveRecord::Base
   def content_vote_count
     result = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}")
     if result.nil?
-      vote = VoteCount.search_vote(self).first
-      count = vote.nil? ? 0 : (vote.vote_count_positive - vote.vote_count_negative)
-      comment_count = self.comments.nil? ?  0 : self.comments.count
-      $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}", "#{count}_#{comment_count}")
-    return count
+      #vote = VoteCount.search_vote(self).first
+      #count = vote.nil? ? 0 : (vote.vote_count_positive - vote.vote_count_negative)
+      #comment_count = self.comments.nil? ?  0 : self.comments.count
+      $redis.set("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{self.id}", "#{self.total_votes}_#{self.comments_count}")
+    return self.total_votes
     else
       return result.split("_")[0]
     end
