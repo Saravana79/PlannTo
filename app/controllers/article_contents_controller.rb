@@ -49,7 +49,7 @@ class ArticleContentsController < ApplicationController
     if params[:article_content][:sub_type]!= "Photo"
        params.delete("content_photos_attributes")
     end 
-    art = AricleContent.find(params[:id])
+    art = ArticleContent.find(params[:id])
     @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
     if params[:submit_url] == 'submit_url' && art.thumbnail!= @article.thumbnail
       ContentPhoto.update_url_content_to_local(@article)
