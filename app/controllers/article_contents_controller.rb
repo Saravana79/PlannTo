@@ -1,6 +1,5 @@
 class ArticleContentsController < ApplicationController
   before_filter :authenticate_user!
-
   def create
     #not used anywhere
     
@@ -50,9 +49,10 @@ class ArticleContentsController < ApplicationController
     if params[:article_content][:sub_type]!= "Photo"
        params.delete("content_photos_attributes")
     end 
+    art = AricleContent.find(params[:id])
     @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
-    if params[:submit_url] == 'submit_url'
-       ContentPhoto.update_url_content_to_local(@article)
+    if params[:submit_url] == 'submit_url' && art.thumbnail!= @article.thumbnail
+      ContentPhoto.update_url_content_to_local(@article)
     end
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
        @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb))
@@ -141,4 +141,4 @@ class ArticleContentsController < ApplicationController
       format.js
     end
   end
-end
+ end
