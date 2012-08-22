@@ -116,7 +116,7 @@ class ContentsController < ApplicationController
     end
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
-    #filter_params["guide"] = params[:guide] if params[:guide].present?
+    filter_params["guide"] = params[:guide] if params[:guide].present?
     filter_params["order"] = get_sort_by(params[:sort_by])   
     @contents = Content.filter(filter_params)
     respond_to do |format|
