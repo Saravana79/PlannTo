@@ -164,6 +164,10 @@
 
 
   $('#deleteTag').live('click', function(){
+  	//removing first to handle clearing the form values for the currently removed tag as well.
+  	$(this).closest('li').remove();
+    hideClearTag();
+    hideSearchPack();
     var tagId = $(this).closest('li').attr('id');
     var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
     $("#" + attributeId).show();
@@ -184,12 +188,12 @@
        	
        	<%index = @search_info_lookups.index(form_value)%>
        	var multipleClickSearchListId = "attribute_menu_" + <%=index%> + "_tag"
-       	if ($(".search_category").find("#" +multipleClickSearchListId).length != 0){
+       	if ($("#" +multipleClickSearchListId).length != 0){
         			reset = "false"
         		}    
        	<%end%>   
         if (reset == "true"){
-        	 $("#" + lookup).val('')
+        	 $("#" + attributeId).val('')
         }          
         } 
          else if (valueType == "Between"){
@@ -202,9 +206,7 @@
         }
 <%end%>
     }
-    $(this).closest('li').remove();
-    hideClearTag();
-    hideSearchPack();
+
     //$.get('/search',$("#searchForm").serialize(),null,"script");
     searchData('spinner');
     return false;
