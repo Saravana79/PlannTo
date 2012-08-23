@@ -21611,11 +21611,11 @@ $("ul#Newtabs li a").live('click', function(){
        var sub_type = find_sub_type(id);
             var filter_page_no = $("#filter_page_no").val()
             if (($('li#all_feeds_tab').attr("class") == "tab_active") && ($("li.feeds_filter").attr("class") == 'feeds_filter Currentfilter'))
-         {
+{           {
              var filter_page_no = $("#all_feed_page_no").val();
           	}
           	if (($('li#my_feed_tab').attr("class") == "tab_active") && ($("li.feeds_filter").attr("class") == 'feeds_filter Currentfilter'))
-           {
+{           {
              var filter_page_no = $("#my_feed_page_no").val();
             }
           	var sort_by = $("span#sortBy a.link_active").text();

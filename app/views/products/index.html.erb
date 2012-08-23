@@ -151,34 +151,45 @@
       </span>
     </div>
  
-    <% items = [] %>
+     <% items = [] %>
+    <%if current_user%>
+      <% items = Item.get_follows_item_ids_for_user(current_user,@itemtype.itemtype) %>
+    <%end%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <%if current_user.nil? %>
-      <span id="all_feeds">
-        <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
+    </div>
+    
+    
+     <%if current_user.nil? || items.size == 0 %>
+      <span id="content_list_my_feed"></span>
+        <div id="my" ></div>
+      <span id="content_list_all_feed">
+             <% params_1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
         <% @contents = Content.filter(params_1)%>
          <%= render :partial => 'contents/contents', :locals => {:params => params_1} %>
       </span>
      
       <%else%>
-      <span id="my_feed" style="display:none;">
-       <% items = Item.get_follows_item_ids_for_user(current_user,@itemtype.itemtype) %>
+       <span id="content_list_all_feed">
+       <div id="all" ></div> </span>
+      <span id="content_list_my_feed">
+   
         <% unless items.size == 0%>
           <% params_2 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,:items => items }%>
            <% @contents = Content.filter(params_2)  %>
          <%= render :partial => 'contents/contents', :locals => {:params => params_2} %>
-         <%else%>
-         <div id="my_feed_content">
-            <center> <h3> Follow an item or user to have my feed content</h3> </center>
-          </div>
+      
          <%end%> 
        <%end%>
        </span>
-       </div>
+      
+       
      <a id="content_next" style="display:none"></a>
-    <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+      <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+      <%= hidden_field_tag :my_feed_page_no,(@contents.current_page+ 1 rescue 2) %>
+      <%= hidden_field_tag :all_feed_page_no,(@contents.current_page+ 1 rescue 2)%>
   </div> 
 </div>
+
 
 
 <script type="text/javascript">
@@ -241,16 +252,11 @@
               contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");  
              }
              <%else%>
-               if ($('#my_feed_tab').attr("class") == "tab_active")
-               {
+              
               $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
   	          $('.Close_dialog').show();
   	          $('.ui-dialog-titlebar').hide();
-  	          }
-  	          else
-  	          {
-             contentSearchFilterAction("filter", sub_type, "", filter_page_no, itemtype_id, sort_by, "");
-             }  
+  	          
              <%end%>
         
             return false
@@ -271,13 +277,7 @@
    <%= render "shared/quick_links", :search_type => request.path.split("/").last%>
   </div>
   <br/>  
-<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
-  Share : 
-  <a rel="nofollow external" href="http://www.facebook.com/dialog/feed?app_id=312988822129373&redirect_uri=<%=request.url%>&link=<%=request.url%>&caption=Check out <%=@itemtype.itemtype.downcase%> section on PlannTo.com" class="fbicon" title="Share with friends on Facebook">facebook</a>
-  <a rel="nofollow external" href="https://twitter.com/intent/tweet?text=Check out <%=@itemtype.itemtype.downcase%> section on PlannTo.com&url=<%=request.url%>&related=plannto" class="twicon" title="Share with followers on Twitter">twitter</a>
-  <a rel="nofollow external" href="https://plus.google.com/share?url=<%=request.url%>" class="gpicon" title="Share with followers on Google+">google+</a>
-  <a rel="nofollow external" href="http://pinterest.com/pin/create/button/?url=<%=request.url%>&description=Check out <%=@itemtype.itemtype.downcase%> section on PlannTo.com" class="piicon" title="Share with followers on Pinterest">pinterest</a>
-</div>
+
 <%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
 <br/>
   <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
@@ -334,15 +334,10 @@
       <td class="bg_widgethdr txt_white">Bookmarklet</td>
     </tr>
     <tr>
-        <td ><div style="padding:10px 5px 10px 5px">Share the contents easily using this bookmarklet, drag and drop the following button in your bookmark toolbar.</div></td>
+        <td>Share the contents easily using this bookmarklet, drag and drop the following button in your bookmark toolbar.</td>
     </tr>
     <tr>
-        <td>
-          <div style="padding:10px 0px 10px 30px">
-          <a href="javascript:void((function(){ var f='http://www.plannto.com/article_contents/bmarklet?url='+encodeURIComponent(window.location.href);var cw=window.open(f+'&externa l=yes','PlannTo','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660');if(!cw)location.href=f+'&external=yes';})());" class="bookmark_button"><span>Add To PlannTo</span></a>
-        </div>
-        <br/>
-          </td>
+        <td><a href="javascript:void((function(){ var f='http://www.plannto.com/article_contents/bmarklet?url='+encodeURIComponent(window.location.href);var cw=window.open(f+'&external=yes','PlannTo','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660');if(!cw)location.href=f+'&external=yes';})());">Add To Plannto</a></td>
     </tr>
 </table>
 
@@ -389,38 +384,54 @@
 
  <script> 
     $("#my_feed_tab").click(function(){
-      if ($('li#my_feed_tab').attr("class") == "tab_active")
-        { 
-        }
-        else
-        {
-      <%if current_user  %>
-        
-        $("ul#Newtabs").find('li').removeClass('tab_active');
+     <%if current_user  %>
+       $("ul#Newtabs").find('li').removeClass('tab_active');
   	    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
   	    $("li.feeds_filter").addClass('Currentfilter');
   	    $('li#my_feed_tab').addClass('tab_active');
-  	    $("#filter_page_no").val('1');
   	    var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
-        var filter_page_no = $("#filter_page_no").val();
         var itemtype_id = <%=@itemtype.id%>;
         var items =  <%= items %>;
         var sort_by = $("span#sortBy a.link_active").text();
+        $("#content_list_my_feed").show();
+        if($("#content_list_my_feed #my").attr("id") == 'my')
+        {
         if (items.length > 0)
          {
-          	contentSearchFilterAction(action, sub_type, i, filter_page_no, itemtype_id, sort_by, guide);   }
+          $("#my_feed_page_no").val('1');
+          var filter_page_no = $("#my_feed_page_no").val();
+          contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, "");     }
          else
           {
-         $("#contentsList").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>")
+         $("#content_list_all_feed").hide();
+         $("#content_list_my_feed").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>")
         }
+        }
+        else
+        {
+        if (items.length > 0)
+         {
+         $("#contentsList").html("");
+         $("#content_list_my_feed").show();
+         $("#content_list_all_feed").hide();
+         }
+         else
+         {
+         $("#content_list_all_feed").hide();
+         $("#content_list_my_feed").html("<center> <h3> Follow an item or user to have my feed content</h3> </center>")
+         }
+        }
+        
        <%else%>
+       $("#content_list_all_feed").hide();
+        $("#content_list_my_feed").hide();
        $("#contentsList").html("<center> <h3>Please login for my feed content.</h3> </center>");
        $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
   	   $('.Close_dialog').show();
   	   $('.ui-dialog-titlebar').hide();
   	 
   	  <%end%> 
-  	  } 
+  	 // } 
   	});
   	
 </script>	
@@ -428,38 +439,43 @@
  <script>
   
   $("#all_feeds_tab").click(function(){
-    if ($('li#all_feeds_tab').attr("class") == "tab_active")
-     { 
-     }
-    else
-    {
     $("ul#Newtabs").find('li').removeClass('tab_active');
     $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
     $("li.feeds_filter").addClass('Currentfilter');
   	$('li#all_feeds_tab').addClass('tab_active');
-  	$("#filter_page_no").val('1');
   	$("#my_feed_content").html('');
   	var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())  
-    var filter_page_no = $("#filter_page_no").val();
     var itemtype_id = <%=@itemtype.id%>;
     var items = "";
     var sort_by = $("span#sortBy a.link_active").text();
+    if($("#content_list_all_feed #all").attr("id") == 'all')
+    {
+    $("#all_feed_page_no").val('1');
+    var filter_page_no = $("#all_feed_page_no").val();
+    $("#content_list_all_feed").show();
     contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, ""); 
-  }
+  
+    }
+    else
+    {
+     $("#contentsList").html("");
+     $("#content_list_my_feed").hide();
+     $("#content_list_all_feed").show();
+    }
   }); 
   
  </script>
  
  <script>
-   <% if current_user %>
+   <% if current_user &&  items.size > 0%>
       $("ul#Newtabs").find('li').removeClass('tab_active');
       $('li#my_feed_tab').addClass('tab_active');
-  	  $("#my_feed").show();
-  	  $("#all_feeds").hide();
+  	  $("#content_list_my_feed").show();
+  	  $("#content_list_all_feed").hide();
   <%else%>
      $("ul#Newtabs").find('li').removeClass('tab_active');
   	 $('li#all_feeds_tab').addClass('tab_active');
-  	 $("#my_feed").hide();
-  	 $("#all_feeds").show();
+  	 $("#content_list_my_feed").hide();
+  	 $("#content_list_all_feed").show();
   <%end%>
   </script> 	   
