@@ -3848,3 +3848,8 @@ ul.navdrop li.over a {
 }
     
 ul.navdrop li ul li.selected a  { background:url(../images/black_righttick.png) no-repeat right 5px;}
+
+.fbicon{ margin:0 0 0 10px; padding:0px 5px 0px 15px;  background:url(../images/icon_fb.png) no-repeat top left; width:15px; height:15px; display:inline-block; text-indent:-9999px;}
+.twicon{ margin:0; padding:0px 5px 0px 5px;  background:url(../images/icon_twitter.png) no-repeat top left; width:15px; height:15px; display:inline-block; text-indent:-9999px;}
+.gpicon{ margin:0; padding:0px 5px 0px 5px;  background:url(../images/icon_gp.png) no-repeat top left; width:15px; height:15px; display:inline-block; text-indent:-9999px;}
+.piicon{ margin:0; padding:0px 5px 0px 5px;  background:url(../images/icon_pi.png) no-repeat top left; width:15px; height:15px; display:inline-block; text-indent:-9999px;}
