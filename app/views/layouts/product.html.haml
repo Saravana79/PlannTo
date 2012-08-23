@@ -3,6 +3,11 @@
   %head
     %meta{:charset => "utf-8"}/
     %title= yield(:title) + "PlannTo"
+    
+    %meta{:name => "description", :content=>yield(:description)}
+    %meta{:property => 'og:image', :content=>yield(:image)}
+    %meta{:property => 'og:title', :content=>yield(:title) + "PlannTo"}
+    %meta{:property => 'og:description', :content=>yield(:description)}
     = csrf_meta_tags
     = stylesheet_link_tag 'application'
     = stylesheet_link_tag '/stylesheets/plannto.css'
