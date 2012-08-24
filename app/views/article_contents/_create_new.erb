@@ -1,6 +1,8 @@
 <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+
 <div id="subContainerContentCreate" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
   <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
+  
   <!-- along with event creation this form is used for many other types -->
   <%if @content.nil?%>
     <%@form_id = "new_create_article_content_form"%>
@@ -9,50 +11,46 @@
   <%end%>
   <% @article_content= ArticleContent.new %>
   <% @article_content.build_content_photo %>
+  
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :sub_type%>
-    <div id="article_errors" style="line-height:20px;color: red;"></div>
-    <div style="padding:5px 5px 0px 0px;text-align:center">
-      <%unless @content %>
-        <div style="display:none;" id="photo">
-          <div class="title_header float_lft" id="photo">Photo:</div>
-          <%= f.fields_for :content_photo do |photo| %>
-            <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
-          <%end%>
-          <div style="clear:both;"></div>
-        </div>
-      <%else%>
-      <%#if @content %>
-        <div class="Close_dialog" style="display:none;width:43px;
-             overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
-             position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-        <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
-        <%if @content.sub_type == 'Photo' %>
-
-          <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></imag></div><%end%>
-          <br />
-          <br />
-          <div class="title_header float_lft" id="photo">Photo:</div>
+  <div id="article_errors" style="line-height:20px;color: red;"></div>
+  <div style="padding:5px 5px 0px 0px;text-align:center">
+    <%unless @content %>
+    <div style="display:none;" id="photo">
+    	<div class="title_header float_lft" id="photo">Photo:</div>
+        <%= f.fields_for :content_photo do |photo| %>
+        	<%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
+        <%end%>
+        <div style="clear:both;"></div>
+    </div>
+    <%else%>
+    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+    <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
+    <%if @content.sub_type == 'Photo' %>
+        <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></img></div><%end%>
+        <br/><br/>
+    <div class="title_header float_lft" id="photo">Photo:</div>
           <%= f.fields_for :content_photo do |photo| %>
             <%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
           <%end%>
         <%end%>
       <%end%>
 
-      <div class="title_header float_lft">Title :</div>
-      <div class="float_lft">
+    <div class="title_header float_lft">Title :</div>
+    <div class="float_lft">
         <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
-      </div>
     </div>
-    <div style="padding:5px 5px 0px 5px;">
-      <div class="title_header float_lft">Description:</div>
-      <div>
-        <br />
-        <br />
-        <%= f.text_area :description, :class => 'textFilling expanding', :style=> 'width:400px;height:50px;' %>
-      </div>
+  </div>
+  <div style="padding:5px 5px 0px 5px;">
+  	<div class="title_header float_lft">Description:</div>
+    <div>
+      <br />
+      <br />
+      <%= f.text_area :description, :class => 'textFilling expanding', :style=> 'width:400px;height:50px;' %>
+    </div>
       <style>
        textarea, .textareaClone {
         min-height: 6em;
@@ -60,7 +58,7 @@
         max-height: <%= configatron.EXPANDING_TEXT_AREA_MAX_HEIGHT %>;
      }
       </style>
-    </div>
+  </div>
     
     <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->
     <%if @content.nil?%>
@@ -131,13 +129,10 @@
     </div>
     <input id="article_content_create" name="article_content_create" type="hidden" value="true"  />
     <%= hidden_field_tag 'article_create_item_id' %>
-    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px">
       <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'article_content_create_submit', 'data-disable-with'=>"Saving..." %>
     </div>
-  </div>
 <% end %>
-
-
 
 <script type="text/javascript">
 
@@ -165,8 +160,8 @@
    
    
   function showDefaultProductTag(id, hidden_text_field_id){
-    var itemId = <%= @item.try(:id) %>
-    var defaultId = "textTaggers" + itemId
+    var itemId = "<%= @item.try(:id) %>";
+    var defaultId = "textTaggers" + itemId;
     $("ul#" +id + " li").each(function (i) {
       var id = $(this).attr('id');
       if (id != defaultId){
@@ -188,6 +183,8 @@
     $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>').css("width","400px");
     $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>').css("width","400px");
   }
+  
+  
   function setDefaultFieldsArticleCreate(category){
 <%if @content.nil?%>
       var saveButtonName = "Save " + category
@@ -330,8 +327,8 @@
   }
 
   function showCreateProductTag(){
-    var itemId = <%= @item.try(:id) %>
-    var defaultId = "textTaggers" + itemId
+    var itemId = "<%= @item.try(:id) %>";
+    var defaultId = "textTaggers" + itemId;
     $("ul#article_create_product_list li").each(function (i) {
       var id = $(this).attr('id');
       if (id != defaultId){
@@ -340,21 +337,9 @@
     });
     $("#article_create_item_id").val(itemId);
   }
-
-  $(document).ready(function(){
-  	
-  	//onfocus logic
-  	
-  	$("#contentEditView #article_create_product").mouseover(function(){  
-  		if ($(this).autocomplete("widget").is(":visible")) {
-                return;
-            }  
-          //  $(this).trigger('keydown.autocomplete');
-          $(this).data("autocomplete").search($("#article_content_title").val());
-    });
-  	//ends
-  	
-<%if @content.nil?%>
+  
+    $(document).ready(function(){ 
+  <%if @content.nil?%>
       settings={
         close:true, addButton: false,
         url: "/search/autocomplete_items",
@@ -364,62 +349,35 @@
       $.textTagger("article_create_product","article_create_product_list",settings);
   <% unless @item.blank? %>
         $.addTag("article_create_product","article_create_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
-        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
         $("ul#article_create_product_list li:first span a.icon_close_tagging").remove();
   <% end %>
 <%else%>
-      settings={
-        has_parent:true,
-        close:true, addButton: false,
-        url: "/search/autocomplete_items",
-        editMode: false, multiple: true,
-        hidden_field: "#contentEditView #article_create_item_id"
-      };
+//error is here
+      var settings={has_parent:true, close:true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+        hidden_field: "#contentEditView #article_create_item_id"};
   <% @items.each do |item| %>
         $.addTag("#contentEditView #default_product_item","div#contentEditView ul#default_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
-        $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
     <%if item.id == @item.try(:id)%>
           $("ul#article_create_product_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
     <%end%>
   <%end%>
       $.textTagger("#contentEditView #article_create_product","#contentEditView #article_create_product_list",settings);
-
+//ends
 <%end%>
 
 
-    $("form#<%=@form_id%> #article_content_create_submit").click(function(e){
-      $("#subContainerContentCreate div#article_errors").html("");
-      var valid = validateEventForm();
-      if (!valid){
-        return false;
-      }
-      <%unless user_signed_in?%>
-        if (login_flag != true){
-          openLoginPopup("form#<%=@form_id%> #article_content_create_submit", "submit");
-          return false
-        }
-      <% end%>
-       
-    })
+ 
+  	$("#contentEditView #article_create_product").mouseover(function(){  
+  		if ($(this).autocomplete("widget").is(":visible")) {
+                return;
+            }  
+          //  $(this).trigger('keydown.autocomplete');
+          $(this).data("autocomplete").search($("#article_content_title").val());
+    });
+    
   });
-
-  function validateEventForm(){
-    $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip('destroy')
-    var valid = true;
-    if ($("div#subContainerContentCreate form#<%=@form_id%> #article_content_title").val() == ""){
-      $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip({
-        className: 'tip-darkgray',
-        content: 'Please select a title.',
-        showOn: 'none',
-        alignTo: 'target',
-        alignX: 'right',
-        offsetX: 5,
-        alignY: 'center'
-      });
-      $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip('show');
-      valid = false
-    }
-    return valid
-  }
 </script>
+</div>
 

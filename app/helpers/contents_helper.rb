@@ -33,16 +33,16 @@ module ContentsHelper
   def display_content_form(item)
     case item.type
     when "QuestionContent"
-      render :partial => "question_contents/new_question_content", :locals => { :content => item }
+      raw render :partial => "question_contents/new_question_content", :locals => { :content => item }
     when "ReviewContent"
-      render :partial => "reviews/review_subcontainer", :locals => { :content => item }
+      raw render :partial => "reviews/review_subcontainer", :locals => { :content => item }
     else   
       if (item.type == "ArticleContent" && item.url.blank?)
-        render :partial => "article_contents/create_new", :locals => { :content => item }
+        raw render :partial => "article_contents/create_new", :locals => { :content => item }
       elsif (item.type == "ArticleContent" && item.url != "")
-        render :partial => "article_contents/article_share", :locals => {:content_category => true,  :content => item}
+        raw render :partial => "article_contents/article_share", :locals => {:content_category => true,  :content => item}
       else
-        render :partial => "article_contents/article_share", :locals => {:content_category => true, :content => item }
+        raw render :partial => "article_contents/article_share", :locals => {:content_category => true, :content => item }
       end
      
     end

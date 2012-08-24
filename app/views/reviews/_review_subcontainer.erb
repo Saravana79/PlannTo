@@ -136,8 +136,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <button class="btn_follow review_content_reco" type="button" value="false" > No </button>
       <%= f.hidden_field :recommend_this, :value => "" %>
     </div>
-  <%#= f.hidden_field :item, :value => @item.id %>
-    <input id="review_content_item" name="item_id" type="hidden" value=<%= item.try(:id) %>  />
+    <input id="review_content_item" name="item_id" type="hidden" value="<%= @item.try(:id)%>"/>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
       <%= f.submit 'Save Review',:class => 'btn_submitanswer', :id => "publishReview", 'data-disable-with'=>"Saving..."   %>
       <!-- </input> -->
