@@ -1,5 +1,6 @@
 <% rating_id = rating_id || "displayRating"%>
 <div class ="displayRating" id="<%=rating_id%>"></div>
+<div style="display:none;" itemprop="rating"><%="#{item.rating.to_f.round(1)}"%></div>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('div#<%=rating_id%>').raty({
