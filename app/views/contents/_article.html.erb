@@ -1,6 +1,6 @@
-<% cache content do %>
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
+  <% cache content do %>
   <div class="float_rgt">
    <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
   </div>
@@ -39,15 +39,19 @@
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/report.jpg"/>Report</a></li>
+     
+		<%end%>
       <%if content.can_update_content?(current_user)%>
+      
+      <!--  <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+        <li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%#=link_to " Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-        <li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%=link_to " Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
-        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-        <li class="subContentGap float_lft"><img src="/images/update.jpg"/><%=link_to " Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
-        <%= render :partial  => 'contents/guide', :locals => {:content => content} %>        
+        <li class="subContentGap float_lft"><img src="/images/update.jpg"/><%#=link_to " Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+              
+        -->  
+        <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
       <%end%>
     </ul>
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>
 </div>
-<%end%>
