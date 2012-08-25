@@ -4,45 +4,12 @@ jQuery.noConflict();
 running=false;
 $("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 <%if params[:page] == "#{1}"%>
-if ($("li.feeds_filter").attr("class") != 'feeds_filter Currentfilter')
-{
-$("#content_list_all_feed").hide();
-$("#content_list_my_feed").hide();
-
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-
-}
-if (($('li#all_feeds_tab').attr("class") == "tab_active") && ($("li.feeds_filter").attr("class") == 'feeds_filter Currentfilter'))
-{
-$("#contentsList").html('');
-
-$("#content_list_all_feed").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#all_feed_page_no").val("<%=params[:page].to_i+ 1%>");
-
-}
-if (($('li#my_feed_tab').attr("class") == "tab_active") && ($("li.feeds_filter").attr("class") == 'feeds_filter Currentfilter'))
-{
-$("#contentsList").html('');
-$("#content_list_my_feed").html('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#my_feed_page_no").val("<%=params[:page].to_i+ 1%>");
-}
 <%else%>
-if ($("li.feeds_filter").attr("class") != 'feeds_filter Currentfilter')
-{
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-}
-if (($('li#all_feeds_tab').attr("class") == "tab_active") && ($("li.feeds_filter").attr("class") == 'feeds_filter Currentfilter'))
-{
-$("#content_list_all_feed").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#all_feed_page_no").val("<%=params[:page].to_i+ 1%>");
-}
-if (($('li#my_feed_tab').attr("class") == "tab_active") && ($("li.feeds_filter").attr("class") == 'feeds_filter Currentfilter'))
-{
-$("#content_list_my_feed").append('<%= escape_javascript(render :partial => 'contents/contents', :locals => {:params => params}) %>');
-$("#my_feed_page_no").val("<%=params[:page].to_i+ 1%>");
-}
  <%end%>
-element.remove();
+
+ element.remove();
 
 //$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
 
