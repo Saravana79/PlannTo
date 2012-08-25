@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+   caches_action :autocomplete_items
   layout "product"
 
   def index
@@ -22,8 +23,7 @@ class SearchController < ApplicationController
         end
       end
       @search_info_lookups = $search_info_lookups
-    end
-    
+    end    
 
     unless ($search_form_lookups.nil? || $search_type != params[:search_type])
       @search_form_lookups = $search_form_lookups
