@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-   caches_action :autocomplete_items
+#   caches_action :autocomplete_items
   layout "product"
 
   def index
