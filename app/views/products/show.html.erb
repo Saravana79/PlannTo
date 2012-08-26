@@ -39,6 +39,7 @@
     <span class="product_details">
       <h1 itemprop="itemreviewed"><%= @item.name %></h1>
     <% if @item.is_a? Product %>
+    <% cache ['minimised_specification', @item] do%>
       <a class="txt_price"><%= @item.get_price_info('Price') %></a><br />
       <a>
       <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
@@ -51,6 +52,7 @@
     <a class="txt_normal"><%=display_specifications(@item)%>
       <%= link_to("...more", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
+    <%end%>
     <% else %>
         <%if @item.is_a? CarGroup %>
            <a class="txt_price">Groups</a><br />
