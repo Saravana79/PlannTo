@@ -1,5 +1,5 @@
 class ContentsController < ApplicationController
-  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
+  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type,:my_feeds]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :store_location, :only => [:show]
   #layout :false
@@ -217,18 +217,18 @@ class ContentsController < ApplicationController
   
    def my_feeds
    if current_user
-    if params[:item_type] == "All"
+    if params[:item_type] == "All" 
       @items = Follow.where(:follower_id => current_user.id).collect(&:followable_id).join(",")
       @item_types = Itemtype.all.collect(&:id).join(",")
       @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
     else
-      @itemtype = Itemtype.find_by_itemtype(params[:item_type])
-      @item_types = @itemtype.id
-      @items = Item.get_follows_item_ids_for_user(current_user,@itemtype.itemtype).join(",")
+      @item_types = params[:item_types].join(',')
+      @items = Item.get_follows_item_ids_for_user(current_user,params[:item_types]).join(",")
       @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name) 
     end     
      filter_params = {"sub_type" =>  @article_categories}    
-     filter_params["order"] = get_sort_by(params[:sort_by]) 
+     filter_params["order"] = get_sort_by(params[:sort_by])
+     filter_params["items"] = @items 
      filter_params["itemtype_id"] =@item_types  if @item_types.present?
     
     if @items.present?

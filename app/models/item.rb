@@ -3,7 +3,7 @@ class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
   cache_records :store => :local, :key => "items",:request_cache => true
-  TYPES = [["Car","Car"],["Mobile","Mobile"],["Cycle","Cycle"],["Tablet","Tablet"],["Bike","Bike"],["Camera","Camera"]]
+  TYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera"]
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
@@ -357,8 +357,9 @@ class Item < ActiveRecord::Base
   contents
  end
 
- def self.get_follows_item_ids_for_user(user,item_type)
-   Follow.where(:follower_id => user.id,:followable_type => item_type).collect(&:followable_id)
+ def self.get_follows_item_ids_for_user(user,item_type_ids)
+   item_types = Itemtype.where('id in (?)',item_type_ids).collect(&:itemtype)
+   Follow.where('follower_id =? and followable_type in (?)', user.id,item_types).collect(&:followable_id)
  end
 
 def show_specification

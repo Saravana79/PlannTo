@@ -1,7 +1,9 @@
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
    <div style="height:500px;left:center;width: 50%; margin: 0 auto;">
     <div style="width:300px">
+    <% if @rescue == "true" %>
      <b>Wrong Email or Password </b>
+    <%end%> 
     <%= render "shared/login_fields", {:f => f} %>
     </div>
    </div>

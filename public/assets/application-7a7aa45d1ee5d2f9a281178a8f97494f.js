@@ -21600,24 +21600,11 @@ $("ul#Newtabs li a").live('click', function(){
     });
    }
   
-  $(function(){
-
-    $('ul.item_drop a').live("click",function(){
-    $(this).parent().toggleClass('selected');
-    var types = [];
-    $("ul.item_drop li.selected a").each(function() {
-  types.push($(this).data('type'))
-});
-    
-   $.ajaxSetup({
-      'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
-    });
-
-    $.get('/my_feeds',{'item_types' :types});
-    });
-});
+  
+   
 
 
+;
 (function() {
 
 
