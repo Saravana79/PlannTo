@@ -341,21 +341,10 @@
     </li>
      <div style="float:right;padding:0px 30px 0px 0px;">
        <dl>
-        <div><%= link_to "My feeds", "#",:id => "my_feeds" %></div>
+        <div><%= link_to "My feeds", my_feeds_path(:item_type=>"All") %></div>
        </dl>
      </div>
      
-</ul>-->  
+</ul>
      
- <script>
-  $("#my_feeds").click(function(){
-  <%if current_user %>
-     window.location.href='/my_feeds?item_type=All'
-    <%else%>
-      $('#login-feed').dialog({modal: true,height: 600,width: 350 }); 
-  	   $('.Close_dialog').show();
-  	   $('.ui-dialog-titlebar').hide();
-  	 <%end%>  
-    
-  });
-  </script>   
+ 

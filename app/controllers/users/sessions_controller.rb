@@ -33,6 +33,7 @@ class Users::SessionsController < Devise::SessionsController
     end
     rescue #temporary solution for produce exception after login fail.
       sign_out(resource_name)
+      @rescue = "true"
      render :new 
   end
 

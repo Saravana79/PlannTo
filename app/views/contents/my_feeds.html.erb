@@ -1,17 +1,13 @@
-<% content_for :title, "My feeds" %>
+<% content_for :title, "My feeds" + "-" %>
 <% content_for :description, "My feeds"%>
-<div class="Homepopupgraybox">
 
-  <div class="Boxtopblock">
-    <div class="Headingtext">My feeds- Quick Navigation Wizard</div>
+<div class="Homepopupgraybox">
+<div class="Boxtopblock">
+ <div class="Headingtext">My feeds- Quick Navigation Wizard</div>
     <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>
   </div>
-
-  
-
-  <div class="Boxbotcorner"></div>
+<div class="Boxbotcorner"></div>
 </div>
-
 <div class="leftcolumnbig">
   <!-- Product Details - Start -->
   <!-- Overview Tabs -  Start -->
@@ -62,7 +58,18 @@
 		<% end -%>  
       </span>
     </div>
-     <div style="margin: 0px 0px 0px 500px;"> Search feeds for:<%= select_tag "item_type",options_for_select([["All","All"]] + Item::TYPES),:onchange=>'$.get("/my_feeds" ,{item_type: $("#item_type").val()},function(data, status, xhr){running = false;});$("div#Filterby div.Filternav ul").find("li").removeClass("Currentfilter");$("li#All").addClass("Currentfilter");'%></div>
+<div style="margin: 0px 0px 0px 500px;">
+<ul class="itemdrop" >
+	<li class="item1"><a href="#"><span>Search feeds for</span></a>
+		<ul class="item_drop">
+
+			<% Itemtype.where("itemtype in(?)",Item::TYPES).each do |i| %>
+				<li class="selected"> <a data-type=<%= i.id %> ><%= i.itemtype %></a></li>
+			<% end %>
+		</ul>
+	</ul>
+</dl>
+</div>
     <%= hidden_field_tag :items, @items%>
      <%= hidden_field_tag :item_types , @item_types %> 
       <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>

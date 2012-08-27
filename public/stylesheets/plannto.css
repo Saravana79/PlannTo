@@ -3862,6 +3862,100 @@ ul.navdrop li.over a {
     
 ul.navdrop li ul li.selected a  { background:url(../images/black_righttick.png) no-repeat right 5px;}
 
+
+
+
+ul.itemdrop {z-index: 5000; float:left; padding:0 0 0 10px;  margin:0;}
+ul.itemdrop li {list-style:none; position: relative; float: left; padding:0 5px 0 0; text-align: center; line-height: 1em;}
+
+ul.itemdrop li a {display: block; padding: 5px 8px 5px 22px; color:#2680B9; text-decoration:none; font-size:11px;
+                        background:url(../images/icon_search.png) no-repeat 3px 3px; float:left;}
+ul.itemdrop li a span {
+    padding: 0 18px 0px 0;
+    background: url(../images/black_arrow.png) no-repeat right 4px;
+    float:left;
+    display:block;
+    
+}
+
+ul.itemdrop li:hover a span { background-position:right 4px;}
+
+ ul.itemdrop  li ul {
+    display: block;
+    position: absolute;
+/* hidding submenus based on: http://css-class.com/articles/ursidae/  */
+   left: -999em;/* this makes it more accessible than display:none; */
+    width: 122px;
+    padding:8px 7px 7px 8px;
+    background:#ececec url(../images/dropdown_top.png) no-repeat left top;
+    border:1px solid #c6c6c6;
+    margin:0px;
+    
+    border-top:none;
+    
+}
+
+ul.itemdrop  li:hover ul,
+ul.itemdrop  li.over ul /* This is for Internet Explorer 6  */
+{
+    display: block;
+    left:0;
+    float:left;
+    top: 100%;
+    position: absolute;
+    z-index: 4000;
+    width: 122px;
+}
+
+ul.itemdrop  li ul li {
+    width: 122px;
+    height: auto;
+    background: transparent;
+    text-indent: 0;
+    padding: 0;
+    cursor:pointer;
+}
+
+ul.itemdrop  li:hover ul li a,
+ul.itemdrop  li.over ul li a {
+    display: block;
+    width: 122px;/*this is to adjust if used some background image for dropdown */
+    background: transparent;
+    padding: 3px 0 2px 0;
+    text-decoration: none;
+    margin: 0;
+    color:#2e2e2e !important;
+    text-indent: 0;
+    text-align: left;
+    border: 0;
+    white-space: nowrap;
+
+}
+
+ul.itemdrop li ul li a:hover {
+color:#000000;
+text-decoration:underline;
+ 
+    
+}
+
+ul.itemdrop li.active a,
+ul.itemrop li a:hover,
+ul.itemdrop li:hover a,
+ul.itemdrop li.over a {
+    background: #ececec url(../images/icon_search.png) no-repeat  2px 2px ;
+    border:1px solid #c6c6c6;
+    border-bottom:none;
+    padding: 4px 7px 4px 21px
+    
+
+}
+    
+ul.itemdrop li ul li.selected a  { background:url(../images/black_righttick.png) no-repeat right 5px;}
+
+
+
+
 .fbicon{ margin:0 0 0 10px; padding:0px 5px 0px 5px;  background:url(../images/icon_fb.png) no-repeat top left; width:16px; height:20px; display:inline-block; text-indent:-9999px;}
 .twicon{ margin:0; padding:0px 5px 0px 5px;  background:url(../images/icon_twitter.png) no-repeat top left; width:16px; height:20px; display:inline-block; text-indent:-9999px;}
 .gpicon{ margin:0; padding:0px 5px 0px 5px;  background:url(../images/icon_gp.png) no-repeat top left; width:16px; height:20px; display:inline-block; text-indent:-9999px;}
