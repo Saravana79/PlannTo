@@ -2,14 +2,10 @@ element= jQuery('#content_next')
 jQuery.noConflict();
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
 running=false;
-$("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
-<%if params[:page] == "#{1}"%>
+$("#filter_page_no").val("2");
+$("#items").val(<%= @items %>);
+$("#item_types").val(<%= @item_types %>);
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
-<%else%>
-$("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents') %>');
- <%end%>
-
- element.remove();
-
+element.remove();
 //$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
 

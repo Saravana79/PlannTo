@@ -3,6 +3,7 @@ class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
   cache_records :store => :local, :key => "items",:request_cache => true
+  TYPES = [["Car","Car"],["Mobile","Mobile"],["Cycle","Cycle"],["Tablet","Tablet"],["Bike","Bike"],["Camera","Camera"]]
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships

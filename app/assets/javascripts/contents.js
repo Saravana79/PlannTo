@@ -80,6 +80,10 @@ $("ul#Newtabs li a").live('click', function(){
     });
    }
   
-
+  
+   function select_item_type_my_feeds(){
+     alert("ppppppppppppp");
+  	 
+       }
 
 

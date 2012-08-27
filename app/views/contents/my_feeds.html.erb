@@ -1,0 +1,104 @@
+<% content_for :title, "My feeds" %>
+<% content_for :description, "My feeds"%>
+<div class="Homepopupgraybox">
+
+  <div class="Boxtopblock">
+    <div class="Headingtext">My feeds- Quick Navigation Wizard</div>
+    <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>
+  </div>
+
+  
+
+  <div class="Boxbotcorner"></div>
+</div>
+
+<div class="leftcolumnbig">
+  <!-- Product Details - Start -->
+  <!-- Overview Tabs -  Start -->
+  <br/><br/>
+  <!-- Product Details - End -->
+  <ul id="Newtabs">
+   <li class="tab_active"><a href="#"><span>My Feeds</span></a></li>
+        <!-- <li id="my_feed_tab"><a href="#"><span>My Feed</span></a></li> -->
+  </ul>
+
+  <div id="content_all">
+    <!--filter by block start here-->
+    <div id="Filterby">
+      <div class="Filternav">
+            <div style="float:left;width:60px;">
+              <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>     
+            </div>
+            <div style="float:left;width:630px;">
+              <ul>
+              <!--  <li class="Labeltext" style="padding-right:2px;">Filter by:</li>-->
+                <li class="Currentfilter feed_filter" id="All"><a href="#">All</a></li>
+                <%ArticleCategory.by_itemtype_id(0).each do |category|%>
+                <%if category.name == "HowTo/Guide"%>
+                  <li id="HowTo"><a href=""><%=category.name%></a></li>
+                <%else%>
+                <li id="<%=category.name%>"><a href=""><%=category.name%></a></li>
+                <%end%>
+                <%end%>
+              </ul>
+            </div>
+      </div>
+    </div>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+    <div >
+      <span class="sortby" id="sortBy">
+        <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
+         <a class="txt_blue" href="#"  class="link_active">Newest</a> <span style="padding:0px 5px;">|</span>
+        <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
+        <a class="txt_blue" href="#">Most Comments</a>
+         <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
+		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+		<%= f.hidden_field :sub_type %>
+		<%= f.hidden_field :item_ids, :value => ""%>
+		<%= f.hidden_field :sort_by, :value => ""%>
+		<%= f.hidden_field :itemtype_ids, :value => @item_types%>
+		<%= f.hidden_field :previous_search_value%>
+		<%= f.hidden_field :page, :value =>1%>
+		<% end -%>  
+      </span>
+    </div>
+     <div style="margin: 0px 0px 0px 500px;"> Search feeds for:<%= select_tag "item_type",options_for_select([["All","All"]] + Item::TYPES),:onchange=>'$.get("/my_feeds" ,{item_type: $("#item_type").val()},function(data, status, xhr){running = false;});$("div#Filterby div.Filternav ul").find("li").removeClass("Currentfilter");$("li#All").addClass("Currentfilter");'%></div>
+    <%= hidden_field_tag :items, @items%>
+     <%= hidden_field_tag :item_types , @item_types %> 
+      <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+     <%= render :partial => 'contents/contents'%>
+     <%if @contents.nil? %>
+       <h2><center>Please follow an item or user to have my feed content. </center></h2>
+     
+     <%end%>
+     
+       
+     <a id="content_next" style="display:none"></a>
+     
+  </div> 
+</div>
+
+</div>
+
+
+<div class="rightcolumnsmall">
+  <br/><br/>
+  <div >
+
+  
+  </div>
+<br/>  
+<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
+  Share : 
+  <a rel="nofollow external" href="http://www.facebook.com/dialog/feed?app_id=312988822129373&redirect_uri=<%=request.url%>&link=<%=request.url%>&caption=Check out my feeds section on PlannTo.com" class="fbicon" title="Share with friends on Facebook">facebook</a>
+  <a rel="nofollow external" href="https://twitter.com/intent/tweet?text=Check out my feeds section on PlannTo.com&url=<%=request.url%>&related=plannto" class="twicon" title="Share with followers on Twitter">twitter</a>
+  <a rel="nofollow external" href="https://plus.google.com/share?url=<%=request.url%>" class="gpicon" title="Share with followers on Google+">google+</a>
+  <a rel="nofollow external" href="http://pinterest.com/pin/create/button/?url=<%=request.url%>&description=Check out my feeds section on PlannTo.com" class="piicon" title="Share with followers on Pinterest">pinterest</a>
+</div> 
+<br/>
+ </div>
+<div id="script_div">
+<%= render "my_feed_script" %>
+</div>
+</div>

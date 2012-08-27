@@ -1,0 +1,108 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+  	$("span#sortBy a").click(function (e) {
+  		 $("span#sortBy").find('a').removeClass('link_active');
+        $(this).addClass("link_active");
+          if ($("#content_search_search").val().toString() == ""){
+          	$("#filter_page_no").val('1');
+          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
+	        var sub_type = find_sub_type(id);
+            var filter_page_no = $("#filter_page_no").val();
+             var itemtype_id = $("#item_types").val();
+             var items =  $("#items").val();
+            var sort_by = $(this).text();
+             <%if !@contents.nil? %>
+            contentSearchFilterAction("filter", sub_type,"5", filter_page_no, itemtype_id, sort_by, "");        <%end%>
+          return false
+           }
+           else{
+         $("#content_search_page").val(1);
+         $("#content_search_sort_by").val($(this).text());
+          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+         $("#contentSearchForm").submit();
+         }
+  	});
+  	
+    $("div#Filterby div.Filternav ul li").click(function (e) {
+       $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+        $(this).closest('li').addClass("Currentfilter");
+      if ($(this).text() != "Labeltext"){
+        $("#filter_page_no").val('1');
+        var id = $(this).attr('id');
+        var sub_type = find_sub_type(id);
+            $("#content_search_page").val(1)
+            $("#content_search_search").val("")
+          	$("#content_search_sub_type").val(sub_type);
+            var filter_page_no = $("#filter_page_no").val();
+            var itemtype_id = $("#item_types").val();
+            var items =  $("#items").val();
+            var sort_by = $("span#sortBy a.link_active").text();
+            <%if !@contents.nil? %>
+            contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
+           <%end%>
+        return false
+          }
+      });
+
+     <%if !@filter_by.nil?%>
+      $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
+      <%end%> 
+       var running =false;
+      $(window).scroll(function () {
+ 
+      lnk = $('#content_next');
+      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+
+      running = true;
+       if ($("#content_search_search").val().toString() == ""){
+       	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
+       	
+       var sub_type = find_sub_type(id);
+            var filter_page_no = $("#filter_page_no").val();
+            
+            var sort_by = $("span#sortBy a.link_active").text();
+            var itemtype_id = $("#item_types").val();
+            var items =  $("#items").val();
+            <%if !@contents.nil? %>
+            contentSearchFilterAction("feeds", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
+            <%end%>
+          return false
+           }
+        else
+      {
+      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+    	$("#contentSearchForm").submit();
+      }
+      }
+    });
+    });
+</script>
+<script type="text/javascript" charset="utf-8">
+    $(function(){
+      $('#load_content').live("click",function(){
+        type='';
+        $('#filter_contents :checked').each(function(){
+          type+="&type[]="+$(this).attr("class");
+        });
+<% unless @item.blank? %>
+          var url = "<%= feed_contents_path(:items => @item.id  ) %>";
+<% else %>
+          var url = "<%= feed_contents_path %>";
+<% end %>
+        $("#content_all").html("");
+        url=url+"&limit=5"+type;
+        $.get(url, function(data) {
+          $("#content_all").html(data);
+        });
+      });
+
+      $('#select_all').click(function(){
+        if($('#select_all').is(':checked')){
+          $('#filter_contents input').attr('checked','checked');
+        }
+        else {
+          $('#filter_contents input').removeAttr('checked');
+        }
+      });
+      });
+</script>

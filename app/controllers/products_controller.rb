@@ -67,7 +67,8 @@ class ProductsController < ApplicationController
     end
 
   end
-
+  
+  
   def review_it
   end
 

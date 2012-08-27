@@ -88,7 +88,7 @@ class Content < ActiveRecord::Base
          idstr= value.is_a?(Array) ? value.join(',') : value
         scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", idstr ) 
       when :itemtype_id
-        scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id = ?", value )
+        scope.joins(:content_itemtype_relations).where("content_itemtype_relations.itemtype_id in (?)", value )
       when :guide
         scope.joins(:guides).where("contents_guides.guide_id = ?", value )      
       when :type

@@ -48,6 +48,7 @@ class ContentsController < ApplicationController
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
     @contents = Content.filter(filter_params)
+    
   end
 
   def search_contents
@@ -213,7 +214,57 @@ class ContentsController < ApplicationController
       format.js
     end
   end
-
+  
+   def my_feeds
+   if current_user
+    if params[:item_type] == "All"
+      @items = Follow.where(:follower_id => current_user.id).collect(&:followable_id).join(",")
+      @item_types = Itemtype.all.collect(&:id).join(",")
+      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+    else
+      @itemtype = Itemtype.find_by_itemtype(params[:item_type])
+      @item_types = @itemtype.id
+      @items = Item.get_follows_item_ids_for_user(current_user,@itemtype.itemtype).join(",")
+      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name) 
+    end     
+     filter_params = {"sub_type" =>  @article_categories}    
+     filter_params["order"] = get_sort_by(params[:sort_by]) 
+     filter_params["itemtype_id"] =@item_types  if @item_types.present?
+    
+    if @items.present?
+   
+        if @items.is_a?  Array
+          items = @items 
+        else
+          items = @items.split(",")
+         end 
+        if items.size == 1
+        item = Item.find(items[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
+          filter_params["items"] = items
+        end
+      else
+      filter_params["items"] = items
+      end
+    end
+    
+    filter_params["status"] = 1
+    filter_params["guide"] = params[:guide] if params[:guide].present?
+    if @items.size > 0
+      @contents = Content.filter(filter_params)
+    end  
+    respond_to do |format|
+    
+     format.js{ render "contents/my_feeds"}
+      format.html
+    end   
+   else
+     redirect_to root_path
+    end
+  end
+  
   private
 
   def get_item_object
@@ -221,8 +272,10 @@ class ContentsController < ApplicationController
   end
   
   def get_sub_type(sub_type, itemtype_id)    
-    if sub_type =="All"
+    if sub_type =="All" && itemtype_id.length == 1
       return ArticleCategory.where("itemtype_id = ?", itemtype_id).collect(&:name)
+    elsif sub_type =="All" && itemtype_id.length > 1
+      return ArticleCategory.where("itemtype_id = ?", 0).collect(&:name)  
      elsif sub_type =="QandA"
       return "Q&A"
     else
@@ -230,6 +283,7 @@ class ContentsController < ApplicationController
     end
   end
   
+
   def get_sort_by(sort_by)
     sort_by_value = params[:sort_by]
     if sort_by == "Newest"
