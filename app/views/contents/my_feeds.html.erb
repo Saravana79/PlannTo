@@ -59,16 +59,16 @@
       </span>
     </div>
 <div style="margin: 0px 0px 0px 500px;">
-<ul class="navdrop" >
-	<li class="item1"><a href="#"><span>Search</span></a>
+<ul class="itemdrop" >
+	<li class="item1"><a href="#"><span>Search feeds for</span></a>
 		<ul class="item_drop">
 
 			<% Itemtype.where("itemtype in(?)",Item::TYPES).each do |i| %>
 				<li class="selected"> <a data-type=<%= i.id %> ><%= i.itemtype %></a></li>
 			<% end %>
 		</ul>
-	</li>
-</ul>
+	</ul>
+</dl>
 </div>
     <%= hidden_field_tag :items, @items%>
      <%= hidden_field_tag :item_types , @item_types %> 
