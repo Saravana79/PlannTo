@@ -3,7 +3,7 @@ jQuery.noConflict();
 //element.before('<%#=escape_javascript(contents_string.html_safe) %>');
 running=false;
 $("#filter_page_no").val("2");
-$("#items").val(<%= @items %>);
+$("#items").val(<%= @items%>);
 $("#item_types").val(<%= @item_types %>);
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
 element.remove();

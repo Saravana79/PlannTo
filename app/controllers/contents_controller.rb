@@ -9,21 +9,24 @@ class ContentsController < ApplicationController
   #TODO DO WE NEED THIS ACTION?
  # def feed
 
-  #  @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
+  # @contents = Content.filter(params.slice(:items, :type, :order, :limit, :page))
 
    # logger.error("slice params " + params.slice(:items, :type, :order, :limit, :page).to_s)
 
     #respond_to do |format|
-   #   format.html { render "feed", :layout =>false, :locals => {:params => params} }
-   #   format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
+   # format.html { render "feed", :layout =>false, :locals => {:params => params} }
+   # format.js { render "feed", :layout =>false, :locals => {:contents_string => render_to_string(:partial => "contents", :locals => {:params => params}) }}
    # end
   #end
-
-  def filter
-    
-    filter_params = {"sub_type" => get_sub_type(params[:sub_type], params[:itemtype_id])}    
+def filter
+     if params[:item_type_id].is_a?  Array
+       itemtype_id = params[:itemtype_id] 
+     else
+       itemtype_id  = params[:itemtype_id].split(",")
+     end 
+    filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
     filter_params["order"] = get_sort_by(params[:sort_by]) 
-    filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
+    filter_params["itemtype_id"] =  itemtype_id if  itemtype_id.present?
     
     if params[:items].present?
    
@@ -96,8 +99,13 @@ class ContentsController < ApplicationController
   end
 
   def feeds
-    filter_params = {"sub_type" => get_sub_type(params[:sub_type], params[:itemtype_id])}
-    filter_params["itemtype_id"] =params[:itemtype_id] if params[:itemtype_id].present?
+    if params[:item_type_id].is_a?  Array
+       itemtype_id = params[:itemtype_id] 
+     else
+       itemtype_id  = params[:itemtype_id].split(",")
+    end 
+    filter_params = {"sub_type" => get_sub_type(params[:sub_type], itemtype_id )}
+    filter_params["itemtype_id"] = itemtype_id  if itemtype_id .present?
     if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 
@@ -128,16 +136,16 @@ class ContentsController < ApplicationController
     end
   end
   
-  def search_guide  
+  def search_guide
     @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
     @guide = Guide.find_by_name params[:guide_type]
-    @article_categories=  ArticleCategory.where("itemtype_id = ?", @itemtype.id)
+    @article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
     
     
    # @item_id = params[:item_id] if params[:item_id].present?
     sub_type = @article_categories.collect(&:name)
     filter_params = {"sub_type" => sub_type}
-    filter_params["order"] = get_sort_by(params[:sort_by])  
+    filter_params["order"] = get_sort_by(params[:sort_by])
     if params[:item_id].present?
       @item_id = params[:item_id]
         item = Item.find(@item_id)
@@ -179,7 +187,7 @@ class ContentsController < ApplicationController
     #put an if loop to check if its an article share. if yes then uncomment the link below
     #@article,@images = ArticleContent.CreateContent(url,current_user)
     @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
-    @article_categories = ArticleCategory.by_itemtype_id(@content.itemtype_id).map { |e|[e.name, e.id]  }
+    @article_categories = ArticleCategory.by_itemtype_id(@content.itemtype_id).map { |e|[e.name, e.id] }
 
   end
 
@@ -208,7 +216,7 @@ class ContentsController < ApplicationController
       @content.guides.delete guide
     else
       @content.guides.push guide
-    end  
+    end
 
     respond_to do |format|
       format.js
@@ -217,27 +225,26 @@ class ContentsController < ApplicationController
   
    def my_feeds
    if current_user
-    if params[:item_type] == "All" 
+    if params[:item_type] == "All"
       @items = Follow.where(:follower_id => current_user.id).collect(&:followable_id).join(",")
-      @item_types = Itemtype.all.collect(&:id).join(",")
+      @item_types = Itemtype.all.collect(&:id)
       @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
     else
-      @item_types = params[:item_types].join(',')
+      @item_types = params[:item_types].join(",")
       @items = Item.get_follows_item_ids_for_user(current_user,params[:item_types]).join(",")
-      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name) 
-    end     
-     filter_params = {"sub_type" =>  @article_categories}    
+      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+    end
+     filter_params = {"sub_type" => @article_categories}
      filter_params["order"] = get_sort_by(params[:sort_by])
-     filter_params["items"] = @items 
-     filter_params["itemtype_id"] =@item_types  if @item_types.present?
+     filter_params["itemtype_id"] =@item_types 
     
-    if @items.present?
-   
-        if @items.is_a?  Array
-          items = @items 
+    if @items.size > 0
+       
+        if @items.is_a? Array
+          items = @items
         else
           items = @items.split(",")
-         end 
+         end
         if items.size == 1
         item = Item.find(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
@@ -248,18 +255,18 @@ class ContentsController < ApplicationController
       else
       filter_params["items"] = items
       end
-    end
+ 
     
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
-    if @items.size > 0
+   
       @contents = Content.filter(filter_params)
-    end  
+    end
     respond_to do |format|
     
      format.js{ render "contents/my_feeds"}
       format.html
-    end   
+    end
    else
      redirect_to root_path
     end
@@ -271,11 +278,11 @@ class ContentsController < ApplicationController
     @item = Content.find(params[:id])
   end
   
-  def get_sub_type(sub_type, itemtype_id)    
+  def get_sub_type(sub_type, itemtype_id)
     if sub_type =="All" && itemtype_id.length == 1
       return ArticleCategory.where("itemtype_id = ?", itemtype_id).collect(&:name)
     elsif sub_type =="All" && itemtype_id.length > 1
-      return ArticleCategory.where("itemtype_id = ?", 0).collect(&:name)  
+      return ArticleCategory.where("itemtype_id = ?", 0).collect(&:name)
      elsif sub_type =="QandA"
       return "Q&A"
     else

@@ -71,19 +71,15 @@
 </dl>
 </div>
     <%= hidden_field_tag :items, @items%>
-     <%= hidden_field_tag :item_types , @item_types %> 
+     <%= hidden_field_tag :item_types , @item_types.join(",") %> 
       <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
      <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
      <%= render :partial => 'contents/contents'%>
      <%if @contents.nil? %>
        <h2><center>Please follow an item or user to have my feed content. </center></h2>
-     
      <%end%>
-     
-       
      <a id="content_next" style="display:none"></a>
-     
-  </div> 
+     </div> 
 </div>
 
 </div>
