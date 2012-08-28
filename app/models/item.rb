@@ -357,14 +357,20 @@ class Item < ActiveRecord::Base
   contents
  end
 
- def self.get_follows_item_ids_for_user(user,item_type_ids)
+ def self.get_follows_item_ids_for_user_and_item_types(user,item_type_ids)
    item_types = Itemtype.where('id in (?)',item_type_ids).collect(&:itemtype)
    Follow.where('follower_id =? and followable_type in (?)', user.id,item_types).collect(&:followable_id)
  end
 
-def show_specification
-  has_specificiation = true
-end 
+ def self.get_follows_items_for_user(user)
+   items = [] 
+   Follow.where('follower_id =?', user.id).limit(5).map{|f| items << Item.find(f.followable_id)}
+   return items
+ end
+ 
+ def show_specification
+   has_specificiation = true
+ end 
 
 def show_buytheprice
   has_buytheprice = true
