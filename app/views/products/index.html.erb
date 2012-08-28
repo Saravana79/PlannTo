@@ -151,7 +151,14 @@
     </div>
  
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
+        <% @contents = Content.filter(params)%>
+         <%= render :partial => 'contents/contents', :locals => {:params => params} %>
      
+     
+       
+     <a id="content_next" style="display:none"></a>
+      <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
   </div> 
 </div>
 
@@ -244,7 +251,7 @@
   </div>
   <br/>  
 <div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
-  <%= render "shared/share_buttons", {:caption_text => 'Check out ' + @itemtype.itemtype.downcase + ' section on PlannTo.com'} %>
+  <%= render "shared/share_buttons", :caption_text => 'Check out ' + @itemtype.itemtype.downcase + ' section on PlannTo.com' %>
 </div>
 
 <%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
