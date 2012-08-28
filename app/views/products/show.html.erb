@@ -107,7 +107,10 @@
 <br/>
 <%= render "shared/quick_links", :search_type => "#{request.path}"%>
 <br/>
-
+<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
+  <%= render  "shared/share_buttons",:caption_text => 'Check out ' + @item.name +  
+  ' on PlannTo.com' %>
+</div>
 <!--follower block start here-->
 <% if( (@item.is_a? Product) )%>
 <div class="Commandiv">

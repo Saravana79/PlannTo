@@ -151,14 +151,7 @@
     </div>
  
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
-        <% @contents = Content.filter(params)%>
-         <%= render :partial => 'contents/contents', :locals => {:params => params} %>
      
-     
-       
-     <a id="content_next" style="display:none"></a>
-      <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
   </div> 
 </div>
 
@@ -251,11 +244,7 @@
   </div>
   <br/>  
 <div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
-  Share : 
-  <a rel="nofollow external" href="http://www.facebook.com/dialog/feed?app_id=312988822129373&redirect_uri=<%=request.url%>&link=<%=request.url%>&caption=Check out <%=@itemtype.itemtype.downcase%> section on PlannTo.com" class="fbicon" title="Share with friends on Facebook">facebook</a>
-  <a rel="nofollow external" href="https://twitter.com/intent/tweet?text=Check out <%=@itemtype.itemtype.downcase%> section on PlannTo.com&url=<%=request.url%>&related=plannto" class="twicon" title="Share with followers on Twitter">twitter</a>
-  <a rel="nofollow external" href="https://plus.google.com/share?url=<%=request.url%>" class="gpicon" title="Share with followers on Google+">google+</a>
-  <a rel="nofollow external" href="http://pinterest.com/pin/create/button/?url=<%=request.url%>&description=Check out <%=@itemtype.itemtype.downcase%> section on PlannTo.com" class="piicon" title="Share with followers on Pinterest">pinterest</a>
+  <%= render "shared/share_buttons", {:caption_text => 'Check out ' + @itemtype.itemtype.downcase + ' section on PlannTo.com'} %>
 </div>
 
 <%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
