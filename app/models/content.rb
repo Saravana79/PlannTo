@@ -144,7 +144,7 @@ class Content < ActiveRecord::Base
     logger.info "-----------------------------------------"
 
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
-    self.update_item_contents_relations_cache(self)
+    #self.update_item_contents_relations_cache(self)
 
   #end
   end
