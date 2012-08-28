@@ -19,9 +19,14 @@ class ContentsController < ApplicationController
    # end
   #end
 def filter
-    filter_params = {"sub_type" => get_sub_type(params[:sub_type],  params[:itemtype_id] )}    
+     if params[:item_type_id].is_a?  Array
+       itemtype_id = params[:itemtype_id] 
+     else
+       itemtype_id  = params[:itemtype_id].split(",")
+     end 
+    filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
     filter_params["order"] = get_sort_by(params[:sort_by]) 
-    filter_params["itemtype_id"] =  params[:itemtype_id] if   params[:itemtype_id]
+    filter_params["itemtype_id"] =  itemtype_id if  itemtype_id.present?
     
     if params[:items].present?
    
@@ -94,8 +99,13 @@ def filter
   end
 
   def feeds
-    filter_params = {"sub_type" => get_sub_type(params[:sub_type],  params[:itemtype_id] )}
-    filter_params["itemtype_id"] =  params[:itemtype_id]  if  params[:itemtype_id] .present?
+    if params[:item_type_id].is_a?  Array
+       itemtype_id = params[:itemtype_id] 
+     else
+       itemtype_id  = params[:itemtype_id].split(",")
+    end 
+    filter_params = {"sub_type" => get_sub_type(params[:sub_type], itemtype_id )}
+    filter_params["itemtype_id"] = itemtype_id  if itemtype_id .present?
     if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 
