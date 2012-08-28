@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-#   caches_action :autocomplete_items
+   caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term] }}
   layout "product"
 
   def index
