@@ -137,17 +137,26 @@ def filter
   end
   
   def search_guide
-    @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
+    #@itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
     @guide = Guide.find_by_name params[:guide_type]
-    @article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
+    #@article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
+    item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
+    param_item_id = item.id
     
+    if (item.is_a? Product)
+      @article_categories = ArticleCategory.where("itemtype_id = ?", item.itemtype_id)
+     # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+    else
+      @article_categories = ArticleCategory.where("itemtype_id = ?", 0)
+     # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
+    end 
     
    # @item_id = params[:item_id] if params[:item_id].present?
     sub_type = @article_categories.collect(&:name)
     filter_params = {"sub_type" => sub_type}
     filter_params["order"] = get_sort_by(params[:sort_by])
-    if params[:item_id].present?
-      @item_id = params[:item_id]
+    if param_item_id.present?
+      @item_id = param_item_id
         item = Item.find(@item_id)
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
@@ -156,7 +165,7 @@ def filter
         end
     end
     #filter_params["items"] = params[:item_id].split(",") if params[:item_id].present?
-    filter_params["itemtype_id"] = @itemtype.id
+    filter_params["itemtype_id"] = @itemtype.id unless @itemtype.nil?
     filter_params["guide"] = @guide.id
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
