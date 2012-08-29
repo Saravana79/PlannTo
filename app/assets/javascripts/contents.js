@@ -17,8 +17,10 @@ $(function(){
   });
   });
   
-    $('ul.item_drop a').live("click",function(){
+   $('ul.item_drop a').live("click",function(){
     $(this).parent().toggleClass('selected');
+    $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+    $("li.feed_filter").addClass("Currentfilter")
     var types = [];
     $("ul.item_drop li.selected a").each(function() {
   types.push($(this).data('type'))

@@ -227,7 +227,6 @@ def filter
     if current_user
       @items,@item_types,@article_categories = Content.follow_items_contents(current_user,params[:item_types])
       filter_params = {"sub_type" => @article_categories}
-      filter_params["order"] = get_sort_by(params[:sort_by])
       filter_params["itemtype_id"] =@item_types 
     
       if @items.size > 0 || !@item_types.blank?
@@ -266,11 +265,9 @@ def filter
     @item = Content.find(params[:id])
   end
   
-  def get_sub_type(sub_type, itemtype_id)
-    if sub_type =="All" && itemtype_id.length == 1
-      return ArticleCategory.where("itemtype_id = ?", itemtype_id).collect(&:name)
-    elsif sub_type =="All" && itemtype_id.length > 1
-      return ArticleCategory.where("itemtype_id = ?", 0).collect(&:name)
+  def get_sub_type(sub_type, itemtype_id)    
+    if sub_type =="All"
+      return ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name)
      elsif sub_type =="QandA"
       return "Q&A"
     else
