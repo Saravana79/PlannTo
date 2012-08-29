@@ -137,14 +137,15 @@ def filter
   end
   
   def search_guide
-    #@itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
+   
     @guide = Guide.find_by_name params[:guide_type]
     #@article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
     item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
     param_item_id = item.try(:id)
     
     if (item.is_a? Product)
-      @article_categories = ArticleCategory.where("itemtype_id = ?", item.itemtype_id)
+      @article_categories = ArticleCategory.where("itemtype_id = ?", item.get_base_itemtypeid)
+       @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
      # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
       @article_categories = ArticleCategory.where("itemtype_id = ?", 0)
@@ -166,6 +167,10 @@ def filter
     end
     #filter_params["items"] = params[:item_id].split(",") if params[:item_id].present?
     filter_params["itemtype_id"] = @itemtype.id unless @itemtype.nil?
+    unless item.nil?
+     filter_params["itemtype_id"] = item.get_base_itemtypeid
+     @itemtype = Itemtype.find item.get_base_itemtypeid
+    end
     filter_params["guide"] = @guide.id
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
