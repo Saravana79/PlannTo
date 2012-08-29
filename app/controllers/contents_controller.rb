@@ -223,27 +223,18 @@ def filter
     end
   end
   
-   def my_feeds
-   if current_user
-    if params[:item_type] == "All"
-      @follow_items = Item.get_follows_items_for_user(current_user)
-      @items = Follow.where(:follower_id => current_user.id).collect(&:followable_id).join(",")
-      @item_types = Itemtype.all.collect(&:id)
-      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
-    else
-      @item_types = params[:item_types].join(",")
-      @items = Item.get_follows_item_ids_for_user_and_item_types(current_user,params[:item_types]).join(",")
-      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
-    end
-     filter_params = {"sub_type" => @article_categories}
-     filter_params["order"] = get_sort_by(params[:sort_by])
-     filter_params["itemtype_id"] =@item_types 
+  def my_feeds
+    if current_user
+      @items,@item_types,@article_categories = Content.follow_items_contents(current_user,params[:item_types])
+      filter_params = {"sub_type" => @article_categories}
+      filter_params["order"] = get_sort_by(params[:sort_by])
+      filter_params["itemtype_id"] =@item_types 
     
-    if @items.size > 0
-      if @items.is_a? Array
-          items = @items
-       else
-         items = @items.split(",")
+      if @items.size > 0 || !@item_types.blank?
+        if @items.is_a? Array
+            items = @items
+        else
+          items = @items.split(",")
         end
         if items.size == 1
           item = Item.find(items[0])
@@ -255,16 +246,16 @@ def filter
        else
          filter_params["items"] = items
        end
-      filter_params["status"] = 1
+       filter_params["status"] = 1
        filter_params["guide"] = params[:guide] if params[:guide].present?
-   
-      @contents = Content.filter(filter_params)
+       filter_params["order"] = "created_at desc"
+       @contents = Content.filter(filter_params)
     end
     respond_to do |format|
      format.js{ render "contents/my_feeds"}
       format.html
     end
-   else
+  else
      redirect_to root_path
     end
   end
