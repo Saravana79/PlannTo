@@ -141,7 +141,7 @@ def filter
     @guide = Guide.find_by_name params[:guide_type]
     #@article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
     item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
-    param_item_id = item.id
+    param_item_id = item.try(:id)
     
     if (item.is_a? Product)
       @article_categories = ArticleCategory.where("itemtype_id = ?", item.itemtype_id)
