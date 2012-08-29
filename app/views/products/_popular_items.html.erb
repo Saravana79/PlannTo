@@ -1,6 +1,6 @@
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
-      <td class="bg_widgethdr txt_white">Popular <%= @type.to_s + 's'%></td>
+      <td class="bg_widgethdr txt_white">Popular <%= @type.to_s.pluralize %></td>
     </tr>
     <tr>
       <td valign="top">
@@ -12,9 +12,15 @@
             <div>
             <a href="<%=item.get_url() rescue ''%>" class="txt_black"><%= item.name rescue ''%></a>
            </div>
+            <% unless @type.to_s == 'Car'%>
+            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "popular_item_id_fhp_#{item.id}"} %><br />
+            <% end %>
             </td>
           </tr>
          <%end%>
+         <tr >
+            <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="<%= "/" + @type.to_s.downcase + "/search"%>" class="txt_blue">View All <%= @type.to_s.pluralize %></a></td>
+          </tr>
         </table>
         </td>
     </tr>
