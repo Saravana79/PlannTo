@@ -42,7 +42,7 @@
 		<%= f.hidden_field :sub_type %>
 		<%= f.hidden_field :item_ids, :value => ""%>
 		<%= f.hidden_field :sort_by, :value => ""%>
-		<%= f.hidden_field :itemtype_ids, :value => @itemtype.id%>
+		<%= f.hidden_field :itemtype_ids, :value => @itemtype.try(:id)%>
 		<%= f.hidden_field :previous_search_value%>
 		<%= f.hidden_field :page, :value =>1%>
 		<% end -%>  
@@ -68,7 +68,7 @@
           	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
 	        var sub_type = find_sub_type(id);  
             var filter_page_no = $("#filter_page_no").val();
-            var itemtype_id = <%=@itemtype.id%>;
+            var itemtype_id = "<%=@itemtype.try(:id)%>";
             var sort_by = $(this).text();
             var guide = <%=@guide.id%>
             var items = <%= @item_id || ""%>
@@ -94,7 +94,7 @@
             $("#content_search_search").val("")
           	$("#content_search_sub_type").val(sub_type);  
             var filter_page_no = $("#filter_page_no").val();
-            var itemtype_id = <%=@itemtype.id%>;
+            var itemtype_id = "<%=@itemtype.try(:id)%>";
             var sort_by = $("span#sortBy a.link_active").text();
             var guide = <%=@guide.id%>
             var items = <%= @item_id || ""%>
@@ -113,7 +113,7 @@
    		id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
        		var sub_type = find_sub_type(id);
         var items = "<%= @item_id || ""%>" ;     
-        var itemtype_id = "<%=@itemtype.id%>";
+        var itemtype_id = "<%=@itemtype.try(:id)%>";
         var guide = <%=@guide.id%>
    		triggerScrollFunction(sub_type, items, itemtype_id, guide); 
    	}); 

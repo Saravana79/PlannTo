@@ -113,7 +113,7 @@ def filter
           items = params[:items].split(",")
         end 
       if items.size == 1
-        item = Item.find(items[0])
+        item = Item.find_by_id(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
         else
@@ -274,9 +274,13 @@ def filter
     @item = Content.find(params[:id])
   end
   
-  def get_sub_type(sub_type, itemtype_id)    
+  def get_sub_type(sub_type, itemtype_id)   
     if sub_type =="All"
+      if itemtype_id.empty?
+      return ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
+      else
       return ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name)
+      end
      elsif sub_type =="QandA"
       return "Q&A"
     else
