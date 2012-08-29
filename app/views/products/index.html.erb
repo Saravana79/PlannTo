@@ -149,13 +149,15 @@
 		<% end -%>  
       </span>
     </div>
- 
+  <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
+    
       <% @contents = Content.filter(params)%>
-       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+       
+         <%= render :partial => 'contents/contents', :locals => {:params => params} %>
       <a id="content_next" style="display:none"></a>
-      <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+     
   </div> 
 </div>
 
@@ -213,31 +215,7 @@
       $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
       <%end%> 
        var running =false;
-    $(window).scroll(function () {
- 
-      lnk = $('#content_next');
-      if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-
-      running = true;
-       if ($("#content_search_search").val().toString() == ""){
-       	id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
-       	
-       var sub_type = find_sub_type(id);
-            var filter_page_no = $("#filter_page_no").val();
-            var itemtype_id = <%=@itemtype.id%>;
-            var sort_by = $("span#sortBy a.link_active").text();
-            var items =  "";
-            contentSearchFilterAction("feeds", sub_type, items, filter_page_no, itemtype_id, sort_by, "");       
-            
-          return false
-           }
-        else
-      {
-      	 $("#contentSearchForm").bind('ajax:complete', function() { running = false});
-    	$("#contentSearchForm").submit();
-      }
-      }
-    });
+   
     });
 </script>
 <div class="rightcolumnsmall">
