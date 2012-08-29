@@ -2,8 +2,8 @@ require 'json'
 class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
-  cache_records :store => :local, :key => "items",:request_cache => true
-  TYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera"]
+  #cache_records :store => :local, :key => "items",:request_cache => true
+  TYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Group", "Topic"]
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
@@ -364,7 +364,7 @@ class Item < ActiveRecord::Base
 
  def self.get_follows_items_for_user(user)
    items = [] 
-   Follow.where('follower_id =?', user.id).limit(5).map{|f| items << Item.find(f.followable_id)}
+   Follow.where('follower_id =? and followable_type in (?)',user.id,Item::TYPES).limit(5).map{|f| items << Item.find(f.followable_id)}
    return items
  end
  

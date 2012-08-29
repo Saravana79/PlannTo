@@ -5,6 +5,8 @@ running=false;
 $("#filter_page_no").val("2");
 $("#items").val("<%= @items%>");
 $("#item_types").val("<%= @item_types %>");
+$("#content_search_item_ids").val("<%= @items%>");
+$("#content_search_itemtype_ids").val("<%= @items%>");
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
 element.remove();
 //$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");

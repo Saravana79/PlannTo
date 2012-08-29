@@ -124,7 +124,21 @@ class Content < ActiveRecord::Base
     end
     return status
   end
-
+  
+  def self.follow_items_contents(user,item_types)
+    if item_types.nil?
+      @items = Follow.where('follower_id =? and followable_type in (?)',user.id,Item::TYPES).collect(&:followable_id).join(",")
+      @item_types = Itemtype.where("itemtype in (?)", Item::TYPES).collect(&:id)
+      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+    else
+      @item_types = item_types.join(",") if !item_types.blank?
+      @items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).join(",")
+      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+    end 
+    return @items,@item_types,@article_categories 
+  end
+  
+  
   def save_with_items!(items)
     # Content.transaction do
     item_type_ids = Array.new
@@ -144,7 +158,7 @@ class Content < ActiveRecord::Base
     logger.info "-----------------------------------------"
 
     #Resque.enqueue(ContentRelationsCache, self.id, items.split(","))
-    #self.update_item_contents_relations_cache(self)
+    self.update_item_contents_relations_cache(self)
 
   #end
   end
