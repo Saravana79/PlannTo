@@ -5,8 +5,8 @@ class ProductsController < ApplicationController
   before_filter :store_location, :only => [:show]
   
   layout 'product'
-  
   include FollowMethods
+
 
   def index
     @filter_by = params["fl"]
