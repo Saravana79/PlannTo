@@ -107,7 +107,7 @@
   <br/>
   <div style="clear:both;margin-top:60px;">
         <ul id="Newtabs">
-          <% ['Cars','Mobile','Tablet','Camera','Bike','Cycle', 'Apps', 'Accessories'].each do |item_type|%>
+          <% ['Products', 'Apps', 'Accessories'].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
         </ul>
@@ -167,10 +167,8 @@
           </span>
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-          <%
            
-          %>
-          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id ,"user" => @user.id}%>
+          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id}%>
           <% @contents = Content.filter(params)  %>
           <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         </div>
@@ -193,7 +191,7 @@
                 }
                 $.ajax(
                 {
-                  url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtype.id%>",
+                  url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtypes%>",
                   type: "get",
                   dataType: "script"
                 });
@@ -211,7 +209,7 @@
           running = true;
             $.ajax(
               {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtype.id%>",
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes%>",
                 type: "get",
                 dataType: "script",
                 success    : function(data)

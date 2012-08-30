@@ -1,6 +1,11 @@
 <div class="ui-widget Blockheading">
-  <div class="Headingtext">Add <%= @follow_types.first %> to your profile</div>
-  <div class="Searchform">
+  <div class="Headingtext">
+  Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
+   <%= @follow_types.first %> 
+   <%else%> Product <%end%> to your profile </div>
+   
+  <div class="Searchform">   
+
      <input type="text" placeholder="Search <%= params[:follow]%>" id="search_item" /> 
      <input name="" type="button" class="Searchbut">
     

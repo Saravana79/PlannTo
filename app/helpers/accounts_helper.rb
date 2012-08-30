@@ -12,7 +12,7 @@ module AccountsHelper
   end
 
   def link_for_item_type(item_type, selected_item, user)
-    if item_type == selected_item || (selected_item.nil? && item_type=="Cars")
+    if item_type == selected_item || (selected_item.nil? && item_type=="Products")
       content_tag(:li,
         link_to(content_tag(:span, item_type), profile_path(user.try(:username), :follow => item_type)),
       :class => "tab_active")

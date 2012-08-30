@@ -7,8 +7,8 @@ class Itemtype < ActiveRecord::Base
 
   def self.get_followable_types(item_type)
     case item_type
-      when 'Cars'
-        return ['Car', 'CarGroup']
+      when 'Products'
+        return Item::TYPES
       else
         return [item_type]
     end
