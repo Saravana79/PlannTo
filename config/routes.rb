@@ -53,6 +53,9 @@ resources :accounts do
       put :change_password
       get :followers
     end
+    collection do
+      get :profile
+     end 
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
 
