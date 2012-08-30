@@ -110,7 +110,7 @@
   <% end rescue "" %>
 
 
-<%= will_paginate items, :page_links => true %>
+<%= will_paginate @followitems %>
 <% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
 <%= hidden_field_tag "category", category %>
 <script type="text/javascript">

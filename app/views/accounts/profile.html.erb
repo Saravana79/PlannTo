@@ -183,7 +183,7 @@
            $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
             $(this).closest('li').addClass("Currentfilter");
           if ($(this).text() != "Labeltext"){
-            $("#filter_page_no").val('2');
+            $("#filter_page_no").val('1');
             var id = $(this).attr('id');
             switch(id){
               case 'All' :  var sub_type = "All";break;
@@ -191,7 +191,7 @@
                 }
                 $.ajax(
                 {
-                  url: "contents/filter?sub_type=" + sub_type + "&itemtype_id=<%=@itemtypes%>",
+                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>",
                   type: "get",
                   dataType: "script"
                 });
@@ -209,7 +209,7 @@
           running = true;
             $.ajax(
               {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes%>",
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>",
                 type: "get",
                 dataType: "script",
                 success    : function(data)

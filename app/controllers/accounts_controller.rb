@@ -51,7 +51,8 @@ class AccountsController < ApplicationController
     @follow_types = Itemtype.get_followable_types(params[:follow])
     @itemtypes =  Itemtype.where("itemtype in (?)", Item::TYPES).collect(&:id) if params[:follow] == 'Products'
     @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  } 
-    @follow_item = Follow.for_follower(@user).where(:followable_type => @follow_types).group_by(&:followable_type)
+    @followitems = Follow.for_follower(@user).where(:followable_type => @follow_types).paginate :page => params[:page],:per_page => 8
+    @follow_item = @followitems.group_by(&:followable_type)
     respond_to do|format|      
       format.html {render :layout => "product"}
     end
