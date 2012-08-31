@@ -18,13 +18,11 @@ gem "hashie"
 gem 'devise', '~> 2.0.0'
 gem "friendly_id", "~> 4.0.1"
 gem "koala"
-#gem 'kaminari'
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
 gem "haml-rails"
 gem 'rails_exception_handler', "~> 2"
-#gem 'aws-s3'
 gem 'aws-sdk'
 gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'
 #gem 'execjs'
