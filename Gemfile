@@ -22,6 +22,7 @@ gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
 gem "haml-rails"
+gem  "haml"
 gem 'rails_exception_handler', "~> 2"
 gem 'aws-sdk'
 gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'

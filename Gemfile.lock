@@ -275,6 +275,7 @@ DEPENDENCIES
   devise (~> 2.0.0)
   fb_graph
   friendly_id (~> 4.0.1)
+  haml
   haml-rails
   hashie
   jquery-rails
