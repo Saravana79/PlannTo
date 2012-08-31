@@ -19,8 +19,9 @@ class SitemapController < ApplicationController
    					{:url => base_url +'/cycles/guides/Beginner%20Guide',      :updated_at => ""}				
    				 ]
    @pages_to_visit  = static_urls
-   @pages_to_visit+= Item.all.collect{  |a| {:url =>  base_url +a.get_url() ,  :updated_at => I18n.l(a.updated_at, :format => :w3c)} }
-   @pages_to_visit+= Content.all.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at, :format => :w3c)} }
+   @pages_to_visit+= Item.all.collect{ |item| {:url =>  base_url + item.get_url() ,  :updated_at => I18n.l(item.updated_at.nil? ? Time.now : item.updated_at, :format => :w3c)} }
+   @pages_to_visit+= Content.all.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
+    
     respond_to do |format|
       format.xml{ render :xml =>  @pages_to_visit}
     end
