@@ -1,7 +1,7 @@
 PlanNto::Application.routes.draw do
   
 
-  match 'sitemap', :to => "sitemap#index", :as => :sitemap
+  match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
   get "home/index"
   resources :follows
   resources :error_messages

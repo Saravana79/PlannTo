@@ -245,7 +245,7 @@ def filter
       filter_params = {"sub_type" => @article_categories}
       filter_params["itemtype_id"] =@item_types 
     
-      if @items.size > 0 || !@item_types.blank?
+      if @items.size > 0 and !@item_types.blank?
         if @items.is_a? Array
             items = @items
         else

@@ -1,9 +1,8 @@
-- base_url = "http://#{request.host_with_port}"
 !!! XML
 %urlset{:xmlns => "http://www.sitemaps.org/schemas/sitemap/0.9"}
   - @pages_to_visit.each do |page|
     %url
-      %loc #{base_url}#{page[:url]}
+      %loc page[:url]
       - if page[:updated_at].present?
         %lastmod= page[:updated_at]
       %changefreq= page[:changefreq].present? ? page[:changefreq] : "monthly"

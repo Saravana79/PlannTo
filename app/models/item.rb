@@ -3,7 +3,8 @@ class Item < ActiveRecord::Base
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
   #cache_records :store => :local, :key => "items",:request_cache => true
-  TYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "CarGroup", "Topic"]
+  FOLLOWTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "CarGroup", "Topic"]
+  ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
   belongs_to :itemtype
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
@@ -358,14 +359,13 @@ class Item < ActiveRecord::Base
  end
 
  def self.get_follows_item_ids_for_user_and_item_types(user,item_type_ids)
-   item_types = Itemtype.where('id in (?)',item_type_ids).collect(&:itemtype)
+   item_types = Itemtype.where('id in (?)',item_type_ids).map{|i| i.itemtype == "Car Group" ? "CarGroup" : i.itemtype}
    Follow.where('follower_id =? and followable_type in (?)', user.id,item_types).collect(&:followable_id)
+  
  end
 
- def self.get_follows_items_for_user(user)
-   items = [] 
-   Follow.where('follower_id =? and followable_type in (?)',user.id,Item::TYPES).limit(5).map{|f| items << Item.find(f.followable_id)}
-   return items
+ def self.get_follows_items_for_user(user) 
+   Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).limit(5).map{|f| Item.find(f.followable_id)}
  end
  
  def show_specification

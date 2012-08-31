@@ -1,10 +1,11 @@
 class SitemapController < ApplicationController
   def index
-   static_urls = [ {:url => '/car/search',      :updated_at => ""}]
-   @pages_to_visit = Item.all.collect{  |a| {:url => item_path(a) ,  :updated_at => I18n.l(a.updated_at, :format => :w3c)} }
+   static_urls = [ {:url => 'http://localhost:3000/car/search',      :updated_at => ""}]
+   @pages_to_visit  = static_urls
+   @pages_to_visit+= Item.all.collect{  |a| {:url => "http://localhost:3000" + item_path(a) ,  :updated_at => I18n.l(a.updated_at, :format => :w3c)} }
  
     respond_to do |format|
-      format.html
+      format.xml{ render :xml =>  @pages_to_visit}
     end
   
   end

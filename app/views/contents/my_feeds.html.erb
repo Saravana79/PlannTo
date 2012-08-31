@@ -63,7 +63,7 @@
 	<li class="item1"><a href="#"><span>Search feeds for</span></a>
 		<ul class="item_drop">
 
-			<% Itemtype.where("itemtype in(?)",Item::TYPES).each do |i| %>
+			<% Itemtype.where("itemtype in(?)",Item::ITEMTYPES).each do |i| %>
 				<li class="selected"> <a data-type=<%= i.id %> ><%= i.itemtype %></a></li>
 			<% end %>
 		</ul>
