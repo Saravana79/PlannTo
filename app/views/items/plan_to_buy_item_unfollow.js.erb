@@ -1,32 +1,34 @@
 <% if params[:profile] %>
 $("#product_"+'<%= @item.id %>').remove();
 <% else %>
+<%
+  classname = @item.class.superclass
+  if(item.is_a?Content)
+    if(item.sub_type == 'Event' || item.sub_type =='Book')
+      classname = item.sub_type
+    end
+  end
+
+%>
 <% if @type == "buy" %>
-  Product.hover_follow_but($("#plan_to_buy_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{@item.class.superclass}.buy_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{@item.class.superclass}.buy_bnt") : '' %>");
-  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : ''%>");
-  Product.unload_buyer('<%= '_'+@item.id.to_s %>', '<%=params[:button_class] %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_buy") : "" %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : "" %>');
+  Product.hover_follow_but($("#plan_to_buy_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{classname}.buy_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{classname}.buy_bnt") : '' %>");
+  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{classname}.follow_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{classname}.follow_bnt") : ''%>");
+  Product.unload_buyer('<%= '_'+@item.id.to_s %>', '<%=params[:button_class] %>', '<%= !@related_items ? I18n.t("#{classname}.plan_to_buy") : "" %>', '<%= !@related_items ? I18n.t("#{classname}.plan_to_follow") : "" %>');
 <% elsif @type == "own" %>
-  Product.unload_owner('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_own") : "" %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : "" %>');
+  Product.unload_owner('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= !@related_items ? I18n.t("#{classname}.plan_to_own") : "" %>', '<%= !@related_items ? I18n.t("#{classname}.plan_to_follow") : "" %>');
   $("#plan_to_buy"+'<%= @item.id %>').unbind("hover");
-  Product.hover_follow_but($("#plan_to_own_"+'<%= @item.id %>'),"<%=!@related_items ? I18n.t("#{@item.class.superclass}.own_bnt") : '' %>", "<%=!@related_items ? I18n.t("#{@item.class.superclass}.own_bnt") : '' %>");
-  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%=!@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", "<%=!@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>");
+  Product.hover_follow_but($("#plan_to_own_"+'<%= @item.id %>'),"<%=!@related_items ? I18n.t("#{classname}.own_bnt") : '' %>", "<%=!@related_items ? I18n.t("#{classname}.own_bnt") : '' %>");
+  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%=!@related_items ? I18n.t("#{classname}.follow_bnt") : '' %>", "<%=!@related_items ? I18n.t("#{classname}.follow_bnt") : '' %>");
 <% elsif @type == "follow" %>
-  Product.unload_follow('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : "" %>');
+  Product.unload_follow('<%= '_'+@item.id.to_s %>', '<%= params[:button_class] %>', '<%= !@related_items ? I18n.t("#{classname}.plan_to_follow") : "" %>');
   $("#plan_to_own"+'<%= @item.id %>').unbind("hover");
   $("#plan_to_buy"+'<%= @item.id %>').unbind("hover");
-  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{@item.class.superclass}.follow_bnt") : '' %>", '<%= !@related_items ? I18n.t("#{@item.class.superclass}.plan_to_follow") : '' %>');
+  Product.hover_follow_but($("#plan_to_follow_"+'<%= @item.id %>'),"<%= !@related_items ? I18n.t("#{classname}.follow_bnt") : '' %>", "<%= !@related_items ? I18n.t("#{classname}.follow_bnt") : '' %>", '<%= !@related_items ? I18n.t("#{classname}.plan_to_follow") : '' %>');
 <% end %>
 
 <% unless @related_items %>
 <%
-=begin
-$('<%= "#plan_to_buy_#{@item.id}, #plan_to_own_#{@item.id}, #plan_to_follow_#{@item.id}" %>').poshytip({
-  content: this.title,
-  className: "tip-darkgray",
-  bgImageFrameSize: 11,
-  offsetX: -25
-});
-=end
+
 %>
 <% end %>
 

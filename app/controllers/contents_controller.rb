@@ -149,6 +149,8 @@ def filter
      # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
       @article_categories = ArticleCategory.where("itemtype_id = ?", 0)
+      @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize) if params[:itemtype].present?
+      
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end 
     
