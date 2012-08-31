@@ -2,8 +2,8 @@
 %urlset{:xmlns => "http://www.sitemaps.org/schemas/sitemap/0.9"}
   - @pages_to_visit.each do |page|
     %url
-      %loc page[:url]
+      %loc #{page[:url]}
       - if page[:updated_at].present?
         %lastmod= page[:updated_at]
-      %changefreq= page[:changefreq].present? ? page[:changefreq] : "monthly"
+      %changefreq= page[:changefreq].present? ? page[:changefreq] : "weekly"
       %priority= page[:priority].present? ? page[:priority] : "0.5"
