@@ -32708,7 +32708,6 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 				sibling = n.nextSibling;
 				xferNode = _traverseFullySelected(n, how);
 
-
 				if (frag)
 					frag.appendChild(xferNode);
 
@@ -42905,7 +42904,6 @@ tinymce.ForceBlocks = function(editor) {
 			var currentFormats;
 
 			// Setup format node change logic
-
 			if (!formatChangeData) {
 				formatChangeData = {};
 				currentFormats = {};
@@ -43462,7 +43460,6 @@ tinymce.ForceBlocks = function(editor) {
 				return TRUE;
 			}
 		};
-
 
 		function removeNode(node, format) {
 			var parentNode = node.parentNode, rootBlockElm;
