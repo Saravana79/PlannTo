@@ -1,3 +1,4 @@
+<% cache "navigation_header_top" do %>
 <ul id="Megadropdown">
    <li>
         <span><a href="/cars">Cars</a></span>
@@ -23,6 +24,7 @@
                          </ul>
                         </li>
                     </ul>   
+                    <%end%>
                     <%if user_signed_in? %>
                      <ul>
                          <li>
@@ -30,18 +32,8 @@
                         </li>
                      </ul>
                      <%end%>
-                </div>
-
-        <!--         <div class="col_2">
-                    <ul>
-                        <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Garage</a> </li>
-                        <li><a href="/Profile">My Reviews</a></li>
-                        <li><a href="/Profile">My Questions</a></li>
-                        <li><a href="/Profile">My Advices</a></li>
-                        <li><a href="/Profile">My Buying Plan</a></li>
-                    </ul>   
-                </div> -->              
+                     <% cache "navigation_cars" do %>
+                </div>      
                   <div class="Topcarcol">
                     <ul>
                         <li><a href="#">Popular Cars</a>
@@ -79,6 +71,7 @@
                          </ul>
                         </li>
                     </ul>   
+                    <%end%>
                     <%if user_signed_in? %>
                      <ul>
                          <li>
@@ -86,18 +79,8 @@
                         </li>
                      </ul>
                      <%end%>
-                </div>
-
-        <!--         <div class="col_2">
-                    <ul>
-                        <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Garage</a> </li>
-                        <li><a href="/Profile">My Reviews</a></li>
-                        <li><a href="/Profile">My Questions</a></li>
-                        <li><a href="/Profile">My Advices</a></li>
-                        <li><a href="/Profile">My Buying Plan</a></li>
-                    </ul>   
-                </div> -->              
+                     <% cache "navigation_bikes" do %>
+                </div>         
                   <div class="Topcarcol">
                     <ul>
                         <li><a href="#">Popular Bikes</a>
@@ -136,6 +119,7 @@
                          </ul>
                         </li>
                     </ul>   
+                    <%end%>
                     <%if user_signed_in? %>
                      <ul>
                          <li>
@@ -143,18 +127,8 @@
                         </li>
                      </ul>
                      <%end%>
-                </div>
-
-        <!--         <div class="col_2">
-                    <ul>
-                        <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Garage</a> </li>
-                        <li><a href="/Profile">My Reviews</a></li>
-                        <li><a href="/Profile">My Questions</a></li>
-                        <li><a href="/Profile">My Advices</a></li>
-                        <li><a href="/Profile">My Buying Plan</a></li>
-                    </ul>   
-                </div> -->              
+                     <% cache "navigation_cycles" do %>
+                </div>          
                   <div class="Topcarcol">
                     <ul>
                         <li><a href="#">Popular Cycles</a>
@@ -194,6 +168,7 @@
                          </ul>
                         </li>
                     </ul>   
+                    <%end%>
                     <%if user_signed_in? %>
                      <ul>
                          <li>
@@ -201,18 +176,8 @@
                         </li>
                      </ul>
                      <%end%>
-                </div>
-
-        <!--         <div class="col_2">
-                    <ul>
-                        <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Garage</a> </li>
-                        <li><a href="/Profile">My Reviews</a></li>
-                        <li><a href="/Profile">My Questions</a></li>
-                        <li><a href="/Profile">My Advices</a></li>
-                        <li><a href="/Profile">My Buying Plan</a></li>
-                    </ul>   
-                </div> -->              
+                     <% cache "navigation_mobiles" do %>
+                </div>         
                   <div class="Topcarcol">
                     <ul>
                         <li><a href="#">Popular Mobiles</a>
@@ -250,6 +215,7 @@
                          </ul>
                         </li>
                     </ul>   
+                    <%end%>
                     <%if user_signed_in? %>
                      <ul>
                          <li>
@@ -257,18 +223,8 @@
                         </li>
                      </ul>
                      <%end%>
-                </div>
-
-        <!--         <div class="col_2">
-                    <ul>
-                        <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Garage</a> </li>
-                        <li><a href="/Profile">My Reviews</a></li>
-                        <li><a href="/Profile">My Questions</a></li>
-                        <li><a href="/Profile">My Advices</a></li>
-                        <li><a href="/Profile">My Buying Plan</a></li>
-                    </ul>   
-                </div> -->              
+                     <% cache "navigation_tablets" do %>
+                </div>      
                   <div class="Topcarcol">
                     <ul>
                         <li><a href="#">Popular Tablets</a>
@@ -306,7 +262,8 @@
                          <li><a href="/cameras?fl=Tips">Tips</a></li>                         
                          </ul>
                         </li>
-                    </ul>   
+                    </ul>  
+                    <%end%> 
                     <%if user_signed_in? %>
                      <ul>
                          <li>
@@ -314,18 +271,8 @@
                         </li>
                      </ul>
                      <%end%>
-                </div>
-
-        <!--         <div class="col_2">
-                    <ul>
-                        <li><a href="/Profile">My Feeds </a></li>
-                        <li><a href="/Profile">My Garage</a> </li>
-                        <li><a href="/Profile">My Reviews</a></li>
-                        <li><a href="/Profile">My Questions</a></li>
-                        <li><a href="/Profile">My Advices</a></li>
-                        <li><a href="/Profile">My Buying Plan</a></li>
-                    </ul>   
-                </div> -->              
+                     <% cache "navigation_camera_popular" do %>
+                </div>          
                   <div class="Topcarcol">
                     <ul>
                         <li><a href="#">Popular Cameras</a>
@@ -341,10 +288,13 @@
     </li>
      <div style="float:right;padding:0px 30px 0px 0px;">
        <dl>
+       	<%end%>
         <div><%= link_to "My Feeds", my_feeds_path %></div>
+        <% cache "navigation_last" do %>
        </dl>
      </div>
      
 </ul>
+<%end%>
      
  
