@@ -140,22 +140,22 @@ def filter
    
     @guide = Guide.find_by_name params[:guide_type]
     #@article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
-    item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
+    @item = item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
     param_item_id = item.try(:id)
     
     if (item.is_a? Product)
-      @article_categories = ArticleCategory.where("itemtype_id = ?", item.get_base_itemtypeid)
+      @article_categories = ArticleCategory.get_by_itemtype(item.get_base_itemtypeid) #ArticleCategory.where("itemtype_id = ?", item.get_base_itemtypeid)
        @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize)
      # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
-      @article_categories = ArticleCategory.where("itemtype_id = ?", 0)
+      @article_categories = ArticleCategory.get_by_itemtype(0) #ArticleCategory.where("itemtype_id = ?", 0)
       @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize) if params[:itemtype].present?
       
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end 
     
    # @item_id = params[:item_id] if params[:item_id].present?
-    sub_type = @article_categories.collect(&:name)
+    sub_type = get_sub_type('All',   "") #@article_categories.collect(&:name)
     filter_params = {"sub_type" => sub_type}
     filter_params["order"] = get_sort_by(params[:sort_by])
     if param_item_id.present?

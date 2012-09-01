@@ -13,7 +13,7 @@ class ProductsController < ApplicationController
     search_type = request.path.split("/").last
     @type = search_type.singularize.camelize.constantize
     @itemtype = Itemtype.find_by_itemtype(@type)
-    @article_categories = ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
+    @article_categories = ArticleCategory.get_by_itemtype(@itemtype.id) #ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
     @followers =  User.get_followers(search_type)
     count = @followers.length
     if count < 20
