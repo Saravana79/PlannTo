@@ -1,12 +1,12 @@
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
-  <% cache content do %>
+  <% cache ['part-1', content] do %>
   <div class="float_rgt">
     <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
     </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
-    <div><a class="txt_brown"><%= content.user.name  %> reviewed <%=get_anchor_name_link(content)%> <a class="txt_brown">- <%= time_ago_format(content) %> ago. </a></div>
+    <div><a class="txt_brown"><%= content.user.name  %> reviewed <%=get_anchor_name_link(content)%> <a class="txt_brown">- <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago. </a></div>
     <div class="subContentGap">
     	<%= raw get_rating_or_category_contents(content)%>
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
