@@ -1,20 +1,28 @@
+<%
+  classname = item.class.superclass
+  if(item.is_a?Content)
+    if(item.sub_type == 'Event' || item.sub_type =='Book')
+      classname = item.sub_type
+    end
+  end
+%>
 <% if (related_follower && related_follower.follow_type == "buyer") || (@type == "buy") %>
     Product.load_buyer('<%= "_"+item.id.to_s %>', '<%= button_class %>',
-            '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_buy_selected") : "" %>',
-            '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_follow_selected") : ""%>');
-  Product.hover_follow_but($("#plan_to_buy"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{item.class.superclass}.buy_bnt") : "" %>', '<%= !related_items ? I18n.t("#{item.class.superclass}.unbuy_bnt") : "" %>')
-    Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{item.class.superclass}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{item.class.superclass}.unfollow_bnt") : "" %>')
+            '<%= !related_items ? I18n.t("#{classname}.plan_to_buy_selected") : "" %>',
+            '<%= !related_items ? I18n.t("#{classname}.plan_to_follow_selected") : ""%>');
+  Product.hover_follow_but($("#plan_to_buy"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{classname}.buy_bnt") : "" %>', '<%= !related_items ? I18n.t("#{classname}.unbuy_bnt") : "" %>')
+    Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{classname}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{classname}.unfollow_bnt") : "" %>')
 <% end %>
 <% if (related_follower && related_follower.follow_type == "owner") || (@type == "own") %>
     Product.load_owner('<%= "_"+item.id.to_s %>', '<%= button_class %>',
-            '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_own_selected") : "" %>',
-            '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_follow_selected") : "" %>');
-    Product.hover_follow_but($("#plan_to_own"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{item.class.superclass}.own_bnt") : "" %>', '<%= !related_items ? I18n.t("#{item.class.superclass}.unown_bnt") : "" %>')
-    Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{item.class.superclass}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{item.class.superclass}.unfollow_bnt") : "" %>')
+            '<%= !related_items ? I18n.t("#{classname}.plan_to_own_selected") : "" %>',
+            '<%= !related_items ? I18n.t("#{classname}.plan_to_follow_selected") : "" %>');
+    Product.hover_follow_but($("#plan_to_own"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{classname}.own_bnt") : "" %>', '<%= !related_items ? I18n.t("#{classname}.unown_bnt") : "" %>')
+    Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{classname}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{classname}.unfollow_bnt") : "" %>')
 <% end %>
 <% if (related_follower && related_follower.follow_type == "follower") || (@type == "follow") %>
-  Product.load_follow('<%= "_"+item.id.to_s %>', '<%= button_class %>', '<%= !related_items ? I18n.t("#{item.class.superclass}.plan_to_follow_selected") : "" %>');
-  Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{item.class.superclass}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{item.class.superclass}.unfollow_bnt") : "" %>')
+  Product.load_follow('<%= "_"+item.id.to_s %>', '<%= button_class %>', '<%= !related_items ? I18n.t("#{classname}.plan_to_follow_selected") : "" %>');
+  Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{classname}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{classname}.unfollow_bnt") : "" %>')
 <% end %>
 
 <% unless related_items %>

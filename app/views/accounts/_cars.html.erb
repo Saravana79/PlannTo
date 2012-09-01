@@ -4,17 +4,21 @@
    <%= @follow_types.first %> 
    <%else%> Product <%end%> to your profile </div>
    
-  <div class="Searchform">   
+   <div class="Searchform">
+       <input type="text" placeholder="Search <%= params[:follow]%>" id="search_item" /> 
+       <input name="" type="button" class="Searchbut"/> 
+   </div>  
+  <div class="Searchform" style="">   
 
-     <input type="text" placeholder="Search <%= params[:follow]%>" id="search_item" /> 
-     <input name="" type="button" class="Searchbut">
-    
-     <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
+     
+    <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
        <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
                                                      ["Follow this car", "follower"]]) %>
        <%= f.hidden_field :followable_id %>
-       <%= f.hidden_field :followable_type %>               
+       <%= f.hidden_field :followable_type %>         
+             
      <%end%>
+     
   </div>
   <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
 </div>

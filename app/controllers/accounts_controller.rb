@@ -49,7 +49,7 @@ class AccountsController < ApplicationController
     end
     @user = User.find(:first, :conditions => ["username like ?","#{params[:username]}"])
     @follow_types = Itemtype.get_followable_types(params[:follow])
-    @itemtypes =  Itemtype.where("itemtype in (?)", Item::TYPES).collect(&:id) if params[:follow] == 'Products'
+    @itemtypes =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id) if params[:follow] == 'Products'
     @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  } 
     @followitems = Follow.for_follower(@user).where(:followable_type => @follow_types).paginate :page => params[:page],:per_page => 8
     @follow_item = @followitems.group_by(&:followable_type)

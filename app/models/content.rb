@@ -127,12 +127,13 @@ class Content < ActiveRecord::Base
   
   def self.follow_items_contents(user,item_types)
     if item_types.nil?
-      @items = Follow.where('follower_id =? and followable_type in (?)',user.id,Item::TYPES).collect(&:followable_id).join(",")
-      @item_types = Itemtype.where("itemtype in (?)", Item::TYPES).collect(&:id)
+      @items = Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).collect(&:followable_id).join(",")
+      @item_types = Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id)
       @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
     else
       @item_types = item_types.join(",") if !item_types.blank?
       @items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).join(",")
+      
       @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
     end 
     return @items,@item_types,@article_categories 

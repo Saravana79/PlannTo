@@ -16,8 +16,14 @@ module ApplicationHelper
       array_follow.each do |text_val, id_val, follow|
         text_val = "" if button_class == "_small"
         title_value = !options[:related_items] ? (I18n.t item.class.superclass.to_s+'.'+id_val) : " "
+
+        # classname = item.class.superclass.to_s.downcase.pluralize
+        classname = "products"
+        if(item.is_a?Content)
+          classname = "contents"
+        end
         links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s}>" +
-          get_follow_link(text_val, url_for(:action => 'follow_item_type', :controller => item.class.superclass.to_s.downcase.pluralize, :id => item, :button_class => button_class, :follow_type => follow, :related_items => options[:related_items]),
+          get_follow_link(text_val, url_for(:action => 'follow_item_type', :controller => classname, :id => item, :button_class => button_class, :follow_type => follow, :related_items => options[:related_items]),
           options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class, :title => title_value)) +
           '</span>'
       end
@@ -38,7 +44,7 @@ module ApplicationHelper
     when 'Apps'
       [["I have it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     when 'Books'
-      [[ "Plan to read", "plan_to_buy", "buyer"], ["I read it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
+      [[ "PlannTo read", "plan_to_buy", "buyer"], ["I read it", "plan_to_own", "owner"], ["Follow This", "plan_to_follow", "follower"]]
     else
       [["Follow This", "plan_to_follow", "follower"]]
     end

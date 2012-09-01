@@ -58,12 +58,12 @@
 		<% end -%>  
       </span>
     </div>
-<div style="margin: 0px 0px 0px 500px;">
+<div style="margin: 0px 0px 0px 550px;">
 <ul class="itemdrop" >
-	<li class="item1"><a href="#"><span>Search feeds for</span></a>
+	<li class="item1"><a href="#"><span>Categories</span></a>
 		<ul class="item_drop">
 
-			<% Itemtype.where("itemtype in(?)",Item::TYPES).each do |i| %>
+			<% Itemtype.where("itemtype in(?)",Item::ITEMTYPES).each do |i| %>
 				<li class="selected"> <a data-type=<%= i.id %> ><%= i.itemtype %></a></li>
 			<% end %>
 		</ul>

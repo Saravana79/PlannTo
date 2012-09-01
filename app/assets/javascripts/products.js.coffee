@@ -115,8 +115,8 @@ root.Product =
 
   show_login_dialog: (dom_elements) ->
     $(dom_elements).click ->
-      $(".Close_dialog").show();
-      $(".ui-dialog-titlebar").hide();
+      $(".Close_dialog").show()
+      $(".ui-dialog-titlebar").hide()
       $("#dialog-form").dialog "open"
 
 
