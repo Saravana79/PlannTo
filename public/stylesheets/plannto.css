@@ -1871,7 +1871,7 @@ li.middlebg {
     text-decoration: none;
     border: solid 0px red;
     padding: 4px 7px;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .pagination	a:hover {
@@ -1893,7 +1893,7 @@ li.middlebg {
     text-decoration: none;
     border: solid 0px red;
     padding: 4px 7px;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .pagination	li a:hover {
@@ -2180,14 +2180,13 @@ ul.menu_profile .menu_profile_active {
 }
 
 div.points {
-    width: 335px;
     height: 67px;
     border: solid 0px;
     float: right;
     display: block;
     padding: 0;
     margin: 0;
-    border-radius: 30px;
+
 }
 
 span.indu_span {
