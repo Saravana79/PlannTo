@@ -123,17 +123,11 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
         <%= f.text_area :description, :class=>"textFilling expanding", :style => "width:400px;height:50px;"  %>
       </div>
     </div>
-      <style>
-       textarea, .textareaClone {
-        min-height: 6em;
-        width: 400px;
-        max-height: <%= configatron.EXPANDING_TEXT_AREA_MAX_HEIGHT %>;
-     }
-   </style>
+      <%= render "shared/expanding_text_area_style" %>
     <div style="padding:5px 5px 0px 80px; width:350px; ">
       Would you recommend this product to your friend
-      <button class="btn_follow review_content_reco" type="button" value="true" > Yes </button>
-      <button class="btn_follow review_content_reco" type="button" value="false" > No </button>
+      <button class="btn_follow review_content_reco" id="reco_yes" type="button" value="true" > Yes </button>
+      <button class="btn_follow review_content_reco" id="reco_no" type="button" value="false" > No </button>
       <%= f.hidden_field :recommend_this, :value => "" %>
     </div>
     <input id="review_content_item" name="item_id" type="hidden" value="<%= @item.try(:id)%>"/>
@@ -143,3 +137,17 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
     </div>
   <% end %>
 </div>
+
+<script>
+  $("#reco_yes").click(function(){
+   $("#reco_no").removeClass("reco_active");
+   $("#reco_yes").addClass("reco_active");
+  });
+   $("#reco_no").click(function(){
+    $("#reco_yes").removeClass("reco_active");
+    $("#reco_no").addClass("reco_active");
+  });
+</script>
+
+
+  

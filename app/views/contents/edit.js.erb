@@ -6,7 +6,7 @@
 //$("#contentEditView").dialog('destroy');
 $("#contentEditView").html('');
   $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
-	
+
 $("#contentEditView").dialog({
 title: 'Edit <%=@content.type.underscore.humanize%>',
 height: 500,

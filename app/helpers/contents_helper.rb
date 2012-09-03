@@ -26,7 +26,9 @@ module ContentsHelper
     when "QuestionContent"
       render :partial => "contents/show_question_details", :locals => { :content => item }
     when "ReviewContent"
-      render :partial => "contents/show_default", :locals => { :content => item }      
+      render :partial => "contents/show_default", :locals => { :content => item }   
+    when "AnswerContent"
+      render :partial => "answer_contents/answer_content", :locals => { :answer_content => item }       
     end
   end
 
@@ -34,6 +36,8 @@ module ContentsHelper
     case item.type
     when "QuestionContent"
       raw render :partial => "question_contents/new_question_content", :locals => { :content => item }
+    when "AnswerContent"
+        raw render :partial => "answer_contents/new_answer_content", :locals => { :content => item }  
     when "ReviewContent"
       raw render :partial => "reviews/review_subcontainer", :locals => { :content => item }
     else   

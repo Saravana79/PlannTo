@@ -56,7 +56,8 @@ class ArticleContentsController < ApplicationController
     end
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
        @article.update_attribute('thumbnail',(@article.content_photo.photo.url(:thumb) rescue nil))
-     end   
+     end
+      @detail = params[:detail]   
   end
   
   def download

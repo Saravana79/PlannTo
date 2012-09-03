@@ -10,5 +10,15 @@ class AnswerContentsController < ApplicationController
 			format.js
 		end
 	end	
-
+	  def update
+    @answercontent = Content.find(params[:id])
+    @answercontent.ip_address = request.remote_ip
+    @answercontent.update_attributes(params['answer_content'])
+  end
+  
+  def destroy
+    @answer_content = AnswerContent.find(params[:id])
+    @answer_content.update_attribute(:status, Content::DELETE_STATUS)
+    
+  end
 end

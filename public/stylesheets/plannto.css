@@ -1627,7 +1627,11 @@ div.rate_content {
 .btn_follow:hover {
     background-color: #ab5e2c;
 }
-
+ .reco_active
+  {
+   background-color: #ab5e2c;
+  }
+  
 .dotted_border {
     border-bottom: solid 1px #CCCCCC;
 }

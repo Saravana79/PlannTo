@@ -26,6 +26,7 @@ class ReviewContentsController < ApplicationController
   def update
     @item = Item.find params['item_id'] unless params[:item_id] == ""
     @reviewcontent = Content.find(params[:id])
+    @detail = params[:detail]
     @reviewcontent.ip_address = request.remote_ip
     @reviewcontent.update_with_items!(params['review_content'], params[:item_id])
   end

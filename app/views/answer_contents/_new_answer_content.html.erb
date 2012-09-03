@@ -1,23 +1,28 @@
- <%= form_for AnswerContent.new, :url =>{:controller => "answer_contents", :action => "create"}, :remote => true do |f| %>
-<div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;display:none;">
+ <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+ <%= form_for content,:remote => true do |f| %>
+<%if content.new_record? %>
+   <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;display:none;">
+ <%else%>
+      <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;">  
+   <%end%>   
     <div style="padding:5px 5px 0px 0px;text-align:center">
-        <div class="title_header float_lft">Title :</div>
-        <div class="float_lft">
-            <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
-        </div>
-    </div>
+       <%unless content.new_record? %>
+     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:540px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+ <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
+ <%end%>
     <div class="productreview" style="clear:both;">
         <div class="title_header float_lft" style="display:none;">Rating :</div></div>
-    <div style="padding:5px 5px 0px 5px;">
-        <div class="title_header float_lft">Description :</div>
-        <div>
-            <%= f.text_area :description, :class => 'textFilling', :style=> 'width:570px;height:50px;' %>
-        </div>
+    <div style="padding:0px 500px 0px 5px;">
+        <div class="title_header float_lft">Answer :</div>
+       <%= f.text_area :description, :class => 'textFilling expanding', :style=> 'width:400px;height:50px;' %>
+      </div>
     </div>
-        <%= f.hidden_field :question_content_id, :value => question_content.id %>
-  
+      <%if content.new_record? %>
+       <%= f.hidden_field :question_content_id, :value => question_content.id %>
+     <%end%>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
         <%= f.submit 'Publish your Answer', :class => 'btn_submitanswer' %>
     </div>
 </div>
 <% end %>
+<%= render "shared/expanding_text_area_style" %>

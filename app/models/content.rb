@@ -4,15 +4,15 @@ class Content < ActiveRecord::Base
   #used for content description split.
   WORDCOUNT = 50
   DELETE_STATUS = 5
-
+	
   acts_as_citier
   # extend FriendlyId
   # friendly_id :title, use: :slugged
 
-  validates_presence_of :title
+  validates_presence_of :title, :unless => lambda{ |content| content.type == "AnswerContent" } 
   
   #below line not required.
-  #validates_presence_of :created_by
+  #validates_presence_of :created_bye
 
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :user, :foreign_key => 'created_by'

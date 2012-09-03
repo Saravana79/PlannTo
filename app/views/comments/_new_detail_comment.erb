@@ -1,3 +1,4 @@
+
 <div style="padding:5px 5px 0px 0px;height:150px;" id="new_comment_block">
   <%= form_for Comment.new, :url => content_comments_path(content), :remote => true do |f|  %>
     <%= hidden_field_tag :parent, parent %>
@@ -6,7 +7,7 @@
   <div style="padding:5px 5px 0px 0px;">
         
         <div style="clear:both;">
-            <%= f.text_area :comment, :class => '', :style=> 'width:550px;height:50px;margin-left:55px;' %>
+            <%= f.text_area :comment, :class => 'expanding', :style=> 'width:550px;height:50px;margin-left:55px;' %>
         </div>
     </div>
 
@@ -18,4 +19,4 @@
   <% end %>
 </div>
 
-
+<%= render "shared/expanding_text_area_style" %>

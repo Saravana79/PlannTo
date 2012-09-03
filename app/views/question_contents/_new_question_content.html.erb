@@ -9,11 +9,12 @@
     <%@title_id ="edit_question_content_#{@content.id}"%>
   <%end%>
 
-  <%= form_for QuestionContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+  <%= form_for @content || QuestionContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
     <div id="notification" class="notificationStyle">Thank You, Question has been created.</div>
     <%if @content %>
+     <%= hidden_field_tag :detail,@detail %>
      <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
  <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
  <%end%>
@@ -33,8 +34,9 @@
       <div style="clear:both;"></div>
     </div>
     <script type="text/javascript">
+     $(document).ready(function(){
   <%if @content.nil?%>
-      $(document).ready(function(){
+     
         settings={
           close:true, addButton: false,
           url: "/search/autocomplete_items",
@@ -65,9 +67,9 @@
     <%end%>
         $.textTagger("#contentEditView #question_product_item","#contentEditView #question_product_item_list",settings);
 
-  <%end%>
+  
     });
-
+<%end%>
     function validateQuestionForm(){
       $('form#<%=@form_id%> #question_content_title').poshytip('destroy')
       var valid = true;
@@ -96,13 +98,7 @@
       <div>
         <%= f.text_area :description, :class => 'textFilling expanding', :style=> 'width:400px;height:50px;' %>
       </div>
-     <style>
-       textarea, .textareaClone {
-        min-height: 6em;
-        width: 400px;
-        max-height: <%= configatron.EXPANDING_TEXT_AREA_MAX_HEIGHT %>;
-     }
-   </style> 
+     <%= render "shared/expanding_text_area_style" %> 
     </div>
     <input id="question_content_item" name="item_id" type="hidden" value="<%= @item.try(:id) %>"/>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">

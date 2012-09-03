@@ -26,6 +26,7 @@ class QuestionContentsController < ApplicationController
   def update
     @questioncontent = Content.find(params[:id])
     @questioncontent.ip_address = request.remote_ip
+    @detail = params[:detail]
     @questioncontent.update_with_items!(params['question_content'], params[:item_id])
   end
   
