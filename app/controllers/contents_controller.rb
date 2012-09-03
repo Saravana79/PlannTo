@@ -181,7 +181,7 @@ def filter
 
   def show
     @content = Content.find(params[:id])
-    @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
+   # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
     @comment = Comment.new
     render :layout => "product"
   end
