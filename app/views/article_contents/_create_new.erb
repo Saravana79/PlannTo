@@ -27,6 +27,7 @@
         <div style="clear:both;"></div>
     </div>
     <%else%>
+     <%= hidden_field_tag :detail,@detail%>
     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
     <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
     <%if @content.sub_type == 'Photo' %>
@@ -51,13 +52,7 @@
       <br />
       <%= f.text_area :description, :class => 'textFilling expanding', :style=> 'width:400px;height:50px;' %>
     </div>
-      <style>
-       textarea, .textareaClone {
-        min-height: 6em;
-        width: 400px;
-        max-height: <%= configatron.EXPANDING_TEXT_AREA_MAX_HEIGHT %>;
-     }
-      </style>
+         <%= render "shared/expanding_text_area_style" %>
   </div>
     
     <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->

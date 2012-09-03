@@ -200,6 +200,7 @@ def filter
     end
     @article_content= @content = Content.find(params[:id])
     @edit_form = true
+    @detail = params[:detail]
     #put an if loop to check if its an article share. if yes then uncomment the link below
     #@article,@images = ArticleContent.CreateContent(url,current_user)
     @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
@@ -211,7 +212,7 @@ def filter
     @item = Item.find(params[:default_item_id])
     @content = Content.find(params[:id])
     @content.update_with_items!(params[:plannto_content], params[:item_id])
-
+    @detail = params[:detail]
   end
 
   def delete
