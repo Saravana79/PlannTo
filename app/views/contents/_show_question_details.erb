@@ -27,7 +27,7 @@
 
       <div  class="subContentDiv">
                 <div><a class="title"><%= content.title %></a></div>
-                <div><a class="txt_brown">Asked by <%= content.user.name %></a></div>
+                <div><a class="txt_brown">Asked by <%= content.user.name %> - <%= time_ago_in_words(content.created_at) %> ago</a></div>
                 <div class="subContentGap">
                 <%= raw get_content_description(content, true)%></div>
                 <ul class="divCommentsConent">

@@ -1,4 +1,4 @@
-
+<div id="subContentDiv<%=comment.id%>">
 <div class="mainContentDiv" style="border-bottom:0px;">
   <%#=render :partial => "votes/voting_detail", :locals => {:item => answer_content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
@@ -23,3 +23,4 @@
 </div>
 <div id="editcomment_<%= comment.id%>"> </div>
 <div  style="border-bottom:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>
+</div>

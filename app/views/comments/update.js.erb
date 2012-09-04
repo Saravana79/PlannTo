@@ -2,4 +2,5 @@
  $("#subContentDiv<%=@comment.id%>").html("<%= escape_javascript(render "comments/detailed_comment",:content => @content, :comment => @comment) %>");
  <%else%>
   $("#subContentDiv<%=@comment.id%>").html("<%= escape_javascript(render "comments/comment",:content => @content, :comment => @comment) %>");
+  $("#comment_id<%= @content.id %>").val("");
  <%end%> 
