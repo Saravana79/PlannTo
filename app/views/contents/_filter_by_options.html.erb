@@ -26,7 +26,15 @@
       	if ($(this).text() != "Labeltext"){
       		$("#filter_page_no").val('1');
         	var id = $(this).attr('id');
-        	var sub_type = find_sub_type(id);        
+        	var sub_type = find_sub_type(id);   
+        	if (sub_type == "All"){
+        		$("span#sortBy").find('a').removeClass('link_active');
+        		$("#sortByNewest").addClass("link_active");
+        	}     
+        	else{
+        		$("span#sortBy").find('a').removeClass('link_active');
+        		$("#sortByVotes").addClass("link_active");
+        	}
         	$("#content_search_page").val(1)
             $("#content_search_search").val("")
           	$("#content_search_sub_type").val(sub_type);  
