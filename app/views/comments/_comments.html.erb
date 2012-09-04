@@ -8,4 +8,9 @@
 </div>
 <div last_comment="<%= content.id %>"></div>
 <% end %>
-<%= render :partial => 'comments/comment', :collection => comments %>
+<% comments.each do |comment| %>
+<div class="subContentDiv_comments comments_bg" id="subContentDiv<%=comment.id%>">
+<%= render  'comments/comment',:comment => comment %>
+</div>
+<%end%>
+

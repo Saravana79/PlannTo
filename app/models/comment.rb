@@ -32,7 +32,7 @@ class Comment < ActiveRecord::Base
 
   end
   
-    def set_comment_status(type)
+  def set_comment_status(type)
     status = case type
     when "create" then 1
     when "update" then 1
@@ -40,5 +40,10 @@ class Comment < ActiveRecord::Base
     1
     end
     return status
+  end
+  def can_update_content?(current_user)
+    return false if !current_user
+    return false if current_user.id != self.user_id
+    return true
   end
 end

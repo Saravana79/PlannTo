@@ -1,0 +1,5 @@
+<%if @detail %>
+$("#editcomment_<%= @comment.id%>").html("<%= escape_javascript(render 'comments/edit_detail_comment', :content => @content, :parent => @content.class.name, :parent_id => @content.id, :detail => true)%>"); 
+<%else%>
+$("#editcomment_<%= @comment.id%>").html("<%= escape_javascript(render "comments/edit",:comment => @comment, :content => @content)%>");
+<%end%>

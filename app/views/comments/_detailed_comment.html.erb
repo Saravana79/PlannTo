@@ -1,3 +1,4 @@
+
 <div class="mainContentDiv" style="border-bottom:0px;">
   <%#=render :partial => "votes/voting_detail", :locals => {:item => answer_content, :user => user_signed_in? ? current_user : nil}%>
   <div class="float_rgt">
@@ -9,13 +10,16 @@
     <ul class="divCommentsConent ">
 			
 			<li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>
+			<%if comment.can_update_content?(current_user)%>
+			  <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to "Delete This",{:controller => "comments", :action => "destroy", :id => comment.id}, :remote => true, :confirm => "Are you sure you want to delete this comment?", :method => :delete, :class => "txt_blue"%></a></li>
+			  <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
+			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to " Update This", edit_content_comment_path(@content,comment,:detail => true), :remote => true, :class => "txt_blue"%></a></li>
+			   <%end%>
 		</ul>
 
   </div>
   
 </div>
+<div id="editcomment_<%= comment.id%>"> </div>
 <div  style="border-bottom:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>

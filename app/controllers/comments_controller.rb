@@ -7,7 +7,6 @@ class CommentsController < ApplicationController
     @comment.commentable = @content
     @comment.status = @comment.set_comment_status("create")
     @comment.user = current_user
-
     if @comment.save
       if @detail
         @comment_string = render_to_string :partial => "detailed_comment", :locals => { :comment => @comment }
@@ -29,9 +28,24 @@ class CommentsController < ApplicationController
     @comments_string = render_to_string :partial => "comments", :locals => { :comments => @comments , :page => @page, :content => @content, :previous  => @previous} 
   end
   
+  def edit
+    @content= Content.find(params[:content_id])
+    @comment = Comment.find(params[:id])
+    @detail = params[:detail]
+    respond_to do|format|
+    format.js
+  end
+  end
+  
+  def update
+    @content = Content.find(params[:content_id])
+    @comment = Comment.find(params[:id])
+    @detail = params[:detail]
+    @comment.update_attributes(params[:comment])
+  end
+  
   def destroy
     @comment = Comment.find(params[:id])
     @comment.update_attribute(:status, Comment::DELETE_STATUS)
-    
   end
 end
