@@ -3,6 +3,11 @@ PlanNto::Application.routes.draw do
   get "home/index"
   resources :follows
   resources :error_messages
+  match "/terms_conditions" ,:to => "home#terms_conditions"
+  match "/privacy_policy" ,:to => "home#privacy_policy"
+  get "/contact_us" => "contact_us#new"
+  match "/about_us",:to => "home#about_us"
+  resources :contact_us
   devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
   devise_scope :user do
     #get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite

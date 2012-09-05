@@ -1,0 +1,30 @@
+ <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+ <%= form_for @contact_us,:url => {:action=>"create", :controller=>"contact_us"},:method => :post  do |f| %>
+   <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;">  
+     <div style="padding:5px 5px 0px 0px;text-align:center">
+    <span class="Popuptitle"><center> <h1>Contact US</h1> </center></span>
+ <br/>
+  <h2><%= flash[:notice] %></h2>
+    <div class="productreview" style="clear:both;width:350px;">
+     <%if @contact_us.errors.any? %>
+   <h2> Please fill required fields.. </h2>
+   <br />
+  <%end%>
+  <div class="title_header float_lft"">Title* :</div> <%= f.text_field :report_type,:class => 'textFilling'%></div>
+</div>
+<br />
+   <div style="padding:0px 500px 0px 5px;">
+        <div class="title_header float_lft">Description* :</div>
+       <%= f.text_area :description, :class => 'textFilling expanding',:style=> 'width:400px;height:50px;' %>
+      </div>
+    </div>
+    <br />
+    <br />
+     <br />
+    <br />
+    <div style="padding:0px 5px 5px 5px; float:left; width:60%; margin-right:40px; margin-top:20px ">  <%= f.submit 'Send', :class => 'btn_submitanswer',:id => "publishanswer" %>
+    </div>
+</div>
+<% end %>
+<%= render "shared/expanding_text_area_style" %>
+
