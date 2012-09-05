@@ -14,8 +14,15 @@
     <ul class="divCommentsConent dontfloat">
       <li class="subContentGap float_lft"><%= render_comments_anchor(content).html_safe  %></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-      <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-      
+      <li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue",:id => "report_link_#{content.id}" %></a></li>
+      <script>
+        $("#report_link_<%= content.id %>").click(function(e){
+          <%if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            return false
+          <%end%>
+        })
+        </script>
       <!--<%#if content.can_update_content?(current_user)%>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
         <li class="subContentGap float_lft"><%#=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>

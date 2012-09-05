@@ -7,12 +7,12 @@ function openLoginPopup(clickable_link_id, c_type){
         plannto_popup_login_id = clickable_link_id;
         click_type = c_type;
 
-        $('#plannto_signin_box').dialog({
+        $('#login-feed').dialog({
             modal: true,
             height: 600,
             width: 350
         });
-        $('.plannto_Close_dialog').show();
+        $('.Close_dialog').show();
         $('.ui-dialog-titlebar').hide();
     }
 }
@@ -20,7 +20,7 @@ function openLoginPopup(clickable_link_id, c_type){
 
 function closeLoginPopup(){
     login_flag = true;
-    $('#plannto_signin_box').dialog('close');
+    $('#login-feed').dialog('close');
     $("" + plannto_popup_login_id).trigger(click_type);
     
 }

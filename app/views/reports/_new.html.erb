@@ -1,0 +1,60 @@
+ <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+ <%= form_for @report,:url => @type == "content" ? content_reports_path(@reportable_object) :  comment_reports_path(@reportable_object)  ,:remote => true,:id => "report_form" do |f| %>
+
+ <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;">  
+     <div style="padding:5px 5px 0px 0px;text-align:center">
+     <%= hidden_field_tag :type,@type %>
+     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:540px; text-indent:-9999px; top:-16px;" onclick="$('.ui-dialog-content').dialog('destroy');"></div>
+ <span class="Popuptitle"><center> <h1>Report</h1> </center></span>
+ <br/>
+    <div class="productreview" style="clear:both;width:250px;">
+        <div class="title_header float_lft"">Report Type :</div>  <%= f.select :report_type,[["Duplicate Content","Duplicate Content"],["Copyright Issue","Copyright Issue"],["Spam","Spam"],["Others","Others"]] %></div>
+</div>
+<br />
+    <div style="padding:0px 500px 0px 5px;">
+        <div class="title_header float_lft">Description :</div>
+       <%= f.text_area :description, :class => 'textFilling expanding', :id=>"report",:style=> 'width:400px;height:50px;' %>
+      </div>
+    </div>
+    <br />
+    <br />
+     <br />
+    <br />
+    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
+        <%= f.submit 'Send report', :class => 'btn_submitanswer',:id => "publishanswer" %>
+    </div>
+</div>
+<% end %>
+<%= render "shared/expanding_text_area_style" %>
+<script>
+ 
+  $(document).ready(function(){
+    $("#publishanswer").click(function(e){
+      var valid = validateAnswerForm();
+      if (!valid){
+        return false;
+      }
+   });
+      }); 
+    function validateAnswerForm(){
+      $('#report').poshytip('destroy')
+      var valid = true;
+      if ($("#report").val() == ""){
+        $('#report').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please enter the description.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('#report').poshytip('show');
+        valid = false
+
+      }
+       return valid
+    }
+  </script>
+    
+    

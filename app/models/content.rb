@@ -6,6 +6,7 @@ class Content < ActiveRecord::Base
   DELETE_STATUS = 5
 	
   acts_as_citier
+  has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId
   # friendly_id :title, use: :slugged
 

@@ -85,6 +85,7 @@ resources :accounts do
   #match "/contents/update_guide" => 'contents#update_guide'
 
   resources :contents do
+   resources :reports 
   collection do
     get :filter
     post :update_guide
@@ -95,12 +96,14 @@ resources :accounts do
   match "/contents/search" => 'contents#search'
  
   post :search
-  resources :comments
+  resources :comments 
     collection do
       get :feed
     end
   end
-
+resources :comments do
+    resources :reports 
+   end 
   resources :event_contents
   resources :plannto_contents
   resources :article_contents do
