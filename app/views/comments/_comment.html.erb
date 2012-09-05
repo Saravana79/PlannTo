@@ -5,7 +5,7 @@
 		<a class="txt_black_description"><%= comment.comment %> </a></div>			
 		<ul class="divCommentsConent ">
 			<li class="subContentGap float_lft"><a class="txt_gray "><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></li>
-			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue" %></a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue",:id => "report_link_#{@content.id}#{comment.id}" %></a></li>
 		<%if comment.can_update_content?(current_user)%>
 			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
 			<li class="subContentGap float_lft"><%=link_to "Delete This",{:controller => "comments", :action => "destroy", :id => comment.id}, :remote => true, :confirm => "Are you sure you want to delete this comment?", :method => :delete, :class => "txt_blue"%></li>
@@ -13,7 +13,14 @@
 			<li class="subContentGap float_lft"><a class="txt_blue "><%=link_to " Update This", edit_content_comment_path(@content,comment), :remote => true, :class => "txt_blue"%></a></li>		
 	 <%end%>		
 		</ul>
-		
+		<script>
+        $("#report_link_<%= @content.id %><%= comment.id%>").click(function(e){
+          <%if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            return false
+          <%end%>
+        })
+        </script>
 	 <div id="editcomment_<%= comment.id%>"> </div>
 	
 	</div>

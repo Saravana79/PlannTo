@@ -9,7 +9,7 @@
     <div style="padding:3px 0px 2px 0px"><a class="txt_black_description" href="" ><%= comment.comment %></a></div>
     <ul class="divCommentsConent ">
 			
-			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue" %></a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue",:id => "report_link_#{@content.id}#{comment.id}" %></a></li>
 			<%if comment.can_update_content?(current_user)%>
 			  <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
 			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to "Delete This",{:controller => "comments", :action => "destroy", :id => comment.id}, :remote => true, :confirm => "Are you sure you want to delete this comment?", :method => :delete, :class => "txt_blue"%></a></li>
@@ -19,7 +19,14 @@
 		</ul>
 
   </div>
-  
+  	<script>
+        $("#report_link_<%= @content.id %><%= comment.id%>").click(function(e){
+          <%if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            return false
+          <%end%>
+        })
+        </script>
 </div>
 <div id="editcomment_<%= comment.id%>"> </div>
 <div  style="border-bottom:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>
