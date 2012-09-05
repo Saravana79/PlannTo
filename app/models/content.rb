@@ -109,8 +109,8 @@ class Content < ActiveRecord::Base
       when :page
         scope.paginate(:page => options["page"], :per_page => options["limit"])
       else
-      scope
-      end
+      scope.select("distinct(contents.id), contents.*")
+      end      
     end
     scope.uniq #.paginate(:page => options["page"], :per_page => options["limit"])
 
