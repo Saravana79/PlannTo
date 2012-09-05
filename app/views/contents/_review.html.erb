@@ -29,7 +29,7 @@
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-      <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" %></a></li>
       <%end%>
       <%if content.can_update_content?(current_user)%>
       <!--<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>

@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
   has_many :reviews,:foreign_key => :created_by
   has_many :contents, :foreign_key => :created_by
   has_many :contents, :foreign_key => :updated_by
+  has_many :reports, :foreign_key => :reported_by
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
   belongs_to :facebook
