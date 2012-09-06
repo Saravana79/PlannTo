@@ -37,13 +37,8 @@
     <script type="text/javascript">
     $("#youtube_thumbnail<%= content.id %>").click(function(){
     $("#youtube_thumbnail<%= content.id %>").html('<div id="youtube_image<%=content.id %>" style="height:350px; width:500px">');
-     autoPlayVideo_<%= content .id %>('<%= content.field4%>');
+     autoPlayVideo('<%= content.field4%>',<%= content.id %>);
     });
-  </script>
-  <script>
-    function autoPlayVideo_<%= content .id %>(vcode){
-     $('#youtube_image<%= content.id %>').html('<iframe type="text/html" width="640" height="385" src="https://www.youtube.com/embed/'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
-     } 
   </script>
  <%end%>
 

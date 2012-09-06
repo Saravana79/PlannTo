@@ -123,5 +123,10 @@ $("ul#Newtabs li a").live('click', function(){
       }    
     });
    }  
-  
+   
+  function autoPlayVideo(vcode,content){
+     $('#youtube_image' + content).html('<iframe type="text/html" width="640" height="385" src="https://www.youtube.com/embed/'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
+  } 
+
+ 
 
