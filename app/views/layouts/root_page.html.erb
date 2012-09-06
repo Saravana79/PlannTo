@@ -117,9 +117,6 @@
   </head>
   <body style="padding-bottom: 0px;" class="body">
     <div id="fb-root"></div>
-    <p class="notice"><%= notice %></p>
-
-    <p class="alert"><%= alert %></p>
 
     <div id="container">
       <%= render 'shared/header_links' %>
@@ -127,6 +124,9 @@
         <%= render "shared/login_dialog"%>
         <%= render 'shared/show_hide_login_form', :item => "" %>
       </div>
+    <p class="notice"><%= notice %></p>
+
+    <p class="alert"><%= alert %></p>
 
       <%= yield %>
 
