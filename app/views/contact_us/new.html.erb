@@ -2,14 +2,14 @@
  <%= form_for @contact_us,:url => {:action=>"create", :controller=>"contact_us"},:method => :post  do |f| %>
    <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:400px;">  
      <div style="padding:5px 5px 0px 0px;text-align:center">
-    <span class="Popuptitle"><center> <h1>Contact US</h1> </center></span>
+    <span class="Popuptitle"><center> <h1>Contact Us</h1> </center></span>
     You can send a mail to admin@plannto.com to contact us or fill the following form and send it to us.
  <br/>
  <br />
   <h2><%= flash[:notice] %></h2>
     <div class="productreview" style="clear:both;width:540px;margin:20px 0px 0px 0px;">
      <%if @contact_us.errors.any? %>
-   <h2> Please fill required fields.. </h2>
+   <h2> Please fill required fields. </h2>
    <br />
    <br />
   <%end%>
