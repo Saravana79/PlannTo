@@ -33,13 +33,13 @@
     </ul>
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>
+ </div> 
   <script type="text/javascript">
     $("#youtube_thumbnail<%= content.id %>").click(function(){
     $("#youtube_thumbnail<%= content.id %>").html('<div id="youtube_image<%=content.id %>" style="height:350px; width:500px">');
      autoPlayVideo('<%= content.field4%>','450','583');
     });
   </script>
-  </div>
   <%end%>
   <script>
     function autoPlayVideo(vcode, width, height){
