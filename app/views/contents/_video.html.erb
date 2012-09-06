@@ -7,8 +7,9 @@
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %> shared a video on <%=get_anchor_name_link(content)%> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago </a></div>
     <div>
-       <div id="youtube_image<%=content.id %>"> <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
-<div id="video<%=content.id%>" style="display:none"> <a id="youtube_<%=content.id%>" data-id="<%= content.field4%>" alt='{"width":"400","height":"300"}'> </div> 
+     <div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
+      <br />
+      <br />
       <div class="subContentGap"><%= raw get_content_description(content)%></div>
     </div>
     <ul class="divCommentsConent dontfloat">
@@ -33,13 +34,17 @@
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>
   <script type="text/javascript">
-    $("#youtube_image<%= content.id %>").click(function(){
-       $("#video<%=content.id%>").show();
-       $("#youtube_image<%= content.id %>").hide();
+    $("#youtube_thumbnail<%= content.id %>").click(function(){
+    $("#youtube_thumbnail<%= content.id %>").html('<div id="youtube_image<%=content.id %>" style="height:350px; width:500px">');
+     autoPlayVideo('<%= content.field4%>','450','583');
     });
   </script>
-   <script>
-       $('#youtube_<%=content.id%>').youtube();
-    </script>     
+   
   </div>
   <%end%>
+  
+  <script>
+    function autoPlayVideo(vcode, width, height){
+     $('#youtube_image<%= content.id %>').html('<iframe type="text/html" width="640" height="385" src="https://www.youtube.com/embed/'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
+     } 
+  </script>

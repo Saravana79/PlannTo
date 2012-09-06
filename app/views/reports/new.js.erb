@@ -2,6 +2,6 @@ $("#contentEditView").html('');
  $("#contentEditView").html("<%= escape_javascript(render "reports/new",:type => @type,:reportable_object => @reportable_object,:report => @report) %>");
 $("#contentEditView").dialog({
 height: 500,
-width:600});
+width:650});
 $(".Close_dialog").show();
 $(".ui-dialog-titlebar").hide();

@@ -8,6 +8,7 @@ class ContactUsController < ApplicationController
   def create
     @contact_us = Report.new(params[:report])
     @contact_us.reported_by = current_user.id
+    @contact_us.reportable_type = "Contact"
     if @contact_us.save
       flash[:notice] ="Thank you for contacting us, we will get back to you soon."
       redirect_to contact_us_path
