@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout "product"
+  layout "root_page"
   def index
     redirect_to my_feeds_path if current_user
   end
