@@ -39,10 +39,8 @@
      autoPlayVideo('<%= content.field4%>','450','583');
     });
   </script>
-   
   </div>
   <%end%>
-  
   <script>
     function autoPlayVideo(vcode, width, height){
      $('#youtube_image<%= content.id %>').html('<iframe type="text/html" width="640" height="385" src="https://www.youtube.com/embed/'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
