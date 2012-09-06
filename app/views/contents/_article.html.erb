@@ -40,13 +40,13 @@
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" ,:id => "report_link_#{content.id}"%></a></li>
      <%end%>
-		<script>
-        $("#report_link_<%= content.id %>").click(function(e){
+		   <script>
+         $("#report_link_<%= content.id %>").click(function(e){
           <%if !current_user %>
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>
-        })
+         })
         </script>
       <%if content.can_update_content?(current_user)%>
       
