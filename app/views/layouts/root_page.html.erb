@@ -121,10 +121,41 @@
 
     <div id="container">
       <%= render 'shared/header_links' %>
-      <div id="dialog-form" title="Create new user">
-        <%= render "shared/login_dialog"%>
-        <%= render 'shared/show_hide_login_form', :item => "" %>
+      <div id="dialog-form" style="display:none;">
+       <div id="login">
+       <%= render "shared/login_dialog" %>
+       <div class="Dontsignup">
+        Don't have an account.
+        <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" %>
+     </div>
       </div>
+        <div id="sign_up_dialog_1" style="display:none;">
+     <%= render "shared/signup_dialog" %>
+      <div class="Dontsignup">
+        Do you have an account.
+       <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"   %>
+      </div>
+     </div>
+    </div>
+    
+    <div id="sign_up_dialog" style="display:none;">
+<div id="login1" style="display:none;">
+<%= render "shared/login_dialog" %>
+<div class="Dontsignup">
+Don't have an account.
+<%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login1').hide();" %>
+</div>
+</div>
+<div id="sign_up_dialog_2">
+<%= render "shared/signup_dialog" %>
+<div class="Dontsignup">
+Do you have an account.
+<%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login1').show();"   %>
+</div>
+</div>
+
+</div>
+          
     <p class="notice"><%= notice %></p>
 
     <p class="alert"><%= alert %></p>
