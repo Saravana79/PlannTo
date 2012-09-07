@@ -202,7 +202,11 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
-    search_type = Product.search_type(params[:search_type])
+   if params[:wizard_type]
+     search_type = Product.wizared_search_type(params[:wizard_type])
+   else  
+     search_type = Product.search_type(params[:search_type])
+   end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       paginate(:page => 1, :per_page => 10)      

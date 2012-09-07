@@ -1,0 +1,36 @@
+ <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
+  <center> <h2> Step-3 </h2>
+ <div class="title_header" style="padding:0px 600px 0px 0px;">Select Plannto buy product  :</div>
+    <div class="title_header" style="padding:0px 500px 0px 0px;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="product"/></div>
+       <div style="clear:both;"></div>
+     <div class="taggingdiv" style="margin-left:5px;">
+      <div class="float_lft " style="clear:both;">  <ul id="product_list" class="tagging"></ul></div></div>
+    <%= f.hidden_field "item_id" %>
+    <%= f.hidden_field "type",:value => "buyer" %>
+    </center>
+      <div style="padding:100px 0px 0px 900px; float:right; width:100%; margin-right:5px; margin-top:20px ">
+        <%= f.submit 'Save or Skip', :class => 'btn_submitanswer',:id => "publishanswer" %>
+ <%end%>
+ 
+ <script>
+    $(document).ready(function(){ 
+    var type = $("#wizard_type").val();
+    settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items?wizard_type="+type,
+        editMode: false, multiple: true,
+        hidden_field: "wizard_item_id",
+      };
+      $.textTagger("product","product_list",settings);
+
+    $("#product").mouseover(function(){  
+  		if ($(this).autocomplete("widget").is(":visible")) {
+                return;
+            }  
+          //  $(this).trigger('keydown.autocomplete');
+         // $(this).data("autocomplete").search($("#article_content_title").val());
+    });
+    
+ 
+  });
+</script>

@@ -19,6 +19,14 @@ has_one :cargroup, :through => :itemrelationship, :source => :cargroup
    return type.camelize.constantize
  end
 
+def self.wizared_search_type(wizared_type)
+  if wizared_type == "owner" || wizared_type == "buyer"
+     return ["Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] 
+  else
+    return ["AttributeTag".camelize.constantize,"Topic".camelize.constantize]
+  end      
+end
+
 def manu
     self.manufacturer
 end

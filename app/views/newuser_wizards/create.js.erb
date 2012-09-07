@@ -1,0 +1,7 @@
+<%if @type == "owner" %>
+ $("#wizard").html("<%= escape_javascript(render  "newuser_wizards/wizard_step2") %> "); 
+<%elsif @type == "follower" %> 
+  $("#wizard").html("<%= escape_javascript(render  "newuser_wizards/wizard_step3") %> ");
+ <%else%>
+   window.location.href = "/my_feeds"  
+<%end%>

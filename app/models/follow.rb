@@ -37,8 +37,17 @@ class Follow < ActiveRecord::Base
     Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
   end
   
-  
-  
+  def self.wizard_save(item_ids,type,user)
+     item_ids.split(',').each do |id|
+      item = Item.find(id)
+      follow = user.follows.new
+      follow.followable_id = item.id
+      follow.followable_type = item.type
+      follow.followable_id = item.id
+      follow.follow_type = type
+      follow.save
+    end 
+  end
   #TODO this is not so good. but current implementation of follow forces to do this
   def content?(type)
     ['Apps', 'Accessories'].include?(type)
