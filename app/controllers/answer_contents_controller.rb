@@ -10,10 +10,15 @@ class AnswerContentsController < ApplicationController
 			format.js
 		end
 	end	
-	  def update
-    @answercontent = Content.find(params[:id])
-    @answercontent.ip_address = request.remote_ip
-    @answercontent.update_attributes(params['answer_content'])
+	 def update
+    @content = Content.find(params[:id])
+    @content.ip_address = request.remote_ip
+    @content.update_attributes(params['answer_content'])
+    results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+    end
+    @related_contents = results.results 
   end
   
   def destroy

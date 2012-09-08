@@ -161,12 +161,11 @@ module ContentsHelper
   end
 
   def get_content_title(content)
-    if ((content.is_a?ArticleContent) && (content.url.blank?)) 
+    if ((content.is_a?(ArticleContent)) && (content.url.blank?) ||  content.is_a?(ReviewContent))
       "<a class='title txt_onhover'>#{content.title }</a>"
     else
       link_to content.title, external_content_path(content.id) , :class => 'title txt_onhover',:target => "_blank"
     end
-
   end
 
   def history_redirection_url(id, type)

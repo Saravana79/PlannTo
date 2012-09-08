@@ -10,7 +10,7 @@ class QuestionContentsController < ApplicationController
     @questioncontent.ip_address = request.remote_ip
 		@questioncontent.user = User.first
 		#@item = Item.find params['item_id']
-		@questioncontent.save_with_items!(params['question_item_id'])
+		@questioncontent.save_with_items!(params['item_id'])
     
   end
 
@@ -24,10 +24,16 @@ class QuestionContentsController < ApplicationController
 	end
 
   def update
-    @questioncontent = Content.find(params[:id])
-    @questioncontent.ip_address = request.remote_ip
+    @content = Content.find(params[:id])
+    @content.ip_address = request.remote_ip
     @detail = params[:detail]
-    @questioncontent.update_with_items!(params['question_content'], params[:item_id])
+    @content.update_with_items!(params['question_content'], params[:item_id])
+    
+     results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+    end
+    @related_contents = results.results
   end
   
   def destroy

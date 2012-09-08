@@ -9,7 +9,7 @@
     <%@title_id ="edit_question_content_#{@content.id}"%>
   <%end%>
 
-  <%= form_for @content || QuestionContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
+  <%= form_for @content || QuestionContent.new,:html => { :id => "#{@form_id}",:class => "test" }, :remote => true do |f| %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
     <div id="notification" class="notificationStyle">Thank You, Question has been created.</div>
@@ -36,7 +36,6 @@
     <script type="text/javascript">
      $(document).ready(function(){
   <%if @content.nil?%>
-     
         settings={
           close:true, addButton: false,
           url: "/search/autocomplete_items",
@@ -61,15 +60,12 @@
     <% @items.each do |item| %>
           $.addTag("#contentEditView #question_product_item","div#contentEditView ul#question_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
           $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-      <%if item.id == @item.try(:id)%>
-            $("ul#question_product_item_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
-      <%end%>
+          $("ul#question_product_item_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
+ 
     <%end%>
         $.textTagger("#contentEditView #question_product_item","#contentEditView #question_product_item_list",settings);
-
-  
-    });
-<%end%>
+        <%end%>
+ });
     function validateQuestionForm(){
       $('form#<%=@form_id%> #question_content_title').poshytip('destroy')
       var valid = true;
@@ -92,7 +88,7 @@
     }
     </script>
 
-    <input id="question_content_item" name="question_item_id" type="hidden" value="<%= @item.try(:id) %>"/>
+   
     <div style="padding:5px 5px 0px 5px;">
       <div class="title_header float_lft">Description :</div>
       <div>
@@ -103,7 +99,21 @@
     <input id="question_content_item" name="item_id" type="hidden" value="<%= @item.try(:id) %>"/>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
       <%= f.submit 'Save Question', :class => 'btn_submitanswer', :id => "publishQuestion" %>
+     <span id="spinner_question" style="padding:0px 0px 0px 290px;display:none">
+         <%= image_tag '/images/ajax-loader.gif' %>
+      </span> 
+   <script>
+    $(function() {
+     $("form").bind("ajax:beforeSend", function(){
+        $("#spinner_question").show();
+       })
+       $("form").bind("ajax:complete", function(){
+         $("#spinner_question").hide();
+      })
+     });
+  </script>
     </div>
+   
   </div>
 <% end %>
 
@@ -114,16 +124,7 @@
       if (!valid){
         return false;
       }
-      else{e.preventDefault()
-<%if @content.nil?%>
-          $.post('/question_contents/create',$("#<%=@form_id%>").serialize(),null, "script");
-          return false;
-<%else%>
-          $.post('/question_contents/update/<%=@content.id%>',$("#<%=@form_id%>").serialize(),null, "script");
-          return false;
-<%end%>
-        return false;
-      }
+
     });
   });
 </script>

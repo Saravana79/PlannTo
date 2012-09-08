@@ -50,14 +50,19 @@ class ArticleContentsController < ApplicationController
        params.delete("content_photos_attributes")
     end 
     art = ArticleContent.find(params[:id])
-    @article=ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
-    if params[:submit_url] == 'submit_url' && art.thumbnail!= @article.thumbnail
-      ContentPhoto.update_url_content_to_local(@article)
+    @content =ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
+    if params[:submit_url] == 'submit_url' && art.thumbnail!= @content.thumbnail
+      ContentPhoto.update_url_content_to_local(@content)
     end
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
-       @article.update_attribute('thumbnail',(@article.content_photo.photo.url(:thumb) rescue nil))
+       @content.update_attribute('thumbnail',(@content.content_photo.photo.url(:thumb) rescue nil))
      end
-      @detail = params[:detail]   
+     @detail = params[:detail]  
+     results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+    end
+    @related_contents = results.results   
   end
   
   def download

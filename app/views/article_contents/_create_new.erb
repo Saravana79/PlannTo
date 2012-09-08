@@ -126,7 +126,22 @@
     <%= hidden_field_tag 'article_create_item_id' %>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px">
       <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'article_content_create_submit', 'data-disable-with'=>"Saving..." %>
+    <span id="spinner_article" style="padding:0px 0px 0px 290px;display:none">
+         <%= image_tag '/images/ajax-loader.gif' %>
+      </span> 
+   <script>
+    $(function() {
+     $("form").bind("ajax:beforeSend", function(){
+        $("#spinner_article").show();
+       })
+       $("form").bind("ajax:complete", function(){
+         $("#spinner_article").hide();
+      })
+     });
+  </script>
+   
     </div>
+     
 <% end %>
 
 <script type="text/javascript">

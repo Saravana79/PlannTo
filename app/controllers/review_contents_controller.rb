@@ -10,7 +10,6 @@ class ReviewContentsController < ApplicationController
 		@item.add_new_rating @reviewcontent.rating
 
     respond_to do |format|
-      format.html{ redirect_to :back}
       format.js
     end
     
@@ -25,10 +24,15 @@ class ReviewContentsController < ApplicationController
 
   def update
     @item = Item.find params['item_id'] unless params[:item_id] == ""
-    @reviewcontent = Content.find(params[:id])
+    @content = Content.find(params[:id])
     @detail = params[:detail]
-    @reviewcontent.ip_address = request.remote_ip
-    @reviewcontent.update_with_items!(params['review_content'], params[:item_id])
+    @content.ip_address = request.remote_ip
+    @content.update_with_items!(params['review_content'], params[:item_id])
+     results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+    end
+    @related_contents = results.results
   end
   
   def destroy

@@ -1,0 +1,13 @@
+<span id="spinner" style="padding:0px 0px 0px 180px;display:none">
+  <%= image_tag '/images/ajax-loader.gif' %>
+</span>
+<script>
+ $(function() {
+ $("form").bind("ajax:beforeSend", function(){
+  $("#spinner").show();
+  })
+ $("form").bind("ajax:complete", function(){
+  $("#spinner").hide();
+    })
+  });
+</script>

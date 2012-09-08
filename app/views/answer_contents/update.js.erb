@@ -1,4 +1,4 @@
 $("#contentEditView").dialog('destroy');
 $(".ui-dialog-content").dialog('destroy')
-$("#mainContentDiv<%=@answercontent.id%>").html('<%= escape_javascript(display_content_type(@answercontent)) %>');
+$("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
 

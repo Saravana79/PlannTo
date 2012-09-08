@@ -16,6 +16,7 @@
        <div class="Close_dialog" style="display:none;width:43px; 
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
 position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+   <%= hidden_field_tag :detail,@detail%>
  <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
  <%end%>
     <div style="padding:5px 5px 0px 0px;text-align:center">
@@ -40,7 +41,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
     </div>
     <script type="text/javascript">
       $(document).ready(function(){
-  <%if @content.nil?%>
+  
       settings={
         close:true, addButton: false,
         url: "/search/autocomplete_items",
@@ -53,9 +54,17 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
         $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= @item.id %>", false)
         $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
+     <%else%>
+      <% @items.each do |item| %>
+         $.addTag("review_product_item","review_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", false)
+        $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
+      <%end%>     
     <% end %>
-  <%end%>
+    
+
   });
+  
   function validateReviewForm(){
     $('form#<%=@form_id%> input[name$="review_content[title]"]').poshytip('destroy')
     var valid = true;
@@ -94,18 +103,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       if (!valid){
         return false;
       }
-      else{
-  <%if @content.nil?%>
-          $.post('/review_contents/create',$("#<%=@form_id%>").serialize(),"script");
-          e.preventDefault()
-          return false;
-  <%else%>
-          $.post('/review_contents/update/<%=@content.id%>',$("#<%=@form_id%>").serialize(),"script");
-          e.preventDefault()
-          return false;
-  <%end%>
-        return false;
-      }
+      
     });
   });
     </script>
@@ -124,21 +122,34 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       </div>
     </div>
       <%= render "shared/expanding_text_area_style" %>
+      
+    
     <div style="padding:5px 5px 0px 80px; width:350px; ">
       Would you recommend this product to your friend
       <button class="btn_follow review_content_reco" id="reco_yes" type="button" value="true" > Yes </button>
       <button class="btn_follow review_content_reco" id="reco_no" type="button" value="false" > No </button>
       <%= f.hidden_field :recommend_this, :value => "" %>
     </div>
-    <input id="review_content_item" name="item_id" type="hidden" value="<%= @item.try(:id)%>"/>
+     <input id="review_content_item" name="review_item_id" type="hidden" value="<%= @item.try(:id)%>"/>
+      <%unless @item.blank? %>
+          <input id="review_item" name="item_id" type="hidden" value="<%= @item.try(:id)%>"/>
+           <%else%>
+         <% @items.each do |item| %>
+          
+        <input id="review_item" name="item_id" type="hidden" value="<%= item.try(:id)%>"/>
+        <%end%>
+       <%end%>  
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
+    
       <%= f.submit 'Save Review',:class => 'btn_submitanswer', :id => "publishReview", 'data-disable-with'=>"Saving..."   %>
       <!-- </input> -->
     </div>
+      <%= render "shared/ajax_loader" %>
   <% end %>
 </div>
 
-<script>
+ <script>
+
   $("#reco_yes").click(function(){
    $("#reco_no").removeClass("reco_active");
    $("#reco_yes").addClass("reco_active");

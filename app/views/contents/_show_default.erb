@@ -28,12 +28,12 @@
 				<div  class="subContentDiv">
 					<div>
 						<%= raw get_content_title(content)%>
-						<% if ((content.is_a?ArticleContent) && (content.url?))  %>
+						<% if ((content.is_a?(ArticleContent)) && (content.url?))  %>
 						- <a class="txt_black_description txt_onhover" href="<%=external_content_path(content.id)%>">(<%= URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
 						<%end%>
 					</div>
 					<div>
-						<a class="txt_brown">Shared by <%= content.user.name %></a>
+						<a class="txt_brown">Shared by <%= content.user.name %> - <%= time_ago_in_words(content.created_at) %> ago</a></a>
 					</div>
 					<div class="subContentGap">
 						<%= raw get_rating_or_category_contents(content)%>
@@ -126,7 +126,7 @@
 						<br/>
 						<%end%>
 						<div style="padding:3px 0px 3px 0px;clear:both;">
-							<%if ((content.is_a?ArticleContent) && (content.thumbnail?))%>
+							<%if ((content.is_a?(ArticleContent)) && (content.thumbnail?))%>
 							<%if ((content.sub_type == "#{ArticleCategory::PHOTO}") && (!content.content_photo.nil?)) %>
 							<div><img src="<%= content.content_photo.photo.url(:large) %>" class="uploadedarticleContentdisplay float_lft" style="width:560px;height:360px;"/>
 							</div>

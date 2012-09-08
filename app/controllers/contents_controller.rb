@@ -223,6 +223,11 @@ def filter
     @content = Content.find(params[:id])
     @content.update_with_items!(params[:plannto_content], params[:item_id])
     @detail = params[:detail]
+     results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+    end
+    @related_contents = results.results
   end
 
   def delete
