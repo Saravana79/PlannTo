@@ -181,14 +181,29 @@ def filter
 
   def show
     @content = Content.find(params[:id])
+    per_page = params[:per_page].present? ? params[:per_page] : 5
+    page_no  = params[:page_no].present? ? params[:page_no] : 1
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
     results = Sunspot.more_like_this(@content) do
       fields :title
       minimum_term_frequency 1
+      paginate(:page => page_no, :per_page => per_page)
     end
     @related_contents = results.results
     @comment = Comment.new
     render :layout => "product"
+  end
+  
+  def search_related_contents
+    @content = Content.find(params[:id])
+    per_page = params[:per_page].present? ? params[:per_page] : 5
+    page_no  = params[:page_no].present? ? params[:page_no] :2
+    results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+      paginate(:page => page_no, :per_page => per_page)
+    end
+    @related_contents = results.results
   end
 
   def create

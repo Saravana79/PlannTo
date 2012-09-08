@@ -99,6 +99,7 @@ resources :accounts do
     get :feed
     get :feeds
     post :search_contents
+    get :search_related_contents
   end
   match "/contents/search" => 'contents#search'
  

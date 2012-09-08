@@ -1,0 +1,8 @@
+<%@related_contents.each do |content|%>
+<tr>
+	<td>
+	<%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
+	</td>
+
+</tr>
+<%end%>
