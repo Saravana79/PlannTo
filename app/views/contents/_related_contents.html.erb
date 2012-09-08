@@ -1,0 +1,23 @@
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+  <tr>
+    <td class="bg_widgethdr txt_white">Related Contents</td>
+  </tr>
+  <tr>
+    <td height="252" valign="top">
+
+        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+          <%@related_contents.each do |content|%>
+          <tr >
+            <td style="padding:5px 5px 5px 2px">          
+             	<%= link_to content.title, content_path(content.id), :class => "rekatedlinks" %>
+          <br/>
+            </td>
+          </tr>
+         <%end%>
+
+        </table>
+
+    </td>
+  </tr>
+
+</table>

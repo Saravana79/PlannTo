@@ -182,6 +182,11 @@ def filter
   def show
     @content = Content.find(params[:id])
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
+    results = Sunspot.more_like_this(@content) do
+      fields :title
+      minimum_term_frequency 1
+    end
+    @related_contents = results.results
     @comment = Comment.new
     render :layout => "product"
   end
