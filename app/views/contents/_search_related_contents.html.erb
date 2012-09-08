@@ -1,8 +1,8 @@
 <%@related_contents.each do |content|%>
 <tr>
-	<td>
-	<%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
-	</td>
+	<td style="padding:4px 2px 4px 2px"> <%= link_to content.title, content_path(content.id), :class => "rekatedlinks" %>
+        <br/> 
+        </td>
 
 </tr>
 <%end%>

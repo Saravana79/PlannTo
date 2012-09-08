@@ -3,14 +3,25 @@
 		<td class="bg_widgethdr txt_white">Related Contents</td>
 	</tr>
 	<tr>
-		<td height="252" valign="top">
+		<td  valign="top">
 		<table id="related_contents_table" width="226" border="0" cellspacing="0" cellpadding="0" align="center">
 			<%@related_contents.each do |content|%>
 			<tr>
-				<td style="padding:5px 5px 5px 2px"> <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %> </td>
+				<td style="padding:4px 2px 4px 2px"> <%= link_to content.title, content_path(content.id), :class => "rekatedlinks" %>
+        </td>
 			</tr>
 			<%end%>
-		</table> <%= link_to "More contents", search_related_contents_contents_path(:id => @content.id), :remote => true, :id => "next_content", :class => "rekatedlinks", 'data-disable-with' => "Searching..."%> </td>
+      <tr >
+            
+          </tr>
+		</table>
+    <br/>
+  </td>
+</tr>
+  <tr>
+    <td style="height:33px;border-top:solid 1px #cdd3d7;width:100%;"><span style="padding:5px 5px 5px 2px;"><%= link_to "View more related contents", search_related_contents_contents_path(:id => @content.id), :remote => true, :id => "next_content", :class => "txt_blue", :style => "margin:5px 5px 5px 2px;", 'data-disable-with' => "Searching..."%></span> </div> 
+    </td>
+  </tr>
 	</tr>
   <tr>
    
