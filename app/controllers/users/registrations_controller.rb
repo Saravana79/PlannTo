@@ -20,9 +20,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
         expire_session_data_after_sign_in!
       end
       if @item.nil?
-        redirect_to  "/newuser_wizard", notice: "Successfully registered"
+        redirect_to  my_feeds_path, notice: "Successfully registered"
       else
-        redirect_to @item.get_url || "/newuser_wizard", notice: "Successfully registered"
+        redirect_to @item.get_url || my_feeds_path, notice: "Successfully registered"
       end 
   
     else
