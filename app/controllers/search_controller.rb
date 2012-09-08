@@ -5,7 +5,9 @@ class SearchController < ApplicationController
   def index
     @search_type = params[:search_type]
     itemtype = Itemtype.find_by_itemtype(params[:search_type])
-
+    status = Array.new
+    status  << 1
+    status = params[:status].split(',') if params[:status].present?
     @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute)
     unless ($search_info_lookups.nil? || $search_type != params[:search_type])
       @search_info_lookups = $search_info_lookups
@@ -117,6 +119,7 @@ class SearchController < ApplicationController
       keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
       with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
+      with(:status, status) if !status.empty?
       # with(:cargroup, cargrouplist)  if !params[cargroup[:field_name].to_sym].blank?
       facet :manufacturer
       #facet :cargroup

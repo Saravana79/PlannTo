@@ -5,6 +5,9 @@
   <div class="leftcolumnsmall">
     <ul class="search_criteria">
       <div class="hdr_search">Search Criteria:</div>
+      <a href="" >Current <%=@search_type.pluralize.humanize%></a><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%>
+      <a href="" >Future <%=@search_type.pluralize.humanize%></a><%= check_box_tag "future_status", 2, false, :onclick => "setSearchStatus();"%>
+      <a href="" >Nonavailable <%=@search_type.pluralize.humanize%></a><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();" %>
       <%@search_info_lookups.each_with_index do |lookup, index|%>
         <%if index == 0%>
           <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
@@ -36,6 +39,7 @@
 </div>
 <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
   <%= hidden_field_tag :page %>
+  <%= hidden_field_tag :status, 1%>
   <%= hidden_field_tag :search_type, @search_type %>
   <%= hidden_field_tag :sort_by, @sort_by %>
   <%=hidden_field_tag :manufacturer%>
@@ -49,6 +53,42 @@
 
 <div class="push"></div>
 <script type="text/javascript">
+
+function store_status_ids(type, sender) {
+
+    var value_selector = "#" + type +""
+
+    if ($(value_selector).val() == "") {
+        var ids = [];
+    } else {
+        var ids = $(value_selector).val().split(",");
+    }
+    var add = true
+    $.each(ids, function(index, value) {
+        if (value.toString() == sender.toString())  {
+            add = false;
+        }
+    });
+    if (add == true){
+        ids.push(sender);
+    }
+    $(value_selector).val(ids.toString());
+};
+
+  function setSearchStatus(){
+  	$("#status").val('');
+if ($('#future_status').is(':checked')) {
+	store_status_ids("status", 2)
+}
+if ($('#current_status').is(':checked')) {
+	store_status_ids("status", 1)
+}
+if ($('#nonavailable_status').is(':checked')) {
+	store_status_ids("status", 3)
+}
+
+  	
+  }
   function resetUnwantedFormFields(){
 <%@search_info_lookups.each_with_index do |value, index|%>
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"

@@ -8,6 +8,7 @@ class Cycle < Product
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 2.0,  :as => :name_ac
     string :name
+    string :status, :multiple => true
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
