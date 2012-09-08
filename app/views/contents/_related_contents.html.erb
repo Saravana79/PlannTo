@@ -7,9 +7,11 @@
 
         <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
           <%@related_contents.each do |content|%>
-          <tr>
-             	<%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
-          
+          <tr >
+            <td style="padding:5px 5px 5px 2px">          
+             	<%= link_to content.title, content_path(content.id), :class => "rekatedlinks" %>
+          <br/>
+            </td>
           </tr>
          <%end%>
 

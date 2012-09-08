@@ -3973,3 +3973,5 @@ a.bookmark_button span { display:block; float:left; background:url(../images/add
 
 a.bookmark_button:hover { background-position:left bottom;}
 a.bookmark_button:hover span { background-position:right bottom;}
+.rekatedlinks {text-decoration:none;color: #19558D;font: bold 12px Tahoma,Arial, Helvetica, sans-serif;}
+.rekatedlinks:hover {text-decoration:underline;};
