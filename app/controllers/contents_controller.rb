@@ -172,10 +172,13 @@ def filter
     per_page = params[:per_page].present? ? params[:per_page] : 5
     page_no  = params[:page_no].present? ? params[:page_no] : 1
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
-   frequency = ((@content.title.split(" ").size) * (0.3)).to_i
+   #frequency = ((@content.title.split(" ").size) * (0.3)).to_i
+   frequency = 1
     results = Sunspot.more_like_this(@content) do
       fields :title
-      minimum_term_frequency frequency
+      minimum_term_frequency 1
+      boost_by_relevance true
+      minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
     @related_contents = results.results
@@ -193,11 +196,13 @@ def filter
     page_no  = params[:page_no].present? ? params[:page_no] :2
     results = Sunspot.more_like_this(@content) do
       fields :title      
-      #boost_by_relevance true
-      #minimum_term_frequency frequency
-      #minimum_word_length 2
+      boost_by_relevance true
+      minimum_term_frequency frequency
+      minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
+    puts results.results.count
+    puts results.results[0]
     @related_contents = results.results
   end
 
