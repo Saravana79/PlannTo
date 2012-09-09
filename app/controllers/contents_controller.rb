@@ -185,13 +185,16 @@ def filter
   
   def search_related_contents
     @content = Content.find(params[:id])
-    frequency = ((@content.title.split(" ").size) * (0.3)).to_i
+    frequency = ((@content.title.split(" ").size) * (0.4)).to_i
+    if frequency == 0
+      frequency = 1
+    end
     per_page = params[:per_page].present? ? params[:per_page] : 5
     page_no  = params[:page_no].present? ? params[:page_no] :2
     results = Sunspot.more_like_this(@content) do
-      fields :title
+      fields :title      
       boost_by_relevance true
-      #minimum_term_frequency frequency
+      minimum_term_frequency frequency
       minimum_word_length 3
       paginate(:page => page_no, :per_page => per_page)
     end
