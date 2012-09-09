@@ -190,7 +190,9 @@ def filter
     page_no  = params[:page_no].present? ? params[:page_no] :2
     results = Sunspot.more_like_this(@content) do
       fields :title
-      minimum_term_frequency frequency
+      boost_by_relevance
+      #minimum_term_frequency frequency
+      minimum_word_length 3
       paginate(:page => page_no, :per_page => per_page)
     end
     @related_contents = results.results
