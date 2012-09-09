@@ -5,9 +5,6 @@
   <div class="leftcolumnsmall">
     <ul class="search_criteria">
       <div class="hdr_search">Search Criteria:</div>
-      <a href="" >Current <%=@search_type.pluralize.humanize%></a><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%>
-      <a href="" >Future <%=@search_type.pluralize.humanize%></a><%= check_box_tag "future_status", 2, false, :onclick => "setSearchStatus();"%>
-      <a href="" >Nonavailable <%=@search_type.pluralize.humanize%></a><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();" %>
       <%@search_info_lookups.each_with_index do |lookup, index|%>
         <%if index == 0%>
           <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
@@ -15,6 +12,12 @@
         <%end%>
         <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
       <%end%>
+      <a href="" >Current <%=@search_type.pluralize.humanize%></a><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%>
+      <br/>
+      <a href="" >Future <%=@search_type.pluralize.humanize%></a><%= check_box_tag "future_status", 2, false, :onclick => "setSearchStatus();"%>
+      <br/>
+      <a href="" >Nonavailable <%=@search_type.pluralize.humanize%></a><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();" %>
+      <br/>
     </ul>
   </div>
   <%= render :partial => "shared/search_popup" %>
