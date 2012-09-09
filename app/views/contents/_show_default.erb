@@ -127,7 +127,7 @@
 						<%end%>
 						<div style="padding:3px 0px 3px 0px;clear:both;">
 							<%if ((content.is_a?(ArticleContent)) && (content.thumbnail?))%>
-							<%if ((content.sub_type == "#{ArticleCategory::PHOTO}") && (!content.url.nil?)) %>
+							<%if ((content.sub_type == "#{ArticleCategory::PHOTO}") && (content.url.nil?)) %>
 							<div><img src="<%= content.content_photo.photo.url(:original) %>" class="uploadedarticleContentdisplay float_lft" style="width:560px;height:360px;"/>
 							</div>
 							<br/>
