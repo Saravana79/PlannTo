@@ -15,6 +15,7 @@
     <% @contents = Content.filter(params)  %>
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
   </div>
+   
   <a id="content_next" style="display:none"></a>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 </div>

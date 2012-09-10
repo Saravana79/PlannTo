@@ -204,6 +204,9 @@
     </div>    
     <input type="hidden" name = "save_instruction"  id = "share_instruction_id" value ="<%=@save_instruction_value%>"/>
     <div id="url_content_desc">	</div>
+<span id="share_spinner" style="padding:0px 0px 0px 180px;display:none;">
+  <%= image_tag '/images/ajax-loader.gif' %>
+</span>
 
   <% end %>
 </div>
@@ -238,9 +241,15 @@
 
 <%if @article_content.new_record?%>
           // $('form#<%#=@form_id%>').attr('action','<%#= article_contents_path %>');
-          $.post('/article_contents/create',$("#<%=@form_id%>").serialize(),"script");
+          //$.post('/article_contents/create',$("#<%=@form_id%>").serialize(),"script");
+           $.ajax({url: '/article_contents/create', dataType:'script', type: "post",data: $("#<%=@form_id%>").serialize(),before:$('#share_spinner').show(),success: function(data){$('#share_spinner').hide();
+  eval(data);
+ }});
 <%else%>     
-          $.post('/article_contents/update/<%=@article_content.id%>',$("#<%=@form_id%>").serialize(),"script");
+          //$.post('/article_contents/update/<%=@article_content.id%>',$("#<%=@form_id%>").serialize(),"script");
+           $.ajax({url: '/article_contents/update/<%=@article_content.id%>', dataType:'script', type: "post",data: $("#<%=@form_id%>").serialize(),before:$('#share_spinner').show(),success: function(data){$('#share_spinner').hide();
+  eval(data);
+ }});
           return false;
 <%end%>
 
@@ -252,9 +261,13 @@
     });
     $('div#ShareURLDiv #<%=@url_id%>').keyup(function(){
       if($('div#ShareURLDiv #<%=@url_id%>').val() && validateUrl($('div#ShareURLDiv #<%=@url_id%>').val())){
-        $.post('/article_contents/download',$("#<%=@form_id%>").serialize(),"script");
+       $.ajax({url: '/article_contents/download', dataType:'script', type: "post",data: $("#<%=@form_id%>").serialize(),before:$('#share_spinner').show(),success: function(data){$('#share_spinner').hide();
+  eval(data);
+ }});
         //$('form#<%#=@form_id%>').attr('action','<%#= download_article_contents_path  %>');
         // $('form#<%#=@form_id%>').submit();
+        
+       
       } else {
         $('div.<%=@dwnld_url%>').hide();
       }

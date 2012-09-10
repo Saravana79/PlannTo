@@ -4,7 +4,8 @@
 <% if !@contents.blank? %>
 <% @contents.each do |content| %>
 	 <%= render_content_type(content) %>
-  <% end %>
+	  <% end %>
+	  
 <%# if @contents.current_page < @contents.total_pages %>
 <%# params ||={}  %>
 <%# params["page"] = @contents.current_page + 1 %>
@@ -15,6 +16,7 @@
 <%#= link_to "More...", {:method => "post"}, "data-disable-with" => "Loading...", :id => "content_next", :remote => true%>
   <%# end %>
  <% end  %>
+
  <script type="text/javascript">
  $(document).ready(function(){
  	$("#contentSearchForm").bind('submit', function() {   
