@@ -19,7 +19,9 @@
   <a id="content_next" style="display:none"></a>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 </div>
-
+ <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+     <%= image_tag '/images/ajax-loader.gif' %>
+</span>
 <script type="text/javascript" charset="utf-8">
   $(function(){
     $('#load_content').live("click",function(){

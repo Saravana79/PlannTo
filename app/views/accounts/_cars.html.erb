@@ -26,6 +26,7 @@
  
 <div class="Searchlisting" style="clear:both;">
   <% items.each do |follow| %>
+
     <% unless follow.content?(follow.followable_type) %>
       <% item = follow.followable %>
       <div class="product" id="product_<%= item.id %>">
@@ -66,11 +67,12 @@
             </table>
             
             <div id='write_review_form' style="display:none;">
-              <%= render 'reviews/review_subcontainer', {:item => item} %>
+              <%@item = item %>
+              <%= render  'reviews/review_subcontainer', :item => @item%>
             </div>
             
             <div id='add_item_info' style="display:none;">
-               <%= render 'shared/feilds_data_for_answer', {:item => item} %>
+               <%= render 'shared/feilds_data_for_answer', {:item => @item} %>
             </div>   
           </div>    
       </div>
@@ -111,7 +113,7 @@
       
     </div>
     <%end%>
-  <% end rescue "" %>
+  <% end  %>
 
 
 <%= will_paginate @followitems %>
