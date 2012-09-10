@@ -85,9 +85,7 @@
 <div class="question_answer main-content-section" id="overview" style="<%=display_required(params[:at] || "overview", "overview")%>">
     <%= render "contents/all"%>
 </div>
- <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-     <%= image_tag '/images/ajax-loader.gif' %>
-</span>
+
 <div id="specification" style="<%=display_required(params[:at] || "overview", "specification")%>" class="main-content-section">
     <%#= render :template => 'products/specification' %>
     <%= render :partial => "products/detailed_specifications" %>
