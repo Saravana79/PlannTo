@@ -236,6 +236,8 @@ def filter
      results = Sunspot.more_like_this(@content) do
       fields :title
       minimum_term_frequency 1
+      boost_by_relevance true
+      minimum_word_length 2
     end
     @related_contents = results.results
   end

@@ -10,6 +10,10 @@
     </center>
       <div style="padding:100px 0px 0px 900px; float:right; width:100%; margin-right:5px; margin-top:20px ">
         <%= f.submit 'Save or Skip', :class => 'btn_submitanswer',:id => "publishanswer" %>
+        <div style="float:right;" %>
+         <%= render "shared/ajax_loader" %>
+        </div> 
+     </div>   
  <%end%>
  
  <script>

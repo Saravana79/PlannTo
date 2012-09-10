@@ -16,7 +16,19 @@
    
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:100px; margin-top:20px ">
      <%= f.submit :value => "Comment", :id => "comment_submit_3", 'data-disable-with'=>"Commenting...", :class => 'btn_submitanswer' %>
-     
+     <span id="spinner_comment" style="padding:0px 0px 0px 180px;display:none">
+       <%= image_tag '/images/ajax-loader.gif' %>
+  </span>
+ <script>
+   $(function() {
+    $("form").bind("ajax:beforeSend", function(){
+      $("#spinner_comment").show();
+   })
+    $("form").bind("ajax:complete", function(){
+        $("#spinner_comment").hide();
+    })
+   });
+</script>
     </div>
   <% end %>
 </div>

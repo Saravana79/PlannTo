@@ -28,10 +28,15 @@ class QuestionContentsController < ApplicationController
     @content.ip_address = request.remote_ip
     @detail = params[:detail]
     @content.update_with_items!(params['question_content'], params[:item_id])
-    
-     results = Sunspot.more_like_this(@content) do
-      fields :title
+    per_page = params[:per_page].present? ? params[:per_page] : 5
+    page_no  = params[:page_no].present? ? params[:page_no] : 1
+   # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
+    frequency = ((@content.title.split(" ").size) * (0.3)).to_i
+    results = Sunspot.more_like_this(@content) do
       minimum_term_frequency 1
+      boost_by_relevance true
+      minimum_word_length 2
+      paginate(:page => page_no, :per_page => per_page)
     end
     @related_contents = results.results
   end

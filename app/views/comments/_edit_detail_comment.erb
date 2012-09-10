@@ -14,7 +14,7 @@
   <%= hidden_field_tag :detail,true %>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:100px; margin-top:20px ">
      <%= f.submit :value => "Update Comment", :id => "comment_submit_3", 'data-disable-with'=>"Update commenting...", :class => 'btn_submitanswer' %>
-     
+      <%= render "shared/ajax_loader" %>
     </div>
   <% end %>
 </div>

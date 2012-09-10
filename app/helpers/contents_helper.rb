@@ -37,7 +37,7 @@ module ContentsHelper
     when "QuestionContent"
       raw render :partial => "question_contents/new_question_content", :locals => { :content => item }
     when "AnswerContent"
-        raw render :partial => "answer_contents/new_answer_content", :locals => { :content => item }  
+        raw render :partial => "answer_contents/edit_answer", :locals => { :content => item }  
     when "ReviewContent"
       raw render :partial => "reviews/review_subcontainer", :locals => { :content => item }
     else   

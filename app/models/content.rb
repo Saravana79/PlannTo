@@ -11,7 +11,7 @@ class Content < ActiveRecord::Base
   # friendly_id :title, use: :slugged
 
   validates_presence_of :title, :unless => lambda{ |content| content.type == "AnswerContent" } 
-  
+  validates_presence_of :description, :if => lambda{ |content| content.type == "AnswerContent" } 
   #below line not required.
   #validates_presence_of :created_bye
 

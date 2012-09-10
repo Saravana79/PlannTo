@@ -6,16 +6,17 @@
     </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
-    <div><a class="txt_brown"><%= content.user.name  %> reviewed <%=get_anchor_name_link(content)%> <a class="txt_brown">- <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago. </a></div>
+    <div><a class="txt_brown"><%= content.user.name  %> reviewed <%=get_anchor_name_link(content)%> <a class="txt_brown">- <%end%>
+    <%= time_ago_format(content) %><% cache ['part-2', content] do %> ago. </a></div>
     <div class="subContentGap">
     	<%= raw get_rating_or_category_contents(content)%>
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
-						<% rating =  (content.is_a?ArticleContent) ? content.field1 : content.rating %>
+						<% rating =  (content.is_a?(ArticleContent)) ? content.field1 : content.rating %>
 						<script type="text/javascript">
 							$('div#content_show_<%= content.id%>').raty({
 							starOff:  'assets/star-off.png',
 							starHalf   : 'assets/star-half.png',
-							half       : true
+							half       : true,
 							starOn: 'assets/star-on.png',
 							start: <%= "#{rating.to_f.round(1)}"%>
 									});
@@ -44,6 +45,8 @@
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content}  %>
 </div>
+<script>        
+
  <script>
         $("#report_link_<%= content.id %>").click(function(e){
           <%if !current_user %>

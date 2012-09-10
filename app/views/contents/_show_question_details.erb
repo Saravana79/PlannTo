@@ -67,9 +67,11 @@
       </div>
       <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
     <!-- Answer this question - End -->
-        
+   
+  <div id="answer_content_div">      
   <%= render :partial => 'answer_contents/answer_content',:collection => content.answer_contents.where("status!=?", Content::DELETE_STATUS) %>
-    <%= render :partial => 'answer_contents/new_answer_content', :locals => {:question_content => content, :item => @item ,:content => AnswerContent.new}%>
+  </div>
+     <%= render :partial => 'answer_contents/new_answer_content', :locals => {:question_content => content, :item => @item ,:content => AnswerContent.new}%>
       
     
 </div>
