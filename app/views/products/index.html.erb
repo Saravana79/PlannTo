@@ -114,6 +114,7 @@
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
     <%= render "contents/sort_by_options"%>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+  
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1} %>
     
@@ -144,6 +145,7 @@
 </div>
 
 <%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
+<%= render :partial => 'products/popular_topics', :locals => {:type => @type} %> 
 <br/>
   <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>

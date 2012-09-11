@@ -3975,3 +3975,28 @@ a.bookmark_button:hover { background-position:left bottom;}
 a.bookmark_button:hover span { background-position:right bottom;}
 .rekatedlinks {text-decoration:none;color: #19558D;font: bold 12px Tahoma,Arial, Helvetica, sans-serif;}
 .rekatedlinks:hover {text-decoration:underline;};
+
+#tag_cloud {
+  display: block;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+ }
+ 
+#tag_cloud h1
+ {   
+  text-align: center;
+ }
+ 
+#tag_cloud .cloud_element
+ {        
+  display: inline;
+ } 
+    
+#tag_cloud .cloud_element a
+ { 
+  text-decoration: none;
+  color:black;
+  line-height: 110%;
+  vertical-align: middle;
+ }              

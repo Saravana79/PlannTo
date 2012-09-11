@@ -431,5 +431,23 @@ end
     end
      Item.where('id in (?)',item_ids)
   end
+  
+  def self.popular_topics(item_t)
+    case item_t.to_s
+    when "Car"
+      ids = configatron.popular_car_topics.split(",")
+    when "Bike"
+      ids = configatron.popular_bike_topics.split(",") 
+    when "Cycle"
+      ids = configatron.popular_cycle_topics.split(",") 
+    when "Mobile"
+       ids = configatron.popular_mobile_topics.split(",")  
+    when "Tablet"
+      ids = configatron.popular_tablet_topics.split(",")
+    when "Camera"
+       ids = configatron.popular_camera_topics.split(",")
+    end      
+    Item.where('id in (?)',ids)
+  end
  end
 

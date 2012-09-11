@@ -1,6 +1,8 @@
 class Itemtype < ActiveRecord::Base
   CAR = "Car"
   has_many :items
+  has_many :topic_itemtype_relations
+  has_many :topics,:through => :topic_itemtype_relations,:class_name => "Item"
   has_many :attributes_relationships
   has_many :article_categories
   has_many :contents

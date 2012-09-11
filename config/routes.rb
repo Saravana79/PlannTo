@@ -44,6 +44,7 @@ PlanNto::Application.routes.draw do
   end
   match ':search_type/related-items/:car_id' => 'related_items#index'
   match 'groups/:id' => 'car_groups#show', :as => 'car_groups'
+  match ':type/topics' => 'products#topics'
   match 'my_feeds'  => 'contents#my_feeds'
   # Sample resource route (maps HTTP verbs to controller actions automatically):
 

@@ -9,6 +9,12 @@ development:
   popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "4013,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
+  popular_camera_topics: "34,45,67,89,90,68"
+  popular_car_topics: "34,45,67,89,90,68"
+  popular_bike_topics: ""
+  popular_cycle_topics: "34,45,67,89,90,68"
+  popular_mobile_topics: ""
+  popular_tablet_topics: "34,45,67,89,90,68"
   popular_count: 5
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
@@ -19,6 +25,11 @@ test:
   popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "4013,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
+  popular_car_topics: "34,45,67,89,90,68"
+  popular_bike_topics: ""
+  popular_cycle_topics: "34,45,67,89,90,68"
+  popular_mobile_topics: ""
+  popular_tablet_topics: "34,45,67,89,90,68"
   popular_count: 5
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
@@ -31,6 +42,11 @@ production:
   popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "4013,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
+  popular_car_topics: "34,45,67,89,90,68,9888999"
+  popular_bike_topics: ""
+  popular_cycle_topics: "34,45,67,89,90,68"
+  popular_mobile_topics: ""
+  popular_tablet_topics: "34,45,67,89,90,68"
   popular_count: 5
   
  

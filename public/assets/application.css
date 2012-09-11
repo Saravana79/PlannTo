@@ -2518,24 +2518,24 @@ ul.tagging								{ padding:0; margin:0; list-style:none; }
 */
 /*
 */
-/* line 8, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 8, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 body {
   margin: 0;
   background: none;
 }
 
-/* line 9, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 9, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 html, body {
   height: 100%;
 }
 
-/* line 10, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 10, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .container {
   width: 980px;
   margin: 0 auto;
 }
 
-/* line 11, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 11, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 iframe {
   color: #666;
   width: 100%;
@@ -2546,7 +2546,7 @@ iframe {
   border: none;
 }
 
-/* line 12, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 12, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 #topbar {
   height: 50px;
   width: 100%;
@@ -2556,34 +2556,34 @@ iframe {
   top: 0;
 }
 
-/* line 13, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 13, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 #content_body {
   margin-top: 50px;
   height: 100%;
 }
 
-/* line 14, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 14, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .padding-left {
   margin-left: 50px;
 }
 
-/* line 15, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 15, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .padding-top {
   margin-top: 15px;
 }
 
-/* line 17, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 17, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .clearfix {
   *zoom: 1;
 }
 
-/* line 18, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 18, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .clearfix:before, .clearfix:after {
   display: table;
   content: "";
 }
 
-/* line 19, /home/ganesh/projects/Plannto/app/assets/stylesheets/external_contents.css.scss */
+/* line 19, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .clearfix:after {
   clear: both;
 }

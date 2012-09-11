@@ -13,6 +13,7 @@ class ProductsController < ApplicationController
     search_type = request.path.split("/").last
     @type = search_type.singularize.camelize.constantize
     @itemtype = Itemtype.find_by_itemtype(@type)
+    @popular_topics = Item.popular_topics(@type)
     @article_categories = ArticleCategory.get_by_itemtype(@itemtype.id) #ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
     @followers =  User.get_followers(search_type)
     count = @followers.length
@@ -28,6 +29,15 @@ class ProductsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def topics
+    @type = params[:type].capitalize
+    @itemtype = Itemtype.find_by_itemtype(@type)
+    @topics = @itemtype.topics
+    if @topics.length > 0
+      @topic_cloud_hash = Topic.topic_clouds(@topics,@itemtype)
+    end  
+  end
+  
   def show
     Vote.get_vote_list(current_user) if user_signed_in?
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last

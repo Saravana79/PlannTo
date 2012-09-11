@@ -1,0 +1,31 @@
+<% unless @popular_topics.empty? %>
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+	<tr>
+		<td class="bg_widgethdr txt_white">Popular <%= @type %> Topics</td>
+	</tr>
+	<tr>
+		<td  valign="top">
+		<table id="related_contents_table" width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+			<% @popular_topics.each do |topic|%>
+			<tr>
+				<td style="padding:4px 2px 4px 2px"><%= link_to topic.name, topic.get_url(), :class => "rekatedlinks" %>
+        </td>
+			</tr>
+			<%end%>
+      <tr >
+            
+          </tr>
+		</table>
+    <br/>
+  </td>
+</tr>
+  <tr>
+    <td style="height:33px;border-top:solid 1px #cdd3d7;width:100%;"><span style="padding:5px 5px 5px 2px;"><%= link_to "View All #{@type} Topics","/#{@type.to_s.downcase}/topics", :class => "txt_blue", :style => "margin:5px 5px 5px 2px;"%></span> </div> 
+    </td>
+  </tr>
+	</tr>
+  <tr>
+   
+</table>
+
+<%end%>
