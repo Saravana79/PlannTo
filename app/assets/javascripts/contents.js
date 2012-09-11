@@ -57,7 +57,6 @@ $("ul#Newtabs li a").live('click', function(){
     function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
     
   	 $.ajax({url : "/contents/" + action , dataType:'script',type: "get",data: 'sub_type=' + sub_type + '&items=' + items + '&page=' + filter_page_no + '&itemtype_id=' + itemtype_id + '&sort_by=' + sort_by + '&guide=' + guide,before:$('#spinner1').show(),success: function(data){$('#spinner1').hide();
-  eval(data);
  }});    
  }
   	
