@@ -1,13 +1,11 @@
 namespace :plannto do
-  #sample task  rake plannto:update_created_by_for_contents[10,13,'1,2,3']
+  #sample task  rake plannto:update_created_by_for_contents[10,13]
   desc 'set created by for contents'
-task :update_created_by_for_contents, :start_id, :end_id, :user_ids, :needs => :environment do |t, args|
-  puts args
+task :update_created_by_for_contents, :start_id, :end_id, :needs => :environment do |t, args|
+  
   contents = Content.where("id BETWEEN ? AND ?", args[:start_id], args[:end_id])
-  puts contents.size
-  user_ids = args[:user_ids].split(",")
+  user_ids = configatron.content_creator_user_ids.split(",")
   contents.each do |content|
-    puts user_ids.shuffle.first
     content.update_attribute(:created_by, user_ids.shuffle.first)
   end
 end
