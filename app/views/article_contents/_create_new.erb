@@ -2,7 +2,8 @@
 
 <div id="subContainerContentCreate" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
   <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
-  
+       <div id="tag">
+        </div>
   <!-- along with event creation this form is used for many other types -->
   <%if @content.nil?%>
     <%@form_id = "new_create_article_content_form"%>
@@ -20,6 +21,7 @@
   <div style="padding:5px 5px 0px 0px;text-align:center">
     <%unless @content %>
     <div style="display:none;" id="photo">
+   
     	<div class="title_header float_lft" id="photo">Photo:</div>
         <%= f.fields_for :content_photo do |photo| %>
         	<%= photo.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
@@ -122,11 +124,14 @@
       </div>
       <div style="clear:both;"></div>
     </div>
+    
     <input id="article_content_create" name="article_content_create" type="hidden" value="true"  />
     <%= hidden_field_tag 'article_create_item_id' %>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px">
       <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'article_content_create_submit', 'data-disable-with'=>"Saving..." %>
+  
     <span id="spinner_article" style="padding:0px 0px 0px 290px;display:none">
+       
          <%= image_tag '/images/ajax-loader.gif' %>
       </span> 
    <script>
@@ -358,9 +363,10 @@
       };
       $.textTagger("article_create_product","article_create_product_list",settings);
   <% unless @item.blank? %>
+       
         $.addTag("article_create_product","article_create_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
-        $("ul#article_create_product_list li:first span a.icon_close_tagging").remove();
+        $("a.icon_close_tagging").remove();
   <% end %>
 <%else%>
 //error is here
@@ -388,6 +394,37 @@
     });
     
   });
+   
+
+    $("#article_content_create_submit").click(function(e){
+      var valid = validateArticleForm();
+      if (!valid){
+        return false;
+      }
+   });
+     
+    function validateArticleForm(){
+      $('#tag').poshytip('destroy')
+      var valid = true;
+      if ($("#article_create_item_id").val() == ""){
+        $('#tag').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please select a product to tag with.',
+          showOn: 'none',
+          alignTo: 'center',
+          alignX: 'center',
+          offsetX: 50,
+          alignY: 'center'
+        });
+        $('#tag').poshytip('show');
+        valid = false
+
+      }
+       return valid
+    }
+ 
+  
 </script>
+
 </div>
 

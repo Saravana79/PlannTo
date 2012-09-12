@@ -84,8 +84,28 @@
 
       }
 
+      
+       if ($("form#<%=@form_id%> #question_content_item").val() == ""){
+        $('form#<%=@form_id%> #question_content_item').poshytip({
+          className: 'tip-darkgray',
+          content: 'Please enter the title.',
+          showOn: 'none',
+          alignTo: 'target',
+          alignX: 'right',
+          offsetX: 5,
+          alignY: 'center'
+        });
+        $('form#<%=@form_id%> #question_content_item').poshytip('show');
+        valid = false
+
+      }
+      
       return valid
+      
     }
+    
+    
+    
     </script>
 
    
