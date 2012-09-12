@@ -1,4 +1,22 @@
 namespace :plannto do
+
+  desc 'set created by for contents'
+  #sample task  rake plannto:update_votes_for_contents[10,13]
+task :update_votes_for_contents, :start_id, :end_id, :needs => :environment do |t, args|
+  
+  contents = Content.where("id BETWEEN ? AND ?", args[:start_id], args[:end_id])
+  user_ids = configatron.content_creator_user_ids.split(",")
+  contents.each do |content|
+    if content.votes.size == 0
+    user_ids.each do |user_id|
+    voter = User.find(user_id)      
+      unless voter.voted_on? content       
+        voter.vote content,:direction => "up"
+      end
+      end
+      end
+  end
+end
   #sample task  rake plannto:update_created_by_for_contents[10,13]
   desc 'set created by for contents'
 task :update_created_by_for_contents, :start_id, :end_id, :needs => :environment do |t, args|
