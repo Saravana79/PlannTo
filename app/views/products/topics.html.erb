@@ -6,7 +6,7 @@
       <div class="cloud_element" >
       	<span style="height:40px;">
       	<%topic_object = Item.find(topic[0]) %> 
-        <%= content_tag(:a, topic_object.name, { :href => "#{topic_object.get_url()}", :title => "#{topic[1]} contents", :style => "font-size:#{size}px;" }) %>
+        <%= content_tag(:a, topic_object.name, { :href => "#{topic_object.get_url()}", :title => "#{topic_object.contents.count} contents", :style => "font-size:#{size}px;" }) %>
     	</span>
       </div>
     <%end%>
