@@ -6,7 +6,8 @@ class Topic < Item
    end
    
   def self.topic_clouds(item_type)
-     topics = ActiveRecord::Base.connection.execute("select i.id, name, count(*) from items i left outer join  item_contents_relations_cache c  on i.id = c.item_id inner join topic_itemtype_relations ti on ti.item_id = i.id  where  i.type ='Topic' and ti.itemtype_id = #{item_type.id} group by c.item_id")
+     topics = ActiveRecord::Base.connection.execute("select i.id, name, count(*) from items i left outer join  item_contents_relations_cache c  on i.id = c.item_id inner join topic_itemtype_relations ti on ti.item_id = i.id  where  i.type ='Topic' and ti.itemtype_id = 12 group by i.id")
+    
      array = topics.sort {|a1,a2| a2[2]<=>a1[2]}
      maxOccurs = array.first[2]
      minOccurs =  array.last[2]
