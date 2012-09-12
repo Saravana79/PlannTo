@@ -2,9 +2,12 @@
 <% if !@topics.empty?%>
   <div id="tag_cloud">
     <h1><%= "All #{@type.capitalize} Related Topics" %></h1>
+    <br/>
     <% @topic_cloud_hash.each_pair do |topic,size| %>
-      <div class="cloud_element">
+      <div class="cloud_element" >
+      	<span style="height:40px;">
         <%= content_tag(:a, topic.name.downcase, { :href => "#{topic.get_url()}", :title => "#{topic.contents.count} contents", :style => "font-size:#{size}px;" }) %>
+    	</span>
       </div>
     <%end%>
   </div>

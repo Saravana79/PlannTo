@@ -11,8 +11,8 @@ class Topic < Item
      array = topic_contents_count.sort {|a1,a2| a2[1]<=>a1[1]}
      maxOccurs = array.first[1]
      minOccurs =  array.last[1]
-     minFontSize = 15
-        maxFontSize = 100
+     minFontSize = 10
+        maxFontSize = 40
         @topic_cloud_hash = Hash.new(0)
         topics.each do |tag|
           weight = (tag.contents.count-minOccurs).to_f/(maxOccurs-minOccurs)

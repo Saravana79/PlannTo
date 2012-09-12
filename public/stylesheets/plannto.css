@@ -3996,7 +3996,12 @@ a.bookmark_button:hover span { background-position:right bottom;}
 #tag_cloud .cloud_element a
  { 
   text-decoration: none;
-  color:black;
-  line-height: 110%;
+  font: bold Tahoma,Arial, Helvetica, sans-serif;
+  color: #19558D;
+  line-height: 35px;
   vertical-align: middle;
+ }              
+#tag_cloud .cloud_element a:hover
+ { 
+  text-decoration: underline;
  }              

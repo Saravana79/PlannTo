@@ -19,10 +19,12 @@
     <br/>
   </td>
 </tr>
+<%if @type == 'Camera' or @type == 'Cycle' %>
   <tr>
-    <td style="height:33px;border-top:solid 1px #cdd3d7;width:100%;"><span style="padding:5px 5px 5px 2px;"><%= link_to "View All #{@type} Topics","/#{@type.to_s.downcase}/topics", :class => "txt_blue", :style => "margin:5px 5px 5px 2px;"%></span> </div> 
+    <td style="height:33px;border-top:solid 1px #cdd3d7;width:100%;"><span style="padding:5px 5px 5px 2px;"><%= link_to "View All Topics","/#{@type.to_s.downcase}/topics", :class => "txt_blue", :style => "margin:5px 5px 5px 2px;"%></span> </div> 
     </td>
   </tr>
+  <%end%>
 	</tr>
   <tr>
    

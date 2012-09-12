@@ -9,14 +9,14 @@ development:
   popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "4013,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
-  popular_camera_topics: "34,45,67,89,90,68"
-  popular_car_topics: "34,45,67,89,90,68"
+  popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165,4128"
+  popular_car_topics: ""
   popular_bike_topics: ""
-  popular_cycle_topics: "34,45,67,89,90,68"
-  popular_mobile_topics: ""
-  popular_tablet_topics: "34,45,67,89,90,68"
+  popular_cycle_topics: "4540, 4541, 4538, 4539, 4543"
+  popular_mobile_topics: "3204,3202,3203,4017"
+  popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
-  content_creator_user_ids: "1,2,3"
+  content_creator_user_ids: "1,7,8,19,27,3"
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -26,12 +26,14 @@ test:
   popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "4013,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
-  popular_car_topics: "34,45,67,89,90,68"
+  popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165,4128"
+  popular_car_topics: ""
   popular_bike_topics: ""
-  popular_cycle_topics: "34,45,67,89,90,68"
-  popular_mobile_topics: ""
-  popular_tablet_topics: "34,45,67,89,90,68"
+  popular_cycle_topics: "4540, 4541, 4538, 4539, 4543"
+  popular_mobile_topics: "3204,3202,3203,4017"
+  popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
+  content_creator_user_ids: "1,7,8,19,27,3"
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
@@ -43,11 +45,13 @@ production:
   popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "4013,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,1705,3986,4068,3580,4261,1546,1511,2032"
-  popular_car_topics: "34,45,67,89,90,68,9888999"
+  popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165,4128"
+  popular_car_topics: ""
   popular_bike_topics: ""
-  popular_cycle_topics: "34,45,67,89,90,68"
-  popular_mobile_topics: ""
-  popular_tablet_topics: "34,45,67,89,90,68"
+  popular_cycle_topics: "4540, 4541, 4538, 4539, 4543"
+  popular_mobile_topics: "3204,3202,3203,4017"
+  popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
+  content_creator_user_ids: "1,7,8,19,27,3"
   
  
