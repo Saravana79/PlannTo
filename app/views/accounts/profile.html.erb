@@ -169,7 +169,7 @@
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
            
-          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id}%>
+          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1}%>
           <% @contents = Content.filter(params)  %>
           <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         </div>
@@ -195,7 +195,7 @@
                 }
                 $.ajax(
                 {
-                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>",
+                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>",
                   type: "get",
                   dataType: "script"
                 });
@@ -205,26 +205,9 @@
 
           
            var running =false;
-        $(window).scroll(function () {
-
-          lnk = $('#content_next');
-          if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-
-          running = true;
-            $.ajax(
-              {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>",
-                type: "get",
-                dataType: "script",
-                success    : function(data)
-                    {
-                      running = false;
-                    }
-              });
-              return false
-            //lnk.click();
-          }
-        });
+           
+           
+       
         });
     </script>
     <%end%>
@@ -237,6 +220,28 @@
 
 <script type="text/javascript">
   $("#usual2 ul").idTabs("tabs1");
+    $(window).scroll(function () {
+
+          lnk = $('#content_next');
+          if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+
+          running = true;
+            $.ajax(
+              {
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>",
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+            //lnk.click();
+          }
+        });
+      
+    </script>
 </script>
 
 

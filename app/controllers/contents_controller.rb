@@ -34,7 +34,9 @@ def filter
       filter_params["items"] = items
       end
     end
-    
+    if params[:user]
+      filter_params[:user] = params[:user]
+    end  
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
@@ -92,8 +94,12 @@ def filter
      else
        itemtype_id  = params[:itemtype_id].split(",")
     end 
+   
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], itemtype_id )}
     filter_params["itemtype_id"] = itemtype_id  if itemtype_id .present?
+    if params[:user]
+      filter_params[:user] = params[:user]
+    end 
     if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 
