@@ -1,18 +1,17 @@
 <div class="maincontainerCss" id="maincontainer"> 
-<% if !@topics.empty?%>
-  <div id="tag_cloud">
+<div id="tag_cloud">
     <h1><%= "All #{@type.capitalize} Related Topics" %></h1>
     <br/>
     <% @topic_cloud_hash.each_pair do |topic,size| %>
       <div class="cloud_element" >
       	<span style="height:40px;">
-        <%= content_tag(:a, topic.name.downcase, { :href => "#{topic.get_url()}", :title => "#{topic.contents.count} contents", :style => "font-size:#{size}px;" }) %>
+      	<%topic_object = Item.find(topic[0]) %> 
+        <%= content_tag(:a, topic_object.name, { :href => "#{topic_object.get_url()}", :title => "#{topic[1]} contents", :style => "font-size:#{size}px;" }) %>
     	</span>
       </div>
     <%end%>
   </div>
-<%end%>  
-<div style="clear:both;display:block;width:400px;padding-top:10px;" ></div>
+ <div style="clear:both;display:block;width:400px;padding-top:10px;" ></div>
 </div>
 
 

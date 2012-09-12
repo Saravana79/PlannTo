@@ -32,10 +32,7 @@ class ProductsController < ApplicationController
   def topics
     @type = params[:type].capitalize
     @itemtype = Itemtype.find_by_itemtype(@type)
-    @topics = @itemtype.topics
-    if @topics.length > 0
-      @topic_cloud_hash = Topic.topic_clouds(@topics,@itemtype)
-    end  
+    @topic_cloud_hash = Topic.topic_clouds(@itemtype)
   end
   
   def show
