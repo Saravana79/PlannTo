@@ -20,16 +20,18 @@
         <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
       </div>
       <span>
-        <h1 onclick="parent.location='<%=link_url(item)%>'"><%=item.name%></h1>
+        <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.name%></a></h1>
         <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
-        <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "related_item_index_#{item.id}"} %>
-        <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a><br />
-        <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
-      </span>
-      <span class="float_rgt" style="display:inline;">
-        <span class="action_btns_selected_medium" style="width:110px;" ><a class="btn_plantobuy_icon"  href="#"></a><a class="btn_txt"  href="#">PlannTo Buy</a></span>
-        <span class="action_btns_medium" style="width:90px;"><a class="btn_iwonit_icon" href="#"></a><a class="btn_txt" href="#">I Own It</a></span>
-        <span class="action_btns_disabled_medium" style="width:120px;"><a class="btn_followthiscar_icon" href="#"></a><a class="btn_txt" href="#">Follow this Car</a></span>
+          <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "search_index_#{item.id}"} %>
+          <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a><br />
+          <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
+        </span>
+        <span class="float_rgt" style="display:inline;">
+          <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item, :related_items => false %>
+        </span>
+
+          <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
+
       </span>
     </div>
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
