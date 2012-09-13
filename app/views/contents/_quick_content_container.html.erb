@@ -1,0 +1,41 @@
+<h3>Quick content create</h3>
+<%count = (@article_categories.size - 1)%>
+<% @article_categories.each_with_index do |article_category, index| %>
+	<%if index < 3%>
+	 <a href="#" class="quickCreate" data-content="<%=article_category[0]%>"><%=article_category[0]%></a>        
+	<%end%>
+     <%if index == 3%>
+<span class="Usrdropdown">
+         <span class="Usernamedp"><a href="#">Others</a>
+           <div class="Useraccountinfo">
+           	<%end%>
+           	<%if index >= 3%>
+             <a data-content="<%=article_category[0]%>" class="quickCreate"><%=article_category[0]%></a>
+            <%end%>
+            
+            <%if index == count %>
+           </div>
+         </span>
+       
+    </span> 
+    <%end%>     
+    <%end%>
+    
+    <script type="text/javascript">
+    	
+    	$(function(){
+
+  $('a.quickCreate').live("click",function(){
+
+   // $(this).parent().toggleClass('selected');
+    var category = $(this).data('content');
+   // $.ajaxSetup({
+   //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+   // });
+	 $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  });
+    //$.get('/contents/quick_new',{'category' : category}, "script");
+    return false
+
+  });
+  });
+    </script>>

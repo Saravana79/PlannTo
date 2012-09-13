@@ -101,6 +101,7 @@ resources :accounts do
     get :feeds
     post :search_contents
     get :search_related_contents
+    get :quick_new
   end
   match "/contents/search" => 'contents#search'
  

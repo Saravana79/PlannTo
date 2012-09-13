@@ -45,6 +45,8 @@ module ContentsHelper
         raw render :partial => "article_contents/create_new", :locals => { :content => item }
       elsif (item.type == "ArticleContent" && item.url != "")
         raw render :partial => "article_contents/article_share", :locals => {:content_category => true,  :content => item}
+      elsif (item.type == "ArticleContent" && item.url.nil?)
+        raw render :partial => "article_contents/create_new", :locals => { :content => item }
       else
         raw render :partial => "article_contents/article_share", :locals => {:content_category => true, :content => item }
       end

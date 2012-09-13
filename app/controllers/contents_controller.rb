@@ -211,6 +211,15 @@ def filter
     puts results.results[0]
     @related_contents = results.results
   end
+  
+  def quick_new
+  @content = ArticleContent.new
+  @content.sub_type = params[:category]
+ 
+  @article_content = @content
+  @article_categories = ArticleCategory.get_by_itemtype(0)
+  @items = Array.new
+  end
 
   def create
     @item = Item.find(params[:default_item_id])

@@ -1,0 +1,8 @@
+$("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
+
+$("#contentEditView").dialog({
+title: 'Edit <%=@content.type.underscore.humanize%>',
+height: 500,
+width:600});
+$("#subContainerContentCreate").show();
+$("#article_content_sub_type").val("<%=@content.sub_type%>");
