@@ -175,7 +175,7 @@ def filter
 
   def show
     @content = Content.find(params[:id])
-    per_page = params[:per_page].present? ? params[:per_page] : 5
+    per_page = params[:per_page].present? ? params[:per_page] : 8
     page_no  = params[:page_no].present? ? params[:page_no] : 1
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
    #frequency = ((@content.title.split(" ").size) * (0.3)).to_i
@@ -198,7 +198,7 @@ def filter
     #if frequency == 0
       frequency = 1
     #end
-    per_page = params[:per_page].present? ? params[:per_page] : 5
+    per_page = params[:per_page].present? ? params[:per_page] : 8
     page_no  = params[:page_no].present? ? params[:page_no] :2
     results = Sunspot.more_like_this(@content) do
       fields :title      
