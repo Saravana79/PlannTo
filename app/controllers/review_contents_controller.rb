@@ -4,10 +4,15 @@ class ReviewContentsController < ApplicationController
 		@reviewcontent = ReviewContent.new(params['review_content'])
     @reviewcontent.ip_address = request.remote_ip
 		@reviewcontent.user = current_user
+		unless params[:content_create_form_type] == "Popup"
 		item_id = params['item_id']
 		@item = Item.find item_id
 		@reviewcontent.save_with_items!(item_id)
-		@item.add_new_rating @reviewcontent.rating
+		else
+		  @reviewcontent.save_with_items!(params[:review_item_id])
+		  @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
+		end
+		@item.add_new_rating @reviewcontent.rating if @item
 
     respond_to do |format|
       format.js

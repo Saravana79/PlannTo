@@ -213,7 +213,15 @@ def filter
   end
   
   def quick_new
-  @content = ArticleContent.new
+  
+  if params[:category] == "Reviews"
+    @content = ReviewContent.new
+    
+  elsif params[:category] == "Q&A"
+    @content = QuestionContent.new
+  else
+    @content = ArticleContent.new
+  end
   @content.sub_type = params[:category]
  
   @article_content = @content

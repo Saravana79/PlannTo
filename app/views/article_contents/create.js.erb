@@ -3,6 +3,10 @@
   $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article).html_safe %>");
   $("#article_errors").show(300);
 <% else %>
+<%if params[:content_create_form_type] == "Popup"%>
+$("#contentEditView").dialog('destroy');
+$("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
+<%else%>
   <%if @article_create%>
     $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.");
   $('div#subContainerContentCreate #notification').fadeIn('slow');
@@ -35,3 +39,4 @@
   <% end %>
     <%end%>
 <% end %>
+<%end%>

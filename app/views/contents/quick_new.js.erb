@@ -1,8 +1,50 @@
 $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
-
 $("#contentEditView").dialog({
-title: 'Edit <%=@content.type.underscore.humanize%>',
+title: 'New <%=@content.type.underscore.humanize%>',
 height: 500,
 width:600});
 $("#subContainerContentCreate").show();
 $("#article_content_sub_type").val("<%=@content.sub_type%>");
+
+
+<%if @content.is_question_content?%>
+  $("div#contentEditView #question_contentDiv").show();
+<%elsif @content.is_review_content?%>
+  $("div#contentEditView #articleReviewSubContainer").show();
+  $('#contentEditView #review_content_item').val('');
+  settings={
+  close:true, addButton: false,
+  url: "/search/autocomplete_items",
+  editMode: false, multiple: true,
+  has_parent: true,
+  hidden_field: "#contentEditView #review_content_item"
+  };
+
+<%elsif @content.is_article_content?%>
+  <%if @content.url.blank?%>
+    $("div#contentEditView #subContainerContentCreate").show();
+    settings={
+    close:true, addButton: false,
+    url: "/search/autocomplete_items",
+    has_parent:true,
+    editMode: false, multiple: true,
+    hidden_field: "#contentEditView #article_create_item_id"
+    };
+    $.textTagger("#contentEditView #article_create_product","#contentEditView #article_create_product_list",settings);
+    <% @items.each do |item| %>
+      $.addTag("#contentEditView #article_create_product","div#contentEditView ul#article_create_product_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+      $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
+      <%if item.id == @item.try(:id)%>
+        $("#contentEditView ul li#textTaggers<%=@item.id%> a.icon_close_tagging").remove();
+      <%end%>
+    <%end%>
+      setDefaultFieldsArticleCreate("<%=@content.sub_type%>");
+  <%else%>
+    $("div#contentEditView #ShareURLDiv").show();
+    $("div#contentEditView #shareProduct").show();
+    setDefaultFieldsArticleSubmit("<%=@content.sub_type%>");
+  <%end%>
+<%end%>
+
+//to differentiate whether popup or not
+$("#content_create_form_type").val('Popup');

@@ -38,7 +38,7 @@
             var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>";   
             var sort_by = $(this).text();
             var guide = "<%=@guide.try(:id)%>";
-            var items = <%= @item.try(:id) || ""%>
+            var items = "<%= @item.try(:id) || ""%>";
             contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, guide);       
           return false
            }
