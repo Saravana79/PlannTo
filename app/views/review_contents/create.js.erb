@@ -1,8 +1,8 @@
- <%if params[:content_create_form_type] == "Popup"%>
-$("#contentEditView").dialog('destroy');
+<%if params[:content_create_form_type] == "Popup"%>
+$("#contentEditView").dialog('close');
+$(".ui-dialog").css("display", "none"); 
 $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
-<%else%>
- 
+<%else%> 
  $('#new_review_content')[0].reset();
   $('div#articleReviewSubContainer div#notification').fadeIn('slow');
   setTimeout("$('div#articleReviewSubContainer div#notification').fadeOut('slow');", 5000);

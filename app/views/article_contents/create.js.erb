@@ -4,7 +4,8 @@
   $("#article_errors").show(300);
 <% else %>
 <%if params[:content_create_form_type] == "Popup"%>
-$("#contentEditView").dialog('destroy');
+$("#contentEditView").dialog('close');
+$(".ui-dialog").css("display", "none"); 
 $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
 <%else%>
   <%if @article_create%>

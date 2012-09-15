@@ -5,11 +5,11 @@ class QuestionContentsController < ApplicationController
   layout :false
 
 	def create
-    @item = Item.find(params[:question_content][:itemtype_id])
+    #@item = Item.find(params[:question_content][:itemtype_id])
 		@questioncontent = QuestionContent.new params[:question_content]
     @questioncontent.ip_address = request.remote_ip
 		@questioncontent.user = current_user
-		#@item = Item.find params['item_id']
+		@item = Item.find params['item_id']
 		@questioncontent.save_with_items!(params['item_id'])
     
   end

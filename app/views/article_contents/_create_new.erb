@@ -31,7 +31,7 @@
     <%else%>
      <%= hidden_field_tag :detail,@detail%>
     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-    <span class="Popuptitle"><center> <h1>Edit <%=@content.type.underscore.humanize%></h1> </center></span>
+    <span class="Popuptitle"><center> <h1 id="contentTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
     <%if @content.sub_type == 'Photo' %>
         <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></img></div><%end%>
         <br/><br/>
@@ -202,7 +202,7 @@
   
   
   function setDefaultFieldsArticleCreate(category){
-<%if @content.nil?%>
+<%if (@content.nil? || @content.new_record?)%>
       var saveButtonName = "Save " + category
 <%else%>
       var saveButtonName = "Update " + category
@@ -424,7 +424,26 @@
        return valid
     }
  
-  
+  function setButtonName(label){
+    var contentWrite = ""
+    switch(label){
+      case 'Reviews': contentWrite= "Save Review";break;
+      case 'Q&A': contentWrite= "Save Question";break;
+      case 'Tips': contentWrite= "Save Tip";break;
+      case 'Accessories': contentWrite= "Save Accessory";break;
+      case 'Photo': contentWrite= "Save Photo";break;
+      case 'News': contentWrite= "Save News";break;
+      case 'Deals': contentWrite= "Save deal";break;
+      case 'Event': contentWrite= "Save Event";break;
+      case 'HowTo/Guide': contentWrite= "Save HowTo/Guide";break;
+      case 'Book': contentWrite= "Save Book";break;
+      case 'Apps': contentWrite= "Save Apps";break;
+      case 'Travelogue': contentWrite= "Save Travelogue";break;
+      case 'Miles': contentWrite= "Save Mile";break;
+      case 'Video': contentWrite= "Save Video";break;
+    }
+    return contentWrite
+  }
 </script>
 
 </div>

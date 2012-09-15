@@ -1,4 +1,5 @@
 $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
+$("#content_create_form_type").val('Popup');
 $("#contentEditView").dialog({
 title: 'New <%=@content.type.underscore.humanize%>',
 height: 500,
@@ -9,18 +10,23 @@ $("#article_content_sub_type").val("<%=@content.sub_type%>");
 
 <%if @content.is_question_content?%>
   $("div#contentEditView #question_contentDiv").show();
+  $("#questionTitle").text('New <%=@content.type.underscore.humanize%>');
 <%elsif @content.is_review_content?%>
+  $("#reviewTitle").text('New <%=@content.type.underscore.humanize%>');
   $("div#contentEditView #articleReviewSubContainer").show();
+  $("#displayTagBox").show();
   $('#contentEditView #review_content_item').val('');
-  settings={
-  close:true, addButton: false,
-  url: "/search/autocomplete_items",
-  editMode: false, multiple: true,
-  has_parent: true,
-  hidden_field: "#contentEditView #review_content_item"
-  };
-
-<%elsif @content.is_article_content?%>
+   
+settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        has_parent: false,
+        hidden_field: "review_content_item"
+      };
+      $.textTagger("review_product_item","review_product_item_list",settings);
+<%elsif @content.is_article_content?%>	
+$("#contentTitle").text('New <%=@content.type.underscore.humanize%>');
   <%if @content.url.blank?%>
     $("div#contentEditView #subContainerContentCreate").show();
     settings={

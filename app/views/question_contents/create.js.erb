@@ -1,5 +1,12 @@
+<%if params[:content_create_form_type] == "Popup"%>
+$("#contentEditView").dialog('close');
+$(".ui-dialog").css("display", "none"); 
+<%else%>
+
 $('#new_question_content')[0].reset();
 $('div#question_contentDiv div#notification').fadeIn('slow');
 setTimeout("$('div#question_contentDiv div#notification').fadeOut('slow');", 5000);
-$("#newContentList").append('<%= escape_javascript(render_content_type(@questioncontent)) %>');
 showDefaultProductTag("question_product_item_list", "question_content_item");
+<%end%>
+
+$("#newContentList").append('<%= escape_javascript(render_content_type(@questioncontent)) %>');

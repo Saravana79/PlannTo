@@ -217,7 +217,7 @@ def filter
   if params[:category] == "Reviews"
     @content = ReviewContent.new
     
-  elsif params[:category] == "Q&A"
+  elsif params[:category] == "Q"
     @content = QuestionContent.new
   else
     @content = ArticleContent.new
