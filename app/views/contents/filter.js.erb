@@ -6,9 +6,7 @@ $("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
 <%else%>
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents') %>');
- <%end%>
-
- element.remove();
-
+<%end%>
+element.remove();
 //$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
 

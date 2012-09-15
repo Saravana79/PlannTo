@@ -15,20 +15,20 @@
     <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
       <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
+   
     </div>
        <div style="clear:both;"></div>
     
-     <div id="photo_box" style="padding-left:100px;">
-     </div>
+      <%= render "default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "owner" %>
    
       
-        <div class="search_block" style="float:right;padding:100px;">
+        <div class="search_block" style="float:right;padding:70px;">
          <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
        
      
-       <p style="margin:10px 0px 0px 70px;font-size:15px;color:gray;">or skip</p>
+       <p style="margin:10px 0px 0px 70px;font-size:15px;color:gray;">or <a href="#">skip</a></p>
       
        <div>
          <%= render "shared/ajax_loader" %>
@@ -37,5 +37,10 @@
  <%end%>
 <%= render "javascript" %>
 </div>
+<script>
+ $("p a").click(function(e){
+   $("#wizard").html("<%= escape_javascript(render  'newuser_wizards/wizard_step2') %> ");
+ });
+</script>
 
  

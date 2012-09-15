@@ -5,12 +5,10 @@
 <% @contents.each do |content| %>
 	 <%= render_content_type(content) %>
 	  <% end %>
-	  
-<%# if @contents.current_page < @contents.total_pages %>
+ <%# if @contents.current_page < @contents.total_pages %>
 <%# params ||={}  %>
 <%# params["page"] = @contents.current_page + 1 %>
 <!-- not working when ajax call is made during filtering -->
-
 <%#= link_to "Next Page", feed_contents_path(params), :id => "content_next", :remote => true, :style => "display:none" %>
 <%#= link_to "Next Page", {:controller => "contents", :action => "filter", :page => @contents.current_page + 1}, :id => "content_next", :remote => true, :style => "display:none" %>
 <%#= link_to "More...", {:method => "post"}, "data-disable-with" => "Loading...", :id => "content_next", :remote => true%>

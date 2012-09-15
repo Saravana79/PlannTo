@@ -7,6 +7,7 @@ class NewuserWizardsController < ApplicationController
   
   def create
     @type = params[:wizard][:type]
+    @item_id = params[:wizard][:item_id]
     Follow.wizard_save(params[:wizard][:item_id],@type,current_user)
   end 
   

@@ -18,13 +18,12 @@
     </div>
     </div>
    <div style="clear:both;"></div>
-     <div id="photo_box" style="padding-left:100px;">
-     </div>
+    <%= render "default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "buyer" %>
-    <div class="search_block" style="float:right;padding:100px;">
-         <%= f.submit 'Save',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-       <p style="margin:10px 0px 0px 70px;font-size:15px;color:gray;">or skip</p>
+    <div class="search_block" style="float:right;padding:70px;">
+         <%= f.submit 'Complete',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
+      
       <div>
          <%= render "shared/ajax_loader" %>
       </div>
@@ -32,3 +31,4 @@
  <%end%>
 <%= render "javascript" %>
 </div>
+
