@@ -17,13 +17,12 @@
     </div>
     </div>
        <div style="clear:both;"></div>
-    <div id="photo_box" style="padding-left:100px;">
-     </div>
+          <%= render "default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "follower" %>
-   <div class="search_block" style="float:right;padding:100px;">
+   <div class="search_block" style="float:right;padding:70px;">
          <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-       <p style="margin:10px 0px 0px 70px;font-size:15px;color:gray;">or skip</p>
+       <p style="margin:10px 0px 0px 70px;font-size:15px;color:gray;">or <a href="#">skip</a></p>
       
        <div>
          <%= render "shared/ajax_loader" %>
@@ -32,3 +31,8 @@
  <%end%>
 <%= render "javascript" %>
 </div>
+<script>
+ $("p a").click(function(e){
+   $("#wizard").html("<%= escape_javascript(render  'newuser_wizards/wizard_step3') %> ");
+ });
+</script>
