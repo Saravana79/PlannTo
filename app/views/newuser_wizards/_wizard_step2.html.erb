@@ -9,10 +9,12 @@
 </div>
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 <div class="text_box">
-<p>Select Topics.It will add to your profile page.</p>
+<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you interested in Photography or Cycling? If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a></div>
 </div>
 <div class="search_block">
-    <div class="title_header" style="padding:0px 500px 0px 0px;"><input style="margin-top:5px;width:360px; height:30px;float:left;font-size:20px;" placeholder="Start Typing for Topics.." type="text" value="" id="product"/></div>
+    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
+        <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a topic." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
+    </div>
     </div>
        <div style="clear:both;"></div>
     <div id="photo_box" style="padding-left:100px;">

@@ -1,4 +1,4 @@
- <div class="step_main_page">
+<div class="step_main_page">
 <div class="main_step">
 <ul>
 <li class="selected">Step 1</li>
@@ -9,10 +9,12 @@
 </div>
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 <div class="text_box">
-<p>Select owned products.It will add to your profile page.</p>
+<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Thanks for registering with PlannTo.com. Add the products that you own in the following list, this will help us to customize our application based on your profile.</div>
 </div>
 <div class="search_block">
-    <div class="title_header" style="padding:0px 500px 0px 0px;"><input style="margin-top:5px;width:360px; height:30px;float:left;font-size:20px;" placeholder="Start Typing for Products.." type="text" value="" id="product"/></div>
+    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
+      <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
+    </div>
     </div>
        <div style="clear:both;"></div>
     

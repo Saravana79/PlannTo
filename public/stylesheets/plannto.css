@@ -4005,7 +4005,7 @@ a.bookmark_button:hover span { background-position:right bottom;}
  { 
   text-decoration: underline;
  }      
- .step_main_page{width:754px; height:auto; margin:auto; padding-top:100px; padding-bottom:50px;}
+ .step_main_page{width:754px; height:auto; margin:auto; padding-top:15px; padding-bottom:50px;}
 
 .main_step{width:491px; height:auto; margin:auto; clear:both; background:url(../images/step_bg.png) no-repeat center center;}
 
@@ -4017,7 +4017,7 @@ a.bookmark_button:hover span { background-position:right bottom;}
 							 background:url(../images/selcted_step.png) no-repeat left top;}
 
 .text_box{width:734px; height:auto; border:1px solid #ededb3; border-radius:5px; background:#fefeec; float:left; margin: 23px 0 0 0;
-		 padding:10px;}
+		 padding:5px;}
 .text_box p{font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#3e3e3e; padding: 5px 13px 5px 15px; margin:0;}
 
 
@@ -4053,7 +4053,12 @@ a.bookmark_button:hover span { background-position:right bottom;}
 
 
 
-.search_block { width:449px; height:78px; margin:auto; padding:30px 0 0 0; clear:both;}
+.search_block { width:449px; margin:auto; padding:15px 0 0 0; clear:both;}
 
  
+.wizardbutton 
+{ width:24px; height:26px;background:url(../images/search_but.png) no-repeat left top;
+padding:0; margin:0; border:none; cursor:pointer;}
+
+.wizardbutton:hover { background-position:left bottom;}
          
