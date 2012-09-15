@@ -13,10 +13,6 @@
     = stylesheet_link_tag '/stylesheets/plannto.css'
     = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" 
     = javascript_include_tag 'application'
-
-    
-    %script{:src => "/javascripts/poshytip-1.1/src/jquery.poshytip.js", :type => "text/javascript"}
-    
   %body
     = render 'shared/header_links'
     #dialog-form{:style => "display:none;"}
