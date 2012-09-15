@@ -1,0 +1,8 @@
+$("#product_<%= @item.id %>").remove();
+var string = $("#wizard_item_id").val();
+var array = string.split(',');
+i = jQuery.inArray('<%= @item.id %>', array)
+array.splice(i, 1);
+$("#wizard_item_id").val(array);
+$("#spinner").hide();
+

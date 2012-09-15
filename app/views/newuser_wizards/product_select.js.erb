@@ -1,0 +1,4 @@
+$("#photo_box").append("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>");
+var item_ids = $("#wizard_item_id").val();
+$("#wizard_item_id").val(item_ids + "<%= escape_javascript(@item.id.to_s + ",")%>");
+$("#product").val("");

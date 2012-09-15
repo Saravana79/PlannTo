@@ -80,24 +80,17 @@ border-image: initial;
 .jcarousel-skin-pika .jcarousel-clip-horizontal {height: 90px; width: 485px;}
 .jcarousel-skin-pika .jcarousel-item-horizontal { margin-right: 10px;}
 
-/* line 2, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 body {
   margin: 0;
-  background: none;
-}
+  background: none; }
 
-/* line 3, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 html, body {
-  height: 100%;
-}
+  height: 100%; }
 
-/* line 4, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .container {
   width: 980px;
-  margin: 0 auto;
-}
+  margin: 0 auto; }
 
-/* line 5, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 iframe {
   color: #666;
   width: 100%;
@@ -105,50 +98,35 @@ iframe {
   z-index: 1000;
   -webkit-box-sizing: border-box;
   padding: 25px 0px;
-  border: none;
-}
+  border: none; }
 
-/* line 6, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 #topbar {
   height: 50px;
   width: 100%;
   border-bottom: 1px solid #666;
   background: #92d1e1;
   position: fixed;
-  top: 0;
-}
+  top: 0; }
 
-/* line 7, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 #content_body {
   margin-top: 50px;
-  height: 100%;
-}
+  height: 100%; }
 
-/* line 8, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .padding-left {
-  margin-left: 50px;
-}
+  margin-left: 50px; }
 
-/* line 9, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .padding-top {
-  margin-top: 15px;
-}
+  margin-top: 15px; }
 
-/* line 11, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .clearfix {
-  *zoom: 1;
-}
+  *zoom: 1; }
 
-/* line 12, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .clearfix:before, .clearfix:after {
   display: table;
-  content: "";
-}
+  content: ""; }
 
-/* line 13, /home/dell/Desktop/PlannTo/app/assets/stylesheets/external_contents.css.scss */
 .clearfix:after {
-  clear: both;
-}
+  clear: both; }
 /*
  * jQuery UI CSS Framework 1.8.16
  *

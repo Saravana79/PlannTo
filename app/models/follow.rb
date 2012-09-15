@@ -38,7 +38,7 @@ class Follow < ActiveRecord::Base
   end
   
   def self.wizard_save(item_ids,type,user)
-     item_ids.split(',').each do |id|
+     item_ids.split(',').uniq.each do |id|
       item = Item.find(id)
       follow = user.follows.new
       follow.followable_id = item.id

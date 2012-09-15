@@ -1,0 +1,18 @@
+ <div class="product" id="product_<%= @item.id %>">
+   <div class="imgprofilediv">
+        <div class="imgpicbtnspan">
+          <div style="width:160px;height:120px;display:block;">
+          <%= link_to image_tag(@item.image_url, height: "120", width: "160"), link_url(@item)%>
+       
+         </div>
+        
+         <%= link_to image_tag("/images/icon_close.png") , product_delete_newuser_wizard_path(@item.id) ,:class=> "closeimg",:remote => true%>
+      
+         
+        </div>
+        <span class="imgtextspan">
+            <%= link_to @item.name, link_url(@item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
+        </span>
+      </div>
+   
+    </div>

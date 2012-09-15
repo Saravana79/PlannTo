@@ -8,7 +8,14 @@ PlanNto::Application.routes.draw do
   get "/contact_us" => "contact_us#new"
   match "/about_us",:to => "home#about_us"
   resources :contact_us
-  resources :newuser_wizards
+  resources :newuser_wizards do
+  collection do
+    get :product_select
+  end
+   member do
+    get :product_delete
+   end 
+  end 
   match "/newuser_wizard", :to => "newuser_wizards#new"
   devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
   devise_scope :user do
