@@ -1,3 +1,4 @@
+<% cache ["related-contents-#{@content.id}", Time.new.to_time.to_i] do %>
 <% unless @related_contents.empty? %>
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
 	<tr>
@@ -28,4 +29,5 @@
    
 </table>
 
+<%end%>
 <%end%>
