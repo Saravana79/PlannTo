@@ -105,7 +105,7 @@ module ContentsHelper
     when "How To/Guides" then "Add a How To/Guide"
     when "Book" then "Add a Book"
     when "Apps" then "Add an Apps"
-    else ""
+    else name
     end
     return label
   end

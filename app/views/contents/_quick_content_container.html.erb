@@ -1,16 +1,19 @@
-<h3>Quick content create</h3>
+<!--<h3>Quick content create</h3>-->
+<br/>
 <%count = (@article_categories.size - 1)%>
 <% @article_categories.each_with_index do |article_category, index| %>
-	<%if index < 3%>
-	 <a href="#" class="quickCreate" data-content="<%=article_category[0]%>"><%=article_category[0]%></a>        
+	<%if index < 4%>
+   <span class='quick_config_btns' >
+	 <a href="#" class="quick_config_btns_icon" data-content="<%=article_category[0]%>"><%=content_write_tab_label(article_category[0])%></a>        
+  </span>
 	<%end%>
-     <%if index == 3%>
-<span class="Usrdropdown">
-         <span class="Usernamedp"><a href="#">Others</a>
-           <div class="Useraccountinfo">
+     <%if index == 4%>
+<span class="Usrdropdown1">
+         <span class="Usernamedp1"><a href="#">Others</a><a class="downarrow"></a>
+           <div class="Useraccountinfo1">
            	<%end%>
-           	<%if index >= 3%>
-             <a data-content="<%=article_category[0]%>" class="quickCreate"><%=article_category[0]%></a>
+           	<%if index >= 4%>
+             <a data-content="<%=article_category[0]%>" class="quickCreate"><%=content_write_tab_label(article_category[0])%></a>
             <%end%>
             
             <%if index == count %>
@@ -20,12 +23,12 @@
     </span> 
     <%end%>     
     <%end%>
-    
+    <br/>
     <script type="text/javascript">
     	
     	$(function(){
 
-  $('a.quickCreate').live("click",function(){
+  $('a.quick_config_btns_icon').live("click",function(){
 
    // $(this).parent().toggleClass('selected');
     var category = $(this).data('content');
@@ -37,5 +40,17 @@
     return false
 
   });
+    $('a.quickCreate').live("click",function(){
+
+   // $(this).parent().toggleClass('selected');
+    var category = $(this).data('content');
+   // $.ajaxSetup({
+   //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+   // });
+   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  });
+    //$.get('/contents/quick_new',{'category' : category}, "script");
+    return false
+
   });
-    </script>>
+  });
+    </script>
