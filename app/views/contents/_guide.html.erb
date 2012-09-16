@@ -3,9 +3,11 @@
 <ul class="navdrop" data-content=<%= content.id %>>
 	<li class="item1"><a href="#"><span>Guide</span></a>
 		<ul >
-			<% content_list = content.guides.map{|c| c.id } %>
+			<%# content_list = content.guides.map{|c| c.id } %>
+			<%guide_ids = content.content_guide_info_ids || ""%>			
+			<% content_list = guide_ids.split(',')%>
 			<% Guide.all.each do |g| %>
-				<li <%= "class='selected'" if content_list.include? g.id %> ><a data-guide=<%= g.id %> ><%= g.name %></a></li>
+				<li <%= "class='selected'" if content_list.include? g.id.to_s %> ><a data-guide=<%= g.id %> ><%= g.name %></a></li>
 			<% end %>
 		</ul>
 	</li>

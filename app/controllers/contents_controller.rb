@@ -281,9 +281,12 @@ def filter
 
     if @content.guides.include? guide
       @content.guides.delete guide
+      
     else
       @content.guides.push guide
     end
+    guide_ids = @content.guides.collect(&:id).join(',')
+    @content.update_attribute(:content_guide_info_ids, "#{guide_ids}")
 
     respond_to do |format|
       format.js
