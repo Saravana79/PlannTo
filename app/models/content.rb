@@ -32,6 +32,7 @@ class Content < ActiveRecord::Base
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true
+    text :title , :as => :name_ac
     text :description
     string :sub_type
     integer :total_votes
