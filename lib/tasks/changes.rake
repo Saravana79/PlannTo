@@ -33,7 +33,11 @@ task :update_created_by_for_contents, :start_id, :end_id, :needs => :environment
   contents = Content.where("id BETWEEN ? AND ?", args[:start_id], args[:end_id])
   user_ids = configatron.content_creator_user_ids.split(",")
   contents.each do |content|
-    content.update_attribute(:created_by, user_ids.shuffle.first)
+  user_id = user_ids.shuffle.first
+    content.update_attribute(:created_by, user_id)
+    user = User.find user_id
+     Point.add_point_system(user, content, Point::PointReason::CONTENT_SHARE) 
+  
   end
 end
 
