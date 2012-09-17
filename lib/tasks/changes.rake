@@ -1,5 +1,14 @@
 namespace :plannto do
 
+  desc 'update guides for contents in contents table'
+  task :update_guides_to_contents => :environment do
+  contents = Content.all
+  contents.each do |content|
+  guide_ids = content.guides.collect(&:id).join(',')
+    content.update_attribute(:content_guide_info_ids, "#{guide_ids}")
+    end
+  end
+
   desc 'set created by for contents'
   #sample task  rake plannto:update_votes_for_contents[10,13]
 task :update_votes_for_contents, :start_id, :end_id, :needs => :environment do |t, args|
