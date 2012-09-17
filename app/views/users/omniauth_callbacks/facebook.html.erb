@@ -1,0 +1,9 @@
+<script>
+      // to close the facebook popup on callback 
+      <% if @user_object.blank? %>
+        window.location.href = "/newuser_wizard"
+      <% else %>
+        window.location.href = "/my_feeds"
+      <% end %>
+ </script>     
+       
