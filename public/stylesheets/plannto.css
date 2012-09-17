@@ -3973,6 +3973,17 @@ a.bookmark_button span { display:block; float:left; background:url(../images/add
 
 a.bookmark_button:hover { background-position:left bottom;}
 a.bookmark_button:hover span { background-position:right bottom;}
+.plannto_button {
+    background: url(../images/add_leftcorner.png) no-repeat scroll left top transparent;
+    float: left; padding: 0 0 0 13px; text-decoration:none;}
+
+.plannto_button span {
+    background: url(../images/add_right_corner.png) no-repeat  right top transparent; text-decoration: none;
+    color: #2a2b2b; display: block; font-family: Arial,Helvetica,sans-serif; font-size: 12px; padding: 0 14px 0 0; height:20px; line-height:20px;}
+    
+.plannto_button:hover { background-position:left bottom;}
+.plannto_button:hover span { background-position:right bottom;}
+
 .rekatedlinks {text-decoration:none;color: #19558D;font: bold 12px Tahoma,Arial, Helvetica, sans-serif;}
 .rekatedlinks:hover {text-decoration:underline;};
 
