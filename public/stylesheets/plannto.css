@@ -4092,7 +4092,7 @@ span.Usrdropdown1 img { float:left; padding:1px; background:#323232; border:0px 
 span.Usrdropdown1 span.Usernamedp1 { 
  padding:7px 15px 0px 10px; height:22px; font: bold 11px/12px Tahoma,Arial, Helvetica, sans-serif; display:block; float:left;
 color:#323232; background: url(../images/btn_bg_active.png) repeat-x; cursor:pointer;
-position:relative; z-index:90;border: solid 1px #bababa;}
+position:relative; border: solid 1px #bababa;}
 .downarrow {background:url(../images/user_dropdownarrow.png) no-repeat 95% 12px;height:24px;width:10px;}
 span.Usrdropdown1 span.Usernamedp1 a { color:#323232; text-decoration:none;}
 

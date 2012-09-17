@@ -212,7 +212,7 @@ Devise.setup do |config|
   end
   
   config.omniauth :facebook, client_id, client_secret, :display => 'popup', 
-                  :scope => "email,read_stream,read_friendlists,offline_access,publish_stream"
+                  :scope => "email,read_friendlists"
                   
   config.navigational_formats = [:"*/*", "*/*", :html, :js]
   # config.warden do |manager|
