@@ -10,9 +10,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       user.follow_facebook_friends #TODO follow fb friends. Move it to background job, in case of performance issue in future
     else
       user.update_attribute('token', auth['credentials']['token'])
+  
     end
     
     sign_in user
-    render :layout => false
+    if user.blank?
+      redirect_to "/newuser_wizard"
+      return nil
+    else  
+     redirect_to my_feeds_path
+     return nil?
+    end 
   end
 end
