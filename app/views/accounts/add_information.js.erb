@@ -1,0 +1,10 @@
+$("#content_new").html("<%= escape_javascript(render 'shared/feilds_data_for_answer', {:item => @item}) %>");
+
+$("#content_new").dialog({
+ height: 500,
+width:600,
+      modal: true
+   
+  });
+$(".Close_dialog").show();
+$(".ui-dialog-titlebar").hide();

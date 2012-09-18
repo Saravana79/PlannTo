@@ -62,6 +62,13 @@ class AccountsController < ApplicationController
     @item = Item.find(params[:id])
   end
   
+  def add_photo
+    @item = Item.find(params[:id])
+  end
+  
+  def add_information
+    @item = Item.find(params[:id])
+  end
   def buying_plans
     @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
   end

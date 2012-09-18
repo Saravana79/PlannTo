@@ -1,0 +1,10 @@
+$("#content_new").html("<%= escape_javascript(render 'article_contents/create_new', {:item => @item}) %>");
+   $("#subContainerContentCreate").show();
+   $("#photo").show();
+   $("#add_photo").show();
+$("#content_new").dialog({
+height: 500,
+width:600});
+$(".Close_dialog").show();
+$(".ui-dialog-titlebar").hide();
+
