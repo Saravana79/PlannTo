@@ -22,7 +22,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       if @item.nil?
         redirect_to  "/newuser_wizard", notice: "Successfully registered"
       else
-        redirect_to @item.get_url || "/newuser_wizard", notice: "Successfully registered"
+        redirect_to @item.get_url ||  "/newuser_wizard", notice: "Successfully registered"
       end 
   
     else
@@ -31,5 +31,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
   
-  
+  def update
+  if resource.update_without_current_password(params[resource_name])
+    set_flash_message :notice, :updated
+    sign_in resource_name, resource, :bypass => true
+    redirect_to "/#{resource.username}"
+  else
+    clean_up_passwords(resource)
+    redirect_to "/#{resource.username}"
+  end
+end
 end

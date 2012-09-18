@@ -4,6 +4,8 @@ $("#contentEditView").dialog({
 title: 'New <%=@content.type.underscore.humanize%>',
 height: 500,
 width:600});
+$(".Close_dialog").show();
+$(".ui-dialog-titlebar").hide();
 $("#subContainerContentCreate").show();
 $("#article_content_sub_type").val("<%=@content.sub_type%>");
 

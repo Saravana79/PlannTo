@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
     Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, 
-                :avatar, :username, :uid, :token
+                :avatar, :username, :uid, :token,:description
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
@@ -216,6 +216,19 @@ class User < ActiveRecord::Base
     end
   end
   
+  def update_without_current_password(params={})
+    params.delete(:current_password) 
+    update_attributes(params) 
+  end
+
+def has_no_password?
+  self.encrypted_password.blank?
+end
+
+  def self.profile_owner?(user,current_user)
+    return true if user.id == current_user.id
+    return false
+  end
   def self.create_from_fb_callback(auth)
     user = User.new(email:auth.info.email, name:auth.extra.raw_info.name, password:Devise.friendly_token[0,20], 
                       uid:auth.uid, token:auth.credentials.token)                 

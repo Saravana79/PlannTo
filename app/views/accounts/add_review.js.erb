@@ -1,0 +1,10 @@
+$("#contentEditView").html("<%= escape_javascript(render 'reviews/review_subcontainer', {:item => @item}) %>");
+   $("#articleReviewSubContainer").show();
+   $("#review_new").show();
+$("#content_create_form_type").val('Popup');
+$("#contentEditView").dialog({
+height: 500,
+width:600});
+$(".Close_dialog").show();
+$(".ui-dialog-titlebar").hide();
+

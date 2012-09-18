@@ -58,6 +58,10 @@ class AccountsController < ApplicationController
     end
   end
 
+  def add_review
+    @item = Item.find(params[:id])
+  end
+  
   def buying_plans
     @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
   end

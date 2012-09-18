@@ -1,3 +1,4 @@
+<%if User.profile_owner?(@user,current_user) %>
 <div class="ui-widget Blockheading">
   <div class="Headingtext">
   Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
@@ -22,7 +23,7 @@
   </div>
   <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
 </div>
- 
+ <%end%>
  
 <div class="Searchlisting" style="clear:both;">
   <% items.each do |follow| %>
@@ -53,7 +54,7 @@
                       <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
                       <% if @user == current_user %>
                         <ul class="dropdown-menu">
-                          <li><a href="#" id='write_review'><i class="icon-pencil"></i> Add a Review</a></li>
+                          <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to  "Add a Review", add_review_account_path(item),:remote => true %></a></li>
                           <li><a href="#" id='add_info'><i class="icon-trash"></i> Add additional information</a></li>
                           <li><a href="#"><i class="icon-ban-circle"></i> Add a Tip</a></li>
                           <li class="divider"></li>
@@ -66,13 +67,12 @@
               </tr>
             </table>
             
-            <div id='write_review_form' style="display:none;">
-              <%@item = item %>
-              <%= render  'reviews/review_subcontainer', :item => @item%>
+            <div id='contentEditView'>
+     
             </div>
             
             <div id='add_item_info' style="display:none;">
-               <%= render 'shared/feilds_data_for_answer', {:item => @item} %>
+               <%= render 'shared/feilds_data_for_answer', {:item => item} %>
             </div>   
           </div>    
       </div>
