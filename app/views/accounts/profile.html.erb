@@ -32,20 +32,14 @@
 <div id="maincontainer" class="maincontainerCss">
 
   <!-- Left Nav - start -->
-  <div class="leftcolumnsmall">
+  <div class="leftcolumnsmall" style="display:none;">
 
-    <span class="profile_photo">
-      <%= image_tag(@user.get_photo(:medium)) %>
-    </span>
-    <br/>
-
-    <h1><%= @user.name %></h1>
-    <br/>
     <ul class="menu_profile">
       <li><a href="#" class="icon_profile menu_profile_active">Profile</a></li>
       <li id="profile_preference_buying_plans"><a href="" class="icon_prefernce">Preference / Buying Plans</a></li>
       <li><a href="#" class="icon_points">Points</a></li>
       <li><a href="#" class="icon_awards">Awards</a></li>
+
       <li><%= link_to 'Followers', followers_account_path(@user), remote: true, class: "icon_followers" %></li>
       <% unless @user == current_user %>
         <li>
@@ -90,18 +84,40 @@
   <!-- Left Nav - End -->
 
   <!-- Right - start -->
-  <div class="rightcolumnbig"  id="profileInfo">
-
-    <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
-      
+  <div class="leftcolumnbig"  id="profileInfo">
+    <div>
+     <span style="float:left;">
+      <h1><%= @user.name %></h1>
+    </span>
+     <span style="float:right;">
+      <% unless @user == current_user %>
+       <% unless current_user.follow_by_type(@user, 'Plannto')  %>
+             <%= link_to 'Follow This User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'icon_followers menu_profile1'%>
+           <%else-%>
+             <%= link_to 'Unfollow This User', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'icon_followers menu_profile1' %> 
+       <%end%>  
+      <%end%>  
+    </span>
+    </div>
+    <br/>
+    <div style="clear:both;padding-top:10px;">
+    <span style="float:left;">
+      <%= image_tag(@user.get_photo(:medium)) %> 
+    </span>
+    <span sytle="float:right;">
       <div class="points">
         <span class="indu_span"><a class="values"><%= @user.total_points  %></a><a class="text">Points</a></span>
         <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
         <span class="indu_span"><a class="values">3</a><a class="text">Following</a></span>
         <span class="indu_span"><a class="values">12</a><a class="text">Reviews </a></span>
-        <span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>
+        <!--<span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>-->
 
       </div>
+    </span>
+   </div>
+    <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
+      
+      
   </div>
   <br/>
   <br/>
