@@ -16,7 +16,7 @@ development:
   popular_mobile_topics: "3204,3202,3203,4017"
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
-  content_creator_user_ids: "1,7,8,19,27,3"
+  content_creator_user_ids: "1,7,8"
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -52,6 +52,6 @@ production:
   popular_mobile_topics: "3204,3202,3203,4017"
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
-  content_creator_user_ids: "1,7,8,19,27,3"
+  content_creator_user_ids: "8,2,3,7,19"
   
  
