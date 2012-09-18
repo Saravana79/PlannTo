@@ -68,6 +68,8 @@ resources :accounts do
       put :change_password
       get :followers
       get :add_review
+      get :add_information
+      get :add_photo
     end
     collection do
       get :profile

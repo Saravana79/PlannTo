@@ -19,6 +19,10 @@
     <%= f.hidden_field :sub_type%>
   <div id="article_errors" style="line-height:20px;color: red;"></div>
   <div style="padding:5px 5px 0px 0px;text-align:center">
+  <div id="add_photo">
+    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+    <span class="Popuptitle"><center> <h1 id="contentTitle">Add a Photo</h1> </center></span>
+    </div>
     <%unless @content %>
     <div style="display:none;" id="photo">
    
@@ -158,6 +162,7 @@
   $(".Qatab").click(function(){
           $('#photo').hide();
    });
+   <%unless @article_categories.nil? %>
     <%@article_categories.each_with_index do |article_category, index|%>
         
          $("#content<%= article_category[0]%>").click(function(){
@@ -173,7 +178,7 @@
           }
        });  
      <%end%>    
-   
+   <%end%>
    
   function showDefaultProductTag(id, hidden_text_field_id){
     var itemId = "<%= @item.try(:id) %>";
