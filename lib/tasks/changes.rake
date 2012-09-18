@@ -10,19 +10,24 @@ namespace :plannto do
   end
 
   desc 'set created by for contents'
-  #sample task  rake plannto:update_votes_for_contents[10,13]
-task :update_votes_for_contents, :start_id, :end_id, :needs => :environment do |t, args|
+  #sample task  rake plannto:update_votes_for_contents[10,13,'Reviews', 5]
+task :update_votes_for_contents, :start_id, :end_id, :sub_type, :votes, :needs => :environment do |t, args|
   
   contents = Content.where("id BETWEEN ? AND ?", args[:start_id], args[:end_id])
   user_ids = configatron.content_creator_user_ids.split(",")
   contents.each do |content|
-    if content.votes.size == 0
+  puts args[:sub_type]
+  puts content.sub_type
+    if content.sub_type == args[:sub_type]
+    #if content.votes.size == 0
     user_ids.each do |user_id|
     voter = User.find(user_id)      
       unless voter.voted_on? content       
         voter.vote content,:direction => "up"
       end
       end
+      content.update_attribute(:total_votes, args[:votes])
+     # end
       end
   end
 end
@@ -36,7 +41,15 @@ task :update_created_by_for_contents, :start_id, :end_id, :needs => :environment
   user_id = user_ids.shuffle.first
     content.update_attribute(:created_by, user_id)
     user = User.find user_id
-     Point.add_point_system(user, content, Point::PointReason::CONTENT_SHARE) 
+    point = Point.find_by_object_id(content.id)  
+    if point.nil?
+     points = Point.get_points(content, Point::PointReason::CONTENT_SHARE)
+      Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(content.class.name), :object_id => content.id, :reason => Point::PointReason::CONTENT_SHARE, :points => points)
+    else
+       point.update_attribute(:user_id, user.id)
+    end    
+     
+     #Point.add_point_system(user, content, Point::PointReason::CONTENT_SHARE) 
   
   end
 end
