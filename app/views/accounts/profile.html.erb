@@ -106,10 +106,10 @@
     <br/>
     <div style="clear:both;padding-top:10px;">
     <span id="description" style="float:left;width:380px;">
-    <%if @user.description.blank?%>
-      No Description
+    <%if @user.description.blank? and User.profile_owner?(@user,current_user) %>
+      Add a short bio about yourself.
      <%end%> 
-      <br /> <%= @user.description %>
+      <%= @user.description %>
       <%if User.profile_owner?(@user,current_user) %>
         <%= link_to "Edit","#",:onclick=>'$("#description_form").toggle();' %>
       <%end%>  
@@ -139,7 +139,7 @@
   </div>
   <br/>
   <br/>
-  <div style="clear:both;margin-top:100px;">
+  <div style="clear:both;margin-top:110px;">
         <ul id="Newtabs">
           <% ['Products', 'Apps', 'Accessories'].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
