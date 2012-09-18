@@ -67,8 +67,8 @@ module ContentsHelper
   end
 
   def time_ago_format(content)
-    return "0 minutes" if content.try(:updated_at).nil?
-    return time_ago_in_words(content.updated_at)
+    return "0 minutes" if content.try(:created_at).nil?
+    return time_ago_in_words(content.created_at)
   end
 
   def get_content_container_class(article_category)
