@@ -1,5 +1,12 @@
-<div id ="popup_question_answer" style="display: none;">
+<div id ="popup_question_answer">
 <%= form_tag(field_values_path(:item_id => item.id), :remote => true ) do  %>
+ 
+    <div class="Close_dialog" style="display:none;width:43px; 
+overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+
+ <span class="Popuptitle"><center> <h1 id="reviewTitle">Additional Information</h1> </center></span>
+
   <%= render "shared/question_answer_fields", :item => item %>
       <% end %>
 </div>

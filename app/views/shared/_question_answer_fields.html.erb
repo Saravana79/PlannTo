@@ -1,5 +1,5 @@
 <% fields = Field.find_all_by_itemtype_id(item.itemtype_id) %>
-
+<%unless fields.empty? %>
 <% fields.each do |fn| %>
         <div>
           <%= fn.name %>
@@ -9,5 +9,6 @@
 
 <% end %>
 
-<%=  submit_tag "Submit" %>
-
+ <div style="padding:0px 5px 5px 5px; float:left; margin-right:800px; margin-top:20px ">  <%= submit_tag 'Save', :class => 'btn_submitanswer',:id => "publishanswer" %>
+    </div>
+<%end%>

@@ -19,9 +19,9 @@
     <%= f.hidden_field :sub_type%>
   <div id="article_errors" style="line-height:20px;color: red;"></div>
   <div style="padding:5px 5px 0px 0px;text-align:center">
-  <div id="add_photo">
+  <div id="add_photo" style="display:none;">
     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-    <span class="Popuptitle"><center> <h1 id="contentTitle">Add a Photo</h1> </center></span>
+    <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
     <%unless @content %>
     <div style="display:none;" id="photo">

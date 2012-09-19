@@ -106,7 +106,7 @@
 
 <div class="rightcolumnsmall">
 <br/>
-<%= render "shared/quick_links", :search_type => "#{request.path}"%>
+<%= render "shared/quick_links", :search_type => @item.get_base_itemtype().pluralize %>
 <br/>
 <div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
   <%= render  "shared/share_buttons",:caption_text => 'Check out ' + @item.name +  

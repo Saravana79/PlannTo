@@ -62,6 +62,11 @@ class Item < ActiveRecord::Base
     end
     return itemtype_id
   end
+  def get_base_itemtype
+    itemtype_id = self.get_base_itemtypeid
+    itemtype1 = Itemtype.find_by_id(itemtype_id).itemtype
+    return itemtype1
+  end
 
   def get_price_info(item_type)   
     price = "0"; 
