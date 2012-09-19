@@ -87,6 +87,18 @@ def filter
     end
     @contents = search_list.results
   end
+  
+  def search_autocomplete_list
+    @results = Sunspot.search(Content) do
+      keywords params[:term], :fields => :title
+      with :sub_type, 'Apps'
+    end
+    results = @results.results.collect{|item|
+
+      {:id => item.id, :value => "#{item.title}", :imgsrc =>"", :type => item.sub_type, :url =>  "" }
+    }
+    render :json => results
+  end
 
   def feeds
     if params[:item_type_id].is_a?  Array

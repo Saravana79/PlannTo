@@ -110,6 +110,7 @@ resources :accounts do
     get :feed
     get :feeds
     post :search_contents
+    get :search_autocomplete_list
     get :search_related_contents
     get :quick_new
   end
