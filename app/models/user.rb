@@ -57,6 +57,7 @@ class User < ActiveRecord::Base
   
   scope :friends, lambda {|user| join_follows.followable_type('User').where("follows.follower_id = #{user.id}")}
   
+ 
   USER_POINTS = {:new_review => {:points => 2,:self_update => true},
     :new_question => {:points => 1,:self_update => true},
     :new_answer => {:points => 1,:self_update => true}
@@ -221,10 +222,17 @@ class User < ActiveRecord::Base
     update_attributes(params) 
   end
 
-def has_no_password?
-  self.encrypted_password.blank?
-end
-
+ def has_no_password?
+   self.encrypted_password.blank?
+ end
+ def total_reviews_count
+   self.contents.where("sub_type=?","Reviews").count
+ end
+ 
+ def total_items_following_count
+   User.join_follows.where("follows.followable_type!=? and follows.follower_id=?",'User',self.id).count
+ end
+ 
   def self.profile_owner?(user,current_user)
     return true if user.id == current_user.id
     return false

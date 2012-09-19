@@ -125,8 +125,8 @@
       <div class="points">
         <span class="indu_span"><a class="values"><%= @user.total_points  %></a><a class="text">Points</a></span>
         <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
-        <span class="indu_span"><a class="values">3</a><a class="text">Following</a></span>
-        <span class="indu_span"><a class="values">12</a><a class="text">Reviews </a></span>
+        <span class="indu_span"><a class="values"><%= @user.total_items_following_count %></a><a class="text">Following</a></span>
+        <span class="indu_span"><a class="values"><%= @user.total_reviews_count %></a><a class="text">Reviews </a></span>
         <!--<span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>-->
 
       </div>
@@ -216,6 +216,7 @@
       <!-- This will go into main layout -->
     </div>
     <script type="text/javascript">
+    $("#usual2 ul").idTabs("tabs1");
       $(document).ready(function(){
         $("div#Filterby div.Filternav ul li").click(function (e) {
            $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
@@ -244,8 +245,8 @@
        
         });
     </script>
-    <script type="text/javascript">
-  $("#usual2 ul").idTabs("tabs1");
+    <script>
+  
     $(window).scroll(function () {
 
           lnk = $('#content_next');

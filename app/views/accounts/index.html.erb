@@ -5,7 +5,7 @@
         <a href="#tabs1">Basic Info</a>
       </li>
       <li>
-        <%= link_to "Change Password", "#tabs4"%>
+        <%= link_to "Change Password", "#tabs4",:id=>"change_password"%>
       </li>
       <li class="tabstyle">
         <a class="" href="#tabs2" id="specification">Email Notifications</a>
@@ -58,8 +58,16 @@
 
 </div>
 <script type="text/javascript">
-  $("#usual2 ul").idTabs("tabs1");
+  $("#change_password").click(function(e){
+    $("#tabs1").hide();
+    $("#tabs4").show();
   
+  });
+   $("li.tabstyle").click(function(e){
+    $("#tabs1").show();
+    $("#tabs4").hide();
+  
+  });
 </script>
 
 
