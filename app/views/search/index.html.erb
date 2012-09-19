@@ -30,7 +30,9 @@
       <div id="btnDiv" style="height:100px;display:block;">
         <a href="#" class="btn_gray float_lft" style="display:none;" id="clearTag">Clear All</a>
         <!--<a href="#" class="btn_submitanswer float_rgt" style="width:150px;display:none;" id="addPreferenceTag">Create Buying Plan</a>-->
+      
         <a href="#" class="btn_submitanswer float_rgt" style="width:130px;display:none;" id="getAdviceTag">Create/Update Buying Plan</a>
+      
       </div>
     </div>
     <div class="push"></div>
@@ -136,7 +138,8 @@ if ($('#nonavailable_status').is(':checked')) {
   function showGetAdviceTag(){
 <% if user_signed_in? %>
       if ($(".search_category").find("li").length == 0){
-        $("#getAdviceTag").show();
+        //commented temp for launch.
+       // $("#getAdviceTag").show();
       }
 <%end%>
   }
