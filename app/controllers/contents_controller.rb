@@ -6,7 +6,7 @@ class ContentsController < ApplicationController
   layout "product"
   include FollowMethods
   
- def filter
+def filter
      if params[:item_type_id].is_a?  Array
        itemtype_id = params[:itemtype_id] 
      else
@@ -23,18 +23,15 @@ class ContentsController < ApplicationController
         else
           items = params[:items].split(",")
          end 
-         if items.size >=1
-          related_items = []
-          items.each do |i|
-           item = Item.find_by_id(i)
-           if (item.type == "Manufacturer") || (item.type == "CarGroup")
-             related_items +=  item.related_cars.collect(&:id)
-           end
-          end 
-           related_items += items  
-           filter_params["item_relations"] = related_items.uniq!
-         else
+        if items.size == 1
+        item = Item.find(items[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
           filter_params["items"] = items
+        end
+      else
+      filter_params["items"] = items
       end
     end
     if params[:user]
@@ -121,19 +118,15 @@ class ContentsController < ApplicationController
         else
           items = params[:items].split(",")
         end 
-      if items.size >=1
-        related_items = []
-        items.each do |i|
-          item = Item.find_by_id(i)
-          if (item.type == "Manufacturer") || (item.type == "CarGroup")
-            related_items +=  item.related_cars.collect(&:id)
-           end
-          end 
-           related_items += items  
-           filter_params["item_relations"] = related_items.uniq!
-          
-       else
+      if items.size == 1
+        item = Item.find_by_id(items[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
           filter_params["items"] = items
+        end
+      else
+      filter_params["items"] = items
       end
     end
     filter_params["page"] = params[:page] if params[:page].present?
@@ -324,20 +317,16 @@ class ContentsController < ApplicationController
         else
           items = @items.split(",")
         end
-        if items.size >=1
-         related_items = []
-         items.each do |i|
-          item = Item.find_by_id(i)
-           if (item.type == "Manufacturer") || (item.type == "CarGroup")
-             related_items +=  item.related_cars.collect(&:id)
-           end
-          end 
-            related_items += items  
-            filter_params["item_relations"] = related_items.uniq!
-          
-         else
+        if items.size == 1
+          item = Item.find(items[0])
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          filter_params["item_relations"] = item.related_cars.collect(&:id)
+        else
           filter_params["items"] = items
-      end
+        end
+       else
+         filter_params["items"] = items
+       end
        filter_params["status"] = 1
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = "created_at desc"
