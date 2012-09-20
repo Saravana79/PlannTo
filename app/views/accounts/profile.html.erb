@@ -190,6 +190,38 @@
           <%end%>
          
         </div>
+        
+               <div class="Rightouter" id="tabs2">
+        	<%if (params[:follow] == 'Accessories') %>
+          <%if User.profile_owner?(@user,current_user) %>
+<div class="ui-widget Blockheading">
+  <div class="Headingtext">
+  Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
+   <%= @follow_types.first %> 
+   <%else%> Product <%end%> to your profile </div>
+   
+   <div class="Searchform">
+       <input type="text" placeholder="Search <%= params[:follow]%>" id="search_accessories" /> 
+       <input name="" type="button" class="Searchbut"/> 
+   </div>  
+  <div class="Searchform" style="">   
+
+     
+    <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
+       <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
+                                                     ["Follow this car", "follower"]]) %>
+       <%= f.hidden_field :followable_id %>
+       <%= f.hidden_field :followable_type %>         
+             
+     <%end%>
+     
+  </div>
+  <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
+</div>
+ <%end%>
+          <%end%>
+         
+        </div>
 
       </div>
     <div class="Rightouter" id="tabs1">

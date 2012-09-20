@@ -91,7 +91,7 @@ def filter
   def search_autocomplete_list
     @results = Sunspot.search(Content) do
       keywords params[:term], :fields => :title
-      with :sub_type, 'Apps'
+      with :sub_type, "#{params[:sub_type]}"
     end
     results = @results.results.collect{|item|
 
