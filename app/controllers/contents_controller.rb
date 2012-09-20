@@ -27,6 +27,8 @@ def filter
         item = Item.find(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
+        elsif (item.type == "AttributeTag")
+          filter_params["item_relations"]  = Item.get_related_item_list_first(item.id)
         else
           filter_params["items"] = items
         end
@@ -73,6 +75,9 @@ def filter
         item = Item.find(item_ids[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           item_ids = item.related_cars.collect(&:id)
+          itemtype_ids = Array.new
+        elsif (item.type == "AttributeTag")
+          item_ids  = Item.get_related_item_list_first(item.id)
           itemtype_ids = Array.new
         end
       end
@@ -122,6 +127,8 @@ def filter
         item = Item.find_by_id(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
+        elsif (item.type == "AttributeTag")
+          filter_params["item_relations"]  = Item.get_related_item_list_first(item.id)
         else
           filter_params["items"] = items
         end
@@ -169,6 +176,8 @@ def filter
         item = Item.find(@item_id)
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
+        elsif (item.type == "AttributeTag")
+          filter_params["item_relations"]  = Item.get_related_item_list_first(item.id)
         else
           filter_params["items"] = @item_id
         end
@@ -321,6 +330,8 @@ def filter
           item = Item.find(items[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
+        elsif (item.type == "AttributeTag")
+          filter_params["item_relations"]  = Item.get_related_item_list_first(item.id)
         else
           filter_params["items"] = items
         end
