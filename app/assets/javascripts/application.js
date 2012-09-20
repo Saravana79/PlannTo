@@ -59,7 +59,17 @@ $(document).ready(function() {
 			}	 
 	});
 	$( "#search_apps" ).autocomplete({
-			source: "/contents/search_autocomplete_list",
+			source: "/contents/search_autocomplete_list?sub_type=Apps",
+			minLength: 2,
+			select: function( event, ui ) {
+			  $('#follow_followable_id').val(ui.item.id);
+			  $('#follow_followable_type').val(ui.item.type);
+			  $('.follow_form').submit();
+			}	 
+	});
+	
+	$( "#search_accessories" ).autocomplete({
+			source: "/contents/search_autocomplete_list?sub_type=Accessories",
 			minLength: 2,
 			select: function( event, ui ) {
 			  $('#follow_followable_id').val(ui.item.id);
