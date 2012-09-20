@@ -140,8 +140,20 @@ class Item < ActiveRecord::Base
 
   def self.get_related_item_list(item, limit=10, page=1)
    # return item.relateditems.paginate(:page => page, :per_page => limit)
-     related_item_ids = Itemrelationship.where(:relateditem_id => item).collect(&:item_id)
-    Item.where(:id => related_item_ids).paginate(:page => page, :per_page => limit)
+   itemdetails = Item.find_by_id(item)
+    if (itemdetails.is_a?AttributeTag)    
+      Item.find_by_sql("SELECT distinct a.* from items AS a INNER JOIN attribute_values ON attribute_values.item_id = a.id  INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value  WHERE item_attribute_tag_relations.item_id = " + item.to_s).paginate(:page => page, :per_page => limit)
+    else
+      related_item_ids = Itemrelationship.where(:relateditem_id => item).collect(&:item_id)
+      Item.where(:id => related_item_ids).paginate(:page => page, :per_page => limit)
+    end
+  end
+
+    def self.get_related_item_list_first(item)
+    
+     itemdetails =  Item.find_by_sql("SELECT a.* from items AS a INNER JOIN attribute_values ON attribute_values.item_id = a.id  INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value  WHERE item_attribute_tag_relations.item_id = " + item.to_s + " limit 1")
+     itemdetails[0].id
+  
   end
 
   def self.get_cached(id)
@@ -389,6 +401,7 @@ end
 def can_display_related_item?
  return true if self.type == "CarGroup"
  return true if self.type == "Manufacturer"
+ return true if self.type == "AttributeTag"
  return false
 end
 
