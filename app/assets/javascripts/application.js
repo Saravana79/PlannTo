@@ -24,13 +24,17 @@ $(document).ready(function() {
     return false;
   });
   
-  $(".invite").live('click', function(){
+
+ $(".invite_friend").live('click', function(){
     id = $(this).attr('id');
     $('#invitation_follow_type').val(id);
     $("#dialog-invite-form").dialog({height: 500,
       width: 550,
       modal: true});
+      $(".Close_dialog").show();
+     $(".ui-dialog-titlebar").hide();
   });
+ 
   
   $("#write_review").live('click', function(){
     $("#articleReviewSubContainer").show();

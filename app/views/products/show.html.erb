@@ -121,7 +121,7 @@
       <div class="Iconblock">
         <span class="Planbuy"><%= @item.get_followers("buyer").split(",").count %></span>
       </div>
-        <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite") %>
+        <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite_friend") %>
       </div>
       <div class="Smalltext">who plans to buy</div>
   </div>
@@ -131,7 +131,7 @@
       <div class="Iconblock">
         <span class="Wonit"><%= @item.get_followers("owner").split(",").count %></span>
       </div>
-        <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite") %>
+        <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite_friend") %>
       </div>
       <div class="Smalltext">who owns it</div>
     </div>
@@ -141,7 +141,7 @@
     <div class="Iconblock">
       <span class="Followcar"><%= @item.get_followers("follower").split(",").count %></span>
     </div>
-      <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite") %>
+      <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite_friend") %>
       
       </div>
       <div class="Smalltext">who is an expert</div>
@@ -169,33 +169,37 @@
 
 <div id="dialog-invite-form" style="display:none">
   <% if current_user %>
-    <%= form_for(@invitation, :remote => true ) do |f| %>
+  <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:496px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+  <span class="Popuptitle"><center> <h1>Invitation</h1></center></span>
+ <%= form_for(@invitation, :remote => true ) do |f| %>
 <div id= "invitation_errors" style="display:none"></div>
 <%= f.hidden_field :item_id, :value => @item.id -%>
 <%= f.hidden_field :item_type, :value => @item.class.to_s -%>
 <%= f.hidden_field :follow_type -%>
 Email : <br /> <%= f.text_field :email %> <br />
 Message : <br />
-<%= f.text_area :message, :rows => 3, :cols => 50 %>
+<%= f.text_area :message, :rows => 3, :cols => 50,:class=>"expanding" %>
+ <div style="padding:0px 5px 5px 5px; float:right; width:60%; margin-right:40px; margin-top:20px "> 
 <%= f.submit 'Invite', :class => 'btn_submitanswer', 'data-disable-with'=>"Sending invite..." %>
+</div>
 <% end %>
-<%else-%>
-Please sign in to invite others.
-<%= render "shared/home_login" %>
+
 <%end%>
 
 </div>
 
 </div>
 
+ <script>
+   $(".invite_friend").click(function(e){
+     <%if !current_user %>
+       openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+      <%end%>
+     })
+  </script>
 
-
-
-
-
-
-
-
+<%= render "shared/expanding_text_area_style" %>
 
 
 
