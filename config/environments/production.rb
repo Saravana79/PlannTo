@@ -12,7 +12,7 @@ PlanNto::Application.configure do
   config.serve_static_assets = true
 
   # Compress JavaScripts and CSS
-  config.assets.compress = false 
+  config.assets.compress = true
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = true
@@ -62,5 +62,5 @@ PlanNto::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  config.action_mailer.default_url_options = { :host => 'plannto.heroku.com' }
+  config.action_mailer.default_url_options = { :host => 'plannto.com' }
 end
