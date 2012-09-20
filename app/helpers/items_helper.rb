@@ -280,6 +280,15 @@ module ItemsHelper
             <li '
       str = str + "#{'class="tab_active"' if tab_type == "all_variants"}"
       str = str + ' id="all_variant"><a href="#all_variants" ><span>All Variants</span></a></li>'
+
+    when "AttributeTag"
+      then 
+      str = '<li '
+      str = str + "#{'class="tab_active"' if tab_type == "overview"}"
+      str = str +'><a href="#overview"><span>Overview</span></a></li>
+            <li '
+      str = str + "#{'class="tab_active"' if tab_type == "all_variants"}"
+      str = str + ' id="all_variant"><a href="#all_variants" ><span>All Variants</span></a></li>'
       
     else
     str = '<li '
