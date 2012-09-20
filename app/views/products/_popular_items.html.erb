@@ -1,4 +1,4 @@
-<% cache ["popular-items", Date.new.to_time.to_i] do %>
+<% cache ["popular-items" + @type.to_s , Date.new.to_time.to_i] do %>
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
       <td class="bg_widgethdr txt_white">Popular <%= @type.to_s.pluralize %></td>

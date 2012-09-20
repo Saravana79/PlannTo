@@ -62,9 +62,9 @@ $(document).ready(function() {
 			source: "/contents/search_autocomplete_list",
 			minLength: 2,
 			select: function( event, ui ) {
-			//  $('#follow_followable_id').val(ui.item.id);
-			//  $('#follow_followable_type').val(ui.item.type);
-			//  $('.follow_form').submit();
+			  $('#follow_followable_id').val(ui.item.id);
+			  $('#follow_followable_type').val(ui.item.type);
+			  $('.follow_form').submit();
 			}	 
 	});
  
