@@ -56,7 +56,7 @@
     </a>
     <%end%>
     <% else %>
-        <%if @item.is_a? CarGroup %>
+        <%if @item.is_a? CarGroup or @item.is_a? AttributeTag %>
            <a class="txt_price">Groups</a><br />
         <%else%>
           <a class="txt_price"><%=@item.type%></a><br />
