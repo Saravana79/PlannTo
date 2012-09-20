@@ -157,12 +157,8 @@
           </div>
         </div>
         -->
-        <div class="Rightouter" id="tabs1">
-        	<%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
-          <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-          <%end%>
+       
          
-        </div>
         <div class="Rightouter" id="tabs2">
         	<%if (params[:follow] == 'Apps') %>
           <%if User.profile_owner?(@user,current_user) %>
@@ -196,7 +192,9 @@
         </div>
 
       </div>
-      <br/>
+    <div class="Rightouter" id="tabs1">
+        	 <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+      </div>
     
 
     <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
@@ -249,8 +247,7 @@
       <!-- This will go into main layout -->
     </div>
     <script type="text/javascript">
- 
-      $(document).ready(function(){
+
         $("div#Filterby div.Filternav ul li").click(function (e) {
            $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
             $(this).closest('li').addClass("Currentfilter");
@@ -270,13 +267,6 @@
                 return false
               }
           });
-
-          
-           var running =false;
-           
-           
-       
-        });
     </script>
     <script>
   

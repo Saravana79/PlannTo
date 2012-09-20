@@ -1,3 +1,4 @@
+<%if params[:follow] == 'Products' %>
 <%if User.profile_owner?(@user,current_user) %>
 <div class="ui-widget Blockheading">
   <div class="Headingtext">
@@ -24,7 +25,7 @@
   <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
 </div>
  <%end%>
- 
+ <%end%>
 <div class="Searchlisting" style="clear:both;">
   <% items.each do |follow| %>
 
@@ -34,7 +35,9 @@
       <div class="imgprofilediv">
         <div class="imgpicbtnspan">
           <div style="width:160px;height:120px;display:block;">
-          <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item)%>
+       
+             <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item)%>
+         
            <%= link_to(follow_item_type_item_path(item, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true) do %>
          </div>
          <!--
@@ -80,10 +83,13 @@
       <% content = follow.content_followable %>
       <div class="product" id="product_<%= content.id %>">
       <div class="imgprofilediv">
+         
         <div class="imgpicbtnspan">
+         <%unless content.thumbnail.nil?%>
           <div style="width:120px;height:90px;display:block;">
           <%= link_to image_tag(content.thumbnail, height: "90", width: "120"),  content_path(content) %>
           </div>
+          <%end%>
           <%= link_to(follow_item_type_item_path(content, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true) do %>
           <!--<img class="closeimg" alt="" src="images/icon_close.png" onmouseover="this.src='images/icon_close_hover.png'" onmouseout="this.src='images/icon_close.png'">-->
           <% end %>

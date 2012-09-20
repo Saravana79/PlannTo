@@ -17,7 +17,7 @@ PlanNto::Application.routes.draw do
    end 
   end 
   match "/newuser_wizard", :to => "newuser_wizards#new"
-  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" } 
+  devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" ,:passwords => "users/passwords" } 
   devise_scope :user do
     #get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
     get '/users/sign_out' => 'devise/sessions#destroy'
