@@ -97,7 +97,7 @@ class Content < ActiveRecord::Base
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type
-        scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value ])
+        scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value.uniq ])
       when :item_relations 
         scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", value )
       when :order
@@ -127,19 +127,27 @@ class Content < ActiveRecord::Base
     return status
   end
   
-  def self.follow_items_contents(user,item_types)
-    if item_types.nil?
-      @items = Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).collect(&:followable_id).join(",")
+  def self.follow_items_contents(user,item_types,type)
+    if item_types.nil? && type.blank?
+      items = Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).collect(&:followable_id).uniq
       @item_types = Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id)
-      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
-    else
+   else
       @item_types = item_types.join(",") if !item_types.blank?
-      @items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).join(",")
-      
-      @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+      items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).uniq
     end 
-    return @items,@item_types,@article_categories 
-  end
+    @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+    @related_items = []
+    @related_items += items
+    @items = items.join(",")
+      items.each do |it| 
+        item = Item.find(it)
+        if (item.type == "Manufacturer") || (item.type == "CarGroup")
+          @related_items += item.related_cars.collect(&:id)
+          @related_items.delete(it)
+        end
+       end
+      return @related_items.uniq.join(","),@item_types,@article_categories,@items 
+   end
   
   
   def save_with_items!(items)

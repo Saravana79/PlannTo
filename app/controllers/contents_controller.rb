@@ -14,9 +14,9 @@ def filter
      end 
     filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
     filter_params["order"] = get_sort_by(params[:sort_by]) 
-    filter_params["itemtype_id"] =  itemtype_id if  itemtype_id.present?
-    
-    if params[:items].present?
+    filter_params["itemtype_id"] =  itemtype_id
+     if  itemtype_id.present?
+       if params[:items].present?
    
         if params[:items].is_a?  Array
           items = params[:items] 
@@ -43,7 +43,7 @@ def filter
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
     @contents = Content.filter(filter_params)
-    
+    end
   end
 
   def search_contents
@@ -113,11 +113,12 @@ def filter
     end 
    
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], itemtype_id )}
-    filter_params["itemtype_id"] = itemtype_id  if itemtype_id .present?
+    filter_params["itemtype_id"] = itemtype_id  
     if params[:user]
       filter_params[:user] = params[:user]
     end 
-    if params[:items].present?
+    if itemtype_id .present?
+     if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 
         else
@@ -141,6 +142,7 @@ def filter
     filter_params["guide"] = params[:guide] if params[:guide].present?
     filter_params["order"] = get_sort_by(params[:sort_by])   
     @contents = Content.filter(filter_params)
+    end
     respond_to do |format|
       format.js {
         render "contents/filter"
@@ -316,28 +318,17 @@ def filter
   
   def my_feeds
     if current_user
-      @items,@item_types,@article_categories = Content.follow_items_contents(current_user,params[:item_types])
+      @all_items,@item_types,@article_categories,@items = Content.follow_items_contents(current_user,params[:item_types],params[:type])
       filter_params = {"sub_type" => @article_categories}
       filter_params["itemtype_id"] =@item_types 
     
-      if @items.size > 0 and !@item_types.blank?
-        if @items.is_a? Array
-            items = @items
+      if @all_items.size > 0 and !@item_types.blank?
+        if @all_items.is_a? Array
+            items = @all_items
         else
-          items = @items.split(",")
+          items = @all_items.split(",")
         end
-        if items.size == 1
-          item = Item.find(items[0])
-        if (item.type == "Manufacturer") || (item.type == "CarGroup")
-          filter_params["item_relations"] = item.related_cars.collect(&:id)
-        elsif (item.type == "AttributeTag")
-          filter_params["item_relations"]  = Item.get_related_item_list_first(item.id)
-        else
-          filter_params["items"] = items
-        end
-       else
-         filter_params["items"] = items
-       end
+       filter_params["items"] = items
        filter_params["status"] = 1
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = "created_at desc"
