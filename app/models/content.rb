@@ -97,7 +97,7 @@ class Content < ActiveRecord::Base
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type
-        scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value.uniq ])
+        scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value])
       when :item_relations 
         scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", value )
       when :order
