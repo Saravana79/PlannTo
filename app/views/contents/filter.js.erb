@@ -1,19 +1,17 @@
 
-if (<%=@contents.size%> < 10)
-{
-	running = true;
-}
-else{
 
-element= jQuery('#content_next');
-running=false;
 $("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 <%if params[:page] == "#{1}"%>
 $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
 <%else%>
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents') %>');
 <%end%>
-element.remove();
-//$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
+if (<%=@contents.size%> < 10)
+{
+	running = true;
+}
+else{
+
+running=false;
 }
 
