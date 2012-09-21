@@ -318,15 +318,15 @@ def filter
   
   def my_feeds
     if current_user
-      @all_items,@item_types,@article_categories,@items = Content.follow_items_contents(current_user,params[:item_types],params[:type])
+      @items,@item_types,@article_categories = Content.follow_items_contents(current_user,params[:item_types],params[:type])
       filter_params = {"sub_type" => @article_categories}
-      filter_params["itemtype_id"] =@item_types 
+      filter_params["itemtype_id"] = @item_types 
     
-      if @all_items.size > 0 and !@item_types.blank?
-        if @all_items.is_a? Array
-            items = @all_items
+      if @items.size > 0 and !@item_types.blank?
+        if @tems.is_a? Array
+            items = @items
         else
-          items = @all_items.split(",")
+          items = @items.split(",")
         end
        filter_params["items"] = items
        filter_params["status"] = 1

@@ -138,7 +138,6 @@ class Content < ActiveRecord::Base
     @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
     @related_items = []
     @related_items += items
-    @items = items.join(",")
       items.each do |it| 
         item = Item.find(it)
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
@@ -146,7 +145,7 @@ class Content < ActiveRecord::Base
           @related_items.delete(it)
         end
        end
-      return @related_items.uniq.join(","),@item_types,@article_categories,@items 
+      return @related_items.uniq.join(","),@item_types,@article_categories
    end
   
   
