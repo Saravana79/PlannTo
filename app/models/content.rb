@@ -31,8 +31,8 @@ class Content < ActiveRecord::Base
   has_many :itemtypes, :through => :content_itemtype_relations
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :title, :boost => 3.0, :more_like_this =>true
     text :title , :as => :name_ac
+    text :title, :boost => 3.0, :more_like_this =>true
     text :description
     string :sub_type
     integer :total_votes
