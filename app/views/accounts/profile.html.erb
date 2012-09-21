@@ -167,7 +167,8 @@
   Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
    <%= @follow_types.first %> 
    <%else%> Product <%end%> to your profile </div>
-   
+   <a data-content="Apps" class="quickCreate"><%=content_write_tab_label("Apps")%></a>
+           
    <div class="Searchform">
        <input type="text" placeholder="Search <%= params[:follow]%>" id="search_apps" /> 
        <input name="" type="button" class="Searchbut"/> 
@@ -188,7 +189,26 @@
 </div>
  <%end%>
           <%end%>
-         
+          
+             <script type="text/javascript">
+    	
+    	$(function(){
+
+    $('a.quickCreate').live("click",function(){
+
+   // $(this).parent().toggleClass('selected');
+    var category = $(this).data('content');
+   // $.ajaxSetup({
+   //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+   // });
+   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category });
+    //$.get('/contents/quick_new',{'category' : category}, "script");
+    return false
+
+  });
+  });
+    </script>
+         <div id="contentEditView"></div>
         </div>
         
                <div class="Rightouter" id="tabs2">
@@ -199,7 +219,7 @@
   Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
    <%= @follow_types.first %> 
    <%else%> Product <%end%> to your profile </div>
-   
+   <a data-content="Accessories" class="quickCreate"><%=content_write_tab_label("Accessories")%></a>
    <div class="Searchform">
        <input type="text" placeholder="Search <%= params[:follow]%>" id="search_accessories" /> 
        <input name="" type="button" class="Searchbut"/> 
