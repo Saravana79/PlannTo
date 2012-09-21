@@ -1,5 +1,11 @@
-element= jQuery('#content_next')
-//element.before('<%#=escape_javascript(contents_string.html_safe) %>');
+
+if (<%=@contents.size%> < 10)
+{
+	running = true;
+}
+else{
+
+element= jQuery('#content_next');
 running=false;
 $("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
 <%if params[:page] == "#{1}"%>
@@ -9,4 +15,5 @@ $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/co
 <%end%>
 element.remove();
 //$("#filter_page_no").val("<%#=@contents.current_page+ 1%>");
+}
 
