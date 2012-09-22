@@ -198,7 +198,7 @@ def filter
 
   def show
     @content = Content.find(params[:id])
-    per_page = params[:per_page].present? ? params[:per_page] : 8
+    per_page = params[:per_page].present? ? params[:per_page] : 6
     page_no  = params[:page_no].present? ? params[:page_no] : 1
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
    #frequency = ((@content.title.split(" ").size) * (0.3)).to_i
@@ -212,8 +212,8 @@ def filter
     end
     @related_contents = results.results
     #@popular_items = ItemContentsRelationsCache.where(:content_id => @content.id).limit(5)
-    @popular_items = Item.find_by_sql("select * from items where itemtype_id in (1, 6, 12, 13, 14, 15) and id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) limit 5")
-   
+    @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status = '1'  order by id desc limit 4")
+    @popular_items_ids  = @popular_items.map(&:id).join(",")
     @comment = Comment.new
     render :layout => "product"
   end
@@ -224,7 +224,7 @@ def filter
     #if frequency == 0
       frequency = 1
     #end
-    per_page = params[:per_page].present? ? params[:per_page] : 8
+    per_page = params[:per_page].present? ? params[:per_page] : 6
     page_no  = params[:page_no].present? ? params[:page_no] :2
     results = Sunspot.more_like_this(@content) do
       fields :title      

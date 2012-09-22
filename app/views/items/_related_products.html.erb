@@ -16,6 +16,7 @@
             <div>
             <a href="<%=related_item.get_url()%>" class="txt_black"><%=related_item.name%></a>
            </div>
+                 <a class="txt_price"><%= related_item.get_price_info('Price',false) %></a><br />
             <%= render :partial => 'shared/rating',:locals => {:item => related_item, :rating_id => "related_item_id#{related_item.id}"} %><br />
             </td>
           </tr>

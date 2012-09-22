@@ -10,7 +10,7 @@
  
     </div>
     <div style="clear:both">
-      <a class="txt_price"><%=item.get_price_info('Price')%></a><br />
+      <a class="txt_price"><%=item.get_price_info('Price',false)%></a><br />
          <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "compare_id#{item.id}"} %><br />
          <% if item.rated_users_count > 0 %>
          <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">

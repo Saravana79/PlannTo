@@ -68,15 +68,19 @@ class Item < ActiveRecord::Base
     return itemtype1
   end
 
-  def get_price_info(item_type)   
+  def get_price_info(item_type,displaycomment = true )   
     price = "0"; 
     item_attribute = item_attributes.select{|a| a.name == item_type}.last
     if item_attribute
       attribute_value = item_attribute.attribute_values.where(:item_id => id).last
       if !attribute_value.blank?
+        if(displaycomment)
           item_attribute.name + ' - '  +
           number_to_indian_currency(attribute_value.value.to_i) +
           (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
+        else
+          number_to_indian_currency(attribute_value.value.to_i) 
+        end 
       else
         ""
       end

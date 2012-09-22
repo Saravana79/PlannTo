@@ -12,16 +12,16 @@
             <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
             <td width="113">
             <div>
-            <a href="<%=cache_item.item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
            </div>
-            <% unless item.type.to_s == 'Car'%>
-            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "popular_item_id_fhp_#{item.id}"} %><br />
-            <% end %>
+                 <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+             <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "popular_item_id_fhp_#{item.id}"} %><br />
             </td>
           </tr>
+          
          <%end%>
          <tr >
-            <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="" class="txt_blue">Compare these items</a></td>
+            <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="/items/compare?ids=<%=@popular_items_ids%>" class="txt_blue">Compare these items</a></td>
           </tr>
         </table>
         </td>
