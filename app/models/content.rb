@@ -192,7 +192,7 @@ class Content < ActiveRecord::Base
       #logger.info item.itemrelationships.collect(&:relateditem_id)
       #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
       manufacturer_and_cargroup_item_ids << item.id
-      elsif item.type == "ItemtypeTag"
+      #elsif item.type == "ItemtypeTag"
       #  itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
       else
       item_ids << item.id
