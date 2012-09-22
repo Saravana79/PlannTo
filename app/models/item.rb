@@ -111,7 +111,7 @@ class Item < ActiveRecord::Base
   end
 
   def ger_followers_count_for_type(follow_type)
-    Follow.where('follow_type =? and followable_id in (?)', follow_type,self.id).count
+   Follow.where('follow_type =? and followable_id=? and followable_type =?', follow_type,self.id, self.itemtype.itemtype == 'Car Group' ? 'CarGroup' : self.itemtype.itemtype).count
   end 
 
   def priority_specification
