@@ -1,7 +1,13 @@
 <%= render 'shared/show_hide_login_form', :item => content %>
 <div style="padding-left:60px;width:600px;">
 	<ul id="productList" class="tagging">
-		<%  Item.where("id in (#{content.related_items.collect(&:item_id).join(',')})").each do |item|%>
+		<%related_item_ids = content.related_items.collect(&:item_id).join(',')%>
+		<%if related_item_ids.empty?%>
+		<%related_content_items = []%>
+		<%else%>
+		<%related_content_items = Item.where("id in (#{related_item_ids})")%>
+		<%end%>
+		<%  related_content_items.each do |item|%>
 		<%= display_product_tag(item, false).html_safe%>
 		<% end%>
 	</ul>

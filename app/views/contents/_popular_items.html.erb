@@ -1,0 +1,33 @@
+<%if @popular_items.size > 0%>
+<%# cache ["popular-items" + @type.to_s , Date.new.to_time.to_i] do %>
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Popular Items</td>
+    </tr>
+    <tr>
+      <td valign="top">
+       <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+          <% @popular_items.each do |item|%>
+           <tr>
+            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
+            <td width="113">
+            <div>
+            <a href="<%=cache_item.item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
+           </div>
+            <% unless item.type.to_s == 'Car'%>
+            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "popular_item_id_fhp_#{item.id}"} %><br />
+            <% end %>
+            </td>
+          </tr>
+         <%end%>
+         <tr >
+            <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="" class="txt_blue">Compare these items</a></td>
+          </tr>
+        </table>
+        </td>
+    </tr>
+   
+  </table>
+  <br/>
+<br />
+<%end%>

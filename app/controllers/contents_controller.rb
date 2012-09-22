@@ -211,6 +211,9 @@ def filter
       paginate(:page => page_no, :per_page => per_page)
     end
     @related_contents = results.results
+    #@popular_items = ItemContentsRelationsCache.where(:content_id => @content.id).limit(5)
+    @popular_items = Item.find_by_sql("select * from items where itemtype_id in (1, 6, 12, 13, 14, 15) and id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) limit 5")
+   
     @comment = Comment.new
     render :layout => "product"
   end
