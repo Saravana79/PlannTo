@@ -355,14 +355,15 @@ def filter
   def get_sub_type(sub_type, itemtype_id)   
     if sub_type =="All"
       if itemtype_id.empty?
-      return ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
+        return ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
       else
-      return ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name)
+        return ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq
       end
+      
      elsif sub_type =="QandA"
       return "Q&A"
     else
-      return params[:sub_type].split(",")
+      return sub_type.split(",")
     end
   end
   

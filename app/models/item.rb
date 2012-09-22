@@ -110,6 +110,9 @@ class Item < ActiveRecord::Base
         end
   end
 
+  def ger_followers_count_for_type(follow_type)
+   Follow.where('follow_type =? and followable_id=? and followable_type =?', follow_type,self.id, self.itemtype.itemtype == 'Car Group' ? 'CarGroup' : self.itemtype.itemtype).count
+  end 
 
   def priority_specification
     specification.where(:priority => 1)
@@ -310,7 +313,7 @@ class Item < ActiveRecord::Base
     else
       prev_review_count = ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
       prev_rating = prev_rating.to_f
-      new_average_rating = ((prev_rating * prev_review_count) + rating) / (prev_review_count + 1).to_f
+      new_average_rating = ((prev_rating * prev_review_count) + rating) / (prev_review_count + 1).to_f rescue 0.0
       $redis.hset("items:ratings", "item:#{self.id}:rating",new_average_rating)
       $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)      
     end

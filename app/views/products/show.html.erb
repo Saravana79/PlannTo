@@ -119,7 +119,7 @@
     <span class="Headingtxt">Plan to Buy</span>
     <div class="Featurecontent">
       <div class="Iconblock">
-        <span class="Planbuy"><%= @item.get_followers("buyer").split(",").count %></span>
+        <span class="Planbuy"><%= @item.ger_followers_count_for_type("buyer") %></span>
       </div>
         <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite_friend") %>
       </div>
@@ -129,7 +129,7 @@
     <span class="Headingtxt">Owners</span>
     <div class="Featurecontent">
       <div class="Iconblock">
-        <span class="Wonit"><%= @item.get_followers("owner").split(",").count %></span>
+        <span class="Wonit"><%= @item.ger_followers_count_for_type("owner") %></span>
       </div>
         <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite_friend") %>
       </div>
@@ -139,7 +139,7 @@
     <span class="Headingtxt">Followers</span>
     <div class="Featurecontent" style="border-right:none;">
     <div class="Iconblock">
-      <span class="Followcar"><%= @item.get_followers("follower").split(",").count %></span>
+      <span class="Followcar"><%= @item.ger_followers_count_for_type("follower") %></span>
     </div>
       <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite_friend") %>
       

@@ -8,6 +8,8 @@ $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none"); 
 $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
 <%else%>
+$("#contentEditView").dialog('close');
+$(".ui-dialog").css("display", "none");
   <%if @article_create%>
     $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.");
   $('div#subContainerContentCreate #notification').fadeIn('slow');
