@@ -29,6 +29,9 @@ class SitemapController < ApplicationController
       elsif params[:object_type] == "content"  
         @pages_to_visit1+= item_type.contents.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
      end 
+   else
+     @pages_to_visit1+= Item.all.collect{ |item| {:url =>  base_url + item.get_url() ,  :updated_at => I18n.l(item.updated_at.nil? ? Time.now : item.updated_at, :format => :w3c), :priority => 0.8 }}
+     @pages_to_visit1+= Content.all.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
    end  
     respond_to do |format|
       format.xml {   @pages_to_visit=@pages_to_visit1}
