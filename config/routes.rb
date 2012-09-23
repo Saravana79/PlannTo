@@ -197,15 +197,18 @@ resources :comments do
   resources :pros
   resources :questions
   resources :answers
-  resources :messages
   resources :tips
   resources :invitations
   match 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
     
   resources :pages, :only => [:show] 
+   match "/messages/search_users" => 'messages#search_users'
+   
+  resources :messages
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
+ 
   
  # match '/:search_type', :to => "products#index"
   

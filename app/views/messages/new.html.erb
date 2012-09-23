@@ -20,7 +20,7 @@
   $(document).ready(function() {
      $.textAutocomplete("message_email",
     "emailList",
-    {xCrsfToken: '<%= form_authenticity_token.to_s %>', url: "/search/message_users", editMode: false, multiple: true, hidden_field: "message_email_list", search_type_array: [],image: false}
+    {xCrsfToken: '<%= form_authenticity_token.to_s %>', url: "/messages/search_users", editMode: false, multiple: true, hidden_field: "message_email_list", search_type_array: [],image: false}
   );
 
   });

@@ -68,5 +68,16 @@ class MessagesController < ApplicationController
     @messages = @send_msg + @received_msg
     @messages = @messages.sort_by &:created_at
   end
+  
+   def search_users
+    #
+     @message_users = User.find(:all, :conditions => ['email like ? and id !=?',"%#{params[:term]}%", current_user.id])
+
+       results = @message_users.collect{|item|
+         logger.info item.email
+      {:id => item.id, :value => "#{item.email}", :imgsrc =>"", :type => "", :url => "" }
+    }
+    render :json => results
+  end
 
 end

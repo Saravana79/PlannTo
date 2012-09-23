@@ -24,7 +24,9 @@ $.textAutocomplete = function(fieldId, taggingField, options){
         addFunctionName: "",
         editFunctionName: "",
         xCrsfToken: "",
-        deleteFunctionName: ""
+        deleteFunctionName: "",
+        has_parent: false
+        
     },
     settings = $.extend({}, defaults, options);
     $("#"+ fieldId).each(function(){
@@ -80,9 +82,10 @@ $.textAutocomplete = function(fieldId, taggingField, options){
         $.selectEvent(ui.item, settings.addfunctionName)
         if (settings.hidden_field != "")
         {
-        $.addIdToField(settings.hidden_field, ui.item.id)
+        $.addIdToTextField(settings.hidden_field, ui.item.id, settings.has_parent)
         }
-        $.addTag(fieldId, taggingField, settings, ui.item.value, ui.item.id);
+        $.addTagToAutocomplete(fieldId, taggingField, settings, ui.item.value, ui.item.id, settings.has_parent);
+           
         $("#" + fieldId).val("");
         return false;
         }
@@ -107,7 +110,7 @@ $.textAutocomplete = function(fieldId, taggingField, options){
     $('#deleteTag').live('click', function(){
         if (settings.hidden_field != ""){
             var deleteId = $(this).closest('li').attr('id').replace("textTaggers",'');
-            $.removeIdFromField(settings.hidden_field, deleteId);
+            $.removeIdFromField(settings.hidden_field, deleteId, settings.has_parent);
         }
         $(this).closest('li').remove();
         if (settings.deleteFunctionName){
@@ -116,7 +119,72 @@ $.textAutocomplete = function(fieldId, taggingField, options){
             $.selectEvent(data, settings.deleteFunctionName)
         }
         return false;
-    })
+    });
+    
+    jQuery.addIdToTextField = function(hidden_field, id, has_parent){
+        if (has_parent == false){
+           hidden_field = "#" + hidden_field
+        }
+        var formVal = $("" + hidden_field).val();
+        var formValArray = formVal.toString() == "" ? [] : formVal.split(",")
+        var add = true
+        $.each(formValArray, function(index, value) {
+            if (value.toString() == id.toString())  {
+                add = false;
+            }
+        })
+        if (add == true){
+            formValArray.push(id)
+        }
+        $("" + hidden_field).val(formValArray.toString())
+    }
+    
+    
+    jQuery.addTagToAutocomplete = function(fieldId, taggingField, settings, value, id, has_parent) {
+        var text = value;
+        var add = true;
+        if (has_parent == false){
+            taggingField = "#" + taggingField
+        }
+        $("" + taggingField).find("li").each(function(index) {
+            if ($(this).text().toString() == text.toString())  {
+                add = false;
+            }
+        });
+        if ((text != "") && add == true)
+        {
+            if (settings.multiple == false){
+                $(""+ taggingField).find("li").remove();
+            }
+            var listTagId = 'textTaggers' + id
+            var list = "<li id='" + listTagId + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + value + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>" ;
+             $('' + taggingField).addClass("tagging");
+             
+            $(list).appendTo('' + taggingField);
+            $("" + fieldId).val("")
+            $('' + fieldId).autocomplete("enable");
+            if (settings.editMode || settings.close){
+                if (settings.has_parent == false){
+                var hideField = "ul" +taggingField + " li span a.icon_close"
+                }
+                else{
+                    var hideField = "" +taggingField + " li span a.icon_close"
+                }
+                $(hideField).show();
+            }
+            else{
+                if (settings.has_parent == false){
+                var hideField = "ul" +taggingField + " li span a.icon_close"
+                }
+                else{
+                    var hideField = "" +taggingField + " li span a.icon_close"
+                }
+                var hideField = "ul#" +taggingField + " li span a.icon_close"
+                $(hideField).hide();
+            }
+        }
+        $(""+ fieldId).val("");
+    }
 }   
 
 
