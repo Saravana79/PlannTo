@@ -1,3 +1,58 @@
+/*---16-aug-2012----*/
+.message_header {float: left; height: auto; margin-top: 23px;  width: 706px; border-bottom:1px solid #c9c9c9; padding-bottom:2px;}
+.message_header h1 {
+    color: #040404;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 18px;
+    padding: 0 0 0 32px;
+	background: url(../images/message_icon.png) no-repeat left top;
+	display:block;
+	float:left;
+}
+
+.add_new_msg {display:block; float:right; background:url(../images/message_left_corner.png) no-repeat left top; cursor:pointer; text-decoration:none;
+			padding:0 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#474547; line-height:23px;}
+			
+.add_new_msg span {display:block; float:left; background:url(../images/message_right_corner.png) no-repeat right top; padding:0 8px 0 2px; height:25px;}
+
+.add_new_msg:hover { background-position:left bottom;}
+.add_new_msg:hover span { background-position: right bottom;}
+
+.msg_box {border-bottom: 1px solid #dddff2; float: left; height: auto; width: 706px; padding:6px 0 9px 0;}
+.msg_box.unreadmsg {background:#ebedf5;}
+
+.msg_box.unreadmsg .msg_leftblock .message_detal p a {color: #006ea7; text-decoration: none;} 
+.msg_box.unreadmsg .msg_leftblock .message_detal p a:hover {text-decoration:underline;}
+
+.msg_box .user_img {float:left; padding:0 10px 0 10px;}
+.msg_leftblock {width:490px; float:left;}
+.msg_leftblock h1  { color: #565656; font-family: Arial,Helvetica,sans-serif; font-size: 14px; font-weight: bold; padding:2px 0 3px 0;}
+.msg_leftblock h1 a {color: #565656; text-decoration: none;}
+.msg_leftblock h1 a:hover {text-decoration:underline;}	
+
+.msg_leftblock .message_detal {background:url(../images/arrow_gray.png) no-repeat left 3px; clear:both; padding:0 0 0 15px; font-size:12px;
+								color:#adacad;}
+
+.msg_leftblock .message_detal p { padding:0 0 0 0; margin:0; font-size:12px;}
+.msg_leftblock .message_detal p a  {color:#adacad; text-decoration:none;}
+.msg_leftblock .message_detal p a:hover {text-decoration:underline;}
+.msg_leftblock .message_detal p.attachment {background:url(../images/attach.png) no-repeat left 2px; padding-left:15px;}
+
+.msg_right_block{ width:70px; height:auto; float:right; padding: 22px 26px 0 0; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#adabad;}
+
+a.cross_icon {background:url(../images/cross_icon.png) no-repeat left top; float: right; width:7px; height:7px; text-decoration:none; margin-top:4px; }
+a.cross_icon:hover { background-position:left -17px;  text-decoration:none;}
+
+
+.msg_popup {width:300px; float:left; position:absolute;}
+.msg_popup .msg_popup_top {background:url(../images/top_corner_shadow.png) no-repeat left top; height:7px; clear:both;} 
+.msg_popup .msg_popup_bot {background:url(../images/popup_botcorner.png) no-repeat left top; height:9px; clear:both;} 
+.msg_popup .msg_popup_midder {background:url(../images/popup_midder.png) repeat-y left top; padding:8px 8px 0 8px; width:284px; float:left;}
+
+.msg_popup_user {float:left; padding:0 10px 0 0;}
+.msg_popup_user img {float:left; border:1px solid #bebebe;}
+
+
 #Popupouter { width:100%; height:500px; padding:100px 0; float:left;
 background:url(../images/poup_samplebg.jpg) no-repeat center top;}
 
