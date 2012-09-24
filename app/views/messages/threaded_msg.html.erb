@@ -1,11 +1,30 @@
 <b><%= @sender.name %></b>
 <% @messages.each do |message| %>
-  <fieldset>
+<div class="msg_box">
+
+<div class="user_img">
+<img src="<%=message.from.get_photo%>" alt="User" align="left" />
+</div>
+
+<div class="msg_leftblock">
+<h1><a href="#"><%=message.from.name%></a></h1>
+<div class="message_detal">
+<p><a href="#"><%=message.body%>
+</a></p>
+</div>
+</div>
+
+<div class="msg_right_block">
+<div class="float_lft"><%= message.created_at.strftime("%B  %d") %></div>
+<!--<a href="#" class="cross_icon" data-message="<%=message.id%>" id="deleteMessage">&nbsp;</a>-->
+</div>
+</div>
+ <!-- <fieldset>
     <p>
-      <%= message.from.email %> : 
-      <%= message.body %></p>
-    <p><%= message.created_at.strftime("%d - %m - %Y") %></p>
-  </fieldset>
+      <%#= message.from.email %> : 
+      <%#= message.body %></p>
+    <p><%#= message.created_at.strftime("%d - %m - %Y") %></p>
+  </fieldset>-->
 <% end %>
 <div>
   <p>

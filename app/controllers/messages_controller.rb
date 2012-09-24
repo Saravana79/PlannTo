@@ -71,11 +71,11 @@ class MessagesController < ApplicationController
   
    def search_users
     #
-     @message_users = User.find(:all, :conditions => ['email like ? and id !=?',"%#{params[:term]}%", current_user.id])
+     @message_users = User.find(:all, :conditions => ['name like ? and id !=?',"%#{params[:term]}%", current_user.id])
 
        results = @message_users.collect{|item|
          logger.info item.email
-      {:id => item.id, :value => "#{item.email}", :imgsrc =>"", :type => "", :url => "" }
+      {:id => item.id, :value => "#{item.name} (#{item.username})", :imgsrc =>"", :type => "", :url => "" }
     }
     render :json => results
   end
