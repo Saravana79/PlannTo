@@ -55,8 +55,8 @@ $("ul#Newtabs li a").live('click', function(){
   
   
     function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
-    
-  	 $.ajax({url : "/contents/" + action , dataType:'script',type: "get",data: 'sub_type=' + sub_type + '&items=' + items + '&page=' + filter_page_no + '&itemtype_id=' + itemtype_id + '&sort_by=' + sort_by + '&guide=' + guide,before:$('#spinner1').show(),success: function(data){$('#spinner1').hide();
+     
+  	 $.ajax({url : "/contents/" + action , dataType:'script',type: "get",data: 'sub_type=' + sub_type + '&items=' + items + '&page=' + filter_page_no + '&itemtype_id=' + itemtype_id + '&sort_by=' + sort_by + '&search_type=' + $("#search_type").val() + '&guide=' + guide,before:$('#spinner1').show(),success: function(data){$('#spinner1').hide();
  }});    
  }
   	
@@ -106,7 +106,7 @@ $("ul#Newtabs li a").live('click', function(){
           	var itemtype_id = $("#item_types").val();
             var items =  $("#items").val();
           	var action = "feeds"
-          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide);        
+          	contentSearchFilterAction(action, sub_type, "", filter_page_no, itemtype_id, sort_by, guide);        
         	return false
       	}
         else

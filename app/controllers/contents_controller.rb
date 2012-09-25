@@ -6,7 +6,7 @@ class ContentsController < ApplicationController
   layout "product"
   include FollowMethods
   
-def filter
+  def filter
      if params[:item_type_id].is_a?  Array
        itemtype_id = params[:itemtype_id] 
      else
@@ -16,6 +16,13 @@ def filter
     filter_params["order"] = get_sort_by(params[:sort_by]) 
     filter_params["itemtype_id"] =  itemtype_id
      if  itemtype_id.present?
+     
+       if params[:search_type] == "Myfeeds"
+          @items,@item_types,@article_categories  = Content.follow_items_contents(current_user,itemtype_id,'category')
+          filter_params["items_id"] = @items.split(",")
+          filter_params["created_by"] = [current_user.id] + User.get_follow_users_id(current_user) 
+       end  
+      if params[:search_type] != "Myfeeds"  
        if params[:items].present?
    
         if params[:items].is_a?  Array
@@ -36,13 +43,18 @@ def filter
       filter_params["items"] = items
       end
     end
+    end
     if params[:user]
       filter_params[:user] = params[:user]
     end  
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
-    @contents = Content.filter(filter_params)
+   if params[:search_type] == "Myfeeds"
+      @contents = Content.my_feeds_filter(filter_params)
+   else      
+      @contents = Content.filter(filter_params)
+   end  
     end
   end
 
@@ -118,7 +130,14 @@ def filter
       filter_params[:user] = params[:user]
     end 
     if itemtype_id .present?
-     if params[:items].present?
+       if params[:search_type] == "Myfeeds"
+          @items,@item_types,@article_categories  = Content.follow_items_contents(current_user,itemtype_id,'category')
+          filter_params["items_id"] = @items.split(",")
+          filter_params["created_by"] = [current_user.id] + User.get_follow_users_id(current_user) 
+       end   
+      if params[:search_type] != "Myfeeds"  
+       
+       if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 
         else
@@ -136,12 +155,17 @@ def filter
       else
       filter_params["items"] = items
       end
+      end
     end
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
-    filter_params["order"] = get_sort_by(params[:sort_by])   
-    @contents = Content.filter(filter_params)
+    filter_params["order"] = get_sort_by(params[:sort_by]) 
+    if params[:search_type] == "Myfeeds"
+        @contents = Content.my_feeds_filter(filter_params)
+    else      
+      @contents = Content.filter(filter_params)
+    end  
     end
     respond_to do |format|
       format.js {
@@ -331,11 +355,13 @@ def filter
         else
           items = @items.split(",")
         end
-       filter_params["items"] = items
+       filter_params["items_id"] = items
        filter_params["status"] = 1
+       filter_params["created_by"] =   creator_ids = [current_user.id] + User.get_follow_users_id(current_user)
+       filter_params["page"] = 1
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = "created_at desc"
-       @contents = Content.filter(filter_params)
+       @contents = Content.my_feeds_filter(filter_params)
     end
     respond_to do |format|
      format.js{ render "contents/my_feeds"}
@@ -385,4 +411,4 @@ def filter
     end
     return "total_votes desc"
   end
-end
+end 

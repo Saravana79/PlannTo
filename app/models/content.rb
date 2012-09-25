@@ -72,6 +72,7 @@ class Content < ActiveRecord::Base
     #end
   end
 
+  
   def self.filter(options)
     options ||= {:page => 1, :limit => 10}
     options["page"]||=1
@@ -103,20 +104,29 @@ class Content < ActiveRecord::Base
       when :order
         attribute, order = value.split(" ")
         scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
+      when :my_feed
+         scope.scoped(:conditions => ["#{self.table_name}.created_at >= ? OR #{self.table_name}.created_by in(?)", 2.weeks.ago,value])
       when :user
-        scope.scoped(:conditions => ["#{self.table_name}.created_by = ?", value ])
+        scope.scoped(:conditions => ["#{self.table_name}.created_by =?", value ])
       when :status      
         scope.scoped(:conditions => ["#{self.table_name}.status = ?", 1])
       when :page
         scope.paginate(:page => options["page"], :per_page => options["limit"])
       else
-      scope.select("distinct(contents.id), contents.*")
+        scope.select("distinct(contents.id), contents.*")
       end      
     end
     scope.uniq #.paginate(:page => options["page"], :per_page => options["limit"])
 
   end
-
+  
+  def self.my_feeds_filter(filter_params)
+      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
+      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
+       item_ids = filter_params["items_id"].is_a?(Array) ? filter_params["items_id"].join(',') : filter_params["items_id"]
+     Content.joins(:item_contents_relations_cache,:content_itemtype_relations).where("item_contents_relations_cache.item_id in (?) and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.status =? or contents.created_by in (?) and contents.created_at >=?", item_ids,item_type_ids,sub_type, 1,filter_params["created_by"],2.weeks.ago).select("distinct(contents.id), contents.*").order(filter_params["order"]).paginate(:page => filter_params["page"],:per_page => PER_PAGE) 
+ end
+  
   def get_content_status(type)
     status = case type
     when "create" then 1
@@ -125,27 +135,19 @@ class Content < ActiveRecord::Base
     1
     end
     return status
-  end
+  end 
+  
   
   def self.follow_items_contents(user,item_types,type)
     if item_types.nil? && type.blank?
-      items = Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).collect(&:followable_id).uniq
       @item_types = Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id)
+       @items = Item.find_top_level_item_ids(Item::FOLLOWTYPES,user)
    else
       @item_types = item_types.join(",") if !item_types.blank?
-      items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).uniq
+      @items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).uniq
     end 
     @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
-    @related_items = []
-    @related_items += items
-      items.each do |it| 
-        item = Item.find(it)
-        if (item.type == "Manufacturer") || (item.type == "CarGroup")
-          @related_items += item.related_cars.collect(&:id)
-          @related_items.delete(it)
-        end
-       end
-      return @related_items.uniq.join(","),@item_types,@article_categories
+     return @items.uniq.join(","),@item_types,@article_categories
    end
   
   

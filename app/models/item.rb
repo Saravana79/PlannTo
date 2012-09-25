@@ -384,13 +384,58 @@ class Item < ActiveRecord::Base
 
  def self.get_follows_item_ids_for_user_and_item_types(user,item_type_ids)
    item_types = Itemtype.where('id in (?)',item_type_ids).map{|i| i.itemtype == "Car Group" ? "CarGroup" : i.itemtype}
-   Follow.where('follower_id =? and followable_type in (?)', user.id,item_types).collect(&:followable_id)
-  
+   #Follow.where('follower_id =? and followable_type in (?)', user.id,item_types).collect(&:followable_id)
+   Item.find_top_level_item_ids(item_types,user)
  end
+ def self.find_top_level_item_ids(types,user)
+     items = []
+     types.each do | type| 
+       it = [] 
+       it+= Follow.where('follower_id =? and followable_type in (?)',user.id,type).collect(&:followable_id).uniq
+       unless it.blank?
+         case type
+         when 'Mobile' 
+          items<<  configatron.root_level_mobile_id
+          items+= it
+        
+         when 'Camera'
+          items<< configatron.root_level_camera_id
+          items+= it
+         
+        when 'Tablet' 
+          items << configatron.root_level_tablet_id
+          items+= it
+        
+        when 'Bike'
+          items << configatron.root_level_tablet_id
+          items+= it
+        when "CarGroup"
+          items << configatron.root_level_car_id
+          it.each do |i|
+           object = Item.find(i)
+           items+= object.related_cars.collect(&:id)
+          end 
+        when "Car"
+          items << configatron.root_level_car_id
+        when "Manufacturer"
+          items << configatron.root_level_car_id  
+          it.each do |i|
+           object = Item.find(i)
+           items+= object.related_cars.collect(&:id)
+         end 
+        when 'Cycle'
+           items <<  configatron.root_level_cycle_id 
+           items+= it
+         end
+         end 
+         end
+        @items = items.uniq  
+               
+      end
 
- def self.get_follows_items_for_user(user) 
-   Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).limit(5).map{|f| Item.find(f.followable_id)}
- end
+  def self.get_follows_items_for_user(user) 
+    Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).limit(5).map{|f| Item.find(f.followable_id)}
+   end
  
  def show_specification
    has_specificiation = true

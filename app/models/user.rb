@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   after_create :populate_username
 
   scope :follow_type, lambda { |follow_type| where("follows.follow_type = ?", follow_type)}
-  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id")}
+  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type)}
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
   scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
   
@@ -67,6 +67,10 @@ class User < ActiveRecord::Base
 
 
   has_many :shares;
+  
+  def self.get_follow_users_id(current_user)
+     Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
+  end
   
   def invitation_token
     invitation.token if invitation
