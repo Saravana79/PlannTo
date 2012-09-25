@@ -143,7 +143,7 @@ function openInfoBox(displayInfo, attr_name, elem){
         $("#criteriaPopup").hide();
         $("#criteriaPopup").css({
             "position": "absolute",
-            "top": (position.top -15)+ "px",
+            "top": (position.top -45)+ "px",
             "left":(position.left+210) + "px"
         }).show();
         $( "#criteriaHeading" ).html(displayInfo.adn)
@@ -194,7 +194,7 @@ function openInfoBox(displayInfo, attr_name, elem){
         var position = $("#" + searchCriteriaFieldId).position();
         $("#criteriaPopup").css({
             "position": "absolute",
-            "top": (position.top -15)+ "px",
+            "top": (position.top -45)+ "px",
             "left":(position.left+210) + "px"
         }).show();
         $( "#criteriaHeading" ).html(displayInfo.adn)
@@ -264,7 +264,7 @@ function openInfoBox(displayInfo, attr_name, elem){
         var position = $("#" + searchCriteriaFieldId).position();
         $("#criteriaPopup").css({
             "position": "absolute",
-            "top": (position.top -15)+ "px",
+            "top": (position.top -45)+ "px",
             "left":(position.left+210) + "px"
         }).show();
         $( "#criteriaHeading" ).html(displayInfo.adn)
@@ -335,7 +335,7 @@ function openManufacturerBox(attr_name,elem){
     var position = $("#" + $(elem).attr('id')).position();
     $("#criteriaPopup").css({
         "position": "absolute",
-        "top": (position.top -15)+ "px",
+        "top": (position.top -45)+ "px",
         "left":(position.left+210) + "px"
     }).show();
     $( "#criteriaHeading" ).html("Manufacturer")
