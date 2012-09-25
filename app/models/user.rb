@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   after_create :populate_username
 
   scope :follow_type, lambda { |follow_type| where("follows.follow_type = ?", follow_type)}
-  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type)}
+  scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id")}
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
   scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
   
