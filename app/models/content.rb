@@ -121,10 +121,12 @@ class Content < ActiveRecord::Base
   end
   
   def self.my_feeds_filter(filter_params)
-      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
-      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
-       item_ids = filter_params["items_id"].is_a?(Array) ? filter_params["items_id"].join(',') : filter_params["items_id"]
-     Content.joins(:item_contents_relations_cache,:content_itemtype_relations).where("item_contents_relations_cache.item_id in (?) and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.status =? or contents.created_by in (?) and contents.created_at >=?", item_ids,item_type_ids,sub_type, 1,filter_params["created_by"],2.weeks.ago).select("distinct(contents.id), contents.*").order(filter_params["order"]).paginate(:page => filter_params["page"],:per_page => PER_PAGE) 
+     item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
+     sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
+     item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
+     root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
+     vote_count = configatron.root_content_vote_count
+     Content.joins(:item_contents_relations_cache,:content_itemtype_relations).where("item_contents_relations_cache.item_id in (?) and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.status =? and contents.created_at >=? or (contents.created_by in (?) and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.created_at >=? and contents.status =?)   or (item_contents_relations_cache.item_id in (?) and contents.total_votes>=? and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.created_at >=? and contents.status =?)", item_ids,item_type_ids,sub_type, 1,2.weeks.ago,filter_params["created_by"],item_type_ids,sub_type,2.weeks.ago,1,root_item_ids,vote_count,item_type_ids,sub_type,2.weeks.ago,1).select("distinct(contents.id), contents.*").order(filter_params["order"]).paginate(:page => filter_params["page"],:per_page => PER_PAGE) 
  end
   
   def get_content_status(type)
@@ -141,13 +143,13 @@ class Content < ActiveRecord::Base
   def self.follow_items_contents(user,item_types,type)
     if item_types.nil? && type.blank?
       @item_types = Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id)
-       @items = Item.find_top_level_item_ids(Item::FOLLOWTYPES,user)
+       @items,@root_items = Item.find_top_level_item_ids(Item::FOLLOWTYPES,user)
    else
       @item_types = item_types.join(",") if !item_types.blank?
-      @items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).uniq
+      @items,@root_items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).uniq
     end 
     @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
-     return @items.uniq.join(","),@item_types,@article_categories
+     return @items.uniq.join(","),@item_types,@article_categories,@root_items
    end
   
   

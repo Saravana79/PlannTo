@@ -18,7 +18,8 @@ class ContentsController < ApplicationController
      if  itemtype_id.present?
      
        if params[:search_type] == "Myfeeds"
-          @items,@item_types,@article_categories  = Content.follow_items_contents(current_user,itemtype_id,'category')
+          @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
+          filter_params["root_items"] = @root_items
           filter_params["items_id"] = @items.split(",")
           filter_params["created_by"] = [current_user.id] + User.get_follow_users_id(current_user) 
        end  
@@ -131,8 +132,9 @@ class ContentsController < ApplicationController
     end 
     if itemtype_id .present?
        if params[:search_type] == "Myfeeds"
-          @items,@item_types,@article_categories  = Content.follow_items_contents(current_user,itemtype_id,'category')
+          @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
           filter_params["items_id"] = @items.split(",")
+          filter_params["root_items"] = @root_items
           filter_params["created_by"] = [current_user.id] + User.get_follow_users_id(current_user) 
        end   
       if params[:search_type] != "Myfeeds"  
@@ -345,7 +347,7 @@ class ContentsController < ApplicationController
   
   def my_feeds
     if current_user
-      @items,@item_types,@article_categories = Content.follow_items_contents(current_user,params[:item_types],params[:type])
+      @items,@item_types,@article_categories,@root_items = Content.follow_items_contents(current_user,params[:item_types],params[:type])
       filter_params = {"sub_type" => @article_categories}
       filter_params["itemtype_id"] = @item_types 
     
@@ -359,6 +361,7 @@ class ContentsController < ApplicationController
        filter_params["status"] = 1
        filter_params["created_by"] =   creator_ids = [current_user.id] + User.get_follow_users_id(current_user)
        filter_params["page"] = 1
+       filter_params["root_items"] = @root_items
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = "created_at desc"
        @contents = Content.my_feeds_filter(filter_params)

@@ -384,53 +384,57 @@ class Item < ActiveRecord::Base
 
  def self.get_follows_item_ids_for_user_and_item_types(user,item_type_ids)
    item_types = Itemtype.where('id in (?)',item_type_ids).map{|i| i.itemtype == "Car Group" ? "CarGroup" : i.itemtype}
-   #Follow.where('follower_id =? and followable_type in (?)', user.id,item_types).collect(&:followable_id)
-   Item.find_top_level_item_ids(item_types,user)
+  @item,@root_items = Item.find_top_level_item_ids(item_types,user)
  end
+ 
  def self.find_top_level_item_ids(types,user)
+     root_items = []
      items = []
-     types.each do | type| 
+     types.each do | type|
+        
        it = [] 
        it+= Follow.where('follower_id =? and followable_type in (?)',user.id,type).collect(&:followable_id).uniq
+      
        unless it.blank?
          case type
          when 'Mobile' 
-          items<<  configatron.root_level_mobile_id
+          root_items<<  configatron.root_level_mobile_id.to_s
           items+= it
         
          when 'Camera'
-          items<< configatron.root_level_camera_id
+          root_items<< configatron.root_level_camera_id.to_s
           items+= it
          
         when 'Tablet' 
-          items << configatron.root_level_tablet_id
+          root_items << configatron.root_level_tablet_id.to_s
           items+= it
         
         when 'Bike'
-          items << configatron.root_level_tablet_id
+          items << configatron.root_level_tablet_id.to_s
           items+= it
         when "CarGroup"
-          items << configatron.root_level_car_id
+          root_items << configatron.root_level_car_id.to_s
           it.each do |i|
            object = Item.find(i)
            items+= object.related_cars.collect(&:id)
           end 
         when "Car"
-          items << configatron.root_level_car_id
+          root_items << configatron.root_level_car_id.to_s
+          items+= it
         when "Manufacturer"
-          items << configatron.root_level_car_id  
+          root_items << configatron.root_level_car_id.to_s  
           it.each do |i|
            object = Item.find(i)
            items+= object.related_cars.collect(&:id)
          end 
         when 'Cycle'
-           items <<  configatron.root_level_cycle_id 
+           root_items <<  configatron.root_level_cycle_id.to_s 
            items+= it
          end
          end 
          end
         @items = items.uniq  
-               
+         return @items,root_items.uniq       
       end
 
   def self.get_follows_items_for_user(user) 

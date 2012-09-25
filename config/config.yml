@@ -17,6 +17,13 @@ development:
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
   content_creator_user_ids: "1,7,8"
+  root_level_car_id: 3214
+  root_level_mobile_id: 5
+  root_level_cycle_id: 3219
+  root_level_tablet_id: 3217
+  root_level_bike_id: 3218
+  root_level_camera_id: 3216
+  root_content_vote_count: 1
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -34,6 +41,13 @@ test:
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
   content_creator_user_ids: "1,7,8,19,27,3"
+  root_level_car_id: 3214
+  root_level_mobile_id: 5
+  root_level_cycle_id: 3219
+  root_level_tablet_id: 3217
+  root_level_bike_id: 3218
+  root_level_camera_id: 3216
+  root_content_vote_count: 1
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
@@ -53,5 +67,11 @@ production:
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
   content_creator_user_ids: "2,8,7,19,3"
-  
+  root_level_car_id: 3214
+  root_level_mobile_id: 5
+  root_level_cycle_id: 3219
+  root_level_tablet_id: 3217
+  root_level_bike_id: 3218
+  root_level_camera_id: 3216
+  root_content_vote_count: 1
  
