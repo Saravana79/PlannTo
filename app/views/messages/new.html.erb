@@ -10,6 +10,10 @@
     <%= f.hidden_field :email_list %>
   </p>
   <p>
+    <%= label "title", "Subject:" %>
+    <%= f.text_field :topic, :rows => 5%>
+  </p>
+  <p>
     <%= label "message", "Message:" %>
     <%= f.text_area :body, :rows => 5, :cols => 40 %>
   </p>
