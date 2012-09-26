@@ -12,12 +12,16 @@
         <%end%>
         <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
       <%end%>
-      <a href="" >Current <%=@search_type.pluralize.humanize%></a><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%>
+      <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Available <%=@search_type.pluralize.humanize%><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%></span>
+      </span>      
+      <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, false, :onclick => "setSearchStatus();"%></span>
+     </span>
       <br/>
-      <a href="" >Future <%=@search_type.pluralize.humanize%></a><%= check_box_tag "future_status", 2, false, :onclick => "setSearchStatus();"%>
-      <br/>
+      <span style="display:none;">
       <a href="" >Nonavailable <%=@search_type.pluralize.humanize%></a><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();" %>
-      <br/>
+      </span>
+
+      <br/>      
     </ul>
   </div>
   <%= render :partial => "shared/search_popup" %>
