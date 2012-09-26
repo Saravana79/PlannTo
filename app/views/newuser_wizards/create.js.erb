@@ -8,6 +8,8 @@
   $("#wizard").html("<%= escape_javascript(render  "newuser_wizards/wizard_step3") %> ");
    <%end%>
  <%end%>   
- <%if  @type == "buyer" %>
+ <%if  @type == "buyer" && !Item.get_follows_items_for_user(current_user).blank?  %>
    window.location.href = "/"  
-<%end%>
+<%elsif @type == "buyer" && Item.get_follows_items_for_user(current_user).blank?  %>
+   window.location.href = "/mobiles" 
+<%end%>   
