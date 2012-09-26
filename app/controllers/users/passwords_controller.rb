@@ -11,7 +11,7 @@ class Users::PasswordsController < DeviseController
   # POST /resource/password
   def create
     self.resource = resource_class.send_reset_password_instructions(params[:user])
-
+     puts"#{resource_class}"
     if successfully_sent?(resource)
       respond_with({}, :location => after_sending_reset_password_instructions_path_for(resource_name))
     else
@@ -32,7 +32,7 @@ class Users::PasswordsController < DeviseController
       flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
       set_flash_message(:notice, flash_message) if is_navigational_format?
       sign_in(resource_name, resource)
-        redirect_to  "/my_feeds", notice: "Successfully Password Reset"
+        redirect_to  root_path, notice: "Successfully Password Reset"
     else
       respond_with resource
     end

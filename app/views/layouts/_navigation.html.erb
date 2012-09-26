@@ -289,7 +289,14 @@
      <div style="float:right;padding:0px 30px 0px 0px;">
        <dl>
        	<%end%>
-        <div><%= link_to "My Feeds", my_feeds_path %></div>
+        <div><%= link_to "My Feeds", "/",:id=>"my_feeds" %></div>
+        <script>
+         $("#my_feeds").click(function(e){
+          <%if !current_user %>
+           alert("Please login to see my feeds contents");
+          <%end%> 
+         })
+        </script>
         <% cache "navigation_last" do %>
        </dl>
      </div>
@@ -297,4 +304,4 @@
 </ul>
 <%end%>
      
- 
+ 	   

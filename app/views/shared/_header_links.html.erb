@@ -54,7 +54,7 @@
            <div class="Useraccountinfo">
              <%= link_to "Account Setting", accounts_path %>
              <%= link_to "Profile",  "/" + "#{current_user.username}" %>
-             <%= link_to "My feeds", my_feeds_path %>
+             <%= link_to "My feeds", "/" %>
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>
          </span>
