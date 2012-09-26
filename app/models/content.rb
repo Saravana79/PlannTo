@@ -123,11 +123,31 @@ class Content < ActiveRecord::Base
   def self.my_feeds_filter(filter_params)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
-     item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
+     sub_type = sub_type.map { |i| "'" + i.to_s + "'" }.join(",")
+      item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
      root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
      vote_count = configatron.root_content_vote_count
-     Content.joins(:item_contents_relations_cache,:content_itemtype_relations).where("item_contents_relations_cache.item_id in (?) and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.status =? and contents.created_at >=? or  (item_contents_relations_cache.item_id in (?) and contents.total_votes>=? and content_itemtype_relations.itemtype_id in (?) and contents.sub_type in (?) and contents.created_at >=? and contents.status =?)", item_ids,item_type_ids,sub_type, 1,2.weeks.ago,root_item_ids,vote_count,item_type_ids,sub_type,2.weeks.ago,1).select("distinct(contents.id), contents.*").order(filter_params["order"]).paginate(:page => filter_params["page"],:per_page => PER_PAGE) 
+     page = (filter_params["page"].to_i - 1) * 10 
+     content_ids =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
+INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
+WHERE 
+(
+(item_contents_relations_cache.item_id in (#{item_ids.join(",")})) or 
+(item_contents_relations_cache.item_id in (#{root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+)and 
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+union 
+SELECT distinct(contents.id) as idu, contents.* FROM contents 
+INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
+WHERE 
+(contents.created_by in (#{filter_params["created_by"].join(",")}))
+and 
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
+)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)  
+   contents = Content.find(content_ids)
  end
+ 
   
   def get_content_status(type)
     status = case type
