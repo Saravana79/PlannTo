@@ -1,5 +1,4 @@
 var parent_div = ($("#close_<%= @item.id %>").parent().parent().parent().parent().attr("id"));
-alert(parent_div);
 $("#product_<%= @item.id %>").remove();
 var string = $("#wizard_item_id").val();
 var array = string.split(',');
