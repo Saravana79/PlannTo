@@ -2,13 +2,13 @@
   <div id="usual2" class="usual">
     <ul>
       <li class="tabstyle">
-        <a href="#tabs1">Basic Info</a>
+         <%= link_to "Basic Info","#tabs1",:id => "basic_info"%>
       </li>
       <li>
         <%= link_to "Change Password", "#tabs4",:id=>"change_password"%>
       </li>
       <li class="tabstyle">
-        <a class="" href="#tabs2" id="specification">Email Notifications</a>
+        <%= link_to "Email Notifications","#tabs2",:id => "email_notify"%>
 
       </li>
       <li class="tabstyle">
@@ -19,6 +19,7 @@
     </ul>
 
     <div id="tabs1" style="display: block; " class="main-content-section">
+         <center><h2> Basic Info </h2> </center>
       <% @user.errors.full_messages.each do |error_message| %>
         <%= error_message %>
       <% end %>
@@ -46,12 +47,20 @@
 
 
     <div id="tabs2" style="display: none; " class="main-content-section">
-      Email Settings goes here
+       <center><h2> Email Settings </h2> </center>
+     <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
+        <%= f.label :my_feeds_email, 'My feeds Email.' %>:
+        <%= f.check_box :my_feeds_email %>
+        <br/>
+        <%= f.submit %>
+      <% end %>
+
     </div>
     
   </div>
 
   <div id="tabs4" style="display:none">
+      <center><h2> Change Password</h2> </center>
       <%= render :partial => 'change_password_form' %>
     </div>
 
@@ -61,13 +70,26 @@
   $("#change_password").click(function(e){
     $("#tabs1").hide();
     $("#tabs4").show();
-  
+    $("#tabs2").hide();
   });
-   $("li.tabstyle").click(function(e){
+   $("#basic_info").click(function(e){
     $("#tabs1").show();
     $("#tabs4").hide();
-  
+    $("#tabs2").hide();
+    });
+   $("#email_notify").click(function(e){
+    $("#tabs1").hide();
+    $("#tabs4").hide();
+    $("#tabs2").show();
+     
   });
+  <%if @type =="email" %>
+    $("#tabs1").hide();
+    $("#tabs4").hide();
+    $("#tabs2").show();
+    $("#tabs2").show();
+  <%end%>  
 </script>
+
 
 

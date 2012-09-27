@@ -3,7 +3,7 @@ class AccountsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :get_user_info
   def index
-
+    @type = params[:type]
   end
 
   def update
