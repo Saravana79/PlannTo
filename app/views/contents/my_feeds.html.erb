@@ -47,16 +47,7 @@
          <a class="txt_blue" href="#"  class="link_active">Newest</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Comments</a>
-         <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
-		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
-		<%= f.hidden_field :sub_type %>
-		<%= f.hidden_field :item_ids, :value => @items%>
-		<%= f.hidden_field :sort_by, :value => ""%>
-		<%= f.hidden_field :itemtype_ids, :value => @item_types.join(",")%>
-		<%= f.hidden_field :previous_search_value%>
-		<%= f.hidden_field :page, :value =>1%>
-		<% end -%>  
-      </span>
+        </span>
     </div>
 <div style="margin: 0px 0px 0px 550px;">
 <ul class="itemdrop" >
