@@ -421,6 +421,8 @@ class Item < ActiveRecord::Base
         when "Car"
           root_items << configatron.root_level_car_id.to_s
           items+= it
+        when "Topic"
+          items+= it        
         when "Manufacturer"
           root_items << configatron.root_level_car_id.to_s  
           it.each do |i|

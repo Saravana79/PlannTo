@@ -21,7 +21,7 @@ class ContentsController < ApplicationController
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
           filter_params["root_items"] = @root_items
           filter_params["items_id"] = @items.split(",")
-          filter_params["created_by"] = [current_user.id] + User.get_follow_users_id(current_user) 
+          filter_params["created_by"] =  User.get_follow_users_id(current_user) 
        end  
       if params[:search_type] != "Myfeeds"  
        if params[:items].present?
