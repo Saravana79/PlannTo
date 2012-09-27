@@ -15,22 +15,15 @@
     <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
       <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
-   
-    </div>
-       <div style="clear:both;"></div>
-    
-      <%= render "default_images" %>
+   </div>
+     <div style="clear:both;"></div>
+     <%= render "default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "owner" %>
-   
-      
-        <div class="search_block" style="float:right;padding:5px;">
-         <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-       
-     
-       <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;">or <a href="#">skip</a></p>
-      
-       <div>
+    <div class="search_block" style="float:right;padding:5px;">
+    <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;">or <a href="#">skip</a></p>
+      <div>
          <%= render "shared/ajax_loader" %>
       </div>
         </div>
@@ -43,4 +36,4 @@
  });
 </script>
 
- 
+

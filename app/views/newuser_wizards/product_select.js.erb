@@ -1,12 +1,42 @@
-if ($("#wizard_item_id").val() == "")
+var item_ids = $("#wizard_item_id").val();
+var array = item_ids.split(",");
+array_length = array.length;
+if ($("#img_box_1").text().length < 100 )
 {
-$("#photo_box").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
+ $("#img_box_1").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
+else if ($("#img_box_2").text().length < 100 )
+{
+ $("#img_box_2").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
+}
+
+else if ($("#img_box_3").text().length < 100 )
+{
+ $("#img_box_3").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
+}
+
+else if ($("#img_box_4").text().length < 100 )
+{
+ $("#img_box_4").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
+}
+
+
+else if ($("#img_box_5").text().length < 100 )
+{
+$("#img_box_5").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
+}
+
+
+else if ($("#img_box_6").text().length < 100 )
+{
+ $("#img_box_6").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
+}
+
 else
 {
 $("#photo_box").append("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>");
 }
-var item_ids = $("#wizard_item_id").val();
 $("#wizard_item_id").val(item_ids + "<%= escape_javascript(@item.id.to_s + ",")%>");
 $("#product").val("");
+
 

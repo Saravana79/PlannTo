@@ -1,6 +1,6 @@
 desc "send email to user"
   task :send_contents_email,:arg1, :needs => :environment do | t, args|
-    follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at<=?",Item::FOLLOWTYPES,1.weeks.ago).select('distinct users.email,users.id')
+    follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at>=?",Item::FOLLOWTYPES,1.weeks.ago).select('distinct users.email,users.id')
      #user = User.find(args[:arg1].to_i)
      follow_users.each do |user|
        follow_friends_ids = [user.id] + User.get_follow_users_id(user)
@@ -48,10 +48,25 @@ desc "send email to user"
           end 
           end
           vote_count = configatron.root_content_vote_count
-       @contents = Content.joins("INNER JOIN `item_contents_relations_cache` ON item_contents_relations_cache.content_id = contents.id").where("item_contents_relations_cache.item_id in (?) and contents.created_at >=? and contents.status=? or(contents.created_by in (?) and contents.created_at >=? and contents.status =?) or (item_contents_relations_cache.item_id in (?) and contents.total_votes>=? and contents.created_at >=? and contents.status =?)",follow_item_ids,2.weeks.ago,1, follow_friends_ids,2.weeks.ago,1,root_item_ids,vote_count,2.weeks.ago,1).select("distinct(contents.id), contents.*").order("contents.created_at desc").limit(10)
+         content_ids =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
+WHERE 
+((item_contents_relations_cache.item_id in (#{follow_item_ids.join(",")})) or 
+(item_contents_relations_cache.item_id in (#{root_item_ids.join(",")}) and total_votes >= {vote_count}))and 
+(contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+union 
+SELECT distinct(contents.id) as idu, contents.* FROM contents 
+WHERE 
+(contents.created_by in (#{follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{2.weeks.ago}')
+)a  order by a.created_at desc limit 10").collect(&:id)  
+  @contents = Content.find(content_ids) 
        if @contents.size > 0
          ContentMailer.my_feeds_content(@contents,user).deliver
        end 
      end
     end
+  
+  
+  
+ 
   
