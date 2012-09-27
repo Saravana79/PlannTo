@@ -1,6 +1,6 @@
 desc "send email to user"
   task :send_contents_email,:arg1, :needs => :environment do | t, args|
-    follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at>=?",Item::FOLLOWTYPES,1.weeks.ago).select('distinct users.email,users.id,users.username')
+    follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at>=? and users.my_feeds_email=?",Item::FOLLOWTYPES,1.weeks.ago,1).select('distinct users.email,users.id,users.username')
      #user = User.find(args[:arg1].to_i)
      follow_users.each do |user|
        follow_friends_ids = [user.id] + User.get_follow_users_id(user)
