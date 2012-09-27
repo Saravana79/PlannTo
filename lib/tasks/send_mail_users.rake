@@ -1,9 +1,15 @@
 desc "send email to user"
   task :send_contents_email,:arg1, :needs => :environment do | t, args|
-    follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at<=? and users.my_feeds_email=?",Item::FOLLOWTYPES,1.weeks.ago,1).select('distinct users.email,users.id,users.username')
-     #user = User.find(args[:arg1].to_i)
+
+    userid = args[:arg1].to_i
+    if( userid != 0)
+     follow_users = User.find(:all, :conditions=> ["id = ?" ,userid])
+    else
+     follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at<=? and users.my_feeds_email=?",Item::FOLLOWTYPES,1.weeks.ago,1).select('distinct users.email,users.id,users.username')
+    end 
+
      follow_users.each do |user|
-       follow_friends_ids = [user.id] + User.get_follow_users_id(user)
+       follow_friends_ids =  User.get_follow_users_id(user)
        root_item_ids = []
        follow_item_ids = []
        followed_item_ids = []
@@ -37,6 +43,9 @@ desc "send email to user"
              end 
            when "Car"
              root_item_ids << configatron.root_level_car_id.to_s
+             follow_item_ids+= it
+             followed_item_ids+= it
+           when "Topic"
              follow_item_ids+= it
              followed_item_ids+= it
            when "Manufacturer"
