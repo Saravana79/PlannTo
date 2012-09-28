@@ -1,10 +1,15 @@
 class ContentMailer < ActionMailer::Base
-  default from: "admin@plannto.com"
+  default from: "\"PlannTo\" <admin@plannto.com>"
   def my_feeds_content(contents,user,followed_item_ids)
     @contents = contents
     @username = user.username
+    @userfullname = user.name
     @items = Item.where('id in (?)',followed_item_ids[0..5])
-    subject = "Latest Plannto contents"
+    if(contents.size > 0)
+    subject = "Weekly Digest - " + contents[0].title;
+	else
+	subject = "PlannTo digest for this week"
+	end 
     mail(:to => user.email, :subject => subject)
   end
  end

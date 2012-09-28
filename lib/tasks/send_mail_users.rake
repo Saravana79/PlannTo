@@ -70,13 +70,13 @@ WHERE
 (item_contents_relations_cache.item_id in (#{follow_item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
 )and 
-(contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+(contents.status =1 and contents.created_at >= '#{1.weeks.ago}')
 union 
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 WHERE 
-(contents.created_by in (#{follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{2.weeks.ago}')
-)a  order by a.created_at desc limit 10").collect(&:id)  
-  @contents = Content.find(content_ids) 
+(contents.created_by in (#{follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{1.weeks.ago}')
+)a  order by a.total_votes desc limit 10").collect(&:id)  
+  @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
        if @contents.size > 0
          ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
        end 

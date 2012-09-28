@@ -145,7 +145,8 @@ WHERE
 and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
 )a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)  
-   contents = Content.find(content_ids)
+   contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+  # contents = Content.find(content_ids)
  end
  
   

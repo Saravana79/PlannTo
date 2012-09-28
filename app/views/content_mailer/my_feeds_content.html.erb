@@ -16,17 +16,16 @@
     <td>
     <table border="0" cellspacing="0" cellpadding="0" width="100%">
   <tr>
-    <td width="37" ><img src="http://www.plannto.com/images/left_shadow.png" alt="LeftShadow" width="37" height="136" /></td>
-    <td  align="left" valign="top" style="background:#FFFFFF; border-top:3px solid #d8d8d8;" >
-    <span style="display:block; float:left;"><a href="http://www.planntp.com"><img src="http://www.plannto.com/images/n_logo.png" width="134" height="97" border="0" /></a></span>
-    <p style="padding:53px 6px 0 0; margin:0;font-family:Georgia, 'Times New Roman', Times, serif; font-size:11px;
-    text-align:right; color:#a3a3a3; font-style:italic;">
+    <td width="37" ><img src="http://www.plannto.com/images/left_shadow.png" alt="" width="37" height="136" /></td>
+    <td align="left" valign="top" style="background:#FFFFFF; border-top:3px solid #d8d8d8;" >
+    <span style="display:block; float:left;"><a href="http://www.plannto.com"><img src="http://www.plannto.com/images/n_logo.png" width="134" height="97" border="0" alt="PlannTo.com" /></a></span>   
+    <td align="right" width="100%" style="background:#FFFFFF; border-top:3px solid #d8d8d8;"> 
 <span style="color:#676767"><em><%= Date.today.day %> <%= Date::MONTHNAMES[Date.today.month] %>
  <%= Date.today.year %></em></span><br /><br />
 
-    If you cannot read this email, <a href="http://localhost:3000/users/sign_in" style="color:#787878; text-decoration:none;">click here</a><br />
-Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="color:#787878; text-decoration:none;">unsubscribe</a>    </p>    </td>
-    <td width="24"  align="right" valign="top"><img src="http://www.plannto.com/images/right_shadow.png" alt="RightShadow" width="24" height="136" /></td>
+   <!-- If you cannot read this email, <a href="http://localhost:3000/users/sign_in" style="color:#787878; text-decoration:none;">click here</a><br />
+Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="color:#787878; text-decoration:none;">unsubscribe</a>    </p> -->   </td>
+    <td width="24"  align="right" valign="top"><img src="http://www.plannto.com/images/right_shadow.png"  width="24" height="136" /></td>
   </tr>
 </table>
 
@@ -43,13 +42,26 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
         <td align="left" valign="top">
           <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><table width="597" border="0" cellspacing="0" cellpadding="0" align="center">
+    <td width="100%" style="border-bottom:1px solid #d8d8d8; padding-bottom:7px; padding-top:0px;width=100%;height:2px;">
+      
+        <!--<table width="597" border="0" cellspacing="0" cellpadding="0" align="center">
       <tr>
         <td style="border-bottom:1px solid #d8d8d8; padding-bottom:7px; padding-top:0px;" align="left" valign="top">
         <img src="http://www.plannto.com/images/topreviews.png" alt="Ending Soon" width="153" height="20" /></td>
       </tr>
-    </table></td>
+    </table>-->
+    </td>
   </tr>
+  <tr>
+    <td>
+        <p  style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
+          <br/>
+           Dear <%=@userfullname%> <br/><br/>
+           Greetings from PlannTo.com. Please find some of the interesting contents shared in Plannto.com this week based on the products/topics you followed in Plannto.com
+             </p> 
+             <br/><br/>
+    <td>
+   </tr> 
   <tr>
     <td align="center" valign="top"><table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
       <% @contents.each do |content| %>
@@ -67,13 +79,13 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
                   <td width="18%" align="left" valign="top"><img src="http://www.plannto.com/images/prodcut_reivew.png" width="75" height="75" style="padding:3px; background:#FFFFFF; border:1px solid #c3c3c3; margin-left:10px;" /></td>
                <%end%>    
             <td width="82%" align="left" valign="top">
-           <h2 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:26px; font-style:italic; color:#1393b2; font-weight:normal;">
+           <h2 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:22px; font-style:italic; color:#1393b2; font-weight:normal;">
             <a href="<%= content_url(content.id) %>"  style="color: #1393b2; text-decoration:none;" onmouseover="this.style.color='#0f6c83'" onmouseout="this.style.color='#1393b2'">
-            <%= content.title %></a>    <%if content.is_a?(ArticleContent) %> <% if content.url?  %>
-        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="http://www.plannto.com/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
-       <%end%>  <%end%></h2> 
+            <%= content.title %></a></h2>    <%if content.is_a?(ArticleContent) %> <% if content.url?  %>
+        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#1393b2;" href="http://www.plannto.com/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
+       <%end%>  <%end%> 
            
-           <p  style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:16px; font-style:italic; color:#676666;">
+           <p  style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
            <%= raw "#{content.description.split[0..(Content::WORDCOUNT-1)].join(' ')}" + "#{content.description.split.size > Content::WORDCOUNT ? "...": ""}" %>        </p>            </td>
           </tr>
         </table></td>
@@ -82,13 +94,13 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
 
      <tr>
     <td width="82%" align="left" valign="top">
-    <h3 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:18px; font-style:italic; color:#1393b2; font-weight:normal;"><%= link_to "View More","http://www.plannto.com/users/sign_in" %></td></h3>
+    <h3 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:18px; font-style:italic; color:#1393b2; font-weight:normal;"><%= link_to "View more contents","http://www.plannto.com" %></td></h3>
   </tr>
     </table></td>
   </tr>
    
   <tr>
-    <td align="center" valign="top"><img src="http://www.plannto.com/images/border_bottom.jpg" alt="Boder Bottom" width="650" height="20" align="left" style="margin:20px 0;" /></td>
+    <td align="center" valign="top"><img src="http://www.plannto.com/images/border_bottom.jpg"  width="650" height="20" align="left" style="margin:20px 0;" /></td>
   </tr>
 
 </table>
@@ -103,8 +115,14 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
   <tr>
     <td><table width="597" border="0" cellspacing="0" cellpadding="0" align="center">
       <tr>
-        <td style="border-bottom:1px solid #d8d8d8; padding-bottom:7px; padding-top:20px;" align="left" valign="top">
-        <img src="http://www.plannto.com/images/review_category.png" alt="Review Categories" width="219" height="19" /></td>
+        <td style="border-bottom:1px solid #d8d8d8; padding-bottom:2px; padding-top:5px;" align="left" valign="top">
+        <p  style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
+          <br/>
+              Please find the list of products/topics followed by you in Plannto.com. 
+             </p> 
+           
+             <br/><br/>
+        <!--<img src="http://www.plannto.com/images/review_category.png" alt="Review Categories" width="219" height="19" />--></td>
       </tr>
     </table></td>
   </tr>
@@ -115,7 +133,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
           <% unless @items[0].nil? %>
         <td width="35">&nbsp;</td>
         <td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
-        <a href="<%= 'http://www.plannto.com' + @items[0].get_url() %>" > <img src="<%= @items[0].image_url() %>" alt="Category" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+        <a href="<%= 'http://www.plannto.com' + @items[0].get_url() %>" > <img src="<%= @items[0].image_url() %>" alt="<%= @items[0].name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @items[0].name %></p>
         
 
@@ -127,7 +145,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
        <% unless @items[1].nil? %>
         <td width="70">&nbsp;</td>
         <td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
-         <a href="<%= 'http://www.plannto.com' + @items[1].get_url() %>" ><img src="<%= @items[1].image_url() %>" alt="Category" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+         <a href="<%= 'http://www.plannto.com' + @items[1].get_url() %>" ><img src="<%= @items[1].image_url() %>" alt="<%= @items[1].name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @items[1].name %></p>
         
 
@@ -139,7 +157,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
         <% unless @items[2].nil? %>
          <td width="70">&nbsp;</td>
         <td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
-        <a href="<%= 'http://www.plannto.com' + @items[2].get_url() %>" ><img src="<%= @items[2].image_url() %>" alt="Category" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+        <a href="<%= 'http://www.plannto.com' + @items[2].get_url() %>" ><img src="<%= @items[2].image_url() %>" alt="<%= @items[2].name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @items[2].name %></p>
         
 
@@ -165,7 +183,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
        <% unless @items[3].nil? %>
         <td>&nbsp;</td>
         <td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
-        <a href="<%= 'http://wwww.plannto.com' + @items[3].get_url() %>" ><img src="<%= @items[3].image_url() %>" alt="Category" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+        <a href="<%= 'http://wwww.plannto.com' + @items[3].get_url() %>" ><img src="<%= @items[3].image_url() %>" alt="<%= @items[3].name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @items[3].name %></p>
         
 
@@ -177,7 +195,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
  <% unless @items[4].nil? %>
         <td>&nbsp;</td>
         <td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
-          <a href="<%= 'http://www.plannto.com' + @items[4].get_url() %>" ><img src="<%= @items[4].image_url() %>" alt="Category" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+          <a href="<%= 'http://www.plannto.com' + @items[4].get_url() %>" ><img src="<%= @items[4].image_url() %>" alt="<%= @items[4].name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @items[4].name %></p>
         
 
@@ -189,7 +207,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
   <% unless @items[5].nil? %>
         <td>&nbsp;</td>
         <td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
-       <a href="<%= 'http://www.plannto.com' + @items[5].get_url() %>" ><img src="<%= @items[5].image_url() %>" alt="Category" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+       <a href="<%= 'http://www.plannto.com' + @items[5].get_url() %>" ><img src="<%= @items[5].image_url() %>" alt="<%= @items[5].name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @items[5].name %></p>
         
 
@@ -211,13 +229,13 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
       </tr>
       <tr>
         
-        <td width="82%" align="right" valign="top" >
-    <h4 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:18px; font-style:italic; color:#1393b2; font-weight:normal;"><%= link_to "View More","http://www.plannto.com/" + @username %></td></h4>
+        <td width="82%" align="left" valign="top" colspan="6">
+    <h4 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:18px; font-style:italic; color:#1393b2; font-weight:normal;"><%= link_to "View all items","http://www.plannto.com/" + @username %></td></h4>
   </tr>
     </table></td>
   </tr>
   <tr>
-    <td align="center" valign="top"><img src="http://www.plannto.com/images/border_bottom.jpg" alt="Boder Bottom" width="650" height="20" align="left" /></td>
+    <td align="center" valign="top"><img src="http://www.plannto.com/images/border_bottom.jpg"  width="650" height="20" align="left" /></td>
   </tr>
 </table>
  </td>
@@ -229,15 +247,15 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
   <tr>
     <td align="left" valign="top"><table border="0" cellspacing="0" cellpadding="0" width="100%">
   <tr>
-    <td width="37" align="left" valign="bottom" ><img src="http://www.plannto.com/images/bottomleft_shadow.png" alt="LeftShadow" width="37" height="173" /></td>
+    <td width="37" align="left" valign="bottom" ><img src="http://www.plannto.com/images/bottomleft_shadow.png" width="37" height="173" /></td>
     <td  align="left" valign="top" style="background:#FFFFFF; border-bottom:3px solid #d8d8d8;" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td align="center" valign="top" style="padding-top:20px;"><table width="494" border="0" align="center" cellpadding="0" cellspacing="0">
           <tr>
-            <td width="177" align="left" valign="middle">
+            <!--<td width="177" align="left" valign="middle">
             <a href="#"><img src="http://www.plannto.com/images/email.png" alt="Email" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
-<a href="#" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Forward this to a friend</a></td>
-            <td width="167" align="left" valign="middle">   <a href="http://www.twitter.com/PlannTo"><img src="http://www.plannto.com/images/twitter.png" alt="Twitter" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
+<a href="#" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Forward this to a friend</a></td> -->
+            <td  align="left" valign="middle">   <a href="http://www.twitter.com/PlannTo"><img src="http://www.plannto.com/images/twitter.png" alt="Twitter" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
 <a href="http://www.twitter.com/PlannTo" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Follow us on Twitter</a></td>
             <td>  <a href="http://www.facebook.com/PlannTo"><img src="http://www.plannto.com/images/facebook.png" alt="Facebook" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>  
             
@@ -249,14 +267,14 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
       <tr>
         <td>
         <p style="padding:32px 0 30px 0; margin:0px; font-family:Georgia, 'Times New Roman', Times, serif; font-size:12px; color:#676767; font-style:italic; text-align:center;">
-  Copyright © 2012 <%= link_to "Plannto","http://www.plannto.com" %>  All rights reserved.<br />
+  Copyright © 2012 <%= link_to "PlannTo.com","http://www.plannto.com" %>  All rights reserved.<br />
 
-You are receiving this email because you voluntarily opted in at our website.
+You are receiving this email because you are a member of PlannTo.com, if you dont like to receive this mail. Please unsubscribe by modifying your email preference in <a href="<%= accounts_url(:type=> 'email')%>" style="color:#787878;" >PlannTo.com Email Settings Page</a>.
  
         </td>
       </tr>
     </table>        </td>
-    <td width="24"  align="right" valign="bottom"><img src="http://www.plannto.com/images/bottomright_shadow.png" alt="RightShadow" width="24" height="173" /></td>
+    <td width="24"  align="right" valign="bottom"><img src="http://www.plannto.com/images/bottomright_shadow.png" width="24" height="173" /></td>
   </tr>
 </table></td>
   </tr>
