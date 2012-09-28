@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout "root_page"
+  layout "product"
   def index
     if current_user
       get_objects_for_my_feeds
@@ -37,7 +37,7 @@ class HomeController < ApplicationController
         end
        filter_params["items_id"] = items
        filter_params["status"] = 1
-       filter_params["created_by"] =   creator_ids = [current_user.id] + User.get_follow_users_id(current_user)
+       filter_params["created_by"] = User.get_follow_users_id(current_user)
        filter_params["page"] = 1
        filter_params["root_items"] = @root_items
        filter_params["guide"] = params[:guide] if params[:guide].present?

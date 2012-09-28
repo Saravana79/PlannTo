@@ -48,6 +48,7 @@ class ContentsController < ApplicationController
     if params[:user]
       filter_params[:user] = params[:user]
     end  
+    filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
@@ -135,7 +136,7 @@ class ContentsController < ApplicationController
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
           filter_params["items_id"] = @items.split(",")
           filter_params["root_items"] = @root_items
-          filter_params["created_by"] = [current_user.id] + User.get_follow_users_id(current_user) 
+          filter_params["created_by"] =  User.get_follow_users_id(current_user) 
        end   
       if params[:search_type] != "Myfeeds"  
        
@@ -359,11 +360,11 @@ class ContentsController < ApplicationController
         end
        filter_params["items_id"] = items
        filter_params["status"] = 1
-       filter_params["created_by"] =   creator_ids = [current_user.id] + User.get_follow_users_id(current_user)
+       filter_params["created_by"] =  User.get_follow_users_id(current_user)
        filter_params["page"] = 1
        filter_params["root_items"] = @root_items
        filter_params["guide"] = params[:guide] if params[:guide].present?
-       filter_params["order"] = "created_at desc"
+       filter_params["order"] = get_sort_by(params[:sort_by])
        @contents = Content.my_feeds_filter(filter_params)
     end
     respond_to do |format|

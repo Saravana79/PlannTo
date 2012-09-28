@@ -127,8 +127,8 @@ class Content < ActiveRecord::Base
       item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
      root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
      vote_count = configatron.root_content_vote_count
-     page = (filter_params["page"].to_i - 1) * 10 
-     content_ids =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+     page = (filter_params["page"].to_i - 1) * 10
+     content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
@@ -144,7 +144,8 @@ WHERE
 (contents.created_by in (#{filter_params["created_by"].join(",")}))
 and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
-)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)  
+)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+   content_ids = content_ids.blank? ? "" : content_ids
    contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
   # contents = Content.find(content_ids)
  end

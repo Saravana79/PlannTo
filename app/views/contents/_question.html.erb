@@ -7,7 +7,10 @@
   </div>
   <div class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
-    <div><a class="txt_brown_bold"><%= content.user.name  %> asked in <%=get_anchor_name_link(content)%> - <%= pluralize(content.answer_contents.count, 'Answer')%>  - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago. </a></div>
+    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name  %></a> <a class="txt_brown"> asked in <%=get_anchor_name_link(content)%> - <a class="txt_brown"> <%= pluralize(content.answer_contents.count, 'Answer')%> </a><a class="txt_brown"> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago.</a> </div>
+    
+   
+     
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>

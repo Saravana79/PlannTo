@@ -1,18 +1,17 @@
 <% content_for :title, "My feeds" + "-" %>
 <% content_for :description, "My feeds"%>
-<div class="maincontainerCss" id="maincontainer">
+
 <div class="Homepopupgraybox">
-<!--<div class="Boxtopblock">
+<div class="Boxtopblock">
  <div class="Headingtext">My feeds- Quick Navigation Wizard</div>
     <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>
   </div>
 <div class="Boxbotcorner"></div>
 </div>
--->
 <div class="leftcolumnbig">
   <!-- Product Details - Start -->
   <!-- Overview Tabs -  Start -->
-  <br/>
+  <br/><br/>
   <!-- Product Details - End -->
   <ul id="Newtabs">
    <li class="tab_active"><a href="#"><span>My Feeds</span></a></li>
@@ -45,10 +44,21 @@
     <div >
       <span class="sortby" id="sortBy">
         <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
-         <a class="txt_blue" href="#"  class="link_active">Newest</a> <span style="padding:0px 5px;">|</span>
+         <a class="txt_blue" href="#"  class="link_active" id="new">Newest</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Most Comments</a>
-        </span>
+        <div style="display:none;">
+          <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
+		      <%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+		     <%= f.hidden_field :sub_type %>
+		     <%= f.hidden_field :item_ids, :value => @items%>
+		     <%= f.hidden_field :sort_by, :value => ""%>
+		       <%= f.hidden_field :itemtype_ids, :value => @item_types.join(",")%>
+	      	<%= f.hidden_field :previous_search_value%>
+		     <%= f.hidden_field :page, :value =>1%>
+		    <% end -%>  
+		   </div>  
+      </span>
     </div>
 <div style="margin: 0px 0px 0px 550px;">
 <ul class="itemdrop" >
@@ -68,7 +78,7 @@
      <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
       <%= render :partial => 'contents/contents'%>
      <%if @contents.nil? %>
-       <h2><center>Please follow a product, topic or an user to have a personalized contents in your feed.</center></h2>
+       <h2><center>Please follow an item or user to have my feed content. </center></h2>
      <%end%>
      <a id="content_next" style="display:none"></a>
      </div> 
@@ -89,6 +99,5 @@
  </div>
 <div id="script_div">
 <%= render "contents/my_feed_script" %>
-</div>
 </div>
 </div>

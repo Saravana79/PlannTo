@@ -19,6 +19,7 @@ $(function(){
   
    $('ul.item_drop a').live("click",function(){
     $(this).parent().toggleClass('selected');
+     var sort_by = $("span#sortBy a.link_active").text();
     $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
     $("li.feed_filter").addClass("Currentfilter")
     var types = [];
@@ -30,7 +31,7 @@ $(function(){
       'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
     });
 
-    $.get('/my_feeds',{'item_types' :types,'type': "category"});
+    $.get('/my_feeds',{'item_types' :types,'type': "category", 'sort_by': sort_by });
     });
 
 

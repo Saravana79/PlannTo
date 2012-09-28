@@ -8,7 +8,7 @@ $(".Close_dialog").show();
 $(".ui-dialog-titlebar").hide();
 $("#subContainerContentCreate").show();
 $("#article_content_sub_type").val("<%=@content.sub_type%>");
-
+$("#question_content_sub_type").val("Q&A");
 
 <%if @content.is_question_content?%>
   $("div#contentEditView #question_contentDiv").show();

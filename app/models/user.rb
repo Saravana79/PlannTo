@@ -69,7 +69,8 @@ class User < ActiveRecord::Base
   has_many :shares;
   
   def self.get_follow_users_id(current_user)
-     Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
+    user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
+    user_ids = user_ids.blank? ? [0] : user_ids
   end
   
   def invitation_token
