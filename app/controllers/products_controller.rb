@@ -37,6 +37,7 @@ class ProductsController < ApplicationController
   end
   
   def show
+    @filter_by = params["fl"]
     Vote.get_vote_list(current_user) if user_signed_in?
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
     @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order(:price)
