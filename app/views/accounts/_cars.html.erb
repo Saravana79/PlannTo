@@ -116,13 +116,15 @@
               </tr>
             </table>
           </div>
-      
-    </div>
+     </div>
+  
     <%end%>
   <% end  %>
+ 
+   <div class="Rightouter" id="tabs1">
+   <%= will_paginate @followitems %>
+  </div>
 
-
-<%= will_paginate @followitems %>
 <% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
 <%= hidden_field_tag "category", category %>
 <script type="text/javascript">

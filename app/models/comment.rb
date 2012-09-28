@@ -42,9 +42,12 @@ class Comment < ActiveRecord::Base
     end
     return status
   end
+  
   def can_update_content?(current_user)
-    return false if !current_user
-    return false if current_user.id != self.user_id
-    return true
-  end
-end
+   return false if !current_user
+   if current_user.is_admin? || current_user.id == self.created_by 
+     return true
+   end
+ end
+ end
+  

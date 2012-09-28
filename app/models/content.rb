@@ -294,10 +294,11 @@ and
     ItemContentsRelationsCache.delete_all(["content_id = ?", self.id])
   end
 
-  def can_update_content?(user)
-    return false if !user
-    return false if user.id != self.created_by
-    return true
+  def can_update_content?(current_user)
+   return false if !current_user
+   if current_user.is_admin? || current_user.id == self.created_by 
+     return true
+   end
   end
 
   def is_review_content?
