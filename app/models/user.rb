@@ -134,7 +134,12 @@ class User < ActiveRecord::Base
   end
     
   def name
-    "shanmukha"
+    unless u_name = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name")
+      u_name = super
+      $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name", u_name)
+    end
+    u_name
+    super
   end
 
   def set_user_follow_item
