@@ -268,12 +268,12 @@
         </div>
 
       </div>
-      <% unless params[:buying_plan].present?%>
+      
     <div class="Rightouter" id="tabs1">
         	 <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
       </div>
     
-
+<% unless params[:buying_plan].present?%>
     <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
     
     <br/>
