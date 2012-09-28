@@ -82,6 +82,7 @@
   </ul>
 </div>
 <br/>
+
 <div class="question_answer main-content-section" id="overview" style="<%=display_required(params[:at] || "overview", "overview")%>">
     <%= render "contents/all"%>
 </div>
@@ -201,7 +202,16 @@ Message : <br />
 
 <%= render "shared/expanding_text_area_style" %>
 
-
+<script>
+   $("#detailed_specification").click(function(e){
+     $("#overview").hide();
+     $("#where_to_buy").hide();
+     $("all_variants").hide();
+     $("#specification").show(); 
+     $("ul#Newtabs").find("li").removeClass("tab_active");
+      $("ul#Newtabs li#specify").addClass("tab_active");
+     })
+  </script>
 
 
 

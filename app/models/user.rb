@@ -70,7 +70,6 @@ class User < ActiveRecord::Base
   
   def self.get_follow_users_id(current_user)
     user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
-    user_ids = user_ids.blank? ? [0] : user_ids
   end
   
   def invitation_token
