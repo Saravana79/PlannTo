@@ -5,7 +5,7 @@ desc "send email to user"
     if( userid != 0)
      follow_users = User.find(:all, :conditions=> ["id = ?" ,userid])
     else
-     follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at<=? and users.my_feeds_email=?",Item::FOLLOWTYPES,1.weeks.ago,1).select('distinct users.email,users.id,users.username')
+     follow_users = User.join_follows.where("follows.followable_type in (?) and users.last_sign_in_at<=? and users.my_feeds_email=?",Item::FOLLOWTYPES,1.weeks.ago,1).select('distinct users.id, users.*')
     end 
 
      follow_users.each do |user|
@@ -67,14 +67,14 @@ desc "send email to user"
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 WHERE 
 (
-(item_contents_relations_cache.item_id in (#{follow_item_ids.join(",")})) or 
-(item_contents_relations_cache.item_id in (#{root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+(item_contents_relations_cache.item_id in (#{follow_item_ids.blank? ? 0 : follow_item_ids.join(",")})) or 
+(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 :root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
 )and 
 (contents.status =1 and contents.created_at >= '#{1.weeks.ago}')
 union 
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 WHERE 
-(contents.created_by in (#{follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{1.weeks.ago}')
+(contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{1.weeks.ago}')
 )a  order by a.total_votes desc limit 10").collect(&:id) 
   content_ids = content_ids.blank? ? "" : content_ids 
   @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")

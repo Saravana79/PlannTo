@@ -70,7 +70,6 @@ class User < ActiveRecord::Base
   
   def self.get_follow_users_id(current_user)
     user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
-    user_ids = user_ids.blank? ? [0] : user_ids
   end
   
   def invitation_token
@@ -135,12 +134,7 @@ class User < ActiveRecord::Base
   end
     
   def name
-    unless u_name = $redis.hget("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name")
-      u_name = super
-      $redis.hset("#{User::REDIS_USER_DETAIL_KEY_PREFIX}#{id}", "name", u_name)
-    end
-    u_name
-    super
+    "shanmukha"
   end
 
   def set_user_follow_item
