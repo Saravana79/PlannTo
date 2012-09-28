@@ -82,11 +82,11 @@
   </ul>
 </div>
 <br/>
-<div id="over">
+
 <div class="question_answer main-content-section" id="overview" style="<%=display_required(params[:at] || "overview", "overview")%>">
     <%= render "contents/all"%>
 </div>
-</div>
+
 <div id="specification" style="<%=display_required(params[:at] || "overview", "specification")%>" class="main-content-section">
     <%#= render :template => 'products/specification' %>
     <%= render :partial => "products/detailed_specifications" %>
@@ -209,7 +209,7 @@ Message : <br />
      $("all_variants").hide();
      $("#specification").show(); 
      $("ul#Newtabs").find("li").removeClass("tab_active");
-       $("ul#Newtabs li#specify").addClass("tab_active");
+      $("ul#Newtabs li#specify").addClass("tab_active");
      })
   </script>
 
