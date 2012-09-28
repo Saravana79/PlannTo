@@ -78,9 +78,9 @@ WHERE
 )a  order by a.total_votes desc limit 10").collect(&:id) 
   content_ids = content_ids.blank? ? "" : content_ids 
   @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
-       if @contents.size > 0
+      
          ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
-       end 
+   
      end
     end
   
