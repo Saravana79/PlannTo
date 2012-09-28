@@ -75,7 +75,8 @@ union
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 WHERE 
 (contents.created_by in (#{follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{1.weeks.ago}')
-)a  order by a.total_votes desc limit 10").collect(&:id)  
+)a  order by a.total_votes desc limit 10").collect(&:id) 
+  content_ids = content_ids.blank? ? "" : content_ids 
   @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
        if @contents.size > 0
          ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
