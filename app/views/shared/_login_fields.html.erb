@@ -13,15 +13,15 @@
    <div class="Popupinputblock">
                 <label>Email</label>
                 <span class="Textinput">
-                  <%= f.text_field :email,:size =>"27" %>
+                  <%= f.text_field :email,:size =>"27", :tabindex => "1" %>
                	 
                   </span>
             </div>
             
        <div class="Popupinputblock">
-                <label></label>Password<span class="Forgotpassword"><%= link_to "forgot password?",new_password_path(:user) %></a></span>
+                <label></label>Password<span class="Forgotpassword"><%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" %></a></span>
                 <span class="Textinput">
-                <%= f.password_field :password,:size =>"27" %>
+                <%= f.password_field :password,:size =>"27" , :tabindex => "2"%>
                	
          </span>
             </div>
@@ -29,9 +29,9 @@
         <div class="Popupinputblock">
       
         <div class="Rememberme">Remember me</div>
-         <div><%= f.check_box :remember_me %> </div>
+         <div><%= f.check_box :remember_me , :tabindex => "3"%> </div>
          </div>
-        <div class="Bluesubmit"><%= f.submit "Sign In" %> </div>             
+        <div class="Bluesubmit"><%= f.submit "Sign In" , :tabindex => "4" %> </div>             
     </div>
 <div class="Clearboth"></div>
 
