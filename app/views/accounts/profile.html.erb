@@ -144,6 +144,8 @@
           <% ['Products', 'Apps', 'Accessories'].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
+           <li id="profile_preference_buying_plans"><a href="/<%=@user.try(:username)%>?buying_plan=true" class="icon_prefernce">Preference / Buying Plans</a></li>
+     
         </ul>
       </div>
       <div style="display:block;">
@@ -210,6 +212,28 @@
     </script>
          <div id="contentEditView"></div>
         </div>
+    
+        	<%if (params[:buying_plan] == 'true') %>   
+        	  <div class="Rightouter" id="tabs2">
+        	  	Select Itemtype
+        	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list, "itemtype", "itemtype")%>
+        	  	<a id="plantobuySection">Create buying Plan</a>
+         <div id="giveAdviceDialog"></div>
+      <script type="text/javascript">
+  $(document).ready(function(){
+    $('#plantobuySection').live('click', function(){
+
+            $.get('/preferences/new',{search_type: $("#buying_plan_item_type").val()},null,"script");
+            return false;
+
+    });
+     });
+</script>
+<div id="buying_plans_div">
+<%=render "buying_plans"%>
+</div>
+</div>
+<%end%>
         
                <div class="Rightouter" id="tabs2">
         	<%if (params[:follow] == 'Accessories') %>
@@ -248,7 +272,7 @@
         	 <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
       </div>
     
-
+<% unless params[:buying_plan].present?%>
     <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
     
     <br/>
@@ -345,6 +369,7 @@
       
     </script>
 
+    <%end%>
     <%end%>
   </div>
   <!-- Right  - End -->

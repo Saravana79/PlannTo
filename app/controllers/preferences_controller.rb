@@ -66,7 +66,7 @@ class PreferencesController < ApplicationController
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
 
     require 'will_paginate/array'
-
+  @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
 
     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     #@preferences_list = Preference.get_items(@preferences)

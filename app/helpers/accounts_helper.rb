@@ -1,5 +1,6 @@
 module AccountsHelper
   def get_items_with_constraint(follow_item, follow_types)
+    require 'will_paginate/array'
      car_items = get_array(follow_item, follow_types)
      return car_items
   end
