@@ -1,0 +1,30 @@
+ <div id="emailList"></div>
+<%= form_for(:message, :url => create_message_path(current_user,'new'), :remote => true) do |f| %>
+<div class="Clearboth"></div>
+  <p>
+    <%= label "message", "To :"%> 
+    <%= f.text_field :email %>
+    <%= f.hidden_field :email_list %>
+  </p>
+  <p>
+    <%= label "title", "Subject:" %>
+    <%= f.text_field :topic, :rows => 5%>
+  </p>
+  <p>
+    <%= label "message", "Message:" %>
+    <%= f.text_area :body, :rows => 5, :cols => 40 %>
+  </p>
+  <%= f.submit "Send" %>
+  <button onclick="$('#newMessage').dialog('close');return false;">Cancel</button>
+<% end %>
+
+
+  <script type ="text/javascript">
+  $(document).ready(function() {
+     $.textAutocomplete("message_email",
+    "emailList",
+    {xCrsfToken: '<%= form_authenticity_token.to_s %>', url: "/messages/search_users", editMode: false, multiple: true, hidden_field: "message_email_list", search_type_array: [],image: false}
+  );
+
+  });
+</script>

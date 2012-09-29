@@ -18,12 +18,12 @@
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue",:id => "report_link_#{content.id}" %></a></li>
 
-      <!--<%#if content.can_update_content?(current_user)%>
+      <%if content.can_update_content?(current_user)%>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-        <li class="subContentGap float_lft"><%#=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
-        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-        <li class="subContentGap float_lft"><%#=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
-      <%#end%>-->
+        <li class="subContentGap float_lft"><%=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
+       <!-- <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+        <li class="subContentGap float_lft"><%#=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>-->
+      <%end%>
     </ul>
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>

@@ -4,10 +4,10 @@
 <div class="msg_box">
 
 <div class="user_img">
-<img src="<%=message.from.get_photo%>" alt="User" align="left" />
+<img src="<%=message.from.get_photo%>" alt="User" align="left" height="60px;"/>
 </div>
 
-<div class="msg_leftblock">
+<div class="msg_leftblock <%unless message.opened?%><%="unreadmsg"%><%end%>">
 <h1><a href="#"><%=message.from.name%></h1></a><%= link_to "Show full thread", threaded_msg_path(message.from.id) %>
 <div class="message_detal">
 <p><a href="#"><%=message.topic%>

@@ -12,13 +12,16 @@
 
 </script>
 <!--message header-->
+<div id="notification" class="notificationStyle">Message Sent.</div>
 
 <div class="message_header">
 <h1>Message</h1>
+<%=link_to "<span>Add new message</span>".html_safe, new_message_path, :class => "add_new_msg", :remote => true%>
+<!--<a href="<%#=new_message_path%>" class="add_new_msg"></a>-->
 
-<a href="<%=new_message_path%>" class="add_new_msg"><span>Add new message</span></a>
 
-
+</div>
+<div id="newMessage">
 </div>
 
 <!--message header-->

@@ -28,13 +28,17 @@ class MessagesController < ApplicationController
     end
     if params[:method] == 'reply'
       user_to = User.find(params[:id])
-      message = current_user.send_message(user_to, { :body => params[:message][:body] })
+      message = current_user.send_message(user_to, { :topic => params[:message][:topic], :body => params[:message][:body] })
     else
       @ids.each do |id|
         send_message(id)
       end
     end
-    redirect_to messages_path, :notice => 'Message sent.'
+    respond_to do |format|
+      #format.html redirect_to messages_path, :notice => 'Message sent.'
+      format.js
+    end
+    
   end
 
   def reply
@@ -43,7 +47,7 @@ class MessagesController < ApplicationController
 
   def send_message(id)
     user_to = User.find(id)
-    message = current_user.send_message(user_to, { :body => params[:message][:body] })
+    message = current_user.send_message(user_to, { :topic => params[:message][:topic], :body => params[:message][:body] })
     return
   end
 
@@ -75,7 +79,7 @@ class MessagesController < ApplicationController
 
        results = @message_users.collect{|item|
          logger.info item.email
-      {:id => item.id, :value => "#{item.name} (#{item.username})", :imgsrc =>"", :type => "", :url => "" }
+      {:id => item.id, :value => "#{item.name} <img src='#{item.get_photo}' height='20px' alt='User' align='left' />", :imgsrc =>"", :type => "", :url => "" }
     }
     render :json => results
   end

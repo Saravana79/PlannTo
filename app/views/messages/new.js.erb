@@ -1,0 +1,5 @@
+$("#newMessage").html('<%= escape_javascript(render(:partial => '/messages/new')) %>');
+$("#newMessage").dialog({
+title: 'New Message',
+height: 400,
+width:400});
