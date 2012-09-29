@@ -48,6 +48,9 @@ class AccountsController < ApplicationController
       params[:follow] = 'Products'
     end
     @user = User.find(:first, :conditions => ["username like ?","#{params[:username]}"])
+     if params[:follow] == "Followers" || params[:follow] == "Following"
+      @users = Follow.get_followers_following(@user,params[:follow]).paginate :page => params[:page],:per_page => 10
+    else 
     @follow_types = Itemtype.get_followable_types(params[:follow])
     @itemtypes =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id) if params[:follow] == 'Products'
      if params[:plan_to_buy] = true
@@ -57,6 +60,7 @@ class AccountsController < ApplicationController
     @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  } 
     @followitems = Follow.for_follower(@user).where(:followable_type => @follow_types).paginate :page => params[:page],:per_page => 8
     @follow_item = @followitems.group_by(&:followable_type)
+    end
     respond_to do|format|      
       format.html {render :layout => "product"}
     end

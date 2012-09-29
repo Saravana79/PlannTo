@@ -141,7 +141,7 @@
   <br/>
   <div style="clear:both;margin-top:110px;">
         <ul id="Newtabs">
-          <% ['Products', 'Apps', 'Accessories'].each do |item_type|%>
+          <% ['Products', 'Apps', 'Accessories',"Followers","Following"].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
           <%if Rails.env == "development"%>
@@ -270,13 +270,18 @@
 
       </div>
       
+     <% if  (params[:follow] == 'Followers') ||  (params[:follow] == "Following") %>
+           <%= render "followers" %>
+       <%else%>
     <div class="Rightouter" id="tabs1">
-        	 <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-      </div>
+        <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+     </div>
+   	<%end%> 
+
     
 <% unless params[:buying_plan].present?%>
-    <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
-    
+   
+    <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories')  && (params[:follow] != 'Followers') && (params[:follow]!= "Following" )%>
     <br/>
     <div style="clear:both;"></div>
     <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">
