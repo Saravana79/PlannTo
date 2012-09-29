@@ -1,32 +1,3 @@
-<script type="text/javascript" src="/javascripts/movingboxs.js"></script>
-<script type="text/javascript" src="/javascripts/search_profile_car.js"></script>
-<link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
-<script type="text/javascript">
-  $(function() {
-    $('#car_slider').movingBoxes({
-      startPanel   : 1,      // start with this panel
-      width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-      wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-      buildNav     : true,   // if true, navigation links will be added
-      navFormatter : function() {
-        return "&#9679;";
-      } // function which returns the navigation text for each panel
-    });
-    $(".tabing2").click(function() {
-      $('#mobile_slider').movingBoxes({
-        startPanel   : 1,      // start with this panel
-        width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-        wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-        buildNav     : true,   // if true, navigation links will be added
-        navFormatter : function() {
-          return "&#9679;";
-        } // function which returns the navigation text for each panel
-      });
-    });
-
-
-  });
-</script>
 
 
 <div id="maincontainer" class="maincontainerCss">
@@ -149,18 +120,7 @@
      		<%end%>
         </ul>
       </div>
-      <div style="display:block;">
-      <!--  <div class="sortby">
-          <div class="icon_share">Share:
-            <span> <img src="/images/icon_fb.png"/> </span>
-            <span> <img src="/images/icon_twitter.png"/> </span>
-            <span> <img src="/images/icon_in.png"/>  </span>
-            <span> <img src="/images/icon_su.png"/>  </span>
-            <span> <img src="/images/icon_t.png"/> </span>
-          </div>
-        </div>
-        -->
-       
+      <div style="display:block;">       
          
         <div class="Rightouter" id="tabs2">
         	<%if (params[:follow] == 'Apps') %>
@@ -269,12 +229,42 @@
         </div>
 
       </div>
-      
+ <% unless params[:buying_plan].present?%>   
+ <script type="text/javascript" src="/javascripts/movingboxs.js"></script>
+<script type="text/javascript" src="/javascripts/search_profile_car.js"></script>
+<link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
+<script type="text/javascript">
+  $(function() {
+    $('#car_slider').movingBoxes({
+      startPanel   : 1,      // start with this panel
+      width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+      wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+      buildNav     : true,   // if true, navigation links will be added
+      navFormatter : function() {
+        return "&#9679;";
+      } // function which returns the navigation text for each panel
+    });
+    $(".tabing2").click(function() {
+      $('#mobile_slider').movingBoxes({
+        startPanel   : 1,      // start with this panel
+        width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+        wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+        buildNav     : true,   // if true, navigation links will be added
+        navFormatter : function() {
+          return "&#9679;";
+        } // function which returns the navigation text for each panel
+      });
+    });
+
+
+  });
+</script>
+  
     <div class="Rightouter" id="tabs1">
         	 <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
       </div>
     
-<% unless params[:buying_plan].present?%>
+
     <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
     
     <br/>

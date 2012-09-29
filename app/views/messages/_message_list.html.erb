@@ -8,7 +8,7 @@
 </div>
 
 <div class="msg_leftblock <%unless message.opened?%><%="unreadmsg"%><%end%>">
-<h1><a href="#"><%=message.from.name%></h1></a><%= link_to "Show full thread", threaded_msg_path(message.from.id) %>
+<h1><a href="#"><%=message.from.name%></h1></a><%= link_to "Show full thread", threaded_msg_path(message.from.id, :message_id => message.id) %>
 <div class="message_detal">
 <p><a href="#"><%=message.topic%>
 </a></p>

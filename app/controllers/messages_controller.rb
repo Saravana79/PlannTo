@@ -65,6 +65,8 @@ class MessagesController < ApplicationController
   end
 
   def threaded_msg
+    @message = Message.find params[:message_id]
+    @message.update_attribute(:opened,true)
     @sender = User.find(params[:id])
     @messages = Array.new
     @send_msg = current_user.messages.are_to(@sender)

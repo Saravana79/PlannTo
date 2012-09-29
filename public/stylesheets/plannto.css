@@ -9,6 +9,17 @@
 	display:block;
 	float:left;
 }
+.msg_box.unreadmsg {
+    background: none repeat scroll 0 0 #EBEDF5;
+}
+
+.msg_box {
+    border-bottom: 1px solid #DDDFF2;
+    float: left;
+    height: auto;
+    padding: 6px 0 9px;
+    width: 706px;
+}
 
 .add_new_msg {display:block; float:right; background:url(../images/message_left_corner.png) no-repeat left top; cursor:pointer; text-decoration:none;
 			padding:0 0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#474547; line-height:23px;}
