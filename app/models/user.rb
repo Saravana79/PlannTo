@@ -259,7 +259,7 @@ class User < ActiveRecord::Base
   end
   
   def follow_by_type(obj, type)
-    self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
+      Follow.where("follower_id=? and followable_type=? and followable_id=?",self.id,"User",obj.id).first
   end
   
 =begin  

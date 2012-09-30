@@ -5,7 +5,7 @@
 
 <div class="member_detail">
 <div class="member_name">
-<%= link_to u.username ,"/#{u.username}" %>
+<%= link_to u.name ,"/#{u.username}" %>
 </div>
 <%unless u.id == current_user.id %>
   <%unless current_user.follow_by_type(u, 'Plannto') %>

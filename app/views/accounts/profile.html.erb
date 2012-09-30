@@ -308,11 +308,11 @@
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
         <div >
-          <span class="sortby">
+          <span class="sortby" id="sortBy">
             <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
-            <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
-            <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
-            <a class="txt_blue" href="#">Most Answers</a>
+            <a class="txt_blue link_active"  href="#">Newest</a> <span style="padding:2px 5px 0px 10px;">|</span>
+            <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
+            <a class="txt_blue" href="#">Most Comments</a>
           </span>
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
@@ -343,7 +343,7 @@
                 }
                 $.ajax(
                 {
-                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>",
+                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
                   type: "get",
                   dataType: "script"
                 });
@@ -361,7 +361,7 @@
           running = true;
             $.ajax(
               {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>",
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
                 type: "get",
                 dataType: "script",
                 before: $('#spinner1').show(),
@@ -384,6 +384,28 @@
   <!-- This will go into main layout -->
 </div>
 
+<script type="text/javascript">
 
-
+  	$("span#sortBy a").click(function (e) {
+  		 $("span#sortBy").find('a').removeClass('link_active');
+        $(this).addClass("link_active");
+          
+          	$("#filter_page_no").val('1');
+             running = true;
+            $.ajax(
+              {
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+       
+          
+        
+  	});
+</script>
 <%= render "shared/expanding_text_area_style" %>
