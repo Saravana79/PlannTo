@@ -383,7 +383,7 @@
 
   <!-- This will go into main layout -->
 </div>
-
+ <%if @itemtypes %>
 <script type="text/javascript">
 
   	$("span#sortBy a").click(function (e) {
@@ -408,4 +408,5 @@
         
   	});
 </script>
+<%end%>
 <%= render "shared/expanding_text_area_style" %>
