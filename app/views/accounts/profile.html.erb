@@ -218,7 +218,8 @@
         	  <div class="Rightouter" id="tabs2">
         	  	Select Itemtype
         	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list, "itemtype", "itemtype")%>
-        	  	<a id="plantobuySection">Create buying Plan</a>
+        	  	
+        	  	<button id="plantobuySection">Create buying Plan</button>
          <div id="giveAdviceDialog"></div>
       <script type="text/javascript">
   $(document).ready(function(){
