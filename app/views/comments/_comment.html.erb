@@ -1,6 +1,8 @@
 <div id="subContentDiv<%=comment.id%>">
 <div class="subContentDiv_comments comments_bg" >
-<div class="float_rgt"><img src="<%= comment.user.get_photo %>" class="userImageSmall"></div>
+	<div  class="float_rgt">
+					<a href="<%= comment.user.get_url()%>"> <img src="<%= comment.user.get_photo%>" class="userImageSmall"/></a>
+				</div>
 	<div class="subContentGap">
 		<a class="txt_black_description"><%= comment.comment %> </a></div>			
 		<ul class="divCommentsConent ">

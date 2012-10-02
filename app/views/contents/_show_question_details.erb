@@ -60,8 +60,15 @@
       <div  style="border-bottom:solid 1px #ccd4d8;">
         <div class="hdr_Category float_lft margin_lft10"><%= pluralize(content.answer_contents.where("status!=?", Content::DELETE_STATUS).count,'Answers') %> </div>
         <div class="float_rgt" style="margin-top:8px;">
-                <a style="" class="btn_submitanswer" id="answer_this_question" >Answer this Question</a> 
-                
+                <a style="" class="btn_submitanswer answer_button" id="answer_this_question" >Answer this Question</a> 
+                <script>
+                $(".answer_button").click(function(e){
+            <% if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
+        })
+           </script>
                 </div>
                 
       </div>

@@ -75,7 +75,7 @@
           }
         })
 
-        $("form.new_comment").submit(function(e){
+        $("form.new_comment").keyup(function(e){
           if (login_flag != true){
             openLoginPopup("#" + $(this).attr('id'), "submit");
             return false

@@ -41,8 +41,10 @@
 					<div>
 						<a class="txt_brown">Shared by <%= content.user.name %> - <%= time_ago_in_words(content.created_at) %> ago</a></a>
 					</div>
+				
 					<div class="subContentGap">
 						<%= raw get_rating_or_category_contents(content)%>
+						
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
 						<% rating =  (content.is_a?ArticleContent) ? content.field1 : content.rating %>
 						<script type="text/javascript">
@@ -138,15 +140,27 @@
 							</div>
 							<br/>
 							<br/>
-							<% else %>
-							<div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/>
-							</div>
+							<% elsif  content.sub_type == "#{ArticleCategory::VIDEO}"%>
+								<div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div> 
+			
+							<%else%>
+							  
+							  	<div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/>
 							<%end%>
 							<%end%>
+							<%if content.sub_type == "#{ArticleCategory::VIDEO}"%>
+						   <br />  <br />  <br />
+						<%end%>
 							<%= raw get_content_description(content, true)%>
 							<br/>
+							
 						</div>
-
+       <script type="text/javascript">
+         $("#youtube_thumbnail<%=content.id %>").click(function(){
+          $("#youtube_thumbnail<%= content.id %>").html('<div id="youtube_image<%=content.id %>" style="height:350px; width:500px">');
+          autoPlayVideo('<%= content.field4%>',<%= content.id %>);
+        });
+  </script>
 					</div>
 					<ul class="divCommentsConent" style="clear:both;">
 						<li class="subContentGap float_lft">

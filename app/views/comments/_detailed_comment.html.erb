@@ -1,9 +1,9 @@
 <div id="subContentDiv<%=comment.id%>">
 <div class="mainContentDiv" style="border-bottom:0px;">
   <%#=render :partial => "votes/voting_detail", :locals => {:item => answer_content, :user => user_signed_in? ? current_user : nil}%>
-  <div class="float_rgt">
-    <img src="<%= comment.user.get_photo %>" class="userImageSmall">
-  </div>
+  	<div  class="float_rgt">
+					<a href="<%= comment.user.get_url()%>"> <img src="<%= comment.user.get_photo%>" class="userImageSmall"/></a>
+				</div>
   <div class="subContentDiv" style="padding-bottom:0px;">
     <div><a class="txt_brown" ><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></div>
     <div style="padding:3px 0px 2px 0px"><a class="txt_black_description" href="" ><%= comment.comment %></a></div>
@@ -17,10 +17,9 @@
 			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to " Update This", edit_content_comment_path(@content,comment,:detail => true), :remote => true, :class => "txt_blue"%></a></li>
 			   <%end%>
 		</ul>
-
   </div>
   	<script>
-        $("#report_link_<%= @content.id %><%= comment.id%>").click(function(e){
+        $("#report_link_<%= @content.id %><%= comment.id%>").keyup(function(){
           <%if !current_user %>
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
