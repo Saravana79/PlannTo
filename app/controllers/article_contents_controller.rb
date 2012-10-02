@@ -69,6 +69,8 @@ class ArticleContentsController < ApplicationController
       minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
+     @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
+    @popular_items_ids  = @popular_items.map(&:id).join(",") 
     @related_contents = results.results   
   end
   
