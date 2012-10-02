@@ -9,11 +9,16 @@ class ReviewContentsController < ApplicationController
 		@item = Item.find item_id
 		@reviewcontent.save_with_items!(item_id)
 		else
-		  @reviewcontent.save_with_items!(params[:review_item_id])
-		  @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
+		  if params[:review_item_id]== ''
+		    @products_error = true
+		   else  
+		     @reviewcontent.save_with_items!(params[:review_item_id])
+		     @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
+		   end 
 		end
-		@item.add_new_rating @reviewcontent.rating if @item
-
+		unless @products_error == true
+		 @item.add_new_rating @reviewcontent.rating if @item
+    end
     respond_to do |format|
       format.js
     end
@@ -43,6 +48,8 @@ class ReviewContentsController < ApplicationController
       minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
+    @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
+    @popular_items_ids  = @popular_items.map(&:id).join(",") 
     @related_contents = results.results
   end
   

@@ -1,7 +1,11 @@
 <%if params[:content_create_form_type] == "Popup"%>
-$("#contentEditView").dialog('close');
-$(".ui-dialog").css("display", "none"); 
-$("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
+ <% if @products_error == true %>
+    $("#products_error").html("<h2>Please select at least one product.</h2>");
+ <%else%> 
+   $("#contentEditView").dialog('close');
+   $(".ui-dialog").css("display", "none"); 
+   $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
+ <%end%>  
 <%else%> 
  $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none"); 

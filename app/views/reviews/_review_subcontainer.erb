@@ -19,6 +19,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
    <%= hidden_field_tag :detail,@detail%>
  <span class="Popuptitle"><center><h1>New Review Content</h1></center></span>
  </div>
+  <div id="products_error" style="color:red;"></div>
      <%if @content %>
        <div class="Close_dialog" style="display:none;width:43px; 
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
@@ -38,6 +39,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
 
     <div id="star"></div>
     <div style="padding:5px 5px 0px 0px;clear:both;" id="reviewProducts">
+   
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
         <ul id="review_product_item_list" class="tagging"></ul>
@@ -164,12 +166,15 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
     </div>
     <%= f.hidden_field :recommend_this, :value => "" %>
     </div>
+
      <input id="review_content_item" name="review_item_id" type="hidden" value="<%= @item.try(:id)%>"/>
+
       <%unless @item.blank? %>
          <input id="review_item" name="item_id" type="hidden" value="<%= @item.try(:id)%>"/>
        <%else%>
-       <% @items.each do |item| %>
-          <input id="review_item" name="item_id" type="hidden" value="<%= item.try(:id)%>"/>
+       <% unless @items.blank?%>
+         <%ids = @items.collect(&:id).join(",") %>
+          <input id="review_item" name="item_id" type="hidden" value="<%= ids %>"/>
         <%end%>
        <%end%>  
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; ">
