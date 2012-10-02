@@ -8,7 +8,7 @@ module AccountsHelper
   def get_array(follow_array, array_values)
   logger.info array_values
     array_values.collect do |val|
-    logger.info values
+    logger.info val
       follow_array[val].blank? ?  [] : follow_array[val]
     end.flatten
   end
