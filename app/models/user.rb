@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :omniauthable, :registerable, :recoverable, :rememberable, 
          :trackable, :validatable
-  cache_records :store => :local, :key => "users",:request_cache => true
+  #cache_records :store => :local, :key => "users",:request_cache => true
   REDIS_USER_DETAIL_KEY_PREFIX = "user_details_"
   CACHE_USER_ITEM_HASH = {Follow::ProductFollowType::Owner => "owned_item_ids" ,
     Follow::ProductFollowType::Follow => "follow_item_ids",
@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
   scope :follow_type, lambda { |follow_type| where("follows.follow_type = ?", follow_type)}
   scope :followable_type, lambda { |followable_type| where("follows.followable_type = ?", followable_type).group("follows.follower_id")}
   scope :followable_id, lambda { |followable_id| where("follows.followable_id = ?", followable_id)}
+
   scope :join_follows, joins("INNER JOIN `follows` ON follows.follower_id = users.id")
   
   scope :friends, lambda {|user| join_follows.followable_type('User').where("follows.follower_id = #{user.id}")}
@@ -258,7 +259,7 @@ class User < ActiveRecord::Base
   end
   
   def follow_by_type(obj, type)
-    self.follows.where(followable_id: obj.id).where(followable_type: obj.class.to_s).where(follow_type: type).first
+      Follow.where("follower_id=? and followable_type=? and followable_id=?",self.id,"User",obj.id).first
   end
   
 =begin  

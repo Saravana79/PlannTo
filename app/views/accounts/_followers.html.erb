@@ -1,0 +1,24 @@
+  <div class="Rightouter2" style="float:left">
+ <% @users.each do |u| %>
+<div class="memberlist" style="margin-left:15px;">
+<div class="userimg"><div style="width:100px;height:120px;"><%= image_tag(u.get_photo(:medium)) %> </div> </div>
+
+<div class="member_detail">
+<div class="member_name">
+<%= link_to u.name ,"/#{u.username}" %>
+</div>
+<%unless u.id == current_user.id %>
+  <%unless current_user.follow_by_type(u, 'Plannto') %>
+   <%= link_to '<span>Follow</span>'.html_safe, follows_path(:follow => {followable_id:    u.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'plannto_button' %>
+  <%end%>
+ <%end%>        
+<%if User.profile_owner?(@user,current_user)  && params[:follow] == "Following"%>
+  <%= link_to '<span>Unfollow</span>'.html_safe, current_user.follow_by_type(u, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plannto_button' %>
+<%end%>
+</div>
+</div>
+<%end%>
+ <div class="Rightouter2" id="tabs1">
+  <%= will_paginate @users %>
+  </div>
+</div>       

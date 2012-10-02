@@ -1,8 +1,0 @@
-- unless @followers.blank? 
-  %ul
-    - @followers.each do |follow|
-      %li
-        = image_tag(follow.follower.get_photo(:medium)) 
-        = follow.follower.name
--else
-  No followers        

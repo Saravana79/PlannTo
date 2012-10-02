@@ -21,5 +21,5 @@
   <% end rescue "" %>
 </div>
 <div id="plantobuyPaginate">
-<%= will_paginate items, :page_links => true %>
+<%= will_paginate items if items.respond_to? :total_pages, :page_links => true %>
 </div>

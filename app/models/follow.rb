@@ -37,6 +37,15 @@ class Follow < ActiveRecord::Base
     Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
   end
   
+  def self.get_followers_following(user,type)
+    if type == "Followers"
+       @followers = Follow.follow_type(['Plannto', 'Facebook']).for_followable(user).limit(10).collect{|i| User.find(i.follower_id)}
+    else  
+      @following =  Follow.where("follower_id=? and followable_type=?",user,"User").limit(10).collect{|i|User.find(i.followable_id)}
+    end
+  end     
+
+  
   def self.wizard_save(item_ids,type,user)
      item_ids.split(',').uniq.each do |id|
       item = Item.find(id)

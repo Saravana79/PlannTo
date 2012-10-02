@@ -42,7 +42,7 @@ test:
   popular_count: 5
   content_creator_user_ids: "1,7,8,19,27,3"
   root_level_car_id: 3214
-  root_level_mobile_id: 5
+  root_level_mobile_id: 3215
   root_level_cycle_id: 3219
   root_level_tablet_id: 3217
   root_level_bike_id: 3218

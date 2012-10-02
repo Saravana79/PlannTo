@@ -2,7 +2,7 @@
 <%= form_for(@article, :as => :article_content,:html => { :id => "new_article_content" }, :url => download_article_contents_path, :remote => true) do |f| %>
 <div id="article_errors" style="display:none"></div>
 
-<%= hidden_field_tag 'articles_item_id' %>
+<%#= hidden_field_tag 'articles_item_id' %>
 
 
 <%= f.hidden_field :type, :id => "new_article_type" %>
@@ -144,13 +144,13 @@ $(function(){
 			$("#new_article_thumbnail").val(images[images_index]);
 		}
 	});
-	settings={
-		close:true, addButton: false,
-		url: "/search/autocomplete_items", 
-		editMode: false, multiple: true, 
-		hidden_field: "articles_item_id"
-	};
-	$.textTagger("article_product","article_product_list",settings);
+	//settings={
+	//	close:true, addButton: false,
+	//	url: "/search/autocomplete_items", 
+	//	editMode: false, multiple: true, 
+	//	hidden_field: "articles_item_id"
+	//};
+	//$.textTagger("article_product","article_product_list",settings);
 	<% unless @item.blank? %>
 	$.addTag("article_product","article_product_list", settings,"<%= @item.name %>", "<%= @item.id %>");
 	$.addIdToField(settings.hidden_field, "<%= @item.id %>", false)

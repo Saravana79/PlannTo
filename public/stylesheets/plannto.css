@@ -4221,3 +4221,17 @@ border:1px solid #528fae; display:none; top:28px; right:-1px;}
 .menu_profile1:hover {
     background-color: #deeff3;
 }
+
+.memberlist { width:139px; height:auto; float:left; height:219px; padding-right:32px;}
+.memberlist .userimg { float:left; padding-bottom:6px; }
+.memberlist .userimg img { border:1px solid #cdcdcd; background:#ececec; padding:3px; float:left;}
+.member_detail { clear:both; overflow:hidden;}
+.member_detail .member_name { font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#2a2929;  clear:both; padding-bottom:4px;} 
+.member_detail .member_name a {color:#2a2929; text-decoration:none;  font-size:14px;}
+.member_detail .member_name a:hover { text-decoration:underline; color:#000000;}
+
+
+.Rightouter2 { width:823px; float:right; padding-top:40px;}
+
+.padrnonw { padding-right:0px !important;}
+
