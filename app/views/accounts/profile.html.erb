@@ -141,7 +141,7 @@
   <br/>
   <div style="clear:both;margin-top:110px;">
         <ul id="Newtabs">
-          <% ['Products', 'Apps', 'Accessories'].each do |item_type|%>
+         <% ['Products', 'Apps', 'Accessories',"Followers","Following"].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
           <%if Rails.env == "development"%>
@@ -271,12 +271,16 @@
 
       </div>
       
+   <% if (params[:follow] == 'Followers') || (params[:follow] == "Following") %>
+           <%= render "followers" %>
+       <%else%>
     <div class="Rightouter" id="tabs1">
-        	 <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-      </div>
+        <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+     </div>
+    <%end%> 
     
 <% unless params[:buying_plan].present?%>
-    <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories') %>
+   <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories')  && (params[:follow] != 'Followers') && (params[:follow]!= "Following" )%>
     
     <br/>
     <div style="clear:both;"></div>
@@ -304,11 +308,11 @@
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
         <div >
-          <span class="sortby">
+         <span class="sortby" id="sortBy">
             <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
-            <a class="txt_blue" id="link_active"  href="#">Relevance</a> <span style="padding:2px 5px 0px 10px;">|</span>
-            <a class="txt_blue" href="#">Newest</a> <span style="padding:0px 5px;">|</span>
-            <a class="txt_blue" href="#">Most Answers</a>
+            <a class="txt_blue link_active" href="#">Newest</a> <span style="padding:2px 5px 0px 10px;">|</span>
+            <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
+            <a class="txt_blue" href="#">Most Comments</a>
           </span>
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
@@ -339,7 +343,7 @@
                 }
                 $.ajax(
                 {
-                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>",
+                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + $("span#sortBy a.link_active").text(),
                   type: "get",
                   dataType: "script"
                 });
@@ -357,7 +361,7 @@
           running = true;
             $.ajax(
               {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>",
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + $("span#sortBy a.link_active").text(),
                 type: "get",
                 dataType: "script",
                 before: $('#spinner1').show(),
@@ -371,6 +375,30 @@
         });
       
     </script>
+<script type="text/javascript">
+
+   $("span#sortBy a").click(function (e) {
+   $("span#sortBy").find('a').removeClass('link_active');
+        $(this).addClass("link_active");
+          
+           $("#filter_page_no").val('1');
+             running = true;
+            $.ajax(
+              {
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+       
+          
+        
+   });
+</script>
 
     <%end%>
     <%end%>
@@ -379,7 +407,6 @@
 
   <!-- This will go into main layout -->
 </div>
-
 
 
 <%= render "shared/expanding_text_area_style" %>
