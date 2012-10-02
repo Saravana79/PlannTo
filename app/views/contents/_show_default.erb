@@ -145,11 +145,11 @@
 			
 							<%else%>
 							  
-							  	<div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/>
+							  	<div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
 							<%end%>
 							<%end%>
 							<%if content.sub_type == "#{ArticleCategory::VIDEO}"%>
-						   <br />  <br />  <br />
+						   <br />  <br />  <br />     
 						<%end%>
 							<%= raw get_content_description(content, true)%>
 							<br/>
@@ -158,7 +158,7 @@
        <script type="text/javascript">
          $("#youtube_thumbnail<%=content.id %>").click(function(){
           $("#youtube_thumbnail<%= content.id %>").html('<div id="youtube_image<%=content.id %>" style="height:350px; width:500px">');
-          autoPlayVideo('<%= content.field4%>',<%= content.id %>);
+          autoPlayVideo('<%= content.field4 rescue ""%>',<%= content.id %>);
         });
   </script>
 					</div>
