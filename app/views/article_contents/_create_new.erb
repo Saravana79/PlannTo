@@ -1,5 +1,5 @@
 <script  type="text/javascript" src="/javascripts/expanding.js"></script>
-
+ 
 <div id="subContainerContentCreate" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
   <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
        <div id="tag">
@@ -20,9 +20,9 @@
   <div id="article_errors" style="line-height:20px;color: red;"></div>
   <div style="padding:5px 5px 0px 0px;text-align:center">
   <div id="add_photo" style="display:none;">
-  
-    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    
+    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+ 
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
     <%unless @content %>
@@ -292,6 +292,8 @@
     $("div#subContainerContentCreate #<%=@sharefield3%>").show();
     $("div#subContainerContentCreate #<%=@sharefield4%>").show();
     $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>').datepicker();
+      $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>').datepicker();
+        $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>').datepicker();
     $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>').css("width","150px");
   }
   
@@ -453,6 +455,37 @@
       case 'Video': contentWrite= "Save Video";break;
     }
     return contentWrite
+  }
+  
+  
+  
+    $("form#<%=@form_id%> #article_content_create_submit").click(function(e){
+      $("#subContainerContentCreate div#article_errors").html("");
+      var valid = validateEventForm();
+      if (!valid){
+        return false;
+      }
+       
+    })
+ 
+
+  function validateEventForm(){
+    $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip('destroy')
+    var valid = true;
+    if ($("div#subContainerContentCreate form#<%=@form_id%> #article_content_title").val() == ""){
+      $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip({
+        className: 'tip-darkgray',
+        content: 'Please select a title.',
+        showOn: 'none',
+        alignTo: 'target',
+        alignX: 'right',
+        offsetX: 5,
+        alignY: 'center'
+      });
+      $('div#subContainerContentCreate form#<%=@form_id%> #article_content_title').poshytip('show');
+      valid = false
+    }
+    return valid
   }
 </script>
 

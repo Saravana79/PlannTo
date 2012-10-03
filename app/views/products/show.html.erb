@@ -64,6 +64,7 @@
         <%end%>
         <% if @item.show_models%>
         <a class="txt_normal"> <%=link_to_function @item.related_cars.count.to_s + " Models","setActiveTab('all_variants')", :class => 'txt_blue'%>
+      
         <%end%>
     <% end %>
     </span>
