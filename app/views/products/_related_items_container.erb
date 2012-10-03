@@ -1,6 +1,14 @@
 <div id="content">
       <%= render :partial => "/related_items/index" %>
 </div>
+ <script>
+        $(".action_btns_medium").click(function(e){
+         <% if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
+        })
+         </script>
   <script type="text/javascript">
   $(document).ready(function(){
     $('#relatedItemsPaginate div.pagination a').live('click', function(){

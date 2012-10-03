@@ -24,6 +24,21 @@
     <%end%>     
     <%end%>
     <br/>
+    <script>        
+  $(".quick_config_btns_icon").click(function(e){
+     <%if !current_user %>
+        openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+     <%end%>
+        })
+  
+   $(".quickCreate").click(function(e){
+     <%if !current_user %>
+        openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+     <%end%>
+        })
+   </script>
     <script type="text/javascript">
     	
     	$(function(){
