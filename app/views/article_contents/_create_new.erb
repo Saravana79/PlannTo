@@ -20,7 +20,9 @@
   <div id="article_errors" style="line-height:20px;color: red;"></div>
   <div style="padding:5px 5px 0px 0px;text-align:center">
   <div id="add_photo" style="display:none;">
+  
     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+   
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
     <%unless @content %>
@@ -34,7 +36,9 @@
     </div>
     <%else%>
      <%= hidden_field_tag :detail,@detail%>
+        
     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+   
     <span class="Popuptitle"><center> <h1 id="contentTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
     <%if @content.sub_type == 'Photo' %>
         <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></img></div><%end%>
@@ -453,4 +457,12 @@
 </script>
 
 </div>
-
+<script>
+$("#<%= @form_id %>").submit(function(e){
+       <% if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
+        })
+</script>        
+        

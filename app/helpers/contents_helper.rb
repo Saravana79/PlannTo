@@ -175,17 +175,26 @@ module ContentsHelper
   end
 
   def get_rating_or_category_contents(content)
+    str=""
     if content.sub_type == "#{ArticleCategory::ACCESSORIES}"
-      "<label>Category:</label>#{content.field1}<br/>"
+     str+= "<label>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
         if(content.field1 != '' && content.field1 != '0')
-          "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.field1}'></div>"
+          str+="<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.field1}'></div>"
         end
       else
-        "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.rating}'></div><br/><label>Pro :</label>#{content.pros}<br/><label>Con :</label>#{content.cons}<br/>"
+        str=""
+        str+= "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.rating}'></div><br/>"
+        unless content.pros.blank?
+          str+= "<label>Pro :</label>#{content.pros}<br/>"
+        end
+          unless content.pros.blank? 
+           str+= "<label>Con :</label>#{content.cons}<br/>"
+          end 
       end
     end
+    return str
   end
 
 

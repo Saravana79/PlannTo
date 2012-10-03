@@ -31,7 +31,7 @@ $(document).ready(function() {
     $("#dialog-invite-form").dialog({height: 500,
       width: 550,
       modal: true});
-      $(".Close_dialog").show();
+      $(".Close_dialog_invite").show();
      $(".ui-dialog-titlebar").hide();
   });
  
