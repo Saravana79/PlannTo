@@ -1,3 +1,4 @@
+<%unless params[:buying_plan].present?%>
 <script type="text/javascript" src="/javascripts/movingboxs.js"></script>
 <script type="text/javascript" src="/javascripts/search_profile_car.js"></script>
 <link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
@@ -27,7 +28,7 @@
 
   });
 </script>
-
+<%end%>
 
 <div id="maincontainer" class="maincontainerCss">
 
@@ -223,7 +224,7 @@
          <div id="giveAdviceDialog"></div>
       <script type="text/javascript">
   $(document).ready(function(){
-    $('#plantobuySection').live('click', function(){
+    $('#plantobuySection').click(function(){
 
             $.get('/preferences/new',{search_type: $("#buying_plan_item_type").val()},null,"script");
             return false;
