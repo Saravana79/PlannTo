@@ -156,7 +156,7 @@
          <%if ((content.is_a?(ArticleContent)) && (content.video?))%> 
          $("#youtube_thumbnail<%=content.id %>").click(function(){
           $("#youtube_thumbnail<%= content.id %>").html('<div id="youtube_image<%=content.id %>" style="height:350px; width:500px">');
-          autoPlayVideo('<%= content.field4 %>',<%= content.id %>);
+          autoPlayVideo('<%= content.field4 rescue ""%>',<%= content.id %>);
           <%end%>
         });
   </script>
