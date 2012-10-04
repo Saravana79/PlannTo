@@ -1,5 +1,3 @@
-$("#contentEditView").html('');
-$("#dealer_report").html('');
 <%if @type == "dealer" %>
   $("#dealer_report").html("<%= escape_javascript(render "reports/dealer",:type => @type,:reportable_object => @reportable_object,:report => @report) %>");
   $("#dealer_report").dialog({
