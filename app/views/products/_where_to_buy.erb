@@ -35,9 +35,11 @@
 </table>
 </div>
 <%end%>
+<div id="dealer_report"> </div>
 <div style="clear:both;margin:10px 0px 5px 0px;">
   <p class="table_bot_text">Are you a dealer/seller of this product? If you like to include your listing, 
-  <a href="#">please get in touch with us.</a></p>
+  <%= link_to "Please get in touch with us.",new_item_report_path(@item,:type => "dealer"),:remote => true,:class => "txt_blue",:id => "report_link_#{@item.id}" %></a></li>
+  </p>
 </div>
 
 

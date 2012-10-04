@@ -6,6 +6,7 @@ class Car < Product
 #  has_many :relatedcars,
 #    :through => :itemrelationships, :include => :cargroup
 
+ 
   has_many :compares, :as => :comparable
   acts_as_taggable
   #  acts_as_taggable_on :product

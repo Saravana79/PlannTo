@@ -22,8 +22,11 @@ class ReportsController < ApplicationController
   def find_reportable_object
     if params[:type] == "content" 
       @reportable_object = Content.find(params[:content_id])
-    else
-      @reportable_object = Comment.find(params[:comment_id])  
+    elsif params[:type] == "comment"
+      @reportable_object = Comment.find(params[:comment_id]) 
+    elsif params[:type] == "dealer"
+      @reportable_object = Item.find(params[:item_id])
+          
   end
   end
 end

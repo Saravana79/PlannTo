@@ -16,7 +16,7 @@ class Item < ActiveRecord::Base
   has_many :shares # to be removed
   has_many :content_item_relations
   has_many :contents, :through => :item_contents_relations_cache
-
+  has_many :reports, :as => :reportable, :dependent => :destroy 
   has_many :groupmembers, :class_name => 'Item'
   belongs_to :group,   :class_name => 'Item', :foreign_key => 'group_id'
 
@@ -505,7 +505,9 @@ end
       count = configatron.popular_count.to_i - 1
       item_ids =  ids[0.."#{count}".to_i] #5 items display
     end
-     Item.where('id in (?)',item_ids)
+     @items = []
+     item_ids.map{|id| @items << Item.find(id) rescue ""}
+     return @items
   end
   
   def self.popular_topics(item_t)
@@ -522,8 +524,11 @@ end
       ids = configatron.popular_tablet_topics.split(",")
     when "Camera"
        ids = configatron.popular_camera_topics.split(",")
-    end      
-    Item.where('id in (?)',ids)
+    end  
+     @items = []
+     ids.map{|id| @items << Item.find(id) rescue ""}
+     return @items    
+    
   end
  end
 
