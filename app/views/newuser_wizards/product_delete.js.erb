@@ -5,7 +5,7 @@ var array = string.split(',');
 i = jQuery.inArray('<%= @item.id %>', array)
 if (parent_div == "img_box_1" || parent_div == "img_box_2" || parent_div == "img_box_3" || parent_div == "img_box_4" || parent_div == "img_box_5" || parent_div == "img_box_6")
 {
-$("#" + parent_div).html("<%= escape_javascript(render "default_image")%>")
+$("#" + parent_div).html("<%= escape_javascript(render "newuser_wizards/default_image")%>")
 }
 array.splice(i, 1);
 $("#wizard_item_id").val(array);

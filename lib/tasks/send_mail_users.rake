@@ -70,16 +70,34 @@ WHERE
 (item_contents_relations_cache.item_id in (#{follow_item_ids.blank? ? 0 : follow_item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 :root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
 )and 
-(contents.status =1 and contents.created_at >= '#{1.weeks.ago}')
+(contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
 union 
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 WHERE 
-(contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{1.weeks.ago}')
-)a  order by a.total_votes desc limit 10").collect(&:id) 
-  content_ids = content_ids.blank? ? "" : content_ids 
-  @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
-      
-         ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
+(contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{2.weeks.ago}')
+)a  order by a.total_votes desc limit 10").collect(&:id)
+  if content_ids.size < 10
+       content_ids =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
+WHERE 
+(
+(item_contents_relations_cache.item_id in (#{follow_item_ids.blank? ? 0 : follow_item_ids.join(",")})) or 
+(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 :root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+)and 
+(contents.status =1 and contents.created_at >= '#{4.weeks.ago}')
+union 
+SELECT distinct(contents.id) as idu, contents.* FROM contents 
+WHERE 
+(contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{4.weeks.ago}')
+)a  order by a.total_votes desc limit 10").collect(&:id)
+  end
+  
+   if content_ids.size < 10
+      content_ids = configatron.top_content_ids.split(",")
+   end  
+     
+     @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
+      ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
    
      end
     end 
