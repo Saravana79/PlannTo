@@ -4244,3 +4244,16 @@ border:1px solid #528fae; display:none; top:28px; right:-1px;}
     padding: 0px 0px 10px 4px;   
     background-color: #fff;
 }
+
+.read_more_class
+{
+font-weight: bold;
+text-decoration: none;
+color: #035BAC;
+outline: none;
+}
+
+.read_more_class:hover
+{
+    text-decoration: underline;
+};
