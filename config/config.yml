@@ -24,6 +24,8 @@ development:
   root_level_bike_id: 3218
   root_level_camera_id: 3216
   root_content_vote_count: 1
+  top_content_ids: "1,2,3,4,5,6,7,8,9,10"
+  top_all_item_ids: "5,6,7,8,9,10"
 test:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -48,6 +50,9 @@ test:
   root_level_bike_id: 3218
   root_level_camera_id: 3216
   root_content_vote_count: 1
+  top_content_ids: "1,2,3,4,5,6,7,8,9,10"
+  top_all_item_ids: "5,6,7,8,9,10"
+ 
 production:
   root_image_url: "http://s3.amazonaws.com/Plannto/items/"
   no_of_main_item: 1
@@ -74,4 +79,5 @@ production:
   root_level_bike_id: 3218
   root_level_camera_id: 3216
   root_content_vote_count: 1
- 
+  top_content_ids: "1,2,3,4,5,6,7,8,9,10"
+  top_all_item_ids: "5,6,7,8,9,10"

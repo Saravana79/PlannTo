@@ -1,4 +1,5 @@
 class NewuserWizardsController < ApplicationController
+  before_filter :authenticate_user!
   layout "product"
   
   def new
