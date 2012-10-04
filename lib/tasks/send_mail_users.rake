@@ -82,8 +82,21 @@ WHERE
          ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
    
      end
-    end
-  
+    end 
+ task :send_contents_not_follow_email,:arg1, :needs => :environment do | t, args|
+    userid = args[:arg1].to_i
+    if( userid != 0)
+     not_follow_users = User.find(:all, :conditions=> ["id = ?" ,userid])
+    else
+     follow_user_ids =  Follow.where("followable_type in(?)", Item::FOLLOWTYPES).select("distinct follower_id").collect(&:follower_id)
+      not_follow_users = User.where('id not in (?)', follow_user_ids)
+    end 
+      @contents = Content.where(configatron.top_content_ids.split(","))
+       top_item_ids = configatron.top_all_item_ids.split(",")
+       not_follow_users.each do |user|
+         ContentMailer.not_follow_user_content(@contents,user,top_item_ids).deliver
+       end     
+     end
   
   
  

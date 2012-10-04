@@ -12,4 +12,13 @@ class ContentMailer < ActionMailer::Base
 	end 
     mail(:to => user.email, :subject => subject)
   end
+  
+  def not_follow_user_content(contents,user,item_ids)
+    @contents = contents
+    @username = user.username
+    @userfullname = user.name
+    @items = Item.where('id in (?)',item_ids)
+    subject = "PlannTo Top Contents"
+    mail(:to => user.email, :subject => subject)
+ end
  end
