@@ -98,6 +98,7 @@ resources :accounts do
    match ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
    
   resources :cars do
+        resources :reports
         resources :shares
   end
    
@@ -152,11 +153,21 @@ resources :comments do
   resources :cycles do
         resources :shares
   end   
-  resources :mobiles
-  resources :tablets
-  resources :cameras
-  resources :bikes
-  resources :cycles
+  resources :mobiles do 
+    resources :reports
+  end  
+  resources :tablets do 
+    resources :reports
+   end 
+  resources :cameras do 
+    resources :reports
+  end  
+  resources :bikes do
+    resources :reports
+  end  
+  resources :cycles do
+    resources :reports
+  end  
   resources :bike_groups
   resources :manufacturers
   resources :car_groups  
@@ -181,7 +192,7 @@ resources :comments do
     end
   end
   resources :items do
-        
+       resources :reports    
     collection do
       get :compare
     end

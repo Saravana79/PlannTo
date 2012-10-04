@@ -165,7 +165,7 @@
                 <a href="<%= user.get_url()%>"><%= image_tag user.get_photo , :class => "userImageSmall"%></a>
               </div>
               <div class="contributorname">
-                <a class="txt_black" href="#">
+                <a class="txt_black" href="/<%= user.username %>">
                   <%= user.name %>
                 </a>
               </div>

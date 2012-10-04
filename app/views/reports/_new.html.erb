@@ -1,4 +1,5 @@
  <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+  
  <%= form_for @report,:url => @type == "content" ? content_reports_path(@reportable_object) :  comment_reports_path(@reportable_object),:remote => true,:id => "report_form" do |f| %>
 
  <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;">  
