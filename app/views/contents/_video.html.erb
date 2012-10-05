@@ -5,7 +5,7 @@
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
-    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %> shared a video on <%=get_anchor_name_link(content)%> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago </a></div>
+    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a> <a class="txt_brown_bold"> shared a video on <%=get_anchor_name_link(content)%> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago </a></div>
     <div>
      <div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div>
       <br />
@@ -17,7 +17,7 @@
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue",:id => "report_link_#{content.id}" %></a></li>
-
+ <%end%>
       <%if content.can_update_content?(current_user)%>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
         <li class="subContentGap float_lft"><%=link_to "Delete This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>

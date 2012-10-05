@@ -13,7 +13,7 @@
         - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
        <%end%>
     </div>
-    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><%=get_anchor_name_link(content)%> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
+    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><a class="txt_brown"><%=get_anchor_name_link(content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
     <div>
       <%if content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div><%end%>
           <div class="subContentGap">

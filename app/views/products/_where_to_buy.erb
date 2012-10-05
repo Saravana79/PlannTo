@@ -42,7 +42,14 @@
   </p>
 </div>
 
-
+   <script>
+        $("#report_link_<%= @item.id %>").click(function(e){
+          <%if !current_user %>
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            return false
+          <%end%>
+        })
+        </script>
 <% if (!@dealer_locators.nil?) %>
  
   <div style="display:block;clear:both;margin:30px 0px 5px 0px;">   
