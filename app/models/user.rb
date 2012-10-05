@@ -288,16 +288,16 @@ class User < ActiveRecord::Base
     user_name = user_name.gsub(".","_")
 
     #check if the same username is already present in the db
-    existing_user_names = User.where("username like ? OR username like ?", "#{user_name}%", "#{user_name}.%")
+    existing_user_names = User.where("username like ? OR username like ?", "#{user_name}", "#{user_name}_")
 
     if existing_user_names.present?
       # write logic here to increment the last digit of username
-      arr = existing_user_names.last.username.split(".")
+      arr = existing_user_names.last.username.split("_")
       if arr.size > 1 
         counter = arr.last.to_i + 1     
-        new_username = "#{user_name}.#{counter}"
+        new_username = "#{user_name}_#{counter}"
       else
-        new_username = "#{user_name}.1"
+        new_username = "#{user_name}_1"
       end
       update_attribute(:username, new_username)
     else
