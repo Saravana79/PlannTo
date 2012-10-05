@@ -8,11 +8,17 @@
 <div class="clearboth"></div>
 </div>
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
-<div class="text_box">
-<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you interested in Photography or Cycling? If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a></div>
+<br/>
+<div class="alert alert-block">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+  <strong>Are you interested in Photography or Cycling? </strong>
+  If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a>
 </div>
+<!--<div class="text_box">
+<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you interested in Photography or Cycling? If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a></div>
+</div>-->
 <div class="search_block">
-    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
+    <div class="title_header" style="padding:0px 0px 0px 0px;width:450px;height:25px;">
         <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a topic." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
     </div>
@@ -20,9 +26,9 @@
           <%= render "newuser_wizards/default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "follower" %>
-   <div class="search_block" style="float:right;padding:5px;">
+   <div  style="float:right;padding:5px;width:220px;">
          <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-       <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;">or <a href="#">skip</a></p>  
+       <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#">skip</a></p>  
        
       
        <div>

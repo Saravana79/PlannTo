@@ -8,21 +8,30 @@
 <div class="clearboth"></div>
 </div>
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
+
+<br/>
+<div class="alert alert-block">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+  <strong>Thanks for registering with PlannTo.com. </strong>
+  Add the products that you own in the following list, this will help us to customize our application based on your profile.
+</div>
+<!--
 <div class="text_box">
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Thanks for registering with PlannTo.com. Add the products that you own in the following list, this will help us to customize our application based on your profile.</div>
 </div>
+-->
 <div class="search_block">
-    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
-      <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
+    <div class="title_header" style="padding:0px 0px 0px 0px;width:450px;height:25px;">
+      <input style="margin-top:5px;width:360px; float:left;font-size:16px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
    </div>
      <div style="clear:both;"></div>
      <%= render "newuser_wizards/default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "owner" %>
-    <div class="search_block" style="float:right;padding:5px;">
+    <div  style="float:right;padding:5px;width:220px;">
     <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;">or <a href="#">skip</a></p>
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#">skip</a></p>
       <div>
          <%= render "shared/ajax_loader" %>
       </div>

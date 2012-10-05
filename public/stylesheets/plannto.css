@@ -2157,6 +2157,7 @@ li.middlebg {
     margin-top: 2px;
     min-width: 75px;
     margin-right: 5px;
+    margin-left:10px;
 }
 
 /* content details */
@@ -4149,7 +4150,7 @@ a.bookmark_button:hover span { background-position:right bottom;}
 
 
 
-.search_block { width:449px; margin:auto; padding:15px 0 0 0; clear:both;}
+.search_block { width:449px; margin:auto; padding:0px 0 0 0; clear:both;}
 
  
 .wizardbutton 
@@ -4257,3 +4258,78 @@ outline: none;
 {
     text-decoration: underline;
 };
+
+/*!
+ * Bootstrap v2.1.1
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+
+.alert {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  font-size:13px;
+  color: #c09853;
+}
+.alert h4 {
+  margin: 0;
+}
+.alert .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 20px;
+}
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+  font-size:13px;
+}
+.alert-danger,
+.alert-error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+  font-size:13px;
+}
+.alert-info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #3a87ad;
+  font-size:13px;
+}
+.alert-block {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.alert-block > p,
+.alert-block > ul {
+  margin-bottom: 0;
+}
+.alert-block p + p {
+  margin-top: 5px;
+}
+

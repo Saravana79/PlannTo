@@ -8,9 +8,16 @@
 <div class="clearboth"></div>
 </div>
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
-<div class="text_box">
-<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you planning to buy a car, mobile, cycle, tablet, bike or camera? Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.</div>
+<br/>
+<div class="alert alert-block">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+  <strong>Are you planning to buy a car, mobile, cycle, tablet, bike or camera? </strong>
+  Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.
 </div>
+
+<!--<div class="text_box">
+<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you planning to buy a car, mobile, cycle, tablet, bike or camera? Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.</div>
+</div>-->
 <div class="search_block">
     <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
         <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
@@ -21,7 +28,7 @@
     <%= render "newuser_wizards/default_images" %>
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "buyer" %>
-<div class="search_block" style="float:right;padding:5px;">
+<div  style="float:right;padding:5px;width:180px;">
          <%= f.submit 'Complete',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
       
       <div>
