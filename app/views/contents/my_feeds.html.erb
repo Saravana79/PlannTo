@@ -3,8 +3,8 @@
 
 <div class="Homepopupgraybox">
 <div class="Boxtopblock">
- <div class="Headingtext">My feeds- Quick Navigation Wizard</div>
-    <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>
+ <div class="Headingtext">My feeds</div>
+  <!--  <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>-->
   </div>
 <div class="Boxbotcorner"></div>
 </div>
@@ -78,7 +78,12 @@
      <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
       <%= render :partial => 'contents/contents'%>
      <%if @contents.nil? %>
-       <h2><center>Please follow an item or user to have my feed content. </center></h2>
+      <br/>
+      <div class="alert alert-block">
+        <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+        <strong>Currently you haven't followed any items, topics or users? </strong>
+        Please follow atleast one item, topics or a user to have personalized contents in your feed.
+      </div>       
      <%end%>
      <a id="content_next" style="display:none"></a>
      </div> 
