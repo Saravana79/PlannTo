@@ -180,7 +180,7 @@ class User < ActiveRecord::Base
   end
 
   def total_points
-    Point.find_by_sql("select points from view_rankings where user_id = #{self.id} limit 1").try(:first).try(:points)
+    Point.find_by_sql("select points from view_rankings where user_id = #{self.id} limit 1").try(:first).try(:points).to_i
   end
 
   def voted_positive?(item)
