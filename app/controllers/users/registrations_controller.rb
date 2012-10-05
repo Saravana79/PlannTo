@@ -22,7 +22,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       if @item.nil?
         redirect_to  "/newuser_wizard", notice: "Successfully registered"
       else
-        redirect_to @item.get_url ||  "/newuser_wizard", notice: "Successfully registered"
+        redirect_to  "/newuser_wizard?invitation=#{@invitation.id}", notice: "Successfully registered"
       end 
   
     else

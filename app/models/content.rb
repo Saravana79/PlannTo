@@ -98,7 +98,11 @@ class Content < ActiveRecord::Base
       when :type
         scope.scoped(:conditions => ["#{self.table_name}.type in (?)", value ])
       when :sub_type
-        scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value])
+         if value == ['Video']
+           scope.joins("INNER JOIN `article_contents` ON article_contents.id = contents.id").where("article_contents.video =?",1)
+         else           
+           scope.scoped(:conditions => ["#{self.table_name}.sub_type in (?)", value])  
+         end   
       when :item_relations 
         scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", value )
       when :order
@@ -123,12 +127,32 @@ class Content < ActiveRecord::Base
   def self.my_feeds_filter(filter_params)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
-     sub_type = sub_type.map { |i| "'" + i.to_s + "'" }.join(",")
+      sub_type = sub_type.map { |i| "'" + i.to_s + "'" }.join(",")
       item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
      root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
      vote_count = configatron.root_content_vote_count
      page = (filter_params["page"].to_i - 1) * 10
-     content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+     if  filter_params["sub_type"] == ["Video"]
+       content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
+INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id INNER JOIN article_contents on  article_contents.id = contents.id
+WHERE 
+(
+(item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
+(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+)and 
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+union 
+SELECT distinct(contents.id) as idu, contents.* FROM contents 
+INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
+INNER JOIN article_contents on  article_contents.id = contents.id
+WHERE 
+(contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
+and 
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
+)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+else 
+   content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
@@ -145,6 +169,7 @@ WHERE
 and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
 )a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+end
    content_ids = content_ids.blank? ? "" : content_ids
    contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
   # contents = Content.find(content_ids)

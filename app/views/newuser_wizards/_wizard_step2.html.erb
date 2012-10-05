@@ -24,8 +24,9 @@
     </div>
        <div style="clear:both;"></div>
           <%= render "newuser_wizards/default_images" %>
-    <%= f.hidden_field "item_id" %>
-    <%= f.hidden_field "type",:value => "follower" %>
+           <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
+          <%= f.hidden_field "item_id" %>
+       <%= f.hidden_field "type",:value => "follower" %>
    <div  style="float:right;padding:5px;width:220px;">
          <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
        <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#">skip</a></p>  
@@ -39,7 +40,18 @@
 <%= render "newuser_wizards/javascript" %>
 </div>
 <script>
+ <%if !@invitation.blank? %>
+ <%if @invitation.follow_type == "follower" %> 
+  $("#close_<%=@item.id %>").hide();
+  <%end%> 
+  <%end%>
  $("p a").click(function(e){
    $("#wizard").html("<%= escape_javascript(render  'newuser_wizards/wizard_step3') %> ");
+     <%unless @invitation.blank? %>
+   <%if @invitation.follow_type == "buyer" %>
+    $("#img_box_1").html("<%= escape_javascript(render  'newuser_wizards/product') %>");
+    $("#close_<%=@item.id %>").hide();
+   <%end%>
+   <%end%>
  });
 </script>

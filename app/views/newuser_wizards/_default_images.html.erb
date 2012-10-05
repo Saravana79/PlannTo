@@ -1,8 +1,20 @@
 <div id="photo_box"  style="padding:20px 00px 0px 85px;">
 <div class="clear"></div>
-<div id="img_box_1">
+<% if @invitation %>
+  <% if @wizard_type == @invitation.follow_type %>       
+ <div id="img_box_1">
+   <%= render "newuser_wizards/product" %>
+</div>
+  <%else%>
+   <div id="img_box_1">
+   <%= render "newuser_wizards/default_image" %>
+</div>
+ <%end%>
+<%else%>
+ <div id="img_box_1">
 <%= render "newuser_wizards/default_image" %>
 </div>
+<%end%>
 <div id="img_box_2">
 <%= render "newuser_wizards/default_image" %>
 </div>

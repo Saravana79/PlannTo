@@ -27,6 +27,7 @@
    <div style="clear:both;"></div>
     <%= render "newuser_wizards/default_images" %>
     <%= f.hidden_field "item_id" %>
+     <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
     <%= f.hidden_field "type",:value => "buyer" %>
 <div  style="float:right;padding:5px;width:180px;">
          <%= f.submit 'Complete',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
@@ -38,4 +39,10 @@
  <%end%>
 <%= render "newuser_wizards/javascript" %>
 </div>
-
+<script>
+<%if !@invitation.blank? %>
+ <%if @invitation.follow_type == "buyer" %> 
+  $("#close_<%=@item.id %>").hide();
+  <%end%> 
+  <%end%>
+</script>
