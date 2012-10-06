@@ -42,20 +42,7 @@
 
 <script type="text/javascript">
 	  $('#preference_question').live('click', function(e){
-              $('#question_question').poshytip('destroy')
-              if ($("#question_question").val() == ""){
-                $('#question_question').poshytip({
-                  className: 'tip-darkgray',
-                  content: 'Please enter your question.',
-                  showOn: 'none',
-                  alignTo: 'target',
-                  alignX: 'right',
-                  offsetX: 5,
-                  alignY: 'center'
-                });
-                $('#question_question').poshytip('show');
-                return false
-              }
+              
               e.preventDefault()
               $.ajax(
               {
