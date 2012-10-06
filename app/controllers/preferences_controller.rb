@@ -116,6 +116,11 @@ logger.info @follow_item
     @question = UserQuestion.find_by_id(params[:question_id])
     @user_answer = UserAnswer.new
   end
+  
+  def edit_user_question
+  @buying_plan = BuyingPlan.find params[:buying_plan_id]
+  @question = @buying_plan.user_question
+  end
 
   def update_question
     @question = UserQuestion.find(params[:question_id])

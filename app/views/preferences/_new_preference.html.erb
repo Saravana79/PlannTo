@@ -1,3 +1,18 @@
+<div class="step_main_page">
+<div class="main_step">
+<ul>
+<li class="selected">Step 1</li>
+<li>Step 2</li>
+<li>Step 3</li>
+</ul>
+<div class="clearboth"></div>
+</div>
+<br/>
+<div class="alert alert-block">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+  <strong>Thanks for registering with PlannTo.com. </strong>
+  Add the products that you own in the following list, this will help us to customize our application based on your profile.
+</div>
 <div class="rightcolumnbig">
   <div class="searchPack">
     <div class="hdr_Category">Search Preferences:</div>
@@ -15,8 +30,7 @@
       <%end%>
     <%end%>
     <div id="btnDiv" style="height:100px;display:block;">
-      <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Next</a>
-      <div id="preferenceSpinner"></div>
+     
     </div>
   </div>
 </div>
@@ -33,13 +47,23 @@
   </ul>
 </div>
 <%= render :partial => "shared/search_popup" %>
-<div class="push"></div>
+
 
 
 <div id="getAdviceDialog" title="I am looking for an advice" style="display:none">
 </div>
 
+</div>
+
 <div class="push"></div>
+<div  style="float:right;padding:5px;width:220px;float: left">
+	<div id="preferenceSpinner"></div>
+	 <a href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</a>
+      
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#" onclick="$('#giveAdviceDialog').dialog('destroy');">skip</a></p>
+      <div>
+      </div>
+        </div>
 <script type="text/javascript">
   $('#updatePreference').click(function() {
     updatePreferences('preferenceSpinner');

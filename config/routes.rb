@@ -91,6 +91,7 @@ resources :accounts do
       get :plan_to_buy
       get :delete_buying_plan
       get :update_question
+      get :edit_user_question
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'

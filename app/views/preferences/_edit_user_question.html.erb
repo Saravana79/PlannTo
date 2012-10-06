@@ -1,0 +1,93 @@
+ <div class="step_main_page">
+<div class="main_step">
+<ul>
+<li >Step 1</li>
+<li>Step 2</li>
+<li class="selected">Step 3</li>
+</ul>
+<div class="clearboth"></div>
+</div>
+<br/>
+<div class="alert alert-block">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+  <strong>Are you planning to buy a car, mobile, cycle, tablet, bike or camera? </strong>
+  Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.
+</div>
+
+<!--<div class="text_box">
+<div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you planning to buy a car, mobile, cycle, tablet, bike or camera? Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.</div>
+</div>-->
+<div class="search_block">
+    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
+        
+    </div>
+    </div>
+   <div style="clear:both;"></div>
+    <%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
+              <%=  f.hidden_field :buying_plan_id%><br/>
+              Send to Friends:
+              <%= f.radio_button :plannto_network, false, :checked => true %>
+              Plannto Network:
+              <%= f.radio_button :plannto_network, true %><br/>
+              <%= f.text_area :question, :rows=>2, :cols=>60, :value => @question.question%><br/>
+              
+               <div  style="float:right;padding:5px;width:180px;">
+         <%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
+      
+      <div>
+            <% end %>
+      </div>
+        </div>
+</div>
+
+<script type="text/javascript">
+	  $('#preference_question').live('click', function(e){
+              $('#question_question').poshytip('destroy')
+              if ($("#question_question").val() == ""){
+                $('#question_question').poshytip({
+                  className: 'tip-darkgray',
+                  content: 'Please enter your question.',
+                  showOn: 'none',
+                  alignTo: 'target',
+                  alignX: 'right',
+                  offsetX: 5,
+                  alignY: 'center'
+                });
+                $('#question_question').poshytip('show');
+                return false
+              }
+              e.preventDefault()
+              $.ajax(
+              {
+                url: "/preferences/update_question",
+                data: {
+                  display_type: "popup",
+                  question_id: <%=@question.id%>,
+                  question: $("#question_question").val(),
+                  plannto_network: $("input[name='question[plannto_network]']:checked").val()
+
+                },
+                type: "get",
+                dataType: "script"
+              });
+              return false
+            });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
