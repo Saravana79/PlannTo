@@ -10,7 +10,7 @@
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 
 <br/>
-<%= render "alert_messages/wizard_step1_message" %>
+<%= render "shared/alert_message",:type => "wizard_step1" %>
 <!--
 <div class="text_box">
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Thanks for registering with PlannTo.com. Add the products that you own in the following list, this will help us to customize our application based on your profile.</div>

@@ -266,7 +266,7 @@ class ContentsController < ApplicationController
   end
   
   def quick_new
-  
+    
   if params[:category] == "Reviews"
     @content = ReviewContent.new
     
@@ -274,6 +274,7 @@ class ContentsController < ApplicationController
     @content = QuestionContent.new
   else
     @content = ArticleContent.new
+    @content.build_content_photo
   end
   @content.sub_type = params[:category]
  

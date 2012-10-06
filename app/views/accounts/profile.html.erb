@@ -292,7 +292,7 @@
       <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1}%>
           <% @contents = Content.filter(params)  %>
        <% if @contents.size == 0 %>
-          <%= render "alert_messages/user_no_activities"%>  
+          <%= render "shared/alert_message",:type => "user_activity"%>  
        <%else%>    
       <div id="content_all">
         <!--filter by block start here-->
