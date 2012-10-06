@@ -205,8 +205,8 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
-   if params[:wizard_type]
-     search_type = Product.wizared_search_type(params[:wizard_type])
+   if params[:type]
+     search_type = Product.wizared_search_type(params[:type])
    else  
      search_type = Product.search_type(params[:search_type])
    end 
@@ -228,22 +228,25 @@ class SearchController < ApplicationController
      # if item.type == "CarGroup"
      #   type = "Car"
      # else
-     if(item.is_a? (Product))
-        type = item.type.humanize
-     elsif(item.is_a? (CarGroup))
-        type = "Groups"
-     elsif(item.is_a? (AttributeTag))
-        type = "Groups"
-     elsif(item.is_a? (ItemtypeTag))
-        type = "Topics"
-     else
-        type = item.type.humanize
-    end 
+     
+     #commented by shanmukha
+     
+     #if(item.is_a? (Product))
+      #  type = item.type.humanize
+     #elsif(item.is_a? (CarGroup))
+      #  type = "Groups"
+     #elsif(item.is_a? (AttributeTag))
+      #  type = "Groups"
+    # elsif(item.is_a? (ItemtypeTag))
+     #   type = "Topics"
+     #else
+      #  type = item.type.humanize
+    #end 
     
      # end
       url = item.get_url()
       # image_url = item.image_url
-      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => item.type, :url => url }
     }
     render :json => results
     

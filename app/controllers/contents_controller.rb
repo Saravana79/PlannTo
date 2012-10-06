@@ -113,7 +113,7 @@ class ContentsController < ApplicationController
       with :sub_type, "#{params[:sub_type]}"
     end
     results = @results.results.collect{|item|
-
+    
       {:id => item.id, :value => "#{item.title}", :imgsrc =>"", :type => item.sub_type, :url =>  "" }
     }
     render :json => results

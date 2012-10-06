@@ -182,7 +182,7 @@
      
     <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
        <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
-                                                     ["Follow this car", "follower"]]) %>
+                                                     ["Follow this Apps", "follower"]]) %>
        <%= f.hidden_field :followable_id %>
        <%= f.hidden_field :followable_type %>         
              
@@ -256,7 +256,7 @@
      
     <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
        <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
-                                                     ["Follow this car", "follower"]]) %>
+                                                     ["Follow this Accessory", "follower"]]) %>
        <%= f.hidden_field :followable_id %>
        <%= f.hidden_field :followable_type %>         
              
@@ -289,6 +289,11 @@
         <h2><%= @user.name %> Activities</h2>
     </div>
     <br/>
+      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1}%>
+          <% @contents = Content.filter(params)  %>
+       <% if @contents.size == 0 %>
+          <%= render "alert_messages/user_no_activities"%>  
+       <%else%>    
       <div id="content_all">
         <!--filter by block start here-->
         <div id="Filterby">
@@ -318,8 +323,7 @@
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
            
-          <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1}%>
-          <% @contents = Content.filter(params)  %>
+        
           <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         </div>
         <a id="content_next" style="display:none"></a>
@@ -330,6 +334,7 @@
       </span>
       <!-- This will go into main layout -->
     </div>
+    <%end%>
     <script type="text/javascript">
 
         $("div#Filterby div.Filternav ul li").click(function (e) {

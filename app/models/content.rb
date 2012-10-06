@@ -141,7 +141,7 @@ WHERE
 (item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
 )and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
 union 
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
@@ -149,7 +149,7 @@ INNER JOIN article_contents on  article_contents.id = contents.id
 WHERE 
 (contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
 and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
 )a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 else 
    content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
@@ -160,14 +160,14 @@ WHERE
 (item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
 )and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 union 
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
 (contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
 and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_at >='#{2.weeks.ago}')
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 )a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 end
    content_ids = content_ids.blank? ? "" : content_ids
