@@ -7,7 +7,7 @@
    <%else%> Product <%end%> to your profile </div>
    
    <div class="Searchform">
-       <input type="text" placeholder="Search <%= params[:follow]%>" id="search_item" /> 
+       <input type="text" placeholder="Search Product" id="search_item" /> 
        <input name="" type="button" class="Searchbut"/> 
    </div>  
   <div class="Searchform" style="">   
@@ -15,7 +15,7 @@
      
     <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
        <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
-                                                     ["Follow this car", "follower"]]) %>
+                                                     ["Follow this Item", "follower"]]) %>
        <%= f.hidden_field :followable_id %>
        <%= f.hidden_field :followable_type %>         
              
@@ -26,6 +26,10 @@
 </div>
  <%end%>
  <%end%>
+  
+  <%if items.size > 0 %>
+  
+   
 <div class="Searchlisting" style="clear:both;">
   <% items.each do |follow| %>
 
@@ -124,9 +128,15 @@
    <div class="Rightouter" id="tabs1">
    <%= will_paginate @followitems %>
   </div>
+</div>
+ <%else%>
+  <br />
+  <br />
+  <br />
+   <br />
+   <%= render "alert_messages/profile_no_item",:item => params[:follow]=="" ? "Products" : params[:follow] %>
+ <%end%> 
 
-<% category = (params[:follow].blank? || params[:follow] == "Cars") ? "Car" : params[:follow] %>
-<%= hidden_field_tag "category", category %>
 <script type="text/javascript">
   window._token = '<%= form_authenticity_token.to_s %>';
     /* ============================================================
@@ -232,4 +242,4 @@
 </script>
 
 
-</div>
+

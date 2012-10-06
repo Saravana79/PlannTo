@@ -10,11 +10,7 @@
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 
 <br/>
-<div class="alert alert-block">
-  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
-  <strong>Thanks for registering with PlannTo.com. </strong>
-  Add the products that you own in the following list, this will help us to customize our application based on your profile.
-</div>
+<%= render "alert_messages/wizard_step1_message" %>
 <!--
 <div class="text_box">
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Thanks for registering with PlannTo.com. Add the products that you own in the following list, this will help us to customize our application based on your profile.</div>
@@ -31,6 +27,7 @@
     <%= f.hidden_field "item_id" %>
     <%= f.hidden_field "type",:value => "owner" %>
     <div  style="float:right;padding:5px;width:220px;">
+    
     <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
      <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#">skip</a></p>
       <div>
@@ -57,4 +54,4 @@
 
  });
 </script>
-
+</div>

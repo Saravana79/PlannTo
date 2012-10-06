@@ -1,3 +1,4 @@
+  <%if @users.size > 0 %>
   <div class="Rightouter2" style="float:left">
  <% @users.each do |u| %>
 <div class="memberlist" style="margin-left:15px;">
@@ -22,3 +23,11 @@
   <%= will_paginate @users %>
   </div>
 </div>       
+
+<%else%>
+  <br />
+  <br />
+  <br />
+  <br />
+  <%= render "alert_messages/profile_no_item" ,:item => params[:follow]%>
+<%end%>  
