@@ -16,7 +16,12 @@
   </div>
   <br /><br />
 </div>
-
+<% if !@contents.blank? %>
+  <center> <h2> Top Contents </h2> </center>
+<% @contents.each do |content| %>
+	 <%= render_content_type(content) %>
+	  <% end %>
+<%end%>	  
 <script type="text/javascript">
   var compareIds= "<%=params[:ids]%>";
 
