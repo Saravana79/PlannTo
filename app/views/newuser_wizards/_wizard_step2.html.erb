@@ -9,7 +9,7 @@
 </div>
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 <br/>
-<%= render "alert_messages/wizard_step2_message" %>
+<%= render "shared/alert_message",:type => "wizard_step2" %>
 
 <!--<div class="text_box">
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you interested in Photography or Cycling? If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a></div>

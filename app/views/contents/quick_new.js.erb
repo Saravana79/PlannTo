@@ -1,5 +1,10 @@
+$("#contentEditView").html("");
+$("#question_contentDiv").html("");
+$("#subContainerContentCreate").html("");
+$("#articleReviewSubContainer").html("");
 $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
 $("#content_create_form_type").val('Popup');
+
 $("#contentEditView").dialog({
 title: 'New <%=@content.type.underscore.humanize%>',
 height: 500,
