@@ -228,6 +228,9 @@ class SearchController < ApplicationController
      # if item.type == "CarGroup"
      #   type = "Car"
      # else
+     
+     #commented by shanmukha
+     
      #if(item.is_a? (Product))
       #  type = item.type.humanize
      #elsif(item.is_a? (CarGroup))
