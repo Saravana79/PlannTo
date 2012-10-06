@@ -1,5 +1,10 @@
 <% if @valid %>
+<%if params[:display_type] == "popup"%>
+$("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render "preferences/add_preference_items", :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");
+
+<%else%>
 $("#plantobuyContent").html('<%= escape_javascript(render 'plan_to_buy_items', :items => get_items_with_constraint(@follow_item, @follow_types)) %>');
+<%end%>
 <%else%>
 alert("You already added this Item");
 <%end%>

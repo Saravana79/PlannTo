@@ -1,6 +1,6 @@
 
 //$("#giveAdviceDialog").dialog('destroy');
-$("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render "newuser_wizards/wizard_step1" )%></div>");
+$("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render "preferences/add_preference_items", :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");
 //$("#giveAdviceDialog").html('<%#= escape_javascript(render 'items', :items => get_items_with_constraint(@follow_item, @follow_types), :@per_page => 8) %>');
 
 //window.location.href = '<%#="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'

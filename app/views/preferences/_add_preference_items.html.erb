@@ -1,0 +1,28 @@
+<div class="step_main_page">
+<div class="main_step">
+<div class="clearboth"></div>
+</div>
+
+<div class="search_block">
+    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
+     <input name="search" style="margin-top:5px;width:360px; float:left;font-size:15px;" type="text" placeholder="Search <%= params[:follow]%>" id="search_buying_car"/>
+      
+    </div>
+   </div>
+     <div style="clear:both;"></div>
+     <%= render "preferences/display_items", :items => items %>
+    <%#= f.hidden_field "item_id" %>
+    <%#= f.hidden_field "type",:value => "owner" %>
+    <div class="search_block" style="float:right;padding:5px;">
+     <a href="#" class="searchButton" style="width:150px;" id="updatePreference">Next</a>
+     
+    <%#= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;">or <a href="#" onclick="$('#giveAdviceDialog').dialog('destroy');">skip</a></p>
+      <div>
+         <%= render "shared/ajax_loader" %>
+      </div>
+        </div>
+</div>
+
+
+
