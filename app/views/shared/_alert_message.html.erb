@@ -16,9 +16,9 @@
   Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.
    <%end%>
    <% if type == "profile_follow" %>
-      <strong> No <%= item.humanize %>.  </strong>
+      <strong> Currently, you havent followed any <%= item.humanize.pluralize %>.  </strong>
     <%end%>
     <% if  type == "user_activity" %>
-       <strong>No activities. </strong>
+       <strong>Currently there are no activities. </strong>
      <%end%>
  </div>

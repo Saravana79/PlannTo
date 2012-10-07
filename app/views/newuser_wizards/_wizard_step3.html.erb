@@ -26,7 +26,8 @@
     <%= f.hidden_field "item_id" %>
      <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
     <%= f.hidden_field "type",:value => "buyer" %>
-<div  style="float:right;padding:5px;width:180px;">
+    <br/>
+<div  style="float:left;padding:5px;width:200px;margin-left:310px;">
          <%= f.submit 'Complete',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
       
       <div>
