@@ -276,7 +276,9 @@
            <%= render "followers" %>
        <%else%>
     <div class="Rightouter" id="tabs1">
+    	<%unless params[:buying_plan].present?%>
         <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+        <%end%>
      </div>
     <%end%> 
     
