@@ -4,8 +4,9 @@
 <% @article_categories.each_with_index do |article_category, index| %>
 	<%if index < 4%>
    <span class='quick_config_btns' >
-	 <a href="#" class="quick_config_btns_icon" data-content="<%=article_category[0]%>"><%=content_write_tab_label(article_category[0])%></a>        
+	 <a href="#" class="quick_config_btns_icon button_<%= index %>" data-content="<%=article_category[0]%>"><%=content_write_tab_label(article_category[0])%></a>        
   </span>
+
 	<%end%>
      <%if index == 4%>
 <span class="Usrdropdown1">
@@ -24,27 +25,16 @@
     <%end%>     
     <%end%>
     <br/>
-    <script>        
-  $(".quick_config_btns_icon").click(function(e){
-     <%if !current_user %>
-        openLoginPopup("#" + $(this).attr('id'), "click");
-       return false
-     <%end%>
-        })
-  
-   $(".quickCreate").click(function(e){
-     <%if !current_user %>
-        openLoginPopup("#" + $(this).attr('id'), "click");
-       return false
-     <%end%>
-        })
-   </script>
+ 
     <script type="text/javascript">
     	
     	$(function(){
 
   $('a.quick_config_btns_icon').click(function(e){
-
+    <%if !current_user %>
+        openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+     <%end%>    
    // $(this).parent().toggleClass('selected');
     var category = $(this).data('content');
    // $.ajaxSetup({
@@ -56,7 +46,10 @@
 
   });
     $('a.quickCreate').live("click",function(){
-
+     <%if !current_user %>
+        openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+     <%end%>  
    // $(this).parent().toggleClass('selected');
     var category = $(this).data('content');
    // $.ajaxSetup({
