@@ -1,5 +1,6 @@
 class UserQuestion < ActiveRecord::Base
-
+  
+  acts_as_commentable
   belongs_to :buying_plan
   has_many :user_answers, :through => :user_question_answers
   has_many :user_question_answers, :dependent => :destroy

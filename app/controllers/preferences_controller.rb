@@ -9,6 +9,7 @@ class PreferencesController < ApplicationController
   def show
     require 'will_paginate/array'
     @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
+  #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
@@ -142,10 +143,11 @@ logger.info @follow_item
 
   def delete_buying_plan
     @buying_plan = BuyingPlan.find(params[:id])
-    @buying_plan.destroy
+    #@buying_plan.destroy
+    @buying_plan.update_attribute(:deleted, true)
     render :nothing => true
   end
-
+ 
   private
 
   def get_follow_items

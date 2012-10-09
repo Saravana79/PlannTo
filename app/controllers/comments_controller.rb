@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
 
   def create
     @detail = params[:detail]
-    @content= Content.find(params[:content_id])
+    @content= params[:comment_type].camelize.constantize.find(params[:content_id])
     @comment = Comment.new(params[:comment])
     @comment.commentable = @content
     @comment.status = @comment.set_comment_status("create")

@@ -90,6 +90,7 @@ resources :accounts do
       get :update_preference
       get :plan_to_buy
       get :delete_buying_plan
+      delete :delete_buying_plan
       get :update_question
       get :edit_user_question
     end
