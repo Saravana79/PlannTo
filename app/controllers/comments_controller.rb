@@ -20,7 +20,7 @@ class CommentsController < ApplicationController
   end
   
   def index
-    @content= Content.find(params[:content_id])
+    @content= params[:comment_type].camelize.constantize.find(params[:content_id])
     @page =  params[:page].blank? ? 1 : params[:page].to_i
     per_page = 5 
     @previous = (@content.comments.where("status=1").count - per_page * @page )> 0 ? true : false

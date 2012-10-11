@@ -1,7 +1,9 @@
 <%if params[:display_type] == "popup"%>
 $("#giveAdviceDialog").dialog('destroy');
 <%else%>
+$('#updateQuestion').dialog('destroy');
 $('#editQuestion').hide();
 $('#displayQuestion').show();
 $('#question_part').text('<%= @question.question%>');
+
 <%end%>
