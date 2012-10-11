@@ -15,8 +15,22 @@
       <strong>Are you planning to buy a car, mobile, cycle, tablet, bike or camera? </strong>
   Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.
    <%end%>
-   <% if type == "profile_follow" %>
-      <strong> Currently, you havent followed any <%= item.humanize.pluralize %>.  </strong>
+   <% if type == "profile_follow"  %>
+     <%if item.downcase != 'following' and item.downcase != 'followers'%>
+         <% if User.profile_owner?(@user,current_user) %>
+            <strong> You havent followed any <%= item.humanize.pluralize %> yet.  </strong>
+         <%else%>
+            <strong> <%=@user.name%> hasnt followed any <%= item.humanize.pluralize %> yet.  </strong>
+         <%end%>
+      <%elsif item.downcase != 'following' %>
+         <% if User.profile_owner?(@user,current_user) %>
+            <strong> You havent followed any users yet.  </strong>
+         <%else%>
+            <strong> <%=@user.name%> hasnt followed any users yet.  </strong>
+         <%end%>
+      <%elsif item.downcase != 'followers' %>
+            <strong> There are no followers.  </strong>        
+      <%end%>
     <%end%>
     <% if  type == "user_activity" %>
        <strong>Currently there are no activities. </strong>
