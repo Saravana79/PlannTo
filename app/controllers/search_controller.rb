@@ -246,7 +246,7 @@ class SearchController < ApplicationController
      # end
       url = item.get_url()
       # image_url = item.image_url
-      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => item.type, :url => url }
+      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
     render :json => results
     
