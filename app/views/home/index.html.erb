@@ -1,79 +1,55 @@
 <div id="maincontainer" class="maincontainerCss1">
 
+
 <div class="Homeinnercontent">
 
-<div class="Titledes">Trusted platform for buyers, owners and experts</div>
+	<div class="slider" id="slider1">
+	<span onclick="slider3.style.display='block';slider1.style.display='none';" class="left_arrow"></span>
+	<span onclick="slider2.style.display='block';slider1.style.display='none';" class="right_arrow"></span>
+	<ul>
+	 <li>
+	<img src="/images/slider_3.png" alt="Sliderone" />
+	<h1>Trusted Platform for Buyers, Owners, Sellers and Experts </h1></li>
+	<li><p>
+	1000s of products and Topics in Mobiles, Cars, Bikes, Cycles, Tablets and Cameras.<br/><br/>
+	Follow each product as a buyer, owner or expert and share the knowledge about the product.<br/><br/>
+	Get all the information about the product in a personalized way.<br/>
 
+	 </p>
+	</li>
+	</ul>
 
-<div class="Homefourblocks">
+	</div>
+ 	<div class="slider" id="slider2" style="display:none;">
+	<span onclick="slider1.style.display='block';slider2.style.display='none';" class="left_arrow"></span>
+	<span onclick="slider3.style.display='block';slider2.style.display='none';" class="right_arrow"></span>
+	<ul>
+	 <li>
+<img src="images/slider2.png" alt="Sliderone" />
+<h1>Search all available and upcoming products</h1></li>
+<li><p>Search the products based on various preferences<br/>
+ </p></li>
+	</ul>
 
-<!--Planning to buy-->
-<div class="Blueblockhome bighomeblock">
-<span class="Buytag"></span>
+	</div>
+	 	<div class="slider" id="slider3" style="display:none;">
+	<span onclick="slider2.style.display='block';slider3.style.display='none';" class="left_arrow"></span>
+	<span onclick="slider1.style.display='block';slider3.style.display='none';" class="right_arrow"></span><ul>
+	 <li>
+	<img src="images/slider_pic.png" alt="Sliderone" />
+		<h1>Structured Knowledge about the product. </h1></li>
+		<li><p>Each product information is structured in such way that it can be accessed based on the need.<br/><br/>
+		Compare prices from various sellers for each product.<br/>
+		</p>
+	</li>
 
-<div class="Textdescriptions">
-<h2>PlannTo Buy</h2>
-<p>
-Planning to buy a car, mobile, bike, cycle, tablet or camera?  Not aware of the various brands/ options? Confused about how to select a brand?
-</p>
-<p><br />
-We make buying easier! Search for the product that suit your requirement, talk to experts and get advice, see what others recommend.
-</p>
+	</ul>
+
+	</div>
+	<!--
+	<div style="padding-top:15px;clear:both;margin-left:380px;">	  <input type="button" class="Bluesubmithomespan" value="Sign In" 
+		style="margin-right:20px;"/>
+		  <input type="button" class="Bluesubmithomespan" value="Sign Up"/></div>-->
+ </div>
 </div>
 
-
-
-</div>
-<!--Planning to buy-->
-
-<!--Owners-->
-<div class="Blueblockhome bighomeblock">
-<span class="Ownertag"></span>
-
-<div class="Textdescriptions">
-<h2>Owners</h2>
-<p>
-Are you the proud owner of a car, mobile, bike, cycle, tablet or camera?
-Here’re some tips and tricks to use your product effectively.
-<br/><br/>
-Having trouble with your gadget? Talk to fellow owners and experts who can troubleshoot.
-Give your valuable advice to a prospective buyer.
-</p>
-</div>
-
-
-
-</div>
-<!--Owners-->
-
-<!--Experts/Enthusiastic-->
-<div class="Blueblockhome bighomeblock">
-<span class="Expertstar"></span>
-
-<div class="Textdescriptions">
-<h2>Experts</h2>
-<p>
-Are you interested in cycling, photography, car, biking or gadgets and like to know about latest happening on those items or network with like-minded people.
-<br/><br/>Are you a cycling/ biking enthusiast? A gadget guru? A know-it-all when it comes to cars? Your knowledge could help someone!
-<br/>Want to know the latest trends in your area of interest? Network with like-minded people here.
-</p>
-</div>
-
-</div>
-<!--Experts/Enthusiastic-->
-<div class="Loginblockhome Lastblock sign_in_home">
-<%= render "/shared/home_login" %>
-</div>
-
-
-<div class="Loginblockhome Lastblock sign_up" style="display:none;">
-
-<%= render "/shared/home_signup" %>
-
-</div>
-
-
-
-</div>
-</div>
-</div>
