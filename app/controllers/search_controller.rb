@@ -229,19 +229,19 @@ class SearchController < ApplicationController
      #   type = "Car"
      # else
      
-     #commented by shanmukha
      
-     #if(item.is_a? (Product))
-      #  type = item.type.humanize
-     #elsif(item.is_a? (CarGroup))
-      #  type = "Groups"
-     #elsif(item.is_a? (AttributeTag))
-      #  type = "Groups"
-    # elsif(item.is_a? (ItemtypeTag))
-     #   type = "Topics"
-     #else
-      #  type = item.type.humanize
-    #end 
+     
+     if(item.is_a? (Product))
+        type = item.type.humanize
+     elsif(item.is_a? (CarGroup))
+        type = "Groups"
+     elsif(item.is_a? (AttributeTag))
+        type = "Groups"
+    elsif(item.is_a? (ItemtypeTag))
+        type = "Topics"
+     else
+        type = item.type.humanize
+      end 
     
      # end
       url = item.get_url()
