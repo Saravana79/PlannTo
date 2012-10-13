@@ -37,4 +37,10 @@
 <!--
 <%= render "newuser_wizards/default_image" %> -->
 </div>
+<% unless @items.blank? %>
+ <% @items.each do |item| %>
+<% @item = Item.find(item) %> 
+<%= render "newuser_wizards/product",:locals => {:item => @item }  %>
+<%end%>
+<%end%>
 </div>

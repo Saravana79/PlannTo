@@ -441,8 +441,20 @@ class Item < ActiveRecord::Base
 
   def self.get_follows_items_for_user(user) 
     Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).limit(5).map{|f| Item.find(f.followable_id)}
-   end
- 
+  end
+  
+  def self.get_buyer_item_ids_for_user(user)
+     Follow.where('follower_id =? and follow_type =?',user.id,"buyer").collect(&:followable_id)
+  end
+  
+  def self.get_owner_item_ids_for_user(user)
+     Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id)
+  end
+  
+  def self.get_topics_follower_ids_for_user(user)
+     Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,['Topic','AttributeTag'].join(","),"follower").collect(&:followable_id)
+  end
+  
  def show_specification
    has_specificiation = true
  end 

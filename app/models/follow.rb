@@ -48,13 +48,14 @@ class Follow < ActiveRecord::Base
   
   def self.wizard_save(item_ids,type,user)
      item_ids.split(',').uniq.each do |id|
-      item = Item.find(id)
-      follow = user.follows.new
-      follow.followable_id = item.id
-      follow.followable_type = item.type
-      follow.followable_id = item.id
-      follow.follow_type = type
-      follow.save
+     if user.follows.where('followable_id =? and followable_type !=? and follow_type =?', id,"User",type).blank?
+        item = Item.find(id)
+        follow = user.follows.new
+        follow.followable_id = item.id
+        follow.followable_type = item.type
+        follow.follow_type = type
+        follow.save
+      end
     end 
   end
   #TODO this is not so good. but current implementation of follow forces to do this

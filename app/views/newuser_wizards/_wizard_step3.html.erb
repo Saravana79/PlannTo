@@ -22,14 +22,14 @@
     </div>
     </div>
    <div style="clear:both;"></div>
-    <%= render "newuser_wizards/default_images" %>
+    <%= render "newuser_wizards/default_images" ,:items => @items%>
     <%= f.hidden_field "item_id" %>
      <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
     <%= f.hidden_field "type",:value => "buyer" %>
     <br/>
 <div  style="float:left;padding:5px;width:200px;margin-left:310px;">
          <%= f.submit 'Complete',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-      
+         <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"><a><%= link_to " Previous",previous_newuser_wizards_path(:previous => "follower"),:remote => :true %></a></p> 
       <div>
          <%= render "shared/ajax_loader" %>
       </div>
