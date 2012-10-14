@@ -63,6 +63,7 @@ class Item < ActiveRecord::Base
     return itemtype_id
   end
   def get_base_itemtype
+
     itemtype_id = self.get_base_itemtypeid
     itemtype1 = Itemtype.find_by_id(itemtype_id).itemtype
     return itemtype1
@@ -135,6 +136,15 @@ class Item < ActiveRecord::Base
         configatron.root_image_url + type.downcase + '/org/' + "#{imageurl}"
       else   
          configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
+      end
+   else
+      baseitemtype = get_base_itemtype.downcase
+        if(imagetype == :medium)
+        configatron.root_image_url + baseitemtype + '/medium/default_' + baseitemtype + ".jpeg"
+      elsif (imagetype == :org)
+        configatron.root_image_url + baseitemtype + '/org/default_' + baseitemtype + ".jpeg"
+      else   
+         configatron.root_image_url + baseitemtype + '/small/default_' + baseitemtype + ".jpeg"
       end
    end
   end
