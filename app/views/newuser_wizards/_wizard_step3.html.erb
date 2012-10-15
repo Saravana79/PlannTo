@@ -27,9 +27,16 @@
      <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
     <%= f.hidden_field "type",:value => "buyer" %>
     <br/>
-<div  style="float:left;padding:5px;width:200px;margin-left:310px;">
+<div  style="float:left;padding:5px;width:200px;margin-left:250px;">
+     <div style="float:left;width:100px;">
+        <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"><a><%= link_to " Previous",previous_newuser_wizards_path(:previous => "owner"),:remote => :true %></a></p>
+      </div>
+      <div style="float:right;width:100px;">
          <%= f.submit 'Complete',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-         <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"><a><%= link_to " Previous",previous_newuser_wizards_path(:previous => "follower"),:remote => :true %></a></p> 
+        
+       </div>
+         
+         
       <div>
          <%= render "shared/ajax_loader" %>
       </div>
