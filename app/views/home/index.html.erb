@@ -1,39 +1,53 @@
 <div id="maincontainer" class="maincontainerCss1">
-
-
 <div class="Homeinnercontent">
 
-	<div class="slider" id="slider1">
-	<span onclick="slider3.style.display='block';slider1.style.display='none';" class="left_arrow"></span>
+<script type="text/javascript" language="javascript" src="/javascripts/jquery.easing.min.1.3.js"></script>
+<script type="text/javascript" language="javascript" src="/javascripts/jquery.jcontent.0.8.min.js"></script>
+   <script type="text/javascript" language="javascript">
+      $("document").ready(function(){
+       $("div#demo3").jContent({orientation: 'horizontal', 
+                                   easing: "easeOutCirc", 
+                                   duration: 500,
+                                   width: 1000,
+                                   height: 430,
+                                   auto: true,
+										 pause_on_hover: true,
+                                    direction: 'next',
+                                    pause: 1500});
+                                     
+              				 
+            });
+        </script>	         	        
+   <div id="demo3" class="demo3" style="height:900px;">	
+      <div class="slider slides" id="slider1" >
+        <div>
+          <span onclick="slider3.style.display='block';slider1.style.display='none';" class="left_arrow"></span>
 	<span onclick="slider2.style.display='block';slider1.style.display='none';" class="right_arrow"></span>
-	<ul>
-	 <li>
+    <ul>
+	   <li>
 	<img src="/images/slider_3.png" alt="Sliderone" />
-	<h1>Trusted Platform for Buyers, Owners, Sellers and Experts </h1></li>
-	<li><p>
+	  <h1>Trusted Platform for Buyers, Owners, Sellers and Experts </h1></li>
+	  <li><p>
 	1000s of products and Topics in Mobiles, Cars, Bikes, Cycles, Tablets and Cameras.<br/><br/>
 	Follow each product as a buyer, owner or expert and share the knowledge about the product.<br/><br/>
 	Get all the information about the product in a personalized way.<br/>
-
-	 </p>
-	</li>
-	</ul>
-
-	</div>
- 	<div class="slider" id="slider2" style="display:none;">
-	<span onclick="slider1.style.display='block';slider2.style.display='none';" class="left_arrow"></span>
+    </p>
+	    </li>
+	  </ul>
+      </div>
+        <div>
+         <span onclick="slider1.style.display='block';slider2.style.display='none';" class="left_arrow"></span>
 	<span onclick="slider3.style.display='block';slider2.style.display='none';" class="right_arrow"></span>
 	<ul>
 	 <li>
-<img src="images/slider2.png" alt="Sliderone" />
-<h1>Search all available and upcoming products</h1></li>
-<li><p>Search the products based on various preferences<br/>
- </p></li>
-	</ul>
-
-	</div>
-	 	<div class="slider" id="slider3" style="display:none;">
-	<span onclick="slider2.style.display='block';slider3.style.display='none';" class="left_arrow"></span>
+     <img src="images/slider2.png" alt="Sliderone" />
+        <h1>Search all available and upcoming products</h1></li>
+     <li><p>Search the products based on various preferences<br/>
+       </p></li>
+	  </ul>
+        </div>
+      <div>
+       <span onclick="slider2.style.display='block';slider3.style.display='none';" class="left_arrow"></span>
 	<span onclick="slider1.style.display='block';slider3.style.display='none';" class="right_arrow"></span><ul>
 	 <li>
 	<img src="images/slider_pic.png" alt="Sliderone" />
@@ -42,14 +56,73 @@
 		Compare prices from various sellers for each product.<br/>
 		</p>
 	</li>
-
 	</ul>
-
-	</div>
-	<!--
-	<div style="padding-top:15px;clear:both;margin-left:380px;">	  <input type="button" class="Bluesubmithomespan" value="Sign In" 
-		style="margin-right:20px;"/>
-		  <input type="button" class="Bluesubmithomespan" value="Sign Up"/></div>-->
- </div>
 </div>
-
+     </div>		
+  </div>
+   </div>
+ </div>
+<table>
+<tr>
+<% configatron.popular_cars.split(",")[0..2].each do | id| %>
+   <% item = Item.find(id) rescue "" %>
+    <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
+     <td width="113">
+       <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
+    <%end%>
+      </tr>
+</table>
+<table>
+<tr>
+<% configatron.popular_mobiles.split(",")[0..2].each do | id| %>
+   <% item = Item.find(id) rescue "" %>
+   
+            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
+            <td width="113">
+          
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
+      <%end%>
+      </tr>
+</table>
+<table>
+<tr>
+<% configatron.popular_bikes.split(",")[0..2].each do | id| %>
+   <% item = Item.find(id) rescue "" %>
+   <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
+      <td width="113">
+      <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
+      
+<%end%>
+   </tr>
+</table>
+<table>
+<tr>
+<% configatron.popular_cameras.split(",")[0..2].each do | id| %>
+   <% item = Item.find(id) rescue "" %>
+     <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
+    <td width="113">
+    <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
+    <%end%>
+   </tr>
+</table>
+<table>
+<tr>
+<% configatron.popular_cycles.split(",")[0..2].each do | id| %>
+   <% item = Item.find(id) rescue "" %>
+    <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
+      <td width="113">
+       <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
+      <%end%>
+      </tr>
+</table>
+<table>
+<tr>
+<% configatron.popular_tablets.split(",")[0..2].each do | id| %>
+   <% item = Item.find(id) rescue "" %>
+    <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
+            <td width="113">
+          <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
+    <%end%>
+      </tr>
+</table>
+   

@@ -8,7 +8,7 @@
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
           <% Item.popular_items(@type,:Five).each do |item|%>
            <tr>
-            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
+            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
             <td width="113">
             <div>
             <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
