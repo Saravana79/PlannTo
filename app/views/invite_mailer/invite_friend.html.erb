@@ -1,8 +1,83 @@
-<p>Hello ,</p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>:: Welcome ::</title>
+</head>
 
-<p><%= "#{@invitation.sender.name} invited you to PlannTo as #{@invitation.follow_type.humanize}" %></p>
+<body style="padding:36px 0 44px 0; margin:0px; background:#d8d8d8;">
+<table width="666" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td>
+    
+    <table width="662" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td>
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+  <tr>
+    <td width="37" ><img src="http://www.plannto.com/images/left_shadow.png" alt="" width="37" height="136" /></td>
+    <td align="left" valign="top" style="background:#FFFFFF; border-top:3px solid #d8d8d8;" >
+    <span style="display:block; float:left;"><a href="http://www.plannto.com"><img src="http://www.plannto.com/images/n_logo.png" width="134" height="97" border="0" alt="PlannTo.com" /></a></span>   
+    <td align="right" width="100%" style="background:#FFFFFF; border-top:3px solid #d8d8d8;"> 
+<span style="color:#676767"><em><%= Date.today.day %> <%= Date::MONTHNAMES[Date.today.month] %>
+ <%= Date.today.year %></em></span><br /><br />
 
-Follow this link <%= link_to "PlannTo", accept_invitation_url(:token => @invitation.token) %> to join us 
+   <!-- If you cannot read this email, <a href="http://localhost:3000/users/sign_in" style="color:#787878; text-decoration:none;">click here</a><br />
+Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="color:#787878; text-decoration:none;">unsubscribe</a>    </p> -->   </td>
+    <td width="24"  align="right" valign="top"><img src="http://www.plannto.com/images/right_shadow.png"  width="24" height="136" /></td>
+  </tr>
+</table>
 
-<p><%= @invitation.message %></p>
+    
+    </td>
+  </tr>
 
+<tr>
+<td>
+<table width="650" border="0" cellspacing="0" cellpadding="0" align="center" style="background:#FFFFFF;">
+	<tr><td>
+<p style="padding:2px 0 0 0; border-top:1px solid #d8d8d8;margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">Hello,
+<br/><br/>
+<%= "#{@invitation.sender.name} invited you to PlannTo.com as #{@invitation.follow_type.humanize} of #{@invitation.item.name}" %>
+</p>
+<br/>
+<div style="margin-left:200px;width:200px;border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
+          <a href="<%= 'http://www.plannto.com' + @invitation.item.get_url() %>" ><img src="<%= @invitation.item.image_url() %>" alt="<%= @invitation.item.name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
+<p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= @invitation.item.name %></p>      
+</div>
+<div style="margin-left:190px;text-align:center;width:200px;padding-top:10px;">
+<a style="width:160px;height: 30px; margin-left: 10px; margin-bottom: 10px;font: bold 11px/30px Tahoma;color: #fff;display: block;background: url(www.plannto.com/images/btn_bg.png) repeat-x top; text-decoration: none; text-align: center; float: right;border: solid 1px #ea5a30;background-color: #ea5e30; border-radius: 3px; padding: 0px 10px;  cursor: hand;" href="<%= accept_invitation_url(:token => @invitation.token) %>">
+
+<%if  @invitation.follow_type == 'owner'%>
+Yes, I own it.
+<%elsif  @invitation.follow_type == 'buyer' %>
+Yes, I am planning to buy this.
+<% else %>
+Yes, I like to follow this.
+<%end %>
+
+</a>
+</div>
+<br/>
+<br/>
+<p style="padding:2px 0 0 0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
+<% if @invitation.message != ''%>
+Message sent by <%= "#{@invitation.sender.name}"%>
+<br/>
+<%= "#{@invitation.message}" %>
+<br/>
+<% end%>
+<br/>
+<br/>
+
+If you are a <%= "#{@invitation.follow_type.humanize}"%> of this product, please click the above button to join PlannTo.com as <%= "#{@invitation.follow_type.humanize}"%> of <%="#{@invitation.item.name}"%>.
+<br/>
+ <br/>
+</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
