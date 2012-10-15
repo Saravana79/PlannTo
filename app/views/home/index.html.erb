@@ -7,18 +7,18 @@
       $("document").ready(function(){
        $("div#demo3").jContent({orientation: 'horizontal', 
                                    easing: "easeOutCirc", 
-                                   duration: 500,
+                                   duration: 8000,
                                    width: 1000,
                                    height: 430,
                                    auto: true,
 										 pause_on_hover: true,
                                     direction: 'next',
-                                    pause: 1500});
+                                    pause: 8000});
                                      
               				 
             });
         </script>	         	        
-   <div id="demo3" class="demo3" style="height:900px;">	
+   <div id="demo3" class="demo3" style="height:450px;">	
       <div class="slider slides" id="slider1" >
         <div>
           <span onclick="slider3.style.display='block';slider1.style.display='none';" class="left_arrow"></span>
@@ -63,66 +63,172 @@
    </div>
  </div>
 <table>
-<tr>
-<% configatron.popular_cars.split(",")[0..2].each do | id| %>
-   <% item = Item.find(id) rescue "" %>
-    <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
-     <td width="113">
-       <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
-    <%end%>
-      </tr>
+  <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Cars
+        </div>
+        <% configatron.popular_cars.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/car/search" class="txt_blue" style="float:right;">View All Cars</a>
+       </div>
+    </td>
+    <td width="40px;"></td>
+    </td>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Bikes
+        </div>
+        <% configatron.popular_bikes.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/bike/search" class="txt_blue" style="float:right;">View All Bikes</a>
+       </div>
+    </td>
+ </tr>
+   <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Mobiles
+        </div>
+        <% configatron.popular_mobiles.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/mobile/search" class="txt_blue" style="float:right;">View All Mobiles</a>
+       </div>
+    </td>
+    <td width="40px;"></td>
+    </td>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Tablets
+        </div>
+        <% configatron.popular_tablets.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/tablet/search" class="txt_blue" style="float:right;">View All Tablets</a>
+       </div>
+    </td>
+ </tr>
+   <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Cameras
+        </div>
+        <% configatron.popular_cameras.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/camera/search" class="txt_blue" style="float:right;">View All Cameras</a>
+       </div>
+    </td>
+    <td width="40px;"></td>
+    </td>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Cycles
+        </div>
+        <% configatron.popular_cycles.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/cycle/search" class="txt_blue" style="float:right;">View All Cycles</a>
+       </div>
+    </td>
+ </tr>
 </table>
-<table>
-<tr>
-<% configatron.popular_mobiles.split(",")[0..2].each do | id| %>
-   <% item = Item.find(id) rescue "" %>
-   
-            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
-            <td width="113">
-          
-            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
-      <%end%>
-      </tr>
-</table>
-<table>
-<tr>
-<% configatron.popular_bikes.split(",")[0..2].each do | id| %>
-   <% item = Item.find(id) rescue "" %>
-   <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
-      <td width="113">
-      <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
-      
-<%end%>
-   </tr>
-</table>
-<table>
-<tr>
-<% configatron.popular_cameras.split(",")[0..2].each do | id| %>
-   <% item = Item.find(id) rescue "" %>
-     <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
-    <td width="113">
-    <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
-    <%end%>
-   </tr>
-</table>
-<table>
-<tr>
-<% configatron.popular_cycles.split(",")[0..2].each do | id| %>
-   <% item = Item.find(id) rescue "" %>
-    <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
-      <td width="113">
-       <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
-      <%end%>
-      </tr>
-</table>
-<table>
-<tr>
-<% configatron.popular_tablets.split(",")[0..2].each do | id| %>
-   <% item = Item.find(id) rescue "" %>
-    <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></a></td>
-            <td width="113">
-          <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a><br /><%=display_specifications(item) rescue ""%> </td>
-    <%end%>
-      </tr>
-</table>
-   
