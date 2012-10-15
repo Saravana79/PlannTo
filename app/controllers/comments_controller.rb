@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-
+  before_filter :authenticate_user!, :except => :index
   def create
     @detail = params[:detail]
     @content= params[:comment_type].camelize.constantize.find(params[:content_id])
