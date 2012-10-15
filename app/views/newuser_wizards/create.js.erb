@@ -1,5 +1,5 @@
 <% type = @invitation.nil? ? "" : @invitation.follow_type %>
-<%if @item_id =="" && @type != "buyer" && @type!= type %>
+<%if @item_id =="" && @type != "buyer" && @type!= type && @not_follow == "true"%>
   $("#spinner").hide();
  alert("Please select at least one product");
 <%else%> 

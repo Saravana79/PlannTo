@@ -4,6 +4,7 @@ class Item < ActiveRecord::Base
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
   #cache_records :store => :local, :key => "items",:request_cache => true
   FOLLOWTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "CarGroup", "Topic"]
+  TOPIC_FOLLOWTYPES = ["Topic","AttributeTag"]
   ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
   belongs_to :itemtype
   #  has_many :itemrelationships
@@ -462,7 +463,7 @@ class Item < ActiveRecord::Base
   end
   
   def self.get_topics_follower_ids_for_user(user)
-     Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,['Topic','AttributeTag'].join(","),"follower").collect(&:followable_id)
+     Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,"follower",Item::TOPIC_FOLLOWTYPES).collect(&:followable_id)
   end
   
  def show_specification

@@ -17,6 +17,7 @@ class NewuserWizardsController < ApplicationController
   end
   
   def create
+    
     @type = params[:wizard][:type]
     if !params[:invitation_id].blank? 
       @invitation = Invitation.find(params[:invitation_id]) 
@@ -30,6 +31,11 @@ class NewuserWizardsController < ApplicationController
     end   
     @item_id = params[:wizard][:item_id]
     Follow.wizard_save(params[:wizard][:item_id],@type,current_user)
+    if @type == "follower"
+      @not_follow = Follow.where('follower_id =? and followable_type in (?) and follow_type=?',current_user.id, Item::TOPIC_FOLLOWTYPES,@type).blank? ? "true" : ""
+     else
+       @not_follow = Follow.where('follower_id =? and followable_type in (?) and follow_type=?',current_user.id, Item::FOLLOWTYPES,@type).blank? ? "true" : ""
+    end   
   end 
   
   def product_select
