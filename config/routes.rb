@@ -11,6 +11,7 @@ PlanNto::Application.routes.draw do
   resources :newuser_wizards do
   collection do
     get :product_select
+    get :previous
   end
    member do
     get :product_delete

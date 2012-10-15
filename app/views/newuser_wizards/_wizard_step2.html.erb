@@ -45,7 +45,7 @@
  $("p a.skip").click(function(e){
     <% @items = Item.get_buyer_item_ids_for_user(current_user) %>
       <% @wizard_type = "buyer" %>
-   $("#wizard").html("<%= escape_javascript(render  'newuser_wizards/wizard_step3',:locals => {:items => @items}) %> ");
+   $("#wizard").html("<%= escape_javascript(render  'newuser_wizards/wizard_step3',:locals => {:items => @items,:wizard_type => @wizard_type}) %> ");
      <%unless @invitation.blank? %>
    <%if @invitation.follow_type == "buyer" %>
     $("#img_box_1").html("<%= escape_javascript(render  'newuser_wizards/product') %>");
