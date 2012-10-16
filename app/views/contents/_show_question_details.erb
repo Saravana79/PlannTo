@@ -45,7 +45,8 @@
         </script>
                     <%if content.can_update_content?(current_user)%>
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                    <li class="subContentGap float_lft"><%=link_to "Delete This", content_path(content), :method => "delete", :remote => true, :class => "txt_blue"%></li>
+                    <li class="subContentGap float_lft"><%=link_to "Delete This", content_path(content), :method => "delete", :remote => true,:confirm => "Are you sure you want to delete #{content.title}?", :class => "txt_blue"%></li>
+                    
                     <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
                     <li class="subContentGap float_lft"><%=link_to "Update This", edit_content_path(content, :detail => true), :remote => true, :class => "txt_blue"%></li>
                       <%= render :partial  => 'contents/guide', :locals => {:content =>  content} %>
@@ -63,9 +64,10 @@
                 <a style="" class="btn_submitanswer answer_button" id="answer_this_question" >Answer this Question</a> 
                 <script>
                 $(".answer_button").click(function(e){
-            <% if !current_user %>
-            openLoginPopup("#" + $(this).attr('id'), "submit");
-            return false
+            <% if current_user %>
+              $("#new_answer_content_block").show();
+             <%else%>
+               openLoginPopup("#" + $(this).attr('id'), "submit");
           <%end%>
         })
            </script>
