@@ -1,17 +1,19 @@
 <div style="clear:both;">
-  <div style="width:735" >
-    <div class="bg_border_topbottom"></div>
+   <!--<div style="width:735" >
+     <div class="bg_border_topbottom"></div>
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
-
-    <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@items.total%></div>
+ 
+  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@items.total%></div> 
     <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:7px"></div>
     <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
       <%=select_tag "search_sort_by",
         options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]), :class => "txt_normal width50" %>
     </div>
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
-  </div>
-
+  </div>-->
+  <br />
+  <br />
+<div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:7px"></div>
 
   <%@items.results.each do |item|%>
     <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;">
@@ -47,17 +49,20 @@
           <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
 
       </div>
-      <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+  <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
   <%end%>
 
     <%= render 'shared/show_hide_login_form', :item => "" %>
 
   <div class="push"></div><br/>
-  <div id="searchItemsPaginate">
-  <%= will_paginate @items.results , :page_links => true %>
-  </div>
-  <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+ <!-- <div id="searchItemsPaginate">
+ 
+   <%= will_paginate @items.results , :page_links => true %> 
+  </div> 
+  -->
+
+  <!--<div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>-->
   <script type="text/javascript">
     $(document).ready(function(){
       setCompareCheckBox();

@@ -40,9 +40,49 @@
       </div>
     </div>
     <div class="push"></div>
-    <div id="content">
-      <%= render :partial => "/search/index" %>
+    <div id="content_all">
+    
+      <%= hidden_field_tag :page_pagination,2%>
+     <div style="width:735" >
+        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+
+  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@items.total%></div> 
+    
+    <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
+      <%=select_tag "search_sort_by",
+        options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]), :class => "txt_normal width50" %>
     </div>
+    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+  </div>
+   <a id="content_next" style="display:none"></a>
+     <div id="content">
+      
+      <%= render :partial => "/search/index" %>
+        
+    </div>
+    </div>
+       <script>
+  
+    $(window).scroll(function () {
+           lnk = $('#content_next');
+    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+         running = true;
+            $.ajax(
+              {
+                url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&24=" + $("#24").val() + "&28=" + $("#28").val() + "&31=" + $("#31").val() + "&41=" + $("#41").val() + "&43=" + $("#43").val() + "&86=" + $("#86").val() + "&87=" + $("#87").val() + "&59=" + $("#59").val() + "&63=" + $("#63").val() ,
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+            //lnk.click();
+       }
+        });
+      
+    </script>
   </div>
 
 </div>
@@ -288,3 +328,8 @@ if ($('#nonavailable_status').is(':checked')) {
   } 
   
 </script>
+<div style="padding-left:300px;">
+ <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+         <%= image_tag '/images/ajax-loader.gif' %>
+      </span>
+      </div>
