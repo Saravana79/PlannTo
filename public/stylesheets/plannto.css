@@ -4335,15 +4335,15 @@ outline: none;
 
 /*-----------SLIDER----------*/
 
-.slider{width:1003px; height:442px; margin:auto; background:url(../images/slider_main_bg.jpg) no-repeat left top; position:relative;}
-.slider h1{font-family: Tahoma, Arial, Helvetica, sans-serif; font-size:22px; color:#c30a50; font-weight:bold; padding: 80px 0 0 0;}
-.slider p{font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; color:#484848; padding: 12px 0 0 0;}
+.slider1{width:1003px; height:442px; margin:auto; background:url(../images/slider_main_bg.jpg) no-repeat left top; position:relative;}
+.slider1 h1{font-family: Tahoma, Arial, Helvetica, sans-serif; font-size:22px; color:#c30a50; font-weight:bold; padding: 80px 0 0 0;}
+.slider1 p{font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:12px; color:#484848; padding: 12px 0 0 0;}
 
-.slider ul{padding:13px 8px 0 8px; margin:0px;}
-.slider ul li{padding:0px; margin:0px; list-style:none; padding-left:30px;}
-.slider ul li img { float:right; margin-left:10px;}
+.slider1 ul{padding:13px 8px 0 8px; margin:0px;}
+.slider1 ul li{padding:0px; margin:0px; list-style:none; padding-left:30px;}
+.slider1 ul li img { float:right; margin-left:10px;}
 
-.slider ul li a{text-decoration:none;}
+.slider1 ul li a{text-decoration:none;}
 
 .left_arrow{background:url(../images/left_arrow.png) no-repeat left top; float:left; width:27px; height:51px;position:absolute; left:6px; top:180px;}
 .left_arrow:hover{background-position:left -53px;}
