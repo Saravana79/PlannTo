@@ -28,62 +28,6 @@
    </div>
  </div>
 <table>
-  <tr>
-    <td width="460px">
-        <div class="homepageprodheaddiv">
-          Popular Cars
-        </div>
-        <% configatron.popular_cars.split(",")[0..2].each do | id| %>
-           <% item = Item.find(id) rescue "" %>
-           <div class="homepageproddiv">
-            <span class="homepageimgspan">
-              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
-              <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
-            <% if item.is_a? Product %>
-                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
-                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
-                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
-              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
-            </a><br />
-            
-             <%end%> 
-           </div>
-           <br/>
-       <%end%>
-       <div class="homepageviewall" >
-            <a href="/car/search" class="txt_blue" style="float:right;">View All Cars</a>
-       </div>
-    </td>
-    <td width="80px;"></td>
-    </td>
-    <td width="460px">
-        <div class="homepageprodheaddiv">
-          Popular Bikes
-        </div>
-        <% configatron.popular_bikes.split(",")[0..2].each do | id| %>
-           <% item = Item.find(id) rescue "" %>
-           <div class="homepageproddiv">
-            <span class="homepageimgspan">
-              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
-              <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
-            <% if item.is_a? Product %>
-                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
-                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
-                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
-              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
-            </a><br />
-            
-             <%end%> 
-           </div>
-           <br/>
-       <%end%>
-       <div class="homepageviewall" >
-            <a href="/bike/search" class="txt_blue" style="float:right;">View All Bikes</a>
-       </div>
-    </td>
- </tr>
    <tr>
     <td width="480px">
         <div class="homepageprodheaddiv">
@@ -99,7 +43,7 @@
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
-                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
               <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
             </a><br />
             
@@ -127,7 +71,7 @@
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
-                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
               <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
             </a><br />
             
@@ -137,6 +81,62 @@
        <%end%>
        <div class="homepageviewall" >
             <a href="/tablet/search" class="txt_blue" style="float:right;">View All Tablets</a>
+       </div>
+    </td>
+ </tr>  
+  <tr>
+    <td width="460px">
+        <div class="homepageprodheaddiv">
+          Popular Cars
+        </div>
+        <% configatron.popular_cars.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/car/search" class="txt_blue" style="float:right;">View All Cars</a>
+       </div>
+    </td>
+    <td width="80px;"></td>
+    </td>
+    <td width="460px">
+        <div class="homepageprodheaddiv">
+          Popular Bikes
+        </div>
+        <% configatron.popular_bikes.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/bike/search" class="txt_blue" style="float:right;">View All Bikes</a>
        </div>
     </td>
  </tr>
@@ -155,7 +155,7 @@
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
-                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
               <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
             </a><br />
             
@@ -183,7 +183,7 @@
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
-                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
               <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
             </a><br />
             
