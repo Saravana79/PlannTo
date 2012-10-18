@@ -1,5 +1,6 @@
+
 $("#page_pagination").val("<%= (params[:page].to_i + 1).to_s %>");
-element= jQuery('#content_next')
+
 if (<%=@items.results.size%> < 10)
 {
 	running = true;
@@ -10,8 +11,10 @@ running=false;
 }
 
 <% unless params[:type] %>
+ $("#total_result").html("<%= @items.total %>");
  $("#content").html('<%= escape_javascript(render(:partial => 'search/index')) %>');
 <%else%> 
  $("#content").append('<%= escape_javascript(render(:partial => 'search/index')) %>');
 <%end%> 
+
 

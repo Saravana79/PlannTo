@@ -46,7 +46,7 @@
      <div style="width:735" >
         <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
 
-  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@items.total%></div> 
+  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <span id="total_result"> <%=@items.total%></span></div> 
     
     <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
       <%=select_tag "search_sort_by",
@@ -58,10 +58,9 @@
      <div id="content">
       
       <%= render :partial => "/search/index" %>
-        
     </div>
     </div>
-       <script>
+    <script>
   
     $(window).scroll(function () {
            lnk = $('#content_next');
