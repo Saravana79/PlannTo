@@ -1,11 +1,8 @@
 	<!-- Answer - Start -->
 						<div  class="mainContentDiv" id="box_<%= ans.id%>">
 
-							<div class="rate_content float_lft">
-								<a class="bg_ratecontent">100</a>
-								<a class="btn_like" href="#" id="btn_like_inactive"></a>
-								<a class="btn_dislike" href="#"></a>
-							</div>
+							<%= render :partial => "votes/voting_detail", :locals => {:item => ans, :user => user_signed_in? ? current_user : nil}%>
+				
 							<div  class="float_rgt">
 								<img src="<%= ans.user.get_photo%>" class="userImageSmall" />
 							</div>

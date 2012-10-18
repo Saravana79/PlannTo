@@ -146,11 +146,11 @@
 								<div class="hdr_Category float_lft margin_lft10">
 									<%= @buying_plan.user_question.user_answers.size%> Recommendations
 								</div>
-								<%#if can_add_recommendation?(@buying_plan)%>
+								<%if can_add_recommendation?(@buying_plan)%>
 								<div class="float_rgt" style="margin-top:8px;">
 									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
 								</div>
-								<%#end%>
+								<%end%>
 							</div>
 
 						</div>

@@ -8,4 +8,16 @@ class UserAnswer < ActiveRecord::Base
   belongs_to :user
 
   validates :answer, :presence => true
+  
+    def content_vote_count
+    count = $redis.get("#{VoteCount::REDIS_ANSWER_VOTE_KEY_PREFIX}#{self.id}")
+    if count.nil?
+      vote = VoteCount.search_vote(self).first
+      count = vote.nil? ? 0 : (vote.vote_count_positive - vote.vote_count_negative)
+      $redis.set("#{VoteCount::REDIS_ANSWER_VOTE_KEY_PREFIX}#{self.id}", count)
+      return count
+    else
+      return count
+    end
+  end
 end
