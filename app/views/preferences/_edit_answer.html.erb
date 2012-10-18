@@ -1,0 +1,33 @@
+<div class="taggingdiv" style="margin-left:0px;">
+	<div id=""></div><ul id="recommendation_list">
+		<%@user_answer.recommendations.each_with_index do |reco, index|%>
+										<li class="taggingmain" id="textTaggers<%=reco.item_id%>">
+
+											<span ><a class="txt_tagging"><%= reco.item.name%></a><a id="deleteTag" class="icon_close_tagging" href="#"></a></span>
+
+										</li>
+										<%end%>
+	</ul><br/>
+Select Recommendation<input type="text" name="textfield" value="" id="recommendation"/>
+
+								
+
+								</div>
+								
+	<%= form_for @user_answer,:url => { :controller => "preferences", :action => "update_answer", :id => @user_answer.id}, :remote => true, :html => {:id => "getAdviceForm"} do |f|%>
+			<%= hidden_field_tag :recommendation_ids, @user_answer.recommendations.collect(&:item_id).join(',')%>
+			
+			<%= f.text_area :answer, :rows=>2, :cols=>60%>
+			<br/>
+
+			<div  style="float:right;padding:5px;width:180px;">
+				<%= f.submit 'Update' %>
+
+			</div>
+			<% end %>
+<script type="text/javascript">
+  $.textTagger("recommendation",
+    "recommendation_list",
+    {close:true, addButton: false, url: "/search/preference_items", editMode: false, multiple: true, hidden_field: "recommendation_ids", search_type_array: ["Mobile", "Car", "AttributeTag"]}
+  );
+</script>

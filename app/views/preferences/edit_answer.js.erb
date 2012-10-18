@@ -1,0 +1,8 @@
+$("#giveAdviceDialog").dialog("destroy");
+$("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/edit_answer')) %>');
+$("#giveAdviceDialog").dialog({width:600,
+	title: 'Edit Answer',
+close: function(event, ui) {
+    $("#giveAdviceDialog").dialog('destroy');
+    $('#user_answer_answer').poshytip('destroy');
+  }});

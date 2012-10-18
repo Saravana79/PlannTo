@@ -129,6 +129,30 @@ logger.info @follow_item
     @question.plannto_network = params[:plannto_network]
     @question.save
   end
+  
+  def edit_answer
+    @user_answer = UserAnswer.find params[:id]
+  end
+  
+  def update_answer
+    @user_answer = UserAnswer.find params[:id]
+    @item_ids = params[:recommendation_ids].split(',')
+    @user_answer.recommendations.each do |rec|
+      rec.destroy
+    end
+    
+    @item_ids.each do |item_id|
+      @user_answer.recommendations.build(:item_id => item_id)
+    end
+    @user_answer.answer = params[:user_answer][:answer]
+    @user_answer.save
+    @user_answer.reload
+  end
+  
+  def delete_answer
+  @user_answer = UserAnswer.find params[:id]
+  @user_answer.destroy
+  end
 
   def save_advice
     @user_answer = UserAnswer.new(params[:user_answer])

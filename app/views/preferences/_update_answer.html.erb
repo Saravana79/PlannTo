@@ -1,0 +1,59 @@
+	<!-- Answer - Start -->
+						<div  class="mainContentDiv" id="box_<%= ans.id%>">
+
+							<div class="rate_content float_lft">
+								<a class="bg_ratecontent">100</a>
+								<a class="btn_like" href="#" id="btn_like_inactive"></a>
+								<a class="btn_dislike" href="#"></a>
+							</div>
+							<div  class="float_rgt">
+								<img src="<%= ans.user.get_photo%>" class="userImageSmall" />
+							</div>
+							<div  class="subContentDiv" id="recommendationAnswer<%=ans.id%>">
+								<div>
+									<a class="txt_brown"><%= ans.user.name%> gave a recommendation - <%= time_ago_in_words(ans.created_at)%> ago</a>
+								</div>
+								<div class="taggingdiv" style="margin-left:0px;">
+									<ul class="tagging">
+										<%ans.recommendations.each_with_index do |reco, index|%>
+										<li class="taggingmain">
+
+											<span ><a class="txt_tagging"><%= reco.item.name%></a></span>
+
+										</li>
+										<%end%>
+									</ul>
+
+								</div>
+								<br/>
+								<div class="subContentGap">
+									<a class="txt_black_description"><%= ans.answer%></a>
+									<a href="google.com" class="padding_left10 txt_blue">more...</a>
+								</div>
+								<ul class="divCommentsConent">
+									<li class="subContentGap float_lft" >
+										<a class="txt_blue "><%= render_comments_anchor(ans).html_safe  %></a>
+									</li>
+									<li class="subContentGap float_lft">
+										<a class="txt_gray ">|</a>
+									</li>
+									<li class="subContentGap float_lft">
+										<a class="txt_blue ">Report</a>
+									</li>
+									<li class="subContentGap float_lft">
+										<a class="txt_gray ">|</a>
+									</li>
+									<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_answer", :id => ans.id}, :remote => true, :confirm => "Are you sure you want to delete #{ans.answer}?", :method => :delete, :class => "txt_blue"%>
+									</li>
+									<li class="subContentGap float_lft">
+										<a class="txt_gray ">|</a>
+									</li>
+									<li class="subContentGap float_lft">
+										<%= link_to "Update This",{:controller => "preferences", :action => "edit_answer", :id => ans.id}, :remote => true, :class => "txt_blue"%>
+									</li>
+								</ul>
+								<%= render :partial => "comments/new", :locals => { :content => ans }  %>
+
+							</div>
+						</div>
+						<!-- Answer - End -->

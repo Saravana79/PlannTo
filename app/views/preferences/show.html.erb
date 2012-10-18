@@ -1,339 +1,302 @@
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
 
 <div id="maincontainer" class="maincontainerCss">
-  <!-- Till this will go into main layout and common for all pages.-->
+	<!-- Till this will go into main layout and common for all pages.-->
 
-  <div class="breadcrumpbtnDiv">
-    <!--  breadcrumbs - Start -->
-    <div id ="breadcrump" class="breadcrump">
-      <a class="alink" href="#">My Cars</a>
-      <a class="grayarrow">></a>
-      <a class="alink" href="#">Saravana</a>
-      <a class="grayarrow">></a>
-      <a class="alink" id="alink_active">Plannto Buy a Car</a>
-      <!--  breadcrumbs - End -->
+	<div class="breadcrumpbtnDiv">
+		<!--  breadcrumbs - Start -->
+		<div id ="breadcrump" class="breadcrump">
+			<a class="alink" href="#">My Cars</a>
+			<a class="grayarrow">></a>
+			<a class="alink" href="#">Saravana</a>
+			<a class="grayarrow">></a>
+			<a class="alink" id="alink_active">Plannto Buy a Car</a>
+			<!--  breadcrumbs - End -->
 
-    </div>
-    <!-- buttons - Start -->
-  </div>
-  <br/><br/>
-  <div class="leftcolumnbig">
-    <!-- Product Details - Start -->
-    <div class="contentDetailsMainDiv">
+		</div>
+		<!-- buttons - Start -->
+	</div>
+	<br/>
+	<br/>
+	<div class="leftcolumnbig">
+		<!-- Product Details - Start -->
+		<div class="contentDetailsMainDiv">
 
-      <!-- Question - Start -->
-      <div  class="mainContentDiv">
-        <%=render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
-        <div  class="float_rgt">
-          <img src="<%=@buying_plan.user.get_photo%>" class="userImageSmall" />
-        </div>
-        <div  class="subContentDiv">
-          <div><a class="title" href="google.com"><%=@question.title%></a></div>
-          <div><a class="txt_brown"><%=@buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%> ago</a></div>
-          <div class="subContentGap">
-            <div id="displayQuestion">
-              <a class="txt_black_description" id="question_part"><%= @question.question_part%></a>
-              <a href="google.com" class="padding_left10 txt_blue">more...</a>
-            </div>
-          </div>
+			<!-- Question - Start -->
+			<div  class="mainContentDiv">
+				<%= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
+				<div  class="float_rgt">
+					<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" />
+				</div>
+				<div  class="subContentDiv">
+					<div>
+						<a class="title" href="google.com"><%= @question.title%></a>
+					</div>
+					<div>
+						<a class="txt_brown"><%= @buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
+					</div>
+					<div class="subContentGap">
+						<div id="displayQuestion">
+							<a class="txt_black_description" id="question_part"><%= @question.question_part%></a>
+							<a href="google.com" class="padding_left10 txt_blue">more...</a>
+						</div>
+					</div>
 
-          <script type="text/javascript">
-            $('#giveAdviceTag').live('click', function(){
-              $.get('/preferences/give_advice',{question_id: <%=@question.id%>},null,"script");
-            })
+					<script type="text/javascript">
+												$('#giveAdviceTag').live('click', function(){
+						$.get('/preferences/give_advice',{question_id: <%= @question.id%>},null,"script");
+						})
 
-            $('#editPreferences').live('click', function(e){
-              e.preventDefault()
-              $.get('/preferences/edit_preference',{id: <%=@buying_plan.id%>},null,"script");
-              return false
-            })
+						$('#editPreferences').live('click', function(e){
+						e.preventDefault()
+						$.get('/preferences/edit_preference',{id: <%= @buying_plan.id%>},null,"script");
+						return false
+						})
 
-            $('#preference_question').live('click', function(e){
-              $('#question_question').poshytip('destroy')
-              if ($("#question_question").val() == ""){
-                $('#question_question').poshytip({
-                  className: 'tip-darkgray',
-                  content: 'Please enter your question.',
-                  showOn: 'none',
-                  alignTo: 'target',
-                  alignX: 'right',
-                  offsetX: 5,
-                  alignY: 'center'
-                });
-                $('#question_question').poshytip('show');
-                return false
-              }
-              e.preventDefault()
-              $.ajax(
-              {
-                url: "/preferences/update_question",
-                data: {
-                  question_id: <%=@question.id%>,
-                  question: $("#question_question").val(),
-                  plannto_network: $("input[name='question[plannto_network]']:checked").val()
+						$('#preference_question').live('click', function(e){
+						$('#question_question').poshytip('destroy')
+						if ($("#question_question").val() == ""){
+						$('#question_question').poshytip({
+						className: 'tip-darkgray',
+						content: 'Please enter your question.',
+						showOn: 'none',
+						alignTo: 'target',
+						alignX: 'right',
+						offsetX: 5,
+						alignY: 'center'
+						});
+						$('#question_question').poshytip('show');
+						return false
+						}
+						e.preventDefault()
+						$.ajax(
+						{
+						url: "/preferences/update_question",
+						data: {
+						question_id: <%= @question.id%>
+							, question: $("#question_question").val(),
+							plannto_network: $("input[name='question[plannto_network]']:checked").val()
 
-                },
-                type: "get",
-                dataType: "script"
-              });
-              return false
-            });
+							}, type: "get",
+							dataType: "script"
+							});
+							return false
+							});
+					</script>
+					<br/>
+					<div style="float:left;">
+						<ul class="divCommentsConent">
+							<li class="subContentGap float_lft" >
+								<a class="txt_blue ">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft" >
+								<a class="txt_blue "><%= render_comments_anchor(@buying_plan.user_question).html_safe  %></a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_blue ">Report</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title}?", :method => :delete, :class => "txt_blue"%>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<%= link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});", :class => "txt_blue"%>
+							</li>
+						</ul>
+						<%= render :partial => "comments/new", :locals => { :content => @buying_plan.user_question }  %>
+						</div >
 
+						<%if can_update_preference?(@buying_plan)%>
+						<div style="float:right;">
+							<a style="" href="#" class="btn_submitanswer">Ask Advice</a>
+						</div>
+						<%end%>
+					</div>
 
-          </script>
-          <br/>
-          <div style="float:left;">
-            <ul class="divCommentsConent">
-              <li class="subContentGap float_lft" ><a class="txt_blue ">Recommendations (<%=@buying_plan.user_question.user_answers.size%>)</a></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft" ><a class="txt_blue "><%= render_comments_anchor(@buying_plan.user_question).html_safe  %></a></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%=link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title}?", :method => :delete, :class => "txt_blue"%></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft"><%=link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});", :class => "txt_blue"%></li>
-            </ul>
-            <%=render :partial => "comments/new", :locals => { :content => @buying_plan.user_question }  %>
-          </div >
-          
-          <%if can_update_preference?(@buying_plan)%>
-            <div style="float:right;">
-              <a style="" href="#" class="btn_submitanswer">Ask Advice</a>
-            </div>
-          <%end%>
-        </div>
+					<br/>
+					<br/>
+					<div class="hdr_Category">
+						Buying Preferences:
+					</div>
+					<ul class="search_category" id="buyingPreferences">
+						<%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
+					</ul>
+					<br/>
+					<div>
+						<div class="listing_items" style="height:250px;">
+							<%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+							<!-- Question - End -->
+							<br/>
+							<br/>
+							<br/>
 
-        <br/><br/>
-        <div class="hdr_Category">Buying Preferences:</div>
-        <ul class="search_category" id="buyingPreferences">
-          <%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
-        </ul>
-        <br/>
-        <div>
-          <div class="listing_items" style="height:250px;">
-            <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-            <!-- Question - End -->
-            <br/>
-            <br/>
-            <br/>
+							<div  style="border-top:solid 1px #ccd4d8;clear:both;margin-top:100px;"></div>
+							<!-- Answer this question - Start -->
+							<div>
+								<div class="hdr_Category float_lft margin_lft10">
+									<%= @buying_plan.user_question.user_answers.size%> Recommendations
+								</div>
+								<%#if can_add_recommendation?(@buying_plan)%>
+								<div class="float_rgt" style="margin-top:8px;">
+									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+								</div>
+								<%#end%>
+							</div>
 
-            <div  style="border-top:solid 1px #ccd4d8;clear:both;margin-top:100px;"></div>
-            <!-- Answer this question - Start -->
-            <div>
-              <div class="hdr_Category float_lft margin_lft10"><%=@buying_plan.user_question.user_answers.size%> Recommendations</div>
-              <%if can_add_recommendation?(@buying_plan)%>
-                <div class="float_rgt" style="margin-top:8px;">
-                  <a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
-                </div>
-              <%end%>
-            </div>
+						</div>
+						<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
+						<!-- Answer this question - End -->
+						<%= display_empty_row(@answers.size).html_safe%>
+						<%@answers.each_with_index do |ans, index|%>
+						<%=render "preferences/update_answer", :ans => ans%>
 
-          </div>
-          <div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
-          <!-- Answer this question - End -->
-          <%=display_empty_row(@answers.size).html_safe%>
-          <%@answers.each_with_index do |ans, index|%>
-            <!-- Answer - Start -->
-            <div  class="mainContentDiv" id="box_<%=index%>">
+						<%end%>
 
-              <div class="rate_content float_lft">
-                <a class="bg_ratecontent">100</a>
-                <a class="btn_like" href="#" id="btn_like_inactive"></a>
-                <a class="btn_dislike" href="#"></a>
-              </div>
-              <div  class="float_rgt">
-                <img src="<%=ans.user.get_photo%>" class="userImageSmall" />
-              </div>
-              <div  class="subContentDiv">
-                <div><a class="txt_brown"><%=ans.user.name%> gave a recommendation - <%= time_ago_in_words(ans.created_at)%> ago</a></div>
-                <div class="taggingdiv" style="margin-left:0px;">
-                  <ul class="tagging">
-                    <%ans.recommendations.each_with_index do |reco, index|%>
-                      <li class="taggingmain">
+					</div>
 
-                        <span ><a class="txt_tagging"><%=reco.item.name%></a><a class="icon_close_tagging" href="#"></a></span>
+					<!-- Product Details - End -->
+				</div>
+			</div>
+		</div>
+		<div style="display:none;" id="updateQuestion">
+			<%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
+			<%= f.hidden_field :buying_plan_id%>
+			<br/>
+			Send to Friends:
+			<%= f.radio_button :plannto_network, false, :checked => true %>
+			Plannto Network:
+			<%= f.radio_button :plannto_network, true %>
+			<br/>
+			<%= f.text_area :question, :rows=>2, :cols=>60, :value => @question.question%>
+			<br/>
 
-                      </li>
-                    <%end%>
-                  </ul>
+			<div  style="float:right;padding:5px;width:180px;">
+				<%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
 
-                </div>
-                <br/>
-                <div class="subContentGap">
-                  <a class="txt_black_description"><%=ans.answer%></a>
-                  <a href="google.com" class="padding_left10 txt_blue">more...</a></div>
-                <ul class="divCommentsConent">
-               	<li class="subContentGap float_lft" ><a class="txt_blue "><%= render_comments_anchor(ans).html_safe  %></a></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%=link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => ans.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title}?", :method => :delete, :class => "txt_blue"%></li>
-              <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-              <li class="subContentGap float_lft"><%=link_to_function "Update This", "", :class => "txt_blue"%></li>
-                      <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-                  <li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li>
-                </ul>
-				     <%=render :partial => "comments/new", :locals => { :content => ans }  %>
-        
-              </div>
-            </div>
-            <!-- Answer - End -->
+			</div>
+			<% end %>
+		</div>
 
-          <%end%>
+		<div class="rightcolumnsmall">
 
-        </div>
+			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+				<tr>
+					<td class="bg_widgethdr txt_white">Related Questions</td>
+				</tr>
+				<tr>
+					<td height="252" valign="top">
+					<table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+						<tr>
+							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
+							<br />
+							<a style="" href="#" class="btn_follow">Follow</a></td>
+						</tr>
+						<tr>
+							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+						</tr>
 
+						<tr>
+							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
+							<br />
+							<a style="" href="#" class="btn_follow">Follow</a></td>
+						</tr>
+						<tr>
+							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+						</tr>
+					</table></td>
+				</tr>
+				<tr>
+					<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+				</tr>
+			</table>
 
-        <!-- Product Details - End -->
-      </div>
-    </div>
-  </div>
-<div style="display:none;" id="updateQuestion">
-          <%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
-              <%=  f.hidden_field :buying_plan_id%><br/>
-              Send to Friends:
-              <%= f.radio_button :plannto_network, false, :checked => true %>
-              Plannto Network:
-              <%= f.radio_button :plannto_network, true %><br/>
-              <%= f.text_area :question, :rows=>2, :cols=>60, :value => @question.question%><br/>
-              
-               <div  style="float:right;padding:5px;width:180px;">
-         <%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
-      
-      </div>
-            <% end %>
-            </div>
+			<!-- Related Cars -- End -->
 
-  <div class="rightcolumnsmall">
+			<br />
 
-    <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-      <tr>
-        <td class="bg_widgethdr txt_white">Related Questions</td>
-      </tr>
-      <tr>
-        <td height="252" valign="top">
+			<!-- Related Cars -- Start -->
 
-          <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-            <tr>
-              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-              <td width="113">
-                <a href="#" class="txt_black">Renault Pulse</a>
-                <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                <a style="" href="#" class="btn_follow">Follow</a>
-              </td>
-            </tr>
-            <tr>
-              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-            </tr>
+			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+				<tr>
+					<td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
+				</tr>
+				<tr>
+					<td height="252" valign="top">
+					<table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+						<tr>
+							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
+							<br />
+							<a style="" href="#" class="btn_follow">Follow</a></td>
+						</tr>
+						<tr>
+							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+						</tr>
 
-            <tr>
-              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-              <td width="113">
-                <a href="#" class="txt_black">Renault Pulse</a>
-                <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                <a style="" href="#" class="btn_follow">Follow</a>
-              </td>
-            </tr>
-            <tr>
-              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-            </tr>
-          </table>
+						<tr>
+							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
+							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
+							<br />
+							<a style="" href="#" class="btn_follow">Follow</a></td>
+						</tr>
+						<tr>
+							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
+						</tr>
+					</table></td>
+				</tr>
+				<tr>
+					<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
+				</tr>
+			</table>
 
-        </td>
-      </tr>
-      <tr>
-        <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-      </tr>
-    </table>
+			<!-- Related Cars -- End -->
+		</div>
 
-    <!-- Related Cars -- End -->
+		<script type="text/javascript"><%@preferences_list.each do |preference|%>
+	var lineHeight = "";
+	var searchCriteria = "";
+	var tagId = "";
+	var searchName =  "";
+<%= preference[:search_name]%>"<%if preference[:value_type] == "Between"%>
+	searchCriteria = ""
+searchCriteria   = searchCriteria + "<%= preference[:search_criteria]%>
+	"
+	var className = "middlebg attributeTag"
+	var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+<%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+	searchCriteria = ""
+searchCriteria   = searchCriteria + "<%= preference[:search_criteria]%>
+	"
+	var value = searchCriteria
+	var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+	var className = "middlebg attributeTag"
+	var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
+<%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>var value =  "<%= "#{preference[:value]}"%>
+	"
+	var selectedList = value.split(',')
+	var searchCriteria = ""
+	var anchorId
+	searchCriteria = searchCriteria +  ""
+	var spanHTML = ""
+	var updatedSearchList= [];
+	$.each(selectedList, function(index, value) {
+	updatedSearchList.push( value)
+	})
+	spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
+	searchCriteria = searchCriteria + spanHTML
+	var className = "middlebg attributeTag"
+	var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
 
-    <br />
-
-    <!-- Related Cars -- Start -->
-
-    <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-      <tr>
-        <td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
-      </tr>
-      <tr>
-        <td height="252" valign="top">
-
-          <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-            <tr>
-              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-              <td width="113">
-                <a href="#" class="txt_black">Renault Pulse</a>
-                <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                <a style="" href="#" class="btn_follow">Follow</a>
-              </td>
-            </tr>
-            <tr>
-              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-            </tr>
-
-            <tr>
-              <td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-              <td width="113">
-                <a href="#" class="txt_black">Renault Pulse</a>
-                <img src="/images/rating_stars.png" width="87" height="20" /><br />
-                <a style="" href="#" class="btn_follow">Follow</a>
-              </td>
-            </tr>
-            <tr>
-              <td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-            </tr>
-          </table>
-
-        </td>
-      </tr>
-      <tr>
-        <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-      </tr>
-    </table>
-
-    <!-- Related Cars -- End -->
-  </div>
-
-  <script type="text/javascript">
-<%@preferences_list.each do |preference|%>
-    var lineHeight = "";
-    var searchCriteria = "";
-    var tagId = "";
-    var searchName = "<%=preference[:search_name]%>"
-  <%if preference[:value_type] == "Between"%>
-      searchCriteria = ""
-      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
-      searchCriteria = ""
-      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var value = searchCriteria
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
-      var value   = "<%="#{preference[:value]}"%>"
-      var selectedList = value.split(',')
-      var searchCriteria = ""
-      var anchorId
-      searchCriteria = searchCriteria +  ""
-      var spanHTML = ""
-      var updatedSearchList= [];
-      $.each(selectedList, function(index, value) {
-        updatedSearchList.push( value)
-      })
-      spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
-      searchCriteria = searchCriteria + spanHTML
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
-
-
-  <%else%>
-      var list = "<li id='" +tagId +"' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>" ;
-  <%end%>
-    $(list).appendTo('ul#buyingPreferences');
-<%end%>
-  </script>
+<%else%>var list = "<li id='" + tagId + "' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>";<%end%>$(list).appendTo('ul#buyingPreferences');<%end%></script>

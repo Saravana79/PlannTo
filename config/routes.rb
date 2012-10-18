@@ -94,6 +94,9 @@ resources :accounts do
       delete :delete_buying_plan
       get :update_question
       get :edit_user_question
+      delete :delete_answer
+      get :edit_answer
+      put :update_answer
     end
   end
    match 'preferences/:search_type/:uuid' => 'preferences#show'
