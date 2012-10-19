@@ -264,39 +264,63 @@
 			<!-- Related Cars -- End -->
 		</div>
 
-		<script type="text/javascript"><%@preferences_list.each do |preference|%>
-	var lineHeight = "";
-	var searchCriteria = "";
-	var tagId = "";
-	var searchName =  "";
-<%= preference[:search_name]%>"<%if preference[:value_type] == "Between"%>
-	searchCriteria = ""
-searchCriteria   = searchCriteria + "<%= preference[:search_criteria]%>
-	"
-	var className = "middlebg attributeTag"
-	var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-<%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
-	searchCriteria = ""
-searchCriteria   = searchCriteria + "<%= preference[:search_criteria]%>
-	"
-	var value = searchCriteria
-	var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-	var className = "middlebg attributeTag"
-	var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "<a id= 'deleteTag' class='icon_close'></a></span>" + searchCriteria + "</li>" ;
-<%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>var value =  "<%= "#{preference[:value]}"%>
-	"
-	var selectedList = value.split(',')
-	var searchCriteria = ""
-	var anchorId
-	searchCriteria = searchCriteria +  ""
-	var spanHTML = ""
-	var updatedSearchList= [];
-	$.each(selectedList, function(index, value) {
-	updatedSearchList.push( value)
-	})
-	spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
-	searchCriteria = searchCriteria + spanHTML
-	var className = "middlebg attributeTag"
-	var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+	<script type="text/javascript">
+  //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
+<%@preferences_list.each do |preference|%>
+    var lineHeight = "";
+    var searchCriteria = "";
+    var index = "<%=@search_info_lookups.index{|x|x[:id]== preference[:attribute]}%>"
+    var searchName = "<%=preference[:search_name]%>"
+    var tagId = "attribute_menu_" + index + "_tag"
+  <%if preference[:value_type] == "Between"%>
+      var minFieldId = "<%=preference[:min_attribute]%>"
+      var maxFieldId = "<%=preference[:max_attribute]%>"
+      var minValue   = "<%=preference[:min_value]%>"
+      var maxValue   = "<%=preference[:max_value]%>"
+      $("#" + minFieldId).val(minValue)
+      $("#" + maxFieldId).val(maxValue)
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
 
-<%else%>var list = "<li id='" + tagId + "' class='middlebg attributeTag' ><span class='title_txt'>" + searchName + "</span></li>";<%end%>$(list).appendTo('ul#buyingPreferences');<%end%></script>
+  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      $("#" + fieldId).val(value)
+      searchCriteria = ""
+      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+      var value = searchCriteria
+      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+      <%if preference[:value_type] == "manufacturer"%>      
+        tagId = "manufacturerAtt_tag"
+     <%end%>
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      var selectedList = value.split(',')
+      var searchCriteria = ""
+      var anchorId
+      var spanId = 'removablePreferenceListofValues' + fieldId
+      var spanHTML = ""
+      $.each(selectedList, function(index, value) {
+        anchorId = "removeThis_" + index + "_" + fieldId
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
+      })
+      searchCriteria = searchCriteria + spanHTML
+      var className = "middlebg attributeTag"
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      $("#" + fieldId).val(value)
+  <%else%>
+      var fieldId = "<%="#{preference[:attribute]}"%>"
+      var value   = "<%="#{preference[:value]}"%>"
+      $("#" + fieldId).val(value)
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "</span></li>" ;
+  <%end%>
+    $(list).appendTo('ul#buyingPreferences');
+<%end%>
+</script>	

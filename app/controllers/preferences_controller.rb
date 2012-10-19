@@ -19,6 +19,9 @@ class PreferencesController < ApplicationController
     logger.info @follow_types
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
 logger.info @follow_item
+
+sunspot_search_items
+logger.info @preferences_list
   end
 
   def add_preference
