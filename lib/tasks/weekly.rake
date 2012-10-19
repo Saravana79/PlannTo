@@ -66,7 +66,13 @@ namespace :plannto do
       puts item.id
       related_contents = item.related_content
       related_contents.each do |id|
-        ItemContentsRelationsCache.create(:item_id => item.id, :content_id => id)
+        icrc = ItemContentsRelationsCache.find_by_item_id_and_content_id(item.id, id)
+        if icrc.nil?
+        puts "not present creating"
+        ItemContentsRelationsCache.create(:item_id => item.id, :content_id => id) 
+        else
+        puts "already present not creating"
+        end
       end
     end
   end
