@@ -16,6 +16,7 @@ class ReviewContentsController < ApplicationController
 		     @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
 		   end 
 		end
+		 UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type)
 		unless @products_error == true
 		 @item.add_new_rating @reviewcontent.rating if @item
     end

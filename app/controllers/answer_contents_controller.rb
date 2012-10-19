@@ -5,6 +5,7 @@ class AnswerContentsController < ApplicationController
 		@answer_content = AnswerContent.new params[:answer_content]
 		@answer_content.user = current_user
 		@answer_content.save_with_items!("") 
+		UserActivity.save_user_activity(current_user,@answer_content.question_content.id,"answered","Q&A")
 		respond_to do |format|
 			format.html
 			format.js

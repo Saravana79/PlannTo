@@ -11,7 +11,7 @@ class QuestionContentsController < ApplicationController
 		@questioncontent.user = current_user
 		@item = Item.find params['item_id']
 		@questioncontent.save_with_items!(params['item_id'])
-    
+    UserActivity.save_user_activity(current_user,@questioncontent.id,"created",@questioncontent.sub_type)
   end
 
 	def show

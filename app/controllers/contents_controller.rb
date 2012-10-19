@@ -15,6 +15,7 @@ class ContentsController < ApplicationController
     filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
     filter_params["order"] = get_sort_by(params[:sort_by]) 
     filter_params["itemtype_id"] =  itemtype_id
+    filter_params["search_type"] = params[:search_type]
      if  itemtype_id.present?
      
        if params[:search_type] == "Myfeeds"
@@ -46,7 +47,7 @@ class ContentsController < ApplicationController
     end
     end
     if params[:user]
-      filter_params[:user] = params[:user]
+      filter_params["user"] = params[:user]
     end  
     filter_params["page"] = params[:page] if params[:page].present?
     filter_params["status"] = 1
@@ -129,8 +130,9 @@ class ContentsController < ApplicationController
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], itemtype_id )}
     filter_params["itemtype_id"] = itemtype_id  
     if params[:user]
-      filter_params[:user] = params[:user]
+      filter_params["user"] = params[:user]
     end 
+     filter_params["search_type"] = params[:search_type]
     if itemtype_id .present?
        if params[:search_type] == "Myfeeds"
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')

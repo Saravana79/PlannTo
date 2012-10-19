@@ -3,7 +3,16 @@
   </div>
 <% if !@contents.blank? %>
 <% @contents.each do |content| %>
-	 <%= render_content_type(content) %>
+   <%if content.is_a?(UserActivity) %>
+     <%= render "contents/activity",:content => content %>
+     <%if ArticleCategory.where("itemtype_id = ?",0).collect(&:name).include?(content.related_activity_type) %>
+       <% content = Content.find(content.related_id) %>
+       <%= render_content_type(content) %>
+      <%end%>
+     <%else%> 
+    
+        <%= render_content_type(content) %>
+     <%end%>     
 	  <% end %>
  <%# if @contents.current_page < @contents.total_pages %>
 <%# params ||={}  %>

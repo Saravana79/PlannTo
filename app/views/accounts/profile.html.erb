@@ -291,7 +291,7 @@
         <h2><%= @user.name %> Activities</h2>
     </div>
     <br/>
-      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1}%>
+      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1,"search_type" => "activities"}%>
           <% @contents = Content.filter(params)  %>
        <% if @contents.size == 0 %>
           <%= render "shared/alert_message",:type => "user_activity"%>  
@@ -310,25 +310,27 @@
                     <%@article_categories.each do |category|%>
                       <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
                     <%end%>
+                    <li id="User"><a href="">User</a></li>
                   </ul>
+                  
                 </div>
           </div>
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
         <div >
-         <span class="sortby" id="sortBy">
+      <!-- <span class="sortby" id="sortBy">
             <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
             <a class="txt_blue link_active" href="#">Newest</a> <span style="padding:2px 5px 0px 10px;">|</span>
             <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
             <a class="txt_blue" href="#">Most Comments</a>
-          </span>
+          </span> -->
         </div>
         <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
            
         
           <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         </div>
-        <a id="content_next" style="display:none"></a>
+       
          <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2) %>
       </div>
        <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
@@ -337,6 +339,7 @@
       <!-- This will go into main layout -->
     </div>
     <%end%>
+      <%= hidden_field_tag "search_type","activities" %>
     <script type="text/javascript">
 
         $("div#Filterby div.Filternav ul li").click(function (e) {
@@ -351,7 +354,7 @@
                 }
                 $.ajax(
                 {
-                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + $("span#sortBy a.link_active").text(),
+                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                   type: "get",
                   dataType: "script"
                 });
@@ -369,7 +372,7 @@
           running = true;
             $.ajax(
               {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + $("span#sortBy a.link_active").text(),
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                 type: "get",
                 dataType: "script",
                 before: $('#spinner1').show(),
@@ -383,7 +386,7 @@
         });
       
     </script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
    $("span#sortBy a").click(function (e) {
    $("span#sortBy").find('a').removeClass('link_active');
@@ -406,8 +409,7 @@
           
         
    });
-</script>
-
+</script> -->
     <%end%>
     <%end%>
   </div>

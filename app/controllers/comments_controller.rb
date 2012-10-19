@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
     @comment.status = @comment.set_comment_status("create")
     @comment.user = current_user
     if @comment.save
+        UserActivity.save_user_activity(current_user,@content.id,"commented",@content.sub_type)
       if @detail
         @comment_string = render_to_string :partial => "detailed_comment", :locals => { :comment => @comment }
       else

@@ -67,9 +67,16 @@ module ContentsHelper
   end
 
   def time_ago_format(content)
-    return "0 minutes" if content.try(:created_at).nil?
-    return time_ago_in_words(content.created_at)
+    if content.is_a?(UserActivity)
+      return "0 minutes" if content.try(:time).nil?
+      return time_ago_in_words(content.time)
+    else  
+      return "0 minutes" if content.try(:created_at).nil?
+      return time_ago_in_words(content.created_at)
+    end  
   end
+   
+
 
   def get_content_container_class(article_category)
     class_name = case article_category
