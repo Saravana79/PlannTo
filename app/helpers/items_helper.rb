@@ -1,4 +1,17 @@
 module ItemsHelper
+  
+  def get_item_ids_to_compare_url(items)
+     item_ids = items.collect(&:followable_id)
+      if items.size < 2
+        return "#"
+      elsif items.size > 1 && items.size < 4
+        return "/items/compare?ids=#{item_ids.join(',')}"
+      else
+        return "/items/compare?ids=#{item_ids[0..3].join(',')}"
+      end
+     return "#"
+  end
+  
   def display_specifications(item)
     specifications = Array.new
     attributes_list = Array.new
