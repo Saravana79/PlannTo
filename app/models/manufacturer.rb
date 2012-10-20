@@ -13,6 +13,7 @@ class Manufacturer < Item
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 5.0,  :as => :name_ac
     string :name
+    string :status
    end
 
   def show_specification

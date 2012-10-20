@@ -212,7 +212,7 @@ class SearchController < ApplicationController
    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
-      paginate(:page => 1, :per_page => 10)      
+      paginate(:page => 1, :per_page => 10)        
     end
 
     if params[:from_profile]

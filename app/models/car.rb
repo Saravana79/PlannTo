@@ -18,7 +18,7 @@ class Car < Product
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
-    string :status, :multiple => true
+    string :status
     float :rating  do |item|
       item.rating
     end
