@@ -204,7 +204,7 @@ class Item < ActiveRecord::Base
     INNER JOIN attribute_values ON attribute_values.item_id = a.id
     INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value 
     INNER JOIN items AS b on b.id=item_attribute_tag_relations.item_id and b.type="AttributeTag"
-    WHERE a.id in (?)', idstr]
+    WHERE item_attribute_tag_relations.itemtype_id = a.itemtype_id and a.id in (?)', idstr]
     items.map(&:id).to_a
   end
   
