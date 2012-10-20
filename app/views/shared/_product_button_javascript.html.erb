@@ -5,21 +5,7 @@
 <% end %>
 var item_id = <%= item.id %>;
 var url = "<%= feed_contents_path(:items => item.id  ) %>";
-  $("#usual2 ul").idTabs("tabs1");
-  Product.detailed_specification();
 
-<% unless related_items %>
-<%
-=begin
-$('<= "#plan_to_buy_#{item.id}, #plan_to_own_#{item.id}, #plan_to_follow_#{item.id}" >').poshytip({
-  content: this.title,
-  className: "tip-darkgray",
-  bgImageFrameSize: 11,
-  offsetX: -25
-});
-=end
-%>
-<% end %>
 
   $(document).ajaxError(function(e, XHR, options){
     if (XHR.status == 401){

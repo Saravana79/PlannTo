@@ -39,7 +39,7 @@
             <span class="homepageimgspan">
               <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
               <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+              <a href="<%=item.get_url()%>" class="homepageprodname txt_onhover"><%= item.name %></a><br/>
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
@@ -67,7 +67,7 @@
             <span class="homepageimgspan">
               <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
               <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+              <a href="<%=item.get_url()%>" class="homepageprodname txt_onhover"><%= item.name %></a><br/>
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
@@ -95,7 +95,7 @@
             <span class="homepageimgspan">
               <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
               <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+              <a href="<%=item.get_url()%>" class="homepageprodname txt_onhover"><%= item.name %></a><br/>
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
@@ -151,7 +151,7 @@
             <span class="homepageimgspan">
               <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
               <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+              <a href="<%=item.get_url()%>" class="homepageprodname txt_onhover"><%= item.name %></a><br/>
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
@@ -179,7 +179,7 @@
             <span class="homepageimgspan">
               <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
               <span class="homepagenamespan">
-              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+              <a href="<%=item.get_url()%>" class="homepageprodname txt_onhover"><%= item.name %></a><br/>
             <% if item.is_a? Product %>
                    <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
                     <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
