@@ -46,11 +46,11 @@
     </div>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
     <div >
-      <span class="sortby" id="sortBy">
+     <!-- <span class="sortby" id="sortBy">
         <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
          <a class="txt_blue" href="#"  class="link_active" id="new">Newest</a> <span style="padding:0px 5px;">|</span>
         <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
-        <a class="txt_blue" href="#">Most Comments</a>
+        <a class="txt_blue" href="#">Most Comments</a> -->
         <div style="display:none;">
           <%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
 		      <%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
@@ -62,7 +62,7 @@
 		     <%= f.hidden_field :page, :value =>1%>
 		    <% end -%>  
 		   </div>  
-      </span>
+      <!-- </span> -->
     </div>
 <div style="margin: 0px 0px 0px 550px;">
 <ul class="itemdrop" >

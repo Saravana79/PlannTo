@@ -138,8 +138,9 @@ class Content < ActiveRecord::Base
      root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
      vote_count = configatron.root_content_vote_count
      page = (filter_params["page"].to_i - 1) * 10
-     if  filter_params["sub_type"] == ["Video"]
-       content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+
+  if  filter_params["sub_type"] == ["Video"]
+       content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu,contents.created_at as created_time ,'' as activity_id,  contents.* FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id INNER JOIN article_contents on  article_contents.id = contents.id
 WHERE 
@@ -149,16 +150,15 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
 union 
-SELECT distinct(contents.id) as idu, contents.* FROM contents 
-INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
-INNER JOIN article_contents on  article_contents.id = contents.id
+SELECT distinct(contents.id) as idu,user_activities.time as created_time ,user_activities.id as activity_id, contents.* FROM contents 
+INNER JOIN user_activities ON user_activities.related_id = contents.id INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id INNER JOIN article_contents on  article_contents.id = contents.id
 WHERE 
-(contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
+(user_activities.user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")})  and user_activities.related_activity_type!='User')
 and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
-)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and (article_contents.video=1)  and contents.status =1)
+ )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 else 
-   content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+   contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.created_at as created_time ,'' as activity_id, contents.* FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
@@ -168,16 +168,24 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 union 
-SELECT distinct(contents.id) as idu, contents.* FROM contents 
-INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
+SELECT distinct(contents.id) as idu,user_activities.time as created_time ,user_activities.id as activity_id, contents.* FROM contents 
+INNER JOIN user_activities ON user_activities.related_id = contents.id INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
-(contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
+(user_activities.user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")})  and user_activities.related_activity_type!='User')
 and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
-)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+)a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
+
 end
+   content_ids  = []
+   activity_ids = []
+   contents.map{ |c| content_ids << c.id if c.activity_id == ""} rescue ''
+   contents.map{ |c| activity_ids << c.activity_id  if c.activity_id != ""} rescue ''
    content_ids = content_ids.blank? ? "" : content_ids
-   contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+   activity_ids = activity_ids.blank? ? "" : activity_ids
+   contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+   activity_contents = UserActivity.where("id in (?)", activity_ids).order("time desc")
+   contents = activity_contents + contents_1
   # contents = Content.find(content_ids)
  end
  

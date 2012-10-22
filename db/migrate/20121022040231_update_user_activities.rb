@@ -34,7 +34,7 @@ class UpdateUserActivities < ActiveRecord::Migration
          u = UserActivity.new
          u.user_id = f.voter_id
          u.related_id = f.voteable_id
-         u.related_activity = f.vote.to_i == 1 ? "voted" : "downvoted"
+         u.related_activity = f.vote? ? "voted" : "downvoted"
          content = Content.find(f.voteable_id)
          u.related_activity_type =  content.type == "AnswerContent" ? "Answer" : content.sub_type
          u.time = f.created_at
