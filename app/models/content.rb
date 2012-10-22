@@ -78,9 +78,10 @@ class Content < ActiveRecord::Base
     options["page"]||=1
     options["limit"]||=PER_PAGE
     options["order"]||="created_at desc"
-    puts"ppppppppppppp #{options}"
+
     if options["search_type"] == "activities"
-       type = options["sub_type"].length > 1 ? options["sub_type"] + ["User"] : options["sub_type"]
+        type_1 = options["sub_type"].length > 1 ? options["sub_type"] + ["User","Answer"]  : options["sub_type"]
+       type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1
        UserActivity.where("user_id =? and related_activity_type in (?)",options["user"],type).where("related_id is not null").order("time desc").paginate(:page => options["page"], :per_page => options["limit"])
      else  
     scope=options.inject(self) do |scope, (key, value)|

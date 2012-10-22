@@ -38,7 +38,7 @@ class VotesController < ApplicationController
       end
       Resque.enqueue(VotingPoint, current_user.id, @voteable.id, params[:parent])
       #Point.add_voting_point(current_user, @voteable)
-      UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',@voteable.sub_type)
+      UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',@voteable.type == "AnswerContent" ? "Answer" : @voteable.sub_type)
     else
       render :nothing => true
     end

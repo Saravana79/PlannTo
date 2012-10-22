@@ -403,8 +403,8 @@ class ContentsController < ApplicationController
         return ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq
       end
       
-     elsif sub_type =="QandA"
-      return "Q&A"
+     elsif sub_type =="QandA" || sub_type == "Q"
+      return ["Q&A"]
     else
       return sub_type.split(",")
     end

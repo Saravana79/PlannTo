@@ -1,4 +1,4 @@
-<div><a class="txt_brown_bold"><%= content.user.name %> <%= content.related_activity %> on
+<%unless  content.related_activity == "created" %><div><a class="txt_brown_bold"><%= content.user.name %> <%= content.related_activity %> on
 <%if content.related_activity =="followed" &&  content.related_activity_type == "User"%> 
 <% u = User.find(content.related_id) %> 
 <a class="txt_brown_bold" href="<%= u.get_url()%>">
@@ -8,3 +8,4 @@
  <%= image_tag(u.get_photo(:medium)) %></div> <br /> </div> 
 <%else%> <%= content.related_activity_type %> - <%= time_ago_format(content)%> </a> 
 <%end%></div>
+<%end%>
