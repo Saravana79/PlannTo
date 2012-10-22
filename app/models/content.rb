@@ -133,6 +133,8 @@ class Content < ActiveRecord::Base
   def self.my_feeds_filter(filter_params)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
+      type_1 = sub_type.length > 1 ? sub_type + ["Answer"]  : sub_type
+      sub_type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1
       sub_type = sub_type.map { |i| "'" + i.to_s + "'" }.join(",")
       item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
      root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
@@ -155,9 +157,10 @@ INNER JOIN user_activities ON user_activities.related_id = contents.id INNER JOI
 WHERE 
 (user_activities.user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")})  and user_activities.related_activity_type!='User')
 and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and (article_contents.video=1)  and contents.status =1)
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
  )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 else 
+   
    contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.created_at as created_time ,'' as activity_id, contents.* FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
@@ -171,7 +174,7 @@ union
 SELECT distinct(contents.id) as idu,user_activities.time as created_time ,user_activities.id as activity_id, contents.* FROM contents 
 INNER JOIN user_activities ON user_activities.related_id = contents.id INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
-(user_activities.user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")})  and user_activities.related_activity_type!='User')
+(user_activities.user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")})  and user_activities.related_activity_type in (#{sub_type}))
 and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
