@@ -4,8 +4,8 @@ class UpdateUserActivities < ActiveRecord::Migration
         u = UserActivity.new
         u.user_id = c.created_by
         u.related_id = c.id
-        u.related_activity = c.type == AnswerContent ? "answered" : "created"
-        u.related_activity_type = c.type == AnswerContent ? "Q&A" : c.sub_type
+        u.related_activity = c.type == "AnswerContent" ? "answered" : "created"
+        u.related_activity_type = c.type == "AnswerContent" ? "Q&A" : c.sub_type
         u.time = c.created_at
         u.save 
       end  
