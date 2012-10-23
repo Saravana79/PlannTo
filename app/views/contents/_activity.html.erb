@@ -1,10 +1,11 @@
-<div><a class="txt_brown_bold"><%= content.user.name %> <%= content.related_activity %> on
+<%unless  content.related_activity == "created" %><div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a> <a class="txt_brown_bold"> <%= content.related_activity %> on</a>
 <%if content.related_activity =="followed" &&  content.related_activity_type == "User"%> 
 <% u = User.find(content.related_id) %> 
 <a class="txt_brown_bold" href="<%= u.get_url()%>">
-<%= u.name %> - <%= time_ago_format(content)%> </a>
+<%= u.name %> </a>- <%= time_ago_format(content)%> 
 <div class="mainContentDiv">
  <div style="width:100px;height:120px;">
  <%= image_tag(u.get_photo(:medium)) %></div> <br /> </div> 
-<%else%> <%= content.related_activity_type %> - <%= time_ago_format(content)%> </a> 
+<%else%> <a class="txt_brown_bold"><%= content.related_activity_type %></a> <a class="txt_brown_bold">- <%= time_ago_format(content)%> </a>
 <%end%></div>
+<%end%>

@@ -11,7 +11,7 @@ class QuestionContentsController < ApplicationController
 		@questioncontent.user = current_user
 		@item = Item.find params['item_id']
 		@questioncontent.save_with_items!(params['item_id'])
-    UserActivity.save_user_activity(current_user,@questioncontent.id,"created",@questioncontent.sub_type)
+    UserActivity.save_user_activity(current_user,@questioncontent.id,"created",@questioncontent.sub_type,@questioncontent.id,request.remote_ip)
   end
 
 	def show
@@ -46,6 +46,7 @@ class QuestionContentsController < ApplicationController
   def destroy
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
+    @content.remove_user_activities
   end
 
 end

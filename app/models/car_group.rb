@@ -8,6 +8,7 @@ class CarGroup < Item
 searchable :auto_index => true, :auto_remove => true  do
   text :name , :boost => 3.0,  :as => :name_ac
   string :name
+  string :status
  end
 
 

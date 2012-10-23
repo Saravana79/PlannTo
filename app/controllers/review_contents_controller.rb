@@ -16,7 +16,7 @@ class ReviewContentsController < ApplicationController
 		     @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
 		   end 
 		end
-		 UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type)
+		 UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type,@reviewcontent.id,request.remote_ip)
 		unless @products_error == true
 		 @item.add_new_rating @reviewcontent.rating if @item
     end
@@ -57,6 +57,7 @@ class ReviewContentsController < ApplicationController
   def destroy
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
+    @content.remove_user_activities
   end
 
 end

@@ -49,5 +49,10 @@ class Comment < ActiveRecord::Base
      return true
    end
  end
+ 
+ 	def remove_user_activities
+	   UserActivity.where("related_activity =? and related_id =? and activity_id=?","commented",self.commentable_id,self.id).first.destroy
+	end
+
  end
   

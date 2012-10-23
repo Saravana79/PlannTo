@@ -78,9 +78,10 @@ class Content < ActiveRecord::Base
     options["page"]||=1
     options["limit"]||=PER_PAGE
     options["order"]||="created_at desc"
-    puts"ppppppppppppp #{options}"
+
     if options["search_type"] == "activities"
-       type = options["sub_type"].length > 1 ? options["sub_type"] + ["User"] : options["sub_type"]
+        type_1 = options["sub_type"].length > 1 ? options["sub_type"] + ["User","Answer"]  : options["sub_type"]
+       type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1
        UserActivity.where("user_id =? and related_activity_type in (?)",options["user"],type).where("related_id is not null").order("time desc").paginate(:page => options["page"], :per_page => options["limit"])
      else  
     scope=options.inject(self) do |scope, (key, value)|
@@ -132,13 +133,16 @@ class Content < ActiveRecord::Base
   def self.my_feeds_filter(filter_params)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
+      type_1 = sub_type.length > 1 ? sub_type + ["Answer"]  : sub_type
+      sub_type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1
       sub_type = sub_type.map { |i| "'" + i.to_s + "'" }.join(",")
       item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]
      root_item_ids = filter_params["root_items"].is_a?(String) ? filter_params["root_items"].split(',') : filter_params["root_items"]
      vote_count = configatron.root_content_vote_count
      page = (filter_params["page"].to_i - 1) * 10
-     if  filter_params["sub_type"] == ["Video"]
-       content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+
+  if  filter_params["sub_type"] == ["Video"]
+       content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id,contents.created_at as created_time ,null as activity_id FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id INNER JOIN article_contents on  article_contents.id = contents.id
 WHERE 
@@ -148,16 +152,10 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
 union 
-SELECT distinct(contents.id) as idu, contents.* FROM contents 
-INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
-INNER JOIN article_contents on  article_contents.id = contents.id
-WHERE 
-(contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
-and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
-)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}))
+ )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 else 
-   content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+  contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id, contents.created_at as created_time ,null as activity_id FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
@@ -167,16 +165,19 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 union 
-SELECT distinct(contents.id) as idu, contents.* FROM contents 
-INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
-WHERE 
-(contents.created_by in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}))
-and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
-)a  order by a.#{filter_params["order"]} limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}))
+)a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
+
 end
+   content_ids  = []
+   activity_ids = []
+   contents.map{ |c| content_ids << c.content_id if c.activity_id == nil} rescue ''
+   contents.map{ |c| activity_ids << c.activity_id  if c.activity_id != nil} rescue ''
    content_ids = content_ids.blank? ? "" : content_ids
-   contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+   activity_ids = activity_ids.blank? ? "" : activity_ids
+   contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+   activity_contents = UserActivity.where("id in (?)", activity_ids).order("time desc")
+   contents = contents_1 + activity_contents 
   # contents = Content.find(content_ids)
  end
  
@@ -204,6 +205,17 @@ end
      return @items.uniq.join(","),@item_types,@article_categories,@root_items
    end
   
+  def  remove_user_activities
+    UserActivity.where('related_activity_type !=? and related_activity_type!=? and related_id =?', "Answer","User",self.id).each do |a|
+      a.destroy
+    end
+    if self.sub_type == "Q&A"
+      answer_ids = self.answer_contents.collect(&:id)
+      UserActivity.where("related_activity_type =? and related_id in (?)",'Answer',answer_ids).each do |an|
+      an.destroy
+    end 
+    end  
+  end
   
   def save_with_items!(items)
     # Content.transaction do
@@ -241,6 +253,7 @@ end
     #item = Item.find(item)
       if item.type == "AttributeTag"
       attribute_item_ids << item.id
+      itemtype_id << item.get_base_itemtypeid
       elsif item.type == "Manufacturer"
       #manufacturer_item_ids = item.itemrelationships.collect(&:relateditem_id)
       manufacturer_and_cargroup_item_ids << item.id
@@ -248,8 +261,8 @@ end
       #logger.info item.itemrelationships.collect(&:relateditem_id)
       #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
       manufacturer_and_cargroup_item_ids << item.id
-      #elsif item.type == "ItemtypeTag"
-      #  itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
+      elsif item.type == "ItemtypeTag"
+        itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
       else
       item_ids << item.id
       end
@@ -258,13 +271,13 @@ end
 
       sql=    "select * from items where "
 
-      # sql += " itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
+      
 
       #if itemtype_id.size != 0
       #   sql += " and (" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
       # end
 
-      sql += "  id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
+      sql += " ( id in (#{item_ids.join(",")})" unless item_ids.size == 0  #/*needs to add only when products are directly associated to content*/
 
       if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0)
         sql += " or " unless item_ids.size == 0
@@ -274,6 +287,10 @@ end
         sql += " and item_id in " unless (manufacturer_and_cargroup_item_ids.size == 0 || attribute_item_ids.size == 0)
         sql += "  (select av.item_id from attribute_values av inner join item_attribute_tag_relations iatr on av.attribute_id =iatr.attribute_id and  iatr.value = av.value where iatr.item_id in (#{attribute_item_ids.join(",")}))"  unless attribute_item_ids.size == 0#/*this needs to be added if attribute tag is associated to it */
         sql += ")"
+        sql += " )" unless item_ids.size == 0
+         sql += " and itemtype_id in (#{itemtype_id.join(",")})" unless itemtype_id.size == 0 #/* needs to be added only when itemtypetag is associated to the content */
+      else 
+        sql += " )" unless item_ids.size == 0
       end
       #if itemtype_id.size != 0
       #  sql += " )" unless   (item_ids.size ==0 && manufacturer_and_cargroup_item_ids.size == 0 && attribute_item_ids.size == 0)
