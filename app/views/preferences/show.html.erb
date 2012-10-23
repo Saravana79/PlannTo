@@ -123,12 +123,15 @@
 						<%end%>
 					</div>
 					<ul id="Newtabs">
-   <li class="tab_active"><a href="#"><span>Current</span></a></li>
-        <li id=""><a href="#"><span>Preference</span></a></li> 
-        <li id=""><a href="#"><span>Deals</span></a></li> 
+   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Current</span></a></li>
+        <li <%if params[:type] == "preference"%> class="tab_active" <%end%>><a href="?type=preference"><span>Preference</span></a></li> 
+        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Deals</span></a></li> 
   </ul>
+  
+  
 					<br/>
 					<br/>
+					<%unless params[:type].present?%>
 					<div class="hdr_Category">
 						Buying Preferences:
 					</div>
@@ -169,6 +172,8 @@
 					</div>
 
 					<!-- Product Details - End -->
+					
+<%end%>
 				</div>
 			</div>
 		</div>
@@ -190,7 +195,6 @@
 			</div>
 			<% end %>
 		</div>
-
 		<div class="rightcolumnsmall">
 
 			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
