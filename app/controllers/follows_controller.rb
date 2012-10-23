@@ -10,7 +10,7 @@ class FollowsController < ApplicationController
   def create
     if current_user.follows.where(followable_id: params[:follow][:followable_id]).where(followable_type: params[:follow][:followable_type]).where(follow_type: params[:follow][:follow_type]).first.blank?
       current_user.follows.create(params[:follow])
-       UserActivity.save_user_activity(current_user, params[:follow][:followable_id],"followed","User")
+       UserActivity.save_user_activity(current_user, params[:follow][:followable_id],"followed","User",params[:follow][:followable_id],request.remote_ip)
     end
       
     redirect_to :back, :notice => "Successfully following."

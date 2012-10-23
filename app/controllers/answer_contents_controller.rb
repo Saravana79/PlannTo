@@ -5,7 +5,7 @@ class AnswerContentsController < ApplicationController
 		@answer_content = AnswerContent.new params[:answer_content]
 		@answer_content.user = current_user
 		@answer_content.save_with_items!("") 
-		UserActivity.save_user_activity(current_user,@answer_content.question_content.id,"answered","Q&A")
+		UserActivity.save_user_activity(current_user,@answer_content.question_content.id,"answered","Q&A",@answer_content.id,request.remote_ip)
 		respond_to do |format|
 			format.html
 			format.js
@@ -25,6 +25,6 @@ class AnswerContentsController < ApplicationController
   def destroy
     @answer_content = AnswerContent.find(params[:id])
     @answer_content.update_attribute(:status, Content::DELETE_STATUS)
-    
+    @answer_content.remove_user_activities
   end
 end

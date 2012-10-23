@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
     @comment.status = @comment.set_comment_status("create")
     @comment.user = current_user
     if @comment.save
-        UserActivity.save_user_activity(current_user,@content.id,"commented",@content.type == "AnswerContent" ? "Answer"  :  @content.sub_type)
+        UserActivity.save_user_activity(current_user,@content.id,"commented",@content.type == "AnswerContent" ? "Answer"  :  @content.sub_type,@comment.id,request.remote_ip)
       if @detail
         @comment_string = render_to_string :partial => "detailed_comment", :locals => { :comment => @comment }
       else
@@ -48,5 +48,6 @@ class CommentsController < ApplicationController
   def destroy
     @comment = Comment.find(params[:id])
     @comment.update_attribute(:status, Comment::DELETE_STATUS)
+    @comment.remove_user_activities
   end
 end

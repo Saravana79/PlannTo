@@ -205,6 +205,17 @@ end
      return @items.uniq.join(","),@item_types,@article_categories,@root_items
    end
   
+  def  remove_user_activities
+    UserActivity.where('related_activity_type !=? and related_activity_type!=? and related_id =?', "Answer","User",self.id).each do |a|
+      a.destroy
+    end
+    if self.sub_type == "Q&A"
+      answer_ids = self.answer_contents.collect(&:id)
+      UserActivity.where("related_activity_type =? and related_id in (?)",'Answer',answer_ids).each do |an|
+      an.destroy
+    end 
+    end  
+  end
   
   def save_with_items!(items)
     # Content.transaction do

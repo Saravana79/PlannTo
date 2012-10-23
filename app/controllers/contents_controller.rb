@@ -338,6 +338,7 @@ class ContentsController < ApplicationController
   def destroy
     get_item_object
     @item.update_attribute(:status, Content::DELETE_STATUS)
+    @item.remove_user_activities
   #@item.destroy
   end
 
