@@ -155,8 +155,7 @@ union
  (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}))
  )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 else 
-   
-   contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id, contents.created_at as created_time ,null as activity_id FROM contents 
+  contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id, contents.created_at as created_time ,null as activity_id FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id 
 WHERE 
@@ -178,7 +177,7 @@ end
    activity_ids = activity_ids.blank? ? "" : activity_ids
    contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
    activity_contents = UserActivity.where("id in (?)", activity_ids).order("time desc")
-   contents = activity_contents + contents_1
+   contents = contents_1 + activity_contents 
   # contents = Content.find(content_ids)
  end
  
