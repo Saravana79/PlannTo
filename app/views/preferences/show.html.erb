@@ -123,8 +123,8 @@
 						<%end%>
 					</div>
 					<ul id="Newtabs">
-   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Current</span></a></li>
-        <li <%if params[:type] == "preference"%> class="tab_active" <%end%>><a href="?type=preference"><span>Preference</span></a></li> 
+   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Preference</span></a></li>
+        <li <%if params[:type] == "content"%> class="tab_active" <%end%>><a href="?type=content"><span>Content</span></a></li> 
         <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Deals</span></a></li> 
   </ul>
   
@@ -174,7 +174,7 @@
 					<!-- Product Details - End -->
 					
 <%end%>
-<%if params[:type] == "preference"%>
+<%if params[:type] == "content"%>
   <div id="content_all">
     <%= render "contents/filter_by_options"%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
