@@ -36,6 +36,8 @@ class VotesController < ApplicationController
       else
         voter.vote voteable,:direction => params[:vote]
       end
+      
+      Vote.get_vote_list(current_user)
       Resque.enqueue(VotingPoint, current_user.id, @voteable.id, params[:parent])
       #Point.add_voting_point(current_user, @voteable)
       UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',@voteable.type == "AnswerContent" ? "Answer" : @voteable.sub_type,"",request.remote_ip)
