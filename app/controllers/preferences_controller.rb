@@ -18,11 +18,9 @@ class PreferencesController < ApplicationController
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
-logger.info @follow_item
-
-sunspot_search_items
-logger.info @preferences_list
-@article_categories = ArticleCategory.get_by_itemtype(0)
+    @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(',') if @follow_item.size >0
+    sunspot_search_items
+    @article_categories = ArticleCategory.get_by_itemtype(0)
   end
 
   def add_preference

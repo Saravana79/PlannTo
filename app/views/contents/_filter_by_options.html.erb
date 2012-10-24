@@ -39,7 +39,7 @@
             $("#content_search_search").val("")
           	$("#content_search_sub_type").val(sub_type);  
             var filter_page_no = $("#filter_page_no").val();
-          var items = "<%=@item.try(:id)%>";
+          var items = "<%=@item.try(:id) || @item_ids%>";
           var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>"                  
             var sort_by = $("span#sortBy a.link_active").text();
             var guide = "<%=@guide.try(:id)%>";
@@ -55,7 +55,7 @@
     
    		id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
        		var sub_type = find_sub_type(id);
-        var items = "<%=@item.try(:id)%>";
+        var items = "<%=@item.try(:id) || @item_ids%>";
           var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>"   
          var guide = "<%=@guide.try(:id)%>";
    		triggerScrollFunction(sub_type, items, itemtype_id, guide); 
