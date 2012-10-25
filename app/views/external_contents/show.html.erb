@@ -28,20 +28,26 @@
            <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
          </div>
          <span class='comment_no'> 
+           <% if @content.comments.count > 0 %>
            <%= link_to @content.comments.count.to_s + " comments", content_path(@content) %>
+           <%else %>
+           <%= link_to " Add a comment", content_path(@content) %>
+           <%end%>
          </span>
          <a href="<%=@content.url %>" class="h_close">close</a>  
          
          <div class="dropdown_main">
               <div class="selected_text">              
                 <span class="tile_select">Related Contents</span>
-                <span class="description_text"></span>
+                <% if @related_contents.count > 0 %>
+                    <span class="description_text"><%=@related_contents[0].title%></span>
+                <%end%>
               </div>
               <span class="drop_arrow"></span>
               <div class="dropdown_open">
                 <ul>
                    <%@related_contents.each do |content|%>
-		       <li><%= link_to content.title, content_path(content.id), :class => "rekatedlinks" %></li>
+		       <li><%= link_to content.title, "/external_contents/" + (content.id.to_s), :class => "rekatedlinks" %></li>
      
            <%end%>
                </ul>

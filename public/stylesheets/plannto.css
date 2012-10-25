@@ -3465,7 +3465,7 @@ span.description_text { font-size:12px; }
                 top:30px; border:3px solid #3588a4; background:#ffffff; padding:10px 0; overflow: auto; }
 .dropdown_open ul { padding:0; margin:0;}
 .dropdown_open ul li { padding:0; margin:0; list-style:none;}
-.dropdown_open ul li a { font-size:12px; font-weight:bold; text-transform:uppercase; display:block;color:#383838;
+.dropdown_open ul li a { font-size:12px; font-weight:bold;  display:block;color:#383838;
                          text-decoration:none; padding:9px 10px; border-bottom:1px solid #3588a4;}
 .dropdown_open ul li a span { font-size:12px; text-transform:none; font-weight:normal; display:block;}
 
