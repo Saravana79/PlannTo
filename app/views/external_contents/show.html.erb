@@ -31,25 +31,23 @@
            <%= link_to @content.comments.count.to_s + " comments", content_path(@content) %>
          </span>
          <a href="<%=@content.url %>" class="h_close">close</a>  
-         <!--
+         
          <div class="dropdown_main">
               <div class="selected_text">              
-                <span class="tile_select">Related Articles:</span>
-                <span class="description_text">Iphone 4S Review.</span>
+                <span class="tile_select">Related Contents</span>
+                <span class="description_text"></span>
               </div>
               <span class="drop_arrow"></span>
               <div class="dropdown_open">
                 <ul>
-                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
-                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
-                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
-                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
-                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
-                    <li><a href="#">READ TOP STORY: <span>50 Olympic Athletes to Watch...</span></a></li>
+                   <%@related_contents.each do |content|%>
+		       <li><%= link_to content.title, content_path(content.id), :class => "rekatedlinks" %></li>
+     
+           <%end%>
                </ul>
               </div>
           </div>
-          -->
+         
       </div>  
     </div> 
       
