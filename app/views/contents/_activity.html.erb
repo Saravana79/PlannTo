@@ -9,6 +9,6 @@
  <div style="width:100px;height:120px;">
  <%= image_tag(u.get_photo(:medium)) %></div> <br /> </div> 
 <%else%> 
- <a class="txt_brown_bold"><%= indefinite_articlerize(content.related_activity_type.singularize.downcase) %></a> <a class="txt_brown_bold">- <%= time_ago_format(content)%> </a>
+ <a class="txt_brown_bold"><%= indefinite_articlerize(content.related_activity_type.singularize) %></a> <a class="txt_brown_bold">- <%= time_ago_format(content)%> </a>
 <%end%></div>
 <%end%>
