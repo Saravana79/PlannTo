@@ -1,4 +1,4 @@
-<%unless  content.related_activity == "created" %>
+<%unless  content.related_activity == "created" ||  content.related_activity == "answered"  %>
 <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a> 
 	<a class="txt_brown_bold"> <%= content.related_activity + " " %> </a>
 <%if content.related_activity =="followed" &&  content.related_activity_type == "User"%> 

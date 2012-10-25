@@ -4,12 +4,10 @@
 <% if !@contents.blank? %>
 <% @contents.each do |content| %>
    <%if content.is_a?(UserActivity) %>
+   
      <%= render "contents/activity",:content => content %>
-     <%if ArticleCategory.where("itemtype_id = ?",0).collect(&:name).include?(content.related_activity_type) %>
-       <% content = Content.find(content.related_id) %>
-       <% if contents.is_a?(AnswerContent) %>
-         <% content = content.question_content %>  
-       <%end%>
+       <%if content.related_activity_type!="User"%>
+         <% content = Content.find(content.related_id) %>
          <%= render_content_type(content) %>
        <%end%>
      <%else%> 

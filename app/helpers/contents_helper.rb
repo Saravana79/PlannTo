@@ -6,6 +6,8 @@ module ContentsHelper
       render :partial => "contents/question", :locals => { :content => item }
     when "ReviewContent"
       render :partial => "contents/review", :locals => { :content => item }
+   when "AnswerContent"
+      render :partial => "contents/answer", :locals => { :content => item }
     else
       if (item.type == "ArticleContent" && item.url.blank?)
         render :partial => "contents/article", :locals => { :content => item }
