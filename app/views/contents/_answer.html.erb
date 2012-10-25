@@ -8,7 +8,7 @@
 
 
     <div>
-      <%= link_to content.question_content.title, content_path(content.id), :class => "title txt_onhover" %>
+      <%= link_to content.question_content.title, content_path(content.question_content.id), :class => "title txt_onhover" %>
       
     </div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> answered a Q&A on </a><a class="txt_brown"><%=get_anchor_name_link(content.question_content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
