@@ -3,7 +3,7 @@ class AddAvtivityIdToUserActivities < ActiveRecord::Migration
      add_column :user_activities,:activity_id,:integer
      add_column :user_activities,:ip_address,:string
       UserActivity.delete_all
-       Content.all.where(:status =>1).each do |c|
+       Content.where(:status =>1).each do |c|
          u = UserActivity.new
          u.user_id = c.created_by
          u.related_id = c.id
@@ -24,7 +24,7 @@ class AddAvtivityIdToUserActivities < ActiveRecord::Migration
         u.time = f.created_at
         u.save 
      end 
-     Comment.all.where(:status =>1).each do |f|
+     Comment.where(:status =>1).each do |f|
         u = UserActivity.new
         u.user_id = f.user_id
         u.related_id = f.commentable_id
