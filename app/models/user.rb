@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
     Follow::ProductFollowType::Buyer => "buyer_item_ids"}
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :name, :remember_me, :facebook_id, :invitation_id, :invitation_token, 
-                :avatar, :username, :uid, :token,:description,:my_feeds_email
+                :avatar, :username, :uid, :token,:description,:my_feeds_email,:location
   attr_accessor :follow_type
   acts_as_followable
   acts_as_follower
@@ -243,8 +243,8 @@ class User < ActiveRecord::Base
     return false
   end
   def self.create_from_fb_callback(auth)
-    user = User.new(email:auth.info.email, name:auth.extra.raw_info.name, password:Devise.friendly_token[0,20], 
-                      uid:auth.uid, token:auth.credentials.token)                 
+    user = User.new(email:auth.info.email, location:auth.info.location,name:auth.extra.raw_info.name, password:Devise.friendly_token[0,20], 
+                      uid:auth.uid, token:auth.credentials.token)               
     user.avatar = open(auth.info.image.gsub('square', 'large')) 
     user.save
     user

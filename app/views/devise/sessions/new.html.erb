@@ -1,5 +1,9 @@
 <h2>Sign in</h2>
-
+<script>
+if(window.opener) {
+    window.close()
+ }
+ </script>
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 
   <%= render "shared/login_fields", {:f => f} %>
