@@ -1461,7 +1461,7 @@ span.sortby a:hover {
     background-color: #ea5e30;
     border-radius: 3px;
     padding: 0px 10px;
-    cursor: hand;
+    cursor: pointer;
 }
 
 .answer_later {
