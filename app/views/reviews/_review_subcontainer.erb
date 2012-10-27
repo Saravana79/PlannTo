@@ -1,4 +1,6 @@
 <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+ 
+
 <div id="articleReviewSubContainer" class="contentSubContainer" style="display:none;">
   <div id="notification" class="notificationStyle">Thank You, Review has been created.</div>
   <%if @content.nil?%>
@@ -15,7 +17,7 @@
     <div id="review_new" style="display:none;"%>
     <div class="Close_dialog" style="display:none;width:43px; 
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
-position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    <%= hidden_field_tag :detail,@detail%>
  <span class="Popuptitle"><center><h1>New Review Content</h1></center></span>
  </div>
@@ -23,7 +25,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
      <%if @content %>
        <div class="Close_dialog" style="display:none;width:43px; 
 overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
-position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    <%= hidden_field_tag :detail,@detail%>
  <span class="Popuptitle"><center> <h1 id="reviewTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
  <%end%>
@@ -31,6 +33,7 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <div class="title_header float_lft">Title :</div>
       <div class="float_lft"> <%= f.text_field :title, :style=> "margin-left:5px;width:400px" %> </div>
     </div>
+    
     <div class="productreview" style="clear:both;">
       <div class="title_header float_lft">Rating :</div>
       <!-- <img src="/images/rating_stars.png" style="padding-left:3px;"/> -->
@@ -186,7 +189,24 @@ position:relative; left:546px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <%= render "shared/ajax_loader" %>
   <% end %>
 </div>
+ <script type="text/javascript">
 
+tinyMCE.init({
+        // General options
+        mode : "specific_textareas",
+        editor_selector : "textFilling",
+        theme : "advanced",
+        plugins : "inlinepopups,imageupload,feature_at",
+
+        // Theme options
+        theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink,feature_at,imageupload",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",
+       
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left"
+});
+</script>
  <script>
 
   $("#reco_yes").click(function(){

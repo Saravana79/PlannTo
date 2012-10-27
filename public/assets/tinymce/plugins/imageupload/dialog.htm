@@ -1,24 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
 <head>
 <title>Image Upload</title>
 </head>
 <body>
 
-<form action="/pages/upload"
+<form action="/imageuploads/upload"
 enctype="multipart/form-data" id="binary-edit-form" data-remote="true"
 method="post">
-<p><label for="user_image">Upload a file:</label><br/>
+<p><label for="user_image">Insert a Image:</label><br/>
 <input id="content_photo_photo"
 name="content_photo[photo]" size="30"
-type="file" />
+type="file" class="file_upload"/>
+
 </p>
 <input name="authenticity_token" id="authenticity_token" type="hidden" value="token_value" />
-<input type="submit" value="Upload!" />
+  <div class="mceActionPanel">
+<input type="submit" id="insert" value="Insert!" />
+<input type="button" id="cancel" name="cancel" value="Cancel" onclick="tinyMCEPopup.close();" />
+</div>
 </form>
 </body>
 </html>
 
-<script>
-  
-</script>

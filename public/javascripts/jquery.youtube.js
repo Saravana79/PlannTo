@@ -70,7 +70,7 @@
 		'draggable': false,
 		'modal': true,
 		'width': 500,
-		'height': 400,
+		'height': 1500,
 		'autoplay': 1,
 		'color': 'red',
 		'color1': 'FFFFFF',
