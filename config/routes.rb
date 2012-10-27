@@ -221,6 +221,7 @@ resources :comments do
   match 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
     
   resources :imageuploads, :only => [:show] 
+  match "/imageuploads_tag" => 'imageuploads#tag' 
    match "/messages/search_users" => 'messages#search_users'
    
   resources :messages
