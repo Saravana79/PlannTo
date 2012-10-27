@@ -33,7 +33,9 @@
       </div>
       <div style="clear:both;"></div>
     </div>
-       <script type="text/javascript">
+       <%unless @content.nil? %>
+ <script type="text/javascript">
+
 tinyMCE.init({
         // General options
         mode : "specific_textareas",
@@ -50,6 +52,7 @@ tinyMCE.init({
         theme_advanced_toolbar_align : "left"
 });
 </script>
+<%end%>
     <script type="text/javascript">
      $(document).ready(function(){
   <%if @content.nil?%>

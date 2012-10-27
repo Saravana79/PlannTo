@@ -56,7 +56,7 @@ $("#inp_popup_product").autocomplete({
 //       var spinner = new Spinner(opts).spin(target);
             $.ajax(
                 {
-                    url:"/search/autocomplete_items",
+                    url:"/autocomplete_tag",
                     data:{
                         term:$("#inp_popup_product").val(),
                         authenticity_token: window._token,

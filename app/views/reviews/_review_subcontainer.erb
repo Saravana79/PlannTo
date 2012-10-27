@@ -189,6 +189,7 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <%= render "shared/ajax_loader" %>
   <% end %>
 </div>
+ <%unless @content.nil? %>
  <script type="text/javascript">
 
 tinyMCE.init({
@@ -207,6 +208,7 @@ tinyMCE.init({
         theme_advanced_toolbar_align : "left"
 });
 </script>
+<%end%>
  <script>
 
   $("#reco_yes").click(function(){
