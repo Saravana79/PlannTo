@@ -17,6 +17,7 @@ PlanNto::Application.routes.draw do
     get :product_delete
    end 
   end 
+  
   match "/newuser_wizard", :to => "newuser_wizards#new"
   devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" ,:passwords => "users/passwords" } 
   devise_scope :user do
@@ -219,7 +220,7 @@ resources :comments do
   resources :invitations
   match 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
     
-  resources :pages, :only => [:show] 
+  resources :imageuploads, :only => [:show] 
    match "/messages/search_users" => 'messages#search_users'
    
   resources :messages
