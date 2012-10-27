@@ -222,6 +222,7 @@ resources :comments do
     
   resources :imageuploads, :only => [:show] 
   match "/imageuploads_tag" => 'imageuploads#tag' 
+  match "/autocomplete_tag" => 'imageuploads#autocomplete_tag' 
    match "/messages/search_users" => 'messages#search_users'
    
   resources :messages
