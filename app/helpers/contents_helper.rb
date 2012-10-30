@@ -145,6 +145,12 @@ module ContentsHelper
     dropdown += "<option value='Sports'>Sports</option><option value='Weather'>Weather</option><option value='Video'>Video</option><option value='Media'>Media</option><option value='Personalization'>Personalization</option><option value='Others'>Others</option></select>"
     return dropdown.html_safe
   end
+  
+    def get_travel_types_html_list(id, name)
+    dropdown = "<select id='#{id}' name='#{name}'><option value='Adventure'>Adventure</option><option value='Leisure'>Leisure</option><option value='Group'>Group</option>"
+    dropdown += "<option value='Others'>Others</option></select>"
+    return dropdown.html_safe
+  end
 
   def get_apps_type_html_list(id, name)
     dropdown = "<select id='#{id}' name='#{name}'><option value='Free'>Free</option><option value='Not Free'>Not Free</option></select>"

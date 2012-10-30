@@ -277,7 +277,7 @@
 <%if @content.nil?%>
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
-      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<%=get_travel_types_html_list("#{@field3_id}", "article_content[field3]")%>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").val('');
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").val('');

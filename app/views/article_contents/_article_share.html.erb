@@ -535,7 +535,7 @@ if ($("#article_content_sub_type").val() == ""){
   function showArticleSubmitTravelogueOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("From:")
     $("div#ShareURLDiv #<%=@sharefield2Label%>").text("To:")
-    $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Date of Travel:")
+    $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Travel Type:")
     $("div#ShareURLDiv #<%=@sharefield4Label%>").text("No of Days:")
 <%if @content.nil?%>
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
@@ -543,12 +543,12 @@ if ($("#article_content_sub_type").val() == ""){
 
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").val('');
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").val('');
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").val('');
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<%=get_travel_types_html_list("#{@field3_id}", "article_content[field3]")%>");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").val('');
 <%else%>
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<%=get_travel_types_html_list("#{@field3_id}", "article_content[field3]")%>");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
 <%end%>
     $("div#ShareURLDiv #<%=@sharefield1%>").show();
