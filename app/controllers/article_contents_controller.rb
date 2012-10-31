@@ -2,7 +2,10 @@ class ArticleContentsController < ApplicationController
   before_filter :authenticate_user!
   def create
     #not used anywhere
-    
+    #me = FbGraph::User.me(current_user.token)
+  #me.feed!(
+  #:message => 'Testing fb post from Rails App.',
+#)
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
@@ -34,6 +37,8 @@ class ArticleContentsController < ApplicationController
   #  end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)
+   session[:content_id] = @article.id
+   @facebook_post = params[:facebook_post]
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
     flash[:notice]= "Article uploaded"
     respond_to do |format|

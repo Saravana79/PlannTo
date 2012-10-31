@@ -8,7 +8,7 @@
         <div class="title_header float_lft" style="display:none;">Rating :</div></div>
     <div style="padding:0px 500px 0px 5px;">
         <div class="title_header float_lft">Answer :</div>
-         <%= f.text_area :description, :class => 'textFilling expanding', :style=> 'width:400px;height:50px;',:id=> "answer" %>
+         <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;',:id=> "answer" %>
       </div>
     </div>
       <script type="text/javascript">
@@ -62,7 +62,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
     </div>
 </div>
 <% end %>
-<%= render "shared/expanding_text_area_style" %>
+
 <script>
  
   $(document).ready(function(){

@@ -18,6 +18,7 @@ gem "hashie"
 gem 'devise', '~> 2.0.0'
 gem "friendly_id", "~> 4.0.1"
 gem "koala"
+gem "mogli"
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'

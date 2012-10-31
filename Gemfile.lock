@@ -107,6 +107,9 @@ GEM
       railties (~> 3.0)
     hashie (1.2.0)
     hike (1.2.1)
+    httmultiparty (0.3.8)
+      httparty (>= 0.7.3)
+      multipart-post
     httparty (0.8.3)
       multi_json (~> 1.0)
       multi_xml
@@ -128,6 +131,11 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.19)
+    mogli (0.0.43)
+      hashie (>= 1.1.0)
+      httmultiparty (>= 0.3.6)
+      httparty (>= 0.4.3)
+      multi_json (>= 1.0.3, < 1.4)
     multi_json (1.3.6)
     multi_xml (0.5.1)
     multipart-post (1.1.5)
@@ -283,6 +291,7 @@ DEPENDENCIES
   hashie
   jquery-rails
   koala
+  mogli
   mysql2
   nokogiri
   oauth
