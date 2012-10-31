@@ -20,6 +20,10 @@ PlanNto::Application.routes.draw do
   
   match "/newuser_wizard", :to => "newuser_wizards#new"
   devise_for :users, :controllers => { :sessions => "users/sessions", :registrations => "users/registrations", :omniauth_callbacks => "users/omniauth_callbacks" ,:passwords => "users/passwords" } 
+  resource :oauth,:controller=>"oauth" 
+
+ match "oauth_callback" => "oauth#create"
+ match "content_post" => "oauth#content_post"
   devise_scope :user do
     #get 'users/sign_up/:invitation_token' => 'users/registrations#invited', :as => :invite
     get '/users/sign_out' => 'devise/sessions#destroy'
