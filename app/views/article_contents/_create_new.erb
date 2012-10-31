@@ -271,7 +271,7 @@
   function showArticleCreateTravelogueOptFields(){
     $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("From:")
     $("div#subContainerContentCreate #<%=@sharefield2Label%>").text("To:")
-    $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Date of Travel:")
+    $("div#subContainerContentCreate #<%=@sharefield3Label%>").text("Travel Type:")
     $("div#subContainerContentCreate #<%=@sharefield4Label%>").text("No of Days:")
     
 <%if @content.nil?%>
@@ -286,17 +286,14 @@
 <%else%>
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
-      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<%=get_travel_types_html_list("#{@field3_id}", "article_content[field3]")%>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
 <%end%>
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
     $("div#subContainerContentCreate #<%=@sharefield3%>").show();
     $("div#subContainerContentCreate #<%=@sharefield4%>").show();
-    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>').datepicker();
-
-    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>').css("width","150px");
-  }
+   }
   
   function showArticleCreateEventOptFields(){
     $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("Start Date:")
