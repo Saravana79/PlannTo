@@ -390,6 +390,8 @@ class ContentsController < ApplicationController
     end
   end
   
+  
+  
   private
 
   def get_item_object

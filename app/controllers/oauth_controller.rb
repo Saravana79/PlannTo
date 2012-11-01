@@ -17,7 +17,7 @@ class OauthController < ApplicationController
     session[:content_id] = ""
     post_data = {}
     post_data[:name] = content.title
-    post_data[:link] = "http://www.plannto.com/contens/#{content.id}"
+    post_data[:link] = "http://www.plannto.com/contents/#{content.id}"
     post_data[:caption] = content.user.name + " shared a " +  content.sub_type.singularize +  " on " + content.items.first.name + " in PlannTo "
     post_data[:description] = ActionView::Base.full_sanitizer.sanitize(content.description)[0..90]
     if !content.content_photo.nil?

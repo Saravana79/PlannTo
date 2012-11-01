@@ -24,6 +24,7 @@
         <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
       </div>
     </div>
+    
     <div style="padding:5px 5px 0px 0px;clear:both;" id="questionProducts">
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
@@ -33,6 +34,7 @@
       </div>
       <div style="clear:both;"></div>
     </div>
+    
        <%unless @content.nil? %>
  <script type="text/javascript">
 
@@ -41,8 +43,10 @@ tinyMCE.init({
         mode : "specific_textareas",
         editor_selector : "textFilling",
         theme : "advanced",
-        plugins : "inlinepopups,imageupload,feature_at",
-
+        plugins : "inlinepopups,autoresize,imageupload,feature_at",
+        theme_advanced_resizing : true,
+        autoresize_max_height : 300,
+        autoresize_min_height :150,
         // Theme options
         theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload",
         theme_advanced_buttons2 : "",
@@ -143,6 +147,11 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
       </div>
      
     </div>
+       <%unless @content %>
+          <div style="float:right;">
+            Facebook Post: <%= check_box_tag "facebook_post" %>
+           </div>
+        <%end%> 
     <input id="question_content_item" name="item_id" type="hidden" value="<%= @item.try(:id) %>"/>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
       <%= hidden_field_tag 'content_create_form_type'%>

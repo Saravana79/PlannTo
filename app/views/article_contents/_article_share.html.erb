@@ -127,6 +127,13 @@
       <%@ul_list_id = "edit_article_product_list_#{@article_content.id}"%>
       <%@search_field_id = "edit_article_product_#{@article_content.id}"%>
     <%end%>
+      <br />
+      <br />
+       <%if @article_content.new_record?%>
+          <div style="float:right;">
+            Facebook Post: <%= check_box_tag "facebook_post" %>
+           </div>
+      <%end%>
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" id="shareProduct">
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
@@ -196,6 +203,8 @@
       <div style="clear:both;"></div>
     </div>
     <!-- FIELD ENDS -->
+    
+     
     <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
       <%= f.submit button_name, :id => "submit_article", :class => "btn_submitanswer" %>
       <% unless @external.blank? %>

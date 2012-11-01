@@ -10,3 +10,7 @@ showDefaultProductTag("question_product_item_list", "question_content_item");
 <%end%>
 
 $("#newContentList").append('<%= escape_javascript(render_content_type(@questioncontent)) %>');
+
+<% if @facebook_post == "1" %>
+window.location.href = "/oauth/new";
+<%end%>

@@ -155,8 +155,11 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
         <br/>
       </div>
     </div>
-      
-      
+      <%unless @content %>
+          <div style="float:right;">
+            Facebook Post: <%= check_box_tag "facebook_post" %>
+           </div>
+        <%end%> 
     
     <div style="padding:5px 5px 0px 80px; width:350px; ">
       <div style="float:left;">
@@ -197,8 +200,10 @@ tinyMCE.init({
         mode : "specific_textareas",
         editor_selector : "textFilling",
         theme : "advanced",
-        plugins : "inlinepopups,imageupload,feature_at",
-
+        plugins : "inlinepopups,imageupload,autoresize,feature_at",
+        theme_advanced_resizing : true,
+        autoresize_max_height : 300,
+        autoresize_min_height :150,
         // Theme options
         theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload",
         theme_advanced_buttons2 : "",

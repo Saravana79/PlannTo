@@ -20,6 +20,8 @@ class ReviewContentsController < ApplicationController
 		unless @products_error == true
 		 @item.add_new_rating @reviewcontent.rating if @item
     end
+     session[:content_id] = @reviewcontent.id
+     @facebook_post = params[:facebook_post]
     respond_to do |format|
       format.js
     end
