@@ -92,18 +92,7 @@ $(document).ready(function(){
     });
 
 
-    $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItem(ul, item, index);
-        });
-        item = {
-            value: "Search more items...",
-            id: "0",
-            imgsrc: ""
-        }
-        self._renderItem(ul, item, -1);
-    };
+
 
     $("#plannToSearch").autocomplete({
         minLength: 2,
@@ -154,7 +143,8 @@ $(document).ready(function(){
         },
         select: function( event, ui ) {
             if (ui.item.id  == 0){
-                location.href = "/search/search_items?q=" + $("#plannToSearch").val();
+            	alert(ui.item.url)
+                location.href = "/search/search_items?q=" + ui.item.url
             // return false;
             }
             else{
@@ -164,8 +154,22 @@ $(document).ready(function(){
         // return false;
         }
     })
+       _renderMenu = function(ul, items) {
+        var self = this;
+        $.each(items, function(index, item) {
+            self._renderItem(ul, item, index);
+        });
+        
+        item = {
+            value: "Search more items...",
+            id: "0",
+            imgsrc: ""
+        }
+        self._renderItem(ul, item, -1);
+    };
     $("#plannToSearch").data("autocomplete")._renderItem = function(ul, item, index) {
-        if (index == -1) {
+    	
+        if (item.id == 0) {
             return $("<li></li>")
             .data("item.autocomplete", item)
             .append("<a class='searchMore'>" + item.value + "" + "</a>")

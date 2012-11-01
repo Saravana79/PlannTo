@@ -248,6 +248,9 @@ class SearchController < ApplicationController
       # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
     }
+    
+    results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
+    
     render :json => results
     
   end
