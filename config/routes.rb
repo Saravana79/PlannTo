@@ -54,6 +54,7 @@ PlanNto::Application.routes.draw do
     collection do
       get :autocomplete_items
       get :preference_items
+      get :search_items
     end
   end
   match ':search_type/related-items/:car_id' => 'related_items#index'
