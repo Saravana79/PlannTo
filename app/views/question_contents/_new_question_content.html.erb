@@ -37,7 +37,7 @@
     
        <%unless @content.nil? %>
  <script type="text/javascript">
-
+ tinyMCE.execCommand("mceRemoveControl", false, "textFilling");
 tinyMCE.init({
         // General options
         mode : "specific_textareas",
@@ -147,11 +147,15 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
       </div>
      
     </div>
-       <%unless @content %>
-          <div style="float:right;">
-            Facebook Post: <%= check_box_tag "facebook_post" %>
-           </div>
-        <%end%> 
+        <%if @content.nil? || @content.new_record? %>
+         <br />
+        <br />
+           <div class="title_header float_lft">Facebook Post :</div>
+          <div class="float_lft">
+         
+             <%= check_box_tag "facebook_post" %>
+          </div> 
+     <%end%> 
     <input id="question_content_item" name="item_id" type="hidden" value="<%= @item.try(:id) %>"/>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
       <%= hidden_field_tag 'content_create_form_type'%>
