@@ -75,6 +75,8 @@ class PreferencesController < ApplicationController
   require 'will_paginate/array'
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+    @buying_plan.update_attribute(:deleted, false)
+    
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
 
     require 'will_paginate/array'
@@ -131,6 +133,7 @@ logger.info @follow_item
   def update_question
     @question = UserQuestion.find(params[:question_id])
     @question.question = params[:question]
+    @question.title = params[:title]
     @question.plannto_network = params[:plannto_network]
     @question.save
   end
@@ -172,8 +175,15 @@ logger.info @follow_item
 
   def delete_buying_plan
     @buying_plan = BuyingPlan.find(params[:id])
+    @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) #.group_by(&:followable_type)
+   item_ids = @follow_item.collect(&:followable_id).join(',')
     #@buying_plan.destroy
-    @buying_plan.update_attribute(:deleted, true)
+    logger.info item_ids
+    @buying_plan.update_attributes(:deleted => true, :items_considered => item_ids)
+    @follow_item.each do |item|
+      item.destroy
+    end
     render :nothing => true
   end
  

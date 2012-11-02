@@ -5,5 +5,7 @@ $('#updateQuestion').dialog('destroy');
 $('#editQuestion').hide();
 $('#displayQuestion').show();
 $('#question_part').text('<%= @question.question%>');
+$('#questionTitle').text('<%= @question.title%>');
+
 
 <%end%>

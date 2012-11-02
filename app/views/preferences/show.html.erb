@@ -30,7 +30,7 @@
 				</div>
 				<div  class="subContentDiv">
 					<div>
-						<a class="title" href="google.com"><%= @question.title%></a>
+						<a class="title" href="google.com" id="questionTitle"><%= @question.title%></a>
 					</div>
 					<div>
 						<a class="txt_brown"><%= @buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
@@ -75,7 +75,8 @@
 						data: {
 						question_id: <%= @question.id%>
 							, question: $("#question_question").val(),
-							plannto_network: $("input[name='question[plannto_network]']:checked").val()
+							plannto_network: $("input[name='question[plannto_network]']:checked").val(),
+							title : $("#question_title").val()
 
 							}, type: "get",
 							dataType: "script"
@@ -209,6 +210,8 @@
 		<div style="display:none;" id="updateQuestion">
 			<%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
 			<%= f.hidden_field :buying_plan_id%>
+			Title
+			<%= f.text_field :title, :value => @question.title %>
 			<br/>
 			Send to Friends:
 			<%= f.radio_button :plannto_network, false, :checked => true %>

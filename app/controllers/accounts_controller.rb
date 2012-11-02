@@ -79,7 +79,7 @@ class AccountsController < ApplicationController
     @item = Item.find(params[:id])
   end
   def buying_plans
-    @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
+    @buying_plans = BuyingPlan.where("user_id = ? and (deleted  IS NULL or deleted = 0)", current_user.id)
   end
   
   #TODO. not restful
