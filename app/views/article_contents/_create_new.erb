@@ -37,7 +37,7 @@
        <%= f.fields_for :content_photos do |photo| %>
           <%= render 'products/content_photo_fields', {:ff => photo} %>
         <%end%>
-        <%= render '/shared/add_fields', {:name => 'Add a Photo', :f => f, :association => :content_photos}%>
+        <%= render '/shared/add_fields', {:name => 'Add Another Photo', :f => f, :association => :content_photos}%>
         <div style="clear:both;"></div>
     </div>
     <%else%>
@@ -59,7 +59,7 @@
              <%= render 'products/content_photo_fields', {:ff => photo} %>
          
           <%end%>
-            <%= render '/shared/add_fields', {:name => 'Add a Photo', :f => f, :association => :content_photos}%>
+            <%= render '/shared/add_fields', {:name => 'Add Another Photo', :f => f, :association => :content_photos}%>
         <%end%>
       <%end%>
 
