@@ -3,7 +3,20 @@ module ApplicationHelper
   def get_follow_link(name, path, options = {})
     link_to(name, path, options).to_s
   end
-
+   def link_to_add_fields(name, f, association, path=nil)  
+   # association = ':' + association
+    new_object = f.object.class.reflect_on_association(association).klass.new  
+    
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|  
+      unless path
+        render(association.to_s.singularize + "_fields", :ff => builder)  
+      else
+        render(path + association.to_s.singularize + "_fields", :ff => builder) 
+      end
+    end  
+     link_to_function(name, "add_fields(this, '#{association}', '#{escape_javascript(fields)}')")
+  end
+  
 
   def get_follow_types(item, follow_type, type, button_class = '_medium', options = {})
     array_follow = get_follow_text(follow_type)

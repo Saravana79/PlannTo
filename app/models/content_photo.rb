@@ -26,7 +26,7 @@ class ContentPhoto < ActiveRecord::Base
   end
 
   def self.update_url_content_to_local(article)
-    photo = article.content_photo
+    photo = article.content_photos.first
     safe_thumbnail_url = URI.encode(URI.decode(article.thumbnail))
     extname = File.extname(safe_thumbnail_url).delete("%")
     basename = File.basename(safe_thumbnail_url, extname).delete("%")

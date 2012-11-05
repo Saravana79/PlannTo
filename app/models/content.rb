@@ -133,7 +133,7 @@ class Content < ActiveRecord::Base
   def self.my_feeds_filter(filter_params)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
-      type_1 = sub_type.length > 1 ? sub_type + ["Answer"]  : sub_type
+      type_1 = sub_type.length > 1 ? sub_type + ["Answer","User"]  : sub_type
       sub_type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1
       sub_type = sub_type.map { |i| "'" + i.to_s + "'" }.join(",")
       item_ids = filter_params["items_id"].is_a?(String) ? filter_params["items_id"].split(',') : filter_params["items_id"]

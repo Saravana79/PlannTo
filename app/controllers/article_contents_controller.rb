@@ -25,8 +25,8 @@ class ArticleContentsController < ApplicationController
    if params[:submit_url] == 'submit_url'
      ContentPhoto.save_url_content_to_local(@article) 
    end   
-   if ((params[:article_content][:sub_type] == "Photo" || params[:submit_url] == 'submit_url') && (!@article.content_photo.nil?))
-     @article.update_attribute('thumbnail',@article.content_photo.photo.url(:thumb)) 
+   if ((params[:article_content][:sub_type] == "Photo" || params[:submit_url] == 'submit_url') && (!@article.content_photos.first.nil?))
+     @article.update_attribute('thumbnail',@article.content_photos.first.photo.url(:thumb)) 
    end  
     if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
      @defaultitem = Item.find(ids[0])
@@ -61,7 +61,7 @@ class ArticleContentsController < ApplicationController
       ContentPhoto.update_url_content_to_local(@content)
     end
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
-       @content.update_attribute('thumbnail',(@content.content_photo.photo.url(:thumb) rescue nil))
+       @content.update_attribute('thumbnail',(@content.content_photos.first.photo.url(:thumb) rescue nil))
      end
     @detail = params[:detail]  
     per_page = params[:per_page].present? ? params[:per_page] : 5

@@ -27,11 +27,16 @@
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
     <%unless @content %>
-      <div style="display:none;" id="photo">
-       <%= f.fields_for :content_photos do |photo| %>
-          <%= render 'products/content_photo_fields', {:ff => photo} %>
+    <div style="display:none;" id="photo">
+   
+    	
+        <%= f.fields_for :content_photos do |photo| %>
+           <%= render 'products/content_photo_fields', {:ff => photo} %>
+           
+        	
         <%end%>
         <%= render '/shared/add_fields', {:name => 'Add a Photo', :f => f, :association => :content_photos}%>
+        
         <div style="clear:both;"></div>
     </div>
     <%else%>
@@ -44,31 +49,15 @@
         <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></img></div><%end%>
         <br/><br/>
     <div class="title_header float_lft" id="photo">Photo:</div>
-           <%= f.fields_for :content_photos do |photo| %>
+          <%= f.fields_for :content_photos do |photo| %>
              <%= render 'products/content_photo_fields', {:ff => photo} %>
          
           <%end%>
             <%= render '/shared/add_fields', {:name => 'Add a Photo', :f => f, :association => :content_photos}%>
         <%end%>
       <%end%>
-
-    <div class="title_header float_lft">Title :</div>
-    <div class="float_lft">
-        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
-    </div>
-  </div>
-  <div style="padding:5px 5px 0px 5px;">
-  	<div class="title_header float_lft">Description:</div>
-    <div style="margin-left:80px;">
-      <br/>
-      <br/>
-      <%= f.text_area :description, :class => 'textFilling', :id => "m_text",:style=> 'width:400px;height:50px;' %>
-      <br/>
-    </div>
-        
-  </div>
-  <script>
- function add_fields(link, association, content) {  
+<script>
+         function add_fields(link, association, content) {  
   var new_id = new Date().getTime();  
   var regexp = new RegExp("new_" + association, "g");  
   //$(link).parent().before(content.replace(regexp, new_id));
@@ -88,6 +77,22 @@ function remove_fields(link) {
   $(link).parent().parent().parent("fieldset").hide();
 }  
 </script>
+    <div class="title_header float_lft">Title :</div>
+    <div class="float_lft">
+        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+    </div>
+  </div>
+  <div style="padding:5px 5px 0px 5px;">
+  	<div class="title_header float_lft">Description:</div>
+    <div style="margin-left:80px;">
+      <br/>
+      <br/>
+      <%= f.text_area :description, :class => 'textFilling', :id => "m_text",:style=> 'width:400px;height:50px;' %>
+      <br/>
+    </div>
+        
+  </div>
+
 
 
     <!--- FIELD1, FIELD2, FIELD3 FOR OTHER FIELDS-->
@@ -162,10 +167,12 @@ function remove_fields(link) {
     </div>
      
      <%if !@detail && (@article_content.new_record? || @content.new_record? )%>
-         <div class="title_header float_lft"></div>
+         <br />
+        <br />
+           <div class="title_header float_lft">Facebook Post :</div>
           <div class="float_lft">
-          <span class="title_header">Post this in Facebook also:</span>
-          <%= check_box_tag "facebook_post" %>
+         
+             <%= check_box_tag "facebook_post" %>
           </div> 
      <%end%>
      

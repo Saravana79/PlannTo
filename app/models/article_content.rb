@@ -4,8 +4,8 @@ class ArticleContent < Content
   validates :url, :uniqueness => true, :if => Proc.new {  |c|  !c.url.blank? }
   #validates :url, :presence => true
   belongs_to :article_category
-  has_one :content_photo,  :foreign_key => 'content_id'
-
+  has_many :content_photos,  :foreign_key => 'content_id'
+  accepts_nested_attributes_for :content_photos, :allow_destroy => true
   #  validate :validate_end_date_before_start_date
   #
   #  def validate_end_date_before_start_date
