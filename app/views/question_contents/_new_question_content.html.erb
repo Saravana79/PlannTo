@@ -155,12 +155,10 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
      
     </div>
         <%if @content.nil? || @content.new_record? %>
-         <br />
-        <br />
-           <div class="title_header float_lft">Facebook Post :</div>
+        <div class="title_header float_lft"></div>
           <div class="float_lft">
-         
-             <%= check_box_tag "facebook_post" %>
+          <span class="title_header">Post this in Facebook also:</span>
+          <%= check_box_tag "facebook_post" %>
           </div> 
      <%end%> 
     <input id="question_content_item" name="item_id" type="hidden" value="<%= @item.try(:id) %>"/>

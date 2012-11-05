@@ -156,16 +156,15 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       </div>
     </div>
        <%if @content.nil? || @content.new_record? %>
-         <br />
-        <br />
-           <div class="title_header float_lft">Facebook Post :</div>
+         <div class="title_header float_lft"></div>
           <div class="float_lft">
+          <span class="title_header">Post this in Facebook also:</span>
           <%= check_box_tag "facebook_post" %>
           </div> 
      <%end%> 
      <br />
     
-    <div style="padding:5px 5px 0px 80px; width:350px; ">
+  <!--  <div style="padding:5px 5px 0px 80px; width:350px; ">
       <div style="float:left;">
       Would you recommend this product to your friend
       </div>
@@ -174,7 +173,7 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
 
 
       <button class="btn_follow review_content_reco" id="reco_no" type="button" value="false" > No </button>
-    </div>
+    </div> -->
     <%= f.hidden_field :recommend_this, :value => "" %>
     </div>
 

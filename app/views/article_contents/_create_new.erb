@@ -141,12 +141,10 @@
     </div>
      
      <%if !@detail && (@article_content.new_record? || @content.new_record? )%>
-         <br />
-        <br />
-           <div class="title_header float_lft">Facebook Post :</div>
+         <div class="title_header float_lft"></div>
           <div class="float_lft">
-         
-             <%= check_box_tag "facebook_post" %>
+          <span class="title_header">Post this in Facebook also:</span>
+          <%= check_box_tag "facebook_post" %>
           </div> 
      <%end%>
      
