@@ -1,6 +1,6 @@
 <br />
 <fieldset>
 <div class="title_header float_lft" id="photo">Photo:</div>
-<%= ff.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
-<%= render 'shared/remove_fields', {:ff => ff, :name => ''} %> 
+ <div class="float_rgt"> <%= ff.file_field :photo, {:style=>"margin-left:5px;width:400px;",:width=>"400px"} %>
+<%= render 'shared/remove_fields', {:ff => ff, :name => ''} %> </div>
 </fieldset>

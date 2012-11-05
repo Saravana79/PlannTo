@@ -26,7 +26,13 @@
  
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
+    
     <%unless @content %>
+    <div class="title_header float_lft">Title :</div>
+    <div class="float_lft">
+        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+    </div>
+      <br /> <br />
       <div style="display:none;" id="photo">
        <%= f.fields_for :content_photos do |photo| %>
           <%= render 'products/content_photo_fields', {:ff => photo} %>
@@ -40,7 +46,12 @@
     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    
     <span class="Popuptitle"><center> <h1 id="contentTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
+    <div class="title_header float_lft">Title :</div>
+    <div class="float_lft">
+        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
+    </div>
     <%if @content.sub_type == 'Photo' %>
+    <br /> <br />
         <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></img></div><%end%>
         <br/><br/>
     <div class="title_header float_lft" id="photo">Photo:</div>
@@ -52,11 +63,9 @@
         <%end%>
       <%end%>
 
-    <div class="title_header float_lft">Title :</div>
-    <div class="float_lft">
-        <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
-    </div>
+    
   </div>
+  
   <div style="padding:5px 5px 0px 5px;">
   	<div class="title_header float_lft">Description:</div>
     <div style="margin-left:80px;">
