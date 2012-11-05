@@ -184,7 +184,7 @@ logger.info @follow_item
     @follow_item.each do |item|
       item.destroy
     end
-    render :nothing => true
+   # render :nothing => true
   end
  
   private
