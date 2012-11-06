@@ -128,10 +128,10 @@
       <%@search_field_id = "edit_article_product_#{@article_content.id}"%>
     <%end%>
       <br />
-      <br />
        <%if @article_content.new_record?%>
-          <div style="float:right;">
-            Post this in Facebook also: <%= check_box_tag "facebook_post" %>
+          <div class="title_header float_lft" ></div>
+          <div style="float:left;">
+            <span class="title_header">Post this in Facebook also:</span><%= check_box_tag "facebook_post" %>
            </div>
       <%end%>
     <div style="padding:5px 5px 0px 0px;clear:both;display:none;" id="shareProduct">
