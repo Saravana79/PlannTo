@@ -2,6 +2,12 @@
  
 
 <div id="articleReviewSubContainer" class="contentSubContainer" style="display:none;">
+<style>
+
+span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
+    display: none !important;
+}
+</style>
   <div id="notification" class="notificationStyle">Thank You, Review has been created.</div>
   <%if @content.nil?%>
     <%@form_id = "new_review_content"%>
@@ -194,8 +200,7 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
     </div>
       <%= render "shared/ajax_loader" %>
   <% end %>
-</div>
- <%unless @content.nil? %>
+  <%unless @content.nil? %>
        <script type="text/javascript">
   setTimeout(function() {
 
@@ -223,12 +228,7 @@ g.oeditor = tinyMCE.init({
 g.oeditor.render();
 });
 </script>
-<style>
 
-span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
-    display: none !important;
-}
-</style>
 <%end%>
  <script>
 
@@ -251,3 +251,5 @@ $("#<%= @form_id %>").submit(function(e){
         })
 </script>  
   
+</div>
+ 
