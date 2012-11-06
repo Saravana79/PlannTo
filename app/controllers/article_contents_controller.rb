@@ -36,7 +36,7 @@ class ArticleContentsController < ApplicationController
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
   #  end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-   UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)
+   UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article
    session[:content_id] = @article.id
    @facebook_post = params[:facebook_post]
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?

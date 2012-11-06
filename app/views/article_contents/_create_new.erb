@@ -27,7 +27,7 @@
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
     
-    <%unless @content %>
+    <%unless @content  %>
     <div class="title_header float_lft">Title :</div>
     <div class="float_lft">
         <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
@@ -43,7 +43,7 @@
     <%else%>
      <%= hidden_field_tag :detail,@detail%>
         
-    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:536px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:520px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    
     <span class="Popuptitle"><center> <h1 id="contentTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
     <div class="title_header float_lft">Title :</div>
@@ -52,12 +52,12 @@
     </div>
     <%if @content.sub_type == 'Photo' %>
     <br /> <br />
-        <%if @content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></img></div><%end%>
-        <br/><br/>
-    <div class="title_header float_lft" id="photo">Photo:</div>
+          <% @photos = @content.content_photos %>
+         <% @i = 0 %>
            <%= f.fields_for :content_photos do |photo| %>
+           
              <%= render 'products/content_photo_fields', {:ff => photo} %>
-         
+             
           <%end%>
             <%= render '/shared/add_fields', {:name => 'Add Another Photo', :f => f, :association => :content_photos}%>
         <%end%>

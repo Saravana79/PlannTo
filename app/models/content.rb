@@ -152,7 +152,7 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
 union 
- (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}))
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}) and related_id is not null)
  )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
 else 
   contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id, contents.created_at as created_time ,null as activity_id FROM contents 
@@ -165,7 +165,7 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 union 
- (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}))
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}) and related_id is not null)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
 
 end

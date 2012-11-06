@@ -276,7 +276,7 @@ class ContentsController < ApplicationController
     @content = QuestionContent.new
   else
     @content = ArticleContent.new
-    @content.build_content_photo
+    @content.content_photos.build
   end
   @content.sub_type = params[:category]
  
