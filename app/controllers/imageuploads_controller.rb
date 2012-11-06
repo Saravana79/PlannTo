@@ -9,7 +9,7 @@ class ImageuploadsController < ApplicationController
     image = ContentPhoto.new
     image.photo = params[:content_photo][:photo]
     image.save
-    @insertString = "<img src=\"#{image.photo.url(:thumb)}\" />"
+    @insertString = "<img src=\"#{image.photo.url(:original)}\" />"
     render :layout => false
   end
   

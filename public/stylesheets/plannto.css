@@ -4356,8 +4356,12 @@ outline: none;
     border: none; cursor: pointer; margin: 0; text-shadow:0 1px 0 #1e779a; font-weight:bold;
 font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF; padding:0 0 5px 0;z-index: 100}
 .Bluesubmithomespan:hover { background-position:left bottom;}
-
-
+ .left {float: left}
+ .right {float: right}
+ .remove_link, .add_fields_link {margin-top: 7px; margin-left: 5px}
+ .remove_link a {color: red; font-size: 14px}
+ .add_fields_link a {color: #2d5e15; font-size: 14px}
+.clear{clear:both;}
 /* --------home page -------------*/
 .homepageprodheaddiv {height:25px; padding-top:8px; display:block;text-indent:10px; border-bottom:solid 1px #cdd3d7; line-height:20px; background:#f5f5f5;font:bold 12px Tahoma,Arial, Helvetica, sans-serif;color:black;text-decoration: none;}
 .homepageproddiv{width:460px;height:100px;clear:both;padding-top:5px;}
