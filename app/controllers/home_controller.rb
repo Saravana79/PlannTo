@@ -10,15 +10,15 @@ class HomeController < ApplicationController
    end
   
   def terms_conditions
-  
+   @static_pages ="true"
   end
   
   def privacy_policy
-  
+   @static_pages ="true"
   end
   
   def about_us
-  
+    @static_pages ="true"
   end
  
  

@@ -1,7 +1,8 @@
 <div class="header">
   <span class="logo"><a href="/"><img src="/images/logo.png"/></a></span>
-
+<% if current_user  && @static_pages!="true" %>
   <div class="search">
+  
     <span class="search_txt" id="plannToSearchSpan">
            <input name="Search" type="text" placeholder="Search Products or Topics" id="plannToSearch"/>
             <!--<= select_tag "plannto_search_type",
@@ -15,10 +16,10 @@
     <a class="icon_user" href="#"></a>
     <a class="icon_chat" href="<%=messages_url%>"></a>
   </span>
-
+<%end%>
        
       <!--header right part start here-->
-    <div class="Headerrightpart">
+   
       
       <!--buttons-->
       <!--
@@ -44,8 +45,8 @@
       </div>
     -->
 
-  <span ><% if user_signed_in? %>
-
+  <% if user_signed_in? %>
+<div class="Headerrightpart"> <span>
     <span class="Usrdropdown">
        
        <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" style="width:24px;height:24x;"/>
@@ -60,19 +61,32 @@
          </span>
        
     </span> 
+   </span>
+   </div>
     <% else %>
-      <span class="txt_welcome">
-      <%= link_to "Sign In", "#",:onclick =>"$('#dialog-form').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
+     <div style="float:right;padding:6px 0px 0px 0px;">
+         <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
+         <%= f.text_field :email,:size =>"27", :placeholder=>"Email" ,:tabindex => "1" %>
+          <%= f.password_field :password,:size =>"27",:placeholder=>"Password" ,:tabindex => "1" %>
+          <%= f.submit "Sign In" , :tabindex => "4" %> 
+           <br />
+         <%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" %>
+             <span style="padding:0px 0px 0px 120px;"><%= f.check_box :remember_me, :size=>"5", :tabindex => "3"%> Remember me.</span>
+        <%end%>            
+
+   
+    </div>
+      <!--<%= link_to "Sign In", "#",:onclick =>"$('#dialog-form').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
         $('.ui-dialog-titlebar').hide();" , :class => "sign_in" %> | <%= link_to "Sign Up", "#",:onclick =>"$('#sign_up_dialog').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
-        $('.ui-dialog-titlebar').hide();" %>
-    </span>
+        $('.ui-dialog-titlebar').hide();" %> -->
+        
+   
     <% end %>
 
 <!--
     |</a>
     <a href="#">Home</a>-->
-  </span>
-</div>
+ 
   
     <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
     <%= render "/layouts/navigation" %>
