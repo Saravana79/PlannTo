@@ -5,26 +5,23 @@ root.Product =
     $("#plan_to_buy_span"+item_id).removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_buy"+item_id).attr("title", message)
     $("#plan_to_follow"+item_id).attr("title", follow_message)
-    $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon_selected"+medium
-    $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns_selected"+medium
+    $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
+    $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon"+medium
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns"+medium
     buy_href_follow = $("#plan_to_buy"+item_id).attr("href")
     $("#plan_to_buy"+item_id).attr("href", buy_href_follow+'&unfollow=true');
-    follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", buy_href_follow+'&unfollow=true');
+    
 
   load_owner: (item_id, medium, message, follow_message) ->
     $("#plan_to_own"+item_id).removeClass().addClass "plan_to_own_icon_selected"+medium
     $("#plan_to_own_span"+item_id).removeClass().addClass "action_btns_selected"+medium
     $("#plan_to_own"+item_id).attr("title", message)
     $("#plan_to_follow"+item_id).attr("title", follow_message)
-    $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon_selected"+medium
-    $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns_selected"+medium
+    $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
+    $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
     own_href_follow = $("#plan_to_own"+item_id).attr("href")    
     $("#plan_to_own"+item_id).attr("href", own_href_follow+'&unfollow=true');
-    follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", follow_href_follow+'&unfollow=true');
     $("#plan_to_buy_span"+item_id).removeClass()
     $("#plan_to_buy"+item_id).removeClass().addClass "plan_to_buy_icon"+medium
     $("#plan_to_buy_span"+item_id).addClass "action_btns"+medium
@@ -48,8 +45,6 @@ root.Product =
     $("#plan_to_follow"+item_id).attr("title", follow_message)
     $("#plan_to_follow"+item_id).removeClass().addClass "plan_to_follow_icon"+medium
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
-    follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "follower"));
     buy_href_follow = $("#plan_to_buy"+item_id).attr("href")
     $("#plan_to_buy"+item_id).attr("href", Product.remove_unfollow_query_string(buy_href_follow, "buyer"));
 
@@ -62,8 +57,6 @@ root.Product =
     $("#plan_to_follow_span"+item_id).removeClass().addClass "action_btns"+medium
     own_href_follow = $("#plan_to_own"+item_id).attr("href")
     $("#plan_to_own"+item_id).attr("href", Product.remove_unfollow_query_string(own_href_follow, "owner"));
-    follow_href_follow = $("#plan_to_follow"+item_id).attr("href")
-    $("#plan_to_follow"+item_id).attr("href", Product.remove_unfollow_query_string(follow_href_follow, "follower"));
 
 
 
