@@ -258,7 +258,7 @@ class Item < ActiveRecord::Base
           avatar_url =  user.get_photo(:thumb)
           userurl = user.get_url()
           #$redis.hmset "#{keyword_id}", "user_id", cont[0], "points", cont[2]
-          $redis.sadd "#{keyword_id}", "#{cont[0]}_#{cont[2]}_#{user.name}_#{avatar_url}_#{userurl}"
+          $redis.sadd "#{keyword_id}", "#{cont[0]}@#{cont[2]}@#{user.name}@#{avatar_url}@#{userurl}"
           #$redis.sadd "#{keyword_id}", {:user_id => cont[0], :points => cont[2], :name => user.name, :avatar_url => avatar_url} #"#{cont[0]}_#{cont[2]}"
         end
       end
