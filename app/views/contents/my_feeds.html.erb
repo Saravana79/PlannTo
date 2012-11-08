@@ -1,14 +1,16 @@
 <% content_for :title, "My feeds" + "-" %>
 <% content_for :description, "My feeds"%>
-
+<!--
 <div class="Homepopupgraybox">
+
 <div class="Boxtopblock">
 
  <div class="Headingtext">My feeds</div>
-  <!--  <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>-->
+   <span class="Openclosebut"><a href="" id="wizardbutton" class="Open">Open</a></span>
   </div>
 <div class="Boxbotcorner"></div>
 </div>
+-->
 <div class="leftcolumnbig">
   <!-- Product Details - Start -->
   <!-- Overview Tabs -  Start -->
@@ -89,7 +91,7 @@
       <br />
         <%= render "shared/alert_message",:type => "myfeed" %>
        <div class="Searchform">
-       <input type="text" placeholder="Search Item for follow." id="search_item" /> 
+       <input type="text" width="200px" placeholder="Search products/topics to follow." id="search_item" /> 
        <input name="" type="button" class="Searchbut"/> 
    </div>  
   <div class="Searchform" style="">   
@@ -97,7 +99,7 @@
      
     <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
        <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
-                                                     ["Follow this Item", "follower"]]) %>
+                                                     ["Follow it", "follower"]]) %>
        <%= f.hidden_field :followable_id %>
        <%= f.hidden_field :followable_type %>         
              
