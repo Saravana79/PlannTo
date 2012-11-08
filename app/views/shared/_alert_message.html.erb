@@ -1,19 +1,19 @@
 <div class="alert alert-block">
     <%if type == "myfeed" %>
     <strong>Currently you haven't followed any items, topics or users? </strong>
- Please follow atleast one item, topic or a user to have personalized contents in your feed.
+ Please follow atleast one item, topic or a user to have personalized contents in your feed. 
  <%end%>
    <%if type == "wizard_step1" %>
        <strong>Thanks for registering with PlannTo.com. </strong>
-  Add the products that you own in the following list, this will help us to customize our application based on your profile.
+  Add the products (cars, mobiles, tablets, cameras, bikes or cycles) that you own in the below list, this will help us to customize our application and your feed page based on your profile.
    <%end%>
     <%if type == "wizard_step2" %>
          <strong>Are you interested in Photography or Cycling? </strong>
-  If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a>
+  Select the interested topics in Photography and Cycling to follow. Some examples of topcis are Landscape photography, bird photography, Composition, Lighting, Cyling Training, Cycling Nuturition and Cycling Maintenance. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a>
    <%end%>
     <%if type == "wizard_step3"%>
       <strong>Are you planning to buy a car, mobile, cycle, tablet, bike or camera? </strong>
-  Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.
+  Select the product that you are considering. This will help us to provide the personalized home page with the contents that will help you to decide the right product.
    <%end%>
    <% if type == "profile_follow"  %>
      <%if item.downcase != 'following' and item.downcase != 'followers'%>
