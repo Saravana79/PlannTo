@@ -153,7 +153,7 @@ class ItemsController < ApplicationController
     attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
     @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
     @items = Item.find_all_and_sort_by_items(@ids)
-    content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Reviews','Deals','News') group by content_id order by count(*) desc limit 10").collect(&:content_id)
+    content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Reviews','Deals','News') group by content_id order by count(*) desc limit 15").collect(&:content_id)
     @contents = Content.where("id in (?)",content_ids).order("total_votes desc")
   end
 
