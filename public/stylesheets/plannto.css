@@ -515,7 +515,7 @@ div.buttons {
 
 .plan_to_buy_icon {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -529,7 +529,7 @@ div.buttons {
 
 .plan_to_buy_icon:hover {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_plantobuy.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -543,7 +543,7 @@ div.buttons {
 
 .plan_to_buy_icon_selected {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_plantobuy.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -557,7 +557,7 @@ div.buttons {
 
 .plan_to_buy_icon_selected:hover {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -571,7 +571,7 @@ div.buttons {
 
 .plan_to_buy_icon_disabled {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_plantobuy.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -585,7 +585,7 @@ div.buttons {
 
 .plan_to_own_icon {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_iwonit_green.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -599,7 +599,7 @@ div.buttons {
 
 .plan_to_own_icon:hover {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_iwonit.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -613,7 +613,7 @@ div.buttons {
 
 .plan_to_own_icon_selected:hover {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_iwonit_green.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -627,7 +627,7 @@ div.buttons {
 
 .plan_to_own_icon_selected {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_iwonit.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -641,7 +641,7 @@ div.buttons {
 
 .plan_to_own_icon_disabled {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_iwonit.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -655,7 +655,7 @@ div.buttons {
 
 .plan_to_follow_icon {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -669,7 +669,7 @@ div.buttons {
 
 .plan_to_follow_icon:hover {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_followthiscar.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -683,7 +683,7 @@ div.buttons {
 
 .plan_to_follow_icon_selected:hover {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -697,7 +697,7 @@ div.buttons {
 
 .plan_to_follow_icon_selected {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_followthiscar.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
@@ -711,7 +711,7 @@ div.buttons {
 
 .plan_to_follow_icon_disabled {
     height: 26px;
-    width: 63px;
+    width: 65px;
     background: url(../images/icon_followthiscar.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
