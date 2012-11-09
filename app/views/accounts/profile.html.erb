@@ -102,10 +102,7 @@
      
     </span>
      
-      <% unless @user == current_user %>
-           <span style="float:right;padding:25px;">
-          <%=link_to "<span>Send message</span>".html_safe, new_message_path(:user_id => @user.id), :class => "add_new_msg", :remote => true%>
-          </span>
+      <% unless @user == current_user %>           
        <% unless current_user.follow_by_type(@user, 'Plannto')  %>
          <span class="action_btns" style="float:right;">  
              <%= link_to 'Follow User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'plan_to_follow_icon'%>
@@ -128,9 +125,17 @@
         <%= link_to "Edit","#",:onclick=>'$("#description_form").toggle();' %>
       <%end%>  
     </span>
+    <br/>
+    <% unless @user == current_user %>
+
+           <span style="float:left;padding-top:20px;">
+          <%=link_to "<span>Send message</span>".html_safe, new_message_path(:user_id => @user.id), :class => "add_new_msg", :remote => true%>
+          </span>
+    <%end%>
+    
     <span id="description_form" style="float:left;width:380px;display:none;">
      <%= form_for(current_user, :as => :user, :url => registration_path(current_user),:method => :put ) do |f| %>
-       <div style="margin:0px 460px 0px 0px;"><%= f.text_area :description, :class => 'textFilling expanding' ,:style=>"width:300px;"%></div>
+      <div style="margin:0px 460px 0px 0px;"><%= f.text_area :description, :class => 'textFilling expanding' ,:style=>"width:300px;"%></div>
     <div style="padding:0px 5px 5px 5px; float:right; width:60%; margin-right:40px; margin-top:20px ">  <%= f.submit 'Save', :class => 'btn_submitanswer',:id => "publishanswer" %>
     </div>
      <% end %>
