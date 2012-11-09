@@ -3,9 +3,9 @@ $("#product_"+'<%= @item.id %>').remove();
 <% else %>
 <%
   classname = @item.class.superclass
-  if(item.is_a?Content)
-    if(item.sub_type == 'Event' || item.sub_type =='Book')
-      classname = item.sub_type
+  if(@item.is_a?Content)
+    if(@item.sub_type == 'Event' || @item.sub_type =='Book')
+      classname = @item.sub_type
     end
   end
 
