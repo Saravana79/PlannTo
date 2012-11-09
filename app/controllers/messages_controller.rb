@@ -9,7 +9,7 @@ class MessagesController < ApplicationController
   end
 
   def new
-    
+    @user = User.find(params[:user_id]) if params[:user_id]
   end
 
   def show

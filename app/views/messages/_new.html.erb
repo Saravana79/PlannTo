@@ -1,5 +1,12 @@
- <div id="emailList"></div>
+
+
 <%= form_for(:message, :url => create_message_path(current_user,'new'), :remote => true) do |f| %>
+<div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:540px;text-indent:-9999px; top:-10px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+   <center><h1>New Message</h1></center>
+    <span id="emailList" style="width:100%;"></span>
+    <br />
+    <br />
+    <br />
 <div class="Clearboth"></div>
   <p>
     <%= label "message", "To :"%> 
@@ -12,13 +19,14 @@
   </p>
   <p>
     <%= label "message", "Message:" %>
-    <%= f.text_area :body, :rows => 5, :cols => 40 %>
+    <%= f.text_area :body, :rows => 5,:class=>"textFilling expanding", :cols => 40 %>
   </p>
-  <%= f.submit "Send" %>
-  <button onclick="$('#newMessage').dialog('close');return false;">Cancel</button>
+ <center> <%= f.submit "Send" %>
+  <button onclick="$('#newMessage').dialog('close');return false;">Cancel</button></center>
 <% end %>
 
-
+<script  type="text/javascript" src="/javascripts/expanding.js"></script>
+<%= render "shared/expanding_text_area_style" %>
   <script type ="text/javascript">
   $(document).ready(function() {
      $.textAutocomplete("message_email",
@@ -27,4 +35,15 @@
   );
 
   });
+  <% unless @user.nil? %>
+   $("#emailList").html("");
+   $.textTagger("article_create_product","emailList",{xCrsfToken: '<%= form_authenticity_token.to_s %>', url: "/messages/search_users", editMode: false, multiple: true, hidden_field: "message_email_list", search_type_array: [],image: false});
+ 
+       
+        $.addTag("article_create_product","emailList", {xCrsfToken: '<%= form_authenticity_token.to_s %>', url: "/messages/search_users", editMode: false, multiple: true, hidden_field: "message_email_list", search_type_array: [],image: false},"<%= @user.name %> <img src='<%= @user.get_photo %>' height='20px' alt='User' align='left' />", "<%= @user.id %>", false);
+        $.addIdToField("message_email_list", "<%= @user.id %>", false);
+        $("a.icon_close_tagging").remove();
+  <%end%>      
 </script>
+
+

@@ -1,5 +1,10 @@
+$("#newMessage").html("");
+
 $("#newMessage").html('<%= escape_javascript(render(:partial => '/messages/new')) %>');
 $("#newMessage").dialog({
 title: 'New Message',
-height: 400,
-width:400});
+height: 550,
+width:600});
+$(".Close_dialog").show();
+$(".ui-dialog-titlebar").hide();
+

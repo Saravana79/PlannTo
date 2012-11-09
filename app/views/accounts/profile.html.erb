@@ -29,7 +29,8 @@
   });
 </script>
 <%end%> -->
-
+   <div id="newMessage">
+</div
 <div id="maincontainer" class="maincontainerCss">
 
   <!-- Left Nav - start -->
@@ -87,22 +88,34 @@
   <!-- Right - start -->
   <div class="leftcolumnbig"  id="profileInfo">
     <div style="float:left;width:120px;height:120px;">
-      <%= image_tag(@user.get_photo(:medium)) %> 
+      <%= image_tag(@user.get_photo(:medium)) %>
+       <% unless @user == current_user %>
+        <br />
+        <br />
+      
+        <%end%> 
     </div>
     <div style="float:left;width:590px;padding-left:10px;">
     <div >
      <span style="float:left;width:380px;">
       <h1><%= @user.name %></h1>
+     
     </span>
-     <span style="float:right;width:210px;">
+     
       <% unless @user == current_user %>
+           <span style="float:right;padding:25px;">
+          <%=link_to "<span>Send message</span>".html_safe, new_message_path(:user_id => @user.id), :class => "add_new_msg", :remote => true%>
+          </span>
        <% unless current_user.follow_by_type(@user, 'Plannto')  %>
-             <%= link_to 'Follow This User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'icon_followers menu_profile1'%>
+         <span class="action_btns" style="float:right;">  
+             <%= link_to 'Follow User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'plan_to_follow_icon'%>
            <%else-%>
-             <%= link_to 'Unfollow This User', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'icon_followers menu_profile1' %> 
+         <span class="action_btns_selected" style="float:right;">  
+             <%= link_to 'Unfollow', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plan_to_follow_icon ' %> 
        <%end%>  
       <%end%>  
     </span>
+ 
     </div>
     <br/>
     <div style="clear:both;padding-top:10px;">
@@ -140,6 +153,8 @@
   </div>
   <br/>
   <br/>
+  <br/>
+   <br/>
   <div style="clear:both;margin-top:110px;">
         <ul id="Newtabs">
          <% ['Products', 'Apps', 'Accessories',"Followers","Following"].each do |item_type|%>
