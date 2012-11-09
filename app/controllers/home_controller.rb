@@ -28,7 +28,8 @@ class HomeController < ApplicationController
    @items,@item_types,@article_categories,@root_items = Content.follow_items_contents(current_user,params[:item_types],params[:type])
       filter_params = {"sub_type" => @article_categories}
       filter_params["itemtype_id"] = @item_types 
-    
+      @follows,@followers = Follow.get_followers_following(current_user,"Followers",1,24)
+      @follows,@following = Follow.get_followers_following(current_user,"Following",1,24)
       if @items.size > 0 and !@item_types.blank?
         if @tems.is_a? Array
             items = @items

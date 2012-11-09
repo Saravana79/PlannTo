@@ -37,11 +37,15 @@ class Follow < ActiveRecord::Base
     Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
   end
   
-  def self.get_followers_following(user,type)
+  def self.get_followers_following(user,type,page,per_page)
     if type == "Followers"
-       @followers = Follow.follow_type(['Plannto', 'Facebook']).for_followable(user).limit(10).collect{|i| User.find(i.follower_id)}
+       @followers = Follow.follow_type(['Plannto', 'Facebook']).for_followable(user).paginate(:page => page, :per_page =>per_page)
+       @users = User.where("id in (?)",@followers.collect{|i| i.follower_id})
+       return @followers,@users
     else  
-      @following =  Follow.where("follower_id=? and followable_type=?",user,"User").limit(10).collect{|i|User.find(i.followable_id)}
+      @following =  Follow.where("follower_id=? and followable_type=?",user,"User").paginate(:page => page, :per_page =>per_page)
+       @users = User.where("id in (?)",@following.collect{|i|i.followable_id})
+       return @following,@users
     end
   end     
 

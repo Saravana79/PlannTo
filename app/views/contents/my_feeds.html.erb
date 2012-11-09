@@ -124,13 +124,41 @@
   <br/><br/>
  <div >
 <%= render  'contents/follow_items'%>
-<br/>
+
   </div>
 
-<br/>  
-<br/>
+
+
+ <%end%> 
+  <%if  @followers.size > 0 %>
+  <div class="txt_black imgfollowers" >Followers
+    <ul class="imgfollowers">
+     <% @followers.each do |follower | %>
+      <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
+     <%end%>
+    </ul>
+      <%if  @followers.size > 24 %>
+    <br /><br /><br /><br /><br /><br />
+   <a href="<%= "/" + "#{current_user.username}" + "?follow=Following" %>" class="txt_blue">View All</a>
+  <%end%>
+  </div>
+ 
+<%end%>
+ <%if  @following.size > 0 %>
+ <div class="txt_black imgfollowers" >Following
+    <ul class="imgfollowers">
+     <% @following.each do |follower | %>
+      <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
+     <%end%>
+    </ul>
+       <%if @following.size > 24 %>
+    <br /><br /><br /><br /><br /><br />
+   <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers" %>" class="txt_blue">View All</a>
+  <%end%>
+  </div>
+ 
+<%end%> 
  </div>
- <%end%>  
 <div id="script_div">
 <%= render "contents/my_feed_script" %>
 </div>
