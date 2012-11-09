@@ -1,6 +1,6 @@
 <div class="header">
   <span class="logo"><a href="/"><img src="/images/logo.png"/></a></span>
-<% if current_user  && @static_pages!="true" %>
+
   <div class="search">
   
     <span class="search_txt" id="plannToSearchSpan">
@@ -16,7 +16,7 @@
     <a class="icon_user" href="#"></a>
     <a class="icon_chat" href="<%=messages_url%>"></a>
   </span>
-<%end%>
+
        
       <!--header right part start here-->
    
@@ -65,7 +65,8 @@
    </div>
     <% else %>
      <div style="float:right;padding:6px 0px 0px 0px;">
-         <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
+         
+         <!--<%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
          <%= f.text_field :email,:size =>"27", :placeholder=>"Email" ,:tabindex => "1" %>
           <%= f.password_field :password,:size =>"27",:placeholder=>"Password" ,:tabindex => "1" %>
           <%= f.submit "Sign In" , :tabindex => "4" %> 
@@ -73,14 +74,15 @@
          <%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" %>
              <span style="padding:0px 0px 0px 120px;"><%= f.check_box :remember_me, :size=>"5", :tabindex => "3"%> Remember me.</span>
         <%end%>            
-
+ 
    
-    </div>
-      <!--<%= link_to "Sign In", "#",:onclick =>"$('#dialog-form').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
+    </div>-->
+     <%= link_to "Sign In", "#",:onclick =>"$('#dialog-form').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
         $('.ui-dialog-titlebar').hide();" , :class => "sign_in" %> | <%= link_to "Sign Up", "#",:onclick =>"$('#sign_up_dialog').dialog({modal: true,height: 600,width: 350 }); $('.Close_dialog').show();
-        $('.ui-dialog-titlebar').hide();" %> -->
+        $('.ui-dialog-titlebar').hide();" %> 
         
-   
+   </span>
+   </div>
     <% end %>
 
 <!--

@@ -2,7 +2,7 @@ class ContactUsController < ApplicationController
   before_filter :authenticate_user!,:only =>[:create]
   layout 'product'
   def new
-    @static_pages ="true"
+    #@static_pages ="true"
     @contact_us = Report.new
   end
   

@@ -2,7 +2,7 @@
 <%#= javascript_include_tag 'jquery.tokeninput' %>
 
 <%= form_for(:message, :url => create_message_path(current_user,'new')) do |f| %>
-
+<div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:520px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
   <p>
     <%= label "message", "To :"%>
   <div id="emailList"></div>
@@ -15,7 +15,7 @@
   </p>
   <p>
     <%= label "message", "Message:" %>
-    <%= f.text_area :body, :rows => 5, :cols => 40 %>
+    <%= f.text_area :body, :rows => 5, :class =>"textFilling",:cols => 40 %>
   </p>
   <%= f.submit "Send" %>
 <% end %>
