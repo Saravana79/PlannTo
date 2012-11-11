@@ -2,7 +2,11 @@ class CommentsController < ApplicationController
   before_filter :authenticate_user!, :except => :index
   def create
     @detail = params[:detail]
+    if params[:comment_type]
     @content= params[:comment_type].camelize.constantize.find(params[:content_id])
+    else
+      @content= Content.find(params[:content_id])
+    end 
     @comment = Comment.new(params[:comment])
     @comment.commentable = @content
     @comment.status = @comment.set_comment_status("create")
