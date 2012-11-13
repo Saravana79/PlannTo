@@ -115,6 +115,13 @@ body {
     color: #333;
     width: 1280px;
 }
+.body1 {
+    background: url(../images/bg_header2.png) repeat-x top;
+    margin: 0 auto;
+    font: normal 11px Tahoma,Arial, Helvetica, sans-serif;;
+    color: #333;
+    width: 1280px;
+}
 
 hr {
     background-color: #ab5e2c;
@@ -133,6 +140,12 @@ a img {border: none; }
 .header {
     width: 1000px;
     height: 102px;
+    margin: 0 auto;
+    border: solid 0px;
+}
+.header1 {
+    width: 1000px;
+    height: 90px;
     margin: 0 auto;
     border: solid 0px;
 }
@@ -3120,7 +3133,7 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 .PopupOr {
     background: url(../images/border_popup.png) no-repeat 50% 20px transparent;
-    margin: 15px 0 0; text-align: center;}
+    margin: 15px 0 15px; text-align: center;}
 
 
 .Homeinnercontent { width:1000px; height:auto; margin:auto; overflow:hidden;}
@@ -3143,16 +3156,17 @@ font-size:12px; color:#282929; padding:0px 0 0px 0;}
 
 .Textdescriptions { clear:both; padding:0 0 15px 0; min-height:191px;}
 .Popupinputblock { width:180px; float:left; padding:0 0 5px 16px;}
+.PopupinputblockNew { width:180px; float:left; padding:2px;}
 .Popupinputblock label {display:block; font-size:14px; color:#666161; padding:3px 0 3px 10px;}
-.Popupinputblock span.Textinput { width:50%; float:left; display:block;}
+.Popupinputblock span.Textinput { float:left; display:block;}
 .Popupinputblock .Rememberme {color: #818181; font-family: Arial,Helvetica,sans-serif; font-size: 13px;
 float:left; margin: 0; padding: 2px 0 0 5px;}
 .Popupinputblock .PadL6 { padding:0 0 0 6px; width:20px; height:20px;}
-.Bluesubmit { width:50%; float:right; padding:3px 0 15px 20px;}
+.Bluesubmit { width:50%; float:right; padding:7px 1px 15px 20px;}
 .Bluesubmit input[type="submit"]
-{background: url(../images/blut_inputbut.png) no-repeat left top; width: 115px; height: 42px;
+{background: url(../images/blut_inputbut1.png) no-repeat left top; width: 100px; height: 36px;
     border: none; cursor: pointer; margin: 0; text-shadow:0 1px 0 #1e779a; font-weight:bold;
-font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF; padding:0 0 5px 0;}
+font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:15px; color:#FFFFFF; padding:0 0 5px 0;}
 .Bluesubmit input:hover[type="submit"] { background-position:left bottom;}
 
 .Forgotpassword {padding:0px 0px 0px 5px; color:#9a9a9a;}

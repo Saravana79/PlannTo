@@ -13,7 +13,6 @@
 <!--content goes here-->
 
 <div class="Popupfacebook">
-<p>Sign up to PlannTo using Facebook</p>
 <div class="FaceImg">
     <%= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>
  </div>
@@ -24,31 +23,31 @@
 
 
        <div class="Popupinputblock">
-                <label>Name</label>
+                <!--<label>Name</label>-->
                 <span class="Textinput">
-                  <%= f.text_field :name,:size =>"27" %>
+                  <%= f.text_field :name,:size =>"27", :placeholder => "Name" , :class => "PopupinputblockNew"%>
                	 
                   </span>
             </div>
          
        <div class="Popupinputblock">
-                <label>Email</label>
+                <!--<label>Email</label>-->
                 <span class="Textinput">
-                  <%= f.text_field :email,:size =>"27" %>
+                  <%= f.text_field :email,:size =>"27" , :placeholder => "Email", :class => "PopupinputblockNew"%>
                	 
                   </span>
             </div>   
              <div class="Popupinputblock">
-                <label>Password</label>
+                <!--<label>Password</label>-->
                 <span class="Textinput">
-                  <%= f.password_field :password,:size =>"27" %>
+                  <%= f.password_field :password,:size =>"27" , :placeholder => "Password", :class => "PopupinputblockNew"%>
                	 
                   </span>
             </div>  
        <div class="Popupinputblock">
-                <label>Password Confirmation</label>
+                <!--<label>Password Confirmation</label>-->
                 <span class="Textinput">
-                <%= f.password_field :password_confirmation,:size =>"27" %>
+                <%= f.password_field :password_confirmation,:size =>"27" , :placeholder => "Password Confirmation", :class => "PopupinputblockNew"%>
                	
          </span>
             </div>
