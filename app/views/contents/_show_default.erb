@@ -12,7 +12,13 @@
 		<% end%>
 	</ul>
 </div>
-<% content_for :title, content.title + " - " %>
+<% content_for :title, content.title  %>
+<% content_for :description, content.description%>
+
+<%if (content.thumbnail?)%>
+<% content_for :image, content.thumbnail %>
+<%end%>
+
 <div class="float_rgt" >
 	<%= render 'shared/follow_buttons',:follow_type => content.content_type, :follow_html => '', :button_class => '', :item => content, :related_items => false %>
 </div>
@@ -171,8 +177,11 @@
 							<%end%>
 							<%end%>
 							
-							<%= raw get_content_description(content, true)%><a class="read_more_class" href="<%=external_content_path(content.id)%>">→ Read More</a>
-							<br/>
+						<%= raw get_content_description(content, true)%>
+						<% if ((content.is_a?(ArticleContent)) && (content.url?))  %>
+						<a class="read_more_class" href="<%=external_content_path(content.id)%>">→ Read More</a>
+						<%end%>
+								<br/>
 							
 						</div>
        <script type="text/javascript">
