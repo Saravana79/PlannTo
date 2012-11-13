@@ -1,9 +1,15 @@
 <div class="Popuptitlebar">
 <span class="Popuptitle"><center> <h1>Sign In</h1> </center></span>
+<%if @popup == "true" %>
+<div class="Close_dialog" style="width:43px; 
+overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
+position:relative; left:206px; text-indent:-9999px; top:-28px;" onclick="$('#login-feed').dialog('close');$('#sign_up_dialog').dialog('close');$('#dialog-form').dialog('close');">
+  </div>
+  <%end%>
 </div>
 <div class="Popupmiddercontent" >
 <div class="Popupfacebook">
-<p>Sign in to PlannTo using Facebook</p>
+
 <div class="FaceImg">
   <%= link_to image_tag('facebook_btn.png'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>
 </div>

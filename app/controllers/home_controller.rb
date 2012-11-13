@@ -5,20 +5,21 @@ class HomeController < ApplicationController
       get_objects_for_my_feeds
       render "contents/my_feeds"
     else
+      @static_page = "true"
       render :index
     end     
    end
   
   def terms_conditions
-  # @static_pages ="true"
+   @static_page ="true"
   end
   
   def privacy_policy
-  # @static_pages ="true"
+   @static_page ="true"
   end
   
   def about_us
-   # @static_pages ="true"
+    @static_page ="true"
   end
  
  
