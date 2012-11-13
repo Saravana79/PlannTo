@@ -116,7 +116,7 @@ body {
     width: 1280px;
 }
 .body1 {
-    background: url(../images/bg_header2.png) repeat-x top;
+    background: url(../images/bg_header3.png) repeat-x top;
     margin: 0 auto;
     font: normal 11px Tahoma,Arial, Helvetica, sans-serif;;
     color: #333;
@@ -2718,6 +2718,7 @@ ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  m
 .Leftreviewinner .Leftnavi ul li { padding:0; margin:0;}
 
 body { width:auto !important;}
+.body1 { width:auto !important;}
 .Leftreviewinner .Leftnavi ul li a {
 border-bottom:1px solid #cdd3d7; border-right:1px solid #cdd3d7; background:#f2f2f2;
 font-family:Arial, Helvetica, sans-serif; padding:0 0 0 37px; text-decoration:none;
@@ -3108,7 +3109,7 @@ h3.Questionans { padding:4px 0 0 0!important; margin:0px !important; float:left;
 #Popupouter { width:100%; height:500px; padding:100px 0; float:left;
 background:url(../images/poup_samplebg.jpg) no-repeat center top;}
 
-#Loginpoup { width:250px; height:auto; margin:auto; background:#f9f9f9; box-shadow:0px 0px 9px #3f3f3f;
+#Loginpoup { width:243px; height:auto; margin:auto; background:#f9f9f9; box-shadow:0px 0px 9px #3f3f3f;
 -moz-border-radius:5px; border-radius:5px; -webkit-border-radius:5px; padding:0 0 12px 0; position:absolute;}
 
 #Loginpoup span.Popuptitle {
@@ -3433,7 +3434,7 @@ p.table_bot_text a:hover { text-decoration:none;}
 /******************/
 
 body.Inner_page { background:none !important; overflow:hidden;}
-
+.body1.Inner_page { background:none !important; overflow:hidden;}
 .header_fix { width:100%; float:left; background:url(../images/header_fixbg.png) repeat-x left top; height:52px; position:fixed;}
 .header_fix_inner { width:1000px; margin:auto; height:52px;}
 .fix_logo { float:left; padding:10px 0 0 0;}
