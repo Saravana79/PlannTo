@@ -1,5 +1,5 @@
 <div class="header">
-  <span class="logo"><a href="/"><img src="/images/logo.png"/></a></span>
+  <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
   <% if @static_page != "true" %>
    <div class="search">
   
@@ -64,15 +64,24 @@
    </span>
    </div>
     <% else %>
-     <div style="float:right;padding:20px 0px 0px 0px;">
-         
+     <div style="float:right;padding:6px 0px 0px 0px;">
+         <div>
          <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
          <%= f.text_field :email,:size =>"27", :placeholder=>"Email" ,:tabindex => "1" %>
           <%= f.password_field :password,:size =>"27",:placeholder=>"Password" ,:tabindex => "1" %>
           <%= f.submit "Sign In" , :tabindex => "4" %> 
-           <br />
-         <%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" %>
-             <span style="padding:0px 0px 0px 20px;"><%= f.check_box :remember_me, :size=>"5", :tabindex => "3"%> Remember me.</span>
+          </div>
+          <div style="float:left;padding-left:3px;">
+            <label style="margin:0px 0px 0px 0px; font-family: Tahoma; font-size: 11px;top:-2px;display:block;text-indent:-15px;padding-left:15px;"> Remember me.
+            
+             <%= f.check_box :remember_me, :size=>"0", :tabindex => "3" , :style => "height:13px;width:13px;vertical-align:bottom; position: relative;margin:0;*overflow: hidden;top:-1px;"%>
+           
+           </label>
+           </div>
+          <div style="float:left;padding-left:95px;">
+         <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" %>
+          </div>
+          
         <%end%>            
  
    
