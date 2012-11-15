@@ -9,8 +9,8 @@ function openLoginPopup(clickable_link_id, c_type){
 
         $('#login-feed').dialog({
             modal: true,
-            height: 470,
-            width: 271
+            height: 480,
+            width: 275
         });
         $('.Close_dialog').show();
         $('.ui-dialog-titlebar').hide();
