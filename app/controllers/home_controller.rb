@@ -38,6 +38,7 @@ class HomeController < ApplicationController
           items = @items.split(",")
         end
        filter_params["items_id"] = items
+       filter_params["content_ids"] = Content.follow_content_ids(current_user,@article_categories)
        filter_params["status"] = 1
        filter_params["created_by"] = User.get_follow_users_id(current_user)
        filter_params["page"] = 1

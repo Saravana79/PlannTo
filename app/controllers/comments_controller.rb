@@ -11,8 +11,10 @@ class CommentsController < ApplicationController
     @comment.commentable = @content
     @comment.status = @comment.set_comment_status("create")
     @comment.user = current_user
+   
     if @comment.save
         UserActivity.save_user_activity(current_user,@content.id,"commented",@content.type == "AnswerContent" ? "Answer"  :  @content.sub_type,@comment.id,request.remote_ip) if @comment
+      Follow.content_follow(@content.type == "AnswerContent" ? @content.question_content : @content ,current_user) if @comment
       if @detail
         @comment_string = render_to_string :partial => "detailed_comment", :locals => { :comment => @comment }
       else

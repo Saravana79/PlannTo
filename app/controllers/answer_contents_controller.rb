@@ -6,6 +6,7 @@ class AnswerContentsController < ApplicationController
 		@answer_content.user = current_user
 		@answer_content.save_with_items!("") 
 		UserActivity.save_user_activity(current_user,@answer_content.id,"answered","Q&A",@answer_content.id,request.remote_ip) if @answer_content
+		 Follow.content_follow(@answer_content.question_content,current_user) if @answer_content
 		respond_to do |format|
 			format.html
 			format.js

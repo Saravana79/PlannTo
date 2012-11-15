@@ -20,6 +20,7 @@ class ContentsController < ApplicationController
      
        if params[:search_type] == "Myfeeds"
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
+           filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"])
           filter_params["root_items"] = @root_items
           filter_params["items_id"] = @items.split(",")
           filter_params["created_by"] =  User.get_follow_users_id(current_user) 
@@ -136,6 +137,7 @@ class ContentsController < ApplicationController
     if itemtype_id .present?
        if params[:search_type] == "Myfeeds"
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
+           filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"])
           filter_params["items_id"] = @items.split(",")
           filter_params["root_items"] = @root_items
           filter_params["created_by"] =  User.get_follow_users_id(current_user) 

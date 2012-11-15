@@ -132,6 +132,7 @@ class Content < ActiveRecord::Base
   
   def self.my_feeds_filter(filter_params)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
+     content_ids = filter_params["content_ids"].is_a?(String) ? filter_params["content_ids"].split(",") : filter_params["content_ids"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
       type_1 = sub_type.length > 1 ? sub_type + ["Answer","User"]  : sub_type
       sub_type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1
@@ -165,7 +166,7 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
 union 
- (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}) and related_id is not null)
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")})) and related_activity_type in (#{sub_type}) and related_id is not null)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
 
 end
@@ -176,11 +177,14 @@ end
    content_ids = content_ids.blank? ? "" : content_ids
    activity_ids = activity_ids.blank? ? "" : activity_ids
    contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
-   activity_contents = UserActivity.where("id in (?)", activity_ids).order("time desc")
+   activity_contents = UserActivity.where("id in (?)", activity_ids).group(:id).order("time desc")
    contents = contents_1 + activity_contents 
   # contents = Content.find(content_ids)
  end
  
+  def self.follow_content_ids(current_user,categories)
+    current_user.follows.where('followable_type in (?)',categories).collect(&:followable_id)
+  end
   
   def get_content_status(type)
     status = case type
