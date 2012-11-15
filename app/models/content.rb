@@ -4,7 +4,7 @@ class Content < ActiveRecord::Base
   #used for content description split.
   WORDCOUNT = 50
   DELETE_STATUS = 5
-	
+  
   acts_as_citier
   has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId
@@ -72,6 +72,9 @@ class Content < ActiveRecord::Base
     #end
   end
 
+  def sort_by
+    created_at
+  end
   
   def self.filter(options)
     options ||= {:page => 1, :limit => 10}
@@ -178,7 +181,7 @@ end
    activity_ids = activity_ids.blank? ? "" : activity_ids
    contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
    activity_contents = UserActivity.where("id in (?)", activity_ids).group(:id).order("time desc")
-   contents = contents_1 + activity_contents 
+   contents = ((contents_1 + activity_contents).sort{|x,y| x.sort_by <=> y.sort_by}).reverse
   # contents = Content.find(content_ids)
  end
  

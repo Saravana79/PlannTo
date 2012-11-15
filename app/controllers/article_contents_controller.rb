@@ -158,6 +158,7 @@ class ArticleContentsController < ApplicationController
   def bmark_create
     ids = params[:articles_item_id]
     @article=ArticleContent.saveContent(params[:article_content],current_user,ids) unless ids.empty?
+    Follow.content_follow(@article,current_user) if @article
     flash[:notice]= "Article uploaded"
 
     respond_to do |format|

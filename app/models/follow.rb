@@ -34,7 +34,7 @@ class Follow < ActiveRecord::Base
   end
 
   def self.content_follow(content,current_user)
-   puts"pppppp"
+   
      if current_user.follows.where(followable_id: content.id).where(followable_type: content.sub_type ).where(follow_type: "follower").first.blank?
         current_user.follows.create(:followable_id => content.id,:followable_type => content.sub_type,:follow_type => "follower")
         

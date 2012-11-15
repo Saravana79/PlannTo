@@ -1,5 +1,6 @@
 class UserActivity < ActiveRecord::Base
  belongs_to :user
+ 
  def self.save_user_activity(current_user,related_id,related_activity,related_activity_type,activity_id,remote_ip)
     u = UserActivity.new
     u.user_id = current_user.id
@@ -11,4 +12,8 @@ class UserActivity < ActiveRecord::Base
     u.ip_address = remote_ip
     u.save   
  end
+ 
+  def sort_by
+    time
+  end
 end
