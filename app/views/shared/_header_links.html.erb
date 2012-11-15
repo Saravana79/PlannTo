@@ -67,8 +67,8 @@
      <div style="float:right;padding:6px 0px 0px 0px;">
          <div>
          <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
-         <%= f.text_field :email,:size =>"27", :placeholder=>"Email" ,:tabindex => "1" %>
-          <%= f.password_field :password,:size =>"27",:placeholder=>"Password" ,:tabindex => "1" %>
+         <%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1" , :style=> "width:180px;"%>
+          <%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "1" , :style=> "width:180px;"%>
           <%= f.submit "Sign In" , :tabindex => "4" %> 
           </div>
           <div style="float:left;padding-left:3px;">
@@ -78,7 +78,7 @@
            
            </label>
            </div>
-          <div style="float:left;padding-left:95px;">
+          <div style="float:left;padding-left:100px;">
          <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" %>
           </div>
           
