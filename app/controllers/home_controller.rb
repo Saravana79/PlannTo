@@ -32,7 +32,7 @@ class HomeController < ApplicationController
       @follows,@followers = Follow.get_followers_following(current_user,"Followers",1,24)
       @follows,@following = Follow.get_followers_following(current_user,"Following",1,24)
       if @items.size > 0 and !@item_types.blank?
-        if @tems.is_a? Array
+        if @items.is_a? Array
             items = @items
         else
           items = @items.split(",")

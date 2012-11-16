@@ -18,12 +18,12 @@ class ContentsController < ApplicationController
     filter_params["search_type"] = params[:search_type]
      if  itemtype_id.present?
      
-       if params[:search_type] == "Myfeeds"
+       if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
-           filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"])
-          filter_params["root_items"] = @root_items
-          filter_params["items_id"] = @items.split(",")
-          filter_params["created_by"] =  User.get_follow_users_id(current_user) 
+           filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"]) if params[:search_type] == "Myfeeds"
+          filter_params["root_items"] = @root_items if params[:search_type] == "Myfeeds"
+          filter_params["items_id"] = @items.split(",") if params[:search_type] == "Myfeeds"
+          filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.find(:all).collect(&:id)
        end  
       if params[:search_type] != "Myfeeds"  
        if params[:items].present?
@@ -54,7 +54,7 @@ class ContentsController < ApplicationController
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
-   if params[:search_type] == "Myfeeds"
+   if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
       @contents = Content.my_feeds_filter(filter_params)
    else      
       @contents = Content.filter(filter_params)
@@ -135,12 +135,12 @@ class ContentsController < ApplicationController
     end 
      filter_params["search_type"] = params[:search_type]
     if itemtype_id .present?
-       if params[:search_type] == "Myfeeds"
+       if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
-           filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"])
-          filter_params["items_id"] = @items.split(",")
-          filter_params["root_items"] = @root_items
-          filter_params["created_by"] =  User.get_follow_users_id(current_user) 
+           filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"]) if params[:search_type] == "Myfeeds"
+          filter_params["root_items"] = @root_items if params[:search_type] == "Myfeeds"
+          filter_params["items_id"] = @items.split(",") if params[:search_type] == "Myfeeds"
+          filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.find(:all).collect(&:id)
        end   
       if params[:search_type] != "Myfeeds"  
        
@@ -168,7 +168,7 @@ class ContentsController < ApplicationController
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
     filter_params["order"] = get_sort_by(params[:sort_by]) 
-    if params[:search_type] == "Myfeeds"
+    if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
         @contents = Content.my_feeds_filter(filter_params)
     else      
       @contents = Content.filter(filter_params)
@@ -367,18 +367,19 @@ class ContentsController < ApplicationController
       @items,@item_types,@article_categories,@root_items = Content.follow_items_contents(current_user,params[:item_types],params[:type])
       filter_params = {"sub_type" => @article_categories}
       filter_params["itemtype_id"] = @item_types 
-    
-      if @items.size > 0 and !@item_types.blank?
-        if @tems.is_a? Array
+     
+       if @items.size > 0 and !@item_types.blank?
+        if @items.is_a? Array
             items = @items
         else
           items = @items.split(",")
         end
-       filter_params["items_id"] = items
+       filter_params["items_id"] = items  unless params[:search_type] == "admin_feeds"
+      
        filter_params["status"] = 1
-       filter_params["created_by"] =  User.get_follow_users_id(current_user)
+       filter_params["created_by"] = params[:search_type] == "admin_feeds" ? User.find(:all).collect(&:id) : User.get_follow_users_id(current_user)
        filter_params["page"] = 1
-       filter_params["root_items"] = @root_items
+       filter_params["root_items"] = @root_items if params[:search_type] != "admin_feeds"
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = get_sort_by(params[:sort_by])
        @contents = Content.my_feeds_filter(filter_params)

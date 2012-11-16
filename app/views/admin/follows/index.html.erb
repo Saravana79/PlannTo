@@ -1,0 +1,25 @@
+<center> All Follows- <%= @no_follows %> </center>
+ <table border="1" width="100px">
+  <tr>
+  <th> Followable </th>
+  <th> Followable type </th>
+  <th> Follower </th>
+  <th> Follow Type </th>
+  
+   </tr>
+   
+   <% @follows.each do |u| %>
+   <tr>
+   <%if ArticleCategory.by_itemtype_id(0).collect(&:name).include?(u.followable_type) %>
+      <%content_object = Content.find(u.followable_id) %>
+     <td> <%=link_to content_object.title, content_path(content_object) %></td>
+   <%else%> 
+  <% object = "#{u.followable_type}".camelize.constantize.find(u.followable_id) %>
+    <td><%=link_to object.name, object.is_a?(User) ? "/" + "#{u.follower.username}" : object.get_url() %>  </td>
+    <%end%>
+   <td> <%= u.followable_type %> </td>
+   <td> <%=link_to  u.follower.name,"/" + "#{u.follower.username}" %> </td>
+   <td><%= u.follow_type %>   </tr>
+   <%end%>
+   </table>
+   <%= will_paginate @users %> 

@@ -1,0 +1,19 @@
+ <center> All Users- <%= @no_users %> </center>
+ <table border="1" width="100px">
+  <tr>
+  <th> Name </th>
+  <th> Email </th>
+  <th> User name </th>
+  
+   </tr>
+   
+   <% @users.each do |u| %>
+   <tr>
+   <td><%= link_to u.name,"/" + "#{u.username}" %> </td>
+   <td> <%= u.email %> </td>
+   <td> <%= u.username %> </td>
+   
+   </tr>
+   <%end%>
+   </table>
+   <%= will_paginate @users %> 

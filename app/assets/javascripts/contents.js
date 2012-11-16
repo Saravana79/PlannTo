@@ -31,7 +31,7 @@ $(function(){
       'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
     });
 
-    $.get('/my_feeds',{'item_types' :types,'type': "category", 'sort_by': sort_by });
+    $.get('/my_feeds',{'item_types' :types,'type': "category",'search_type': $("#search_type").val(), 'sort_by': sort_by });
     });
 
 

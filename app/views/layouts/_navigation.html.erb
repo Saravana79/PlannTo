@@ -47,6 +47,7 @@
                 </div>
             </div>
     </li>
+   
     <li>
         <span><a href="/bikes">Bikes</a></span>
         <div class="Divmain"></div>
@@ -286,6 +287,28 @@
                 </div>
             </div>
     </li>
+        <%if current_user.is_admin? %>
+        <li>
+        <span><a href="">Admin Menu</a></span>
+        <div class="Divmain"></div>
+            <div class="dropdown_4columns">
+                <div class="col_1">
+                    <ul>
+                          <ul>
+                        <li><a href="/admin/feeds">All Feeds</a>
+                       
+                         <li><a href="/admin/users">All Users</a></li>
+                         <li><a href="/admin/follows">All Follows</a></li>
+                        
+                         </ul>
+                        </li>
+                    </ul>                       
+                   
+                </div>      
+                 
+            </div>
+    </li>
+    <%end%>
      <div style="float:right;padding:0px 30px 0px 0px;">
        <dl>
        	<%end%>

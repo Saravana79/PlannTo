@@ -1,7 +1,17 @@
 PlanNto::Application.routes.draw do
+ 
+namespace :admin do
+  resources :users
+  resources :feeds
+  resources :follows
+ end
   match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
   get "home/index"
-  resources :follows
+  resources :follows do
+   collection do 
+     get :user_follow
+   end
+  end   
   resources :error_messages
   match "/terms_conditions" ,:to => "home#terms_conditions"
   match "/privacy_policy" ,:to => "home#privacy_policy"
