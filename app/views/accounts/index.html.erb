@@ -8,7 +8,7 @@
         <%= link_to "Change Password", "#tabs4",:id=>"change_password"%>
       </li>
       <li class="tabstyle">
-        <%= link_to "Email Notifications","#tabs2",:id => "email_notify"%>
+        <%= link_to "Settings","#tabs2",:id => "email_notify"%>
 
       </li>
       <li class="tabstyle">
@@ -35,7 +35,8 @@
         <br/>
         <%= f.label :location, 'Location' %>:
         <%= f.text_field :location %>
-        <br/> 
+        <br/>
+         
         <div><%= f.label "Profile Picture: " %>
              <%= f.file_field :avatar %>
  
@@ -49,11 +50,23 @@
 
 
     <div id="tabs2" style="display: none; " class="main-content-section">
-       <center><h2> Email Settings </h2> </center>
+       <center><h2> Settings </h2> </center>
      <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
+         <b>Email Setting:</b>
         <%= f.label :my_feeds_email, 'My feeds Email.' %>:
         <%= f.check_box :my_feeds_email %>
-        <br/>
+        <br /><br /><br />
+        <b>Profile View Setting:</b>
+         <br/>   <br/>
+         <%= f.label :profile_view_setting, 'PannTo Users' %>
+         <%= f.radio_button :profile_view_setting,"pu" %>
+         <%= f.label :profile_view_setting, 'Followers and Friends' %>
+         <%= f.radio_button :profile_view_setting,"ff" %>
+         <%= f.label :profile_view_setting, 'Friends Only' %>
+         <%= f.radio_button :profile_view_setting,"fo" %>
+          <%= f.label :profile_view_setting, 'None' %>
+         <%= f.radio_button :profile_view_setting,"no" %>
+        <br/>     <br/>
         <%= f.submit %>
       <% end %>
 
