@@ -13,7 +13,10 @@
     <%= stylesheet_link_tag '/stylesheets/plannto.css'%>
     <%= stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"%>
     <%= stylesheet_link_tag "/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" %>
+    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
 	<%= javascript_include_tag 'application'%>
+	 
     <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>		
 		<style type="text/css">
@@ -29,6 +32,24 @@
          <div class="vote_thumb"> 
            <%=render :partial => "votes/voting_detail", :locals => {:item => @content, :user => user_signed_in? ? current_user : nil}%>
          </div>
+        <div id="login-feed" style = "display:none;">
+         <div id="login-1">
+          <%= render "/shared/login_dialog"%>
+      
+          <div class="Dontsignup">
+            Don't have an accoun. 
+            <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login-1').hide();"%>
+            </div>
+                </div>
+         <div id="sign_up_dialog_2" style = "display:none;">
+          <%= render "/shared/signup_dialog"%>
+          <div class="Dontsignup">
+            Do you have an account. 
+            <%=link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();" %>
+            </div>
+            </div>
+            </div>    
+        
          <span class='comment_no'> 
            <% if @content.comments.count > 0 %>
            <%= link_to @content.comments.count.to_s + " comments", content_path(@content) %>
