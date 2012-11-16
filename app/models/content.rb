@@ -146,7 +146,7 @@ class Content < ActiveRecord::Base
      page = (filter_params["page"].to_i - 1) * 10
 
   if  filter_params["sub_type"] == ["Video"]
-       content_ids=  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id,contents.created_at as created_time ,null as activity_id FROM contents 
+       contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id,contents.created_at as created_time ,null as activity_id FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
 INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id = contents.id INNER JOIN article_contents on  article_contents.id = contents.id
 WHERE 
@@ -156,8 +156,8 @@ WHERE
 )and 
 (content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
 union 
- (select related_id as content_id, time as created_time, id as activity_id from user_activities where  user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) and related_activity_type in (#{sub_type}) and related_id is not null)
- )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}").collect(&:id)
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User')) and related_activity_type in (#{sub_type}) and related_id is not null)
+)a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
 else 
   contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id, contents.created_at as created_time ,null as activity_id FROM contents 
 INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
