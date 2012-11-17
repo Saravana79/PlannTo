@@ -72,7 +72,13 @@ class User < ActiveRecord::Base
   def self.get_follow_users_id(current_user)
     user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
   end
-  
+  def profle_view_permission?(user)
+    return true if self.id == user.id
+    return true if user.profile_view_setting == "pu"
+    return true if Follow.where("follower_id=? and followable_type=?",user,"User").collect(&:followable_id).include?(self.id) && user.profile_view_setting == "fo"
+    return true if (Follow.follow_type(['Plannto', 'Facebook']).for_followable(user).collect(&:follower_id).include?(self.id) || Follow.where("follower_id=? and followable_type=?",user,"User").collect(&:followable_id).include?(self.id)) && user.profile_view_setting == "ff"
+    return false
+  end
   def invitation_token
     invitation.token if invitation
   end
