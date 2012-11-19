@@ -68,19 +68,19 @@
      <div style="float:right;padding:6px 0px 0px 0px;">
          <div>
          <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
-         <%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1" , :style=> "width:180px;"%>
-          <%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "1" , :style=> "width:180px;"%>
+         <%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1" , :style=> "width:180px;padding-left:2px;"%>
+          <%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "1" , :style=> "width:180px;padding-left:2px;"%>
           <%= f.submit "Sign In" , :tabindex => "4" %> 
           </div>
-          <div style="float:left;padding-left:3px;">
-            <label style="margin:0px 0px 0px 0px; font-family: Tahoma; font-size: 11px;top:-2px;display:block;text-indent:-15px;padding-left:15px;"> Remember me.
+          <div style="float:left;padding-left:3px;margin-top:-5px">
+            <label style="margin:0px 0px 0px 0px; font-family: Tahoma; font-size: 9px;top:-5px;display:block;text-indent:-15px;padding-left:13px;color:grey;"> Remember me.
             
-             <%= f.check_box :remember_me, :size=>"0", :tabindex => "3" , :style => "height:13px;width:13px;vertical-align:bottom; position: relative;margin:0;*overflow: hidden;top:-1px;"%>
+             <%= f.check_box :remember_me, :size=>"0", :tabindex => "3" , :style => "height:13px;width:13px;vertical-align:bottom; position: relative;margin:0;*overflow: hidden;top:3px;"%>
            
            </label>
            </div>
-          <div style="float:left;padding-left:100px;">
-         <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" %>
+          <div style="float:left;padding-left:110px;">
+         <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" , :style=>"color:grey;font-size:9px;text-decoration:none;"%>
           </div>
           
         <%end%>            

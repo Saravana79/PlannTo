@@ -139,13 +139,13 @@ a img {border: none; }
 /* Header */
 .header {
     width: 1000px;
-    height: 102px;
+    height: 95px;
     margin: 0 auto;
     border: solid 0px;
 }
 .header1 {
     width: 1000px;
-    height: 90px;
+    height: 95px;
     margin: 0 auto;
     border: solid 0px;
 }
@@ -1653,7 +1653,7 @@ div.rate_content {
 
 .footer	a {
     font: normal 12px/24px Tahoma,Arial, Helvetica, sans-serif;
-    color: #ffffff;
+    color: grey;
     text-decoration: none;
 }
 
@@ -1666,7 +1666,7 @@ div.rate_content {
     width: 100%;
     margin: 0 auto;
     height: 50px;
-    background-color: #4e4e4e;
+    background-color: #f5f5f5;
     display: block;
     text-align: center;
 }
@@ -2596,7 +2596,7 @@ ul.imgfollowers							{ list-style:none; padding:0; margin:0; width:251px;  marg
 
 .menu_list 								{ width:251px;height:25px; color:#007dbd; display:block; border:solid 0px; background:url(../images/icon_arrow_small.png) no-repeat 0px 6px; padding-left:10px;}
 .menu_list a:hover						{ color:#c15f24; text-decoration:none;display:block; }
-.heading_others							{ width:251px; height:25px; padding-top:6px; display:block;text-indent:10px; margin-bottom:10px;border-bottom:solid 1px #cdd3d7; line-height:20px; background:#f5f5f5; }
+.heading_others							{ width:251px; height:25px; padding-top:6px; display:block;text-indent:10px; margin-bottom:10px;border-bottom:solid 1px #cdd3d7; line-height:20px; ` }
 
 /* Plane to Buy - I Won IT - I Follow */
 
@@ -4384,3 +4384,4 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
 .homepagenamespan{width:270px;heigh:100%;margin-left: 10px;float:left;padding:10px;}
 .homepageprodname{font: bold 13px Tahoma,Arial, Helvetica, sans-serif;color:#000;text-decoration:none;}
 .homepageviewall{border-top: solid 1px #cdd3d7;display:block;height:33px;padding:5px;}
+.signupin { padding: 0; margin: 0; font: bold 14px Tahoma,Arial, Helvetica, sans-serif; color: #2a2929;}
