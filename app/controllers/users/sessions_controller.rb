@@ -19,7 +19,12 @@ class Users::SessionsController < Devise::SessionsController
     unless request.xhr? && !authentication.user.present?
     set_flash_message(:notice, :signed_in) if is_navigational_format?
     sign_in(resource_name, resource)
-    respond_with resource, :location => after_sign_in_path_for(resource)
+    if  session[:invitation].blank? 
+      respond_with resource, :location => after_sign_in_path_for(resource)
+    else
+      redirect_to "#{session[:invitation]}" 
+     end 
+        
     #else
    
     #  if user_signed_in?

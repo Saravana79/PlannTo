@@ -10,6 +10,7 @@ class Invitation < ActiveRecord::Base
   def accept(user)
     self.transaction do
       user.follow(item, self.follow_type)
+      user.clear_user_follow_item
       self.update_attributes(:token => '')
     end
   end

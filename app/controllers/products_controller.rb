@@ -48,6 +48,7 @@ class ProductsController < ApplicationController
     #@contents = Tip.order('created_at desc').limit(5)
     @review = ReviewContent.new
     @article_content=ArticleContent.new(:itemtype_id => @item.itemtype_id)
+    session[:invitation] = ""
     #@questions = QuestionContent.all
     if (@item.is_a? Product)
       @article_categories = ArticleCategory.get_by_itemtype(@item.itemtype_id)
