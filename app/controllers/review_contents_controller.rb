@@ -18,23 +18,23 @@ class ReviewContentsController < ApplicationController
 		end
 		 UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type,@reviewcontent.id,request.remote_ip) 
 		 Follow.content_follow(@reviewcontent,current_user) if @reviewcontent
-	if @reviewcontent
-		unless @products_error == true
-		 @item.add_new_rating @reviewcontent.rating if @item
-    end
-     session[:content_id] = @reviewcontent.id
-     @facebook_post = params[:facebook_post]
-    respond_to do |format|
-      format.js
-    end
-    
-    #Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_SHARE) unless @reviewcontent.errors.any?
-		#@item.rate_it params['review_content']['rating'],@reviewcontent.user
-    #		respond_to do |format|
-    #			format.html
-    #			format.js
-    #		end
-	
+  	if @reviewcontent
+    		unless @products_error == true
+    		 @item.add_new_rating @reviewcontent.rating if @item
+        end
+         session[:content_id] = @reviewcontent.id
+         @facebook_post = params[:facebook_post]
+        respond_to do |format|
+          format.js
+         end
+      
+      #Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_SHARE) unless @reviewcontent.errors.any?
+  		#@item.rate_it params['review_content']['rating'],@reviewcontent.user
+      #		respond_to do |format|
+      #			format.html
+      #			format.js
+      #		end
+  	end 
 	end
 
   def update
