@@ -22,6 +22,8 @@ module ContentsHelper
  def change_thumb_original(content)
    if content.thumbnail.include?("/thumb/")
      return content.content_photos.first.photo.url(:original)
+   else
+     content.thumbnail
    end   
  end
  
