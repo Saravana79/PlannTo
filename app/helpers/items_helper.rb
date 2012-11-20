@@ -135,7 +135,7 @@ module ItemsHelper
     content = ""
     if attribute.attribute_type == Attribute::TEXT
        if item.name == "Product Home Page URL"
-        content = "<a href= #{item.value}>#{item.value} </a>"
+        content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
        else
           content = "#{item.value}"
         end  
