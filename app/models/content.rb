@@ -133,7 +133,7 @@ class Content < ActiveRecord::Base
    end
   end
   
-  def self.my_feeds_filter(filter_params)
+  def self.my_feeds_filter(filter_params,current_user)
      item_type_ids = filter_params["itemtype_id"].is_a?(String) ? filter_params["itemtype_id"].split(",") : filter_params["itemtype_id"]
      content_ids = filter_params["content_ids"].is_a?(String) ? filter_params["content_ids"].split(",") : filter_params["content_ids"]
      sub_type = filter_params["sub_type"].is_a?(String) ? filter_params["sub_type"].split(",") : filter_params["sub_type"]
@@ -152,11 +152,11 @@ INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id =
 WHERE 
 (
 (item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
-(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count} and contents.created_by != #{current_user.id}) 
 )and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1)
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1 and contents.created_by != #{current_user.id})
 union 
- (select related_id as content_id, time as created_time, id as activity_id from user_activities where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User')) and related_activity_type in (#{sub_type}) and related_id is not null)
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User' and user_id!= #{current_user.id})) and related_activity_type in (#{sub_type}) and related_id is not null)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
 else 
   contents =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as content_id, contents.created_at as created_time ,null as activity_id FROM contents 
@@ -165,11 +165,11 @@ INNER JOIN content_itemtype_relations ON content_itemtype_relations.content_id =
 WHERE 
 (
 (item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
-(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count} and contents.created_by != #{current_user.id}) 
 )and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1)
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_by != #{current_user.id})
 union 
- (select related_id as content_id, time as created_time, id as activity_id from user_activities  where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User')) and related_activity_type in (#{sub_type}) and related_id is not null)
+ (select related_id as content_id, time as created_time, id as activity_id from user_activities  where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User' and user_id!= #{current_user.id})) and related_activity_type in (#{sub_type}) and related_id is not null)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
 
 end

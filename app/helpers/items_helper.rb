@@ -134,7 +134,11 @@ module ItemsHelper
     attribute = item if attribute == ""
     content = ""
     if attribute.attribute_type == Attribute::TEXT
-      content = "#{item.value}"
+       if item.name == "Product Home Page URL"
+        content = "<a href= #{item.value}>#{item.value} </a>"
+       else
+          content = "#{item.value}"
+        end  
     elsif attribute.attribute_type == Attribute::BOOLEAN
       if item.value == "True"
         content = "<img src='/images/check.png' width='12' height='12'>"

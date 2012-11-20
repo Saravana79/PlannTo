@@ -34,11 +34,12 @@ class Follow < ActiveRecord::Base
   end
 
   def self.content_follow(content,current_user)
-   
+    unless content.id == nil
      if current_user.follows.where(followable_id: content.id).where(followable_type: content.sub_type ).where(follow_type: "follower").first.blank?
         current_user.follows.create(:followable_id => content.id,:followable_type => content.sub_type,:follow_type => "follower")
         current_user.clear_user_follow_item
-     end  
+     end 
+    end  
   end
   def self.get_followers(item)
     Follow.for_follower(item).select("count(*) as follow_count, follow_type").group("follow_type")
