@@ -199,7 +199,8 @@ end
     return status
   end 
   
-  
+
+ 
   def self.follow_items_contents(user,item_types,type)
     if item_types.nil? && type.blank?
       @item_types = Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id)
@@ -216,7 +217,7 @@ end
     UserActivity.where('related_activity_type !=? and related_id =?', "User",self.id).each do |a|
       a.destroy
     end
-    if self.sub_type == "Q&A"
+    if self.sub_type == "Q&A" && self.is_a?(QusetionContent)
       answer_ids = self.answer_contents.collect(&:id)
       UserActivity.where("related_activity_type !=? and related_id in (?)",'User',answer_ids).each do |an|
       an.destroy

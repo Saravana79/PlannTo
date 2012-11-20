@@ -19,6 +19,12 @@ module ContentsHelper
     end
   end
 
+ def change_thumb_original(content)
+   if content.thumbnail.include?("/thumb/")
+     return content.content_photos.first.photo.url(:original)
+   end   
+ end
+ 
   def display_content_type(item)
     case item.type
     when "ArticleContent"

@@ -16,7 +16,7 @@
 <% content_for :description, content.description%>
 
 <%if (content.thumbnail?)%>
-<% content_for :image, content.thumbnail %>
+<% content_for :image, change_thumb_original(content) %>
 <%end%>
 
 <div class="float_rgt" >
@@ -170,10 +170,10 @@
 							<br/>
 							<br/>
 							<% elsif !content.video.nil?%>
-								<div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= content.thumbnail %>" class="uploadedvideoContentdisplay float_lft"></a></div> 
+								<div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= change_thumb_original(content) %>" class="uploadedvideoContentdisplay float_lft"></a></div> 
 								 <br />  <br />  <br />     
 			      <%else%>
-							  <div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
+							  <div><img src="<%= change_thumb_original(content) %>" class="uploadedarticleContentdisplay float_lft"/></div>
 							<%end%>
 							<%end%>
 							

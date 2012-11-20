@@ -45,7 +45,7 @@ class HomeController < ApplicationController
        filter_params["root_items"] = @root_items
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = "created_at desc"
-       @contents = Content.my_feeds_filter(filter_params)
+       @contents = Content.my_feeds_filter(filter_params,current_user)
     end
  end   
  end

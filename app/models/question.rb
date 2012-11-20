@@ -1,5 +1,6 @@
 class Question < ActiveRecord::Base
   has_many :answers
+  has_many :answer_contents
   belongs_to :user, :foreign_key => :created_by
 
   acts_as_commentable
