@@ -2677,7 +2677,7 @@ ul.tagging								{ padding:0; margin:0; list-style:none; }
 
 ul.imgContributors							{ list-style:none; padding:0; margin:0; width:251px;  margin-top:5px;  }
 .imgContributors li						{  margin:10px 2px 10px 10px;}
-.imgContributors  img 					{height:25px; width:25px;}
+.imgContributors  img 					{/*height:25px; width:25px;*/}
 .contributorname							{float:left;margin:-2px 0px 0px 10px;width:150px;}
 .contributorpoints							{float:left;margin:2px 0px 5px 10px}
 
