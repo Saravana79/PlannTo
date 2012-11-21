@@ -91,7 +91,7 @@
         <div class="imgpicbtnspan">
          <%unless content.thumbnail.nil?%>
           <div style="width:120px;height:90px;display:block;">
-          <%= link_to image_tag(content.thumbnail, height: "90", width: "120"),  content_path(content) %>
+          <%= link_to image_tag(change_thumb_original(content,'medium'), height: "90", width: "120"),  content_path(content) %>
           </div>
           <%end%>
           <%= link_to(follow_item_type_item_path(content, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true) do %>

@@ -19,9 +19,13 @@ module ContentsHelper
     end
   end
 
- def change_thumb_original(content)
+ def change_thumb_original(content, detail='original')
    if content.thumbnail.include?("/thumb/")
-     return content.content_photos.first.photo.url(:original)
+    if(detail == "original")
+      return content.content_photos.first.photo.url(:original)
+    else
+      return content.content_photos.first.photo.url(:medium)
+    end
    else
      content.thumbnail
    end   
@@ -155,7 +159,7 @@ module ContentsHelper
   end
   
     def get_travel_types_html_list(id, name)
-    dropdown = "<select id='#{id}' name='#{name}'><option value='Adventure'>Adventure</option><option value='Leisure'>Leisure</option><option value='Group'>Group</option>"
+    dropdown = "<select id='#{id}' name='#{name}'><option value='Adventure'>Adventure</option><option value='Leisure'>Leisure</option><option value='Religious'>Religious</option><option value='Heritage'>Heritage</option><option value='Honeymoon'>Honeymoon</option><option value='Wildlife'>Wildlife</option>"
     dropdown += "<option value='Others'>Others</option></select>"
     return dropdown.html_safe
   end

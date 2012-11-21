@@ -1573,8 +1573,8 @@ div.rate_content {
 }
 
 .userImageSmall {
-    width: 24px;
-    height: 24px;
+ /*   width: 24px;
+    height: 24px;*/
 }
 
 #btn_like_inactive {

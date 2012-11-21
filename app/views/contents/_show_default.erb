@@ -110,12 +110,15 @@
 								<label >From : <%= content.field1%> </label></br>
 								<%end%>
 								<% if !content.field3.empty? %>
-								<label >Date : <%= content.field3%> </label></br>
+								<label >Days : <%= content.field3%> </label></br>
 								<%end%>
 							</div>
 							<div style="float:right;">
 								<% if !content.field2.empty? %>
 								<label >To : <%= content.field2%> </label></br>
+								<%end%>
+								<% if !content.field4.empty? %>
+								<label >Type : <%= content.field4%> </label></br>
 								<%end%>
 							</div>
 						</div>

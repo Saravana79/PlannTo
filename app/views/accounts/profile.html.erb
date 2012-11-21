@@ -193,7 +193,7 @@
   Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
    <%= @follow_types.first %> 
    <%else%> Product <%end%> to your profile </div>
-   <a data-content="Apps" class="quickCreate"><%=content_write_tab_label("Apps")%></a>
+   <a data-content="Apps" class="quickCreate" style="display:none;"><%=content_write_tab_label("Apps")%></a>
            
    <div class="Searchform">
        <input type="text" placeholder="Search <%= params[:follow]%>" id="search_apps" /> 
@@ -268,7 +268,8 @@
   Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
    <%= @follow_types.first %> 
    <%else%> Product <%end%> to your profile </div>
-   <a data-content="Accessories" class="quickCreate"><%=content_write_tab_label("Accessories")%></a>
+   
+   <a data-content="Apps" class="quickCreate" style="display:none;"><%=content_write_tab_label("Accessories")%></a>
    <div class="Searchform">
        <input type="text" placeholder="Search <%= params[:follow]%>" id="search_accessories" /> 
        <input name="" type="button" class="Searchbut"/> 
