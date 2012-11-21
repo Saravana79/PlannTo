@@ -25,6 +25,7 @@
   Product.hover_follow_but($("#plan_to_follow"+'<%= "_"+item.id.to_s %>'),'<%= !related_items ? I18n.t("#{classname}.follow_bnt") : "" %>', '<%= !related_items ? I18n.t("#{classname}.unfollow_bnt") : "" %>')
 <% end %>
 
+  
 <% unless related_items %>
 <%
 =begin

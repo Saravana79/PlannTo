@@ -11,6 +11,7 @@
          <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;',:id=> "answer" %>
       </div>
     </div>
+
             <script type="text/javascript">
   setTimeout(function() {
 
@@ -77,6 +78,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
  
   $(document).ready(function(){
     $("#publishanswer").click(function(e){
+   
       var valid = validateAnswerForm();
       if (!valid){
         return false;

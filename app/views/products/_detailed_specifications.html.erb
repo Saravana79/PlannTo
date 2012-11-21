@@ -12,6 +12,7 @@
             <% reset_cycle("specificationinnerul") %>
             <li class="specificationblckdivli">
               <% product_attributes.each_with_index do |product_attribute| %>
+            
                 <%if display_specification?(product_attribute)%>
                   <ul class="<%= cycle("specificationinnerul", "specificationinnerul", :name => "specificationinnerul") -%>">
                     <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong> <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>

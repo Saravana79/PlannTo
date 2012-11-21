@@ -15,6 +15,8 @@
 <script>
 $("#comment_id<%= content.id %>").keyup(function(){
    <%if !current_user %>
+
+    $("#click_message").html("<b><font color='green'>Please sign in to add comment.</font><br /> </b>");
      openLoginPopup("#" + $(this).attr('id'), "click");
      return false
     <%end%>

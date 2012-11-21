@@ -1,9 +1,11 @@
 <div class="PlanntoBuyBtn">
   <%= get_follow_types(item, follow_type, follow_html, button_class, {:remote => true, :class => "btn_plantobuy_icon", :related_items => related_items}) %>
 </div>
+<br />
+<br />
+  <div class="tool_tip_div_<%= item.id %>"></div>
 
-
-
+<div id="content_new"></div>
 <script type="text/javascript">
     $(document).ready(function () {
         $(".plan_to_own_icon").addClass("show_review_popup");

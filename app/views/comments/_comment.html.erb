@@ -15,9 +15,13 @@
 			<li class="subContentGap float_lft"><a class="txt_blue "><%=link_to " Update This", edit_content_comment_path(@content,comment), :remote => true, :class => "txt_blue"%></a></li>		
 	 <%end%>		
 		</ul>
+		
 		<script>
         $("#report_link_<%= @content.id %><%= comment.id%>").click(function(e){
+        
           <%if !current_user %>
+      
+           $("#click_message").html("<b><font color='green'>Please sign in to send report.</font><br /> </b>");
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>

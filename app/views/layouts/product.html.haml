@@ -137,6 +137,7 @@
       :javascript
         $("div.rate_content a").click(function(e){
           if (login_flag != true){
+           $("#click_message").html("<b><font color='green'>Please sign in to do voting.</font><br /> </b>");
             openLoginPopup("#" +$(this).attr('id'), "click");
             return false
           }
@@ -144,6 +145,7 @@
 
         $("form.new_comment").keyup(function(e){
           if (login_flag != true){
+            $("#click_message").html("<b><font color='green'>Please sign in to do comment.</font><br /> </b>");
             openLoginPopup("#" + $(this).attr('id'), "submit");
             return false
           }

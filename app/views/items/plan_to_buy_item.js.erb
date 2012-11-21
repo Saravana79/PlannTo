@@ -1,3 +1,31 @@
 Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
 <%= render "shared/javascript_button", :button_class => params[:button_class], :item => @item, :related_follower => user_follow_type(@item, current_user), :related_items => @related_items %>
 
+
+<%if @type == "own" %>
+ 
+       $('.tool_tip_div_<%= @item.id %>').poshytip('destroy')
+   
+        $('.tool_tip_div_<%= @item.id %>').poshytip({
+          className: 'tip-darkgray',
+          	showTimeout: 300,
+            content: "Thanks for adding this product to your profile, would like to review this product.  <%= escape_javascript(button_to "Add a review", {:controller => :accounts, :action => :add_review}, {:remote => true, :method => :get} )%></span>",
+						bgImageFrameSize: 11,
+					
+						alignTo: 'target',
+						alignX: 'center',
+						alignY: 'bottom',
+						offsetY: 5,
+						
+          
+        });
+        $('.tool_tip_div_<%= @item.id %>').poshytip('show');
+     
+   setTimeout(function(){
+  $("div.tool_tip_div_<%= @item.id %>").fadeOut("slow", function () {
+  $("div.tool_tip_div_<%= @item.id %>").poshytip('destroy');
+      });
+ 
+}, 12000);
+ 
+ <%end%>

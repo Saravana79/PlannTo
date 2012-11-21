@@ -21,6 +21,8 @@
   	<script>
         $("#report_link_<%= @content.id %><%= comment.id%>").keyup(function(){
           <%if !current_user %>
+          $("#click_message").html("");
+             $("#click_message").html("<b><font color='green'>Please sign in to send report.</font><br /> </b>");
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>
