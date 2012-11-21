@@ -23,11 +23,15 @@ class InvitationsController < ApplicationController
         redirect_to new_user_registration_path(:token => invitation.token)
       else
         flash[:notice] = 'Invitation is successfully accepted.'
-        
- 
-        invitation.accept(user)
+         invitation.accept(user)
          session[:invitation] = invitation.item.get_url
-         redirect_to "/users/sign_in"
+         if current_user
+           redirect_to invitation.item.get_url
+           return nil
+         else
+           redirect_to "/users/sign_in"
+           return nil
+         end
       end  
     else
       flash[:notice] = 'This is not a valid invitation or might have expired already. Please contact PlannTo adiministrator.'
