@@ -8,10 +8,18 @@
 	</ul>
 </div>
 
+     
 <div class="float_rgt" >
    <%= render 'shared/follow_buttons',:follow_type => content.content_type, :follow_html => '', :button_class => '', :item => content, :related_items => false %>
 </div>
+<script>
+ $(".plan_to_follow_icon").click(function(e){
+  <%if !current_user %>
+         $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content-follow')%>");
+         <%end%>
 
+      });
+ </script>
 <div class="leftcolumnbig" style="clear:both;">
 <!-- Product Details - Start -->
 <div class="contentDetailsMainDiv">
@@ -38,7 +46,7 @@
 					<script>
         $("#report_link_<%= content.id %>").click(function(e){
           <%if !current_user %>
-           $("#login-1 #click_message").html("<b><font color='green'>Please sign in to add report.</font><br /> </b>");
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'report')%>");
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>
@@ -63,16 +71,7 @@
         <div class="hdr_Category float_lft margin_lft10"><%= pluralize(content.answer_contents.where("status!=?", Content::DELETE_STATUS).count,'Answers') %> </div>
         <div class="float_rgt" style="margin-top:8px;">
                <!-- <a style="" class="btn_submitanswer answer_button" id="answer_this_question" >Answer this Question</a> --> 
-              <script>
-                $("#publishanswer").click(function(e){
-           
-            <% if !current_user %>
-                     $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'answer')%>");
-               openLoginPopup("#" + $(this).attr('id'), "submit");
-               
-          <%end%>
-        });
-           </script>
+            
                 </div>
                 
       </div>
@@ -83,7 +82,13 @@
   <%= render :partial => 'answer_contents/answer_content',:collection => content.answer_contents.where("status!=?", Content::DELETE_STATUS) %>
   </div>
      <%= render :partial => 'answer_contents/new_answer_content', :locals => {:question_content => content, :item => @item ,:content => AnswerContent.new}%>
-      
+        <script>
+          $("#publishanswer").click(function(e){
+            <% if !current_user %>
+               $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'answer')%>");
+           <%end%>
+        });
+           </script>
     
 </div>
 
