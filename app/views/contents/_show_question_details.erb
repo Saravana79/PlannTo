@@ -15,6 +15,7 @@
 <script>
  $(".plan_to_follow_icon").click(function(e){
   <%if !current_user %>
+   $("#login #click_message").show();
          $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content-follow')%>");
          <%end%>
 
@@ -85,6 +86,7 @@
         <script>
           $("#publishanswer").click(function(e){
             <% if !current_user %>
+             $("#login #click_message").show();
                $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'answer')%>");
            <%end%>
         });
