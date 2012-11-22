@@ -7,7 +7,7 @@
 </div>
 <script>
    <% if !current_user %>
-          $("#click_message").html("<b><font color='green'>Please sign in to add this product to your profile.</font><br /> </b>");
+          $("#click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
      <%end%>
  </script>
 <% content_for :title, @item.name + " - " %>
@@ -212,7 +212,7 @@ Message : <br />
  <script>
    $(".invite_friend").click(function(e){
      <%if !current_user %>
-       $("#click_message").html("<b><font color='green'>Please sign in to invite friend.</font><br /> </b>");
+       $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'invite')%>");
        openLoginPopup("#" + $(this).attr('id'), "click");
        return false
       <%end%>

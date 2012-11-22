@@ -137,7 +137,8 @@
       :javascript
         $("div.rate_content a").click(function(e){
           if (login_flag != true){
-           $("#click_message").html("<b><font color='green'>Please sign in to do voting.</font><br /> </b>");
+            $("#login-1 #click_message").html("#{escape_javascript(render(:partial => "shared/login_popup_message",:locals=>{:type => "vote"})).html_safe}");
+          
             openLoginPopup("#" +$(this).attr('id'), "click");
             return false
           }
@@ -145,7 +146,7 @@
 
         $("form.new_comment").keyup(function(e){
           if (login_flag != true){
-            $("#click_message").html("<b><font color='green'>Please sign in to do comment.</font><br /> </b>");
+            $("#login-1 #click_message").html("#{escape_javascript(render(:partial => "shared/login_popup_message",:locals=>{:type => "comment"})).html_safe}");
             openLoginPopup("#" + $(this).attr('id'), "submit");
             return false
           }

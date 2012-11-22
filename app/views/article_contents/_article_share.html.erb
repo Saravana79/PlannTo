@@ -1,7 +1,11 @@
 <script  type="text/javascript" src="/javascripts/expanding.js"></script>
 <div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display: none;" class="contentSubContainer">
   <div id="notification" class="notificationStyle">Thank You, Article has been created.</div>
-
+ <script>
+  <% if !current_user %>
+          $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+   <%end%>       
+ </script>
   <div id="article_errors" style="display:none"></div>
   <%if @article_content.new_record?%>
     <%@url_id = "new_share_url"%>

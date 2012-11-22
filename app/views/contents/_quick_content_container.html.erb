@@ -32,7 +32,7 @@
 
   $('a.quick_config_btns_icon').click(function(e){
     <%if !current_user %>
-    $("#click_message").html("<b><font color='green'>Please sign in to add content.</font><br /> </b>");
+    $("#click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
        return false
      <%end%>    
@@ -48,7 +48,7 @@
   });
     $('a.quickCreate').live("click",function(){
      <%if !current_user %>
-     $("#click_message").html("<b><font color='green'>Please sign in to add content.</font><br /> </b>");
+     $("#click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
        return false
      <%end%>  

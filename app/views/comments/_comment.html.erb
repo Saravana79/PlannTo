@@ -21,7 +21,7 @@
         
           <%if !current_user %>
       
-           $("#click_message").html("<b><font color='green'>Please sign in to send report.</font><br /> </b>");
+           $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'report')%>");
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>

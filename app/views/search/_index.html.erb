@@ -38,7 +38,7 @@
        <script>
         $(".action_btns_medium").click(function(e){
          <% if !current_user %>
-          $("#click_message").html("<b><font color='green'>Please sign in to add this product to your profile.</font><br /> </b>");
+          $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
             openLoginPopup("#" + $(this).attr('id'), "submit");
           
            
