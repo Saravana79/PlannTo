@@ -6,8 +6,13 @@
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
 <script>
+$(".plan_to_buy_icon").click(function(e){
+$("#dialog-form #click_message").show();
+      });
+ 
    <% if !current_user %>
-          $("#click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+          $("#dialog-form #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+           $("#dialog-form #click_message").hide();
      <%end%>
  </script>
 <% content_for :title, @item.name + " - " %>

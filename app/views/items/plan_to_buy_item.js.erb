@@ -5,20 +5,16 @@ Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
 <%if @type == "own" %>
  
        $('.tool_tip_div_<%= @item.id %>').poshytip('destroy')
-   
-        $('.tool_tip_div_<%= @item.id %>').poshytip({
+         $('.tool_tip_div_<%= @item.id %>').poshytip({
           className: 'tip-darkgray',
           	showTimeout: 300,
             content: "Thanks for adding this <br/> product to your profile,<br /> would like to  review <br />this product.  <%= escape_javascript(button_to "Add a review", {:controller => :accounts, :action => :add_review}, {:remote => true, :method => :get} )%></span>",
 						bgImageFrameSize: 11,
-					
-						alignTo: 'target',
+					  alignTo: 'target',
 						alignX: 'center',
 						alignY: 'bottom',
 						offsetY: 5,
-						
-          
-        });
+				 });
         $('.tool_tip_div_<%= @item.id %>').poshytip('show');
      
    setTimeout(function(){
