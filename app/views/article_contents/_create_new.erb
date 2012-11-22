@@ -1,9 +1,4 @@
 <script  type="text/javascript" src="/javascripts/expanding.js"></script>
- <script>
-  <% if !current_user %>
-          $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
-   <%end%>       
- </script>
 
 <div id="subContainerContentCreate" style="padding:5px 5px 0px 5px;height:150px;display:none;" class="contentSubContainer">
 <style>
@@ -513,6 +508,7 @@ function remove_fields(link) {
 <script>
 $("#<%= @form_id %>").submit(function(e){
        <% if !current_user %>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
             openLoginPopup("#" + $(this).attr('id'), "submit");
             return false
           <%end%>

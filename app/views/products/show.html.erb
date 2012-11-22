@@ -8,8 +8,16 @@
 <script>
 $(".plan_to_buy_icon").click(function(e){
 $("#dialog-form #click_message").show();
+
       });
- 
+$(".plan_to_own_icon").click(function(e){
+$("#dialog-form #click_message").show();
+
+      });
+      $(".plan_to_follow_icon").click(function(e){
+$("#dialog-form #click_message").show();
+
+      });
    <% if !current_user %>
           $("#dialog-form #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
            $("#dialog-form #click_message").hide();
