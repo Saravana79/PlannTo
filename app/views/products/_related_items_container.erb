@@ -6,7 +6,7 @@
         $(".action_btns_medium").click(function(e){
       
          <% if !current_user %>
-             $("#click_message").html(("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+             $("#login-1 #click_message").html(("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
             openLoginPopup("#" + $(this).attr('id'), "submit");
             return false
           <%end%>
