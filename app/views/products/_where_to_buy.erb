@@ -9,26 +9,31 @@
     <td class="th_blue">&nbsp;</td>
   </tr>
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
-    <%items.each_with_index do |item, index|%>
+    <% displayBorder  = 0%>
+    <%items.each_with_index do |item, index|%>      
       <%if display_item_details(item)%>
-       
+        <% displayBorder  = 1%>
         <%if index == 0%>
           <tr>
-            <td class="bdb_gray"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
-            <td class="bdb_gray price_text"><%=display_price_detail(item)%></td>
-            <td class="bdb_gray font_13"><%=display_shipping_detail(item)%></td>
-            <td align="center" class="bdb_gray" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
+            <td class="bdb_gray1"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
+            <td class="bdb_gray1 price_text"><%=display_price_detail(item)%></td>
+            <td class="bdb_gray1 font_13"><%=display_shipping_detail(item)%></td>
+            <td align="center" class="bdb_gray1" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
           </tr>
         <%else%>
           <%if index == 1%>
-            <tr class="bdb_gray"><td colspan="4">Other variants <a class="bdb_gray price_text" target="_blank" style="padding:0px 5px 0px 10px;" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>
+            <br/>
+            <td colspan="4">Other variants <a class="bdb_gray1 price_text" target="_blank" style="padding:0px 5px 0px 10px;" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>
             <%elsif (items.size == index + 1) && index > 1%>
              |  <a style="padding:0px 0px 0px 5px;" target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>  </td></tr>
             <%else%>
              | <a target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a> 
-          <%end%>
+          <%end%>           
         <%end%>
       <%end%>
+    <%end%>
+    <%if displayBorder  == 1%>
+      <tr  ><td colspan="4" style="border-bottom: solid 1px #cdd3d7;height:5px;"></td></tr>
     <%end%>
   <%end%>
   <tr></tr>
