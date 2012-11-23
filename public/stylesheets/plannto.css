@@ -1935,7 +1935,7 @@ li.middlebg {
     font: bold 11px/22px Tahoma,Arial, Helvetica, sans-serif;
     color: #fff;
     text-align: center;
-    cursor:hand;
+    cursor:pointer;
 }
 
 .btn_selected_compare {
@@ -1950,7 +1950,7 @@ li.middlebg {
     font: bold 11px/22px arial;
     color: #fff;
     text-align: center;
-    cursor:hand;
+    cursor:pointer;
 }
 
 .pagination {
