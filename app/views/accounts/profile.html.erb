@@ -108,7 +108,7 @@
              <%= link_to 'Follow User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'plan_to_follow_icon'%>
            <%else-%>
          <span class="action_btns_selected" style="float:right;">  
-             <%= link_to 'Unfollow', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plan_to_follow_icon ' %> 
+             <%= link_to 'Unfollow', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plan_to_follow_icon_selected' %> 
        <%end%>  
       <%end%>  
     </span>
