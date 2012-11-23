@@ -23,9 +23,9 @@ $("#dialog-form #click_message").show();
  </script>
 <% content_for :title, @item.name + " - " %>
  <% if (@item.is_a? Product) %>
-<% content_for :description, @item.name + " - Read reviews, How-Tos, FAQs and Tips. Compare prices and check out accessories, apps, photos, videos of " + @item.name + ". Also finds out who owns this and get their opinions"%>
+<% content_for :description, @item.name + " - Read reviews, How-Tos, FAQs and Tips. Compare prices in India and check out accessories, apps, photos, videos of " + @item.name + ". Also finds out who owns this and get their opinions "%>
 <% elsif ((@item.is_a? Topic) or (@item.is_a? AttributeTag)) %>
-<% content_for :description, @item.name + " - Read How-Tos, Tips and FAQs and connect with others interested in this topic."%>
+<% content_for :description, @item.name + " - Read How-Tos, Tips and FAQs and connect with others interested in this topic. Connect with others on this topic."%>
 <% else %>
 <% content_for :description, @item.name + " - Read Reviews, How-Tos, Tips and FAQs and check out all the models and variants."%>
 <% end%>
