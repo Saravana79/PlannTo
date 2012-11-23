@@ -387,7 +387,7 @@ div.buttons {
     padding: 0px 0px;
 }
 
-.action_btns:hover {
+.action_btns1:hover {
     height: 28px;
     float: left;
     display: block;
@@ -415,7 +415,7 @@ div.buttons {
     padding: 0px 0px;
 }
 
-.action_btns_selected:hover {
+.action_btns_selected1:hover {
     height: 28px;
     float: left;
     display: block;
@@ -453,7 +453,7 @@ div.buttons {
     padding: 0px 0px 0px;
 }
 
-.action_btns_medium:hover {
+.action_btns_medium1:hover {
     height: 23px;
     float: left;
     display: block;
@@ -477,7 +477,7 @@ div.buttons {
     padding: 0px 0px 0px;
 }
 
-.action_btns_selected_medium:hover {
+.action_btns_selected_medium1:hover {
     height: 23px;
     float: left;
     display: block;
@@ -540,7 +540,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_buy_icon:hover {
+.plan_to_buy_icon1:hover {
     height: 26px;
     width: 65px;
     background: url(../images/icon_plantobuy.png) no-repeat 0px 6px;
@@ -568,7 +568,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_buy_icon_selected:hover {
+.plan_to_buy_icon_selected1:hover {
     height: 26px;
     width: 65px;
     background: url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;
@@ -610,7 +610,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_own_icon:hover {
+.plan_to_own_icon1:hover {
     height: 26px;
     width: 65px;
     background: url(../images/icon_iwonit.png) no-repeat 0px 6px;
@@ -624,7 +624,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_own_icon_selected:hover {
+.plan_to_own_icon_selected1:hover {
     height: 26px;
     width: 65px;
     background: url(../images/icon_iwonit_green.png) no-repeat 0px 6px;
@@ -680,7 +680,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_follow_icon:hover {
+.plan_to_follow_icon1:hover {
     height: 26px;
     width: 65px;
     background: url(../images/icon_followthiscar.png) no-repeat 0px 6px;
@@ -694,7 +694,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_follow_icon_selected:hover {
+.plan_to_follow_icon_selected1:hover {
     height: 26px;
     width: 65px;
     background: url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;
@@ -749,7 +749,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_buy_icon_medium:hover {
+.plan_to_buy_icon_medium1:hover {
     height: 23px;
     background: url(../images/icon_plantobuy.png) no-repeat 0px 6px;
     float: left;
@@ -775,7 +775,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_buy_icon_selected_medium:hover {
+.plan_to_buy_icon_selected_medium1:hover {
     height: 22px;
     background: url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;
     float: left;
@@ -814,7 +814,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_own_icon_medium:hover {
+.plan_to_own_icon_medium1:hover {
     height: 26px;
     background: url(../images/icon_iwonit.png) no-repeat 0px 6px;
     float: left;
@@ -827,7 +827,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_own_icon_selected_medium:hover {
+.plan_to_own_icon_selected_medium1:hover {
     height: 26px;
     background: url(../images/icon_iwonit_green.png) no-repeat 0px 6px;
     float: left;
@@ -879,7 +879,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_follow_icon_medium:hover {
+.plan_to_follow_icon_medium1:hover {
     height: 26px;
     background: url(../images/icon_followthiscar.png) no-repeat 0px 6px;
     float: left;
@@ -892,7 +892,7 @@ div.buttons {
     text-decoration: none;
 }
 
-.plan_to_follow_icon_selected_medium:hover {
+.plan_to_follow_icon_selected_medium1:hover {
     height: 26px;
     background: url(../images/icon_followthiscar_green.png) no-repeat 0px 6px;
     float: left;
@@ -939,7 +939,7 @@ div.buttons {
     float: left;
 }
 
-.plan_to_buy_icon_small:hover {
+.plan_to_buy_icon_small1:hover {
     width: 22px;
     height: 21px;
     background: url(../images/map_icon.png) bottom left;
@@ -955,7 +955,7 @@ div.buttons {
     float: left;
 }
 
-.plan_to_buy_icon_selected_small:hover {
+.plan_to_buy_icon_selected_small1:hover {
     width: 22px;
     height: 21px;
     background: url(../images/map_icon.png) top left;
@@ -979,7 +979,7 @@ div.buttons {
     float: left;
 }
 
-.plan_to_own_icon_small:hover {
+.plan_to_own_icon_small1:hover {
     width: 21px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -22px -21px;;
@@ -995,7 +995,7 @@ div.buttons {
     float: left;
 }
 
-.plan_to_own_icon_selected_small:hover {
+.plan_to_own_icon_selected_small1:hover {
     width: 21px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -22px 0px;
@@ -1035,7 +1035,7 @@ div.buttons {
     float: left;
 }
 
-.plan_to_follow_icon_selected_small:hover {
+.plan_to_follow_icon_selected_small1:hover {
     width: 23px;
     height: 21px;
     background: url(../images/map_icon.png) no-repeat -43px 0px;;
