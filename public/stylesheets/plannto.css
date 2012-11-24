@@ -4453,3 +4453,5 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
     background: -moz-linear-gradient(top,  #90cddb,  #366774);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#90cddb', endColorstr='#366774');
 }
+.accountlabel{width:100px;float:left;clear:both;padding-top:4px;}
+.accounttext{float:left;padding-top:4px;}

@@ -1,81 +1,130 @@
 <div id="main-content">
   <div id="usual2" class="usual">
-    <ul>
-      <li class="tabstyle">
+    <div style="padding:20px 0px 0px 380px;">
+      <span style="padding:10px;">
          <%= link_to "Basic Info","#tabs1",:id => "basic_info"%>
-      </li>
-      <li>
+      </span>
+      <span style="padding:10px;">
         <%= link_to "Change Password", "#tabs4",:id=>"change_password"%>
-      </li>
-      <li class="tabstyle">
-        <%= link_to "Settings","#tabs2",:id => "email_notify"%>
+      </span>
+      <span style="padding:10px;">
+        <%= link_to "Other Settings","#tabs2",:id => "email_notify"%>
 
-      </li>
-      <li class="tabstyle">
+      </span>
+<!--      <li class="tabstyle">
 
         <a href="#tabs3" class="">Linked Accounts</a>
 
-      </li>
-    </ul>
+      </li>-->
+    </div>
 
-    <div id="tabs1" style="display: block; " class="main-content-section">
+    <div id="tabs1" style="display: block;width:400px; height:300px;padding-left:300px; " class="main-content-section" >
+      <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">        
          <center><h2> Basic Info </h2> </center>
+      </div>
+      <br/>
+      <br/>
+      <div style="padding-left:50px;">
       <% @user.errors.full_messages.each do |error_message| %>
         <%= error_message %>
       <% end %>
       <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
-        <%= f.label :name, 'Full Name' %>:
+        <div class="accountlabel">
+        <%= f.label :name, 'Full Name' %>
+        </div>
+        <div class="accounttext">
         <%= f.text_field :name %>
+        </div>
         <br/>
-        <%= f.label :username, 'User Name' %>:
-        <%= f.text_field :username %>
+        <div class="accountlabel">
+        <%= f.label :username, 'User Name' , :class=>"accountlabel"  %>
+         </div>
+        <div class="accounttext">
+        <%= f.text_field :username %> 
+      </div>
         <br/>        
-        <%= f.label :email, 'Email Address' %>:
+        <div class="accountlabel">
+        <%= f.label :email, 'Email Address', :class=>"accountlabel"  %>
+         </div>
+         <div class="accounttext">
         <%= f.text_field :email %>
+      </div>
         <br/>
-        <%= f.label :location, 'Location' %>:
+        <div class="accountlabel">
+        <%= f.label :location, 'Location', :class=>"accountlabel"  %>
+         </div>
+         <div class="accounttext">
         <%= f.text_field :location %>
+      </div>
         <br/>
          
-        <div><%= f.label "Profile Picture: " %>
-             <%= f.file_field :avatar %>
+        <div class="accountlabel"><%= f.label "Profile Picture " , :class=>"accountlabel" %>
+        </div>
+          <div class="accounttext">
+          <%= image_tag @user.get_photo(:thumb) %>
+             
  
         </div>
-        <%= image_tag @user.get_photo(:thumb) %>
- 
-        <%= f.submit %>
+        <div class="accountlabel"><%= f.label "Update Picture " , :class=>"accountlabel" %>
+        </div>
+          <div class="accounttext">
+          <%= f.file_field :avatar %>
+        </div>
+        <br/>
+        <div style="padding-left:200px;clear:both;padding-top:10px;">
+        <%= f.submit "Save Details", :class=>"Bluesubmit3" %>
+      </div>
       <% end %>
-
+    </div>
     </div>
 
 
-    <div id="tabs2" style="display: none; " class="main-content-section">
-       <center><h2> Settings </h2> </center>
+        <div id="tabs2" style="display: none;width:400px; height:300px;padding-left:300px; " class="main-content-section" >
+      <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">        
+         <center><h2> Other Settings</h2> </center>
+      </div>
+      <div style="padding-left:50px;"
      <%= form_for(@user, :url => account_update_path, :method => :put, :html => { :multipart => true }) do |f| %>
+      <br/>
+      <br/>
+      <div class="accountlabel">
          <b>Email Setting:</b>
-        <%= f.label :my_feeds_email, 'My feeds Email.' %>:
+      </div>  
+      <div class="accounttext">  
+        <%= f.label :my_feeds_email, 'My feeds Email' , :style=>"top:-5px;" %>
         <%= f.check_box :my_feeds_email %>
+      </div>
         <br /><br /><br />
+
         <b>Profile View Setting:</b>
-         <br/>   <br/>
-         <%= f.label :profile_view_setting, 'PannTo Users' %>
+         <br/>   
+         <div style="padding-left:130px">
+         <%= f.label :profile_view_setting, 'All PlannTo Users' %>
          <%= f.radio_button :profile_view_setting,"pu" %>
+         <br/>
          <%= f.label :profile_view_setting, 'Followers and Friends' %>
          <%= f.radio_button :profile_view_setting,"ff" %>
+         <br/>
          <%= f.label :profile_view_setting, 'Friends Only' %>
          <%= f.radio_button :profile_view_setting,"fo" %>
-          <%= f.label :profile_view_setting, 'None' %>
+         <br/>
+          <%= f.label :profile_view_setting, 'Keep it Private' %>
          <%= f.radio_button :profile_view_setting,"no" %>
         <br/>     <br/>
-        <%= f.submit %>
+      </div>  
+        <div style="padding-left:180px;clear:both;padding-top:10px;">
+        <%= f.submit "Save Details", :class=>"Bluesubmit3" %>
+      </div>
+    </div>
       <% end %>
 
     </div>
     
   </div>
-
-  <div id="tabs4" style="display:none">
-      <center><h2> Change Password</h2> </center>
+    <div id="tabs4" style="display: none;width:400px; height:300px;padding-left:300px; " class="main-content-section" >
+      <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">        
+       <center><h2> Change Password </h2> </center>
+      </div>
       <%= render :partial => 'change_password_form' %>
     </div>
 
