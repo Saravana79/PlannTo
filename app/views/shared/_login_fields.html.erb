@@ -21,7 +21,7 @@ position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#log
    
    <div class="Popupinputblock">
               
-                <label>Email</label>
+                <label style="margin-left:-2px;">Email</label>
                 <span class="Textinput">
                   <%= f.text_field :email,:size =>"27", :tabindex => "1" %>
                	 
@@ -29,7 +29,7 @@ position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#log
             </div>
             
        <div class="Popupinputblock">
-                <label></label>Password<span class="Forgotpassword"><%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" %></a></span>
+                <span>Password</span><span class="Forgotpassword" ><%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" ,:style=>"font-family: Tahoma; font-size: 10px;"%></a></span>
                 <span class="Textinput">
                 <%= f.password_field :password,:size =>"27" , :tabindex => "2"%>
                	
@@ -38,10 +38,11 @@ position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#log
             
         <div class="Popupinputblock">
       
-        <div class="Rememberme">Remember me</div>
+        <div class="Rememberme" style="font-family: Tahoma; font-size: 10px;margin-top:3px;">Remember me</div>
          <div><%= f.check_box :remember_me , :tabindex => "3"%> </div>
          </div>
-        <div class="Bluesubmit"><%= f.submit "Sign In" , :tabindex => "4" %> </div>             
+        
+        <div class="Bluesubmit2" style="margin:5px 0px 0px 98px;"  ><%= f.submit "Sign In" , :tabindex => "4"%> </div>           
     </div>
 <div class="Clearboth"></div>
 

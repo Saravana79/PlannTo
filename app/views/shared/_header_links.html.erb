@@ -67,10 +67,14 @@
       <%if @static_page == "true" %>
      <div style="float:right;padding:6px 0px 0px 0px;">
          <div>
+         <div style="float:left;"> 
          <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
          <%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1" , :style=> "width:180px;padding-left:2px;"%>
-          <%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "1" , :style=> "width:180px;padding-left:2px;"%>
-          <%= f.submit "Sign In" , :tabindex => "4" %> 
+          <%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :style=> "width:180px;padding-left:2px;"%>
+        </div>
+          <div style="float:right;padding-left:4px;">
+          <%= f.submit "Sign In" , :tabindex => "4" , :class=>"Bluesubmit3" %> 
+          </div>
           </div>
           <div style="float:left;padding-left:3px;margin-top:-5px">
             <label style="margin:0px 0px 0px 0px; font-family: Tahoma; font-size: 9px;top:-5px;display:block;text-indent:-15px;padding-left:13px;color:grey;"> Remember me.

@@ -19,8 +19,9 @@ position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#log
 
 <div class="Popupfacebook">
 <div class="FaceImg">
-    <%= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>
+    <%= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>  
  </div>
+ <div style="padding: 0px 10px 0px 5px;" ><label style="font-size:10px;">(It takes one click. We'll never post without your permission)</label></div>
 </div>
 
 <div class="PopupOr"><img alt="" src="/images/or_icon.png"></div>
@@ -58,7 +59,7 @@ position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#log
             </div>
             
          
-         <div class="Bluesubmit"><%= f.submit "Sign up" %> </div>           
+         <div class="Bluesubmit2" style="margin:5px 0px 0px 98px;"><%= f.submit "Sign Up" %> </div>           
          
         </div>
 <!--poupmidder container-->
