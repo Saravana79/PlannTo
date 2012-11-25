@@ -45,7 +45,24 @@ module ContentsHelper
       render :partial => "answer_contents/answer_content", :locals => { :answer_content => item }       
     end
   end
+  
+  def render_new_open_window_form(item,items,content,sub_type,url)
+    if url == "true"
+     render :partial => "article_contents/article_share", :locals => { :article_content => content,:item => item,:items => items,:content_category => false}
+   elsif url == "true" && content!=""
+    render :partial => "article_contents/article_share", :locals => { :article_content => content,:item => item,:items => items,:content_category => true}
+    
+    elsif sub_type == "Q&A" || sub_type == "Q"
+     render :partial => "question_contents/new_question_content", :locals => { :content => content,:item => item,:items => items}
 
+    elsif sub_type == "Reviews"
+       render :partial => "reviews/review_subcontainer", :locals => { :content => content,:item => item,:items => items}  
+    else
+              
+     render :partial => "article_contents/create_new", :locals => { :content => content,:item => item,:items => items}
+    end  
+  end
+  
   def display_content_form(item)
     case item.type
     when "QuestionContent"

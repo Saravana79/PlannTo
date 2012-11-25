@@ -1,3 +1,11 @@
+if(window.opener) {
+ window.close();
+<%if @facebook_post != "1" %>
+  window.location.href = "<%= "#{session[:return_to]}" %>"
+ <%else%>
+    window.location.href = "/oauth/new";
+<%end%>
+}
 <% if @content.errors.any? %>
   $("#subContainerDefaultContent div#article_errors").html("<%= raw errors_for(@event_content) %>");
   $("#subContainerDefaultContent div#article_errors").show(300);

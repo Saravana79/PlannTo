@@ -6,6 +6,7 @@
     display: none !important;
 }
 </style>
+
   <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
        <div id="tag">
         </div>
@@ -19,6 +20,9 @@
   <% @article_content.content_photos.build %>
   
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
+  <% unless params[:sub_type] %>
+  <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+  <%end%>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :sub_type%>
@@ -30,9 +34,20 @@
  
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
-    
+    <script type="text/javascript">
+  
+    function open_and_redirect() {
+       $("#contentEditView").dialog('destroy');
+$(".ui-dialog-content").dialog('destroy')
+     var i =  $("#article_content_sub_type").val();
+        window.open('<%= "/article_contents/new_popup?sub_type="%>'+ i + '&&item=<%= @item.id rescue ''%>' + '&&content=<%= @content.id rescue '' %>', '', 'toolbars=0');
+       
+    }
+</script>
+
     <%unless @content  %>
     <div class="title_header float_lft">Title :</div>
+   
     <div class="float_lft">
         <%= f.text_field :title, {:style=>"margin-left:5px;width:400px",:width=>"400px"}  %>
     </div>
@@ -67,19 +82,20 @@
         <%end%>
       <%end%>
 
-    
-  </div>
-  
-  <div style="padding:5px 5px 0px 5px;">
-  	<div class="title_header float_lft">Description:</div>
-    <div style="margin-left:80px;">
+    <div style="padding:5px 5px 0px 5px;">
+
+    <div style="margin-left:2px;">
       <br/>
       <br/>
+        <div class="title_header float_lft">Description:</div>
       <%= f.text_area :description, :class => 'textFilling', :id => "m_text",:style=> 'width:400px;height:50px;' %>
       <br/>
     </div>
         
   </div>
+  </div>
+  
+  
   <script>
  function add_fields(link, association, content) {  
   var new_id = new Date().getTime();  
@@ -412,6 +428,7 @@ function remove_fields(link) {
   
     $(document).ready(function(){ 
   <%if @content.nil?%>
+  
       settings={
         close:true, addButton: false,
         url: "/search/autocomplete_items",
@@ -427,22 +444,22 @@ function remove_fields(link) {
   <% end %>
 <%else%>
 //error is here
+
       var settings={has_parent:true, close:true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
-        hidden_field: "#contentEditView #article_create_item_id"};
+        hidden_field: "#article_create_item_id"};
   <% @items.each do |item| %>
-        $.addTag("#contentEditView #default_product_item","div#contentEditView ul#default_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
+     
+      $.addTag("article_create_product","article_create_product_list", settings,"<%= item.name %>", "<%= item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
-    <%if item.id == @item.try(:id)%>
-          $("ul#article_create_product_list li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
-    <%end%>
+    $("a.icon_close_tagging").remove();
   <%end%>
-      $.textTagger("#contentEditView #article_create_product","#contentEditView #article_create_product_list",settings);
+      $.textTagger("#article_create_product","#article_create_product_list",settings);
 //ends
 <%end%>
 
 
  
-  	$("#contentEditView #article_create_product").mouseover(function(){  
+  	$("#article_create_product").mouseover(function(){  
   		if ($(this).autocomplete("widget").is(":visible")) {
                 return;
             }  

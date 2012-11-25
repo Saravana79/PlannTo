@@ -15,14 +15,31 @@
 <% content_for :title, content.title  + " - "%>
 <% content_for :description, content.description%>
 
-<%if (content.thumbnail?)%>
+<%if (content.is_a?(ArticleContent) && content.thumbnail?)%>
 <% content_for :image, change_thumb_original(content) %>
 <%end%>
 
 <div class="float_rgt" >
 	<%= render 'shared/follow_buttons',:follow_type => content.content_type, :follow_html => '', :button_class => '', :item => content, :related_items => false %>
 </div>
+<script>
+ $(".plan_to_follow_icon").click(function(e){
+  <%if !current_user %>
+   $("#login #click_message").show();
+         $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content-follow')%>");
+         <%end%>
 
+      });
+ </script>
+ <script>
+ $(".plan_to_own_icon").click(function(e){
+  <%if !current_user %>
+   $("#login #click_message").show();
+         $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+         <%end%>
+
+      });
+ </script>
 <div class="leftcolumnbig" style="clear:both;">
 	<!-- Product Details - Start -->
 	<div class="contentDetailsMainDiv">

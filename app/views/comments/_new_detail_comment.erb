@@ -19,6 +19,14 @@
      <span id="spinner_comment" style="padding:0px 0px 0px 180px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
   </span>
+   <script>
+          $("#comment_submit_3").click(function(e){
+            <% if !current_user %>
+             $("#login #click_message").show();
+               $("#login #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'comment')%>");
+           <%end%>
+        });
+           </script>
  <script>
    $(function() {
     $("form").bind("ajax:beforeSend", function(){

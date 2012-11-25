@@ -14,9 +14,9 @@ class ArticleContentsController < ApplicationController
     @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
     score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
-    if params[:article_content][:sub_type]!= "Photo"
-       params.delete("content_photos_attributes")
-   end 
+    if params[:article_content][:sub_type]!= "Photo" 
+       params["article_content"].delete("content_photos_attributes")
+    end 
    if (params[:noincludethumbnail] == 'on')
       params[:article_content][:thumbnail] = ''
    end  
@@ -36,7 +36,7 @@ class ArticleContentsController < ApplicationController
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
   #  end
     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-   UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article
+   UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article.id!=nil
    session[:content_id] = @article.id
    @facebook_post = params[:facebook_post]
    Follow.content_follow(@article,current_user) if @article
@@ -149,6 +149,24 @@ class ArticleContentsController < ApplicationController
     @article_content= @article
     @external = params[:external]
     #@article_string = render_to_string :partial => "article" 
+    respond_to do |format|
+      format.html { render :layout => false }
+      #format.js
+    end
+  end
+  
+  def new_popup
+    if params[:url] && params[:content].blank?
+      @content = @article_content = ArticleContent.new 
+    else
+      @content = @article_content = Content.find(params[:content]) rescue nil
+    end  
+     @item = Item.find(params[:item]) rescue nil
+    
+     @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})") rescue nil
+     @url = "true" if params[:url]
+      @article_categories = ArticleCategory.by_itemtype_id(@content.itemtype_id).map { |e|[e.name, e.id] } if @content
+     @detail = "true" if @content
     respond_to do |format|
       format.html { render :layout => false }
       #format.js

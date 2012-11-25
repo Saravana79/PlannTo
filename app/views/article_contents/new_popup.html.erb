@@ -1,0 +1,101 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>	
+<script type="text/javascript" src="/javascripts/jquery-ui-1.8.14.custom/js/jquery-ui-1.8.14.custom.min.js"></script>
+<link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+<%= javascript_include_tag 'textTagger' %>
+<%= javascript_include_tag 'application' %>
+<script>
+<%if @content.is_article_content?%>
+  <%unless @content.url.blank?%>
+    <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
+  <%end%>
+<%end%>
+</script>
+<%= render_new_open_window_form(@item,@items,@content,params[:sub_type],@url) %>
+ <script>
+<%if @content!='' %>
+ $(".edit_dwnld_url_<%=@content.id%>").show();
+  <%if  !@content.url.blank?%>
+   $("#shareProduct").show();
+  <%end%>
+<%end%>
+   $("#articleReviewSubContainer").show();
+  setTimeout(function() {
+
+g = {};
+g.oeditor = tinyMCE.init({
+        // General options
+        mode : "specific_textareas",
+        editor_selector : "textFilling",
+       
+        theme_advanced_resizing : true,
+        autoresize_max_height : 300,
+        autoresize_min_height :150,
+        plugins : "inlinepopups,autoresize,imageupload,feature_at",
+        // Theme options
+        theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",
+       
+        theme_advanced_toolbar_location : "top",
+     
+        theme_advanced_toolbar_align : "left"
+});
+g.oeditor.render();
+});
+
+  $("#ShareURLDiv").show();
+  $("#question_contentDiv").show();
+  $("#subContainerContentCreate").show();
+  <%if params[:sub_type] == "Photo" %>
+    $("#photo").show();
+   
+  <%end%>
+  <%if params[:sub_type] == "Q" && @url!="true" %>
+     $("#question_content_sub_type").val("Q&A");
+  <%elsif params[:sub_type] == "Reviews" && @url!="true" %>
+       $("#review_content_sub_type").val("Q&A");
+   <%else%>
+    $("#article_content_sub_type").val("<%= params[:sub_type] %>");
+  <%end%>  
+</script>
+<%#= render :partial => 'article_contents/article_share', :locals => {:content_category => true} %>
+<style type="text/css" media="screen">
+.title_header { font:bold 11px tahoma; color:#b2884e; text-align:right;margin-top:2px;min-width:75px; margin-right:5px; }
+.float_lft	{ float:left; }
+.left {float: left}
+ .right {float: right}
+ .remove_link, .add_fields_link {margin-top: 7px; margin-left: 5px}
+ .remove_link a {color: red; font-size: 14px}
+ .add_fields_link a {color: #2d5e15; font-size: 14px}
+.clear{clear:both;}
+.btn_submitanswer {
+	height: 30px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	font: bold 11px/30px tahoma;
+	color: #fff;
+	display: block;
+	background: url(../images/btn_bg.png) repeat-x top;
+	text-decoration: none;
+	text-align: center;
+	float: right;
+	border: solid 1px #ea5a30;
+	background-color: #ea5e30;
+	border-radius: 3px;
+	padding: 0px 10px;
+}
+
+.notificationStyle {
+  display:none;
+}
+
+.taggingdiv								{height:auto;display:block;float:left;width:420px;}
+ul.tagging								{ padding:0; margin:0; list-style:none; }
+.taggingmain							{ height:auto; background-color:#fffce0; border:solid 1px #efd68b;border-radius:2px;  float:left; margin-right:6px;padding:2px 2px 2px 2px;margin-top:5px;}
+.txt_tagging							{ font:normal 11px tahoma ; color:#c15f24; text-decoration:none; border:solid 0px; float:left;margin:0px 2px 0px 2px;}
+.txt_tagging:hover					       { text-decoration:underline; cursor:pointer;}
+.icon_close_tagging								{ width:14px; height:14px; display:block; background:url(../images/btn_close1.png) no-repeat; border:solid 0px; float:right; margin-top:0px; margin-left:2px; margin-right:2px;}
+.icon_close_tagging:hover							{ background:url(../images/btn_close.png) no-repeat;}
+
+
+</style>

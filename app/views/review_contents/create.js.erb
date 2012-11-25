@@ -1,3 +1,11 @@
+if(window.opener) {
+ window.close();
+<%if @facebook_post != "1" %>
+  window.location.href = "<%= "#{session[:return_to]}" %>"
+ <%else%>
+    window.location.href = "/oauth/new";
+<%end%>
+}
 <%if params[:content_create_form_type] == "Popup"%>
  <% if @products_error == true %>
     $("#products_error").html("<h2>Please select at least one product.</h2>");

@@ -27,6 +27,19 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
    <%= hidden_field_tag :detail,@detail%>
  <span class="Popuptitle"><center><h1>New Review Content</h1></center></span>
  </div>
+ <% unless params[:sub_type] %>
+       <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+     <%end%>
+     <script type="text/javascript">
+  
+    function open_and_redirect() {
+       $("#contentEditView").dialog('destroy');
+$(".ui-dialog-content").dialog('destroy')
+     var i =  $("#review_content_sub_type").val();
+        window.open('<%= "/article_contents/new_popup?sub_type="%>'+ i + '&&item=<%= @item.id rescue ''%>' + '&&content=<%= @content.id rescue '' %>', '', 'toolbars=0');
+       
+    }
+</script>
   <div id="products_error" style="color:red;"></div>
      <%if @content %>
        <div class="Close_dialog" style="display:none;width:43px; 

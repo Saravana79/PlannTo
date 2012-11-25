@@ -12,7 +12,7 @@ class QuestionContentsController < ApplicationController
 		@item = Item.find params['item_id']
 		@questioncontent.save_with_items!(params['item_id'])
     UserActivity.save_user_activity(current_user,@questioncontent.id,"created",@questioncontent.sub_type,@questioncontent.id,request.remote_ip)           
-   Follow.content_follow(@questioncontent,current_user) if @questioncontent
+   Follow.content_follow(@questioncontent,current_user) if @questioncontent.id!=nil
    if @questioncontent
     session[:content_id] = @questioncontent.id
     @facebook_post = params[:facebook_post]

@@ -5,7 +5,7 @@
 <%elsif type == "answer" %>
 <b><font color='green'>Please sign in to add answer.</font><br /> </b>
 <%elsif type == "follow" %>
-<b><font color='green'>Please sign in to add this product to your profile.</font><br /> </b>
+<b><font color='green'>Please sign in to add this <%= @item.type.singularize rescue "" %> <%= @content.sub_type.singularize rescue "" %>  to your profile.</font><br /> </b>
 <%elsif type == "invite" %>
 <b><font color='green'>Please sign in to invite friend.</font><br /> </b>
 <%elsif type == "content" %>
@@ -13,6 +13,7 @@
 <%elsif type == "vote" %>
 <b><font color='green'>Please sign in to vote this content.</font><br /> </b>
 <%elsif type == "content-follow" %>
-<b><font color='green'>Please sign in to follow this.</font><br /> </b>
+<b><font color='green'>Please sign in to follow this <%= @content.sub_type.singularize rescue "" %> </font><br /> </b>
 <%end%>
+
 

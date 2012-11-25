@@ -42,6 +42,19 @@
   <%end%>
 
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
+  <% unless params[:sub_type] %>
+       <button onclick="open_and_redirect_url()" style="margin-left:350px;">Open new Window</button>
+     <%end%>
+     
+   <script type="text/javascript">
+     function open_and_redirect_url() {
+       $("#contentEditView").dialog('destroy');
+$(".ui-dialog-content").dialog('destroy')
+     var i =  $("#article_content_sub_type").val();
+        window.open('<%= "/article_contents/new_popup?sub_type="%>'+ i + '&&item=<%= @item.id rescue ''%>' + '&&content=<%= @article_content.id rescue '' %>' + '&&url=true', '', 'toolbars=0');
+       }
+  </script>
+  
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
      <%= hidden_field_tag 'submit_url','submit_url' %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
@@ -329,7 +342,7 @@
         hidden_field: "#ShareURLDiv #<%=@articles_item_id%>"
       };
   <% @items.each do |item| %>
-        $.addTag("#contentEditView #<%=@search_field_id%>","div#contentEditView ul#<%=@ul_list_id%>", settings,"<%= item.name %>", "<%= item.id %>", true);
+        $.addTag("#<%=@search_field_id%>","ul#<%=@ul_list_id%>", settings,"<%= item.name %>", "<%= item.id %>", true);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
     <%if item.id == @item.try(:id) || @article_content.is_review?%>
           $("ul#<%=@ul_list_id%> li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();

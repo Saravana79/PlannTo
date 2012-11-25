@@ -12,8 +12,9 @@
 <%end%>
  <div style="float:right;padding:0px 0px 0px 75px;">
 <%= ff.file_field :photo, {:style=>"margin-left:5px;width:430px;",:width=>"400px"} %>
+<%= render 'shared/remove_fields', {:ff => ff, :name => ''} %> 
 </div>
 
-<%= render 'shared/remove_fields', {:ff => ff, :name => ''} %> 
+
 </fieldset>
 

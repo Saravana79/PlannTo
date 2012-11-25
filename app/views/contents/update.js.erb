@@ -1,5 +1,11 @@
 $("#contentEditView").dialog('destroy');
 $(".ui-dialog-content").dialog('destroy')
+if(window.opener) {
+<%if @facebook_post != "1" %>
+  window.location.href = "<%= "#{session[:return_to]}" %>"
+
+<%end%>
+}
 <%if @detail == true%>
   $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
 <%else%>
