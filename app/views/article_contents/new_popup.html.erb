@@ -4,15 +4,17 @@
 <%= javascript_include_tag 'textTagger' %>
 <%= javascript_include_tag 'application' %>
 <script>
+<%unless @content.blank? %>
 <%if @content.is_article_content?%>
   <%unless @content.url.blank?%>
     <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
   <%end%>
+<%end%>  
 <%end%>
 </script>
 <%= render_new_open_window_form(@item,@items,@content,params[:sub_type],@url) %>
  <script>
-<%if @content!='' %>
+<%unless @content.blank? %>
  $(".edit_dwnld_url_<%=@content.id%>").show();
   <%if  !@content.url.blank?%>
    $("#shareProduct").show();
@@ -68,6 +70,9 @@ g.oeditor.render();
  .remove_link a {color: red; font-size: 14px}
  .add_fields_link a {color: #2d5e15; font-size: 14px}
 .clear{clear:both;}
+ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
+    display: none !important;
+}
 .btn_submitanswer {
 	height: 30px;
 	margin-left: 10px;
