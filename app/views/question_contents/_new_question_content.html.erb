@@ -14,7 +14,9 @@
     <%= f.hidden_field :sub_type %>
     <div id="notification" class="notificationStyle">Thank You, Question has been created.</div>
      <% unless params[:sub_type] %>
+      <%if Rails.env == "development"%>
        <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+     <%end%>
      <%end%>
      <script type="text/javascript">
   

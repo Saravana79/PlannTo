@@ -21,7 +21,9 @@
   
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
   <% unless params[:sub_type] %>
-  <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+  <%if Rails.env == "development"%>
+    <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+  <%end%>
   <%end%>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>

@@ -42,10 +42,11 @@
   <%end%>
 
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
+  <%if Rails.env == "development"%>
   <% unless params[:sub_type] %>
        <button onclick="open_and_redirect_url()" style="margin-left:350px;">Open new Window</button>
      <%end%>
-     
+  <%end%>   
    <script type="text/javascript">
      function open_and_redirect_url() {
        $("#contentEditView").dialog('destroy');
