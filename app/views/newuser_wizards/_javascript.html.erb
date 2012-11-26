@@ -53,6 +53,7 @@ $("#product").autocomplete({
                     url:"/newuser_wizards/product_select",
                     data: {
                     item_id: ui.item.id,
+                    type: $("#wizard_type").val(),
                     },
                     type:"GET",
                     dataType:"script",

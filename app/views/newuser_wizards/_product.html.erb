@@ -1,4 +1,5 @@
- <div class="productinwizard" id="product_<%= @item.id %>" style="height:120px;width:196px;">
+ 
+ <div class="productinwizard" id="product_<%= @item.id %>" style="height:160px;width:196px;">
    <div id="product_image" style="display:none;">image</div>
    <div class="imgprofilediv">
         <div class="imgpicbtnspan">
@@ -14,8 +15,19 @@
         <span class="imgtextspan">
             <%= link_to @item.name, link_url(@item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
         </span>
+          
       </div>
-   
+      <br />
+       <span class="action_btns_selected">
+       <%if @wizard_type == "follower" %>
+         <%= link_to 'Following',"#",:class => 'plan_to_follow_icon_selected',:style=> "cursor: default;" %>
+       <%elsif  @wizard_type ==   "buyer" %>
+         <%= link_to 'Plan to buy',"#",:class => 'plan_to_follow_icon_selected',:style=> "cursor: default;"  %> 
+       <%elsif  @wizard_type ==  "owner" %>
+         <%= link_to 'own it',"#",:class => 'plan_to_follow_icon_selected',:style=> "cursor: default;"  %> 
+        <%end%>   
+         </span>
+      
     </div>
-    
+  
 

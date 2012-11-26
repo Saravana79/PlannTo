@@ -57,11 +57,14 @@ class Follow < ActiveRecord::Base
     end
   end     
 
+  def self.get_follow_object(current_user,item,follow_type)
+    current_user.follows.where(followable_id: item.id).where(followable_type: item.type).where(follow_type: follow_type).first
+  end
   
   def self.wizard_save(item_ids,type,user)
      item_ids.split(',').uniq.each do |id|
-     if user.follows.where('followable_id =? and followable_type !=? and follow_type =?', id,"User",type).blank?
-        item = Item.find(id)
+     item = Item.find(id)
+       if user.follows.where('followable_id =? and followable_type =? and follow_type =?', id,item.type,type).first.blank?
         follow = user.follows.new
         follow.followable_id = item.id
         follow.followable_type = item.type

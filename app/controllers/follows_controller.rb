@@ -4,6 +4,9 @@ class FollowsController < ApplicationController
   def destroy
     follow = Follow.find(params[:id])
     follow.destroy
+    if params[:type] == "wizard"
+       session[:wizard] = follow.follow_type
+    end
     redirect_to :back, :notice => "Successfully unfollowed."
   end
   
@@ -14,6 +17,9 @@ class FollowsController < ApplicationController
       if params[:follow][:followable_type]  == "User"
        UserActivity.save_user_activity(current_user, params[:follow][:followable_id],"followed","User",params[:follow][:followable_id],request.remote_ip)
       end 
+      if params[:follow][:type] == "wizard"
+        session[:wizard] = params[:follow][:follow_type]
+      end
     end
       
     redirect_to :back, :notice => "Successfully following."

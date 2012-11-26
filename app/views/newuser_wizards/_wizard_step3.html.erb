@@ -7,11 +7,12 @@
 </ul>
 <div class="clearboth"></div>
 </div>
+
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 <br/>
 <%= render "shared/alert_message",:type => "wizard_step3" %>
 
-
+ 
 <!--<div class="text_box">
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you planning to buy a car, mobile, cycle, tablet, bike or camera? Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.</div>
 </div>-->
@@ -25,6 +26,51 @@
     </div>
     </div>
    <div style="clear:both;"></div>
+   <div style="margin-left:80px;">
+   <%  @popular_items,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user) %>
+  <% @popular_items.each do |item| %>
+     <div class="product" id="product_<%= item.id %>">
+      <div class="imgprofilediv">
+        <div class="imgpicbtnspan">
+          <div style="width:160px;height:120px;display:block;">
+       
+             <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item)%>
+         
+        
+         </div>
+      
+        </div>
+        <span class="imgtextspan">
+            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
+        </span>
+      </div>
+      <% follow = Follow.get_follow_object(current_user,item,"buyer") %>
+    
+      <%if follow.blank? %>
+      </br>
+      <span class="action_btns">  
+        <%= link_to 'I plan to buy it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class => 'plan_to_follow_icon' %>
+        </span>
+         <%else%>
+        <div class="Clearboth PadT10">
+            <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
+              <tr>
+                <td><div class="btn-group">
+                      <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i>Own it</a>
+                      <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
+                   
+                        <ul class="dropdown-menu">
+                          
+                          <li><%= link_to 'Delete',follow_path(follow,:type=>"wizard"), :method => :delete, :confirm => "Are you sure?"  %> </li>
+                        </ul>
+                      
+                    </div></td>
+              </tr>
+            </table>
+            </div>
+            <%end%></div>
+            <%end%>
+          </div>
     <%= render "newuser_wizards/default_images" ,:items => @items%>
     <%= f.hidden_field "item_id" %>
      <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>

@@ -7,10 +7,11 @@
 </ul>
 <div class="clearboth"></div>
 </div>
+
 <%= form_for :wizard,:url => newuser_wizards_path,:remote => true,:method => :post do |f| %>
 <br/>
 <%= render "shared/alert_message",:type => "wizard_step2" %>
-
+  
 <!--<div class="text_box">
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you interested in Photography or Cycling? If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a></div>
 </div>-->
@@ -23,6 +24,35 @@
     </div>
     </div>
        <div style="clear:both;"></div>
+       <div style="margin-left:80px;">
+   <%  @popular_items,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user) %>
+  <% @popular_topics.each do |item| %>
+     <div class="product" id="product_<%= item.id %>">
+      <div class="imgprofilediv">
+        <div class="imgpicbtnspan">
+          <div style="width:160px;height:120px;display:block;">
+       
+             <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item)%>
+         
+        
+         </div>
+      
+        </div>
+        <span class="imgtextspan">
+            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
+        </span>
+      </div>
+      <% follow = Follow.get_follow_object(current_user,item,"follower") %>
+    
+      <%if follow.blank? %>
+      </br>
+      <span class="action_btns">  
+        <%= link_to 'I follow it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "follower",type: "wizard"}), :method => :post,:class => 'plan_to_follow_icon' %>
+        </span>
+         
+            <%end%></div>
+            <%end%>
+          </div>
           <%= render "newuser_wizards/default_images",:items => @items %>
            <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
           <%= f.hidden_field "item_id" %>

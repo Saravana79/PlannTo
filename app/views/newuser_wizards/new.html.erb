@@ -1,5 +1,18 @@
-
- <div id="wizard" >
- <%= render "newuser_wizards/wizard_step1" %>
+<div id="wizard" >
+  <%if session[:wizard] == "owner" %>
+  <% @items = Item.get_owner_item_ids_for_user(current_user) %>
+     <%= render "newuser_wizards/wizard_step1" %>
+  <%elsif session[:wizard] == "follower" %>
+     <%@wizard_type = "follower" %>
+    <%@items = Item.get_topics_follower_ids_for_user(current_user) %>
+    <%= render "newuser_wizards/wizard_step2" %> 
+  <%elsif session[:wizard] == "buyer" %>
+     <%@wizard_type = "follower" %>
+    <%@items = Item.get_buyer_item_ids_for_user(current_user)%>  
+    <%= render "newuser_wizards/wizard_step3" %>   
+   <%else%>
+     <% @items = Item.get_owner_item_ids_for_user(current_user) %>
+     <%= render "newuser_wizards/wizard_step1" %>
+   <%end%>   
  </div>   
 
