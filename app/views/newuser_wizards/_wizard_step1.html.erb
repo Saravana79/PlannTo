@@ -48,9 +48,10 @@
     
       <%if follow.blank? %>
       </br>
-      <span class="action_btns">  
-        <%= link_to 'Yes I own it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "owner",type: "wizard"}), :method => :post,:class => 'plan_to_follow_icon' %>
-        </span>
+        <div class="btn-group">
+                 <%= link_to 'Yes,I own it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "owner",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+               </div>
+     
         
             <%end%></div>
             <%end%>
@@ -91,7 +92,6 @@
 
  });
 </script>
-
 
 <script type="text/javascript">
   window._token = '<%= form_authenticity_token.to_s %>';
@@ -196,6 +196,6 @@
 
 }(window.jQuery);
 </script>
-</div>
 
+</div>
 

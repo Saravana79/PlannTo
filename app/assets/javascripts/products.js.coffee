@@ -96,6 +96,7 @@ root.Product =
     $("#plan_to_buy_select").attr "data-url", "javascript:void(0)"
 
   login_dialog: ->
+  
     $("#dialog-form").dialog
       autoOpen: false
       height: 480
@@ -108,6 +109,7 @@ root.Product =
 
   show_login_dialog: (dom_elements) ->
     $(dom_elements).click ->
+      
       $(".Close_dialog").show()
       $(".ui-dialog-titlebar").hide()
       $("#dialog-form").dialog "open"

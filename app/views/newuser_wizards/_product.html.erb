@@ -1,5 +1,5 @@
  
- <div class="productinwizard" id="product_<%= @item.id %>" style="height:160px;width:196px;">
+<div class="productinwizard" id="product_<%= @item.id %>" style="height:160px;width:196px;">
    <div id="product_image" style="display:none;">image</div>
    <div class="imgprofilediv">
         <div class="imgpicbtnspan">
@@ -7,10 +7,6 @@
           <%= link_to image_tag(@item.image_url, height: "120", width: "160"), link_url(@item)%>
        
          </div>
-        
-         <%= link_to image_tag("/images/icon_close.png") , product_delete_newuser_wizard_path(@item.id,:type => @wizard_type) ,:class=> "closeimg",:id => "close_#{@item.id}",:style=>"padding-left:10px;",:remote => true%>
-      
-         
         </div>
         <span class="imgtextspan">
             <%= link_to @item.name, link_url(@item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
@@ -18,15 +14,27 @@
           
       </div>
       <br />
-       <span class="action_btns_selected">
-       <%if @wizard_type == "follower" %>
-         <%= link_to 'Following',"#",:class => 'plan_to_follow_icon_selected',:style=> "cursor: default;" %>
-       <%elsif  @wizard_type ==   "buyer" %>
-         <%= link_to 'Plan to buy',"#",:class => 'plan_to_follow_icon_selected',:style=> "cursor: default;"  %> 
-       <%elsif  @wizard_type ==  "owner" %>
-         <%= link_to 'own it',"#",:class => 'plan_to_follow_icon_selected',:style=> "cursor: default;"  %> 
-        <%end%>   
-         </span>
+       <% follow = Follow.get_follow_object(current_user,@item,@wizard_type) %>
+       <div class="Clearboth PadT10">
+            <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
+              <tr>
+                <td><div class="btn-group">
+                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(follow.follow_type) rescue "" %></a>
+                      <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
+                        <ul class="dropdown-menu">
+                          <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , product_delete_newuser_wizard_path(@item.id,:type => @wizard_type) ,:id => "close_#{@item.id}",:remote => true%></a></li>
+                          
+                          <li class="divider"></li>
+                          <li> </li>
+                        </ul>
+                     
+                    </div></td>
+              </tr>
+            </table>
+            
+           
+          </div>      
+
       
     </div>
   
