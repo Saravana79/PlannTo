@@ -259,10 +259,11 @@ g.oeditor.render();
 
 <script>
 $("#<%= @form_id %>").submit(function(e){
-       <% if !current_user %>
-            openLoginPopup("#" + $(this).attr('id'), "submit");
-            return false
-          <%end%>
+     <% if !current_user %>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+           openLoginPopup("#" + $(this).attr('id'), "submit");
+           return false
+        <%end%>
         })
 </script>  
   

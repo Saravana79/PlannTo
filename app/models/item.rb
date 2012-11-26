@@ -63,6 +63,7 @@ class Item < ActiveRecord::Base
     end
     return itemtype_id
   end
+  
   def get_base_itemtype
 
     itemtype_id = self.get_base_itemtypeid
