@@ -9,7 +9,7 @@ class ImageuploadsController < ApplicationController
     image = ContentPhoto.new
     image.photo = params[:content_photo][:photo]
     image.save
-    @insertString = "<img src=\"#{image.photo.url(:original)}\" style=\"height:auto;width:100%;\" />"
+    @insertString = "<img src=\"#{image.photo.url(:original)}\" class=\"contentInsertImg\" />"
     render :layout => false
   end
   
