@@ -21,12 +21,12 @@
     <div class="title_header" style="padding:0px 0px 0px 25px;width:450px;height:26px;">
       <input style="margin-top:5px;width:360px; float:left;font-size:14px;min-height:20px;" placeholder="" type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
-    <div style="clear:both;padding:0px 0px 0px 40px;width:450px;height:20px;display:block">
-      <label style="font-size:9px;color:gray;">[Type the name of the product that you own in the text box or select from list below]</label>
+    <div style="clear:both;padding:0px 0px 0px 15px;width:500px;height:20px;display:block">
+      <label style="font-size:9px;color:gray;">[Type the name of the product that you own in the text box or select from the sample products shown below]</label>
     </div>
    </div>
      <div style="clear:both;"></div>
-     <div id="photo_box"  style="padding:20px 00px 0px 85px;">
+     <div id="photo_box"  style="padding:5px 00px 0px 85px;">
       <%= render "newuser_wizards/default_images",:items => @items %>
 
   <%  @popular_items,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user) %>
@@ -81,7 +81,7 @@
     <%= f.hidden_field "item_id"%>
     <%= f.hidden_field "type",:value => "owner" %>
     <br/><br/>
-    <div  style="clear:both;float:left;padding:5px;width:200px;margin-left:270px;">
+    <div  style="clear:both;float:left;padding:5px;width:200px;margin-left:370px;">
     
     <%= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
      <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#">skip</a></p>

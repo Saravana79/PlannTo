@@ -456,13 +456,13 @@ class Item < ActiveRecord::Base
   end
   
   def self.get_buyer_item_ids_for_user(user)
-     popular_item_ids = configatron.wizard_items.split(",") 
+     popular_item_ids = configatron.wizard_items_buyer.split(",") 
      Follow.where('follower_id =? and follow_type =?',user.id,"buyer").collect(&:followable_id).collect{|i| i.to_s} - popular_item_ids
   end
   
   
   def self.get_owner_item_ids_for_user(user)
-     popular_item_ids = configatron.wizard_items.split(",") 
+     popular_item_ids = configatron.wizard_items_owner.split(",") 
      Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id).collect{|i| i.to_s}  - popular_item_ids
   end
   

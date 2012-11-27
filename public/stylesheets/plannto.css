@@ -4115,7 +4115,7 @@ a.bookmark_button:hover span { background-position:right bottom;}
  { 
   text-decoration: underline;
  }      
- .step_main_page{width:850px; height:auto; margin:auto; padding-top:15px; padding-bottom:50px;}
+ .step_main_page{width:850px; height:auto; margin:auto; margin-top:-25px; padding-bottom:50px;}
 
 .main_step{width:491px; height:auto; margin:auto; clear:both;padding-left:80px; background:url(../images/step_bg.png) no-repeat center center;}
 
