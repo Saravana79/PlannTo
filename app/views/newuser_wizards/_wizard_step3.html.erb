@@ -51,9 +51,9 @@
       </div>
     
      <%if follow.blank? %>
-      </br>
-        <div class="btn-group" style="margin-left:30px;">
-            <%= link_to 'Yes,I plan to buy it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+      
+        <div class="btn-group PadT10" style="margin-left:50px;">
+            <%= link_to 'Plan to buy', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
           </div>
      
           <%else%>
