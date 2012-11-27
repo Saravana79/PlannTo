@@ -16,11 +16,11 @@
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you interested in Photography or Cycling? If so, select the interested topics in Photography and cycling to follow. Find the complete list of topics in <a href="/camera/topics" target="_blank">Photography</a> and <a href="/cycle/topics" target="_blank">Cycling</a></div>
 </div>-->
 <div class="search_block">
-    <div class="title_header" style="padding:0px 0px 0px 0px;width:450px;height:25px;">
-        <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a topic." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
+    <div class="title_header" style="padding:0px 0px 0px 25px;width:450px;height:26px;">
+        <input style="margin-top:5px;width:360px; float:left;font-size:14px;min-height:20px;" placeholder="" type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
-    <div style="clear:both;padding:0px 0px 0px 10px;width:450px;height:20px;display:block">
-      <label style="font-size:9px;color:gray;">[Ex. Landscape, Bird, Wildlife, Portrait, Lighting, Cycling Maintenance, Cycling Training]</label>
+    <div style="clear:both;padding:0px 0px 0px 40px;width:450px;height:20px;display:block">
+      <label style="font-size:9px;color:gray;">[Type the interested topics in Photography and cycling in the text box to select.]</label>
     </div>
     </div>
        <div style="clear:both;"></div>
@@ -47,7 +47,7 @@
       <%if follow.blank? %>
       </br>
      <div class="btn-group">
-                 <%= link_to 'Yes,I like to follow it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "follower",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+                 <%= link_to 'Yes, I like to follow it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "follower",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
                </div>
      
      

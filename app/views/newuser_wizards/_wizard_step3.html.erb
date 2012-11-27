@@ -17,11 +17,11 @@
 <div style="font: bold 11px Tahoma,Arial, Helvetica, sans-serif;">Are you planning to buy a car, mobile, cycle, tablet, bike or camera? Select the product that you are considering. This will help us to provide the customized home page with the content that will help you to decide the right product.</div>
 </div>-->
 <div class="search_block">
-    <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
-        <input style="margin-top:5px;width:360px; float:left;font-size:15px;" placeholder="Start typing to select a product." type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
+    <div class="title_header" style="padding:0px 0px 0px 25px;width:450px;height:26px;">
+        <input style="margin-top:5px;width:360px; float:left;font-size:14px;min-height:20px;" placeholder="" type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
             </div>
-        <div style="clear:both;padding:0px 0px 0px 10px;width:450px;height:20px;display:block">
-      <label style="font-size:9px;color:gray;">[Ex. Ford Figo, Apple IPhone 5, CBR 250R, Nikon D800, Ipad Mini, Trek - 1.2]</label>
+        <div style="clear:both;padding:0px 0px 0px 25px;width:450px;height:20px;display:block">
+      <label style="font-size:9px;color:gray;">[Type the name of the product that you are planning to buy in the text box or select from list below]</label>
 
     </div>
     </div>
@@ -49,7 +49,7 @@
       <%if follow.blank? %>
       </br>
      <div class="btn-group">
-                 <%= link_to 'Yes,I plannto buy it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+                 <%= link_to 'Yes, I plannto buy it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
                </div>
          <%else%>
         <div class="Clearboth PadT10">

@@ -3138,9 +3138,10 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 
 .Homeinnercontent { width:1000px; height:auto; margin:auto; overflow:hidden;}
-.Titledes { font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#2d2d2d; text-align:center;
-Clear:both; font-weight:bold; padding:0 0 30px 0;}
-
+.Titledes { font-family: Trebuchet MS, Helvetica, sans-serif; font-size:20px; color:#2d2d2d; text-align:center;
+Clear:both; font-weight:bold; padding:0 0 5px 0;}
+.Titledessmall { font-family: Trebuchet MS, Helvetica, sans-serif; font-size:12px; color:#2d2d2d; text-align:center;
+Clear:both; font-weight:bold; padding:0 0 20px 0;}
 
 .Homefourblocks { width:100%; float:left; padding-bottom:15px;}
 .Blueblockhome { width:150px; height:auto; float:left; margin-right:44px;
@@ -3196,9 +3197,6 @@ a.Blacklink:hover { text-decoration: underline;}
 
 /*---------------HOME POPUP GRAY BOX-----------*/
 .Homeinnercontent { width:1000px; height:auto; margin:auto; overflow:hidden;}
-.Titledes { font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#2d2d2d; text-align:center;
-            Clear:both; font-weight:bold; padding:0 0 30px 0;}
-
 
 .Homefourblocks { width:100%; float:left; padding-bottom:15px;}
 .Blueblockhome {  float:left; margin-right:44px; text-align:center;
@@ -4117,15 +4115,15 @@ a.bookmark_button:hover span { background-position:right bottom;}
  { 
   text-decoration: underline;
  }      
- .step_main_page{width:754px; height:auto; margin:auto; padding-top:15px; padding-bottom:50px;}
+ .step_main_page{width:850px; height:auto; margin:auto; padding-top:15px; padding-bottom:50px;}
 
-.main_step{width:491px; height:auto; margin:auto; clear:both; background:url(../images/step_bg.png) no-repeat center center;}
+.main_step{width:491px; height:auto; margin:auto; clear:both;padding-left:80px; background:url(../images/step_bg.png) no-repeat center center;}
 
 .main_step ul{padding:0px 0 0 39px; margin:0px; float:left;}
-.main_step ul li {font-family:Arial, Helvetica, sans-serif; font-size:18px; color:#9cc6db; text-decoration: none; list-style:none; display:block;
-						padding:9px 13px 10px 14px; margin:0 0 0 32px;  background:url(../images/step_button.png) no-repeat center top; float:left; font-weight:bold;}
+.main_step ul li {font-family:Arial, Helvetica, sans-serif; font-size:15px; color:#9cc6db; text-decoration: none; list-style:none; display:block;
+						padding:5px 11px 6px 12px; margin:0 0 0 32px;  background:url(../images/step_button.png) no-repeat center top; float:left; font-weight:bold;}
 
-.main_step ul li.selected   {font-family:Arial, Helvetica, sans-serif; font-size:18px; color: #FFFFFF; text-decoration: none;
+.main_step ul li.selected   {font-family:Arial, Helvetica, sans-serif; font-size:15px; color: #FFFFFF; text-decoration: none;
 							 background:url(../images/selcted_step.png) no-repeat left top;}
 
 .text_box{width:734px; height:auto; border:1px solid #ededb3; border-radius:5px; background:#fefeec; float:left; margin: 23px 0 0 0;
@@ -4298,7 +4296,7 @@ outline: none;
 
 .alert {
   padding: 8px 35px 8px 14px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #fcf8e3;
   border: 1px solid #fbeed5;
