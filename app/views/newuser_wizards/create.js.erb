@@ -16,3 +16,4 @@
 <%elsif @type == "buyer" && Item.get_follows_items_for_user(current_user).blank?  %>
    window.location.href = "/mobiles" 
 <%end%>   
+document.getElementById('product').focus();

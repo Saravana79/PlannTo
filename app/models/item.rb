@@ -461,14 +461,22 @@ class Item < ActiveRecord::Base
   end
   
   
-  def self.get_owner_item_ids_for_user(user)
-     popular_item_ids = configatron.wizard_items_owner.split(",") 
-     Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id).collect{|i| i.to_s}  - popular_item_ids
+  def self.get_owner_item_ids_for_user(user,type='nil')
+     popular_item_ids = configatron.wizard_items_owner.split(",")
+    if type == "all"  
+      Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id).collect{|i| i.to_s}
+    else  
+       Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id).collect{|i| i.to_s}  - popular_item_ids
+    end   
   end
   
-  def self.get_topics_follower_ids_for_user(user)
-      popular_topic_ids = configatron.wizard_topics.split(",") 
+  def self.get_topics_follower_ids_for_user(user,type='nil')
+      popular_topic_ids = configatron.wizard_topics.split(",")
+    if type == "all"
+       Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,"follower",Item::TOPIC_FOLLOWTYPES).collect(&:followable_id).collect{|i| i.to_s} 
+    else      
      Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,"follower",Item::TOPIC_FOLLOWTYPES).collect(&:followable_id).collect{|i| i.to_s} - popular_topic_ids
+   end  
   end
   
  def show_specification

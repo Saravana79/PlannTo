@@ -21,6 +21,7 @@
     <div class="title_header" style="padding:0px 0px 0px 25px;width:450px;height:26px;">
       <input style="margin-top:5px;width:360px; float:left;font-size:14px;min-height:20px;" placeholder="" type="text" value="" id="product"/><input style="float:left;margin-top:5px;" class="wizardbutton" type="button"/>
     </div>
+    
     <div style="clear:both;padding:0px 0px 0px 15px;width:500px;height:20px;display:block">
       <label style="font-size:9px;color:gray;">[Type the name of the product that you own in the text box or select from the sample products shown below]</label>
     </div>
@@ -101,9 +102,11 @@
   <%end%> 
   <%end%>
  $("p a").click(function(e){
+
    <% @items = Item.get_topics_follower_ids_for_user(current_user) %>
     <% @wizard_type = "follower" %>
    $("#wizard").html("<%= escape_javascript(render  'newuser_wizards/wizard_step2',:locals => {:items => @items,:wizard_type => @wizard_type}) %> ");
+    document.getElementById('product').focus();
    <%if !@invitation.blank? %>
    <%if @invitation.follow_type == "follower" %>
     $("#img_box_1").html("<%= escape_javascript(render  'newuser_wizards/product') %>");

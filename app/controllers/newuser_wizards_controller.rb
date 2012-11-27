@@ -22,12 +22,14 @@ class NewuserWizardsController < ApplicationController
       @item = @invitation.item
      end  
     if @type == "owner"
+       @item_id = Item.get_owner_item_ids_for_user(current_user,"all").join(",")
        @items = Item.get_topics_follower_ids_for_user(current_user)
     else
+      @item_id = Item.get_topics_follower_ids_for_user(current_user,"all").join(",")
       @items = Item.get_buyer_item_ids_for_user(current_user)  
     end 
     session[:wizard] = ''  
-    @item_id = params[:wizard][:item_id]
+  
     #Follow.wizard_save(params[:wizard][:item_id],@type,current_user)
      current_user.clear_user_follow_item
     if @type == "follower"
