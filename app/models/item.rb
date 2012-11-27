@@ -538,16 +538,24 @@ end
      return @items
   end
   
-  def self.new_wizard_popular_topics_and_items(current_user)
-    popular_item_ids = configatron.wizard_items.split(",")
-    #own_plan_item_ids = current_user.follows.where('follow_type =? or follow_type =?',"owner","buyer").collect(&:followable_id).collect{|i| i.to_s}
-    #popular_item_ids = popular_item_ids - own_plan_item_ids
-    @items = Item.where("id in (?)",popular_item_ids)
-     popular_topic_ids =  configatron.wizard_topics.split(",")
-    #follow_item_ids = current_user.follows.where('follow_type =?',"follower").collect(&:followable_id).collect{|i| i.to_s}
-    #popular_topic_ids = popular_topic_ids - follow_item_ids 
-    @topics = Item.where("id in (?)",popular_topic_ids) 
-    return @items,@topics
+  def self.new_wizard_popular_topics_and_items(current_user,type)
+   if type=="buyer"
+     popular_item_buyer_ids = configatron.wizard_items_buyer.split(",")
+     @items_buyer = Item.where("id in (?)",popular_item_buyer_ids)
+     @items_owner = ""
+     @topics = ""
+   elsif type == "owner"
+     popular_item_owner_ids = configatron.wizard_items_owner.split(",")
+     @items_owner = Item.where("id in (?)",popular_item_owner_ids)
+     @topics = ""
+     @items_buyer = ""
+    elsif type == "follower"
+     popular_topic_ids = configatron.wizard_topics.split(",")
+     @topics = Item.where("id in (?)",popular_topic_ids) 
+     @items_buyer = ""
+     @items_owner = ""
+    end   
+    return @items_owner,@items_buyer,@topics
   end
       
   def self.popular_topics(item_t)

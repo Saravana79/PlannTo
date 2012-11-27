@@ -29,14 +29,15 @@
      <div id="photo_box"  style="padding:5px 00px 0px 85px;">
       <%= render "newuser_wizards/default_images",:items => @items %>
 
-  <%  @popular_items,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user) %>
-  <% @popular_items.each do |item| %>
+  <%  @popular_items_owner,@popular_items_buyer,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user,"owner") %>
+  <% @popular_items_owner.each do |item| %>
+   <% follow = Follow.get_follow_object(current_user,item,"owner") %>
     <div class="productinwizard" id="product_<%= item.id %>" style="idth:160px;height:180px;display:block;">
    <div id="product_image" style="display:none;">image</div>
    <div class="imgprofilediv">
         <div class="imgpicbtnspan">
           <div style="margin-left:20px;width:160px;height:120px;display:block;">
-            <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item)%>
+              <%= link_to image_tag(item.image_url, height: "120", width: "160"), follow.blank? ?  follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "owner",type: "wizard"}) : "#", :method => :post%>
          </div>
       
         </div>
@@ -44,7 +45,7 @@
             <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;;margin-left:20px"%>
         </span>
       </div>
-      <% follow = Follow.get_follow_object(current_user,item,"owner") %>
+     
      <%if follow.blank? %>
       </br>
         <div class="btn-group" style="margin-left:30px;">
