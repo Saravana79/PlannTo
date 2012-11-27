@@ -1,43 +1,52 @@
 var item_ids = $("#wizard_item_id").val();
 var array = item_ids.split(",");
 array_length = array.length;
+
 if ($("#img_box_1").text().length < 100 && array.indexOf("<%= @item.id %>") == -1)
 {
+
  $("#img_box_1").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
 else if ($("#img_box_2").text().length < 100 && array.indexOf("<%= @item.id %>") == -1)
 {
+
  $("#img_box_2").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
 
 else if ($("#img_box_3").text().length < 100 && array.indexOf("<%= @item.id %>") == -1 )
 {
+
  $("#img_box_3").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
 
 else if ($("#img_box_4").text().length < 100 && array.indexOf("<%= @item.id %>") == -1)
 {
+
  $("#img_box_4").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
 
 
 else if ($("#img_box_5").text().length < 100 && array.indexOf("<%= @item.id %>") == -1)
 {
+
 $("#img_box_5").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
 
 
 else if ($("#img_box_6").text().length < 100 && array.indexOf("<%= @item.id %>") == -1)
 {
+
  $("#img_box_6").html("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>")
 }
 
 else if (array.indexOf("<%= @item.id %>") == -1)
 {
+
 $("#photo_box").append("<%= escape_javascript(render "newuser_wizards/product" ,:item => @item)%>");
 }
 if (array.indexOf("<%= @item.id %>") == -1)
 {
+
   $("#wizard_item_id").val(item_ids + "<%= escape_javascript(@item.id.to_s + ",")%>");
   $("#product").val("");
 }

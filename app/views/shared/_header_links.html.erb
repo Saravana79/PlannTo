@@ -1,6 +1,7 @@
 <div class="header">
   <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
-  <% if @static_page != "true" %>
+ <% a= @static_page == 'true' ? 'display:none' : '' %>
+  <div id="static" style="<%= a %>" >
    <div class="search">
   
     <span class="search_txt" id="plannToSearchSpan">
@@ -15,8 +16,9 @@
   <span>
     <a class="icon_user" href="#"></a>
     <a class="icon_chat" href="<%=messages_url%>"></a>
-  </span> 
- <%end%>
+  </span>
+  </div> 
+
        
       <!--header right part start here-->
    

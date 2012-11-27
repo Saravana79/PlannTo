@@ -456,15 +456,19 @@ class Item < ActiveRecord::Base
   end
   
   def self.get_buyer_item_ids_for_user(user)
-     Follow.where('follower_id =? and follow_type =?',user.id,"buyer").collect(&:followable_id)
+     popular_item_ids = configatron.wizard_items.split(",") 
+     Follow.where('follower_id =? and follow_type =?',user.id,"buyer").collect(&:followable_id).collect{|i| i.to_s} - popular_item_ids
   end
   
+  
   def self.get_owner_item_ids_for_user(user)
-     Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id)
+     popular_item_ids = configatron.wizard_items.split(",") 
+     Follow.where('follower_id =? and follow_type =?',user.id,"owner").collect(&:followable_id).collect{|i| i.to_s}  - popular_item_ids
   end
   
   def self.get_topics_follower_ids_for_user(user)
-     Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,"follower",Item::TOPIC_FOLLOWTYPES).collect(&:followable_id)
+      popular_topic_ids = configatron.wizard_topics.split(",") 
+     Follow.where('follower_id =? and  follow_type =? and followable_type in (?)',user.id,"follower",Item::TOPIC_FOLLOWTYPES).collect(&:followable_id).collect{|i| i.to_s} - popular_topic_ids
   end
   
  def show_specification
@@ -535,24 +539,13 @@ end
   end
   
   def self.new_wizard_popular_topics_and_items(current_user)
-    popular_item_ids = configatron.popular_cars.split(",")[0..1]
-    popular_item_ids += configatron.popular_bikes.split(",") [0..1]
-    popular_item_ids += configatron.popular_cycles.split(",")[0..1]
-    popular_item_ids +=  configatron.popular_mobiles.split(",")[0..1]
-    popular_item_ids +=  configatron.popular_tablets.split(",")[0..1] 
-    popular_item_ids += configatron.popular_cameras.split(",")[0..1]  
-    own_plan_item_ids = current_user.follows.where('follow_type =? or follow_type =?',"owner","buyer").collect(&:followable_id).collect{|i| i.to_s}
-    popular_item_ids = popular_item_ids - own_plan_item_ids
+    popular_item_ids = configatron.wizard_items.split(",")
+    #own_plan_item_ids = current_user.follows.where('follow_type =? or follow_type =?',"owner","buyer").collect(&:followable_id).collect{|i| i.to_s}
+    #popular_item_ids = popular_item_ids - own_plan_item_ids
     @items = Item.where("id in (?)",popular_item_ids)
-     
-    popular_topic_ids =  configatron.popular_car_topics.split(",")[0..1]
-    popular_topic_ids +=  configatron.popular_bike_topics.split(",") [0..1]
-    popular_topic_ids +=  configatron.popular_cycle_topics.split(",")[0..1]
-    popular_topic_ids +=  configatron.popular_mobile_topics.split(",")[0..1]
-    popular_topic_ids +=  configatron.popular_tablet_topics.split(",")[0..1] 
-    popular_topic_ids +=  configatron.popular_camera_topics.split(",")[0..1] 
-    follow_item_ids = current_user.follows.where('follow_type =?',"follower").collect(&:followable_id).collect{|i| i.to_s}
-    popular_topic_ids = popular_topic_ids - follow_item_ids 
+     popular_topic_ids =  configatron.wizard_topics.split(",")
+    #follow_item_ids = current_user.follows.where('follow_type =?',"follower").collect(&:followable_id).collect{|i| i.to_s}
+    #popular_topic_ids = popular_topic_ids - follow_item_ids 
     @topics = Item.where("id in (?)",popular_topic_ids) 
     return @items,@topics
   end

@@ -3,6 +3,7 @@ class NewuserWizardsController < ApplicationController
   layout "product"
   
   def new
+    @static_page = "true"
     @wizard_type = "owner"
     if !params[:invitation].blank? 
       @invitation = Invitation.find(params[:invitation]) 
@@ -27,7 +28,7 @@ class NewuserWizardsController < ApplicationController
     end 
     session[:wizard] = ''  
     @item_id = params[:wizard][:item_id]
-    Follow.wizard_save(params[:wizard][:item_id],@type,current_user)
+    #Follow.wizard_save(params[:wizard][:item_id],@type,current_user)
      current_user.clear_user_follow_item
     if @type == "follower"
       @not_follow = Follow.where('follower_id =? and followable_type in (?) and follow_type=?',current_user.id, Item::TOPIC_FOLLOWTYPES,@type).blank? ? "true" : ""
@@ -39,6 +40,7 @@ class NewuserWizardsController < ApplicationController
   def product_select
     @item = Item.find(params[:item_id])
     @wizard_type = params[:type]
+    Follow.wizard_save(params[:item_id], @wizard_type,current_user)
   end
   
   def previous

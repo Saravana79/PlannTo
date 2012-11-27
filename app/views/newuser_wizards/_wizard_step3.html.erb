@@ -26,13 +26,16 @@
     </div>
     </div>
    <div style="clear:both;"></div>
-   <div style="margin-left:80px;">
-   <%  @popular_items,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user) %>
+ <div id="photo_box"  style="padding:20px 00px 0px 85px;">
+      <%= render "newuser_wizards/default_images",:items => @items %>
+
+  <%  @popular_items,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user) %>
   <% @popular_items.each do |item| %>
-     <div class="product" id="product_<%= item.id %>">
-      <div class="imgprofilediv">
+    <div class="productinwizard" id="product_<%= item.id %>" style="idth:160px;height:180px;display:block;">
+   <div id="product_image" style="display:none;">image</div>
+   <div class="imgprofilediv">
         <div class="imgpicbtnspan">
-          <div style="width:160px;height:120px;display:block;">
+          <div style="margin-left:20px;width:160px;height:120px;display:block;">
        
              <%= link_to image_tag(item.image_url, height: "120", width: "160"), link_url(item)%>
          
@@ -41,37 +44,42 @@
       
         </div>
         <span class="imgtextspan">
-            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
+            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;;margin-left:20px"%>
         </span>
       </div>
       <% follow = Follow.get_follow_object(current_user,item,"buyer") %>
-    
-      <%if follow.blank? %>
+     <%if follow.blank? %>
       </br>
-     <div class="btn-group">
-                 <%= link_to 'Yes, I plannto buy it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
-               </div>
-         <%else%>
-        <div class="Clearboth PadT10">
+        <div class="btn-group" style="margin-left:30px;">
+            <%= link_to 'Yes,I plan to buy it', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+          </div>
+     
+          <%else%>
+             <div class="Clearboth PadT10">
             <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
               <tr>
                 <td><div class="btn-group">
-                      <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i>Own it</a>
+                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(follow.follow_type) rescue "" %></a>
                       <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
-                   
                         <ul class="dropdown-menu">
+                          <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , follow_path(follow,:type => "wizard") ,:id => "close_#{item.id}",:method => :delete %></a></li>
                           
-                          <li><%= link_to 'Delete',follow_path(follow,:type=>"wizard"), :method => :delete, :confirm => "Are you sure?"  %> </li>
+                          <li class="divider"></li>
+                          <li> </li>
                         </ul>
-                      
+                     
                     </div></td>
               </tr>
             </table>
+            
+           
+          </div>      
+           <%end%>
+            
             </div>
-            <%end%></div>
             <%end%>
           </div>
-    <%= render "newuser_wizards/default_images" ,:items => @items%>
+    
     <%= f.hidden_field "item_id" %>
      <%= hidden_field_tag "invitation_id",@invitation.id rescue "" %>
     <%= f.hidden_field "type",:value => "buyer" %>

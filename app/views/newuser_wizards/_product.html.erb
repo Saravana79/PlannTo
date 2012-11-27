@@ -1,15 +1,17 @@
  
-<div class="productinwizard" id="product_<%= @item.id %>" style="height:160px;width:196px;">
+ 
+ 
+<div class="productinwizard" id="product_<%= @item.id %>" style="idth:160px;height:180px;display:block;">
    <div id="product_image" style="display:none;">image</div>
    <div class="imgprofilediv">
         <div class="imgpicbtnspan">
-          <div style="width:160px;height:120px;display:block;">
+          <div style="margin-left:20px;width:160px;height:120px;display:block;">
           <%= link_to image_tag(@item.image_url, height: "120", width: "160"), link_url(@item)%>
        
          </div>
         </div>
         <span class="imgtextspan">
-            <%= link_to @item.name, link_url(@item), :class => "produ_bgimg" ,:style=>"width:155px;"%>
+            <%= link_to @item.name, link_url(@item), :class => "produ_bgimg" ,:style=>"width:155px;margin-left:20px"%>
         </span>
           
       </div>
@@ -19,7 +21,7 @@
             <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
               <tr>
                 <td><div class="btn-group">
-                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(follow.follow_type) rescue "" %></a>
+                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(@wizard_type)  %></a>
                       <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
                         <ul class="dropdown-menu">
                           <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , product_delete_newuser_wizard_path(@item.id,:type => @wizard_type) ,:id => "close_#{@item.id}",:remote => true%></a></li>
