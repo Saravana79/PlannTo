@@ -82,7 +82,11 @@
             openLoginPopup("#" + $(this).attr('id'), "submit");
             return false
           }
-        })      
+        }) 
+    :javascript
+      $(document).ready(function() {
+      Placeholders.init();
+      }           
   -else
     %body   
       = render 'shared/header_links'
