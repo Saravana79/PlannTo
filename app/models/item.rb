@@ -548,18 +548,21 @@ end
   
   def self.new_wizard_popular_topics_and_items(current_user,type)
    if type=="buyer"
+     @items_buyer = []
      popular_item_buyer_ids = configatron.wizard_items_buyer.split(",")
-     @items_buyer = Item.where("id in (?)",popular_item_buyer_ids)
+     popular_item_buyer_ids.map{|id| @items_buyer  << Item.find(id) rescue ""}
      @items_owner = ""
      @topics = ""
    elsif type == "owner"
+     @items_owner = []
      popular_item_owner_ids = configatron.wizard_items_owner.split(",")
-     @items_owner = Item.where("id in (?)",popular_item_owner_ids)
+     popular_item_owner_ids.map{|id| @items_owner  << Item.find(id) rescue ""}
      @topics = ""
      @items_buyer = ""
     elsif type == "follower"
+     @topics = [] 
      popular_topic_ids = configatron.wizard_topics.split(",")
-     @topics = Item.where("id in (?)",popular_topic_ids) 
+     popular_topic_ids.map{|id| @topics  << Item.find(id) rescue ""}
      @items_buyer = ""
      @items_owner = ""
     end   
