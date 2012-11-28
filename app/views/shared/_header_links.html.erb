@@ -66,7 +66,8 @@
    </span>
    </div>
     <% else %>
-      <%if @static_page == "true" %>
+      <%if @static_page == "true"  %>
+      <%if @devise != "true" %>
      <div style="float:right;padding:6px 0px 0px 0px;">
          <div>
          <div style="float:left;"> 
@@ -93,7 +94,10 @@
  
    
     </div>
+    <%end%>
      <%else%>
+       <%if @devise != "true" %>
+  
       <div style="float:right;padding:20px 0px 0px 0px;">
          <span>
  <%= link_to "Sign In", "#",:onclick =>"$('#dialog-form #click_message').hide();$('#dialog-form').dialog({modal: true,height: 480,width: 275 }); $('.Close_dialog').show();
@@ -102,6 +106,7 @@
         
    </span>
    </div> 
+   <%end%>
    <%end%>
   
     <% end %>

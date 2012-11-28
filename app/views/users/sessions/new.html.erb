@@ -8,7 +8,7 @@ if(window.opener) {
    <div style="width:300px">
   
     <% if @rescue == "true" %>
-      <b>Wrong Email or Password!! </b>
+      <%= render  '/shared/login_popup_message',:type => 'login-devise'%>
    <%end%> 
     <%= render "shared/login_fields", {:f => f} %>
     </div>
