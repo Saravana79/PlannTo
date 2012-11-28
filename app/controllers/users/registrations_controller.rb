@@ -1,12 +1,16 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   layout "product"
   def new
+    @static_page = "true"
+    @devise = "true"
     @invitation = Invitation.find_by_token(params[:token])
     build_resource
     resource.email = @invitation.email unless @invitation.nil?
   end
 
   def create
+    @static_page = "true"
+    @devise = "true"
     @invitation = Invitation.find_by_token(params[:token])
     @item =  @invitation.item unless @invitation.blank?
     

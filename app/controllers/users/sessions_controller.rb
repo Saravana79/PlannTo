@@ -6,13 +6,16 @@ class Users::SessionsController < Devise::SessionsController
    prepend_before_filter :allow_params_authentication!, :only => :create
   #skip_before_filter :allow_params_authentication!, :only => :create #, :if => request.xhr?
   def new
+    @static_page = "true"
+    @devise = "true"
     return redirect_to root_url unless current_user.blank?
     super
   end
 
 
   def create
-
+     @static_page = "true"
+     @devise = "true"
     # resource = warden.authenticate!(auth_options)
     resource = warden.authenticate(auth_options)
  # if resource
