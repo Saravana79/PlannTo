@@ -8,29 +8,45 @@
     <%@form_id = "edit_question_content_#{@content.id}"%>
     <%@title_id ="edit_question_content_#{@content.id}"%>
   <%end%>
-
+<%= form_for :popup, :url => new_popup_article_contents_path,:html => {:method => :post,:target=>'mypopup',:id => 'new_popup' } do |f| %>
+    <%= hidden_field_tag "sub_type" %>
+    <%= hidden_field_tag "item" %>
+    <%= hidden_field_tag "content" %>
+    <%= hidden_field_tag "title" %>
+    <%= hidden_field_tag "description" %>
+ <%end%>
   <%= form_for @content || QuestionContent.new,:html => { :id => "#{@form_id}",:class => "test" }, :remote => true do |f| %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
     <div id="notification" class="notificationStyle">Thank You, Question has been created.</div>
-     <% unless params[:sub_type] %>
-      <%if Rails.env == "development"%>
-       <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+    <%if Rails.env == "development"%>
+  <% unless params[:sub_type] %>
+   <div style="float:right;margin-left:2000px;">
+       <img  src="/images/open-window.png" onclick= "open_and_redirect2()" title="Open New window" width="17"  />
+       </div>
      <%end%>
-     <%end%>
-     <script type="text/javascript">
+  <%end%>   
   
-    function open_and_redirect() {
-       $("#contentEditView").dialog('destroy');
-$(".ui-dialog-content").dialog('destroy')
+
+    <script type="text/javascript">
+      function open_and_redirect2() {
+    
      var i =  $("#question_content_sub_type").val();
-        window.open('<%= "/article_contents/new_popup?sub_type="%>'+ i + '&&item=<%= @item.id rescue ''%>' + '&&content=<%= @content.id rescue '' %>', '', 'toolbars=0');
-       
+     $("#sub_type").val(i);
+     $("#item").val("<%= @item.id rescue ""  %>");
+     $("#content").val("<%= @content.id rescue ""  %>");
+     $("#title").val($("#question_content_title").val());
+     var x = tinyMCE.get('m_text2').getContent();
+     $("#description").val(x);
+      window.open('',"mypopup", 'toolbars=0');
+     $("#contentEditView").dialog('destroy');
+       $(".ui-dialog-content").dialog('destroy')
+  $('#new_popup').submit(); 
     }
 </script>
     <%if @content %>
      <%= hidden_field_tag :detail,@detail %>
-     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
  <span class="Popuptitle"><center> <h1 id="questionTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
  <%end%>
     <div style="padding:5px 5px 0px 0px;text-align:center">
@@ -165,7 +181,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
     <div style="padding:5px 5px 0px 5px;">
       <div class="title_header float_lft">Description :</div>
       <div style="margin-left:80px;">
-        <%= f.text_area :description, :class => 'textFilling', :style=> 'width:400px;height:50px;' %>
+        <%= f.text_area :description, :class => 'textFilling',:id => "m_text2", :style=> 'width:400px;height:50px;' %>
       </div>
      
     </div>
