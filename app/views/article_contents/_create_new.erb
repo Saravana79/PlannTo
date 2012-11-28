@@ -18,13 +18,22 @@
   <%end%>
   <% @article_content= ArticleContent.new %>
   <% @article_content.content_photos.build %>
-  
+  <%= form_for :popup, :url => new_popup_article_contents_path,:html => {:method => :post,:target=>'mypopup',:id => 'new_popup' } do |f| %>
+    <%= hidden_field_tag "sub_type" %>
+    <%= hidden_field_tag "item" %>
+    <%= hidden_field_tag "content" %>
+    <%= hidden_field_tag "title" %>
+    <%= hidden_field_tag "description" %>
+ <%end%>
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
-  <% unless params[:sub_type] %>
+   <% unless params[:sub_type] %>
   <%if Rails.env == "development"%>
-    <button onclick="open_and_redirect()" style="margin-left:350px;">Open new Window</button>
+    <div style="float:right;margin-left:2000px;">
+      <img  src="/images/open-window.png" onclick= "open_and_redirect()" title="Open New window" width="17"  />
+   </div>   
   <%end%>
   <%end%>
+  
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :sub_type%>
@@ -32,18 +41,25 @@
   <div style="padding:5px 5px 0px 0px;text-align:center">
   <div id="add_photo" style="display:none;">
    
-    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:520px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:500px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
  
     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
     </div>
-    <script type="text/javascript">
+  <script type="text/javascript">
+      function open_and_redirect() {
   
-    function open_and_redirect() {
-       $("#contentEditView").dialog('destroy');
-$(".ui-dialog-content").dialog('destroy')
      var i =  $("#article_content_sub_type").val();
-        window.open('<%= "/article_contents/new_popup?sub_type="%>'+ i + '&&item=<%= @item.id rescue ''%>' + '&&content=<%= @content.id rescue '' %>', '', 'toolbars=0');
-       
+     $("#sub_type").val(i);
+     $("#item").val("<%= @item.id rescue ""  %>");
+     $("#content").val("<%= @content.id rescue ""  %>");
+     $("#title").val($("#article_content_title").val());
+     var x = tinyMCE.get('m_text').getContent();
+     $("#description").val(x);
+      window.open('',"mypopup", 'toolbars=0');
+         $("#contentEditView").dialog('destroy');
+$(".ui-dialog-content").dialog('destroy')
+  $('#new_popup').submit(); 
+  
     }
 </script>
 
@@ -64,7 +80,7 @@ $(".ui-dialog-content").dialog('destroy')
     <%else%>
      <%= hidden_field_tag :detail,@detail%>
         
-    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:520px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:500px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    
     <span class="Popuptitle"><center> <h1 id="contentTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
     <div class="title_header float_lft">Title :</div>
@@ -564,8 +580,46 @@ g.oeditor = tinyMCE.init({
 g.oeditor.render();
 });
 </script>
+<script>
+//$(document).ready(function() {
 
+  //setTimeout(function() {
+   
+    //$('form[data-remote]#<%= @form_id %>').submit();
+
+ // }, 1000*30); // 1000ms * 60s = 1m
+//}) 
+</script>
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

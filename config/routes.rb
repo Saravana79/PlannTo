@@ -155,7 +155,7 @@ resources :comments do
     put :download
     collection do
       post :download
-      get :new_popup
+      post :new_popup
       get :bmarklet
       #post :update - by shanmukha I have confused why they defined update as collection with  post method .  Actualy in restful method update is put method
       put :download

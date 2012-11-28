@@ -4,6 +4,7 @@
 <%= javascript_include_tag 'textTagger' %>
 <%= javascript_include_tag 'application' %>
 <script>
+
 <%unless @content.blank? %>
 <%if @content.is_article_content?%>
   <%unless @content.url.blank?%>
@@ -12,8 +13,18 @@
 <%end%>  
 <%end%>
 </script>
+
 <%= render_new_open_window_form(@item,@items,@content,params[:sub_type],@url) %>
  <script>
+   
+  <% unless @content %>
+  $("#article_content_title").val("<%= @title  rescue "" %>");
+   $(".textFilling").val("<%= @description.html_safe rescue "" %>");
+   $("#question_content_title").val("<%= @title  rescue "" %>");
+   $(".textFilling").val("<%= @description.html_safe rescue "" %>");
+   $("#review_content_title").val("<%= @title  rescue "" %>");
+   $(".expanding").val("<%= @description.html_safe rescue "" %>");
+ <%end%>  
 <%unless @content.blank? %>
  $(".edit_dwnld_url_<%=@content.id%>").show();
   <%if  !@content.url.blank?%>

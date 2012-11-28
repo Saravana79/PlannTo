@@ -40,21 +40,40 @@
     <%@manual_image= "edit_manual_image_#{@article_content.id}"%>
     <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
   <%end%>
-
+<%= form_for :popup, :url => new_popup_article_contents_path,:html => {:method => :post,:target=>'mypopup3',:id => 'new_popup3' } do |f| %>
+    <%= hidden_field_tag "sub_type" %>
+    <%= hidden_field_tag "item" %>
+    <%= hidden_field_tag "content" %>
+    <%= hidden_field_tag "title" %>
+    <%= hidden_field_tag "description" %>
+    <%= hidden_field_tag "url" %>
+ <%end%>
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
   <%if Rails.env == "development"%>
   <% unless params[:sub_type] %>
-       <button onclick="open_and_redirect_url()" style="margin-left:350px;">Open new Window</button>
+      <div style="float:right;margin-left:2000px;">
+      <img  src="/images/open-window.png" onclick= "open_and_redirect_url1()" title="Open New window" width="17"  />
+   </div>   
      <%end%>
   <%end%>   
-   <script type="text/javascript">
-     function open_and_redirect_url() {
-       $("#contentEditView").dialog('destroy');
-$(".ui-dialog-content").dialog('destroy')
+  
+
+    <script type="text/javascript">
+      function open_and_redirect_url1() {
      var i =  $("#article_content_sub_type").val();
-        window.open('<%= "/article_contents/new_popup?sub_type="%>'+ i + '&&item=<%= @item.id rescue ''%>' + '&&content=<%= @article_content.id rescue '' %>' + '&&url=true', '', 'toolbars=0');
-       }
-  </script>
+     $("#sub_type").val(i);
+     $("#item").val("<%= @item.id rescue ""  %>");
+     $("#content").val("<%= @article_content.id rescue ""  %>");
+     $("#title").val($("#article_content_title").val());
+     $("#url").val("true");
+     var x = $(".expanding").val();
+     $("#description").val(x);
+      window.open('',"mypopup3", 'toolbars=0');
+     $("#contentEditView").dialog('destroy');
+   $(".ui-dialog-content").dialog('destroy')
+  $('#new_popup3').submit(); 
+    }
+</script>
   
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
      <%= hidden_field_tag 'submit_url','submit_url' %>
