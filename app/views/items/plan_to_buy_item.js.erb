@@ -7,7 +7,7 @@ Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
           showTimeout: 1000,
          <% if(@item.is_a?Item) %>
             content: 
-             "Congrats on owning this <%= @item.type.singularize %>,<br/> Would you like help others<br /> by reviewing this <%= @item.type.singularize %> <%= escape_javascript(button_to "Add a review", {:controller => :accounts, :action => :add_review}, {:remote => true, :method => :get} ) %>",
+             "Congrats on owning this <%= @item.type.singularize %>,<br/> Would you like to help others<br /> by reviewing this <%= @item.type.singularize %> <%= escape_javascript(button_to "Add a review", {:controller => :accounts, :action => :add_review}, {:remote => true, :method => :get} ) %>",
             <%else%>
              content: "Congrats on owning this <%= @item.sub_type.singularize %> ,<br/> Please provide your inputs about this <%= @item.sub_type.singularize %> <br/> in comments section",
             <%end%>
