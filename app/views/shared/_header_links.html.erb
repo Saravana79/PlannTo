@@ -14,7 +14,8 @@
   </div> 
 
   <span>
-    <a class="icon_user" href="#"></a>
+   <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
+   
     <a class="icon_chat" href="<%=messages_url%>"></a>
   </span>
   </div> 
