@@ -21,9 +21,7 @@ class ArticleContentsController < ApplicationController
       params[:article_content][:thumbnail] = ''
    end  
     @article=ArticleContent.saveContent(params[:article_content] || params[:article_create],current_user,ids, request.remote_ip, score)
-    if !params[:commit]
-       @article.update_attribute('status',4)
-    end   
+      
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
    if params[:submit_url] == 'submit_url'
      ContentPhoto.save_url_content_to_local(@article) 
