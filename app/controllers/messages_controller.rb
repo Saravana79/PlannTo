@@ -29,6 +29,7 @@ class MessagesController < ApplicationController
     if params[:method] == 'reply'
       user_to = User.find(params[:id])
       message = current_user.send_message(user_to, { :topic => params[:message][:topic], :body => params[:message][:body] })
+      return redirect_to :back
     else
       @ids.each do |id|
         send_message(id)
