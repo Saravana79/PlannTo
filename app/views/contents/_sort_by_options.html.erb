@@ -13,7 +13,8 @@
 <a class="<%=votes_class%>" href="#" id="sortByVotes">Votes</a> <span style="padding:0px 5px;">|</span> 
 		<a class="txt_blue" href="#">Most Comments</a> 
 		<%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
-		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "Search content" %>
+    <label style="padding-right:10px;color:#7A7A7A;font-size:11px;">Search Content:</label>
+		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "" %>
 		<%= f.hidden_field :sub_type %>
 		<%= f.hidden_field :item_ids, :value => @item.try(:id)%>
 		<%= f.hidden_field :sort_by, :value => ""%>
