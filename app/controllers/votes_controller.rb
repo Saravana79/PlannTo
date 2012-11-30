@@ -41,6 +41,8 @@ class VotesController < ApplicationController
       Resque.enqueue(VotingPoint, current_user.id, @voteable.id, params[:parent])
       #Point.add_voting_point(current_user, @voteable)
       UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',@voteable.type == "AnswerContent" ? "Answer" : @voteable.sub_type,"",request.remote_ip)
+      @vote = voter.fetch_vote(voteable)
+      @voteable = params[:parent].camelize.constantize.find(params[:id])
     else
       render :nothing => true
     end

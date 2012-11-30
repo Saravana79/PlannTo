@@ -16,7 +16,7 @@ class Vote < ActiveRecord::Base
     vote = $redis.get redis_key
     $redis.set(redis_key, true) if self.vote?
     $redis.set(redis_key, false) if !self.vote?
-    if self.vote == ""
+    if self.vote.nil?
       $redis.del(redis_key) if !vote.nil?
     end
   end

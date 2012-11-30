@@ -214,13 +214,21 @@ module ThumbsUp #:nodoc:
       def voted_which_way?(voteable, direction)
         raise ArgumentError, "expected :up or :down" unless [:up, :down].include?(direction)
         class_name = get_class_name(voteable.class.name)
-        0 < Vote.where(
+        vote = Vote.where(
           :voter_id => self.id,
           :voter_type => self.class.name,
-          :vote => direction == :up ? true : false,
+          #:vote => direction == :up ? true : false,
           :voteable_id => voteable.id,
           :voteable_type => class_name
-        ).count
+        )
+        if(vote.count == 0)
+          return false
+        elsif(vote[0].vote == 1 and direction ==:up)
+          return true
+        elsif(vote[0].vote == 0 and direction ==:down)
+          return true
+        else
+          return false
       end
 
     end
