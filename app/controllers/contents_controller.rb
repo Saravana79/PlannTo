@@ -55,7 +55,7 @@ class ContentsController < ApplicationController
     filter_params["guide"] = params[:guide] if params[:guide].present?
     
    if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
-      @contents,@content_ids,@activity_ids = Content.my_feeds_filter(filter_params,current_user)
+      @contents = Content.my_feeds_filter(filter_params,current_user)
    else      
       @contents = Content.filter(filter_params)
    end  
@@ -169,7 +169,7 @@ class ContentsController < ApplicationController
     filter_params["guide"] = params[:guide] if params[:guide].present?
     filter_params["order"] = get_sort_by(params[:sort_by]) 
     if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
-       @contents,@content_ids,@activity_ids = Content.my_feeds_filter(filter_params,current_user)
+        @contents = Content.my_feeds_filter(filter_params,current_user)
     else      
       @contents = Content.filter(filter_params)
     end  
@@ -382,7 +382,7 @@ class ContentsController < ApplicationController
        filter_params["root_items"] = @root_items if params[:search_type] != "admin_feeds"
        filter_params["guide"] = params[:guide] if params[:guide].present?
        filter_params["order"] = get_sort_by(params[:sort_by])
-      @contents,@content_ids,@activity_ids = Content.my_feeds_filter(filter_params,current_user)
+       @contents = Content.my_feeds_filter(filter_params,current_user)
     end
     respond_to do |format|
      format.js{ render "contents/my_feeds"}

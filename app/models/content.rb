@@ -173,17 +173,16 @@ union
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
 
 end
-   @content_ids  = []
-   @activity_ids = []
-   contents.map{ |c| @content_ids << c.content_id if c.activity_id == nil} rescue ''
-   contents.map{ |c| @activity_ids << c.activity_id  if c.activity_id != nil} rescue ''
+   content_ids  = []
+   activity_ids = []
+   contents.map{ |c| content_ids << c.content_id if c.activity_id == nil} rescue ''
+   contents.map{ |c| activity_ids << c.activity_id  if c.activity_id != nil} rescue ''
    content_ids = content_ids.blank? ? "" : content_ids
    activity_ids = activity_ids.blank? ? "" : activity_ids
-   contents_1 = Content.find(:all, :conditions => ['id in (?)',@content_ids] ,:order => filter_params["order"])
-   activity_contents = UserActivity.where("id in (?)", @activity_ids).group(:id).order("time desc")
+   contents_1 = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => filter_params["order"])
+   activity_contents = UserActivity.where("id in (?)", activity_ids).group(:id).order("time desc")
    contents = ((contents_1 + activity_contents).sort{|x,y| x.sort_by <=> y.sort_by}).reverse
   # contents = Content.find(content_ids)
-   return contents,@content_ids,@activity_ids
  end
  
   def self.follow_content_ids(current_user,categories)
