@@ -3,6 +3,9 @@ class FollowsController < ApplicationController
   
   def destroy
     follow = Follow.find(params[:id])
+    if  follow.followable_type  == "User"
+        follow .remove_activity(current_user)
+    end
     follow.destroy
     if params[:type] == "wizard"
        session[:wizard] = follow.follow_type
@@ -15,7 +18,7 @@ class FollowsController < ApplicationController
       current_user.follows.create(params[:follow])
       current_user.clear_user_follow_item
       if params[:follow][:followable_type]  == "User"
-       UserActivity.save_user_activity(current_user, params[:follow][:followable_id],"followed","User",params[:follow][:followable_id],request.remote_ip)
+        UserActivity.save_user_activity(current_user, params[:follow][:followable_id],"followed","User",params[:follow][:followable_id],request.remote_ip)
       end 
       if params[:follow][:type] == "wizard"
         session[:wizard] = params[:follow][:follow_type]

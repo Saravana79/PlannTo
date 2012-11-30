@@ -1,18 +1,27 @@
 <div id="contentEditView"></div> 
 <div id="newContentList">
   </div>
+
 <% if !@contents.blank? %>
+<% content_ids = [] %>
 <% @contents.each do |content| %>
    <%if content.is_a?(UserActivity) %>
-   
-     <%= render "contents/activity",:content => content %>
+       <%= render "contents/activity",:content => content,:content_ids => content_ids,:page => params[:page].blank? ? "1" : params[:page]%>
+     
        <%if content.related_activity_type!="User"%>
+       <% unless content_ids.include?(content.related_id) %>   
          <% content = Content.find(content.related_id) %>
-         <%= render_content_type(content) %>
+         <%= render_content_type(content,params[:page].blank? ? "1" : params[:page]) %>
+         <%end%>
        <%end%>
      <%else%> 
-       <%= render_content_type(content) %>
-     <%end%>     
+      <%= render "contents/activity",:content => content,:content_ids => content_ids,:page => params[:page].blank? ? "1" : params[:page] %>
+     <% unless content_ids.include?(content.id) %> 
+        <%= render_content_type(content,params[:page].blank? ? "1" : params[:page]) %>
+     <%end%>  
+     <%end%> 
+       <% content_ids << content.related_id if content.related_activity_type != 'User' rescue nil %>
+     <% content_ids << content.id rescue "" %>    
 	  <% end %>
  <%# if @contents.current_page < @contents.total_pages %>
 <%# params ||={}  %>

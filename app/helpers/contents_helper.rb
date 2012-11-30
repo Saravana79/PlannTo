@@ -1,20 +1,20 @@
 module ContentsHelper
 
-  def render_content_type(item)
+  def render_content_type(item,page="")
     case item.type
     when "QuestionContent"
-      render :partial => "contents/question", :locals => { :content => item }
+      render :partial => "contents/question", :locals => { :content => item,:page => page }
     when "ReviewContent"
-      render :partial => "contents/review", :locals => { :content => item }
+      render :partial => "contents/review", :locals => { :content => item,:page => page }
    when "AnswerContent"
-      render :partial => "contents/answer", :locals => { :content => item }
+      render :partial => "contents/answer", :locals => { :content => item,:page => page }
     else
       if (item.type == "ArticleContent" && item.url.blank?)
-        render :partial => "contents/article", :locals => { :content => item }
+        render :partial => "contents/article", :locals => { :content => item,:page => page }
       elsif (item.type == "ArticleContent" && item.video?)
-        render :partial => "contents/video", :locals => {:content => item}
+        render :partial => "contents/video", :locals => {:content => item,:page => page}
       else
-        render :partial => "contents/article", :locals => {:content => item }
+        render :partial => "contents/article", :locals => {:content => item,:page => page }
       end
     end
   end
@@ -218,18 +218,18 @@ module ContentsHelper
     return "/history_details?detail_id=#{id}&type=#{type}"
   end
 
-  def get_rating_or_category_contents(content)
+  def get_rating_or_category_contents(content,page="")
     str=""
     if content.sub_type == "#{ArticleCategory::ACCESSORIES}"
      str+= "<label>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
         if(content.field1 != '' && content.field1 != '0')
-          str+="<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.field1}'></div>"
+          str+="<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}{page}' data-rating='#{content.field1}'></div>"
         end
       else
         str=""
-        str+= "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}' data-rating='#{content.rating}'></div><br/>"
+        str+= "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}{page}' data-rating='#{content.rating}'></div><br/>"
         unless content.pros.blank?
           str+= "<label>Pro :</label>#{content.pros}<br/>"
         end

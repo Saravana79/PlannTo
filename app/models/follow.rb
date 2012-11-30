@@ -78,6 +78,9 @@ class Follow < ActiveRecord::Base
     ['Apps', 'Accessories'].include?(type)
   end
   
+  def remove_activity(current_user)
+    UserActivity.where('user_id =? and related_activity_type=? and related_id =?',current_user.id,"User",self.followable_id)
+  end
   def content_followable
     Content.find(self.followable_id)
   end
