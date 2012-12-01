@@ -316,7 +316,7 @@ module ItemsHelper
     str = str + 'id="specify"><a href="#specification"><span>Specification</span></a></li>'
     str = str + "<li "
     str = str + "#{'class="tab_active"' if tab_type == "where_to_buy"}"
-    str = str + '><a href="#where_to_buy" ><span>Where to Buy</span></a></li>'
+    str = str + 'id="buy"><a href="#where_to_buy" ><span>Where to Buy</span></a></li>'
     end
     return html_list.html_safe
   end

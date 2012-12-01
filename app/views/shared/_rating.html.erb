@@ -1,6 +1,16 @@
+<%if @type == "group"  && item.is_a?(CarGroup)%>
+  
+   <% t_rating = 0 %>
+  <% item.related_cars.each do |c| %>
+    <% t_rating+= c.rating.to_f.round(1) %>
+    
+  <%end%>
+  <%items_size= item.related_cars.size %>
+   <% rating = t_rating/items_size.to_f %>
+ <%end%>  
 <% rating_id = rating_id || "displayRating"%>
 <div class ="displayRating" id="<%=rating_id%>"></div>
-<div style="display:none;" itemprop="rating"><%="#{item.rating.to_f.round(1)}"%></div>
+<div style="display:none;" itemprop="rating"><%="#{@type == "group" ? rating : item.rating.to_f.round(1)}"%></div>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('div#<%=rating_id%>').raty({

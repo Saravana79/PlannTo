@@ -70,19 +70,74 @@ class Item < ActiveRecord::Base
     itemtype1 = Itemtype.find_by_id(itemtype_id).itemtype
     return itemtype1
   end
-
-  def get_price_info(item_type,displaycomment = true )   
+  
+  def get_group_price_info(item_type,displaycomment = true)
+     prices = []
+     item_attribute1= []
+     attribute_value1 = []
+     self.related_cars.each do |item|  
+       item_attribute =  item.item_attributes.select{|a| a.name == item_type}.last
+       item_attribute1 <<   item_attribute 
+       if item_attribute
+         attribute_value =  item_attribute.attribute_values.where(:item_id => item.id).last
+         attribute_value1 << attribute_value
+       if !attribute_value.blank?  
+           prices << attribute_value.value.to_i  if attribute_value.value.to_i > 0
+         end   
+       end 
+      end  
+      prices.sort {|a1,a2| a2[0]<=>a1[1]}
+      min_price = prices.last
+      max_price = prices.first
+      price = "0"; 
+      if !prices.blank?
+        if(displaycomment)
+         if prices.size > 1
+           price = item_attribute1.first.name + ' - '  +
+          number_to_indian_currency(min_price.to_i) +
+           '  -  ' +   number_to_indian_currency(max_price.to_i) +
+          (attribute_value1.first.addition_comment.blank? ? "" : " ( #{attribute_value1.first.addition_comment} )")
+         else
+           price = item_attribute1.first.name + ' - '  +
+          number_to_indian_currency(min_price.to_i) +
+          (attribute_value1.first.addition_comment.blank? ? "" : " ( #{attribute_value1.first.addition_comment} )")
+         end   
+        else
+         if prices.size > 1
+          price = number_to_indian_currency(min_price.to_i) +  ' - '  + number_to_indian_currency(max_price.to_i)
+         else
+            price = number_to_indian_currency(min_price.to_i)
+          end   
+        end 
+      else
+        ""
+      end
+  end
+  
+  def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
+      
     price = "0"; 
     item_attribute = item_attributes.select{|a| a.name == item_type}.last
+   
     if item_attribute
       attribute_value = item_attribute.attribute_values.where(:item_id => id).last
       if !attribute_value.blank?
         if(displaycomment)
-          item_attribute.name + ' - '  +
-          number_to_indian_currency(attribute_value.value.to_i) +
+         if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
+           item_attribute.name + ' - '  +
+          "starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
           (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
+         else
+            item_attribute.name + ' - '  +
+           number_to_indian_currency(attribute_value.value.to_i)  +
+          (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )") 
+        end  
         else
-          number_to_indian_currency(attribute_value.value.to_i) 
+        if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
+          "starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
+        else
+           number_to_indian_currency(attribute_value.value.to_i)
+        end    
         end 
       else
         ""
@@ -275,6 +330,19 @@ class Item < ActiveRecord::Base
    return ($redis.hget("items:ratings", "item:#{self.id}:review_count_total")).to_i
   end  
 
+  def rated_users_count_group
+   unless($redis.hget("items:ratings1", "item:#{self.id}:review_count_total1"))
+      item_rating = 0
+      
+      self.related_cars.each do |c|
+        item_rating += c.average_rating
+      end  
+     return item_rating
+   else
+     return ($redis.hget("items:ratings1", "item:#{self.id}:review_count_total1")).to_i 
+    end
+   end
+   
   def average_rating
   created_reviews = Array.new
     complete_created_reviews = self.contents.where(:type => 'ReviewContent' )    
