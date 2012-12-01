@@ -10,14 +10,16 @@
    <div class="mainContentDiv">
     <div style="width:100px;height:120px;">
      <%= image_tag(u.get_photo(:medium)) %></div> <br /> </div>
-  <%elsif !content_ids.include?(content.related_id) %>
-    <%if  content.related_activity != "created" ||  content.related_activity != "answered"  %>
+  <%elsif !content_ids.include?(content.related_id)%>
+  
+     <% unless  content.related_activity == "created" || content.related_activity == "answered" %>
+    
  <span id="username_<%= page %><%= content.related_id%>"> <a class="txt_brown_bold" href="<%= content.user.get_url()%>"> <%= content.user.name %></a> </span>
 	<span id="related_activity_<%= page %><%= content.related_id%>"> <a class="txt_brown_bold">  <%= content.related_activity + " " %> </a> </span>
 <a class="txt_brown_bold"><%= indefinite_articlerize(content.related_activity_type.singularize) %></a> <a class="txt_brown_bold"> - <%= time_ago_format(content)%> ago.</a>
-<%end%>
+  <%end%>
 <%elsif  content_ids.include?(content.related_id) %>
-  <%if  content.related_activity != "created" ||  content.related_activity != "answered" %>
+  <% unless  content.related_activity == "created" || content.related_activity == "answered"  %>
     <script>
        if ($("#activity_<%= page %><%= content.related_activity_type != 'User' ? content.related_id :  ''%>").val().to_string == "")
       {
