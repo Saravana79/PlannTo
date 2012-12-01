@@ -17,6 +17,7 @@
 <a class="txt_brown_bold"><%= indefinite_articlerize(content.related_activity_type.singularize) %></a> <a class="txt_brown_bold"> - <%= time_ago_format(content)%> ago.</a>
 <%end%>
 <%elsif  content_ids.include?(content.related_id) %>
+  <%if  content.related_activity != "created" ||  content.related_activity != "answered" %>
     <script>
        if ($("#activity_<%= page %><%= content.related_activity_type != 'User' ? content.related_id :  ''%>").val().to_string == "")
       {
@@ -24,7 +25,7 @@
       }
       else
       {
-       if ($("#username_<%= page %><%= content.related_id%>").text().indexOf('<%= escape_javascript(content.user.name) %>') == -1)
+       if ($("#username_<%= page %><%= content.related_id%>").text().indexOf('<%= escape_javascript(content.user.name) %>') == -1 )
        {
       $("#username_<%= page %><%= content.related_id%>").append("<a class='txt_brown_bold' href='<%= escape_javascript(content.user.get_url()) %>'> ,<%= escape_javascript(content.user.name) %></a>");
       }
@@ -35,7 +36,7 @@
       }
   
     </script>
-
+ <%end%>
 <%end%>
 </div>
 <%else %>
