@@ -130,6 +130,15 @@ $("#dialog-form #click_message").show();
 
 <!-- Q&A - End -->
 </div>
+ <% if @item.is_a? Product %>
+ <%if !@item.is_a? Car or !@item.is_a? Bike %>
+ <%if @where_to_buy_items.size > 1 %>
+<script>
+  $("#buy span").html("Comparison Prices");
+</script>
+<%end%>
+<%end%>
+<%end%>
 
 <div class="rightcolumnsmall">
 <br/>
@@ -228,6 +237,9 @@ Message : <br />
 
 </div>
 
+<style>
+ a.txt_price:hover {text-decoration: underline;}
+</style>
 </div>
 
  <script>

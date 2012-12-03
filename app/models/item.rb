@@ -86,9 +86,10 @@ class Item < ActiveRecord::Base
          end   
        end 
       end  
-      prices.sort {|a1,a2| a2[0]<=>a1[1]}
-      min_price = prices.last
-      max_price = prices.first
+      price1 = prices.sort {|a1,a2| a2[0]<=>a1[1]}
+     
+      min_price = price1.first
+      max_price = price1.last
       price = "0"; 
       if !prices.blank?
         if(displaycomment)
@@ -125,7 +126,7 @@ class Item < ActiveRecord::Base
         if(displaycomment)
          if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
            item_attribute.name + ' - '  +
-          "starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
+          "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
           (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
          else
             item_attribute.name + ' - '  +
@@ -134,7 +135,7 @@ class Item < ActiveRecord::Base
         end  
         else
         if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-          "starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
+          "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
         else
            number_to_indian_currency(attribute_value.value.to_i)
         end    
