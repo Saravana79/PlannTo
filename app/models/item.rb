@@ -87,9 +87,9 @@ class Item < ActiveRecord::Base
        end 
       end  
     
-      price1 = prices.sort {|a1,a2| a2[0]<=>a1[0]}
-      min_price = price1.first
-      max_price = price1.last
+      price1 = prices.sort {|a1,a2| a2<=>a1}
+      min_price = price1.last
+      max_price = price1.first
       price = "0"; 
       if !prices.blank?
         if(displaycomment)
