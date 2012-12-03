@@ -23,13 +23,14 @@
             <strong> <%=@user.name%> hasnt followed any <%= item.humanize.pluralize %> yet.  </strong>
          <%end%>
       <%elsif item.downcase != 'following' %>
+          <strong> There are no followers.  </strong>        
+      <%elsif item.downcase != 'followers' %>
          <% if User.profile_owner?(@user,current_user) %>
             <strong> You havent followed any users yet.  </strong>
          <%else%>
             <strong> <%=@user.name%> hasnt followed any users yet.  </strong>
          <%end%>
-      <%elsif item.downcase != 'followers' %>
-            <strong> There are no followers.  </strong>        
+            
       <%end%>
     <%end%>
     <% if  type == "user_activity" %>
