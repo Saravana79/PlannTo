@@ -205,10 +205,15 @@ class SearchController < ApplicationController
 
 
   def autocomplete_items
+  
    if params[:type]
      search_type = Product.wizared_search_type(params[:type])
+   elsif params[:follow_type]
+      search_type = Product.search_profile_item_type(params[:follow_type])
+     
    else  
-     search_type = Product.search_type(params[:search_type])
+      puts"ppppppppp"   
+      search_type = Product.search_type(params[:search_type])
    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name

@@ -54,7 +54,7 @@ $(document).ready(function() {
   });
   
   $( "#search_item" ).autocomplete({
-			source: "/search/autocomplete_items",
+			source: "/search/autocomplete_items?follow_type=" + $('#follow_follow_type').val(),
 			minLength: 2,
 			select: function( event, ui ) {
 			  $('#follow_followable_id').val(ui.item.id);
