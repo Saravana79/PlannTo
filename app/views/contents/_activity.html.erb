@@ -29,7 +29,7 @@
       {
        if ($("#username_<%= page %><%= content.related_id%>").text().indexOf('<%= escape_javascript(content.user.name) %>') == -1 )
        {
-      $("#username_<%= page %><%= content.related_id%>").append("<a class='txt_brown_bold' href='<%= escape_javascript(content.user.get_url()) %>'> ,<%= escape_javascript(content.user.name) %></a>");
+      $("#username_<%= page %><%= content.related_id%>").append("<a class='txt_brown_bold' href='<%= escape_javascript(content.user.get_url()) %>'>, <%= escape_javascript(content.user.name) %></a>");
       }
        if ($("#related_activity_<%= page %><%= content.related_id%>").text().indexOf('<%= content.related_activity%> ') == -1)
        {
