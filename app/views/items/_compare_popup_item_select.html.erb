@@ -9,7 +9,7 @@
 <td class="rowline" align="center">
   <div class="comparebox" id="compareBasicInfo<%=count%>">
     <div class="alert alert-block">
-   <strong>Atleast one <%= type %> needs to be selected to compare <%= type %>s, please select a <%=type %> by typing the name of the <%= type %> in following box. </strong>
+   <strong>Atleast one <%= type.downcase %> needs to be selected to compare <%= type.pluralize.downcase %>s, please select a <%=type.downcase %> by typing the name of the <%= type.downcase %> in following box. </strong>
  </div>
     <span class="img_product_cmp" >
       <br/>
