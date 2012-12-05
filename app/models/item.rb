@@ -243,14 +243,16 @@ class Item < ActiveRecord::Base
   end
 
   def self.find_all_and_sort_by_items(ids)
-    items = Item.find_all_by_id(ids)
+    items = Item.where(:id => ids)
     sorted_items = Array.new
     ids.each do |id|
+      unless id== ""
       items.each do |item|
         if item.id.to_i == id.to_i
           sorted_items << item
           break
         end
+      end
       end
     end
     return sorted_items

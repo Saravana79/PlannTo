@@ -1,11 +1,10 @@
+  <%if @items %>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="comparetbl" style="table-layout: fixed">
   <tr>
     <td class="rowline" valign="bottom" align="center" width="200px">
-     <!--  <p class="lefttitle" style="margin-top:40px;">If you are not sure what <%=@item1.itemtype.itemtype.downcase!%> to buy.</p>
-      <br/>
-     <span style="margin-right:30px;"><a href="#" class="btn_submitanswer" style="float:center;margin-left:30px;margin-right:30px;">Ask Advice</a></span>-->
 
     </td>
+  
     <%@items.each_with_index do |item, index|%>
       <%=render :partial =>"items/basic_info",:locals => {:item => item, :count => index+1} %>
       <%break if index == 3%>
@@ -40,9 +39,72 @@
     <%end%>
   <%end%>
 </table>
+<%end%>
+
+<div id="compare_popup" style="display:none;">
+ <%=render :partial =>"items/compare_popup_item_select",:locals => {:count =>"#{params[:ids].split(",").size rescue  "1"}"} %>
+
+</div>
+
+<script>
+$(".ui-dialog-content").dialog('destroy')
+var ids = '<%= params[:ids] %>'
+
+  if (ids.toString().split(",")[0] == '')
+        {
+         var size = 3
+        }
+        else
+        {
+         var size = 2
+        }
+if (ids.toString().split(",").length < size )
+{
+$('#compare_popup').dialog({modal: true,height: 480,width: 275 });
+ $('.Close_dialog').show();
+        $('.ui-dialog-titlebar').hide();
+   }
+</script>
+<%if @items %>
 <% if !@contents.blank? %>
   <center> <h2> Top Contents </h2> </center>
-<% @contents.each do |content| %>
-	 <%= render_content_type(content) %>
-	  <% end %>
+    
+  <div id="content_all">  
+ <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+    <%= render :partial => 'contents/contents'%>
+     <a id="content_next" style="display:none"></a>
+      <%= hidden_field_tag :page_pagination,2%>
+  </div> 
+   <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+     <%= image_tag '/images/ajax-loader.gif' %>
+</span>
+</div>
+  <script>
+  
+    $(window).scroll(function () {
+ 
+ 
+     if (!running && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+   
+             running = true;
+            $.ajax(
+              {
+                url: "/items/compare?type=scroll" + "&ids=<%= params[:ids]%>" + '&page=' + $("#page_pagination").val(),
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+            //lnk.click();
+       }
+        });
+      
+    </script>
+
+
 <%end%>
+<%end%>
+</div>

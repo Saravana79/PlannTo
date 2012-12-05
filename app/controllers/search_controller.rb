@@ -1,5 +1,6 @@
 class SearchController < ApplicationController
-   caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term] }}
+   caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term],:type => params[:type] }}
+   
   layout "product"
 
   def index
@@ -207,12 +208,8 @@ class SearchController < ApplicationController
   def autocomplete_items
   
    if params[:type]
-     search_type = Product.wizared_search_type(params[:type])
-   elsif params[:follow_type]
-      search_type = Product.search_profile_item_type(params[:follow_type])
-     
+     search_type = Product.follow_search_type(params[:type])
    else  
-      puts"ppppppppp"   
       search_type = Product.search_type(params[:search_type])
    end 
     @items = Sunspot.search(search_type) do

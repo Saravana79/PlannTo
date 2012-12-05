@@ -1,9 +1,17 @@
+<%unless @item1.nil? %>
+  <%type = @item1.itemtype.itemtype%>
+<%else%>
+
+<%type = session[:item_type] %>
+ 
+<%end%>
+   <div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:220px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
 <td class="rowline" align="center">
   <div class="comparebox" id="compareBasicInfo<%=count%>">
-    <p><b>Add <%=itemtype%> to compare</b> </p> 
+    <p><b>Add <%= type %> to compare</b> </p> 
     <span class="img_product_cmp" >
       <br/>
-      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%>" style="width: 150px;"/><div id="moreCarsSearchDiv<%=count%>"></div>
+      <input name="" type="text" placeholder="Select an Item" id="moreCars<%=count%>" style="width: 150px;"/><div id="moreCarsDiv<%=count%>"></div>
     </span>
     <div class="PlanntoBuyBtncnt">
     </div>
@@ -19,7 +27,7 @@
       $("#ui-active-menuitem").hide();
     });
 
-    $('#moreCarsSearch<%=count%>').focus(function(){
+    $('#moreCars<%=count%>').focus(function(){
       $(this).val('');
       $(this).keydown();
     });
@@ -32,7 +40,7 @@
       });
     };
 
-    $("#moreCarsSearch<%=count%>").autocomplete({
+    $("#moreCars<%=count%>").autocomplete({
       minLength: 2,
       format: "js",
       source: function( request, response )
@@ -48,14 +56,14 @@
           shadow: true, // Whether to render a shadow
           hwaccel: false // Whether to use hardware acceleration
         };
-        var target = document.getElementById('moreCarsSearchDiv<%=count%>');
+        var target = document.getElementById('moreCarsDiv<%=count%>');
         var spinner = new Spinner(opts).spin(target);
         $.ajax(
         {
           url: "/search/autocomplete_items",
           data: {
             term: request.term,
-            search_type: '<%=@item1.itemtype.itemtype%>'
+            search_type: '<%= type %>'
           },
           type: "POST",
           dataType: "json",
@@ -79,24 +87,15 @@
         return false
       },
       select: function( event, ui ) {
-           if (compareIds.toString().split(",")[0] == '')
-        {
-         var size1 = 5
-        }
-        else
-        {
-         var size1 = 4
-        }
-      
         var ids = compareIds.toString().split(",");
-        if (ids.length == size1){
+        if (ids.length == 4){
           alert("You have already selected four items.")
           return false;
         }
         var value = jQuery.inArray(ui.item.id.toString(), ids)
         if (value.toString() == "-1"){
-          var spinnerId = $(this).attr('id').replace("moreCarsSearch",'');
-          spinnerId = "moreCarsSearchDiv" +spinnerId  
+          var spinnerId = $(this).attr('id').replace("moreCars",'');
+          spinnerId = "moreCarsDiv" +spinnerId  
           ids.push(ui.item.id);
           compareIds = ids;
           reloadComparableItems(ids, spinnerId);
@@ -104,7 +103,7 @@
         }
         else{
           $(this).val('');
-          alert("You have already selected this Item.")
+          alert("You have already selected this item.")
           return false;
         }
       }

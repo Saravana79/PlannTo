@@ -1,6 +1,7 @@
 class ReportsController < ApplicationController
  before_filter :authenticate_user!
  before_filter :find_reportable_object
+ 
  def index
  
  end
@@ -13,7 +14,7 @@ class ReportsController < ApplicationController
  def create
    @report = @reportable_object.reports.create(params[:report])
    @report.reported_by = current_user.id
-   @report.report_from_page = request.path
+   @report.report_from_page = session[:return_to]
    @report.save
  end
 
@@ -26,7 +27,6 @@ class ReportsController < ApplicationController
       @reportable_object = Comment.find(params[:comment_id]) 
     elsif params[:type] == "dealer"
       @reportable_object = Item.find(params[:item_id])
-          
-  end
+   end
   end
 end

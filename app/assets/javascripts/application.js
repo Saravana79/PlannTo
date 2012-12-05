@@ -54,7 +54,41 @@ $(document).ready(function() {
   });
   
   $( "#search_item" ).autocomplete({
-			source: "/search/autocomplete_items?follow_type=" + $('#follow_follow_type').val(),
+			source:  function (request, response) {
+			 if($('#follow_follow_type').val() == "follower")
+        {
+          var type =  "profile_follower";
+         }
+         else
+         {
+          type =  $('#follow_follow_type').val();
+         }
+                $.ajax({
+                    url:"/search/autocomplete_items?type=" + type,
+                    data:{
+                        term:request.term,
+                        authenticity_token: window._token,
+                        
+                    },
+                    type:"POST",
+                    dataType:"json",
+                    success:function (data) {
+                        response($.map(data, function (item) {
+                            return{
+                                id:item.id,
+                                value:item.value,
+                                type:item.type,
+                                url:item.url
+                            }
+                        }));
+//           spinner.stop();
+                    }
+                });
+        },
+                    
+			
+	
+    
 			minLength: 2,
 			select: function( event, ui ) {
 			  $('#follow_followable_id').val(ui.item.id);

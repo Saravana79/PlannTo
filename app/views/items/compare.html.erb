@@ -1,5 +1,11 @@
 <!-- this page needs to be deleted -->
-<h2>Compare <%=@item1.itemtype.itemtype.pluralize.capitalize%></h2>
+<h2>Compare <%if @item_type%>
+  <%= @item_type + "s"%>
+<%else%>
+<%=@item1.itemtype.itemtype.pluralize.capitalize%>
+<%end%>
+</h2>
+
 <div class="comparedivcontainer">
   <div class="comparetopdiv">    
     <div class="rightcol">
@@ -9,10 +15,12 @@
         <li><a href="#" class="printer">Printer</a></li>
       </ul>
     </div>
-
+  
     <div class="comaredivbox dontfloat" id="comparePage">
       <%=render "items/compare"%>
+    
     </div>
+   
   </div>
   <br /><br />
 </div>
@@ -24,10 +32,7 @@
     //$("#compareBasicInfo" + index).html("")
     // $(".attributeInfo" + index).text("")
     var ids = compareIds.toString().split(",");
-    if (ids.length == 2){
-      alert("You must have atleast two items to compare.")
-      return false;
-    }
+   
     ids = $.grep(ids, function(val) {
       return val != item_id;
     })

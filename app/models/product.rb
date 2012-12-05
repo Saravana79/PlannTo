@@ -19,21 +19,14 @@ has_one :cargroup, :through => :itemrelationship, :source => :cargroup
    return type.camelize.constantize
  end
 
-  def self.search_profile_item_type(search_type)
-    if search_type == "follower"
-      return["AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
-     else  
-      return ["Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
-   end
-  end
-
-
-def self.wizared_search_type(wizared_type)
-  if wizared_type == "owner" || wizared_type == "buyer"
+def self.follow_search_type(type)
+  if  type == "owner" || type == "buyer"
      return ["Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] 
-  else
+  elsif  type == "follower"
     return ["AttributeTag".camelize.constantize,"Topic".camelize.constantize]
-  end      
+  elsif  type == "profile_follower"
+     return ["Car".camelize.constantize,"AttributeTag".camelize.constantize,"Topic".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
+    end      
 end
 
 def manu
