@@ -15,18 +15,17 @@ class Admin::FeedsController < ApplicationController
     end
 
   def add_vote
-     user_ids = configatron.content_creator_user_ids.split(",")
+    user_ids = configatron.content_creator_user_ids.split(",")
     content = Content.find(params[:id])
     #if content.votes.size == 0
     user_ids.each do |user_id|
-    voter = User.find(user_id)      
+      voter = User.find(user_id)      
       unless voter.voted_on? content       
         voter.vote content,:direction => "up"
       end
-      end
-      content.update_attribute(:total_votes, 5)
+    end
+     content.update_attribute(:total_votes, 5)
      # end
      redirect_to :back
-      end
-    
-end
+   end
+ end
