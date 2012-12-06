@@ -46,7 +46,7 @@
         -->  
         <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
       <%end%>
-        <%if current_user.is_admin? %>
+        <%if current_user && current_user.is_admin? %>
        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
        <li class="subContentGap float_lft"><%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
      <%end%>  
