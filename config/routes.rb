@@ -2,7 +2,11 @@ PlanNto::Application.routes.draw do
  
 namespace :admin do
   resources :users
-  resources :feeds
+  resources :feeds do
+    member do
+      get :add_vote
+    end
+   end  
   resources :follows
  end
   match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
