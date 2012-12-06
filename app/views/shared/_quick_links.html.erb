@@ -3,7 +3,12 @@
       <span class="txt_black heading_others">Quick Links</span>
       <%@guides = Guide.all%>
       <%@guides.each do |guide|%>
+      <%unless (@item.is_a?Product) and  (guide.name=="Expert") %>
       <span class="menu_list"><a href="/<%=search_type%>/guides/<%=guide.name%>"><%=guide.name%></a></span>
+      <%end%>
+    <%end%>
+   <%if @item.is_a?Product %>
+     <span class="menu_list"><a href="/items/compare?ids=<%= @item.id %>">Compare <%= @item.itemtype.itemtype %>s</a></span>
     <%end%>
     </div>
     <!-- Buttons - End-->
