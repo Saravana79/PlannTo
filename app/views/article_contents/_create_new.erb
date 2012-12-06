@@ -553,15 +553,18 @@ function remove_fields(link) {
   
     
 </script>
+<script>
+ $("#<%= @form_id %>").submit(function(e){
+  <% if !current_user %>
+  $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+openLoginPopup("#" + $(this).attr('id'), "submit");
+ return false
+<%end%>
 
+})
+</script>  
  
-
-
-      
-       
-        
- 
-          <script type="text/javascript">
+<script type="text/javascript">
   setTimeout(function() {
 
 g = {};
