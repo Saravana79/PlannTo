@@ -22,7 +22,20 @@ g.oeditor = tinyMCE.init({
         // General options
         mode : "specific_textareas",
         editor_selector : "textFilling",
-       
+         setup : function (ed) {
+        ed.onKeyPress.add(
+            function (ed, evt) {
+                <%if !current_user %>
+                 $("#login-1 #click_message").show();
+                $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'answer')%>" );
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            
+            return false
+          <%end%>
+               
+            }
+        );
+    },
         theme_advanced_resizing : true,
         autoresize_max_height : 300,
         autoresize_min_height :150,

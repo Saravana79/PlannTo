@@ -106,7 +106,7 @@ $(".ui-dialog-content").dialog('destroy')
       <br/>
       <br/>
         <div class="title_header float_lft">Description:</div>
-      <%= f.text_area :description, :class => 'textFilling', :id => "m_text",:style=> 'width:400px;height:50px;' %>
+      <%= f.text_area :description, :class => 'textFilling', :id => "m_text23",:style=> 'width:400px;height:50px;' %>
       <br/>
     </div>
         
@@ -242,18 +242,31 @@ function remove_fields(link) {
 <% end %>
 
 <script type="text/javascript">
-
  $(".Howkb").click(function(){
+    <% if !current_user %>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
         $('#photo').hide();
     });
   $(".Qatab").click(function(){
+   <% if !current_user %>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
           $('#photo').hide();
    });
    <%unless @article_categories.nil? %>
     <%@article_categories.each_with_index do |article_category, index|%>
         
          $("#content<%= article_category[0]%>").click(function(){
-            
+             <% if !current_user %>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
            if ($(this).attr('id')!= 'contentPhoto')
            
            {
@@ -540,19 +553,14 @@ function remove_fields(link) {
   
     
 </script>
-<script>
-$("#<%= @form_id %>").submit(function(e){
-       <% if !current_user %>
-         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
-            openLoginPopup("#" + $(this).attr('id'), "submit");
-            return false
-          <%end%>
-        })
-        
-        
-</script>   
+
  
 
+
+      
+       
+        
+ 
           <script type="text/javascript">
   setTimeout(function() {
 
