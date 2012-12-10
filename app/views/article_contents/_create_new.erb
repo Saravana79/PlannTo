@@ -244,30 +244,30 @@ function remove_fields(link) {
 
 <script type="text/javascript">
  $(".Howkb").click(function(){
- //   <% if !current_user %>
-   //      $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
-     //       openLoginPopup("#" + $(this).attr('id'), "submit");
-       //     return false
-         // <%end%>
+  <% if !current_user %>
+        $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+           return false
+          <%end%>
         $('#photo').hide();
     });
   $(".Qatab").click(function(){
    <% if !current_user %>
-         //$("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
-           // openLoginPopup("#" + $(this).attr('id'), "submit");
-            //return false
-          //<%end%>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
           $('#photo').hide();
    });
    <%unless @article_categories.nil? %>
     <%@article_categories.each_with_index do |article_category, index|%>
         
          $("#content<%= article_category[0]%>").click(function(){
-             //<% if !current_user %>
-         //$("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
-           // openLoginPopup("#" + $(this).attr('id'), "submit");
-            //return false
-          //<%end%>
+             <% if !current_user %>
+         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+           openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
            if ($(this).attr('id')!= 'contentPhoto')
            
            {

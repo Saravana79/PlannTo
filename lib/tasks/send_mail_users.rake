@@ -116,6 +116,19 @@ WHERE
        end     
      end
   
-  
+ task :welcome_mail,:arg1,:arg2,:arg3, :needs => :environment do | t, args|
+    start_date = args[:arg1]
+    
+    end_date = args[:arg2]
+     userid = args[:arg3].to_i
+    if( userid != 0)
+      users = User.find(:all, :conditions=> ["id = ?" ,userid])
+    else
+     users = User.where('created_at >=? and created_at <=?',start_date,end_date)
+    end 
+     users.each do |user|
+       ContentMailer.user_welcome_mail(user).deliver
+     end  
+     end  
  
   
