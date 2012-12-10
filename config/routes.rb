@@ -11,7 +11,6 @@ namespace :admin do
  end
   match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
   get "home/index"
-  get "home/google_referer"
   resources :follows do
    collection do 
      get :user_follow

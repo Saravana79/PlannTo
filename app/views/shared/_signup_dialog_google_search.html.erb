@@ -1,0 +1,9 @@
+ <div>
+ Content comming here
+ </div>
+  <div style="margin-left:300px;">
+<%= form_for(User.new, :as => :user, :url => registration_path(:user) ) do |f| %>
+ <% @popup = "true" %>
+   <%= render "/shared/sign_up_fields_google_search",{:f => f,:popup => @popup} %>
+   <% end %>
+</div>

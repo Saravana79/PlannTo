@@ -9,11 +9,7 @@ class HomeController < ApplicationController
       render :index
     end     
    end
-  
-  def google_referer
-  
-  end
-  
+
   def terms_conditions
    @static_page ="true"
   end

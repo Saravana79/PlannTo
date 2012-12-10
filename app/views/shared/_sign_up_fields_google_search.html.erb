@@ -1,0 +1,69 @@
+<!--popup heading bar-->
+
+<div class="Popuptitlebar">
+<center> <label class="signupin">Join Now</label> </center>
+<%if @popup == "true" %>
+  <div class="Close_dialog" style="width:43px; 
+overflow:hidden;height:38px; background:url(../images/pclose_but.png) no-repeat left top;
+position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#login-feed').dialog('close');$('#dialog-form-google-search').dialog('close');$('#dialog-form').dialog('close');"></div>
+<%end%>
+</div>
+
+<!--popup heading bar-->
+
+
+<!--poupmidder container-->
+<div class="Popupmiddercontent">
+
+
+<!--content goes here-->
+
+<div class="Popupfacebook">
+<div class="FaceImg">
+    <%= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>  
+ </div>
+ <div style="padding: 0px 10px 0px 5px;" ><label style="font-size:10px;">(It takes one click. We'll never post without your permission)</label></div>
+</div>
+
+<div class="PopupOr"><img alt="" src="/images/or_icon.png"></div>
+
+
+
+       <div class="Popupinputblock">
+                <!--<label>Name</label>-->
+                <span class="Textinput">
+                  <%= f.text_field :name,:size =>"27", :placeholder => "Name" , :class => "PopupinputblockNew"%>
+               	 
+                  </span>
+            </div>
+         
+       <div class="Popupinputblock">
+                <!--<label>Email</label>-->
+                <span class="Textinput">
+                  <%= f.text_field :email,:size =>"27" , :placeholder => "Email", :class => "PopupinputblockNew"%>
+               	 
+                  </span>
+            </div>   
+             <div class="Popupinputblock">
+                <!--<label>Password</label>-->
+                <span class="Textinput">
+                  <%= f.password_field :password,:size =>"27" , :placeholder => "Password", :class => "PopupinputblockNew"%>
+               	 
+                  </span>
+            </div>  
+       <div class="Popupinputblock">
+                <!--<label>Password Confirmation</label>-->
+                <span class="Textinput">
+                <%= f.password_field :password_confirmation,:size =>"27" , :placeholder => "Password Confirmation", :class => "PopupinputblockNew"%>
+               	
+         </span>
+            </div>
+            
+         
+         <div class="Bluesubmit2" style="margin:5px 0px 0px 98px;"><%= f.submit "Sign Up" %> </div>           
+         
+        </div>
+<!--poupmidder container-->
+
+<div class="Clearboth"></div>
+

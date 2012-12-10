@@ -102,6 +102,11 @@
             Do you have an account. 
             =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"        
           = render "shared/signup_popup"
+      #dialog-form-google-search{:style => "display:none;"}
+       
+        #sign_up_dialog_1_google_search{:style => "display:none;"}
+          = render "/shared/signup_dialog_google_search"
+           
     #login-feed{:style => "display:none;"}
       #login-1
         = render "/shared/login_dialog"
@@ -159,4 +164,5 @@
     :javascript
       $(document).ready(function() {
       Placeholders.init();
-      });    
+      });  
+= render 'shared/referer_url_signup_popup'        
