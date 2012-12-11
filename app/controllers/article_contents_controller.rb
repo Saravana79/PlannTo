@@ -1,5 +1,5 @@
 class ArticleContentsController < ApplicationController
-  before_filter :authenticate_user!
+ before_filter :authenticate_user!,:except => [:bmarklet]
   def create
     #not used anywhere
     #me = FbGraph::User.me(current_user.token)
@@ -146,14 +146,16 @@ class ArticleContentsController < ApplicationController
   
   def bmarklet
     #@article_content = ArticleContent.new
-    @article,@images = ArticleContent.CreateContent(params[:url],current_user)
+   if current_user 
+    @article,@images = ArticleContent.CreateContent("http://www.plannto.com/bikes",current_user)
     @article_content= @article
     @external = params[:external]
+   end 
     #@article_string = render_to_string :partial => "article" 
     respond_to do |format|
       format.html { render :layout => false }
       #format.js
-    end
+   end
   end
   
   def new_popup
