@@ -17,12 +17,12 @@ class ProductsController < ApplicationController
        session[:referer_counter] = 1
        return true
      end
-   
+   end 
      if !session[:referer_counter].nil?  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
        session[:referer_counter]+= 1
        return true
    end
-  end  
+  
   end
 
   def index
