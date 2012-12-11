@@ -1,0 +1,6 @@
+$("#report_no_item").html("");
+$("#report_no_item").html("<%= escape_javascript(render "contact_us/new") %> ");
+ $('#report_no_item').dialog({modal: true,height: 500,
+width:650}); $('.Close_dialog').show();
+        $('.ui-dialog-titlebar').hide();
+        

@@ -123,11 +123,20 @@
       <%if @items.size > 0 %>
 
   <br/><br/>
+  <div >
+<%= render  'contents/owned_items'%>
+
+  </div>
+ <div >
+<%= render  'contents/plan_to_buy_items'%>
+
+  </div>
+   
  <div >
 <%= render  'contents/follow_items'%>
 
   </div>
-
+ 
 
 
  <%end%> 

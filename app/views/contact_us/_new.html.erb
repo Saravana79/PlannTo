@@ -1,0 +1,43 @@
+ 
+  <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+ <%= form_for @contact_us,:url => {:action=>"create", :controller=>"contact_us"},:method => :post,:remote => :true  do |f| %>
+
+ <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;">  
+     <div style="padding:5px 5px 0px 0px;text-align:center">
+     <%= hidden_field_tag :type,@type %>
+     <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:590px; text-indent:-9999px; top:-16px;" onclick="$('.ui-dialog-content').dialog('destroy');"></div>
+ <span class="Popuptitle"><center> <h1>Report</h1> </center></span>
+ <br/>
+    <div class="productreview" style="clear:both;width:250px;">
+        <div class="title_header float_lft"">Report Type :</div>  <%= f.select :report_type,[["Item Not Found", "Item Not Found"],["Topic Not Found ","Topic Not Found"]] %></div>
+</div>
+<br />
+    <div style="padding:0px 500px 0px 5px;">
+        <div class="title_header float_lft">Description :</div>
+        <div style="margin-left:80px;">
+       <%= f.text_area :description, :class => 'textFilling expanding', :id=>"report",:style=> 'width:400px;height:50px;' %>
+     </div>
+      </div>
+    </div>
+    <br />
+    <br />
+     <br />
+    <br />
+    <div style="padding:100px 0px 0px 900px; float:right; width:100%; margin-right:5px; margin-top:20px ">
+        <%= f.submit 'Send report', :class => 'btn_submitanswer',:id => "publishanswer" %>
+        <%= render "shared/ajax_loader" %>
+    </div>
+</div>
+<% end %>
+<%= render "shared/expanding_text_area_style" %>
+
+<script> 
+  $("#report").val("");
+</script>
+ 
+ 
+ 
+ 
+ 
+ 
+

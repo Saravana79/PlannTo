@@ -43,7 +43,7 @@
           .Dontsignup
             Do you have an account. 
             =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();"        
-       
+      #report_no_item
            
     #maincontainer.maincontainerCss
       .breadcrumpbtnDiv
@@ -107,19 +107,19 @@
         #sign_up_dialog_1_google_search{:style => "display:none;"}
           = render "/shared/signup_dialog_google_search"
            
-    #login-feed{:style => "display:none;"}
-      #login-1
-        = render "/shared/login_dialog"
-        .Dontsignup
-          Don't have an accoun. 
-          = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login-1').hide();"
-      #sign_up_dialog_2{:style => "display:none;"}
-        = render "/shared/signup_dialog"
-        .Dontsignup
-          Do you have an account. 
-          =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();"        
+      #login-feed{:style => "display:none;"}
+        #login-1
+          = render "/shared/login_dialog"
+          .Dontsignup
+            Don't have an accoun. 
+            = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login-1').hide();"
+        #sign_up_dialog_2{:style => "display:none;"}
+          = render "/shared/signup_dialog"
+          .Dontsignup
+            Do you have an account. 
+            =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();"        
        
-           
+      #report_no_item    
     #maincontainer.maincontainerCss
       .breadcrumpbtnDiv
         = yield

@@ -1,11 +1,11 @@
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
-      <td class="bg_widgethdr txt_white">Followed Items</td>
+      <td class="bg_widgethdr txt_white">Owned Items</td>
     </tr>
     <tr>
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <% Item.get_follows_items_for_user(current_user).each do |item|%>
+          <% Item.get_owned_items_for_user(current_user).each do |item|%>
            <tr>
             <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
             <td width="113">

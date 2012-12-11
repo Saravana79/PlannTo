@@ -523,9 +523,17 @@ class Item < ActiveRecord::Base
       end
 
   def self.get_follows_items_for_user(user) 
-    Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).limit(5).map{|f| Item.find(f.followable_id)}
+    Follow.where('follower_id =? and followable_type in (?) and follow_type =?',user.id,Item::FOLLOWTYPES,"follower").limit(5).map{|f| Item.find(f.followable_id)}
   end
   
+  def self.get_buyer_items_for_user(user) 
+     Follow.where('follower_id =? and followable_type in (?) and follow_type =?',user.id,Item::FOLLOWTYPES,"buyer").limit(5).map{|f| Item.find(f.followable_id)}
+  end
+  
+  
+  def self.get_owned_items_for_user(user) 
+    Follow.where('follower_id =? and followable_type in (?) and follow_type =?',user.id,Item::FOLLOWTYPES,"owner").limit(5).map{|f| Item.find(f.followable_id)}
+  end
   def self.get_buyer_item_ids_for_user(user)
      popular_item_ids = configatron.wizard_items_buyer.split(",") 
      Follow.where('follower_id =? and follow_type =?',user.id,"buyer").collect(&:followable_id).collect{|i| i.to_s} - popular_item_ids
