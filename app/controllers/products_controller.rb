@@ -11,7 +11,7 @@ class ProductsController < ApplicationController
   
   def set_referer
     @item = Item.find(params[:id])
-   if @item.name == "Royal Enfield Classic 500"
+   if @item.name == "Vibgyor Persona 200"
      if request.referer.nil?
        session[:http_referer] = request.referer
        session[:referer_counter] = 1
