@@ -7,22 +7,22 @@ class ApplicationController < ActionController::Base
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
   prepend_before_filter { |c| RecordCache::Strategy::RequestCache.clear }
   before_filter :cache_follow_items 
-  before_filter :set_referer
+  #before_filter :set_referer
   
-  def set_referer
+  #def set_referer
   
-     if request.referer.nil?
-       session[:http_referer] = request.referer
-       session[:referer_counter] = 1
-       return true
-     end
+   #  if request.referer.nil?
+    #   session[:http_referer] = request.referer
+     #  session[:referer_counter] = 1
+      # return true
+     #end
    
-     if !session[:referer_counter].nil?  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
-       session[:referer_counter]+= 1
-       return true
-   end
+     #if !session[:referer_counter].nil?  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
+      # session[:referer_counter]+= 1
+       #return true
+   #end
     
-  end
+  #end
 
   def cache_follow_items
     user = current_user

@@ -3,10 +3,27 @@ class ProductsController < ApplicationController
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
   before_filter :store_location, :only => [:show]
+  before_filter :set_referer,:only => [:show]
   
   layout 'product'
   include FollowMethods
 
+  
+  def set_referer
+    @item = Item.find(params[:id])
+   if @item.name == "Royal Enfield Classic 500"
+     if request.referer.nil?
+       session[:http_referer] = request.referer
+       session[:referer_counter] = 1
+       return true
+     end
+   
+     if !session[:referer_counter].nil?  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
+       session[:referer_counter]+= 1
+       return true
+   end
+  end  
+  end
 
   def index
     @filter_by = params["fl"]
