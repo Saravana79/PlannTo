@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121117054535) do
+ActiveRecord::Schema.define(:version => 20120918112407) do
 
   create_table "answer_contents", :force => true do |t|
     t.integer "question_content_id"
@@ -128,13 +128,11 @@ ActiveRecord::Schema.define(:version => 20121117054535) do
   end
 
   create_table "buying_plans", :force => true do |t|
-    t.string   "uuid",             :limit => 36
+    t.string   "uuid",        :limit => 36
     t.integer  "user_id"
     t.integer  "itemtype_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "deleted"
-    t.string   "items_considered"
   end
 
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
@@ -422,17 +420,6 @@ ActiveRecord::Schema.define(:version => 20121117054535) do
 
   add_index "itemexternalurls", ["itemtype_id"], :name => "fk_itemexternalurls_itemtypes_typeid"
 
-  create_table "itemexternalurls1", :primary_key => "ID", :force => true do |t|
-    t.integer  "ItemID",                                          :null => false
-    t.text     "URL",                                             :null => false
-    t.string   "URLSource",    :limit => 2000,                    :null => false
-    t.boolean  "is_verified",                  :default => false
-    t.integer  "itemtype_id"
-    t.datetime "last_updated"
-  end
-
-  add_index "itemexternalurls1", ["itemtype_id"], :name => "fk_itemexternalurls1_itemtypes_typeid"
-
   create_table "itemimages", :primary_key => "ID", :force => true do |t|
     t.integer "ItemId",                    :null => false
     t.string  "ImageURL",  :limit => 4000, :null => false
@@ -526,14 +513,6 @@ ActiveRecord::Schema.define(:version => 20121117054535) do
     t.string   "value_2"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "price_comparison_batch", :force => true do |t|
-    t.string   "Status",      :limit => 20,  :null => false
-    t.datetime "starttime",                  :null => false
-    t.datetime "endtime"
-    t.string   "Source",      :limit => 100
-    t.integer  "CompletedId"
   end
 
   create_table "pros", :force => true do |t|
@@ -721,28 +700,11 @@ ActiveRecord::Schema.define(:version => 20121117054535) do
     t.datetime "updated_at"
   end
 
-  create_table "user_activities", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "related_id"
-    t.string   "related_activity"
-    t.string   "related_activity_type"
-    t.datetime "time"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "activity_id"
-    t.string   "ip_address"
-  end
-
   create_table "user_answers", :force => true do |t|
     t.text     "answer"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "no_of_votes"
-    t.integer  "positive_votes"
-    t.integer  "negative_votes"
-    t.integer  "total_votes"
-    t.integer  "comments_count"
   end
 
   create_table "user_images", :force => true do |t|
@@ -770,11 +732,6 @@ ActiveRecord::Schema.define(:version => 20121117054535) do
     t.integer  "buying_plan_id"
     t.boolean  "plannto_network"
     t.string   "title"
-    t.integer  "no_of_votes"
-    t.integer  "positive_votes"
-    t.integer  "negative_votes"
-    t.integer  "total_votes"
-    t.integer  "comments_count"
   end
 
   create_table "users", :force => true do |t|
@@ -803,9 +760,6 @@ ActiveRecord::Schema.define(:version => 20121117054535) do
     t.datetime "avatar_updated_at"
     t.boolean  "is_admin",                              :default => false
     t.string   "description"
-    t.boolean  "my_feeds_email",                        :default => true
-    t.string   "location"
-    t.string   "profile_view_setting",                  :default => "pu"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
