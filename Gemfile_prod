@@ -4,13 +4,11 @@ gem 'rails', '3.1.1'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
 gem 'mysql2'
 gem 'uuidtools' 
 gem "configatron", "~> 2.8.4"
 gem 'dalli'
 gem 'fb_graph'
-
 gem "oauth"
 gem "oauth2"
 gem "omniauth"
@@ -21,23 +19,23 @@ gem 'devise', '~> 2.0.0'
 gem "friendly_id", "~> 4.0.1"
 gem "koala"
 gem "mogli"
-#gem 'kaminari'
 gem 'will_paginate'
 gem 'youtube_it'
 gem 'nokogiri'
 gem "haml-rails"
+gem  "haml"
 gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
 gem 'rails_exception_handler', "~> 2"
-#gem 'aws-s3'
 gem 'aws-sdk'
 gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'
 #gem 'execjs'
-#-gem 'therubyracer'
+gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
+  #please dont change the versionof sass-rails
+  gem 'sass-rails', "3.1.4"
   gem 'coffee-rails', "~> 3.1.0"
   gem 'uglifier'
 end
@@ -52,7 +50,7 @@ gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
 gem 'thumbs_up', :path => 'vendor/plugins/thumbs_up'
 #gem 'devise'
-gem 'sunspot_rails', '~>1.2.1'
+gem 'sunspot_rails', '~>1.3.1'
 gem 'sunspot_solr'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'

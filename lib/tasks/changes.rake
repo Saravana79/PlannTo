@@ -26,7 +26,7 @@ task :update_votes_for_contents, :start_id, :end_id, :sub_type, :votes, :needs =
         voter.vote content,:direction => "up"
       end
       end
-      content.update_attribute(:total_votes, args[:votes])
+      content.update_attribute(:total_votes, :total_votes + args[:votes])
      # end
       end
   end

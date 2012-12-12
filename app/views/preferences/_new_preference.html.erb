@@ -8,15 +8,16 @@
 <div class="clearboth"></div>
 </div>
 <br/>
-<div class="alert alert-block">
-  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
-  <strong>Thanks for registering with PlannTo.com. </strong>
-  Add the products that you own in the following list, this will help us to customize our application based on your profile.
-</div>
 <div class="rightcolumnbig">
   <div class="searchPack">
-    <div class="hdr_Category">Search Preferences:</div>
+    <div class="hdr_Category">Preferences:</div>
+    <div class="alert alert-block">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+      <strong>
+       Click on criteria list below to add that criteria to your preference list for buying a <%=@itemtype.itemtype.singularize%>.</strong>
+    </div>
     <ul class="search_category" id="editBuyingPreferences">
+
     </ul>
     <br/>
     <%= form_for(:preference, :url =>{:action=>"preferences",:controller=>"update_preference"}, :html => { :method => :post, :id => "updatePreferencesForm"}) do |f| %>
@@ -36,7 +37,7 @@
 </div>
 <div style=" border: 0 solid;float: left;height: auto;width: 500px;">
   <ul class="search_criteria">
-    <div class="hdr_search">Search Criteria:</div>
+    <div class="hdr_search">Criteria:</div>
     <%@search_info_lookups.each_with_index do |lookup, index|%>
       <%if index == 0%>
         <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
@@ -48,16 +49,12 @@
 </div>
 <%= render :partial => "shared/search_popup" %>
 
-
-
-<div id="getAdviceDialog" title="I am looking for an advice" style="display:none">
-</div>
-
 </div>
 
 <div class="push"></div>
 <div  style="float:right;padding:5px;width:220px;float: left">
 	<div id="preferenceSpinner"></div>
+  <input type="submit" id="publishanswer" class="searchButton" style="font-size:15px;" title="Next Step" /> 
 	 <a href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</a>
       
      <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#" onclick="$('#giveAdviceDialog').dialog('destroy');">skip</a></p>
