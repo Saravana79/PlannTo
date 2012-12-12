@@ -19,13 +19,13 @@ development:
   content_creator_user_ids: "1,7,8"
   root_level_car_id: 3214
   root_level_mobile_id: 3215
-  root_level_cycle_id: 3219
+  root_level_cycle_id: "3219,4538,4540"
   root_level_tablet_id: 3217
   root_level_bike_id: 3218
-  root_level_camera_id: "3216,3936"
-  root_content_vote_count: 1
-  top_content_ids: "1,2,3,4,5,6,7,8,9,10"
-  top_all_item_ids: "5,6,7,8,9,10"
+  root_level_camera_id: "3216,4154,4160,4152,4137,4128,4165,4129"
+  root_content_vote_count: 2
+  top_content_ids: "8445,8099,8346,8345,8322,8193,7597,8283,8250,7978,7519"
+  top_all_item_ids: "2157,4963,4745,4651,4884,4099,4744,3978"
   wizard_items_buyer: "2073,2076,1473,1475,2527,2073,2076,1072"
   wizard_items_owner: "2073,2076,1473,1475,2527,2073,2076,1072"
   wizard_topics: "3935,3936,3956,3955,3962,3967,3969,3970"
@@ -68,7 +68,7 @@ production:
   popular_bikes: "2862,2932,2120,2812,2194,2243,2836,2133,2438,2971"
   popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"
   popular_mobiles: "4745,4057,4651,3712,4211,1865,3385,1449,1078"
-  popular_tablets: "4961,4075,4453,2489,3790,2505,3556,3901,4073,2503"
+  popular_tablets: "4963,4075,4453,2489,3790,2505,3556,3901,4073,2503"
   popular_cameras: "3770,1690,4744,3986,4068,3580,4261,1546,1511,2032"
   popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165,4128"
   popular_car_topics: ""
@@ -86,7 +86,7 @@ production:
   root_level_camera_id: 3216
   root_content_vote_count: 1
   top_content_ids: "1,2,3,4,5,6,7,8,9,10"
-  top_all_item_ids: "5,6,7,8,9,10"
-  wizard_items_buyer: "2157,4961,4745,4651,4884,4099,4744,3978"
+  top_all_item_ids: "2157,4963,4745,4651,4884,4099,4744,3978"
+  wizard_items_buyer: "2157,4963,4745,4651,4884,4099,4744,3978"
   wizard_items_owner: "1790,4057,2880,581,253,4961,1693,2756"
   wizard_topics: "4154,4160,4152,4137,4128,4165,4129,4538,4540"
