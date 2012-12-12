@@ -18,17 +18,17 @@
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue",:id => "report_link_#{content.id}" %></a></li>
 <%end%>
-      <%if content.can_update_content?(current_user)%>
+     <!-- <%if content.can_update_content?(current_user)%>
         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
         <li class="subContentGap float_lft"><%=link_to "Delete This",article_content_path(content), :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
-       <!-- <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-        <li class="subContentGap float_lft"><%#=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>-->
+       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+        <li class="subContentGap float_lft"><%#=link_to "Update This", edit_content_path(content, :item_id => "#{@item.try(:id)}"), :remote => true, :class => "txt_blue"%></li>
         <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
-      <%end%>
+      <%end%> 
      <%if current_user && current_user.is_admin? %>
        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
        <li class="subContentGap float_lft"><%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
-     <%end%>  
+     <%end%> -->  
     </ul>
   </div>
   <%=render :partial => "comments/new", :locals => { :content => content }  %>
