@@ -5,7 +5,7 @@
     <tr>
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <% Item.get_follows_items_for_user(current_user).each do |item|%>
+          <% @follow_items.each do |item|%>
            <tr>
             <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
             <td width="113">
@@ -13,12 +13,14 @@
             <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
              
            </div>
+           <%unless item.type == "Topic" || item.type == "CarGroup" || item.type == "Manufacturer"%>
            <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
             <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "related_item_id#{item.id}"} %><br />
             <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
       <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %><span style="display:none;" itemprop="count"><%=item.rated_users_count%></span></span>
     
     </a><br />
+    <%end%>
             </td>
           </tr>
          <%end%>

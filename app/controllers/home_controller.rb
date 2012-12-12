@@ -31,6 +31,9 @@ class HomeController < ApplicationController
       filter_params["itemtype_id"] = @item_types 
       @follows,@followers = Follow.get_followers_following(current_user,"Followers",1,24)
       @follows,@following = Follow.get_followers_following(current_user,"Following",1,24)
+      @follow_items = Item.get_follows_items_for_user(current_user)
+      @owned_items = Item.get_owned_items_for_user(current_user)
+      @buyer_items = Item.get_buyer_items_for_user(current_user)
       if @items.size > 0 and !@item_types.blank?
         if @items.is_a? Array
             items = @items

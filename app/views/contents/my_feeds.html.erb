@@ -123,21 +123,24 @@
       <%if @items.size > 0 %>
 
   <br/><br/>
-  <div >
-<%= render  'contents/owned_items'%>
+  <%if @buyer_items.size > 0 %>
+  <div>
+     <%= render  'contents/plan_to_buy_items'%>
+  </div>
+  <%end%>
+ <%if @owned_items.size > 0 %>
+  <div>
+    <%= render  'contents/owned_items'%>
 
   </div>
- <div >
-<%= render  'contents/plan_to_buy_items'%>
-
-  </div>
-   
+ <%end%>
+  <%if @follow_items.size > 0 %>
  <div >
 <%= render  'contents/follow_items'%>
 
   </div>
  
-
+<%end%>
 
  <%end%> 
   <%if  @followers.size > 0 %>

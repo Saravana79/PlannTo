@@ -5,7 +5,7 @@
     <tr>
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-          <% Item.get_buyer_items_for_user(current_user).each do |item|%>
+          <% @buyer_items.each do |item|%>
            <tr>
             <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
             <td width="113">
