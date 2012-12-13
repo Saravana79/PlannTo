@@ -5,7 +5,7 @@
       <div class="img_product float_lft" style="width:180px;"><img src="" width="150" height="75" onclick="parent.location='<%#=link_url(item)%>'" /></div>
       <div class="float_rgt" style="width:520px;">
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
-        <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title}?", :method => :delete, :style => "float:inherit;"%>
+        <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""}?", :method => :delete, :style => "float:inherit;"%>
          <span>
           <h1><a class="productTitle" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a></h1>
         </span>

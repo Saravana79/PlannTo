@@ -21,6 +21,19 @@ class FollowsController < ApplicationController
       if params[:follow][:followable_type]  == "User"
         UserActivity.save_user_activity(current_user, params[:follow][:followable_id],"followed","User",params[:follow][:followable_id],request.remote_ip)
       end 
+     if Rails.env == "development"
+      if params[:follow][:follow_type] == "buyer"
+        @item = Item.find(params[:follow][:followable_id])
+        @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
+        @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+        @question = @buying_plan.user_question #.destroy
+      if @question.nil?
+       @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
+       @question.save
+    end
+    end
+  end
+
       if params[:follow][:type] == "wizard"
         session[:wizard] = params[:follow][:follow_type]
       end
