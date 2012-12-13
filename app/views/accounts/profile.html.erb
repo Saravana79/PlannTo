@@ -166,12 +166,12 @@
    <%if current_user.profle_view_permission?(@user) %>
   <div style="clear:both;margin-top:110px;">
         <ul id="Newtabs">
-         <% ['Products', 'Apps', 'Accessories',"Followers","Following"].each do |item_type|%>
+         <% ['Products', 'Apps', 'Accessories',"Followers","Following" ,Rails.env == "development" ? "Preferences / Buying Plans" : "" ].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
-          <%if Rails.env == "development"%>
+          <!--<%if Rails.env == "development"%>
            <li id="profile_preference_buying_plans"><a href="/<%=@user.try(:username)%>?buying_plan=true" class="icon_prefernce">Preference / Buying Plans</a></li>
-     		<%end%>
+     		<%end%> -->
         </ul>
       </div>
       <div style="display:block;">
@@ -239,7 +239,7 @@
          <div id="contentEditView"></div>
         </div>
     
-        	<%if (params[:buying_plan] == 'true') %>   
+        	<%if (params[:follow] == "Preferences") %>   
         	  <div class="Rightouter" id="tabs2">
         	  	Select Itemtype
         	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list, "itemtype", "itemtype")%>
@@ -301,13 +301,13 @@
            <%= render "followers" %>
        <%else%>
     <div class="Rightouter" id="tabs1">
-    	<%unless params[:buying_plan].present?%>
+    	<%unless params[:follow] == "Preferences"%>
         <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
         <%end%>
      </div>
     <%end%> 
     
-<% unless params[:buying_plan].present?%>
+<% unless  params[:follow] == "Preferences" %>
    <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories')  && (params[:follow] != 'Followers') && (params[:follow]!= "Following" )%>
     
     <br/>

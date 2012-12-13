@@ -54,7 +54,9 @@ class AccountsController < ApplicationController
     @follow_types = Itemtype.get_followable_types(params[:follow])
     @itemtypes =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id) if params[:follow] == 'Products'
     @itemtypes =  Itemtype.where("itemtype=?", params[:follow]).collect(&:id) if params[:follow] == 'Car' ||  params[:follow] == 'Mobile' || params[:follow] == 'Cycle' || params[:follow] == 'Camera' || params[:follow] == 'Tablet' || params[:follow] == 'Bike'
-     if params[:plan_to_buy] = true
+     if params[:follow].match("Preferences")
+       
+     
      @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES)
      buying_plans
      end
