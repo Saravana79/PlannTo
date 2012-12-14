@@ -2,20 +2,149 @@
   <% @buying_plans.each do |buying_plan| %>
 
   <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" id="buyingPlanItem<%=buying_plan.id%>">
-      <div class="img_product float_lft" style="width:180px;"><img src="" width="150" height="75" onclick="parent.location='<%#=link_url(item)%>'" /></div>
+      <%item_type = buying_plan.itemtype.itemtype %>
+      <%item = buying_plan.get_first_item%>
+      
+      <div class="img_product float_lft" style="width:180px;"><%if item.blank? && item_type == "Car" %>
+       <img src="http://s3.amazonaws.com/Plannto/items/car/small/default_car.jpeg" width="150" height="75" onclick="" /></div>
+       <%elsif @item.blank? && item_type == "Cycle" %>
+          <img src="http://s3.amazonaws.com/Plannto/items/cycle/small/default_cycle.jpeg" width="150" height="75" onclick="" /></div>
+       <%elsif @item.blank? && item_type == "Bike" %>
+          <img src="http://s3.amazonaws.com/Plannto/items/bike/small/default_bike.jpeg" width="150" height="75" onclick="" /></div>
+       <%elsif @item.blank? && item_type == "Mobile" %>
+         <img src="http://s3.amazonaws.com/Plannto/items/mobile/small/default_mobile.jpeg" width="150" height="75" onclick="" /></div>
+       <%elsif @item.blank? && item_type == "Tablet" %>
+         <img src="http://s3.amazonaws.com/Plannto/items/tablet/small/default_tablet.jpeg" width="150" height="75" onclick="" />    </div>
+       <%elsif @item.blank? && item_type == "Camers" %>
+        <img src="http://s3.amazonaws.com/Plannto/items/camera/small/default_camera.jpeg" width="150" height="75" onclick="" /> </div>
+       <%else%>        
+       <img src="<%= item.image_url rescue ''%>" width="150" height="75" onclick="parent.location='<%=link_url(item)%>'" /></div>
+      <%end%>
       <div class="float_rgt" style="width:520px;">
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
         <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""}?", :method => :delete, :style => "float:inherit;"%>
          <span>
-          <h1><a class="productTitle" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a></h1>
+          <h1><a class="productTitle" id="questionTitle" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a></h1>
         </span>
+        <div class="subContentGap">
+						<div id="displayQuestion">
+						   <% descr = buying_plan.user_question.question_part %>
+							<a class="txt_black_description" id="question_part"><%= buying_plan.user_question.question_part[0..149]%></a>
+							<a href="<%=buying_plan.preference_page_url%>" class="padding_left10 txt_blue"><%if descr.size > 150 %> more... <%end%></a>
+						</div>
+					</div>
+			
+         <br />
+         <br />
+					<% @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype) %>
+   
+    <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) %>
+				 <%= render "buying_items", :items => get_items_with_constraint(@follow_item, @follow_types)%>
+				 	
+						
         <span class="float_rgt" style="display:inline;">
          </span>
+         <div style="float:left;">
+						<ul class="divCommentsConent">
+							<li class="subContentGap float_lft" >
+								<a class="txt_blue ">Recommendations (<%= buying_plan.user_question.user_answers.size%>)</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft" >
+								<a class="txt_blue "><%= render_comments_anchor(buying_plan.user_question).html_safe  %></a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_blue ">Report</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title}?", :method => :delete, :class => "txt_blue"%>
+							</li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							<li class="subContentGap float_lft">
+								<%= link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});$('.Close_dialog').show();
+$('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
+							</li>
+						</ul>
+						<%= render :partial => "comments/new", :locals => { :content => buying_plan.user_question }  %>
+						</div >
       </div>
+      	
       <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
+   <div style="display:none;" id="updateQuestion">
+		<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:440px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+			<%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  buying_plan.user_question.id}, :html => {:id => "getAdviceForm"} do |f|%>
+			<%= f.hidden_field :buying_plan_id%>
+			Title
+			<%= f.text_field :title, :value => buying_plan.user_question.title %>
+			<br/>
+			Send to Friends:
+			<%= f.radio_button :plannto_network, false, :checked => true %>
+			Plannto Network:
+			<%= f.radio_button :plannto_network, true %>
+			<br/>
+			<%= f.text_area :question, :rows=>2, :cols=>60, :value => buying_plan.user_question.question%>
+			<br/>
 
-       <%end%>  
+			<div  style="float:right;padding:5px;width:180px;">
+				<%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
+
+			</div>
+			<% end %>
+		</div>
+		 	<script type="text/javascript">
+												$('#giveAdviceTag').live('click', function(){
+						$.get('/preferences/give_advice',{question_id: <%=  buying_plan.user_question.id%>},null,"script");
+						})
+
+						$('#editPreferences').live('click', function(e){
+						e.preventDefault()
+						$.get('/preferences/edit_preference',{id: <%=  buying_plan.user_question.id%>},null,"script");
+						return false
+						})
+
+						$('#preference_question').live('click', function(e){
+						$('#question_question').poshytip('destroy')
+						if ($("#question_question").val() == ""){
+						$('#question_question').poshytip({
+						className: 'tip-darkgray',
+						content: 'Please enter your question.',
+						showOn: 'none',
+						alignTo: 'target',
+						alignX: 'right',
+						offsetX: 5,
+						alignY: 'center'
+						});
+						$('#question_question').poshytip('show');
+						return false
+						}
+						e.preventDefault()
+						$.ajax(
+						{
+						url: "/preferences/update_question",
+						data: {
+						question_id: <%= buying_plan.user_question.id%>
+							, question: $("#question_question").val(),
+							plannto_network: $("input[name='question[plannto_network]']:checked").val(),
+							title : $("#question_title").val()
+
+							}, type: "get",
+							dataType: "script"
+							});
+							return false
+							});
+					</script>
+       <%end%>
+     
 <script type="text/javascript">
   function deleteBuyingPlan(buying_plan_id){
     $.ajax(

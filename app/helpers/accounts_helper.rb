@@ -15,10 +15,10 @@ module AccountsHelper
 
   def link_for_item_type(item_type, selected_item, user)
     if item_type == selected_item || (selected_item.nil? && item_type=="Products
-    ") || ( selected_item.include?("Preferences")  && item_type.include?("Preferences"))
-       if selected_item == "Preferences" && item_type.include?("Preferences")
+    ") || ( selected_item.include?("Preferences")  && item_type.include?("Buying Plans"))
+       if selected_item == "Preferences" && item_type.include?("Buying Plans")
        
-        return content_tag(:li,link_to(content_tag(:span,"Preferences / Buying Plans"), profile_path(user.try(:username), :follow => "Preferences")),
+        return content_tag(:li,link_to(content_tag(:span,"Buying Plans"), profile_path(user.try(:username), :follow => "Preferences")),
       :class => "tab_active")
       end
       content_tag(:li,
@@ -26,9 +26,9 @@ module AccountsHelper
       :class => "tab_active")
      
     else
-     if item_type.include?("Preferences")
+     if item_type.include?("Buying Plans")
    
-      return content_tag(:li,link_to(content_tag(:span,"Preferences / Buying Plans"), profile_path(user.try(:username), :follow => "Preferences")))
+      return content_tag(:li,link_to(content_tag(:span,"Buying Plans"), profile_path(user.try(:username), :follow => "Preferences")))
       end     
       content_tag(:li,
         link_to(content_tag(:span, item_type), profile_path(user.try(:username), :follow => item_type)))

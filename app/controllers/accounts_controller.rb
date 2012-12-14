@@ -57,7 +57,7 @@ class AccountsController < ApplicationController
      if params[:follow].match("Preferences")
        
      
-     @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES)
+     @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES-["Manufacturer","Car Group","Topic"])
      buying_plans
      end
     @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  } 

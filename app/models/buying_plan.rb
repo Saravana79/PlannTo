@@ -8,7 +8,11 @@ class BuyingPlan < ActiveRecord::Base
   def preference_page_url
      return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
   end
-
+  
+  def get_first_item
+    Item.find(Follow.for_follower(self.user).where(:followable_type =>  self.itemtype.itemtype, :follow_type =>Follow::ProductFollowType::Buyer).first.followable_id) rescue "" 
+ end
+ 
   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_BUYING_PLAN_VOTE_KEY_PREFIX}#{self.id}")
     if count.nil?
