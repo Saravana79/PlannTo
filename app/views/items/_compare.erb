@@ -79,8 +79,8 @@ $('#compare_popup').dialog({modal: true,height: 480,width: 305 });
      <%= image_tag '/images/ajax-loader.gif' %>
 </span>
 </div>
-  <script>
-  
+<script>
+ var ids = "<%= params[:ids] %>"
     $(window).scroll(function () {
  
  
@@ -89,7 +89,7 @@ $('#compare_popup').dialog({modal: true,height: 480,width: 305 });
              running = true;
             $.ajax(
               {
-                url: "/items/compare?type=scroll" + "&ids=<%= params[:ids]%>" + '&page=' + $("#page_pagination").val(),
+                url: "/items/compare?type=scroll" + "&ids=" + ids + '&page=' + $("#page_pagination").val(),
                 type: "get",
                 dataType: "script",
                 before: $('#spinner1').show(),
