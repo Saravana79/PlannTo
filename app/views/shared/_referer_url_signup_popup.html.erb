@@ -1,5 +1,6 @@
 <%if !current_user %>
 <%if session[:referer_counter] == 2 %>
+   <% session[:referer_counter] = 0 %>
    <script>
      $('#dialog-form-google-search').dialog({modal: true,height: 580,width: 575 }); $('.Close_dialog').show();
         $('.ui-dialog-titlebar').hide();
