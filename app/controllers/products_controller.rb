@@ -21,10 +21,10 @@ class ProductsController < ApplicationController
      end
    end
    end 
-     if (!session[:referer_counter].nil? || session[:referer_counter]!=0)  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
-       session[:referer_counter]+= 1
-       return true
-   end
+#     if (!session[:referer_counter].nil? || session[:referer_counter]!=0)  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
+#       session[:referer_counter]+= 1
+#       return true
+#   end
   
   end
 
