@@ -33,9 +33,10 @@ class PreferencesController < ApplicationController
 
   def plan_to_buy
     @page = params[:page]
+    @itemtype = Item.find(params[:item_id]).itemtype #by shan
     @per_page = params[:per_page] || 4
     require 'will_paginate/array'
-    follow_type = params["follow_type"]
+    follow_type = params["follow_type"] = "buyer"  #by shan
     unless follow_type == ""
       follow = follow_item(params[:follow_type])
       if follow.blank?
@@ -133,7 +134,9 @@ logger.info @follow_item
   def update_question
     @question = UserQuestion.find(params[:question_id])
     @question.question = params[:question]
+    if params[:title]!="" && !params[:title].nil?
     @question.title = params[:title]
+    end 
     @question.plannto_network = params[:plannto_network]
     @question.save
   end

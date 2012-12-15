@@ -15,6 +15,26 @@
       <strong>Planning to buy a gadget, car, bike, cycle or a camera? We will simplify the decision making! </strong>
       Select the products that you are considering here and you will have all the information you need on your profile page.
    <%end%>
+   
+   <%if type == "buying_plan_deals" %>
+   
+  <div class="alert alert-block">
+    <strong>Currently there are no Price Comparisons.</strong>
+ </div>
+   <%end%>
+   
+   <%if type == "no_recommendations" %>
+   
+  <div class="alert alert-block">
+    <strong>Currently there are no Recommendations</strong>
+ </div>
+   <%end%>
+     <%if type == "no_preferences" %>
+     <div class="alert alert-block">
+    <strong>Currently there are no Preferences.</strong>
+ </div>
+   <%end%>
+   
    <% if type == "profile_follow"  %>
      <%if item.downcase != 'following' and item.downcase != 'followers'%>
          <% if User.profile_owner?(@user,current_user) %>

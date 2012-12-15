@@ -1,3 +1,4 @@
+ 
 <% if (!@where_to_buy_items.empty?) %>
 <div class="clearboth align_right font_11 pad_tb5">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>
 <div class="clearboth pad_b29">
@@ -27,5 +28,7 @@
   <tr></tr>
 </table>
 </div>
+<%else%>
+   <%= render  '/shared/alert_message',:type => 'buying_plan_deals'%>
 <%end%>
    

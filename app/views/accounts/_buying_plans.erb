@@ -4,21 +4,23 @@
   <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" id="buyingPlanItem<%=buying_plan.id%>">
       <%item_type = buying_plan.itemtype.itemtype %>
       <%item = buying_plan.get_first_item%>
-      
+      <%if item.blank?  %>
+        <%d_item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
+      <%end%>  
       <div class="img_product float_lft" style="width:180px;"><%if item.blank? && item_type == "Car" %>
-       <img src="http://s3.amazonaws.com/Plannto/items/car/small/default_car.jpeg" width="150" height="75" onclick="" /></div>
-       <%elsif @item.blank? && item_type == "Cycle" %>
-          <img src="http://s3.amazonaws.com/Plannto/items/cycle/small/default_cycle.jpeg" width="150" height="75" onclick="" /></div>
-       <%elsif @item.blank? && item_type == "Bike" %>
-          <img src="http://s3.amazonaws.com/Plannto/items/bike/small/default_bike.jpeg" width="150" height="75" onclick="" /></div>
-       <%elsif @item.blank? && item_type == "Mobile" %>
-         <img src="http://s3.amazonaws.com/Plannto/items/mobile/small/default_mobile.jpeg" width="150" height="75" onclick="" /></div>
-       <%elsif @item.blank? && item_type == "Tablet" %>
-         <img src="http://s3.amazonaws.com/Plannto/items/tablet/small/default_tablet.jpeg" width="150" height="75" onclick="" />    </div>
-       <%elsif @item.blank? && item_type == "Camers" %>
-        <img src="http://s3.amazonaws.com/Plannto/items/camera/small/default_camera.jpeg" width="150" height="75" onclick="" /> </div>
+       <img src= "<%= d_item.image_url rescue ''%>"  width="150" height="75" onclick="" /></div>
+       <%elsif item.blank? && item_type == "Cycle" %>
+          <img src="<%= d_item.image_url rescue ''%>" width="150" height="75" onclick="" /></div>
+       <%elsif item.blank? && item_type == "Bike" %>
+          <img src="<%= d_item.image_url rescue ''%>" width="150" height="75" onclick="" /></div>
+       <%elsif item.blank? && item_type == "Mobile" %>
+         <img src="<%= d_item.image_url rescue ''%>" width="150" height="75" onclick="" /></div>
+       <%elsif item.blank? && item_type == "Tablet" %>
+         <img src="<%= d_item.image_url rescue ''%>" width="150" height="75" onclick="" />    </div>
+       <%elsif item.blank? && item_type == "Camera" %>
+        <img src="<%= d_item.image_url rescue ''%>" width="150" height="75" onclick="" /> </div>
        <%else%>        
-       <img src="<%= item.image_url rescue ''%>" width="150" height="75" onclick="parent.location='<%=link_url(item)%>'" /></div>
+       <img src="<%= item.image_url %>" width="150" height="75" onclick="parent.location='<%=link_url(item)%>'" /></div>
       <%end%>
       <div class="float_rgt" style="width:520px;">
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>

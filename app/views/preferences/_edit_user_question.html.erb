@@ -25,6 +25,7 @@
    <div style="clear:both;"></div>
     <%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
               <%=  f.hidden_field :buying_plan_id%><br/>
+            
               Send to Friends:
               <%= f.radio_button :plannto_network, false, :checked => true %>
               Plannto Network:

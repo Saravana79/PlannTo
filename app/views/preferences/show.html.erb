@@ -3,19 +3,7 @@
 <div id="maincontainer" class="maincontainerCss">
 	<!-- Till this will go into main layout and common for all pages.-->
 
-	<div class="breadcrumpbtnDiv">
-		<!--  breadcrumbs - Start -->
-		<div id ="breadcrump" class="breadcrump">
-			<a class="alink" href="#">My Cars</a>
-			<a class="grayarrow">></a>
-			<a class="alink" href="#">Saravana</a>
-			<a class="grayarrow">></a>
-			<a class="alink" id="alink_active">Plannto Buy a Car</a>
-			<!--  breadcrumbs - End -->
-
-		</div>
-		<!-- buttons - Start -->
-	</div>
+	
 	<br/>
 	<br/>
 	<div class="leftcolumnbig">
@@ -26,19 +14,19 @@
 			<div  class="mainContentDiv">
 				<%= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
 				<div  class="float_rgt">
-					<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" />
+				<a href="<%= @buying_plan.user.get_url()%>"> 	<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" /> </a>
 				</div>
 				<div  class="subContentDiv">
 					<div>
-						<a class="title" href="google.com" id="questionTitle"><%= @question.title%></a>
+							<div  id="questionTitle" ><h2><%= @question.title%></h2></div>
 					</div>
 					<div>
-						<a class="txt_brown"><%= @buying_plan.user.name%>  - <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
+					<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown" > <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" >- <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
 					</div>
 					<div class="subContentGap">
 						<div id="displayQuestion">
 							<a class="txt_black_description" id="question_part"><%= @question.question_part%></a>
-							<a href="google.com" class="padding_left10 txt_blue">more...</a>
+							
 						</div>
 					</div>
 
@@ -125,9 +113,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%end%>
 					</div>
 					<ul id="Newtabs">
-   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Preference</span></a></li>
-        <li <%if params[:type] == "content"%> class="tab_active" <%end%>><a href="?type=content"><span>Content</span></a></li> 
-        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Deals</span></a></li> 
+   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
+        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations</span></a></li> 
+        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
   </ul>
   
   
@@ -138,24 +126,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 		      <br />
 		      <br />
 		      <br />
-					<%unless params[:type].present?%>
-					<div class="hdr_Category">
-						Buying Preferences:
-					</div>
-					<ul class="search_category" id="buyingPreferences">
-						<%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
-					</ul>
-					<br/>
-					<div>
-						<div class="listing_items" style="height:250px;">
-							<%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-							<!-- Question - End -->
-							<br/>
-							<br/>
-							<br/>
-
-							<div  style="border-top:solid 1px #ccd4d8;clear:both;margin-top:100px;"></div>
-							<!-- Answer this question - Start -->
+		        <%if params[:type] == "Recommendations" %>
+						<!-- Answer this question - Start -->
+						<%if @buying_plan.user_question.user_answers.size == 0 %>
+						  <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+						<%else%>
 							<div>
 								<div class="hdr_Category float_lft margin_lft10">
 									<%= @buying_plan.user_question.user_answers.size%> Recommendations
@@ -166,21 +141,16 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 								</div>
 								<%end%>
 							</div>
-
-						</div>
 						<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
 						<!-- Answer this question - End -->
 						<%= display_empty_row(@answers.size).html_safe%>
 						<%@answers.each_with_index do |ans, index|%>
-						<%=render "preferences/update_answer", :ans => ans%>
-
+						  <%=render "preferences/update_answer", :ans => ans%>
 						<%end%>
-
-					</div>
-
-					<!-- Product Details - End -->
-					
-<%end%>
+						
+						
+    <%end%>
+  <%end%>  
 <%if params[:type] == "deals"%>
 <%unless @item_ids.nil?%>
  <br />
@@ -188,8 +158,30 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
   <%end%> 
 <%end%>
 
-<%if params[:type] == "content"%>
-  <div id="content_all">
+					<%unless params[:type].present?%>
+					<div class="hdr_Category">
+						Buying Preferences:
+					</div>
+						<%if @preferences_list.nil? %>
+					    <%= render  '/shared/alert_message',:type => 'no_preferences'%>
+ 				   <%end%>
+					<ul class="search_category" id="buyingPreferences">
+						<%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
+					</ul>
+					<br/>
+					<br />
+					<br /><br/>
+					<br />
+					<br />
+					<div>
+						<div class="listing_items" style="height:250px;">
+							<%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+							<!-- Question - End -->
+         </div>
+         <div class="hdr_Category float_lft margin_lft10">
+									Contents
+								</div>
+					<div id="content_all">
     <%= render "contents/filter_by_options"%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
     <%= render "contents/sort_by_options"%>
@@ -207,7 +199,12 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
      <%= image_tag '/images/ajax-loader.gif' %>
 </span>
 </div>
-<%end%>
+					</div>
+					<!-- Product Details - End -->
+					
+     <%end%>
+	     
+
 
 
 				</div>
@@ -234,7 +231,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			</div>
 			<% end %>
 		</div>
-		<div class="rightcolumnsmall">
+		<!--<div class="rightcolumnsmall">
 
 			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
 				<tr>
@@ -271,11 +268,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 
 			<!-- Related Cars -- End -->
 
-			<br />
+			<!--<br /> ->
 
 			<!-- Related Cars -- Start -->
 
-			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+			<!--<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
 				<tr>
 					<td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
 				</tr>
@@ -309,7 +306,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			</table>
 
 			<!-- Related Cars -- End -->
-		</div>
+		<!--</div> -->
 
 	<script type="text/javascript">
   //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
