@@ -3,7 +3,9 @@
 <div class="rightcolumnbig">
   <div class="searchPack">
     <div class="hdr_Category">Search Preferences:</div>
-   
+   <%if @preferences_list.blank? %>
+      <%= render  '/shared/alert_message',:type => 'edit_no_preferences'%>
+  <%end%>
     <ul class="search_category" id="editBuyingPreferences">
     </ul>
     <br/>
@@ -17,13 +19,13 @@
         <%=hidden_field_tag form_list[:field_name].to_sym%>
       <%end%>
     <%end%>
-    <div id="btnDiv" style="height:100px;display:block;">
-      <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Update Preference</a>
-      <div id="preferenceSpinner"></div>
-    </div>
+    
+  
+    
   </div>
 </div>
-<div style=" border: 0 solid;float: left;height: auto;width: 500px;">
+
+<div style="border: 0 solid;float: left;height: auto;width: 700px;">
   <ul class="search_criteria">
     <div class="hdr_search">Search Criteria:</div>
     <%@search_info_lookups.each_with_index do |lookup, index|%>
@@ -31,7 +33,7 @@
         <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
 
       <%end%>
-      <li style="float:<%if index%2==0%> right<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+      <li style="float:<%if index%2==0%> left<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
     <%end%>
   </ul>
 </div>
@@ -43,6 +45,11 @@
 </div>
 
 <div class="push"></div>
+<div id="btnDiv" style="height:100px;display:block;margin-top:420px;">
+    <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Update Preference</a>
+ <div id="preferenceSpinner"></div>
+ </div>
+ 
 <script type="text/javascript">
   $('#updatePreference').live('click', function(){
     updatePreferences('preferenceSpinner');
@@ -249,8 +256,9 @@ end%>
       $("#criteriaPopup").hide();
       $("#criteriaPopup").css({
         "position": "absolute",
+        
         "top": (position.top -15)+ "px",
-        "left":(position.left+210) + "px"
+        "left":(position.left+410) + "px"
       }).show();
       $( "#criteriaHeading" ).html(displayInfo.adn)
       var  rangeVal = displayInfo.range.split(",")

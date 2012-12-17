@@ -37,7 +37,9 @@
     </div>
   </div>
 </div>
-<div style=" border: 0 solid;float: left;height: auto;width: 500px;">
+
+	
+<div style=" border: 0 solid;float: left;height: auto;width: 700px;">
   <ul class="search_criteria">
     <div class="hdr_search">Criteria:</div>
     <%@search_info_lookups.each_with_index do |lookup, index|%>
@@ -45,7 +47,7 @@
         <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
 
       <%end%>
-      <li style="float:<%if index%2==0%> right<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+      <li style="float:<%if index%2==0%> left<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
     <%end%>
   </ul>
 </div>
@@ -54,15 +56,22 @@
 </div>
 
 <div class="push"></div>
-<div  style="float:right;padding:5px;width:220px;float: left">
+<div  style="float:right;padding:5px;width:220px;margin-top:20px;">
 	<div id="preferenceSpinner"></div>
-  <input type="submit" id="publishanswer" class="searchButton" style="font-size:15px;" title="Next Step" /> 
+ 
 	 <a href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</a>
       
-     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;"> or <a href="#" onclick="$('#giveAdviceDialog').dialog('destroy');">skip</a></p>
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip"> or <a href="#">skip</a></p>
       <div>
+      
+      
       </div>
         </div>
+        <script>
+         $("#skip a").click(function(){
+         $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render 'preferences/add_preference_items', :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");
+         });
+        </script>
 <script type="text/javascript">
   $('#updatePreference').click(function() {
     updatePreferences('preferenceSpinner');

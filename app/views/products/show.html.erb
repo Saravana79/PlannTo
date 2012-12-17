@@ -104,6 +104,7 @@ $("#dialog-form #click_message").show();
 <br/>
 <div>
   <ul id="Newtabs">
+
     <%= display_product_page_tabs(@item, params[:at] || "overview") %>
   </ul>
 </div>
@@ -121,6 +122,7 @@ $("#dialog-form #click_message").show();
 <div id="where_to_buy" style="<%=display_required(params[:at] || "overview", "where_to_buy")%>" class="main-content-section">
   <%= render "products/where_to_buy" %>
 </div>
+
 <div id="all_variants" style="<%=display_required(params[:at] || "overview", "all_variants")%>" class="main-content-section">
  <%if @item.can_display_related_item?%>
   <%= render :partial => "products/related_items_container" %>

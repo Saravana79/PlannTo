@@ -34,7 +34,11 @@
     <strong>Currently there are no Preferences.</strong>
  </div>
    <%end%>
-   
+      <%if type == "edit_no_preferences" %>
+     <div class="alert alert-block">
+    <strong>Please seclect the preference for you from the bottom page.</strong>
+ </div>
+   <%end%>
    <% if type == "profile_follow"  %>
      <%if item.downcase != 'following' and item.downcase != 'followers'%>
          <% if User.profile_owner?(@user,current_user) %>

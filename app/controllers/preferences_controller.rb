@@ -57,6 +57,10 @@ class PreferencesController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
       @question = @buying_plan.user_question #.destroy
+       @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+    logger.info @follow_types
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
+logger.info @follow_item  
     if @question.nil?
     @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
    @question.save
