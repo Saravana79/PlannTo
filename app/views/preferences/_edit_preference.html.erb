@@ -237,8 +237,8 @@ end%>
   function openPreferenceInfoBox(displayInfo, attr_name, elem){
     var searchCriteriaFieldId = $(elem).attr('id');
     resetUnwantedFormFields();
-    $( "#searchCriteriaLabel" ).html(" ")
-    $( "#criteriaHeading" ).html(" ")
+    $("#searchCriteriaLabel" ).html(" ")
+    $("#criteriaHeading").html(" ")
     $("#which_attribute").val($(elem).attr('id'));
     $("#which_form_field").val(attr_name);
     $("#which_type").val(displayInfo.vth);
@@ -256,9 +256,8 @@ end%>
       $("#criteriaPopup").hide();
       $("#criteriaPopup").css({
         "position": "absolute",
-        
-        "top": (position.top -15)+ "px",
-        "left":(position.left+410) + "px"
+        "top":  (position.top -15)+ "px",
+        "left": (position.left+210) + "px"
       }).show();
       $( "#criteriaHeading" ).html(displayInfo.adn)
       var  rangeVal = displayInfo.range.split(",")
@@ -276,6 +275,7 @@ end%>
           heterogeneity: [heteroVal1, heteroVal2, heteroVal3],
           scale: [rangeVal[0], '|', rangeVal[1], '|', rangeVal[2], '|', rangeVal[3], '|', rangeVal[4]],
           skin: "plastic",
+
           calculate: function(value){
             return value
           },
@@ -307,7 +307,7 @@ end%>
       $("#criteriaPopup").css({
         "position": "absolute",
         "top": (position.top -15)+ "px",
-        "left":(position.left+210) + "px"
+        "right":(position.left+210) + "px"
       }).show();
       $( "#criteriaHeading" ).html(displayInfo.adn)
       var  rangeVal = displayInfo.range.split(",")

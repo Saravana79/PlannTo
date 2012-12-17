@@ -18,26 +18,26 @@
    
    <%if type == "buying_plan_deals" %>
    
-  <div class="alert alert-block">
+
     <strong>Currently there are no Price Comparisons.</strong>
- </div>
+
    <%end%>
    
    <%if type == "no_recommendations" %>
    
-  <div class="alert alert-block">
+  
     <strong>Currently there are no Recommendations</strong>
- </div>
+ 
    <%end%>
      <%if type == "no_preferences" %>
-     <div class="alert alert-block">
+    
     <strong>Currently there are no Preferences.</strong>
- </div>
+ 
    <%end%>
       <%if type == "edit_no_preferences" %>
-     <div class="alert alert-block">
+   
     <strong>Please seclect the preference for you from the bottom page.</strong>
- </div>
+
    <%end%>
    <% if type == "profile_follow"  %>
      <%if item.downcase != 'following' and item.downcase != 'followers'%>

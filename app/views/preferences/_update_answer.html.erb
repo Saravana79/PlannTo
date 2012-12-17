@@ -14,10 +14,8 @@
 									<ul class="tagging">
 										<%ans.recommendations.each_with_index do |reco, index|%>
 										<li class="taggingmain">
-
-											<span ><a class="txt_tagging"><%= reco.item.name%></a></span>
-
-										</li>
+                      <span ><a class="txt_tagging"><%= reco.item.name%></a></span>
+                   </li>
 										<%end%>
 									</ul>
 
@@ -25,7 +23,7 @@
 								<br/>
 								<div class="subContentGap">
 									<a class="txt_black_description"><%= ans.answer%></a>
-									<a href="google.com" class="padding_left10 txt_blue">more...</a>
+									
 								</div>
 								<ul class="divCommentsConent">
 									<li class="subContentGap float_lft" >

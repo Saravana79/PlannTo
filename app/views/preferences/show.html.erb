@@ -31,7 +31,7 @@
 					</div>
 
 					<script type="text/javascript">
-												$('#giveAdviceTag').live('click', function(){
+						$('#giveAdviceTag').live('click', function(){
 						$.get('/preferences/give_advice',{question_id: <%= @question.id%>},null,"script");
 						})
 
@@ -129,24 +129,28 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 		        <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
-						  <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+						  <%if current_user.id == @buying_plan.user. id %>
+						    <b> No recommendation yet, please send this to your friends/experts for their advice/feedback </b>
+						   <%else%>
+						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+						  <%end%>
 						<%else%>
-							<div>
-								<div class="hdr_Category float_lft margin_lft10">
+							 <div class="hdr_Category float_lft margin_lft10">
 									<%= @buying_plan.user_question.user_answers.size%> Recommendations
 								</div>
+						 <%end%>		
 								<%if can_add_recommendation?(@buying_plan)%>
 								<div class="float_rgt" style="margin-top:8px;">
 									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
 								</div>
-								<%end%>
-							</div>
+							<%end%>
+							
 						<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
 						<!-- Answer this question - End -->
 						<%= display_empty_row(@answers.size).html_safe%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
-						<%end%>
+			
 						
 						
     <%end%>
@@ -162,7 +166,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					<div class="hdr_Category">
 						Buying Preferences:
 					</div>
-						<%if @preferences_list.nil? %>
+						<%if @preferences_list.blank? %>
 					    <%= render  '/shared/alert_message',:type => 'no_preferences'%>
  				   <%end%>
 					<ul class="search_category" id="buyingPreferences">
@@ -176,11 +180,16 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					<div>
 						<div class="listing_items" style="height:250px;">
 							<%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-							<!-- Question - End -->
+						
          </div>
+         	<div class="listing_items" style="height:250px;">
+        	<br/>
+						  <%@items =  BuyingPlan.recommended_items(@answers) %>
+							<%= render 'recommend_items', :items => @items%>
+							</div>
          <div class="hdr_Category float_lft margin_lft10">
-									Contents
-								</div>
+					 Contents
+			  </div>
 					<div id="content_all">
     <%= render "contents/filter_by_options"%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
@@ -195,19 +204,14 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       <a id="content_next" style="display:none"></a>
      
   </div> 
-   <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-     <%= image_tag '/images/ajax-loader.gif' %>
-</span>
+     <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+       <%= image_tag '/images/ajax-loader.gif' %>
+   </span>
 </div>
-					</div>
+	</div>
 					<!-- Product Details - End -->
-					
-     <%end%>
-	     
-
-
-
-				</div>
+		<%end%>
+	     </div>
 			</div>
 		</div>
 		<div style="display:none;" id="updateQuestion">
