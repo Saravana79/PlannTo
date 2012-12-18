@@ -1,10 +1,11 @@
  <!-- Buttons - start-->
+
     <div class="other_links" >
       <span class="txt_black heading_others">Quick Links</span>
       <%@guides = Guide.all%>
       <%@guides.each do |guide|%>
-      <%unless (@item.is_a?Product) and  (guide.name=="Expert" || guide.name=="Experts Guides" ) %>
-      <span class="menu_list"><a href="/<%=search_type%>/guides/<%=guide.name%>"><%=guide.name%></a></span>
+      <%unless ((@item.is_a?Product) and  (guide.name=="Expert" || guide.name=="Experts Guides" )) || ((@item.is_a?(Topic) || @item.is_a?(AttributeTag)) and  (guide.name=="Owner" || guide.name=="Owner Guides" )) %>
+      <span class="menu_list"><a href="/<%=search_type%>/guides/<%=guide.name%>?item_id=<%= @item.id rescue ''%>"><%=guide.name%></a></span>
       <%end%>
     <%end%>
    <%if @item.is_a?Product %>
