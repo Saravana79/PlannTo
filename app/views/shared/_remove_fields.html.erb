@@ -1,14 +1,12 @@
 <div class="right">
   <div class="remove_fields">
   <%= ff.hidden_field :_destroy %>
-  <div class="left">
-    <%= link_to_function image_tag("remove.png", :title => 'Remove this') , "if(confirm('Are you sure? You want to remove this?')) remove_fields(this)" %>
-    
+    <div class="left">
+      <%= link_to_function image_tag("remove.png", :title => 'Remove this',:style=>"width:20px;") , "if(confirm('Are you sure? You want to remove this?')) remove_fields(this)" %>   
  
-   <div class="remove_link">  
-    <%= link_to_function name, "if(confirm('Are you sure? You want to remove this?')) remove_fields(this)" %>
+         <div class="remove_link">  
+          <%= link_to_function name, "if(confirm('Are you sure? You want to remove this?')) remove_fields(this)" %>
+          </div>
     </div>
-    </div>
-
    </div>
-   </div>
+</div>

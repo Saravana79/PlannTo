@@ -1,18 +1,19 @@
 <br />
-<fieldset>
-<div class="title_header float_lft" id="photo">Photo:</div>
-<% if @content %>
-<% if !@content.new_record?  %>
- <div style="float:left;">
-<%= image_tag(@photos[@i].photo.url(:thumb)) rescue ""%>
-</div>
-<% @i = @i +1   %>
-<%end%>
-<%end%>
- <div style="float:right;padding:0px 0px 0px 75px;">
-<%= ff.file_field :photo, {:style=>"margin-left:5px;width:430px;",:width=>"400px"} %>
-<%= render 'shared/remove_fields', {:ff => ff, :name => ''} %> 
-</div>
+<fieldset style="border:0px;">
+	<div class="title_header float_lft" id="photo">Photo:</div>
+		<% if @content %>
+			<% if !@content.new_record?  %>
+				<div style="float:left;">
+					<%= image_tag(@photos[@i].photo.url(:thumb)) rescue ""%>
+				</div>
+				<% @i = @i +1   %>
+			<%end%>
+		<%end%>
+		<%= render 'shared/remove_fields', {:ff => ff, :name => ''} %> 
+		<div style="float:right;padding:0px 0px 0px 0px;">
+			<%= ff.file_field :photo, {:style=>"margin-left:0px;width:378px;",:width=>"300px"} %>
+		</div>
 
+	
 </fieldset>
 
