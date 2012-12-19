@@ -4371,7 +4371,7 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
 .Bluesubmithomespan:hover { background-position:left bottom;}
  .left {float: left}
  .right {float: right}
- .remove_link, .add_fields_link {margin-top: 7px; margin-left: 5px}
+ .remove_link, .add_fields_link {margin-top: 0px; margin-left: 5px}
  .remove_link a {color: red; font-size: 14px}
  .add_fields_link a {color: #2d5e15; font-size: 14px}
 .clear{clear:both;}
