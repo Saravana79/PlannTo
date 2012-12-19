@@ -1,11 +1,6 @@
 
 
-$("#filter_page_no").val("<%=params[:page].to_i+ 1%>");
-<%if params[:page] == "#{1}"%>
-$("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
-<%else%>
-$("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents') %>');
-<%end%>
+<%unless params[:guide] %>
 if (<%=@contents.size%> < 10)
 {
 	running = true;
@@ -14,4 +9,22 @@ else{
 
 running=false;
 }
+<%else%>
+running=false;
+<%end%>
 
+<%if params[:guide] && params[:page] == "#{1}"  %>
+   $("#search_type").val("undefined");
+<%end%> 
+ 
+<%if params[:guide] && @guide_itemtype == "true"%>
+  $("#filter_page_no").val("2");
+  $("#search_type").val("guide_itemtype");
+<%else%>
+  $("#filter_page_no").val("<%=params[:page].to_i+ 1%>");   
+<%end%> 
+<%if params[:page] == "#{1}"%>
+$("#contentsList").html('<%= escape_javascript(render :partial => 'contents/contents') %>');
+<%else%>
+$("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents') %>');
+<%end%>

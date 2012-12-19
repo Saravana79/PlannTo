@@ -6,23 +6,21 @@ class ContentsController < ApplicationController
   layout "product"
   include FollowMethods
   
-  def filter
+   def filter
      if params[:item_type_id].is_a?  Array
        itemtype_id = params[:itemtype_id] 
      else
        itemtype_id  = params[:itemtype_id].split(",")
      end 
-    filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
-    filter_params["order"] = get_sort_by(params[:sort_by])
-   
+     filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
+     filter_params["order"] = get_sort_by(params[:sort_by])
      filter_params["itemtype_id"] =  itemtype_id 
-    if  params[:guide] && session[:guide] == ""
+     if  params[:guide] && params[:items]
        filter_params.delete("itemtype_id") 
-    end   
-    filter_params["search_type"] = params[:search_type]
+    end 
+     filter_params["search_type"] = params[:search_type]
      if  itemtype_id.present?
-     
-       if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
+        if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
            filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"]) if params[:search_type] == "Myfeeds"
           filter_params["root_items"] = @root_items if params[:search_type] == "Myfeeds"
@@ -31,8 +29,7 @@ class ContentsController < ApplicationController
        end  
       if params[:search_type] != "Myfeeds"  
        if params[:items].present?
-   
-        if params[:items].is_a?  Array
+       if params[:items].is_a?  Array
           items = params[:items] 
         else
           items = params[:items].split(",")
@@ -51,20 +48,24 @@ class ContentsController < ApplicationController
       end
     end
     end
-    if  params[:guide] && session[:guide] == "itemtype"
-        filter_params.delete("items")
-    end  
     if params[:user]
       filter_params["user"] = params[:user]
     end  
-    filter_params["page"] = params[:page] if params[:page].present?
+    #filter_params["page"] = params[:page] if params[:page].present?
+    filter_params["page"] = params[:page]  
     filter_params["status"] = 1
     filter_params["guide"] = params[:guide] if params[:guide].present?
-    
     if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
       @contents = Content.my_feeds_filter(filter_params,current_user)
     else      
-      @contents = Content.filter(filter_params)
+       @contents = Content.filter(filter_params)
+        if params[:guide] && @contents.size == 0 && params[:items] 
+         filter_params.delete("items")
+         @guide_itemtype = "true"
+         filter_params["page"] = 1
+         filter_params["itemtype_id"] =  itemtype_id 
+         @contents = Content.filter(filter_params)
+      end
     end  
     end
   end
@@ -94,6 +95,7 @@ class ContentsController < ApplicationController
         sort_by =   "total_votes"
      end
     end   
+    
       if item_ids.size == 1
         item = Item.find(item_ids[0])
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
@@ -104,7 +106,7 @@ class ContentsController < ApplicationController
           itemtype_ids = Array.new
         end
       end
-    search_list = Sunspot.search(Content ) do
+     search_list = Sunspot.search(Content ) do
       fulltext params[:content_search][:search] , :field => :name
       with :sub_type, sub_type if sub_type.size > 0
       with :item_ids, item_ids if item_ids.size > 0
@@ -134,16 +136,14 @@ class ContentsController < ApplicationController
      else
        itemtype_id  = params[:itemtype_id].split(",")
     end 
-   
     filter_params = {"sub_type" => get_sub_type(params[:sub_type], itemtype_id )}
     filter_params["itemtype_id"] = itemtype_id  
     if params[:user]
       filter_params["user"] = params[:user]
     end 
-    
-    if  params[:guide] && session[:guide] == ""
-    filter_params.delete("itemtype_id")
-    end
+     if  params[:guide] && params[:items]
+       filter_params.delete("itemtype_id") 
+     end 
      filter_params["search_type"] = params[:search_type]
     if itemtype_id .present?
        if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
@@ -175,17 +175,25 @@ class ContentsController < ApplicationController
       end
       end
     end
-    if  params[:guide] && session[:guide] == "itemtype"
-     filter_params.delete("items")
-    end
-    filter_params["page"] = params[:page] if params[:page].present?
-    filter_params["status"] = 1
-    filter_params["guide"] = params[:guide] if params[:guide].present?
-    filter_params["order"] = get_sort_by(params[:sort_by]) 
-    if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
+     if  params[:guide] && params[:search_type] == "guide_itemtype"
+       filter_params.delete("items")
+       filter_params["itemtype_id"] =  itemtype_id 
+     end 
+     filter_params["page"] = params[:page]  
+     filter_params["status"] = 1
+     filter_params["guide"] = params[:guide] if params[:guide].present?
+     filter_params["order"] = get_sort_by(params[:sort_by]) 
+     if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
         @contents = Content.my_feeds_filter(filter_params,current_user)
-    else      
+     else      
       @contents = Content.filter(filter_params)
+      if params[:guide] && @contents.size == 0 && params[:items] && params[:search_type]!= "guide_itemtype"
+         filter_params.delete("items")
+         @guide_itemtype = "true"
+         filter_params["page"] = 1
+         filter_params["itemtype_id"] =  itemtype_id 
+         @contents = Content.filter(filter_params)
+      end
     end  
     end
     respond_to do |format|
@@ -213,15 +221,14 @@ class ContentsController < ApplicationController
       
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end
-    session[:guide] = "" 
+
     if !@item.nil?
-      
-   # @item_id = params[:item_id] if params[:item_id].present?
-    sub_type = get_sub_type('All',   "") #@article_categories.collect(&:name)
-    filter_params = {"sub_type" => sub_type}
-    filter_params["order"] = get_sort_by(params[:sort_by])
-    if param_item_id.present?
-      @item_id = param_item_id
+      # @item_id = params[:item_id] if params[:item_id].present?
+      sub_type = get_sub_type('All',   "") #@article_categories.collect(&:name)
+      filter_params = {"sub_type" => sub_type}
+      filter_params["order"] = get_sort_by(params[:sort_by])
+     if param_item_id.present?
+        @item_id = param_item_id
         item = Item.find(@item_id)
         if (item.type == "Manufacturer") || (item.type == "CarGroup")
           filter_params["item_relations"] = item.related_cars.collect(&:id)
@@ -244,14 +251,14 @@ class ContentsController < ApplicationController
   end  
     if @contents.try(:size) == 0 || @item.nil?
        
-       session[:guide] = "itemtype"
+       #session[:guide] = "itemtype"
        sub_type = get_sub_type('All',   "") #@article_categories.collect(&:name)
        filter_params = {"sub_type" => sub_type}
        filter_params["order"] = get_sort_by(params[:sort_by])
        filter_params["itemtype_id"] = @itemtype.id  
     unless item.nil?
       filter_params["itemtype_id"] = item.get_base_itemtypeid
-     @itemtype = Itemtype.find item.get_base_itemtypeid
+      @itemtype = Itemtype.find item.get_base_itemtypeid
     end
     filter_params["guide"] = @guide.id
     filter_params["page"] = params[:page] if params[:page].present?
