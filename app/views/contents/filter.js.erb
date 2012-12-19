@@ -1,6 +1,4 @@
-
-
-<%unless params[:guide] %>
+<%if params[:guide] =="" %>
 if (<%=@contents.size%> < 10)
 {
 	running = true;
@@ -13,11 +11,11 @@ running=false;
 running=false;
 <%end%>
 
-<%if params[:guide] && params[:page] == "#{1}"  %>
+<%if params[:guide]!="" && params[:page] == "#{1}"  %>
    $("#search_type").val("undefined");
 <%end%> 
  
-<%if params[:guide] && @guide_itemtype == "true"%>
+<%if params[:guide]!="" && @guide_itemtype == "true"%>
   $("#filter_page_no").val("2");
   $("#search_type").val("guide_itemtype");
 <%else%>

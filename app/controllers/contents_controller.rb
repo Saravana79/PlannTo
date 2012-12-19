@@ -15,7 +15,7 @@ class ContentsController < ApplicationController
      filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
      filter_params["order"] = get_sort_by(params[:sort_by])
      filter_params["itemtype_id"] =  itemtype_id 
-     if  params[:guide] && params[:items]
+     if  params[:guide]!="" && params[:items]!=""
        filter_params.delete("itemtype_id") 
     end 
      filter_params["search_type"] = params[:search_type]
@@ -59,7 +59,7 @@ class ContentsController < ApplicationController
       @contents = Content.my_feeds_filter(filter_params,current_user)
     else      
        @contents = Content.filter(filter_params)
-        if params[:guide] && @contents.size == 0 && params[:items] 
+        if params[:guide]!="" && @contents.size == 0 && params[:items]!="" 
          filter_params.delete("items")
          @guide_itemtype = "true"
          filter_params["page"] = 1
@@ -141,7 +141,7 @@ class ContentsController < ApplicationController
     if params[:user]
       filter_params["user"] = params[:user]
     end 
-     if  params[:guide] && params[:items]
+     if  params[:guide]!="" && params[:items]!=""
        filter_params.delete("itemtype_id") 
      end 
      filter_params["search_type"] = params[:search_type]
@@ -175,7 +175,7 @@ class ContentsController < ApplicationController
       end
       end
     end
-     if  params[:guide] && params[:search_type] == "guide_itemtype"
+     if  params[:guide]!="" && params[:search_type] == "guide_itemtype"
        filter_params.delete("items")
        filter_params["itemtype_id"] =  itemtype_id 
      end 
@@ -187,7 +187,7 @@ class ContentsController < ApplicationController
         @contents = Content.my_feeds_filter(filter_params,current_user)
      else      
       @contents = Content.filter(filter_params)
-      if params[:guide] && @contents.size == 0 && params[:items] && params[:search_type]!= "guide_itemtype"
+      if params[:guide]!="" && @contents.size == 0 && params[:items]!="" && params[:search_type]!= "guide_itemtype"
          filter_params.delete("items")
          @guide_itemtype = "true"
          filter_params["page"] = 1
