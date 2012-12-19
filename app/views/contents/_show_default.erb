@@ -166,12 +166,12 @@
 							<link rel="stylesheet" href="/slider/themes/light/light.css" type="text/css" media="screen" />
    
     <link rel="stylesheet" href="/slider/nivo-slider.css" type="text/css" media="screen" />
-  <div style="width:400px;margin-left:25px;">
+  <div style="width:400px;height:400px;margin-left:25px;">
    <div id="wrapper">
         <div class="slider-wrapper theme-light">
             <div id="slider" class="nivoSlider">
              <% content.content_photos.each do |photo| %>
-                 <%= image_tag(photo.photo.url(:original)) %>
+                 <%= image_tag(photo.photo.url(:large)) %>
                  <%end%>
             </div>
       
@@ -195,6 +195,10 @@
 			      <%else%>
 							  <div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
 							<%end%>
+							<%end%>
+							<%if ((content.sub_type == "#{ArticleCategory::PHOTO}") && (content.url.nil?)) %>
+							<br /><br />
+							<br /><br /><br /><br /><br /><br />
 							<%end%>
 							
 						<%= raw get_content_description(content, true)%>

@@ -26,6 +26,7 @@ RailsExceptionHandler.configure do |config|
   }
   config.storage_strategies = [:active_record] # Available options: [:active_record, :rails_log, :remote_url => {:target => 'http://example.com'}]
   config.store_request_info do |storage,request|
+  
     storage[:target_url] =    request.url
     storage[:ip_address] =    request.remote_ip
     storage[:referer_url] =   request.referer
@@ -34,9 +35,13 @@ RailsExceptionHandler.configure do |config|
   end
 
   config.store_exception_info do |storage,exception|
-    storage[:class_name] =   exception.class.to_s
-    storage[:message] =      exception.to_s
-    storage[:trace] =        exception.backtrace.join("\n")
+    if exception.class.to_s == "ActionController::RoutingError"
+      exit
+    end
+     storage[:class_name] =   exception.class.to_s
+     storage[:message] =      exception.to_s
+     storage[:trace] =        exception.backtrace.join("\n")
+  
   end
 
   config.store_environment_info do |storage,env|
