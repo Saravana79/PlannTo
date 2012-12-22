@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   has_many :flagged_contents, :class_name => 'Flag', :foreign_key => 'flagged_by'
   has_many :verified_contents, :class_name => 'Flag', :foreign_key => 'verified_by'
   #has_attached_file :uploaded_image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
-  
+  validates_presence_of :name
   has_attached_file :avatar, 
                     :styles => {  :medium => "120x120>", :thumb => "24x24>" },
                     :storage => :s3,
