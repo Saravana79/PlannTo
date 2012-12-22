@@ -1,8 +1,8 @@
 // To make this work on localhost
-var nAgt = navigator.userAgent;
-if ((nAgt.indexOf("Chrome"))!=-1) {
-document.domain = /(\w+)(.\w+)?$/.exec(location.hostname)[0];
-}
+//var nAgt = navigator.userAgent;
+//if ((nAgt.indexOf("Chrome"))!=-1) {
+//document.domain = /(\w+)(.\w+)?$/.exec(location.hostname)[0];
+//}
 function removeCompare(obj){
     $(obj).parents('.compare-view').remove();
     key = $(obj).attr('rel') ;

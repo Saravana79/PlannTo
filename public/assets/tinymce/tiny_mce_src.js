@@ -8653,7 +8653,6 @@ if ( document.documentElement.compareDocumentPosition ) {
 		al = ap.length;
 		bl = bp.length;
 
-
 		// Start walking down the tree looking for a discrepancy
 		for ( var i = 0; i < al && i < bl; i++ ) {
 			if ( ap[i] !== bp[i] ) {
@@ -13548,8 +13547,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 			}
 
 			// User specified a document.domain value
-			var nAgt = navigator.userAgent;
-			if (document.domain && location.hostname != document.domain && (nAgt.indexOf("Chrome"))!=-1)
+			if (document.domain && location.hostname != document.domain)
 				tinymce.relaxedDomain = document.domain;
 
 			t.iframeHTML = s.doctype + '<html><head xmlns="http://www.w3.org/1999/xhtml">';
@@ -13591,8 +13589,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 			// Domain relaxing enabled, then set document domain
 			if (tinymce.relaxedDomain && (isIE || (tinymce.isOpera && parseFloat(opera.version()) < 11))) {
 				// We need to write the contents here in IE since multiple writes messes up refresh button and back button
-				u = 'javascript:(function(){document.open();var nAgt = navigator.userAgent;
-if ((nAgt.indexOf("Chrome"))!=-1) {document.domain="' + document.domain + '";}var ed = window.parent.tinyMCE.get("' + t.id + '");document.write(ed.iframeHTML);document.close();ed.initContentBody();})()';
+				u = 'javascript:(function(){document.open();document.domain="' + document.domain + '";var ed = window.parent.tinyMCE.get("' + t.id + '");document.write(ed.iframeHTML);document.close();ed.initContentBody();})()';
 			}
 
 			// Create iframe
