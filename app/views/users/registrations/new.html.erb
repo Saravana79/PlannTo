@@ -2,7 +2,7 @@
   
     <%if  @user.errors.any? %>
      <div style="width:300px;padding-left:250px;">
-      <%= render  '/shared/login_popup_message',:type => 'signup-devise'%>
+      <%= render  '/shared/login_popup_message',:type => 'signup-devise',:user => @user%>
     <%end%>
     </div>
      <%= hidden_field_tag :token,   @invitation? @invitation.token : "No" %>

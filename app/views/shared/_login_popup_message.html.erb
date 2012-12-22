@@ -20,10 +20,11 @@
  </div>
 <%elsif type == "signup-devise" %>
 <div class="alert alert-block">
-    <strong>Please fill all the fields correctly. </strong>
+ <%@user.errors.full_messages.each do |msg| %>
+   <strong><%= msg %>.</strong>
+    <br />
+    <%end%>
  </div>
- 
- 
-<%end%>
+ <%end%>
 
 
