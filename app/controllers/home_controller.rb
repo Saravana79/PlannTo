@@ -22,7 +22,9 @@ class HomeController < ApplicationController
     @static_page ="true"
   end
  
+ def dialog_test
  
+ end
  private
  
  def get_objects_for_my_feeds

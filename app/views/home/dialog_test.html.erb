@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>test</title>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        $('#modal').click(function() {
+            $('#datamodal').dialog({modal: true,height: 480,width: 275});
+        });
+
+    });
+
+</script>
+
+</head>
+<body>
+    <input id="modal" type="button" value="show modal" />
+    <div id="datamodal" style="border:10px solid #999;backgroundColor:#FFFFFF;color:#111111;display:none;padding:10px;">
+        Test this out..
+        <input type="text"></input>
+    </div>
+</body>
+</html>
