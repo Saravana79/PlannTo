@@ -12,7 +12,7 @@ class Comment < ActiveRecord::Base
   # want user to vote on the quality of comments.
   acts_as_voteable
   has_many :reports, :as => :reportable, :dependent => :destroy 
-  
+  validates_presence_of :comment
   # NOTE: Comments belong to a user
   belongs_to :user
   #acts_as_voteable
@@ -45,7 +45,7 @@ class Comment < ActiveRecord::Base
   
   def can_update_content?(current_user)
    return false if !current_user
-   if current_user.is_admin? || current_user.id == self.created_by 
+   if current_user.is_admin? || current_user.id == self.user_id
      return true
    end
  end
