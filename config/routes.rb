@@ -11,6 +11,7 @@ namespace :admin do
  end
   match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
   get "home/index"
+  get "home/dialog_test"
   resources :follows do
    collection do 
      get :user_follow
