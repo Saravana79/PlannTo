@@ -86,7 +86,8 @@
     :javascript
       $(document).ready(function() {
       Placeholders.init();
-      });           
+      }); 
+    = render 'shared/referer_url_signup_popup'               
   -else
     %body   
       = render 'shared/header_links'
@@ -165,4 +166,4 @@
       $(document).ready(function() {
       Placeholders.init();
       });  
-= render 'shared/referer_url_signup_popup'        
+    = render 'shared/referer_url_signup_popup'        
