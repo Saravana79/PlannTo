@@ -1,0 +1,9 @@
+	<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:540px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+ <b> Give descision why you owned this item? </b>
+<%= form_for :buying_plan,:url => { :controller => "preferences", :action => "owned_description_save" }, :html => {:id => "saveowneddescriptionForm"} ,:remote => true do |f|%>
+  <%= f.hidden_field :plan_id,:value => @plan.id %>
+  <%= f.text_area :owned_item_description, :rows=>10, :cols=>60%><br/>
+  <%= f.submit "Give Decision", :class=> 'suggestionButton' %>
+<% end %>
+
+

@@ -1,0 +1,8 @@
+  //window.location.reload( true );
+  
+  $("#owned_item").html("<%= escape_javascript(render 'preferences/owned_item_description_save', {:item => @item}) %>");
+$("#owned_item").dialog({
+height: 620,
+width:600});
+$(".Close_dialog").show();
+$(".ui-dialog-titlebar").hide();

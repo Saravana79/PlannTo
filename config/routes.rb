@@ -104,6 +104,8 @@ resources :accounts do
   resources :preferences do
     collection do
       get :give_advice
+      get :owned_item
+      post :owned_description_save
       get :get_advice
       post :add_preference
       post :create_preference

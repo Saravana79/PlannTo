@@ -23,10 +23,14 @@
        <img src="<%= item.image_url %>" width="150" height="75" onclick="parent.location='<%=link_url(item)%>'" /></div>
       <%end%>
       <div class="float_rgt" style="width:520px;">
+        <% if current_user.id == @user.id %>
+        <%if !buying_plan.completed? %>
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
-        <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""}?", :method => :delete, :style => "float:inherit;"%>
+       <%end%> 
+        <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%>
+        <%end%>
          <span>
-          <h1><a class="productTitle" id="questionTitle" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a></h1>
+          <h1><a class="productTitle" id="questionTitle" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
         <div class="subContentGap">
 						<div id="displayQuestion">
@@ -38,13 +42,10 @@
 			
          <br />
          <br />
-					<% @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype) %>
-   
-    <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) %>
+		  <% @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype) %>
+        <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) %>
 				 <%= render "buying_items", :items => get_items_with_constraint(@follow_item, @follow_types)%>
-				 	
-						
-        <span class="float_rgt" style="display:inline;">
+				<span class="float_rgt" style="display:inline;">
          </span>
          <div style="float:left;">
 						<ul class="divCommentsConent">
@@ -63,18 +64,25 @@
 							<li class="subContentGap float_lft">
 								<a class="txt_blue ">Report</a>
 							</li>
+						  <%if current_user.id == @user.id %>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
 							</li>
-							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title}?", :method => :delete, :class => "txt_blue"%>
+							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
 							</li>
-							<li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							</li>
-							<li class="subContentGap float_lft">
-								<%= link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});$('.Close_dialog').show();
+							<%if !buying_plan.completed? %>
+							 <li class="subContentGap float_lft">
+								 <a class="txt_gray ">|</a>
+							 </li>
+							  
+							  <li class="subContentGap float_lft">
+								  <%= link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
-							</li>
+
+							  </li>
+							  <%end%>
+						<%end%>
+					
 						</ul>
 						<%= render :partial => "comments/new", :locals => { :content => buying_plan.user_question }  %>
 						</div >

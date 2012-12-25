@@ -1,10 +1,9 @@
+<% content_for :title, @question.title + " - " %>
+<% content_for :description, @question.question_part%>
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
-
 <div id="maincontainer" class="maincontainerCss">
 	<!-- Till this will go into main layout and common for all pages.-->
-
-	
-	<br/>
+  <br/>
 	<br/>
 	<div class="leftcolumnbig">
 		<!-- Product Details - Start -->
@@ -18,7 +17,7 @@
 				</div>
 				<div  class="subContentDiv">
 					<div>
-							<div  id="questionTitle" ><h2><%= @question.title%></h2></div>
+							<div  id="questionTitle" ><h2><%= @question.title%><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h2> </div>
 					</div>
 					<div>
 					<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown" > <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" >- <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
@@ -93,16 +92,28 @@
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
 							</li>
-							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title}?", :method => :delete, :class => "txt_blue"%>
+							<% if can_update_preference?(@buying_plan)%>
+							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title} ,this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
+							</li>
+							<%end%>
+							
+							<%if !@buying_plan.completed? && can_update_preference?(@buying_plan)%>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							
+							<li class="subContentGap float_lft"><%= link_to "Yes,Completed",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id,:type => "complete"},:remote => true, :method => :delete, :class => "txt_blue"%>
 							</li>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
 							</li>
+							
 							<li class="subContentGap float_lft">
 								<%= link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 							</li>
 						</ul>
+						<%end%>
 						<%= render :partial => "comments/new", :locals => { :content => @buying_plan.user_question }  %>
 						</div >
 
@@ -117,9 +128,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations</span></a></li> 
         <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
   </ul>
-  
-  
-					<br/>
+         <br/>
 					<br/>
 					<br />
 		      <br />
@@ -130,7 +139,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<!-- Answer this question - Start -->
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
-						    <b> No recommendation yet, please send this to your friends/experts for their advice/feedback </b>
+						    <div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br />Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this on PlannTo.com' %></div>
 						   <%else%>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						  <%end%>
@@ -150,27 +159,24 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%= display_empty_row(@answers.size).html_safe%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
-			
-						
-						
-    <%end%>
-  <%end%>  
-<%if params[:type] == "deals"%>
-<%unless @item_ids.nil?%>
- <br />
-  <%=render "preferences/deals"%>
-  <%end%> 
-<%end%>
-
-					<%unless params[:type].present?%>
+			      <%end%>
+         <%end%>  
+      <%if params[:type] == "deals"%>
+        <%unless @item_ids.nil?%>
+       <br />
+       <%=render "preferences/deals"%>
+      <%end%> 
+      <%end%>
+       <%unless params[:type].present?%>
 					<div class="hdr_Category">
 						Buying Preferences:
-					</div>
+					</div><br />
+						<br />
 						<%if @preferences_list.blank? %>
 					    <%= render  '/shared/alert_message',:type => 'no_preferences'%>
  				   <%end%>
 					<ul class="search_category" id="buyingPreferences">
-						<%if can_update_preference?(@buying_plan)%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
+						<%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
 					</ul>
 					<br/>
 					<br />
@@ -178,15 +184,27 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					<br />
 					<br />
 					<div>
-						<div class="listing_items" style="height:250px;">
-							<%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-						
-         </div>
+				  <div class="listing_items" style="height:250px;">
+				    <%if @buying_plan.completed? %>
+				      <% @complete = "true" %>
+				      <b> Considering to buy items </b>
+				     <% @items = Item.where('id in (?)', @buying_plan.items_considered) %>
+				     <%= render 'recommend_items', :items => @items,:complete => @complete %>
+				    <%else%> 
+				    <%if can_update_preference?(@buying_plan)  %>
+						 <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+						 <%else%>
+						    <%= render 'recommend_items', :items => @items,:complete => @complete %>
+						  <%end%>  
+						<%end%>
+						<%@complete = "" %>
+			   </div>
          	<div class="listing_items" style="height:250px;">
         	<br/>
 						  <%@items =  BuyingPlan.recommended_items(@answers) %>
 							<%= render 'recommend_items', :items => @items%>
 							</div>
+							<% unless @buying_plan.completed? %>
          <div class="hdr_Category float_lft margin_lft10">
 					 Contents
 			  </div>
@@ -199,15 +217,26 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids} %>
     
       <% @contents = Content.filter(params)%>
-       
-         <%= render :partial => 'contents/contents', :locals => {:params => params} %>
-      <a id="content_next" style="display:none"></a>
-     
-  </div> 
+       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+        <a id="content_next" style="display:none"></a>
+    </div> 
      <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
 </div>
+<%else%>
+<div class="listing_items" style="height:250px;">
+ <br/>
+  <% @complete = "true" %>
+ <%@items = Item.where('id =?',@buying_plan.owned_item_id)%>
+ <span><h2>Owned Item</h2></span>
+ <br />
+ <%= @buying_plan.owned_item_description %>
+<%= render 'recommend_items', :items => @items,:complete => @complete %>
+</div>
+ <%end%>
+							
+    
 	</div>
 					<!-- Product Details - End -->
 		<%end%>
@@ -371,4 +400,5 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
   <%end%>
     $(list).appendTo('ul#buyingPreferences');
 <%end%>
-</script>	
+</script>
+<div id="owned_item"> </div>	

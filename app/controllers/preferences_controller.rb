@@ -52,7 +52,20 @@ class PreferencesController < ApplicationController
       get_follow_items
     end
   end
-
+  
+  def owned_description_save
+    buying_plan = BuyingPlan.find(params[:buying_plan][:plan_id])
+    buying_plan.update_attribute('owned_item_description', params[:buying_plan][:owned_item_description])
+  end
+  
+  def owned_item
+    Follow.wizard_save(params[:item_id],"owner",current_user)
+    type = Item.find(params[:item_id]).type
+    item_type_id = Itemtype.find_by_itemtype(type).id
+    @plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => item_type_id).first
+    @plan.update_attribute('owned_item_id',params[:item_id])
+  end
+  
   def new
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
@@ -184,10 +197,15 @@ logger.info @follow_item
     @buying_plan = BuyingPlan.find(params[:id])
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) #.group_by(&:followable_type)
-   item_ids = @follow_item.collect(&:followable_id).join(',')
+    item_ids = @follow_item.collect(&:followable_id).join(',')
     #@buying_plan.destroy
     logger.info item_ids
-    @buying_plan.update_attributes(:deleted => true, :items_considered => item_ids)
+    if params[:type] == "complete"
+      @buying_plan.update_attributes(:completed => true)
+      @buying_plan.update_attribute('items_considered',item_ids)
+    else
+      @buying_plan.update_attributes(:deleted => true, :items_considered => item_ids)
+    end    
     @follow_item.each do |item|
       item.destroy
     end

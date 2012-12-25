@@ -13,6 +13,11 @@ class BuyingPlan < ActiveRecord::Base
     Item.find(Follow.for_follower(self.user).where(:followable_type =>  self.itemtype.itemtype, :follow_type =>Follow::ProductFollowType::Buyer).first.followable_id) rescue "" 
  end
   
+  def self.owned_item(itemtype,user)
+   item_ids =  Follow.where('follower_id =? and follow_type =? and followable_type=?',user.id,"owner",itemtype).collect(&:followable_id)
+   @items = Item.where("id in(?)",item_ids.last)
+  end
+  
   def self.recommended_items(answers)
     @items = []
     answers.each do |ans|

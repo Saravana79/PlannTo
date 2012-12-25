@@ -239,12 +239,15 @@
          <div id="contentEditView"></div>
         </div>
     
-        	<%if (params[:follow] == "Preferences") %>   
+        	<%if (params[:follow] == "Preferences")  %>   
+        	   
         	  <div class="Rightouter" id="tabs2">
+        	  <% if current_user.id == @user.id %>
         	  	Select Category
         	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list , "itemtype", "itemtype")%>
         	  	
         	  	<button id="plantobuySection">Create buying Plan</button>
+        	  	<%end%>
          <div id="giveAdviceDialog"></div>
       <script type="text/javascript">
   $(document).ready(function(){
