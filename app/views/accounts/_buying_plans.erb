@@ -30,12 +30,12 @@
         <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%>
         <%end%>
          <span>
-          <h1><a class="productTitle" id="questionTitle" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
+          <h1><a class="productTitle" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
         <div class="subContentGap">
 						<div id="displayQuestion">
 						   <% descr = buying_plan.user_question.question_part %>
-							<a class="txt_black_description" id="question_part"><%= buying_plan.user_question.question_part[0..149]%></a>
+							<a class="txt_black_description" id="question_part_<%= buying_plan.user_question.id %>"><%= buying_plan.user_question.question_part[0..149]%></a>
 							<a href="<%=buying_plan.preference_page_url%>" class="padding_left10 txt_blue"><%if descr.size > 150 %> more... <%end%></a>
 						</div>
 					</div>
@@ -76,7 +76,7 @@
 							 </li>
 							  
 							  <li class="subContentGap float_lft">
-								  <%= link_to_function "Update This", "$('#updateQuestion').dialog({width:500, height:250});$('.Close_dialog').show();
+								  <%= link_to_function "Update This", "$('#updateQuestion_#{buying_plan.id}').dialog({width:500, height:300});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 
 							  </li>
@@ -90,26 +90,31 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       	
       <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
-   <div style="display:none;" id="updateQuestion">
+   <div style="display:none;" id="updateQuestion_<%= buying_plan.id %>">
 		<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:440px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-			<%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  buying_plan.user_question.id}, :html => {:id => "getAdviceForm"} do |f|%>
-			<%= f.hidden_field :buying_plan_id%>
-			Title
-			<%= f.text_field :title, :value => buying_plan.user_question.title %>
-			<br/>
-			Send to Friends:
-			<%= f.radio_button :plannto_network, false, :checked => true %>
-			Plannto Network:
-			<%= f.radio_button :plannto_network, true %>
-			<br/>
-			<%= f.text_area :question, :rows=>2, :cols=>60, :value => buying_plan.user_question.question%>
-			<br/>
-
-			<div  style="float:right;padding:5px;width:180px;">
-				<%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
-
-			</div>
-			<% end %>
+		  <%= form_for :question,:url => { :controller => "preferences", :action => "update_question", :id => buying_plan.user_question.id}, :html => {:id => "getAdviceForm1"} ,:remote => :true do |f|%>
+              <%=  hidden_field_tag :question_id, buying_plan.user_question.id %><br/>
+               <b>Title</b>
+               
+              <%= text_field_tag :title,buying_plan.user_question.title %>
+             <!-- Send to Friends:
+              <%= f.radio_button :plannto_network, false, :checked => true %>
+              Plannto Network:
+              <%= f.radio_button :plannto_network, true %><br/> -->
+              <br />
+              <br />
+              <b>Description</b>
+              <br />
+              <%= text_area_tag :question,  buying_plan.user_question.question ,:rows=>2,:cols=>60, :class => 'textFilling expanding'%><br/>
+              <%= hidden_field_tag :display_type,"popup1" %>
+          
+         <%= f.submit 'Complete',:id => "preference_question1",:class=>"searchButton",:style=>"font-size:15px;" %>
+      
+    
+     
+            <% end %>
+		
+		
 		</div>
 		 	<script type="text/javascript">
 												$('#giveAdviceTag').live('click', function(){

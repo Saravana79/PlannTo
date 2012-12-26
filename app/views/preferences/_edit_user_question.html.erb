@@ -25,11 +25,11 @@
     </div>
     </div>
    <div style="clear:both;"></div>
-    <%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
-              <%=  f.hidden_field :buying_plan_id%><br/>
+    <%= form_for :question,:url => { :controller => "preferences", :action => "update_question", :id =>  @question.id}, :html => {:id => "getAdviceForm1"} ,:remote => :true do |f|%>
+              <%=  hidden_field_tag :question_id, @question.id %><br/>
                <b>Title</b>
                
-              <%= f.text_field :title,:value => @buying_plan.user_question.title %>
+              <%= text_field_tag :title,@buying_plan.user_question.title %>
              <!-- Send to Friends:
               <%= f.radio_button :plannto_network, false, :checked => true %>
               Plannto Network:
@@ -38,10 +38,10 @@
               <br />
               <b>Description</b>
               <br />
-              <%= f.text_area :question, :rows=>2, :cols=>60, :class => 'textFilling expanding',:value => @question.question%><br/>
-              
+              <%= text_area_tag :question,  @question.question ,:rows=>2,:cols=>60, :class => 'textFilling expanding'%><br/>
+              <%= hidden_field_tag :display_type,"popup" %>
                <div  style="float:right;padding:5px;width:180px;">
-         <%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
+         <%= f.submit 'Complete',:id => "preference_question1",:class=>"searchButton",:style=>"font-size:15px;" %>
       
       <div>
       <%= render "shared/expanding_text_area_style" %>
@@ -50,26 +50,7 @@
         </div>
 </div>
 
-<script type="text/javascript">
-	  $('#preference_question').live('click', function(e){
-              
-              e.preventDefault()
-              $.ajax(
-              {
-                url: "/preferences/update_question",
-                data: {
-                  display_type: "popup",
-                  question_id: <%=@question.id%>,
-                  question: $("#question_question").val(),
-                  plannto_network: $("input[name='question[plannto_network]']:checked").val()
 
-                },
-                type: "get",
-                dataType: "script"
-              });
-              return false
-            });
-</script>
 
 
 
