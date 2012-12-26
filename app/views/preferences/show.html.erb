@@ -1,5 +1,6 @@
 <% content_for :title, @question.title + " - " %>
 <% content_for :description, @question.question_part%>
+<% @type = params[:type] %>
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
 <div id="maincontainer" class="maincontainerCss">
 	<!-- Till this will go into main layout and common for all pages.-->
@@ -127,6 +128,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations</span></a></li> 
         <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
+        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
          <br/>
 					<br/>
@@ -135,7 +137,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 		      <br />
 		      <br />
 		      <br />
-		        <%if params[:type] == "Recommendations" %>
+		      <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
@@ -167,8 +169,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
        <%=render "preferences/deals"%>
       <%end%> 
       <%end%>
+  	
        <%unless params[:type].present?%>
-					<div class="hdr_Category">
+           <div class="hdr_Category">
 						Buying Preferences:
 					</div><br />
 						<br />
@@ -240,6 +243,31 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 	</div>
 					<!-- Product Details - End -->
 		<%end%>
+		<%if @type == 'guides' %>
+		        	
+		  <div class="hdr_Category float_lft margin_lft10">
+					 Buyer Guides
+			  </div>
+					<div id="content_all">
+    <%= render "contents/filter_by_options"%>
+    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+    <%= render "contents/sort_by_options"%>
+ 	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+	 <%= hidden_field_tag "search_type","undefined" %>
+   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids} %>
+    
+      <% @contents = Content.filter(params)%>
+       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+        <a id="content_next" style="display:none"></a>
+    </div> 
+     <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+       <%= image_tag '/images/ajax-loader.gif' %>
+   </span>
+</div> 
+<% params[:type] = "guides" %>
+		<%end%>
+	
 	     </div>
 			</div>
 		</div>

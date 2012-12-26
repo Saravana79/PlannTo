@@ -15,6 +15,7 @@ class PreferencesController < ApplicationController
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     @preferences_list = Preference.get_items(@preferences)
     @itemtype = @buying_plan.itemtype
+     @guide = Guide.find_by_name("Buyer")
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
