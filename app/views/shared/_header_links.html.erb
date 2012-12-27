@@ -59,7 +59,9 @@
              <%= link_to "Account Setting", accounts_path %>
              <%= link_to "Profile",  "/" + "#{current_user.username}" %>
              <%= link_to "My feeds", "/" %>
+              <%if Rails.env == "development" %>
              <%= link_to "Buying Plans","/" + "#{current_user.username}" + "?follow=Preferences" %>
+             <%end%>
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>
          </span>

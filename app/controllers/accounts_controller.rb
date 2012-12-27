@@ -58,7 +58,7 @@ class AccountsController < ApplicationController
        
      
      @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES-["Manufacturer","Car Group","Topic"])
-     buying_plans
+     buying_plans(@user)
      end
     @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  } 
     @followitems = Follow.for_follower(@user).where(:followable_type => @follow_types).paginate :page => params[:page],:per_page => 8
@@ -80,8 +80,8 @@ class AccountsController < ApplicationController
   def add_information
     @item = Item.find(params[:id])
   end
-  def buying_plans
-    @buying_plans = BuyingPlan.where("user_id = ? and (deleted  IS NULL or deleted = 0)", current_user.id)
+  def buying_plans(user)
+    @buying_plans = BuyingPlan.where("user_id = ? and (deleted  IS NULL or deleted = 0)",   user.id)
   end
   
   #TODO. not restful

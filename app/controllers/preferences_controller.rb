@@ -64,7 +64,15 @@ class PreferencesController < ApplicationController
     type = Item.find(params[:item_id]).type
     item_type_id = Itemtype.find_by_itemtype(type).id
     @plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => item_type_id).first
+    @follow_types = Itemtype.get_followable_types(@plan.itemtype.itemtype)
+    @follow_item = Follow.for_follower(@plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) #.group_by(&:followable_type)
+    item_ids = @follow_item.collect(&:followable_id).join(',')
     @plan.update_attribute('owned_item_id',params[:item_id])
+    @plan.update_attributes(:completed => true)
+    @plan.update_attribute('items_considered',item_ids)
+    @follow_item.each do |item|
+      item.destroy
+    end    
   end
   
   def new
@@ -202,14 +210,14 @@ logger.info @follow_item
     #@buying_plan.destroy
     logger.info item_ids
     if params[:type] == "complete"
-      @buying_plan.update_attributes(:completed => true)
-      @buying_plan.update_attribute('items_considered',item_ids)
+     
     else
       @buying_plan.update_attributes(:deleted => true, :items_considered => item_ids)
-    end    
+   
     @follow_item.each do |item|
       item.destroy
     end
+        end 
    # render :nothing => true
   end
  

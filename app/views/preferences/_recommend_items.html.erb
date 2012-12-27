@@ -1,7 +1,7 @@
  <%unless @complete == "true" %>
  <%if @buying_plan.user_question.user_answers.size == 0 %>
 	<%if current_user.id == @buying_plan.user. id %>
-	<div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br />Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div>
+	<div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:450px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div></div>
 	 <%else%>
 	 <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 <%end%>

@@ -1,17 +1,22 @@
 <br />
-<a class="arrow_up comments_<%= content.id %>" style="display:none"></a>
+<script  type="text/javascript" src="/javascripts/expanding.js"></script>
+
+
+<a class="arrow_up comments_<%= content.id %>" style="display:none;float:"></a>
 <div id="new_comment_<%= content.id %>" class="subContentDiv_comments comments_bg" style="display:none" last_comment="<%= content.id %>">
 	<div class="float_rgt"><img src="<% if user_signed_in? %> <%= current_user.get_photo %> <%end%>" class="userImageSmall">
 	</div>
 
 	<%= form_for  Comment.new, :url => content_comments_path(content), :remote => true, :html => { :id => "comment_form_#{content.id}"} do |f| -%>
-	<%= f.text_field :comment, :class => "txt_gray new_comment", :size => "80", :id => "comment_id#{content.id}" %>
+	<%= f.text_area :comment, :class => "expanding txt_gray new_comment", :size => "80", :id => "comment_id#{content.id}" %>
 	<%= hidden_field_tag "comment_type", content.class.name%>
+	<br /> <br />
+	<%= f.submit "Submit" %>
 	<% end -%>  			
 </div>
 
 
-
+	<%= render "shared/expanding_text_area_style" %>
 <script>
 $("#comment_id<%= content.id %>").keyup(function(){
    <%if !current_user %>
@@ -22,4 +27,5 @@ $("#comment_id<%= content.id %>").keyup(function(){
     <%end%>
   });
 </script>         
+
 

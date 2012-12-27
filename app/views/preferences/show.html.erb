@@ -90,10 +90,11 @@
 							<li class="subContentGap float_lft">
 								<a class="txt_blue ">Report</a>
 							</li>
+							<% if can_update_preference?(@buying_plan)%>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
 							</li>
-							<% if can_update_preference?(@buying_plan)%>
+							
 							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title} ,this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
 							</li>
 							<%end%>
@@ -118,11 +119,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%= render :partial => "comments/new", :locals => { :content => @buying_plan.user_question }  %>
 						</div >
 
-						<%if can_update_preference?(@buying_plan)%>
+						<!--<%if can_update_preference?(@buying_plan)%>
 						<div style="float:right;">
 							<a style="" href="#" class="btn_submitanswer">Ask Advice</a>
 						</div>
-						<%end%>
+						<%end%> -->
 					</div>
 					<ul id="Newtabs">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
@@ -141,7 +142,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<!-- Answer this question - Start -->
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
-						    <div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br />Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this on PlannTo.com' %></div>
+						    <div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:470px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this on PlannTo.com' %></div></div>
 						   <%else%>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						  <%end%>
@@ -197,7 +198,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 				    <%if can_update_preference?(@buying_plan)  %>
 						 <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
 						 <%else%>
-						    <%= render 'recommend_items', :items => @items,:complete => @complete %>
+						 <b> Considering to buy items </b>
+						    <%@owner = "false" %>
+						    <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types),:owner => @owner %>
 						  <%end%>  
 						<%end%>
 						<%@complete = "" %>

@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   def index
     if current_user
       get_objects_for_my_feeds
+     
       render "contents/my_feeds"
     else
       @static_page = "true"
@@ -28,6 +29,8 @@ class HomeController < ApplicationController
  private
  
  def get_objects_for_my_feeds
+     @buying_plan = params[:buying_plan]
+     @buying_plans = BuyingPlan.where("user_id = ? and (deleted  IS NULL or deleted = 0)",   current_user.id)
    @items,@item_types,@article_categories,@root_items = Content.follow_items_contents(current_user,params[:item_types],params[:type])
       filter_params = {"sub_type" => @article_categories}
       filter_params["itemtype_id"] = @item_types 

@@ -1,5 +1,6 @@
 <%if params[:display_type] == "popup"%>
 $("#giveAdviceDialog").dialog('destroy');
+ window.location.href = "<%=@question.buying_plan.preference_page_url%>"
 <%else%>
 $(".ui-dialog-content").dialog('destroy')
 $('#updateQuestion').dialog('destroy');

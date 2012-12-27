@@ -7,9 +7,11 @@
           <a href="<%= link_url(item) %>">
             <img src='<%= item.image_url %>' height="120" width="160">
           </a>
+          <%if @owner!="false" %>
           <%= link_to(follow_item_type_item_path(item, :follow_type => follow.follow_type, :unfollow => true, :profile => true), :remote => true) do %>
             <img class="closeimg" alt="" src="/images/icon_close.png" onmouseover="this.src='/images/icon_close_hover.png'" onmouseout="this.src='/images/icon_close.png'"/>
           <% end %>
+          <%end%>
         </div>
                     <span class="imgtextspan">
                       <%= link_to item.name, link_url(item), :class => "produ_bgimg" %>

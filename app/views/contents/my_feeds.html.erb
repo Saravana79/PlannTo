@@ -14,10 +14,16 @@
 <div class="leftcolumnbig">
   <!-- Product Details - Start -->
   <!-- Overview Tabs -  Start -->
-  <br/><br/>
+
   <!-- Product Details - End -->
-  
-  
+  <%if Rails.env == "development" %>
+  <%if @buying_plan == "true" %>
+    <%@first_time = "true" %>
+   <center> <h1> Buying Plans </h1> </center>
+   <%= render "accounts/buying_plans" %>
+  <%end%>
+  <%end%>  
+    <br/><br/>
   <ul id="Newtabs">
    <li class="tab_active"><a href="#"><span>My Feeds</span></a></li>
         <!-- <li id="my_feed_tab"><a href="#"><span>My Feed</span></a></li> -->
@@ -124,9 +130,17 @@
 
   <br/><br/>
   <%if @buyer_items.size > 0 %>
+  <%if Rails.env == "development" %>
+  <%if @first_time != "true" %>
   <div>
-     <%= render  'contents/plan_to_buy_items'%>
+    <%= render  'contents/buying_plans'%>
   </div>
+  <%end%>
+  <%else%>
+  <div>
+    <%= render  'contents/plan_to_buy_items'%>
+  </div>
+  <%end%>
   <%end%>
  <%if @owned_items.size > 0 %>
   <div>
