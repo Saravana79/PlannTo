@@ -70,6 +70,7 @@ class PreferencesController < ApplicationController
     @plan.update_attribute('owned_item_id',params[:item_id])
     @plan.update_attributes(:completed => true)
     @plan.update_attribute('items_considered',item_ids)
+    UserActivity.save_user_activity(current_user,@buying_plan.id,"completed","Buying Plan",@buying_plan.id,request.remote_ip)
     @follow_item.each do |item|
       item.destroy
     end    
@@ -102,12 +103,12 @@ logger.info @follow_item
   require 'will_paginate/array'
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+    UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
     @buying_plan.update_attribute(:deleted, false)
-    
+    @buying_plan.update_attribute(:completed, false)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
-
     require 'will_paginate/array'
-  @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
+    @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
 
     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     #@preferences_list = Preference.get_items(@preferences)
@@ -199,7 +200,10 @@ logger.info @follow_item
       @user_answer.recommendations.build(:item_id => item_id)
     end
     @user_answer.save
+    
     @count = UserQuestion.find(:first, :conditions => {:id =>params[:user_question_answers][:user_question_id]}).user_answers.size
+     buying_plan = UserQuestion.find(params[:user_question_answers][:user_question_id]).buying_plan
+     UserActivity.save_user_activity(current_user,buying_plan.id,"recommended","Buying Plan", @user_answer.id,request.remote_ip)
   end
 
   def delete_buying_plan

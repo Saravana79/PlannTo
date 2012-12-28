@@ -27,10 +27,17 @@ module FollowMethods
     current_user.clear_user_follow_item
     if Rails.env == "development"
      @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
-     @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
-     @buying_plan.update_attribute(:deleted, false)
-     @buying_plan.update_attribute(:completed, false)
-     @question = @buying_plan.user_question #.destroy
+      @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id).first
+      
+      if @buying_plan.nil?
+        @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
+     elsif @buying_plan.completed?
+        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
+     end
+       @buying_plan.update_attribute(:deleted, false)
+       @buying_plan.update_attribute(:completed, false)
+       @question = @buying_plan.user_question #.destroy
      if @question.nil?
     @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
      @question.save

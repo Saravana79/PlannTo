@@ -18,9 +18,10 @@
         <% if @buying_plan == "true" || (current_user.id == @user.id rescue true)  %>
         <!--<%if !buying_plan.completed? %>
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
-       <%end%> 
-        <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%> 
-        <%end%>-->
+       <%end%>  -->
+        <!-- <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%> 
+        -->
+        <%end%> 
          <span>
           <h1><a class="productTitle" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
