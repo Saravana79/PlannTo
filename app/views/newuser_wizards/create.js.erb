@@ -11,9 +11,9 @@
  <%end%> 
  <%if @type == "buyer" &&  !@invitation.blank? %> 
    window.location.href = "<%= @invitation.item.get_url %>" 
- <%elsif  @type == "buyer" && !Item.get_follows_items_for_user(current_user).blank?  %>
+ <%elsif  @type == "buyer" && !Item.get_total_follows_items_for_user(current_user).blank?  %>
    window.location.href = "/?buying_plan=true"  
-<%elsif @type == "buyer" && Item.get_follows_items_for_user(current_user).blank?  %>
+<%elsif @type == "buyer" && Item.get_total_follows_items_for_user(current_user).blank?  %>
    window.location.href = "/mobiles" 
 <%end%>   
 document.getElementById('product').focus();

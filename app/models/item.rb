@@ -526,6 +526,9 @@ class Item < ActiveRecord::Base
     Follow.where('follower_id =? and followable_type in (?) and follow_type =?',user.id,Item::FOLLOWTYPES,"follower").limit(5).map{|f| Item.find(f.followable_id)}
   end
   
+  def self.get_total_follows_items_for_user(user) 
+    Follow.where('follower_id =? and followable_type in (?)',user.id,Item::FOLLOWTYPES).limit(5).map{|f| Item.find(f.followable_id)}
+  end
   def self.get_buyer_items_for_user(user) 
      Follow.where('follower_id =? and followable_type in (?) and follow_type =?',user.id,Item::FOLLOWTYPES,"buyer").limit(5).map{|f| Item.find(f.followable_id)}
   end
