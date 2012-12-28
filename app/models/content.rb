@@ -271,9 +271,9 @@ end
       manufacturer_and_cargroup_item_ids << item.id
       elsif item.type == "ItemtypeTag"
         itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
-      else
-      item_ids << item.id
       end
+      item_ids << item.id
+
     end
     if (manufacturer_and_cargroup_item_ids.size != 0 || attribute_item_ids.size != 0 || item_ids.size !=0)
 
