@@ -1,6 +1,21 @@
 	<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:540px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-<div id=""></div><ul id="recommendation_list"></ul><br/>
-Select Recommendation<input type="text" name="textfield" value="" id="recommendation"/>
+
+<div id=""></div>
+ <div class="alert alert-block" style="margin-left:100px;margin-right:50px;">
+  <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+      <strong>
+       Please select the product that you like to suggest and provide your comments below.</strong>
+    </div>
+<div style="padding:5px 5px 5px 115px;clear:both;">
+<ul id="recommendation_list"></ul><br/>
+</div>
+<div style="padding:5px 5px 5px 0px;clear:both;">
+ <div class="title_header float_lft" style="width:100px;">Select Product:</div>
+ <div class="float_lft" >
+ <input type="text" name="textfield" value="" id="recommendation"  style="padding-left:5px;width:400px;" placeholder="Start typing for recommendations"/>
+</div>
+</div>
+<div style="padding:5px 5px 5px 0px;clear:both;">
 <%= form_for @user_answer,:url => { :controller => "preferences", :action => "save_advice" }, :html => {:id => "saveAdviceForm"} do |f|%>
   <%=f.fields_for :user_question_answers do |uqa|%>
     <%= hidden_field_tag "user_question_answers[user_question_id]", @question.id %>
@@ -9,10 +24,15 @@ Select Recommendation<input type="text" name="textfield" value="" id="recommenda
     <%= hidden_field_tag "recommendations[item_id]" %>
   <%end%>
   <%= f.hidden_field :user_id, :value => current_user.id %>
-  <%= f.text_area :answer, :rows=>2, :cols=>60%><br/>
+  <div class="title_header float_lft" style="width:100px;">Comments:</div>
+ <div class="float_lft" >
+  <%= f.text_area :answer, :rows=>2, :cols=>60 , :style=>"padding-left:5px;width:400px;"%>
+</div>
+</div>
+<div style="padding:5px 50px 5px 0px;clear:both;float:right;">
   <%= f.submit "Give Suggestion", :class=> 'suggestionButton' %>
 <% end %>
-
+</div>
 <script type="text/javascript">
   jQuery(document).ready(function(){ 
   });
