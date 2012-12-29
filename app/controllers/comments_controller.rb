@@ -13,12 +13,20 @@ class CommentsController < ApplicationController
     @comment.user = current_user
    
     if @comment.save
-      unless @content.is_a?UserQuestion
+    
+      if !@content.is_a?UserQuestion and !@content.is_a?UserAnswer
         UserActivity.save_user_activity(current_user,@content.id,"commented",@content.type == "AnswerContent" ? "Answer"  :  @content.sub_type,@comment.id,request.remote_ip) if @comment
-      Follow.content_follow(@content.type == "AnswerContent" ? @content.question_content : @content ,current_user) if @comment
-      else
+        Follow.content_follow(@content.type == "AnswerContent" ? @content.question_content : @content ,current_user) if @comment
+      end
+        
+     if @content.is_a?UserQuestion
         UserActivity.save_user_activity(current_user,@content.buying_plan.id,"commented","Buying Plan",@comment.id,request.remote_ip)
-     end 
+     end  
+      
+     #if  @content.is_a?UserAnswer
+      #  UserActivity.save_user_activity(current_user,@content.id,"commented","Recommend",@comment.id,request.remote_ip)
+     #end  
+       
       if @detail
         @comment_string = render_to_string :partial => "detailed_comment", :locals => { :comment => @comment }
       else

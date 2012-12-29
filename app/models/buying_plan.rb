@@ -29,6 +29,12 @@ class BuyingPlan < ActiveRecord::Base
     return @items
   end 
   
+  def  remove_user_activities
+    UserActivity.where("related_activity_type =? and related_id =?","Buying Plan",self.id).each do|ac|
+     ac.destroy
+    end 
+  end
+     
   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_BUYING_PLAN_VOTE_KEY_PREFIX}#{self.id}")
     if count.nil?

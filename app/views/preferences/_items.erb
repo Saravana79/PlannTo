@@ -1,11 +1,11 @@
 <div class="">
  
   <span>
-    <%if can_update_preference?(@buying_plan) && !@buying_plan.completed? %>
+   <!-- <%if can_update_preference?(@buying_plan) && !@buying_plan.completed? %>
      <span><h2><%= @buying_plan.itemtype.itemtype %> that you are considering to buy</h2></span>
       <input name="search" type="text" class="search_inputfield" placeholder="Search <%= params[:follow]%>" id="search_car"/>
       <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="/images/icon_search_gray.png"/></a>
-    <%end%>
+    <%end%> -->
       <%if request.xhr?%>
       <div id="btnDiv" style="height:100px;display:block;">
       <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Next</a>
@@ -15,18 +15,15 @@
   </span>
 
 </div>
+
 <div id="plantobuyContent">
-  <%unless items.blank? %> 
-   <%= render "plan_to_buy_items", :items => items %>
-  <%else%>
-  <br /><br /><br />
-    <div class="alert alert-block"> <strong> No items to be considered.</strong></div>
-  <%end%> 
+  <%= render "plan_to_buy_items", :items => items %>
 </div>
-<%unless items.blank? %> 
+
+<!-- <%unless items.blank? %> 
 
 <a class="txt_compare" href="<%=get_item_ids_to_compare_url(items)%>">COMPARE</a>
-<%end%>
+<%end%> -->
 <%= hidden_field_tag "buying_plan_id", @buying_plan.id %>
 <%= hidden_field_tag "per_page_value", @per_page || ""%>
 <script type="text/javascript">

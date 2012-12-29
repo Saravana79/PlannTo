@@ -1,7 +1,7 @@
- <%unless @complete == "true" %>
+ <!--<%unless @complete == "true" %>
  <%if @buying_plan.user_question.user_answers.size == 0 %>
 	<%if current_user.id == @buying_plan.user. id %>
-	<div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:450px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div></div>
+	<div class="alert alert-block"> <strong>No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:450px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div></div>
 	 <%else%>
 	 <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 <%end%>
@@ -57,8 +57,7 @@
  <%end%>  
  <div class="items_list" style="clear:both;">
   <% items.each do |item| %>
-  
-    <div class="product" id="product_<%= item.id %>">
+     <div class="product" id="product_<%= item.id %>">
       <div class="imgprofilediv">
         <div class="imgpicbtnspan">
           <a href="<%= link_url(item) %>">
@@ -70,9 +69,7 @@
              <%= link_to item.name, link_url(item), :class => "produ_bgimg" %>
           </span>
       </div>
-
- 
-    </div>
+     </div>
   <% end rescue "" %>
 </div>
 
@@ -81,4 +78,53 @@
 </div>
 </div>
 		</div>
-<%end%>
+<%end%> -->
+
+
+
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Recommended Items</td>
+    </tr>
+     <tr><td><%if @buying_plan.user_question.user_answers.size == 0 %>
+	<%if current_user.id == @buying_plan.user. id %>
+	<div class="alert alert-block"> <strong>No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:450px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div></div>
+	 <%else%>
+	 <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+<%end%>  <%end%><%if can_add_recommendation?(@buying_plan) && !@buying_plan.completed? %>
+		<div class="float_rgt" style="margin-top:8px;">
+	<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+<%end%> </td> </tr>
+    <tr>
+      <td valign="top">
+       <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+           
+         <% items.each do |item| %>
+           <tr id="product_<%= item.id %>">
+            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
+            <td width="113">
+            <div>
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
+             
+           </div>
+           <%unless item.type == "Topic" || item.type == "CarGroup" || item.type == "Manufacturer"%>
+           <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "related_item_id#{item.id}"} %><br />
+            <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+      <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %><span style="display:none;" itemprop="count"><%=item.rated_users_count%></span></span>
+    
+    </a><br />
+    <%end%>
+            </td>
+          </tr>
+         <%end%>
+           <tr >
+           <!-- <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="<%= "/" + "#{current_user.username}"%>" class="txt_blue">View All</a></td> -->
+          </tr>
+        </table>
+        </td>
+    </tr>
+   
+  </table>
+  <br/>
+<br />

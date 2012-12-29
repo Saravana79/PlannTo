@@ -40,7 +40,15 @@ class VotesController < ApplicationController
       Vote.get_vote_list(current_user)
       Resque.enqueue(VotingPoint, current_user.id, @voteable.id, params[:parent])
       #Point.add_voting_point(current_user, @voteable)
-      UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',@voteable.type == "AnswerContent" ? "Answer" : @voteable.sub_type,"",request.remote_ip)
+      
+      if  !@voteable.is_a?BuyingPlan and !@voteable.is_a?UserAnswer
+        UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',@voteable.type == "AnswerContent" ? "Answer" : @voteable.sub_type,"",request.remote_ip)
+      end
+      
+      if @voteable.is_a?BuyingPlan
+        UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted','Buying Plan',"",request.remote_ip)
+      end 
+        
       @vote = voter.fetch_vote(voteable)
       @voteable = params[:parent].camelize.constantize.find(params[:id])
     else

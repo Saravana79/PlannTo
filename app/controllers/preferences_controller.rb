@@ -188,8 +188,9 @@ logger.info @follow_item
   end
   
   def delete_answer
-  @user_answer = UserAnswer.find params[:id]
-  @user_answer.destroy
+    @user_answer = UserAnswer.find params[:id]
+    @user_answer.destroy
+    UserActivity.where("related_activity=? and related_activity_type =? and activity_id=?","recommended","Buying Plan",@user_answer.id).first.destroy
   end
 
   def save_advice
@@ -210,7 +211,8 @@ logger.info @follow_item
     @buying_plan = BuyingPlan.find(params[:id])
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) #.group_by(&:followable_type)
-    item_ids = @follow_item.collect(&:followable_id).join(',')
+     item_ids = @follow_item.collect(&:followable_id).join(',')
+     @buying_plan.remove_user_activities
     #@buying_plan.destroy
     logger.info item_ids
     if params[:type] == "complete"

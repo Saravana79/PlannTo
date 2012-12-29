@@ -180,38 +180,17 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					    <%= render  '/shared/alert_message',:type => 'no_preferences'%>
  				   <%end%>
 					<ul class="search_category" id="buyingPreferences">
-						<%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%><a id="editPreferences" class="btn_submitanswer" href="">Edit My Preferences</a><%end%>
+						<%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%><a id="editPreferences" class="btn_submitanswer" href=""><%if  @preferences_list.size == 0 %> Add Preferences <%else%> Edit My Preferences<%end%> </a><%end%>
 					</ul>
 					<br/>
 					<br />
-					<br /><br/>
+					<br />
+					<br/>
 					<br />
 					<br />
 					<div>
-				  <div class="listing_items" style="height:250px;">
-				    <%if @buying_plan.completed? %>
-				      <% @complete = "true" %>
-				      <b> Considering to buy items </b>
-				     <% @items = Item.where('id in (?)', @buying_plan.items_considered) %>
-				     <%= render 'recommend_items', :items => @items,:complete => @complete %>
-				    <%else%> 
-				    <%if can_update_preference?(@buying_plan)  %>
-						 <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-						 <%else%>
-						 <b> Considering to buy items </b>
-						    <%@owner = "false" %>
-						    <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types),:owner => @owner %>
-						  <%end%>  
-						<%end%>
-						<%@complete = "" %>
-			   </div>
-         	<div class="listing_items" style="height:250px;">
-        	<br/>
-						  <%@items =  BuyingPlan.recommended_items(@answers) %>
-							<%= render 'recommend_items', :items => @items%>
-							</div>
-							<% unless @buying_plan.completed? %>
-         <div class="hdr_Category float_lft margin_lft10">
+			<% unless @buying_plan.completed? %>
+        <div class="hdr_Category float_lft margin_lft10">
 					 Contents
 			  </div>
 					<div id="content_all">
@@ -432,4 +411,18 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
     $(list).appendTo('ul#buyingPreferences');
 <%end%>
 </script>
-<div id="owned_item"> </div>	
+        <div id="owned_item"> </div>	
+          <div class="rightcolumnsmall">
+				    <%if @buying_plan.completed? %>
+				      <% @items = Item.where('id in (?)', @buying_plan.items_considered) %>
+				       <%= render 'items', :items => @items%>
+				    <%else%> 
+				      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+						 <%end%>
+				  </div>
+			      <div class="rightcolumnsmall">
+			       <br/>
+						  <%@items =  BuyingPlan.recommended_items(@answers) %>
+							<%= render 'recommend_items', :items => @items%>
+			      </div>
+			    

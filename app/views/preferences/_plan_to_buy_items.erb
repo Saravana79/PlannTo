@@ -1,4 +1,4 @@
-<div class="items_list" style="clear:both;">
+<!--<div class="items_list" style="clear:both;">
   <% items.each do |follow| %>
     <% item = follow.followable %>
     <div class="product" id="product_<%= item.id %>">
@@ -24,4 +24,56 @@
 </div>
 <div id="plantobuyPaginate">
 <%= will_paginate items if items.respond_to? :total_pages, :page_links => true %>
-</div>
+</div> -->
+
+
+
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Considered Items</td>
+    </tr>
+     <tr><td> <%if can_update_preference?(@buying_plan) && !@buying_plan.completed? %>
+     <span><h2><%= @buying_plan.itemtype.itemtype %> that you are considering to buy</h2></span>
+      <input name="search" type="text" class="search_inputfield" placeholder="Search <%= params[:follow]%>" id="search_car"/>
+      
+    <%end%></td> </tr>
+    <tr>
+      <td valign="top">
+       <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
+         <%if items.blank? %>
+           <div class="alert alert-block"> <strong> No items to be considered.</strong></div>
+         <%end%>  
+         <% items.each do |follow| %>
+             <%if @buying_plan.completed? %>
+               <% item = follow %>
+             <%else%>  
+               <% item = follow.followable %>
+             <%end%>  
+           <tr id="product_<%= item.id %>">
+            <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
+            <td width="113">
+            <div>
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
+             
+           </div>
+           <%unless item.type == "Topic" || item.type == "CarGroup" || item.type == "Manufacturer"%>
+           <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "related_item_id#{item.id}"} %><br />
+            <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+      <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %><span style="display:none;" itemprop="count"><%=item.rated_users_count%></span></span>
+    
+    </a><br />
+    <%end%>
+            </td>
+          </tr>
+         <%end%>
+           <tr >
+            <!--<td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="<%= "/" + "#{current_user.username}"%>" class="txt_blue">View All</a></td> -->
+          </tr>
+        </table>
+        </td>
+    </tr>
+   
+  </table>
+  <br/>
+<br />

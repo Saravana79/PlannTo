@@ -40,7 +40,7 @@ class ArticleContentsController < ApplicationController
    UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article.id!=nil
    session[:content_id] = @article.id
    @facebook_post = params[:facebook_post]
-   Follow.content_follow(@article,current_user) if @article
+   Follow.content_follow(@article,current_user) if @article.id!=nil
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
     flash[:notice]= "Article uploaded"
     respond_to do |format|
