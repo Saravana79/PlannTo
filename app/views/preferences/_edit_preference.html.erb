@@ -2,7 +2,7 @@
 <div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:740px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
 <div class="rightcolumnbig">
   <div class="searchPack">
-    <div class="hdr_Category">Search Preferences:</div>
+    <div class="hdr_Category">Buying Preferences:</div>
    <%if @preferences_list.blank? %>
       <%= render  '/shared/alert_message',:type => 'edit_no_preferences'%>
   <%end%>
@@ -23,11 +23,10 @@
   
     
   </div>
-</div>
 
 <div style="border: 0 solid;float: left;height: auto;width: 700px;">
   <ul class="search_criteria">
-    <div class="hdr_search">Search Criteria:</div>
+    <div class="hdr_Category">Criteria:</div>
     <%@search_info_lookups.each_with_index do |lookup, index|%>
       <%if index == 0%>
         <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
@@ -45,10 +44,12 @@
 </div>
 
 <div class="push"></div>
-<div id="btnDiv" style="height:100px;display:block;margin-top:420px;">
+<br/>
+<div id="btnDiv" style="clear:both;display:block;padding:15px 20px 10px 0px;">
     <a href="#" class="btn_submitanswer float_rgt" style="width:150px;" id="updatePreference">Update Preference</a>
  <div id="preferenceSpinner"></div>
  </div>
+</div>
  
 <script type="text/javascript">
   $('#updatePreference').live('click', function(){

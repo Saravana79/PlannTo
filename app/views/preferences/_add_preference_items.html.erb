@@ -11,15 +11,18 @@
 <br/>
 <div class="alert alert-block">
   <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
-  <strong>Are you considering any <%=@itemtype.itemtype.pluralize%> to buy? </strong>
-  Select the interested <%=@itemtype.itemtype.pluralize%> by entering the name in the following text box.
+  <strong>Please specify the list of <%=@itemtype.itemtype.pluralize.downcase%> that you are considering to buy? </strong>
+  
 </div>
 <div class="search_block">
     <div class="title_header" style="padding:0px 500px 0px 0px;width:450px;height:25px;">
-     <input name="search" style="margin-top:5px;width:360px; float:left;font-size:15px;" type="text" placeholder="Search <%= params[:follow]%>" id="search_buying_car"/>
+     <input name="search" style="margin-top:5px;width:360px; float:left;font-size:15px;" type="text"  id="search_buying_car"/>
        <a style="border:solid 0px; left:left; width:21px; height:21px; float:left; margin:5px;"><img src="/images/icon_search_gray.png"/></a>
     </div>
-   
+       <div style="clear:both;padding:0px 0px 0px 15px;width:500px;height:20px;display:block">
+      <label style="font-size:9px;color:gray;">[Type the name of the <%=@itemtype.itemtype.downcase%> in the above textbox to select it]</label>
+    </div>
+
    </div>
      <div style="clear:both;"></div>
      <%= render "preferences/display_items", :items => items %>

@@ -12,7 +12,7 @@
      <%end%> 
      <a href="<%= link_url(item) %>">
           
-       <img src='<%= item.image_url %>' height="50" width="80" style="padding-left:10px;">
+       <img src='<%= item.image_url(:small) %>'  style="padding-left:1px;">
        </a>
      <% end rescue "" %>
 </div>

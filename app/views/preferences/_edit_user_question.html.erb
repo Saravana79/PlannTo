@@ -12,7 +12,7 @@
 <br/>
 <div class="alert alert-block">
   <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
-  <strong>Please add question.</strong>
+  <strong>Please specify additional information about your buying preferences like expected usage or any other preferences that you couldnt specifiy in step 1.</strong>
 </div>
 
 <!--<div class="text_box">
@@ -27,20 +27,20 @@
    <div style="clear:both;"></div>
     <%= form_for :question,:url => { :controller => "preferences", :action => "update_question", :id =>  @question.id}, :html => {:id => "getAdviceForm1"} ,:remote => :true do |f|%>
               <%=  hidden_field_tag :question_id, @question.id %><br/>
-               <b>Title</b>
-               
-              <%= text_field_tag :title,@buying_plan.user_question.title %>
-             <!-- Send to Friends:
-              <%= f.radio_button :plannto_network, false, :checked => true %>
-              Plannto Network:
-              <%= f.radio_button :plannto_network, true %><br/> -->
-              <br />
-              <br />
-              <b>Description</b>
-              <br />
-              <%= text_area_tag :question,  @question.question ,:rows=>2,:cols=>60, :class => 'textFilling expanding'%><br/>
+              <div style="padding:5px 5px 0px 50px;text-align:center">
+
+               <div class="title_header float_lft" style="width:100px;">Title:</div>
+               <div class="float_lft" > 
+              <%= text_field_tag :title,@buying_plan.user_question.title , :style=>"padding-left:5px;width:400px;"%>
+               </div>
+                  </div>
+              <div style="clear:both;padding:5px 5px 0px 50px;text-align:center">    
+              <div class="title_header float_lft" style="width:100px;">Additional Information:</div>
+              <div class="float_lft" >  
+              <%= text_area_tag :question,  @question.question ,:rows=>4,:cols=>80, :class => 'textFilling expanding', :style=>"padding-left:5px;width:400px;"%><div/>
+            </div>
               <%= hidden_field_tag :display_type,"popup" %>
-               <div  style="float:right;padding:5px;width:180px;">
+               <div  style="clear:both;float:right;padding:5px;width:180px;">
          <%= f.submit 'Complete',:id => "preference_question1",:class=>"searchButton",:style=>"font-size:15px;" %>
       
       <div>

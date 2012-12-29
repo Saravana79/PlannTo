@@ -11,19 +11,19 @@
       <%if item.blank?  %>
         <%item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
       <%end%>  
-      <div class="img_product float_lft" style="width:180px;">  
-       <img src="<%= item.image_url %>" width="150" height="75" onclick="parent.location='<%=link_url(item)%>'" /></div>
+      <div class="img_product float_lft">  
+       <img src="<%= item.image_url %>"  onclick="parent.location='<%=link_url(item)%>'" /></div>
       
       <div class="float_rgt" style="width:520px;">
         <% if @buying_plan == "true" || (current_user.id == @user.id rescue true)  %>
         <!--<%if !buying_plan.completed? %>
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
        <%end%>  -->
-        <!-- <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""},this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%> 
+        <!-- <%= link_to " Delete",{:controller => "preferences", :action => "delete_buying_plan", :id => buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{buying_plan.user_question.title rescue ""}, this will also delete the products that are considering to buy from your profile, do you like to proceed?", :method => :delete, :style => "float:inherit;"%> 
         -->
         <%end%> 
          <span>
-          <h1><a class="productTitle" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
+          <h1><a class="productTitle txt_onhover" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
         <div class="subContentGap">
 						<div id="displayQuestion">
@@ -43,7 +43,7 @@
 			
 				<span class="float_rgt" style="display:inline;">
          </span>
-         <div style="float:left;">
+         <div style="float:left;padding-top:5px;">
 						<ul class="divCommentsConent">
 							<li class="subContentGap float_lft" >
 								<a class="txt_blue ">Recommendations (<%= buying_plan.user_question.user_answers.size%>)</a>

@@ -12,14 +12,13 @@
 <br/>
 <div class="rightcolumnbig">
   <div class="searchPack">
-    <div class="hdr_Category">Preferences:</div>
+    <div class="hdr_Category">Buying Preferences:</div>
     <div class="alert alert-block">
   <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
       <strong>
-       Click on criteria list below to add that criteria to your preference list for buying a <%=@itemtype.itemtype.singularize%>.</strong>
+       Please specify your buying preferences from the list of criterias shown below.</strong>
     </div>
     <ul class="search_category" id="editBuyingPreferences">
-
     </ul>
     <br/>
     <%= form_for(:preference, :url =>{:action=>"preferences",:controller=>"update_preference"}, :html => { :method => :post, :id => "updatePreferencesForm"}) do |f| %>
@@ -32,16 +31,13 @@
         <%=hidden_field_tag form_list[:field_name].to_sym%>
       <%end%>
     <%end%>
-    <div id="btnDiv" style="height:100px;display:block;">
-     
-    </div>
   </div>
-</div>
+
 
 	
 <div style=" border: 0 solid;float: left;height: auto;width: 700px;">
   <ul class="search_criteria">
-    <div class="hdr_search">Criteria:</div>
+    <div class="hdr_search">Criteria's:</div>
     <%@search_info_lookups.each_with_index do |lookup, index|%>
       <%if index == 0%>
         <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
@@ -56,17 +52,14 @@
 </div>
 
 <div class="push"></div>
-<div  style="float:right;padding:5px;width:220px;margin-top:20px;">
+<div  style="clear:both;float:right;padding:5px;width:220px;padding:15px 20px 10px 0px;">
 	<div id="preferenceSpinner"></div>
- 
-	 <a href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</a>
-      
+ 	 <a href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</a>
      <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip"> or <a href="#">skip</a></p>
-      <div>
-      
-      
-      </div>
-        </div>
+  <div>      
+  </div>    
+</div>
+</div>
         <script>
          $("#skip a").click(function(){
          $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render 'preferences/add_preference_items', :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");
