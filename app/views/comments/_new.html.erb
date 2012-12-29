@@ -1,7 +1,4 @@
 <br />
-<script  type="text/javascript" src="/javascripts/expanding.js"></script>
-
-
 <a class="arrow_up comments_<%= content.id %>" style="display:none;float:"></a>
 <div id="new_comment_<%= content.id %>" class="subContentDiv_comments comments_bg" style="display:none" last_comment="<%= content.id %>">
 	<div class="float_rgt"><img src="<% if user_signed_in? %> <%= current_user.get_photo %> <%end%>" class="userImageSmall">
