@@ -128,7 +128,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					<ul id="Newtabs">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations</span></a></li> 
-        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
+        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li> 
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
          <br/>
@@ -142,7 +142,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<!-- Answer this question - Start -->
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
-						    <div class="alert alert-block"> <strong> No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:470px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this on PlannTo.com' %></div></div>
+						    <div class="alert alert-block"> 
+						    	<strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + 'is planning to buy a' +  @buying_plan.itemtype.itemtype.downcase + ', Recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name  %>
+
+						    	</div></div>
 						   <%else%>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						  <%end%>

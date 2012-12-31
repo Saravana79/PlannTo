@@ -1,6 +1,6 @@
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
-      <td class="bg_widgethdr txt_white">Plan To Buy Items</td>
+      <td class="bg_widgethdr txt_white">Plan To Buy Products</td>
     </tr>
     <tr>
       <td valign="top">
@@ -14,11 +14,19 @@
              
            </div>
            <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
-            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "related_item_id#{item.id}"} %><br />
-            <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
-      <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %><span style="display:none;" itemprop="count"><%=item.rated_users_count%></span></span>
-    
-    </a><br />
+            <%if item.rated_users_count > 0 %>
+           <div>
+           <div style="float:left;">
+           <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "related_item_id#{item.id}"} %> 
+           </a></div>        
+
+           <div class="txt_blue" style="float:right;" >
+           <a class="txt_blue" href="<%= item.get_url + '?fl=Reviews'%>"> <%= "(" + item.rated_users_count.to_s + ")" %></a></div>
+           
+         </div>
+           <br />
+          <%end%>
             </td>
           </tr>
          <%end%>

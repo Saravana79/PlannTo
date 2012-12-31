@@ -84,13 +84,15 @@
 
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
-      <td class="bg_widgethdr txt_white">Recommended Items</td>
+      <td class="bg_widgethdr txt_white">Recommendations</td>
     </tr>
      <tr><td><%if @buying_plan.user_question.user_answers.size == 0 %>
 	<%if current_user.id == @buying_plan.user. id %>
-	<div class="alert alert-block"> <strong>No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:450px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div></div>
+	<div style="padding:5px;"> <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + 'is planning to buy a' + @buying_plan.itemtype.itemtype.downcase + ', Recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name  %></div>
+</div>
 	 <%else%>
-	 <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+
+	 <div style="padding:5px;"><strong> Currently, there are no recommendations.</strong></div>
 <%end%>  <%end%><%if can_add_recommendation?(@buying_plan) && !@buying_plan.completed? %>
 		<div class="float_rgt" style="margin-top:8px;">
 	<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
