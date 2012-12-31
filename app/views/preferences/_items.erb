@@ -20,10 +20,7 @@
   <%= render "plan_to_buy_items", :items => items %>
 </div>
 
-<!-- <%unless items.blank? %> 
 
-<a class="txt_compare" href="<%=get_item_ids_to_compare_url(items)%>">COMPARE</a>
-<%end%> -->
 <%= hidden_field_tag "buying_plan_id", @buying_plan.id %>
 <%= hidden_field_tag "per_page_value", @per_page || ""%>
 <script type="text/javascript">

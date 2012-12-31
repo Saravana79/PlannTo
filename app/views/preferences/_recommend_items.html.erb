@@ -1,60 +1,8 @@
- <!--<%unless @complete == "true" %>
- <%if @buying_plan.user_question.user_answers.size == 0 %>
-	<%if current_user.id == @buying_plan.user. id %>
-	<div class="alert alert-block"> <strong>No recommendation yet, please send this to your friends/experts for their advice/feedback through email </strong> <br /><br /><div style="padding-left:450px;">Or <%= render "shared/share_buttons", :caption_text => 'Please Recommend for this plan to buy  on PlannTo.com' %></div></div>
-	 <%else%>
-	 <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
-<%end%>
-	<%else%>
-	<div class="hdr_Category float_lft margin_lft10">
-	<%= @buying_plan.user_question.user_answers.size%> Recommendations
-	</div>
- <%end%>		
-	<%if can_add_recommendation?(@buying_plan)%>
-		<div class="float_rgt" style="margin-top:8px;">
-	<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
-</div>
-<%end%> 		
- 		      
-					
- <%if @buying_plan.user_question.user_answers.size != 0 %>
- <span><h2>Recommended Items</h2></span>
-<div id="plantobuyContent">
- <div class="items_list" style="clear:both;">
-  <% items.each do |item| %>
-  
-    <div class="product" id="product_<%= item.id %>">
-      <div class="imgprofilediv">
-        <div class="imgpicbtnspan">
-          <a href="<%= link_url(item) %>">
-            <img src='<%= item.image_url %>' height="120" width="160">
-          </a>
-         
-        </div>
-          <span class="imgtextspan">
-             <%= link_to item.name, link_url(item), :class => "produ_bgimg" %>
-          </span>
-      </div>
-
- 
-    </div>
-  <% end rescue "" %>
-</div>
-
-<div id="plantobuyPaginate">
-<%= will_paginate items if items.respond_to? :total_pages, :page_links => true %>
-</div>
-</div>
-		</div>
-<%end%>
-<%else%>
 
 <div id="plantobuyContent">
  
-<% if items.blank? %>
-   <br />
-   <%= render  '/shared/alert_message',:type => 'no_items'%>
- <%end%>  
+<% if @owned == "true" %>
+    
  <div class="items_list" style="clear:both;">
   <% items.each do |item| %>
      <div class="product" id="product_<%= item.id %>">
@@ -77,9 +25,8 @@
 <%= will_paginate items if items.respond_to? :total_pages, :page_links => true %>
 </div>
 </div>
-		</div>
-<%end%> -->
-
+	
+<%else%>
 
 
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
@@ -130,3 +77,4 @@
   </table>
   <br/>
 <br />
+<%end%>

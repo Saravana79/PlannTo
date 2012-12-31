@@ -128,7 +128,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					<ul id="Newtabs">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations</span></a></li> 
-        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li> 
+        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
          <br/>
@@ -142,10 +142,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<!-- Answer this question - Start -->
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
-						    <div class="alert alert-block"> 
-						    	<strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
+							<div class="alert alert-block">
+<strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
 
-						    	</div></div>
+</div></div>
 						   <%else%>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						  <%end%>
@@ -175,22 +175,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       <%end%>
   	
        <%unless params[:type].present?%>
-           <div class="hdr_Category">
-						Buying Preferences:
-					</div><br />
-						<br />
-						<%if @preferences_list.blank? %>
-					    <%= render  '/shared/alert_message',:type => 'no_preferences'%>
- 				   <%end%>
-					<ul class="search_category" id="buyingPreferences">
-						<%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%><a id="editPreferences" class="btn_submitanswer" href=""><%if  @preferences_list.size == 0 %> Add Preferences <%else%> Edit My Preferences<%end%> </a><%end%>
-					</ul>
-					<br/>
-					<br />
-					<br />
-					<br/>
-					<br />
-					<br />
+           
 					<div>
 			<% unless @buying_plan.completed? %>
         <div class="hdr_Category float_lft margin_lft10">
@@ -215,15 +200,15 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 <%else%>
 <div class="listing_items" style="height:250px;">
  <br/>
-  <% @complete = "true" %>
+  <% @owned = "true" %>
  <%@items = Item.where('id =?',@buying_plan.owned_item_id)%>
  <span><h2>Owned Item</h2></span>
  <br />
  <%= @buying_plan.owned_item_description %>
-<%= render 'recommend_items', :items => @items,:complete => @complete %>
+<%= render 'recommend_items', :items => @items,:complete => @owned %>
 </div>
  <%end%>
-							
+		<%= @owned = "" %>					
     
 	</div>
 					<!-- Product Details - End -->
@@ -354,7 +339,26 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			<!-- Related Cars -- End -->
 		<!--</div> -->
 
-	<script type="text/javascript">
+
+        <div id="owned_item"> </div>	
+         <div class="rightcolumnsmall">
+			       <br/>
+						 
+							<%= render 'preferences_list' %>
+			      </div>	
+          <div class="rightcolumnsmall">
+				    <%if @buying_plan.completed? %>
+				      <% @items = Item.where('id in (?)', @buying_plan.items_considered) %>
+				       <%= render 'items', :items => @items%>
+				    <%else%> 
+				      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+						 <%end%>
+				  </div>
+			      <div class="rightcolumnsmall">
+			       <%@items =  BuyingPlan.recommended_items(@answers) %>
+							<%= render 'recommend_items', :items => @items%>
+			      </div>
+			   	<script type="text/javascript">
   //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
 <%@preferences_list.each do |preference|%>
     var lineHeight = "";
@@ -412,20 +416,6 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "</span></li>" ;
   <%end%>
     $(list).appendTo('ul#buyingPreferences');
-<%end%>
+<%end%> 
+
 </script>
-        <div id="owned_item"> </div>	
-          <div class="rightcolumnsmall">
-				    <%if @buying_plan.completed? %>
-				      <% @items = Item.where('id in (?)', @buying_plan.items_considered) %>
-				       <%= render 'items', :items => @items%>
-				    <%else%> 
-				      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-						 <%end%>
-				  </div>
-			      <div class="rightcolumnsmall">
-			       <br/>
-						  <%@items =  BuyingPlan.recommended_items(@answers) %>
-							<%= render 'recommend_items', :items => @items%>
-			      </div>
-			    
