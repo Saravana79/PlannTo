@@ -11,10 +11,10 @@
       <%if item.blank?  %>
         <%item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
       <%end%>  
-      <div class="img_product float_lft">  
-       <img src="<%= item.image_url %>"  onclick="parent.location='<%=link_url(item)%>'" /></div>
+      <div class="float_lft" style="padding-right:5px;">  
+       <img src="<%= item.image_url %>" style="width:92px;height:69px;" onclick="parent.location='<%=link_url(item)%>'" /></div>
       
-      <div class="float_rgt" style="width:520px;">
+      <div class="float_lft" style="width:520px;">
         <% if @buying_plan == "true" || (current_user.id == @user.id rescue true)  %>
         <!--<%if !buying_plan.completed? %>
         <a style="float:inherit;" href="<%=buying_plan.preference_page_url%>"> Edit Buying Plan</a><br/>
@@ -23,9 +23,9 @@
         -->
         <%end%> 
          <span>
-          <h1><a class="productTitle txt_onhover" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
+          <h1><a class="txt_black txt_onhover" style="font-size:13px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
-        <div class="subContentGap">
+        <div class="subContentGap" style="padding-bottom:8px;">
 						<div id="displayQuestion">
 						   <% descr = buying_plan.user_question.question_part %>
 							<a class="txt_black_description" id="question_part_<%= buying_plan.user_question.id %>"><%= buying_plan.user_question.question_part[0..149]%></a>
@@ -33,9 +33,6 @@
 						</div>
 					</div>
 			
-         <br />
-         <br />
-		 
 				     <% @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype) %>
 				   <% @buying_plan = buying_plan %>    
         <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) %>

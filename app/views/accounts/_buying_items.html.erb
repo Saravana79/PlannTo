@@ -10,9 +10,9 @@
       <% item = follow.followable %>
      
      <%end%> 
-     <a href="<%= link_url(item) %>">
+     <a href="<%= link_url(item) %>" style="text-decoration:none;">
           
-       <img src='<%= item.image_url(:small) %>'  style="padding-left:1px;">
+       <img src='<%= item.image_url(:small) %>'  style="border: solid 1px #CCC;">
        </a>
      <% end rescue "" %>
 </div>
