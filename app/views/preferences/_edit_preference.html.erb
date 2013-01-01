@@ -138,7 +138,7 @@
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> <dl style='margin-left:15px;> <font size='2px'> ,</font></dl></a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
@@ -513,7 +513,7 @@ end%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> <dl style='margin-left:15px;> <font size='2px'>,</font></dl></a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg"

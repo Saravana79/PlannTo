@@ -25,9 +25,6 @@
 <div id="plantobuyPaginate">
 <%= will_paginate items if items.respond_to? :total_pages, :page_links => true %>
 </div> -->
-
-
-
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
   <%if !can_update_preference?(@buying_plan)  %>
     <tr style="padding-bottom:5px;">

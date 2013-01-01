@@ -1,5 +1,5 @@
    <script  type="text/javascript" src="/javascripts/expanding.js"></script>
-  <div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:820px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+  <div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:850px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
  <div class="step_main_page">
 <div class="main_step">
 <ul>
@@ -34,13 +34,16 @@
               <%= text_field_tag :title,@buying_plan.user_question.title , :style=>"padding-left:5px;width:400px;"%>
                </div>
                   </div>
-              <div style="clear:both;padding:5px 5px 0px 50px;text-align:center">    
+              <br />
+              <br />  
+             <div style="padding:5px 5px 0px 50px;">  
               <div class="title_header float_lft" style="width:100px;">Additional Information:</div>
               <div class="float_lft" >  
-              <%= text_area_tag :question,  @question.question ,:rows=>4,:cols=>80, :class => 'textFilling expanding', :style=>"padding-left:5px;width:400px;"%><div/>
-            </div>
+                 <%= text_area_tag :question,  @question.question ,:rows=>4,:cols=>80, :class => 'textFilling expanding', :style=>"padding-left:5px;width:400px;"%><div/>
+             </div>
               <%= hidden_field_tag :display_type,"popup" %>
                <div  style="clear:both;float:right;padding:5px;width:180px;">
+               <br /> <br />
          <%= f.submit 'Complete',:id => "preference_question1",:class=>"searchButton",:style=>"font-size:15px;" %>
       
       <div>

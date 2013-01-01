@@ -4,7 +4,7 @@ class BuyingPlan < ActiveRecord::Base
   has_one :user_question, :dependent => :destroy
   belongs_to :user
   belongs_to :itemtype
-
+  has_many :preferences
   def preference_page_url
      return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
   end

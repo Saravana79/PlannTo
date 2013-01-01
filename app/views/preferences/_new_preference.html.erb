@@ -54,7 +54,7 @@
 <div class="push"></div>
 <div  style="clear:both;float:right;padding:5px;width:220px;padding:15px 20px 10px 0px;">
 	<div id="preferenceSpinner"></div>
- 	 <a href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</a>
+ 	 <button href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</button>
      <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip"> or <a href="#">skip</a></p>
   <div>      
   </div>    
@@ -152,7 +152,7 @@
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> <dl style='margin-left:15px;> <font size='2px'> ,</font></dl></a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
@@ -511,7 +511,7 @@ end%>
         return false
       }
       var value = " ( " + selectedValue + " " +  ") "
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+      var searchCriteria = "<span class='txt_subcategories'>" +  value +"</span>"
     }
     if (($("#which_type").val() == "List of values") || ($("#which_type").val() == "manufacturer"))
     {
@@ -526,7 +526,7 @@ end%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removablePreferenceList' id='" + anchorId + "' href='#'></a></span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> <dl style='margin-left:15px;> <font size='2px'>,</font></dl></a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg"

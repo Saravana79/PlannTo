@@ -75,12 +75,12 @@
 					<br/>
 					<div style="float:left;">
 						<ul class="divCommentsConent">
-							<li class="subContentGap float_lft" >
+						<!--	<li class="subContentGap float_lft" >
 								<a class="txt_blue ">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</a>
 							</li>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
-							</li>
+							</li> -->
 							<li class="subContentGap float_lft" >
 								<a class="txt_blue "><%= render_comments_anchor(@buying_plan.user_question).html_safe  %></a>
 							</li>
@@ -127,11 +127,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					</div>
 					<ul id="Newtabs">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
-        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations</span></a></li> 
+        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations(<%= @buying_plan.user_question.user_answers.size%>) </span></a></li> 
         <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
-         <br/>
+          <br/>
 					<br/>
 					<br />
 		      <br />
@@ -140,19 +140,17 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 		      <br />
 		      <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
+						
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
 							<div class="alert alert-block">
 <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
-
-</div></div>
-						   <%else%>
+   </div></div>
+						<%else%>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						  <%end%>
 						<%else%>
-							 <div class="hdr_Category float_lft margin_lft10">
-									<%= @buying_plan.user_question.user_answers.size%> Recommendations
-								</div>
+							
 						 <%end%>		
 								<%if can_add_recommendation?(@buying_plan)%>
 								<div class="float_rgt" style="margin-top:8px;">
@@ -166,12 +164,66 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
 			      <%end%>
+			      <%unless @preferences_list.nil? %>
+			       <div id="content_all">
+    
+      <%= hidden_field_tag :page_pagination,2%>
+     <div style="width:735" >
+        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+
+  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results from PlannTo based on your preferences: <span id="total_result"> <%=@items.total%></span></div> 
+    
+ 
+    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+  </div>
+   <a id="content_next" style="display:none"></a>
+     <div id="content">
+      
+      <%= render :partial => "/search/index" %>
+    </div>
+    </div>
+     <div style="padding-left:100px;">
+ <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+         <%= image_tag '/images/ajax-loader.gif' %>
+      </span>
+      </div>
+    </div>
+     <script>
+  
+    $(window).scroll(function () {
+       lnk = $('#content_next');
+      
+    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+         running = true;
+            $.ajax(
+              {
+               
+        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val(),
+               
+
+
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+            //lnk.click();
+       }
+        });
+      
+    </script>
+    <%end%>
          <%end%>  
       <%if params[:type] == "deals"%>
         <%unless @item_ids.nil?%>
        <br />
        <%=render "preferences/deals"%>
       <%end%> 
+      
+         
       <%end%>
   	
        <%unless params[:type].present?%>
@@ -401,7 +453,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "</span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories' style='margin-left:10px;'>" + value + " " + "</span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
