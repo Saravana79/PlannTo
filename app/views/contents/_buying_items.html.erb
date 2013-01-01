@@ -1,0 +1,22 @@
+<div class="items_list1" style="clear:both;">
+    <%if @buying_plan.completed? %>
+       <% items = Item.where('id in (?)', buying_plan.items_considered.split(",")) %>
+		 <%end%>		       
+  <% items.each do |follow| %>
+     <%if follow.is_a?Item %>
+     <%item = follow %>
+   
+     <%else%>
+      <% item = follow.followable %>
+     
+     <%end%> 
+     <a href="<%= link_url(item) %>" style="text-decoration:none;">
+          
+       <img src='<%= item.image_url(:small) %>'  style="border: solid 1px #CCC;">
+       </a>
+     <% end rescue "" %>
+</div>
+<div id="plantobuyPaginate">
+<%= will_paginate items if items.respond_to? :total_pages, :page_links => true %>
+</div>
+

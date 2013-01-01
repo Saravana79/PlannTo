@@ -28,12 +28,12 @@
         <div class="subContentGap" style="padding-bottom:8px;">
 						<div id="displayQuestion">
 						   <% descr = buying_plan.user_question.question_part %>
-							<a class="txt_black_description" id="question_part_<%= buying_plan.user_question.id %>"><%if  !buying_plan.user_question.question_part.blank? %> <%= buying_plan.user_question.question_part[0..149]%></a>
+								<a class="txt_black_description" id="question_part_<%= buying_plan.user_question.id %>"><%if  !buying_plan.user_question.question_part.blank? %> <%= buying_plan.user_question.question_part[0..149]%></a>
 							<a href="<%=buying_plan.preference_page_url%>" class="padding_left10 txt_blue"><%if descr.size > 150 %> more... <%end%>  <%elsif buying_pan.user_id == current_user.id %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion_#{buying_plan.id}').dialog({width:550, height:300});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
 						</div>
 					</div>
-		
+			
 				     <% @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype) %>
 				   <% @buying_plan = buying_plan %>    
         <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) %>
