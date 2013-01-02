@@ -96,7 +96,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%></a>
 								<a class="txt_gray ">|</a>
 							</li>
 							
-							<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title} ,this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
+							<li class="subContentGap float_lft"><!--<img src="/images/delete.jpg"/>--><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title} ,this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
 							</li>
 							<%end%>
 							
@@ -105,7 +105,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%></a>
 								<a class="txt_gray ">|</a>
 							</li>
 							
-							<li class="subContentGap float_lft"><%= link_to "Yes,Completed",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id,:type => "complete"},:remote => true, :method => :delete, :class => "txt_blue"%>
+							<li class="subContentGap float_lft"><%= link_to "Mark as Completed",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id,:type => "complete"},:remote => true, :method => :delete, :class => "txt_blue"%>
 							</li>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
@@ -126,10 +126,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						</div>
 						<%end%> -->
 					</div>
-					<ul id="Newtabs">
+					<ul id="Newtabs" style="padding-top:15px;">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
-        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations(<%= @buying_plan.user_question.user_answers.size%>) </span></a></li> 
-        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Price Comparisons</span></a></li> 
+        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> ( <%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
+        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li> 
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
           <br/>
@@ -227,13 +227,12 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
          
       <%end%>
   	
-       <%unless params[:type].present?%>
-           
+       <%unless params[:type].present?%>           
 					<div>
 			<% unless @buying_plan.completed? %>
-        <div class="hdr_Category float_lft margin_lft10">
+        <!--<div class="hdr_Category float_lft margin_lft10">
 					 Contents
-			  </div>
+			  </div>-->
 					<div id="content_all">
     <%= render "contents/filter_by_options"%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
@@ -428,7 +427,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       searchCriteria = ""
       searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
       var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;'>: "+ searchCriteria + "</span></span>" +  "</li>" ;
 
   <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
       var fieldId = "<%="#{preference[:attribute]}"%>"
@@ -439,7 +438,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var value = searchCriteria
       var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
       var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+      var list = "<li id='" + tagId + "'" + " class='" + className +"' ><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;'>: "+ searchCriteria + "</span></span>" + "</li>" ;
   <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
       <%if preference[:value_type] == "manufacturer"%>      
         tagId = "manufacturerAtt_tag"
@@ -453,11 +452,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories' style='margin-left:10px;'>" + value + " " + "</span>"
+        spanHTML = spanHTML + "<span  style='margin-left:2px;font-size:10px;font-weight:normal;text-transform:none;'>" + value + " " + "</span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" + searchName + "</span>" + searchCriteria + "</li>" ;
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName  + ": "+ searchCriteria + "<span></li>" ;
       var fieldId = "<%="#{preference[:attribute]}"%>"
       var value   = "<%="#{preference[:value]}"%>"
       $("#" + fieldId).val(value)
@@ -465,7 +464,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var fieldId = "<%="#{preference[:attribute]}"%>"
       var value   = "<%="#{preference[:value]}"%>"
       $("#" + fieldId).val(value)
-      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "</span></li>" ;
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:auto;'><span class='title_txt' style='text-transform:none;'>" + searchName  + "</span></li>" ;
   <%end%>
     $(list).appendTo('ul#buyingPreferences');
 <%end%> 
