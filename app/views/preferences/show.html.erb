@@ -245,9 +245,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
        <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         <a id="content_next" style="display:none"></a>
     </div> 
-     <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-       <%= image_tag '/images/ajax-loader.gif' %>
-   </span>
+    
 </div>
 <%else%>
 <div class="listing_items" style="height:250px;">
@@ -288,8 +286,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
    </span>
 </div> 
 <% params[:type] = "guides" %>
+
 		<%end%>
-	
+	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+       <%= image_tag '/images/ajax-loader.gif' %>
+   </span>
 	     </div>
 			</div>
 		</div>
