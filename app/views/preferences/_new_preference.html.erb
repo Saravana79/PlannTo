@@ -13,11 +13,14 @@
 <div class="rightcolumnbig">
   <div class="searchPack">
     <div class="hdr_Category">Buying Preferences:</div>
+      <%if @preferences_list.size == 0 %>
     <div class="alert alert-block">
   <!--<button type="button" class="close" data-dismiss="alert">×</button>-->
+
       <strong>
-       Please specify your buying preferences from the list of criterias shown below.</strong>
+       Please specify your buying preferences from the list of criterias shown below.</strong> 
     </div>
+    <%end%>
     <ul class="search_category" id="editBuyingPreferences">
     </ul>
     <br/>
