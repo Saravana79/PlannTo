@@ -1,4 +1,4 @@
-<div class="items_list1" style="clear:both;">
+<div class="items_list1" style="clear:both;padding-top:5px;">
     <%if @buying_plan.completed? %>
        <% items = Item.where('id in (?)', buying_plan.items_considered.split(",")) %>
 		 <%end%>		       

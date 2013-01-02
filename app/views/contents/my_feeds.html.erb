@@ -19,8 +19,18 @@
   <%if Rails.env == "development" %>
   <%if @buying_plan == "true" %>
     <%@first_time = "true" %>
-   <center> <h1> Buying Plans </h1> </center>
+  <!-- <center> <h1> Buying Plans </h1> </center>-->
+   <table style="width:600px;border:solid 1px #CDD3D7;margin-left:50px;padding-bottom:10px;">
+   <tr><td class="th_blue">
+    <!--
+     Following buying plans are created for you automatically, check out these buying plans to get all the information like reviews, news, deals, price comparison, recommendations from friends and experts requried for you to take informed buying decision.-->
+    Check out these buying plans to get all the information required for you to take the informed buying decisions.
+   </td></tr>
+   <tr><td>
+   <div style="width:100%;height:auto;padding-left:50px;padding-right:50px;">
    <%= render "contents/buying_plans_list" %>
+ </div>
+</td></tr></table>
   <%end%>
   <%end%>  
     <br/><br/>
