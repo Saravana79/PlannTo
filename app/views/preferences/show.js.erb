@@ -1,4 +1,17 @@
 $("#page_pagination").val("<%= (params[:page].to_i + 1).to_s %>");
+<% if @preference == "true" %>
+
+if (<%=@related_items.size%> < 10)
+{
+	running = true;
+}
+else{
+
+running=false;
+}
+
+$("#content").append('<%= escape_javascript(render(:partial => 'related_items')) %>');
+<%else%>
 
 if (<%=@items.results.size%> < 10)
 {
@@ -9,6 +22,6 @@ else{
 running=false;
 }
 
-$("#content").append('<%= escape_javascript(render(:partial => 'search/index')) %>');
 
-
+$("#content").append('<%= escape_javascript(render(:partial => 'search/index')) %>')
+<%end%>

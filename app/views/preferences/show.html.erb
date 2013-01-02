@@ -165,7 +165,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
 			      <%end%>
-			      <%unless @preferences_list.nil? %>
+			      <%if @preferences_list.size != 0 %>
 			       <div id="content_all">
     
       <%= hidden_field_tag :page_pagination,2%>
@@ -199,7 +199,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
             $.ajax(
               {
                
-        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val(),
+        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() + "&type=Recommendations" ,
                
 
 
@@ -216,7 +216,74 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
         });
       
     </script>
-    <%end%>
+    <%else%>
+    <div id="content_all">
+    
+      <%= hidden_field_tag :page_pagination,2%>
+     <div style="width:735" >
+        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+
+  
+    
+ 
+    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+  </div>
+   <a id="content_next" style="display:none"></a>
+     <div id="content">
+      
+     <%= render :partial => "related_items" %>
+    </div>
+    </div>
+     <div style="padding-left:100px;">
+ <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+         <%= image_tag '/images/ajax-loader.gif' %>
+      </span>
+      </div>
+    </div>
+     <div id="content_all">
+    
+      <%= hidden_field_tag :page_pagination,2%>  <a id="content_next" style="display:none"></a>
+      
+
+<script>
+  
+    $(window).scroll(function () {
+       lnk = $('#content_next');
+      
+    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+         running = true;
+            $.ajax(
+              {
+               
+        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() +  "&type=Recommendations" ,
+               
+
+
+                type: "get",
+                dataType: "script",
+                before: $('#spinner1').show(),
+                success: function(data){$('#spinner1').hide();
+                 
+                  }
+              });
+              return false
+            //lnk.click();
+       }
+        });
+      
+    </script>
+ <script>
+        $(".action_btns_medium").click(function(e){
+      
+         <% if !current_user %>
+             $("#login-1 #click_message").html(("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+            openLoginPopup("#" + $(this).attr('id'), "submit");
+            return false
+          <%end%>
+        })
+         </script>
+    
+         <%end%>
          <%end%>  
       <%if params[:type] == "deals"%>
         <%unless @item_ids.nil?%>

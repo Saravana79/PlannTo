@@ -26,9 +26,18 @@ class PreferencesController < ApplicationController
     @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
     @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids).includes(:vendor).order(:price)
     end
-    #sunspot_search_items
-    @article_categories = ArticleCategory.get_by_itemtype(0)
-    search_preference_tems(@buying_plan,@itemtype,params[:page],"1")
+    sunspot_search_items
+    if params[:type] == "Recommendations"
+    if @preferences_list.size == 0
+      ids = RelatedItem.find_by_sql("select distinct related_item_id from related_items where item_id in (#{@item_ids}) and related_item_id not in (#{@item_ids}) order by variance desc").collect(&:related_item_id)
+      @related_items = Item.where('id in (?)',ids).paginate :page => params[:page],:per_page => 10
+     @preference = "true"
+    else
+      @article_categories = ArticleCategory.get_by_itemtype(0) 
+      search_preference_tems(@buying_plan,@itemtype,params[:page],"1")
+    end  
+   end
+    @article_categories = ArticleCategory.get_by_itemtype(0) 
   end
 
   def search_preference_tems(buying_plan,search_type,page,status)
