@@ -427,7 +427,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       searchCriteria = ""
       searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
       var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;'>: "+ searchCriteria + "</span></span>" +  "</li>" ;
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;line-height:20px;'>: "+ searchCriteria + "</span></span>" +  "</li>" ;
 
   <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
       var fieldId = "<%="#{preference[:attribute]}"%>"
@@ -438,7 +438,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var value = searchCriteria
       var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
       var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"' ><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;'>: "+ searchCriteria + "</span></span>" + "</li>" ;
+      var list = "<li id='" + tagId + "'" + " class='" + className +"' ><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;line-height:20px;'>: "+ searchCriteria + "</span></span>" + "</li>" ;
   <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
       <%if preference[:value_type] == "manufacturer"%>      
         tagId = "manufacturerAtt_tag"
@@ -452,11 +452,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span  style='margin-left:2px;font-size:10px;font-weight:normal;text-transform:none;'>" + value + " " + "</span>"
+        spanHTML = spanHTML + "<span  style='margin-left:2px;font-size:10px;line-height:20px;font-weight:normal;text-transform:none;'>" + value + " " + "</span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName  + ": "+ searchCriteria + "<span></li>" ;
+      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;line-height:20px;'>" + searchName  + ": "+ searchCriteria + "<span></li>" ;
       var fieldId = "<%="#{preference[:attribute]}"%>"
       var value   = "<%="#{preference[:value]}"%>"
       $("#" + fieldId).val(value)
@@ -464,7 +464,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       var fieldId = "<%="#{preference[:attribute]}"%>"
       var value   = "<%="#{preference[:value]}"%>"
       $("#" + fieldId).val(value)
-      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:auto;'><span class='title_txt' style='text-transform:none;'>" + searchName  + "</span></li>" ;
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:auto;'><span class='title_txt' style='text-transform:none;line-height:20px;'>" + searchName  + "</span></li>" ;
   <%end%>
     $(list).appendTo('ul#buyingPreferences');
 <%end%> 
