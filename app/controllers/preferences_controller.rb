@@ -278,7 +278,7 @@ class PreferencesController < ApplicationController
     @plan.update_attribute('owned_item_id',params[:item_id])
     @plan.update_attributes(:completed => true)
     @plan.update_attribute('items_considered',item_ids)
-    UserActivity.save_user_activity(current_user,@buying_plan.id,"completed","Buying Plan",@buying_plan.id,request.remote_ip)
+    UserActivity.save_user_activity(current_user,@plan.id,"completed","Buying Plan",@plan.id,request.remote_ip)
     @follow_item.each do |item|
       item.destroy
     end    
