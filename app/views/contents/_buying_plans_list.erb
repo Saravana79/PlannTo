@@ -49,8 +49,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
 				<span class="float_rgt" style="display:inline;">
          </span>
          <div style="padding-top:10px;">
-         	<input class="Bluesubmit3" name="commit"  type="submit" value="View Plan">
-         	<input class="Bluesubmit3" name="commit"  type="submit" value="Update Plan" style="margin-left:5px;">
+           <a class="Bluesubmit3" name="commit"  type="submit" value="View Plan" href="<%=buying_plan.preference_page_url%>" style="margin-left:5px;"> View Plan </a>
+        <!-- /preferences/new?search_type=Car -->
+        <%= link_to "Update Plan", "/preferences/new?search_type=#{buying_plan.itemtype.itemtype}"  ,:class=> "Bluesubmit3",:remote => :true ,:style=> "margin-left:5px;"%>
+         	
          </div>
          <!--
          <div style="float:left;padding-top:5px;">
@@ -188,4 +190,4 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
     return false
   }
   </script>
-
+<div id="giveAdviceDialog"> </div>
