@@ -458,7 +458,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			<!-- Related Cars -- End -->
 		<!--</div> -->
 
-
+		<div class="rightcolumnsmall">
         <div id="owned_item"> </div>	
          <div class="rightcolumnsmall">
 			       <br/>
@@ -477,6 +477,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			       <%@items =  BuyingPlan.recommended_items(@answers) %>
 							<%= render 'recommend_items', :items => @items%>
 			      </div>
+		</div>
 			   	<script type="text/javascript">
   //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
 <%@preferences_list.each do |preference|%>
