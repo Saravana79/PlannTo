@@ -29,7 +29,7 @@ class PreferencesController < ApplicationController
     sunspot_search_items
     if params[:type] == "Recommendations"
     if @preferences_list.size == 0
-      ids = RelatedItem.find_by_sql("select distinct related_item_id from related_items where item_id in (#{@item_ids}) and related_item_id not in (#{@item_ids}) order by variance desc").collect(&:related_item_id)
+      ids = RelatedItem.find_by_sql("select distinct related_item_id from related_items where item_id in (#{@item_ids.blank? ? 0 :@item_ids }) and related_item_id not in (#{@item_ids.blank? ? 0 :@item_ids}) order by variance desc").collect(&:related_item_id)
       @related_items = Item.where('id in (?)',ids).paginate :page => params[:page],:per_page => 10
      @preference = "true"
     else
