@@ -1,26 +1,38 @@
-<div class="taggingdiv" style="margin-left:0px;">
-	<div id=""></div><ul id="recommendation_list">
+	<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:540px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+
+<div  style="margin-left:0px;">
+	<div id=""></div>
+	<div style="padding:5px 5px 5px 115px;clear:both;">
+	<ul id="recommendation_list" class="tagging">
 		<%@user_answer.recommendations.each_with_index do |reco, index|%>
+
 										<li class="taggingmain" id="textTaggers<%=reco.item_id%>">
 
 											<span ><a class="txt_tagging"><%= reco.item.name%></a><a id="deleteTag" class="icon_close_tagging" href="#"></a></span>
 
 										</li>
 										<%end%>
-	</ul><br/>
-Select Recommendation<input type="text" name="textfield" value="" id="recommendation"/>
+	</ul></div>
 
-								
 
-								</div>
-								
+	<div style="padding:5px 5px 5px 0px;clear:both;">
+ 		<div class="title_header float_lft" style="width:100px;">Select Product:</div>
+ 	<div class="float_lft" >
+ <input type="text" name="textfield" value="" id="recommendation"  style="padding-left:5px;width:400px;" placeholder="Start typing for recommendations"/>
+</div>
+</div>
+<div style="padding:5px 5px 5px 0px;clear:both;">
+							
 	<%= form_for @user_answer,:url => { :controller => "preferences", :action => "update_answer", :id => @user_answer.id}, :remote => true, :html => {:id => "getAdviceForm"} do |f|%>
 			<%= hidden_field_tag :recommendation_ids, @user_answer.recommendations.collect(&:item_id).join(',')%>
-			
-			<%= f.text_area :answer, :rows=>2, :cols=>60%>
-			<br/>
+			<div class="title_header float_lft" style="width:100px;">Comments:</div>
+			<div class="float_lft" >
+			<%= f.text_area :answer, :rows=>2, :cols=>60, :style=>"padding-left:5px;width:400px;"%>
+			</div>
 
-			<div  style="float:right;padding:5px;width:180px;">
+			</div>
+			<div style="padding:5px 50px 5px 0px;clear:both;float:right;">
+
 				<%= f.submit 'Update' %>
 
 			</div>
@@ -28,6 +40,6 @@ Select Recommendation<input type="text" name="textfield" value="" id="recommenda
 <script type="text/javascript">
   $.textTagger("recommendation",
     "recommendation_list",
-    {close:true, addButton: false, url: "/search/preference_items", editMode: false, multiple: true, hidden_field: "recommendation_ids", search_type_array: ["Mobile", "Car", "AttributeTag"]}
+    {close:true, addButton: false, url: "/search/preference_items", editMode: false, multiple: true, hidden_field: "recommendation_ids", search_type_array: ["Mobile", "Car", "Camera","Tablet","Cycle","Bike"]}
   );
 </script>

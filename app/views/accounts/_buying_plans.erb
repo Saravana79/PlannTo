@@ -44,7 +44,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
          <div style="float:left;padding-top:5px;">
 						<ul class="divCommentsConent">
 							<li class="subContentGap float_lft" >
-								<a class="txt_blue ">Recommendations (<%= buying_plan.user_question.user_answers.size%>)</a>
+								<a class="txt_blue ">
+									Recommendations (<%=buying_plan.user_question.user_answers.size%>)</a>
 							</li>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>

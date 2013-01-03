@@ -7,7 +7,7 @@ $("#giveAdviceDialog").dialog("close")
  <!-- Answer - Start -->
  var list = '<div  class="mainContentDiv" id="box_<%=@count-1%>"><div class="rate_content float_lft"><a class="bg_ratecontent">100</a><a class="btn_like" href="#" id="btn_like_inactive"></a>'
   list = list + '<a class="btn_dislike" href="#"></a></div><div  class="float_rgt"><img src="<%=@user_answer.user.get_photo%>" class="userImageSmall" /></div>'
- list = list + '<div  class="subContentDiv"><div><a class="txt_brown"><%=@user_answer.user.name%> gave a recommendation - <%= time_ago_in_words(@user_answer.created_at)%> ago</a></div>'
+ list = list + '<div  class="subContentDiv" style="clear:display;"><div><a class="txt_brown"><%=@user_answer.user.name%> gave a recommendation - <%= time_ago_in_words(@user_answer.created_at)%> ago</a></div>'
 list = list + '<div class="taggingdiv" style="margin-left:0px;"><ul class="tagging">'
                   <%@user_answer.recommendations.each_with_index do |reco, index|%>
                  list = list + '<li class="taggingmain"><span ><a class="txt_tagging"><%=reco.item.name%></a><a class="icon_close_tagging" href="#"></a></span></li>'

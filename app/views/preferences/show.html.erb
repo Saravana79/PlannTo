@@ -128,20 +128,20 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					</div>
 					<ul id="Newtabs" style="padding-top:15px;">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
-        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> ( <%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
+        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
         <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li> 
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
           <br/>
 					<br/>
 					<br />
-		      <br />
-		      <br />
-		      <br />
-		      <br />
+		   
 		      <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
-						
+			  <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;">
+			  	Suggestions from Friends/Experts
+			  </div>			
+
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
 						  <%if current_user.id == @buying_plan.user. id %>
 							<div class="alert alert-block">
@@ -153,18 +153,23 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%else%>
 							
 						 <%end%>		
-								<%if can_add_recommendation?(@buying_plan)%>
-								<div class="float_rgt" style="margin-top:8px;">
-									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
-								</div>
-							<%end%>
 							
-						<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>
+							
+						<!--<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>-->
 						<!-- Answer this question - End -->
 						<%= display_empty_row(@answers.size).html_safe%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
 			      <%end%>
+			      	<%if can_add_recommendation?(@buying_plan)%>
+								<div class="float_rgt" style="margin-top:8px;">
+									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+								</div>
+							<%end%>
+
+			     <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;padding-top:15px;clear:both;">
+			  	Suggestions from PlannTo 
+			  </div>
 			      <%if @preferences_list.size != 0 %>
 			       <div id="content_all">
     
@@ -172,7 +177,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
      <div style="width:735" >
         <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
 
-  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results from PlannTo based on your preferences: <span id="total_result"> <%=@items.total%></span></div> 
+  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total: <span id="total_result"> <%=@items.total%></span></div> 
     
  
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
@@ -221,10 +226,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
     
       <%= hidden_field_tag :page_pagination,2%>
      <div style="width:735" >
-        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
-
-  
-    
+          
  
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
   </div>

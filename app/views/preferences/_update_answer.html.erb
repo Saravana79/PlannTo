@@ -21,7 +21,7 @@
 
 								</div>
 								<br/>
-								<div class="subContentGap">
+								<div class="subContentGap" style="clear:both;">
 									<a class="txt_black_description"><%= ans.answer%></a>
 									
 								</div>
@@ -31,14 +31,14 @@
 									</li>
 									<li class="subContentGap float_lft">
 										<a class="txt_gray ">|</a>
-									</li>
+									</li>	
 									<li class="subContentGap float_lft">
 										<a class="txt_blue ">Report</a>
 									</li>
 									<li class="subContentGap float_lft">
 										<a class="txt_gray ">|</a>
 									</li>
-									<li class="subContentGap float_lft"><img src="/images/delete.jpg"/><%= link_to " Delete This",{:controller => "preferences", :action => "delete_answer", :id => ans.id}, :remote => true, :confirm => "Are you sure you want to delete #{ans.answer}?", :method => :delete, :class => "txt_blue"%>
+									<li class="subContentGap float_lft"><!--<img src="/images/delete.jpg"/>--><%= link_to " Delete This",{:controller => "preferences", :action => "delete_answer", :id => ans.id}, :remote => true, :confirm => "Are you sure you want to delete #{ans.answer}?", :method => :delete, :class => "txt_blue"%>
 									</li>
 									<li class="subContentGap float_lft">
 										<a class="txt_gray ">|</a>

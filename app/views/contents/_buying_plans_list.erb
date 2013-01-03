@@ -4,10 +4,10 @@
   <%
    unless i == 0   	
   %>
-  <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;width:500px;"></div>
+  <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding:10px 0px 5px 0px;width:500px;"></div>
   <%end%>
   <% i=i+1 %>
-  <div border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;width:500px;" id="buyingPlanItem<%=buying_plan.id%>">
+  <div border="0" cellspacing="0" cellpadding="0" style="padding-top:2px;clear:both;width:500px;" id="buyingPlanItem<%=buying_plan.id%>">
       <%item_type = buying_plan.itemtype.itemtype %>
       <%if buying_plan.completed? %>
         <%item = Item.find(buying_plan.owned_item_id) %>
