@@ -25,9 +25,9 @@
             <br/>
             <td colspan="4">Other variants <a class="bdb_gray1 price_text" target="_blank" style="padding:0px 5px 0px 10px;" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>
             <%elsif (items.size == index + 1) && index > 1%>
-             |  <a style="padding:0px 0px 0px 5px;" target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>  </td></tr>
+             |  <a style="padding:0px 0px 0px 5px;" class="bdb_gray1 price_text" target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a>  </td></tr>
             <%else%>
-             | <a target="_blank" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a> 
+             | <a target="_blank" class="bdb_gray1 price_text" href="/history_details?detail_id=<%=item.item_details_id%>"><%=display_price_detail(item)%></a> 
           <%end%>           
         <%end%>
       <%end%>
