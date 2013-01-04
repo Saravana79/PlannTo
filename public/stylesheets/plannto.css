@@ -1862,7 +1862,7 @@ li.middlebg {
     background: url(../images/btn_close1.png) no-repeat;
     border: solid 0px;
     float: right;
-    margin-top: 2px;
+    margin-top: 0px;
     margin-left: 5px;
     margin-right: 5px;
 }
