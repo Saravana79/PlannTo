@@ -5,9 +5,9 @@
    <%if @preferences_list.blank? %>
       <%= render  '/shared/alert_message',:type => 'edit_no_preferences'%>
   <%end%>
-    <ul class="search_category" id="editBuyingPreferences">
+    <ul class="search_category1" id="editBuyingPreferences">
     </ul>
-    <br/>
+   
     <%= form_for(:preference, :url =>{:action=>"preferences",:controller=>"update_preference"}, :html => { :method => :post, :id => "updatePreferencesForm"}) do |f| %>
       <%=hidden_field_tag :id, @buying_plan.id%>
       <%= hidden_field_tag :page %>
@@ -78,7 +78,7 @@
   function resetUnwantedFormFields(){
 <%@search_info_lookups.each_with_index do |value, index|%>
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"
-      if ($(".search_category").find("#" + searchListId).length == 0){
+      if ($(".search_category1").find("#" + searchListId).length == 0){
         var formId = <%= value[:id] %>
         var valueType = "<%= value[:param_1][:vt] %>"
         if (valueType == "Between"){
@@ -134,7 +134,7 @@
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> </a>  </span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList'  id='" +  anchorId + "' href='#'> </a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
@@ -194,7 +194,7 @@
       var searchListId = "attribute_menu_" + <%=index%> + "_tag"
       var formId = <%= value[:id] %>
       if ((formId == fieldId) && (searchListId != tagId)){
-        if ($(".search_category").find("#" + searchListId).length != 0){
+        if ($(".search_category1").find("#" + searchListId).length != 0){
           $("#" + searchListId).remove();
           var attrField = searchListId.replace("_tag", "")
           $("#" + attrField).show();
@@ -351,7 +351,7 @@ end%>
       removeMultipleAttributeInstance(booleanObject.field_id, tagId);
 
       var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
-      $(list).appendTo('.search_category');
+      $(list).appendTo('.search_category1');
       $("#" + $("#which_attribute").val()).hide();
       $( "#" + booleanObject.field_id ).val( booleanObject.value ); 
       return false
@@ -458,7 +458,7 @@ end%>
 
   $('#criteriaSubmit').click(function() {
     var tagId = $("#which_attribute").val() + "_tag"
-    if ($(".search_category").find("#" + tagId).length > 0){
+    if ($(".search_category1").find("#" + tagId).length > 0){
       $("#" +tagId).remove();
     }
     var fieldId = $("#which_form_field").val()
@@ -509,7 +509,7 @@ end%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'>  </a>  </span>"
+      spanHTML = spanHTML + "<span class='txt_subcategories' style='height:11px;'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg"
@@ -518,7 +518,7 @@ end%>
       var className = "middlebg attributeTag"
     }
     var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt'>" +$("#criteriaHeading").text()+ "<a id= 'deletePreferenceTag' class='icon_close'></a></span>" +searchCriteria + "</li>" ;
-    $(list).appendTo('.search_category');
+    $(list).appendTo('.search_category1');
     $("#criteriaPopup").hide();
     $("#" + $("#which_attribute").val()).hide();
 

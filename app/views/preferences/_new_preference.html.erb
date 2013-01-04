@@ -23,7 +23,7 @@
     <%end%>
     <ul class="search_category" id="editBuyingPreferences">
     </ul>
-    <br/>
+
     <%= form_for(:preference, :url =>{:action=>"preferences",:controller=>"update_preference"}, :html => { :method => :post, :id => "updatePreferencesForm"}) do |f| %>
       <%=hidden_field_tag :id, @buying_plan.id%>
       <%= hidden_field_tag :page %>
@@ -38,7 +38,7 @@
 
 
 	
-<div style=" border: 0 solid;float: left;height: auto;width: 670px;">
+<div style=" border: 0 solid;float: left;height: auto;width: 700px;">
   <ul class="search_criteria">
     <div class="hdr_search">Criteria's:</div>
     <%@search_info_lookups.each_with_index do |lookup, index|%>
@@ -155,7 +155,7 @@
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> <dl style='margin-left:15px;> <font size='2px'> ,</font></dl></a>  </span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' id='" +  anchorId + "' href='#'> </a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg attributeTag"
@@ -529,7 +529,7 @@ end%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-        spanHTML = spanHTML + "<span class='txt_subcategories'>" +  value +   "<a class='icon_close1 removablePreferenceList' style='text-decoration: none;color:red' id='" +  anchorId + "' href='#'> <dl style='margin-left:15px;> <font size='2px'>,</font></dl></a>  </span>"
+        spanHTML = spanHTML + "<span class='txt_subcategories' style='height:11px;'>" +  value +   "<a class='icon_close1 removablePreferenceList'  id='" +  anchorId + "' href='#'> </a>  </span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg"

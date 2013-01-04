@@ -24,7 +24,7 @@ class PreferencesController < ApplicationController
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
     if @follow_item.size >0
     @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
-    @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids).includes(:vendor).order(:price)
+    @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
     end
     sunspot_search_items
     if params[:type] == "Recommendations"
