@@ -146,7 +146,7 @@
       var fieldId = "<%="#{preference[:attribute]}"%>"
       var value   = "<%="#{preference[:value]}"%>"
       $("#" + fieldId).val(value)
-      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + searchName  + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:42px;'><span class='title_txt'>" + searchName  + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
   <%end%>
     $(list).appendTo('ul#editBuyingPreferences');
 <%end%>
@@ -350,7 +350,7 @@ end%>
       //if this attribute already has a different tag then lets remove it.
       removeMultipleAttributeInstance(booleanObject.field_id, tagId);
 
-      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:40px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
+      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:42px;'><span class='title_txt'>" + booleanObject.display_name + "<a id= 'deletePreferenceTag' class='icon_close'></a></span></li>" ;
       $(list).appendTo('.search_category1');
       $("#" + $("#which_attribute").val()).hide();
       $( "#" + booleanObject.field_id ).val( booleanObject.value ); 
