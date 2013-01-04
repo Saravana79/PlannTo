@@ -43,7 +43,7 @@ class NewuserWizardsController < ApplicationController
     @item = Item.find(params[:item_id])
     @wizard_type = params[:type]
     Follow.wizard_save(params[:item_id], @wizard_type,current_user)
-    if Rails.env == "development"
+   
       @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id).first
       if @buying_plan.nil?
@@ -57,7 +57,7 @@ class NewuserWizardsController < ApplicationController
       @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
      @question.save
    end
-   end 
+   
   end
   
   def previous

@@ -1,7 +1,7 @@
 class AddExistPlanToBuyItemsToBuyingPlans < ActiveRecord::Migration
   def change
-  if Rails.env == "development"
-    Follow.where(:follow_type => "buyer").each do |follow| 
+ 
+      Follow.where(:follow_type => "buyer").each do |follow| 
       @itemtype = Itemtype.find_by_itemtype(follow.followable_type.downcase)
       @buying_plan = BuyingPlan.where(:user_id => follow.follower_id, :itemtype_id => @itemtype.id).first
        if @buying_plan.nil?
@@ -26,5 +26,5 @@ class AddExistPlanToBuyItemsToBuyingPlans < ActiveRecord::Migration
     end
    
   end
-  end
+  
 end

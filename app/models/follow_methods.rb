@@ -25,7 +25,7 @@ module FollowMethods
     @type = "buy"
     follow = follow_item(params[:follow_type], params[:unfollow])
     current_user.clear_user_follow_item
-    if Rails.env == "development"
+  
      @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id).first
       
@@ -41,7 +41,7 @@ module FollowMethods
      if @question.nil?
     @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
      @question.save
-    end
+   
     end
     #if follow.blank?
     #  flash[:notice] = "You already buy this Item"

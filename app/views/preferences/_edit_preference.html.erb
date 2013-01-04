@@ -509,7 +509,7 @@ end%>
       var spanHTML = ""
       $.each(selectedList, function(index, value) {
         anchorId = "removeThis_" + index + "_" + formFieldId
-      spanHTML = spanHTML + "<span class='txt_subcategories' style='height:12px;'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
+      spanHTML = spanHTML + "<span class='txt_subcategories'>" + value + "<a class='icon_close1 removableList' id='" + anchorId + "' href='#'></a></span>"
       })
       searchCriteria = searchCriteria + spanHTML
       var className = "middlebg"

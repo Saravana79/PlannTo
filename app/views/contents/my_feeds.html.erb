@@ -16,7 +16,7 @@
   <!-- Overview Tabs -  Start -->
 
   <!-- Product Details - End -->
-  <%if Rails.env == "development" %>
+ 
   <%if @buying_plan == "true" %>
     <%@first_time = "true" %>
   <!-- <center> <h1> Buying Plans </h1> </center>-->
@@ -31,7 +31,7 @@
    <%= render "contents/buying_plans_list" %>
  </div>
 </td></tr></table>
-  <%end%>
+ 
   <%end%>  
     <br/><br/>
   <ul id="Newtabs">
@@ -139,19 +139,14 @@
       <%if @items.size > 0 %>
 
   <br/><br/>
-  <%if @buyer_items.size > 0 %>
-  <%if Rails.env == "development" %>
+  <%if @buying_plans.size > 0 %>
+
   <%if @first_time != "true" %>
   <div>
     <%= render  'contents/buying_plans'%>
   </div>
   <%end%>
-  <%else%>
-  <div>
-    <%= render  'contents/plan_to_buy_items'%>
-  </div>
-  <%end%>
-  <%end%>
+ <%end%>
  <%if @owned_items.size > 0 %>
   <div>
     <%= render  'contents/owned_items'%>

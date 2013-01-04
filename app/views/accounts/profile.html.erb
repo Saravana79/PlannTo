@@ -166,7 +166,7 @@
    <%if current_user.profle_view_permission?(@user) %>
   <div style="clear:both;margin-top:110px;">
         <ul id="Newtabs">
-         <% ['Products', 'Apps', 'Accessories',"Followers","Following" ,Rails.env == "development" ? "Buying Plans" : "" ].each do |item_type|%>
+         <% ['Products', 'Apps', 'Accessories',"Followers","Following" ,"Buying Plans"].each do |item_type|%>
             <%= link_for_item_type(item_type, params[:follow], @user) %>
           <%end%>    
           <!--<%if Rails.env == "development"%>
