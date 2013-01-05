@@ -330,8 +330,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 		<%= @owned = "" %>					
     
 	</div>
+					<!-- Product Details - End -->
 		<%end%>
 		<%if @type == 'guides' %>
+		        	
 		  <div class="hdr_Category float_lft margin_lft10">
 					 Buyer Guides
 			  </div>
@@ -342,17 +344,17 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
  	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 	 <%= hidden_field_tag "search_type","undefined" %>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <% params1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids} %>
-     <% @contents = "" %>
-     <% @contents = Content.filter(params1)%>
-       <%= render :partial => 'contents/contents', :locals => {:params => params1} %>
+     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids} %>
+    
+      <% @contents = Content.filter(params)%>
+       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
         <a id="content_next" style="display:none"></a>
     </div> 
      <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
 </div> 
-    <% @contents = "" %>
+<% params[:type] = "guides" %>
 
 		<%end%>
 	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
