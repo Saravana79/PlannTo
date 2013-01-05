@@ -8,7 +8,7 @@ class PreferencesController < ApplicationController
   end
 
   def show
-    require 'will_paginate/array'
+   
     @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
     @question = @buying_plan.user_question
