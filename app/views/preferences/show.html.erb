@@ -330,7 +330,6 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 		<%= @owned = "" %>					
     
 	</div>
-					<!-- Product Details - End -->
 		<%end%>
 		<%if @type == 'guides' %>
 		  <div class="hdr_Category float_lft margin_lft10">
@@ -352,7 +351,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
 </div> 
-
+    <% @contents = "" %>
 
 		<%end%>
 	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
