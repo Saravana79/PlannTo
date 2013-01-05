@@ -332,9 +332,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 	</div>
 					<!-- Product Details - End -->
 		<%end%>
-		<%if @type == 'guides' %>
-		        	
-		  <div class="hdr_Category float_lft margin_lft10">
+			<%if @type == 'guides' %>
+ <div class="hdr_Category float_lft margin_lft10">
 					 Buyer Guides
 			  </div>
 					<div id="content_all">
@@ -354,9 +353,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
 </div> 
-<% params[:type] = "guides" %>
 
-		<%end%>
+
+		<%end%> 
 	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
@@ -383,82 +382,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			</div>
 			<% end %>
 		</div>
-		<!--<div class="rightcolumnsmall">
-
-			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-				<tr>
-					<td class="bg_widgethdr txt_white">Related Questions</td>
-				</tr>
-				<tr>
-					<td height="252" valign="top">
-					<table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-					</table></td>
-				</tr>
-				<tr>
-					<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-				</tr>
-			</table>
-
-			<!-- Related Cars -- End -->
-
-			<!--<br /> ->
-
-			<!-- Related Cars -- Start -->
-
-			<!--<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-				<tr>
-					<td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
-				</tr>
-				<tr>
-					<td height="252" valign="top">
-					<table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-					</table></td>
-				</tr>
-				<tr>
-					<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-				</tr>
-			</table>
-
-			<!-- Related Cars -- End -->
-		<!--</div> -->
+		
 
 		<div class="rightcolumnsmall">
         <div id="owned_item"> </div>	
