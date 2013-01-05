@@ -345,8 +345,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
     
     
-      <% @contents = Content.filter({"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids})%>
-       <%= render :partial => 'contents/contents'%>
+      
         <a id="content_next" style="display:none"></a>
     </div> 
      <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
