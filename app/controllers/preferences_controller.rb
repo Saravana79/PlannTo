@@ -260,6 +260,7 @@ class PreferencesController < ApplicationController
       @valid = true
       get_follow_items
     end
+     current_user.clear_user_follow_item
   end
   
   def owned_description_save

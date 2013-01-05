@@ -63,13 +63,13 @@
     <script>
   
     $(window).scroll(function () {
-           lnk = $('#content_next');
+       lnk = $('#content_next');
     if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
          running = true;
             $.ajax(
               {
                <%if params[:search_type] == "car" %>
-                 url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&24=" + $("#24").val() + "&28=" + $("#28").val() + "&31=" + $("#31").val() + "&41=" + $("#41").val() + "&43=" + $("#43").val() + "&86=" + $("#86").val() + "&87=" + $("#87").val() + "&59=" + $("#59").val() + "&63=" + $("#63").val() ,
+                 url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&24=" + $("#24").val() + "&28=" + $("#28").val() + "&31=" + $("#31").val() + "&41=" + $("#41").val() + "&43=" + $("#43").val() + "&86=" + $("#86").val() + "&87=" + $("#87").val() + "&59=" + $("#59").val() + "&63=" + $("#63").val(),
                 <%end%>
                  <%if params[:search_type] == "bike" %>
                     url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&31=" + $("#31").val() + "&205=" + $("#205").val() + "&208=" + $("#208").val() ,
