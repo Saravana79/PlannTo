@@ -269,6 +269,7 @@ class PreferencesController < ApplicationController
   
   def owned_item
     Follow.wizard_save(params[:item_id],"owner",current_user)
+    current_user.clear_user_follow_item
     type = Item.find(params[:item_id]).type
     item_type_id = Itemtype.find_by_itemtype(type).id
     @plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => item_type_id).first
