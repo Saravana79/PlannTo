@@ -16,9 +16,7 @@ class PreferencesController < ApplicationController
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     @preferences_list = Preference.get_items(@preferences)
     @itemtype = @buying_plan.itemtype
-    if params[:type] == "guides"
-      @guide = Guide.find_by_name("Buyer")
-    end 
+   
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
@@ -26,6 +24,11 @@ class PreferencesController < ApplicationController
     @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
     @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
     end
+     if params[:type] == "guides"
+      @guide = Guide.find_by_name("Buyer")
+       params1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids}
+      @contents = Content.filter(params1)
+    end 
     sunspot_search_items
     if params[:type] == "Recommendations"
     if @preferences_list.size == 0

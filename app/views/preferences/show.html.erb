@@ -343,9 +343,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
  	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 	 <%= hidden_field_tag "search_type","undefined" %>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-    
-    
-      
+
+       <%= render :partial => 'contents/contents'%>
         <a id="content_next" style="display:none"></a>
     </div> 
      <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
