@@ -8,7 +8,7 @@ class PreferencesController < ApplicationController
   end
 
   def show
-   
+    require 'will_paginate/array'
     @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
     @question = @buying_plan.user_question
@@ -18,7 +18,7 @@ class PreferencesController < ApplicationController
     @itemtype = @buying_plan.itemtype
    
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-    logger.info @follow_types
+    
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
     if @follow_item.size >0
     @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
