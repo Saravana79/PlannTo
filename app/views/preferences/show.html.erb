@@ -130,7 +130,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
         <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li> 
-        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="?type=guides"><span>Buyer Guides</span></a></li> 
+        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
           <br/>
 					<br/>
@@ -332,11 +332,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 	</div>
 					<!-- Product Details - End -->
 		<%end%>
-		<%if @type == 'guides' %>
-		        	
-		 <!-- <div class="hdr_Category float_lft margin_lft10">
+			<%if @type == 'guides' %>
+ <div class="hdr_Category float_lft margin_lft10">
 					 Buyer Guides
 			  </div>-->
+			  </div>
 					<div id="content_all">
     <%= render "contents/filter_by_options"%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
@@ -344,19 +344,17 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
  	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 	 <%= hidden_field_tag "search_type","undefined" %>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids} %>
-    
-      <% @contents = Content.filter(params)%>
-       <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+
+       <%= render :partial => 'contents/contents'%>
         <a id="content_next" style="display:none"></a>
     </div> 
      <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
 </div> 
-<% params[:type] = "guides" %>
 
-		<%end%>
+
+		<%end%> 
 	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
@@ -383,82 +381,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			</div>
 			<% end %>
 		</div>
-		<!--<div class="rightcolumnsmall">
-
-			<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-				<tr>
-					<td class="bg_widgethdr txt_white">Related Questions</td>
-				</tr>
-				<tr>
-					<td height="252" valign="top">
-					<table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-					</table></td>
-				</tr>
-				<tr>
-					<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-				</tr>
-			</table>
-
-			<!-- Related Cars -- End -->
-
-			<!--<br /> ->
-
-			<!-- Related Cars -- Start -->
-
-			<!--<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
-				<tr>
-					<td class="bg_widgethdr txt_white">Top Hatchback Cars</td>
-				</tr>
-				<tr>
-					<td height="252" valign="top">
-					<table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-
-						<tr>
-							<td width="113" height="85"><img src="/images/car1.png" width="101" height="68" /></td>
-							<td width="113"><a href="#" class="txt_black">Renault Pulse</a><img src="/images/rating_stars.png" width="87" height="20" />
-							<br />
-							<a style="" href="#" class="btn_follow">Follow</a></td>
-						</tr>
-						<tr>
-							<td height="40" colspan="2" class="dotted_border" valign="top">Rahul, Deepak, and 100 other people owns this...</td>
-						</tr>
-					</table></td>
-				</tr>
-				<tr>
-					<td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
-				</tr>
-			</table>
-
-			<!-- Related Cars -- End -->
-		<!--</div> -->
+		
 
 		<div class="rightcolumnsmall">
         <div id="owned_item"> </div>	

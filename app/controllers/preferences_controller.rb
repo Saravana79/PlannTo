@@ -16,16 +16,19 @@ class PreferencesController < ApplicationController
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     @preferences_list = Preference.get_items(@preferences)
     @itemtype = @buying_plan.itemtype
-    if params[:type] == "guides"
-      @guide = Guide.find(1)
-    end 
+   
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-    logger.info @follow_types
+    
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
     if @follow_item.size >0
     @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
     @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
     end
+     if params[:type] == "guides"
+      @guide = Guide.find_by_name("Buyer")
+       params1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids}
+      @contents = Content.filter(params1)
+    end 
     sunspot_search_items
     if params[:type] == "Recommendations"
     if @preferences_list.size == 0
@@ -260,6 +263,7 @@ class PreferencesController < ApplicationController
       @valid = true
       get_follow_items
     end
+     current_user.clear_user_follow_item
   end
   
   def owned_description_save
@@ -269,6 +273,7 @@ class PreferencesController < ApplicationController
   
   def owned_item
     Follow.wizard_save(params[:item_id],"owner",current_user)
+    current_user.clear_user_follow_item
     type = Item.find(params[:item_id]).type
     item_type_id = Itemtype.find_by_itemtype(type).id
     @plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => item_type_id).first
