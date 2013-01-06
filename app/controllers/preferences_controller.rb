@@ -25,7 +25,7 @@ class PreferencesController < ApplicationController
     @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
     end
      if params[:type] == "guides"
-      @guide = Guide.find_by_name("Buyer")
+      @guide = Guide.find(1)
        params1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids}
       @contents = Content.filter(params1)
     end 
