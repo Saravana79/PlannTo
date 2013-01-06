@@ -138,7 +138,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					<br />
 		      <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
-			  <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;">
+			  <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;clear:both;">
 			  	Suggestions from Friends/Experts
 			  </div>			
 
@@ -170,6 +170,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			     <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;padding-top:15px;clear:both;">
 			  	Suggestions from PlannTo 
 			  </div>
+			  	<% if ((!@related_items.nil? and @related_items.size == 0) and (@preferences_list.size == 0 ) )%>
+			  		<div class="alert alert-block">
+<strong>There are no suggestions from PlannTo, please specify your buying preferences to have better recommendations.</strong> <br /></div>		
+			  	<%end%>
 			      <%if @preferences_list.size != 0 %>
 			       <div id="content_all">
     

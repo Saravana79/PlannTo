@@ -6,7 +6,7 @@
      <td> <%if @preferences_list.blank? %>
           <div style="padding:5px;">
             <%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%>
-               <strong> You havent provided your buying preferences yet, please specify your preferences here to have more personalized page. </strong>
+               <strong> You havent provided your buying preferences yet, please specify your preferences here to have a better personalized page. </strong>
             <%else%>
 					     <strong> Currently there are no preferences. </strong>
             <%end%>
@@ -21,7 +21,7 @@
           <br/>
             <%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%>
                 
-               <br /><br /> <a id="editPreferences" class="btn_submitanswer" href="" style="margin-right:10px;margin-top:10px;"><%if  @preferences_list.size == 0 %> Add Preferences <%else%> Edit My Preferences<%end%></a>
+                <a id="editPreferences" class="btn_submitanswer" href="" style="margin-right:10px;margin-top:10px;"><%if  @preferences_list.size == 0 %> Add Preferences <%else%> Edit My Preferences<%end%></a>
             <%end%>					
 					
 					</tr>
