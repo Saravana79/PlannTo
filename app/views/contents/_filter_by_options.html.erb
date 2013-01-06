@@ -7,6 +7,9 @@
       <div style="float:left;width:630px;">
         <ul>
           <li class="Currentfilter" id="All"><a href="#">All</a></li>
+          <%if @buy_plan == "true" %>
+           <li id="Custom"><a href="">Custom</a></li>
+           <%end%>  
           <%@article_categories.each do |category|%>
              <%if category[0]== "HowTo/Guide"%>
                   <li id="HowTo"><a href=""><%=category[0]%></a></li>
@@ -14,6 +17,7 @@
                 <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
                 <%end%>            
           <%end%>
+         
         </ul>
       </div>
     </div>

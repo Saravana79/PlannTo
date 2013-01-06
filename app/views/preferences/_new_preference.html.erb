@@ -47,9 +47,21 @@
 
       <%end%>
       <li style="float:<%if index%2==0%> left<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+
     <%end%>
   </ul>
 </div>
+      <script>
+$(document).ready(function() {
+
+  setTimeout(function() {
+   $(".jslider").show()
+    
+alert("pppppppppp");
+  }, 3000*30); 
+  
+}) 
+</script>
 <%= render :partial => "shared/search_popup" %>
 
 </div>
@@ -324,7 +336,7 @@ end%>
       $("#criteriaPopup").css({
         "position": "absolute",
         "top": (position.top -15)+ "px",
-        "right":(position.right+210) + "px"
+        "left":(position.left+210) + "px"
       }).show();
       $( "#criteriaHeading" ).html(displayInfo.adn)
       var  rangeVal = displayInfo.range.split(",")

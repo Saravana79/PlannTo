@@ -1,6 +1,7 @@
 <% content_for :title, @question.title + " - " %>
 <% content_for :description, @question.question_part%>
 <% @type = params[:type] %>
+<% @buy_plan = "true" %>
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
 <div id="maincontainer" class="maincontainerCss">
 	<!-- Till this will go into main layout and common for all pages.-->
@@ -126,16 +127,15 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						</div>
 						<%end%> -->
 					</div>
-					<ul id="Newtabs" style="padding-top:15px;">
+							<ul id="Newtabs" style="padding-top:15px;">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
-        <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li> 
+        <%if params[:search_type] != "car" and  params[:search_type]  !="bike"%> <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li>  <%end%>
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
   </ul>
           <br/>
 					<br/>
 					<br />
-		   
 		      <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
 			  <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;">
@@ -303,7 +303,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					 Contents
 			  </div>-->
 					<div id="content_all">
-    <%= render "contents/filter_by_options"%>
+    <%= render "contents/filter_by_options",:buying_plan => @buy_plan%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
     <%= render "contents/sort_by_options"%>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
@@ -338,7 +338,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			  
 			  </div>-->
 					<div id="content_all">
-    <%= render "contents/filter_by_options"%>
+    <%= render "contents/filter_by_options",:buying_plan => @buy_plan%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
     <%= render "contents/sort_by_options"%>
  	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
