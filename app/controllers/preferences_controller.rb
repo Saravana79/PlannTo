@@ -17,7 +17,7 @@ class PreferencesController < ApplicationController
     @preferences_list = Preference.get_items(@preferences)
     @itemtype = @buying_plan.itemtype
     if params[:type] == "guides"
-      @guide = Guide.find_by_name("Buyer")
+      @guide = Guide.find(1)
     end 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
