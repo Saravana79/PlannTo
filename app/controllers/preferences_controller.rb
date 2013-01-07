@@ -23,8 +23,8 @@ class PreferencesController < ApplicationController
       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).group('vendors.name').order(:price)
     end
     if params[:type] == "guides"
+      @item_ids = ""
       @guide = Guide.find(1)
-     
     end 
       @article_categories = ArticleCategory.get_by_itemtype(0) 
       sunspot_search_items
