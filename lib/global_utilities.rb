@@ -76,11 +76,13 @@ module GlobalUtilities
   def filter_similar_group_ids(items, item_type, original_item)
     item_ids = Array.new
     items.results.each do |item|
-      if item_type == "Car"
-        item_ids << item.id unless item.cargroup.id == original_item.cargroup.id
-      else
-        item_ids << item.id unless item.id == original_item.id
-      end
+     unless(item.nil?)
+        if item_type == "Car"
+          item_ids << item.id unless item.cargroup.id == original_item.cargroup.id
+        else
+          item_ids << item.id unless item.id == original_item.id
+        end
+     end 
     end
     return item_ids
   end

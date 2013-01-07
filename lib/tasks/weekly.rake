@@ -43,8 +43,9 @@ namespace :plannto do
 
       #item_id_collection = item_ids.join(',')
       #puts item_id_collection
+      puts item.to_s + " - " + item.name
       item_ids.each do |r_item|
-        puts r_item
+        #puts r_item
         related_item = RelatedItem.find_or_create_by_item_id_and_related_item_id(item.id, r_item)
         #related_item.related_item_ids = item_id_collection
         related_item.variance = variance
