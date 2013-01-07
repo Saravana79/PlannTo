@@ -152,12 +152,12 @@ class ItemsController < ApplicationController
   
     unless @ids.blank? || params[:ids] == ""
       @item1 = Item.find(@ids[1]) if @ids[0] == ''
-       @item1 = Item.find(@ids[0]) if @ids[0]!= ''
-       session[:item_type] =  @item1.itemtype.itemtype
-     attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
-    @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
-    @items = Item.find_all_and_sort_by_items(@ids)
-    @ids[0] = "0" if @ids[0] == ""
+      @item1 = Item.find(@ids[0]) if @ids[0]!= ''
+      session[:item_type] =  @item1.itemtype.itemtype
+      attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
+      @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
+      @items = Item.find_all_and_sort_by_items(@ids)
+      @ids[0] = "0" if @ids[0] == ""
     content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Reviews','Deals','News') group by content_id order by count(*) desc").paginate(:page => params[:page], :per_page =>10).collect(&:content_id)
     @contents = Content.where("id in (?)",content_ids).order("total_votes desc")
    else

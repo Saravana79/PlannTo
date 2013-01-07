@@ -2,7 +2,7 @@
 	<span class="sortby" id="sortBy"> 
 		<span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span> 
 		<% @guide_id = "#{@guide.try(:id)}"%>
-		<%if @guide_id == ""%>
+		<%if @guide_id == "" || @buy_plan == "true"%>
 		<%newest_class = "link_active"%>
 		<%votes_class = "txt_blue"%>
 		<%else%>
