@@ -312,7 +312,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
     <%= render "contents/sort_by_options"%>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids} %>
+     <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(",")} %>
     
       <% @contents = Content.filter(params)%>
        <%= render :partial => 'contents/contents', :locals => {:params => params} %>
