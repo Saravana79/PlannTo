@@ -45,7 +45,7 @@ $(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomp
         focus:function (e, ui) {
             return false
         },
-        select: function( event, ui ) {alert("called")
+        select: function( event, ui ) {
             $.ajax(
             {
                 url:"/preferences/plan_to_buy?item_id="+ui.item.id+"&follow_type="+ "Buyer&buying_plan_id=" + $("#buying_plan_id").val() + "&per_page=" + $("#per_page_value").val(),

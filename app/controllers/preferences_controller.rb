@@ -353,7 +353,8 @@ logger.info @follow_item
   def save_advice_question
     @question = UserQuestion.new(params[:question])
     @question.title = "Planning to buy a #{@question.buying_plan.itemtype.itemtype}"
-    @question.save    
+    @question.save  
+
     @question.reload
     redirect_to "/preferences/#{@question.buying_plan.itemtype.itemtype.downcase!}/#{@question.buying_plan.uuid}"
   end
@@ -413,8 +414,8 @@ logger.info @follow_item
     @user_answer.save
     
     @count = UserQuestion.find(:first, :conditions => {:id =>params[:user_question_answers][:user_question_id]}).user_answers.size
-     buying_plan = UserQuestion.find(params[:user_question_answers][:user_question_id]).buying_plan
-     UserActivity.save_user_activity(current_user,buying_plan.id,"recommended","Buying Plan", @user_answer.id,request.remote_ip)
+     @buying_plan = UserQuestion.find(params[:user_question_answers][:user_question_id]).buying_plan
+     UserActivity.save_user_activity(current_user,@buying_plan.id,"recommended","Buying Plan", @user_answer.id,request.remote_ip)
   end
 
   def delete_buying_plan

@@ -2,7 +2,7 @@
 	<span class="sortby" id="sortBy"> 
 		<span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span> 
 		<% @guide_id = "#{@guide.try(:id)}"%>
-		<%if @guide_id == "" || @buy_plan == "true"%>
+		<%if @guide_id == "" || @custom == "true"%>
 		<%newest_class = "link_active"%>
 		<%votes_class = "txt_blue"%>
 		<%else%>
@@ -34,7 +34,7 @@
           if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
           	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
-	        var sub_type = find_sub_type(id);  
+	          var sub_type = find_sub_type(id);  
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>";   
             var sort_by = $(this).text();
