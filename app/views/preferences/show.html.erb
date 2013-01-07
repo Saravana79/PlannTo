@@ -341,6 +341,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 					 Buyer Guides
 			  
 			  </div>-->
+			  <%@contents= "" %>
 					<div id="content_all">
     <%= render "contents/filter_by_options",:buying_plan => @buy_plan%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
@@ -348,7 +349,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
  	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 	 <%= hidden_field_tag "search_type","undefined" %>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-
+       <% params1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids} %>
+      <%@contents = Content.filter(params1) %>
        <%= render :partial => 'contents/contents'%>
         <a id="content_next" style="display:none"></a>
     </div> 

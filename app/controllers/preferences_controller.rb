@@ -16,32 +16,29 @@ class PreferencesController < ApplicationController
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
     @preferences_list = Preference.get_items(@preferences)
     @itemtype = @buying_plan.itemtype
-   
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-    
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
     if @follow_item.size >0
-    @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
-    @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).group('vendors.name').order(:price)
+      @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
+      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).group('vendors.name').order(:price)
     end
-     if params[:type] == "guides"
+    if params[:type] == "guides"
       @guide = Guide.find(1)
-       params1 = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id, "items" => @item_ids}
-      @contents = Content.filter(params1)
+     
     end 
-    sunspot_search_items
-    if params[:type] == "Recommendations"
-    if @preferences_list.size == 0
-      ids = RelatedItem.find_by_sql("select distinct related_item_id from related_items where item_id in (#{@item_ids.blank? ? 0 :@item_ids }) and related_item_id not in (#{@item_ids.blank? ? 0 :@item_ids}) order by variance desc").collect(&:related_item_id)
-      @related_items = Item.where('id in (?)',ids).paginate :page => params[:page],:per_page => 10
-     @preference = "true"
-    else
       @article_categories = ArticleCategory.get_by_itemtype(0) 
-      search_preference_tems(@buying_plan,@itemtype,params[:page],"1")
-    end  
-   end
-    @article_categories = ArticleCategory.get_by_itemtype(0) 
-  end
+      sunspot_search_items
+    if params[:type] == "Recommendations"
+      if @preferences_list.size == 0
+        ids = RelatedItem.find_by_sql("select distinct related_item_id from related_items where item_id in (#{@item_ids.blank? ? 0 :@item_ids }) and related_item_id not in (#{@item_ids.blank? ? 0 :@item_ids}) order by variance desc").collect(&:related_item_id)
+        @related_items = Item.where('id in (?)',ids).paginate :page => params[:page],:per_page => 10
+        @preference = "true"
+     else
+        search_preference_tems(@buying_plan,@itemtype,params[:page],"1")
+      end  
+    end
+   
+    end
 
   def search_preference_tems(buying_plan,search_type,page,status)
     @search_type = search_type.itemtype
