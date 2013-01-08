@@ -2,12 +2,19 @@
 	<span class="sortby" id="sortBy"> 
 		<span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span> 
 		<% @guide_id = "#{@guide.try(:id)}"%>
-		<%if @guide_id == "" || @custom == "true"%>
-		<%newest_class = "link_active"%>
-		<%votes_class = "txt_blue"%>
+		<%if @guide_id == ""%>
+	 	 <%newest_class = "link_active"%>
+	 	  <%votes_class = "txt_blue"%>
 		<%else%>
 		<%newest_class = "txt_blue"%>
 		<%votes_class = "link_active"%>
+		<%end%>
+		<%if  @order == "created_at desc" %>
+		  <%newest_class = "link_active"%>
+	 	  <%votes_class = "txt_blue"%>
+		<%else%>
+		   <%newest_class = "txt_blue"%>
+		  <%votes_class = "link_active"%>
 		<%end%>
 		<a  class="<%=newest_class%>" href="#" id="sortByNewest" style="text-decoration: none;">Newest</a> <span style="padding:0px 5px;">|</span>
 <a class="<%=votes_class%>" href="#" id="sortByVotes">Votes</a> <span style="padding:0px 5px;">|</span> 

@@ -35,6 +35,7 @@
 									<li class="subContentGap float_lft">
 										<a class="txt_blue ">Report</a>
 									</li> -->
+											<%if ans.user.id == current_user.id || current_user.is_admin? %>
 									<li class="subContentGap float_lft">
 										<a class="txt_gray ">|</a>
 									</li>
@@ -46,6 +47,7 @@
 									<li class="subContentGap float_lft">
 										<%= link_to "Update This",{:controller => "preferences", :action => "edit_answer", :id => ans.id}, :remote => true, :class => "txt_blue"%>
 									</li>
+								<%end%>	
 								</ul>
 								<%= render :partial => "comments/new", :locals => { :content => ans }  %>
 

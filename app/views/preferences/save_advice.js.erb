@@ -4,17 +4,4 @@ window.location.href= "<%=@buying_plan.preference_page_url%>?type=Recommendation
 
 
 
- <!-- Answer - Start -->
- var list = '<div  class="mainContentDiv" id="box_<%=@count-1%>"><div class="rate_content float_lft"><a class="bg_ratecontent">100</a><a class="btn_like" href="#" id="btn_like_inactive"></a>'
-  list = list + '<a class="btn_dislike" href="#"></a></div><div  class="float_rgt"><img src="<%=@user_answer.user.get_photo%>" class="userImageSmall" /></div>'
- list = list + '<div  class="subContentDiv" style="clear:display;"><div><a class="txt_brown"><%=@user_answer.user.name%> gave a recommendation - <%= time_ago_in_words(@user_answer.created_at)%> ago</a></div>'
-list = list + '<div class="taggingdiv" style="margin-left:0px;"><ul class="tagging">'
-                  <%@user_answer.recommendations.each_with_index do |reco, index|%>
-                 list = list + '<li class="taggingmain"><span ><a class="txt_tagging"><%=reco.item.name%></a><a class="icon_close_tagging" href="#"></a></span></li>'
-                  <%end%>
-        list = list + '</ul></div><div class="subContentGap"><a class="txt_black_description"><%=@user_answer.answer%></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>'
-        list = list + '<ul class="divCommentsConent"><li class="subContentGap float_lft"><a class="txt_blue ">Comments (9)</a></li><li class="subContentGap float_lft"><a class="txt_gray ">|</a></li><li class="subContentGap float_lft"><a class="txt_blue ">Report</a></li>'
-         list = list + '<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li><li class="subContentGap float_lft"><a class="txt_blue ">Delete This</a></li><li class="subContentGap float_lft"><a class="txt_gray ">|</a></li><li class="subContentGap float_lft"><a class="txt_blue ">Update This</a></li>'
-       list = list + '<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li><li class="subContentGap float_lft"><a class="txt_blue ">Mark as best answer</a></li></ul></div></div>'
-var rowCount = <%=@count - 2%>;
-$(list).insertAfter('#box_' + '<%=@count - 2%>');
+ 
