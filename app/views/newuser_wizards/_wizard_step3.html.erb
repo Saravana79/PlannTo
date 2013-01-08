@@ -35,7 +35,7 @@
   <%  @popular_items_owner,@popular_items_buyer,@popular_topics = Item.new_wizard_popular_topics_and_items(current_user,"buyer") %>
   <% @popular_items_buyer.each do |item| %>
     <% follow = Follow.get_follow_object(current_user,item,"buyer") %>
-    <div class="productinwizard" id="product_<%= item.id %>" style="idth:160px;height:180px;display:block;">
+    <div class="productinwizard" id="product_<%= item.id %>" style="width:160px;height:180px;display:block;">
    <div id="product_image" style="display:none;">image</div>
    <div class="imgprofilediv">
         <div class="imgpicbtnspan">

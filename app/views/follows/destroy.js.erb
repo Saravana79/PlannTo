@@ -1,0 +1,1 @@
+$("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render "preferences/add_preference_items", :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");

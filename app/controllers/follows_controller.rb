@@ -4,13 +4,20 @@ class FollowsController < ApplicationController
   def destroy
     follow = Follow.find(params[:id])
     if  follow.followable_type  == "User"
-        follow .remove_activity(current_user)
+        follow.remove_activity(current_user)
     end
     follow.destroy
     if params[:type] == "wizard"
        session[:wizard] = follow.follow_type
     end
-    redirect_to :back, :notice => "Successfully unfollowed."
+    if params[:buying_plan_id]
+      @buying_plan = BuyingPlan.find(params[:buying_plan_id])
+      @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+      @itemtype = @buying_plan.itemtype
+      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
+   else
+     redirect_to :back, :notice => "Successfully unfollowed."
+   end  
   end
   
   def create
