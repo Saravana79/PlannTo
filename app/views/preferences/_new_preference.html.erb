@@ -202,7 +202,7 @@ $(document).ready(function() {
 <%#end%>
 
 
-  $('#deletePreferenceTag').live('click', function(){
+ $('#deletePreferenceTag').live('click', function(){
     var tagId = $(this).closest('li').attr('id');
     var attributeId = tagId.substring(0, tagId.indexOf("_tag"));
     $("#" + attributeId).show();
@@ -215,23 +215,7 @@ $(document).ready(function() {
         if (<%=index%> == attributeIndex){
           var valueType = "<%=lookup[:param_1][:vt]%>"
           var attributeId = "<%=lookup[:id]%>"
-          //click option has multiple values and hence before we reset the values we need
-      //to check whether other field values is already set in search criteria or not.
-          if (valueType == "Click"){
-      var reset = "true"
-        <%@search_info_lookups.select {|s| s[:id] == lookup[:id]}.each do |form_value|%>
-        
-        <%index = @search_info_lookups.index(form_value)%>
-        var multipleClickSearchListId = "attribute_menu_" + <%=index%> + "_tag"
-        if ($("#" +multipleClickSearchListId).length != 0){
-              reset = "false"
-            }    
-        <%end%>   
-        if (reset == "true"){
-           $("#" + attributeId).val('')
-        }          
-        } 
-         else if (valueType == "Between"){
+          if (valueType == "Between"){
             $("#min_" + attributeId).val('');
             $("#max_" + attributeId).val('');
           }
