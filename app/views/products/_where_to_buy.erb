@@ -11,12 +11,13 @@
        <% combine_list = [] %>
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
     <% displayBorder  = 0%>
-    <%items.each_with_index do |item, index|%>      
+    <%items.each_with_index do |item, index|%>
+    <%if !combine_list.include?(combine) %>      
       <%if display_item_details(item)%>
          <% price = display_price_detail(item) %>
          <% shipping = display_shipping_detail(item) %>
          <% combine = "#{price}-#{shipping}" %>
-       <%if !combine_list.include?(combine) %>
+    
         <% displayBorder  = 1%>
         <%if index == 0%>
           <tr>
@@ -25,7 +26,6 @@
             <td class="bdb_gray1 font_13"><%= shipping %></td>
             <td align="center" class="bdb_gray1" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
           </tr>
-            <% combine_list << "#{price}-#{shipping}" %> 
         <%else%>
           <%if index == 1%>
             <br/>
@@ -35,14 +35,17 @@
             <%else%>
              | <a target="_blank" class="bdb_gray1 price_text" href="/history_details?detail_id=<%=item.item_details_id%>"><%= price %></a> 
           <%end%> 
-            <% combine_list << "#{price}-#{shipping}" %>      
+                 
         <%end%>
+        
       <%end%>
+      <% combine_list << "#{price}-#{shipping}" %> 
       <%end%>
     <%end%>
     <%if displayBorder  == 1%>
       <tr  ><td colspan="4" style="border-bottom: solid 1px #cdd3d7;height:5px;"></td></tr>
     <%end%>
+    
   <%end%>
   <tr></tr>
 </table>
@@ -58,7 +61,6 @@
    <script>
         $("#report_link_<%= @item.id %>").click(function(e){
           <%if !current_user %>
-            $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'report')%>");
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>
