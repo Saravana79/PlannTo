@@ -23,7 +23,7 @@
         -->
         <%end%> 
          <span>
-          <h1><a class="txt_black txt_onhover" style="font-size:13px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%><%= buying_plan.user_id!=current_user.id ? '?type=Recommendations' : ''%> "><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
+          <h1><a class="txt_black txt_onhover" style="font-size:13px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>/<%= buying_plan.user_id!=current_user.id ? '?type=Recommendations' : ''%> "><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
         <div class="subContentGap" style="padding-bottom:8px;">
 						<div id="displayQuestion">

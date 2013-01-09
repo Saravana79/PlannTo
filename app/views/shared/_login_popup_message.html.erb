@@ -12,6 +12,8 @@
 <b><font color='green'>Please sign in to add content.</font><br /> </b>
 <%elsif type == "vote" %>
 <b><font color='green'>Please sign in to vote this content.</font><br /> </b>
+<%elsif type == "recommendation" %>
+<b><font color='green'>Please sign in to add recommendation.</font><br /> </b>
 <%elsif type == "content-follow" %>
 <b><font color='green'>Please sign in to follow this <%= @content.sub_type.singularize rescue "" %> </font><br /> </b>
 <%elsif type == "login-devise" %>

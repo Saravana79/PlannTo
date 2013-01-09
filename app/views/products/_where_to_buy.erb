@@ -58,6 +58,7 @@
    <script>
         $("#report_link_<%= @item.id %>").click(function(e){
           <%if !current_user %>
+            $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'report')%>");
             openLoginPopup("#" + $(this).attr('id'), "click");
             return false
           <%end%>

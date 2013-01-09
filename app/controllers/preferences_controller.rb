@@ -1,6 +1,6 @@
 class PreferencesController < ApplicationController
   #before_filter :authenticate_user!, :only => [:new]
-  before_filter :authenticate_user!
+  #before_filter :authenticate_user!
   layout "product"
 
   def index
@@ -11,6 +11,18 @@ class PreferencesController < ApplicationController
     require 'will_paginate/array'
     @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
+    unless session[:counter]
+       session[:counter]=1
+     else
+       session[:counter]+= 1
+     end    
+    if current_user
+      if @buying_plan.user.id != current_user.id && session[:counter] == 1
+        params[:type] = "Recommendations"
+      end
+     elsif session[:counter] == 1
+       params[:type] = "Recommendations"
+     end     
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)

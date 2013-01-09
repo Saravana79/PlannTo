@@ -40,10 +40,28 @@
 	 <%else%>
 
 	 <div style="padding:5px;"><strong> Currently, there are no recommendations.</strong></div>
-<%end%>  <%end%><%if can_add_recommendation?(@buying_plan) && !@buying_plan.completed? %>
+<%end%>  <%end%><%if (can_add_recommendation?(@buying_plan) || !current_user) && !@buying_plan.completed? %>
 		<div class="float_rgt" style="margin-top:8px;">
 	<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
 <%end%> </td> </tr>
+ <script>
+        $("#giveAdviceTag").click(function(e){
+          <%if !current_user %>
+             $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'recommendation')%>");
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            return false
+          <%end%>
+        })
+        </script>
+         <script>
+        $(".btn_submitanswer").click(function(e){
+          <%if !current_user %>
+             $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'recommendation')%>");
+            openLoginPopup("#" + $(this).attr('id'), "click");
+            return false
+          <%end%>
+        })
+        </script>
     <tr>
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
@@ -68,7 +86,7 @@
           </tr>
          <%end%>
            <tr >
-           <!-- <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;"><a href="<%= "/" + "#{current_user.username}"%>" class="txt_blue">View All</a></td> -->
+      
           </tr>
         </table>
         </td>

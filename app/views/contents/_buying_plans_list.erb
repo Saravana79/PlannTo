@@ -29,7 +29,7 @@
         -->
         <%end%> 
          <span>
-          <h1><a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
+          <h1><a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>/"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
         </span>
         <!--
         <div class="subContentGap" style="padding-bottom:8px;">
@@ -49,7 +49,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
 				<span class="float_rgt" style="display:inline;">
          </span>
          <div style="padding-top:10px;">
-           <a class="Bluesubmit3" name="commit"  type="submit" value="View Plan" href="<%=buying_plan.preference_page_url%>" style="margin-left:5px;"> View Plan </a>
+           <a class="Bluesubmit3" name="commit"  type="submit" value="View Plan" href="<%=buying_plan.preference_page_url%>/" style="margin-left:5px;"> View Plan </a>
         <!-- /preferences/new?search_type=Car -->
         <%= link_to "Update Plan", "/preferences/new?search_type=#{buying_plan.itemtype.itemtype}"  ,:class=> "Bluesubmit3",:remote => :true ,:style=> "margin-left:5px;"%>
          	

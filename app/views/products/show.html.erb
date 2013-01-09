@@ -59,8 +59,7 @@ $("#dialog-form #click_message").show();
       <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>    
-    
-    <a class="txt_normal" href="<%= @item.get_url + '?fl=Reviews'%>">Ratings
+      <a class="txt_normal" href="<%= @item.get_url + '?fl=Reviews'%>">Ratings
       <span class="txt_blue" > <%= "(" + pluralize(@item.rated_users_count,'Review') + ")" if @item.rated_users_count > 0 %><span style="display:none;" itemprop="count"><%=@item.rated_users_count%></span></span>
     <span class="txt_blue"> <%= "Be the first one to review it" unless @item.rated_users_count > 0 %></span>
     </a><br />

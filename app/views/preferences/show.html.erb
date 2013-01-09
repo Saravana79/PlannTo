@@ -92,6 +92,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%></a>
 							<li class="subContentGap float_lft">
 								<a class="txt_blue ">Report</a>
 							</li> -->
+							<%if current_user %>
 							<% if (can_update_preference?(@buying_plan) || current_user.is_admin? )%>
 							<li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
@@ -118,6 +119,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%></a>
 								  <%= link_to_function "Update This", "$('#updateQuestion').dialog({width:550, height:300});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 							 </li>
+			      <%end%>
 			      <%end%>
 						</ul>
 						
@@ -165,7 +167,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
 			      <%end%>
-			      	<%if can_add_recommendation?(@buying_plan)%>
+			      	<%if can_add_recommendation?(@buying_plan) || !current_user%>
 								<div class="float_rgt" style="margin-top:8px;">
 									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
 								</div>
