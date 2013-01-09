@@ -12,11 +12,12 @@
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
     <% displayBorder  = 0%>
     <%items.each_with_index do |item, index|%>
+       <% price = display_price_detail(item) %>
+       <% shipping = display_shipping_detail(item) %>
+      <% combine = "#{price}-#{shipping}" %>
     <%if !combine_list.include?(combine) %>      
       <%if display_item_details(item)%>
-         <% price = display_price_detail(item) %>
-         <% shipping = display_shipping_detail(item) %>
-         <% combine = "#{price}-#{shipping}" %>
+      
     
         <% displayBorder  = 1%>
         <%if index == 0%>
