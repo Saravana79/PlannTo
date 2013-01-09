@@ -2,9 +2,9 @@
 <div class="rightcolumnbig">
   <div class="searchPack">
     <div class="hdr_Category">Buying Preferences:</div>
-   <%if @preferences_list.blank? %>
+    <%if @preferences_list.size == 0 %> 
       <%= render  '/shared/alert_message',:type => 'edit_no_preferences'%>
-  <%end%>
+    <%end%>
     <ul class="search_category1" id="editBuyingPreferences">
     </ul>
    

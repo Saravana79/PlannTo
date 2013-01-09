@@ -10,22 +10,27 @@
     <td class="th_blue">Estimated Delivery Time</td>
     <td class="th_blue">&nbsp;</td>
   </tr>
-  <% @where_to_buy_items.group_by(&:itemid).each do |site, items| %>
+     <% combine_list = [] %>
+     <% @where_to_buy_items.group_by(&:itemid).each do |site, items| %>
     <%items.each_with_index do |item, index|%>
       <%if display_item_details(item)%>
-       
+          <% price = display_price_detail(item) %>
+          <% shipping = display_shipping_detail(item) %>
+          <% combine = "#{price}-#{shipping}" %>
+         <%if !combine_list.include?(combine) %>
           <tr>
           	<td class="bdb_gray"><%=item.ItemName%></td>
             <td class="bdb_gray"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
-            <td class="bdb_gray price_text"><%=display_price_detail(item)%></td>
-            <td class="bdb_gray font_13"><%=display_shipping_detail(item)%></td>
+            <td class="bdb_gray price_text"><%= price %></td>
+            <td class="bdb_gray font_13"><%= shipping %></td>
             <td align="center" class="bdb_gray" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
           </tr>
         
       <%end%>
+       <% combine_list << "#{price}-#{shipping}" %>
+      <%end%>
     <%end%>
   <%end%>
-  <tr></tr>
 </table>
 </div>
 <%else%>
