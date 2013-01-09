@@ -12,7 +12,7 @@
 		<%if  @order == "created_at desc" %>
 		  <%newest_class = "link_active"%>
 	 	  <%votes_class = "txt_blue"%>
-		<%else%>
+		<%elsif @order == "total_votes desc"%>
 		   <%newest_class = "txt_blue"%>
 		  <%votes_class = "link_active"%>
 		<%end%>
