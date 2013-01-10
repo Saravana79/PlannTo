@@ -17,9 +17,7 @@
       <% combine = "#{price}-#{shipping}" %>
     <%if !combine_list.include?(combine) %>      
       <%if display_item_details(item)%>
-      
-    
-        <% displayBorder  = 1%>
+     <% displayBorder  = 1%>
         <%if index == 0%>
           <tr>
             <td class="bdb_gray1"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
