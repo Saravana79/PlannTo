@@ -34,7 +34,7 @@
       <td class="bg_widgethdr txt_white">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</td>
     </tr>
      <tr><td><%if @buying_plan.user_question.user_answers.size == 0 %>
-	<%if current_user.id == @buying_plan.user. id %>
+	<%if current_user && current_user.id == @buying_plan.user. id %>
 	<div style="padding:5px;"> <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %></div>
 </div>
 	 <%else%>
@@ -42,7 +42,9 @@
 	 <div style="padding:5px;"><strong> Currently, there are no recommendations.</strong></div>
 <%end%>  <%end%><%if (can_add_recommendation?(@buying_plan) || !current_user) && !@buying_plan.completed? %>
 		<div class="float_rgt" style="margin-top:8px;">
-	<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+		<%unless @follow_item == '' %>
+	    <a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+	  <%end%>  
 <%end%> </td> </tr>
  <script>
         $("#giveAdviceTag").click(function(e){
@@ -53,6 +55,7 @@
           <%end%>
         })
         </script>
+        <%unless @follow_item == "" %>
          <script>
         $(".btn_submitanswer").click(function(e){
           <%if !current_user %>
@@ -62,6 +65,7 @@
           <%end%>
         })
         </script>
+        <%end%>
     <tr>
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">

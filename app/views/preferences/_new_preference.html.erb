@@ -74,12 +74,19 @@ $(document).ready(function() {
   <div>      
   </div>    
 </div>
-</div>
+</div>  <%if params[:without_login] == "true" %>
+        <script>
+         $("#skip a").click(function(){
+         $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render 'preferences/add_preference_items', :items => (@considered_items),:without_login => "true" ) %></div>");
+         });
+        </script>
+        <%else%>
         <script>
          $("#skip a").click(function(){
          $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render 'preferences/add_preference_items', :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");
          });
         </script>
+        <%end%>
 <script type="text/javascript">
   $('#updatePreference').click(function() {
     updatePreferences('preferenceSpinner');
@@ -99,7 +106,7 @@ $(document).ready(function() {
     };
     var target = document.getElementById(fieldName);
     var spinner = new Spinner(opts).spin(target);
-    $.post('/preferences/create_preference',$("#updatePreferencesForm").serialize(),null,"script").success(function() {
+    $.post('/preferences/create_preference?without_login=<%= params[:without_login]%>',$("#updatePreferencesForm").serialize(),null,"script").success(function() {
       spinner.stop();
     //  $("#giveAdviceDialog").dialog("destroy");
       //window.location.href = '<%#="/preferences/#{@buying_plan.itemtype.itemtype.downcase!}/#{@buying_plan.uuid}"%>'

@@ -218,8 +218,10 @@ class SearchController < ApplicationController
     end
 
     if params[:from_profile]
-      exclude_selected = Follow.for_follower(current_user).where(:followable_type => params[:search_type]).collect(&:followable)
+      exclude_selected = Follow.for_follower(current_user).where(:followable_type => params[:search_type]).collect(&:followable) rescue []
       @items = @items.results - exclude_selected
+     
+    
     else
       @items = @items.results
     end

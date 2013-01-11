@@ -13,7 +13,11 @@
 <div id="photo_box"  style="padding:20px 00px 0px 85px;">
 <div class="clear"></div>
 <% items.each do |follow| %>
-    <% item = follow.followable %>
+   <%if without_login == "true" %>
+     <%item = follow %>
+    <%else%> 
+      <% item = follow.followable %>
+    <%end%>  
      <div class="productinwizard" id="product_<%= item.id %>" style="width:160px;height:180px;display:block;background-color:#f9f9f9;">
    <div id="product_image" style="display:none;">image</div>
    <div class="imgprofilediv">
@@ -42,11 +46,15 @@
             <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
               <tr>
                 <td><div class="btn-group">
-                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= get_the_follow_text(follow.follow_type) rescue "" %></a>
+                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= "Plan to buy" rescue "" %></a>
                       <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
                         <ul class="dropdown-menu">
-                          <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , follow_path(follow,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:method => :delete ,:remote => :true %></a></li>
-                          
+                          <%if without_login == "true" %>
+                             <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , considered_item_delete_preferences_path(:item_id => follow.id,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:remote => :true %></a></li>
+                          <%else%>
+                            <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , follow_path(follow,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:method => :delete ,:remote => :true %></a></li>
+                          <%end%>   
+                           
                           <li class="divider"></li>
                           <li> </li>
                         </ul>

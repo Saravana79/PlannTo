@@ -19,7 +19,7 @@
 
 					<div style="padding:5px;"><ul style="width:240px;" class="search_category" id="buyingPreferences"></ul></div>
           <br/>
-            <%if can_update_preference?(@buying_plan) && !@buying_plan.completed?%>
+            <%if (can_update_preference?(@buying_plan) && !@buying_plan.completed?) || @follow_item == "" %>
                 
                 <a id="editPreferences" class="btn_submitanswer" href="" style="margin-right:10px;margin-top:10px;"><%if  @preferences_list.size == 0 %> Add Preferences <%else%> Edit My Preferences<%end%></a>
             <%end%>					

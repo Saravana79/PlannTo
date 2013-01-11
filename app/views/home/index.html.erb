@@ -2,6 +2,24 @@
 <% content_for :description, "Everything you want to know about the products that you own or planning to buy." %>
 <div id="maincontainer" class="maincontainerCss1">
 <div class="Homeinnercontent">
+<%if Rails.env.development? %>
+Select Category
+        	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list , "itemtype", "itemtype")%>
+        	  	
+        	  	<button id="plantobuySection">Create buying Plan</button>
+        	  
+         <div id="giveAdviceDialog"></div>
+      <script type="text/javascript">
+  $(document).ready(function(){
+    $('#plantobuySection').click(function(){
+
+            $.get('/preferences/new?without_login=true',{search_type: $("#buying_plan_item_type").val()},null,"script");
+            return false;
+
+    });
+     });
+</script>
+<%end%>
  <!-- <link rel="stylesheet" href="slider/themes/default/default.css" type="text/css" media="screen" /> -->
     <link rel="stylesheet" href="slider/themes/light/light.css" type="text/css" media="screen" />
     <!-- <link rel="stylesheet" href="slider/themes/dark/dark.css" type="text/css" media="screen" /> -->

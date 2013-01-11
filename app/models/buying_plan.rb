@@ -5,8 +5,9 @@ class BuyingPlan < ActiveRecord::Base
   belongs_to :user
   belongs_to :itemtype
   has_many :preferences
+  
   def preference_page_url
-     return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
+    return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
   end
   
   def get_first_item

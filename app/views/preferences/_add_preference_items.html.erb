@@ -28,7 +28,7 @@
 
    </div>
      <div style="clear:both;"></div>
-     <%= render "preferences/display_items", :items => items %>
+     <%= render "preferences/display_items", :items => items,:without_login => (without_login rescue "") %>
      <div class="search_block" style="float:right;padding:0px;margin-top:50px;">
      <button href="#" class="searchButton" style="font-size:15px;" id="preferenceGoToStep3">Next Step</button>
      

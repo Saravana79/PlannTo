@@ -15,14 +15,18 @@
 			<div  class="mainContentDiv">
 				<%= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
 				<div  class="float_rgt">
-				<a href="<%= @buying_plan.user.get_url()%>"> 	<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" /> </a>
+				<%unless @follow_item == '' %>
+				  <a href="<%= @buying_plan.user.get_url()%>"> 	<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" /> </a>
+				<%end%>  
 				</div>
 				<div  class="subContentDiv">
 					<div>
 							<div  id="questionTitle" ><h2><%= @question.title%><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h2> </div>
 					</div>
 					<div>
+					<%unless @follow_item == '' %>
 					<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown" > <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" >- <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
+					<%end%>
 					</div>
 					<div class="subContentGap">
 						<div id="displayQuestion">
@@ -149,18 +153,15 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			  </div>			
 
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
-						  <%if current_user.id == @buying_plan.user. id %>
+						  <%if (current_user && current_user.id == @buying_plan.user. id) %>
 							<div class="alert alert-block">
 <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
    </div></div>
-						<%else%>
+						<%elsif %>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						  <%end%>
 						<%else%>
-							
-						 <%end%>		
-							
-							
+						<%end%>		
 						<!--<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>-->
 						<!-- Answer this question - End -->
 						<%= display_empty_row(@answers.size).html_safe%>
@@ -169,7 +170,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			      <%end%>
 			      	<%if can_add_recommendation?(@buying_plan) || !current_user%>
 								<div class="float_rgt" style="margin-top:8px;">
+								<%unless @follow_item == '' %>
 									<a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+									<%end%>
 								</div>
 							<%end%>
 
@@ -407,8 +410,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 							<%= render 'preferences_list' %>
 			      </div>	
           <div class="rightcolumnsmall">
-				    <%if @buying_plan.completed? %>
-				      <% @items = Item.where('id in (?)', @buying_plan.items_considered) %>
+				    <%if @buying_plan.completed? || @follow_item == "" %>
+				      <% @items = Item.where('id in (?)', @buying_plan.items_considered.split(",")) %>
 				       <%= render 'items', :items => @items%>
 				    <%else%> 
 				      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>

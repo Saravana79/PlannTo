@@ -43,12 +43,12 @@ class NewuserWizardsController < ApplicationController
     @item = Item.find(params[:item_id])
     @wizard_type = params[:type]
     Follow.wizard_save(params[:item_id], @wizard_type,current_user)
-     current_user.clear_user_follow_item
+      current_user.clear_user_follow_item
       @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id).first
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id)
-        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
+       UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
        @buying_plan.update_attribute(:deleted, false)
        @buying_plan.update_attribute(:completed, false) 
       end  

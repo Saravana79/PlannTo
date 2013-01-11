@@ -32,7 +32,7 @@
     </tr>    
   <%end%>
     <tr>
-     <tr><td class="th_blue" style="text-align:center;"> <%if can_update_preference?(@buying_plan) && !@buying_plan.completed? %>
+     <tr><td class="th_blue" style="text-align:center;"> <%if (can_update_preference?(@buying_plan) && !@buying_plan.completed?) || @follow_item == "" %>
      <span style="text-align:center;padding-left:5px;font-size:12px;">Add the <%= @buying_plan.itemtype.itemtype.pluralize.downcase %> that you are considering to buy here</span>
       <input name="search" type="text" class="search_inputfield"  style="padding-left:3px;" 
       placeholder="Type the <%= @buying_plan.itemtype.itemtype.downcase %> name here." id="search_car"/>
@@ -44,7 +44,7 @@
            <div style="padding:5px;"> <strong> Currently no <%= @buying_plan.itemtype.itemtype.downcase %> are added.</strong></div>
          <%end%>  
          <% items.each do |follow| %>
-             <%if @buying_plan.completed? %>
+             <%if @buying_plan.completed? || @follow_item == '' %>
                <% item = follow %>
              <%else%>  
                <% item = follow.followable %>
