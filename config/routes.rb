@@ -105,6 +105,7 @@ resources :accounts do
     collection do
       get :give_advice
       get :owned_item
+      get :considered_item_delete
       post :owned_description_save
       get :get_advice
       post :add_preference
