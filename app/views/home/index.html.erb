@@ -19,7 +19,7 @@ Select Category
     });
      });
 </script>
-<%end%>
+s<%end%>
  <!-- <link rel="stylesheet" href="slider/themes/default/default.css" type="text/css" media="screen" /> -->
     <link rel="stylesheet" href="slider/themes/light/light.css" type="text/css" media="screen" />
     <!-- <link rel="stylesheet" href="slider/themes/dark/dark.css" type="text/css" media="screen" /> -->
@@ -28,6 +28,7 @@ Select Category
   <div class="Titledes" style="margin-top:-5px;">All the information you need on the products that you own or plan to buy.</div>
 <div class="Titledessmall" style="margin-top:-5px;">Join now to explore a new way to get all the information about products and connect with people with similar interests.</div>
 
+<div>
   <div style="width:745px;height:373px;margin-left:0px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
    <div id="wrapper">
         <div class="slider-wrapper theme-light">
@@ -42,14 +43,81 @@ Select Category
 
     </div>
   </div>
+ 
 
     <div style="float:right;width:240px;">
 
           <%= render "/shared/home_signup" %>
 
     </div>
+</div>
+<%if Rails.env.development? %>
+   <br/><br/>
+<div style="clear:both;margin-top:380px;padding:top:100px;">
+<div style="width:100%;height:250px;float:left;border: solid 0px #cdd3d7;display:block;padding:3px;align:center;">
+  <div  class="Titledes">Are you planning to buy?</div>
+<div class="Titledessmall" style="margin-top:-5px;">Click the products below to get all the information required for you to take a informed buying decision.</div>
 
-  
+<table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" style="padding-top:15px">
+      <tbody><tr>
+        
+        
+        <td>
+          <div class="divheader">
+             <a href="http://www.plannto.com">
+              <img src="http://s3.amazonaws.com/Plannto/items/car/medium/landrover_evoque_1.jpeg" alt="Car"  class="imgbuyingplanhome"/>
+             </a><br>
+         <p class="textbuyingplanhome">Car</p>        
+      </div>
+    </td>
+
+        <td>
+          <div class="divheader">
+             <a href="http://www.plannto.com">
+              <img src="http://s3.amazonaws.com/Plannto/items/bike/medium/KTM Duke 390 1.jpeg" alt="Bike"  class="imgbuyingplanhome"/>
+             </a><br>
+         <p class="textbuyingplanhome">Bike</p>        
+      </div>
+    </td>
+      <td>
+          <div class="divheader">
+             <a href="http://www.plannto.com">
+              <img src="http://s3.amazonaws.com/Plannto/items/camera/medium/Canon EOS 650D 3.jpeg" alt="Camera"  class="imgbuyingplanhome"/>
+             </a><br>
+         <p class="textbuyingplanhome">Camera</p>        
+      </div>
+    </td>
+      <td>
+          <div class="divheader">
+             <a href="http://www.plannto.com">
+              <img src="http://s3.amazonaws.com/Plannto/items/mobile/medium/Samsung Galaxy S III 2.jpeg" alt="Mobile"  class="imgbuyingplanhome"/>
+             </a><br>
+         <p class="textbuyingplanhome">Mobile</p>        
+      </div>
+    </td>
+      <td>
+          <div class="divheader">
+             <a href="http://www.plannto.com">
+              <img src="http://s3.amazonaws.com/Plannto/items/tablet/medium/Apple iPad 2 Wi-Fi 16GB 1.jpeg" alt="Tablet"  class="imgbuyingplanhome"/>
+             </a><br>
+         <p class="textbuyingplanhome">Tablet</p>        
+      </div>
+    </td>
+      <td>
+          <div class="divheader">
+             <a href="http://www.plannto.com">
+              <img src="http://s3.amazonaws.com/Plannto/items/cycle/medium/Schwinn Sporterra Sport 2012 1.jpeg" alt="Cycle"  class="imgbuyingplanhome"/>
+             </a><br>
+         <p class="textbuyingplanhome">Cycle</p>        
+      </div>
+    </td>
+  </tr>
+        
+</tbody></table>
+</div>
+
+</div>
+<%end%>
     <script type="text/javascript" src="slider/jquery.nivo.slider.js"></script>
     <script type="text/javascript">
     $(window).load(function() {
