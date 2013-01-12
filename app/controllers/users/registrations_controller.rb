@@ -23,6 +23,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       else
         expire_session_data_after_sign_in!
       end
+      
+      if Rails.env.development?
+        BuyingPlan.buying_plan_move_from_without_login(current_user,request.remote_ip)
+      end  
+      
       if @item.nil?
         redirect_to  "/newuser_wizard", notice: "Successfully registered"
       else
