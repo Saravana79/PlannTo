@@ -4,6 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @static_page = "true"
     @devise = "true"
     @invitation = Invitation.find_by_token(params[:token])
+    @without_login = params[:type]
     build_resource
     resource.email = @invitation.email unless @invitation.nil?
   end
@@ -13,7 +14,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @devise = "true"
     @invitation = Invitation.find_by_token(params[:token])
     @item =  @invitation.item unless @invitation.blank?
-    
+    @without_login = params[:type]
     #from devise
     build_resource
     if resource.save
@@ -28,12 +29,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
         BuyingPlan.buying_plan_move_from_without_login(current_user,request.remote_ip)
       end  
       
-      if @item.nil?
-        redirect_to  "/newuser_wizard", notice: "Successfully registered"
-      else
-        redirect_to  "/newuser_wizard?invitation=#{@invitation.id}", notice: "Successfully registered"
-      end 
-  
+     
+       if @without_login!="without_login"
+          if @item.nil?
+            redirect_to  "/newuser_wizard", notice: "Successfully registered"
+          else
+            redirect_to  "/newuser_wizard?invitation=#{@invitation.id}", notice: "Successfully registered"
+          end 
+       else
+         redirect_to  "/"
+     end  
     else
       clean_up_passwords resource
       respond_with resource

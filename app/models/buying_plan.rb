@@ -24,8 +24,7 @@ class BuyingPlan < ActiveRecord::Base
  
   def self.buying_plan_move_from_without_login_for_has_account(user,ip)
     BuyingPlan.where(:temporary_buying_plan_ip => ip).each do |b|
-      buying_plan = BuyingPlan.where('itemtype_id =? and user_id =?', b.itemtype.id,user.id).first
-      if buying_plan.nil?
+      buying_plan = BuyingPlan.where('itemtype_id =? and user_id =? and completed =? ', b.itemtype.id,user.id,false).first
         b.update_attributes(:user_id=>user.id,:temporary_buying_plan_ip => "")
         Item.where("id in (?)",b.items_considered.to_s.split(",")).each do |i|
           Follow.wizard_save(i.id.to_s, "buyer",user)
@@ -33,18 +32,16 @@ class BuyingPlan < ActiveRecord::Base
         end
         UserActivity.save_user_activity(user,b.id,"added","Buying Plan",b.id,ip)
         b.update_attribute('items_considered',"") 
-     else
-        b.update_attribute('temporary_buying_plan_ip',"")
-        buying_plan.update_attributes(:user_id=>user.id,:temporary_buying_plan_ip => "")
-        buying_plan.update_attribute(:deleted, false)
-        buying_plan.update_attribute(:completed, false)
-        Item.where("id in (?)",b.items_considered.to_s.split(",")).each do |i|
-          Follow.wizard_save(i.id.to_s, "buyer",user)
-          user.clear_user_follow_item
-        end
-        UserActivity.save_user_activity(user,b.id,"added","Buying Plan",b.id,ip)
-        b.update_attribute('items_considered',"")         
-      end  
+       if !buying_plan.nil?
+         @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype)
+         @follow_item = Follow.for_follower(user).where(:followable_type => @follow_types,:follow_type =>Follow::ProductFollowType::Buyer)
+          item_ids = @follow_item.collect(&:followable_id).join(',')
+          buying_plan.update_attributes(:completed => true)
+          buying_plan.update_attribute('items_considered',item_ids)
+          @follow_item.each do |item|
+            item.destroy
+          end 
+       end  
     end
   end
    

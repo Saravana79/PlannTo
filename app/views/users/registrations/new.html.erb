@@ -11,7 +11,7 @@
    <%= render "/shared/sign_up_fields",{:f => f} %>
    	</div>
    </div>
-   
+   <%= hidden_field_tag :type, @without_login %>
 <% end %>
 
 

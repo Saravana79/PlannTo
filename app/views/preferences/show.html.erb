@@ -3,7 +3,7 @@
   <% @type = params[:type] %>
   <% @buyer = "true" %>
   <%if @buying_plan.temporary_buying_plan_ip!="" %>
-    <b><center><h1><font color="green"> This is Temporary Buying Plan Please Sign Up for Make it Permanent. <%= link_to "Sign up", new_registration_path(User.new)%> </font> </h1> </center> </b>
+    <b><center><h1><font color="green"> This is Temporary Buying Plan Please Sign Up for Make it Permanent. <%= link_to "Sign up", new_registration_path(User.new,:type => "without_login")%> </font> </h1> </center> </b>
   <%end%>  
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
 <div id="maincontainer" class="maincontainerCss">
@@ -33,7 +33,7 @@
 					</div>
 					<div class="subContentGap">
 						<div id="displayQuestion">
-							<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif @buying_plan.user_id == current_user.id %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion').dialog({width:550, height:300});$('.Close_dialog').show();
+							<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif (current_user && @buying_plan.user_id == current_user.id) || @buying_plan.temporary_buying_plan_ip!="" %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion').dialog({width:550, height:300});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%></a>
 							
 						</div>
