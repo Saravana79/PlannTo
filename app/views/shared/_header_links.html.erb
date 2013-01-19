@@ -1,4 +1,14 @@
-<div class="header">
+<%if Rails.env.development? %>
+<div class="outerdivwarning">
+
+  <div  class="innerdivwarning">
+    <span>Are you planning to buy a mobile? Get all the information required for you to take a informed decision.</span> 
+    <a class="hyperlinkwarning" href="">Show Me</a>
+  </div>
+</div>
+<%end%>
+<div class="divbody">
+<div class="header" style="clear:both;">
   <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
  <% a= @static_page == 'true' ? 'display:none' : '' %>
   <div id="static" style="<%= a %>" >
@@ -126,7 +136,7 @@
   
 </div>
 
-
+</div>
 <script type="text/javascript">
 
 
