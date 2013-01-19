@@ -8,7 +8,7 @@
           <% @buying_plans.each do |buying_plan|%>
            <%item_type = buying_plan.itemtype.itemtype %>
            <%if buying_plan.completed? %>
-             <%item = Item.find(buying_plan.owned_item_id) %>
+             <%item = Item.find(buying_plan.owned_item_id) rescue buying_plan.get_first_item %>
           <%else%>  
            <%item = buying_plan.get_first_item%>
          <%end%>

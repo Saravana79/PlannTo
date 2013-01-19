@@ -13,7 +13,7 @@ class HomeController < ApplicationController
    end
 
   def terms_conditions
-   @static_page ="true"
+    @static_page ="true"
   end
   
   def privacy_policy

@@ -4,7 +4,7 @@
   <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" id="buyingPlanItem<%=buying_plan.id%>">
       <%item_type = buying_plan.itemtype.itemtype %>
       <%if buying_plan.completed? %>
-        <%item = Item.find(buying_plan.owned_item_id) %>
+        <%item = Item.find(buying_plan.owned_item_id) rescue buying_plan.get_first_item %>
       <%else%>  
       <%item = buying_plan.get_first_item%>
       <%end%>

@@ -27,7 +27,7 @@ module FollowMethods
     current_user.clear_user_follow_item
   
      @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
-      @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id).first
+      @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false).first
       
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id)
