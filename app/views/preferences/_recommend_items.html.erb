@@ -31,7 +31,7 @@
 
 <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
     <tr>
-      <td class="bg_widgethdr txt_white">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</td>
+      <td class="th_blue" style="text-align:center;padding-left:5px;font-size: 13px;">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</td>
     </tr>
      <tr><td><%if @buying_plan.user_question.user_answers.size == 0 %>
 	<%if current_user && current_user.id == @buying_plan.user. id %>
@@ -43,7 +43,7 @@
 <%end%>  <%end%><%if (can_add_recommendation?(@buying_plan) || !current_user) && !@buying_plan.completed? %>
 		<div class="float_rgt" style="margin-top:8px;">
 		<%unless @follow_item == '' %>
-	    <a style="" href="#" class="btn_submitanswer" id='giveAdviceTag'>Add Recommendation</a>
+	    <a style="margin-right:10px;margin-top:10px;float:right;margin-bottom:10px;font-size: 13px;padding: 4px 8px 4px 8px;" href="#" class="Bluesubmit3" id='giveAdviceTag'>Add Recommendation</a>
 	  <%end%>  
 <%end%> </td> </tr>
  <script>
