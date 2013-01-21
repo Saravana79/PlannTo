@@ -20,17 +20,19 @@ class PreferencesController < ApplicationController
         session[:counter]=1
       else
         session[:counter]+= 1
-      end    
-     if current_user
-       if @buying_plan.user.id != current_user.id && session[:counter] == 1
-         params[:type] = "Recommendations"
-       end
-     elsif session[:counter] == 1
-        params[:type] = "Recommendations"
-    end 
-    if params[:type] == "create"
-       params[:type] = nil
-    end    
+      end
+      unless params[:type] == "create"     
+        if current_user
+          if @buying_plan.user.id != current_user.id && session[:counter] == 1
+            params[:type] = "Recommendations"
+          end
+        elsif session[:counter] == 1
+           params[:type] = "Recommendations"
+        end
+      else
+        params[:type] = nil    
+      end  
+      
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)

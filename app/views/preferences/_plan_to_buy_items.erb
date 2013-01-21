@@ -32,7 +32,7 @@
     </tr>    
   <%end%>
     <tr>
-     <tr><td class="th_blue" style="text-align:center;"> <%if (can_update_preference?(@buying_plan) && !@buying_plan.completed?) || @follow_item == "" %>
+     <tr><td class="th_blue" style="text-align:center;"> <%if (can_update_preference?(@buying_plan) && !@buying_plan.completed?)%>
      <span style="text-align:center;padding-left:5px;font-size:13px;">Add the <%= @buying_plan.itemtype.itemtype.pluralize.downcase %> that you are considering to buy here</span>
       <input name="search" type="text" class="search_inputfield"  style="padding-left:3px;" 
       placeholder="Type the <%= @buying_plan.itemtype.itemtype.downcase %> name here." id="search_car"/>
@@ -78,11 +78,11 @@
          
          <%end%>
          </table>
-
+          <%if items.size > 0 %>
            <tr >
             <td height="33" class="" colspan="2" style="border-top:solid 1px #cdd3d7;width:100%;padding-left:5px;"> <a href="/items/compare?ids=<%= @item_ids %>">Compare  <%= @buying_plan.itemtype.itemtype.pluralize %></a></td>
           </tr>
-        
+        <%end%>
         </td>
     </tr>
    

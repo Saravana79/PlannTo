@@ -315,7 +315,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
          
       <%end%>
   	
-       <%unless params[:type].present?%>           
+       <%if !params[:type].present? || params[:type] == "create"%>    
+             
 					<div>
 					<% @custom = "true" %>
 			<% unless @buying_plan.completed? %>
