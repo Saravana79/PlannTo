@@ -1,16 +1,38 @@
 <%if Rails.env.development? %>
-<div class="outerdivwarning">
-
+  <div id="giveAdviceDialog"></div>
+  <%if @buying_warning_message == "true" %>
+    <div class="outerdivwarning">
+    <div  class="innerdivwarning">
+    <span>This is Temporary Buying Plan. Please Sign Up for Make it Permanent. </span> 
+     <%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a>
+   </div>
+  </div>
+ <%elsif @static_page!="true" && @product_warning_message == "true"%>
+  <div class="outerdivwarning">
   <div  class="innerdivwarning">
-    <span>Are you planning to buy a mobile? Get all the information required for you to take a informed decision.</span> 
-    <a class="hyperlinkwarning" href="">Show Me</a>
+    <span>Are you planning to buy a <%= @item.itemtype.itemtype.downcase%>? Get all the information required for you to take a informed decision.</span> 
+    <%=link_to  'Show Me'.html_safe ,new_preference_path(:without_login => :true,:search_type => "#{@item.itemtype.itemtype}"),:class=> "hyperlinkwarning",:remote => :true %>
   </div>
 </div>
+<%elsif @static_page!="true" && @content_warning_message == "true"%>
+ <div class="outerdivwarning">
+  <div  class="innerdivwarning">
+    <span>Are you planning to buy a <%= @content.items.first.itemtype.itemtype.downcase%>? Get all the information required for you to take a informed decision.</span> 
+    <%=link_to  'Show Me'.html_safe ,new_preference_path(:without_login => :true,:search_type => "#{@content.items.first.itemtype.itemtype}"),:class=> "hyperlinkwarning",:remote => :true %>
+  </div>
+</div>
+
 <%end%>
-<div class="divbody">
+<%end%>
+ <% a= @static_page == 'true' ? 'display:none' : '' %>
+ <%if @static_page == 'true' %>
+    <div class="divbody1">
+ <%else%>
+    <div class="divbody">
+ <%end%>      
 <div class="header" style="clear:both;">
   <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
- <% a= @static_page == 'true' ? 'display:none' : '' %>
+
   <div id="static" style="<%= a %>" >
    <div class="search">
   

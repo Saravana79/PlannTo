@@ -2,9 +2,7 @@
   <% content_for :description, @question.question_part%>
   <% @type = params[:type] %>
   <% @buyer = "true" %>
-  <%if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip!="" %>
-    <b><center><h1><font color="green"> This is Temporary Buying Plan Please Sign Up for Make it Permanent. <%= link_to "Sign up", new_registration_path(User.new,:type => "without_login")%> </font> </h1> </center> </b>
-  <%end%>  
+  
 <div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
 <div id="maincontainer" class="maincontainerCss">
 	<!-- Till this will go into main layout and common for all pages.-->

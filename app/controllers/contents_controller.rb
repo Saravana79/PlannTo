@@ -2,9 +2,12 @@ class ContentsController < ApplicationController
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type,:my_feeds]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :store_location, :only => [:show]
+  before_filter :set_waring_message,:only => [:show]
+ 
   #layout :false
   layout "product"
   include FollowMethods
+  
   
    def filter
      if params[:item_type_id].is_a?  Array
@@ -437,7 +440,19 @@ class ContentsController < ApplicationController
   
   
   private
- 
+  
+  def set_waring_message
+    if Rails.env.development?
+      unless request.referer.nil?
+        if request.referer.include?("google")   
+          @content_warning_message = "true"  
+          session[:http_referer] = request.referer
+          return true
+        end
+      end
+   end
+  end
+  
   def get_item_object
     @item = Content.find(params[:id])
   end

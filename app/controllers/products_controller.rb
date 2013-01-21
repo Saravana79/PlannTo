@@ -12,15 +12,17 @@ class ProductsController < ApplicationController
   def set_referer
     @item = Item.find(params[:id])
     
-   if @item.name == "Vibgyor Persona 200"
-    unless request.referer.nil?
-     if request.referer.include?("google")     
-       session[:http_referer] = request.referer
-       session[:referer_counter] = 1
-       return true
+    if Rails.env.development?
+      unless request.referer.nil?
+      if request.referer.include?("google")   
+        @product_warning_message = "true"  
+        session[:http_referer] = request.referer
+        session[:referer_counter] = 1
+        return true
+      end
      end
    end
-   end 
+ 
 
      if (session[:referer_counter] == 1)  &&  request.env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest"
        session[:referer_counter]+= 1
