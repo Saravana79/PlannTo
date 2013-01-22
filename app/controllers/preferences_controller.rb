@@ -365,7 +365,7 @@ logger.info @follow_item
     #@buying_plan.update_attribute(:completed, false)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
     require 'will_paginate/array'
-   if params[:without_login] == "true"
+   if !current_user
       @buying_plans = BuyingPlan.where("temporary_buying_plan_ip = ?", request.remote_ip)
    else   
      @buying_plans = BuyingPlan.where("user_id = ?", current_user.id)
@@ -375,7 +375,7 @@ logger.info @follow_item
 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
-   if params[:without_login] == "true"
+   if !current_user
       @considered_items  = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
    else   
      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
