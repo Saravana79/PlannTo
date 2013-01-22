@@ -321,9 +321,9 @@ class PreferencesController < ApplicationController
   def new
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     if params[:without_login] == "true"
-      @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false)
+      @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
     else   
-      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false)
+      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
     end 
      @question = @buying_plan.user_question #.destroy
      @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
@@ -353,9 +353,9 @@ logger.info @follow_item
   require 'will_paginate/array'
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
      if params[:without_login] == "true"
-      @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false)
+      @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
     else   
-      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false)
+      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
       UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
     end 
   

@@ -32,7 +32,7 @@ class FollowsController < ApplicationController
       if params[:follow][:follow_type] == "buyer"
         @item = Item.find(params[:follow][:followable_id])
         @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
-        @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false)
+        @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
         @buying_plan.update_attribute(:deleted, false)
         @buying_plan.update_attribute(:completed, false)
         @question = @buying_plan.user_question #.destroy

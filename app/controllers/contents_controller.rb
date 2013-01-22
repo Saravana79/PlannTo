@@ -442,15 +442,13 @@ class ContentsController < ApplicationController
   private
   
   def set_waring_message
-    if Rails.env.development?
-      unless request.referer.nil?
-        if request.referer.include?("google")   
-          @content_warning_message = "true"  
-          session[:http_referer] = request.referer
-          return true
-        end
+    unless request.referer.nil?
+      if request.referer.include?("google")   
+        @content_warning_message = "true"  
+        session[:http_referer] = request.referer
+        return true
       end
-   end
+     end
   end
   
   def get_item_object

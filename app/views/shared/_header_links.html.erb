@@ -1,5 +1,4 @@
-<%if Rails.env.development? %>
-  <div id="giveAdviceDialog"></div>
+<div id="giveAdviceDialog"></div>
   <%if @buying_warning_message == "true" %>
     <div class="outerdivwarning">
     <div  class="innerdivwarning">
@@ -22,7 +21,6 @@
   </div>
 </div>
 
-<%end%>
 <%end%>
  <% a= @static_page == 'true' ? 'display:none' : '' %>
  <%if @static_page == 'true' %>

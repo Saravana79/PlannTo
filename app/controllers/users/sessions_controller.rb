@@ -21,9 +21,7 @@ class Users::SessionsController < Devise::SessionsController
  # if resource
     unless request.xhr? && !authentication.user.present?
     set_flash_message(:notice, :signed_in) if is_navigational_format?
-    if Rails.env.development? 
-      BuyingPlan.buying_plan_move_from_without_login_for_has_account(current_user,request.remote_ip)
-   end   
+    BuyingPlan.buying_plan_move_from_without_login_for_has_account(current_user,request.remote_ip)  
     sign_in(resource_name, resource)
     if  session[:invitation].blank? 
       respond_with resource, :location => after_sign_in_path_for(resource)
