@@ -2,7 +2,7 @@
   <%if @buying_warning_message == "true" %>
     <div class="outerdivwarning">
     <div  class="innerdivwarning">
-    <span>This is Temporary Buying Plan. Please Sign Up for Make it Permanent. </span> 
+        <span>This buying plan is created temporarily for you which will expire after sometime, to access it later please sign up. </span> 
      <%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a>
    </div>
   </div>
