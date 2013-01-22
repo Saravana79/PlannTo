@@ -418,7 +418,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			      </div>	
           <div class="rightcolumnsmall">
 				    <%if @buying_plan.completed? || @follow_item == "" %>
-				      <% @items = Item.where('id in (?)', @buying_plan.items_considered.split(",")) %>
+				        <% @items = Item.where('id in (?)', (@buying_plan.items_considered.split(",") rescue 0)) %>
 				       <%= render 'items', :items => @items%>
 				    <%else%> 
 				      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>

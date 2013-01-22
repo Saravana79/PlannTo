@@ -10,14 +10,14 @@
   <div class="outerdivwarning">
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= @item.itemtype.itemtype.downcase%>? Get all the information required for you to take a informed decision.</span> 
-    <%=link_to  'Show Me'.html_safe ,new_preference_path(:without_login => :true,:search_type => "#{@item.itemtype.itemtype}"),:class=> "hyperlinkwarning",:remote => :true %>
+    <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{@item.itemtype.itemtype}"),:class=> "hyperlinkwarning",:remote => :true %>
   </div>
 </div>
 <%elsif @static_page!="true" && @content_warning_message == "true"%>
  <div class="outerdivwarning">
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= @content.items.first.itemtype.itemtype.downcase%>? Get all the information required for you to take a informed decision.</span> 
-    <%=link_to  'Show Me'.html_safe ,new_preference_path(:without_login => :true,:search_type => "#{@content.items.first.itemtype.itemtype}"),:class=> "hyperlinkwarning",:remote => :true %>
+    <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{@content.items.first.itemtype.itemtype}"),:class=> "hyperlinkwarning",:remote => :true %>
   </div>
 </div>
 

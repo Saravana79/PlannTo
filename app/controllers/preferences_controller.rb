@@ -320,7 +320,7 @@ class PreferencesController < ApplicationController
   
   def new
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
-    if params[:without_login] == "true"
+    if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
     else   
       @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
@@ -328,7 +328,7 @@ class PreferencesController < ApplicationController
      @question = @buying_plan.user_question #.destroy
      @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
-  if params[:without_login] == "true"
+  if !current_user
     @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0) )
   else  
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
@@ -350,17 +350,19 @@ logger.info @follow_item
   end
   
   def create_preference
-  require 'will_paginate/array'
+    require 'will_paginate/array'
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
-     if params[:without_login] == "true"
+     if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
     else   
-      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
-      UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
+      @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first
+      if @buying_plan.nil?
+        @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+       UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
     end 
-  
-    @buying_plan.update_attribute(:deleted, false)
-    @buying_plan.update_attribute(:completed, false)
+    end
+    #@buying_plan.update_attribute(:deleted, false)
+    #@buying_plan.update_attribute(:completed, false)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
     require 'will_paginate/array'
    if params[:without_login] == "true"
@@ -390,7 +392,7 @@ logger.info @follow_item
   def get_advice
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     #search_attributes = SearchAttribute.where("itemtype_id =?", @itemtype.id)
-    @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id(:user_id => current_user.id, :itemtype_id => @itemtype.id)
+    @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false, :deleted => false)
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
     #search_ids = search_attributes.collect{|item| item.id}
     #@preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)

@@ -49,8 +49,8 @@ class NewuserWizardsController < ApplicationController
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id)
        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
-       @buying_plan.update_attribute(:deleted, false)
-       @buying_plan.update_attribute(:completed, false) 
+       #@buying_plan.update_attribute(:deleted, false)
+       #@buying_plan.update_attribute(:completed, false) 
       end  
       @question = @buying_plan.user_question #.destroy
     if @question.nil?
