@@ -124,7 +124,8 @@ $(document).on("keyup.autocomplete", '#search_buying_car', function(){ $(this).a
                 data:{
                     term:$("#search_buying_car").val(),                    
                     authenticity_token: window._token,
-                    from_profile: true
+                    from_profile: true,
+                    search_type: $("#category").val(),
                 },
                 type:"GET",
                 dataType:"json",

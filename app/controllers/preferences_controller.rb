@@ -12,7 +12,6 @@ class PreferencesController < ApplicationController
       @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
       if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip!=""
         @buying_warning_message = "true"
-        @static_page = "true"
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
