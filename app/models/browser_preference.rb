@@ -20,7 +20,7 @@ class BrowserPreference < ActiveRecord::Base
           min_attribute = "min_" + "#{preference.search_attribute.attribute_id}"
           max_attribute = "max_" + "#{preference.search_attribute.attribute_id}"
           unit = preference.search_attribute.attribute.unit_of_measure
-          search_criteria = " #{preference.search_attribute.value_type.underscore.humanize} #{min_value} #{unit} - #{max_value} #{unit} "
+          search_criteria = " #{preference.search_attribute.value_type.underscore.humanize} " + number_to_indian_currency(min_value) +" #{unit} - "+ number_to_indian_currency(max_value) + " #{unit} "
           preferences_list << {:search_name => preference.search_attribute.attribute_display_name, :attribute_name => preference.search_attribute.attribute.name, :value_type => preference.search_attribute.value_type, :min_value => min_value, :min_attribute => min_attribute, :max_value => max_value, :attribute => preference.search_attribute.attribute_id, :max_attribute => max_attribute, :search_criteria => search_criteria}
         elsif value_type == "ListOfValues"
           value = preference.value_1.nil? ? "" : preference.value_1.split(',')
@@ -95,5 +95,12 @@ class BrowserPreference < ActiveRecord::Base
 
   def self.save_browse_preferences(user, itemtype, params, ip)
     BrowserPreference.add_preference(user, itemtype, params, ip)
+  end
+    def self.number_to_indian_currency(number)
+    if number
+      string = number.to_s
+      number = string.to_s.gsub(/(\d+?)(?=(\d\d)+(\d)(?!\d))(\.\d+)?/, "\\1,")
+    end
+    "#{number}"
   end
 end

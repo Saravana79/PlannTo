@@ -121,6 +121,46 @@ function resetForm(form_id){
 
 }
 
+function intToFormat(nStr)
+    {
+     nStr += '';
+     x = nStr.split('.');
+     x1 = x[0];
+     x2 = x.length > 1 ? ‘.’ + x[1] : ”;
+  
+     if (x2.length == 0) {
+         x2 = ‘.00′;
+       } else if (x2.length == 2) {
+         x2 = ‘.’ + x[1] + ’0′;
+       } else {
+         x2 = ‘.’ + x[1];
+       }
+     var rgx = /(\d+)(\d{3})/;
+     var z = 0;
+     var len = String(x1).length;
+     var num = parseInt((len/2)-1);
+ 
+      while (rgx.test(x1))
+      {
+        if(z > 0)
+        {
+          x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        else
+        {
+          x1 = x1.replace(rgx, '$1' + ',' + '$2');
+          rgx = /(\d+)(\d{2})/;
+        }
+        z++;
+        num--;
+        if(num == 0)
+        {
+          break;
+        }
+      }
+     return x1 + x2;
+    }
+
 function openInfoBox(displayInfo, attr_name, elem){
     var searchCriteriaFieldId = $(elem).attr('id');
     resetUnwantedFormFields();
@@ -168,7 +208,7 @@ function openInfoBox(displayInfo, attr_name, elem){
                 onstatechange: function(value) {
                     var  sliderVal = value.split(";")
                     $("#form_field_val").val(value);
-                    var searchCriteria = $("#which_type").val() + " "  + sliderVal[ 0 ] + " " + $("#which_unit").val() + " - " + sliderVal[ 1 ] + " "  + $("#which_unit").val()
+                    var searchCriteria = $("#which_type").val() + " "  + intToFormat(sliderVal[ 0 ]) + " " + $("#which_unit").val() + " - " + intToFormat(sliderVal[ 1 ]) + " "  + $("#which_unit").val()
                     $("#searchCriteriaLabel").html(searchCriteria)
                 }
             });
@@ -177,7 +217,7 @@ function openInfoBox(displayInfo, attr_name, elem){
             $('#Slider' + attr_name).next(".jslider").show()
             $('#Slider' + attr_name).slider( "value", parseFloat(displayInfo.min_v), parseFloat(displayInfo.max_v) )
             //$( "#Slider" + attr_name).val( "" +parseFloat(displayInfo.min_v) + ";" + parseFloat(displayInfo.max_v) + "");
-            var searchCriteria = $("#which_type").val() + " "  + min_v + " " + $("#which_unit").val() + " - " + max_v + " "  + $("#which_unit").val()
+            var searchCriteria = $("#which_type").val() + " "  + intToFormat(min_v) + " " + $("#which_unit").val() + " - " + intToFormat(max_v) + " "  + $("#which_unit").val()
             $("#searchCriteriaLabel").html(searchCriteria)
         }
         return false;
@@ -465,7 +505,7 @@ $(document).ready(function(){
                 alert("Please select a search criteria.");
                 return false
             }
-            var value = "" + $("#which_type").val() + " "  + minValue + " " + $("#which_unit").val() + " - " + maxValue + " "  + $("#which_unit").val() + ""
+            var value = "" + $("#which_type").val() + " "  + number_to_indian_currency(minValue) + " " + $("#which_unit").val() + " - " + number_to_indian_currency(maxValue) + " "  + $("#which_unit").val() + ""
             var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
         }
         else if (($("#which_type").val() == "Greater than") || ($("#which_type").val() == "Less then"))
