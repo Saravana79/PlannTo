@@ -13,7 +13,7 @@ class ProductsController < ApplicationController
     @item = Item.find(params[:id])
     unless request.referer.nil?
       if request.referer.include?("google")   
-        session[:product_waring_message] = "true"  
+        session[:product_warning_message] = "true"  
         session[:http_referer] = request.referer
         session[:referer_counter] = 1
         return true
