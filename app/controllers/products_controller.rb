@@ -61,6 +61,7 @@ class ProductsController < ApplicationController
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    session[:itemtype] = @item.itemtype.itemtype
     @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order(:price)
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)

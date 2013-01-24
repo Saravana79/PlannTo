@@ -273,7 +273,8 @@ class ContentsController < ApplicationController
 
   def show
     @content = Content.find(params[:id])
-    #session[:content_warning_message] = "true"  
+    #session[:content_warning_message] = "true" 
+    session[:itemtype] = @contents.items.first.itemtype.itemtype 
     per_page = params[:per_page].present? ? params[:per_page] : 6
     page_no  = params[:page_no].present? ? params[:page_no] : 1
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
