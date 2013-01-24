@@ -19,6 +19,7 @@
     %script{:src => "/javascripts/layout.js", :type => "text/javascript"}
     %body   
       = render 'shared/header_links'
+      #giveAdviceDialog
       #dialog-form{:style => "display:none;"}
         #login
           = render "/shared/login_dialog"

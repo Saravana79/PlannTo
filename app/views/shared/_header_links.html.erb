@@ -1,5 +1,5 @@
-<div id="giveAdviceDialog"></div>
-  <%if @buying_warning_message == "true" %>
+
+  <%if session[:buying_warning_message] == "true" %>
     <div class="outerdivwarning">
     <div  class="innerdivwarning">
         <span>This buying plan is created temporarily for you<!-- which will expire after sometime-->, to access it later please sign up. </span> 
@@ -7,7 +7,7 @@
    </div>
   </div>
   <div style="display:block;height:30px;"></div>
- <%elsif @static_page!="true" && @product_warning_message == "true"%>
+ <%elsif @static_page!="true" && session[:product_warning_message] == "true"%>
   <div class="outerdivwarning">
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= @item.itemtype.itemtype.downcase%>? Get all the information required for you to take a informed decision.</span> 
@@ -15,7 +15,7 @@
   </div>
 </div>
 <div style="display:block;height:30px;"></div>
-<%elsif @static_page!="true" && @content_warning_message == "true"%>
+<%elsif @static_page!="true" && session[:content_warning_message] == "true"%>
  <div class="outerdivwarning">
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= @content.items.first.get_base_itemtype.downcase%>? Get all the information required for you to take a informed decision.</span> 

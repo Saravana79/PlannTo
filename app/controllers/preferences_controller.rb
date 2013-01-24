@@ -11,7 +11,7 @@ class PreferencesController < ApplicationController
       require 'will_paginate/array'
       @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
       if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip!=""
-        @buying_warning_message = "true"
+        session[:buying_warning_message] = "true"
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
@@ -319,6 +319,8 @@ class PreferencesController < ApplicationController
   
   def new
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
+    session[:product_warning_message] = ''
+    session[:content_warning_message] = ''
     if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
     else   
