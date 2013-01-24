@@ -153,7 +153,7 @@ class ItemsController < ApplicationController
     unless @ids.blank? || params[:ids] == ""
       @item1 = Item.find(@ids[1]) if @ids[0] == ''
       @item1 = Item.find(@ids[0]) if @ids[0]!= ''
-      session[:item_type] =  @item1.itemtype.itemtype
+      session[:item_type] =  @item1.get_base_itemtype
       attribute_ids = AttributesRelationships.where("itemtype_id = ?", @item1.itemtype.id).collect(&:attribute_id)
       @attributes = Attribute.where("id in (?)", attribute_ids) #.group(:category_name)
       @items = Item.find_all_and_sort_by_items(@ids)
