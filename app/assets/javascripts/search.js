@@ -128,7 +128,7 @@ function intToFormat(nStr)
      x1 = x[0];
      x2 = x.length > 1 ? '.' + x[1] :'';
   
-     if (x2.length == 0) {
+/*     if (x2.length == 0) {
          x2 = '.00';
        } else if (x2.length == 2) 
         {
@@ -136,7 +136,7 @@ function intToFormat(nStr)
        }
       else {
          x2 = '.' + x[1];
-       }
+       }*/
      var rgx = /(\d+)(\d{3})/;
      var z = 0;
      var len = String(x1).length;
