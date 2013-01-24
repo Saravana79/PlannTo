@@ -248,19 +248,21 @@ end%>
     return typeList;
   }
 
-    function intToFormat(nStr)
+  function intToFormat(nStr)
     {
      nStr += '';
      x = nStr.split('.');
      x1 = x[0];
-     x2 = x.length > 1 ? ‘.’ + x[1] : ”;
+     x2 = x.length > 1 ? '.' + x[1] :'';
   
      if (x2.length == 0) {
-         x2 = ‘.00′;
-       } else if (x2.length == 2) {
-         x2 = ‘.’ + x[1] + ’0′;
-       } else {
-         x2 = ‘.’ + x[1];
+         x2 = '.00';
+       } else if (x2.length == 2) 
+        {
+         x2 = '.' + x[1] + '0';
+       }
+      else {
+         x2 = '.' + x[1];
        }
      var rgx = /(\d+)(\d{3})/;
      var z = 0;
