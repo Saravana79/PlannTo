@@ -25,6 +25,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         expire_session_data_after_sign_in!
       end
         BuyingPlan.buying_plan_move_from_without_login(current_user,request.remote_ip)
+        session[:buying_warning_message] = ''
         if @without_login!="without_login"
           if @item.nil?
             redirect_to  "/newuser_wizard", notice: "Successfully registered"

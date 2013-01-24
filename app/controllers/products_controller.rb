@@ -13,7 +13,7 @@ class ProductsController < ApplicationController
     @item = Item.find(params[:id])
     unless request.referer.nil?
       if request.referer.include?("google")   
-        @product_warning_message = "true"  
+        session[:product_waring_message] = "true"  
         session[:http_referer] = request.referer
         session[:referer_counter] = 1
         return true
@@ -31,6 +31,7 @@ class ProductsController < ApplicationController
     @filter_by = params["fl"]
     search_type = request.path.split("/").last
     @type = search_type.singularize.camelize.constantize
+ 
     @itemtype = Itemtype.find_by_itemtype(@type)
     @popular_topics = Item.popular_topics(@type)
     @article_categories = ArticleCategory.get_by_itemtype(@itemtype.id) #ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
@@ -57,8 +58,10 @@ class ProductsController < ApplicationController
   
   def show
     @filter_by = params["fl"]
-    Vote.get_vote_list(current_user) if user_signed_in?
+    Vote.get_vote_list(current_user) if user_signed_in? 
+    #session[:product_warning_message] = "true"
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    session[:itemtype] = @item.itemtype.itemtype
     @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order(:price)
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
@@ -109,6 +112,4 @@ class ProductsController < ApplicationController
   def get_item_object
     @item = Item.find(params[:id])
   end
-
-
 end
