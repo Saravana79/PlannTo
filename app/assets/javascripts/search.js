@@ -130,9 +130,11 @@ function intToFormat(nStr)
   
      if (x2.length == 0) {
          x2 = '.00';
-       } else if (x2.length == 2) {
-         x2 = '.' + x[1] + ’0′;
-       } else {
+       } else if (x2.length == 2) 
+        {
+         x2 = '.' + x[1] + '0';
+       }
+      else {
          x2 = '.' + x[1];
        }
      var rgx = /(\d+)(\d{3})/;
