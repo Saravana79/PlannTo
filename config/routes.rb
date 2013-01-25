@@ -123,6 +123,7 @@ resources :accounts do
       put :update_answer
     end
   end
+   match 'create_buying_plan' => 'preferences#new'
    match 'preferences/:search_type/:uuid' => 'preferences#show'
    match ':itemtype/guides/:guide_type' => 'contents#search_guide'
    match ':itemtype/:item_id/guides/:guide_type' => 'contents#search_guide'
