@@ -1,0 +1,67 @@
+  <%if @buying_plans.size > 0 %>
+     <h1><center> Buying plans </center></h1>
+  <%end%> 
+   <table>
+   <%@buying_plans.each do |buying_plan | %>
+      <%item = buying_plan.get_first_item%>
+      <%if item.blank?  %>
+        <%item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
+       <%end%>
+       <tr>
+        <td>
+         <div class="float_lft" style="padding-right:5px;">  
+          <a href="<%= 'http://www.plannto.com' + item.get_url() %>" ><img src="<%= item.image_url() %>" alt="<%= item.name%>" border="0" style="padding:8px 8px 4px 8px;" /></a> </div>
+         </td>
+         <td>
+           <span>
+             <h1><a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%= 'http://www.plannto.com' + buying_plan.preference_page_url%>/"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1></td>
+          </span>
+        <%end%>
+      </table>
+    <% if (!@where_to_buy_items.empty?) %>
+      <h1><center> Price Comparisons</center></h1>
+<div class="clearboth align_right font_11 pad_tb5">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>
+   <div class="clearboth pad_b29">
+  <table  width="100%" border="0" cellspacing="0" cellpadding="0" >
+    <tr>
+  	<td class="th_blue">Product Name</td>
+    <td class="th_blue">Seller Name</td>
+    <td class="th_blue">Price</td>
+    <td class="th_blue">Estimated Delivery Time</td>
+    <td class="th_blue">&nbsp;</td>
+  </tr>
+     <% combine_list = [] %>
+     <% @where_to_buy_items.group_by(&:itemid).each do |site, items| %>
+    <%items.each_with_index do |item, index|%>
+      <%if Itemdetail.display_item_details(item)%>
+          <% price = Itemdetail.display_price_detail(item) %>
+          <% shipping = Itemdetail.display_shipping_detail(item) %>
+          <% combine = "#{price}-#{shipping}" %>
+         <%if !combine_list.include?(combine) %>
+          <tr>
+          	<td class="bdb_gray"><%=item.ItemName%></td>
+            <td class="bdb_gray"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
+            <td class="bdb_gray price_text"><%= price %></td>
+            <td class="bdb_gray font_13"><%= shipping %></td>
+            <td align="center" class="bdb_gray" valign="top"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
+          </tr>
+        
+      <%end%>
+       <% combine_list << "#{price}-#{shipping}" %>
+      <%end%>
+    <%end%>
+  <%end%>
+</table>
+</div>
+<%end%>
+<%if @recommendations.size > 0 %>
+ <h1><center> Recommendations </center></h1>
+<%end%> 
+<%@recommendations.each do |ans| %>
+  <b> <%= ans.answer%></a><b>
+  <br /><br />
+  <a class="txt_brown"><%= ans.user.name%> gave a recommendation.
+<%end%>
+<br />
+<br />
+ <%= link_to "View All","www.plannto.com/" + "#{@user.username}" + "?follow=Preferences" %>

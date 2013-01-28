@@ -128,6 +128,17 @@ end
        end     
   end
   
+  task :send_buying_plans,:arg1, :needs => :environment do | t, args|
+    userid = args[:arg1].to_i
+    if( userid != 0)
+       users = User.find(:all, :conditions=> ["id = ?" ,userid])
+    else
+       users = User.all
+    end 
+    users.each do |user|
+      ContentMailer.buying_plans(user).deliver
+    end     
+  end
 
     
    task :welcome_mail,:arg1,:arg2,:arg3, :needs => :environment do | t, args|

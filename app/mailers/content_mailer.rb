@@ -26,8 +26,23 @@ class ContentMailer < ActionMailer::Base
     mail(:to => user.email, :subject => subject)
   end 
   
-  def user_welcome_mail(user)
+  def buying_plans(user)
     @user = user
+    @buying_plans  = BuyingPlan.where('user_id=? and deleted =? and completed=?',user.id,0,0)
+    user_question_ids = @buying_plans.collect{|b|b.user_question.id}
+    user_answer_ids = UserQuestionAnswer.where('user_question_id in (?)',user_question_ids).order('created_at desc').limit(10).collect(&:user_answer_id)
+    @recommendations = UserAnswer.where("id in(?)",user_answer_ids) 
+     @follow_item = Follow.for_follower(user).where(:follow_type =>Follow::ProductFollowType::Buyer) 
+    @item_ids = []
+    if @follow_item.size >0
+      @item_ids = @follow_item.map{|c|c.followable_id}.join(",") 
+      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+    end
+    subject = "PlannTo Buying Plans" 
+    mail(:to => user.email, :subject => subject)
+    
+  end
+  def user_welcome_mail(user)
     buyer_item_ids =  Follow.where("follower_id=? and follow_type =?",user.id,"buyer").collect(&:followable_id)
     @buyer_items = Item.where('id in (?)',buyer_item_ids)
     follow_item_ids = Follow.where("follower_id=? and follow_type =? and followable_type!=?",user.id,"follower","User").collect(&:followable_id)
