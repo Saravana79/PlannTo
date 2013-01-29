@@ -159,7 +159,10 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			  </div>			
 
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
-						  <%if (current_user && current_user.id == @buying_plan.user. id) %>
+						<%if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" %>
+						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+						    
+						  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
 							<div class="alert alert-block">
 <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
    </div></div>

@@ -34,7 +34,9 @@
       <td class="th_blue" style="text-align:center;padding-left:5px;font-size: 13px;">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</td>
     </tr>
      <tr><td><%if @buying_plan.user_question.user_answers.size == 0 %>
-	<%if current_user && current_user.id == @buying_plan.user. id %>
+      <%if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" %>
+       <div style="padding:5px;"><strong> Currently, there are no recommendations.</strong></div>
+	<%elsif current_user && current_user.id == @buying_plan.user. id %>
 	<div style="padding:5px;"> <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %></div>
 </div>
 	 <%else%>

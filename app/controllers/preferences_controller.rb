@@ -10,8 +10,8 @@ class PreferencesController < ApplicationController
     def show
       require 'will_paginate/array'
       @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
-      if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip!=""
-        session[:buying_warning_message] = "true"
+      if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip == request.remote_ip
+        @buying_warning_message = "true"
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
@@ -22,7 +22,9 @@ class PreferencesController < ApplicationController
       end
       unless params[:type] == "create"     
         if current_user
-          if @buying_plan.user.id != current_user.id && session[:counter] == 1
+         if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && session[:counter] == 1
+            params[:type] = nil 
+         elsif session[:counter] == 1 && (@buying_plan.user.id != current_user.id)
             params[:type] = "Recommendations"
           end
         elsif session[:counter] == 1
