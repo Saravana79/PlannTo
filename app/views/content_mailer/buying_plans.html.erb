@@ -1,24 +1,107 @@
-  <%if @buying_plans.size > 0 %>
-     <h1><center> Buying plans </center></h1>
-  <%end%> 
-   <table>
-   <%@buying_plans.each do |buying_plan | %>
-      <%item = buying_plan.get_first_item%>
-      <%if item.blank?  %>
-        <%item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
-       <%end%>
-       <tr>
-        <td>
-         <div class="float_lft" style="padding-right:5px;">  
-          <a href="<%= 'http://www.plannto.com' + item.get_url() %>" ><img src="<%= item.image_url() %>" alt="<%= item.name%>" border="0" style="padding:8px 8px 4px 8px;" /></a> </div>
-         </td>
-         <td>
-           <span>
-             <h1><a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%= 'http://www.plannto.com' + buying_plan.preference_page_url%>/"><%=buying_plan.try(:user_question).try(:title)%></a><%= buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1></td>
-          </span>
-        <%end%>
-      </table>
-    <% if (!@where_to_buy_items.empty?) %>
+
+ 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>:: Welcome ::</title>
+</head>
+
+<body style="padding:36px 0 44px 0; margin:0px; background:#d8d8d8;">
+<table width="666" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td>
+    
+    <table width="662" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td>
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+  <tr>
+    <td width="37" ><img src="http://www.plannto.com/images/left_shadow.png?ref=email" alt="" width="37" height="136" /></td>
+    <td align="left" valign="top" style="background:#FFFFFF; border-top:3px solid #d8d8d8;" >
+    <span style="display:block; float:left;"><a href="http://www.plannto.com?ref=email"><img src="http://www.plannto.com/images/n_logo.png?ref=email" width="134" height="97" border="0" alt="PlannTo.com" /></a></span>   
+    <td align="right" width="100%" style="background:#FFFFFF; border-top:3px solid #d8d8d8;"> 
+<span style="color:#676767"><em><%= Date.today.day %> <%= Date::MONTHNAMES[Date.today.month] %>
+ <%= Date.today.year %></em></span><br /><br />
+
+   <!-- If you cannot read this email, <a href="http://localhost:3000/users/sign_in" style="color:#787878; text-decoration:none;">click here</a><br />
+Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="color:#787878; text-decoration:none;">unsubscribe</a>    </p> -->   </td>
+    <td width="24"  align="right" valign="top"><img src="http://www.plannto.com/images/right_shadow.png"  width="24" height="136" /></td>
+  </tr>
+</table>
+
+    
+    </td>
+  </tr>
+  
+  
+  
+  <tr>
+    <td><table width="650" border="0" cellspacing="0" cellpadding="0" align="center" style="background:#FFFFFF;">
+     
+      <tr>
+        <td align="left" valign="top">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td>
+        <p  style="padding:2px 0 0 0; border-top:1px solid #d8d8d8;margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
+          <br/>
+           Dear <%=@userfullname%> <br/><br/>
+           Greetings from PlannTo.com. Please find details about buying Plan  <h1><a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= @buying_plan.user_question.id %>" href="<%= 'http://www.plannto.com' + @buying_plan.preference_page_url%>/"><%=@buying_plan.try(:user_question).try(:title)%></a><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
+             </p> 
+             <br/><br/>
+    <td>
+   </tr> 
+  <tr>
+    <td align="center" valign="top"><table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+      <% @contents.each do |content| %>
+      <tr>
+        <td><table width="100%" border="0" cellspacing="0" cellpadding="0"  style="padding:10px 0 15px 0; border-bottom:1px dashed #c3c3c3;">
+          <tr>
+            <% if content.is_a?(ArticleContent) %>
+             <%if content.thumbnail?%>
+            <td width="18%" align="left" valign="top"><img src="<%= content.thumbnail %>" width="75" height="75" style="padding:3px; background:#FFFFFF; border:1px solid #c3c3c3; margin-left:10px;" /></td>
+            <%else%>
+              <td width="18%" align="left" valign="top"><img src="http://www.plannto.com/images/prodcut_reivew.png" width="75" height="75" style="padding:3px; background:#FFFFFF; border:1px solid #c3c3c3; margin-left:10px;" /></td>
+              <%end%>
+            <%end%>  
+           <%unless content.is_a?(ArticleContent) %>
+                  <td width="18%" align="left" valign="top"><img src="http://www.plannto.com/images/prodcut_reivew.png" width="75" height="75" style="padding:3px; background:#FFFFFF; border:1px solid #c3c3c3; margin-left:10px;" /></td>
+               <%end%>    
+            <td width="82%" align="left" valign="top">
+           <h2 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:22px; font-style:italic; color:#1393b2; font-weight:normal;">
+            <a href="<%="http://www.plannto.com/contents/" + content.id.to_s + "?ref=email"%>"  style="color: #1393b2; text-decoration:none;" onmouseover="this.style.color='#0f6c83'" onmouseout="this.style.color='#1393b2'">
+            <%= content.title %></a></h2>    <%if content.is_a?(ArticleContent) %> <% if content.url?  %>
+        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#1393b2;" href="http://www.plannto.com/external_contents/<%= content.id %>?ref=email"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
+       <%end%>  <%end%> 
+           
+           <p  style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
+           <%= raw "#{content.description.split[0..(Content::WORDCOUNT-1)].join(' ')}" + "#{content.description.split.size > Content::WORDCOUNT ? "...": ""}" %>        </p>            </td>
+          </tr>
+        </table></td>
+      </tr>
+      <%end%>
+
+     <tr>
+    <td width="82%" align="left" valign="top">
+    <h3 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:18px; font-style:italic; color:#1393b2; font-weight:normal;"><br />
+<br />
+<%if @contents.size > 0 %>
+<%= link_to "View All Contents",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/?type=create"%> 
+<%end%>
+  </tr>
+    </table></td>
+  </tr>
+   
+  <tr>
+    <td align="center" valign="top"><img src="http://www.plannto.com/images/border_bottom.jpg"  width="650" height="20" align="left" style="margin:20px 0;" /></td>
+  </tr>
+
+</table>
+
+        <% if (!@where_to_buy_items.empty?) %>
       <h1><center> Price Comparisons</center></h1>
 <div class="clearboth align_right font_11 pad_tb5">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>
    <div class="clearboth pad_b29">
@@ -51,6 +134,11 @@
       <%end%>
     <%end%>
   <%end%>
+  <br />
+<br />
+<%if  (!@where_to_buy_items.empty?) %>
+<%= link_to "View All Compare Prices",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/" + "?type=deals"%> 
+<%end%>
 </table>
 </div>
 <%end%>
@@ -64,4 +152,19 @@
 <%end%>
 <br />
 <br />
- <%= link_to "View All","www.plannto.com/" + "#{@user.username}" + "?follow=Preferences" %>
+<%if @recommendations.size > 0 %>
+<%= link_to "View All Recommendations",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/" + "?type=Recommendations"%> 
+<%end%>
+        </td>
+      </tr>
+      
+      
+</table>
+
+  </tr>
+</table>
+
+</body>
+</html> 
+ 
+ 

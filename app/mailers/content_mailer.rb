@@ -26,22 +26,26 @@ class ContentMailer < ActionMailer::Base
     mail(:to => user.email, :subject => subject)
   end 
   
-  def buying_plans(user)
-    @user = user
-    @buying_plans  = BuyingPlan.where('user_id=? and deleted =? and completed=?',user.id,0,0)
-    user_question_ids = @buying_plans.collect{|b|b.user_question.id}
-    user_answer_ids = UserQuestionAnswer.where('user_question_id in (?)',user_question_ids).order('created_at desc').limit(10).collect(&:user_answer_id)
-    @recommendations = UserAnswer.where("id in(?)",user_answer_ids) 
-     @follow_item = Follow.for_follower(user).where(:follow_type =>Follow::ProductFollowType::Buyer) 
+  def buying_plans(buying_plan)
+    @buying_plan = buying_plan
+    @user = @buying_plan.user
+    @username = @user.username
+    @userfullname = @user.name
+    @recommendations = @buying_plan.user_question.user_answers.order('created_at desc').limit(10) 
+    @itemtype = @buying_plan.itemtype
+    @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
     @item_ids = []
     if @follow_item.size >0
-      @item_ids = @follow_item.map{|c|c.followable_id}.join(",") 
+      @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
     end
-    subject = "PlannTo Buying Plans" 
-    mail(:to => user.email, :subject => subject)
-    
+    params1 = {"sub_type" => ["Reviews","News","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => 'created_at desc' }
+    @contents = Content.filter(params1)
+    subject = "#{@buying_plan.user_question.title}" 
+    mail(:to => @user.email, :subject => subject)
   end
+  
   def user_welcome_mail(user)
     buyer_item_ids =  Follow.where("follower_id=? and follow_type =?",user.id,"buyer").collect(&:followable_id)
     @buyer_items = Item.where('id in (?)',buyer_item_ids)
