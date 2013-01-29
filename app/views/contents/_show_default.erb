@@ -166,7 +166,7 @@
 							<link rel="stylesheet" href="/slider/themes/light/light.css" type="text/css" media="screen" />
    
     <link rel="stylesheet" href="/slider/nivo-slider.css" type="text/css" media="screen" />
-  <div style="width:auto;height:400px;margin-left:25px;">
+  <div style="width:auto;height:auto;margin-left:25px;">
    <div id="wrapper">
         <div class="slider-wrapper theme-light">
             <div id="slider" class="nivoSlider">
@@ -188,7 +188,7 @@
     </script>
 							</div>
 							<br/>
-							<br/>
+						
 							<% elsif !content.video.nil?%>
 								<div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= change_thumb_original(content) %>" class="uploadedvideoContentdisplay float_lft"></a></div> 
 								 <br />  <br />  <br />     
@@ -197,7 +197,7 @@
 							<%end%>
 							<%end%>
 							<%if ((content.sub_type == "#{ArticleCategory::PHOTO}") && (content.url.nil?)) %>
-							<br />
+						
 							<%end%>
 							
 						<%= raw get_content_description(content, true)%>
