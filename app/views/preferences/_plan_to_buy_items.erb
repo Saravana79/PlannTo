@@ -58,7 +58,10 @@
             <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
             <td width="113">
             <div>
-            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a> 
+            <%if !@buying_plan.completed? && @follow_item != '' %>
+              <%= link_to "Remove", follow_path(follow),:method => :delete %> 
+            <%end%>
              
            </div>
            <%unless item.type == "Topic" || item.type == "CarGroup" || item.type == "Manufacturer"%>
