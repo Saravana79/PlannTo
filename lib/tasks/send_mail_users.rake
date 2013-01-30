@@ -129,14 +129,14 @@ end
   end
   
   task :send_buying_plans,:arg1, :needs => :environment do | t, args|
-    userid = args[:arg1].to_i
-    if( userid != 0)
-       users = User.find(:all, :conditions=> ["id = ?" ,userid])
+    buying_planid = args[:arg1].to_i
+    if(buying_planid != 0)
+       buying_plans= BuyingPlan.find(:all, :conditions=> ["id = ?" ,buying_planid])
     else
-       users = User.all
+       buying_plans = BuyingPlan.where('user_id !=? and deleted =? and completed =?',0,0,0)
     end 
-    users.each do |user|
-      ContentMailer.buying_plans(user).deliver
+    buying_plans.each do |b_plan|
+      ContentMailer.buying_plans(b_plan).deliver
     end     
   end
 
