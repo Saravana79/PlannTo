@@ -21,13 +21,10 @@ class Preference < ActiveRecord::Base
   end
 
   def self.update_preferences(buying_plan_id, search_type, params)
-
     itemtype = Itemtype.find_by_itemtype(search_type)
     search_attributes = SearchAttribute.by_itemtype(itemtype.id)
     Preference.clear_items(buying_plan_id)
-
     Preference.add_items(buying_plan_id, search_attributes, params)
-
   end
 
     def self.get_preferences(buying_plan_id, itemtype, search_ids)

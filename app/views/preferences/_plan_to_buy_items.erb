@@ -31,8 +31,13 @@
       <td class="th_blue" style="text-align:center;padding-left:5px;font-size: 13px;"><%= @buying_plan.itemtype.itemtype.pluralize %> under consideration</td>
     </tr>    
   <%end%>
+    <%if current_user && @follow_item =='' %>
+    <tr style="padding-bottom:5px;">
+      <td class="th_blue" style="text-align:center;padding-left:5px;font-size: 13px;"><%= @buying_plan.itemtype.itemtype.pluralize %> under consideration</td>
+    </tr>    
+  <%end%>
     <tr>
-     <tr><td class="th_blue" style="text-align:center;"> <%if (can_update_preference?(@buying_plan) && !@buying_plan.completed?) || @follow_item==''%>
+     <tr><td class="th_blue" style="text-align:center;"> <%if (can_update_preference?(@buying_plan) && !@buying_plan.completed?) || (!current_user && @follow_item=='')%>
      <span style="text-align:center;padding-left:5px;font-size:13px;">Add the <%= @buying_plan.itemtype.itemtype.pluralize.downcase %> that you are considering to buy here</span>
       <input name="search" type="text" class="search_inputfield"  style="padding-left:3px;" 
       placeholder="Type the <%= @buying_plan.itemtype.itemtype.downcase %> name here." id="search_car"/>

@@ -159,7 +159,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			  </div>			
 
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
-						<%if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" %>
+						<%if (!current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "") %>
+						  <div class="alert alert-block"> <strong> Currently there are no recommendation, please sign up to share this with friends/experts to get their feedback.<%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a></strong></div>
+						 <%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "") %>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						    
 						  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
@@ -177,9 +179,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 						<%@answers.each_with_index do |ans, index|%>
 						  <%=render "preferences/update_answer", :ans => ans%>
 			      <%end%>
-			      	<%if can_add_recommendation?(@buying_plan) || !current_user%>
+			      	<%if can_add_recommendation?(@buying_plan) || !current_user %>
 								<div class="float_rgt" style="margin-top:8px;">
-								<%unless @follow_item == '' %>
+								<%if @follow_item != '' || (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "") %>
 									<a style="margin-right:10px;margin-top:10px;float:right;margin-bottom:10px;font-size: 13px;padding: 4px 8px 4px 8px;" href="#" class="Bluesubmit3" id='giveAdviceTag'>Add Recommendation</a>
 									<%end%>
 								</div>
