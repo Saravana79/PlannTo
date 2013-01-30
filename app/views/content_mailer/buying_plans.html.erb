@@ -146,24 +146,25 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
  <h1><center> Recommendations </center></h1>
 <%end%> 
 <%@recommendations.each do |ans| %>
-  <b> <%= ans.answer%></a><b>
-  <br /><br />
-  <a class="txt_brown"><%= ans.user.name%> gave a recommendation.
+  <a class="txt_brown"><%= ans.user.name%> gave a recommendation.</a>
+  <br /> 
+  <b><%= ans.answer%><b>
+  <br />
+  <%ans.recommendations.each do |reco| %>
+    <a href="www.plannto.com/<%= reco.item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= reco.item.name rescue ''%></a>, &nbsp;&nbsp;
+  <%end%> 
+  <br /> <br />
 <%end%>
 <br />
 <br />
 <%if @recommendations.size > 0 %>
 <%= link_to "View All Recommendations",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/" + "?type=Recommendations"%> 
 <%end%>
-        </td>
-      </tr>
-      
-      
+  </td>
+</tr>
 </table>
-
-  </tr>
+</tr>
 </table>
-
 </body>
 </html> 
  

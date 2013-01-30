@@ -40,7 +40,9 @@ class ContentMailer < ActionMailer::Base
     @item_ids = []
     if @follow_item.size >0
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
-      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price).limit(5)
+    else
+      @where_to_buy_items = []  
     end
     params1 = {"sub_type" => ["Reviews","News","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => 'created_at desc' }
     @contents = Content.filter(params1)

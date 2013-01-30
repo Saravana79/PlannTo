@@ -53,6 +53,8 @@ class PreferencesController < ApplicationController
     if @follow_item.size >0
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+    else
+      @where_to_buy_items = []
     end
    end 
     if params[:type] == "guides"
@@ -354,7 +356,7 @@ logger.info @follow_item
   def edit_preference
     @buying_plan = BuyingPlan.find(params[:id])
     @question = @buying_plan.user_question
-    sunspot_search_items
+sunspot_search_items
   end
   
   def create_preference
