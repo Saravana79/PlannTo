@@ -325,8 +325,14 @@ class PreferencesController < ApplicationController
     session[:content_warning_message] = ''
     if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
+      if params[:item_ids]
+        @buying_plan.update_attribute('items_considered',params[:item_ids])
+      end  
     else   
       @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
+      if params[:item_ids]
+        Follow.wizard_save(params[:item_ids], 'buyer',current_user)
+      end  
     end 
      @question = @buying_plan.user_question #.destroy
      @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
@@ -348,7 +354,6 @@ logger.info @follow_item
   def edit_preference
     @buying_plan = BuyingPlan.find(params[:id])
     @question = @buying_plan.user_question
-
     sunspot_search_items
   end
   
