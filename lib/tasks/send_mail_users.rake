@@ -3,7 +3,6 @@ desc "send email to user"
   task :send_contents_email,:arg1, :needs => :environment do | t, args|
 
     userid = args[:arg1].to_i
-    puts "1"
     if( userid != 0)
      follow_users = User.find(:all, :conditions=> ["id = ?" ,userid])
     else
@@ -76,41 +75,44 @@ WHERE
 (item_contents_relations_cache.item_id in (#{follow_item_ids.blank? ? 0 : follow_item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 :root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
 )and 
-(contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+(contents.status =1 and contents.created_at >= '#{1.weeks.ago}')
 union 
 SELECT distinct(contents.id) as idu, contents.* FROM contents 
 WHERE 
 (contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{2.weeks.ago}')
-)a  order by a.total_votes desc limit 10").collect(&:id)
-  if content_ids.size < 10
-       content_ids =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
-INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
-WHERE 
-(
-(item_contents_relations_cache.item_id in (#{follow_item_ids.blank? ? 0 : follow_item_ids.join(",")})) or 
-(item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 :root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
-)and 
-(contents.status =1 and contents.created_at >= '#{4.weeks.ago}')
-union 
-SELECT distinct(contents.id) as idu, contents.* FROM contents 
-WHERE 
-(contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{4.weeks.ago}')
-)a  order by a.total_votes desc limit 10").collect(&:id)
-  end
+)a  order by a.total_votes desc, created_at desc limit 10").collect(&:id)
+#  if content_ids.size < 10
+#       content_ids =  Content.find_by_sql("select * from (SELECT distinct(contents.id) as idu, contents.* FROM contents 
+#INNER  JOIN item_contents_relations_cache ON item_contents_relations_cache.content_id = contents.id 
+#WHERE 
+#(
+# (item_contents_relations_cache.item_id in (#{follow_item_ids.blank? ? 0 : follow_item_ids.join(",")})) or 
+# (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 :root_item_ids.join(",")}) and total_votes >= #{vote_count}) 
+# )and 
+# (contents.status =1 and contents.created_at >= '#{2.weeks.ago}')
+# union 
+# SELECT distinct(contents.id) as idu, contents.* FROM contents 
+# WHERE 
+# (contents.created_by in (#{follow_friends_ids.blank? ? 0 :follow_friends_ids.join(",")})) and (contents.status =1 and contents.created_at >='#{4.weeks.ago}')
+# )a  order by a.total_votes desc, created_at desc limit 10").collect(&:id)
+#   end
   
-#   if content_ids.size < 10
-#      content_ids = configatron.top_content_ids.split(",")
-#   end  
-puts content_ids.to_s + " content count"
-  unless content_ids.size < 2     
+ # if content_ids.size < 10
+ #     content_ids = configatron.top_content_ids.split(",")
+ #  end  
+
+  unless content_ids.size <= 2     
      @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
-      puts "3"
+      
   else
-    @contents =  Content.find(:all, :conditions => ['id in (?)',configatron.top_content_ids.split(",")] ) 
+    @contents =  Content.find(:all, :conditions => ['id in (?)',configatron.top_content_ids.split(",")],:order => "total_votes desc" ) 
     puts content_ids.to_s + " content count"
-    puts "4"
+    
   end   
-  ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
+puts user.id.to_s + " - User id"
+puts content_ids.to_s + " content Id"
+puts "*****"
+ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
  end
 end 
  task :send_contents_not_follow_email,:arg1, :needs => :environment do | t, args|
@@ -121,7 +123,7 @@ end
      follow_user_ids =  Follow.where("followable_type in(?)", Item::FOLLOWTYPES).select("distinct follower_id").collect(&:follower_id)
       not_follow_users = User.where('id not in (?)', follow_user_ids)
     end 
-      @contents =  Content.find(:all, :conditions => ['id in (?)',configatron.top_content_ids.split(",")] ) 
+      @contents =  Content.find(:all, :conditions => ['id in (?)',configatron.top_content_ids.split(",")] ,:order => "total_votes desc" ) 
        top_item_ids = configatron.top_all_item_ids.split(",")
        not_follow_users.each do |user|
          ContentMailer.not_follow_user_content(@contents,user,top_item_ids).deliver
@@ -139,7 +141,6 @@ end
       ContentMailer.buying_plans(b_plan).deliver
     end     
   end
-
     
    task :welcome_mail,:arg1,:arg2,:arg3, :needs => :environment do | t, args|
       start_date = args[:arg1]

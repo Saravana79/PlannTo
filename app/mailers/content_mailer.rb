@@ -10,7 +10,8 @@ class ContentMailer < ActionMailer::Base
   else
   subject = "PlannTo digest for this week"
   end 
-    mail(:to => user.email, :subject => subject)
+    mail(:to => user.email, :bcc => 'saravanak@gmail.com', :subject => subject)
+    #mail(:to => 'saravanak@gmail.com', :bcc => 'admin@plannto.com', :subject => subject)
   end
   
   def not_follow_user_content(contents,user,item_ids)
@@ -23,8 +24,9 @@ class ContentMailer < ActionMailer::Base
      else
        subject = "PlannTo digest for this week"
       end 
-    mail(:to => user.email, :subject => subject)
+    mail(:to=>user.email, :subject => subject)
   end 
+
   
   def buying_plans(buying_plan)
     @buying_plan = buying_plan
@@ -43,10 +45,12 @@ class ContentMailer < ActionMailer::Base
     params1 = {"sub_type" => ["Reviews","News","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => 'created_at desc' }
     @contents = Content.filter(params1)
     subject = "#{@buying_plan.user_question.title}" 
-    mail(:to => @user.email, :subject => subject)
+    #mail(:to => @user.email, :subject => subject)
+    mail(:to => 'Saravanak@gmail.com', :subject => subject)
   end
   
   def user_welcome_mail(user)
+    @user = user
     buyer_item_ids =  Follow.where("follower_id=? and follow_type =?",user.id,"buyer").collect(&:followable_id)
     @buyer_items = Item.where('id in (?)',buyer_item_ids)
     follow_item_ids = Follow.where("follower_id=? and follow_type =? and followable_type!=?",user.id,"follower","User").collect(&:followable_id)
@@ -77,4 +81,5 @@ class ContentMailer < ActionMailer::Base
     @owned_items = Item.where('id in (?)',owner_item_ids)
      mail(:to => user.email, :subject => 'Welcome to PlannTo')
   end
+
  end
