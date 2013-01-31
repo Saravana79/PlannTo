@@ -325,6 +325,7 @@ class PreferencesController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     session[:product_warning_message] = ''
     session[:content_warning_message] = ''
+    @search = params[:search]
     if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
       if params[:item_ids]
@@ -334,6 +335,7 @@ class PreferencesController < ApplicationController
       @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
       if params[:item_ids]
         Follow.wizard_save(params[:item_ids], 'buyer',current_user)
+        current_user.clear_user_follow_item rescue ''
       end  
     end 
      @question = @buying_plan.user_question #.destroy
