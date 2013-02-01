@@ -275,24 +275,31 @@ class ContentsController < ApplicationController
     @content = Content.find(params[:id])
     #session[:content_warning_message] = "true" 
     session[:itemtype] = @content.items.first.get_base_itemtype 
-    per_page = params[:per_page].present? ? params[:per_page] : 6
-    page_no  = params[:page_no].present? ? params[:page_no] : 1
-   # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
-   #frequency = ((@content.title.split(" ").size) * (0.3)).to_i
-   frequency = 1
-    results = Sunspot.more_like_this(@content) do
+    content_as_item = ContentAsItem.where(:content_id => @content.id).first
+    if  content_as_item.blank?
+      per_page = params[:per_page].present? ? params[:per_page] : 6
+      page_no  = params[:page_no].present? ? params[:page_no] : 1
+      # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
+      #frequency = ((@content.title.split(" ").size) * (0.3)).to_i
+      frequency = 1
+      results = Sunspot.more_like_this(@content) do
       fields :title
       minimum_term_frequency 1
       boost_by_relevance true
       minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
-    @related_contents = results.results
-    #@popular_items = ItemContentsRelationsCache.where(:content_id => @content.id).limit(5)
-    @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
-    @popular_items_ids  = @popular_items.map(&:id).join(",")
-    @comment = Comment.new
-    render :layout => "product"
+      @related_contents = results.results
+      #@popular_items = ItemContentsRelationsCache.where(:content_id => @content.id).limit(5)
+      @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
+      @popular_items_ids  = @popular_items.map(&:id).join(",")
+      @comment = Comment.new
+      render :layout => "product"
+      return true
+    else
+     @item = Item.find(content_as_item.item_id)
+      redirect_to @item.get_url()
+  end   
   end
   
   def search_related_contents
