@@ -43,7 +43,6 @@ module FollowMethods
     #else
     #  flash[:notice] = "Planning is saved"
     #end
-
   end
 
   def own_a_item

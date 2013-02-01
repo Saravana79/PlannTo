@@ -7,8 +7,12 @@
 </div>
 <script>
 $(".plan_to_buy_icon").click(function(e){
-//$(".ui-dialog-content").dialog('destroy');
+  <% if !current_user %>
+ window.location.href = '/create_buying_plan?search_type=<%=@item.type %>&&item_ids=<%= @item.id %>'
+$("#dialog-form").dialog('destroy');
+(".ui-dialog-content").dialog('destroy');
 $("#dialog-form #click_message").show();
+<%end%>
  });
 $(".plan_to_own_icon").click(function(e){
 $("#dialog-form #click_message").show();

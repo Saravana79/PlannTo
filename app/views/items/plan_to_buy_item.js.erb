@@ -25,4 +25,6 @@ Product.show_notice('<%= escape_javascript(flash[:notice]) %>');
  
 }, 12000);
  
+ <%elsif @type == "buy"%>
+    window.location.href = '/create_buying_plan?search_type=<%=@item.type %>'
  <%end%>
