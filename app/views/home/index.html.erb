@@ -1,8 +1,232 @@
+
 <% content_for :image, "http://www.plannto.com/images/n_logo.png" %>
 <% content_for :description, "Everything you want to know about the products that you own or planning to buy." %>
 <div id="maincontainer" class="maincontainerCss1">
 <div class="Homeinnercontent">
+  <script> // To make this work on localhost
+//var nAgt = navigator.userAgent;
+//if ((nAgt.indexOf("Chrome"))!=-1) {
+//document.domain = /(\w+)(.\w+)?$/.exec(location.hostname)[0];
+//}
+function removeCompare(obj){
+    $(obj).parents('.compare-view').remove();
+    key = $(obj).attr('rel') ;
+    $.cookie(key,null);
+    $('#add_to_compare_' + key ).attr('checked',false);
+    var url = $('#compare-items a').attr('href')
+    idsPrt = url.split('=');
+    idsStr = idsPrt[1];
+    var url = url.split('=')[0];
+    idsArr = idsStr.split(',');
+    ids = jQuery.grep(idsArr,function(a){
+        return a != key
+    } );
+    idsStr = ids.join(',')
+    $.cookie('allItems',idsStr)
+    url = $('#compare-items a').attr('href',url + '=' + idsStr)
+    if($('#compare-list .compare-view').length > 1){
+        $('#compare-items').show();
+    }else{
+        $('#compare-items').hide();
+    }
+    if($('#compare-list div.compare-view').length == 0){
+        $('#compare-list').hide();
+    }
+    return false;
+};
 
+//##################################### ADDED BY GANESH #####################################
+function reinitialiseVotingPoshyTip(){   
+    $('.btn_dislike_positive').poshytip('destroy')
+
+    $('.btn_like_positive').poshytip('destroy')
+
+    $('.btn_like_default').poshytip('destroy')
+
+    $('.btn_dislike_default').poshytip('destroy')
+
+    $('.btn_like_negative').poshytip('destroy')
+    $('.btn_dislike_negative').poshytip('destroy')
+
+
+    $('.btn_dislike_positive').poshytip({
+        content: 'Dislike It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_like_positive').poshytip({
+        content: 'Already Liked It, click to cancel it',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_like_default').poshytip({
+        content: 'Like It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_dislike_default').poshytip({
+        content: 'Dislike It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_like_negative').poshytip({
+        content: 'Like It',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+    $('.btn_dislike_negative').poshytip({
+        content: 'Alread Disliked it, click to cancel',
+        className: 'tip-darkgray',
+        bgImageFrameSize: 11,
+        offsetX: -25
+    });
+}
+
+$(document).ready(function(){
+    reinitialiseVotingPoshyTip();
+
+    $("#ui-active-menuitem").mouseout(function() {
+        $("#ui-active-menuitem").hide();
+    });
+
+    $('#plannToSearch1').focus(function(){
+        $(this).val('');
+        $(this).keydown();
+    });
+
+
+
+
+    $("#plannToSearch1").autocomplete({
+        minLength: 2,
+        format: "js",
+        // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
+        source: function( request, response )
+        {
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 5, // The length of each line
+                width: 4, // The line thickness
+                radius: 5, // The radius of the inner circle
+                color: '#2EFE9A', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 50, // Afterglow percentage
+                shadow: true, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('plannToSearchSpan');
+            var spinner = new Spinner(opts).spin(target);
+            $.ajax(
+            {
+                url: "/search/autocomplete_items",
+                data: {
+                    term: request.term,
+                    search_type: $("#plannto_search_type").val()
+                },
+                type: "get",
+                dataType: "json",
+                success: function( data )
+                {
+                    response( $.map( data, function( item )
+                    {
+                        return{
+                            id: item.id,
+                            value: item.value,
+                            imgsrc: item.imgsrc,
+                            type: item.type,
+                            url: item.url
+                        }
+                    }));
+                    spinner.stop();
+                }
+            });
+        },
+        focus:function(e, ui) {
+            return false
+        },
+        select: function( event, ui ) {
+            if (ui.item.id  == 0){
+            	alert(ui.item.url)
+                location.href = "/search/search_items?q=" + ui.item.url
+            // return false;
+            }
+            else{
+                location.href = "" + ui.item.url
+            // return false;
+            }
+        // return false;
+        }
+    })
+       _renderMenu = function(ul, items) {
+        var self = this;
+        $.each(items, function(index, item) {
+            self._renderItem(ul, item, index);
+        });
+        
+        item = {
+            value: "Search more items...",
+            id: "0",
+            imgsrc: ""
+        }
+        self._renderItem(ul, item, -1);
+    };
+    $("#plannToSearch1").data("autocomplete")._renderItem = function(ul, item, index) {
+    	
+        if (item.id == 0) {
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append("<a class='searchMore'>" + item.value + "" + "</a>")
+            .appendTo(ul);
+        }
+        else {
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+            .appendTo(ul);
+        }
+    };
+
+});
+
+  
+$(document).ready(function() {
+        
+    $('a.youtube').youtube();
+    $('span.buttonLink a#youtube_form').click(function() {
+        $("#image_share").hide();
+        $("#article_share").hide();
+        $("#youtube").toggle(2000);
+        //          alert('Handler for .click() called.');
+        return false;
+    });
+
+
+    $('span.buttonLink a#image_form').click(function() {
+        $("#article_share").hide();
+        $("#youtube").hide();
+        $("#image_share").toggle(2000);
+        return false;
+    });
+
+
+    $('span.buttonLink a#article_form').click(function() {
+        $("#youtube").hide();
+        $("#image_share").hide();
+        $("#article_share").toggle(2000);
+        return false;
+    });
+
+});
+
+$("#share_an_article").click(function(){
+        $("share_an_article_form").show();
+    }
+);</script>
 <!-- <link rel="stylesheet" href="slider/themes/default/default.css" type="text/css" media="screen" /> -->
     <link rel="stylesheet" href="slider/themes/light/light.css" type="text/css" media="screen" />
     <!-- <link rel="stylesheet" href="slider/themes/dark/dark.css" type="text/css" media="screen" /> -->
@@ -95,6 +319,215 @@
 </div>
 
 </div>
+
+ <div class="search">
+  
+    <span class="search_txt" id="plannToSearchSpan">
+        <input name="Search" type="text" placeholder="Search Products or Topics" id="plannToSearch1"/>
+   
+    </span>
+    <a class="btn_search" href="#"></a>
+  </div> 
+<table>
+  <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Cars
+        </div>
+        <% configatron.popular_cars.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/car/search" class="txt_blue" style="float:right;">View All Cars</a>
+       </div>
+    </td>
+    <td width="40px;"></td>
+    </td>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Bikes
+        </div>
+        <% configatron.popular_bikes.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/bike/search" class="txt_blue" style="float:right;">View All Bikes</a>
+       </div>
+    </td>
+ </tr>
+   <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Mobiles
+        </div>
+        <% configatron.popular_mobiles.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/mobile/search" class="txt_blue" style="float:right;">View All Mobiles</a>
+       </div>
+    </td>
+    <td width="40px;"></td>
+    </td>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Tablets
+        </div>
+        <% configatron.popular_tablets.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/tablet/search" class="txt_blue" style="float:right;">View All Tablets</a>
+       </div>
+    </td>
+ </tr>
+   <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Cameras
+        </div>
+        <% configatron.popular_cameras.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/camera/search" class="txt_blue" style="float:right;">View All Cameras</a>
+       </div>
+    </td>
+    <td width="40px;"></td>
+    </td>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Cycles
+        </div>
+        <% configatron.popular_cycles.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+       <div class="homepageviewall" >
+            <a href="/cycle/search" class="txt_blue" style="float:right;">View All Cycles</a>
+       </div>
+    </td>
+    <tr>
+    <td width="480px">
+        <div class="homepageprodheaddiv">
+          Popular Topics
+        </div>
+        <% configatron.popular_topics.split(",")[0..2].each do | id| %>
+           <% item = Item.find(id) rescue "" %>
+           <div class="homepageproddiv">
+            <span class="homepageimgspan">
+              <img  src="<%=item.image_url rescue ''%>" alt="<%=item.name%>" width="120" height="90" style= "cursor: pointer;" onclick="parent.location='<%=(item.get_url())%>'"/></span>
+              <span class="homepagenamespan">
+              <a href="<%=item.get_url()%>" class="homepageprodname"><%= item.name %></a><br/>
+            <% if item.is_a? Product %>
+                   <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                    <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "item#{item.id}"} %>
+                 <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">Ratings
+              <span class="txt_blue" > <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>      
+            </a><br />
+            
+             <%end%> 
+           </div>
+           <br/>
+       <%end%>
+      <div class="homepageviewall" >
+            <a href="/camera/topics" class="txt_blue" style="float:right;">View All Camera Topics</a>
+            <br /><br />
+             <a href="/cycle/topics" class="txt_blue" style="float:right;">View All Cycle Topics</a>
+       </div>
+    </td>
+   
+ </tr>
+</table>
 <%end%>
     <script type="text/javascript" src="slider/jquery.nivo.slider.js"></script>
     <script type="text/javascript">
