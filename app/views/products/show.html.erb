@@ -6,8 +6,6 @@
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
 <div id="content_new"></div>
-
-
 <script>
 $(".plan_to_buy_icon").click(function(e){
   <% if !current_user %>
@@ -105,9 +103,67 @@ $("#dialog-form #click_message").show();
   <br/>
   <div style="border-bottom: solid 1px #cdd3d7;display:block;" ></div>
   <br/>
-<div id="contentEditView">
-<%= render :partial => "contents/container", :locals => {:article_categories => @article_categories} %>
+  <%unless current_user %>
+  <% @article_categories.each_with_index do |article_category, index| %>
+	<%if index < 2%>
+   <span class='quick_config_btns' >
+	 <a href="#" class="quick_config_btns_icon button_<%= index %>" data-content="<%=article_category[0]%>"><%=content_write_tab_label(article_category[0])%></a>        
+  </span>
+
+	<%end%>
+	
+	<%end%>
+	<span class='quick_config_btns' >
+	 <a href="#" class="quick_config_btns_icon button_2" data-content="photo">Add a Photo</a> 
+	 </span>
+	 <br />
+	 <br />
+	 
+	 <%end%>
+	   <script type="text/javascript">
+    	
+    	$(function(){
+
+  $('a.quick_config_btns_icon').click(function(e){
+    <%if !current_user %>
+    $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+        openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+     <%end%>    
+   // $(this).parent().toggleClass('selected');
+    var category = $(this).data('content');
+   // $.ajaxSetup({
+   //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+   // });
+	 $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  });
+    //$.get('/contents/quick_new',{'category' : category}, "script");
+    return false
+
+  });
+    $('a.quickCreate').live("click",function(){
+     <%if !current_user %>
+     $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+        openLoginPopup("#" + $(this).attr('id'), "click");
+       return false
+     <%end%>  
+   // $(this).parent().toggleClass('selected');
+    var category = $(this).data('content');
+   // $.ajaxSetup({
+   //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+   // });
+   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  });
+    //$.get('/contents/quick_new',{'category' : category}, "script");
+    return false
+
+  });
+  });
+    </script>
+  <%if current_user %>
+   <div id="contentEditView">
+   <%= render :partial => "contents/container", :locals => {:article_categories => @article_categories} %>
+
 </div>
+<%end%>
 <br/>
 <div>
   <ul id="Newtabs">
