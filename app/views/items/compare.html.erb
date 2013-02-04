@@ -5,7 +5,19 @@
 <%=@item1.itemtype.itemtype.pluralize.capitalize%>
 <%end%>
 </h2>
+<%if @items%>
+<% @itemname  = ''%>
+<%@items.each_with_index do |item, index|%>
+  <%@itemname = @itemname + item.name + ' Vs '%>
+<%end%>
+<%@itemname  = @itemname[0..-4]%>
+<% content_for :title,   @itemname + " - " %>
+<% content_for :description, "Compare "+ @itemname + " based on price, specifications, rating, reviews, deals and latest news."%>
 
+<%else%>
+
+<% content_for :title, " - Compare Items" %>
+<%end%>
 <div class="comparedivcontainer">
   <div class="comparetopdiv">    
     <div class="rightcol">
