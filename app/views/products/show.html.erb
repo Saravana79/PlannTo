@@ -5,6 +5,9 @@
 <div class="float_rgt">
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
 </div>
+<div id="content_new"></div>
+
+
 <script>
 $(".plan_to_buy_icon").click(function(e){
   <% if !current_user %>
@@ -292,5 +295,11 @@ Message : <br />
       $("ul#Newtabs li#all_variant").addClass("tab_active");
      })
   </script>
+<%if @write_review == "write_review" %>
 
+ <script type="text/javascript">
+   $("#contentReviews").click();
+   document.getElementById('review_content_title').focus();
+ </script>
+<%end%>
 

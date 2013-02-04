@@ -26,7 +26,14 @@ class ContentMailer < ActionMailer::Base
       end 
     mail(:to=>user.email, :subject => subject)
   end 
-
+ 
+ def content_write(user)
+    @items = []
+    @username = user.username
+    @userfullname = user.name
+    Follow.where('follower_id =?  and follow_type in (?)',user.id,["owner","follower","buyer"]).map{|i| @items << Item.find(i.followable_id) }
+    mail(:to => user.email, :subject => 'Write content about your owned item') 
+  end
   
   def buying_plans(buying_plan)
     @buying_plan = buying_plan

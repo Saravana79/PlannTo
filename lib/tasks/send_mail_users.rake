@@ -19,7 +19,7 @@ desc "send email to user"
        followed_item_ids = []
           Item::FOLLOWTYPES.each do |type| 
           it = [] 
-          it+= Follow.where('follower_id =? and followable_type in (?)',user.id,type).collect(&:followable_id).uniq
+          it+= Follow.where('follower_id =? and followable_type in (?) and follow_type in (?)',user.id,type,["follower","owner"]).collect(&:followable_id).uniq
           unless it.blank?
             case type
             when 'Mobile' 
@@ -101,14 +101,13 @@ WHERE
  #     content_ids = configatron.top_content_ids.split(",")
  #  end  
 
-  unless content_ids.size <= 2     
-     @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
-      
+  if content_ids.size < 10 
+    cont_ids = content_ids + configatron.top_content_ids.split(",")
+    @contents =  Content.find(:all, :conditions => ['id in (?)',cont_ids[0..9]],:order => "total_votes desc" ) 
+    puts content_ids.to_s + " content count"    
   else
-    @contents =  Content.find(:all, :conditions => ['id in (?)',configatron.top_content_ids.split(",")],:order => "total_votes desc" ) 
-    puts content_ids.to_s + " content count"
-    
-  end   
+    @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
+ end   
 puts user.id.to_s + " - User id"
 puts content_ids.to_s + " content Id"
 puts "*****"
@@ -156,5 +155,18 @@ end
          ContentMailer.user_welcome_mail(user).deliver
        end  
        end  
-   
+    task :ask_content_write_mail,:arg1, :needs => :environment do | t, args|
+      userid = args[:arg1].to_i
+      if( userid != 0)
+         users = User.find(:all, :conditions=> ["id = ?" ,userid])
+      else
+        users_1 = User.all
+        users_2 = []
+        Content.where('sub_type =?','Reviews').map{|c| users_2 << User.find(c.created_by) }
+        users = users_1 - users_2.uniq
+      end 
+       users.each do |user|
+         ContentMailer.content_write(user).deliver
+       end  
+      end 
     
