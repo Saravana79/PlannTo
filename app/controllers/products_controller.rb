@@ -59,6 +59,7 @@ class ProductsController < ApplicationController
   def show
     @filter_by = params["fl"]
     @write_review = params[:type]
+    @warning = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last

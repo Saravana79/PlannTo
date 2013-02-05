@@ -7,20 +7,20 @@
    </div>
   </div>
   <div style="display:block;height:30px;"></div>
- <%elsif @static_page!="true" && (session[:product_warning_message] == "true" || !current_user)%>
+ <%elsif @static_page!="true" && (session[:product_warning_message] == "true" || (!current_user&& @warning == "true"))%>
  <div id="giveAdviceDialog"> </div>
   <div class="outerdivwarning">
   <div  class="innerdivwarning">
-    <span>Are you planning to buy a <%= session[:itemtype].downcase%>? Get all the information required for you to take a informed decision.</span> 
+    <span>Are you planning to buy a <%= session[:itemtype].downcase rescue ""%>? Get all the information required for you to take a informed decision.</span> 
     <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
   </div>
 </div>
 <div style="display:block;height:30px;"></div>
-<%elsif @static_page!="true" && (session[:content_warning_message] == "true" || !current_user )%>
+<%elsif @static_page!="true" && (session[:content_warning_message] == "true" || (!current_user && @warning == "true") )%>
  <div class="outerdivwarning">
  <div id="giveAdviceDialog"> </div>
   <div  class="innerdivwarning">
-    <span>Are you planning to buy a <%= session[:itemtype].downcase%>? Get all the information required for you to take a informed decision.</span> 
+    <span>Are you planning to buy a <%= session[:itemtype].downcase rescue ''%>? Get all the information required for you to take a informed decision.</span> 
     <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
   </div>
 </div>
