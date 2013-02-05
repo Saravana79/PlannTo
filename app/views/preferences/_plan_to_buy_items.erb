@@ -58,9 +58,9 @@
             <td width="113" height="85"><a href="<%=(item.get_url()) rescue ''%>"><img src="<%= item.image_url rescue ''%>" width="92" height="69"/></td>
             <td width="113">
             <div>
-            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a> 
+            <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover" style="margin-right:10px;"><%= item.name rescue ''%></a> 
             <%if !@buying_plan.completed? && @follow_item != '' %>
-              <%= link_to "Remove", follow_path(follow),:method => :delete %> 
+              <%= link_to "(Remove)", follow_path(follow),:method => :delete, :style=>"font-size:9px;color:gray;" %> 
             <%end%>
              
            </div>

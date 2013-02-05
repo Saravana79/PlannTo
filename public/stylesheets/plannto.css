@@ -4460,5 +4460,5 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
 .divbody{width:100%;background:url(/images/bg_header1.png) repeat-x top;clear:both}
 .divbody1{width:100%;background:url(/images/bg_header2.png) repeat-x top;clear:both}
 .outerdivwarning{display: block;width: 100%; top: 0px; left: 0px; z-index: 5000;position:fixed;}
-.innerdivwarning{font-size: 14px;font-weight: normal;height: 30px;line-height: 30px;margin: 0;overflow: visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: #eb583c;color: #ffffff;border-bottom-color: #ffffff;}
+.innerdivwarning{font-size: 14px;font-weight: normal;height: 30px;line-height: 30px;margin: 0;overflow: visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: #eb583c;color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
 .hyperlinkwarning{background: #4a4844;padding: 2px 8px 2px 8px;color: #ffffff;text-decoration: none;font-size: 12px;}
