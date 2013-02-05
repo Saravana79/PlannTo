@@ -72,20 +72,20 @@ $(document).ready(function() {
 <div  style="clear:both;float:right;padding:5px;width:220px;padding:15px 20px 10px 0px;">
 	<div id="preferenceSpinner"></div>
  	 <button href="#" class="searchButton" style="font-size:15px;" id="updatePreference">Next Step</button>
-     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip"> or <a href="#">skip</a></p>
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip"> or <a href="#"><%=link_to "Skip",create_preference_preferences_path,:method => :post,:remote => :true %></a></p>
   <div>      
   </div>    
 </div>
 </div>  <%if !current_user %>
         <script>
          $("#skip a").click(function(){
-         $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render 'preferences/add_preference_items', :items => (@considered_items),:without_login => "true" ) %></div>");
+         $("#giveAdviceDialog").html("<%= escape_javascript(render 'preferences/add_preference_items', :items => (@considered_items),:without_login => "true" ) %>");
          });
         </script>
         <%else%>
         <script>
          $("#skip a").click(function(){
-         $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render 'preferences/add_preference_items', :items => get_items_with_constraint(@follow_item, @follow_types) )%></div>");
+         $("#giveAdviceDialog").html("<%= escape_javascript(render 'preferences/add_preference_items', :items => get_items_with_constraint(@follow_item, @follow_types) )%>");
          });
         </script>
         <%end%>

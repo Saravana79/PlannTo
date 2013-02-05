@@ -35,7 +35,7 @@
      <button href="#" class="searchButton" style="font-size:15px;" id="preferenceGoToStep3">Next Step</button>
      
     <%#= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip">or <a href="#">skip</a></p>
+     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip">or <a href="#"><%=link_to "Skip",edit_user_question_preferences_path(:buying_plan_id => @buying_plan.id),:method => :post,:remote => :true %></a></p>
       <div>
          <%= render "shared/ajax_loader" %>
       </div>
