@@ -135,14 +135,14 @@ module ContentsHelper
     when "Reviews" then "Write a Review"
     when "Q&A" then "Ask a Question"
     when "Tips" then "Add a Tip"
-    when "Accessories" then "Add a Accessory"
+    when "Accessories" then "Add an Accessory"
     when "Photo" then "Add a Photo"
     when "News" then "Add a News"
     when "Deals" then "Add a deal"
     when "Event" then "Add a Event"
     when "How To/Guides" then "Add a How To/Guide"
     when "Book" then "Add a Book"
-    when "Apps" then "Add an Apps"
+    when "Apps" then "Add an App"
     else name
     end
     return label
@@ -160,7 +160,7 @@ module ContentsHelper
     when "Event" then "Submit a Event"
     when "How To/Guides" then "Submit a How To/Guide"
     when "Book" then "Submit a book"
-    when "Apps" then "Submit an Apps"
+    when "Apps" then "Submit an App"
     else ""
     end
     return label
