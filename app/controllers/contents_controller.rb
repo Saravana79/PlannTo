@@ -274,7 +274,7 @@ class ContentsController < ApplicationController
   def show
     @content = Content.find(params[:id])
     #session[:content_warning_message] = "true"
-    @warning = "true" 
+    session[:warning] = "true"
     session[:itemtype] = @content.items.first.get_base_itemtype 
     content_as_item = ContentAsItem.where(:content_id => @content.id).first
     if  content_as_item.blank?

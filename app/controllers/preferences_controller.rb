@@ -134,7 +134,6 @@ class PreferencesController < ApplicationController
       end
       @search_form_lookups = $search_form_lookups
     end
-
     sunspot_search_fields = Array.new
     @search_attributes.each do |search_attr|
       unless search_attr.try(:attribute).nil?
@@ -387,12 +386,20 @@ sunspot_search_items
 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
-   if !current_user
+
+   logger.info @follow_item  
+   @items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..7]
+   item_ids = @items.collect(&:id).join(",")
+    if !current_user
+      @buying_plan.update_attribute('items_considered',item_ids)
+    else   
+      Follow.wizard_save(item_ids, 'buyer',current_user)
+   end 
+    if !current_user
       @considered_items  = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
    else   
      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
    end 
-logger.info @follow_item   
   end
 
   def update_preference

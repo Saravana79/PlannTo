@@ -31,7 +31,8 @@ class ProductsController < ApplicationController
     @filter_by = params["fl"]
     search_type = request.path.split("/").last
     @type = search_type.singularize.camelize.constantize
- 
+    session[:itemtype] = @type
+    session[:warning] = "true" 
     @itemtype = Itemtype.find_by_itemtype(@type)
     @popular_topics = Item.popular_topics(@type)
     @article_categories = ArticleCategory.get_by_itemtype(@itemtype.id) #ArticleCategory.by_itemtype_id(@itemtype.id)#.map { |e|[e.name, e.id]  }
@@ -59,7 +60,7 @@ class ProductsController < ApplicationController
   def show
     @filter_by = params["fl"]
     @write_review = params[:type]
-    @warning = "true"
+    session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
