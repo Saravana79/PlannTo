@@ -1,4 +1,5 @@
 <div class="">
+ 
   <span>
     <%if can_update_preference?(@buying_plan)%>
      
@@ -12,44 +13,83 @@
 </div>
 <div id="photo_box"  style="padding:20px 00px 0px 85px;">
 <div class="clear"></div>
-<% items.each do |follow| %>
-   <%if without_login == "true" %>
-     <%item = follow %>
-    <%else%> 
-      <% item = follow.followable %>
-    <%end%>  
-     <div class="productinwizard" id="product_<%= item.id %>" style="width:160px;height:180px;display:block;background-color:#f9f9f9;">
-   <div id="product_image" style="display:none;">image</div>
-   <div class="imgprofilediv">
+<% @default_considered_items.each do |follow| %>
+  <%item = follow %> 
+    <div class="productinwizard" id="" style="width:160px;height:180px;display:block;background-color:#f9f9f9;">
+      <div id="product_image" style="display:none;">image</div>
+       <div class="imgprofilediv">
         <div class="imgpicbtnspan">
           <div style="margin-left:20px;width:160px;height:120px;display:block;">
-       
-             <%= link_to image_tag(item.image_url, height: "120", width: "160"), follow.blank?? follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}) : "#", :method => :post%>
-         
-        
-         </div>
-      
+         <%= link_to image_tag(item.image_url, height: "120", width: "160"), follow.blank?? follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}) : "#", :method => :post%>
+          </div>
         </div>
         <span class="imgtextspan">
             <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;;margin-left:20px"%>
         </span>
       </div>
     
-     <%if follow.blank? %>
-      
+     <%if !item.blank? %>
         <div class="btn-group PadT10" style="margin-left:50px;">
-            <%= link_to 'Plan to buy', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+            <%= link_to 'Plan to buy', plan_to_buy_preferences_path(:item_id => item.id,:buying_plan_id => @buying_plan.id,:display_type=> "popup"),:method => :get,:remote => :true,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
           </div>
-     
-          <%else%>
-             <div class="Clearboth PadT10">
+      <%else%>
+         <div class="Clearboth PadT10">
             <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
               <tr>
                 <td><div class="btn-group">
                      <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= "Plan to buy" rescue "" %></a>
                       <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
                         <ul class="dropdown-menu">
-                          <%if without_login == "true" %>
+                          <%if !current_user %>
+                             <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , considered_item_delete_preferences_path(:item_id => follow.id,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:remote => :true %></a></li>
+                         <%else%>
+                            <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , follow_path(follow,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:method => :delete ,:remote => :true %></a></li>
+                          <%end%>   
+                         <li class="divider"></li>
+                          <li> </li>
+                        </ul>
+                     
+                    </div></td>
+              </tr>
+            </table>
+           </div>      
+           <%end%>
+         </div>
+    <%end%>
+  <div class="clear"></div>
+    <% items.each do |follow| %>
+      <%if !current_user %>
+          <%item = follow %>
+      <%else%> 
+          <% item = follow.followable %>
+      <%end%>  
+        <div class="productinwizard" id="product_<%= item.id %>" style="width:160px;height:180px;display:block;background-color:#f9f9f9;">
+          <div id="product_image" style="display:none;">image</div>
+          <div class="imgprofilediv">
+          <div class="imgpicbtnspan">
+           <div style="margin-left:20px;width:160px;height:120px;display:block;">
+              <%= link_to image_tag(item.image_url, height: "120", width: "160"), follow.blank?? follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}) : "#", :method => :post%>
+         
+        </div>
+       </div>
+        <span class="imgtextspan">
+            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;;margin-left:20px"%>
+        </span>
+      </div>
+    
+     <%if follow.blank? %>
+        <div class="btn-group PadT10" style="margin-left:50px;">
+            <%= link_to 'Plan to buy', follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}), :method => :post,:class=>"btn btn-primary", :style=>'background:#ece1e1;'%> </a>
+          </div>
+        <%else%>
+           <div class="Clearboth PadT10">
+            <table border="0" cellspacing="0" class="marginauto" cellpadding="0" align="center" >
+              <tr>
+                <td><div class="btn-group">
+                     <a href="#" class="btn btn-primary"><i class="icon-user icon-white"></i><%= "Plan to buy" rescue "" %></a>
+                      <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a> 
+                        <ul class="dropdown-menu">
+                          <%if !current_user %>
                              <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , considered_item_delete_preferences_path(:item_id => follow.id,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:remote => :true %></a></li>
                           <%else%>
                             <li><a href="#" id='write_review'><i class="icon-pencil"></i><%= link_to "Delete" , follow_path(follow,:buying_plan_id => @buying_plan.id ) ,:id => "close_#{item.id}",:method => :delete ,:remote => :true %></a></li>
@@ -70,7 +110,10 @@
             </div>
     <%end%>
  
-</div>
+
+
+
+ </div>
 
 <%= hidden_field_tag "buying_plan_id", @buying_plan.id %>
 <%= hidden_field_tag "per_page_value", @per_page || ""%>

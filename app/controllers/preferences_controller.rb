@@ -340,11 +340,14 @@ class PreferencesController < ApplicationController
      @question = @buying_plan.user_question #.destroy
      @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
-  if !current_user
-    @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0) )
-  else  
-    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
-  end  
+   if !current_user
+      @considered_items  = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
+   else   
+     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
+    @follow_item_1 = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer)
+    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
+   end 
 logger.info @follow_item  
     if @question.nil?
     @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
@@ -386,20 +389,23 @@ sunspot_search_items
 
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
     logger.info @follow_types
-
-   logger.info @follow_item  
-   @items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..7]
-   item_ids = @items.collect(&:id).join(",")
-    if !current_user
-      @buying_plan.update_attribute('items_considered',item_ids)
-    else   
-      Follow.wizard_save(item_ids, 'buyer',current_user)
-   end 
-    if !current_user
+  if !current_user
       @considered_items  = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
    else   
      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
+    @follow_item_1 = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer)
+    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
    end 
+   logger.info @follow_item  
+    
+  
+    #if !current_user
+     # @buying_plan.update_attribute('items_considered',item_ids)
+    #else   
+     # Follow.wizard_save(item_ids, 'buyer',current_user)
+   #end 
+   
   end
 
   def update_preference
@@ -519,6 +525,7 @@ sunspot_search_items
     @itemtype = @buying_plan.itemtype
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ''
     @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
+    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
   end 
   
   private
@@ -529,7 +536,10 @@ sunspot_search_items
     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ''
     if @follow_item == ''
       @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
-    end   
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
+    else
+      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item
+    end  
   end
 
   def follow_item(follow_type,item_id)
