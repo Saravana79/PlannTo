@@ -325,38 +325,16 @@ class PreferencesController < ApplicationController
     session[:product_warning_message] = ''
     session[:content_warning_message] = ''
     @search = params[:search]
+    @separate_url_item_ids = params[:item_ids]
     if !current_user
-      @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
-      if params[:item_ids]
-        @buying_plan.update_attribute('items_considered',params[:item_ids])
-      end  
+      @buying_plan = BuyingPlan.where(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first
     else   
-      @buying_plan = BuyingPlan.find_or_create_by_user_id_and_itemtype_id_and_completed_and_deleted(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
-      if params[:item_ids]
-        Follow.wizard_save(params[:item_ids], 'buyer',current_user)
-        current_user.clear_user_follow_item rescue ''
-      end  
+      @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first
     end 
-     @question = @buying_plan.user_question #.destroy
-     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-    logger.info @follow_types
-   if !current_user
-      @considered_items  = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
-      @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
-   else   
-     @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
-     @follow_item_ids = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).collect(&:followable_id)
-    @follow_item_1 = Item.where('id in (?)', @follow_item_ids)
-    @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
-   end 
-logger.info @follow_item  
-    if @question.nil?
-    @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
-   @question.save
+      @follow_types = Itemtype.get_followable_types(@itemtype.itemtype)
+      @search_type = params[:search_type]
+      sunspot_search_items
    end
-    @search_type = params[:search_type]
-    sunspot_search_items
-  end
 
   def edit_preference
     @buying_plan = BuyingPlan.find(params[:id])
@@ -369,11 +347,18 @@ sunspot_search_items
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
      if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
+       if params[:separate_url_item_ids]
+         @buying_plan.update_attribute('items_considered',params[:separate_url_item_ids])
+       end  
     else   
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id,:deleted => 0)
        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
+       if params[:separate_url_item_ids]
+          Follow.wizard_save(params[:separate_url_item_ids], 'buyer',current_user)
+          current_user.clear_user_follow_item rescue ''
+       end
     end 
     end
     #@buying_plan.update_attribute(:deleted, false)
@@ -401,7 +386,12 @@ sunspot_search_items
    end 
    logger.info @follow_item  
     
-  
+     @question = @buying_plan.user_question 
+   if @question.nil?
+   
+     @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
+     @question.save
+   end  
     #if !current_user
      # @buying_plan.update_attribute('items_considered',item_ids)
     #else   
@@ -540,7 +530,7 @@ sunspot_search_items
       @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
       @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @considered_items
     else
-     @follow_item_ids = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).collect(&:followable_id)
+      @follow_item_ids = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).collect(&:followable_id)
     @follow_item_1 = Item.where('id in (?)', @follow_item_ids)
       @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
     end  
@@ -613,7 +603,7 @@ sunspot_search_items
     ############## PREFERENCES SECTION ######################
 
     preferences = Array.new
-    @preferences_list = preferences = Preference.get_preferences(@buying_plan.id, itemtype.id, @search_attributes.collect{|item| item.id})
+    @preferences_list = preferences = Preference.get_preferences((@buying_plan.id rescue 0), itemtype.id, @search_attributes.collect{|item| item.id})
     ############ PREFERENCE SECTION ENDS#############
     $search_type = @search_type
 
