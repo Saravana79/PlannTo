@@ -15,7 +15,8 @@ class FollowsController < ApplicationController
       @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
       @itemtype = @buying_plan.itemtype
       @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type)
-      @follow_item_1 = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer)
+      @follow_item_ids = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).collect(&:followable_id)
+      @follow_item_1 = Item.where('id in (?)', @follow_item_ids)
       @default_considered_items = search_preference_tems(@buying_plan,@itemtype,1,"1").results[0..3] - @follow_item_1
    else
      redirect_to :back, :notice => "Successfully unfollowed."
