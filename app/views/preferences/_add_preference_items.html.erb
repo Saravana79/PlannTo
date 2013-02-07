@@ -1,14 +1,13 @@
 
 <!--<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:910px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div> -->
 <br />
-<br />
-<br />
+
 <div class="step_main_page" style="padding-top:40px;">
 <div class="main_step">
-	<ul>
+	<ul style="margin-left: 70px;">
 <li >Step 1</li>
 <li class="selected">Step 2</li>
-<li>Step 3</li>
+<!--<li>Step 3</li>-->
 </ul>
 
 <div class="clearboth"></div>
@@ -32,10 +31,12 @@
      <div style="clear:both;"></div>
      <%= render "preferences/display_items", :items => items,:without_login => (without_login rescue "") %>
      <div class="search_block" style="float:right;padding:0px;margin-top:50px;">
-     <button href="#" class="searchButton" style="font-size:15px;" id="preferenceGoToStep3">Next Step</button>
+     <button href="#" class="searchButton" style="font-size:15px;" id="preferenceGoToStep3">Complete</button>
      
     <%#= f.submit 'Next Step',:id => "publishanswer",:class=>"searchButton",:style=>"font-size:15px;" %>
-     <p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip">or <a href="#"><%=link_to "Skip",edit_user_question_preferences_path(:buying_plan_id => @buying_plan.id),:method => :post,:remote => :true %></a></p>
+     <!--<p style="margin:10px 0px 0px 5px;font-size:15px;color:gray;" id="skip">or <a href="#">
+     <%#=link_to "Skip",edit_user_question_preferences_path(:buying_plan_id => @buying_plan.id),:method => :post,:remote => :true %>
+     </a></p>-->
       <div>
          <%= render "shared/ajax_loader" %>
       </div>
