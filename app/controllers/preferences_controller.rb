@@ -347,7 +347,7 @@ sunspot_search_items
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
      if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
-       if params[:separate_url_item_ids]
+       if !params[:separate_url_item_ids].blank?
          @buying_plan.update_attribute('items_considered',params[:separate_url_item_ids])
        end  
     else   
@@ -355,7 +355,7 @@ sunspot_search_items
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id,:deleted => 0)
        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
-       if params[:separate_url_item_ids]
+       if !params[:separate_url_item_ids].blank?
           Follow.wizard_save(params[:separate_url_item_ids], 'buyer',current_user)
           current_user.clear_user_follow_item rescue ''
        end
