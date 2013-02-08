@@ -15,7 +15,8 @@ class VoteCount < ActiveRecord::Base
     count = self.vote_count_positive - self.vote_count_negative
     if self.voteable_type == "Content"
       #update content table
-      self.voteable.update_attributes(:no_of_votes => self.voteable.votes.count, :positive_votes => self.vote_count_positive, :negative_votes => self.vote_count_negative, :total_votes => count, :comments_count => self.comment_count)
+      self.voteable.update_attributes(:no_of_votes => self.voteable.votes.count, :positive_votes => #self.vote_count_positive, :negative_votes => self.vote_count_negative, :total_votes => count, :comments_count => self.comment_count)
+      self.vote_count_positive, :negative_votes => self.vote_count_negative, :total_votes => count)
     end
     
     redis_key_prefix = get_cache_prefix
