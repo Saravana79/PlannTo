@@ -15,7 +15,7 @@ class ImageuploadsController < ApplicationController
   
    def tag
     @item = Item.find(params[:item_id])
-    @insertString = "<a href=\"http://www.plannto.com#{@item.get_url}\" /> #{@item.name}</a>"
+    @insertString = "<a href=\"#{@item.get_url}\" /> #{@item.name}</a>"
     render :layout => false
   end
    def autocomplete_tag
