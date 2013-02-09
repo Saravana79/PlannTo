@@ -507,7 +507,7 @@ $(document).ready(function(){
                 alert("Please select a search criteria.");
                 return false
             }
-            var value = "" + $("#which_type").val() + " "  + number_to_indian_currency(minValue) + " " + $("#which_unit").val() + " - " + number_to_indian_currency(maxValue) + " "  + $("#which_unit").val() + ""
+            var value = "" + $("#which_type").val() + " "  + intToFormat(minValue) + " " + $("#which_unit").val() + " - " + intToFormat(maxValue) + " "  + $("#which_unit").val() + ""
             var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
         }
         else if (($("#which_type").val() == "Greater than") || ($("#which_type").val() == "Less then"))
