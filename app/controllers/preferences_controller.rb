@@ -24,6 +24,7 @@ class PreferencesController < ApplicationController
     @itemtype = @buying_plan.itemtype
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ""
+   @considered_items  = []
     if @follow_item == ""
        @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0) )
        @item_ids = []
@@ -45,17 +46,17 @@ class PreferencesController < ApplicationController
       else
         session[:counter]+= 1
       end
+     
       unless params[:type] == "create"     
         if current_user
-         if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && session[:counter] == 1
-            params[:type] = nil 
-          if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size > 0
+          if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0
              params[:type] = "Recommendations"
           end  
-              if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size ==  0
-             params[:type] = "Guides"
-          end  
-          
+           if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0
+             params[:type] = "guides"
+          end 
+         if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && session[:counter] == 1
+            params[:type] = nil 
          elsif session[:counter] == 1 && (@buying_plan.user.id != current_user.id)
             params[:type] = "Recommendations"
           end
@@ -64,14 +65,16 @@ class PreferencesController < ApplicationController
         end
       else
         params[:type] = nil  
-         if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size > 0
+         if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0
              params[:type] = "Recommendations"
           end  
-              if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size ==  0
-             params[:type] = "Guides"
+              if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0
+             params[:type] = "guides"
           end    
       end  
- 
+       if params[:overview] == "true" 
+         params[:type] = nil
+      end
       if params[:type] == "guides"
         @item_ids = ""
         @guide = Guide.find(1)

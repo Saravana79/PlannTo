@@ -144,7 +144,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
   <br/>
 
 							<ul id="Newtabs" style="padding-top:15px;">
-   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?"><span>Overview</span></a></li>
+   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?overview=true"><span>Overview</span></a></li>
         <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
         <%if params[:search_type] != "car" and  params[:search_type]  !="bike"%> <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li>  <%end%>
         <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
@@ -367,6 +367,11 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			  <%@order = "" %>
 			  <% @custom = "" %>
 			  <%@contents= "" %>
+			    <br />
+			    <br />
+			    <%if @considered_items.size == 0 && @follow_item.size == 0 && @preferences_list.size == 0 %>
+			  		<div class="alert alert-block">We are showing buying guides for <%=params[:search_type] %>, please update your preferences or considered items to have more personalized buying plan page. </div>
+			  		<%end%>
 					<div id="content_all">
     <%= render "contents/filter_by_options",:buying_plan => @buy_plan%>
     <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>

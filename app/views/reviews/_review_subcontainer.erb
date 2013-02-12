@@ -5,7 +5,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
     display: none !important;
 }
 </style>
-  <div id="notification" class="notificationStyle">Thank You, Review has been created.If your score is  less than 10 then it goes to admin approval</div>
+  <div id="notification" class="notificationStyle"><%if current_user.total_points > 10 %>Thank You, Review has been created.<%else%> Thanks for sharing the Review. Its sent for approval, once it is reviewed it would be available for others<%end%></div>
   <%if @content.nil?%>
     <%@form_id = "new_review_content"%>
     <%@title_id = "review_content_title"%>

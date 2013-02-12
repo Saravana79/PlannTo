@@ -18,7 +18,7 @@
   <%= form_for @content || QuestionContent.new,:html => { :id => "#{@form_id}",:class => "test" }, :remote => true do |f| %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
-    <div id="notification" class="notificationStyle">Thank You, Question has been created.If your score is  less than 10 then it goes to admin approval</div>
+    <div id="notification" class="notificationStyle"><%if current_user.total_points > 10 %>Thank You, Question has been created.<%else%> Thanks for sharing the Qusetion. Its sent for approval, once it is reviewed it would be available for others<%end%></div>
     <%if Rails.env == "development"%>
   <% unless params[:sub_type] %>
    <div style="float:right;margin-left:2000px;">

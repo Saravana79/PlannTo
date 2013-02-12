@@ -23,7 +23,11 @@ $(".ui-dialog").css("display", "none");
     <%if params[:article_content][:sub_type] == "Photo" && @facebook_post != "1" %>
      window.location.href = "<%= "#{session[:return_to]}" %>"
     <%end%> 
-    $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.If your score is  less than 10 then it goes to admin approval");
+    <%if @display!='false' %>
+     $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.");
+    <%else%>
+       $('div#subContainerContentCreate #notification').text("Thank you for sharing the <%=@article.sub_type.singularize %>.Its sent for approval,once it is reviewed it would be available for others.");
+     <%end%>
   $('div#subContainerContentCreate #notification').fadeIn('slow');
    setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 4000);
    $("#article_errors").hide();
