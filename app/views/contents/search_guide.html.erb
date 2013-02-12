@@ -25,4 +25,16 @@
 	</div>
 </div>
 
+<div class="rightcolumnsmall">
+<br/>
+<%= render "shared/quick_links", :search_type => @itemtype.itemtype.pluralize %>
+<br/>
+<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
+  <%= render "shared/share_buttons", :caption_text => 'Check out the buying guides of ' + @itemtype.itemtype.downcase + ' in PlannTo.com' %>
+</div>
+<br/>
+<%=render :partial => "shared/google_adsense_square" %>
+<br/>
+<!--<#%= render :partial => 'products/popular_items',:locals => {:type => 'Bike'} %>-->
+</div>
 

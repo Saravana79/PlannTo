@@ -220,11 +220,11 @@ class ContentsController < ApplicationController
      # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
     else
       @article_categories = ArticleCategory.get_by_itemtype(0) #ArticleCategory.where("itemtype_id = ?", 0)
-      @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize) if params[:itemtype].present?
+      @itemtype = Itemtype.find_by_itemtype(params[:itemtype].singularize.camelize.constantize) if params[:itemtype].present?
       
      # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
     end
-
+    
     if !@item.nil?
       # @item_id = params[:item_id] if params[:item_id].present?
       sub_type = get_sub_type('All',   "") #@article_categories.collect(&:name)
