@@ -28,7 +28,9 @@ $(".ui-dialog").css("display", "none");
    setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 4000);
    $("#article_errors").hide();
    $('div#subContainerContentCreate form#new_create_article_content_form')[0].reset();
+  <%if @display!='false' %>
    $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
+   <%end%>
    showCreateProductTag();
   <%else%>
   <% if @external.blank? %>
