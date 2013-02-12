@@ -3433,7 +3433,7 @@ p.table_bot_text a:hover { text-decoration:none;}
 
 body.Inner_page { background:none !important; overflow:hidden;}
 .body1.Inner_page { background:none !important; overflow:hidden;}
-.header_fix { width:100%; float:left; background:url(../images/header_fixbg.png) repeat-x left top; height:52px; position:fixed;}
+.header_fix { width:100%; float:left; background:url(../images/header_fixbg.png) repeat-x left top; height:52px; position:fixed;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
 .header_fix_inner { width:1000px; margin:auto; height:52px;}
 .fix_logo { float:left; padding:10px 0 0 0;}
 
