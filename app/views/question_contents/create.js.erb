@@ -17,8 +17,9 @@ $('div#question_contentDiv div#notification').fadeIn('slow');
 setTimeout("$('div#question_contentDiv div#notification').fadeOut('slow');", 5000);
 showDefaultProductTag("question_product_item_list", "question_content_item");
 <%end%>
-
-$("#newContentList").append('<%= escape_javascript(render_content_type(@questioncontent)) %>');
+<%if @display!='false' %>
+  $("#newContentList").append('<%= escape_javascript(render_content_type(@questioncontent)) %>');
+ <%end%> 
 
 <% if @facebook_post == "1" %>
 window.location.href = "/oauth/new";

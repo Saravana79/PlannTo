@@ -11,8 +11,10 @@ if(window.opener) {
     $("#products_error").html("<h2>Please select at least one product.</h2>");
  <%else%> 
    $("#contentEditView").dialog('close');
-   $(".ui-dialog").css("display", "none"); 
+   $(".ui-dialog").css("display", "none");
+  <%if @display!='false' %> 
    $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
+   <%end%>
  <%end%>  
 <%else%> 
  $("#contentEditView").dialog('close');
@@ -20,7 +22,9 @@ $(".ui-dialog").css("display", "none");
  $('#new_review_content')[0].reset();
   $('div#articleReviewSubContainer div#notification').fadeIn('slow');
   setTimeout("$('div#articleReviewSubContainer div#notification').fadeOut('slow');", 5000);
+  <%if @display!='false' %>
   $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
+  <%end%>
  <%if @reviewcontent.errors.empty? %>
  $("#review_it").html("");
  <%end%>

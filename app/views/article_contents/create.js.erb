@@ -1,5 +1,3 @@
-
-
 if(window.opener) {
  window.close();
 <%if @facebook_post != "1" %>
@@ -15,7 +13,9 @@ if(window.opener) {
 <%if params[:content_create_form_type] == "Popup"%>
 $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none"); 
+ <%if @display!='false' %>
 $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
+<%end%>
 <%else%>
 $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none");
@@ -23,7 +23,7 @@ $(".ui-dialog").css("display", "none");
     <%if params[:article_content][:sub_type] == "Photo" && @facebook_post != "1" %>
      window.location.href = "<%= "#{session[:return_to]}" %>"
     <%end%> 
-    $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.");
+    $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.If your score is  less than 10 then it goes to admin approval");
   $('div#subContainerContentCreate #notification').fadeIn('slow');
    setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 4000);
    $("#article_errors").hide();
@@ -47,8 +47,9 @@ $(".ui-dialog").css("display", "none");
    hideAddImageUrl();
    hideReview();
    hideProductTag();
-   
-   $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
+   <%if @display!='false' %>
+     $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
+   <%end%>  
   <% else %>   
     window.open('', '_self', '');
     window.close();

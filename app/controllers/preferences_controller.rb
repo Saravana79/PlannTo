@@ -15,24 +15,7 @@ class PreferencesController < ApplicationController
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
-      unless session[:counter]
-        session[:counter]=1
-      else
-        session[:counter]+= 1
-      end
-      unless params[:type] == "create"     
-        if current_user
-         if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && session[:counter] == 1
-            params[:type] = nil 
-         elsif session[:counter] == 1 && (@buying_plan.user.id != current_user.id)
-            params[:type] = "Recommendations"
-          end
-        elsif session[:counter] == 1
-           params[:type] = "Recommendations"
-        end
-      else
-        params[:type] = nil    
-      end  
+
       
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
@@ -57,10 +40,42 @@ class PreferencesController < ApplicationController
       @where_to_buy_items = []
     end
    end 
-    if params[:type] == "guides"
-      @item_ids = ""
-      @guide = Guide.find(1)
-    end 
+      unless session[:counter]
+        session[:counter]=1
+      else
+        session[:counter]+= 1
+      end
+      unless params[:type] == "create"     
+        if current_user
+         if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && session[:counter] == 1
+            params[:type] = nil 
+          if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size > 0
+             params[:type] = "Recommendations"
+          end  
+              if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size ==  0
+             params[:type] = "Guides"
+          end  
+          
+         elsif session[:counter] == 1 && (@buying_plan.user.id != current_user.id)
+            params[:type] = "Recommendations"
+          end
+        elsif session[:counter] == 1
+           params[:type] = "Recommendations"
+        end
+      else
+        params[:type] = nil  
+         if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size > 0
+             params[:type] = "Recommendations"
+          end  
+              if (@considered_items.size == 0 || @follow_item.size == 0) && @preferences_list.size ==  0
+             params[:type] = "Guides"
+          end    
+      end  
+ 
+      if params[:type] == "guides"
+        @item_ids = ""
+        @guide = Guide.find(1)
+      end 
       @article_categories = ArticleCategory.get_by_itemtype(0) 
       sunspot_search_items
     if params[:type] == "Recommendations"
