@@ -26,10 +26,10 @@ $(".ui-dialog").css("display", "none");
     <%if @display!='false' %>
      $('div#subContainerContentCreate #notification').text("Thank you, <%=@article.sub_type.singularize %> has been created.");
     <%else%>
-       $('div#subContainerContentCreate #notification').text("Thank you for sharing the <%=@article.sub_type.singularize %>.Its sent for approval,once it is reviewed it would be available for others.");
+       $('div#subContainerContentCreate #notification').text("Thank you for sharing this <%=@article.sub_type.singularize %>. Its sent for review, once it is approved it would be available for others.");
      <%end%>
   $('div#subContainerContentCreate #notification').fadeIn('slow');
-   setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 4000);
+   setTimeout("$('div#subContainerContentCreate #notification').fadeOut('slow');", 10000);
    $("#article_errors").hide();
    $('div#subContainerContentCreate form#new_create_article_content_form')[0].reset();
   <%if @display!='false' %>
