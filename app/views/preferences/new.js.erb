@@ -1,3 +1,6 @@
+ <%if !@buying_plan.blank? %>
+  window.location.href= "<%=@buying_plan.preference_page_url%>"
+<%else%>
 $("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/new_preference')) %>');
 $("#giveAdviceDialog").dialog({
 title: 'New Buying Plan',
@@ -5,3 +8,4 @@ height: 570,
 width:980});
 $(".Close_dialog").show();
 $(".ui-dialog-titlebar").hide();
+<%end%>

@@ -4,7 +4,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :commentable, :polymorphic => true
 
-  default_scope :order => 'created_at DESC'
+ # default_scope :order => 'created_at desc'
   
   DELETE_STATUS = 5
 

@@ -1,5 +1,6 @@
 <div id="commentsList">
   <%content.comments.where('status=?',1).each do |comment|%>
     <%= render :partial => 'comments/detailed_comment',:locals => {:comment => comment} %>
+    
   <%end%>
 </div>

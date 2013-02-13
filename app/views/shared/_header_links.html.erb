@@ -12,7 +12,12 @@
   <div class="outerdivwarning">
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span> 
-    <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
+      <%buying_plan =  BuyingPlan.finding_buyng_plan(current_user,session[:itemtype],request.remote_ip) %>
+      <%if buying_plan.blank? %>
+        <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
+      <%else%>
+       <%=link_to  'Show Me'.html_safe, buying_plan.preference_page_url,:class=> "hyperlinkwarning" %> 
+     <%end%>    
   </div>
 </div>
 <div style="display:block;height:30px;"></div>
@@ -21,7 +26,12 @@
  <div id="giveAdviceDialog"> </div>
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span> 
-    <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
+   <%buying_plan =  BuyingPlan.finding_buyng_plan(current_user,session[:itemtype],request.remote_ip) %>
+      <%if buying_plan.blank? %>
+        <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
+      <%else%>
+       <%=link_to  'Show Me'.html_safe, buying_plan.preference_page_url,:class=> "hyperlinkwarning" %> 
+     <%end%>    
   </div>
 </div>
 <div style="display:block;height:30px;"></div>

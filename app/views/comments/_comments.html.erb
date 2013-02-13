@@ -2,12 +2,12 @@
 <% if @previous %>
 <div class="subContentDiv_comments comments_bg">
 	<div class="subContentGap">
-   <%= link_to "View previous comments", content_comments_path({:content_id => content.id, :page => page+1 }), :remote => true,  :id => "previous_#{content.id}" %>
+   <%= link_to "View previous comments", content_comments_path({:content_id => content.id, :page => page+1,:comment_type => 'ReviewContent' }), :remote => true,  :id => "previous_#{content.id}" %>
 	</div>
 </div>
 <div last_comment="<%= content.id %>"></div>
 <% end %>
-<% comments.each do |comment| %>
+<% comments.reverse.each do |comment| %>
  <%= render  'comments/comment',:comment => comment %>
 <%end%>
 

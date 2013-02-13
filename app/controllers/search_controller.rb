@@ -6,8 +6,8 @@ class SearchController < ApplicationController
   def index
     @search_type = params[:search_type]
     itemtype = Itemtype.find_by_itemtype(params[:search_type])
-    session[:warning] = "true"
-    session[:itemtype] = itemtype.itemtype
+    #session[:warning] = "true"
+    #session[:itemtype] = itemtype.itemtype
     status = Array.new
     status  << 1
     status = params[:status].split(',') if params[:status].present?

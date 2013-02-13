@@ -9,6 +9,16 @@ class BuyingPlan < ActiveRecord::Base
   def preference_page_url
     return "/preferences/#{self.itemtype.itemtype.downcase}/#{self.uuid}"
   end
+  def self.finding_buyng_plan(user,itemtype ,remote_ip)
+    itemtype = Itemtype.find_by_itemtype(itemtype)
+    if !user 
+      buying_plan = BuyingPlan.where(:temporary_buying_plan_ip => remote_ip,:user_id => 0, :itemtype_id => itemtype.id,:completed => false,:deleted => false).first
+    return buying_plan 
+   else 
+     buying_plan = BuyingPlan.where(:user_id => user.id, :itemtype_id =>          itemtype.id,:completed => false,:deleted => false).first
+    return buying_plan 
+    end
+  end
   
   def self.buying_plan_move_from_without_login(user,ip)
     BuyingPlan.where(:temporary_buying_plan_ip => ip).each do |b|

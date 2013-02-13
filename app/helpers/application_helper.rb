@@ -19,6 +19,7 @@ module ApplicationHelper
   
 
   def get_follow_types(item, follow_type, type, button_class = '_medium', options = {})
+   
     array_follow = get_follow_text(follow_type)
     if type == "select_box"
       select_tag("follow_type", options_for_select(array_follow),
@@ -26,7 +27,7 @@ module ApplicationHelper
           :id => array_follow.first[1].to_s+"_select"})
     else
       links_follow = ""
-      array_follow.each do |text_val, id_val, follow|
+      array_follow.each do |text_val, id_val, follow| 
         text_val = "" if button_class == "_small"
         title_value = !options[:related_items] ? (I18n.t item.class.superclass.to_s+'.'+id_val) : " "
 

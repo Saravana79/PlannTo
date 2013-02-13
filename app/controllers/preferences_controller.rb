@@ -11,7 +11,7 @@ class PreferencesController < ApplicationController
       require 'will_paginate/array'
       @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
       if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip == request.remote_ip
-        @buying_warning_message = "true"
+       @buying_warning_message = "true"
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
@@ -351,6 +351,7 @@ class PreferencesController < ApplicationController
     else   
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first
     end 
+    
       @follow_types = Itemtype.get_followable_types(@itemtype.itemtype)
       @search_type = params[:search_type]
       sunspot_search_items

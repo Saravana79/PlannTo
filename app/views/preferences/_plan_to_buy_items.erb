@@ -63,7 +63,10 @@
             <%if !@buying_plan.completed? && @follow_item != '' %>
               <%= link_to "(Remove)", follow_path(follow),:method => :delete, :style=>"font-size:9px;color:gray;" %> 
             <%end%>
-             
+           <%if  @follow_item == '' %>
+         
+              <%= link_to "(Remove)",  considered_item_delete_preferences_path(:item_id => follow.id,:buying_plan_id => @buying_plan.id,:popup => "false" ),:remote => :true,:style=>"font-size:9px;color:gray;" %> 
+            <%end%>
            </div>
            <%unless item.type == "Topic" || item.type == "CarGroup" || item.type == "Manufacturer"%>
            <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />

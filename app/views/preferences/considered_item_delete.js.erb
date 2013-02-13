@@ -1,5 +1,8 @@
+<% if params[:popup] == 'false' %>
+  window.location.href= "<%=@buying_plan.preference_page_url%>"
+<%else%>  
 $("#giveAdviceDialog").html("<div id='wizard'></div><%= escape_javascript(render "preferences/add_preference_items", :items => (@considered_items) )%></div>");
-
+<%end%>
   window._token = '<%= form_authenticity_token.to_s %>';
     /* ============================================================
  * bootstrap-dropdown.js v2.0.4
