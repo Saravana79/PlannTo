@@ -36,13 +36,17 @@ class ArticleContentsController < ApplicationController
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
   #  end
-    Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
+   # Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article.id!=nil
    session[:content_id] = @article.id
    if current_user.total_points < 10
      @article.update_attribute('status',2) 
      @display = 'false'
-   end 
+   elsif @article.url!=nil
+     Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
+   else
+      Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?  
+   end
    @facebook_post = params[:facebook_post]
    Follow.content_follow(@article,current_user) if @article.id!=nil
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?

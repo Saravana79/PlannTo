@@ -7,6 +7,12 @@ class AnswerContentsController < ApplicationController
 		@answer_content.save_with_items!("") 
 		UserActivity.save_user_activity(current_user,@answer_content.id,"answered","Q&A",@answer_content.id,request.remote_ip) if @answer_content
 		 Follow.content_follow(@answer_content.question_content,current_user) if @answer_content
+	 if current_user.total_points < 10
+     @answer_content.update_attribute('status',2) 
+     @display = 'false'
+    else
+      Point.add_point_system(current_user, @answer_content, Point::PointReason::CONTENT_CREATE)  
+    end 
 		respond_to do |format|
 			format.html
 			format.js

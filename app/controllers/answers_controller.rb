@@ -5,7 +5,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(params[:answer])
     @answer.user = current_user
     question.answers.push @answer
-
+  
     if question.save
       update_user_reputation(@answer.user,User::USER_POINTS[:new_answer])
       respond_to do|format|

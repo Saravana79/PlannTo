@@ -18,7 +18,7 @@ class CommentsController < ApplicationController
         UserActivity.save_user_activity(current_user,@content.id,"commented",@content.type == "AnswerContent" ? "Answer"  :  @content.sub_type,@comment.id,request.remote_ip) if @comment
         Follow.content_follow(@content.type == "AnswerContent" ? @content.question_content : @content ,current_user) if @comment
       end
-        
+      Point.add_point_system(current_user,@comment, Point::PointReason::CONTENT_COMMENT)    
      if @content.is_a?UserQuestion
         UserActivity.save_user_activity(current_user,@content.buying_plan.id,"commented","Buying Plan",@comment.id,request.remote_ip)
      end  

@@ -13,7 +13,20 @@ class Admin::FeedsController < ApplicationController
       filter_params["order"] = "created_at desc"
       @contents = Content.my_feeds_filter(filter_params,current_user)
     end
-
+  def approve
+    content = Content.find(params[:id])
+    content.update_attribute('status',1)
+    if content.is_a?ArticleContent
+      if content.url!=nil
+         Point.add_point_system(current_user, content, Point::PointReason::CONTENT_SHARE)
+      else
+        Point.add_point_system(current_user, content, Point::PointReason::CONTENT_CREATE) 
+    else
+      Point.add_point_system(current_user, content, Point::PointReason::CONTENT_CREATE) 
+    end      
+          
+    redirect_to :back  
+  end
   def add_vote
     user_ids = configatron.content_creator_user_ids.split(",")
     content = Content.find(params[:id])

@@ -1,3 +1,4 @@
-$('#new_answer_content')[0].reset();
-$("#answer_content_div").append("<%= escape_javascript(render(:partial => 'answer_contents/answer_content',:object => @answer_content, :locals => {:item => @item} )) %>"); 
- 
+<%if @display !='false'%>
+  $('#new_answer_content')[0].reset();
+  $("#answer_content_div").append("<%= escape_javascript(render(:partial => 'answer_contents/answer_content',:object => @answer_content, :locals => {:item => @item} )) %>"); 
+<%end%>

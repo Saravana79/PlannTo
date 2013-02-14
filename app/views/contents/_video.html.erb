@@ -4,7 +4,7 @@
   <div class="float_rgt"><a href="<%= content.user.get_url()%>"> <img src="<%=content.user.get_photo%>" class="userImageSmall"/></a>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
-    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
+    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status == 2%> <font color="red">[Under Review] </font> <%end%></div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a> <a class="txt_brown_bold"> shared a video on <%=get_anchor_name_link(content)%> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago </a></div>
     <div>
      <div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= change_thumb_original(content)%>" class="uploadedvideoContentdisplay float_lft"></a></div>
@@ -28,6 +28,10 @@
      <%if current_user && current_user.is_admin? %>
        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
        <li class="subContentGap float_lft"><%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+       <%if content.status == 2%>
+         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+         <li class="subContentGap float_lft"><%= link_to "Approve",approve_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+      <%end%>   
      <%end%> - 
     </ul>
   </div>

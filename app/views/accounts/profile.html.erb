@@ -382,7 +382,7 @@
                 }
                 $.ajax(
                 {
-                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
+                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" +  "&status=1,2" +  "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                   type: "get",
                   dataType: "script"
                 });
@@ -400,7 +400,7 @@
           running = true;
             $.ajax(
               {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
+                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&status=1,2" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                 type: "get",
                 dataType: "script",
                 before: $('#spinner1').show(),

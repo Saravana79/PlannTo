@@ -56,7 +56,7 @@
 				</div>
 				<div  class="subContentDiv">
 					<div>
-						<%= raw get_content_title(content)%>
+						<%= raw get_content_title(content)%><%if content.status == 2%> <font color="red">[Under Review] </font> <%end%>
 						<% if ((content.is_a?(ArticleContent)) && (content.url?))  %>
 						- (<a class="txt_black_description txt_onhover" target="_blank" href="<%=external_content_path(content.id)%>"><%= URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
 						<%end%>

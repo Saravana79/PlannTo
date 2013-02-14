@@ -9,6 +9,7 @@ class Point < ActiveRecord::Base
     CONTENT_SHARE = "content_share"
     USER_LOG_IN = "user_login_in"
     CONTENT_VOTE = "content_vote"
+    CONTENT_COMMENT = "content_comment"
   end
 
   module CategoryName
@@ -31,6 +32,8 @@ class Point < ActiveRecord::Base
     SHARE_VIDEO_POINT = 1
     ASK_QUESTION_POINT = 1
     ANSWER_QUESTION_POINT = 2
+    COMMENT_POINT=1
+    VOTE_POINT=0.1
   end
 
   module PercentagePoint
@@ -55,7 +58,12 @@ class Point < ActiveRecord::Base
       when Point::CategoryName::REVIEW then Point::CreationPoint::SHARE_REVIEW_POINT
       else Point::CreationPoint::DEFAULT_SHARE_POINT
       end 
-    end
+   
+   elsif reason == Point::PointReason::CONTENT_VOTE
+     return Point::CreationPoint::VOTE_POINT
+   elsif reason == Point::PointReason::CONTENT_COMMENT
+      return Point::CreationPoint::COMMENT_POINT 
+    end  
     return points
   end
 

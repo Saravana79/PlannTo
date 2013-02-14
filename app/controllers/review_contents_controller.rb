@@ -21,6 +21,8 @@ class ReviewContentsController < ApplicationController
 		  if current_user.total_points < 10
 		    @reviewcontent.update_attribute('status',2) 
 		    @display = 'false'
+		  else
+		    Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_CREATE)   
 		  end  
 		  if @reviewcontent
     		unless @products_error == true

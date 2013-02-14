@@ -63,11 +63,11 @@ class ContentsController < ApplicationController
     else      
        @contents = Content.filter(filter_params)
         if params[:guide]!="" && @contents.size == 0 && params[:items]!="" 
-         filter_params.delete("items")
-         @guide_itemtype = "true"
-         filter_params["page"] = 1
-         filter_params["itemtype_id"] =  itemtype_id 
-         @contents = Content.filter(filter_params)
+          filter_params.delete("items")
+          @guide_itemtype = "true"
+          filter_params["page"] = 1
+          filter_params["itemtype_id"] =  itemtype_id 
+          @contents = Content.filter(filter_params)
       end
     end  
     end

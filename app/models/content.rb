@@ -154,7 +154,7 @@ WHERE
 (item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count} and contents.created_by != #{current_user.id}) 
 )and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status =1 and contents.created_by != #{current_user.id})
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and (article_contents.video=1)  and contents.status in (1,2) and contents.created_by != #{current_user.id})
 union 
  (select related_id as content_id, time as created_time, id as activity_id from user_activities where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User' and user_id!= #{current_user.id})) and related_activity_type in (#{sub_type}) and related_id is not null)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")
@@ -167,7 +167,7 @@ WHERE
 (item_contents_relations_cache.item_id in (#{item_ids.blank? ? 0 : item_ids.join(",")})) or 
 (item_contents_relations_cache.item_id in (#{root_item_ids.blank? ? 0 : root_item_ids.join(",")}) and total_votes >= #{vote_count} and contents.created_by != #{current_user.id}) 
 )and 
-(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and contents.status =1 and contents.created_by != #{current_user.id})
+(content_itemtype_relations.itemtype_id in (#{item_type_ids.join(",")}) and contents.sub_type in (#{sub_type}) and  contents.status in (1,2)  and contents.created_by != #{current_user.id})
 union 
  (select related_id as content_id, time as created_time, id as activity_id from user_activities  where (user_id in (#{filter_params["created_by"].blank? ? 0 : filter_params["created_by"].join(",")}) or (related_id in (#{filter_params["content_ids"].blank? ? 0 : filter_params["content_ids"].join(",")}) and related_activity_type!='User' and user_id!= #{current_user.id})) and related_activity_type in (#{sub_type}) and related_id is not null)
 )a  order by a.created_time desc limit #{PER_PAGE} OFFSET #{page}")

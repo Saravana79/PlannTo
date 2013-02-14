@@ -16,7 +16,9 @@ class QuestionContentsController < ApplicationController
    if current_user.total_points < 10
 		  @questioncontent.update_attribute('status',2) 
 		  @display = 'false'
-		end  
+	 else 
+	    Point.add_point_system(current_user, @questioncontent, Point::PointReason::CONTENT_CREATE)
+	 end   
    if @questioncontent
     session[:content_id] = @questioncontent.id
     @facebook_post = params[:facebook_post]

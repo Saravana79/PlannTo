@@ -6,7 +6,7 @@
 
   </div>
   <div class="subContentDiv">
-    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %></div>
+    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status == 2%> <font color="red">[Under Review] </font> <%end%></div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name  %></a> <a class="txt_brown"> asked a question in <%=get_anchor_name_link(content)%> - <a class="txt_brown"> <%= pluralize(content.answer_contents.count, 'Answer')%> </a><a class="txt_brown"> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago.</a> </div>
     
    
@@ -48,6 +48,10 @@
         <%if current_user &&  current_user.is_admin? %>
        <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
        <li class="subContentGap float_lft"><%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+         <%if content.status == 2%>
+         <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+         <li class="subContentGap float_lft"><%= link_to "Approve",approve_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+      <%end%>   
      <%end%>  
     </ul>
   </div>
