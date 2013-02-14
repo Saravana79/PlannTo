@@ -418,7 +418,10 @@ sunspot_search_items
     #else   
      # Follow.wizard_save(item_ids, 'buyer',current_user)
    #end 
-   
+   if !params[:separate_url_item_ids].blank?
+     redirect_to @buying_plan.preference_page_url
+     return nil
+   end 
   end
 
   def update_preference
