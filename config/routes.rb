@@ -109,6 +109,7 @@ resources :accounts do
       post :owned_description_save
       get :get_advice
       post :add_preference
+      get :create_preference
       post :create_preference
       get :edit_preference
       post :save_advice
