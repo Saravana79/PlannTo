@@ -5,6 +5,7 @@ namespace :admin do
   resources :feeds do
     member do
       get :add_vote
+      get :approve
     end
    end  
   resources :follows
