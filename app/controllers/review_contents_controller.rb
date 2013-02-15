@@ -18,7 +18,7 @@ class ReviewContentsController < ApplicationController
 		end
 		  UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type,@reviewcontent.id,request.remote_ip) 
 		  Follow.content_follow(@reviewcontent,current_user) if @reviewcontent.id!=nil
-		  if current_user.total_points < 10
+		  if current_user.total_points > 10
 		    @reviewcontent.update_attribute('status',2) 
 		    @display = 'false'
 		  else

@@ -8,7 +8,7 @@ class Point < ActiveRecord::Base
     CONTENT_CREATE = "content_create"
     CONTENT_SHARE = "content_share"
     USER_LOG_IN = "user_login_in"
-    CONTENT_VOTE = "content_vote"
+    VOTE = "vote"
     CONTENT_COMMENT = "content_comment"
   end
 
@@ -59,7 +59,7 @@ class Point < ActiveRecord::Base
       else Point::CreationPoint::DEFAULT_SHARE_POINT
       end 
    
-   elsif reason == Point::PointReason::CONTENT_VOTE
+   elsif reason == Point::PointReason::VOTE
      return Point::CreationPoint::VOTE_POINT
    elsif reason == Point::PointReason::CONTENT_COMMENT
       return Point::CreationPoint::COMMENT_POINT 
@@ -71,11 +71,7 @@ class Point < ActiveRecord::Base
   def self.add_point_system(user, object, reason)
     point = Point.search_item(object, user).first
     points = Point.get_points(object, reason)
-    if point.nil?
       Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason => reason, :points => points)
-    else
-      Point.update(point.id, :points => points)
-    end    
   end
 
   def self.get_per_value(object)
@@ -86,22 +82,18 @@ class Point < ActiveRecord::Base
     end
   end
 
-  def self.add_voting_point(user, object)
+  def self.add_voting_point(user, object,type)
     vote_count = VoteCount.search_vote(object).first
-    points = Point.calculate_voting_points((vote_count.vote_count_positive + vote_count.vote_count_negative),Point.get_per_value(object))
+    points = Point.get_points(object, Point::PointReason::VOTE)
     point = Point.search_item(object, user).first
-    if point.nil?
-      Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason =>  Point::PointReason::CONTENT_VOTE, :points => points)
-    else
-      Point.update(point.id, :points => points)
-    end
+    Point.create_or_find_by(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason =>  Point::PointReason::VOTE, :points => points.to_f)
   end
 
   def self.calculate_voting_points(total, variance)
     value = total.to_f
     # points = (value - (value*variance)/100).round(2)
-    points = (value / (value*variance)/100).round(2)
-    return points.to_i
+    points = (value / (value*variance)/100)
+    return points
   end
 
   #Content Creation Part
