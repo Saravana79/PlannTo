@@ -21,6 +21,7 @@ class Admin::FeedsController < ApplicationController
          Point.add_point_system(current_user, content, Point::PointReason::CONTENT_SHARE)
       else
         Point.add_point_system(current_user, content, Point::PointReason::CONTENT_CREATE) 
+      end
     else
       Point.add_point_system(current_user, content, Point::PointReason::CONTENT_CREATE) 
     end      
