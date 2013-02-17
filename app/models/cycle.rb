@@ -12,10 +12,13 @@ class Cycle < Product
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
+    integer :orderbyid  do |item|
+      item.itemtype.orderby
+    end
     float :rating  do |item|
       item.rating
     end
-
+    time :created_at
     dynamic_float :features do |car|
       car.attribute_values.inject({}) do |hash,attribute_value|
         if attribute_value.attribute.search_display_attributes.nil?

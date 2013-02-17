@@ -31,7 +31,6 @@ class Content < ActiveRecord::Base
   has_many :itemtypes, :through => :content_itemtype_relations
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :title , :as => :name_ac
     text :title, :boost => 3.0, :more_like_this =>true
     text :description
     string :sub_type
@@ -39,6 +38,10 @@ class Content < ActiveRecord::Base
     integer :status
     integer :comments_count
     time :created_at
+    text :name , :boost => 6.0,  :as => :name_ac do |content|
+      content.title
+    end
+
     integer :itemtype_ids,  :multiple => true do
       content_itemtype_relations.map {|items| items.itemtype_id}    
     #content.itemtype_id

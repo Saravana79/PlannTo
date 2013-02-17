@@ -6,5 +6,9 @@ class ItemtypeTag < Item
     text :name , :boost => 6.0,  :as => :name_ac
     string :name
     string :status
+    integer :orderbyid  do |item|
+      item.itemtype.orderby
+    end
+    time :created_at
    end
 end

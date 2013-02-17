@@ -123,8 +123,9 @@ class ContentsController < ApplicationController
   
   def search_autocomplete_list
     @results = Sunspot.search(Content) do
-      keywords params[:term], :fields => :title
+      keywords params[:term], :fields => :name
       with :sub_type, "#{params[:sub_type]}"
+      with :status, 1
     end
     results = @results.results.collect{|item|
     

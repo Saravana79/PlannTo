@@ -8,7 +8,7 @@
 
 
     <div>
-      <%= link_to content.question_content.title, content_path(content.question_content.id), :class => "title txt_onhover" %><%if content.status == 2%> <font color="red">[Under Review] </font> <%end%>
+      <%= link_to content.question_content.title, content_path(content.question_content.id), :class => "title txt_onhover" %><%if content.status == 2%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%>
       
     </div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> answered a question on </a><a class="txt_brown"><%=get_anchor_name_link(content.question_content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>

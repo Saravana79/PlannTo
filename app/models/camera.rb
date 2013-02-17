@@ -9,6 +9,10 @@ class Camera < Product
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
+    time :created_at
+    integer :orderbyid  do |item|
+      item.itemtype.orderby
+    end
     float :rating  do |item|
       item.rating
     end
