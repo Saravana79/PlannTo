@@ -172,7 +172,7 @@ class SearchController < ApplicationController
       paginate(:page => params[:page], :per_page => 10)
       order_by :name if sort_by_option == "Name"
       order_by :rating,:desc if sort_by_option == "Rating"
-
+      order_by :created_at,:desc 
       #   order_by :Price, :desc           # descending order , check Documentation link below
     
 
@@ -195,7 +195,9 @@ class SearchController < ApplicationController
       order_by :class, :desc
       paginate(:page => params[:page], :per_page => 10)
       #facet :types
-      order_by :class , :desc
+      order_by :orderbyid , :asc
+      order_by :status, :asc      
+      order_by :created_at, :desc
     end
     if @items.results.count < 10
       @display = "none;"
@@ -216,7 +218,11 @@ class SearchController < ApplicationController
    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
-      paginate(:page => 1, :per_page => 10)        
+      paginate(:page => 1, :per_page => 10) 
+      order_by :orderbyid , :asc
+      order_by :status, :asc      
+      order_by :created_at, :desc            
+     # order_by :status, :asc
     end
 
     if params[:from_profile]
