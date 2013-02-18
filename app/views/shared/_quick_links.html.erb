@@ -4,12 +4,15 @@
       <span class="txt_black heading_others">Quick Links</span>
       <%@guides = Guide.all%>
       <%@guides.each do |guide|%>
-      <%unless ((@item.is_a?Product) and  (guide.name=="Expert" || guide.name=="Experts Guides" )) || ((@item.is_a?(Topic) || @item.is_a?(AttributeTag)) and  (guide.name=="Owner" || guide.name=="Owner Guides" )) %>
+      <%unless ((@item.is_a?Product) || (@item.is_a?CarGroup) and  (guide.name=="Expert" || guide.name=="Experts Guides" )) || ((@item.is_a?(Topic) || @item.is_a?(AttributeTag)) and  (guide.name=="Owner" || guide.name=="Owner Guides" )) %>
       <span class="menu_list"><a href="/<%=search_type%>/guides/<%=guide.name%>?item_id=<%= @item.id rescue ''%>"><%=guide.name%></a></span>
       <%end%>
     <%end%>
-   <%if @item.is_a?Product %>
+   <%if @item.is_a?Product%>
      <span class="menu_list"><a href="/items/compare?ids=<%= @item.id %>">Compare <%= @item.itemtype.itemtype %>s</a></span>
     <%end%>
+    <%if @item.is_a?CarGroup %> 
+       <span class="menu_list"><a href="/items/compare?ids=<%= @item.related_cars.collect(&:id).join(',') %>">Compare Cars</a></span>
+     <%end%>  
     </div>
     <!-- Buttons - End-->

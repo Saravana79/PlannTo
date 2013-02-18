@@ -13,7 +13,8 @@ class ArticleContentsController < ApplicationController
     #for article content create or submit
     @article_create = params[:article_content_create]
     ids = params[:articles_item_id] || params[:article_create_item_id]
-    score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
+    unless ids.blank?
+      score =  (params[:article_content][:sub_type] == ArticleCategory::REVIEWS) ? params[:score] : ""
     if params[:article_content][:sub_type]!= "Photo" 
        params["article_content"].delete("content_photos_attributes")
     end 
@@ -50,6 +51,9 @@ class ArticleContentsController < ApplicationController
    @facebook_post = params[:facebook_post]
    Follow.content_follow(@article,current_user) if @article.id!=nil
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
+   else
+     @tag = 'false'
+   end  
     flash[:notice]= "Article uploaded"
     respond_to do |format|
       format.js
@@ -155,7 +159,7 @@ class ArticleContentsController < ApplicationController
   def bmarklet
     #@article_content = ArticleContent.new
    if current_user 
-    @article,@images = ArticleContent.CreateContent(params[:url],current_user)
+    @article,@images = ArticleContent.CreateContent('http://www.plannto.com/mobiles',current_user)
     @article_content= @article
     @external = params[:external]
    end 

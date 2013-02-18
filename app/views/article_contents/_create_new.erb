@@ -110,7 +110,8 @@ $(".ui-dialog-content").dialog('destroy')
     </div>
         
   </div>
-  </div>
+ 
+    </div>
   
   
   <script>
@@ -193,16 +194,29 @@ function remove_fields(link) {
       </div>
       <div style="clear:both;"></div>
     </div>
-    <!-- FIELD ENDS -->
+ <div id="deals" style='display:none' >
+    <div class="title_header float_lft">Expire Date:</div>
+      <div class="float_lft">
+         <%= f.text_field :field1, {:style=>"margin-left:1px;width:150px", :id => "expire_date"}%>
+    </div> 
+    <div class="title_header float_lft">Discount:</div>
+      <div class="float_lft">
+         <%= f.text_field :field2, {:style=>"margin-left:1px;width:150px"}%>
+      </div>
+     <div class="title_header float_lft">Completed?:</div>
+      <div class="float_lft">
+         <%= f.check_box :field3%>
+       </div>
+    </div>
+      <script>
+         $('#expire_date').datepicker();
+       </script>
     <div style="padding:5px 5px 0px 0px;clear:both;" id="shareProduct">
       <div class="title_header float_lft">Product  :</div>
       <div class="taggingdiv" style="margin-left:5px;">
         <ul id="article_create_product_list" class="tagging"></ul>
         <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="article_create_product"/></div>
-     
-        
-         
-        <div style="clear:both;"></div>
+       <div style="clear:both;"></div>
       </div>
       <div style="clear:both;"></div>
     </div>
@@ -275,6 +289,17 @@ function remove_fields(link) {
            {
              $('#photo').show();
           }
+          
+           if ($(this).attr('id')!= 'contentDeals')
+           
+           {
+             $('#deals').hide();
+           }
+            if ($(this).attr('id')== 'contentDeals')
+           
+           {
+             $('#deals').show();
+           }
        });  
      <%end%>    
    <%end%>
