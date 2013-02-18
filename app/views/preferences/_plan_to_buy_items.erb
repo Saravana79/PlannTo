@@ -63,7 +63,7 @@
             <%if !@buying_plan.completed? && @follow_item != '' %>
               <%= link_to "(Remove)", follow_path(follow),:method => :delete, :style=>"font-size:9px;color:gray;" %> 
             <%end%>
-           <%if  @follow_item == '' %>
+           <%if  @follow_item == '' && @buying_plan.temporary_buying_plan_ip == request.remote_ip %>
          
               <%= link_to "(Remove)",  considered_item_delete_preferences_path(:item_id => follow.id,:buying_plan_id => @buying_plan.id,:popup => "false" ),:remote => :true,:style=>"font-size:9px;color:gray;" %> 
             <%end%>
