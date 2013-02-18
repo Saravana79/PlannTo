@@ -88,7 +88,7 @@ class Content < ActiveRecord::Base
     options["page"]||=1
     options["limit"]||=PER_PAGE
     options["order"]||="created_at desc"
-
+    
     if options["search_type"] == "activities"
         type_1 = options["sub_type"].length > 1 ? options["sub_type"] + ["User","Answer"]  : options["sub_type"]
        type = type_1[0] == "Q&A" ? type_1 + ["Answer"] : type_1

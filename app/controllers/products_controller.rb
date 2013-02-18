@@ -10,7 +10,7 @@ class ProductsController < ApplicationController
 
  def log_impression
    @item = Item.find(params[:id])
-   @item.impressions.create(ip_address: request.remote_ip,user_id:current_user.id)
+   @item.impressions.create(ip_address: request.remote_ip,user_id:(current_user.id rescue ''))
  end
   def set_referer
     @item = Item.find(params[:id])
@@ -32,6 +32,9 @@ class ProductsController < ApplicationController
 
   def index
     @filter_by = params["fl"]
+    if !current_user
+      @custom = "true"
+    end 
     search_type = request.path.split("/").last
     @type = search_type.singularize.camelize.constantize
     session[:itemtype] = @type
@@ -62,6 +65,9 @@ class ProductsController < ApplicationController
   
   def show
     @filter_by = params["fl"]
+    if !current_user
+      @custom = "true"
+    end  
     @write_review = params[:type]
     session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 

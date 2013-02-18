@@ -335,7 +335,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
     <%= render "contents/sort_by_options" ,:order => @order%>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <% params1 = {"sub_type" => ["Reviews","News","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => @order} %>
+     <% params1 = {"sub_type" => ["Reviews","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => @order} %>
     
       <% @contents = Content.filter(params1)%>
        <%= render :partial => 'contents/contents', :locals => {:params => params1} %>

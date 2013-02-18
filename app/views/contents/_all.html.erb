@@ -6,6 +6,7 @@
   
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;"></div>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+    
     <%if @item.show_models %>
       <% params = {"items" => @item.related_cars.collect(&:id), "status" => 1 } %>
     <%elsif @item.is_a?AttributeTag %>
@@ -13,7 +14,9 @@
     <% else %>
       <% params = {"items" => [@item.id], "status" => 1  }%>
     <% end %>
-
+    <%if @custom == "true" %>
+      <% params["sub_type"] = ["Reviews","Deals"] %>
+    <%end%> 
     <% @contents = Content.filter(params)  %>
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
   </div>

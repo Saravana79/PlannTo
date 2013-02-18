@@ -320,6 +320,9 @@
     </div>
     <br/>
       <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1,"search_type" => "activities"}%>
+     <%if @custom == "true" %>
+       <% params["sub_type"] = ["Reviews","Deals"] %>
+    <%end%> 
           <% @contents = Content.filter(params)  %>
        <% if @contents.size == 0 %>
           <%= render "shared/alert_message",:type => "user_activity"%>  

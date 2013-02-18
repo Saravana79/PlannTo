@@ -13,7 +13,7 @@ class ContentsController < ApplicationController
   def log_impression
     @article = Content.find(params[:id])
   # this assumes you have a current_user method in your authentication system
-    @article.impressions.create(ip_address: request.remote_ip,user_id:current_user.id)
+    @article.impressions.create(ip_address: request.remote_ip,user_id:(current_user.id rescue ''))
     end
    def filter
      if params[:item_type_id].is_a?  Array
@@ -483,7 +483,7 @@ class ContentsController < ApplicationController
      elsif sub_type =="QandA" || sub_type == "Q"
       return ["Q&A"]
      elsif sub_type == "Custom"
-      return ["Reviews","Deals","News"]   
+      return ["Reviews","Deals"]   
     else
       return sub_type.split(",")
     end
