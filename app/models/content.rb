@@ -9,7 +9,7 @@ class Content < ActiveRecord::Base
   has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId
   # friendly_id :title, use: :slugged
-
+  has_many :impressions, :as=>:impressionable
   validates_presence_of :title, :unless => lambda{ |content| content.type == "AnswerContent" } 
   validates_presence_of :description, :if => lambda{ |content| content.type == "AnswerContent" } 
   #below line not required.
@@ -50,7 +50,11 @@ class Content < ActiveRecord::Base
       item_contents_relations_cache.map {|items| items.item_id}
     end
   end
-
+  
+  def impression_count
+    impressions.size
+  end
+  
   def related_items
     return ContentItemRelation.where('content_id = ?', self.id)
   end

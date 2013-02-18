@@ -1,5 +1,6 @@
 require 'json'
 class Item < ActiveRecord::Base
+  has_many :impressions, :as=>:impressionable
   self.inheritance_column ='type'
   REDIS_FOLLOW_ITEM_KEY_PREFIX = "follow_item_user_ids_"
   #cache_records :store => :local, :key => "items",:request_cache => true
@@ -7,6 +8,7 @@ class Item < ActiveRecord::Base
   TOPIC_FOLLOWTYPES = ["Topic","AttributeTag"]
   ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
   belongs_to :itemtype
+  
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
   #
@@ -72,6 +74,10 @@ class Item < ActiveRecord::Base
     else self.itemtype_id
     end
     return itemtype_id
+  end
+  
+  def impression_count
+    impressions.size
   end
   
   def get_base_itemtype

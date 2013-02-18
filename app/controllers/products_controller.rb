@@ -4,11 +4,14 @@ class ProductsController < ApplicationController
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
-  
+  before_filter :log_impression, :only=> [:show]
   layout 'product'
   include FollowMethods
 
-  
+ def log_impression
+   @item = Item.find(params[:id])
+   @item.impressions.create(ip_address: request.remote_ip,user_id:current_user.id)
+ end
   def set_referer
     @item = Item.find(params[:id])
     unless request.referer.nil?

@@ -3,12 +3,18 @@ class ContentsController < ApplicationController
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :store_location, :only => [:show]
   before_filter :set_waring_message,:only => [:show]
- 
+  before_filter :log_impression, :only=> [:show]
+
   #layout :false
   layout "product"
   include FollowMethods
   
   
+  def log_impression
+    @article = Content.find(params[:id])
+  # this assumes you have a current_user method in your authentication system
+    @article.impressions.create(ip_address: request.remote_ip,user_id:current_user.id)
+    end
    def filter
      if params[:item_type_id].is_a?  Array
        itemtype_id = params[:itemtype_id] 

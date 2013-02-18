@@ -141,6 +141,24 @@
 						</div>
 						<br/>
 						<%end%>
+									<% if content.sub_type == "#{ArticleCategory::DEALS}" %>
+						<div>
+							<div style="float:left;">
+								<% if !content.field1.empty? %>
+								<label >Expire Date : <%= content.field1%> </label></br>
+								<%end%>
+								<% if !content.field3.empty? %>
+								<label >Discount : <%= content.field4%> </label></br>
+								<%end%>
+							</div>
+							<div style="float:right;">
+								<% if !content.field2.empty? %>
+								<label >Completed : <%= content.field2.to_i == 1? "Yes" : "No" %> </label></br>
+								<%end%>
+								</div>
+						</div>
+						<br/>
+						<%end%>
 						<% if content.sub_type == "#{ArticleCategory::MILES}" %>
 						<div>
 							<div style="float:left;">

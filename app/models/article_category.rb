@@ -11,6 +11,7 @@ class ArticleCategory < ActiveRecord::Base
   BOOKS = "Books"
   TRAVELOGUE = "Travelogue"
   MILES = "Miles"
+  DEALS = "Deals"
   HOW_TO   = "HowTo/Guide"
   has_one :article_content
   belongs_to :itemtype
