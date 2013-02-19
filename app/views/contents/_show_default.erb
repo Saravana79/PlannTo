@@ -147,13 +147,13 @@
 								<% if !content.field1.empty? %>
 								<label >Expire Date : <%= content.field1%> </label></br>
 								<%end%>
-								<% if !content.field3.empty? %>
-								<label >Discount : <%= content.field4%> </label></br>
+								<% if !content.field2.empty? %>
+								<label >Discount : <%= content.field2%> </label></br>
 								<%end%>
 							</div>
 							<div style="float:right;">
-								<% if !content.field2.empty? %>
-								<label >Completed : <%= content.field2.to_i == 1? "Yes" : "No" %> </label></br>
+								<% if !content.field3.empty? %>
+								<label >Completed : <%= content.field3.to_i == 1? "Yes" : "No" %> </label></br>
 								<%end%>
 								</div>
 						</div>

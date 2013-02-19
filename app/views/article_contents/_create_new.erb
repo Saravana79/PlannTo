@@ -348,6 +348,9 @@ function remove_fields(link) {
     else if (category == "<%=ArticleCategory::APPS%>"){
       showArticleCreateAppOptFields();
     }
+    else if (category == "<%=ArticleCategory::DEALS%>"){
+      $('#deals').show();
+    }
     else if (category == "<%=ArticleCategory::TRAVELOGUE%>"){
       showArticleCreateTravelogueOptFields();
     }

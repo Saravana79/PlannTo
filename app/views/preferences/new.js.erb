@@ -1,4 +1,4 @@
- <%if !@buying_plan.blank? %>
+ <%if !@buying_plan.blank? && @from!='my_feed' %>
   window.location.href= "<%=@buying_plan.preference_page_url%>"
 <%else%>
 $("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/new_preference')) %>');

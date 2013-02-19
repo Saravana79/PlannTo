@@ -58,6 +58,7 @@
   
 
     <script type="text/javascript">
+ 
       function open_and_redirect_url1() {
      var i =  $("#article_content_sub_type").val();
      $("#sub_type").val(i);
@@ -111,6 +112,7 @@
       <div class="title_header float_lft" >Title :</div>
       <div class="float_lft"><%= f.text_field :title, :id => "#{@title_id}", :style => "margin-left:5px;width:400px" %></div>
     </div>
+    
     <div class="productreview" style="clear:both;display:none" id="<%=@productReviewRating%>">
       <div class="title_header float_lft">Rating :</div>
       <div id="<%=@productReviewRatingField%>" class="thereisnosuchclass"></div>
@@ -226,7 +228,7 @@
       </div>
       <div style="clear:both;"></div>
     </div>
-
+ 
     <div style="padding:0px 5px 0px 0px;display:none" id="<%=@sharefield4%>">
       <div class="title_header float_lft" id="<%=@sharefield4Label%>">Itune url:</div>
       <div class="float_lft">
@@ -235,7 +237,25 @@
       <div style="clear:both;"></div>
     </div>
     <!-- FIELD ENDS -->
-    
+    <br />
+    <br />
+         <div id="deals1" style='display:none' >
+    <div class="title_header float_lft">Expire Date:</div>
+      <div class="float_lft">
+         <%= f.text_field :field1, {:style=>"margin-left:1px;width:150px", :id => "expire_date"}%>
+    </div> 
+    <div class="title_header float_lft">Discount:</div>
+      <div class="float_lft">
+         <%= f.text_field :field2, {:style=>"margin-left:1px;width:150px"}%>
+      </div>
+     <div class="title_header float_lft">Completed?:</div>
+      <div class="float_lft">
+         <%= f.check_box :field3%>
+       </div>
+    </div>
+      <script>
+         $('#expire_date').datepicker();
+       </script>
      
     <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
       <%= f.submit button_name, :id => "submit_article", :class => "btn_submitanswer" %>
@@ -528,6 +548,7 @@ if ($("#article_content_sub_type").val() == ""){
 <%end%>
     $("form#<%=@form_id%> #submit_article").val(saveButtonName)
     hideAllOptionalFieldsArticleSubmit();
+    
     if (category == "<%=ArticleCategory::EVENT%>"){
       showArticleSubmitEventOptFields();
     }
@@ -542,6 +563,9 @@ if ($("#article_content_sub_type").val() == ""){
     }
     else if (category == "<%=ArticleCategory::REVIEWS%>"){
       $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
+    }
+    else if (category == "<%=ArticleCategory::DEALS%>"){
+      $("#deals1").show();
     }
     else if (category == "<%=ArticleCategory::MILES%>"){
       showArticleSubmitMileOptFields();

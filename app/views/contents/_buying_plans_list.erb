@@ -10,7 +10,7 @@
   <div border="0" cellspacing="0" cellpadding="0" style="padding-top:2px;clear:both;width:500px;" id="buyingPlanItem<%=buying_plan.id%>">
       <%item_type = buying_plan.itemtype.itemtype %>
       <%if buying_plan.completed? %>
-        <%item = Item.find(buying_plan.owned_item_id) %>
+        <%item = Item.find(buying_plan.owned_item_id) rescue buying_plan.get_first_item %>
       <%else%>  
       <%item = buying_plan.get_first_item%>
       <%end%>
@@ -48,12 +48,14 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
 			
 				<span class="float_rgt" style="display:inline;">
          </span>
+         <%unless @admin == 'true' %>
          <div style="padding-top:10px;">
            <a class="Bluesubmit3" name="commit"  type="submit" value="View Plan" href="<%=buying_plan.preference_page_url%>/" style="margin-left:5px;"> View Plan </a>
         <!-- /preferences/new?search_type=Car -->
-        <%= link_to "Update Plan", "/preferences/new?search_type=#{buying_plan.itemtype.itemtype}"  ,:class=> "Bluesubmit3",:remote => :true ,:style=> "margin-left:5px;"%>
+        <%= link_to "Update Plan", "/preferences/new?search_type=#{buying_plan.itemtype.itemtype}&&from=my_feed"  ,:class=> "Bluesubmit3",:remote => :true ,:style=> "margin-left:5px;"%>
          	
          </div>
+         <%end%>
          <!--
          <div style="float:left;padding-top:5px;">
          	

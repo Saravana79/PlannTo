@@ -344,6 +344,7 @@ class PreferencesController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     session[:product_warning_message] = ''
     session[:content_warning_message] = ''
+    @from = params[:from]
     @search = params[:search]
     @separate_url_item_ids = params[:item_ids]
     if !current_user
