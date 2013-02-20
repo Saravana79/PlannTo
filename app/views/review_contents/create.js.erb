@@ -13,7 +13,11 @@ if(window.opener) {
    $("#contentEditView").dialog('close');
    $(".ui-dialog").css("display", "none");
   <%if @display!='false' %> 
-   $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
+    alert("Thank You,Content Created Sucessfully.")
+    $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
+    
+   <%else%>
+   alert("<%= "Thank you for sharing this review. Its sent for review, once it is approved it would be available for others." %>")
    <%end%>
  <%end%>  
 <%else%> 

@@ -18,8 +18,11 @@ if(window.opener) {
 $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none"); 
  <%if @display!='false' %>
+  alert("Thank You,Content Created Sucessfully.")
 $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
-<%end%>
+<%else%>
+   alert("<%= "Thank you for sharing this #{@article.sub_type.singularize}. Its sent for review, once it is approved it would be available for others." %>")
+   <%end%>
 <%else%>
 $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none");

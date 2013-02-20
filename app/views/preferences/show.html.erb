@@ -31,7 +31,7 @@
 					</div>
 					<div class="subContentGap">
 						<div id="displayQuestion">
-							<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif (current_user && @buying_plan.user_id == current_user.id) || (@buying_plan.temporary_buying_plan_ip == requset.remote_ip && @buying_plan.temporary_buying_plan_ip!="") %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion').dialog({width:550, height:300});$('.Close_dialog').show();
+							<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif (current_user && @buying_plan.user_id == current_user.id) || (@buying_plan.temporary_buying_plan_ip == request.remote_ip && @buying_plan.temporary_buying_plan_ip!="") %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion').dialog({width:550, height:300});$('.Close_dialog').show();
 $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%></a>
 							
 						</div>
@@ -159,9 +159,9 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			  </div>			
 
 						<%if @buying_plan.user_question.user_answers.size == 0 %>
-						<%if (!current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "") %>
+						<%if (!current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip == request.remote_ip) %>
 						  <div class="alert alert-block"> <strong> Currently there are no recommendation, please sign up to share this with friends/experts to get their feedback.<%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a></strong></div>
-						 <%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "") %>
+						 <%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
 						    
 						  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
@@ -181,7 +181,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
 			      <%end%>
 			      	<%if can_add_recommendation?(@buying_plan) || !current_user %>
 								<div class="float_rgt" style="margin-top:8px;">
-								<%if @follow_item != '' || (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "") %>
+								<%if @follow_item != '' || (@buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
 									<a style="margin-right:10px;margin-top:10px;float:right;margin-bottom:10px;font-size: 13px;padding: 4px 8px 4px 8px;" href="#" class="Bluesubmit3" id='giveAdviceTag'>Add Recommendation</a>
 									<%end%>
 								</div>

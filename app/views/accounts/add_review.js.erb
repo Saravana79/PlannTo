@@ -3,7 +3,7 @@ $("#articleReviewSubContainer").html("");
 $("#content_new").html("<%= escape_javascript(render 'reviews/review_subcontainer', {:item => @item}) %>");
    $("#articleReviewSubContainer").show();
    $("#review_new").show();
-
+$("#content_create_form_type").val("Popup");
 $("#content_new").dialog({
 height: 620,
 width:600});

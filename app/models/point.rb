@@ -71,7 +71,7 @@ class Point < ActiveRecord::Base
   def self.add_point_system(user, object, reason)
     point = Point.search_item(object, user).first
     points = Point.get_points(object, reason)
-      Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason => reason, :points => points)
+    Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason => reason, :points => points)
   end
 
   def self.get_per_value(object)
@@ -86,7 +86,7 @@ class Point < ActiveRecord::Base
     vote_count = VoteCount.search_vote(object).first
     points = Point.get_points(object, Point::PointReason::VOTE)
     point = Point.search_item(object, user).first
-    Point.create_or_find_by(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason =>  Point::PointReason::VOTE, :points => points.to_f)
+    Point.create(:user_id => user.id, :object_type => GlobalUtilities.get_class_name(object.class.name), :object_id => object.id, :reason =>  Point::PointReason::VOTE, :points => points.to_f)
   end
 
   def self.calculate_voting_points(total, variance)
