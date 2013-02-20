@@ -86,9 +86,9 @@
 						<% if content.sub_type == "#{ArticleCategory::APPS}" %>
 						<div>
 							<div style="float:left;">
-								<label >Category : <%= content.field1%> </label></br>
+								<label class="txt_black_description_detail">Category : <%= content.field1%> </label></br>
 								<% if content.field2 == "Free"%>
-								<label>Cost: Free</label>
+								<label class="txt_black_description_detail">Cost: Free</label>
 								<%end%>
 							</div>
 							<div style="float:right;">
@@ -106,15 +106,15 @@
 						<div>
 							<div style="float:left;">
 								<% if !content.field1.empty? %>
-								<label >Start Date : <%= content.field1%> </label></br>
+								<label class="txt_black_description_detail">Start Date : <%= content.field1%> </label></br>
 								<%end%>
 								<% if !content.field3.empty? %>
-								<label >Location : <%= content.field3%> </label></br>
+								<label class="txt_black_description_detail">Location : <%= content.field3%> </label></br>
 								<%end%>
 							</div>
 							<div style="float:right;">
 								<% if !content.field2.empty? %>
-								<label >End  Date : <%= content.field2%> </label></br>
+								<label class="txt_black_description_detail">End  Date : <%= content.field2%> </label></br>
 								<%end%>
 							</div>
 						</div>
@@ -124,18 +124,18 @@
 						<div>
 							<div style="float:left;">
 								<% if !content.field1.empty? %>
-								<label >From : <%= content.field1%> </label></br>
+								<label class="txt_black_description_detail">From : <%= content.field1%> </label></br>
 								<%end%>
 								<% if !content.field3.empty? %>
-								<label >Days : <%= content.field4%> </label></br>
+								<label class="txt_black_description_detail">Days : <%= content.field4%> </label></br>
 								<%end%>
 							</div>
 							<div style="float:right;">
 								<% if !content.field2.empty? %>
-								<label >To : <%= content.field2%> </label></br>
+								<label class="txt_black_description_detail">To : <%= content.field2%> </label></br>
 								<%end%>
 								<% if !content.field4.empty? %>
-								<label >Type : <%= content.field3%> </label></br>
+								<label class="txt_black_description_detail">Type : <%= content.field3%> </label></br>
 								<%end%>
 							</div>
 						</div>
@@ -145,15 +145,15 @@
 						<div>
 							<div style="float:left;">
 								<% if !content.field1.empty? %>
-								<label >Expire Date : <%= content.field1%> </label></br>
+								<label class="txt_black_description_detail">Expire Date : <%= content.field1%> </label></br>
 								<%end%>
 								<% if !content.field2.empty? %>
-								<label >Discount : <%= content.field2%> </label></br>
+								<label class="txt_black_description_detail">Discount : <%= content.field2%> </label></br>
 								<%end%>
 							</div>
 							<div style="float:right;">
 								<% if !content.field3.empty? %>
-								<label >Completed : <%= content.field3.to_i == 1? "Yes" : "No" %> </label></br>
+								<label class="txt_black_description_detail">Completed : <%= content.field3.to_i == 1? "Yes" : "No" %> </label></br>
 								<%end%>
 								</div>
 						</div>
@@ -163,15 +163,15 @@
 						<div>
 							<div style="float:left;">
 								<% if !content.field1.empty? %>
-								<label >Distance : <%= content.field1%> </label></br>
+								<label class="txt_black_description_detail">Distance : <%= content.field1%> </label></br>
 								<%end%>
 								<% if !content.field3.empty? %>
-								<label >Route : <%= content.field3%> </label></br>
+								<label class="txt_black_description_detail">Route : <%= content.field3%> </label></br>
 								<%end%>
 							</div>
 							<div style="float:right;">
 								<% if !content.field2.empty? %>
-								<label >Time : <%= content.field2%> </label></br>
+								<label class="txt_black_description_detail">Time : <%= content.field2%> </label></br>
 								<%end%>
 							</div>
 						</div>

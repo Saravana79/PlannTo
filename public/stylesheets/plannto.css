@@ -2020,6 +2020,17 @@ li.middlebg {
     text-decoration: none;
     cursor: pointer;
 }
+.titledetail {
+    font-family: Tahoma,Arial, Helvetica, sans-serif;
+    color: #333;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    font-size: 125%;
+    line-height: 1.3;
+    cursor: pointer;
+    font-weight: bold;
+}
 
 .titlePro {
     font: bold 12px Tahoma,Arial, Helvetica, sans-serif;
@@ -2047,6 +2058,14 @@ li.middlebg {
     font: 11px Tahoma,Arial, Helvetica, sans-serif;
     color: #000;
     text-decoration: none;
+}
+
+.txt_black_description_detail {
+    font-family: Tahoma,Arial, Helvetica, sans-serif;
+    color: #333;
+    text-decoration: none;
+    font-size: 120%;
+    line-height: 1.4;
 }
 
 .txt_gray {
@@ -4083,7 +4102,7 @@ a.bookmark_button:hover span { background-position:right bottom;}
 .plannto_button:hover { background-position:left bottom;}
 .plannto_button:hover span { background-position:right bottom;}
 
-.rekatedlinks {text-decoration:none;color: #19558D;font: bold 12px Tahoma,Arial, Helvetica, sans-serif;}
+.rekatedlinks {text-decoration:none;color: #19558D;font: bold 12px Tahoma,Arial, Helvetica, sans-serif;font-size: 120%}
 .rekatedlinks:hover {text-decoration:underline;};
 
 #tag_cloud {

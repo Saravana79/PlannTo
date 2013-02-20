@@ -202,15 +202,15 @@ module ContentsHelper
       "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "...": "")
       #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
     else
-      "<a class='txt_black_description'>" + content.description + "</a>"
+      "<a class='txt_black_description_detail'>" + content.description + "</a>"
     end
   end
 
   def get_content_title(content)
     if ((content.is_a?(ArticleContent)) && (content.url.blank?) ||  content.is_a?(ReviewContent))
-      "<a class='title txt_onhover'>#{content.title }</a>"
+      "<a class='titledetail txt_onhover'>#{content.title }</a>"
     else
-      link_to content.title, external_content_path(content.id) , :class => 'title txt_onhover',:target => "_blank"
+      link_to content.title, external_content_path(content.id) , :class => 'titledetail txt_onhover',:target => "_blank"
     end
   end
 
@@ -221,20 +221,20 @@ module ContentsHelper
   def get_rating_or_category_contents(content,page="")
     str=""
     if content.sub_type == "#{ArticleCategory::ACCESSORIES}"
-     str+= "<label>Category:</label>#{content.field1}<br/>"
+     str+= "<label class='txt_black_description_detail'>Category:</label>#{content.field1}<br/>"
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
         if(content.field1 != '' && content.field1 != '0')
-          str+="<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.field1}'></div>"
+          str+="<label class='txt_black_description_detail'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.field1}'></div>"
         end
       else
         str=""
-        str+= "<label>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.rating}'></div><br/>"
+        str+= "<label class='txt_black_description_detail'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.rating}'></div><br/>"
         unless content.pros.blank?
-          str+= "<label>Pro :</label>#{content.pros}<br/>"
+          str+= "<label class='txt_black_description_detail' >Pro :</label><label style='padding-left:2px;'>#{content.pros}</label><br/>"
         end
           unless content.pros.blank? 
-           str+= "<label>Con :</label>#{content.cons}<br/>"
+           str+= "<label class='txt_black_description_detail'>Con :</label><label style='padding-left:2px;'>#{content.cons}</label><br/>"
           end 
       end
     end
