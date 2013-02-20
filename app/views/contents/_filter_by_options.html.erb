@@ -6,8 +6,9 @@
       </div>
       <div style="float:left;width:630px;">
         <ul>
-        
-          <%if @custom == "true" %>
+         <%if @topic == "true" %>
+              <li id="All" class="Currentfilter"><a href="#">All</a></li>
+         <%elsif @custom == "true" %>
             <li id="All"><a href="#">All</a></li>
             <li id="Custom" class="Currentfilter"><a href="">Custom</a></li>
           <%else%>  

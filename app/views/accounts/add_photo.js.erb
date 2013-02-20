@@ -1,7 +1,7 @@
 $("#subContainerContentCreate").html("");
 $("#content_new").html("<%= escape_javascript(render 'article_contents/create_new', {:item => @item}) %>");
 
-
+  $("#content_create_form_type").val("Popup");
    $("#subContainerContentCreate").show();
    $("#photo").show();
    $("#add_photo").show();

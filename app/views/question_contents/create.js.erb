@@ -10,6 +10,11 @@ if(window.opener) {
 <%if params[:content_create_form_type] == "Popup"%>
 $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none"); 
+<%if @display!='false' %> 
+   alert("Thank You,Content Created Sucessfully.")
+ <%else%>
+   alert("<%= "Thank you for sharing this question. Its sent for review, once it is approved it would be available for others." %>")
+   <%end%>
 <%else%>
 
 $('#new_question_content')[0].reset();

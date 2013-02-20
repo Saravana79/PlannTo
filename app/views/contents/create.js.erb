@@ -15,5 +15,7 @@ if(window.opener) {
    $("#article_errors").hide();
    $('#new_content')[0].reset();
    showDefaultProductTag("default_product_item_list", "default_content_item");
-   $("#newContentList").append('<%= escape_javascript(render_content_type(@content)) %>');
+  <%if @display!='false' %> 
+    $("#newContentList").append('<%= escape_javascript(render_content_type(@content)) %>');
+ <%end%>
 <% end %>
