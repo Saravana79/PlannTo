@@ -60,7 +60,7 @@
             <td width="113">
             <div>
             <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover" style="margin-right:10px;"><%= item.name rescue ''%></a> 
-            <%if !@buying_plan.completed? && @follow_item != '' %>
+            <%if !@buying_plan.completed? && @follow_item != '' && (current_user && @buying_plan.user_id == current_user.id ) %>
               <%= link_to "(Remove)", follow_path(follow),:method => :delete, :style=>"font-size:9px;color:gray;" %> 
             <%end%>
            <%if  @follow_item == '' && @buying_plan.temporary_buying_plan_ip == request.remote_ip %>
