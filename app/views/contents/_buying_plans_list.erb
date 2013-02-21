@@ -43,8 +43,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
 			-->
 				     <% @follow_types = Itemtype.get_followable_types(buying_plan.itemtype.itemtype) %>
 				   <% @buying_plan = buying_plan %>    
-        <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) %>
-				 <%= render "accounts/buying_items",:buying_plan => @buying_plan, :items => get_items_with_constraint(@follow_item, @follow_types)%>
+        <% @follow_item = Follow.for_follower(buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue []%>
+				 <%= render "accounts/buying_items",:buying_plan => @buying_plan, :items => get_items_with_constraint(@follow_item, @follow_types) rescue ""%>
 			
 				<span class="float_rgt" style="display:inline;">
          </span>
