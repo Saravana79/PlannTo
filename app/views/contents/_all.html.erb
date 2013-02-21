@@ -14,7 +14,7 @@
     <% else %>
       <% params = {"items" => [@item.id], "status" => 1  }%>
     <% end %>
-    <%if @custom == "true" && @topic!="true"%>
+    <%if @custom == "true" && @no_custom!="true"%>
       <% params["sub_type"] = ["Reviews","Deals"] %>
     <%end%> 
     <% @contents = Content.filter(params)  %>

@@ -486,8 +486,7 @@ function remove_fields(link) {
   
     $(document).ready(function(){ 
   <%if @content.nil?%>
-  
-      settings={
+  settings={
         close:true, addButton: false,
         url: "/search/autocomplete_items",
         editMode: false, multiple: true,
@@ -498,7 +497,7 @@ function remove_fields(link) {
        
         $.addTag("article_create_product","article_create_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
-        $("a.icon_close_tagging").remove();
+       $("#article_create_product_list li:first span a.icon_close_tagging").remove();
   <% end %>
 <%else%>
 //error is here
@@ -509,7 +508,7 @@ function remove_fields(link) {
      
       $.addTag("article_create_product","article_create_product_list", settings,"<%= item.name %>", "<%= item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
-    $("a.icon_close_tagging").remove();
+    $("#article_create_product_list li:first span a.icon_close_tagging").remove();
   <%end%>
       $.textTagger("#article_create_product","#article_create_product_list",settings);
 //ends

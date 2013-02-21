@@ -31,10 +31,8 @@ class ProductsController < ApplicationController
  end
 
   def index
+    @no_custom = "true" 
     @filter_by = params["fl"]
-    if !current_user
-      @custom = "true"
-    end 
     search_type = request.path.split("/").last
     @type = search_type.singularize.camelize.constantize
     session[:itemtype] = @type
@@ -71,9 +69,9 @@ class ProductsController < ApplicationController
     #session[:product_warning_message] = "true"
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
     if !current_user
-      @topic = "true" if @item.type == "Topic"
       @custom = "true"
-    end  
+    end 
+    @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
     @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order(:price)
     @related_items = Item.get_related_items(@item, 3)

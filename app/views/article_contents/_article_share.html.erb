@@ -383,9 +383,8 @@
   <% @items.each do |item| %>
         $.addTag("#<%=@search_field_id%>","ul#<%=@ul_list_id%>", settings,"<%= item.name %>", "<%= item.id %>", true);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-    <%if item.id == @item.try(:id) || @article_content.is_review?%>
-          $("ul#<%=@ul_list_id%> li#textTaggers<%=item.id%> span a.icon_close_tagging").remove();
-    <%end%>
+       $("ul#<%=@ul_list_id%> li:first span a.icon_close_tagging").remove();
+   
   <%end%>
   <%unless @article_content.is_review_content?%>
         $.textTagger("#ShareURLDiv #<%=@search_field_id%>","#ShareURLDiv #<%=@ul_list_id%>",settings);

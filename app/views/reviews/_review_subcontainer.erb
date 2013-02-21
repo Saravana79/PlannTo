@@ -86,7 +86,8 @@ position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <div style="clear:both;"></div>
     </div>
     <script type="text/javascript">
-      $(document).ready(function(){
+     <%if @content.nil? %>
+       $(document).ready(function(){
   
       settings={
         close:true, addButton: false,
@@ -95,6 +96,17 @@ position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
         has_parent: false,
         hidden_field: "review_content_item"
       };
+      <%else%>
+        $(document).ready(function(){
+  
+      settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        has_parent: false,
+        hidden_field: "review_item"
+      };
+        <%end%>
       /*$.textTagger("review_product_item","review_product_item_list",settings);*/
     <% unless @item.blank? %>
         $.addTag("review_product_item","review_product_item_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
@@ -110,7 +122,7 @@ position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <%end%>  
     <% end %>
     
-
+ $.textTagger("review_product_item","#review_product_item_list",settings);
   });
   
   function validateReviewForm(){
