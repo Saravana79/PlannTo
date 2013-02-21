@@ -212,7 +212,7 @@
     <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield1%>">
       <div class="title_header float_lft" id="<%=@sharefield1Label%>">Start date :</div>
       <div class="float_lft">
-        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id => @field1_id}  %>
+        <%= f.text_field :field1, {:style=>"margin-left:5px;width:150px", :id => @field1_id,:class => "rating_field"}  %>
       </div>
     </div>
     <div style="padding:5px 5px 0px 0px;text-align:center;display:none" id="<%=@sharefield2%>">
@@ -549,24 +549,30 @@ if ($("#article_content_sub_type").val() == ""){
     hideAllOptionalFieldsArticleSubmit();
     
     if (category == "<%=ArticleCategory::EVENT%>"){
+      $("#deals1").remove();
       showArticleSubmitEventOptFields();
     }
     else if(category == "<%=ArticleCategory::ACCESSORIES%>"){
+      $("#deals1").remove();
       showArticleSubmitAccessoriesOptFields();
     }
     else if (category == "<%=ArticleCategory::APPS%>"){
+       $("#deals1").remove();
       showArticleSubmitAppOptFields();
     }
     else if (category == "<%=ArticleCategory::TRAVELOGUE%>"){
+       $("#deals1").remove();
       showArticleSubmitTravelogueOptFields();
     }
     else if (category == "<%=ArticleCategory::REVIEWS%>"){
+      $("#deals1").remove();
       $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
     }
     else if (category == "<%=ArticleCategory::DEALS%>"){
       $("#deals1").show();
     }
     else if (category == "<%=ArticleCategory::MILES%>"){
+       $("#deals1").remove();
       showArticleSubmitMileOptFields();
     }
   }
@@ -732,7 +738,7 @@ if ($("#article_content_sub_type").val() == ""){
     start: score,
     width:  '200px',
     click: function(score, evt) {
-      $("#<%=@form_id%> #<%=@field1_id%>").val("" + score);
+      $(".rating_field").val("" + score);
     }
   });
   	
