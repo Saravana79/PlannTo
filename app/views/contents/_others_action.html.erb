@@ -1,0 +1,20 @@
+<li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
+<ul class="navdrop" data-content=<%= content.id %>>
+	<li class="item1"><a href="#"><span>Others</span></a>
+		<ul >
+			<%# content_list = content.guides.map{|c| c.id } %>
+			  <%if content.can_update_content?(current_user)%>
+			 
+        <li> <%=link_to " Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
+         <%end%>
+			 <%if current_user && current_user.is_admin? %>
+      <li> <%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+       <%if content.status == 2%>
+        
+         <li> <%= link_to "Approve",approve_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+      <%end%>   
+     <%end%>  
+		
+		</ul>
+	</li>
+</ul>
