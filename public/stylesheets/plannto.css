@@ -2615,8 +2615,8 @@ ul.imgfollowers							{ list-style:none; padding:0; margin:0; width:251px;  marg
 
 .other_links							{ width:251px;list-style-image:url(../images/icon_arrow_small.png); display:block; }
 
-.menu_list 								{ width:251px;height:25px; color:#007dbd; display:block; border:solid 0px; background:url(../images/icon_arrow_small.png) no-repeat 0px 6px; padding-left:10px;}
-.menu_list a:hover						{ color:#c15f24; text-decoration:none;display:block; }
+.menu_list 								{ width:251px;height:25px; color:#333; display:block; border:solid 0px;padding-left:10px;text-decoration: none;}
+.menu_list a:hover						{  text-decoration:underline;display:block; }
 .heading_others							{ width:251px; height:25px; padding-top:6px; display:block;text-indent:10px; margin-bottom:10px;border-bottom:solid 1px #cdd3d7; line-height:20px; ` }
 
 /* Plane to Buy - I Won IT - I Follow */

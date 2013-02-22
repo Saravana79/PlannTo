@@ -127,14 +127,14 @@
        <%= render "shared/login_dialog" %>
        <div class="Dontsignup">
         Don't have an account.
-        <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" %>
+        <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"%>
      </div>
       </div>
         <div id="sign_up_dialog_1" style="display:none;">
      <%= render "shared/signup_dialog" %>
       <div class="Dontsignup">
         Do you have an account.
-       <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"   %>
+       <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"   ,:style=>"font-weight:bold;text-decoration:underline;"%>
       </div>
      </div>
     </div>
@@ -144,14 +144,14 @@
 <%= render "shared/login_dialog" %>
 <div class="Dontsignup">
 Don't have an account.
-<%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login1').hide();" %>
+<%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login1').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"%>
 </div>
 </div>
 <div id="sign_up_dialog_2">
 <%= render "shared/signup_dialog" %>
 <div class="Dontsignup">
 Do you have an account.
-<%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login1').show();"   %>
+<%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login1').show();"  ,:style=>"font-weight:bold;text-decoration:underline;" %>
 </div>
 </div>
 
