@@ -1532,8 +1532,9 @@ div.rate_content {
 .divCommentsConent {
     height: 12px;
     list-style: none;
-    padding: 0;
+    padding:0;
     margin: 0;
+    padding-top: 5px;
 }
 
 .margin_lft10 {
@@ -2014,7 +2015,7 @@ li.middlebg {
 /* Search Result -- Start */
 .title {
     font: bold 13px Tahoma,Arial, Helvetica, sans-serif;
-    color: #111111;
+    color: #333;
     padding: 0;
     margin: 0;
     text-decoration: none;
@@ -2056,8 +2057,9 @@ li.middlebg {
 
 .txt_black_description {
     font: 11px Tahoma,Arial, Helvetica, sans-serif;
-    color: #000;
+    color: #333;
     text-decoration: none;
+    line-height: 1.3;
 }
 
 .txt_black_description_detail {
@@ -3310,7 +3312,7 @@ ul#Newtabs { width:100%; float:left; height:36px; background:url(../images/navig
             padding:0 0 0 0px; margin:0 0 10px 0;}
 ul#Newtabs li:first-child { margin-left:13px;}
 ul#Newtabs li { display:block; float:left; padding:0; margin:0; list-style:none;}
-ul#Newtabs li a { font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#2a2929; text-decoration:none; 
+ul#Newtabs li a { font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#2a2929; text-decoration:none; 
                   display:block; line-height:36px; text-align:center;  font-weight:bold;
                   padding:0 0 0 12px; float:left;}
 ul#Newtabs li a span { display:block; float:left; padding:0 12px 0 0px;}  
@@ -4481,3 +4483,4 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
 .outerdivwarning{display: block;width: 100%; top: 0px; left: 0px; z-index: 5000;position:fixed;}
 .innerdivwarning{font-size: 14px;font-weight: normal;height: 30px;line-height: 30px;margin: 0;overflow: visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: #eb583c;color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
 .hyperlinkwarning{background: #4a4844;padding: 2px 8px 2px 8px;color: #ffffff;text-decoration: none;font-size: 12px;}
+.contentsubsection{padding-top:5px;}

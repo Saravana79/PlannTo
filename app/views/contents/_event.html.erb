@@ -7,8 +7,8 @@
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
     <div><%= link_to content.title, content_path(content.id), :class => "title" %></div>
-    <div><a class="txt_brown" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> reviewed <%=get_anchor_name_link(content)%> - <%= time_ago_format(content) %> ago. Start date: <%=content.start_date%> End date: <%=content.end_date%> Location: <%=content.location%></a></div>
-    <div class="subContentGap"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
+    <div><a class="txt_brown" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared <%=get_anchor_name_link(content)%> - <%= time_ago_format(content) %> ago. Start date: <%=content.start_date%> End date: <%=content.end_date%> Location: <%=content.location%></a></div>
+    <div class="subContentGap contentsubsection"><a class="txt_black_description"><%= content.description %></a><a href="google.com" class="padding_left10 txt_blue">more...</a></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>

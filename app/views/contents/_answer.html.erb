@@ -12,7 +12,7 @@
       
     </div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> answered a question on </a><a class="txt_brown"><%=get_anchor_name_link(content.question_content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
-    <div>
+    <div class="contentsubsection">
       
           <div class="subContentGap">
        <%= raw get_rating_or_category_contents(content)%>

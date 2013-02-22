@@ -8,7 +8,7 @@
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status == 2%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%></div>
  
    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> reviewed </a><%=get_anchor_name_link(content)%> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
-    <div class="subContentGap">
+    <div class="subContentGap contentsubsection">
     	<%= raw get_rating_or_category_contents(content,page)%>
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
 						<% rating =  (content.is_a?(ArticleContent)) ? content.field1 : content.rating %>
