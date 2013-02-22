@@ -2,7 +2,7 @@
 <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
   <%= render "shared/login_fields", {:f => f} %> 
 <% end %>
-  <div class="Dontsignup">Don't have an account. <%= link_to "Sign up now" ,"#", :onclick =>"$('.sign_up').show();$('.sign_in_home').hide();" %></div>
+  <div class="Dontsignup">Don't have an account. <%= link_to "Sign up now" ,"#", :onclick =>"$('.sign_up').show();$('.sign_in_home').hide();",:style=>"font-weight:bold;text-decoration:underline;"%></div>
 </div>
 
 

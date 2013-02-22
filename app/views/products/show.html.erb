@@ -219,17 +219,17 @@ $("#dialog-form #click_message").show();
 <br/>
 <%= render "shared/quick_links", :search_type => @item.get_base_itemtype().pluralize %>
 <br/>
-<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
+<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;border-bottom:solid 1px #cdd3d7;">
   <%= render  "shared/share_buttons",:caption_text => 'Check out ' + @item.name +  
   ' on PlannTo.com' %>
 </div>
 <!--follower block start here-->
-<br/>
+
 <%=render :partial => "shared/google_adsense_square" %>
 <!--follower block end here-->
-<br/>
+
 <% unless @item.get_followers.empty? %>
-<div class="txt_black imgfollowers">Followers
+<div class="txt_black imgfollowers" style="padding-top:5px;">Followers
   <ul class="imgfollowers">
       <% @item.get_followers.each do |follower| %>
         <li class="imgfollowers">
