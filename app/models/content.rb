@@ -224,7 +224,7 @@ end
     UserActivity.where('related_activity_type !=? and related_activity_type !=? and related_id =?', "User","Buying Plan",self.id).each do |a|
       a.destroy
     end
-    if self.sub_type == "Q&A" && self.is_a?(QusetionContent)
+    if self.sub_type == "Q&A" && self.is_a?(QuestionContent)
       answer_ids = self.answer_contents.collect(&:id)
       UserActivity.where("related_activity_type !=? and related_activity_type !=? and  related_id in (?)",'User','Buying Plan', answer_ids).each do |an|
       an.destroy

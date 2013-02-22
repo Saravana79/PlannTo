@@ -13,6 +13,14 @@
     <%end%>
     <%if @item.is_a?CarGroup %> 
        <span class="menu_list"><a href="/items/compare?ids=<%= @item.related_cars.collect(&:id).join(',') %>">Compare Cars</a></span>
-     <%end%>  
+     <%end%>
+     <%unless (@item.is_a?(Topic) || @item.is_a?(AttributeTag))  %>
+      <span class="menu_list"><a href="#"  id="review1" data-content="Reviews">Write a Review</a>  </span>
+       <span class="menu_list"><a href="#"  id="review2" data-content="Reviews">Ask a Question</a>  </span>
+     <%else%>
+        <span class="menu_list"><a href="#"  id="review1" data-content="Reviews">Ask a Question</a>  </span>
+        <span class="menu_list"><a href="#"  id="review2" data-content="Reviews">Add a Photo</a>  </span>
+        <%end%>
     </div>
+    
     <!-- Buttons - End-->

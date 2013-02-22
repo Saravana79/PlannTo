@@ -117,7 +117,7 @@ position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
       <% @items.each do |item| %>
          $.addTag("review_product_item","review_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", false)
-        $("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
+        //$("ul#review_product_item_list li:first span a.icon_close_tagging").remove();
       <%end%>   
       <%end%>  
     <% end %>

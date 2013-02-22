@@ -129,7 +129,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
     <% @items.each do |item| %>
           $.addTag("#question_product_item"," ul#question_product_item_list", settings,"<%= item.name %>", "<%= item.id %>", true);
           $.addIdToField(settings.hidden_field, "<%= item.id %>", true)
-          $("ul#question_product_item_list li:first span a.icon_close_tagging").remove();
+          //$("ul#question_product_item_list li:first span a.icon_close_tagging").remove();
  
     <%end%>
         $.textTagger("#question_product_item","#question_product_item_list",settings);
