@@ -2,28 +2,49 @@
 
     <div class="other_links" >
       <span class="txt_black heading_others">Quick Links</span>
+
+         <%if @item.is_a?Product%>
+           <span class="menu_list">
+            <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+            <a href="/items/compare?ids=<%= @item.id %>">Compare <%= @item.itemtype.itemtype %>s</a></span>
+          <%end%>
+          <%if @item.is_a?CarGroup %> 
+             <span class="menu_list">
+              <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/><a href="/items/compare?ids=<%= @item.related_cars.collect(&:id).join(',') %>">Compare Cars</a></span>
+           <%end%>
+
+
+        <%unless current_user %>
+            <%unless (@item.is_a?(Topic) || @item.is_a?(AttributeTag))  %>
+                <span class="menu_list">
+                  <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+                  <a href="#"  id="review1" data-content="Reviews">Write a Review</a>  
+                </span>
+                <span class="menu_list">
+                  <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+                  <a href="#"  id="review2" data-content="Reviews">Ask a Question</a>  
+                </span>
+           <%else%>
+              <span class="menu_list">
+                <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+                <a href="#"  id="review1" data-content="Reviews">Ask a Question</a> 
+               </span>
+            <span class="menu_list">
+              <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+              <a href="#"  id="review2" data-content="Reviews">Add a Photo</a>  
+            </span>
+           <%end%>
+        <%end%>
+
       <%@guides = Guide.all%>
       <%@guides.each do |guide|%>
       <%unless ((@item.is_a?Product) || (@item.is_a?CarGroup) and  (guide.name=="Expert" || guide.name=="Experts Guides" )) || ((@item.is_a?(Topic) || @item.is_a?(AttributeTag)) and  (guide.name=="Owner" || guide.name=="Owner Guides" )) %>
-      <span class="menu_list"><a href="/<%=search_type%>/guides/<%=guide.name%>?item_id=<%= @item.id rescue ''%>"><%=guide.name%></a></span>
+      <span class="menu_list">
+        <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+        <a href="/<%=search_type%>/guides/<%=guide.name%>?item_id=<%= @item.id rescue ''%>"><%=guide.name%></a></span>
       <%end%>
     <%end%>
-   <%if @item.is_a?Product%>
-     <span class="menu_list"><a href="/items/compare?ids=<%= @item.id %>">Compare <%= @item.itemtype.itemtype %>s</a></span>
-    <%end%>
-    <%if @item.is_a?CarGroup %> 
-       <span class="menu_list"><a href="/items/compare?ids=<%= @item.related_cars.collect(&:id).join(',') %>">Compare Cars</a></span>
-     <%end%>
-      <%unless current_user %>
-        <%unless (@item.is_a?(Topic) || @item.is_a?(AttributeTag))  %>
-          <span class="menu_list"><a
-            <href="#"  id="review1" data-content="Reviews">Write a Review</a>  </span>
-            <span class="menu_list"><a href="#"  id="review2" data-content="Reviews">Ask a Question</a>  </span>
-        <%else%>
-          <span class="menu_list"><a href="#"  id="review1" data-content="Reviews">Ask a Question</a>  </span>
-          <span class="menu_list"><a href="#"  id="review2" data-content="Reviews">Add a Photo</a>  </span>
-          <%end%>
-        <%end%>
+   
     </div>
     
     <!-- Buttons - End-->
