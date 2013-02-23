@@ -2,11 +2,19 @@
 <div style="padding:5px 0px 5px 0px">
 	<script type="text/javascript"><!--
 	google_ad_client = "ca-pub-8213060007083692";
+		<%#if @type=='BannerBig'%>				
+			/* BannerBig */
+			google_ad_slot = "5430564902";
+			google_ad_width = 728;
+			google_ad_height = 90;
+			//-->
+		<%#else%>
 			/* NewAdd */
 			google_ad_slot = "1061070909";
 			google_ad_width = 250;
 			google_ad_height = 250;
 			//-->
+		<%end%>
 	</script>
 	<script type="text/javascript"
 	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
