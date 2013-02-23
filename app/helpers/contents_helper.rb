@@ -93,7 +93,7 @@ module ContentsHelper
     txt= "Comments "
     txt += "(#{item.comments_count})" unless item.comments_count.nil?
     <<-END
-     #{link_to txt, content_comments_path(item, :comment_type =>item.class.name), :remote => true, :class => "txt_blue comments_show", :id => "anchor_comments_#{item.id}"}
+     #{link_to txt, content_comments_path(item, :comment_type =>item.class.name), :remote => true, :class => "txt_blue comments_show", :id => "anchor_comments_#{item.id}", :style=>"float:left;padding-left:5px;"}
     END
   end
 

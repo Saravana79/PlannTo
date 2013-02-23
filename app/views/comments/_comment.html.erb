@@ -6,7 +6,7 @@
 	<div class="subContentGap">
 		<a class="txt_black_description"><%= comment.comment %> </a></div>			
 		<ul class="divCommentsConent ">
-			<li class="subContentGap float_lft"><a class="txt_gray "><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></li>
+			<li class="subContentGap float_lft"><a class="txt_gray " style="font-weight:bold;"><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></li>
 			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue",:id => "report_link_#{@content.id}#{comment.id}" %></a></li>
 		<%if comment.can_update_content?(current_user)%>
 			<li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>

@@ -23,9 +23,9 @@
     </div>
 
     <ul class="divCommentsConent dontfloat">
-      <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-      <li class="subContentGap float_lft"><a class="txt_blue "><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" ,:id => "report_link_#{content.id}"%></a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" ,:id => "report_link_#{content.id}",:style=>"float:left;padding-left:5px;"%></a></li>
      <%end%>
 		   <script>
          $("#report_link_<%= content.id %>").click(function(e){

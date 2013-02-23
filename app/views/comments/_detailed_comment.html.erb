@@ -5,8 +5,8 @@
 					<a href="<%= comment.user.get_url()%>"> <img src="<%= comment.user.get_photo%>" class="userImageSmall"/></a>
 				</div>
   <div class="subContentDiv" style="padding-bottom:0px;">
-    <div><a class="txt_brown" ><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></div>
-    <div style="padding:3px 0px 2px 0px"><a class="txt_black_description" href="" ><%= comment.comment %></a></div>
+    <div><a class="txt_brown" style="font-weight:bold;"><%= comment.user.name %> - <%= time_ago_in_words(comment.updated_at) %> ago</a></div>
+    <div style="padding:5px 0px 2px 0px"><a class="txt_black_description" href="" ><%= comment.comment %></a></div>
     <ul class="divCommentsConent ">
 			
 			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue",:id => "report_link_#{@content.id}#{comment.id}" %></a></li>

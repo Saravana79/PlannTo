@@ -3898,7 +3898,7 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; font-weight:bo
 .sign_inbutton:hover span span  { background: url(../images/signin_butright.png) no-repeat right bottom;}
 
 
-ul.navdrop {z-index: 5000; float:left; padding:0 0 0 10px;  margin:0;}
+ul.navdrop {z-index: 5000; float:left; padding:0 0 0 0px;  margin:0;}
 ul.navdrop li {list-style:none; position: relative; float: left; padding:0 5px 0 0; text-align: center; line-height: 1em;}
 
 ul.navdrop li a {display: block; padding: 5px 8px 5px 22px; color:#2680B9; text-decoration:none; font-size:11px;

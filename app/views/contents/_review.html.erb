@@ -29,9 +29,9 @@
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
     
     <ul class="divCommentsConent">
-      <li class="subContentGap float_lft"><a class="txt_blue"><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue" style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray">|</a></li>
-      <li class="subContentGap float_lft"><a class="txt_blue"><div id="report_link_<%= content.id %>"> <img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" %></div></a></li>
+      <li class="subContentGap float_lft"><a class="txt_blue" style="float:left;"><div id="report_link_<%= content.id %>"> <img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" ,:style=>"float:left;padding-left:5px;"%></div></a></li>
       <%end%>
      
       <%if content.can_update_content?(current_user)%>
