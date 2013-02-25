@@ -13,7 +13,7 @@
 	</ul>
 </div>
 <% content_for :title, content.title  + " - "%>
-<% content_for :description, content.description%>
+<% content_for :description, content.description.split[0..150]%>
 
 <%if (content.is_a?(ArticleContent) && content.thumbnail?)%>
 <% content_for :image, change_thumb_original(content) %>

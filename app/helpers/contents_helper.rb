@@ -199,10 +199,10 @@ module ContentsHelper
   def get_content_description(content, detail=false)
     wordcount = Content::WORDCOUNT
     if detail == false
-      "<a class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</a>"+ (content.description.split.size > wordcount ? "...": "")
+      "<div class='txt_black_description'>" + content.description.split[0..(wordcount-1)].join(" ") + "</div>"+ (content.description.split.size > wordcount ? "...": "")
       #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
     else
-      "<a class='txt_black_description_detail'>" + content.description + "</a>"
+      "<div class='txt_black_description_detail'>" + content.description + "</div>"
     end
   end
 
