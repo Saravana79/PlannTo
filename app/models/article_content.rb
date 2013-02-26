@@ -34,7 +34,10 @@ class ArticleContent < Content
         end
         @meta_description = ''
         doc.xpath("//meta[@name='description']/@content").each do |attr|
-          @meta_description = CGI.unescapeHTML(attr.value.to_s.gsub!(/[^\x20-\x7e]/,''))
+          unless attr.value.nil?
+            @meta_description = CGI.unescapeHTML(attr.value.to_s.gsub(/[^\x20-\x7e]/,''))
+            #@meta_description = CGI.unescapeHTML(attr.value.to_s)
+          end 
         end
         # doc.xpath("//link[@rel='image_src']").each do |attr|
         #   @images << CGI.unescapeHTML(attr.value)
