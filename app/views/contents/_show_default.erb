@@ -70,7 +70,7 @@
 						
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
 						<% rating =  (content.is_a?ArticleContent) ? content.field1 : content.rating %>
-						<% unless rating == '0'%>
+						<% unless rating == 0%>
 						<script type="text/javascript">
 						$(document).ready(function(){
 							$('div#content_show_<%= content.id%>').raty({
