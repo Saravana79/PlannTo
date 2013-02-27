@@ -229,7 +229,9 @@ module ContentsHelper
         end
       else
         str=""
-        str+= "<label class='txt_black_description_detail'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.rating}'></div><br/>"
+        unless content.rating == '0'
+          str+= "<label class='txt_black_description_detail'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.rating}'></div><br/>"
+        end
         unless content.pros.blank?
           str+= "<label class='txt_black_description_detail' >Pro :</label><label style='padding-left:2px;'>#{content.pros}</label><br/>"
         end
