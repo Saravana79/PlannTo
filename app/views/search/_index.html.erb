@@ -13,7 +13,7 @@
   </div>-->
 <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:0px"></div>
   <%if params[:page] == "1" || !params[:page] %>
-     <% session[:group] = [] %>
+     <% session[:group_id] = [] %>
   <%end%>  
   <%@items.results.each do |item|%>
      <% group = [] %>
@@ -60,7 +60,7 @@
     </div>
     <%end%>
       <% group << group_id %>
-       <% session[:group_id] = group %>
+      <% session[:group_id] = group %>
       <% session[:group_id].delete("no") %>
   <%end%>
 
