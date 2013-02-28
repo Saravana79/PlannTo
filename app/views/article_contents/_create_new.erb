@@ -30,12 +30,11 @@
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
 
    <% unless params[:sub_type] %>
-  <%if Rails.env == "development"%>
-    <div style="float:right;margin-left:2000px;">
+ <div style="float:right;margin-left:2000px;">
       <img  src="/images/newwindow.png" onclick= "open_and_redirect()" title="Open in new window" style="cursor:pointer;"  />
    </div>   
   <%end%>
-  <%end%>
+
   
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
@@ -56,10 +55,19 @@
      $("#item_1").val("<%= @item.id rescue ""  %>");
      $("#content_1").val("<%= @content.id rescue ""  %>");
      $("#tit_1").val($("#article_content_title").val());
+    if (i == "Deals")
+      {
+      $("#field_1").val($("#expire_date").val());
+      $("#field_2").val($("#discount").val());
+      $("#field_3").val($("#completed").val());
+      }
+      else
+      {
      $("#field_1").val($("#new_article_create_field1").val());
      $("#field_2").val($("#new_article_create_field2").val());
      $("#field_3").val($("#new_article_create_field3").val());
      $("#field_4").val($("#new_article_create_field4").val());
+     }
      var x = tinyMCE.get('m_text23').getContent();
      $("#desc_1").val(x);
       window.open('',"mypopup11", 'toolbars=0');
@@ -209,11 +217,11 @@ function remove_fields(link) {
     </div> 
     <div class="title_header float_lft">Discount:</div>
       <div class="float_lft">
-         <%= f.text_field :field2, {:style=>"margin-left:1px;width:150px"}%>
+         <%= f.text_field :field2, {:style=>"margin-left:1px;width:150px", :id => "discount"}%>
       </div>
      <div class="title_header float_lft">Completed?:</div>
       <div class="float_lft">
-         <%= f.check_box :field3%>
+         <%= f.check_box :field3,:id => "completed"%>
        </div>
        <script>
          $('#expire_date').datepicker();
@@ -350,21 +358,26 @@ function remove_fields(link) {
     $("form#<%=@form_id%> input#article_content_create_submit").val(saveButtonName);
     hideAllOptionalFieldsArticleCreate();
     if (category == "<%=ArticleCategory::EVENT%>"){
+      $("#deals").remove();
       showArticleCreateEventOptFields();
     }
     else if(category == "<%=ArticleCategory::ACCESSORIES%>"){
+      $("#deals").remove();
       showArticleCreateAccessoriesOptFields();
     }
     else if (category == "<%=ArticleCategory::APPS%>"){
+      $("#deals").remove();
       showArticleCreateAppOptFields();
     }
     else if (category == "<%=ArticleCategory::DEALS%>"){
       $('#deals').show();
     }
     else if (category == "<%=ArticleCategory::TRAVELOGUE%>"){
+      $("#deals").remove();
       showArticleCreateTravelogueOptFields();
     }
     else if (category == "<%=ArticleCategory::MILES%>"){
+      $("#deals").remove();
       showArticleCreateMileOptFields();
     }
   }

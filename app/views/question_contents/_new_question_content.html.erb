@@ -19,13 +19,13 @@
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
     <div id="notification" class="notificationStyle"><%if (current_user.total_points rescue 11) > 10 %>Thank You, Question has been created.<%else%> Thanks for sharing the Qusetion. Its sent for approval, once it is reviewed it would be available for others<%end%></div>
-    <%if Rails.env == "development"%>
+  
   <% unless params[:sub_type] %>
    <div style="float:right;margin-left:2000px;">
        <img  src="/images/newwindow.png" onclick= "open_and_redirect2()" title="Open in new window" style="cursor:pointer;"   />
        </div>
      <%end%>
-  <%end%>   
+  
   
 
     <script type="text/javascript">

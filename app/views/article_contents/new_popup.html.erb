@@ -16,7 +16,7 @@
 
 <%= render_new_open_window_form(@item,@items,@content,params[:sub_type],@url) %>
  <script>
-   <%if params[:sub_type]  == 'Travelogue' && !@url %>'
+   <%if params[:sub_type]  == 'Travelogue' && !@url %>
       showArticleCreateTravelogueOptFields();
    <%elsif params[:sub_type]  == 'Travelogue' && @url%> 
       $("#deals1").remove();
@@ -54,6 +54,9 @@
    $("#new_article_create_field1").val("<%= @field1  rescue "" %>");
    $("#new_article_create_field2").val("<%= @field2  rescue "" %>");
    $("#new_article_create_field3").val("<%= @field3  rescue "" %>");
+   $("#expire_date").val("<%= @field1  rescue "" %>");
+   $("#discount").val("<%= @field2  rescue "" %>");
+   $("#completed").val("<%= @field3  rescue "" %>");
    $("#new_article_create_field4").val("<%= @field4  rescue "" %>");
    $("#new_share_field1").val("<%= @field1  rescue "" %>");
    $("#new_share_field2").val("<%= @field2  rescue "" %>");

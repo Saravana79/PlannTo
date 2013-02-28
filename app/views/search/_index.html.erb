@@ -12,19 +12,24 @@
     <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
   </div>-->
 <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:0px"></div>
-
+  <%if params[:page] == "1" || !params[:page] %>
+     <% session[:group] = [] %>
+  <%end%>  
   <%@items.results.each do |item|%>
-    <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;">
-      <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="176" height="132" onclick="parent.location='<%=link_url(item)%>'" /></div>
-      <div class="float_rgt" style="width:520px;">
-        <div class="float_rgt">
-          <a class="txt_compare" >  COMPARE</a>
-          <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
-        </div>
+     <% group = [] %>
+     <% group_id = item.cargroup.id rescue "no" %>
+      <%unless session[:group_id].include?(group_id) %>
+         <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;">
+          <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="176" height="132" onclick="parent.location='<%=link_url(item)%>'" /></div>
+            <div class="float_rgt" style="width:520px;">
+            <div class="float_rgt">
+           <a class="txt_compare" >  COMPARE</a>
+           <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
+            </div>
 
 
-        <span>
-          <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.name%></a></h1>
+            <span>
+              <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.name%></a></h1>
              <%@where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) %>
           <a class="txt_price"><%= item.get_price_info('Price',true,@where_to_buy_items.size).html_safe %></a><br />
            <% rating_id = "search_index_#{item.id}" %>
@@ -53,6 +58,10 @@
       </div>
   <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
+    <%end%>
+      <% group << group_id %>
+       <% session[:group_id] = group %>
+      <% session[:group_id].delete("no") %>
   <%end%>
 
     <%= render 'shared/show_hide_login_form', :item => "" %>
