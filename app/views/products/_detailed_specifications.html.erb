@@ -15,7 +15,9 @@
             
                 <%if display_specification?(product_attribute)%>
                   <ul class="<%= cycle("specificationinnerul", "specificationinnerul", :name => "specificationinnerul") -%>">
+                  <%unless product_attribute.name == "Price" %>
                     <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong> <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
+                  <%end%>  
                   </ul >
                 <%end%>
               <% end %>

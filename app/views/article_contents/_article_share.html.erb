@@ -40,11 +40,15 @@
     <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
   <%end%>
 <%= form_for :popup, :url => new_popup_article_contents_path,:html => {:method => :post,:target=>'mypopup3',:id => 'new_popup3' } do |f| %>
-    <%= hidden_field_tag "sub_type" %>
-    <%= hidden_field_tag "item" %>
-    <%= hidden_field_tag "content" %>
-    <%= hidden_field_tag "title" %>
-    <%= hidden_field_tag "description" %>
+  <%= hidden_field_tag "sub_type","",:id => "share_sub_1" %>
+    <%= hidden_field_tag "item","",:id => "share_item_1"  %>
+    <%= hidden_field_tag "content","",:id => "share_content_1" %>
+    <%= hidden_field_tag "title","",:id => "share_tit_1" %>
+    <%= hidden_field_tag "field1","",:id=> "share_field_1" %>
+    <%=  hidden_field_tag "field2","",:id=> "share_field_2"  %>
+    <%= hidden_field_tag "field3","",:id=> "share_field_3"  %>
+    <%=  hidden_field_tag "field4","",:id=> "share_field_4"  %> 
+    <%= hidden_field_tag "description","",:id => "share_desc_1" %>
     <%= hidden_field_tag "url" %>
  <%end%>
   <%= form_for(@article_content, :as => :article_content,:html => { :id => "#{@form_id}" }, :url => download_article_contents_path, :remote => true) do |f| %>
@@ -61,13 +65,17 @@
  
       function open_and_redirect_url1() {
      var i =  $("#article_content_sub_type").val();
-     $("#sub_type").val(i);
-     $("#item").val("<%= @item.id rescue ""  %>");
-     $("#content").val("<%= @article_content.id rescue ""  %>");
-     $("#title").val($("#article_content_title").val());
+     $("#share_sub_type").val(i);
+     $("#share_item").val("<%= @item.id rescue ""  %>");
+     $("#share_content").val("<%= @article_content.id rescue ""  %>");
+     $("#share_tit_1").val($("#article_content_title").val());
+     $("#share_field_1").val($("#new_share_field1").val());
+     $("#share_field_2").val($("#new_share_field2").val());
+     $("#share_field_3").val($("#new_share_field3").val());
+     $("#share_field_4").val($("#new_share_field4").val())
      $("#url").val("true");
      var x = $(".expanding").val();
-     $("#description").val(x);
+     $("#share_desc_1").val(x);
       window.open('',"mypopup3", 'toolbars=0');
      $("#contentEditView").dialog('destroy');
    $(".ui-dialog-content").dialog('destroy')

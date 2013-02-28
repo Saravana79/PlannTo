@@ -18,6 +18,13 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
     <%= hidden_field_tag "item" %>
     <%= hidden_field_tag "content" %>
     <%= hidden_field_tag "title" %>
+    <%= hidden_field_tag "pros" %>
+    <%= hidden_field_tag "cons" %>
+    <%= hidden_field_tag "field1" %>
+    <%= hidden_field_tag "field2" %>
+    <%= hidden_field_tag "field3" %>
+    <%= hidden_field_tag "field4" %>
+     <%= hidden_field_tag "rating" %>
     <%= hidden_field_tag "description" %>
  <%end%>
   <%= form_for @content || ReviewContent.new,:html => { :id => "#{@form_id}" }, :remote => true do |f| %>
@@ -47,6 +54,9 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
      $("#item").val("<%= @item.id rescue ""  %>");
      $("#content").val("<%= @content.id rescue ""  %>");
      $("#title").val($("#review_content_title").val());
+     $("#pros").val($("#review_content_pros").val());
+     $("#cons").val($("#review_content_cons").val());
+      $("#rating").val($("#reviewRating-score").val());
      var x = tinyMCE.get('m_text3').getContent();
      $("#description").val(x);
       window.open('',"mypopup", 'toolbars=0');
@@ -286,6 +296,7 @@ g.oeditor.render();
 
 <script>
 $("#<%= @form_id %>").submit(function(e){
+
      <% if !current_user %>
          $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
            openLoginPopup("#" + $(this).attr('id'), "submit");

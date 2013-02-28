@@ -141,10 +141,12 @@ $("#dialog-form #click_message").show();
 	   <script type="text/javascript">
     	
     	$(function(){
-
-  $('#review1').click(function(e){
-    <%if !current_user %>
-    $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
+    $('#review1').click(function(e){
+     <%if !current_user %>
+       <% session[:review1] = "true" %>
+       <% session[:review2] =  nil %>
+       <% session[:review3] =  nil %>
+       $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
        return false
      <%end%>    
@@ -152,6 +154,9 @@ $("#dialog-form #click_message").show();
   });
     $('#review2').live("click",function(){
      <%if !current_user %>
+      <% session[:review2] = "true" %>
+      <% session[:review1] =  nil %>
+      <% session[:review3] =  nil %>
      $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
        return false
@@ -160,6 +165,9 @@ $("#dialog-form #click_message").show();
   });
    $('#review3').live("click",function(){
      <%if !current_user %>
+      <% session[:review3] = "true" %>
+      <% session[:review2] =  nil %>
+      <% session[:review1] =  nil %>
      $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
        return false
@@ -362,11 +370,22 @@ Message : <br />
       $("ul#Newtabs li#all_variant").addClass("tab_active");
      })
   </script>
-<%if @write_review == "write_review" %>
-
+<%if @write_review == "write_review" || session[:review1] == "true" %>
+  <% session[:review1] = nil %>
  <script type="text/javascript">
    $("#contentReviews").click();
    document.getElementById('review_content_title').focus();
  </script>
-<%end%>
-
+ <%elsif  session[:review2] == "true" %>
+   <% session[:review2] =  nil %>
+  <script type="text/javascript">
+     $(".Qatab").click();
+     document.getElementById('question_content_title').focus();
+  </script>
+<%elsif session[:review3] == "true"%>
+  <% session[:review3] =  nil %>
+  <script type="text/javascript">
+    $(".Photos").click();
+    document.getElementById('article_content_title').focus();
+ </script>
+<%end%> 

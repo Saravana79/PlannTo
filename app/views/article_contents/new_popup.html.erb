@@ -16,20 +16,65 @@
 
 <%= render_new_open_window_form(@item,@items,@content,params[:sub_type],@url) %>
  <script>
-   
+   <%if params[:sub_type]  == 'Travelogue' && !@url %>'
+      showArticleCreateTravelogueOptFields();
+   <%elsif params[:sub_type]  == 'Travelogue' && @url%> 
+      $("#deals1").remove();
+      showArticleSubmitTravelogueOptFields(); 
+   <%elsif params[:sub_type] == "Deals" && !@url%>
+     $("#deals").show(); 
+   <%elsif params[:sub_type] == "Deals" && @url %>
+      $("#deals1").show();
+   <%elsif params[:sub_type] == "Event"  && !@url %>
+      showArticleCreateEventOptFields();
+   <%elsif params[:sub_type] == "Event" && @url %>
+      $("#deals1").remove();
+      showArticleSubmitEventOptFields();  
+   <%elsif  params[:sub_type] == "Accessories" && !@url %>
+      showArticleCreateAccessoriesOptFields();
+   <%elsif  params[:sub_type] == "Accessories" && @url %>
+      $("#deals1").remove();
+      showArticleSubmitAccessoriesOptFields();
+   <%elsif  params[:sub_type] == "Apps" && !@url %>
+      showArticleCreateAppOptFields();
+    <%elsif  params[:sub_type] == "Apps" && @url %>
+       $("#deals1").remove();
+       showArticleSubmitAppOptFields();
+    <%elsif  params[:sub_type] == "Miles" && !@url %>
+       showArticleCreateMileOptFields(); 
+    <%elsif params[:sub_type] == "Reviews" && !@url %>
+      $("#deals1").remove();
+      $("div#ShareURLDiv div#new_product_review_rating").show();
+    <%elsif  params[:sub_type] == "Miles" && @url %>
+      $("#deals1").remove();
+      showArticleSubmitMileOptFields();
+    <%end%>   
   <% unless @content %>
-  $("#article_content_title").val("<%= @title  rescue "" %>");
+   $("#article_content_title").val("<%= @title  rescue "" %>");
+   $("#new_article_create_field1").val("<%= @field1  rescue "" %>");
+   $("#new_article_create_field2").val("<%= @field2  rescue "" %>");
+   $("#new_article_create_field3").val("<%= @field3  rescue "" %>");
+   $("#new_article_create_field4").val("<%= @field4  rescue "" %>");
+   $("#new_share_field1").val("<%= @field1  rescue "" %>");
+   $("#new_share_field2").val("<%= @field2  rescue "" %>");
+   $("#new_share_field3").val("<%= @field3  rescue "" %>");
+   $("#new_share_field4").val("<%= @field4  rescue "" %>");
    $(".textFilling").val("<%= @description.html_safe rescue "" %>");
    $("#question_content_title").val("<%= @title  rescue "" %>");
    $(".textFilling").val("<%= @description.html_safe rescue "" %>");
    $("#review_content_title").val("<%= @title  rescue "" %>");
+   $("#review_content_pros").val("<%= @pros  rescue "" %>");
+   $("#review_content_cons").val("<%= @cons rescue "" %>");
+   $("#reviewRating-score").val("<%= @rating rescue "" %>");
    $(".expanding").val("<%= @description.html_safe rescue "" %>");
- <%end%>  
+ <%end%>
+ $("#reviewRating-score").hover();  
 <%unless @content.blank? %>
  $(".edit_dwnld_url_<%=@content.id%>").show();
   <%if  !@content.url.blank?%>
    $("#shareProduct").show();
   <%end%>
+   
 <%end%>
    $("#articleReviewSubContainer").show();
   setTimeout(function() {

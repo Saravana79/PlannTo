@@ -16,12 +16,16 @@
   <%end%>
   <% @article_content= ArticleContent.new %>
   <% @article_content.content_photos.build %>
-  <%= form_for :popup, :url => new_popup_article_contents_path,:html => {:method => :post,:target=>'mypopup',:id => 'new_popup' } do |f| %>
-    <%= hidden_field_tag "sub_type" %>
-    <%= hidden_field_tag "item" %>
-    <%= hidden_field_tag "content" %>
-    <%= hidden_field_tag "title" %>
-    <%= hidden_field_tag "description" %>
+  <%= form_for :popup, :url => new_popup_article_contents_path,:html => {:method => :post,:target=>'mypopup11',:id => 'new_popup11' } do |f| %>
+    <%= hidden_field_tag "sub_type","",:id => "sub_1" %>
+    <%= hidden_field_tag "item","",:id => "item_1"  %>
+    <%= hidden_field_tag "content","",:id => "content_1" %>
+    <%= hidden_field_tag "title","",:id => "tit_1" %>
+    <%= hidden_field_tag "field1","",:id=> "field_1" %>
+    <%=  hidden_field_tag "field2","",:id=> "field_2"  %>
+    <%= hidden_field_tag "field3","",:id=> "field_3"  %>
+    <%=  hidden_field_tag "field4","",:id=> "field_4"  %> 
+    <%= hidden_field_tag "description","",:id => "desc_1" %>
  <%end%>
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
 
@@ -48,16 +52,20 @@
       function open_and_redirect() {
   
      var i =  $("#article_content_sub_type").val();
-     $("#sub_type").val(i);
-     $("#item").val("<%= @item.id rescue ""  %>");
-     $("#content").val("<%= @content.id rescue ""  %>");
-     $("#title").val($("#article_content_title").val());
-     var x = tinyMCE.get('m_text').getContent();
-     $("#description").val(x);
-      window.open('',"mypopup", 'toolbars=0');
+     $("#sub_1").val(i);
+     $("#item_1").val("<%= @item.id rescue ""  %>");
+     $("#content_1").val("<%= @content.id rescue ""  %>");
+     $("#tit_1").val($("#article_content_title").val());
+     $("#field_1").val($("#new_article_create_field1").val());
+     $("#field_2").val($("#new_article_create_field2").val());
+     $("#field_3").val($("#new_article_create_field3").val());
+     $("#field_4").val($("#new_article_create_field4").val());
+     var x = tinyMCE.get('m_text23').getContent();
+     $("#desc_1").val(x);
+      window.open('',"mypopup11", 'toolbars=0');
          $("#contentEditView").dialog('destroy');
 $(".ui-dialog-content").dialog('destroy')
-  $('#new_popup').submit(); 
+  $('#new_popup11').submit(); 
   
     }
 </script>
@@ -294,7 +302,7 @@ function remove_fields(link) {
            if ($(this).attr('id')!= 'contentDeals')
            
            {
-            $("#deals").remove();
+            //$("#deals").remove();
              $('#deals').hide();
            }
             if ($(this).attr('id')== 'contentDeals')

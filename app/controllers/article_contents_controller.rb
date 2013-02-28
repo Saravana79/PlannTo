@@ -159,7 +159,7 @@ class ArticleContentsController < ApplicationController
   def bmarklet
     #@article_content = ArticleContent.new
    if current_user 
-    @article,@images = ArticleContent.CreateContent(params[:url],current_user)
+    @article,@images = ArticleContent.CreateContent("http://www.team-bhp.com/forum/travelogues/103395-search-god-god-s-own-country-kerala.html",current_user)
     @article_content= @article
     @external = params[:external]
    end 
@@ -172,6 +172,13 @@ class ArticleContentsController < ApplicationController
   
   def new_popup
      @title = params[:title]
+     @pros = params[:pros]
+     @cons = params[:cons]
+     @field1 = params[:field1]
+     @field2 = params[:field2]
+     @field3 = params[:field3]
+     @field4 = params[:field4]
+     @rating = params[:rating]
      @description = params[:description]
     if params[:url] && params[:content].blank?
       @content = @article_content = ArticleContent.new 

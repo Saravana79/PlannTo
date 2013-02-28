@@ -15,7 +15,17 @@
 
 
         <%unless current_user %>
-            <%unless (@item.is_a?(Topic) || @item.is_a?(AttributeTag))  %>
+            <%if (@item.is_a?(Topic) || @item.is_a?(AttributeTag))  %>
+                <span class="menu_list">
+                <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+                <a href="#"  id="review2" data-content="Reviews">Ask a Question</a> 
+               </span>
+            <span class="menu_list">
+              <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
+              <a href="#"  id="review3" data-content="Reviews">Add a Photo</a>  
+            </span>
+               
+            <%elsif (@item.is_a?Product) ||(@item.is_a?CarGroup)%>
                 <span class="menu_list">
                   <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
                   <a href="#"  id="review1" data-content="Reviews">Write a Review</a>  
@@ -24,15 +34,6 @@
                   <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
                   <a href="#"  id="review2" data-content="Reviews">Ask a Question</a>  
                 </span>
-           <%else%>
-              <span class="menu_list">
-                <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
-                <a href="#"  id="review1" data-content="Reviews">Ask a Question</a> 
-               </span>
-            <span class="menu_list">
-              <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
-              <a href="#"  id="review2" data-content="Reviews">Add a Photo</a>  
-            </span>
            <%end%>
         <%end%>
 
