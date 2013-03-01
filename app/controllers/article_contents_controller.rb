@@ -6,6 +6,11 @@ class ArticleContentsController < ApplicationController
   #me.feed!(
   #:message => 'Testing fb post from Rails App.',
 #)
+    if params['article_content']['url']
+      if params['article_content']['url'].include?("?utm_source=feedburner")
+        params['article_content']['url'] = params['article_content']['url'].split("?")[0]
+      end
+    end    
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
@@ -104,6 +109,9 @@ class ArticleContentsController < ApplicationController
     if url.nil?
       @article=ArticleContent.create(params[:article_content])
     else
+      if url.include?("?utm_source=feedburner")
+         url = url.split("?")[0]
+      end  
       @article,@images = ArticleContent.CreateContent(url,current_user)
       @article.sub_type = params[:article_content][:sub_type]
     end
