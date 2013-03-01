@@ -5,13 +5,18 @@ class ReviewContentsController < ApplicationController
     @reviewcontent.ip_address = request.remote_ip
 		@reviewcontent.user = current_user
 		unless params[:content_create_form_type] == "Popup"
-		item_id = params['item_id']
-		@item = Item.find item_id
-		@reviewcontent.save_with_items!(item_id)
+		  if params[:review_content][:title] ==''
+		     @title_error= true
+		  else   
+		    item_id = params['item_id']
+		    @item = Item.find item_id
+		    @reviewcontent.save_with_items!(item_id)
+		  end  
 		else
 		  if params[:review_item_id]== ''
 		    @products_error = true
-		   else  
+		   
+		   else   
 		     @reviewcontent.save_with_items!(params[:review_item_id])
 		     @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
 		   end 

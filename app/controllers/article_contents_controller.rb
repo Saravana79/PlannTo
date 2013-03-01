@@ -6,7 +6,10 @@ class ArticleContentsController < ApplicationController
   #me.feed!(
   #:message => 'Testing fb post from Rails App.',
 #)
-    if params['article_content']['url']
+   if params['article_content']['title'] == ''
+      @title = false
+   else  
+     if params['article_content']['url']
       if params['article_content']['url'].include?("?utm_source=feedburner")
         params['article_content']['url'] = params['article_content']['url'].split("?")[0]
       end
@@ -59,6 +62,7 @@ class ArticleContentsController < ApplicationController
    else
      @tag = 'false'
    end  
+   end
     flash[:notice]= "Article uploaded"
     respond_to do |format|
       format.js
