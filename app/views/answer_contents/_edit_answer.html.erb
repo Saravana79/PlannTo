@@ -24,11 +24,16 @@ g.oeditor = tinyMCE.init({
         // General options
         mode : "specific_textareas",
         editor_selector : "textFilling",
-       
+        paste_text_sticky : true,
+        setup : function(ed) {
+        ed.onInit.add(function(ed) {
+           ed.pasteAsPlainText = true;
+        });
+       },
         theme_advanced_resizing : true,
         autoresize_max_height : 300,
         autoresize_min_height :150,
-        plugins : "inlinepopups,autoresize,imageupload,feature_at,table",
+        plugins : "inlinepopups,paste,autoresize,imageupload,feature_at,table",
         // Theme options
         theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload,table",
         theme_advanced_buttons2 : "",

@@ -25,12 +25,12 @@
           <div class="imgprofilediv">
           <div class="imgpicbtnspan">
            <div style="margin-left:20px;width:160px;height:120px;display:block;">
-              <%= link_to image_tag(item.image_url, height: "120", width: "160"), follow.blank?? follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}) : "#", :method => :post%>
+              <%= image_tag(item.image_url, height: "120", width: "160") %>
          
         </div>
        </div>
-        <span class="imgtextspan">
-            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;;margin-left:20px"%>
+        <span class="imgtextspan produ_bgimg" style="width:155px;;margin-left:20px;">
+            <%=  item.name %>
         </span>
       </div>
     
@@ -74,11 +74,11 @@
        <div class="imgprofilediv">
         <div class="imgpicbtnspan">
           <div style="margin-left:20px;width:160px;height:120px;display:block;">
-         <%= link_to image_tag(item.image_url, height: "120", width: "160"), follow.blank?? follows_path(:follow => {followable_id: item.id, followable_type: item.type, follow_type: "buyer",type: "wizard"}) : "#", :method => :post%>
+         <%= image_tag(item.image_url, height: "120", width: "160") %>
           </div>
         </div>
-        <span class="imgtextspan">
-            <%= link_to item.name, link_url(item), :class => "produ_bgimg" ,:style=>"width:155px;;margin-left:20px"%>
+         <span class="imgtextspan produ_bgimg" style="width:155px;;margin-left:20px;">
+            <%=  item.name %>
         </span>
       </div>
     

@@ -39,11 +39,11 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
  <span class="Popuptitle"><center><h1>New Review Content</h1></center></span>
  </div>
 
-  <% unless params[:sub_type] %>
+  <!-- <% unless params[:sub_type] %>
    <div style="float:right;margin-left:2000px;">
        <img  src="/images/newwindow.png" onclick= "open_and_redirect3()" title="Open in new window" style="cursor:pointer;"   />
        </div>
-   <%end%>
+   <%end%> -->
     <script type="text/javascript">
       function open_and_redirect3() {
      var i =  $("#review_content_sub_type").val();
@@ -260,11 +260,16 @@ g.oeditor = tinyMCE.init({
         // General options
         mode : "specific_textareas",
         editor_selector : "textFilling",
-       
+        paste_text_sticky : true,
+        setup : function(ed) {
+        ed.onInit.add(function(ed) {
+           ed.pasteAsPlainText = true;
+        });
+       },
         theme_advanced_resizing : true,
         autoresize_max_height : 300,
         autoresize_min_height :150,
-        plugins : "inlinepopups,autoresize,imageupload,feature_at,table",
+        plugins : "inlinepopups,autoresize,paste,imageupload,feature_at,table",
         // Theme options
         theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload,table",
         theme_advanced_buttons2 : "",

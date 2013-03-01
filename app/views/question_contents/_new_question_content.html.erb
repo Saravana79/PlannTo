@@ -24,26 +24,22 @@
    <div style="float:right;margin-left:2000px;">
        <img  src="/images/newwindow.png" onclick= "open_and_redirect2()" title="Open in new window" style="cursor:pointer;"   />
        </div>
-     <%end%>
-  
-  
-
-    <script type="text/javascript">
+     <%end%> 
+   <script type="text/javascript">
       function open_and_redirect2() {
-    
-     var i =  $("#question_content_sub_type").val();
-     $("#sub_type").val(i);
-     $("#item").val("<%= @item.id rescue ""  %>");
-     $("#content").val("<%= @content.id rescue ""  %>");
-     $("#title").val($("#question_content_title").val());
-     var x = tinyMCE.get('m_text2').getContent();
-     $("#description").val(x);
-      window.open('',"mypopup", 'toolbars=0');
-     $("#contentEditView").dialog('destroy');
-       $(".ui-dialog-content").dialog('destroy')
-  $('#new_popup').submit(); 
-    }
-</script>
+        var i =  $("#question_content_sub_type").val();
+        $("#sub_type").val(i);
+        $("#item").val("<%= @item.id rescue ""  %>");
+        $("#content").val("<%= @content.id rescue ""  %>");
+        $("#title").val($("#question_content_title").val());
+        var x = tinyMCE.get('m_text2').getContent();
+        $("#description").val(x);
+        window.open('',"mypopup", 'toolbars=0');
+        $("#contentEditView").dialog('destroy');
+        $(".ui-dialog-content").dialog('destroy')
+        $('#new_popup').submit(); 
+       }
+    </script>
     <%if @content %>
      <%= hidden_field_tag :detail,@detail %>
      <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
@@ -77,11 +73,20 @@ g.oeditor = tinyMCE.init({
         // General options
         mode : "specific_textareas",
         editor_selector : "textFilling",
-       
+//add paste plugin
+
+//Keeps Paste Text feature active until user deselects the Paste as Text button
+paste_text_sticky : true,
+//select pasteAsPlainText on startup
+setup : function(ed) {
+    ed.onInit.add(function(ed) {
+        ed.pasteAsPlainText = true;
+    });
+},
         theme_advanced_resizing : true,
         autoresize_max_height : 300,
         autoresize_min_height :150,
-        plugins : "inlinepopups,autoresize,imageupload,feature_at,table",
+        plugins : "inlinepopups,autoresize,paste,imageupload,feature_at,table",
         // Theme options
         theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload,table",
         theme_advanced_buttons2 : "",

@@ -26,9 +26,7 @@
            <a class="txt_compare" >  COMPARE</a>
            <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
             </div>
-
-
-            <span>
+           <span>
               <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.name%></a></h1>
              <%@where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) %>
           <a class="txt_price"><%= item.get_price_info('Price',true,@where_to_buy_items.size).html_safe %></a><br />

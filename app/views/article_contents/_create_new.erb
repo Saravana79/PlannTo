@@ -29,14 +29,12 @@
  <%end%>
   <%= form_for @content || @article_content,:html => { :id => "#{@form_id}",:multipart => :true }, :remote => true  do |f| %>
 
-   <% unless params[:sub_type] %>
+  <% unless params[:sub_type] %>
  <div style="float:right;margin-left:2000px;">
       <img  src="/images/newwindow.png" onclick= "open_and_redirect()" title="Open in new window" style="cursor:pointer;"  />
    </div>   
   <%end%>
-
-  
-    <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+   <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :sub_type%>
   <div id="article_errors" style="line-height:20px;color: red;"></div>
@@ -72,9 +70,8 @@
      $("#desc_1").val(x);
       window.open('',"mypopup11", 'toolbars=0');
          $("#contentEditView").dialog('destroy');
-$(".ui-dialog-content").dialog('destroy')
-  $('#new_popup11').submit(); 
-  
+      $(".ui-dialog-content").dialog('destroy')
+      $('#new_popup11').submit(); 
     }
 </script>
 
@@ -623,11 +620,21 @@ g.oeditor = tinyMCE.init({
         // General options
         mode : "specific_textareas",
         editor_selector : "textFilling",
-       
+     
+//add paste plugin
+
+//Keeps Paste Text feature active until user deselects the Paste as Text button
+paste_text_sticky : true,
+//select pasteAsPlainText on startup
+setup : function(ed) {
+    ed.onInit.add(function(ed) {
+        ed.pasteAsPlainText = true;
+    });
+},
         theme_advanced_resizing : true,
         autoresize_max_height : 300,
         autoresize_min_height :150,
-        plugins : "inlinepopups,autoresize,imageupload,feature_at,table",
+        plugins : "inlinepopups,autoresize,paste,imageupload,feature_at,table",
         // Theme options
         theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,feature_at,imageupload,table",
         theme_advanced_buttons2 : "",
