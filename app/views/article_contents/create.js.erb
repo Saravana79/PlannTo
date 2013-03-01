@@ -1,4 +1,7 @@
 $("#deals1").hide();
+<%if @title == false %>
+    alert('Please Enter Title.')
+<%else%>    
 <%if @tag == 'false' %>
   alert('Please at least one product')
 <%else%>  
@@ -72,5 +75,6 @@ $(".ui-dialog").css("display", "none");
 <%end%>
 <% if @facebook_post == "1" %>
  window.location.href = "/oauth/new";
+<%end%>
 <%end%>
 <%end%>

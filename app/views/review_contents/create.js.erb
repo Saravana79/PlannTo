@@ -6,6 +6,9 @@ if(window.opener) {
     window.location.href = "/oauth/new";
 <%end%>
 }
+<% if @title_error == true %>
+  alert("Please Enter Title.");
+<%else%>
 <%if params[:content_create_form_type] == "Popup"%>
  <% if @products_error == true %>
     $("#products_error").html("<h2>Please select at least one product.</h2>");
@@ -38,5 +41,5 @@ $(".ui-dialog").css("display", "none");
 window.location.href = "/oauth/new";
 <%end%>
 
-
+<%end%>
 
