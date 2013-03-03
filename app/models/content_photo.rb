@@ -1,11 +1,12 @@
 class ContentPhoto < ActiveRecord::Base
   belongs_to :content
-  has_attached_file :photo,:styles => { :medium => "120x90!", :thumb => "80x60!" ,:large => "600x400"},
+  has_attached_file :photo,:styles => { :medium => "120x90!", :thumb => "80x60!" ,:large => "600>"},
   :storage => :s3,
   :bucket => ENV['plannto'],
   :s3_credentials => "config/s3.yml",
   :path => "images/content/:id/:style/:filename"
-  
+  #http://www.imagemagick.org/script/command-line-processing.php#geometry
+
   def self.save_url_content_to_local(article)
     photo = ContentPhoto.new
     safe_thumbnail_url = URI.encode(URI.decode(article.thumbnail))
