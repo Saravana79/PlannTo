@@ -5,7 +5,7 @@
   </div>
   <div class="subContentDiv">
     <div><a class="txt_brown"><%= answer_content.user.name unless answer_content.user.nil?   %> answered a question<%= time_ago_in_words(answer_content.created_at) unless answer_content.created_at.nil? %> ago</a></div>
-    <div class="subContentGap"><%= raw get_content_description(answer_content)%></div>
+    <div class="subContentGap"><%= raw get_content_description(answer_content,true)%></div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue "><%= render_comments_anchor(answer_content).html_safe  %> </a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>

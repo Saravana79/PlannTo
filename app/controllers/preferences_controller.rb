@@ -25,24 +25,28 @@ class PreferencesController < ApplicationController
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ""
    @considered_items  = []
+   @item_ids = []
+    
     if @follow_item == ""
-       @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0) )
-       @item_ids = []
-      if @considered_items.size > 0
+       @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
+      if @considered_items.size > 0 && params[:type] == "deals"
         @item_ids =  @considered_items.collect(&:id).join(",")
         @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
       else
         @where_to_buy_items = []  
       end
    else   
-    @item_ids = []
-    if @follow_item.size >0
+    
+    if @follow_item.size >0 && params[:type] == "deals"
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
     else
       @where_to_buy_items = []
     end
    end 
+      if params[:type] == "deals"
+        @contents = Content.get_top_active_deals(@item_ids)
+      end
       unless session[:counter]
         session[:counter]=1
       else

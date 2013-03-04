@@ -51,6 +51,10 @@ class Content < ActiveRecord::Base
     end
   end
   
+  def self.get_top_active_deals(item_ids)
+    Content.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=?",item_ids.split(","),"Deals",1).group('contents.id').order('contents.created_at desc').limit(10)
+  end
+   
   def impression_count
     impressions.size
   end
