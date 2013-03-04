@@ -5,7 +5,6 @@
 <% if !@contents.blank? %>
 <% content_ids = [] %>
 <% @contents.each do |content| %>
-   <%= content.id %>
    <%if content.is_a?(UserActivity) %>
        <%= render "contents/activity",:content => content,:content_ids => content_ids,:page => params[:page].blank? ? "1" : params[:page]%>
      
