@@ -207,17 +207,15 @@ class SearchController < ApplicationController
     end
 
   end
-
-
-def autocomplete_items
   
-   if params[:type]
-     search_type = Product.follow_search_type(params[:type])
-   elsif params[:content] == "true"
-      search_type = Product.search_type(params[:search_type]) + [Content]
-   else
-      search_type = Product.search_type(params[:search_type])
-   end 
+  def autocomplete_items
+    if params[:type]
+      search_type = Product.follow_search_type(params[:type])
+    elsif params[:content] == "true"
+        search_type = Product.search_type(params[:search_type]) + [Content]
+    else
+        search_type = Product.search_type(params[:search_type])
+    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
       #with :status,1
@@ -230,21 +228,14 @@ def autocomplete_items
     if params[:from_profile]
       exclude_selected = Follow.for_follower(current_user).where(:followable_type => params[:search_type]).collect(&:followable) rescue []
       @items = @items.results - exclude_selected
-     
-    
     else
       @items = @items.results
     end
 
     results = @items.collect{|item|
-
-      
-     # if item.type == "CarGroup"
+    # if item.type == "CarGroup"
      #   type = "Car"
      # else
-     
-     
-     
      if(item.is_a? (Product))
         type = item.type.humanize
      elsif(item.is_a? (Content))
