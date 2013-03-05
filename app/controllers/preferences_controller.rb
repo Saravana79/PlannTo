@@ -31,15 +31,19 @@ class PreferencesController < ApplicationController
        @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
       if @considered_items.size > 0 && params[:type] == "deals"
         @item_ids =  @considered_items.collect(&:id).join(",")
-        @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+        if params[:type] == "deals" 
+          @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+         end   
       else
         @where_to_buy_items = []  
       end
    else   
     
-    if @follow_item.size >0 && params[:type] == "deals"
+    if @follow_item.size >0  
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
-      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+     if params[:type] == "deals" 
+       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+     end   
     else
       @where_to_buy_items = []
     end
