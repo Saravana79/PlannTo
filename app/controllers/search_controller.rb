@@ -220,11 +220,11 @@ def autocomplete_items
    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
-      with :status,1
+      #with :status,1
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
       order_by :created_at, :desc            
-      order_by :status,:asc
+      #order_by :status,:asc
     end
 
     if params[:from_profile]
