@@ -280,11 +280,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
          running = true;
             $.ajax(
               {
-               
-        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() +  "&type=Recommendations" ,
-               
-
-
+             url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() +  "&type=Recommendations" ,
                 type: "get",
                 dataType: "script",
                 before: $('#spinner1').show(),
@@ -390,9 +386,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>
 </div> 
-
-
-		<%end%> 
+   <%end%> 
 	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
        <%= image_tag '/images/ajax-loader.gif' %>
    </span>

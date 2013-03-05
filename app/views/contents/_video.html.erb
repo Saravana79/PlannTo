@@ -4,7 +4,7 @@
   <div class="float_rgt"><a href="<%= content.user.get_url()%>"> <img src="<%=content.user.get_photo%>" class="userImageSmall"/></a>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
-    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status == 2%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%></div>
+    <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status ==  Content::SENT_APPROVAL%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%></div>
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a> <a class="txt_brown_bold"> shared a video on <%=get_anchor_name_link(content)%> - <%end%><%= time_ago_format(content) %><% cache ['part-2', content] do %> ago </a></div>
     <div class="contentsubsection">
      <div id="youtube_thumbnail<%=content.id %>">  <a href="javascript:void(0);"> <span class="video_play"></span><img src="<%= change_thumb_original(content)%>" class="uploadedvideoContentdisplay float_lft"></a></div>

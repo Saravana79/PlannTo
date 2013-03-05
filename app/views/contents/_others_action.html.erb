@@ -14,7 +14,7 @@
          <%end%>
 			 <%if current_user && current_user.is_admin? %>
       <li> <%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
-       <%if content.status == 2%>
+       <%if content.status == Content::SENT_APPROVAL%>
         
          <li> <%= link_to "Approve",approve_admin_feed_path(content) ,:class =>"txt_blue "%></li>
       <%end%>   

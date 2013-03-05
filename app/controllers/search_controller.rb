@@ -209,20 +209,22 @@ class SearchController < ApplicationController
   end
 
 
-  def autocomplete_items
+def autocomplete_items
   
    if params[:type]
      search_type = Product.follow_search_type(params[:type])
-   else  
+   elsif params[:content] = "true"
+      search_type = Product.search_type(params[:search_type]) + [Content]
+   else
       search_type = Product.search_type(params[:search_type])
    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
+      with :status,1
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
-      order_by :status, :asc      
       order_by :created_at, :desc            
-     # order_by :status, :asc
+      order_by :status,:asc
     end
 
     if params[:from_profile]
@@ -236,7 +238,7 @@ class SearchController < ApplicationController
 
     results = @items.collect{|item|
 
-      image_url = item.image_url(:small)
+      
      # if item.type == "CarGroup"
      #   type = "Car"
      # else
@@ -245,6 +247,8 @@ class SearchController < ApplicationController
      
      if(item.is_a? (Product))
         type = item.type.humanize
+     elsif(item.is_a? (Content))
+        type = "Contents"   
      elsif(item.is_a? (CarGroup))
         type = "Groups"
      elsif(item.is_a? (AttributeTag))
@@ -256,11 +260,20 @@ class SearchController < ApplicationController
       end 
     
      # end
-      url = item.get_url()
+     if  item.is_a?(Item)
+      image_url = item.image_url(:small) rescue ""
+      url = item.get_url() rescue ""
       # image_url = item.image_url
       {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+       
+    else
+      image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png"
+      url = content_path(item)
+      # image_url = item.image_url
+      {:content_id => item.id, :value => "#{item.title}", :imgsrc =>image_url, :type => type, :url => url } 
+       end
     }
-    
+  
     results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
     
     render :json => results

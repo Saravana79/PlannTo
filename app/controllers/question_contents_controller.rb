@@ -14,7 +14,7 @@ class QuestionContentsController < ApplicationController
     UserActivity.save_user_activity(current_user,@questioncontent.id,"created",@questioncontent.sub_type,@questioncontent.id,request.remote_ip)           
    Follow.content_follow(@questioncontent,current_user) if @questioncontent.id!=nil
    if current_user.total_points < 10
-		  @questioncontent.update_attribute('status',2) 
+		  @questioncontent.update_attribute('status',Content::SENT_APPROVAL) 
 		  @display = 'false'
 	 else 
 	    Point.add_point_system(current_user, @questioncontent, Point::PointReason::CONTENT_CREATE)

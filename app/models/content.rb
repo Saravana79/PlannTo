@@ -4,7 +4,8 @@ class Content < ActiveRecord::Base
   #used for content description split.
   WORDCOUNT = 50
   DELETE_STATUS = 5
-  
+  SENT_APPROVAL =6
+  UNAPPROVAL =7
   acts_as_citier
   has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId
@@ -35,7 +36,7 @@ class Content < ActiveRecord::Base
     text :description
     string :sub_type
     integer :total_votes
-    integer :status
+    integer :status  
     integer :comments_count
     time :created_at
     text :name , :boost => 6.0,  :as => :name_ac do |content|
