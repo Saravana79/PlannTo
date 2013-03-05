@@ -29,7 +29,7 @@ def autocomplete_tag
   
    if params[:type]
      search_type = Product.follow_search_type(params[:type])
-   elsif params[:content] = "true"
+   elsif params[:content] == "true"
       search_type = Product.search_type(params[:search_type]) + [Content]
    else
       search_type = Product.search_type(params[:search_type])
