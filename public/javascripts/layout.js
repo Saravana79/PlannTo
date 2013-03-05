@@ -121,6 +121,7 @@ $(document).ready(function(){
                 url: "/search/autocomplete_items",
                 data: {
                     term: request.term,
+                    content: "true",
                     search_type: $("#plannto_search_type").val()
                 },
                 type: "get",

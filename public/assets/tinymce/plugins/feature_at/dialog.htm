@@ -29,7 +29,7 @@ enctype="multipart/form-data" id="tag_form"
 method="post">
 
 <input name="item_id" id="item_id" type="hidden" value="token_value" />
-
+<input name="content_id" id="content_id" type="hidden" value="token_value" />
 </form>
 Search Product: <input id="inp_popup_product" type="text" size="50" />
 </body>
@@ -59,6 +59,7 @@ $("#inp_popup_product").autocomplete({
                     url:"/autocomplete_tag",
                     data:{
                         term:$("#inp_popup_product").val(),
+                        content: "true",
                         authenticity_token: window._token,
                         
                     },
@@ -68,6 +69,7 @@ $("#inp_popup_product").autocomplete({
                         response($.map(data, function (item) {
                             return{
                                 id:item.id,
+                                content_id: item.content_id,
                                 value:item.value,
                                 imgsrc:item.imgsrc,
                                 type:item.type,
@@ -84,7 +86,7 @@ $("#inp_popup_product").autocomplete({
         select: function( event, ui ) {
             
            $('#item_id').val(ui.item.id);
-			  
+			     $("#content_id").val(ui.item.content_id); 
 			  $('#tag_form').submit();
                
         }
