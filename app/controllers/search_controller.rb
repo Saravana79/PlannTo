@@ -190,13 +190,14 @@ class SearchController < ApplicationController
   def search_items
     @page  = params[:page].nil? ? 1 : params[:page].to_i
 
-    @items = Sunspot.search(Manufacturer,CarGroup ) do
+    @items = Sunspot.search(Product.search_type(params[:search_type]) + [Content]) do
       keywords params[:q], :fields => :name
+      with :status,[1,2,3]
       order_by :class, :desc
       paginate(:page => params[:page], :per_page => 10)
       #facet :types
       order_by :orderbyid , :asc
-      order_by :status, :asc      
+      #order_by :status, :asc      
       order_by :created_at, :desc
     end
     if @items.results.count < 10
@@ -218,7 +219,7 @@ class SearchController < ApplicationController
     end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
-      with :status,1
+      with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
       order_by :created_at, :desc            
@@ -264,9 +265,9 @@ class SearchController < ApplicationController
       {:content_id => item.id, :value => "#{item.title}", :imgsrc =>image_url, :type => type, :url => url } 
        end
     }
-  
+  if params[:content] == "true"
     results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
-    
+  end   
     render :json => results
     
   end

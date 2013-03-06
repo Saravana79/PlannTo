@@ -3,19 +3,37 @@
   <%@items.results.each do |item|%>
     <div class="col w4_5 feed_item p1">
       <div class="col w0_5">
-        <a>
-          <img class="profile_photo_img" width="50" height="50" alt="image" src="/images/B16.jpg"/>
+       <%if item.is_a?(Item) %>
+         <% image_url = item.image_url(:small) rescue "" %>
+         <a>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%= image_url %>"/>
         </a>
+       <%else%>
+             <%image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png" %> 
+               <a>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%= image_url %>"/>
+          
+        </a>
+        <%end%>
       </div>
       <div class="e_col w3_5">
+       <%if item.is_a?(Item) %>
         <h2>
-          <a href="">
-            <%=item.name%>
-          </a>
+          <%= link_to item.name,item.get_url() %>
+          
         </h2>
         <div class="feed_item_question_info">
           Type: <%=item.type%>
         </div>
+        <%else%>
+           <h2>
+          <%= link_to item.title,content_path(item) %>
+          
+        </h2>
+        <div class="feed_item_question_info">
+          Type: <%=item.sub_type%>
+        </div>
+          <%end%>
       </div>
     </div>
   <%end%>

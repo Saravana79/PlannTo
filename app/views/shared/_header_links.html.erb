@@ -50,6 +50,17 @@
   
     <span class="search_txt" id="plannToSearchSpan">
            <input name="Search" type="text" placeholder="Search Products or Topics" id="plannToSearch"/>
+           
+       
+       <script>
+          $('#plannToSearch').keyup(function(e){
+if(e.keyCode == 13)
+{
+  window.location.href= "/search/search_items?q=" + $("#plannToSearch").val();
+}
+});
+       
+       </script>
             <!--<= select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
    

@@ -25,43 +25,35 @@ class ImageuploadsController < ApplicationController
     end    
     render :layout => false
   end
-def autocomplete_tag
   
-   if params[:type]
-     search_type = Product.follow_search_type(params[:type])
-   elsif params[:content] == "true"
+  def autocomplete_tag
+    
+    if params[:type]
+       search_type = Product.follow_search_type(params[:type])
+    elsif params[:content] == "true"
       search_type = Product.search_type(params[:search_type]) + [Content]
-   else
+    else
       search_type = Product.search_type(params[:search_type])
    end 
     @items = Sunspot.search(search_type) do
       keywords params[:term], :fields => :name
-      #with :status,1
+      with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
       order_by :created_at, :desc            
       #order_by :status,:asc
     end
-
     if params[:from_profile]
       exclude_selected = Follow.for_follower(current_user).where(:followable_type => params[:search_type]).collect(&:followable) rescue []
       @items = @items.results - exclude_selected
-     
-    
     else
       @items = @items.results
     end
-
     results = @items.collect{|item|
-
-      
-     # if item.type == "CarGroup"
+    # if item.type == "CarGroup"
      #   type = "Car"
      # else
-     
-     
-     
-     if(item.is_a? (Product))
+    if(item.is_a? (Product))
         type = item.type.humanize
      elsif(item.is_a? (Content))
         type = "Contents"   
@@ -76,7 +68,7 @@ def autocomplete_tag
       end 
     
      # end
-     if  item.is_a?(Item)
+    if  item.is_a?(Item)
       image_url = item.image_url(:small) rescue ""
       url = item.get_url() rescue ""
       # image_url = item.image_url
@@ -89,8 +81,7 @@ def autocomplete_tag
       {:content_id => item.id, :value => "#{item.title}", :imgsrc =>image_url, :type => type, :url => url } 
        end
     }
-  
-    results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
+
     
     render :json => results
     
