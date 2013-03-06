@@ -36,11 +36,13 @@ class Content < ActiveRecord::Base
     text :description
     string :sub_type
     integer :total_votes
-    integer :status  
     integer :comments_count
     time :created_at
     text :name , :boost => 6.0,  :as => :name_ac do |content|
       content.title
+    end
+   string :status   do |content|
+      content.status.to_s
     end
 
     integer :itemtype_ids,  :multiple => true do
