@@ -1,6 +1,6 @@
 <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
-<ul class="navdrop" data-content=<%= content.id %>>
-	<li class="item1"><a href="#"><span>Edit</span></a>
+<ul class="navdrop" data-content=<%= content.id %>>	 
+    <li class="item1" ><a href="#" style="background: url(/images/settings.png) no-repeat  2px 2px ;"><span>Edit</span></a>
 		<ul >
 			<%# content_list = content.guides.map{|c| c.id } %>
 			  <%if content.can_update_content?(current_user)%>
