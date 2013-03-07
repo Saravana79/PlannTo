@@ -44,6 +44,9 @@ class Content < ActiveRecord::Base
    string :status   do |content|
       content.status.to_s
     end
+    integer :orderbyid  do |content|
+      100
+    end
 
     integer :itemtype_ids,  :multiple => true do
       content_itemtype_relations.map {|items| items.itemtype_id}    
