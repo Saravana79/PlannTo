@@ -147,7 +147,7 @@ $(document).ready(function(){
         },
         select: function( event, ui ) {
             if (ui.item.id  == 0){
-            	alert(ui.item.url)
+            	//alert(ui.item.url)
                 location.href = "/search/search_items?q=" + ui.item.url
             // return false;
             }
