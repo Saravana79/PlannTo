@@ -9,6 +9,12 @@
 
     <div>
       <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status == Content::SENT_APPROVAL%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%>
+        <%if content.sub_type == "Deals"  %>
+           <%if content.deal_expired? %>
+             <font color="black" style="font-style:italic">[This Deal is Expired.] </font>
+           <%end%>
+        <%end%>     
+          
        <% if content.url?  %>
         - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
        <%end%>

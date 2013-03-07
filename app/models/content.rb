@@ -73,6 +73,23 @@ class Content < ActiveRecord::Base
     end   
   end
   
+  def deal_expired?
+    date = self.field1.to_date rescue ""
+    puts"pppppppppppppp1 #{Time.now.to_date}"
+    puts"pppppppppppppp2 #{date}"
+    completed = self.field3
+    unless date == ''
+      if date && date < Time.now.to_date 
+         return true
+      end
+    end
+    
+    if completed.to_i == 1
+       return true
+    end      
+     return false 
+  end
+  
   def related_items
     return ContentItemRelation.where('content_id = ?', self.id)
   end
