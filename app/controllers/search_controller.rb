@@ -240,7 +240,7 @@ class SearchController < ApplicationController
      if(item.is_a? (Product))
         type = item.type.humanize
      elsif(item.is_a? (Content))
-        type = "Contents"   
+        type = item.sub_type   
      elsif(item.is_a? (CarGroup))
         type = "Groups"
      elsif(item.is_a? (AttributeTag))
