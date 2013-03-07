@@ -65,6 +65,14 @@ class Content < ActiveRecord::Base
     impressions.size
   end
   
+  def self.title_display(title)
+    if title.length > 60
+      title = title[0..59] + "...."
+    else
+       title
+    end   
+  end
+  
   def related_items
     return ContentItemRelation.where('content_id = ?', self.id)
   end

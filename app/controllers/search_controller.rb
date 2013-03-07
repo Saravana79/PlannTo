@@ -262,7 +262,7 @@ class SearchController < ApplicationController
       image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png"
       url = content_path(item)
       # image_url = item.image_url
-      {:content_id => item.id, :value => "#{item.title}", :imgsrc =>image_url, :type => type, :url => url } 
+      {:content_id => item.id, :value => Content.title_display(item.title)  , :imgsrc =>image_url, :type => type, :url => url } 
        end
     }
   if params[:content] == "true"
