@@ -49,6 +49,7 @@ class PreferencesController < ApplicationController
       @where_to_buy_items = []
     end
    end 
+      @compare_item_ids = @item_ids
       if params[:type] == "deals"
         @contents = Content.get_top_active_deals(@item_ids)
       end
