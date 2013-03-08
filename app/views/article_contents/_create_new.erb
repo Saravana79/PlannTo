@@ -477,8 +477,14 @@ function remove_fields(link) {
 <%else%>
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
-      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='checkbox' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
-      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field4%>'/>");
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='checkbox' style='margin-left:5px;width:150px' checked='true' />");
+      <%if @content.field3 == '1' %> 
+        $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").attr('checked', true);
+      <%else%>
+          $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").attr('checked', false); 
+       <%end%>    
+      $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<input id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:150px'  value='<%=@content.field4%>'/>");
+       $("div#subContainerContentCreate form#<%=@form_id%> #<%=@field3_id%>").val('1');
 <%end%>
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();

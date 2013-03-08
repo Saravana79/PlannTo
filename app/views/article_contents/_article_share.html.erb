@@ -674,7 +674,13 @@ if ($("#article_content_sub_type").val() == ""){
 <%else%>
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='checkbox' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='checkbox' style='margin-left:5px;width:150px' checked='true'/>");
+       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").val('1');
+        <%if @content.field3 == '1' %> 
+        $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").attr('checked', true);
+      <%else%>
+          $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").attr('checked', false); 
+       <%end%> 
 <%end%>
     $("div#ShareURLDiv #<%=@sharefield1%>").show();
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
