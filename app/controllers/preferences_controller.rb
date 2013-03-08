@@ -15,8 +15,6 @@ class PreferencesController < ApplicationController
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
-
-      
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
@@ -51,7 +49,8 @@ class PreferencesController < ApplicationController
    end 
       @compare_item_ids = @item_ids
       if params[:type] == "deals"
-        @contents = Content.get_top_active_deals(@item_ids)
+        deals_item_id = Item.get_root_level_id(@itemtype.itemtype)
+        @contents = Content.get_top_active_deals(@item_ids + "," + deals_item_id.to_s)
       end
       unless session[:counter]
         session[:counter]=1

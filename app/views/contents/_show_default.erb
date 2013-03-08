@@ -159,7 +159,7 @@
 								<%end%>
 							</div>
 							<div style="float:right;">
-								<% if !content.field3.empty? %>
+								<% if !content.field3.blank?   %>
 								<label class="txt_black_description_detail">Completed : <%= content.field3.to_i == 1? "Yes" : "No" %> </label></br>
 								<%end%>
 								</div>

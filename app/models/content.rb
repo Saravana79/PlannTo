@@ -58,7 +58,7 @@ class Content < ActiveRecord::Base
   end
   
   def self.get_top_active_deals(item_ids)
-    Content.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=?",item_ids.split(","),"Deals",1).group('contents.id').order('contents.created_at desc').limit(10)
+    ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=? and field3=? and field1>=?",item_ids.split(","),"Deals",1,'0', Time.now.to_date.strftime("%m/%d/%Y")).group('item_contents_relations_cache.content_id').order('item_contents_relations_cache.created_at desc').limit(10)
   end
    
   def impression_count
@@ -75,8 +75,6 @@ class Content < ActiveRecord::Base
   
   def deal_expired?
     date = self.field1.to_date rescue ""
-    puts"pppppppppppppp1 #{Time.now.to_date}"
-    puts"pppppppppppppp2 #{date}"
     completed = self.field3
     unless date == ''
       if date && date < Time.now.to_date 

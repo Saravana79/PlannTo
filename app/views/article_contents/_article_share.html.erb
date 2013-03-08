@@ -247,7 +247,7 @@
     <!-- FIELD ENDS -->
     <br />
     <br />
-         <div id="deals1" style='display:none' >
+  <!-- <div id="deals1" style='display:none' >
     <div class="title_header float_lft">Expire Date:</div>
       <div class="float_lft">
          <%= f.text_field :field1, {:style=>"margin-left:1px;width:150px", :id => "expire_date1"}%>
@@ -263,7 +263,7 @@
     </div>
       <script>
          $('#expire_date1').datepicker();
-       </script>
+       </script> -->
      
     <div style="padding:10px 5px 20px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
       <%= f.submit button_name, :id => "submit_article", :class => "btn_submitanswer" %>
@@ -557,30 +557,30 @@ if ($("#article_content_sub_type").val() == ""){
     hideAllOptionalFieldsArticleSubmit();
     
     if (category == "<%=ArticleCategory::EVENT%>"){
-      $("#deals1").remove();
+     // $("#deals1").remove();
       showArticleSubmitEventOptFields();
     }
     else if(category == "<%=ArticleCategory::ACCESSORIES%>"){
-      $("#deals1").remove();
+      //$("#deals1").remove();
       showArticleSubmitAccessoriesOptFields();
     }
     else if (category == "<%=ArticleCategory::APPS%>"){
-       $("#deals1").remove();
+      // $("#deals1").remove();
       showArticleSubmitAppOptFields();
     }
     else if (category == "<%=ArticleCategory::TRAVELOGUE%>"){
-       $("#deals1").remove();
+       //$("#deals1").remove();
       showArticleSubmitTravelogueOptFields();
     }
     else if (category == "<%=ArticleCategory::REVIEWS%>"){
-      $("#deals1").remove();
+      //$("#deals1").remove();
       $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
     }
     else if (category == "<%=ArticleCategory::DEALS%>"){
-      $("#deals1").show();
+     showArticleSubmitDealsOptFields()
     }
     else if (category == "<%=ArticleCategory::MILES%>"){
-       $("#deals1").remove();
+       //$("#deals1").remove();
       showArticleSubmitMileOptFields();
     }
   }
@@ -659,6 +659,30 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
     $('div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>,div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>').datepicker();
   }
+
+  function showArticleSubmitDealsOptFields(){
+    $("div#ShareURLDiv #<%=@sharefield1Label%>").text("Expire Date:")
+    $("div#ShareURLDiv #<%=@sharefield2Label%>").text("Discount:")
+    $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Completed?:")
+<%if @content.nil?%>
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px'/>");
+       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='checkbox' style='margin-left:5px;width:150px'/>"); 
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").val('');
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").val('');
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").val('1');
+<%else%>
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%=@field1_id%>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<input id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field2%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<input id='<%=@field3_id%>' name='article_content[field3]' type='checkbox' style='margin-left:5px;width:150px' value='<%=@content.field3%>'/>");
+<%end%>
+    $("div#ShareURLDiv #<%=@sharefield1%>").show();
+    $("div#ShareURLDiv #<%=@sharefield2%>").show();
+    $("div#ShareURLDiv #<%=@sharefield3%>").show();
+    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>').datepicker();
+  }
+
+
 
   function showArticleSubmitAppOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("Sub Category:")
