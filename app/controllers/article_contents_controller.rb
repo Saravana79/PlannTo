@@ -53,7 +53,7 @@ class ArticleContentsController < ApplicationController
    # Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article.id!=nil
    session[:content_id] = @article.id
-   if current_user.total_points < 10
+   if current_user.total_points > 10
      @article.update_attribute('status',Content::SENT_APPROVAL) 
      @display = 'false'
    elsif @article.url!=nil

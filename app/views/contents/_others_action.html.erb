@@ -17,6 +17,7 @@
        <%if content.status == Content::SENT_APPROVAL%>
         
          <li> <%= link_to "Approve",approve_admin_feed_path(content) ,:class =>"txt_blue "%></li>
+         <li> <%= link_to "Reject",reject_admin_feed_path(content) ,:remote => :true,:class =>"txt_blue "%></li>
       <%end%>   
      <%end%>  
 		

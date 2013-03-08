@@ -5,7 +5,7 @@ class Content < ActiveRecord::Base
   WORDCOUNT = 50
   DELETE_STATUS = 5
   SENT_APPROVAL =6
-  UNAPPROVAL =7
+  REJECTED = 7
   acts_as_citier
   has_many :reports, :as => :reportable, :dependent => :destroy 
   # extend FriendlyId

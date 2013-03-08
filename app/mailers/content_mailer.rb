@@ -33,8 +33,19 @@ class ContentMailer < ActionMailer::Base
     @userfullname = user.name
     Follow.where('follower_id =?  and follow_type in (?)',user.id,["owner","follower","buyer"]).map{|i| @items << Item.find(i.followable_id) }
     mail(:to => user.email, :subject => 'Write content about your owned item') 
-  end
-  
+ end
+ 
+  def content_action(content,reason)
+    user = content.user
+    @content = content
+    @reason = reason
+    if content.status == Content::DELETE_STATUS
+       subject  = "Your #{@content.sub_type} `#{@content.title}` deleted by PlannTo admin."  
+    elsif content.status == Content::DELETE_REJECTED
+       subject = "Your #{@content.sub_type} `#{@content.title}` rejected by PlannTO admin" 
+    end
+    mail(:to=>user.email, :from =>'admin@plannto.com', :subject => subject)   
+  end 
   def buying_plans(buying_plan)
     @buying_plan = buying_plan
     @user = @buying_plan.user

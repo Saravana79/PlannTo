@@ -7,6 +7,8 @@ namespace :admin do
     member do
       get :add_vote
       get :approve
+      get :reject
+      post :content_action
     end
    end  
   resources :follows
