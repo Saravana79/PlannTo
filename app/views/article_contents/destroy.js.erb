@@ -1,1 +1,12 @@
 $("#mainContentDiv<%=@content.id%>").remove();
+<%if current_user.is_admin? %>
+  $("#contentEditView").html('');
+  $("#contentEditView").html("<%= escape_javascript(render '/shared/content_reject_reason') %>");
+  $("#contentEditView").dialog({
+  title: 'Edit <%=@content.type.underscore.humanize%>',
+  height: 550,
+  width:600});
+  $(".Close_dialog").show();
+  $(".ui-dialog-titlebar").hide();
+<%end%>  
+  

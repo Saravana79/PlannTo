@@ -16,6 +16,7 @@ class Admin::FeedsController < ApplicationController
   def approve
     content = Content.find(params[:id])
     content.update_attribute('status',1)
+    ContentAction.create(:action_done_by => current_user.id,:reason => "",:time => Time.now, :sent_mail => false,:content_id => content.id,:action => "approved" )
     if content.is_a?ArticleContent
       if content.url!=nil
          Point.add_point_system(current_user, content, Point::PointReason::CONTENT_SHARE)
@@ -28,6 +29,25 @@ class Admin::FeedsController < ApplicationController
           
     redirect_to :back  
   end
+  
+  def reject
+    @content = Content.find(params[:id])
+    @content.update_attribute('status',Content::REJECTED)
+    @content.remove_user_activities
+  end
+  
+  def content_action
+    @content = Content.find(params[:id])
+    if @content.status == Content::REJECTED
+        ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "rejected" )
+   elsif @content.status == Content::DELETE_STATUS
+       ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "deleted" )
+   end 
+   if params[:content_action][:sent_mail] == "1"
+     ContentMailer.content_action(@content,params[:content_action][:reason]).deliver 
+   end    
+  end
+  
   def add_vote
     user_ids = configatron.content_creator_user_ids.split(",")
     content = Content.find(params[:id])

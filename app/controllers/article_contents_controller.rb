@@ -5,7 +5,12 @@ class ArticleContentsController < ApplicationController
     #me = FbGraph::User.me(current_user.token)
   #me.feed!(
   #:message => 'Testing fb post from Rails App.',
-#)
+#) 
+  if params[:article_content][:sub_type] == "Deals" 
+       if !params[:article_content][:field3]
+         params[:article_content][:field3] = "0"
+      end
+    end  
    if params['article_content']['title'] == ''
       @title = false
    else  
@@ -48,7 +53,7 @@ class ArticleContentsController < ApplicationController
    # Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
    UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article.id!=nil
    session[:content_id] = @article.id
-   if current_user.total_points < 10
+   if current_user.total_points > 10
      @article.update_attribute('status',Content::SENT_APPROVAL) 
      @display = 'false'
    elsif @article.url!=nil
@@ -72,6 +77,11 @@ class ArticleContentsController < ApplicationController
  
   def update
     #@default_id= params[:default_item_id]
+     if params[:article_content][:sub_type] == "Deals" 
+       if !params[:article_content][:field3]
+         params[:article_content][:field3] = "0"
+      end
+    end  
     @item = Item.find(params[:default_item_id]) if params[:default_item_id] != ""
     ids = params["edit_articles_item_id_#{params[:id]}"] || params[:article_create_item_id]
     #ids = params[:articles_item_id] || params[:article_create_item_id]

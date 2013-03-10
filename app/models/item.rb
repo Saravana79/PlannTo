@@ -687,5 +687,21 @@ end
      return @items    
     
   end
+  def self.get_root_level_id(item_type)
+    case item_type
+    when "Car"
+       return configatron.root_level_car_id
+    when "Mobile"
+       return configatron.root_level_mobile_id  
+    when "Tablet"
+       return configatron.root_level_tablet_id 
+    when "Cycle"
+       return configatron.root_level_cycle_id
+    when "Bike"
+       return configatron.root_level_bike_id   
+    when "Camera"
+       return configatron.root_level_camera_id 
+    end 
+   end           
  end
 

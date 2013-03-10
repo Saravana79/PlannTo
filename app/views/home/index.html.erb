@@ -1,14 +1,14 @@
-
-<% content_for :image, "http://www.plannto.com/images/n_logo.png" %>
-<% content_for :description, "Everything you want to know about the products that you own or planning to buy." %>
-<div id="maincontainer" class="maincontainerCss1">
-<div class="Homeinnercontent">
-  <script> // To make this work on localhost
+<% cache ('home_page') do %>
+  <% content_for :image, "http://www.plannto.com/images/n_logo.png" %>
+  <% content_for :description, "Everything you want to know about the products that you own or planning to buy." %>
+  <div id="maincontainer" class="maincontainerCss1">
+  <div class="Homeinnercontent">
+    <script> // To make this work on localhost
 //var nAgt = navigator.userAgent;
 //if ((nAgt.indexOf("Chrome"))!=-1) {
 //document.domain = /(\w+)(.\w+)?$/.exec(location.hostname)[0];
 //}
-function removeCompare(obj){
+  function removeCompare(obj){
     $(obj).parents('.compare-view').remove();
     key = $(obj).attr('rel') ;
     $.cookie(key,null);
@@ -33,10 +33,10 @@ function removeCompare(obj){
         $('#compare-list').hide();
     }
     return false;
-};
+  };
 
 //##################################### ADDED BY GANESH #####################################
-function reinitialiseVotingPoshyTip(){   
+  function reinitialiseVotingPoshyTip(){   
     $('.btn_dislike_positive').poshytip('destroy')
 
     $('.btn_like_positive').poshytip('destroy')
@@ -87,7 +87,7 @@ function reinitialiseVotingPoshyTip(){
     });
 }
 
-$(document).ready(function(){
+  $(document).ready(function(){
     reinitialiseVotingPoshyTip();
 
     $("#ui-active-menuitem").mouseout(function() {
@@ -194,40 +194,42 @@ $(document).ready(function(){
 });
 
   
-$(document).ready(function() {
+  $(document).ready(function() {
         
-    $('a.youtube').youtube();
-    $('span.buttonLink a#youtube_form').click(function() {
-        $("#image_share").hide();
-        $("#article_share").hide();
-        $("#youtube").toggle(2000);
-        //          alert('Handler for .click() called.');
-        return false;
-    });
+      $('a.youtube').youtube();
+      $('span.buttonLink a#youtube_form').click(function() {
+          $("#image_share").hide();
+          $("#article_share").hide();
+          $("#youtube").toggle(2000);
+          //          alert('Handler for .click() called.');
+          return false;
+      });
 
 
-    $('span.buttonLink a#image_form').click(function() {
-        $("#article_share").hide();
-        $("#youtube").hide();
-        $("#image_share").toggle(2000);
-        return false;
-    });
+      $('span.buttonLink a#image_form').click(function() {
+          $("#article_share").hide();
+          $("#youtube").hide();
+          $("#image_share").toggle(2000);
+          return false;
+      });
 
 
-    $('span.buttonLink a#article_form').click(function() {
-        $("#youtube").hide();
-        $("#image_share").hide();
-        $("#article_share").toggle(2000);
-        return false;
-    });
+      $('span.buttonLink a#article_form').click(function() {
+          $("#youtube").hide();
+          $("#image_share").hide();
+          $("#article_share").toggle(2000);
+          return false;
+      });
 
 });
 
-$("#share_an_article").click(function(){
+    $("#share_an_article").click(function(){
         $("share_an_article_form").show();
     }
-);</script>
+);
+    </script>
 <!-- <link rel="stylesheet" href="slider/themes/default/default.css" type="text/css" media="screen" /> -->
+
     <link rel="stylesheet" href="slider/themes/light/light.css" type="text/css" media="screen" />
     <!-- <link rel="stylesheet" href="slider/themes/dark/dark.css" type="text/css" media="screen" /> -->
     <!-- <link rel="stylesheet" href="slider/themes/bar/bar.css" type="text/css" media="screen" /> -->
@@ -253,8 +255,7 @@ $("#share_an_article").click(function(){
  
 
     <div style="float:right;width:240px;">
-
-          <%= render "/shared/home_signup" %>
+       <%= render "/shared/home_signup" %>
 
     </div>
 </div>
@@ -593,7 +594,7 @@ $("#share_an_article").click(function(){
     </script>
    </div>
  </div>
-
+<%end%>
 
 <!--<div class="FaceImg" style="padding-left:300px;">
     <%= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>

@@ -19,34 +19,34 @@
    <%if params[:sub_type]  == 'Travelogue' && !@url %>
       showArticleCreateTravelogueOptFields();
    <%elsif params[:sub_type]  == 'Travelogue' && @url%> 
-      $("#deals1").remove();
+      //$("#deals1").remove();
       showArticleSubmitTravelogueOptFields(); 
    <%elsif params[:sub_type] == "Deals" && !@url%>
-     $("#deals").show(); 
+     showArticleCreateDealsOptFields(); 
    <%elsif params[:sub_type] == "Deals" && @url %>
-      $("#deals1").show();
+      showArticleSubmitDealsOptFields();
    <%elsif params[:sub_type] == "Event"  && !@url %>
       showArticleCreateEventOptFields();
    <%elsif params[:sub_type] == "Event" && @url %>
-      $("#deals1").remove();
+      //$("#deals1").remove();
       showArticleSubmitEventOptFields();  
    <%elsif  params[:sub_type] == "Accessories" && !@url %>
       showArticleCreateAccessoriesOptFields();
    <%elsif  params[:sub_type] == "Accessories" && @url %>
-      $("#deals1").remove();
+      //$("#deals1").remove();
       showArticleSubmitAccessoriesOptFields();
    <%elsif  params[:sub_type] == "Apps" && !@url %>
       showArticleCreateAppOptFields();
     <%elsif  params[:sub_type] == "Apps" && @url %>
-       $("#deals1").remove();
+       //$("#deals1").remove();
        showArticleSubmitAppOptFields();
     <%elsif  params[:sub_type] == "Miles" && !@url %>
        showArticleCreateMileOptFields(); 
-    <%elsif params[:sub_type] == "Reviews" && !@url %>
-      $("#deals1").remove();
+    <%elsif params[:sub_type] == "Reviews" && @url %>
+     // $("#deals1").remove();
       $("div#ShareURLDiv div#new_product_review_rating").show();
     <%elsif  params[:sub_type] == "Miles" && @url %>
-      $("#deals1").remove();
+      //$("#deals1").remove();
       showArticleSubmitMileOptFields();
     <%end%>   
   <% unless @content %>
@@ -54,9 +54,6 @@
    $("#new_article_create_field1").val("<%= @field1  rescue "" %>");
    $("#new_article_create_field2").val("<%= @field2  rescue "" %>");
    $("#new_article_create_field3").val("<%= @field3  rescue "" %>");
-   $("#expire_date").val("<%= @field1  rescue "" %>");
-   $("#discount").val("<%= @field2  rescue "" %>");
-   $("#completed").val("<%= @field3  rescue "" %>");
    $("#new_article_create_field4").val("<%= @field4  rescue "" %>");
    $("#new_share_field1").val("<%= @field1  rescue "" %>");
    $("#new_share_field2").val("<%= @field2  rescue "" %>");

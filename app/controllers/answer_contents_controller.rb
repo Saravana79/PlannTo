@@ -30,8 +30,8 @@ class AnswerContentsController < ApplicationController
   end
   
   def destroy
-    @answer_content = AnswerContent.find(params[:id])
-    @answer_content.update_attribute(:status, Content::DELETE_STATUS)
-    @answer_content.remove_user_activities
+    @content = AnswerContent.find(params[:id])
+    @content.update_attribute(:status, Content::DELETE_STATUS)
+    @content.remove_user_activities
   end
 end
