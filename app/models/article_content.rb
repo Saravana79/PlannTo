@@ -26,36 +26,39 @@ class ArticleContent < Content
       require 'nokogiri'
       require 'open-uri'
       begin
-
-        doc = Nokogiri::HTML(open(url))
-        @title_info = doc.xpath('.//title').to_s.strip
-        doc.xpath("//meta[@name='keywords']/@content").each do |attr|
-          @meta_keywords = attr.value
+        begin
+            doc = Nokogiri::HTML(open(url))
+            @title_info = doc.xpath('.//title').to_s.strip
+            doc.xpath("//meta[@name='keywords']/@content").each do |attr|
+              @meta_keywords = attr.value
+            end
+            @meta_description = ''
+            doc.xpath("//meta[@name='description']/@content").each do |attr|
+              unless attr.value.nil?
+                @meta_description = CGI.unescapeHTML(attr.value.to_s.gsub(/[^\x20-\x7e]/,''))
+                #@meta_description = CGI.unescapeHTML(attr.value.to_s)
+              end 
+            end
+            # doc.xpath("//link[@rel='image_src']").each do |attr|
+            #   @images << CGI.unescapeHTML(attr.value)
+            # end
+            # doc.xpath("//link[@src]").each do |attr|
+            #   @images << CGI.unescapeHTML(attr.value)
+            # end
+            # */
+            doc.xpath("//meta[@property='og:image']/@content").each do |attr|
+              @images << CGI.unescapeHTML(attr.value)
+            end
+            #doc.xpath("/html/body//img[@src[contains(.,'://')
+            #       and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
+            doc.xpath("/html/body//img[@src[contains(.,'://')
+                   and not(contains(.,'ads.') or contains(.,'ad.'))]]//@src") .each do |attr|
+              @images << CGI.unescapeHTML(attr.value)
+            end
+        rescue OpenURI::HTTPError=>e
+            @title_info=""
+            @meta_description =""
         end
-        @meta_description = ''
-        doc.xpath("//meta[@name='description']/@content").each do |attr|
-          unless attr.value.nil?
-            @meta_description = CGI.unescapeHTML(attr.value.to_s.gsub(/[^\x20-\x7e]/,''))
-            #@meta_description = CGI.unescapeHTML(attr.value.to_s)
-          end 
-        end
-        # doc.xpath("//link[@rel='image_src']").each do |attr|
-        #   @images << CGI.unescapeHTML(attr.value)
-        # end
-        # doc.xpath("//link[@src]").each do |attr|
-        #   @images << CGI.unescapeHTML(attr.value)
-        # end
-        # */
-        doc.xpath("//meta[@property='og:image']/@content").each do |attr|
-          @images << CGI.unescapeHTML(attr.value)
-        end
-        #doc.xpath("/html/body//img[@src[contains(.,'://')
-        #       and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
-        doc.xpath("/html/body//img[@src[contains(.,'://')
-               and not(contains(.,'ads.') or contains(.,'ad.'))]]//@src") .each do |attr|
-          @images << CGI.unescapeHTML(attr.value)
-        end
-
         @article.title = CGI.unescapeHTML(@title_info.to_s.gsub(%r{</?[^>]+?>}, '')) if @title_info
         sub_type = @article.find_subtype(@article.title)
         logger.info sub_type
