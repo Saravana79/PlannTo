@@ -310,6 +310,7 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
       <%if params[:type] == "deals"%>
         <%unless @item_ids.nil?%>
        <br />
+       
        <%=render "preferences/deals"%>
        <%unless @contents.blank? %>
          <h1><center> Deals </b></h1>

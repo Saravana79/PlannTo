@@ -336,7 +336,7 @@ class PreferencesController < ApplicationController
     current_user.clear_user_follow_item
     type = Item.find(params[:item_id]).type
     item_type_id = Itemtype.find_by_itemtype(type).id
-    @plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => item_type_id).first
+    @plan = BuyingPlan.where(:user_id => current_user.id,:completed => false,:deleted => false, :itemtype_id => item_type_id).first
     @follow_types = Itemtype.get_followable_types(@plan.itemtype.itemtype)
     @follow_item = Follow.for_follower(@plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) #.group_by(&:followable_type)
     item_ids = @follow_item.collect(&:followable_id).join(',')
@@ -375,6 +375,7 @@ sunspot_search_items
   
   def create_preference
     require 'will_paginate/array'
+  
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
      if !current_user
       @buying_plan = BuyingPlan.find_or_create_by_temporary_buying_plan_ip_and_user_id_and_itemtype_id_and_completed_and_deleted(:temporary_buying_plan_ip => request.remote_ip,:user_id => 0, :itemtype_id => @itemtype.id,:completed => false,:deleted => false)
@@ -428,7 +429,7 @@ sunspot_search_items
     #else   
      # Follow.wizard_save(item_ids, 'buyer',current_user)
    #end 
-   if !params[:separate_url_item_ids].blank?
+   if !params[:separate_url_item_ids].blank? && params[:separate_url] == "true"
      redirect_to @buying_plan.preference_page_url
      return nil
    end 

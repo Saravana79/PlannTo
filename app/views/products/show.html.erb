@@ -11,9 +11,9 @@
 <script>
 $(".plan_to_buy_icon").click(function(e){
   <% if !current_user %>
- window.location.href = '/create_buying_plan?search_type=<%=@item.type %>&&item_ids=<%= @item.id %>'
-$("#dialog-form").dialog('destroy');
-(".ui-dialog-content").dialog('destroy');
+ //window.location.href = '/create_buying_plan?search_type=<%=@item.type %>&&item_ids=<%= @item.id %>'
+//$("#dialog-form").dialog('destroy');
+//(".ui-dialog-content").dialog('destroy');
 $("#dialog-form #click_message").show();
 <%end%>
  });

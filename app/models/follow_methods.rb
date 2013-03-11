@@ -23,10 +23,12 @@ module FollowMethods
 
   def plan_to_buy_item
      @type = "buy"
+  
      follow = follow_item(params[:follow_type], params[:unfollow])
       current_user.clear_user_follow_item
       @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => false,:deleted => false).first
+      @b_p = @buying_plan 
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id,:deleted => 0)
         UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)

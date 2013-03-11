@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-   caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term],:type => params[:type] ,:search_type => params[:search_type]}}
+   caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term],:type => params[:type] ,:content => params[:content], :search_type => params[:search_type]}}
    
   layout "product"
 
