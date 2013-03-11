@@ -115,6 +115,7 @@ resources :accounts do
       post :add_preference
       get :create_preference
       post :create_preference
+      get  :deals_filter
       get :edit_preference
       post :save_advice
       get :update_preference

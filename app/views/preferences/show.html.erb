@@ -308,15 +308,36 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%>
          <%end%>
          <%end%>  
       <%if params[:type] == "deals"%>
+        <div style="margin: 0px 0px 0px 550px;">
+          <ul class="itemdrop" >
+          	<li class="item1"><a href="#"><span>Products</span></a>
+		         <ul class="item_drop_deals">
+               <% Item.where("id in(?)",@item_ids.split(',')).each do |i| %>
+				         <li class="selected"> <a data-type=<%= i.id %> ><%= i.name %></a></li>
+			        <% end %>
+		       </ul>
+	      </ul>
+      </dl>
+   </div>
+   <script>
+      $('ul.item_drop_deals a').live("click",function(){
+      $(this).parent().toggleClass('selected');
+      var types = [];
+      $("ul.item_drop_deals li.selected a").each(function() {
+  types.push($(this).data('type'))
+});
+       $.ajaxSetup({
+      'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+      });
+
+      $.get('/preferences/deals_filter',{'item_ids' :types});
+      });
+     </script>
+       <div id="buying_plan_deals">
         <%unless @item_ids.nil?%>
-       <br />
-       
-       <%=render "preferences/deals"%>
-       <%unless @contents.blank? %>
-         <h1><center> Deals </b></h1>
-         <%= render "contents/contents" %>
-       <%end%>   
-      <%end%> 
+            <%=render "preferences/deals"%>
+         <%end%> 
+        </div>
       <%end%>
   	
        <%if !params[:type].present? || params[:type] == "create"%>    

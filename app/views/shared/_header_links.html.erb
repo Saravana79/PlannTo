@@ -50,21 +50,14 @@
   
     <span class="search_txt" id="plannToSearchSpan">
         <input name="Search" type="text" placeholder="Search Products or Topics" id="plannToSearch"/>
-     <script>
-        $('#plannToSearch').keyup(function(e){
-          if(e.keyCode == 13)
-         {
-             window.location.href= "/search/search_items?q=" + $("#plannToSearch").val   ();
-          }
-        });
-       
-       </script>
+            </span>
+  <%= hidden_field_tag "item_search" %>
             <!--<= select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
    
-    </span>
+
     <a class="btn_search" href="#"></a>
-  </div> 
+  </div>
 
   <span>
    <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
@@ -181,9 +174,7 @@
 
 </div>
 <script type="text/javascript">
-
-
-  function showLoginLinks(){
+ function showLoginLinks(){
     $('#login_link').show();
   }
 
@@ -192,3 +183,4 @@
   }
 
 </script>
+    

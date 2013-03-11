@@ -434,7 +434,18 @@ sunspot_search_items
      return nil
    end 
   end
-
+  
+  def deals_filter
+    @item_ids = params[:item_ids].join(",") rescue nil
+      @where_to_buy_items = []
+    unless @item_ids.nil?
+      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+     @itemtype = Item.find(params[:item_ids][0]).itemtype
+     deals_item_id = Item.get_root_level_id(@itemtype.itemtype)
+     @contents = Content.get_top_active_deals(@item_ids + "," + deals_item_id.to_s)
+   end  
+  end
+  
   def update_preference
     @buying_plan = BuyingPlan.find(params[:id])
     Preference.update_preferences(@buying_plan.id, params[:search_type], params)
