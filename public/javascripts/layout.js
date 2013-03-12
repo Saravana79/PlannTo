@@ -146,13 +146,18 @@ $(document).ready(function(){
             return false
         },
         select: function( event, ui ) {
+            $("#item_search").val("true");
             if (ui.item.id  == 0){
             	//alert(ui.item.url)
+            	 
                 location.href = "/search/search_items?q=" + ui.item.url
+                //$("#item_search").val("")
             // return false;
             }
             else{
+                
                 location.href = "" + ui.item.url
+               // $("#item_search").val("")
             // return false;
             }
         // return false;
@@ -191,7 +196,13 @@ $(document).ready(function(){
 
   
 $(document).ready(function() {
-        
+    $('input#plannToSearch').keyup(function(e){
+      if(e.keyCode == 13 && $("#item_search").val()!="true")
+       {
+         window.location.href= "/search/search_items?q=" + $("#plannToSearch").val();
+       }
+    }); 
+    
     $('a.youtube').youtube();
     $('span.buttonLink a#youtube_form').click(function() {
         $("#image_share").hide();
