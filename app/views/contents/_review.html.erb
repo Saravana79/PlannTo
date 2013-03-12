@@ -8,7 +8,12 @@
     <div><%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status ==  Content::SENT_APPROVAL%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%></div>
  
    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> reviewed </a><%=get_anchor_name_link(content)%> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
-    <div class="subContentGap contentsubsection">
+    <div class="contentsubsection">
+        <%if content.thumbnail?%>
+				  <div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/>
+				  </div>
+				<%end%>
+				<div class="subContentGap">
     	<%= raw get_rating_or_category_contents(content,page)%>
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>
 						<% rating =  (content.is_a?(ArticleContent)) ? content.field1 : content.rating %>
@@ -27,7 +32,7 @@
     <div class="subContentGap"><a class="titleCon">Con:</a><a class="txt_black_description"><%#= content.cons %></a></div>-
   -->
     <div class="subContentGap"><%= raw get_content_description(content)%></div>
-    
+    </div>
     <ul class="divCommentsConent">
       <li class="subContentGap float_lft"><a class="txt_blue" style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray">|</a></li>

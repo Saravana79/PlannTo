@@ -242,7 +242,13 @@ function remove_fields(link) {
           <%= check_box_tag "facebook_post" %>
           </div> 
      <%end%>
-     
+       <div class="title_header float_rgt"></div>
+          <div class="float_rgt" style="padding-right:200px;">
+          <br />
+          <br />
+          <span class="title_header">Use thumbnail as uploaded image:</span>
+            <%= check_box_tag(:thumbnail, 1, true)%>
+        </div>
     <input id="article_content_create" name="article_content_create" type="hidden" value="true"  />
     <%= hidden_field_tag 'article_create_item_id' %>
     <%= hidden_field_tag 'content_create_form_type'%>

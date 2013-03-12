@@ -73,6 +73,19 @@ class Content < ActiveRecord::Base
     end   
   end
   
+  def self.save_thumbnail_using_uploaded_image(article)
+    description = article.description
+    URI.extract(description).each do |u|
+      if u.include?("s3.amazonaws.com")
+        id = u.split("/")[6]
+        photo = ContentPhoto.find(id)
+        photo.update_attribute('content_id',article.id)
+        thumb = photo.photo.url(:thumb)
+        article.update_attribute('thumbnail',thumb)
+      end
+     end
+  end
+  
   def deal_expired?
     date = self.field1.to_date rescue ""
     completed = self.field3

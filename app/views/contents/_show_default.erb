@@ -71,6 +71,9 @@
 					</div>
 				
 					<div class="subContentGap">
+					   <%if content.is_a?(ReviewContent) && content.thumbnail?%>
+						 	<div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
+						 	<%end%>
 						<%= raw get_rating_or_category_contents(content)%>
 						
 						<% if content.sub_type == "#{ArticleCategory::REVIEWS}" %>

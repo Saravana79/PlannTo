@@ -38,11 +38,19 @@ class ArticleContentsController < ApplicationController
       
     # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
    if params[:submit_url] == 'submit_url'
-     ContentPhoto.save_url_content_to_local(@article) 
-   end   
+      ContentPhoto.save_url_content_to_local(@article) 
+   end
+         
    if ((params[:article_content][:sub_type] == "Photo" || params[:submit_url] == 'submit_url') && (!@article.content_photos.first.nil?))
      @article.update_attribute('thumbnail',@article.content_photos.first.photo.url(:thumb)) 
-   end  
+   else
+     if params[:thumbnail] == "1"
+       Content.save_thumbnail_using_uploaded_image(@article)
+     else
+        @article.update_attribute('thumbnail',"")
+     end    
+   end
+      
     if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
      @defaultitem = Item.find(ids[0])
      @defaultitem.add_new_rating(params[:article_content][:field1].to_f)
@@ -95,7 +103,13 @@ class ArticleContentsController < ApplicationController
     end
      if params[:article_content][:sub_type] == 'Photo' || params[:submit_url] == 'submit_url'
        @content.update_attribute('thumbnail',(@content.content_photos.first.photo.url(:thumb) rescue nil))
-     end
+     else
+      if params[:thumbnail] == "1"
+        Content.save_thumbnail_using_uploaded_image(@content)
+      else
+        @content.update_attribute('thumbnail',"")
+      end
+     end 
     @detail = params[:detail]  
     per_page = params[:per_page].present? ? params[:per_page] : 5
     page_no  = params[:page_no].present? ? params[:page_no] : 1

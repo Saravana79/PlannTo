@@ -29,6 +29,11 @@ class ReviewContentsController < ApplicationController
 		  else
 		    Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_CREATE)   
 		  end  
+		  if params[:thumbnail] == "1"
+		    Content.save_thumbnail_using_uploaded_image(@reviewcontent)
+      else
+        @reviewcontent.update_attribute('thumbnail',"")
+      end
 		  if @reviewcontent
     		unless @products_error == true
     		 @item.add_new_rating @reviewcontent.rating if @item
@@ -57,13 +62,18 @@ class ReviewContentsController < ApplicationController
     per_page = params[:per_page].present? ? params[:per_page] : 5
     page_no  = params[:page_no].present? ? params[:page_no] : 1
    # @items = Item.where("id in (#{@content.related_items.collect(&:item_id).join(',')})")
-   frequency = ((@content.title.split(" ").size) * (0.3)).to_i
+    frequency = ((@content.title.split(" ").size) * (0.3)).to_i
     results = Sunspot.more_like_this(@content) do
       minimum_term_frequency 1
       boost_by_relevance true
       minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
+     if params[:thumbnail] == "1"
+		   Content.save_thumbnail_using_uploaded_image(@content)
+     else
+       @reviewcontent.update_attribute('thumbnail',"")
+     end
     @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
     @popular_items_ids  = @popular_items.map(&:id).join(",") 
     @related_contents = results.results

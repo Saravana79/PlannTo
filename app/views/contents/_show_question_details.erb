@@ -38,6 +38,9 @@
                 <div><a class="title"><%= content.title %></a><%if content.status ==  Content::SENT_APPROVAL%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%></div>
                 <div><a class="txt_brown">Asked by <%= content.user.name %> - <%= time_ago_in_words(content.created_at) %> ago</a></div>
                 <div class="subContentGap">
+                <%if content.thumbnail?%>
+						 	     <div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div>
+						 	<%end%>
                 <%= raw get_content_description(content, true)%></div>
                 <ul class="divCommentsConent">
                     <li class="subContentGap float_lft" ><a class="txt_blue "><%= render_comments_anchor(content).html_safe  %></a></li>
