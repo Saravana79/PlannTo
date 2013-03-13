@@ -1,0 +1,78 @@
+
+
+  <%@items.results.each do |item|%>
+    <div class="col w4_5 feed_item p1">
+      <div class="col w0_5">
+       <%if item.is_a?(Item) %>
+         <% image_url = item.image_url(:small) rescue "" %>
+         <a>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%= image_url %>"/>
+        </a>
+       <%else%>
+             <%image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png" %> 
+               <a>
+          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%= image_url %>"/>
+          
+        </a>
+        <%end%>
+      </div>
+      <div class="e_col w3_5">
+       <%if item.is_a?(Item) %>
+        <h2>
+          <%= link_to item.name,item.get_url() %>
+          
+        </h2>
+        <div class="feed_item_question_info">
+          Type: <%=item.type%>
+        </div>
+        <%else%>
+           <h2>
+          <%= link_to "#{Content.title_display(item.title)}",content_path(item) %>
+          
+        </h2>
+        <div class="feed_item_question_info">
+          Type: <%=item.sub_type%>
+        </div>
+          <%end%>
+      </div>
+    </div>
+  <%end%>
+ <!-- <div class="e_col w3_5" style="display:<%=@display%>">
+    <h2></h2>
+    <div>
+      <a href="/search/search_items?q=<%=params[:q]%>&page=<%=@page%>">
+        Show Next Items...
+      </a>
+    </div>
+  </div> -->
+   
+
+
+<style type="text/css">
+  .w4_5 {
+    width: 600px;
+  }
+
+  h1.heading {
+    border-bottom: 1px solid #B0B0B0;
+    margin-bottom: 1px;
+    padding-bottom: 0.4em;
+  }
+
+  .w0_5 {
+    width: 50px;
+  }
+  .col, .e_col {
+    float: left;
+    margin: 0 10px 0 0;
+  }
+  .feed_item {
+    border-bottom: 1px solid #E0E0E0;
+    float: left;
+    position: relative;
+  }
+  .p1 {
+    padding: 10px 0;
+  }
+</style>
+

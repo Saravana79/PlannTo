@@ -356,7 +356,16 @@ Message : <br />
       $("ul#Newtabs li#buy").addClass("tab_active");
      })
   </script>
-
+<%if params[:tab] =="compare" %>
+  <script>
+     $("#overview").hide();
+     $("#where_to_buy").show();
+     $("#all_variants").hide();
+     $("#specification").hide(); 
+     $("ul#Newtabs").find("li").removeClass("tab_active");
+      $("ul#Newtabs li#buy").addClass("tab_active");
+  </script>
+<%end%>
 
 <script>
    $("#group_price").click(function(e){

@@ -188,8 +188,6 @@ class SearchController < ApplicationController
   end
 
   def search_items
-    @page  = params[:page].nil? ? 1 : params[:page].to_i
-
     @items = Sunspot.search(Product.search_type(params[:search_type]) + [Content]) do
       keywords params[:q], :fields => :name
       with :status,[1,2,3]
@@ -200,13 +198,6 @@ class SearchController < ApplicationController
       #order_by :status, :asc      
       order_by :created_at, :desc
     end
-    if @items.results.count < 10
-      @display = "none;"
-    else
-      @display = "block;"
-      @page += 1
-    end
-
   end
   
   def autocomplete_items
