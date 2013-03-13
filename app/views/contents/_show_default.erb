@@ -56,7 +56,7 @@
 				</div>
 				<div  class="subContentDiv">
 					<div>
-						<%= raw get_content_title(content)%><%if content.status ==  Content::SENT_APPROVAL%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%>
+						<%= raw get_content_title(content)%> <%if content.sent_approval? %> <font color="black" style="font-style:italic">[Under Review] </font> <%end%>
 				<%if content.sub_type == "Deals"  %>
            <%if content.deal_expired? %>
              <font color="black" style="font-style:italic">[This Deal is Expired.] </font>

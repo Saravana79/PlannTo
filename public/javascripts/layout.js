@@ -90,7 +90,7 @@ $(document).ready(function(){
     });
 
     $('#plannToSearch').focus(function(){
-        $(this).val('');
+      //  $(this).val('');
         $(this).keydown();
     });
 
@@ -196,8 +196,8 @@ $(document).ready(function(){
 
   
 $(document).ready(function() {
-    $('input#plannToSearch').keyup(function(e){
-      if(e.keyCode == 13 && $("#item_search").val()!="true")
+  $('input#plannToSearch').keyup(function(e){
+     if(e.keyCode == 13 && $("#item_search").val()!="true")
        {
          window.location.href= "/search/search_items?q=" + $("#plannToSearch").val();
        }

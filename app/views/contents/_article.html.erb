@@ -8,7 +8,7 @@
 
 
     <div>
-      <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.status == Content::SENT_APPROVAL%> <font color="black" style="font-style:italic">[Under Review] </font> <%end%>
+      <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %><%if content.sent_approval? %> <font color="black" style="font-style:italic">[Under Review] </font> <%end%>
         <%if content.sub_type == "Deals"  %>
            <%if content.deal_expired? %>
              <font color="black" style="font-style:italic">[This Deal is Expired.] </font>

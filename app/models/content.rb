@@ -73,6 +73,14 @@ class Content < ActiveRecord::Base
     end   
   end
   
+  def sent_approval?
+    if self.status == Content::SENT_APPROVAL
+      return true
+    else
+      return false  
+    end  
+  end
+  
   def self.save_thumbnail_using_uploaded_image(article)
     description = article.description
     URI.extract(description).each do |u|

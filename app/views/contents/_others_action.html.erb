@@ -1,9 +1,9 @@
-  <%if current_user %>
+  <%if current_user && content.can_update_content?(current_user) %>
 <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
 <ul class="navdrop" data-content=<%= content.id %>>	 
  
      <li class="item1" ><a href="#" style="background: url(/images/settings.png) no-repeat  2px 2px ;"><span>Edit</span></a>
-   <%end%>  
+    
 		<ul >
 			<%# content_list = content.guides.map{|c| c.id } %>
 			  <%if content.can_update_content?(current_user)%>
@@ -17,7 +17,7 @@
          <%end%>
 			 <%if current_user && current_user.is_admin? %>
       <li> <%= link_to "Add Votes",add_vote_admin_feed_path(content) ,:class =>"txt_blue "%></li>
-       <%if content.status == Content::SENT_APPROVAL%>
+       <%if content.sent_approval?%>
         
          <li> <%= link_to "Approve",approve_admin_feed_path(content) ,:class =>"txt_blue "%></li>
          <li> <%= link_to "Reject",reject_admin_feed_path(content) ,:remote => :true,:class =>"txt_blue "%></li>
@@ -27,3 +27,4 @@
 		</ul>
 	</li>
 </ul>
+<%end%> 

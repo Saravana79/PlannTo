@@ -9,6 +9,7 @@
   <div style="display:block;height:30px;"></div>
  <%elsif @static_page!="true" && (session[:product_warning_message] == "true" || (!current_user&& session[:warning] == "true"))%>
  <div id="giveAdviceDialog"> </div>
+
   <div class="outerdivwarning">
   <div  class="innerdivwarning">
     <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span> 
@@ -51,7 +52,7 @@
     <span class="search_txt" id="plannToSearchSpan">
         <input name="Search" type="text" placeholder="Search Products or Topics" id="plannToSearch"/>
             </span>
-  <%= hidden_field_tag "item_search" %>
+  
             <!--<= select_tag "plannto_search_type",
         options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
    
@@ -65,7 +66,7 @@
     <a class="icon_chat" href="<%=messages_url%>"></a>
   </span>
   </div> 
-
+   
        
       <!--header right part start here-->
    
