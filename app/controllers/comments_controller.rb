@@ -21,7 +21,9 @@ class CommentsController < ApplicationController
       Point.add_point_system(current_user,@content, Point::PointReason::CONTENT_COMMENT)    
      if @content.is_a?UserQuestion
         UserActivity.save_user_activity(current_user,@content.buying_plan.id,"commented","Buying Plan",@comment.id,request.remote_ip)
-     end  
+     elsif @content.is_a?UserAnswer
+        UserActivity.save_user_activity(current_user,@content.id,"commented","Buying Plan-Recommend",@comment.id,request.remote_ip) 
+     end
       
      #if  @content.is_a?UserAnswer
       #  UserActivity.save_user_activity(current_user,@content.id,"commented","Recommend",@comment.id,request.remote_ip)

@@ -47,8 +47,9 @@ class VotesController < ApplicationController
       
       if @voteable.is_a?BuyingPlan
         UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted','Buying Plan',"",request.remote_ip)
-      end 
-        
+     elsif @voteable.is_a?UserAnswer
+       UserActivity.save_user_activity(current_user,params[:id],params[:vote] == 'down'? 'downvoted' : 'voted',"Buying Plan-Recommend","",request.remote_ip) 
+     end   
       @vote = voter.fetch_vote(voteable)
       @voteable = params[:parent].camelize.constantize.find(params[:id])
     else

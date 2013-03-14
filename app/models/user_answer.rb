@@ -9,7 +9,7 @@ class UserAnswer < ActiveRecord::Base
 
   validates :answer, :presence => true
   
-    def content_vote_count
+   def content_vote_count
     count = $redis.get("#{VoteCount::REDIS_ANSWER_VOTE_KEY_PREFIX}#{self.id}")
     if count.nil?
       vote = VoteCount.search_vote(self).first

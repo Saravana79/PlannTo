@@ -482,8 +482,8 @@ sunspot_search_items
   end
   
   def edit_user_question
-  @buying_plan = BuyingPlan.find params[:buying_plan_id]
-  @question = @buying_plan.user_question
+    @buying_plan = BuyingPlan.find params[:buying_plan_id]
+    @question = @buying_plan.user_question
   end
 
   def update_question
@@ -519,6 +519,9 @@ sunspot_search_items
     @user_answer = UserAnswer.find params[:id]
     @user_answer.destroy
     UserActivity.where("related_activity=? and related_activity_type =? and activity_id=?","recommended","Buying Plan",@user_answer.id).first.destroy
+    UserActivity.where("related_activity_type =? and related_id =?","Buying Plan-Recommend",@user_answer.id).each do|ac|
+      ac.destroy
+    end  
   end
 
   def save_advice
@@ -529,8 +532,7 @@ sunspot_search_items
       @user_answer.recommendations.build(:item_id => item_id)
     end
     @user_answer.save
-    
-    @count = UserQuestion.find(:first, :conditions => {:id =>params[:user_question_answers][:user_question_id]}).user_answers.size
+     @count = UserQuestion.find(:first, :conditions => {:id =>params[:user_question_answers][:user_question_id]}).user_answers.size
      @buying_plan = UserQuestion.find(params[:user_question_answers][:user_question_id]).buying_plan
      UserActivity.save_user_activity(current_user,@buying_plan.id,"recommended","Buying Plan", @user_answer.id,request.remote_ip)
   end
