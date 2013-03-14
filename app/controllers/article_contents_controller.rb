@@ -11,17 +11,18 @@ class ArticleContentsController < ApplicationController
          params[:article_content][:field3] = "0"
       end
     end  
+    
+    if params['article_content']['url']
+      if params['article_content']['url'].include?("?utm_source=feedburner")
+        params['article_content']['url'] = params['article_content']['url'].split("?")[0]
+      end
+    end  
+    
    if params['article_content']['title'] == ''
       @title = false
    elsif params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
      @duplicate_url = 'true'
    else
-   if params['article_content']['url']
-      if params['article_content']['url'].include?("?utm_source=feedburner")
-        params['article_content']['url'] = params['article_content']['url'].split("?")[0]
-      end
-    end  
-     
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
