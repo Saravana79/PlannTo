@@ -1,8 +1,9 @@
 $("#deals1").hide();
-<%if @title == false %>
+<%if @duplicate_url == "true"%>
+   alert('Url already taken');
+<%elsif @title == false %>
     alert('Please Enter Title.')
-<%else%>    
-<%if @tag == 'false' %>
+<%elsif @tag == 'false' %>
   alert('Please at least one product')
 <%else%>  
 if(window.opener) {
@@ -77,4 +78,4 @@ $(".ui-dialog").css("display", "none");
  window.location.href = "/oauth/new";
 <%end%>
 <%end%>
-<%end%>
+

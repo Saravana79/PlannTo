@@ -1,7 +1,7 @@
 class ArticleContent < Content
   acts_as_citier
 
-  validates :url, :uniqueness => true, :if => Proc.new {  |c|  !c.url.blank? }
+  
   #validates :url, :presence => true
   belongs_to :article_category
   has_many :content_photos,  :foreign_key => 'content_id'

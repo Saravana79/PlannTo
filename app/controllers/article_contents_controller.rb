@@ -13,12 +13,15 @@ class ArticleContentsController < ApplicationController
     end  
    if params['article_content']['title'] == ''
       @title = false
-   else  
-     if params['article_content']['url']
+   elsif params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
+     @duplicate_url = 'true'
+   else
+   if params['article_content']['url']
       if params['article_content']['url'].include?("?utm_source=feedburner")
         params['article_content']['url'] = params['article_content']['url'].split("?")[0]
       end
-    end    
+    end  
+     
     @item_id = params[:item_id]
     #for bookmark
     @external = params[:external]
@@ -59,7 +62,7 @@ class ArticleContentsController < ApplicationController
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
   #  end
    # Point.add_point_system(current_user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-   UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)  if @article.id!=nil
+   UserActivity.save_user_activity(current_user,@article.id,"created",@article.sub_type,@article.id,request.remote_ip)                if @article.id!=nil
    session[:content_id] = @article.id
    if current_user.total_points < 10
      @article.update_attribute('status',Content::SENT_APPROVAL) 
@@ -196,7 +199,7 @@ class ArticleContentsController < ApplicationController
     #@article_content = ArticleContent.new
    if current_user 
     #@article,@images = ArticleContent.CreateContent("http://www.team-bhp.com/forum/travelogues/103395-search-god-god-s-own-country-kerala.html",current_user)
-    @article,@images = ArticleContent.CreateContent(params[:url],current_user)
+    @article,@images = ArticleContent.CreateContent("http://www.plannto.com/cameras/nikon-d600",current_user)
     @article_content= @article
     @external = params[:external]
    end 
