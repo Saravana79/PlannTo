@@ -58,7 +58,7 @@ class Content < ActiveRecord::Base
   end
   
   def self.get_top_active_deals(item_ids)
-    ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=? and field3=? and field1>=?",item_ids.split(","),"Deals",1,'0', Time.now.to_date.strftime("%m/%d/%Y")).group('item_contents_relations_cache.content_id').order('item_contents_relations_cache.created_at desc').limit(10)
+    ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=? and field3=? and field1>=?",item_ids.split(","),"Deals",1,'0', Time.now.to_date.strftime("%d/%m  /%Y")).group('item_contents_relations_cache.content_id').order('item_contents_relations_cache.created_at desc').limit(10)
   end
    
   def impression_count
@@ -81,6 +81,22 @@ class Content < ActiveRecord::Base
     end  
   end
   
+  def deleted?
+    if self.status == Content::DELETE_STATUS
+      return true
+    else
+      return false  
+    end  
+  end
+  
+  def rejected?
+    if self.status == Content::REJECTED
+      return true
+    else
+      return false  
+    end  
+  end
+  
   def self.save_thumbnail_using_uploaded_image(article)
     description = article.description
     URI.extract(description).each do |u|
@@ -95,11 +111,11 @@ class Content < ActiveRecord::Base
   end
   
   def deal_expired?
-    date = self.field1.to_date rescue ""
+    date = self.field1.to_date rescue ''
     completed = self.field3
     unless date == ''
-      if date && date < Time.now.to_date 
-         return true
+      if date && date < Date.today.to_date
+        return true
       end
     end
     

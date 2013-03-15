@@ -16,7 +16,6 @@
      <% session[:group_id] = [] %>
   <%end%>  
   <%@items.results.each do |item|%>
-     <% group = [] %>
      <% group_id = item.cargroup.id rescue "no" %>
       <%unless session[:group_id].include?(group_id) %>
          <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;">
@@ -57,8 +56,7 @@
   <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
     </div>
     <%end%>
-      <% group << group_id %>
-      <% session[:group_id] = group %>
+      <% session[:group_id] << group_id %>
       <% session[:group_id].delete("no") %>
   <%end%>
 

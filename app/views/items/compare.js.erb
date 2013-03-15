@@ -14,5 +14,6 @@ $("#contentsList").append('<%= escape_javascript(render(:partial => 'contents/co
 
 <%else%>
 running = false;
-$("#comparePage").html('<%= escape_javascript(render(:partial => 'items/compare')) %>');
+  window.location.href = "/items/compare?ids=<%= params[:ids]%>"
+
 <%end%>

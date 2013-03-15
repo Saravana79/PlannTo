@@ -3,6 +3,19 @@ module ApplicationHelper
   def get_follow_link(name, path, options = {})
     link_to(name, path, options).to_s
   end
+  
+  def date_formate(d)
+    day = d.day  rescue ''
+    if day == '' 
+     return ''
+    end 
+    month = d.month.to_i - 1
+    year = d.year
+    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','']
+    month = months[month]
+    return "#{day}-#{month}-#{year}" 
+  end
+  
    def link_to_add_fields(name, f, association, path=nil)  
    # association = ':' + association
     new_object = f.object.class.reflect_on_association(association).klass.new  

@@ -6,7 +6,7 @@ class ArticleContentsController < ApplicationController
   #me.feed!(
   #:message => 'Testing fb post from Rails App.',
 #) 
-  if params[:article_content][:sub_type] == "Deals" 
+     if params[:article_content][:sub_type] == "Deals" 
        if !params[:article_content][:field3]
          params[:article_content][:field3] = "0"
       end

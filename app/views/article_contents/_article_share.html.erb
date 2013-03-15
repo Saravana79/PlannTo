@@ -633,7 +633,7 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
     $("div#ShareURLDiv #<%=@sharefield4%>").show();
-    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>').datepicker();
+    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>').datepicker({ altFormat: 'dd MM, yy' });
 
     $('div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>').css("width","150px");
   }
@@ -657,7 +657,9 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield1%>").show();
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
-    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>,div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>').datepicker();
+    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>').datepicker({altField: 'div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>',altFormat: 'dd/mm/yy' });
+     $('div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>').datepicker({altField: 'div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>',altFormat: 'dd/mm/yy' });
+    
   }
 
   function showArticleSubmitDealsOptFields(){
@@ -685,7 +687,7 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield1%>").show();
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
-    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>').datepicker();
+    $('div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>').datepicker({ altField: 'div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>',altFormat: 'dd/mm/yy' });
   }
 
 

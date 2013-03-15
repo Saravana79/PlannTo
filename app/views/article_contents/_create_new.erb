@@ -463,9 +463,11 @@ function remove_fields(link) {
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
     $("div#subContainerContentCreate #<%=@sharefield3%>").show();
-    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>,div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>').datepicker();
-  }
+    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>').datepicker({ altField: 'div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>', altFormat: 'dd/mm/yy' });
   
+  
+   $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>').datepicker({ altField: 'div#subContainerContentCreate form#<%=@form_id%> #<%=@field2_id%>', altFormat: 'dd/mm/yy' });
+  }
   
   function showArticleCreateDealsOptFields(){
     $("div#subContainerContentCreate #<%=@sharefield1Label%>").text("Expire Date:")
@@ -495,7 +497,7 @@ function remove_fields(link) {
     $("div#subContainerContentCreate #<%=@sharefield1%>").show();
     $("div#subContainerContentCreate #<%=@sharefield2%>").show();
     $("div#subContainerContentCreate #<%=@sharefield3%>").show();
-    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>').datepicker();
+    $('div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>').datepicker({  altField: 'div#subContainerContentCreate form#<%=@form_id%> #<%=@field1_id%>',altFormat: 'dd/mm/yy' });
   }
 
 

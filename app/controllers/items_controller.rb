@@ -151,7 +151,13 @@ class ItemsController < ApplicationController
 
   def compare
     @ids = params[:ids].split(',') rescue ""
-  
+     p = params[:ids].split(',') rescue ''
+     unless p == ""
+      if p.include?('')
+         p.delete('')
+        params[:ids] = p.join(",")
+      end 
+    end 
     unless @ids.blank? || params[:ids] == ""
       @item1 = Item.find(@ids[1]) if @ids[0] == ''
       @item1 = Item.find(@ids[0]) if @ids[0]!= ''

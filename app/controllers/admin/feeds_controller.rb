@@ -12,7 +12,8 @@ class Admin::FeedsController < ApplicationController
       filter_params["guide"] = params[:guide] if params[:guide].present?
       filter_params["order"] = "created_at desc"
       @contents = Content.my_feeds_filter(filter_params,current_user)
-    end
+   end
+   
   def approve
     content = Content.find(params[:id])
     content.update_attribute('status',1)
@@ -38,9 +39,9 @@ class Admin::FeedsController < ApplicationController
   
   def content_action
     @content = Content.find(params[:id])
-    if @content.status == Content::REJECTED
+    if @content.rejected?
         ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "rejected" )
-   elsif @content.status == Content::DELETE_STATUS
+   elsif @content.deleted?
        ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "deleted" )
    end 
    if params[:content_action][:sent_mail] == "1"
