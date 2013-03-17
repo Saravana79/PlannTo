@@ -1431,6 +1431,7 @@ span.sortby {
     height: 32px;
     display: block;
     border-bottom: solid 1px #e4e4e4;
+    padding-left: 10px;
 }
 
 span.sortby a {
@@ -2915,7 +2916,7 @@ textarea { outline:none;}
 ======================================MEGA DROPDOWN====================================================================*/
 #Megadropdown {list-style:none; width:100%; margin:0px auto 0px auto; height:47px; float:left; padding:0; position:relative;
                 z-index:1; line-height:21px;}
-#Megadropdown li {float:left; display:block; text-align:center; position:relative; padding: 0px 0px 0px 18px; 
+#Megadropdown li {float:left; display:block; text-align:center; position:relative; padding: 0px 0px 0px 16px; 
                     margin-top:7px; border:none;}
 #Megadropdown li span { display:block; padding: 3px 17px 4px 0px; float:left;}
 #Megadropdown li:hover {background:url(../images/li_bg.png) no-repeat left top;}
@@ -3008,7 +3009,7 @@ div.imgfollowers { clear:both;}
 /***************************************************************************/
                                 
 /*======================FILTER BY OPTIONS START HERE 05-APRIL-2012===============================*/
-#Filterby { width:100%; float:left; padding:0 0 0px 0;}
+#Filterby { width:100%; float:left;padding: 5px 0px 5px 10px;background: url(../images/filterbackground.png) repeat;}
 #Filterby .Filternav { width:700px; float:left;margin-top:5px;}
 #Filterby .Filternav ul         { padding:0; margin:0; list-style:none;}
 #Filterby .Filternav ul li      { padding:0; margin:0; float:left;}
@@ -4486,3 +4487,4 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
 .innerdivwarning{font-size: 14px;font-weight: normal;height: 30px;line-height: 30px;margin: 0;overflow: visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: #eb583c;color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
 .hyperlinkwarning{background: #4a4844;padding: 2px 8px 2px 8px;color: #ffffff;text-decoration: none;font-size: 12px;}
 .contentsubsection{padding-top:5px;}
+.arrowbackground{background: url(../images/arrows.png) no-repeat 0px 3px transparent;float: right;margin: 7px 0px 0px 2px;}
