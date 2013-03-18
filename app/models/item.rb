@@ -198,7 +198,7 @@ class Item < ActiveRecord::Base
   end
 
   def specification
-    item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type").order("attribute_id")
+    item_attributes.select("attribute_id, value, name, unit_of_measure, category_name, attribute_type, attributes.hyperlink as attributeshyperlink,attribute_values.hyperlink as valuehyperlink, description").order("attribute_id")
   end
   
  

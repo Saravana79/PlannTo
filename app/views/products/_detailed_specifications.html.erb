@@ -15,8 +15,17 @@
             
                 <%if display_specification?(product_attribute)%>
                   <ul class="<%= cycle("specificationinnerul", "specificationinnerul", :name => "specificationinnerul") -%>">
+                 
                   <%unless product_attribute.name == "Price" %>
-                    <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong> <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
+                     <%if product_attribute.description && product_attribute.attributeshyperlink %>
+                        <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();",:title => "Description" %>: </strong>
+                        <%= render "attribute_description_popup",:attribute => product_attribute %>
+                     <%elsif product_attribute.attributeshyperlink %>
+                        <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> <%= link_to "(?)",product_attribute.attributeshyperlink,:title => "Description" %> : </strong>
+                    <%else%>
+                         <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong>
+                     <%end%>       
+                    <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
                   <%end%>  
                   </ul >
                 <%end%>

@@ -133,6 +133,49 @@ module ItemsHelper
   def display_specification_value(item, attribute="")
     attribute = item if attribute == ""
     content = ""
+     if item.valuehyperlink
+       if attribute.attribute_type == Attribute::TEXT
+        if attribute.name == "Product Home Page URL"
+          content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
+        else
+          content = "<a href= #{item.valuehyperlink} target='_blank'>#{item.value} </a>"
+        end  
+    elsif attribute.attribute_type == Attribute::BOOLEAN
+      if item.value == "True"
+        content = "<img src='/images/check.png' width='12' height='12'>"
+      else
+        content = "<img src='/images/close.png' width='12' height='12'>"
+      end
+    elsif   attribute.attribute_type == "Rating"
+       content = render :partial => "specification_rating", :locals => {:value => item.value}
+         
+    elsif attribute.attribute_type == Attribute::NUMERIC
+      if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
+        value = convert_to_MB(item.value.to_f)
+       content = "<a href= #{item.valuehyperlink} target='_blank'>#{value} MB</a>" if value != 0
+      elsif (attribute.unit_of_measure == "MB" && item.value.to_f >= 1024)
+        value = convert_to_GB(item.value.to_f)
+        content = "<a href= #{item.valuehyperlink} target='_blank'>#{value} GB</a>" if value != 0
+      elsif (attribute.unit_of_measure == "GHz" && item.value.to_f < 1)
+        value = convert_to_MHz(item.value.to_f)
+        content = "<a href= #{item.valuehyperlink} target='_blank'>#{value} MHz</a>" if value != 0
+      elsif (attribute.unit_of_measure == "MHz" && item.value.to_f >= 1000)
+        value = convert_to_GHz(item.value.to_f)
+        content = "<a href= #{item.valuehyperlink} target='_blank'>#{value} GHz</a>" if value != 0
+      else
+        content += "<a href= #{item.valuehyperlink} target='_blank'>#{item.value}</a>" 
+        unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+          content += "#{attribute.unit_of_measure}"
+        end
+      end
+    else
+        content += "<a href= #{item.valuehyperlink} target='_blank'>#{item.value}</a>" 
+      unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+        content += "#{attribute.unit_of_measure}"
+      end
+    end
+    return content
+    else
     if attribute.attribute_type == Attribute::TEXT
        if attribute.name == "Product Home Page URL"
         content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
@@ -145,6 +188,8 @@ module ItemsHelper
       else
         content = "<img src='/images/close.png' width='12' height='12'>"
       end
+    elsif   attribute.attribute_type == "Rating"
+       content = render :partial => "specification_rating", :locals => {:value => item.value}
     elsif attribute.attribute_type == Attribute::NUMERIC
       if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
         value = convert_to_MB(item.value.to_f)
@@ -171,6 +216,7 @@ module ItemsHelper
       end
     end
     return content
+    end
   end
 
   def get_content(item)
