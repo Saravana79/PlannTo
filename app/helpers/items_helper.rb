@@ -146,8 +146,8 @@ module ItemsHelper
       else
         content = "<img src='/images/close.png' width='12' height='12'>"
       end
-    elsif   attribute.attribute_type == "Rating"
-       content = render :partial => "products/specification_rating", :locals => {:value => item.value}
+    elsif attribute.attribute_type == "Rating"
+       content = render :partial => "products/specification_rating", :locals => {:value => item.value,:item => item}
          
     elsif attribute.attribute_type == Attribute::NUMERIC
       if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
@@ -189,7 +189,7 @@ module ItemsHelper
         content = "<img src='/images/close.png' width='12' height='12'>"
       end
     elsif   attribute.attribute_type == "Rating"
-       content = render :partial => "products/specification_rating", :locals => {:value => item.value}
+       content = render :partial => "products/specification_rating", :locals => {:value => item.value,:item => item}
     elsif attribute.attribute_type == Attribute::NUMERIC
       if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
         value = convert_to_MB(item.value.to_f)
