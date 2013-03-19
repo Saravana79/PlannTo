@@ -254,7 +254,7 @@ $("#dialog-form #click_message").show();
       <div class="Iconblock">
         <span class="Planbuy"><%= @item.ger_followers_count_for_type("buyer") %></span>
       </div>
-        <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite_friend") %>
+        <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite_friends") %>
       </div>
       <div class="Smalltext">who plans to buy</div>
   </div>
@@ -264,7 +264,7 @@ $("#dialog-form #click_message").show();
       <div class="Iconblock">
         <span class="Wonit"><%= @item.ger_followers_count_for_type("owner") %></span>
       </div>
-        <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite_friend") %>
+        <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite_friends") %>
       </div>
       <div class="Smalltext">who owns it</div>
     </div>
@@ -274,13 +274,25 @@ $("#dialog-form #click_message").show();
     <div class="Iconblock">
       <span class="Followcar"><%= @item.ger_followers_count_for_type("follower") %></span>
     </div>
-      <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite_friend") %>
+      <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite_friends") %>
       
       </div>
       <div class="Smalltext">who is an expert</div>
   </div>
 </div>
 <%end%>
+<script>
+$(".invite_friends").live('click', function(){
+    id = $(this).attr('id');
+    $('#invitation_follow_type').val(id);
+    $("#dialog-invite-form").dialog({height: 500,
+      width: 550,
+      modal: true});
+      $(".Close_dialog_invite").show();
+     $(".ui-dialog-titlebar").hide();
+     return false;
+  });
+ </script> 
 <br/>
 <%=render :partial =>"items/related_products" %>
   <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => user_follow_type(@item, current_user), :related_items => false %>

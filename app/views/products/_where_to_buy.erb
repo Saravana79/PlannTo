@@ -20,9 +20,7 @@
             <td class="bdb_gray1 font_13"><%=display_shipping_detail(item)%></td>
             <td align="center" class="bdb_gray1" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
           </tr>
-          <%unless item.offer == ""%>
-          <tr><td colspan="4"> <img src="/images/offer.jpeg" style="padding-right:5px;float:left;"/><span style="padding-top: 2px;float:left;"><%= " - " + item.offer%></span></td></tr>
-          <%end%>
+         <%= render "products/deals_offer",:item => item,:site => site %>
        <!--   
         <%#else%>
           <%#if index == 1%>

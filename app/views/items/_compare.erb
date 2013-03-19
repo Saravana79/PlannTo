@@ -22,15 +22,16 @@
       </tr>
       <%attributes.each do |att|%>
         <%if  attribute_display_required?(@ids, att.id)%>
+          <%unless att.name == "Price" %>
           <tr>
            <%if att.description && att.hyperlink %>
-                       <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%> <%= link_to "(?)","#",:onclick => "$('#description_#{att.id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();",:title => "Description" %>: </b></td>
-                        <%= render "products/attribute_description_popup",:attribute => att %>
-                     <%elsif att.hyperlink %>
-                       <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%> <%= link_to "(?)",att.hyperlink,:title => "Description" %> : </b></td>
-                    <%else%>
-                        <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%></b></td>
-                     <%end%>      
+               <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%> <%= link_to "(?)","#",:onclick => "$('#description_#{att.id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();return false;",:title => "Description" %>: </b></td>
+               <%= render "products/attribute_description_popup",:attribute => att %>
+            <%elsif att.hyperlink %>
+                 <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%> <%= link_to "(?)",att.hyperlink,:title => "Description" %> : </b></td>
+               <%else%>
+                    <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%></b></td>
+                <%end%>      
            <%@items.each_with_index do |compare_item, index|%>
               <td align="center" class="high insidebox bordered attributeInfo<%=index+1%>" width="200px"> <div class="price"><%=raw show_item_value(compare_item, att)%></div></td>
               <%break if index == 3%>
@@ -41,6 +42,7 @@
               <%end%>
             <%end%>
           </tr>
+          <%end%>
         <%end%>
       <%end%>
     <%end%>

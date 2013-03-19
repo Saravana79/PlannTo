@@ -18,7 +18,7 @@
                  
                   <%unless product_attribute.name == "Price" %>
                      <%if product_attribute.description && product_attribute.attributeshyperlink %>
-                        <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();",:title => "Description" %>: </strong>
+                        <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();return false;",:title => "Description" %>: </strong>
                         <%= render "attribute_description_popup",:attribute => product_attribute %>
                      <%elsif product_attribute.attributeshyperlink %>
                         <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> <%= link_to "(?)",product_attribute.attributeshyperlink,:title => "Description" %> : </strong>
