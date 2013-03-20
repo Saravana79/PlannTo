@@ -59,7 +59,11 @@ class ArticleContent < Content
             @title_info=""
             @meta_description =""
         end
+        begin
         @article.title = CGI.unescapeHTML(@title_info.to_s.gsub(%r{</?[^>]+?>}, '')) if @title_info
+        rescue          
+          @article.title =""
+        end
         sub_type = @article.find_subtype(@article.title)
         logger.info sub_type
       @article.sub_type = sub_type
