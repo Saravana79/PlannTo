@@ -73,7 +73,7 @@ class ProductsController < ApplicationController
     end 
     @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
-    @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order(:price)
+    @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order('itemdetails.price - itemdetails.cashback')
     @related_items = Item.get_related_items(@item, 3)
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)

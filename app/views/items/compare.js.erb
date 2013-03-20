@@ -1,3 +1,4 @@
+element= jQuery('#content_next')
 <%if params[:type] == "scroll" %>
  $("#page_pagination").val("<%= (params[:page].to_i + 1).to_s %>");
 
@@ -11,7 +12,7 @@ running=false;
 }
 
 $("#contentsList").append('<%= escape_javascript(render(:partial => 'contents/contents')) %>');
-
+element.remove();
 <%else%>
 running = false;
   window.location.href = "/items/compare?ids=<%= params[:ids]%>"

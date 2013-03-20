@@ -1,3 +1,4 @@
+element= jQuery('#content_next')
 <%if params[:guide] =="" %>
 if (<%=@contents.size%> < 10)
 {
@@ -26,3 +27,4 @@ $("#contentsList").html('<%= escape_javascript(render :partial => 'contents/cont
 <%else%>
 $("#contentsList").append('<%= escape_javascript(render :partial => 'contents/contents') %>');
 <%end%>
+element.remove();

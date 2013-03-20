@@ -1,5 +1,11 @@
 <div id="description_<%= attribute.attribute_id rescue attribute.id %>" style="display:none;">
    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:220px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-     <%=  attribute.description %>
-       <%= link_to "More",(attribute.attributeshyperlink rescue attribute.hyperlink)%>
+  <%=  attribute.description %>
+  <% link = attribute.attributeshyperlink rescue attribute.hyperlink %>
+ <% if(link).include?("http://") || (link).include?("https://")  %>
+       <a href= "<%= attribute.attributeshyperlink rescue attribute.hyperlink %>" target='_blank'>More</a>
+   <%else%>
+      <a href= "<%= 'http://' + attribute.attributeshyperlink rescue attribute.hyperlink %>" target='_blank'>More</a> 
+   <%end%>      
  </div>
+  

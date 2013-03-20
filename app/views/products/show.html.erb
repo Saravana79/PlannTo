@@ -338,7 +338,7 @@ Message : <br />
 </div>
 
  <script>
-   $(".invite_friend").click(function(e){
+   $(".invite_friends").click(function(e){
      <%if !current_user %>
        $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'invite')%>");
        openLoginPopup("#" + $(this).attr('id'), "click");

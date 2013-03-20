@@ -324,7 +324,7 @@
        <% if @contents.size == 0 %>
           <%= render "shared/alert_message",:type => "user_activity"%>  
        <%else%>    
-      <div id="content_all">
+      <span id="content_all">
         <!--filter by block start here-->
         <div id="Filterby">
           <div class="Filternav">
@@ -357,11 +357,13 @@
            
         
           <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+          
+         <a id="content_next" style="display:none"></a>
         </div>
        
          <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2) %>
          
-      </div>
+      </span>
        <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
          <%= image_tag '/images/ajax-loader.gif' %>
       </span>

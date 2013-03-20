@@ -1,3 +1,4 @@
+<span id="content_all">
 <div class="leftcolumnbig">
 	<br/>
 	<br/>
@@ -9,22 +10,22 @@
 			<a href="#"><span>My Feed</span></a>
 		</li> -->
 	</ul>
-	<div id="content_all">
+	
 	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 	 <%= hidden_field_tag "search_type","undefined" %>
-		<%= render "contents/filter_by_options"%>
-		<div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+	 <%= render "contents/filter_by_options"%>
+	 <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
 		<%= render "contents/sort_by_options"%>
 		<div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
 			<%= render :partial => 'contents/contents'%>
+			<a id="content_next" style="display:none"></a>
 		</div>
-		<a id="content_next" style="display:none"></a>
-		  <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-     <%= image_tag '/images/ajax-loader.gif' %>
-</span>
-	</div>
-</div>
+		<span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+      <%= image_tag '/images/ajax-loader.gif' %>
+   </span>
 
+</div>
+	</span>
 <div class="rightcolumnsmall">
 <br/>
 <%= render "shared/quick_links", :search_type => @itemtype.itemtype.pluralize %>

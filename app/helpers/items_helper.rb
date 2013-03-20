@@ -134,9 +134,18 @@ module ItemsHelper
     attribute = item if attribute == ""
     content = ""
     unless (item.value == "" || item.value.nil?)
-      if (item.valuehyperlink rescue item.hyperlink)
+      if (!item.valuehyperlink.nil? rescue !item.hyperlink.nil?) || (!item.valuehyperlink.blank? rescue !item.hyperlink.blank?)
+        link = (item.valuehyperlink rescue item.hyperlink)
+        if(link).include?("http://") || (link).include?("https://")
+        else
+           ((item.valuehyperlink = "http://" + link) rescue item.hyperlink = "http://" + link)
+        end   
         if attribute.attribute_type == Attribute::TEXT
           if attribute.name == "Product Home Page URL"
+            if(item.value).include?("http://") || (item.value).include?("https://")
+            else
+              item.value = "http://" + item.value
+            end     
             content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
           else
             content = "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value} </a>"
@@ -179,6 +188,10 @@ module ItemsHelper
      else
       if attribute.attribute_type == Attribute::TEXT
         if attribute.name == "Product Home Page URL"
+          if(item.value).include?("http://") || (item.value).include?("https://")
+          else
+            item.value = "http://" + item.value
+          end
           content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
         else
           content = "#{item.value}"

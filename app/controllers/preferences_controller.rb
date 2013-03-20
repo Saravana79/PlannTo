@@ -31,7 +31,7 @@ class PreferencesController < ApplicationController
       if @considered_items.size > 0 
         @item_ids =  @considered_items.collect(&:id).join(",")
         if params[:type] == "deals" 
-          @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+          @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('itemdetails.price - itemdetails.cashback')
          end   
       else
         @where_to_buy_items = []  
@@ -41,7 +41,7 @@ class PreferencesController < ApplicationController
     if @follow_item.size >0  
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
      if params[:type] == "deals" 
-       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('itemdetails.price - itemdetails.cashback')
      end   
     else
       @where_to_buy_items = []
