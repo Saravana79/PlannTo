@@ -116,7 +116,7 @@
 						<div>
 							<div style="float:left;">
 								<% if !content.field1.empty? %>
-								<label class="txt_black_description_detail">Start Date : <%= (content.field1)%> </label></br>
+								<label class="txt_black_description_detail">Start Date : <%= date_formate(content.field1.to_date)%> </label></br>
 								<%end%>
 								<% if !content.field3.empty? %>
 								<label class="txt_black_description_detail">Location : <%= content.field3%> </label></br>
@@ -124,7 +124,7 @@
 							</div>
 							<div style="float:right;">
 								<% if !content.field2.empty? %>
-								<label class="txt_black_description_detail">End  Date : <%= (content.field2)%> </label></br>
+								<label class="txt_black_description_detail">End  Date : <%= date_formate(content.field2.to_date)%> </label></br>
 								<%end%>
 							</div>
 						</div>
