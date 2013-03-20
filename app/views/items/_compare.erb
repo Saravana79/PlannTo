@@ -18,7 +18,8 @@
   <%@attributes.group_by(&:category_name).each do |group, attributes|%>
     <%if group_display_required?(attributes.collect(&:id), @ids)%>
       <tr>
-        <td id="comp-info-start-here" class="high insidebox titlename bordered" colspan="5" width="1000px"><b><%=group%></b></td>
+        <td></td>
+        <td id="comp-info-start-here" class="high insidebox titlename bordered" colspan="4" width="1000px" align="center"><b><%=group%></b></td>
       </tr>
       <%attributes.each do |att|%>
         <%if  attribute_display_required?(@ids, att.id)%>
