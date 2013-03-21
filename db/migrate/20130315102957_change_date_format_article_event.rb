@@ -1,4 +1,4 @@
-class ChangeDateFormatArticle < ActiveRecord::Migration
+class ChangeDateFormatArticleEvent < ActiveRecord::Migration
 
   def up
     ArticleContent.where('sub_type in (?)',["Event"]).each do |art|
