@@ -53,47 +53,4 @@
        <h1><center> Deals </b></h1>
       <%= render "contents/contents" %>
  <%end%> 
-<!--<% if (!@where_to_buy_items.empty?) %>
-		
-<div class="clearboth align_right font_11 pad_tb5">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>
-<div class="clearboth pad_b29">
-<table  width="100%" border="0" cellspacing="0" cellpadding="0" >
-  <tr>
-  	<td class="th_blue">Product Name</td>
-    <td class="th_blue">Seller Name</td>
-    <td class="th_blue">Price</td>
-    <td class="th_blue">Estimated Delivery Time</td>
-    <td class="th_blue">&nbsp;</td>
-  </tr>
-     <% combine_list = [] %>
-     <% @where_to_buy_items.group_by(&:itemid).each do |site, items| %>
-    <%items.each_with_index do |item, index|%>
-      <%if display_item_details(item)%>
-          <% price = display_price_detail(item) %>
-          <% shipping = display_shipping_detail(item) %>
-          <% combine = "#{price}-#{shipping}" %>
-         <%if !combine_list.include?(combine) %>
-          <tr>
-          	<td class="bdb_gray"><%=item.ItemName%></td>
-            <td class="bdb_gray"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
-            <td class="bdb_gray price_text"><%= price %></td>
-            <td class="bdb_gray font_13"><%= shipping %></td>
-            <td align="center" class="bdb_gray" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
-          </tr>
-        
-      <%end%>
-       <% combine_list << "#{price}-#{shipping}" %>
-      <%end%>
-    <%end%>
-  <%end%>
-</table>
-</div>
-<%else%>
-   <div style="clear:both;padding-top:10px;padding-bottom:50px;">
-   <%= render  '/shared/alert_message',:type => 'buying_plan_deals'%>
- </div>
-<%end%>
-   <%unless @contents.blank? %>
-       <h1><center> Deals </b></h1>
-      <%= render "contents/contents" %>
-    <%end%>  -->
+

@@ -91,7 +91,7 @@ class SearchController < ApplicationController
     end
 
 
-    BrowserPreference.save_browse_preferences(browser_user_id, params[:search_type], params, browser_ip) if request.xhr?
+    BrowserPreference.save_browse_preferences(browser_user_id, params[:search_type], params, browser_ip) 
 
     preferences = Array.new
     if user_signed_in? && !request.xhr?

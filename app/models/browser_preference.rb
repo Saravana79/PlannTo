@@ -48,6 +48,7 @@ class BrowserPreference < ActiveRecord::Base
   end
 
   def self.add_items(user, type, search_attributes, params, ip="")
+  
     unless params["manufacturer"].blank?
       manufacturer_id = search_attributes.find {|s| s.attribute_id == 0 }
       BrowserPreference.create(:itemtype_id => type, :user_id => user, :search_display_attribute_id => manufacturer_id.id, :value_1 => params["manufacturer"], :ip => ip)
