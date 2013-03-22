@@ -25,17 +25,6 @@ $(document).ready(function() {
   });
   
 
- $(".invite_friend").live('click', function(){
-    id = $(this).attr('id');
-    $('#invitation_follow_type').val(id);
-    $("#dialog-invite-form").dialog({height: 500,
-      width: 550,
-      modal: true});
-      $(".Close_dialog_invite").show();
-     $(".ui-dialog-titlebar").hide();
-  });
- 
-  
   $("#write_review").live('click', function(){
     $("#articleReviewSubContainer").show();
     $("#write_review_form").dialog({height: 450,

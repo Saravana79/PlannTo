@@ -44,7 +44,7 @@
        showArticleCreateMileOptFields(); 
     <%elsif params[:sub_type] == "Reviews" && @url %>
      // $("#deals1").remove();
-      $("div#ShareURLDiv div#new_product_review_rating").show();
+      showReview();
     <%elsif  params[:sub_type] == "Miles" && @url %>
       //$("#deals1").remove();
       showArticleSubmitMileOptFields();

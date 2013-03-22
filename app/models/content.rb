@@ -99,17 +99,37 @@ class Content < ActiveRecord::Base
   
   def self.save_thumbnail_using_uploaded_image(article)
     description = article.description
+    photos_ids = []
+    article.update_attribute('thumbnail',"")
     URI.extract(description).each do |u|
       if u.include?("s3.amazonaws.com")
         id = u.split("/")[6]
-        photo = ContentPhoto.find(id)
-        photo.update_attribute('content_id',article.id)
-        thumb = photo.photo.url(:thumb)
-        article.update_attribute('thumbnail',thumb)
-      end
+        photos_ids << id.to_i
+        photos_ids = photos_ids.sort.reverse!
+    #    photos_ids.each do | id | 
+     #     string = "thumb#{id}"
+      #    final_string = "<div id=\"#{string}\"></div>"
+       #   if article.description.include?(final_string)
+        #    @thumbnail = "true"
+         #   photo = ContentPhoto.find(id)
+          #  photo.update_attribute('content_id',article.id)
+          #  thumb = photo.photo.url(:thumb)
+           # article.description =  article.description.gsub(final_string.to_s,"")
+            # article.update_attribute('thumbnail',thumb)
+         # end
+          #end
+          
+        end
      end
-  end
-  
+     unless photos_ids.blank?
+       id = photos_ids.last
+       photo = ContentPhoto.find(id)
+       photo.update_attribute('content_id',article.id)
+       thumb = photo.photo.url(:thumb)
+       article.update_attribute('thumbnail',thumb)
+     end  
+   end
+   
   def deal_expired?
     date = self.field1.to_date rescue ''
     completed = self.field3

@@ -8,9 +8,9 @@ if(window.opener) {
     window.location.href = "/oauth/new";
 <%end%>
 }
-<% if @detail == true %>
+<% if @detail == 'true' %>
  $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
 <%else%>
  //$("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
- window.location.href = "<%= "#{session[:return_to]}" %>"
- <%end%>  
+  window.location.reload();
+<%end%>  

@@ -164,13 +164,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
           <%= check_box_tag "facebook_post" %>
           </div> 
      <%end%> 
-     <div class="title_header float_rgt"></div>
-          <div class="float_rgt" style="padding-right:200px;">
-          <br />
-          <br />
-          <span class="title_header">Use thumbnail as uploaded image:</span>
-            <%= check_box_tag(:thumbnail, 1, true)%>
-        </div>
+     
     <input id="question_content_item" name="item_id" type="hidden" value="<%= @item.try(:id) %>"/>
     <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px ">
       <%= hidden_field_tag 'content_create_form_type'%>

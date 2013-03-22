@@ -236,28 +236,20 @@ function remove_fields(link) {
     </div>
      
      <%if !@detail && (@article_content.new_record? || @content.new_record? )%>
-         <div class="title_header float_lft"></div>
-          <div class="float_lft">
-          <span class="title_header">Post this in Facebook also:</span>
-          <%= check_box_tag "facebook_post" %>
-          </div> 
+       <div class="title_header float_lft"></div>
+        <div class="float_lft">
+        <span class="title_header">Post this in Facebook also:</span>
+           <%= check_box_tag "facebook_post" %>
+        </div> 
      <%end%>
-       <div class="title_header float_rgt"></div>
-          <div class="float_rgt" style="padding-right:200px;">
-          <br />
-          <br />
-          <span class="title_header">Use thumbnail as uploaded image:</span>
-            <%= check_box_tag(:thumbnail, 1, true)%>
-        </div>
-    <input id="article_content_create" name="article_content_create" type="hidden" value="true"  />
-    <%= hidden_field_tag 'article_create_item_id' %>
-    <%= hidden_field_tag 'content_create_form_type'%>
-    <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px">
+      <input id="article_content_create" name="article_content_create" type="hidden" value="true"  />
+      <%= hidden_field_tag 'article_create_item_id' %>
+      <%= hidden_field_tag 'content_create_form_type'%>
+      <div style="padding:0px 5px 5px 5px; float:right; width:100%; margin-right:40px; margin-top:20px">
       <%= f.submit 'Save Event', :class => 'btn_submitanswer', :id => 'article_content_create_submit', 'data-disable-with'=>"Saving..." %>
   
-    <span id="spinner_article" style="padding:0px 0px 0px 290px;display:none">
-       
-         <%= image_tag '/images/ajax-loader.gif' %>
+      <span id="spinner_article" style="padding:0px 0px 0px 290px;display:none">
+        <%= image_tag '/images/ajax-loader.gif' %>
       </span> 
    <script>
     $(function() {

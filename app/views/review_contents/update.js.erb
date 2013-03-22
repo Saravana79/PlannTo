@@ -12,5 +12,5 @@ if(window.opener) {
  $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
 <%else%>
 //$("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(render_content_type(@content)) %>');
-window.location.href = "<%= "#{session[:return_to]}" %>"
+  window.location.reload();
 <%end%>

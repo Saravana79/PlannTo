@@ -19,11 +19,7 @@ class QuestionContentsController < ApplicationController
 	 else 
 	    Point.add_point_system(current_user, @questioncontent, Point::PointReason::CONTENT_CREATE)
 	 end   
-	  if params[:thumbnail] == "1"
 		  Content.save_thumbnail_using_uploaded_image(@questioncontent)
-    else
-      @questioncontent.update_attribute('thumbnail',"")
-    end
    if @questioncontent
     session[:content_id] = @questioncontent.id
     @facebook_post = params[:facebook_post]
@@ -53,11 +49,7 @@ class QuestionContentsController < ApplicationController
       minimum_word_length 2
       paginate(:page => page_no, :per_page => per_page)
     end
-    if params[:thumbnail] == "1"
-		  Content.save_thumbnail_using_uploaded_image(@content)
-    else
-      @content.update_attribute('thumbnail',"")
-    end
+    Content.save_thumbnail_using_uploaded_image(@content)
     @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
     @popular_items_ids  = @popular_items.map(&:id).join(",")
     @related_contents = results.results

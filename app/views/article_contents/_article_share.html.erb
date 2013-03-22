@@ -574,7 +574,7 @@ if ($("#article_content_sub_type").val() == ""){
     }
     else if (category == "<%=ArticleCategory::REVIEWS%>"){
       //$("#deals1").remove();
-      $("div#ShareURLDiv div#<%=@productReviewRating%>").show()
+      showReview();
     }
     else if (category == "<%=ArticleCategory::DEALS%>"){
      showArticleSubmitDealsOptFields()
@@ -584,6 +584,17 @@ if ($("#article_content_sub_type").val() == ""){
       showArticleSubmitMileOptFields();
     }
   }
+  function showReview()
+  {
+    $("div#ShareURLDiv div#<%=@productReviewRating%>").show();
+  <%if @content.nil?%>
+    $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%= @field1_id %>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>"); 
+  <%else%>
+    $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input class='rating_field' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
+  <%end%> 
+  
+  } 
+ 
   
   function showArticleSubmitMileOptFields(){
     $("div#ShareURLDiv #<%=@sharefield1Label%>").text("City:")
