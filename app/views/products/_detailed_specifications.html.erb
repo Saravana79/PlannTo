@@ -1,4 +1,4 @@
-<% cache ['detailed_specifications', @item] do%>
+<%# cache ['detailed_specifications', @item] do%>
 <div class="specificationcontainer">
   <div class="spacificationdiv">
     <br/>
@@ -18,7 +18,10 @@
                  
                   <%unless product_attribute.name == "Price" %>
                      <%if (!product_attribute.description.nil? && !product_attribute.attributeshyperlink.nil?) || (!product_attribute.description.blank? && !product_attribute.attributeshyperlink.blank?) %>
-                        <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();return false;",:title => "Description" %>: </strong>
+                        <li class="specificationblcksublvltxt">
+                          <span style="width:200px;float:left;">
+                          <strong><%= product_attribute.name %> <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();return false;",:title => "Description" %>: </strong>
+                        </span>
                         <%= render "attribute_description_popup",:attribute => product_attribute %>
                      <%elsif !product_attribute.attributeshyperlink.nil? || !product_attribute.attributeshyperlink.blank? %>
                         <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %>   
@@ -30,9 +33,12 @@
                            <%= link_to "(?)","http://" + product_attribute.attributeshyperlink,:title => "Description" %> : </strong>
                          <%end%>
                     <%else%>
-                         <li class="specificationblcksublvltxt"><strong><%= product_attribute.name %> : </strong>
+                         <li class="specificationblcksublvltxt">
+                          <span style="width:200px;float:left;">
+                          <strong><%= product_attribute.name %> : </strong></span>
                      <%end%>       
-                    <%=raw display_specification_value(product_attribute)%><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
+                     <span>
+                    <%=raw display_specification_value(product_attribute)%></span><%#= product_attribute.value %> <%#= product_attribute.unit_of_measure %></li>
                   <%end%>  
                   </ul >
                 <%end%>
@@ -46,4 +52,4 @@
   </div>
   <div class="dontfloat"></div>
 </div>
-<%end%>
+<%#end%>

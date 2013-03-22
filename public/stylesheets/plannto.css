@@ -2535,7 +2535,7 @@ h2 {
 .specificationblckdivli {list-style:none;  margin:0; padding:5px 0 5px 5px; }
 .specificationblckdivliempty{list-style:none;  margin:0; padding:5px 0 5px 5px;min-height:10px; }
 
-.specificationblcksublvltxt {list-style:none;; margin-left:-10px;display: list-item; line-height:12px; font-size:11px; margin:0; padding:5px 0 5px 5px;  border-right:0px solid #a8cfda;  border-bottom:1px solid #a8cfda;}
+.specificationblcksublvltxt {list-style:none;; margin-left:-10px;display: list-item; line-height:12px; font-size:11px; margin:0; padding:5px 0 5px 5px;  border-right:0px solid #a8cfda;  border-bottom:1px dotted #a8cfda;}
 
 
 /* Compare page */
