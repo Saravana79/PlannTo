@@ -141,12 +141,12 @@ module ItemsHelper
            ((item.valuehyperlink = "http://" + link) rescue item.hyperlink = "http://" + link)
         end   
         if attribute.attribute_type == Attribute::TEXT
-          if attribute.name == "Product Home Page URL"
+          if attribute.name == "Product Home Page URL" || attribute.name == "360 degree view" 
             if(item.value).include?("http://") || (item.value).include?("https://")
             else
               item.value = "http://" + item.value
             end     
-            content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
+            content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 degree view"} </a>"
           else
             content = "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value} </a>"
           end  
@@ -187,12 +187,12 @@ module ItemsHelper
       return content
      else
       if attribute.attribute_type == Attribute::TEXT
-        if attribute.name == "Product Home Page URL"
+        if attribute.name == "Product Home Page URL" || attribute.name == "360 degree view" 
           if(item.value).include?("http://") || (item.value).include?("https://")
           else
             item.value = "http://" + item.value
           end
-          content = "<a href= #{item.value} target='_blank'>#{item.value} </a>"
+          content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 degree view"} </a>"
         else
           content = "#{item.value}"
         end  
