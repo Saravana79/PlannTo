@@ -134,14 +134,14 @@ module ItemsHelper
     attribute = item if attribute == ""
     content = ""
     unless (item.value == "" || item.value.nil?)
-      if (!item.valuehyperlink.nil? rescue !item.hyperlink.nil?) || (!item.valuehyperlink.blank? rescue !item.hyperlink.blank?)
-        link = (item.valuehyperlink rescue item.hyperlink)
-        if(link).include?("http://") || (link).include?("https://")
-        else
-           ((item.valuehyperlink = "http://" + link) rescue item.hyperlink = "http://" + link)
-        end   
+      if (!item.valuehyperlink.nil? rescue !item.hyperlink.nil?) || (!item.valuehyperlink.strip.blank? rescue !item.hyperlink.strip.blank?)
+          link = (item.valuehyperlink rescue item.hyperlink)
+          if(link).include?("http://") || (link).include?("https://")
+          else
+             ((item.valuehyperlink = "http://" + link) rescue item.hyperlink = "http://" + link)
+          end   
         if attribute.attribute_type == Attribute::TEXT
-          if attribute.name == "Product Home Page URL" || attribute.name == "360 degree view" 
+          if attribute.name == "Product Home Page URL" || attribute.name == "360 Degree View" 
             if(item.value).include?("http://") || (item.value).include?("https://")
             else
               item.value = "http://" + item.value
@@ -187,12 +187,12 @@ module ItemsHelper
       return content
      else
       if attribute.attribute_type == Attribute::TEXT
-        if attribute.name == "Product Home Page URL" || attribute.name == "360 degree view" 
+        if attribute.name == "Product Home Page URL" || attribute.name == "360 Degree View" 
           if(item.value).include?("http://") || (item.value).include?("https://")
           else
             item.value = "http://" + item.value
           end
-          content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 degree view"} </a>"
+          content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 Degree View"} </a>"
         else
           content = "#{item.value}"
         end  
