@@ -134,7 +134,7 @@ module ItemsHelper
     attribute = item if attribute == ""
     content = ""
     unless (item.value == "" || item.value.nil?)
-      if (!item.valuehyperlink.nil? rescue !item.hyperlink.nil?) || (!item.valuehyperlink.blank? rescue !item.hyperlink.blank?)
+      if (!item.valuehyperlink.nil? rescue !item.hyperlink.nil?) && (!item.valuehyperlink.blank?  rescue !item.hyperlink.blank?)
           link = (item.valuehyperlink rescue item.hyperlink)
           if(link).include?("http://") || (link).include?("https://")
           else
