@@ -31,7 +31,7 @@ class PreferencesController < ApplicationController
       if @considered_items.size > 0 
         @item_ids =  @considered_items.collect(&:id).join(",")
         if params[:type] == "deals" 
-          @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('itemdetails.price - itemdetails.cashback asc')
+          @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
          end   
       else
         @where_to_buy_items = []  
@@ -41,7 +41,7 @@ class PreferencesController < ApplicationController
     if @follow_item.size >0  
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
      if params[:type] == "deals" 
-       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('itemdetails.price - itemdetails.cashback asc')
+       @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
      end   
     else
       @where_to_buy_items = []
@@ -439,7 +439,7 @@ sunspot_search_items
     @item_ids = params[:item_ids].join(",") rescue nil
       @where_to_buy_items = []
     unless @item_ids.nil?
-      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price)
+      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
      @itemtype = Item.find(params[:item_ids][0]).itemtype
      deals_item_id = Item.get_root_level_id(@itemtype.itemtype)
      @contents = Content.get_top_active_deals(@item_ids + "," + deals_item_id.to_s)
