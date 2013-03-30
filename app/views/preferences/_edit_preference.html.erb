@@ -238,20 +238,30 @@ end%>
   }
 
   function loadTypes(){
-    var typeList = [];
-<%if @items.facet(:features_string, 'Type'.to_sym)%>
-  <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
-    <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
-          typeList.push( {
-            label: "<%="#{row.value} (#{row.count})"%>",
-            value: "<%="#{row.value}"%>"
-          });
-    <%end
-  end
-end%>
-    return typeList;
-  }
+      var typeList = [];
+          <%if @items.facet(:features_string, 'Body Style'.to_sym)%>
+            <%if @items.facet(:features_string, 'Body Style'.to_sym).rows.count > 0%>
+              <% for row in @items.facet(:features_string, 'Body Style'.to_sym).rows%>
+                    typeList.push( {
+                      label: "<%="#{row.value} (#{row.count})"%>",
+                      value: "<%="#{row.value}"%>"
+                    });
+              <%end
+            end
 
+          <%else if @items.facet(:features_string, 'Type'.to_sym)%>
+            <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
+              <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
+                    typeList.push( {
+                      label: "<%="#{row.value} (#{row.count})"%>",
+                      value: "<%="#{row.value}"%>"
+                    });
+              <%end
+            end
+          end%>
+        
+      return typeList;
+    }
   function intToFormat(nStr)
     {
      nStr += '';
