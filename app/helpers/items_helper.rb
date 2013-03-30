@@ -151,7 +151,7 @@ module ItemsHelper
             content = "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value} </a>"
           end  
       elsif attribute.attribute_type == Attribute::BOOLEAN
-        if item.value == "True"
+        if item.value.downcase == "true"
           content = "<img src='/images/check.png' width='12' height='12'>"
         else
           content = "<img src='/images/close.png' width='12' height='12'>"
