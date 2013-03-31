@@ -41,7 +41,7 @@ class SitemapController < ApplicationController
       elsif params[:object_type] == "content"  
         @pages_to_visit1+= item_type.contents.includes(:comments).where('status = ?',1).select { |con| con.comments.size >= 2 }.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
      elsif params[:object_type] == "original_content"
-           @pages_to_visit1+= item_type.contents.where('type!=? and status=?','ReviewContent',1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at ,:format => :w3c)} }
+           @pages_to_visit1+= item_type.contents.where('type!=? and status=?','ArticleContent',1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at ,:format => :w3c)} }
             @pages_to_visit1+= ArticleContent.where('itemtype_id =? and status=? and url is  null ',item_type.id,1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
       elsif params[:object_type] == "compare_items" && params[:page]
         items = item_type.items.paginate(:per_page => 600,:page => params[:page])
