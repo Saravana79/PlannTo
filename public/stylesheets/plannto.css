@@ -2947,14 +2947,14 @@ textarea { outline:none;}
 
 .dropdown_4columns {
 margin:25px auto 0 0; float:left; position:absolute; left:-999em; text-align:left; 
-padding:10px 14px 20px 11px; border:1px solid #508baa; background:#ecf1f2;  width: 450px;
+padding:12px 14px 20px 11px; border:1px solid #508baa; background:#ecf1f2;  width: 620px;
 -moz-border-radius: 0px 5px 5px 5px; -webkit-border-radius: 0px 5px 5px 5px; border-radius: 0px 5px 5px 5px;
 -moz-box-shadow: 0px 5px 3px 0px #bbbbbb; -webkit-box-shadow: 0px 5px 3px 0px #bbbbbb; box-shadow: 0px 5px 3px 0px #bbbbbb;
 }
 
 #Megadropdown li:hover .dropdown_4columns {left:-0px; top:auto;}
 .col_1 { display:inline; float: left; position: relative; margin-left: 5px; margin-right: 5px; width:182px;}
-.col_2 { display:inline; float: left; position: relative;  width:127px;}
+.col_2 { display:inline; float: left; position: relative; margin-left: 5px; margin-right: 5px; width:170px;padding-left:20px;}
 
 .Topcarcol { width:200px; height:auto; float:left; padding:10px 5px 10px 14px; border:1px solid #8bbfd8; 
             background:#FFFFFF; -moz-border-radius:5px; -webkit-border-radius: 5px; border-radius: 5px;}
@@ -2967,11 +2967,11 @@ padding:10px 14px 20px 11px; border:1px solid #508baa; background:#ecf1f2;  widt
 #Megadropdown li:hover div a:hover {color:#508baa;}
 #Megadropdown li ul {list-style:none; padding:0; margin:0;}
 #Megadropdown li ul li {font-size:12px; line-height:20px; position:relative; text-align:left;
-                        padding:0; margin:0; color:#333434; float:none; width:100%;}
+                        padding:0; margin:0; color:black; float:none; width:100%;padding-top:1px;}
 #Megadropdown li:hover div ul li a { font-weight:bold;}
 #Megadropdown li:hover div ul li ul li a { font-weight:normal;}
 #Megadropdown li:hover div ul li ul { padding:0 0 4px 10px; margin:0;}
-#Megadropdown li ul li:hover {background:none; border:none; padding:0; margin:0;}
+#Megadropdown li ul li:hover {background:none; border:none; padding-top:1px; margin:0;}
 #Megadropdown li:hover .Divmain { display:block; position:absolute; width:99%;  height:5px; left:1px; background:#ecf1f2;
                                 bottom:-2px; z-index:1; margin-left:0px;}    
 .Divmain { display:none;}
