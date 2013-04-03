@@ -146,7 +146,7 @@ module ItemsHelper
             else
               item.value = "http://" + item.value
             end     
-            content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 degree view"} </a>"
+            content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 Degree View"} </a>"
           else
             content = "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value} </a>"
           end  

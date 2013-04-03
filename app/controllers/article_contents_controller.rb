@@ -193,7 +193,7 @@ class ArticleContentsController < ApplicationController
   def bmarklet
     #@article_content = ArticleContent.new
    if current_user 
-    #@article,@images = ArticleContent.CreateContent("http://www.team-bhp.com/forum/travelogues/103395-search-god-god-s-own-country-kerala.html",current_user)
+    #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
     @article,@images = ArticleContent.CreateContent(params[:url],current_user)
     @article_content= @article
     @external = params[:external]

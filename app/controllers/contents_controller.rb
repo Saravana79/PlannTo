@@ -282,7 +282,7 @@ class ContentsController < ApplicationController
     @content = Content.find(params[:id])
     #session[:content_warning_message] = "true"
     session[:warning] = "true"
-    session[:itemtype] = @content.items.first.get_base_itemtype 
+    session[:itemtype] = @content.items.first.get_base_itemtype rescue ""
     content_as_item = ContentAsItem.where(:content_id => @content.id).first
     if  content_as_item.blank?
       per_page = params[:per_page].present? ? params[:per_page] : 6

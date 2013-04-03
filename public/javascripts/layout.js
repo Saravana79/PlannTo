@@ -146,7 +146,7 @@ $(document).ready(function(){
             return false
         },
         select: function( event, ui ) {
-            $("#item_search").val("true");
+            $("#item_search1").val("true");
             if (ui.item.id  == 0){
             	//alert(ui.item.url)
             	 
@@ -197,7 +197,7 @@ $(document).ready(function(){
   
 $(document).ready(function() {
   $('input#plannToSearch').keyup(function(e){
-     if(e.keyCode == 13 && $("#item_search").val()!="true")
+     if(e.keyCode == 13 && $("#item_search1").val()!="true")
        {
          window.location.href= "/search/search_items?q=" + $("#plannToSearch").val();
        }

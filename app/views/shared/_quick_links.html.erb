@@ -10,7 +10,7 @@
             <%unless @attribute_degree_view.nil? or @attribute_degree_view == "" %>   
               <% if(@attribute_degree_view).include?("http://") || ( @attribute_degree_view).include?("https://") %>
               <%else%>
-                <% @attribute_degree_view = "http://" + item.value %>
+                <% @attribute_degree_view = "http://" + @attribute_degree_view %>
               <%end%>
               <span class="menu_list"> 
               <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>    
