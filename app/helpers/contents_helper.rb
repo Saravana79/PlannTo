@@ -161,6 +161,10 @@ module ContentsHelper
     when "How To/Guides" then "Submit a How To/Guide"
     when "Book" then "Submit a book"
     when "Apps" then "Submit an App"
+    when "Video" then "Submit a Video"
+    when "HowTo/Guide" then "Submit a HowTo/Guide"
+    when "Travelogue" then "Submit a Travelogue"
+    when "Books" then "Submit a Books"
     else ""
     end
     return label

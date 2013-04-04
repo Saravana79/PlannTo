@@ -331,21 +331,28 @@ class ContentsController < ApplicationController
   end
   
   def quick_new
+  @share = params[:sharecontent]
+  if @share!='' && !@share.nil?
+     @content = ArticleContent.new
+     @content.sub_type = params[:category]
+    @article_content = @content
+    @article_categories = ArticleCategory.get_by_itemtype(0)
+    @items = Array.new
+  else    
+    if params[:category] == "Reviews"
+      @content = ReviewContent.new
     
-  if params[:category] == "Reviews"
-    @content = ReviewContent.new
-    
-  elsif params[:category] == "Q"
-    @content = QuestionContent.new
-  else
-    @content = ArticleContent.new
-    @content.content_photos.build
-  end
-  @content.sub_type = params[:category]
- 
-  @article_content = @content
-  @article_categories = ArticleCategory.get_by_itemtype(0)
-  @items = Array.new
+    elsif params[:category] == "Q"
+      @content = QuestionContent.new
+    else
+      @content = ArticleContent.new
+      @content.content_photos.build
+    end
+    @content.sub_type = params[:category]
+    @article_content = @content
+    @article_categories = ArticleCategory.get_by_itemtype(0)
+    @items = Array.new
+  end  
   end
 
   def create
