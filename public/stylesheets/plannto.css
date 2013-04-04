@@ -2968,8 +2968,8 @@ padding:12px 14px 20px 11px; border:1px solid #508baa; background:#ecf1f2;  widt
 #Megadropdown li ul {list-style:none; padding:0; margin:0;}
 #Megadropdown li ul li {font-size:12px; line-height:20px; position:relative; text-align:left;
                         padding:0; margin:0; color:black; float:none; width:100%;padding-top:1px;}
-#Megadropdown li:hover div ul li a { font-weight:bold;}
-#Megadropdown li:hover div ul li ul li a { font-weight:normal;}
+#Megadropdown li:hover div ul li a { font-weight:bold;text-transform:uppercase;}
+#Megadropdown li:hover div ul li ul li a { font-weight:normal;text-transform:none;}
 #Megadropdown li:hover div ul li ul { padding:0 0 4px 10px; margin:0;}
 #Megadropdown li ul li:hover {background:none; border:none; padding-top:1px; margin:0;}
 #Megadropdown li:hover .Divmain { display:block; position:absolute; width:99%;  height:5px; left:1px; background:#ecf1f2;
