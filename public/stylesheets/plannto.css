@@ -381,8 +381,7 @@ div.buttons {
     display: block;
     background: url(../images/btn_bg_active.png) repeat-x;
     border: solid 1px #bababa;
-    background-clip: border-box;
-    border-radius: 3px;
+    background-clip: border-box;    
     margin-right: 10px;
     padding: 0px 0px;
 }
@@ -3224,15 +3223,15 @@ a.Blacklink:hover { text-decoration: underline;}
 
 
 /*---------------HOME POPUP GRAY BOX-----------*/
-.Homeinnercontent { width:1000px; height:auto; margin:auto; overflow:hidden;}
+.Homeinnercontent { width:1000px; height:auto; margin:auto; overflow:hidden;padding-left:20px;}
 
 .Homefourblocks { width:100%; float:left; padding-bottom:15px;}
-.Blueblockhome {  float:left; margin-right:44px; text-align:center;
+.Blueblockhome {  float:left; margin-right:24px; text-align:center;
 background:#FFFFFF url(../images/blue_boxbg.png) repeat-x left top; padding:0 9px 0px 9px;
 border:1px solid #dadada; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;}
 
 
-.smallhomeblock{width:178px;height:250px;}
+.smallhomeblock{width:178px;height:120px;}
 .bighomeblock{width:170px; height:450px;}
 
 .Blueblockhome.Lastblock { margin-right:0px;}
@@ -3243,7 +3242,7 @@ font-size:16px; text-align:center; color:#4b85a4; font-weight:bold; padding:0 0 
 .Blueblockhome p {font-family:Tahoma, Arial, Helvetica, sans-serif; margin:0;
 font-size:12px; color:#282929; padding:0px 0 0px 0;}
 
-.Textdescriptions { clear:both; padding:0 0 15px 0; min-height:191px;}
+.Textdescriptions { clear:both; padding:5px 0 15px 0;}
 
 
 .Blueblockhome span.Buytag { height:128px; background:url(../images/buy_tag.png) no-repeat center center;
@@ -3260,20 +3259,20 @@ clear:both; display:block; margin-top:28px; margin-bottom:16px;}
 a.Blacklink { color:#282929; text-decoration:none;}
 a.Blacklink:hover { text-decoration: underline;}
 
-.Homepopupgraybox { width:1008px; float:left; margin-left:-2px;}
-.Homepopupgraybox .Boxtopblock { width:1008px; float:left; background:url(../images/gray_blocktop.png) no-repeat left top;
+.Homepopupgraybox { width:720px; float:left; margin-left:-2px;}
+.Homepopupgraybox .Boxtopblock { width:720px; float:left; background:url(../images/gray_blocktop.png) no-repeat left top;
 height:38px; font-family:Tahoma, Arial, Helvetica, sans-serif;}
 
-.Homepopupgraybox .Boxtopblock .Headingtext { width:70%; float:left; padding:14px 0 0 11px; font-size:12px;
+.Homepopupgraybox .Boxtopblock .Headingtext { width:70%; float:left; padding:10px 0 0 11px; font-size:12px;
 font-weight:bold; color:#444444;}
 
-.Homepopupgraybox .Grayboxmid { width:1008px; float:left; background:url(../images/gray_blockmidbg.png) repeat-y left top;
+.Homepopupgraybox .Grayboxmid { width:720px; float:left; background:url(../images/gray_blockmidbg.png) repeat-y left top;
 padding:11px 0 11px 0;}
 
 .Homepopupgraybox .Boxtopblock span.Openclosebut { display:block; float:right; margin:10px 16px 0 0;}
 .Homepopupgraybox .Boxtopblock span.Openclosebut a {
 display:block; float:right; width:40px; height:20px; line-height:18px;
-text-decoration:none; background:url(../images/open_closetab.png) no-repeat left top; padding:0 16px 0 0;
+text-decoration:none; background:url(../images/open_closetab.png) no-repeat 0 bottom; padding:0 16px 0 0;
 font-size:12px; font-family:Tahoma, Arial, Helvetica, sans-serif; color:#505050; text-align:center;
  }
 
@@ -4207,14 +4206,13 @@ padding:0; margin:0; border:none; cursor:pointer;}
     background: url(../images/btn_bg_active.png) repeat-x;
     border: solid 1px #bababa;
     background-clip: border-box;
-    border-radius: 3px;
     margin-right: 10px;
     padding: 0px 0px;
 }
 .quick_config_btns_icon {
     height: 26px;
-    width: 100px;
-    background: url(../images/icon_plantobuy_green.png) no-repeat 0px 6px;
+    width: 120px;
+    background: url(../images/icon_searchcriteria_active.png) no-repeat 0px 6px;
     float: left;
     border: solid 0px;
     display: block;
@@ -4242,7 +4240,7 @@ span.Usrdropdown1 span.Usernamedp1:hover a { color:#000000;}
 span.Usrdropdown1 span.Usernamedp1:hover .Useraccountinfo1 { display:block;}
 
 .Useraccountinfo1 { width:150px; float:left; position:absolute; background:#FFFFFF;
-border:1px solid #528fae; display:none; top:28px; right:-1px;}
+border:1px solid #528fae; display:none; top:28px; right:-1px;z-index:5001;}
 
 .Useraccountinfo1 a { color:#000000; border-bottom:1px solid #528fae; display:block; padding:5px 0 5px 3px;
                     font-size:11px; float:none; background:none; font-weight:normal;}
