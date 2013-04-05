@@ -17,6 +17,7 @@ development:
   popular_mobile_topics: "3204,3202,3203,4017"
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
+  popular_car_contents: "1132,1138,1136"
   content_creator_user_ids: "1,7,8"
   root_level_car_id: 3214
   root_level_mobile_id: 3215
@@ -81,6 +82,7 @@ production:
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
   content_creator_user_ids: "2,8,7,19,3"
+  popular_car_contents: "1132,1138,1136"
   root_level_car_id: 3214
   root_level_mobile_id: 3215
   root_level_cycle_id: 3219
