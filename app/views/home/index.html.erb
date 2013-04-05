@@ -627,15 +627,20 @@
      </div>
      
       <div style="width:315px;height:323px;margin-left:10px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
-        <% configatron.popular_car_contents.split(",").each do |id| %>
+        <% Content.latest_contents("Car").each do |id| %>
           <%content = Content.find(id) rescue "" %>
           <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
+          <% if (content.is_a?(ArticleContent) && content.url? rescue false) %>
+        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
+       <%end%>
           <%if content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay"/></div><%end%><hr></hr>
        <%end%>
        <%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}  Reviews","/cars?fl=Reviews" %>&nbsp;&nbsp;&nbsp;  
        <%= link_to  "#{Content.total_number_of_contents("Car","Deals")} Deals","/cars?fl=Deals" %>&nbsp;&nbsp;&nbsp;  
        <%= link_to  "#{Content.total_number_of_contents("Car","News")} News","/cars?fl=News" %> &nbsp;&nbsp;&nbsp; 
        <%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")} Travelogue","/cars?fl=Travelogue" %>
+       <%= link_to  "#{Content.total_number_of_contents("Car","HowTo/KB")} HowTo","/cars?fl=HowTo/KB" %>
+       
       </div>
    </div>
    
