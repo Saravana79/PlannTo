@@ -87,6 +87,7 @@
     <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
      <%= hidden_field_tag 'submit_url','submit_url' %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+    <%= hidden_field_tag 'share_from_home' %>
     <% if @article_content %>
     <%= hidden_field_tag :detail,@detail%>
       <%if current_user %>

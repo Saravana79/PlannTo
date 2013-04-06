@@ -6,9 +6,7 @@ $("#articleReviewSubContainer").html("");
 <%if @share!='' && !@share.nil? %>
   $("#contentEditView").html("<%= escape_javascript(render :partial => "article_contents/article_share", :locals => {:content_category => false,:article_content => @article_content} ) %>");
   $("div#contentEditView #ShareURLDiv").show();
-  $("div#contentEditView #shareProduct").show();
-  setDefaultFieldsArticleSubmit("<%=@content.sub_type%>");
-  
+  $("#share_from_home").val("true");
 <%else%>  
 $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
  <%end%>
