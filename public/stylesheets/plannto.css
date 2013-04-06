@@ -381,8 +381,7 @@ div.buttons {
     display: block;
     background: url(../images/btn_bg_active.png) repeat-x;
     border: solid 1px #bababa;
-    background-clip: border-box;    
-    margin-right: 10px;
+    background-clip: border-box;        
     padding: 0px 0px;
 }
 
@@ -393,9 +392,8 @@ div.buttons {
     background: url(../images/btn_bg_hover.png) 0px -29px;
     border: solid 1px #74ae58;
     line-height: 30px;
-    margin-right: 10px;
     background-clip: border-box;
-    border-radius: 3px;
+ 
     padding: 0px 0px;
 }
 
@@ -409,8 +407,8 @@ div.buttons {
     background: url(../images/btn_bg_hover.png) 0px -29px;
     border: solid 1px #7eb55e;
     background-clip: border-box;
-   /* border-radius: 3px;*/
-    margin-right: 10px;
+   /* border-radius: 3px;
+    margin-right: 10px;*/
     padding: 0px 0px;
 }
 
@@ -447,7 +445,6 @@ div.buttons {
     background: url(../images/btn_bg_active.png) 0px -29px;
     border: solid 1px #bababa;
     background-clip: border-box;
-    border-radius: 2px;
     margin-right: 6px;
     padding: 0px 0px 0px;
 }
@@ -4491,3 +4488,4 @@ font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:18px; color:#FFFFFF;
 .hyperlinkwarning{background: #4a4844;padding: 2px 8px 2px 8px;color: #ffffff;text-decoration: none;font-size: 12px;}
 .contentsubsection{padding-top:5px;}
 .arrowbackground{background: url(../images/arrows.png) no-repeat 0px 3px transparent;float: right;margin: 7px 0px 0px 2px;}
+.plantobuycounter{float:left;background: #626262;color: white;font-weight: bold;text-align: middle;font-size: 10px;height: 23px;border: solid 1px #bababa;padding: 5px 1px 0px 1px;margin-right: 10px;border-left: none;"}
