@@ -240,14 +240,17 @@
 <div>
   <div style="width:745px;height:373px;margin-left:0px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
    <div id="wrapper">
+  
         <div class="slider-wrapper theme-light">
             <div id="slider" class="nivoSlider">
-                <img src="images/slider1_img.png" data-thumb="images/slider1.png" alt="" />
+               <img src="images/slider1_img.png" data-thumb="images/slider1.png" alt=""/>
+                  
                 <img src="images/slider2_img.png" data-thumb="images/slider2.png" alt=""  />
                 <img src="images/slider3_img.png" data-thumb="images/slider3.png" alt="" />
                 <img src="images/slider4_img.png" data-thumb="images/slider4.png" alt="" />
             </div>
-      
+    
+            </div>
         </div>
 
     </div>
@@ -589,6 +592,7 @@
     <script type="text/javascript" src="slider/jquery.nivo.slider.js"></script>
     <script type="text/javascript">
     $(window).load(function() {
+        $('#slider1').nivoSlider();
         $('#slider').nivoSlider();
     });
     </script>
@@ -596,8 +600,155 @@
  </div>
 <%end%>
 
-<!--<div class="FaceImg" style="padding-left:300px;">
-    <%= link_to image_tag('facebook_btn_signup.jpg'), user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %>
-     <span style="margin-left:50px;"><%= link_to image_tag('home_sign_up.png'),new_user_registration_path %></span>
+<div>
+  <div style="width:315px;height:323px;margin-left:0px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+    <div id="wrapper">
+       <div class="slider-wrapper theme-light">
+          <div id="slider1" class="nivoSlider">
+            <% configatron.popular_cars.split(",")[0..3].each do | id| %>
+              <% item = Item.find(id) rescue "" %>
+              <a href="<%=(item.get_url())%>"> <img  src="<%=item.image_url%>" alt="<%=item.name%>" title="#htmlcaption<%= id %>" ></a>
+              <%end%>
+             </div>
+           <% configatron.popular_cars.split(",")[0..3].each do | id| %>
+              <% item = Item.find(id) rescue "" %>   
+             <div id="htmlcaption<%= id %>" class="nivo-html-caption">
+               <a href="<%=item.get_url()%>" class="homepageprodname txt_onhover"><%= item.name %></a>
+              </div>
+             <%end%>
+             </div>
+         </div>
+      </div>
+      
+     <div style="width:315px;height:323px;margin-left:10px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+        <span class="search_txt" id="plannToSearchSpan" style="background:none;">
+      Search Car:<input name="Search" type="text" placeholder="" id="plannToSearch_car" style="border:solid 1px;margin:130px 5px 0px 5px;width:240px;"/>
+        </span>
+     </div>
+     
+      <div style="width:315px;height:323px;margin-left:10px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+        <% Content.latest_contents("Car").each do |id| %>
+          <%content = Content.find(id) rescue "" %>
+          <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
+          <% if (content.is_a?(ArticleContent) && content.url? rescue false) %>
+        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
+       <%end%>
+          <%if content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay"/></div><%end%><hr></hr>
+       <%end%>
+       <%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}  Reviews","/cars?fl=Reviews" %>&nbsp;&nbsp;&nbsp;  
+       <%= link_to  "#{Content.total_number_of_contents("Car","Deals")} Deals","/cars?fl=Deals" %>&nbsp;&nbsp;&nbsp;  
+       <%= link_to  "#{Content.total_number_of_contents("Car","News")} News","/cars?fl=News" %> &nbsp;&nbsp;&nbsp; 
+       <%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")} Travelogue","/cars?fl=Travelogue" %>
+       <%= link_to  "#{Content.total_number_of_contents("Car","HowTo/KB")} HowTo","/cars?fl=HowTo/KB" %>
+       
+      </div>
+   </div>
    
- </div>-->
+<script>
+$(document).ready(function(){
+    reinitialiseVotingPoshyTip();
+
+    $("#ui-active-menuitem").mouseout(function() {
+        $("#ui-active-menuitem").hide();
+    });
+
+    $('#plannToSearch_car').focus(function(){
+        $(this).val('');
+        $(this).keydown();
+    });
+
+
+
+
+    $("#plannToSearch_car").autocomplete({
+        minLength: 2,
+        format: "js",
+        // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
+        source: function( request, response )
+        {
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 5, // The length of each line
+                width: 4, // The line thickness
+                radius: 5, // The radius of the inner circle
+                color: '#2EFE9A', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 50, // Afterglow percentage
+                shadow: true, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('plannToSearchSpan');
+            var spinner = new Spinner(opts).spin(target);
+            $.ajax(
+            {
+                url: "/search/autocomplete_items",
+                data: {
+                    term: request.term,
+                    search_type: "Car"
+                },
+                type: "get",
+                dataType: "json",
+                success: function( data )
+                {
+                    response( $.map( data, function( item )
+                    {
+                        return{
+                            id: item.id,
+                            value: item.value,
+                            imgsrc: item.imgsrc,
+                            type: item.type,
+                            url: item.url
+                        }
+                    }));
+                    spinner.stop();
+                }
+            });
+        },
+        focus:function(e, ui) {
+            return false
+        },
+        select: function( event, ui ) {
+            if (ui.item.id  == 0){
+            	//alert(ui.item.url)
+                location.href = "/search/search_items?q=" + ui.item.url
+            // return false;
+            }
+            else{
+                location.href = "" + ui.item.url
+            // return false;
+            }
+        // return false;
+        }
+    })
+       _renderMenu = function(ul, items) {
+        var self = this;
+        $.each(items, function(index, item) {
+            self._renderItem(ul, item, index);
+        });
+        
+        item = {
+            value: "Search more items...",
+            id: "0",
+            imgsrc: ""
+        }
+        self._renderItem(ul, item, -1);
+    };
+    $("#plannToSearch_car").data("autocomplete")._renderItem = function(ul, item, index) {
+    	
+        if (item.id == 0) {
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append("<a class='searchMore'>" + item.value + "" + "</a>")
+            .appendTo(ul);
+        }
+        else {
+            return $("<li></li>")
+            .data("item.autocomplete", item)
+            .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+            .appendTo(ul);
+        }
+    };
+
+});
+</script>
+

@@ -74,7 +74,7 @@ class ProductsController < ApplicationController
     @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
     @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @attribute_degree_view = Attribute.where(:name => "360 degree view").first.attribute_values.where("item_id =?",@item.id).first.value rescue ""
+    @attribute_degree_view = Attribute.where(:name => "360 Degree View").first.attribute_values.where("item_id =?",@item.id).first.value rescue ""
     @related_items = Item.get_related_items(@item, 3) 
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
