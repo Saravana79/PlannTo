@@ -139,7 +139,7 @@ class ArticleContentsController < ApplicationController
          url = url.split("?")[0]
       end  
       @article,@images = ArticleContent.CreateContent(url,current_user)
-      puts"ppppppppppppppppppppp #{@images.size}"
+      
       @article.sub_type = params[:article_content][:sub_type]
     end
     @related_items = article_search_by_relevance(@article)

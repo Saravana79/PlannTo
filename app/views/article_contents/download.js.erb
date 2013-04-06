@@ -21,22 +21,29 @@
 <%end%>
 $('div.<%=@dwnld_url%>').show();
 $("#<%=@title_id%>").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));
-
 $("#share_spinner").hide();
 $("#<%=@new_article_type%>").val("ArticleContent");
-<%unless @external%>
-  <%unless @edit_form%>
+
+<%unless params[:share_from_home] == "true" %>
+  <%unless @external%>
+    <%unless @edit_form%>
     showProductTag();
     <%if @article.is_review?%>
       $("div#ShareURLDiv input#<%="new_article_product"%>").hide();
     <%end%>
   <%else%>
-    <%if @article.is_review?%>
-      $("div#ShareURLDiv input#<%="edit_article_product_#{@article.id}"%>").hide();
-    <%end%>
-  <%end%>
-  setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
+     <%if @article.is_review?%>
+       $("div#ShareURLDiv input#<%="edit_article_product_#{@article.id}"%>").hide();
+   <%end%>
+ <%end%>
+   setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
 <%end%>
+
+<%else%>
+  $("#shareProduct").show();
+  $("div#ShareURLDiv input#<%="new_article_product"%>").show();
+  setDefaultFieldsArticleSubmit("<%=@article.sub_type%>");
+<%end%>  
 
 <% if @images.present? and @images.count > 0 %>
  
