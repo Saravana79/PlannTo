@@ -59,12 +59,12 @@ class Content < ActiveRecord::Base
   
   def self.total_number_of_contents(type,sub_type)
     itemtype = Itemtype.where(:itemtype => type).first
-    return Content.where(:sub_type => sub_type,:itemtype_id => itemtype.id).count
+    return Content.where(:sub_type => sub_type,:itemtype_id => itemtype.id,:status => 1).count
   end
   
   def self.latest_contents(type)
     itemtype = Itemtype.where(:itemtype => type).first
-    Content.where(:itemtype_id => itemtype.id).order('created_at desc').limit(3)
+    Content.where(:itemtype_id => itemtype.id,:status => 1).order('created_at desc').limit(3)
   end
   
   def self.get_top_active_deals(item_ids)

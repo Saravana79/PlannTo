@@ -48,7 +48,7 @@ class ProductsController < ApplicationController
       @followers_count = User.get_followers_count(search_type) 
     end    
     @top_contributors =  User.get_top_contributors
-    @article_categories = ArticleCategory.get_by_itemtype(0)
+    #@article_categories = ArticleCategory.get_by_itemtype(0)
  end
 
   def specification
