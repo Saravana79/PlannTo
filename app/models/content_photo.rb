@@ -4,7 +4,8 @@ class ContentPhoto < ActiveRecord::Base
   :storage => :s3,
   :bucket => ENV['planntonew'],
   :s3_credentials => "config/s3.yml",
-  :path => "images/content/:id/:style/:filename"
+  :path => "images/content/:id/:style/:filename",
+  :url  => ":s3_sg_url"
   #http://www.imagemagick.org/script/command-line-processing.php#geometry
 
   def self.save_url_content_to_local(article)
