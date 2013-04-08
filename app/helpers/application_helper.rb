@@ -53,7 +53,7 @@ module ApplicationHelper
         links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s}>" +
           get_follow_link(text_val, url_for(:action => 'follow_item_type', :controller => classname, :id => item, :button_class => button_class, :follow_type => follow, :related_items => options[:related_items]),
           options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class, :title => title_value)) +
-          if (follow_type == 'Car' || follow_type == 'Bike' || follow_type == 'Cycle' || follow_type == 'Mobile' || follow_type == 'Tablet' || follow_type == 'Camera') && !options[:related_items]
+          if (follow_type == 'Car' || follow_type == 'Bike' || follow_type == 'Cycle' || follow_type == 'Mobile' || follow_type == 'Tablet' || follow_type == 'Camera') && !options[:related_items] && button_class ==''
             '</span><span class="plantobuycounter">' + item.ger_followers_count_for_type(follow).to_s + '</span>'
          else
           '</span>'
