@@ -1,5 +1,5 @@
 development:
-  root_image_url: "http://s3.amazonaws.com/Plannto/items/"
+  root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -25,13 +25,13 @@ development:
   root_level_bike_id: 3218
   root_level_camera_id: "3216,4154,4160,4152,4137,4128,4165,4129"
   root_content_vote_count: 1
-  top_content_ids: "10386,10378,10377,10354,10234,10214,10345,10260,10273,10336"
+  top_content_ids: "12495,12688,12716,12580,12729,12621,12503,12554,12744,12599"
   top_all_item_ids: "2157,4963,4745,4651,4884,4099,4744,3978"
   wizard_items_buyer: "1,2,3,4,5,6"
   wizard_items_owner: "1,2,3,4,5,6"
   wizard_topics: "1,2,3,4,5,6"
 test:
-  root_image_url: "http://s3.amazonaws.com/Plannto/items/"
+  root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
   popular_cars: "252,331,4098,580,1017,1038,4111,976,522,453"
   popular_bikes: "2862,2932,2120,2812,2194,2243,2836,2133,2438,2971"
@@ -62,7 +62,7 @@ test:
   wizard_topics: "3935,3936,3956,3955,3962,3967,3969,3970"
  
 production:
-  root_image_url: "http://s3.amazonaws.com/Plannto/items/"
+  root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em

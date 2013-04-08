@@ -1,4 +1,4 @@
-<% cache ('home_page') do %>
+<%# cache ('home_page') do %>
   <% content_for :image, "http://www.plannto.com/images/n_logo.png" %>
   <% content_for :description, "Everything you want to know about the products that you own or planning to buy." %>
   <div id="maincontainer" class="maincontainerCss1">
@@ -596,7 +596,10 @@
 
 
 <div>
-  <div style="width:315px;height:323px;margin-left:0px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+   <%if Rails.env == "development"%>
+  <div style="width:315px;height:400px;margin-left:0px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+  <h2 style="background: #f7f3f7;background: -webkit-gradient(linear,left top,left bottom,from(#FFF),to(#f7f3f7));background: -moz-linear-gradient(top,#FFF,#f7f3f7);border-bottom: 1px solid #cdd3d7;font-size: 12px;height: 38px;line-height: 38px;text-indent: 14px;">Popular Cars</h2>
+  <div style="width:280px;height:250px;padding-left:20px;">
     <div id="wrapper">
        <div class="slider-wrapper theme-light">
           <div id="slider1" class="nivoSlider">
@@ -614,22 +617,60 @@
              </div>
          </div>
       </div>
-  <%end%>    
-     <div style="width:315px;height:323px;margin-left:10px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+      <h2 style="background: #f7f3f7;background: -webkit-gradient(linear,left top,left bottom,from(#FFF),to(#f7f3f7));background: -moz-linear-gradient(top,#FFF,#f7f3f7);border-bottom: 1px solid #cdd3d7;font-size: 12px;height: 38px;line-height: 38px;text-indent: 14px;">Find Cars</h2>
         <span class="search_txt" id="plannToSearchSpan" style="background:none;">
-      Search Car:<input name="Search" type="text" placeholder="" id="plannToSearch_car" style="border:solid 1px;margin:130px 5px 0px 5px;width:240px;"/>
+      Search Car:<input name="Search" type="text" placeholder="" id="plannToSearch_car" style="border:solid 1px;margin:5px 5px 5px 5px;width:240px;"/>
         </span>
+    
+    </div>
+  <%end%>
+  <%#end%>    
+  <%if Rails.env == "development"%>
+     <div style="width:315px;height:400px;float:left;border-top: solid 1px #cdd3d7;border-bottom: solid 1px #cdd3d7;display:block;padding:0px;">
+      <h2 style="background: #f7f3f7;background: -webkit-gradient(linear,left top,left bottom,from(#FFF),to(#f7f3f7));background: -moz-linear-gradient(top,#FFF,#f7f3f7);border-bottom: 1px solid #cdd3d7;font-size: 12px;height: 38px;line-height: 38px;text-indent: 14px;">Quick Links</h2>
+      <span style="height:250px;display:block"></span>
+  
+          <h2 style="background: #f7f3f7;background: -webkit-gradient(linear,left top,left bottom,from(#FFF),to(#f7f3f7));background: -moz-linear-gradient(top,#FFF,#f7f3f7);border-bottom: 1px solid #cdd3d7;font-size: 12px;height: 38px;line-height: 38px;text-indent: 14px;">Compare Cars</h2>
+    
      </div>
      
-      <div style="width:315px;height:323px;margin-left:10px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
-        <% Content.latest_contents("Car").each do |id| %>
-          <%content = Content.find(id) rescue "" %>
-          <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
-          <% if (content.is_a?(ArticleContent) && content.url? rescue false) %>
-        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
-       <%end%>
-          <%if content.thumbnail?%><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay"/></div><%end%><hr></hr>
-       <%end%>
+      <div style="width:315px;height:400px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
+        <h2 style="background: #f7f3f7;background: -webkit-gradient(linear,left top,left bottom,from(#FFF),to(#f7f3f7));background: -moz-linear-gradient(top,#FFF,#f7f3f7);border-bottom: 1px solid #cdd3d7;font-size: 12px;height: 38px;line-height: 38px;text-indent: 14px;">Latest Stories</h2>
+        <span style="padding:5px;height:250px;display:block;">
+              <% Content.latest_contents("Car").each do |id| %>
+                <%content = Content.find(id) rescue "" %>
+                <div>
+                <div  class="float_lft" style="width:90px;float:left;">  
+                <%if content.thumbnail?%>                  
+                    <img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay"/>                  
+                <%end%>
+                </div>
+                  <div style="width:200px;float:left;">
+                    <div>
+                    <%= link_to content.title, content_path(content.id), :class => "title txt_onhover" %>
+                    <% if (content.is_a?(ArticleContent) && content.url? rescue false) %>
+                  - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
+                     <%end%>
+                    </div>
+                    <div>
+                      <a class="txt_brown">Shared by <%= content.user.name %></a>
+                    </div>
+        
+                  </div>
+                  
+            
+                   <div style="border-bottom:solid 1px #ccd4d8;clear:both;"></div>
+                 </div>   
+             <%end%>
+       </span>
+       <div class="points">
+        <span class="indu_span"><a class="text">Reviews</a><a class="values">3070</a></span>        
+        <span class="indu_span"><a class="text">How To</a><a class="values">846</a></span>
+        <span class="indu_span"><a class="text">Travelogue</a><a class="values">2236</a></span>
+        <span class="indu_span"><a class="text">News</a><a class="values">25</a></span>
+
+      </div>
+
        <%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}  Reviews","/cars?fl=Reviews" %>&nbsp;&nbsp;&nbsp;  
        <%= link_to  "#{Content.total_number_of_contents("Car","Deals")} Deals","/cars?fl=Deals" %>&nbsp;&nbsp;&nbsp;  
        <%= link_to  "#{Content.total_number_of_contents("Car","News")} News","/cars?fl=News" %> &nbsp;&nbsp;&nbsp; 
@@ -637,6 +678,7 @@
        <%= link_to  "#{Content.total_number_of_contents("Car","HowTo/KB")} HowTo","/cars?fl=HowTo/KB" %>
        
       </div>
+      <%end%>
    </div>
    
 <script>
