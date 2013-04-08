@@ -247,9 +247,9 @@ end%>
                       value: "<%="#{row.value}"%>"
                     });
               <%end
-            end
+            end%>
 
-          <%else if @items.facet(:features_string, 'Type'.to_sym)%>
+          <%elsif @items.facet(:features_string, 'Type'.to_sym)%>
             <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
               <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
                     typeList.push( {
