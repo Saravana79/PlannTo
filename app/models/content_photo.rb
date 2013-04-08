@@ -2,7 +2,7 @@ class ContentPhoto < ActiveRecord::Base
   belongs_to :content
   has_attached_file :photo,:styles => { :medium => "120x90!", :thumb => "80x60!" ,:large => "600x400>"},
   :storage => :s3,
-  :bucket => ENV['plannto'],
+  :bucket => ENV['planntonew'],
   :s3_credentials => "config/s3.yml",
   :path => "images/content/:id/:style/:filename"
   #http://www.imagemagick.org/script/command-line-processing.php#geometry
