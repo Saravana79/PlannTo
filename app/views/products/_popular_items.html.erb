@@ -13,9 +13,22 @@
             <div>
             <a href="<%=item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= item.name rescue ''%></a>
            </div>
-            <% unless @type.to_s == 'Car'%>
-            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "popular_item_id_fhp_#{item.id}"} %><br />
-            <% end %>
+           <%unless item.type == "Topic" || item.type == "CarGroup" || item.type == "Manufacturer"%>
+           <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+           <%if item.rated_users_count > 0 %>
+           <div>
+           <div style="float:left;">
+           <a class="txt_normal" href="<%= item.get_url + '?fl=Reviews'%>">
+            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "popular_item_id_fhp_#{item.id}"} %> 
+           </a></div>        
+
+           <div class="txt_blue" style="float:right;" >
+           <a class="txt_blue" href="<%= item.get_url + '?fl=Reviews'%>"> <%= "(" + item.rated_users_count.to_s + ")" %></a></div>
+           
+         </div>
+           <br />
+          <%end%>
+  
             </td>
           </tr>
          <%end%>
