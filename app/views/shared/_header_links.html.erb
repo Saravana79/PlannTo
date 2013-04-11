@@ -184,7 +184,8 @@
 </script>
   <script>
  $(".sign_in_popup").click(function(){
-$('#dialog-form').bPopup({
+ $("#dialog-form #click_message").hide();
+ $('#dialog-form').bPopup({
    closeClass:'Closebut',
     position: [350, 100],
     follow: [false, false] //x, y
@@ -194,6 +195,7 @@ $('#dialog-form').bPopup({
  
 <script>
 $(".sign_up_popup").click(function(){
+$("#sign_up_dialog #click_message").hide();
 $('#sign_up_dialog').bPopup({
    closeClass:'Closebut',
     position: [350, 100],
