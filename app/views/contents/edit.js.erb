@@ -7,12 +7,11 @@
 $("#contentEditView").html('');
   $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
 
-$("#contentEditView").dialog({
-title: 'Edit <%=@content.type.underscore.humanize%>',
-height: 550,
-width:600});
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();
+$("#contentEditView").bPopup({
+   closeClass:'Closebut',
+    position: [350, 100],
+    follow: [false, false] //x, y
+ });
  
 <%#if @content.is_plannto_content?%>
 // $("div#contentEditView #subContainerDefaultContent").show();

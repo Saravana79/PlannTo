@@ -17,37 +17,40 @@
     %link(rel="shortcut icon" href="/images/logosc.png" type="image/x-icon")
     %script{:src => "/javascripts/Placeholders.js", :type => "text/javascript"}
     %script{:src => "/javascripts/layout.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/jquery.bpopup.min.js", :type => "text/javascript"}
     %body   
       = render 'shared/header_links'
       //#giveAdviceDialog
       #dialog-form{:style => "display:none;"}
-        #logi
-          = render "/shared/login_dialog"
-          .Dontsignup
-            Don't have an account. 
-            = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"
-        #sign_up_dialog_1{:style => "display:none;"}
-          = render "/shared/signup_dialog"
-          .Dontsignup
-            Do you have an account. 
-            =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();",:style=>"font-weight:bold;text-decoration:underline;"        
-          = render "shared/signup_popup"
+        #Loginpoup
+          #login
+            = render "/shared/login_dialog"
+            .Dontsignup
+              Don't have an account. 
+              = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"
+          #sign_up_dialog_1{:style => "display:none;"}
+            = render "/shared/signup_dialog"
+            .Dontsignup
+              Do you have an account. 
+              =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();",:style=>"font-weight:bold;text-decoration:underline;"        
+            = render "shared/signup_popup"
       #dialog-form-google-search{:style => "display:none;"}
        
         #sign_up_dialog_1_google_search{:style => "display:none;"}
           = render "/shared/signup_dialog_google_search"
            
       #login-feed{:style => "display:none;"}
-        #login-1
-          = render "/shared/login_dialog"
-          .Dontsignup
-            Don't have an account. 
-            = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login-1').hide();",:style=>"font-weight:bold;text-decoration:underline;"
-        #sign_up_dialog_2{:style => "display:none;"}
-          = render "/shared/signup_dialog"
-          .Dontsignup
-            Do you have an account. 
-            =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();",:style=>"font-weight:bold;text-decoration:underline;"        
+        #Loginpoup
+          #login-1
+            = render "/shared/login_dialog"
+            .Dontsignup
+              Don't have an account. 
+              = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login-1').hide();",:style=>"font-weight:bold;text-decoration:underline;"
+          #sign_up_dialog_2{:style => "display:none;"}
+            = render "/shared/signup_dialog"
+            .Dontsignup
+              Do you have an account. 
+              =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();",:style=>"font-weight:bold;text-decoration:underline;"        
        
       #report_no_item    
     #maincontainer.maincontainerCss
@@ -60,16 +63,17 @@
         %div{:style => "display:none;"}
           = render "shared/login_dialog", :item => @item
       #sign_up_dialog{:style => "display:none"}
-        #login1{:style => "display:none;"}
-          = render "shared/login_dialog"
-          .Dontsignup
-            Don't have an account. 
-            = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog2').show();$('#login1').hide();",:style=>"font-weight:bold;text-decoration:underline;"
-        #sign_up_dialog2
-          = render "/shared/signup_dialog"
-          .Dontsignup
-            Do you have an account. 
-            = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();",:style=>"font-weight:bold;text-decoration:underline;"
+        #Loginpoup
+          #login1{:style => "display:none;"}
+            = render "shared/login_dialog"
+            .Dontsignup
+              Don't have an account. 
+              = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog2').show();$('#login1').hide();",:style=>"font-weight:bold;text-decoration:underline;"
+          #sign_up_dialog2
+            = render "/shared/signup_dialog"
+            .Dontsignup
+              Do you have an account. 
+              = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();",:style=>"font-weight:bold;text-decoration:underline;"
             
       = render("shared/google_analytics") if Rails.env.production?
       = render 'shared/show_hide_login_form', :item => "" 
@@ -95,4 +99,8 @@
       $(document).ready(function() {
       Placeholders.init();
       });  
-    /= render 'shared/referer_url_signup_popup'        
+    /= render 'shared/referer_url_signup_popup'       
+    
+    
+    
+  

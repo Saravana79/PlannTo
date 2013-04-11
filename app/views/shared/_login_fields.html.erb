@@ -1,13 +1,6 @@
 <div class="Popuptitlebar">
-<span class="Popuptitle"><center> <label class="signupin">Sign In</label> </center></span>
-
-<%if @popup == "true" %>
-<div class="Close_dialog" style="width:43px; 
-overflow:hidden;height:38px; background:url(../images/pclose_but.png) no-repeat left top;
-position:relative; left:212px; text-indent:-9999px; top:-38px;" onclick="$('#login-feed').dialog('close');$('#sign_up_dialog').dialog('close');$('#dialog-form').dialog('close');">
-  </div>
-  <%end%>
-  <div id="click_message"></div>
+<span class="Popuptitle"><center> <h1><label class="signupin">Sign In</label> </center><%if @popup == "true" %><a href="#" class="Closebut">&nbsp;</a> <%end%></h1></span>
+<div id="click_message"></div>
 </div>
 <div class="Popupmiddercontent" >
 <div class="Popupfacebook">

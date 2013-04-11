@@ -20,7 +20,14 @@
                      <%if (!product_attribute.description.nil? && !product_attribute.attributeshyperlink.nil?) || (!product_attribute.description.blank? && !product_attribute.attributeshyperlink.blank?) %>
                         <li class="specificationblcksublvltxt">
                           <span style="width:200px;float:left;">
-                          <strong><%= product_attribute.name %> <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').dialog({modal: true,height: 280,width: 275 }); $('.Close_dialog').show(); $('.ui-dialog-titlebar').hide();return false;",:title => "Description" %>: </strong>
+                          <strong>
+                            <%= product_attribute.name %>
+                              <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').bPopup({
+   closeClass:'Closebut',
+    positionStyle: 'fixed',
+    follow: [false, false] 
+ });", :title => "Description" %>
+                                 :</strong>
                         </span>
                         <%= render "attribute_description_popup",:attribute => product_attribute %>
                      <%elsif !product_attribute.attributeshyperlink.nil? || !product_attribute.attributeshyperlink.blank? %>

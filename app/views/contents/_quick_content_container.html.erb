@@ -3,7 +3,7 @@
 <%count = (@article_categories.size - 1)%>
 <span >
 <div class="Bluecyanbut" style="padding-left:450px;">  <span class='quick_config_btns' >
-    <%=link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
+    <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
   </span>
 </div>
       <% @article_categories.each_with_index do |article_category, index| %>

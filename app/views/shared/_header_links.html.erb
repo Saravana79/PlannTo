@@ -152,9 +152,7 @@
   
       <div style="float:right;padding:20px 90px 0px 0px;">
          <span>
- <%= link_to "Sign In", "#",:onclick =>"$('#dialog-form #click_message').hide();$('#dialog-form').dialog({modal: true,height: 480,width: 275 }); $('.Close_dialog').show();
-      $('.ui-dialog-titlebar').hide();return false;" , :class => "sign_in" %> | <%= link_to "Sign Up", "#",:onclick =>"$('#sign_up_dialog').dialog({modal: true,height: 480,width: 275 }); $('.Close_dialog').show();
-     $('.ui-dialog-titlebar').hide();return false;" %> 
+ <%= link_to "Sign In", "#", :class => "sign_in_popup" %> | <%= link_to "Sign Up", "#",:class => "sign_up_popup"%> 
         
    </span>
    </div> 
@@ -184,4 +182,22 @@
   }
 
 </script>
-    
+  <script>
+ $(".sign_in_popup").click(function(){
+$('#dialog-form').bPopup({
+   closeClass:'Closebut',
+    position: [350, 100],
+    follow: [false, false] //x, y
+ });
+ });
+ </script>  
+ 
+<script>
+$(".sign_up_popup").click(function(){
+$('#sign_up_dialog').bPopup({
+   closeClass:'Closebut',
+    position: [350, 100],
+    follow: [false, false] //x, y
+ });
+ });
+ </script>    

@@ -7,13 +7,13 @@ function openLoginPopup(clickable_link_id, c_type){
         plannto_popup_login_id = clickable_link_id;
         click_type = c_type;
 
-        $('#login-feed').dialog({
-            modal: true,
-            height: 480,
-            width: 275
+        $('#login-feed').bPopup({
+          closeClass:'Closebut',
+          positionStyle: 'absolute',
+          follow: [false, false]
         });
-        $('.Close_dialog').show();
-        $('.ui-dialog-titlebar').hide();
+        //$('.Close_dialog').show();
+        //$('.ui-dialog-titlebar').hide();
     }
 }
 
