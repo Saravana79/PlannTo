@@ -4,7 +4,7 @@
     <span class="img_product_cmp" >
  
       <a href="<%=link_url(item)%>"><img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>" onclick="location.href = '<%=link_url(item)%>'"/></a></span>
-    <p><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
+    <p style="clear:both;"><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
 
     <div class="PlanntoBuyBtncnt" style="align:center;margin-right:60px;">
       <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => item, :related_items => true %>
