@@ -6,10 +6,10 @@
 //$("#contentEditView").dialog('destroy');
 $("#contentEditView").html('');
   $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
-
+$(".Closebut").show();
 $("#contentEditView").bPopup({
    closeClass:'Closebut',
-    position: [350, 100],
+    position: [screen.width / 3, $(window).scrollTop() + 150],
     follow: [false, false] //x, y
  });
  

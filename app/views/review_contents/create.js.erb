@@ -1,5 +1,6 @@
 if(window.opener) {
  window.close();
+ $('.Closebut').click();
 <%if @facebook_post != "1" %>
   window.location.href = "<%= "#{session[:return_to]}" %>"
  <%else%>

@@ -664,20 +664,13 @@
              <%end%>
        </span>
        <div class="points">
-        <span class="indu_span"><a class="text">Reviews</a><a class="values">3070</a></span>        
-        <span class="indu_span"><a class="text">How To</a><a class="values">846</a></span>
-        <span class="indu_span"><a class="text">Travelogue</a><a class="values">2236</a></span>
-        <span class="indu_span"><a class="text">News</a><a class="values">25</a></span>
+        <span class="indu_span"><a class="text">Reviews  <%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}","/cars?fl=Reviews",:class=>"values" %></span>        
+        <span class="indu_span"><a class="text">How To</a> <%= link_to  "#{Content.total_number_of_contents("Car","HowTo/KB")}","/cars?fl=HowTo/KB",:class => "values" %></span>
+        <span class="indu_span"><a class="text">Travelogue</a><%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")}","/cars?fl=Travelogue",:class => "values" %></span>
+        <span class="indu_span"><a class="text">News</a> <%= link_to  "#{Content.total_number_of_contents("Car","News")}","/cars?fl=News",:class => "values" %> </span>
 
       </div>
-
-       <%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}  Reviews","/cars?fl=Reviews" %>&nbsp;&nbsp;&nbsp;  
-       <%= link_to  "#{Content.total_number_of_contents("Car","Deals")} Deals","/cars?fl=Deals" %>&nbsp;&nbsp;&nbsp;  
-       <%= link_to  "#{Content.total_number_of_contents("Car","News")} News","/cars?fl=News" %> &nbsp;&nbsp;&nbsp; 
-       <%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")} Travelogue","/cars?fl=Travelogue" %>
-       <%= link_to  "#{Content.total_number_of_contents("Car","HowTo/KB")} HowTo","/cars?fl=HowTo/KB" %>
-       
-      </div>
+    </div>
       <%end%>
    </div>
    

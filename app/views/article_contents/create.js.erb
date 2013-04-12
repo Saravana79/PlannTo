@@ -18,6 +18,7 @@ if(window.opener) {
   $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article).html_safe %>");
   $("#article_errors").show(300);
 <% else %>
+ $('.Closebut').click();
 <%if params[:content_create_form_type] == "Popup"%>
 $("#contentEditView").dialog('close');
 $(".ui-dialog").css("display", "none"); 

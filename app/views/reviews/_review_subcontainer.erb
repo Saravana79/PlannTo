@@ -1,4 +1,8 @@
 <div id="articleReviewSubContainer" class="contentSubContainer" style="display:none;">
+<%unless @no_popup_background == "true" %>
+<div class="popup-background">
+  <a href="#" class="Closebut" style="display:none;">&nbsp;</a>
+  <%end%>
 <style>
 
 span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
@@ -40,7 +44,7 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
  </div>
 
  <% unless params[:sub_type] %>
-   <div style="float:right;margin-left:2000px;">
+   <div style="float:right;padding:0px 10px 0px 0px;">
        <img  src="/images/newwindow.png" onclick= "open_and_redirect3()" title="Open in new window" style="cursor:pointer;"   />
        </div>
    <%end%> 
@@ -277,7 +281,10 @@ $("#<%= @form_id %>").submit(function(e){
            return false
         <%end%>
         })
-</script>  
-  
+</script> 
+ <div style="clear:both;"></div> 
+<%unless @no_popup_background == "true" %>
+</div>
+<%end%>  
 </div>
  

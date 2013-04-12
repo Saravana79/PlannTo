@@ -1,6 +1,9 @@
 
 <div id="question_contentDiv" style="display:none;" class="contentSubContainer">
-
+<%unless @no_popup_background == "true" %>
+<div class="popup-background">
+  <a href="#" class="Closebut" style="display:none;">&nbsp;</a>
+  <%end%>
   <%if @content.nil?%>
     <%@form_id = "new_question_content"%>
     <%@title_id = "review_content_title"%>
@@ -21,7 +24,7 @@
     <div id="notification" class="notificationStyle"><%if (current_user.total_points rescue 11) > 10 %>Thank You, Question has been created.<%else%> Thanks for sharing the Qusetion. Its sent for approval, once it is reviewed it would be available for others<%end%></div>
   
   <% unless params[:sub_type] %>
-   <div style="float:right;margin-left:2000px;">
+   <div style="float:right;padding:0px 10px 0px 0px;">
        <img  src="/images/newwindow.png" onclick= "open_and_redirect2()" title="Open in new window" style="cursor:pointer;"   />
        </div>
      <%end%> 
@@ -62,7 +65,7 @@
       <div style="clear:both;"></div>
     </div>
     
-       <%unless @content.nil? %>
+     <%unless @content.nil? %>
        <script type="text/javascript">
    <%= render "/shared/text_editor_js" %> 
 </script>
@@ -183,7 +186,10 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
      });
   </script>
     </div>
-   
+   <%unless @no_popup_background == "true" %>
+       <div style="clear:both;"></div>
+   </div>
+  <%end%>
   </div>
 <% end %>
 

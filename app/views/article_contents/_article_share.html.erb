@@ -1,5 +1,9 @@
  <script  type="text/javascript" src="/javascripts/expanding.js"></script>
 <div id="ShareURLDiv" style="padding:5px 5px 0px 5px;display: none;" class="contentSubContainer">
+<%unless @no_popup_background == "true" %>
+ <div class="popup-background">
+   <a href="#" class="Closebut" style="display:none;">&nbsp;</a>
+ <%end%>  
   <div id="notification" class="notificationStyle">Thank You, Article has been created.</div>
  
   <div id="article_errors" style="display:none"></div>
@@ -283,6 +287,9 @@
 
   <% end %>
 </div>
+<%unless @no_popup_background == "true" %>
+</div>
+<%end%>
 <script type="text/javascript">
   var MIN_SIZE=[100,50];
   var first=false;

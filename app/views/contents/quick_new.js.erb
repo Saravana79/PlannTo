@@ -12,12 +12,14 @@ $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)
  <%end%>
  $("#content_create_form_type").val('Popup');
 
-$("#contentEditView").dialog({
-title: 'New <%=@content.type.underscore.humanize%>',
-height: 620,
-width:600});
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();
+$(".Closebut").show();
+$("#contentEditView").bPopup({
+   closeClass:'Closebut',
+    position: [screen.width / 3, $(window).scrollTop() + 150],
+    follow: [false, false] //x, y
+ });
+//$(".Close_dialog").show();
+//$(".ui-dialog-titlebar").hide();
 $("#subContainerContentCreate").show();
 $("#article_content_sub_type").val("<%=@content.sub_type%>");
 $("#question_content_sub_type").val("Q&A");

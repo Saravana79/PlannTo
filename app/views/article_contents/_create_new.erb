@@ -4,7 +4,10 @@
     display: none !important;
 }
 </style>
+<%unless @no_popup_background == "true" %>
 <div class="popup-background">
+  <a href="#" class="Closebut" style="display:none;">&nbsp;</a>
+  <%end%>
   <div id="notification" class="notificationStyle">Thank You, Content has been created.</div>
        <div id="tag">
         </div>
@@ -658,7 +661,9 @@ openLoginPopup("#" + $(this).attr('id'), "submit");
 //}) 
 </script>
  <div style="clear:both;"></div>
-</div>
+<%unless @no_popup_background == "true" %>
+  </div>
+<%end%>
 </div>
 
 
