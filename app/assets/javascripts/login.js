@@ -9,12 +9,13 @@ function openLoginPopup(clickable_link_id, c_type){
 
         $('#login-feed').bPopup({
           closeClass:'Closebut',
-          positionStyle: 'absolute',
+          position: [screen.width / 3, $(window).scrollTop() + 150],
           follow: [false, false]
         });
         //$('.Close_dialog').show();
         //$('.ui-dialog-titlebar').hide();
     }
+    
 }
 
 

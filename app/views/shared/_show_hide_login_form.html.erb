@@ -7,33 +7,37 @@
     $("#plan_to_buy_<%= item.id %>").click(function(){
     $('#dialog-form').bPopup({
     closeClass:'Closebut',
-    positionStyle: 'absolute',
+    position: [screen.width / 3, $(window).scrollTop() + 150],
     follow: [false, false] //x, y
  });
+ return false;
  });
  
  $("#plan_to_own_<%= item.id %>").click(function(){
    $('#dialog-form').bPopup({
    closeClass:'Closebut',
-   positionStyle: 'absolute',
+   position: [screen.width / 3, $(window).scrollTop() + 150],
    follow: [false, false] //x, y
  });
+ return false;
  });
  
  $("#plan_to_follow_<%= item.id %>").click(function(){
    $('#dialog-form').bPopup({
    closeClass:'Closebut',
-   positionStyle: 'absolute',
+   position:[screen.width / 3, $(window).scrollTop() + 150],
    follow: [false, false] //x, y
  });
+ return false;
  });
  
   $("#plan_to_buy_select_<%= item.id %>").click(function(){
    $('#dialog-form').bPopup({
    closeClass:'Closebut',
-   positionStyle: 'absolute',
+   position: [screen.width / 3, $(window).scrollTop() + 150],
    follow: [false, false] //x, y
  });
+ return false;
  });
    //Product.show_login_dialog("#plan_to_buy_<%= item.id %>, #plan_to_own_<%= item.id %>, #plan_to_follow_<%= item.id %>, #plan_to_buy_select_<%= item.id %>");
   <% end %>

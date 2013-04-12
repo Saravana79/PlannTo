@@ -2,10 +2,10 @@
     <tr><td colspan="4"> <img src="/images/offer.jpeg" style="padding-right:5px;float:left;"/><span style="padding-top: 2px;float:left;"><%= " - " + item.offer[0..119] rescue ""%>
       <%if item.offer.size > 120 %> 
         <%= link_to "[Read More]","#",:onclick => "$('#offer_#{item.id}#{site}').bPopup({
-   closeClass:'Closebut',
-    positionStyle: 'absolute',
+    closeClass: 'Closebut',
+    position: [screen.width / 3, $(window).scrollTop() + 150],
     follow: [false, false] 
- });" %> </span> <div id="offer_<%= item.id %><%= site %>" style="display:none; background-color:white;height:200px;width:300px;">
+ });return false;" %> </span> <div id="offer_<%= item.id %><%= site %>" style="display:none; background-color:white;height:200px;width:300px;">
    <a href="#" class="Closebut" style="float:right;padding:5px 5px 0px 0px;">Close</a> 
    <div style="padding:50px 0px 0px 20px">
      <%= item.offer %> </div>  

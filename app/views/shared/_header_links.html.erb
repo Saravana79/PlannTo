@@ -187,19 +187,20 @@
  $("#dialog-form #click_message").hide();
  $('#dialog-form').bPopup({
    closeClass:'Closebut',
-    position: [350, 100],
-    follow: [false, false] //x, y
+    position: [screen.width / 3, $(window).scrollTop() + 150],
+   follow: [false, false] //x, y
  });
  });
  </script>  
  
 <script>
 $(".sign_up_popup").click(function(){
+alert(screen.width / 2);
 $("#sign_up_dialog #click_message").hide();
 $('#sign_up_dialog').bPopup({
    closeClass:'Closebut',
-    position: [350, 100],
-    follow: [false, false] //x, y
+   position: [screen.width / 3, $(window).scrollTop() + 150],
+   follow: [false, false] //x, y
  });
  });
  </script>    
