@@ -1,5 +1,4 @@
-$("#contentEditView").dialog('destroy');
-$(".ui-dialog-content").dialog('destroy')
+$('.Closebut').click();
 if(window.opener) {
 <%if @facebook_post != "1" %>
   window.location.href = "<%= "#{session[:return_to]}" %>"

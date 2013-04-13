@@ -1,7 +1,6 @@
 if(window.opener) {
  window.close();
- $('.Closebut').click();
-<%if @facebook_post != "1" %>
+ <%if @facebook_post != "1" %>
   window.location.href = "<%= "#{session[:return_to]}" %>"
  <%else%>
     window.location.href = "/oauth/new";
@@ -14,8 +13,7 @@ if(window.opener) {
  <% if @products_error == true %>
     $("#products_error").html("<h2>Please select at least one product.</h2>");
  <%else%> 
-   $("#contentEditView").dialog('close');
-   $(".ui-dialog").css("display", "none");
+   $('.Closebut').click();
   <%if @display!='false' %> 
     alert("Thank You,Content Created Sucessfully.")
     $("#newContentList").append('<%= escape_javascript(render_content_type(@reviewcontent)) %>');
@@ -25,8 +23,7 @@ if(window.opener) {
    <%end%>
  <%end%>  
 <%else%> 
- $("#contentEditView").dialog('close');
-$(".ui-dialog").css("display", "none"); 
+ $('.Closebut').click();
  $('#new_review_content')[0].reset();
   $('div#articleReviewSubContainer div#notification').fadeIn('slow');
   setTimeout("$('div#articleReviewSubContainer div#notification').fadeOut('slow');", 5000);

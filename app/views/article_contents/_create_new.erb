@@ -43,14 +43,10 @@
   <div id="article_errors" style="line-height:20px;color: red;"></div>
   <div style="padding:5px 5px 0px 0px;text-align:center">
   <div id="add_photo" style="display:none;">
-   
-    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:500px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
- 
-    <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
-    </div>
+     <span class="Popuptitle"><center> <h1>New Article Content</h1></center></span>
+  </div>
   <script type="text/javascript">
-      function open_and_redirect() {
-  
+   function open_and_redirect() {
      var i =  $("#article_content_sub_type").val();
      $("#sub_1").val(i);
      $("#item_1").val("<%= @item.id rescue ""  %>");
@@ -94,8 +90,6 @@
     </div>
     <%else%>
      <%= hidden_field_tag :detail,@detail%>
-        
-    <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:500px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
    
     <span class="Popuptitle"><center> <h1 id="contentTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
     <div class="title_header float_lft">Title :</div>

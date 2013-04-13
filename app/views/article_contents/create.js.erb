@@ -18,10 +18,9 @@ if(window.opener) {
   $("div#ShareURLDiv div#article_errors").html("<%= errors_for(@article).html_safe %>");
   $("#article_errors").show(300);
 <% else %>
- $('.Closebut').click();
+ 
 <%if params[:content_create_form_type] == "Popup"%>
-$("#contentEditView").dialog('close');
-$(".ui-dialog").css("display", "none"); 
+  $('.Closebut').click();
  <%if @display!='false' %>
   alert("Thank You,Content Created Sucessfully.")
 $("#newContentList").append('<%= escape_javascript(render_content_type(@article)) %>');
@@ -29,8 +28,7 @@ $("#newContentList").append('<%= escape_javascript(render_content_type(@article)
    alert("<%= "Thank you for sharing this #{@article.sub_type.singularize}. Its sent for review, once it is approved it would be available for others." %>")
    <%end%>
 <%else%>
-$("#contentEditView").dialog('close');
-$(".ui-dialog").css("display", "none");
+  $('.Closebut').click();
   <%if @article_create%>
     <%if params[:article_content][:sub_type] == "Photo" && @facebook_post != "1" %>
      window.location.href = "<%= "#{session[:return_to]}" %>"

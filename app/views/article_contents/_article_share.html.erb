@@ -94,9 +94,6 @@
     <%= hidden_field_tag 'share_from_home' %>
     <% if @article_content %>
     <%= hidden_field_tag :detail,@detail%>
-      <%if current_user %>
-   <div class="Close_dialog" style="display:none;width:43px;overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-   <%end%>
     <%end%>
     <%= hidden_field_tag "#{@articles_item_id}" %>
     <%= f.hidden_field :type, :id => "#{@new_article_type}" %>

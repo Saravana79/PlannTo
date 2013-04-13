@@ -2,13 +2,14 @@ $("#content_new").val("");
 $("#articleReviewSubContainer").html("");
 $("#content_new").html("<%= escape_javascript(render 'reviews/review_subcontainer', {:item => @item}) %>");
    $("#articleReviewSubContainer").show();
-   $("#review_new").show();
+   $("#reviewTitle").text('New Review Content');
 $("#content_create_form_type").val("Popup");
-$("#content_new").dialog({
-height: 620,
-width:600});
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();
+$(".Closebut").show();
+$("#content_new").bPopup({
+   closeClass:'Closebut',
+    position: [screen.width / 3, $(window).scrollTop() + 150],
+    follow: [false, false] //x, y
+ });
 
   setTimeout(function() {
 

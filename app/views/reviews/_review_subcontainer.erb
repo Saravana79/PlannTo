@@ -35,16 +35,10 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
   <%#= hidden_field_tag 'default_item_id', @item.try(:id) %>
     <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
     <%= f.hidden_field :sub_type %>
-    <div id="review_new" style="display:none;"%>
-    <div class="Close_dialog" style="display:none;width:43px; 
-overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
-position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+ 
    <%= hidden_field_tag :detail,@detail%>
- <span class="Popuptitle"><center><h1>New Review Content</h1></center></span>
- </div>
-
  <% unless params[:sub_type] %>
-   <div style="float:right;padding:0px 10px 0px 0px;">
+   <div style="float:right;margin-left:2000px">
        <img  src="/images/newwindow.png" onclick= "open_and_redirect3()" title="Open in new window" style="cursor:pointer;"   />
        </div>
    <%end%> 
@@ -67,13 +61,10 @@ position:relative; left:536px; text-indent:-9999px; top:-12px;" onclick="$('.ui-
     }
 </script>
   <div id="products_error" style="color:red;"></div>
-     <%if @content %>
-       <div class="Close_dialog" style="display:none;width:43px; 
-overflow:hidden;height:42px; background:url(../images/pclose_but.png) no-repeat left top;
-position:relative; left:506px; text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+     
    <%= hidden_field_tag :detail,@detail%>
- <span class="Popuptitle"><center> <h1 id="reviewTitle">Edit <%=@content.type.underscore.humanize%></h1> </center></span>
- <%end%>
+ <span class="Popuptitle"><center> <h1 id="reviewTitle">Edit <%=@content.type.underscore.humanize rescue ""%></h1> </center></span>
+
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>
       <div class="float_lft"> <%= f.text_field :title, :style=> "margin-left:5px;width:400px" %> </div>

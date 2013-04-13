@@ -8,8 +8,7 @@ if(window.opener) {
 }
 
 <%if params[:content_create_form_type] == "Popup"%>
-$("#contentEditView").dialog('close');
-$(".ui-dialog").css("display", "none"); 
+$('.Closebut').click(); 
 <%if @display!='false' %> 
    alert("Thank You,Content Created Sucessfully.")
  <%else%>
