@@ -24,6 +24,7 @@
                             <%= product_attribute.name %>
                               <%= link_to "(?)","#",:onclick => "$('#description_#{product_attribute.attribute_id}').bPopup({
    closeClass:'Closebut',
+   modalClose: false,
    position: [screen.width / 3, $(window).scrollTop() + 150],
    follow: [false, false] 
  });return false;", :title => "Description" %>

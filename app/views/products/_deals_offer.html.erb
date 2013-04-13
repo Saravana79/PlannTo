@@ -3,6 +3,7 @@
       <%if item.offer.size > 120 %> 
         <%= link_to "[Read More]","#",:onclick => "$('#offer_#{item.id}#{site}').bPopup({
     closeClass: 'Closebut',
+    modalClose: false,
     position: [screen.width / 3, $(window).scrollTop() + 150],
     follow: [false, false] 
  });return false;" %> </span> <div id="offer_<%= item.id %><%= site %>" style="display:none; background-color:white;height:200px;width:300px;">

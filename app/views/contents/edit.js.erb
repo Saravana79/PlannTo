@@ -8,8 +8,9 @@ $("#contentEditView").html('');
   $("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
 $(".Closebut").show();
 $("#contentEditView").bPopup({
-   closeClass:'Closebut',
-    position: [screen.width / 3, $(window).scrollTop() + 150],
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [screen.width / 4, $(window).scrollTop() + 120],
     follow: [false, false] //x, y
  });
  

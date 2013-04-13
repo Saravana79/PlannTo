@@ -187,7 +187,8 @@
  $("#dialog-form #click_message").hide();
  $('#dialog-form').bPopup({
    closeClass:'Closebut',
-    position: [screen.width / 3, $(window).scrollTop() + 150],
+   modalClose: false,
+   position: [screen.width / 2.5, $(window).scrollTop() + 150],
    follow: [false, false] //x, y
  });
  });
@@ -198,7 +199,8 @@ $(".sign_up_popup").click(function(){
 $("#sign_up_dialog #click_message").hide();
 $('#sign_up_dialog').bPopup({
    closeClass:'Closebut',
-   position: [screen.width / 3, $(window).scrollTop() + 150],
+   modalClose: false,
+   position: [screen.width / 2.5, $(window).scrollTop() + 150],
    follow: [false, false] //x, y
  });
  });

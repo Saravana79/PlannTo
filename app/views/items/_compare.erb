@@ -28,6 +28,7 @@
            <%if (!att.description.nil? && !att.hyperlink.nil?) || (!att.description.blank? && !att.hyperlink.blank?)  %>
                <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%> <%= link_to "(?)","#",:onclick => "$('#description_#{att.id}').bPopup({
    closeClass:'Closebut',
+   modalClose: false,
    position: [screen.width / 3, $(window).scrollTop() + 150],
     follow: [false, false] 
  });return false;", :title => "Description" %>: </b></td>
