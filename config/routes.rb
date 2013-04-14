@@ -126,8 +126,9 @@ resources :accounts do
       get :edit_user_question
       delete :delete_answer
       get :edit_answer
-      put :update_answer
+      post :update_answer
     end
+    
   end
    match 'create_buying_plan' => 'preferences#new'
    match 'preferences/:search_type/:uuid' => 'preferences#show'
