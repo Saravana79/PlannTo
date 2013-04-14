@@ -1,7 +1,9 @@
 
 <!--<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:910px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div> -->
-<br />
-
+<%unless session[:no_popup_background] == "true" %>
+<div class="popup-background" style="width:900px">
+  <a href="#" class="Closebut">&nbsp;</a>
+<%end%>
 <div class="step_main_page" style="padding-top:40px;">
 <div class="main_step">
 	<ul style="margin-left: 50px;">
@@ -69,6 +71,8 @@
   });
  
 </script>
-
+ <div style="clear:both;"></div>
 </div>
-
+<%unless session[:no_popup_background] == "true" %>
+ </div>
+<%end%> 

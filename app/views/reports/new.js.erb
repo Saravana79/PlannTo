@@ -1,17 +1,23 @@
+
 <%if @type == "dealer" %>
   $("#dealer_report").html("<%= escape_javascript(render "reports/dealer",:type => @type,:reportable_object => @reportable_object,:report => @report) %>");
-  $("#dealer_report").dialog({
-height: 500,
-width:650});
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();
+   $(".Closebut").click()
+  $("#dealer_report").bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [screen.width / 4, $(window).scrollTop() + 120],
+    follow: [false, false] //x, y
+ });
+ 
  <%else%> 
     $("#contentEditView").html("");
   $("#contentEditView").html("<%= escape_javascript(render "reports/new",:type => @type,:reportable_object => @reportable_object,:report => @report) %>");
-  $("#contentEditView").dialog({
-height: 500,
-width:650});
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();
+  $(".Closebut").click();
+  $("#contentEditView").bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [screen.width / 4, $(window).scrollTop() + 120],
+    follow: [false, false] //x, y
+ });
  <%end%>
 

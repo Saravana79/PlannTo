@@ -1,5 +1,4 @@
 //$("#giveAdviceDialog").dialog('destroy');
-
 <%if @follow_item %>
 $("#giveAdviceDialog").html("<%= escape_javascript(render "preferences/add_preference_items", :items => get_items_with_constraint(@follow_item, @follow_types) )%>");
 

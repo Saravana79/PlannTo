@@ -1,13 +1,11 @@
-$("#giveAdviceDialog").dialog("destroy");
+$(".Closebut").click();
 $("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/give_advice')) %>');
-
-$("#giveAdviceDialog").dialog({width:600,
-close: function(event, ui) {
-    $("#giveAdviceDialog").dialog('destroy');
-    $('#user_answer_answer').poshytip('destroy');
-  }});
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();  
+$("#giveAdviceDialog").bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [screen.width / 4, $(window).scrollTop() + 120],
+    follow: [false, false] //x, y
+ });
 
 
 

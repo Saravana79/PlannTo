@@ -1,4 +1,5 @@
-<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:850px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+<div class="popup-background" style="width:900px">
+  <a href="#" class="Closebut">&nbsp;</a>
 <div class="rightcolumnbig">
   <div class="searchPack">
     <div class="hdr_Category">Buying Preferences:</div>
@@ -19,7 +20,7 @@
       <%end%>
     <%end%>
   </div>
-
+ <div style="clear:both;"></div>
 <div style="border: 0 solid;float: left;height: auto;width: 700px;">
   <ul class="search_criteria">
     <div class="hdr_Category">Criteria:</div>
@@ -28,7 +29,7 @@
         <li style="float:left;" id="manufacturerAtt" onclick="openPreferenceManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
 
       <%end%>
-      <li style="float:<%if index%2==0%> left<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+      <li style="float:<%if index%2==0%> left<%else%> left<%end%>" class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openPreferenceInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this);return false"><a href=""><%=lookup[:name]%></a></li>
     <%end%>
   </ul>
 </div>
@@ -637,3 +638,5 @@ end%>
     });
 
 </script>
+ <div style="clear:both;"></div>
+</div>

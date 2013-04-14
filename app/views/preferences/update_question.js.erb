@@ -1,9 +1,8 @@
 <%if params[:display_type] == "popup"%>
-$("#giveAdviceDialog").dialog('destroy');
+ $(".Closebut").click();
  window.location.href = "<%=@question.buying_plan.preference_page_url%>?type=create"
 <%else%>
-$(".ui-dialog-content").dialog('destroy')
-$('#updateQuestion').dialog('destroy');
+$(".Closebut").click();
 $('#editQuestion').hide();
 $('#displayQuestion').show();
 $('#question_part').text('<%= @question.question%>');

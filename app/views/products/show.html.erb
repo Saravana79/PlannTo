@@ -285,13 +285,14 @@ $("#dialog-form #click_message").show();
 $(".invite_friends").live('click', function(){
     id = $(this).attr('id');
     $('#invitation_follow_type').val(id);
-    $("#dialog-invite-form").dialog({height: 500,
-      width: 550,
-      modal: true});
-      $(".Close_dialog_invite").show();
-     $(".ui-dialog-titlebar").hide();
-     return false;
-  });
+    $("#dialog-invite-form").bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [screen.width / 4, $(window).scrollTop() + 120],
+    follow: [false, false] //x, y
+ });
+ return false;
+ });
  </script> 
 <br/>
 <%=render :partial =>"items/related_products" %>
@@ -300,7 +301,9 @@ $(".invite_friends").live('click', function(){
 
 <div id="dialog-invite-form" style="display:none">
   <% if current_user %>
-  <div class="Close_dialog_invite" style="display:none;width:43px;overflow:hidden;height:42px;background:url(../images/pclose_but.png) no-repeat left top;position:relative;left:496px;text-indent:-9999px; top:-8px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+ <div class="popup-background">
+  <a href="#" class="Closebut">&nbsp;</a>
+  <%end%>
   <span class="Popuptitle"><center> <h1>Invitation</h1></center></span>
  <%= form_for(@invitation, :remote => true ) do |f| %>
 <div id= "invitation_errors" style="display:none"></div>
@@ -310,9 +313,12 @@ $(".invite_friends").live('click', function(){
 Email : <br /> <%= f.text_field :email %> <br />
 Message : <br />
 <%= f.text_area :message, :rows => 3, :cols => 50,:class=>"expanding" %>
+  <div style="clear:both;"></div>
  <div style="padding:0px 5px 5px 5px; float:right; width:60%; margin-right:40px; margin-top:20px "> 
 <%= f.submit 'Invite', :class => 'btn_submitanswer', 'data-disable-with'=>"Sending invite..." %>
+ 
 </div>
+<div style="clear:both;"></div>
 <span id="spinner2" style="padding:0px 0px 0px 180px;display:none">
   <%= image_tag '/images/ajax-loader.gif' %>
 </span>
@@ -328,10 +334,9 @@ Message : <br />
 </script>
 <% end %>
 
-<%end%>
 
 </div>
-
+</div>
 <style>
  a.txt_price:hover {text-decoration: underline;}
 </style>

@@ -1,8 +1,8 @@
 $("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/edit_preference')) %>');
-$("#giveAdviceDialog").dialog({
-title: '<%=@question.title%>',
-height: 570,
-width:900});
-$("#question_buying_plan_id").val('<%#=@buying_plan.id%>')
-$(".Close_dialog").show();
-$(".ui-dialog-titlebar").hide();
+$(".Closebut").show();
+$("#giveAdviceDialog").bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [screen.width / 18, $(window).scrollTop() + 120],
+    follow: [false, false] //x, y
+ });

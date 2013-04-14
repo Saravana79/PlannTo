@@ -1,5 +1,5 @@
-	<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:540px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
-
+<div class="popup-background">
+   <a href="#" class="Closebut">&nbsp;</a>
 <div  style="margin-left:0px;">
 	<div id=""></div>
 	<div style="padding:5px 5px 5px 115px;clear:both;">
@@ -23,23 +23,33 @@
 </div>
 <div style="padding:5px 5px 5px 0px;clear:both;">
 							
-	<%= form_for @user_answer,:url => { :controller => "preferences", :action => "update_answer", :id => @user_answer.id}, :remote => true, :html => {:id => "getAdviceForm"} do |f|%>
+	<%= form_for @user_answer,:url => { :controller => "preferences", :action => "update_answer", :id => @user_answer.id}, :remote => true, :html => {:id => "getAdviceForm1",:method => :post} do |f1|%>
 			<%= hidden_field_tag :recommendation_ids, @user_answer.recommendations.collect(&:item_id).join(',')%>
 			<div class="title_header float_lft" style="width:100px;">Comments:</div>
 			<div class="float_lft" >
-			<%= f.text_area :answer, :rows=>2, :cols=>60, :style=>"padding-left:5px;width:400px;"%>
+			<%= f1.text_area :answer, :rows=>2, :cols=>60, :style=>"padding-left:5px;width:400px;"%>
 			</div>
 
 			</div>
 			<div style="padding:5px 50px 5px 0px;clear:both;float:right;">
 
-				<%= f.submit 'Update' %>
+				<%= f1.submit 'Update',:id => "advice_form" %>
 
 			</div>
 			<% end %>
+			
+			<script>
+			    $("#advice_form").click(function (e) {
+			        $.post('/preferences/update_answer?id=<%= @user_answer.id %>',$("#getAdviceForm1").serialize(),null,"script");
+			    
+			    });
+			
+			</script>
 <script type="text/javascript">
   $.textTagger("recommendation",
     "recommendation_list",
     {close:true, addButton: false, url: "/search/preference_items", editMode: false, multiple: true, hidden_field: "recommendation_ids", search_type_array: ["Mobile", "Car", "Camera","Tablet","Cycle","Bike"]}
   );
 </script>
+<div style="clear:both;"></div>
+</div>

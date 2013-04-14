@@ -63,7 +63,7 @@ span.defaultSkin table.mceLayout tbody tr.mceLast td.mceStatusbar {
   <div id="products_error" style="color:red;"></div>
      
    <%= hidden_field_tag :detail,@detail%>
- <span class="Popuptitle"><center> <h1 id="reviewTitle">Edit <%=@content.type.underscore.humanize rescue ""%></h1> </center></span>
+ <span class="Popuptitle"><center> <h1 id="reviewTitle"><%= ("Edit" + @content.type.underscore.humanize rescue "")%></h1> </center></span>
 
     <div style="padding:5px 5px 0px 0px;text-align:center">
       <div class="title_header float_lft">Title :</div>

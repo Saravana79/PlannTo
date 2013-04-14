@@ -79,7 +79,7 @@ class PreferencesController < ApplicationController
          if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0
              params[:type] = "Recommendations"
           end  
-              if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0
+           if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0
              params[:type] = "guides"
           end    
       end  
@@ -350,6 +350,7 @@ class PreferencesController < ApplicationController
   end
   
   def new
+    session[:no_popup_background] = ""
     @itemtype = Itemtype.find_by_itemtype(params[:search_type])
     session[:product_warning_message] = ''
     session[:content_warning_message] = ''

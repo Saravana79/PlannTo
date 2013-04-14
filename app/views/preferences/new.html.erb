@@ -1,7 +1,7 @@
 <script>
   $("#giveAdviceDialog").remove();
 </script>
-
+ <% session[:no_popup_background] = "true" %>
 <div id="giveAdviceDialog" style="padding-bottom:20px;">
    <%= render(:partial => '/preferences/new_preference') %>
 </div>
