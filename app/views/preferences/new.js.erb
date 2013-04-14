@@ -8,12 +8,12 @@ $("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferen
 //width:980});
 //$(".Close_dialog").show();
 //$(".ui-dialog-titlebar").hide();
-
+alert("ppppppppppp");
 $(".Closebut").show();
 $("#giveAdviceDialog").bPopup({
     closeClass:'Closebut',
     modalClose: false,
-    position: [screen.width / 18, $(window).scrollTop() + 120],
+    position: [(screen.width / 2) - (920 /2), $(window).scrollTop() + 120],
     follow: [false, false] //x, y
  });
 <%end%>
