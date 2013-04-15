@@ -46,16 +46,23 @@
          </span>
          <div style="float:left;padding-top:5px;">
 						<ul class="divCommentsConent">
+						
+						<li class="subContentGap float_lft" >
+						<li class="subContentGap float_lft" >
+						<li class="subContentGap float_lft" >
+						<li class="subContentGap float_lft" >
+						<li class="subContentGap float_lft" >
+							<a class="txt_blue "><%= render_comments_anchor(buying_plan.user_question).html_safe  %></a>
+							</li></li></li></li></li>
+							<li class="subContentGap float_lft">
+								<a class="txt_gray ">|</a>
+							</li>
+							
 							<li class="subContentGap float_lft" >
 								<a class="txt_blue ">
 									Recommendations (<%=buying_plan.user_question.user_answers.size%>)</a>
 							</li>
-							<li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							</li>
-							<li class="subContentGap float_lft" >
-								<a class="txt_blue "><%= render_comments_anchor(buying_plan.user_question).html_safe  %></a>
-							</li>
+							
 							<!-- <li class="subContentGap float_lft">
 								<a class="txt_gray ">|</a>
 							</li>
@@ -109,14 +116,9 @@
               <br />
               <%= text_area_tag :question,  buying_plan.user_question.question ,:rows=>2,:cols=>60, :class => 'textFilling expanding'%><br/>
               <%= hidden_field_tag :display_type,"popup1" %>
-          
-         <%= f.submit 'Complete',:id => "preference_question1",:class=>"searchButton",:style=>"font-size:15px;" %>
-      
-    
-     
-            <% end %>
-		
-		 <div style="clear:both;"></div>
+              <%= f.submit 'Complete',:id => "preference_question1",:class=>"searchButton",:style=>"font-size:15px;" %>
+           <% end %>
+	        <div style="clear:both;"></div>
 		</div>
 		</div>
 		 	<script type="text/javascript">

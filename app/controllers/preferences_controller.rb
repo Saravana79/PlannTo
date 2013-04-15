@@ -25,9 +25,9 @@ class PreferencesController < ApplicationController
    @considered_items  = []
    @item_ids = []
     
-    if @follow_item == ""
+    if @follow_item == "" || @buying_plan.completed?
        @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
-      
+   
       if @considered_items.size > 0 
         @item_ids =  @considered_items.collect(&:id).join(",")
         if params[:type] == "deals" 
@@ -50,7 +50,7 @@ class PreferencesController < ApplicationController
       @compare_item_ids = @item_ids
       if params[:type] == "deals"
         deals_item_id = Item.get_root_level_id(@itemtype.itemtype)
-        @contents = Content.get_top_active_deals(@item_ids + "," + deals_item_id.to_s)
+        @contents = Content.get_top_active_deals(@item_ids.to_s + "," + deals_item_id.to_s)
       end
       unless session[:counter]
         session[:counter]=1

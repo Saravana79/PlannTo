@@ -19,7 +19,7 @@
 <div style="padding:5px 5px 5px 0px;clear:both;">
 <%= form_for @user_answer,:url => { :controller => "preferences", :action => "save_advice" }, :html => {:id => "saveAdviceForm"} do |f|%>
   <%=f.fields_for :user_question_answers do |uqa|%>
-    <%= hidden_field_tag "user_question_answers[user_question_id]", @question.id %>
+  <%= hidden_field_tag "user_question_answers[user_question_id]", @question.id %>
   <%end%>
   <%=f.fields_for :recommendations do |rec|%>
     <%= hidden_field_tag "recommendations[item_id]" %>
