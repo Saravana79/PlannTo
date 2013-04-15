@@ -81,7 +81,7 @@ class BuyingPlan < ActiveRecord::Base
     UserActivity.where("related_activity_type =? and related_id =?","Buying Plan",self.id).each do|ac|
      ac.destroy
     end 
-    UserActivity.where("related_activity_type =? and related_id in (?)","Buying Plan-Recommend",self.user_answers.id.collect(&:id)).each do|ac|
+    UserActivity.where("related_activity_type =? and related_id in (?)","Buying Plan-Recommend",self.user_question.user_answers.collect(&:id)).each do|ac|
       ac.destroy
     end 
   end

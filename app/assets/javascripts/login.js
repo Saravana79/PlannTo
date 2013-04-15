@@ -10,7 +10,7 @@ function openLoginPopup(clickable_link_id, c_type){
         $('#login-feed').bPopup({
           closeClass:'Closebut',
           modalClose: false,
-          position: [screen.width / 2.5, $(window).scrollTop() + 150],
+          position: [(screen.width / 2) - (270 /2), $(window).scrollTop() + 150],
           follow: [false, false]
         });
         //$('.Close_dialog').show();

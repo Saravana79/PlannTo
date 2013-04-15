@@ -29,8 +29,11 @@
 						<div id="displayQuestion">
 						   <% descr = buying_plan.user_question.question_part %>
 							<a class="txt_black_description" id="question_part_<%= buying_plan.user_question.id %>"><%if  !buying_plan.user_question.question_part.blank? %> <%= buying_plan.user_question.question_part[0..149]%></a>
-							<a href="<%=buying_plan.preference_page_url%>" class="padding_left10 txt_blue"><%if descr.size > 150 %> more... <%end%>  <%elsif buying_plan.user_id == current_user.id %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion_#{buying_plan.id}').dialog({width:550, height:300});$('.Close_dialog').show();
-$('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
+							<a href="<%=buying_plan.preference_page_url%>" class="padding_left10 txt_blue"><%if descr.size > 150 %> more... <%end%>  <%elsif buying_plan.user_id == current_user.id %> Please add more information about your usage or buying preference here 	<%= link_to_function "Edit", "$('#updateQuestion_#{buying_plan.id}').bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [(screen.width / 2) - (520 /2), $(window).scrollTop() + 120],
+    follow: [false, false]});return false;",  :class => "txt_blue"%> <%end%> </a>
 						</div>
 					</div>
 		
@@ -74,8 +77,8 @@ $('.ui-dialog-titlebar').hide();", :class => "txt_blue"%> <%end%> </a>
 								  <%= link_to "Update This","#",:onclick =>  "$('#updateQuestion_#{buying_plan.id}').bPopup({
     closeClass:'Closebut',
     modalClose: false,
-    position: [screen.width / 4, $(window).scrollTop() + 120],
-    follow: [false, false]});return false;", :class => "txt_blue"%>
+    position: [(screen.width / 2) - (520 /2), $(window).scrollTop() + 120],
+    follow: [false, false]});return false;", :class => "txt_blue" %>
 
 							  </li>
 							  <%end%>

@@ -1,4 +1,5 @@
-<div class="Close_dialog" style="width:43px;overflow:hidden;height:42px;background:url(/images/pclose_but.png) no-repeat left top;position:relative;left:540px;text-indent:-9999px; top:-12px;" onclick="$('.ui-dialog-content').dialog('destroy')"></div>
+<div class="popup-background" style="width:920px">
+  <a href="#" class="Closebut">&nbsp;</a>
 <div class="search_block">
    <b> Select <%=@buying_plan.itemtype.itemtype.downcase %> that you owned.</b>
     <div class="title_header" style="padding:0px 0px 0px 25px;width:450px;height:26px;">
@@ -6,7 +7,8 @@
         <!-- Commenting out temporarily -->
          <%#= link_to "Send Report", contact_us_path(:type => "WizardTopic"),:remote=> :true %>
     </div>
-     <%= render "shared/ajax_loader" %>
+      <%= render "shared/ajax_loader" %>
+      <div style="clear:both;"></div>
     </div>
 <script>
    $(document).ready(function() {
@@ -33,7 +35,7 @@ $("#product").autocomplete({
                     url:"/search/autocomplete_items",
                     data:{
                         term:$("#product").val(),
-                        type: "owner",
+                        search_type: '<%=@buying_plan.itemtype.itemtype %>',
                         authenticity_token: window._token,
                         
                     },
@@ -87,4 +89,5 @@ $("#product").autocomplete({
     }
 });
 </script>
-
+<div style="clear:both;"></div>
+</div>
