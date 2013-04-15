@@ -1,11 +1,11 @@
 <!--<h3>Quick content create</h3>-->
 <br/>
 <%count = (@article_categories.size - 1)%>
-<span >
-<div class="Bluecyanbut" style="padding-left:450px;">  <span class='quick_config_btns' >
+<span style="height:30px;display:block;">
+<span class="Bluecyanbut" style="padding-left:450px;display:block;">  <span class='quick_config_btns' >
     <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
   </span>
-</div>
+</span>
       <% @article_categories.each_with_index do |article_category, index| %>
             <%if index == 0%> 
               <span class="Usrdropdown1" style="padding-left:20px;">
