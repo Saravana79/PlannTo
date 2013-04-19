@@ -17,6 +17,7 @@ development:
   popular_mobile_topics: "3204,3202,3203,4017"
   popular_tablet_topics: "4228,3212,3213,4018"
   popular_count: 5
+  photo_field_size: 15
   content_creator_user_ids: "1,7,8"
   root_level_car_id: 3214
   root_level_mobile_id: 3215
