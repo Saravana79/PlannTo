@@ -32,14 +32,20 @@ class Content < ActiveRecord::Base
   has_many :itemtypes, :through => :content_itemtype_relations
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :title, :boost => 3.0, :more_like_this =>true
-    text :description
+    text :title, :boost => 3.0, :more_like_this =>true do |item|
+       item.title.gsub("_","")
+     end
+      
+    text :description do |item|
+      item.description.gsub("_","") 
+    end
+      
     string :sub_type
     integer :total_votes
     integer :comments_count
     time :created_at
     text :name , :boost => 6.0,  :as => :name_ac do |content|
-      content.title
+      content.title.gsub("_","")
     end
    string :status   do |content|
       content.status.to_s

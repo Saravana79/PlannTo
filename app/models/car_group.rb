@@ -6,8 +6,12 @@ class CarGroup < Item
 
 
 searchable :auto_index => true, :auto_remove => true  do
-  text :name , :boost => 3.0,  :as => :name_ac
-  string :name
+   text :name , :boost => 3.0,  :as => :name_ac do |item|
+      item.name.gsub("_","")
+    end 
+   string :name do |item|
+      item.name.gsub("_", " ")
+   end 
   string :status
   integer :orderbyid  do |item|
       item.itemtype.orderby

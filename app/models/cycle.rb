@@ -6,11 +6,17 @@ class Cycle < Product
   has_many :compares, :as => :comparable
 
   searchable :auto_index => true, :auto_remove => true  do
-    text :name , :boost => 2.0,  :as => :name_ac
-    string :name
+    text :name , :boost => 2.0,  :as => :name_ac do |item|
+      item.name.gsub("_","")
+    end  
+    
+    string :name do |item|
+      item.name.gsub("_", " ")
+    end 
+    
     string :status
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name
+      product.manufacturer.name.gsub("_", " ")
     end
     integer :orderbyid  do |item|
       item.itemtype.orderby

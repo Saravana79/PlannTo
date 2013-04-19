@@ -189,7 +189,7 @@ class SearchController < ApplicationController
 
   def search_items
     @items = Sunspot.search(Product.search_type(params[:search_type]) + [Content]) do
-      keywords params[:q], :fields => :name
+      keywords params[:q].gsub("_",""), :fields => :name
       with :status,[1,2,3]
       order_by :class, :desc
       paginate(:page => params[:page], :per_page => 10)
@@ -209,7 +209,7 @@ class SearchController < ApplicationController
         search_type = Product.search_type(params[:search_type])
     end 
     @items = Sunspot.search(search_type) do
-      keywords params[:term], :fields => :name
+      keywords params[:term].gsub("_",""), :fields => :name
       with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
@@ -266,7 +266,7 @@ class SearchController < ApplicationController
   def search_items_by_relavance
     search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
-        fulltext params[:term] do
+        fulltext params[:term].gsub("_","") do
           minimum_match 1
         end
       order_by :score,:desc
@@ -300,7 +300,7 @@ class SearchController < ApplicationController
 
   def autocomplete_manufacturers
     @items = Sunspot.search(Manufacturer) do
-      keywords params[:term], :fields => :name
+      keywords params[:term].gsub("_",""), :fields => :name
       #paginate(:page => 1, :per_page => 6)
     end
 
@@ -310,7 +310,7 @@ class SearchController < ApplicationController
   def preference_items
     search_type = Preference.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
-      keywords params[:term], :fields => :name
+      keywords params[:term].gsub("_",""), :fields => :name
       order_by :class, :desc
       paginate(:page => 1, :per_page => 6)
       order_by :class , :desc
