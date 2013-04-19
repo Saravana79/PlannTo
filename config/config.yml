@@ -77,6 +77,7 @@ production:
   popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165,4128"
   popular_car_topics: ""
   popular_bike_topics: ""
+  photo_field_size: 15
   popular_cycle_topics: "4540,4541,4538,4539,4543"
   popular_mobile_topics: "3204,3202,3203,4017"
   popular_tablet_topics: "4228,3212,3213,4018"
