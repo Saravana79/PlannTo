@@ -12,10 +12,10 @@ class Manufacturer < Item
 
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 5.0,  :as => :name_ac do |item|
-      item.name.gsub("_","")
+      item.name.gsub("-","")
     end 
     string :name do |item|
-      item.name.gsub("_", " ")
+      item.name.gsub("-", "")
     end
     string :status
     integer :orderbyid  do |item|

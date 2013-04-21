@@ -36,7 +36,7 @@ class ImageuploadsController < ApplicationController
       search_type = Product.search_type(params[:search_type])
    end 
     @items = Sunspot.search(search_type) do
-      keywords params[:term].gsub("_",""), :fields => :name
+      keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc

@@ -129,7 +129,7 @@ class ContentsController < ApplicationController
   
   def search_autocomplete_list
     @results = Sunspot.search(Content) do
-      keywords params[:term].gsub("_",""), :fields => :name
+      keywords params[:term].gsub("-",""), :fields => :name
       with :sub_type, "#{params[:sub_type]}"
       with :status, 1
     end

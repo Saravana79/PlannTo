@@ -15,11 +15,11 @@ class Car < Product
   searchable :auto_index => true, :auto_remove => true  do
   
     text :name , :boost => 2.0,  :as => :name_ac do |item|
-      item.name.gsub("_","")
+      item.name.gsub("-","")
     end  
     
     string :name do |item|
-      item.name.gsub("_", " ")
+      item.name.gsub("-", "")
     end 
     
     string :manufacturer, :multiple => true do |product|
