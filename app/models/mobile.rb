@@ -18,7 +18,7 @@ class Mobile < Product
     end 
     string :status
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name.gsub("_", " ")
+      product.manufacturer.name
     end
     time :created_at
     float :rating  do |item|

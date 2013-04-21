@@ -23,7 +23,7 @@ class Car < Product
     end 
     
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name.gsub("_", " ")
+      product.manufacturer.name
     end
     
     string :status

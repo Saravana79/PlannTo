@@ -11,7 +11,7 @@ class Tablet < Product
     end 
     string :status
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name.gsub("_","")
+      product.manufacturer.name
     end
     float :rating  do |item|
       item.rating

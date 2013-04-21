@@ -37,7 +37,7 @@ class Content < ActiveRecord::Base
      end
       
     text :description do |item|
-      item.description.gsub("_","") 
+      item.description
     end
       
     string :sub_type

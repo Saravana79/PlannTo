@@ -16,7 +16,7 @@ class Cycle < Product
     
     string :status
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name.gsub("_", " ")
+      product.manufacturer.name
     end
     integer :orderbyid  do |item|
       item.itemtype.orderby

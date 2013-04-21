@@ -14,7 +14,7 @@ class Camera < Product
     string :status
     
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name.gsub("_", " ")
+      product.manufacturer.name
     end
     
     time :created_at
