@@ -53,7 +53,7 @@
                 <li class="Currentfilter feed_filter" id="All"><a href="#">All</a></li>
                 <%ArticleCategory.by_itemtype_id(0).each do |category|%>
                 <%if category.name == "HowTo/Guide"%>
-                  <li id="HowTo"><a href=""><%=category.name%></a></li>
+                  <li id="HowTo"><a href="">HowTo/Tips</a></li>
                 <%else%>
                 <li id="<%=category.name%>"><a href=""><%=category.name%></a></li>
                 <%end%>

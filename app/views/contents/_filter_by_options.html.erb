@@ -17,7 +17,7 @@
            <%end%>  
           <%@article_categories.each do |category|%>
              <%if category[0]== "HowTo/Guide"%>
-                  <li id="HowTo"><a href=""><%=category[0]%></a></li>
+                  <li id="HowTo"><a href="">HowTo/Tips</a></li>
                 <%else%>
                 <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
                 <%end%>            
@@ -36,7 +36,7 @@
       		$("#filter_page_no").val('1');
         	var id = $(this).attr('id');
         	var sub_type = find_sub_type(id);   
-        	if (sub_type == "All" || sub_type == "Custom" ||  sub_type == "News" || sub_type == "Deals" || sub_type == "Event" || sub_type ==  "Miles" ){
+        	if (sub_type == "All" || sub_type == "Custom" ||  sub_type == "News" || sub_type == "Deals" || sub_type == "Event" || sub_type ==  "Miles" || sub_type ==  "Lists" ){
         		$("span#sortBy").find('a').removeClass('link_active');
         		$("#sortByNewest").addClass("link_active");
         	}     

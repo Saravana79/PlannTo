@@ -490,7 +490,7 @@ class ContentsController < ApplicationController
      elsif sub_type =="QandA" || sub_type == "Q"
       return ["Q&A"]
      elsif sub_type == "Custom"
-      return ["Reviews","Deals"]   
+      return ["Reviews","Deals","Lists"]   
     else
       return sub_type.split(",")
     end

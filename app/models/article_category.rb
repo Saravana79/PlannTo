@@ -13,6 +13,7 @@ class ArticleCategory < ActiveRecord::Base
   MILES = "Miles"
   DEALS = "Deals"
   HOW_TO   = "HowTo/Guide"
+  LIST = "Lists"
   has_one :article_content
   belongs_to :itemtype
   validates_uniqueness_of :name, :scope => [:itemtype_id]

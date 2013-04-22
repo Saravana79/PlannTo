@@ -87,7 +87,7 @@ class ArticleContent < Content
     logger.info "how to"
     tips.each do |tip|
       
-      return ArticleCategory::TIPS if title_words.scan(tip).size >0
+      return ArticleCategory::HOW_TO if title_words.scan(tip).size >0
     end
     reviews.each do |review|
       return ArticleCategory::REVIEWS if title_words.scan(review).size >0
