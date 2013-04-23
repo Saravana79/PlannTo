@@ -448,7 +448,7 @@ class Item < ActiveRecord::Base
          self.item_rating.user_review_total_count = self.item_rating.user_review_total_count + 1   
          self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  self.item_rating.user_review_count) + content.rating.to_f rescue 0.0) / (self.item_rating.user_review_count + 1).to_f   
       else
-        self.item_rating.expert_review_count = self.item_rating.user_review_count + ((content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
+        self.item_rating.expert_review_count = self.item_rating.expert_review_count + ((content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
         self.item_rating.expert_review_total_count = self.item_rating.expert_review_total_count + 1   
          self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) + content.field1.to_f rescue 0.0) / (self.item_rating.expert_review_count + 1).to_f             
     end
