@@ -52,9 +52,9 @@ class ArticleContentsController < ApplicationController
      end    
    
       
-    if((params[:article_content][:sub_type] == "Reviews") && !params[:article_content][:field1].nil? && (params[:article_content][:field1] !="0"))
+    if((params[:article_content][:sub_type] == "Reviews"))
      @defaultitem = Item.find(ids[0])
-     @defaultitem.add_new_rating(params[:article_content][:field1].to_f)
+     @defaultitem.add_new_rating(@article) if @article.id!=nil
     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
@@ -98,6 +98,8 @@ class ArticleContentsController < ApplicationController
        params.delete("content_photos_attributes")
     end 
     art = ArticleContent.find(params[:id])
+    rating = art.field1.to_f rescue 0
+    @item.update_remove_rating(rating,art,true)
     @content =ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
     if params[:submit_url] == 'submit_url' && art.thumbnail!= @content.thumbnail
       ContentPhoto.update_url_content_to_local(@content)
@@ -188,6 +190,10 @@ class ArticleContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
+    rating = art.field1.to_f rescue 0
+    if @content.sub_type == "Reviews"
+      @content.items.first.update_remove_rating(rating,@content,false)
+    end  
   #@item.destroy
   end
   

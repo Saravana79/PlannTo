@@ -1,4 +1,4 @@
-$("#mainContentDiv<%=@content.id%>").remove();
+
 <%if current_user.is_admin? %>
   $("#contentEditView").html('');
   $("#contentEditView").html("<%= escape_javascript(render '/shared/content_reject_reason') %>");
@@ -8,5 +8,8 @@ $("#mainContentDiv<%=@content.id%>").remove();
     position: [(screen.width / 2) - (520/2), $(window).scrollTop() + 120],
     follow: [false, false] //x, y
  });
-<%end%>  
+<%else%>  
+//$("#mainContentDiv<%=@content.id%>").remove();
+window.location.reload();
+<%end%>
   

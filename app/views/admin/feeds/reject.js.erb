@@ -1,4 +1,5 @@
-$("#mainContentDiv<%=@content.id%>").remove();
+//$("#mainContentDiv<%=@content.id%>").remove();
+window.location.reload();
 $("#contentEditView").html('');
   $("#contentEditView").html("<%= escape_javascript(render '/shared/content_reject_reason') %>");
 $("#contentEditView").bPopup({

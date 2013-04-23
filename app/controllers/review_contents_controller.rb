@@ -20,6 +20,7 @@ class ReviewContentsController < ApplicationController
 		     @reviewcontent.save_with_items!(params[:review_item_id])
 		     @item = Item.find params[:review_item_id] unless params[:review_item_id].blank?
 		   end 
+		   params[:review_content]['rating'] = ''
 		end
 		  UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type,@reviewcontent.id,request.remote_ip) 
 		  Follow.content_follow(@reviewcontent,current_user) if @reviewcontent.id!=nil
@@ -33,7 +34,7 @@ class ReviewContentsController < ApplicationController
      
 		  if @reviewcontent
     		unless @products_error == true
-    		 @item.add_new_rating @reviewcontent.rating if @item
+    		 @item.add_new_rating @reviewcontent if @item
         end
          session[:content_id] = @reviewcontent.id
          @facebook_post = params[:facebook_post]
@@ -53,6 +54,7 @@ class ReviewContentsController < ApplicationController
   def update
     @item = Item.find params['item_id'] unless params[:item_id] == ""
     @content = Content.find(params[:id])
+    old_rating = @content.field1.to_f rescue 0
     @detail = params[:detail]
     @content.ip_address = request.remote_ip
     @content.update_with_items!(params['review_content'], params[:item_id])
@@ -67,7 +69,7 @@ class ReviewContentsController < ApplicationController
       paginate(:page => page_no, :per_page => per_page)
     end
      Content.save_thumbnail_using_uploaded_image(@content)
-     
+     @item.update_remove_rating(old_rating,@content,true)
     @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
     @popular_items_ids  = @popular_items.map(&:id).join(",") 
     @related_contents = results.results
@@ -77,6 +79,8 @@ class ReviewContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
+    rating = (content.rating.to_f rescue 0)
+    @content.items.first.update_remove_rating(rating,@content,false)
   end
 
 end

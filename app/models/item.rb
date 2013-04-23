@@ -8,7 +8,7 @@ class Item < ActiveRecord::Base
   TOPIC_FOLLOWTYPES = ["Topic","AttributeTag"]
   ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
   belongs_to :itemtype
-  
+  has_one :item_rating
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
   #
@@ -389,17 +389,25 @@ class Item < ActiveRecord::Base
     else
        item_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f)
     end
-     $redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
-     $redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
-     $redis.hset("items:ratings", "item:#{self.id}:review_count_total",(complete_shared_reviews.size.to_f + complete_created_reviews.size.to_f))
+     #$redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
+     user_review_count = created_reviews.size
+     expert_review_count = shared_reviews.size
+     expert_review_total_count = complete_shared_reviews.size        
+     user_review_total_count = complete_created_reviews.size
+     expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size)
+     user_review_avg_rating = (created_avg_sum)/(created_reviews.size)
+     average_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f)
+     review_count =  user_review_count + expert_review_count
+    #$redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
+     #$redis.hset("items:ratings", "item:#{self.id}:review_count_total",(complete_shared_reviews.size.to_f + complete_created_reviews.size.to_f))
      return item_rating
     #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
    end 
 
+
+
   def rating
-    unless item_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
-      item_rating = self.average_rating
-    end  
+    item_rating = self.item_rating.average_rating
     roundoff_rating item_rating.to_f
   end 
 
@@ -407,27 +415,86 @@ class Item < ActiveRecord::Base
     ((item_rating * 2).round) / 2.0
   end
 
-  def add_new_rating rating
-    prev_rating = $redis.hget("items:ratings", "item:#{self.id}:rating")
+  def add_new_rating(content)
+    prev_rating = self.item_rating.average_rating
     unless prev_rating
-      $redis.hset("items:ratings", "item:#{self.id}:rating",rating)
-      $redis.hset("items:ratings", "item:#{self.id}:review_count",1)
-      
+     if content.is_a?(ArticleContent) 
+      expert_review_count = (content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1
+      expert_review_total_count = 1
+      expert_review_avg_rating =   content.field1.to_f
+      average_rating = content.field1.to_f
+      review_count =  1
+      review_total_count =   1
     else
-      prev_review_count = ($redis.hget("items:ratings", "item:#{self.id}:review_count")).to_i
+      user_review_count =  (content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1
+      user_review_total_count = 1
+      user_review_avg_rating =   content.rating.to_f
+      average_rating = content.rating.to_f
+      review_count =  1
+      review_total_count =   1 
+     end 
+    else
+      prev_review_count = self.item_rating.review_count.to_i
       prev_rating = prev_rating.to_f
-      new_average_rating = ((prev_rating * prev_review_count) + rating) / (prev_review_count + 1).to_f rescue 0.0
-      $redis.hset("items:ratings", "item:#{self.id}:rating",new_average_rating)
-      $redis.hset("items:ratings", "item:#{self.id}:review_count",prev_review_count + 1)      
-    end
-      prev_count_total = $redis.hget("items:ratings", "item:#{self.id}:review_count_total")
-      unless prev_count_total
-        $redis.hset("items:ratings", "item:#{self.id}:review_count_total",1)
+      if content.is_a?(ReviewContent) 
+        new_average_rating = ((prev_rating * prev_review_count) + content.rating.to_f) / (prev_review_count + 1).to_f rescue 0.0
+      elsif 
+         new_average_rating = ((prev_rating * prev_review_count) + content.field1.to_f) / (prev_review_count + 1).to_f rescue 0.0 
+      end   
+      self.item_rating.average_rating = new_average_rating
+      self.item_rating.review_count = prev_review_count + 1
+       if  !content.is_a?(ArticleContent)
+         self.item_rating.user_review_count = self.item_rating.user_review_count + ((content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1).to_i
+         self.item_rating.user_review_total_count = self.item_rating.user_review_total_count + 1   
+         self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  self.item_rating.user_review_count) + content.rating.to_f rescue 0.0) / (self.item_rating.user_review_count + 1).to_f   
       else
-        $redis.hset("items:ratings", "item:#{self.id}:review_count_total",prev_count_total.to_i + 1)
+        self.item_rating.expert_review_count = self.item_rating.user_review_count + ((content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
+        self.item_rating.expert_review_total_count = self.item_rating.expert_review_total_count + 1   
+         self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) + content.field1.to_f rescue 0.0) / (self.item_rating.expert_review_count + 1).to_f             
+    end
+       self.item_rating.save
+     end
+      prev_count_total = self.item_rating.review_total_count
+      unless prev_count_total
+        self.item_rating.update_attribute("review_total_count",1)
+      else
+        self.item_rating.update_attribute("review_total_count",prev_count_total + 1)
       end  
   end
 
+  def update_remove_rating(rating,content,update=false)
+    prev_rating = self.item_rating.average_rating
+    prev_review_count = self.item_rating.review_count.to_i
+    prev_rating = prev_rating.to_f
+    if content.is_a?(ReviewContent) 
+      new_average_rating = ((prev_rating * prev_review_count) - rating) / (prev_review_count - 1).to_f rescue 0.0
+    elsif 
+      new_average_rating = ((prev_rating * prev_review_count) - rating.to_f) / (prev_review_count - 1).to_f rescue 0.0 
+    end  
+      self.item_rating.average_rating = new_average_rating
+      self.item_rating.review_count = prev_review_count - 1
+        if  !content.is_a?(ArticleContent)
+          self.item_rating.user_review_count = self.item_rating.user_review_count - ((rating.to_i == 0 || rating.nil?) ? 0 : 1).to_i
+          self.item_rating.user_review_total_count = self.item_rating.user_review_total_count - 1   
+          self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  self.item_rating.user_review_count) - rating.to_f rescue 0.0) / (self.item_rating.user_review_count - 1).to_f   
+       else
+         self.item_rating.expert_review_count = self.item_rating.expert_review_count.to_i - ((rating.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
+         self.item_rating.expert_review_total_count = self.item_rating.expert_review_total_count - 1   
+         self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) - rating rescue 0.0) / (self.item_rating.expert_review_count - 1).to_f             
+      end
+        self.item_rating.save
+        prev_count_total = self.item_rating.review_total_count
+      unless prev_count_total
+         self.item_rating.update_attribute("review_total_count",1)
+      else
+        self.item_rating.update_attribute("review_total_count",prev_count_total - 1)
+     end  
+     if update == true 
+       self.add_new_rating(content)
+     end
+  end
+  
+   
   def itemtypetag
     Item.find(:first,:conditions =>{:name => self.type.pluralize, :type => "ItemtypeTag"})
   end
