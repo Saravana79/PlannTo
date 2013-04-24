@@ -363,50 +363,6 @@ class Item < ActiveRecord::Base
     end
    end
    
-  def average_rating
-  created_reviews = Array.new
-    complete_created_reviews = self.contents.where(:type => 'ReviewContent' )    
-    complete_created_reviews.each do |rev|
-    created_reviews << rev unless (rev.rating.to_i == 0 || rev.rating.nil?)
-    end
-    shared_reviews = Array.new
-    complete_shared_reviews = self.contents.where("sub_type = '#{ArticleCategory::REVIEWS}' and type != 'ReviewContent'" )   
-    complete_shared_reviews.each do |rev|   
-    shared_reviews << rev unless (rev.field1.to_i == 0 || rev.field1.nil?)
-    end
-    return 0 if (created_reviews.empty? && shared_reviews.empty?)
-    unless created_reviews.empty?
-    created_avg_sum = created_reviews.inject(0){|sum,review| sum += review.rating} 
-    else
-      created_avg_sum = 0
-    end
-    unless shared_reviews.empty?
-    shared_avg_sum = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i}
-    else
-      shared_avg_sum = 0
-    end
-    if(created_avg_sum == 0 && shared_avg_sum == 0)
-      item_rating =  0
-    else
-       item_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f)
-    end
-     #$redis.hset("items:ratings", "item:#{self.id}:rating",item_rating) if item_rating  > 0
-     user_review_count = created_reviews.size
-     expert_review_count = shared_reviews.size
-     expert_review_total_count = complete_shared_reviews.size        
-     user_review_total_count = complete_created_reviews.size
-     expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size) 
-     user_review_avg_rating = (created_avg_sum)/(created_reviews.size) 
-     average_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f) 
-     review_count =  user_review_count + expert_review_count
-    #$redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
-     #$redis.hset("items:ratings", "item:#{self.id}:review_count_total",(complete_shared_reviews.size.to_f + complete_created_reviews.size.to_f))
-     return item_rating
-    #reviews = self.contents.where("(type =:article_content and (field1 != null or field1 != 0)) or type = :review_content ", {:article_content => 'ArticleContent',:review_content =>'ReviewContent'})
-   end 
-
-
-
   def rating
     item_rating = self.item_rating.average_rating rescue 0.0
     roundoff_rating item_rating.to_f
