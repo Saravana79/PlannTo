@@ -54,7 +54,7 @@ class ArticleContentsController < ApplicationController
       
     if((params[:article_content][:sub_type] == "Reviews"))
      @defaultitem = Item.find(ids[0])
-     @defaultitem.add_new_rating(@article) if @article.id!=nil
+     @item.add_new_rating(@article) if @article.id!=nil
     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
