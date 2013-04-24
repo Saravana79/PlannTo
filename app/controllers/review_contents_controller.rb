@@ -79,7 +79,7 @@ class ReviewContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
-    rating = (content.rating.to_f rescue 0)
+    rating = (@content.rating.to_f rescue 0.0)
     @content.items.first.update_remove_rating(rating,@content,false)
   end
 

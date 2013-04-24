@@ -343,22 +343,23 @@ class Item < ActiveRecord::Base
   end
 
   def rated_users_count
-    unless($redis.hget("items:ratings", "item:#{self.id}:review_count_total"))
-      item_rating = self.average_rating
+  if !(self.item_rating.review_total_count rescue false)
+      item_rating = self.rating
+      return item_rating
     end
-   return ($redis.hget("items:ratings", "item:#{self.id}:review_count_total")).to_i
+   return self.item_rating.review_total_count.to_i
   end  
 
   def rated_users_count_group
-   unless($redis.hget("items:ratings1", "item:#{self.id}:review_count_total1"))
+   if !(self.item_rating.review_total_count rescue false)
       item_rating = 0
       
       self.related_cars.each do |c|
-        item_rating += c.average_rating
+        item_rating += c.rating
       end  
      return item_rating
    else
-     return ($redis.hget("items:ratings1", "item:#{self.id}:review_count_total1")).to_i 
+     return self.item_rating.review_total_count.to_i 
     end
    end
    
@@ -394,9 +395,9 @@ class Item < ActiveRecord::Base
      expert_review_count = shared_reviews.size
      expert_review_total_count = complete_shared_reviews.size        
      user_review_total_count = complete_created_reviews.size
-     expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size)
-     user_review_avg_rating = (created_avg_sum)/(created_reviews.size)
-     average_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f)
+     expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size) 
+     user_review_avg_rating = (created_avg_sum)/(created_reviews.size) 
+     average_rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f) 
      review_count =  user_review_count + expert_review_count
     #$redis.hset("items:ratings", "item:#{self.id}:review_count",(created_reviews.size.to_f + shared_reviews.size.to_f)) if item_rating  > 0
      #$redis.hset("items:ratings", "item:#{self.id}:review_count_total",(complete_shared_reviews.size.to_f + complete_created_reviews.size.to_f))
@@ -407,7 +408,7 @@ class Item < ActiveRecord::Base
 
 
   def rating
-    item_rating = self.item_rating.average_rating
+    item_rating = self.item_rating.average_rating rescue 0.0
     roundoff_rating item_rating.to_f
   end 
 
@@ -416,32 +417,41 @@ class Item < ActiveRecord::Base
   end
 
   def add_new_rating(content)
-    prev_rating = self.item_rating.average_rating
-    unless prev_rating
+    prev_rating = self.item_rating.average_rating rescue "no"
+    if prev_rating == "no"
+       r = ItemRating.new
      if content.is_a?(ArticleContent) 
-      expert_review_count = (content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1
-      expert_review_total_count = 1
-      expert_review_avg_rating =   content.field1.to_f
-      average_rating = content.field1.to_f
-      review_count =  1
-      review_total_count =   1
+      
+       r.expert_review_count = (content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1
+       r.expert_review_total_count = 1
+       r.expert_review_avg_rating =   content.field1.to_f rescue 0.0
+       r.average_rating = content.field1.to_f rescue 0.0
+       r.review_count =  1
+       r.review_total_count =   1
+       r.item_id = self.id
+       r.save
+       return true
     else
-      user_review_count =  (content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1
-      user_review_total_count = 1
-      user_review_avg_rating =   content.rating.to_f
-      average_rating = content.rating.to_f
-      review_count =  1
-      review_total_count =   1 
+       r.user_review_count =  (content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1
+       r.user_review_total_count = 1
+       r.user_review_avg_rating =   content.rating.to_f rescue 0.0
+       r.average_rating = content.rating.to_f rescue 0.0
+       r.review_count =  1
+       r.review_total_count =   1 
+       r.item_id = self.id
+       r.save
+       return true
      end 
+     
     else
       prev_review_count = self.item_rating.review_count.to_i
       prev_rating = prev_rating.to_f
-      if content.is_a?(ReviewContent) 
+      if content.is_a?(ReviewContent) &&  !(content.rating.to_i == 0 || content.rating.nil?)
         new_average_rating = ((prev_rating * prev_review_count) + content.rating.to_f) / (prev_review_count + 1).to_f rescue 0.0
-      elsif 
+      elsif content.is_a?(ArticleContent) && !(content.field1.to_i == 0 || content.field1.nil?)
          new_average_rating = ((prev_rating * prev_review_count) + content.field1.to_f) / (prev_review_count + 1).to_f rescue 0.0 
       end   
-      self.item_rating.average_rating = new_average_rating
+      self.item_rating.average_rating = new_average_rating if !new_average_rating.nil? || !new_average_rating.blank?
       self.item_rating.review_count = prev_review_count + 1
        if  !content.is_a?(ArticleContent)
          self.item_rating.user_review_count = self.item_rating.user_review_count + ((content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1).to_i
@@ -466,12 +476,12 @@ class Item < ActiveRecord::Base
     prev_rating = self.item_rating.average_rating
     prev_review_count = self.item_rating.review_count.to_i
     prev_rating = prev_rating.to_f
-    if content.is_a?(ReviewContent) 
+    if content.is_a?(ReviewContent) && !(rating.to_i == 0 || rating.nil?)
       new_average_rating = ((prev_rating * prev_review_count) - rating) / (prev_review_count - 1).to_f rescue 0.0
-    elsif 
+    elsif content.is_a?(ArticleContent)  && !(rating.to_i == 0 || rating.nil?)
       new_average_rating = ((prev_rating * prev_review_count) - rating.to_f) / (prev_review_count - 1).to_f rescue 0.0 
     end  
-      self.item_rating.average_rating = new_average_rating
+      self.item_rating.average_rating = new_average_rating if !new_average_rating.nil? || !new_average_rating.blank?
       self.item_rating.review_count = prev_review_count - 1
         if  !content.is_a?(ArticleContent)
           self.item_rating.user_review_count = self.item_rating.user_review_count - ((rating.to_i == 0 || rating.nil?) ? 0 : 1).to_i

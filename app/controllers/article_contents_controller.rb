@@ -98,8 +98,8 @@ class ArticleContentsController < ApplicationController
        params.delete("content_photos_attributes")
     end 
     art = ArticleContent.find(params[:id])
-    rating = art.field1.to_f rescue 0
-    @item.update_remove_rating(rating,art,true)
+    rating = art.field1.to_f rescue 0.0
+    
     @content =ArticleContent.update_content(params[:id], params[:article_content] || params[:article_create],current_user,ids)
     if params[:submit_url] == 'submit_url' && art.thumbnail!= @content.thumbnail
       ContentPhoto.update_url_content_to_local(@content)
@@ -125,6 +125,7 @@ class ArticleContentsController < ApplicationController
      @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
     @popular_items_ids  = @popular_items.map(&:id).join(",") 
     @related_contents = results.results   
+    @item.update_remove_rating(rating, @content,true)
   end
   
   def download
@@ -190,7 +191,7 @@ class ArticleContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
-    rating = art.field1.to_f rescue 0
+    rating = art.field1.to_f rescue 0.0
     if @content.sub_type == "Reviews"
       @content.items.first.update_remove_rating(rating,@content,false)
     end  
