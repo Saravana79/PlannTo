@@ -34,7 +34,7 @@ class ReviewContentsController < ApplicationController
      
 		  if @reviewcontent
     		unless @products_error == true
-    		 @item.add_new_rating @reviewcontent if @item
+    		  @item.add_new_rating @reviewcontent if @item
         end
          session[:content_id] = @reviewcontent.id
          @facebook_post = params[:facebook_post]
@@ -54,7 +54,7 @@ class ReviewContentsController < ApplicationController
   def update
     @item = Item.find params['item_id'] unless params[:item_id] == ""
     @content = Content.find(params[:id])
-    old_rating = @content.field1.to_f rescue 0
+    old_rating = @content.rating.to_f rescue 0.0
     @detail = params[:detail]
     @content.ip_address = request.remote_ip
     @content.update_with_items!(params['review_content'], params[:item_id])
@@ -77,6 +77,7 @@ class ReviewContentsController < ApplicationController
   
   def destroy
     @content = Content.find(params[:id])
+    
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
     rating = (@content.rating.to_f rescue 0.0)

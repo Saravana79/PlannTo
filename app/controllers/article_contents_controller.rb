@@ -54,7 +54,7 @@ class ArticleContentsController < ApplicationController
       
     if((params[:article_content][:sub_type] == "Reviews"))
      @defaultitem = Item.find(ids[0])
-     @item.add_new_rating(@article) if @article.id!=nil
+        Item.find(params[:articles_item_id]).add_new_rating(@article) if @article.id!=nil
     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
@@ -77,6 +77,12 @@ class ArticleContentsController < ApplicationController
      @tag = 'false'
    end  
    end
+    if params['article_content']['url'] && @article.id!=nil
+       url = params['article_content']['url']
+       url = "http://#{url}" if URI.parse(url).scheme.nil?
+       host = URI.parse(url).host.downcase
+     @article.update_attribute('domain',host.start_with?('www.') ? host[4..-1] : host)
+   end   
     flash[:notice]= "Article uploaded"
     respond_to do |format|
       format.js
@@ -93,6 +99,7 @@ class ArticleContentsController < ApplicationController
     end  
     @item = Item.find(params[:default_item_id]) if params[:default_item_id] != ""
     ids = params["edit_articles_item_id_#{params[:id]}"] || params[:article_create_item_id]
+    item_id = params[:default_item_id].blank? ? params["edit_articles_item_id_#{params[:id]}"] : Item.find(params[:default_item_id])
     #ids = params[:articles_item_id] || params[:article_create_item_id]
     if params[:article_content][:sub_type]!= "Photo"
        params.delete("content_photos_attributes")
@@ -124,8 +131,10 @@ class ArticleContentsController < ApplicationController
     end
      @popular_items = Item.find_by_sql("select * from items where id in (select item_id from item_contents_relations_cache where content_id =#{@content.id}) and itemtype_id in (1, 6, 12, 13, 14, 15) and status in ('1','2')  order by id desc limit 4")
     @popular_items_ids  = @popular_items.map(&:id).join(",") 
-    @related_contents = results.results   
-    @item.update_remove_rating(rating, @content,true)
+    @related_contents = results.results  
+    if params[:article_content][:sub_type] == "Reviews"  
+      Item.find(item_id).update_remove_rating(rating, @content,true)
+    end  
   end
   
   def download
@@ -145,7 +154,7 @@ class ArticleContentsController < ApplicationController
       
       @article.sub_type = params[:article_content][:sub_type]
     end
-  #  @related_items = article_search_by_relevance(@article)
+    #@related_items = article_search_by_relevance(@article)
     @related_items = Array.new
     for row in @related_items
     logger.info row[:value]
