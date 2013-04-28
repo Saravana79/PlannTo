@@ -44,12 +44,17 @@ class UpdateItemRatings < ActiveRecord::Migration
       rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f) rescue 0.0
      
     end  
-       if (created_avg_sum == 0 && shared_avg_sum == 0) || shared_reviews.size == 0 || created_reviews.size == 0
-          expert_review_avg_rating = 0
+       if (created_avg_sum == 0) || created_reviews.size == 0
          user_review_avg_rating = 0 
-      else
+       else
+          user_review_avg_rating = (created_avg_sum)/(created_reviews.size).to_f rescue 0.0
+       end      
+       
+       if  shared_avg_sum == 0 || shared_reviews.size == 0  
+          expert_review_avg_rating = 0
+       else
          expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size).to_f rescue 0.0
-     user_review_avg_rating = (created_avg_sum)/(created_reviews.size).to_f rescue 0.0   end    
+       end    
     
      user_review_count = created_reviews.size
      expert_review_count = shared_reviews.size
