@@ -27,13 +27,9 @@
 								</div>
 								<ul class="divCommentsConent">
 									<li class="subContentGap float_lft" >
-									<li class="subContentGap float_lft" >
-									<li class="subContentGap float_lft" >
-									<li class="subContentGap float_lft" >
-										<li class="subContentGap float_lft" >
-									<li class="subContentGap float_lft" >
+								
 										<a class="txt_blue "><%= render_comments_anchor(ans).html_safe  %></a>
-									</li></li></li></li></li></li>
+									</li>
 									<!-- <li class="subContentGap float_lft">
 										<a class="txt_gray ">|</a>
 									</li>	
@@ -56,7 +52,8 @@
 								<%end%>	
 								<%end%>
 								</ul>
-								<%= render :partial => "comments/new", :locals => { :content => ans }  %>
+								<% @buying_plan_comment = true %>
+								<%= render :partial => "comments/new", :locals => { :content => ans,:buying_plan1 =>  @buying_plan_comment }  %>
 
 							</div>
 						</div>

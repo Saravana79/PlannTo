@@ -53,8 +53,8 @@ class ArticleContentsController < ApplicationController
    
       
     if((params[:article_content][:sub_type] == "Reviews"))
-     @defaultitem = Item.find(ids[0])
-        Item.find(params[:articles_item_id]).add_new_rating(@article) if @article.id!=nil
+      @defaultitem = Item.find(ids[0])
+       Item.find(params[:articles_item_id]).add_new_rating(@article) if @article.id!=nil
     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
@@ -73,16 +73,17 @@ class ArticleContentsController < ApplicationController
    @facebook_post = params[:facebook_post]
    Follow.content_follow(@article,current_user) if @article.id!=nil
    # @article,@images = ArticleContent.CreateContent(@article.url,current_user) unless @article.url.blank?
-   else
-     @tag = 'false'
-   end  
-   end
     if params['article_content']['url'] && @article.id!=nil
        url = params['article_content']['url']
        url = "http://#{url}" if URI.parse(url).scheme.nil?
        host = URI.parse(url).host.downcase
      @article.update_attribute('domain',host.start_with?('www.') ? host[4..-1] : host)
    end   
+   else
+     @tag = 'false'
+   end  
+   end
+   
     flash[:notice]= "Article uploaded"
     respond_to do |format|
       format.js
@@ -201,7 +202,7 @@ class ArticleContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
-    rating = art.field1.to_f rescue 0.0
+    rating = @content.field1.to_f rescue 0.0
     if @content.sub_type == "Reviews"
       @content.items.first.update_remove_rating(rating,@content,false)
     end  

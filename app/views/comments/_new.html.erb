@@ -1,6 +1,11 @@
 <br />
-<a class="arrow_up comments_<%= content.id %>" style="display:none;float:"></a>
-<div id="new_comment_<%= content.id %>" class="subContentDiv_comments comments_bg" style="display:none" last_comment="<%= content.id %>">
+<%if @buying_plan_comment == true %>
+  <a class="arrow_up comments_<%= content.id %>" style="display:none;margin-left:25px;"></a>
+<div id="new_comment_<%= content.id %>" class="subContentDiv_comments comments_bg" style="display:none;margin-left:10px;" last_comment="<%= content.id %>" >
+<%else%>
+  <a class="arrow_up comments_<%= content.id %>" style="display:none;float:"></a>
+   <div id="new_comment_<%= content.id %>" class="subContentDiv_comments comments_bg" style="display:none" last_comment="<%= content.id %>">
+<%end%>
 	<div class="float_rgt"><img src="<% if user_signed_in? %> <%= current_user.get_photo %> <%end%>" class="userImageSmall">
 	</div>
 

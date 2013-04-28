@@ -1,5 +1,19 @@
 class UpdateItemRatings < ActiveRecord::Migration
   def change
+     drop_table :item_ratings
+     create_table :item_ratings, :force => true do |t|
+      t.decimal  :expert_review_avg_rating , :precision => 8, :scale => 2
+      t.integer  :expert_review_count
+      t.integer  :expert_review_total_count
+      t.decimal  :user_review_avg_rating, :precision => 8, :scale => 2
+      t.integer  :user_review_count
+      t.integer  :user_review_total_count
+      t.decimal  :average_rating, :precision => 8, :scale => 2
+      t.integer  :review_count
+      t.integer  :review_total_count
+      t.integer  :item_id 
+      t.timestamps
+    end  
     Item.all.each do |item|  
         created_reviews = Array.new
         complete_created_reviews = item.contents.where(:type => 'ReviewContent' )    
@@ -23,16 +37,25 @@ class UpdateItemRatings < ActiveRecord::Migration
       shared_avg_sum = 0
     end
     if(created_avg_sum == 0 && shared_avg_sum == 0)
+    
       item_rating =  0
+    
     else
       rating = (created_avg_sum + shared_avg_sum)/(created_reviews.size.to_f + shared_reviews.size.to_f) rescue 0.0
+     
     end  
+       if (created_avg_sum == 0 && shared_avg_sum == 0) || shared_reviews.size == 0 || created_reviews.size == 0
+          expert_review_avg_rating = 0
+         user_review_avg_rating = 0 
+      else
+         expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size).to_f rescue 0.0
+     user_review_avg_rating = (created_avg_sum)/(created_reviews.size).to_f rescue 0.0   end    
+    
      user_review_count = created_reviews.size
      expert_review_count = shared_reviews.size
      expert_review_total_count = complete_shared_reviews.size        
      user_review_total_count = complete_created_reviews.size
-     expert_review_avg_rating = (shared_avg_sum)/(shared_reviews.size) rescue 0.0
-     user_review_avg_rating = (created_avg_sum)/(created_reviews.size) rescue 0.0
+   
      average_rating = rating
      review_count =  user_review_count + expert_review_count
      review_total_count =   user_review_total_count   +      expert_review_total_count
