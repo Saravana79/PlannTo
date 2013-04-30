@@ -25,6 +25,12 @@ class Camera < Product
       product.manufacturer.name rescue ''
     end
     
+    float :rating_search_result do |item|
+       item_type_id = Itemtype.find_by_itemtype('Camera').id
+       avearge_rating_of_average  = ItemRating.find_by_sql("select avg(average_rating) as avg1 from item_ratings where item_id in (select id from items where itemtype_id = #{item_type_id}) and (average_rating is not null  or average_rating!=0)").first.avg1.to_f
+      (((item.item_rating.review_count/(item.item_rating.review_count + configatron.rating_m_for_camera.to_i )) * item.item_rating.average_rating) + ((configatron.rating_m_for_camera.to_i/(item.item_rating.review_count+configatron.rating_m_for_camera.to_i))*avearge_rating_of_average )) rescue 0.0
+    end
+      
     time :created_at
     date :launch_date do |item|
      if  (item.attribute_values.where(:attribute_id => 8).first.value.nil? rescue true)
