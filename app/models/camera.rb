@@ -14,18 +14,26 @@ class Camera < Product
     string :status
     
     string :alternative_name do |item|
-      item.alternative_name.gsub("-", "")
+      item.alternative_name.gsub("-", "")  rescue ""
     end  
     
     string :hidden_alternative_name do |item|
-      item.hidden_alternative_name.gsub("-", "")
+      item.hidden_alternative_name.gsub("-", "")  rescue ""
     end
-    
+ 
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name
+      product.manufacturer.name rescue ''
     end
     
     time :created_at
+    date :launch_date do |item|
+     if  (item.attribute_values.where(:attribute_id => 8).first.value.nil? rescue true)
+       item.created_at
+     else
+         (item.attribute_values.where(:attribute_id => 8).first.value.to_date rescue item.created_at)
+     end
+    end    
+    
     integer :orderbyid  do |item|
       item.itemtype.orderby
     end

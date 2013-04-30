@@ -11,11 +11,11 @@ searchable :auto_index => true, :auto_remove => true  do
     end 
     
     string :alternative_name do |item|
-      item.alternative_name.gsub("-", "")
+      item.alternative_name.gsub("-", "") rescue ""
     end  
     
     string :hidden_alternative_name do |item|
-      item.hidden_alternative_name.gsub("-", "")
+      item.hidden_alternative_name.gsub("-", "") rescue ""
     end
     
    string :name do |item|

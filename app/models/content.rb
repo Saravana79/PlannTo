@@ -33,7 +33,7 @@ class Content < ActiveRecord::Base
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true do |item|
-       item.title.gsub("_","")
+       item.title.gsub("_","") rescue ''
      end
       
     text :description do |item|
@@ -45,7 +45,7 @@ class Content < ActiveRecord::Base
     integer :comments_count
     time :created_at
     text :name , :boost => 6.0,  :as => :name_ac do |content|
-      content.title.gsub("_","")
+      content.title.gsub("_","") rescue ''
     end
    string :status   do |content|
       content.status.to_s

@@ -172,6 +172,7 @@ class SearchController < ApplicationController
       paginate(:page => params[:page], :per_page => 10)
       order_by :name if sort_by_option == "Name"
       order_by :rating,:desc if sort_by_option == "Rating"
+      order_by :launch_date,:desc if sort_by_option == "launch_date"
       order_by :created_at,:desc 
       #   order_by :Price, :desc           # descending order , check Documentation link below
     
