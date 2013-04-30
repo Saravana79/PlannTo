@@ -75,6 +75,10 @@ $("#dialog-form #click_message").show();
     <a class="txt_normal"><%=display_specifications(@item)%>
       <%= link_to("...more", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
+    <%if @new_version_item %>
+       <br /><br />
+      <font color="green"> <h3>New version of this product is avaialble: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue"><%= @new_version_item.name rescue ''%></a> </h3> 
+    <%end%>
     <%end%>
      
     <% else %>
@@ -107,37 +111,7 @@ $("#dialog-form #click_message").show();
   <div style="border-bottom: solid 1px #cdd3d7;display:block;" ></div>
   <br/>
   <%end%>
-  <%#unless current_user %>
-  <!--
-    <ul style="border: solid 0px;display: block;padding: 0;margin: 0;height: 25px;list-style: none;text-indent: 18px;border: solid 0px;z-index: 0;">
-      <%# unless ((@item.is_a? Topic) or (@item.is_a? AttributeTag)) %>
-      <li class="icon_reviewcar txt_onhover" style="padding-right:150px;">
-           <a href="#" class="review_tabs" id="review1" data-content="Reviews">Write a Review</a> 
-      </li>
-  
-        <li class="icon_Askquestion txt_onhover" style="padding-right:150px;">
-           <a href="#" class="review_tabs" id="review2" data-content="Q&A">Ask a Question</a> 
-      </li>
-       <li class="icon_sharetip txt_onhover">
-           <a href="#" class="review_tabs" id="review3" data-content="photo">Share an Image</a> 
-      </li>
-    <%#else%>
-         <li class="icon_reviewcar txt_onhover" style="padding-right:150px;">
-           <a href="#" class="review_tabs" id="review1" data-content="Q&A">Ask a Question</a> 
-      </li>
-  
-        <li class="icon_Askquestion txt_onhover" style="padding-right:150px;">
-           <a href="#" class="review_tabs" id="review2" data-content="photo">Share an Image</a> 
-      </li>
-       <li class="icon_sharetip txt_onhover">
-           <a href="#" class="review_tabs" id="review3" data-content="Tips">Share a Tip</a> 
-      </li>
-    <%#end%>
-
-    </ul>
-   <div style="border-bottom: solid 1px #cdd3d7;display:block;" ></div>
-	 -->
-	 <%#end%>
+ 
 	   <script type="text/javascript">
     	
     	$(function(){

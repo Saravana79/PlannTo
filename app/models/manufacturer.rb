@@ -14,6 +14,14 @@ class Manufacturer < Item
     text :name , :boost => 5.0,  :as => :name_ac do |item|
       item.name.gsub("-","")
     end 
+    
+    string :alternative_name do |item|
+      item.alternative_name.gsub("-", "")
+    end  
+    
+    string :hidden_alternative_name do |item|
+      item.hidden_alternative_name.gsub("-", "")
+    end
     string :name do |item|
       item.name.gsub("-", "")
     end

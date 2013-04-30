@@ -68,6 +68,7 @@ class ProductsController < ApplicationController
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
     @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    @new_version_item = Item.find(@item.new_version_item_id) if @item.new_version_item_id
     if !current_user
       @custom = "true"
     end 

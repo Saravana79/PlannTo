@@ -10,6 +10,15 @@ class Tablet < Product
       item.name.gsub("-", "")
     end 
     string :status
+    
+    string :alternative_name do |item|
+      item.alternative_name.gsub("-", "")
+    end  
+    
+    string :hidden_alternative_name do |item|
+      item.hidden_alternative_name.gsub("-", "")
+    end
+    
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name
     end
