@@ -7,21 +7,16 @@ class Bike < Product
 
   searchable :auto_index => true, :auto_remove => true  do
   
-    text :name , :boost => 2.0,  :as => :name_ac do |item|
-      item.name.gsub("-","")
+ 
+    
+    
+     text :name , :boost => 2.0,  :as => :name_ac do |item|
+      item.name.gsub("-","") + item.alternative_name.gsub("-", "")  rescue "" +  item.hidden_alternative_name.gsub("-", "")  rescue ""
     end  
     
     string :name do |item|
       item.name.gsub("-", "")
     end 
-    
-    string :alternative_name do |item|
-      item.alternative_name.gsub("-", "") rescue ""
-    end  
-    
-    string :hidden_alternative_name do |item|
-      item.hidden_alternative_name.gsub("-", "") rescue ""
-    end  
     
     string :status
     string :manufacturer, :multiple => true do |product|

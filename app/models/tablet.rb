@@ -3,22 +3,15 @@ class Tablet < Product
   has_many :compares, :as => :comparable
 
   searchable :auto_index => true, :auto_remove => true  do
-   text :name , :boost => 2.0,  :as => :name_ac do |item|
-      item.name.gsub("-","")
-    end 
+    text :name , :boost => 2.0,  :as => :name_ac do |item|
+      item.name.gsub("-","") + item.alternative_name.gsub("-", "")  rescue "" +  item.hidden_alternative_name.gsub("-", "")  rescue ""
+    end  
+    
     string :name do |item|
       item.name.gsub("-", "")
     end 
     string :status
-    
-    string :alternative_name do |item|
-      item.alternative_name.gsub("-", "")  rescue ""
-    end  
-    
-    string :hidden_alternative_name do |item|
-      item.hidden_alternative_name.gsub("-", "")  rescue ""
-    end
-    
+
     string :manufacturer, :multiple => true do |product|
       product.manufacturer.name rescue ''
     end
