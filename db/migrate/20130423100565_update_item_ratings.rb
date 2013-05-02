@@ -27,12 +27,12 @@ class UpdateItemRatings < ActiveRecord::Migration
     end
       #return 0 if (created_reviews.empty? && shared_reviews.empty?)
       unless created_reviews.empty?
-      created_avg_sum = created_reviews.inject(0){|sum,review| sum += review.rating} 
+      created_avg_sum = created_reviews.inject(0){|sum,review| sum += review.rating.to_f} 
     else
         created_avg_sum = 0
     end
     unless shared_reviews.empty?
-    shared_avg_sum = shared_reviews.inject(0){|sum,review| sum += review.field1.to_i}
+    shared_avg_sum = shared_reviews.inject(0){|sum,review| sum += review.field1.to_f}
     else
       shared_avg_sum = 0
     end

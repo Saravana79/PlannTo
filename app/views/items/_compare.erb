@@ -80,10 +80,15 @@ var ids = '<%= params[:ids] %>'
         }
 if (ids.toString().split(",").length < size )
 {
-$('#compare_popup').dialog({modal: true,height: 480,width: 305 });
- $('.Close_dialog').show();
-        $('.ui-dialog-titlebar').hide();
-   }
+
+  $(".Closebut").show();
+$('#compare_popup').bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [(screen.width / 2) - (520/2), $(window).scrollTop() + 120],
+    follow: [false, false] //x, y
+ });
+ }
 </script>
 <%if @items %>
 <% if !@contents.blank? %>

@@ -408,13 +408,14 @@ class Item < ActiveRecord::Base
          new_average_rating = ((prev_rating * prev_review_count) + content.field1.to_f) / (prev_review_count + 1).to_f rescue 0.0 
       end   
       self.item_rating.average_rating = new_average_rating if !new_average_rating.nil? || !new_average_rating.blank?
-      self.item_rating.review_count = prev_review_count + 1
+      self.item_rating.review_count = prev_review_count + 1 if  !(content.rating.to_i == 0 || content.rating.nil?)
        if  content.is_a?(ReviewContent)
-         self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  self.item_rating.user_review_count) + content.rating.to_f rescue 0.0) / (self.item_rating.user_review_count + 1).to_f  
-         self.item_rating.user_review_count = self.item_rating.user_review_count + ((content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1).to_i
+         self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  self.item_rating.user_review_count) + content.rating.to_f rescue 0.0) / (self.item_rating.user_review_count + 1).to_f if  !(content.rating.to_i == 0 || content.rating.nil?) 
+         self.item_rating.user_review_count = self.item_rating.user_review_count + ((content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1).to_i 
          self.item_rating.user_review_total_count = self.item_rating.user_review_total_count + 1   
       else
-         self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) + content.field1.to_f rescue 0.0) / (self.item_rating.expert_review_count + 1).to_f      
+         self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) + content.field1.to_f rescue 0.0) / (self.item_rating.expert_review_count + 1).to_f if  !(content.rating.to_i == 0 || content.rating.nil?) 
+              
         self.item_rating.expert_review_count = self.item_rating.expert_review_count + ((content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
         self.item_rating.expert_review_total_count = self.item_rating.expert_review_total_count + 1   
      end
@@ -445,11 +446,11 @@ class Item < ActiveRecord::Base
      else
        self.item_rating.average_rating = 0.0
      end    
-      self.item_rating.review_count = prev_review_count - 1
+      self.item_rating.review_count = prev_review_count - 1  if  !(rating.to_i == 0 || rating.nil?)
         if  content.is_a?(ReviewContent)
           u_r_c = self.item_rating.user_review_count.to_i
           if  u_r_c!= 1
-            self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  u_r_c) - rating.to_f rescue 0.0) / (u_r_c - 1).to_f  rescue 0.0
+            self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  u_r_c) - rating.to_f rescue 0.0) / (u_r_c - 1).to_f  rescue 0.0 if  !(rating.to_i == 0 || rating.nil?) 
          else
             self.item_rating.user_review_avg_rating = 0.0
          end    
@@ -457,7 +458,7 @@ class Item < ActiveRecord::Base
           self.item_rating.user_review_total_count = self.item_rating.user_review_total_count - 1   
         else
          if self.item_rating.expert_review_count.to_i != 1
-          self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) - rating rescue 0.0) / (self.item_rating.expert_review_count - 1).to_f rescue 0.0  
+           self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) - rating rescue 0.0) / (self.item_rating.expert_review_count - 1).to_f rescue 0.0  if  !(rating.to_i == 0 || rating.nil?) 
         else
           self.item_rating.expert_review_avg_rating  = 0.0
         end   
