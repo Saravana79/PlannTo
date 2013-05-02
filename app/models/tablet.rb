@@ -3,13 +3,22 @@ class Tablet < Product
   has_many :compares, :as => :comparable
 
   searchable :auto_index => true, :auto_remove => true  do
+
     text :name , :boost => 2.0,  :as => :name_ac do |item|
-      item.name.gsub("-","") + item.alternative_name.gsub("-", "")  rescue "" +  item.hidden_alternative_name.gsub("-", "")  rescue ""
-    end  
-    
-    string :name do |item|
+      tempName = item.name.gsub("-","")
+      if (!item.alternative_name.nil?)
+        tempName = tempName + item.alternative_name.gsub("-", "")
+      end
+      if (!item.hidden_alternative_name.nil?)
+        tempName =tempName +  item.hidden_alternative_name.gsub("-", "")
+      end
+      tempName
+    end     
+     
+    text :nameformlt do |item|
       item.name.gsub("-", "")
     end 
+
     string :status
 
     string :manufacturer, :multiple => true do |product|
@@ -26,7 +35,7 @@ class Tablet < Product
      float :rating_search_result do |item|
        item_type_id = Itemtype.find_by_itemtype('Tablet').id
        avearge_rating_of_average  = ItemRating.find_by_sql("select avg(average_rating) as avg1 from item_ratings where item_id in (select id from items where itemtype_id = #{item_type_id}) and (average_rating is not null  or average_rating!=0)").first.avg1.to_f
-      (((item.item_rating.review_count/(item.item_rating.review_count + configatron.rating_m_for_tablet.to_i )) * item.item_rating.average_rating.to_f) + ((configatron.rating_m_for_tablet.to_i/(item.item_rating.review_count+configatron.rating_m_for_tablet.to_i))*avearge_rating_of_average )).to_f rescue 0.0
+      (((item.item_rating.review_count/(item.item_rating.review_count + configatron.rating_m_for_tablet.to_f )) * item.item_rating.average_rating.to_f) + ((configatron.rating_m_for_tablet.to_f/(item.item_rating.review_count+configatron.rating_m_for_tablet.to_f))*avearge_rating_of_average )).to_f rescue 0.0
     end
     time :created_at
     date :launch_date do |item|
