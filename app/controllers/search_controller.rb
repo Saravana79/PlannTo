@@ -269,6 +269,7 @@ class SearchController < ApplicationController
     @items = Sunspot.search(search_type) do
         fulltext params[:term].gsub("-","") do
           minimum_match 1
+          fields :nameformlt
         end
       order_by :score,:desc
       paginate(:page => 1, :per_page => 10)      
