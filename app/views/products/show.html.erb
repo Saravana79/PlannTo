@@ -77,7 +77,7 @@ $("#dialog-form #click_message").show();
     </a>
     <%if @new_version_item %>
        <br /><br />
-      <font color="green"> <h3>New version of this product is avaialble: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue"><%= @new_version_item.name rescue ''%></a> </h3> 
+      <font color="green"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue"><%= @new_version_item.name rescue ''%></a> </h3> 
     <%end%>
     <%end%>
      
