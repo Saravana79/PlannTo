@@ -35,7 +35,7 @@ development:
   rating_m_for_bike: 2
   rating_m_for_cycle: 1
   rating_m_for_mobile: 5
-  rating_m_for_table: 5
+  rating_m_for_tablet: 5
   rating_m_for_camera: 5
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -105,5 +105,5 @@ production:
   rating_m_for_bike: 2
   rating_m_for_cycle: 1
   rating_m_for_mobile: 5
-  rating_m_for_table: 5
+  rating_m_for_tablet: 5
   rating_m_for_camera: 5
