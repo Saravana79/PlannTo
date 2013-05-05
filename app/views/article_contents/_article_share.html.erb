@@ -801,13 +801,13 @@ if ($("#article_content_sub_type").val() == ""){
   	
   	//onfocus logic
   	
-  	//$("#ShareURLDiv #<%=@search_field_id%>").mouseover(function(){   		
-  	//	if ($(this).autocomplete("widget").is(":visible")) {
-               // return;
-          //  }  
-          //  $(this).trigger('keydown.autocomplete');
-         // $(this).data("autocomplete").search($("#<%=@title_id%>").val());
-   // });
+  	$("#ShareURLDiv #<%=@search_field_id%>").focus(function(){   		
+  		if ($(this).autocomplete("widget").is(":visible")) {
+                return;
+            }  
+            $(this).trigger('keydown.autocomplete');
+          $(this).data("autocomplete").search($("#<%=@title_id%>").val());
+    });
   	//ends
   	
         
