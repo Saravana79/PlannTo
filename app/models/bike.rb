@@ -43,7 +43,7 @@ class Bike < Product
      if (item.attribute_values.where(:attribute_id => 8).first.value.nil? rescue true)
        item.created_at
      else
-       item.attribute_values.where(:attribute_id => 8).first.value.to_date
+       (Date.parse(item.attribute_values.where(:attribute_id => 8).first.value) rescue item.created_at)
      end
     end     
     integer :orderbyid  do |item|
