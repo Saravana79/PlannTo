@@ -155,7 +155,7 @@ class ArticleContentsController < ApplicationController
       
       @article.sub_type = params[:article_content][:sub_type]
     end
-    #@related_items = article_search_by_relevance(@article)
+    @related_items = article_search_by_relevance(@article)
     @related_items = Array.new
     for row in @related_items
     logger.info row[:value]
@@ -167,6 +167,7 @@ class ArticleContentsController < ApplicationController
   search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
         fulltext article.title do
+          fields :nameformlt
           minimum_match 1
         end
       order_by :score,:desc
