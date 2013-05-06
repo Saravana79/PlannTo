@@ -156,7 +156,7 @@ class ArticleContentsController < ApplicationController
       @article.sub_type = params[:article_content][:sub_type]
     end
     @related_items = article_search_by_relevance(@article)
-    @related_items = Array.new
+    #@related_items = Array.new
     for row in @related_items
     logger.info row[:value]
     end
