@@ -21,9 +21,9 @@ class PreferencesController < ApplicationController
     @preferences_list = Preference.get_items(@preferences)
     @itemtype = @buying_plan.itemtype
     @follow_types = Itemtype.get_followable_types(@buying_plan.itemtype.itemtype)
-   @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ""
-   @considered_items  = []
-   @item_ids = []
+    @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer).group_by(&:followable_type) rescue ""
+    @considered_items  = []
+    @item_ids = []
     
     if @follow_item == "" || @buying_plan.completed?
        @considered_items = Item.where('id in (?)',(@buying_plan.items_considered.split(",") rescue 0))
@@ -282,7 +282,7 @@ class PreferencesController < ApplicationController
 
       paginate(:page => page, :per_page => 10)
       order_by :name if sort_by_option == "Name"
-      order_by :rating,:desc if sort_by_option == "Rating"
+      order_by :rating_search_result,:desc if sort_by_option == "Rating"
 
       #   order_by :Price, :desc           # descending order , check Documentation link below
     
