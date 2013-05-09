@@ -380,8 +380,8 @@ class Item < ActiveRecord::Base
       prev_rating = self.item_rating.average_rating.nil? ? 0.0 : self.item_rating.average_rating
     end
 
-    if prev_rating == "no" and self.item_rating.nil?
-       r = ItemRating.new
+    if prev_rating == "no" && self.item_rating.nil?
+      r = ItemRating.new
      if content.is_a?(ArticleContent) 
       
        r.expert_review_count = (content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1
@@ -427,7 +427,7 @@ class Item < ActiveRecord::Base
         self.item_rating.expert_review_count = self.item_rating.expert_review_count + ((content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
         self.item_rating.expert_review_total_count = self.item_rating.expert_review_total_count + 1   
         
-     end
+       end
        self.item_rating.save
      end
       prev_count_total = self.item_rating.review_total_count
