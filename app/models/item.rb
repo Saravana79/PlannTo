@@ -373,7 +373,13 @@ class Item < ActiveRecord::Base
   end
 
   def add_new_rating(content)
-    prev_rating = self.item_rating.average_rating rescue "no"
+     
+    if (self.item_rating.average_rating.nil? or self.item_rating.average_rating.to_f = 0.0)
+      prev_rating = "no"
+    else
+      prev_rating = self.item_rating.average_rating
+    end
+
     if prev_rating == "no"
        r = ItemRating.new
      if content.is_a?(ArticleContent) 
@@ -402,10 +408,10 @@ class Item < ActiveRecord::Base
     else
       prev_review_count = self.item_rating.review_count.to_i
       prev_rating = prev_rating.to_f
-      if content.is_a?(ReviewContent) &&  !(content.rating.to_i == 0 || content.rating.nil?)
+      if content.is_a?(ReviewContent) &&  !(content.rating.to_i == 0 || content.rating.nil? || prev_rating != 0.0)
         new_average_rating = ((prev_rating * prev_review_count) + content.rating.to_f) / (prev_review_count + 1).to_f rescue 0.0
         self.item_rating.review_count = prev_review_count + 1
-      elsif content.is_a?(ArticleContent) && !(content.field1.to_i == 0 || content.field1.nil?)
+      elsif content.is_a?(ArticleContent) && !(content.field1.to_i == 0 || content.field1.nil? || prev_rating != 0.0)
          new_average_rating = ((prev_rating * prev_review_count) + content.field1.to_f) / (prev_review_count + 1).to_f rescue 0.0 
          self.item_rating.review_count = prev_review_count + 1
       end   
@@ -415,11 +421,9 @@ class Item < ActiveRecord::Base
        if  content.is_a?(ReviewContent)
          self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  self.item_rating.user_review_count) + content.rating.to_f rescue 0.0) / (self.item_rating.user_review_count + 1).to_f if  !(content.rating.to_i == 0 || content.rating.nil?) 
          self.item_rating.user_review_count = self.item_rating.user_review_count + ((content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1).to_i 
-         self.item_rating.user_review_total_count = self.item_rating.user_review_total_count + 1   
-        
+         self.item_rating.user_review_total_count = self.item_rating.user_review_total_count + 1           
       else
-         self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) + content.field1.to_f rescue 0.0) / (self.item_rating.expert_review_count + 1).to_f if  !(content.field1.to_i == 0 || content.field1.nil?) 
-              
+        self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) + content.field1.to_f rescue 0.0) / (self.item_rating.expert_review_count + 1).to_f if  !(content.field1.to_i == 0 || content.field1.nil?)               
         self.item_rating.expert_review_count = self.item_rating.expert_review_count + ((content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1).to_i
         self.item_rating.expert_review_total_count = self.item_rating.expert_review_total_count + 1   
         
