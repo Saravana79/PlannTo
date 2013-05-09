@@ -374,13 +374,13 @@ class Item < ActiveRecord::Base
 
   def add_new_rating(content)
      
-    if (self.item_rating.average_rating.nil? or self.item_rating.average_rating.to_f == 0.0)
+    if self.item_rating.nil? 
       prev_rating = "no"
     else
-      prev_rating = self.item_rating.average_rating
+      prev_rating = self.item_rating.average_rating.nil? ? 0.0 : self.item_rating.average_rating
     end
 
-    if prev_rating == "no"
+    if prev_rating == "no" and self.item_rating.nil?
        r = ItemRating.new
      if content.is_a?(ArticleContent) 
       
