@@ -408,10 +408,10 @@ class Item < ActiveRecord::Base
     else
       prev_review_count = self.item_rating.review_count.to_i
       prev_rating = prev_rating.to_f
-      if content.is_a?(ReviewContent) &&  !(content.rating.to_i == 0 || content.rating.nil? || prev_rating != 0.0)
+      if content.is_a?(ReviewContent) &&  !(content.rating.to_i == 0 || content.rating.nil?)
         new_average_rating = ((prev_rating * prev_review_count) + content.rating.to_f) / (prev_review_count + 1).to_f rescue 0.0
         self.item_rating.review_count = prev_review_count + 1
-      elsif content.is_a?(ArticleContent) && !(content.field1.to_i == 0 || content.field1.nil? || prev_rating != 0.0)
+      elsif content.is_a?(ArticleContent) && !(content.field1.to_i == 0 || content.field1.nil?)
          new_average_rating = ((prev_rating * prev_review_count) + content.field1.to_f) / (prev_review_count + 1).to_f rescue 0.0 
          self.item_rating.review_count = prev_review_count + 1
       end   
@@ -443,19 +443,19 @@ class Item < ActiveRecord::Base
     prev_rating = self.item_rating.average_rating
     prev_review_count = self.item_rating.review_count.to_i
     prev_rating = prev_rating.to_f
-    if content.is_a?(ReviewContent) && !(rating.to_i == 0 || rating.nil?)
+    if content.is_a?(ReviewContent) && !(rating.to_i == 0 || rating.nil? || prev_rating == 0.0)
 
       new_average_rating = ((prev_rating * prev_review_count) - rating) / (prev_review_count - 1).to_f rescue 0.0
   
-   elsif content.is_a?(ArticleContent)  && !(rating.to_i == 0 || rating.nil?)
+   elsif content.is_a?(ArticleContent)  && !(rating.to_i == 0 || rating.nil? || prev_rating == 0.0)
       new_average_rating = ((prev_rating * prev_review_count) - rating.to_f) / (prev_review_count - 1).to_f rescue 0.0 
     end  
-     unless prev_review_count.to_i == 1 
+     unless prev_review_count.to_i == 1  || prev_rating == 0.0
        self.item_rating.average_rating = new_average_rating if !new_average_rating.nil? || !new_average_rating.blank?
      else
        self.item_rating.average_rating = 0.0
      end    
-      self.item_rating.review_count = prev_review_count - 1  if  !(rating.to_i == 0 || rating.nil?)
+      self.item_rating.review_count = prev_review_count - 1  if  !(rating.to_i == 0 || rating.nil? || prev_rating == 0.0)
         if  content.is_a?(ReviewContent)
           u_r_c = self.item_rating.user_review_count.to_i
           if  u_r_c!= 1
