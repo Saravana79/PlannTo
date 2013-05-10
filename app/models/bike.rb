@@ -40,7 +40,7 @@ class Bike < Product
        current_date = Date.today
    diff_months = (current_date.year * 12 + current_date.month) - (lunch_date.year * 12 +  lunch_date.month) rescue 0
        rating = (((item.item_rating.review_count/(item.item_rating.review_count + configatron.rating_m_for_bike.to_f )) * item.item_rating.average_rating.to_f) + ((configatron.rating_m_for_bike.to_f/(item.item_rating.review_count+configatron.rating_m_for_bike.to_f))*avearge_rating_of_average )).to_f rescue 0.0
-      rating - diff_months*0.1
+      rating - diff_months*configatron.launch_date_modifier.to_f
      end 
     end  
     end
