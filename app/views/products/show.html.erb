@@ -73,11 +73,11 @@ $("#dialog-form #click_message").show();
     </a><br />
     <% cache ['minimised_specification', @item] do%>
     <a class="txt_normal"><%=display_specifications(@item)%>
-      <%= link_to("...more", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
+      <%= link_to(" - View all specifications", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
     </a>
     <%if @new_version_item %>
        <br /><br />
-      <font color="green"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue"><%= @new_version_item.name rescue ''%></a> </h3> 
+      <font color="green" style="font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%= @new_version_item.name rescue ''%></a> </h3> 
     <%end%>
     <%end%>
      
@@ -108,7 +108,7 @@ $("#dialog-form #click_message").show();
   </div>
   <br/>
   <%if current_user%>
-  <div style="border-bottom: solid 1px #cdd3d7;display:block;" ></div>
+  <div style="border-bottom: solid 1px #cdd3d7;display:block;clear:both;" ></div>
   <br/>
   <%end%>
  
