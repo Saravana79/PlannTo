@@ -17,10 +17,10 @@ class Car < Product
     text :name , :boost => 2.0,  :as => :name_ac do |item|
       tempName = item.name.gsub("-","")
       if (!item.alternative_name.nil?)
-        tempName = tempName + item.alternative_name.gsub("-", "")
+        tempName = tempName + " " +item.alternative_name.gsub("-", "")
       end
       if (!item.hidden_alternative_name.nil?)
-        tempName =tempName +  item.hidden_alternative_name.gsub("-", "")
+        tempName =tempName + " "  item.hidden_alternative_name.gsub("-", "")
       end
       tempName
     end     
