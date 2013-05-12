@@ -12,10 +12,11 @@ class Cycle < Product
         tempName = tempName + " " +item.alternative_name.gsub("-", "")
       end
       if (!item.hidden_alternative_name.nil?)
-        tempName =tempName + " "  item.hidden_alternative_name.gsub("-", "")
+        tempName =tempName + " " + item.hidden_alternative_name.gsub("-", "")
       end
       tempName
     end     
+         
        
      
     text :nameformlt do |item|
