@@ -55,7 +55,7 @@ class Car < Product
     
      time :created_at
     date :launch_date do |item|
-      valuetemp = item.attribute_values.where(:attribute_id => 8).first.value
+     valuetemp = item.attribute_values.where(:attribute_id => 8).first.value rescue ""
      if (valuetemp.nil? or valuetemp == ""  rescue true)
        item.created_at
      else
