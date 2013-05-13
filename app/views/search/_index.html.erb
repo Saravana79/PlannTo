@@ -34,7 +34,7 @@
           <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a><br />
           <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
         </span>
-        <%  new_version_item = Item.find(item.new_version_item_id) if (item.new_version_item_id && item.new_version_item_id != 0)%>
+        <%  new_version_item = Item.find(item.new_version_item_id) if (item.new_version_item_id && item.new_version_item_id != 0) rescue nil%>
      <%if  new_version_item %>
       <font color="green" style="font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%= new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%=  new_version_item.name rescue ''%></a> </h3> 
     <%end%>
