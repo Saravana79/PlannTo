@@ -46,12 +46,13 @@ class Bike < Product
     end  
     end
     date :launch_date do |item|
-     if (item.attribute_values.where(:attribute_id => 8).first.value.nil? rescue true)
+      valuetemp = item.attribute_values.where(:attribute_id => 8).first.value
+     if (valuetemp.nil? or valuetemp == ""  rescue true)
        item.created_at
      else
-       (Date.parse(item.attribute_values.where(:attribute_id => 8).first.value) rescue item.created_at)
+         (Date.parse(valuetemp) rescue item.created_at)
      end
-    end     
+    end    
     integer :orderbyid  do |item|
       item.itemtype.orderby
     end

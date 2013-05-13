@@ -46,10 +46,11 @@ diff_months = (current_date.year * 12 + current_date.month) - (lunch_date.year *
     end
    end
     date :launch_date do |item|
-     if (item.attribute_values.where(:attribute_id => 8).first.value.nil? rescue true)
+      valuetemp = item.attribute_values.where(:attribute_id => 8).first.value
+     if (valuetemp.nil? or valuetemp == ""  rescue true)
        item.created_at
      else
-       (Date.parse(item.attribute_values.where(:attribute_id => 8).first.value) rescue item.created_at)
+         (Date.parse(valuetemp) rescue item.created_at)
      end
     end  
       

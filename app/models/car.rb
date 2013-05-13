@@ -54,13 +54,14 @@ class Car < Product
   end  
     
      time :created_at
-     date :launch_date do |item|
-     if  (item.attribute_values.where(:attribute_id => 8).first.value.nil? rescue true)
+    date :launch_date do |item|
+      valuetemp = item.attribute_values.where(:attribute_id => 8).first.value
+     if (valuetemp.nil? or valuetemp == ""  rescue true)
        item.created_at
      else
-        (Date.parse(item.attribute_values.where(:attribute_id => 8).first.value) rescue item.created_at)
+         (Date.parse(valuetemp) rescue item.created_at)
      end
-    end   
+    end  
      
     integer :orderbyid  do |item|
       item.itemtype.orderby
