@@ -32,12 +32,12 @@ class ArticleContent < Content
             @rating_value = 0
             @rating_value = doc.at("span.rating").inner_text.to_i rescue 0
              unless @rating_value == 0
-               if doc.xpath("span")["itemprop"].to_s == 'rating'
+               if doc.at("span")["itemprop"].to_s == 'rating'
                   @rating_value = doc.at("span").inner_text.to_i rescue 0
                end     
              end  
              unless @rating_value == 0
-               if doc.xpath("span")["itemprop"].to_s == 'value'
+               if doc.at("span")["itemprop"].to_s == 'value'
                  @rating_value = doc.at("span").inner_text.to_i / 2 rescue 0
                end     
             end 
