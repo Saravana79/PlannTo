@@ -29,6 +29,19 @@ class ArticleContent < Content
         begin
             doc = Nokogiri::HTML(open(url))
             @title_info = doc.xpath('.//title').to_s.strip
+            @rating_value = 0
+            @rating_value = doc.at("span.rating").inner_text.to_i rescue 0
+             unless @rating_value == 0
+               if doc.xpath("span")["itemprop"].to_s == 'rating'
+                  @rating_value = doc.at("span").inner_text.to_i rescue 0
+               end     
+             end  
+             unless @rating_value == 0
+               if doc.xpath("span")["itemprop"].to_s == 'value'
+                 @rating_value = doc.at("span").inner_text.to_i / 2 rescue 0
+               end     
+            end 
+           
             doc.xpath("//meta[@name='keywords']/@content").each do |attr|
               @meta_keywords = attr.value
             end
@@ -72,7 +85,7 @@ class ArticleContent < Content
       # rescue => e
       end
     end
-    [@article,@images]
+    [@article,@images,@rating_value]
   end
 
   def find_subtype(title)  
