@@ -47,7 +47,7 @@
       <td valign="top">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
          <%if items.blank? %>
-           <div style="padding:5px;"> <strong> Currently no <%= @buying_plan.itemtype.itemtype.downcase %> are added.</strong></div>
+           <div style="padding:5px;"> <strong> Currently no <%= @buying_plan.itemtype.itemtype.pluralize.downcase %> are added.</strong></div>
          <%end%>  
          <% items.each do |follow| %>
              <%if @buying_plan.completed? || @follow_item == '' %>

@@ -39,7 +39,7 @@
 			<%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
 			<div style="padding:5px;"><strong> Currently, there are no recommendations.</strong></div>
 	<%elsif current_user && current_user.id == @buying_plan.user. id %>
-	<div style="padding:5px;"> <strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %></div>
+	<div style="padding:5px;"> <strong>There are no recommendations yet from your friends/experts, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %></div>
 </div>
 	 <%else%>
 

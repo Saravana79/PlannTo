@@ -82,9 +82,6 @@
 							return false
 							});
 					</script>
-					<br/>
-					
-   
 						<ul class="divCommentsConent dontfloat">
 						<!--	<li class="subContentGap float_lft" >
 								<a class="txt_blue ">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</a>
@@ -147,9 +144,9 @@
 						<%end%> -->
 					</div>
 
-			  <br/>
+<!--			  <br/>
   <div style="border-bottom: solid 1px #cdd3d7;display:none;clear:both;" ></div>
-  <br/>
+  <br/>-->
 
 							<ul id="Newtabs" style="padding-top:15px;">
    <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?overview=true"><span>Overview</span></a></li>
@@ -162,7 +159,7 @@
 					<br />
 		      <%if params[:type] == "Recommendations" %>
 						<!-- Answer this question - Start -->
-			  <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;clear:both;">
+			  <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;clear:both;">
 			  	Suggestions from Friends/Experts
 			  </div>			
 
@@ -174,7 +171,7 @@
 						    
 						  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
 							<div class="alert alert-block">
-<strong>There are no recommendations yet, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
+<strong>There are no recommendations yet from your friends/experts, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
    </div></div>
 						<%elsif %>
 						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
@@ -195,7 +192,7 @@
 								</div>
 							<%end%>
 
-			     <div style="font:bold 12px/45px Tahoma,Arial, Helvetica, sans-serif;padding-top:15px;clear:both;">
+			     <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;padding-top:15px;clear:both;">
 			  	Suggestions from PlannTo 
 			  </div>
 			  	<% if ((!@related_items.nil? and @related_items.size == 0) and (@preferences_list.size == 0 ) )%>
