@@ -22,7 +22,7 @@
     <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><a class="txt_brown"><%=get_anchor_name_link(content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
     <div class="contentsubsection">
       
-      <%if content.thumbnail?%><div style="float:left;width:80px;padding-left:10px;"><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div></div><%end%>
+      <%if content.thumbnail?%><div style="float:left;width:80px;padding-right:10px;"><div><img src="<%= content.thumbnail %>" class="uploadedarticleContentdisplay float_lft"/></div></div><%end%>
     
       <div style="float:left;width:490px;">
           <div class="subContentGap">
