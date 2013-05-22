@@ -230,8 +230,18 @@ module ContentsHelper
     elsif content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
         if(content.field1 != '' && content.field1 != '0')
-          str+="<label class='txt_black_description_detail'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.field1}'></div>"
+          str+="<label class='txt_black_description_detail'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.field1}'></div><br/>"
         end
+        unless content.field2.blank?
+          str+= "<label class='txt_black_description_detail' >Pro :</label><label style='padding-left:2px;'>#{content.field2}</label><br/>"
+        end
+          unless content.field3.blank? 
+           str+= "<label class='txt_black_description_detail'>Con :</label><label style='padding-left:2px;'>#{content.field3}</label><br/>"
+          end 
+           unless content.field4.blank? 
+           str+= "<label class='txt_black_description_detail'>Verdict :</label><label style='padding-left:2px;'>#{content.field4}</label><br/><br/>"
+          end 
+
       else
         str=""
         unless content.rating == 0
@@ -241,7 +251,7 @@ module ContentsHelper
           str+= "<label class='txt_black_description_detail' >Pro :</label><label style='padding-left:2px;'>#{content.pros}</label><br/>"
         end
           unless content.pros.blank? 
-           str+= "<label class='txt_black_description_detail'>Con :</label><label style='padding-left:2px;'>#{content.cons}</label><br/>"
+           str+= "<label class='txt_black_description_detail'>Con :</label><label style='padding-left:2px;'>#{content.cons}</label><br/><br/>"
           end 
       end
     end
