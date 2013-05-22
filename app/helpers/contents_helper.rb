@@ -203,11 +203,17 @@ module ContentsHelper
 
   def get_content_description(content, detail=false)
     wordcount = Content::WORDCOUNT
+    if ((content.is_a?(ArticleContent)) && (content.url?)) 
+        # encoding: UTF-8
+        readmore ="<a class='read_more_class' href=' " + external_content_path(content.id) + "'> Read More</a>"
+    else
+        readmore = ""
+    end
     if detail == false
-      "<div class='txt_black_description'>" + Nokogiri::HTML(content.description).text.split[0..(wordcount-1)].join(" ") + (content.description.split.size > wordcount ? "...": "" + "</div>")
+      "<div class='txt_black_description'>" + Nokogiri::HTML(content.description).text.split[0..(wordcount-1)].join(" ") + (content.description.split.size > wordcount ? "...": "")  + readmore + "</div>"
       #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
     else
-      "<div class='txt_black_description_detail'>" + content.description + "</div>"
+      "<div class='txt_black_description_detail'>" + content.description + readmore + "</div>"
     end
   end
 

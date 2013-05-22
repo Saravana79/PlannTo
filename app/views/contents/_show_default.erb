@@ -229,9 +229,6 @@
 							<%end%>
 							
 						<%= raw get_content_description(content, true)%>
-						<% if ((content.is_a?(ArticleContent)) && (content.url?))  %>
-						<a class="read_more_class" href="<%=external_content_path(content.id)%>">→ Read More</a>
-						<%end%>
 								<br/>
 							
 						</div>
