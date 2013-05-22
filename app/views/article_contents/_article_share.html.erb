@@ -592,6 +592,7 @@ if ($("#article_content_sub_type").val() == ""){
   }
   function showReview()
   {
+
     $("div#ShareURLDiv div#<%=@productReviewRating%>").show();
     $("div#ShareURLDiv #<%=@sharefield2%>").show();
     $("div#ShareURLDiv #<%=@sharefield3%>").show();
@@ -601,7 +602,7 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield3Label%>").text("Con:")
     $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Verdict:")
 
-  <%if @content.nil?%>
+    <%if @content.nil?%>
     $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input id='<%= @field1_id %>' name='article_content[field1]' type='text' style='margin-left:5px;width:150px'/>"); 
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<textarea id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:400px;min-height:40px;' />");
   $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<textarea id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px;min-height:40px;' />");
@@ -612,11 +613,11 @@ if ($("#article_content_sub_type").val() == ""){
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").val('');
   <%else%>
     $("div#ShareURLDiv form#<%=@form_id%> #<%=@field1_id%>").replaceWith("<input class='rating_field' name='article_content[field1]' type='text' style='margin-left:5px;width:150px' value='<%=@content.field1%>'/>");
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<textarea id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:400px;min-height:40px;' value='<%=@content.field2%>'/>");
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<textarea id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px;min-height:40px;' value='<%=@content.field3%>'/>");
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;' value='<%=@content.field4%>'/>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field2_id%>").replaceWith("<textarea id='<%=@field2_id%>' name='article_content[field2]' type='text' style='margin-left:5px;width:400px;min-height:40px;''><%=@content.field2%></textarea>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<textarea id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px;min-height:40px;'><%=@content.field3%></textarea>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;'><%=@content.field4%></textarea>");
   <%end%> 
-  
+    
   } 
  
   
