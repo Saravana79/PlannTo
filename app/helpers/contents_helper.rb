@@ -204,7 +204,7 @@ module ContentsHelper
   def get_content_description(content, detail=false)
     wordcount = Content::WORDCOUNT
     if detail == false
-      "<div class='txt_black_description'>" + Nokogiri::HTML(content.description).text.split[0..(wordcount-1)].join(" ") + "</div>"+ (content.description.split.size > wordcount ? "...": "")
+      "<div class='txt_black_description'>" + Nokogiri::HTML(content.description).text.split[0..(wordcount-1)].join(" ") + (content.description.split.size > wordcount ? "...": "" + "</div>")
       #{}"<a href='#{content_path(content.id)}' class='padding_left10 txt_blue'>more...</a>" : "")
     else
       "<div class='txt_black_description_detail'>" + content.description + "</div>"
@@ -233,13 +233,13 @@ module ContentsHelper
           str+="<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.field1}'></div><br/>"
         end
         unless content.field2.blank?
-          str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Pro :</label><label style='padding-left:2px;'>#{content.field2}</label><br/>"
+          str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Pro :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.field2,150) + "</label><br/>"
         end
           unless content.field3.blank? 
-           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: brown;'>Con :</label><label style='padding-left:2px;'>#{content.field3}</label><br/>"
+           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: brown;'>Con :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.field3,150) + "</label><br/>"
           end 
            unless content.field4.blank? 
-           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Verdict :</label><label style='padding-left:2px;'>#{content.field4}</label><br/><br/>"
+           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Verdict :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.field4,250) + "</label><br/><br/>"
           end 
 
       else
@@ -248,10 +248,10 @@ module ContentsHelper
           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.rating}'></div><br/>"
         end
         unless content.pros.blank?
-          str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Pro :</label><label style='padding-left:2px;'>#{content.pros}</label><br/>"
+          str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Pro :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.pros,200) + "</label><br/>"
         end
           unless content.pros.blank? 
-           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Con :</label><label style='padding-left:2px;'>#{content.cons}</label><br/><br/>"
+           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Con :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.cons,200) + "</label><br/><br/>"
           end 
       end
     end
@@ -276,5 +276,13 @@ module ContentsHelper
   end
   def indefinite_articlerize(params_word)
     %w(a e i o u).include?(params_word[0].downcase) ? "an #{params_word}" : "a #{params_word}"
+  end
+
+  def get_content_based_on_size(params_word,count)
+    if (params_word.size > count)
+      params_word.split[0..(count-1)].join(" ") + "..."
+    else
+      params_word
+    end
   end
 end
