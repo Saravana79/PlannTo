@@ -17,6 +17,7 @@
         <% displayBorder  = 1%>
         <%if index == 0%>
           <tr>
+            <td class="bdb_gray"><%=item.ItemName%></td>
             <td class="bdb_gray1"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
             <td class="bdb_gray1 price_text"><%=display_price_detail(item)%></td>
             <td class="bdb_gray1 font_13"><%=display_shipping_detail(item)%></td>
