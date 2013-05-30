@@ -21,6 +21,7 @@
 <%end%>
 $('div.<%=@dwnld_url%>').show();
 $("#<%=@title_id%>").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));
+$("#<%=@txtArticleDescription%>").attr("value","<%= escape_javascript(@article.description) %>");
 $("#share_spinner").hide();
 $("#<%=@new_article_type%>").val("ArticleContent");
 
