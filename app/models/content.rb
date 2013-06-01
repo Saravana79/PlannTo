@@ -11,11 +11,11 @@ class Content < ActiveRecord::Base
   # extend FriendlyId
   # friendly_id :title, use: :slugged
   has_many :impressions, :as=>:impressionable
+  has_one :facebook_count
   validates_presence_of :title, :unless => lambda{ |content| content.type == "AnswerContent" } 
   validates_presence_of :description, :if => lambda{ |content| content.type == "AnswerContent" } 
   #below line not required.
   #validates_presence_of :created_bye
-
   belongs_to :user, :foreign_key => 'updated_by'
   belongs_to :user, :foreign_key => 'created_by'
   has_many :votes
