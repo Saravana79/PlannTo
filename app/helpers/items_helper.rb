@@ -38,7 +38,7 @@ module ItemsHelper
   def get_displayable_content(item, attribute)
     content = ""
     unless (item.value == "" || item.value.nil? || item.value == "0")
-      if attribute.attribute_type == Attribute::TEXT
+      if attribute.attribute_type == Attribute::TEXT        
         content = "#{item.value}"
       elsif attribute.attribute_type == Attribute::BOOLEAN
         if item.value == "True"
@@ -79,11 +79,11 @@ module ItemsHelper
         end
       end
     end
-    if content.length > 42
+    if content.length > 45
       content = content[0..42] + "..."
     end
     if content != ""
-      content = "<li style='width:220px;display: list-item;float:left;padding-right:5px;'>" + content + "</li>"
+      content = "<li style='width:230px;display: list-item;float:left;padding-right:5px;'>" + content + "</li>"
     end
     return content
   end
