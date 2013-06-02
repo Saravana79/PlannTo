@@ -79,11 +79,11 @@ module ItemsHelper
         end
       end
     end
-    if content.length > 45
-      content = content[0..42] + "..."
+    if content.length > 43
+      content = content[0..39] + "..."
     end
     if content != ""
-      content = "<li style='width:230px;display: list-item;float:left;padding-right:5px;'>" + content + "</li>"
+      content = "<li style='width:240px;display: list-item;float:left;padding-right:5px;'>" + content + "</li>"
     end
     return content
   end
