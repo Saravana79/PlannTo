@@ -134,34 +134,39 @@ class Item < ActiveRecord::Base
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
       
     price = "0"; 
-    item_attribute = item_attributes.select{|a| a.name == item_type}.last
-   
-    if item_attribute
-      attribute_value = item_attribute.attribute_values.where(:item_id => id).last
-      if !attribute_value.blank?
-        if(displaycomment)
-         if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-           item_attribute.name + ' - '  +
-          "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
-          (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
-         else
-            item_attribute.name + ' - '  +
-           number_to_indian_currency(attribute_value.value.to_i)  +
-          (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )") 
-        end  
+
+     item_attribute = item_attributes.select{|a| a.name == item_type}.last
+      if (status == "1" || status == "3")
+        if item_attribute
+          attribute_value = item_attribute.attribute_values.where(:item_id => id).last
+          if !attribute_value.blank?
+            if(displaycomment)
+             if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
+               item_attribute.name + ' - '  +
+              "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
+              (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
+             else
+                item_attribute.name + ' - '  +
+               number_to_indian_currency(attribute_value.value.to_i)  +
+              (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )") 
+            end  
+            else
+            if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
+              "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
+            else
+               number_to_indian_currency(attribute_value.value.to_i)
+            end    
+            end 
+          else
+            ""
+          end
         else
-        if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-          "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
-        else
-           number_to_indian_currency(attribute_value.value.to_i)
-        end    
-        end 
-      else
-        ""
+          ""
+        end
+      elsif status == "2"
+        "Price - N/A [Not yet launched in India]"
       end
-    else
-      ""
-    end
+
   end
 
   def unfollowing_related_items(user, number)

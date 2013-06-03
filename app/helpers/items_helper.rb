@@ -39,7 +39,9 @@ module ItemsHelper
     content = ""
     unless (item.value == "" || item.value.nil? || item.value == "0")
       if attribute.attribute_type == Attribute::TEXT        
-        content = "#{item.value}"
+        unless (attribute.id == 7 && (["bike","tablet","touch","bar","scooter","slr","point & shoot","mirrorless","touchpad"].include?item.value.downcase))          
+           content = "#{item.value}"
+        end
       elsif attribute.attribute_type == Attribute::BOOLEAN
         if item.value == "True"
           content = "Has #{attribute.name}"
