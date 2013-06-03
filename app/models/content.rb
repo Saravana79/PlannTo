@@ -1,5 +1,6 @@
 require 'will_paginate/array'
-
+require 'net/http'
+require 'rexml/document'
 class Content < ActiveRecord::Base
   #used for content description split.
   WORDCOUNT = 50
@@ -67,6 +68,27 @@ class Content < ActiveRecord::Base
     itemtype = Itemtype.where(:itemtype => type).first
     return Content.where(:sub_type => sub_type,:itemtype_id => itemtype.id,:status => 1).count
   end
+  
+ 
+  def facebook_count_save
+    #not working
+    unless self.url.blank? or self.url.nil?
+      url = "http://api.facebook.com/restserver.php?method=http://tech2.in.com/how-to/smartphones/how-to-root-the-samsung-galaxy-s4-i9500/873750"
+      xml_data = Net::HTTP.get_response(URI.parse(url)).body
+      doc = REXML::Document.new(xml_data)
+      counts = []
+      doc.elements.each('share_count/ / /') do |ele|
+        counts << ele.text
+      end
+      f_c = FacebookCount.find_by_content_id(self.id)
+      if f_c.nil? or f_c.blank?
+        #create new row in facebookcounts table
+      else
+        #update column in facebookcounts table
+      end 
+    end  
+  end
+
   
   def self.latest_contents(type)
     itemtype = Itemtype.where(:itemtype => type).first

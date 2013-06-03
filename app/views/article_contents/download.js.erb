@@ -1,3 +1,6 @@
+<%if @duplicate_url == "true"%>
+   alert('This article is already shared in PlannTo.com');
+<%end%>
 <%if @edit_form%>
   <%@title_id = "edit_txtArticleTitle_#{@default_item_id}"%>
   <%@dwnld_url = "edit_dwnld_url_#{@default_item_id}"%>

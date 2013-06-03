@@ -14,7 +14,8 @@ class ContentsController < ApplicationController
     @article = Content.find(params[:id])
   # this assumes you have a current_user method in your authentication system
     @article.impressions.create(ip_address: request.remote_ip,user_id:(current_user.id rescue ''))
-    end
+   end
+   
    def filter
      if params[:item_type_id].is_a?  Array
        itemtype_id = params[:itemtype_id] 
@@ -284,6 +285,7 @@ class ContentsController < ApplicationController
     session[:warning] = "true"
     session[:itemtype] = @content.items.first.get_base_itemtype rescue ""
     content_as_item = ContentAsItem.where(:content_id => @content.id).first
+   # @content.facebook_count_save 
     if  content_as_item.blank?
       per_page = params[:per_page].present? ? params[:per_page] : 6
       page_no  = params[:page_no].present? ? params[:page_no] : 1

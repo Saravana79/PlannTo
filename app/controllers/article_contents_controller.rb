@@ -157,14 +157,16 @@ class ArticleContentsController < ApplicationController
     end
     @related_items = article_search_by_relevance(@article)
     #@related_items = Array.new
+   if params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
+     @duplicate_url = 'true'
+   end  
     for row in @related_items
     logger.info row[:value]
     end
   end # action ends here
   
   def article_search_by_relevance(article)
-  
-  search_type = Product.search_type(params[:search_type])
+    search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
         fulltext article.title do
           fields :nameformlt
@@ -214,6 +216,10 @@ class ArticleContentsController < ApplicationController
     #@article_content = ArticleContent.new
    if current_user 
     #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
+     params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
+   if params['url']  && !ArticleContent.where(:url => params['url']).blank?
+     @duplicate_url = 'true'
+   end
     @article,@images = ArticleContent.CreateContent(params[:url],current_user)
     @article_content= @article
     @external = params[:external]
