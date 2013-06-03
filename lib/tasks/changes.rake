@@ -159,12 +159,12 @@ end
     ItemRating.delete_all
     Item.all.each do |item|  
         created_reviews = Array.new
-        complete_created_reviews = item.contents.where(:type => 'ReviewContent')    
+        complete_created_reviews = item.contents.where("type = 'ReviewContent' and  status = 1")    
         complete_created_reviews.each do |rev|
            created_reviews << rev unless (rev.rating.to_i == 0 || rev.rating.nil?)
         end
         shared_reviews = Array.new
-        complete_shared_reviews = item.contents.where("sub_type = 'Reviews' and type != 'ReviewContent'" )   
+        complete_shared_reviews = item.contents.where("sub_type = 'Reviews' and type != 'ReviewContent' and status = 1" )   
         complete_shared_reviews.each do |rev|   
           shared_reviews << rev unless (rev.field1.to_i == 0 || rev.field1.nil?)
         end
