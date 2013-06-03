@@ -134,34 +134,39 @@ class Item < ActiveRecord::Base
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
       
     price = "0"; 
-    item_attribute = item_attributes.select{|a| a.name == item_type}.last
-   
-    if item_attribute
-      attribute_value = item_attribute.attribute_values.where(:item_id => id).last
-      if !attribute_value.blank?
-        if(displaycomment)
-         if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-           item_attribute.name + ' - '  +
-          "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
-          (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
-         else
-            item_attribute.name + ' - '  +
-           number_to_indian_currency(attribute_value.value.to_i)  +
-          (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )") 
-        end  
+
+     item_attribute = item_attributes.select{|a| a.name == item_type}.last
+      if (status == "1" || status == "3")
+        if item_attribute
+          attribute_value = item_attribute.attribute_values.where(:item_id => id).last
+          if !attribute_value.blank?
+            if(displaycomment)
+             if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
+               item_attribute.name + ' - '  +
+              "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
+              (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
+             else
+                item_attribute.name + ' - '  +
+               number_to_indian_currency(attribute_value.value.to_i)  +
+              (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )") 
+            end  
+            else
+            if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
+              "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
+            else
+               number_to_indian_currency(attribute_value.value.to_i)
+            end    
+            end 
+          else
+            ""
+          end
         else
-        if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-          "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
-        else
-           number_to_indian_currency(attribute_value.value.to_i)
-        end    
-        end 
-      else
-        ""
+          ""
+        end
+      elsif status == "2"
+        "[Not yet launched in India]"
       end
-    else
-      ""
-    end
+
   end
 
   def unfollowing_related_items(user, number)
@@ -388,7 +393,7 @@ class Item < ActiveRecord::Base
        r.expert_review_total_count = 1
        r.expert_review_avg_rating =   content.field1.to_f rescue 0.0
        r.average_rating = content.field1.to_f rescue 0.0
-       r.review_count =  1
+       r.review_count =  (content.field1.to_i == 0 || content.field1.nil?) ? 0 : 1
        r.review_total_count =   1
        r.item_id = self.id
        r.save
@@ -398,7 +403,7 @@ class Item < ActiveRecord::Base
        r.user_review_total_count = 1
        r.user_review_avg_rating =   content.rating.to_f rescue 0.0
        r.average_rating = content.rating.to_f rescue 0.0
-       r.review_count =  1
+       r.review_count =   (content.rating.to_i == 0 || content.rating.nil?) ? 0 : 1
        r.review_total_count =   1 
        r.item_id = self.id
        r.save
@@ -442,7 +447,7 @@ class Item < ActiveRecord::Base
   
     prev_rating = self.item_rating.average_rating
     prev_review_count = self.item_rating.review_count.to_i
-    prev_rating = prev_rating.to_f
+    prev_rating = prev_rating.to_f rescue 0.0
     if content.is_a?(ReviewContent) && !(rating.to_i == 0 || rating.nil? || prev_rating == 0.0)
 
       new_average_rating = ((prev_rating * prev_review_count) - rating) / (prev_review_count - 1).to_f rescue 0.0
@@ -455,11 +460,13 @@ class Item < ActiveRecord::Base
      else
        self.item_rating.average_rating = 0.0
      end    
-      self.item_rating.review_count = prev_review_count - 1  if  !(rating.to_i == 0 || rating.nil? || prev_rating == 0.0)
+        self.item_rating.review_count = prev_review_count - 1  if  !(rating.to_i == 0 || rating.nil? || prev_rating == 0.0)
         if  content.is_a?(ReviewContent)
           u_r_c = self.item_rating.user_review_count.to_i
           if  u_r_c!= 1
-            self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  u_r_c) - rating.to_f rescue 0.0) / (u_r_c - 1).to_f  rescue 0.0 if  !(rating.to_i == 0 || rating.nil?) 
+            if !(rating.to_i == 0 || rating.nil?)
+              self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  u_r_c) - rating.to_f rescue 0.0) / (u_r_c - 1).to_f  rescue 0.0 if  !(rating.to_i == 0 || rating.nil?) 
+            end
          else
             self.item_rating.user_review_avg_rating = 0.0
          end    
@@ -467,7 +474,9 @@ class Item < ActiveRecord::Base
           self.item_rating.user_review_total_count = self.item_rating.user_review_total_count - 1   
         else
          if self.item_rating.expert_review_count.to_i != 1
-           self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) - rating rescue 0.0) / (self.item_rating.expert_review_count - 1).to_f rescue 0.0  if  !(rating.to_i == 0 || rating.nil?) 
+           if !(rating.to_i == 0 || rating.nil?)
+            self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) - rating rescue 0.0) / (self.item_rating.expert_review_count - 1).to_f rescue 0.0  if  !(rating.to_i == 0 || rating.nil?) 
+           end
         else
           self.item_rating.expert_review_avg_rating  = 0.0
         end   
@@ -476,12 +485,13 @@ class Item < ActiveRecord::Base
       end
         self.item_rating.save
         prev_count_total = self.item_rating.review_total_count
+
       unless prev_count_total
          self.item_rating.update_attribute("review_total_count",1)
       else
         self.item_rating.update_attribute("review_total_count",prev_count_total - 1)
      end  
-     if update == true 
+     if (update == true  && content.sub_type == "Reviews")
        self.add_new_rating(content)
      end
   end

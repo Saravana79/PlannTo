@@ -36,7 +36,8 @@
         </span>
         <%  new_version_item = Item.find(item.new_version_item_id) if (item.new_version_item_id && item.new_version_item_id != 0) rescue nil%>
      <%if  new_version_item %>
-      <font color="green" style="font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%= new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%=  new_version_item.name rescue ''%></a> </h3> 
+      <br/>
+      <font color="green" style="font-size:12px;"> <h3 style="clear:both;padding-top:5px;">New version of this product is available: </font> <a href="<%= new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%=  new_version_item.name rescue ''%></a> </h3> 
     <%end%>
         <span class="float_rgt" style="display:inline;">
           <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item, :related_items => false %>

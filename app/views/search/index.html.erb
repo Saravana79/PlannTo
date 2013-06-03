@@ -14,13 +14,11 @@
       <%end%>
       <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Available <%=@search_type.pluralize.humanize%><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%></span>
       </span>      
-      <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, false, :onclick => "setSearchStatus();"%></span>
+      <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, true, :onclick => "setSearchStatus();"%></span>
+     </span>
+     <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Discontinued <%=@search_type.pluralize.humanize%><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();"%></span>
      </span>
       <br/>
-      <span style="display:none;">
-      <a href="" >Nonavailable <%=@search_type.pluralize.humanize%></a><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();" %>
-      </span>
-
       <br/>      
     </ul>
   </div>
@@ -113,7 +111,7 @@
 </div>
 <%= form_for(:search, :url =>{:action=>"index",:controller=>"search"}, :html => { :method => :post, :id => "searchForm"}) do |f| %>
   <%= hidden_field_tag :page %>
-  <%= hidden_field_tag :status, 1%>
+  <%= hidden_field_tag :status, "1,2"%>
   <%= hidden_field_tag :search_type, @search_type %>
   <%= hidden_field_tag :sort_by, @sort_by %>
   <%=hidden_field_tag :manufacturer%>
@@ -149,10 +147,10 @@ function store_status_ids(type, sender) {
     $(value_selector).val(ids.toString());
 };
 
-  function setSearchStatus(){
+function setSearchStatus(){
   	$("#status").val('');
 if ($('#future_status').is(':checked')) {
-	store_status_ids("status", 2)
+store_status_ids("status", 2)
 }
 if ($('#current_status').is(':checked')) {
 	store_status_ids("status", 1)

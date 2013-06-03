@@ -13,31 +13,35 @@ module ItemsHelper
   end
   
   def display_specifications(item)
-    specifications = Array.new
+    specifications = ""
     attributes_list = Array.new
     attributes_list =  Rails.cache.fetch("attributes_list")
+    attributes_list = nil
     if attributes_list.nil?
       attributes_list = Attribute.where(:priority => true).to_a
       Rails.cache.write('attributes_list', attributes_list)
     end
-    item.attribute_values.each do |att|
+    item.attribute_values.joins(:attribute).order("attributes.sortorder").each do |att|
       field = ""
       attributes_list.each do |list|
         field = list if list.id == att.attribute_id
       end
       if field != ""
         content = get_displayable_content(att, field)
-        specifications << content if content != ""
+        specifications = specifications + content if content != ""
       end
     end
-    specifications.to_sentence
+    specificationstemp = "<ul style='list-style-type: disc;font-size: 11px;padding:0px 0px 15px 15px;'>" + specifications + "</ul>"
+    specificationstemp.html_safe 
   end
 
   def get_displayable_content(item, attribute)
     content = ""
     unless (item.value == "" || item.value.nil? || item.value == "0")
-      if attribute.attribute_type == Attribute::TEXT
-        content = "#{item.value}"
+      if attribute.attribute_type == Attribute::TEXT        
+        unless (attribute.id == 7 && (["bike","tablet","touch","bar","scooter","slr","point & shoot","mirrorless","touchpad"].include?item.value.downcase))          
+           content = "#{item.value}"
+        end
       elsif attribute.attribute_type == Attribute::BOOLEAN
         if item.value == "True"
           content = "Has #{attribute.name}"
@@ -45,30 +49,44 @@ module ItemsHelper
       elsif attribute.attribute_type == Attribute::NUMERIC
         if (attribute.unit_of_measure == "GB" && item.value.to_f < 1)
           value = convert_to_MB(item.value.to_f)
-          content = "#{attribute.name} - #{value} MB" if value != 0
+          content = "#{value} MB #{attribute.name}" if value != 0
         elsif (attribute.unit_of_measure == "MB" && item.value.to_f >= 1024)
           value = convert_to_GB(item.value.to_f)
-          content = "#{attribute.name} - #{value} GB" if value != 0
+          content = "#{value} GB #{attribute.name} " if value != 0
         elsif (attribute.unit_of_measure == "GHz" && item.value.to_f < 1)
           value = convert_to_MHz(item.value.to_f)
-          content = "#{attribute.name} - #{value} MHz" if value != 0
+          content = "#{value} MHz #{attribute.name}" if value != 0
         elsif (attribute.unit_of_measure == "MHz" && item.value.to_f >= 1000)
           value = convert_to_GHz(item.value.to_f)
-          content = "#{attribute.name} - #{value} GHz" if value != 0
+          content = "#{value} GHz #{attribute.name}" if value != 0
         else
-          content += "#{attribute.name} - #{item.value}"
+          content += "#{item.value}"
           unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
             content += "  #{attribute.unit_of_measure}"
           end
+          content += " #{attribute.name}"
         end
       else
-        content = "#{attribute.name} - #{item.value}"
-        unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
-          content += "  #{attribute.unit_of_measure}"
+        if attribute.id == 8
+          content = "Launched on #{item.value}"
+          
+
+        else
+          content = "#{item.value}"
+          unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
+            content += "  #{attribute.unit_of_measure}"
+          end
+
+          content += " #{attribute.name}"
         end
       end
     end
-
+    if content.length > 43
+      content = content[0..39] + "..."
+    end
+    if content != ""
+      content = "<li style='width:240px;display: list-item;float:left;padding-right:5px;'>" + content + "</li>"
+    end
     return content
   end
 

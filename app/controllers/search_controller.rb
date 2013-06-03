@@ -10,8 +10,9 @@ class SearchController < ApplicationController
     #session[:itemtype] = itemtype.itemtype
     status = Array.new
     status  << 1
+    status  << 2
     status = params[:status].split(',') if params[:status].present?
-    @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute)
+    @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder")
     unless ($search_info_lookups.nil? || $search_type != params[:search_type])
       @search_info_lookups = $search_info_lookups
     else
