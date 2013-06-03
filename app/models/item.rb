@@ -464,7 +464,7 @@ class Item < ActiveRecord::Base
         if  content.is_a?(ReviewContent)
           u_r_c = self.item_rating.user_review_count.to_i
           if  u_r_c!= 1
-            if !((rating.to_i == 0 || rating.nil?)
+            if !(rating.to_i == 0 || rating.nil?)
               self.item_rating.user_review_avg_rating =  ((self.item_rating.user_review_avg_rating *  u_r_c) - rating.to_f rescue 0.0) / (u_r_c - 1).to_f  rescue 0.0 if  !(rating.to_i == 0 || rating.nil?) 
             end
          else
@@ -474,7 +474,7 @@ class Item < ActiveRecord::Base
           self.item_rating.user_review_total_count = self.item_rating.user_review_total_count - 1   
         else
          if self.item_rating.expert_review_count.to_i != 1
-           if !((rating.to_i == 0 || rating.nil?)
+           if !(rating.to_i == 0 || rating.nil?)
             self.item_rating.expert_review_avg_rating =  (( self.item_rating.expert_review_avg_rating *  self.item_rating.expert_review_count) - rating rescue 0.0) / (self.item_rating.expert_review_count - 1).to_f rescue 0.0  if  !(rating.to_i == 0 || rating.nil?) 
            end
         else
