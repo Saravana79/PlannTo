@@ -75,7 +75,7 @@ $("#dialog-form #click_message").show();
     </a>
     </div>
       <div style="float:right;">
-        <%if (!(item.rank.nil?) && (item.rank > 0))%>
+        <%if (!(@item.rank.nil?) && (@item.rank > 0))%>
                 <div class="ratingdiv" style="background-color: #fd7200;left: 115px;width: 60px;font-size: 10px;text-transform: uppercase;text-align: center;padding: 1px 0px 5px 0px;color: #fff;">
                    <span class="ratingspan" style="font-size: 30px;display: block;margin-bottom: -2px;text-align: center;"><%=@item.rank%></span>
                          Score

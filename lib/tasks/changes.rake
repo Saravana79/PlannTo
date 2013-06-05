@@ -228,7 +228,7 @@ end
 
     date_modifier = configatron.launch_date_modifier.to_s
 
-    Itemtype.where("itemtype in ('Car')").each do |itemtype|  
+    Itemtype.where("itemtype in ('Car','Mobile','Bike','Tablet','Camera','Cycle')").each do |itemtype|  
     
       item_type_id = itemtype.id.to_s
       total_rating_to_consider = configatron.retrieve(("rating_m_for_" + itemtype.itemtype.downcase).to_sym).to_s
@@ -270,7 +270,7 @@ end
             rank = 0
           end
         end
-          
+
         item_rating = ItemRating.find(temp_item_rating_id)
         item_rating.final_rating = final_rating
         item_rating.rank = rank
