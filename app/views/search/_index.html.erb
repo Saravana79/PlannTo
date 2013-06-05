@@ -27,12 +27,23 @@
             </div>
            <span>
               <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.name%></a></h1>
+          <div style="float:left;">   
              <%@where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) %>
           <a class="txt_price"><%= item.get_price_info('Price',true,@where_to_buy_items.size).html_safe %></a><br />
            <% rating_id = "search_index_#{item.id}" %>
           <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => rating_id} %>
-          <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a><br />
-          <a class="txt_normal"><%=display_specifications(item)%><br /><br/></a>
+          <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a>
+        </div>
+        <div style="float:right;">
+          <%if (!(item.rank.nil?) && (item.rank > 0))%>
+                  <div class="ratingdiv" style="background-color: #fd7200;left: 115px;width: 60px;font-size: 10px;text-transform: uppercase;text-align: center;padding: 1px 0px 5px 0px;color: #fff;">
+                     <span class="ratingspan" style="font-size: 30px;display: block;margin-bottom: -2px;text-align: center;"><%=item.rank%></span>
+                           Score
+                  </div>
+          <%end%>
+        </div>
+            <br />
+          <div style="clear:both"><a class="txt_normal"><%=display_specifications(item)%><br /><br/></a></div>
         </span>
         <%  new_version_item = Item.find(item.new_version_item_id) if (item.new_version_item_id && item.new_version_item_id != 0) rescue nil%>
      <%if  new_version_item %>

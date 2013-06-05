@@ -62,26 +62,42 @@ $("#dialog-form #click_message").show();
     <span class="product_details">
       <h1 itemprop="itemreviewed"><%= @item.name %></h1>
     <% if @item.is_a? Product %>
+      <div style="float:left;">
       <a class="txt_price"><%= @item.get_price_info('Price',true, @where_to_buy_items.size).html_safe %></a><br />
       <a>
       <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
+      
       <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
     </a>    
       <a class="txt_normal" href="<%= @item.get_url + '?fl=Reviews'%>">Ratings
       <span class="txt_blue" > <%= "(" + pluralize(@item.rated_users_count,'Review') + ")" if @item.rated_users_count > 0 %><span style="display:none;" itemprop="count"><%=@item.rated_users_count%></span></span>
     <span class="txt_blue"> <%= "Be the first one to review it" unless @item.rated_users_count > 0 %></span>
-    </a><br />
+    </a>
+    </div>
+      <div style="float:right;">
+        <%if (!(item.rank.nil?) && (item.rank > 0))%>
+                <div class="ratingdiv" style="background-color: #fd7200;left: 115px;width: 60px;font-size: 10px;text-transform: uppercase;text-align: center;padding: 1px 0px 5px 0px;color: #fff;">
+                   <span class="ratingspan" style="font-size: 30px;display: block;margin-bottom: -2px;text-align: center;"><%=@item.rank%></span>
+                         Score
+                </div>
+        <%end%>
+      </div>
+    <br />
+    
     <% cache ['minimised_specification', @item] do%>
+    <div style="clear:both;">
     <a class="txt_normal" ><%=display_specifications(@item)%>
       <br/>
-      <div style="clear:both;">
+      <div style="clear:both;float:right;">
       <%= link_to(" View all Specifications and Benchmarks", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
       </div>
     </a>
+    </div>
     <br/>
       <%if @new_version_item %>
          <br /><br />
-        <font color="green" style="font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%= @new_version_item.name rescue ''%></a> </h3> 
+        <div style="clear:both;"
+        <font color="green" style="font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%= @new_version_item.name rescue ''%></a> </h3> </font></div>
       <%end%>
     <%end%>
      

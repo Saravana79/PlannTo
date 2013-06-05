@@ -373,6 +373,10 @@ class Item < ActiveRecord::Base
     roundoff_rating item_rating.to_f
   end 
 
+  def rank
+    item_rating = self.item_rating.rank rescue 0.0  
+  end 
+
   def roundoff_rating item_rating
     ((item_rating * 2).round) / 2.0
   end

@@ -218,7 +218,7 @@ class ArticleContentsController < ApplicationController
     #@article_content = ArticleContent.new
    if current_user 
     #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
-     params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
+    # params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
    if params['url']  && !ArticleContent.where(:url => params['url']).blank?
      @duplicate_url = 'true'
    end
