@@ -237,8 +237,8 @@ end
          
       sql_for_max_average = "select calculated_rating - ((case when (launchdatemonth > 0 and launchdatemonth1 != '') then launchdatemonth else createddatedifference end) * "+ date_modifier + ") as final_rating from (select items.name,average_rating,review_count,
             (((review_count/(review_count + " + total_rating_to_consider + ")) * average_rating) + ((" + total_rating_to_consider + "/(review_count+" + total_rating_to_consider + "))*" + avearge_rating_of_average + ")) as calculated_rating ,
-            (select value from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id) as launchdatemonth1,
-            (select period_diff(date_format(now(), '%Y%m'), date_format(str_to_date(value,'%d-%M-%Y') , '%Y%m'))from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id) as launchdatemonth,
+            (select value from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth1,
+            (select period_diff(date_format(now(), '%Y%m'), date_format(str_to_date(value,'%d-%M-%Y') , '%Y%m'))from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth,
             period_diff(date_format(now(), '%Y%m'),date_format(items.created_at,'%Y%m')) as createddatedifference
             from item_ratings 
             inner join items on items.id = item_ratings.item_id where itemtype_id = " + item_type_id + " and average_rating != 0 
@@ -249,8 +249,8 @@ end
       sql_for_rank = "select item_ratings_id, name, calculated_rating - ((case when (launchdatemonth > 0 and launchdatemonth1 != '') then launchdatemonth else createddatedifference end) * "+ date_modifier + ") as final_rating ,
             ((calculated_rating - ((case when (launchdatemonth > 0 and launchdatemonth1 != '') then launchdatemonth else createddatedifference end) * "+ date_modifier + "))/"+ max_average_value +") * 100 as rank from (select item_ratings.id as item_ratings_id,items.name,average_rating,review_count,
             (((review_count/(review_count + " + total_rating_to_consider + ")) * average_rating) + ((" + total_rating_to_consider + "/(review_count+" + total_rating_to_consider + "))*" + avearge_rating_of_average + ")) as calculated_rating ,
-            (select value from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id) as launchdatemonth1,
-            (select period_diff(date_format(now(), '%Y%m'), date_format(str_to_date(value,'%d-%M-%Y') , '%Y%m'))from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id) as launchdatemonth,
+            (select value from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth1,
+            (select period_diff(date_format(now(), '%Y%m'), date_format(str_to_date(value,'%d-%M-%Y') , '%Y%m'))from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth,
             period_diff(date_format(now(), '%Y%m'),date_format(items.created_at,'%Y%m')) as createddatedifference
             from item_ratings 
             inner join items on items.id = item_ratings.item_id where itemtype_id = " + item_type_id + " and average_rating != 0 
