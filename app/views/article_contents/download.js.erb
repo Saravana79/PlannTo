@@ -1,5 +1,6 @@
 <%if @duplicate_url == "true"%>
    alert('This article is already shared in PlannTo.com');
+   window.location.href =   "<%= "/contents/#{@previous_content.id}" %>"
 <%end%>
 <%if @edit_form%>
   <%@title_id = "edit_txtArticleTitle_#{@default_item_id}"%>
@@ -9,8 +10,6 @@
   <%@txtArticleDescription =  "edit_txtArticleDescription_#{@default_item_id}"%>
   <%@new_article_type ="edit_article_type_#{@default_item_id}"%>
   <%@thumbnail_id = "edit_thumbnail_url_#{@article_content.id}"%>
-
-
 <%else%>
   <%@title_id = "txtArticleTitle"%>
   <%@dwnld_url = "dwnld_url"%>
@@ -20,7 +19,6 @@
   <%@new_article_type ="new_article_type"%>
   <%@thumbnail_id = "new_thumbnail_url"%>
   $("#<%=@thumbnail_id%>").val('<%=@article.thumbnail%>');
-
 <%end%>
 $('div.<%=@dwnld_url%>').show();
 $("#<%=@title_id%>").val(unescapeHTML("<%= escape_javascript(@article.title) %>"));

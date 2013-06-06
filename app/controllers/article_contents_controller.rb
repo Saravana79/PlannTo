@@ -20,8 +20,8 @@ class ArticleContentsController < ApplicationController
     
    if params['article_content']['title'] == ''
       @title = false
-   elsif params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
-     @duplicate_url = 'true'
+   #elsif params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
+    # @duplicate_url = 'true'
    else
     @item_id = params[:item_id]
     #for bookmark
@@ -51,10 +51,10 @@ class ArticleContentsController < ApplicationController
        Content.save_thumbnail_using_uploaded_image(@article)
      end    
    
-      
+     @item1 = Item.find(params[:articles_item_id]) 
     if((params[:article_content][:sub_type] == "Reviews"))
       @defaultitem = Item.find(ids[0])
-       Item.find(params[:articles_item_id]).add_new_rating(@article) if @article.id!=nil
+       @item1.add_new_rating(@article) if @article.id!=nil
     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
@@ -159,7 +159,8 @@ class ArticleContentsController < ApplicationController
     end
     @related_items = article_search_by_relevance(@article)
     #@related_items = Array.new
-   if params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
+    @previous_content = ArticleContent.where(:url => params['article_content']['url']).first
+   if params['article_content']['url']  && !@previous_content.blank?
      @duplicate_url = 'true'
    end  
     for row in @related_items
@@ -218,8 +219,9 @@ class ArticleContentsController < ApplicationController
     #@article_content = ArticleContent.new
    if current_user 
     #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
-    # params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
-   if params['url']  && !ArticleContent.where(:url => params['url']).blank?
+     #params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
+    @previous_content = ArticleContent.where(:url => params[:url]).first
+   if params['url']  && !@previous_content.blank?
      @duplicate_url = 'true'
    end
     @article,@images = ArticleContent.CreateContent(params[:url],current_user)
