@@ -1,6 +1,43 @@
   <%if @items %>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="comparetbl" style="table-layout: fixed">
-  <tr>
+<div class="outerdivwarning" id="staticDiv" style="display:none;">
+  <div  style="font-size: 14px;font-weight: normal;height: 85px;line-height: 30px;margin:0; overflow:visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: rgb(240, 240, 240);color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;">
+    <div style="position: relative;width:1000px;margin: 0 auto;">
+      <table width="1000px" border="0" cellspacing="0" cellpadding="0" style="line-height:15px;text-align:none;">
+
+        <tr >
+            <td class="rowline" valign="bottom" align="center" style="width:200px;border-right:1px solid #cdd3d7;">
+                <div style="width:200px;display:block;"/>
+            </td>
+              
+            <%@items.each_with_index do |item, index|%>
+            <td width="200px;"  style="width:200px;vertical-align:top;border-right:1px solid #cdd3d7;text-align:left;">
+               <table>
+                    <tr>
+                        <td width="100px" height="85"><img src="<%=item.image_url%>" onclick="parent.location='<%=(item.get_url())%>'" width="92" height="69"/></td>
+                        <td width="">
+                        <div style="width:98px;">
+                        <a href="<%=item.get_url()%>" class="txt_black"><%=item.name%></a>
+                       </div>
+                             <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
+                        <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "itemsmall#{item.id}"} %><br />
+                        </td>
+                      </tr>                  
+               </table>
+            </td>
+            <%break if index == 3%>
+          <%end%>
+          <%if empty_boxes_required?(@items)%>
+            <%for i in empty_boxes_count(@items)..4%>
+              <%=render :partial =>"items/add_more_items",:locals => {:itemtype =>@item1.itemtype.itemtype, :count => i } %>
+            <%end%>
+          <%end%>
+        </tr>
+      </table>   
+    </div>
+  </div>
+</div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="comparetbl" style="table-layout: fixed"  id="tblCompare">
+  <tr style="background-color:white;">
     <td class="rowline" valign="bottom" align="center" width="200px">
 
     </td>
@@ -15,6 +52,39 @@
       <%end%>
     <%end%>
   </tr>
+  <!--
+  <tr><td></td><td class="high insidebox titlename bordered" colspan="4" width="1000px" align="center">Summary of Comparison</td></tr>
+  <tr>
+    <td class= "top insidebox name bordered" rowspan="2"><b> Lighter Mobiles</b></td>
+    <td class="high insidebox bordered" style="border-bottom:0px;"><b>30 grams</b></td>
+    <td class="high insidebox bordered">40 grams</td>
+    <td class="high insidebox bordered">50 grams</td>
+    <td class="high insidebox bordered">60 grams</td>
+  </tr>
+  <tr>
+    <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  Samsung Galaxy S4 is 30% lighter then Iphone 5, lighter mobiles are easy to carry.</td>
+  </tr>
+  <tr>
+    <td class= "top insidebox name bordered" rowspan="2"><b> Higher Processing Power</b></td>
+    <td class="high insidebox bordered" style="border-bottom:0px;">1 GHz</td>
+    <td class="high insidebox bordered">2 Ghz</td>
+    <td class="high insidebox bordered"><b>2.5 Ghz</b></td>
+    <td class="high insidebox bordered">1 Ghz</td>
+  </tr>
+  <tr>
+    <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  Iphone 5 is having 30% more processing power then Galaxy S4, with more processing power more work can be done in short time.</td>
+  </tr>
+  <tr>
+    <td class= "top insidebox name bordered" rowspan="2"><b> Has FM</b></td>
+    <td class="high insidebox bordered" style="border-bottom:0px;">False</td>
+    <td class="high insidebox bordered">False</td>
+    <td class="high insidebox bordered"><b>True</b></td>
+    <td class="high insidebox bordered"><b>True</b></td>
+  </tr>
+  <tr>
+    <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  Iphone 5 and Samsung Galaxy S4 are having FM Radio.  </td>
+  </tr>
+-->
   <%@attributes.group_by(&:category_name).each do |group, attributes|%>
     <%if group_display_required?(attributes.collect(&:id), @ids)%>
       <tr>
@@ -67,28 +137,83 @@
 </div>
 
 <script>
-$(".ui-dialog-content").dialog('destroy')
-var ids = '<%= params[:ids] %>'
+      $(window).scroll(function(e){
+        if (($(window).scrollTop() > ($("#tblCompare").offset().top + 150)) && ($(window).scrollTop() < ($("#tblCompare").position().top +  $("#tblCompare").height() + 20 ))) {
 
-  if (ids.toString().split(",")[0] == '')
-        {
-         var size = 2
+          $('#staticDiv').css("display", "inline");
+            
+        } else {
+            $('#staticDiv').css("display", "none");
         }
-        else
-        {
-         var size = 1
-        }
-if (ids.toString().split(",").length < size )
-{
+    });
+      function UpdateTableHeaders() {
+            $("div.divTableWithFloatingHeader").each(function() {
+                var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);
+                var floatingHeaderRow = $(".tableFloatingHeader", this);
+                var offset = $(this).offset();
+                var scrollTop = $(window).scrollTop();
+                if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
+                    floatingHeaderRow.css("visibility", "visible");
+                    floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
 
-  $(".Closebut").show();
-$('#compare_popup').bPopup({
-    closeClass:'Closebut',
-    modalClose: false,
-    position: [(screen.width / 2) - (520/2), $(window).scrollTop() + 120],
-    follow: [false, false] //x, y
- });
- }
+                    // Copy cell widths from original header
+                    $("th", floatingHeaderRow).each(function(index) {
+                        var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
+                        $(this).css('width', cellWidth);
+                    });
+
+                    // Copy row width from whole table
+                    floatingHeaderRow.css("width", $(this).css("width"));
+                }
+                else {
+                    floatingHeaderRow.css("visibility", "hidden");
+                    floatingHeaderRow.css("top", "0px");
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $("table.comparetbl1").each(function() {
+                $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
+
+                var originalHeaderRow = $("tr:first", this)
+                originalHeaderRow.before(originalHeaderRow.clone());
+                var clonedHeaderRow = $("tr:first", this)
+
+                clonedHeaderRow.addClass("tableFloatingHeader");
+                clonedHeaderRow.css("position", "absolute");
+                clonedHeaderRow.css("top", "0px");
+                clonedHeaderRow.css("left", $(this).css("margin-left"));
+                clonedHeaderRow.css("visibility", "hidden");
+
+                originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+            });
+            UpdateTableHeaders();
+            $(window).scroll(UpdateTableHeaders);
+            $(window).resize(UpdateTableHeaders);
+        });
+      $(".ui-dialog-content").dialog('destroy')
+      var ids = '<%= params[:ids] %>'
+
+        if (ids.toString().split(",")[0] == '')
+              {
+               var size = 2
+              }
+              else
+              {
+               var size = 1
+              }
+      if (ids.toString().split(",").length < size )
+      {
+
+        $(".Closebut").show();
+      $('#compare_popup').bPopup({
+          closeClass:'Closebut',
+          modalClose: false,
+          position: [(screen.width / 2) - (520/2), $(window).scrollTop() + 120],
+          follow: [false, false] //x, y
+       });
+       }
 </script>
 <%if @items %>
 <% if !@contents.blank? %>
