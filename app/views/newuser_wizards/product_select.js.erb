@@ -1,7 +1,6 @@
 var item_ids = $("#wizard_item_id").val();
 var array = item_ids.split(",");
 array_length = array.length;
-
 if ($("#img_box_1").text().length < 100 && array.indexOf("<%= @item.id %>") == -1)
 {
 

@@ -81,7 +81,6 @@ class Item < ActiveRecord::Base
   end
   
   def get_base_itemtype
-
     itemtype_id = self.get_base_itemtypeid
     itemtype1 = Itemtype.find_by_id(itemtype_id).itemtype
     return itemtype1
@@ -132,10 +131,8 @@ class Item < ActiveRecord::Base
   end
   
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
-      
     price = "0"; 
-
-     item_attribute = item_attributes.select{|a| a.name == item_type}.last
+    item_attribute = item_attributes.select{|a| a.name == item_type}.last
       if (status == "1" || status == "3")
         if item_attribute
           attribute_value = item_attribute.attribute_values.where(:item_id => id).last

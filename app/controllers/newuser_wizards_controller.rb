@@ -43,11 +43,12 @@ class NewuserWizardsController < ApplicationController
     @item = Item.find(params[:item_id])
     @wizard_type = params[:type]
     Follow.wizard_save(params[:item_id], @wizard_type,current_user)
-      @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
+    @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
+    if params[:type] == 'buyer'
       @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype.id,:completed => 0,:deleted => 0).first
       if @buying_plan.nil?
         @buying_plan = BuyingPlan.create(:user_id => current_user.id, :itemtype_id => @itemtype.id,:deleted => 0)
-       UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
+        UserActivity.save_user_activity(current_user,@buying_plan.id,"added","Buying Plan",@buying_plan.id,request.remote_ip)
        #@buying_plan.update_attribute(:deleted, false)
        #@buying_plan.update_attribute(:completed, false) 
       end  
@@ -56,6 +57,7 @@ class NewuserWizardsController < ApplicationController
       @question = UserQuestion.new(:title => "Planning to buy a #{@buying_plan.itemtype.itemtype}", :buying_plan_id => @buying_plan.id)
      @question.save
    end
+  end 
     current_user.clear_user_follow_item
   end
   
@@ -73,9 +75,18 @@ class NewuserWizardsController < ApplicationController
   end
       
   def product_delete
-    @item = Item.find(params[:id])
+     @item = Item.find(params[:id])
     unless current_user.follows.where('followable_id =? and followable_type =? and follow_type =?', @item.id,@item.type,params[:type]).blank?
+    if params[:type] == 'buyer'
+      @itemtype = Itemtype.find_by_itemtype(@item.itemtype.itemtype)
+      @buying_plan = BuyingPlan.where(:user_id => current_user.id, :itemtype_id => @itemtype,:completed => 0,:deleted => 0).first
+      @follow_types = Itemtype.get_followable_types(@itemtype.itemtype)
+      @follow_item = Follow.for_follower(@buying_plan.user).where(:followable_type => @follow_types, :follow_type =>Follow::ProductFollowType::Buyer) 
+      item_ids = @follow_item.collect(&:followable_id).join(',')
+      @buying_plan.remove_user_activities
+      @buying_plan.update_attributes(:deleted => true, :items_considered => item_ids)
+   end   
        current_user.follows.where('followable_id =? and followable_type =? and follow_type =?', @item.id,@item.type,params[:type]).first.destroy
-    end
   end
+ end
 end

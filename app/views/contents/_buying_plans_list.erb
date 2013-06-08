@@ -12,13 +12,13 @@
       <%if buying_plan.completed? %>
         <%item = Item.find(buying_plan.owned_item_id) rescue buying_plan.get_first_item %>
       <%else%>  
-      <%item = buying_plan.get_first_item%>
+      <%item = buying_plan.get_first_item rescue '' %>
       <%end%>
       <%if item.blank?  %>
         <%item =  Item.find_by_name(buying_plan.itemtype.itemtype.pluralize) %>
       <%end%>  
       <div class="float_lft" style="padding-right:5px;">  
-       <img src="<%= item.image_url %>" style="width:92px;height:69px;" onclick="parent.location='<%=link_url(item)%>'" /></div>
+       <img src="<%= item.image_url  rescue ''%>" style="width:92px;height:69px;" onclick="parent.location='<%=link_url(item) rescue ''%>'" /></div>
       
       <div class="float_lft">
         <% if @buying_plan == "true" || (current_user.id == @user.id rescue true)  %>
