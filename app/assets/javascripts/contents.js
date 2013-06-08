@@ -65,6 +65,7 @@ $("ul#Newtabs li a").live('click', function(){
    	switch(id){
             case 'All' :  var sub_type = "All";break;
             case 'HowTo': var sub_type = "HowTo/Guide";break;
+            case 'HowTo/Tips': var sub_type = "HowTo/Guide";break;
             case 'Q&A': var sub_type = "QandA";break;
             default:  var sub_type = id;
           }
