@@ -43,6 +43,16 @@ class Content < ActiveRecord::Base
       
     string :sub_type
     integer :total_votes
+    integer :total_votes   do |content|
+      #unless (content.facebook_count)
+      #  content.total_votes + ((content.facebook_count.share_count + content.facebook_count.like_count)/10).to_i
+      #else
+        content.total_votes  
+      #end
+      
+    end
+
+
     integer :comments_count
     time :created_at
     text :name , :boost => 6.0,  :as => :name_ac do |content|
@@ -251,7 +261,13 @@ class Content < ActiveRecord::Base
         scope.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?)", value )
       when :order
         attribute, order = value.split(" ")
-        scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
+        if(attribute == "total_votes")          
+          attribute = ("(ifnull(total_votes,0) + (ifnull((facebook_counts.like_count + facebook_counts.share_count),0)/10))")
+          scope.joins(:facebook_count).scoped(:order => "#{attribute} #{order}")
+        else
+          scope.scoped(:order => "#{self.table_name}.#{attribute} #{order}")
+        end
+        
       when :my_feed
          scope.scoped(:conditions => ["#{self.table_name}.created_at >= ? OR #{self.table_name}.created_by in(?)", 2.weeks.ago,value])
       when :user
