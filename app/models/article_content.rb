@@ -161,7 +161,7 @@ class ArticleContent < Content
   def update_facebook_stats
     # begin
     # puts HTTParty.get(self.facebook_statlink)
-    unless (url.nil || (url.include? ","))
+    unless (url.nil? || (url.include? ","))
       stats = HTTParty.get(self.facebook_statlink)['links_getStats_response']
       [:url, :normalized_url, :comments_fbid, :commentsbox_count].each{|key| stats['link_stat'].delete(key.to_s)}
       facebook_count ? facebook_count.update_attributes(stats['link_stat']) : self.build_facebook_count(stats['link_stat']) 
