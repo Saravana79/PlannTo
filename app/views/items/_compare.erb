@@ -52,18 +52,29 @@
       <%end%>
     <%end%>
   </tr>
-  <!--
+
+
+ 
+  
+  
+  
   <tr><td></td><td class="high insidebox titlename bordered" colspan="4" width="1000px" align="center">Summary of Comparison</td></tr>
+   <% @attribute_comparision_lists.each do |attr_ca| %>
   <tr>
-    <td class= "top insidebox name bordered" rowspan="2"><b> Lighter Mobiles</b></td>
-    <td class="high insidebox bordered" style="border-bottom:0px;"><b>30 grams</b></td>
-    <td class="high insidebox bordered">40 grams</td>
+    <td class= "top insidebox name bordered" rowspan="2"><b> <%= "#{attr_ca.title} #{session[:item_type]}" %></b></td>
+    <% @items.each do |i| %>
+      <td class="high insidebox bordered" style="border-bottom:0px;"><b><%= attr_ca.attribute.attribute_values.find_by_item_id(i.id).value %></b></td>
+    <% end %>
+   <!--  <td class="high insidebox bordered">40 grams</td>
     <td class="high insidebox bordered">50 grams</td>
-    <td class="high insidebox bordered">60 grams</td>
+    <td class="high insidebox bordered">60 grams</td> -->
   </tr>
   <tr>
-    <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  Samsung Galaxy S4 is 30% lighter then Iphone 5, lighter mobiles are easy to carry.</td>
+    <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  
+      <%= show_comparision_summary(attr_ca, @items) %></td>
   </tr>
+  <% end %>
+  <!--
   <tr>
     <td class= "top insidebox name bordered" rowspan="2"><b> Higher Processing Power</b></td>
     <td class="high insidebox bordered" style="border-bottom:0px;">1 GHz</td>

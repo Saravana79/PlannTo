@@ -208,5 +208,14 @@ module ApplicationHelper
   def get_tag_list(item)
     return "<li id='textTaggers#{item.id}' class='taggingmain'><span><a class='txt_tagging' href='#{item.get_url()}' >#{item.name}</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>".html_safe
   end
+
+  def show_comparision_summary(attr_ca, items)
+    order = attr_ca.order
+    values = attr_ca.attribute.attribute_values.where("item_id in (?)", items.collect(&:id)).order("value #{order[:value]}")
+    attr_ca.description.gsub!("{1}", values[order[:first]].item.name)
+    attr_ca.description.gsub!("{2}", values[order[:second]].item.name)
+    attr_ca.description.gsub!("{percentage}", "#{(((values[order[:first]].value.to_f - values[order[:second]].value.to_f)/values[0].value.to_f)*100).to_i}%") if attr_ca.description.match("{percentage}")
+    attr_ca.description
+  end 
  
 end
