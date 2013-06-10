@@ -38,35 +38,43 @@
 <div style="display:block;height:30px;"></div>
 <%end%>
  <% a= @static_page == 'true' ? 'display:none' : '' %>
- <%if @static_page == 'true' %>
-    <div class="divbody1">
+ <%if @static_page == 'true' %>    
+    <div class="dppattern">
+    <div id="header12" style="">       
+          <div class="logodiv">
+            <h1 class="logo"><a href="index.html">
+                  <img src="images/logo_new.png" alt="PlannTo" />
+             </a></h1>
+           </div>
+
+
  <%else%>
     <div class="divbody">
+        <div class="header" style="clear:both;">
+            <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
+
+            <div id="static" style="<%= a %>" >
+               <div class="search">
+              
+                <span class="search_txt" id="plannToSearchSpan">
+                    <input name="Search" type="text" placeholder="Search Products or Topics or Contents" id="plannToSearch"/>
+                        </span>
+                    <div id="item_search1"></div>
+                        <!--<= select_tag "plannto_search_type",
+                    options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
+               
+
+                      <a class="btn_search" href="#"></a>
+                </div>
+
+                <span>
+                 <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
+                 
+                  <a class="icon_chat" href="<%=messages_url%>"></a>
+                </span>
+            </div> 
+             
  <%end%>      
-<div class="header" style="clear:both;">
-  <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
-
-  <div id="static" style="<%= a %>" >
-   <div class="search">
-  
-    <span class="search_txt" id="plannToSearchSpan">
-        <input name="Search" type="text" placeholder="Search Products or Topics or Contents" id="plannToSearch"/>
-            </span>
-  <div id="item_search1"></div>
-            <!--<= select_tag "plannto_search_type",
-        options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
-   
-
-    <a class="btn_search" href="#"></a>
-  </div>
-
-  <span>
-   <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
-   
-    <a class="icon_chat" href="<%=messages_url%>"></a>
-  </span>
-  </div> 
-   
        
       <!--header right part start here-->
    
@@ -119,40 +127,28 @@
     <% else %>
       <%if @static_page == "true"  %>
       <%if @devise != "true" %>
-     <div style="float:right;padding:6px 0px 0px 0px;">
-         <div>
-         <div style="float:left;"> 
-         <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post) do |f| %>
-         <%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1" , :style=> "width:180px;padding-left:2px;"%>
-          <%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :style=> "width:180px;padding-left:2px;"%>
-        </div>
-          <div style="float:right;padding-left:4px;">
-          <%= f.submit "Sign In" , :tabindex => "4" , :class=>"Bluesubmit3" %> 
-          </div>
-          </div>
+           <div class="search-login-box">
+              <div class="top-search">
+              <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post, :html => {:class => "top-searchform"}) do |f| %>
+                  <p><%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1", :value =>"Email", :class => "inputbox"%></p>
+                    <p><%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :class=>"inputbox", :value => "Password"%></p>
+                    <p><%= f.submit "Sign In" , :tabindex => "4" , :class=>"button org small" %></p>
+                    <p><label> <%= f.check_box :remember_me, :size=>"0", :tabindex => "3"%> Remember Me</label> | 
+                      <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" %></p>
+                <%end%>           
+                </div>
+                <div class="orimg"></div>
+                <div class="fb-signup"><a href="#">SignUp with Facebook</a></div>                
+            </div>
+            <div class="clr" style="clear:both;"></div>
           <br/>
-          <div style="clear:both;float:left;padding-left:3px;margin-top:-5px;">
-            <label style="margin:0px 0px 0px 0px; font-family: Tahoma; font-size: 9px;top:-5px;display:block;text-indent:-15px;padding-left:13px;color:grey;"> Remember me.
-            
-             <%= f.check_box :remember_me, :size=>"0", :tabindex => "3" , :style => "height:13px;width:13px;vertical-align:bottom; position: relative;margin:0;*overflow: hidden;top:3px;"%>
-           
-           </label>
-           </div>
-          <div style="float:left;padding-left:110px;">
-         <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" , :style=>"color:grey;font-size:9px;text-decoration:none;"%>
-          </div>
-          
-        <%end%>            
- 
-   
-    </div>
     <%end%>
      <%else%>
        <%if @devise != "true" %>
   
       <div style="float:right;padding:20px 90px 0px 0px;">
          <span>
- <%= link_to "Sign In", "#", :class => "sign_in_popup" %> | <%= link_to "Sign Up", "#",:class => "sign_up_popup"%> 
+          <%= link_to "Sign In", "#", :class => "sign_in_popup" %> | <%= link_to "Sign Up", "#",:class => "sign_up_popup"%> 
         
    </span>
    </div> 
