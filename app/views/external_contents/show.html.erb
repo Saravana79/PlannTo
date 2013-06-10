@@ -83,7 +83,7 @@
     </div> 
       
     <div  class="header_midder_box" >
-      <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1" onload="resizeIframe(this);" class="iframecss" style="padding:0px;"></iframe>
+      <iframe  src="<%=@content.url %>" scrolling="yes" frameborder="1" onload="resizeIframe(this);" class="iframecss" style="padding:0px;min-height:550px;" id="iframeforcontent"></iframe>
     </div>  
    <%= render "shared/signup_popup"%>
 </body>
@@ -111,10 +111,11 @@
        obj.style.height = (winH - 52) + 'px';
       }
       obj.focus();
+      
    //obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';                        
  }
  
- 
+
    <%unless user_signed_in?%>
         $("div.rate_content a").click(function(e){
           if (login_flag != true){
