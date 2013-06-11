@@ -1,0 +1,349 @@
+/* #Reset & Basics (Inspired by E. Meyers)
+================================================== */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block
+}
+body {
+	line-height: 1
+}
+ol, ul {
+	list-style: none
+}
+blockquote, q {
+	quotes: none
+}
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.clr { clear:both;}
+.txtcenter { text-align:center;}
+.txtleft { text-align:left;}
+.left { float:left;}
+.right { float:right;}
+
+/* #Basic Styles
+================================================== */
+body {
+	background:url(../images/bg.jpg) repeat top left;
+	font: 14px/21px 'PTSansRegular', sans-serif;
+	color: #222;
+	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+	-webkit-text-size-adjust: 100%;
+}
+
+/* #Typography
+================================================== */
+h1, h2, h3, h4, h5, h6 {
+	font-family: "PTSansRegular", serif;
+	font-weight: 400;
+}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+	font-weight: inherit
+}
+p {
+	margin:0; padding:0; text-align:justify;
+}
+em {
+	font-style: italic
+}
+strong {
+	font-weight:bold;
+}
+small {
+	font-size: 80%
+}
+/*    Blockquotes  */
+blockquote, blockquote p {
+	font-size: 17px;
+	line-height: 24px;
+	color: #777;
+	font-style: italic;
+}
+blockquote {
+	margin: 0 0 20px;
+	padding: 9px 20px 0 19px;
+	border-left: 1px solid #ddd;
+}
+blockquote cite {
+	display: block;
+	font-size: 12px;
+	color: #555;
+}
+blockquote cite:before {
+	content: "\2014 \0020"
+}
+blockquote cite a, blockquote cite a:visited, blockquote cite a:visited {
+	color: #555
+}
+hr {
+	background:url(../images/hrline.gif) repeat-x top left;
+	border:0;
+	clear: both;
+	margin:20px 0 20px 0; padding:0;
+	height: 6px;
+}
+/* #Links
+================================================== */
+a, a:visited {
+	color: #333;
+	text-decoration: none;
+	outline: 0;
+}
+a:hover, a:focus {
+	color: #97263e
+}
+p a, p a:visited {
+	line-height: inherit
+}
+/* #Lists
+================================================== */
+ul, ol {
+	margin-bottom: 20px
+}
+ul {
+	list-style: none outside
+}
+ol {
+	list-style: decimal
+}
+ol, ul.square, ul.circle, ul.disc {
+	margin-left: 30px
+}
+ul.square {
+	list-style: square outside
+}
+ul.circle {
+	list-style: circle outside
+}
+ul.disc {
+	list-style: disc outside
+}
+ul ul, ul ol, ol ol, ol ul {
+	margin: 4px 0 5px 30px;
+	font-size: 90%;
+}
+ul ul li, ul ol li, ol ol li, ol ul li {
+	margin-bottom: 6px
+}
+li {
+	line-height: 18px;
+	margin-bottom: 12px;
+}
+ul.large li {
+	line-height: 21px
+}
+li p {
+	line-height: 21px
+}
+/* #Images
+================================================== */
+img.scale-with-grid {
+	max-width: 100%;
+	height: auto;
+}
+/* Fix for odd Mozilla border & padding issues */
+button::-moz-focus-inner, 
+::-moz-focus-inner {
+border: 0;
+padding: 0;
+}
+/*----*****---- << Buttons >> ----*****----*/	
+	.button { line-height:normal; display:inline-block !important; *display:inline; zoom:1; cursor:pointer; font-size:14px; text-transform:uppercase;  font-family: 'PTSansBold';}
+	
+	.button.medium { padding:16px 20px; }
+	.button.small { padding:3px 10px; }
+	
+	.button.blue { background:#1461a2; color:#ffffff; }
+	.button.yellow { background:#ffc956; color:#3d3d3d; }
+	.button.org { background:#e87b06; color:#ffffff; border:1px solid #e6bc12; 
+		background: -moz-linear-gradient(top, #ff9422 0%, #e87b06 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9422), color-stop(100%,#e87b06)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, #ff9422 0%,#e87b06 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, #ff9422 0%,#e87b06 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top, #ff9422 0%,#e87b06 100%); /* IE10+ */
+		background: linear-gradient(to bottom, #ff9422 0%,#e87b06 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9422', endColorstr='#e87b06',GradientType=0 ); /* IE6-9 */
+	 }
+	.button.org:hover {background:#12c1e6; color:#ffffff; border:1px solid #ace5f0;}
+	
+	.medium-buttons .button { margin-bottom:10px; margin-right:20px; }
+	.small-buttons .button { margin-right:7px; }	
+	
+	input[type=text], input[type=password], input.text, textarea, input[type=submit], input.button, input[type="button"] { -webkit-border-radius: 2px;border-radius: 2px;}
+
+	/*----*****---- << Forms >> ----*****----*/
+
+/* Start page css here */
+#wrapper { margin:0 auto; padding:0;}
+#maincontainer { margin:0 auto; padding:0; width:960px;}
+.container { margin:0 auto; padding:0; width:960px;}
+
+.dppattern { margin:0; padding:0; background:url(../images/dpattern.jpg) no-repeat center top; border-bottom:1px solid #fff;}
+#header { margin:0 auto; padding:0; width:960px; height:75px; }
+
+.logodiv { margin:0; padding:0; width:300px; float:left;}
+.logodiv .logo{ margin:0; padding:20px 0 0 0;}
+.search-login-box { margin:0; padding:15px 0 0 0; width:650px; float:right;}
+
+.search-login-box .top-search{ margin:0; padding:0; width:380px; float:left; display:inline-block;}
+.search-login-box .top-search .top-searchform { margin:0; padding:0;}
+.search-login-box .top-search .top-searchform p{ margin:0 5px 0 0; padding:0; display:inline-block; float:left; font-size:12px;color:#fff;}
+.search-login-box .top-search .top-searchform .inputbox{ margin:0; padding:3px; display:inline-block; background:#12c1e6; border:1px solid #ace5f0; font-size:12px; color:#fff;}
+.search-login-box .top-search .top-searchform label{ margin:0 0 0 0; padding:5px 0 0 0; display:inline-block; font-size:12px; color:#fff;}
+.search-login-box .top-search .top-searchform a{ font-size:12px; color:#ff8400; text-decoration:none;}
+.search-login-box .top-search .top-searchform a:hover { text-decoration:underline;}
+
+.search-login-box .orimg{ margin:0; padding:0; width:70px; float:left; display:block; height:26px; background:url(../images/or.png) no-repeat center top;}
+.search-login-box .fb-signup{ margin:0; padding:0; width:200px; float:left; display:inline-block;}
+.search-login-box .fb-signup a { background:url(../images/signup-fb.png) no-repeat left top; display:block; height:24px; text-indent:-9999px;}
+.search-login-box .fb-signup a:hover { background:url(../images/signup-fb.png) no-repeat left bottom;}
+
+.banner-container { margin:0 auto; padding:0; border-bottom:1px solid #fff;}
+.banner-div { margin:0 auto; padding:0;}
+
+.banner-div .banner1-cap-title{ margin:0; padding:0;color:#fff; font-size:30px;text-align:center;font-family: 'PTSansBold'; text-shadow: 1px 1px #333; text-align:center;}
+.banner-div .banner1-sub-title{ color:#003857; font-size:18px; text-align:center; padding:0 30px 0 30px; margin:10px 0 0 0; width:960px; line-height:22px;}
+.banner-div .banner1-btn{ margin:0; padding:0;}
+.banner-div .banner1-btn .findbutton { background:url(../images/find-btn.png) no-repeat center top; width:200px; height:46px; display:block;text-align:center; margin:0 auto; text-indent:-9999px; width:960px;}
+.banner-div .banner1-btn .findbutton:hover {opacity:0.8; filter:alpha(opacity=80);}
+
+.banner-div .cap-title{ margin:0; padding:0;color:#fff; font-size:30px;text-align:left;font-family: 'PTSansBold'; text-shadow: 1px 1px #333;}
+.banner-div .sub-title{ color:#003857; font-size:16px; padding:0; margin:10px 0 0 0; text-align:left; width:450px; line-height:22px;}
+
+
+.home-search { margin:0 auto; padding:25px 0 25px 0; text-align:center;}
+.home-search h2{ margin:0; padding:0; text-align:center; color:#12c1e6; font-size:24px;font-family: 'PTSansBold'; font-weight:normal;}
+.home-search span{ text-align:center; color:#fff; font-size:14px;}
+
+.home-search #search-form { clear:both;-webkit-border-radius: 2px;border-radius: 2px; border: #ace5f0 1px solid;background: #12c1e6;width: 345px;float: left;padding:0; margin:20px 0 0 300px;}
+.home-search #search-form .search-input-text{width: 300px;float: left;border: 0;background: #12c1e6;color: #222;line-height: 100%;font-size: 14px;height:20px; padding:0 5px 0 5px;}
+.home-search #search-form .search-input-text:focus{outline:none;color:#fff;}
+.home-search #search-form .search-input-submit{background:url(../images/search-icon.png) no-repeat right top; float:right;width:32px; height:22px;z-index: 100;cursor: pointer; display:block; border:0;}
+
+#middlecontainer { margin:0 auto; padding:20px 0 20px 0;}
+
+.home-left { margin:0 35px 0 0; padding:0; float:left; width:462px;}
+.home-right { margin:0; padding:0; float:left; width:462px;}
+
+.home-left h3, .home-right h3 { margin:0; padding:10px; border:1px solid #d6d6d6; color:#003554; font-size:20px;font-family: 'PTSansBold';
+	background:#009ebf;
+	background: -moz-linear-gradient(top, #12c0e5 0%, #009ebf 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#12c0e5), color-stop(100%,#009ebf)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #12c0e5 0%,#009ebf 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #12c0e5 0%,#009ebf 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #12c0e5 0%,#009ebf 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #12c0e5 0%,#009ebf 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#12c0e5', endColorstr='#009ebf',GradientType=0 ); /* IE6-9 */
+}
+.home-left h3 span, .home-right h3 span {font-family: 'PTSansRegular'; font-size:12px; color:#fff; line-height:normal; display:block; padding:5px 0 0 0; font-style:italic;}
+
+.box-div { margin:0; padding:0; background:#fff url(../images/box-bg.png) left bottom repeat-x;border:1px solid #d6d6d6;}
+.white-box-div { margin:0; padding:0; background:#fff;border:1px solid #d6d6d6;}
+
+.home-pop-product { margin:20px 0 20px 0; padding:0;}
+.home-pop-product h3{  margin:0; padding:10px; border:1px solid #d6d6d6; color:#1c1c1c; font-size:20px;font-family: 'PTSansBold';
+	background:#e97d08;
+	background: -moz-linear-gradient(top, #ff9422 0%, #e97d08 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9422), color-stop(100%,#e97d08)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ff9422 0%,#e97d08 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ff9422 0%,#e97d08 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ff9422 0%,#e97d08 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #ff9422 0%,#e97d08 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9422', endColorstr='#e97d08',GradientType=0 ); /* IE6-9 */	
+}
+.home-pop-product h3 span {font-family: 'PTSansRegular'; font-size:12px; color:#fff; line-height:normal; display:block; padding:5px 0 0 0; font-style:italic;}
+
+.home-pop-product .home-pop-product-div { padding:10px;}
+
+.home-pop-product .category-row { margin:0; padding:0 0 5px 0;}
+.home-pop-product .category-row .top-row{ margin:0; padding:5px; background:#efefef; border-bottom:2px solid #ccc;}
+.home-pop-product .category-row .top-row .title{ margin:0; padding:0; display:inline-block; color:#525252; font-size:18px;font-family: 'PTSansBold';}
+.home-pop-product .category-row .top-row .links{ margin:0; padding:0; display:inline-block; text-align:right; float:right;}
+.home-pop-product .category-row .top-row .links a { color:#018dde; font-size:14px;}
+.home-pop-product .category-row .top-row .links a:hover { color:#ee830e; text-decoration:underline;}
+
+.home-pop-product .category-row .category-div { margin:0; padding:0;}
+.home-pop-product .category-row .category-div .col1{ margin:0; padding:10px 0 0 0; float:left; width:758px; border:0px solid red; }
+.home-pop-product .category-row .category-div .col2{ margin:0; padding:0; float:left; width:180px; border:0px solid red; }
+.home-pop-product .category-row .category-div .col1-bottom{ clear:both; margin:10px 0 0 0; padding:0; float:left; width:100%; background:#cecece; border:0px solid #000; }
+.home-pop-product .category-row .category-div .col1-bottom p { text-align:right;color:#555; font-size:12px; font-family: 'PTSansBold'; padding:0 10px 0 0;}
+.home-pop-product .category-row .category-div .col1-bottom a { color:#00819c; font-size:12px; font-family: 'PTSansBold'; text-decoration:underline;}
+.home-pop-product .category-row .category-div .col1-bottom a:hover {color:#ff5b01; text-decoration:none;}
+
+.home-pop-product .category-row .category-div .col1 .cats-row{ margin:0 10px 0 0; padding:0;float:left;}
+.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv{ margin:0 10px 0 0; padding:0; width:166px; height:99px; float:left;}
+.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv a img{width:166px; height:99px;border:1px solid #a0a0a0;}
+.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv a:hover img{ border:1px solid #008fe4;}
+.home-pop-product .category-row .category-div .col1 .cats-row .desc{ margin:0; padding:0; float:left;}
+.home-pop-product .category-row .category-div .col1 .cats-row .desc h4{ margin:0; padding:0; color:#303030; font-size:14px; font-family: 'PTSansBold';}
+.home-pop-product .category-row .category-div .col1 .cats-row .desc h4 a:hover{color:#00a7ca;}
+
+.home-pop-product .category-row .category-div .col1 .cats-row .desc .price{ margin:0; padding:0; color:#e87c08;font-size:14px; font-family: 'PTSansBold';}
+.home-pop-product .category-row .category-div .col1 .cats-row .desc .rating{ margin:0; padding:0; color:#303030; font-size:12px; font-style:italic;}
+.home-pop-product .category-row .category-div .col1 .cats-row .desc .rating a { color:#018dde; font-size:12px;}
+
+.home-pop-product .category-row .category-div .col2-links { margin:0; padding:0; background:#efefef; border:0px solid #000;}
+.home-pop-product .category-row .category-div .col2-links ul { padding-top:10px;}
+.home-pop-product .category-row .category-div .col2-links li { line-height:20px;}
+
+ul.blue-link { margin:0 0 0 10px; padding:5px 0 10px 0;}
+ul.blue-link li { margin:0 0 0 15px; padding:0; list-style:disc; color:#488cb3; font-size:12px;}
+ul.blue-link li a{ color:#488cb3; font-size:12px;}
+ul.blue-link li a:hover { color:#ee830e; text-decoration:underline;}
+
+
+
+#footer { margin:0 auto; padding:0; background:#363636;}
+.footer-div { clear:both; margin:20px 0 0 0; padding:10px 0 20px 0; text-align:center; border-top:1px solid #4a4a4a;}
+.footer-div p{ margin:0; padding:0; color:#bfbfbf; font-size:12px; text-align:center;}
+.footer-div a{ color:#bfbfbf; font-size:12px; }
+.footer-div a:hover{color:#018dde; text-decoration:underline;}
+
+#btop {background: url("../images/up-arrows.png") no-repeat scroll left top transparent; bottom: 70px; display: none; height: 30px; position: fixed; right: 30px; text-indent: -9999px; width: 33px; z-index: 9999; }
+#btop:hover { background-position: left -47px;}
+
+/* #Social Icons
+================================================== */
+.social { margin:0 0 0 200px; padding:20px 0 0 0; text-align:center;}
+a.icn {float: left;margin-right: 65px; text-indent: -9999px; cursor: pointer;}
+.icn:focus, .icn:active {outline: none;}
+.icn.twitter { background:url(../images/twitter.png) no-repeat left top; width:112px; height:43px;}
+.icn.facebook { background:url(../images/fb.png) no-repeat left top; width:117px; height:43px;}
+.icn.gplus { background:url(../images/gplus.png) no-repeat left top; width:124px; height:43px;}
+.icn:hover{ opacity:0.8; filter:alpha(opacity=80); }
+
+
+/* Font tace */
+@font-face {
+    font-family: 'PTSansRegular';
+    src: url('../fonts/pts55f-webfont.eot');
+    src: url('../fonts/pts55f-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/pts55f-webfont.woff') format('woff'),
+         url('../fonts/pts55f-webfont.ttf') format('truetype'),
+         url('../fonts/pts55f-webfont.svg#PTSansRegular') format('svg');
+   font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+    font-family: 'PTSansBold';
+    src: url('../fonts/pts75f-webfont.eot');
+    src: url('../fonts/pts75f-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/pts75f-webfont.wofhrf') format('woff'),
+         url('../fonts/pts75f-webfont.ttf') format('truetype'),
+         url('../fonts/pts75f-webfont.svg#PTSansBold') format('svg');
+    font-style: normal;
+  font-weight: 700;
+}

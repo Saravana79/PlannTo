@@ -135,7 +135,7 @@ class ArticleContentsController < ApplicationController
     @related_contents = results.results  
     if (art.sub_type == "Reviews")
       Item.find(item_id).update_remove_rating(rating, @content,true)
-    @content.update_facebook_stats
+      @content.update_facebook_stats
     #elsif (art.sub_type != "Reviews" && @content.sub_type ="Reviews")
      # add_new_rating(@content)
     end  

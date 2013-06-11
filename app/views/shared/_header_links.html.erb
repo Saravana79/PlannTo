@@ -126,7 +126,7 @@
    </div>
     <% else %>
       <%if @static_page == "true"  %>
-      <%if @devise != "true" %>
+        <%if @devise != "true" %>
            <div class="search-login-box">
               <div class="top-search">
               <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post, :html => {:class => "top-searchform"}) do |f| %>
@@ -138,8 +138,10 @@
                 <%end%>           
                 </div>
                 <div class="orimg"></div>
-                <div class="fb-signup"><a href="#">SignUp with Facebook</a></div>                
+                <div class="fb-signup"> <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>                
             </div>
+            
+          
             <div class="clr" style="clear:both;"></div>
           <br/>
     <%end%>
