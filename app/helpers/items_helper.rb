@@ -142,7 +142,7 @@ module ItemsHelper
   end
 
   def show_item_value(item, attribute)
-    compare_item = AttributeValue.find_by_item_id_and_attribute_id( item.id, attribute.id) #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
+    compare_item = item.attribute_values.collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
     return "" if compare_item.nil?
     value = display_specification_value(compare_item, attribute)
     return value
