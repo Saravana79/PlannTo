@@ -211,7 +211,7 @@ module ApplicationHelper
 
   def show_comparision_summary(attr_ca, items)
     order = attr_ca.order
-    compare = attr_ca.attribute.attribute_values.includes(:item).where("item_id in (?)", items.collect(&:id)).group_by(&:value)
+    compare = attr_ca.attribute.attribute_values.includes(:item).where("item_id in (?) and items.itemtype_id=?", items.collect(&:id), items.first.itemtype_id).group_by(&:value)
     compare.each do |key, value|
       compare[key] = value.collect{|av| av.item.name}
     end
@@ -220,13 +220,24 @@ module ApplicationHelper
     attr_v = compare.keys.sort
     if attr_v.size > 1 and ["asc", "desc"].include?(order[:value])
       attr_ca.description.gsub!("{2}", compare[attr_v[order[:second]]].join(','))
-      attr_ca.description.gsub!("{percentage}", "#{(((attr_v[order[:second]].to_f - attr_v[order[:first]].to_f)/attr_v[order[:first]].to_f)*100).to_i}%") if attr_ca.description.match("{percentage}")
+      attr_ca.description.gsub!("{percentage}", get_percentage(order, attr_v)) if attr_ca.description.match("{percentage}")
       attr_ca.description.gsub!("{1}", compare[attr_v[order[:first]]].join(','))
-    elsif compare[attr_v.first].size > 1 
+      {summary: attr_ca.description, highlight: attr_v[order[:first]]}
+    elsif compare[attr_v.first].size > 1 and attr_v.size > 1
       attr_ca.description.gsub!("{1}", compare[attr_v[order[:first]]].join(','))
+      {summary: attr_ca.description, highlight: attr_v[order[:first]]}
     else
       nil
     end
+
   end 
+
+  def get_percentage(order, attr_v)
+    if order[:value] == "asc"
+      "#{(((attr_v[order[:second]].to_f - attr_v[order[:first]].to_f)/attr_v[order[:first]].to_f)*100).to_i}%"
+    else
+      "#{(((attr_v[order[:first]].to_f - attr_v[order[:second]].to_f)/attr_v[order[:second]].to_f)*100).to_i}%"
+    end
+  end
  
 end
