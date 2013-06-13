@@ -102,13 +102,13 @@
   </tr>
 -->
   <%@attributes.group_by(&:category_name).each do |group, attributes|%>
-    <%if group_display_required?(attributes.collect(&:id), @ids)%>
+    <%if group_display_required?(@attribute_ids, @items)%>
       <tr>
         <td></td>
         <td id="comp-info-start-here" class="high insidebox titlename bordered" colspan="4" width="1000px" align="center"><b><%=group%></b></td>
       </tr>
       <%attributes.each do |att|%>
-        <%if  attribute_display_required?(@ids, att.id)%>
+        <%if  attribute_display_required?(@items, att.id)%>
           <%unless att.name == "Price" %>
           <tr>
            <%if (!att.description.nil? && !att.hyperlink.nil?) || (!att.description.blank? && !att.hyperlink.blank?)  %>

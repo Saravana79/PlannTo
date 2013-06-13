@@ -110,39 +110,44 @@ module ItemsHelper
     end
   end
 
-  def attribute_display_required?(ids, attribute_id)
+  def attribute_display_required?(items, attribute_id)
   value = false 
-    attribute_values = AttributeValue.where("item_id in (?) and attribute_id =? and value != ''", ids, attribute_id)
+    attribute_values = items.where("attribute_values.attribute_id =? and (attribute_values.value != '' or attribute_values.value = 'False')", attribute_id)
+    # attribute_values = AttributeValue.where("item_id in (?) and attribute_id =? and value != ''", ids, attribute_id)
     #if all values are empty or False then no need of dispalying it.
-    attribute_values.each do |att|     
-     value = true unless (att.value.blank? || att.value == "False")
-    end
+    # attribute_values.each do |att|     
+    #  value = true unless (att.value.blank? || att.value == "False")
+    # end
     
-    return false if value == false
+    # return false if value == false
     return true if attribute_values.size > 0
     return false
   end
 
-  def group_display_required?(attribute_ids, item_ids)
+  def group_display_required?(attribute_ids, items)
     return false if attribute_ids.size == 0
-    attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", item_ids, attribute_ids)
+    attribute_values = items.where("attribute_values.attribute_id in (?)", attribute_ids)#collect{|i| i.attribute_values}.flatten.collect(&:attribute_id)
+    
+    # common = attribute_values | attribute_ids
+    # logger.info "++++++++++"
+     # attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", items.collect(&:id), attribute_ids)
     return true if attribute_values.size > 0
     return false
   end
 
   def item_group_display_required?(attribute_ids, item)
     return false if attribute_ids.size == 0
-    attribute_values = Array.new
-    item.attribute_values.each do |att|
-      attribute_values << att if attribute_ids.include?(att.attribute_id) && att.value != ""
-    end
+    attribute_values = item.attribute_values.where("attribute_values.attribute_id in (?)", attribute_ids)
+    # attribute_values = Array.new
+    # item.attribute_values.each do |att|
+    #   attribute_values << att if attribute_ids.include?(att.attribute_id) && att.value != ""
+    # end
     # attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", item_ids, attribute_ids)
     return true if attribute_values.size > 0
     return false
   end
-
   def show_item_value(item, attribute)
-    compare_item = item.attribute_values.collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
+    compare_item = item.attribute_values.find_by_attribute_id(attribute.id)#collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
     return "" if compare_item.nil?
     value = display_specification_value(compare_item, attribute)
     return value
