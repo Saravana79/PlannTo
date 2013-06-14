@@ -94,15 +94,23 @@
         $("#ui-active-menuitem").hide();
     });
 
-    $('#plannToSearch1').focus(function(){
+    $('#plannToSearch1, #cmp1stitem, #cmp2nditem').focus(function(){
         $(this).val('');
         $(this).keydown();
     });
 
+    $("#compare_items").live("click", function(e){
+      if($("#cmp1stitem").attr("product_id") && $("#cmp2nditem").attr("product_id")){
+        window.location.href = $(this).attr("href")+"?ids="+$("#cmp1stitem").attr("product_id")+","+$("#cmp2nditem").attr("product_id");
+      }else{
+        alert("To compare please choose Two items");
+      }
+      e.preventDefault();
+    })
 
 
 
-    $("#plannToSearch1").autocomplete({
+    $("#plannToSearch1, #cmp1stitem, #cmp2nditem").autocomplete({
         minLength: 2,
         format: "js",
         // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
@@ -150,6 +158,10 @@
             return false
         },
         select: function( event, ui ) {
+
+          if($(this).attr("id")=="cmp2nditem" || $(this).attr("id")=="cmp1stitem"){
+            $(this).attr("product_id", ui.item.id)
+          }else{
             if (ui.item.id  == 0){
             	//alert(ui.item.url)
                 location.href = "/search/search_items?q=" + ui.item.url
@@ -159,6 +171,7 @@
                 location.href = "" + ui.item.url
             // return false;
             }
+          }
         // return false;
         }
     })
@@ -175,8 +188,8 @@
         }
         self._renderItem(ul, item, -1);
     };
-    $("#plannToSearch1").data("autocomplete")._renderItem = function(ul, item, index) {
-    	
+    jQuery.each(["#plannToSearch1", "#cmp1stitem", "#cmp2nditem"], function(index, item) {
+    $(item).data("autocomplete")._renderItem = function(ul, item, index) {
         if (item.id == 0) {
             return $("<li></li>")
             .data("item.autocomplete", item)
@@ -189,8 +202,8 @@
             .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
             .appendTo(ul);
         }
-    };
-
+      };
+    });
 });
 
   
@@ -271,7 +284,11 @@
 <div class="Titledessmall" style="margin-top:-5px;">Click the products below to get all the information required for you to take a informed buying decision.</div>
 
 <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" style="padding-top:15px">
-      <tbody><tr>
+      <tbody>
+
+
+
+        <tr>
         
         
         <td>
@@ -279,7 +296,7 @@
                  <%=link_to '<img src="http://s3.amazonaws.com/Plannto/items/car/medium/landrover_evoque_1.jpeg" alt="Bike"  class="imgbuyingplanhome"/>'.html_safe,new_preference_path(:search_type => "Car"),:remote => :true  %>
              </a><br>
          <p class="textbuyingplanhome">Car</p>        
-      </div>
+      </div>compare_items
     </td>
 
         <td>
@@ -323,6 +340,11 @@
 </div>
 
 </div>
+
+<input name="" type="text" placeholder="Select a item"  id="cmp1stitem" style="width: 150px;"/><div></div>
+<input name="" type="text" placeholder="Select a item" id="cmp2nditem" style="width: 150px;"/><div></div>
+<a id="compare_items" href="items/compare">Compare</a>
+
 <div class="PopupOr" style="clear:both;"><img alt="" src="/images/or_icon.png"></div>
 
 <div style="clear:both;padding-top:15px;">
