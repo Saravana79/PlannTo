@@ -130,7 +130,7 @@
                  <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%></b></td>
              <%end%>    
            <%@items.each_with_index do |compare_item, index|%>
-              <td align="center" class="high insidebox bordered attributeInfo<%=index+1%>" width="200px"> <div class="price"><%=raw show_item_value(compare_item, att)%></div></td>
+              <td align="center" class="high insidebox bordered attributeInfo<%=index+1%>" width="200px"> <div class="price"><%=raw show_item_value(@items, compare_item, att)%></div></td>
               <%break if index == 3%>
             <%end%>
             <%if empty_boxes_required?(@items)%>

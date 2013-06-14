@@ -112,42 +112,48 @@ module ItemsHelper
 
   def attribute_display_required?(items, attribute_id)
   value = false 
-    attribute_values = items.where("attribute_values.attribute_id =? and (attribute_values.value != '' or attribute_values.value = 'False')", attribute_id)
+    attribute_values = items.collect{|i| i.attribute_values}.flatten 
+    #where("attribute_values.attribute_id =? and (attribute_values.value != '' or attribute_values.value = 'False')", attribute_id)
+    intersection = attribute_values.collect{|av| av.id if (av.attribute_id==attribute_id and (av.value != "" || av.value == 'False'))}.compact
+    # intersection = a | attribute_id
     # attribute_values = AttributeValue.where("item_id in (?) and attribute_id =? and value != ''", ids, attribute_id)
     #if all values are empty or False then no need of dispalying it.
     # attribute_values.each do |att|     
     #  value = true unless (att.value.blank? || att.value == "False")
     # end
-    
+    # logger.info "==========================================="
     # return false if value == false
-    return true if attribute_values.size > 0
+    return true if intersection.size > 0
     return false
   end
 
   def group_display_required?(attribute_ids, items)
     return false if attribute_ids.size == 0
-    attribute_values = items.where("attribute_values.attribute_id in (?)", attribute_ids)#collect{|i| i.attribute_values}.flatten.collect(&:attribute_id)
-    
+    attribute_values = items.collect{|i| i.attribute_values}.flatten#where("attribute_values.attribute_id in (?)", attribute_ids)#collect{|i| i.attribute_values}.flatten.collect(&:attribute_id)
+    a = attribute_values.collect{|av| av.id if attribute_ids.include?(av.attribute_id)}.compact.uniq#collect(&:id)
     # common = attribute_values | attribute_ids
-    # logger.info "++++++++++"
+     # logger.info "++++++++++"
      # attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", items.collect(&:id), attribute_ids)
-    return true if attribute_values.size > 0
+    return true if a.size > 0
     return false
   end
 
   def item_group_display_required?(attribute_ids, item)
     return false if attribute_ids.size == 0
-    attribute_values = item.attribute_values.where("attribute_values.attribute_id in (?)", attribute_ids)
+    attribute_values = item.attribute_values
+    a = attribute_values.collect{|av| av.id if attribute_ids.include?(av.attribute_id)}.compact.uniq#collect(&:id)
     # attribute_values = Array.new
     # item.attribute_values.each do |att|
     #   attribute_values << att if attribute_ids.include?(att.attribute_id) && att.value != ""
     # end
+    # logger.info "?????????????????????????/"
     # attribute_values = AttributeValue.where("item_id IN (?) and attribute_id IN (?) and value != ''", item_ids, attribute_ids)
-    return true if attribute_values.size > 0
+    return true if a.size > 0
     return false
   end
-  def show_item_value(item, attribute)
-    compare_item = item.attribute_values.find_by_attribute_id(attribute.id)#collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
+  def show_item_value(items,item, attribute)
+    attribute_values = items.collect{|i| i.attribute_values}.flatten.compact
+    compare_item = attribute_values.collect{|av| av if av.attribute_id==attribute.id}.compact.first#.find_by_attribute_id(attribute.id)#collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
     return "" if compare_item.nil?
     value = display_specification_value(compare_item, attribute)
     return value
