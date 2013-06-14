@@ -52,18 +52,34 @@
       <%end%>
     <%end%>
   </tr>
-  <!--
+
+
+ 
+  
+  
+  
   <tr><td></td><td class="high insidebox titlename bordered" colspan="4" width="1000px" align="center">Summary of Comparison</td></tr>
-  <tr>
-    <td class= "top insidebox name bordered" rowspan="2"><b> Lighter Mobiles</b></td>
-    <td class="high insidebox bordered" style="border-bottom:0px;"><b>30 grams</b></td>
-    <td class="high insidebox bordered">40 grams</td>
-    <td class="high insidebox bordered">50 grams</td>
-    <td class="high insidebox bordered">60 grams</td>
-  </tr>
-  <tr>
-    <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  Samsung Galaxy S4 is 30% lighter then Iphone 5, lighter mobiles are easy to carry.</td>
-  </tr>
+   <% @attribute_comparision_lists.each do |attr_ca| %>
+   <% display = show_comparision_summary(attr_ca, @items) %>
+     <% if display %>
+      <tr>
+        <td class= "top insidebox name bordered" rowspan="2"><b> <%= "#{attr_ca.title} #{session[:item_type]}" %></b></td>
+        <% @items.each do |i| %>
+          <td class="high insidebox bordered" style="border-bottom:0px;"><b>
+            <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id).value %>
+            <%= a == display[:highlight] ? "<h4>#{display[:highlight]}</h4>".html_safe : a %></b></td>
+        <% end %>
+       <!--  <td class="high insidebox bordered">40 grams</td>
+        <td class="high insidebox bordered">50 grams</td>
+        <td class="high insidebox bordered">60 grams</td> -->
+      </tr>
+      <tr>
+        <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  
+          <%= display[:summary] %></td>
+      </tr>
+    <% end %>
+  <% end %>
+  <!--
   <tr>
     <td class= "top insidebox name bordered" rowspan="2"><b> Higher Processing Power</b></td>
     <td class="high insidebox bordered" style="border-bottom:0px;">1 GHz</td>
@@ -86,13 +102,13 @@
   </tr>
 -->
   <%@attributes.group_by(&:category_name).each do |group, attributes|%>
-    <%if group_display_required?(attributes.collect(&:id), @ids)%>
+    <%if group_display_required?(@attribute_ids, @items)%>
       <tr>
         <td></td>
         <td id="comp-info-start-here" class="high insidebox titlename bordered" colspan="4" width="1000px" align="center"><b><%=group%></b></td>
       </tr>
       <%attributes.each do |att|%>
-        <%if  attribute_display_required?(@ids, att.id)%>
+        <%if  attribute_display_required?(@items, att.id)%>
           <%unless att.name == "Price" %>
           <tr>
            <%if (!att.description.nil? && !att.hyperlink.nil?) || (!att.description.blank? && !att.hyperlink.blank?)  %>
@@ -114,7 +130,7 @@
                  <td id="comp-info-start-here" class="top insidebox name bordered" width="200px"><b><%=att.name%></b></td>
              <%end%>    
            <%@items.each_with_index do |compare_item, index|%>
-              <td align="center" class="high insidebox bordered attributeInfo<%=index+1%>" width="200px"> <div class="price"><%=raw show_item_value(compare_item, att)%></div></td>
+              <td align="center" class="high insidebox bordered attributeInfo<%=index+1%>" width="200px"> <div class="price"><%=raw show_item_value(@items, compare_item, att)%></div></td>
               <%break if index == 3%>
             <%end%>
             <%if empty_boxes_required?(@items)%>
