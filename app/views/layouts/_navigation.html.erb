@@ -297,18 +297,35 @@ jQuery(function(){
                                 <li><a href="/search?search_type=camera&sort_by=Rating&295=SLR-like (bridge) ">Top SLR Style Bridge Cameras</a></li>                                                              
                                 <li><a href="/search?search_type=camera&sort_by=Rating&302=True">Top WaterProof Cameras</a></li>     
                         </ul>
-                       <h2 class="padding-top"><a href="/tablets/guides/Buyer%20Guides">Guides</a></h2>
+                       <h2 class="padding-top"><a href="/cameras/guides/Buyer%20Guides">Guides</a></h2>
                        <ul class="navi_link">
-                          <li><a href="/tablets/guides/Buyer%20Guides">Buyer's Guides</a></li>
-                         <li><a href="/tablets/guides/Beginner%20Guides">Begineer's Guides</a></li>
+                          <li><a href="/cameras/guides/Buyer%20Guides">Buyer's Guides</a></li>
+                         <li><a href="/cameras/guides/Beginner%20Guides">Begineer's Guides</a></li>
+                         
+                       </ul>                        
+                    </div>
+                               <div class="left-2">
+                        <h2><a href="/cameras">Browse Articles</a></h2>
+                        <ul class="navi_link">
+                             <li><a href="/cameras?fl=Reviews">Reviews</a></li>
+                             <li><a href="/cameras?fl=Deals">Deals & Offers</a></li>
+                             <li><a href="/cameras?fl=Apps">Apps</a></li>
+                             <li><a href="/cameras?fl=HowTo">How Tos</a></li>                             
+                             <li><a href="/cameras?fl=Photo">Photos</a></li> 
+                       </ul>
+                            
+                       <h2 class="padding-top"><a href="/cameras/guides/Buyer%20Guides">Guides</a></h2>
+                       <ul class="navi_link">
+                          <li><a href="/cameras/guides/Buyer%20Guides">Buyer's Guides</a></li>
+                         <li><a href="/cameras/guides/Beginner%20Guides">Begineer's Guides</a></li>
                          
                        </ul>                        
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
-                            <h2>Popular Tablets</h2>
+                            <h2>Popular cameras</h2>
                             <p><img src="/images/tablet-icon.png" alt="" /></p>
-                            <p>       <% Item.popular_items("Tablet").each do |item| %> 
+                            <p>       <% Item.popular_items("Camera").each do |item| %> 
                                     <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>      
                                 <%end%></p>
                         </div>
