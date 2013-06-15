@@ -153,7 +153,7 @@ module ItemsHelper
   end
   def show_item_value(items,item, attribute)
     attribute_values = items.collect{|i| i.attribute_values}.flatten.compact
-    compare_item = attribute_values.collect{|av| av if av.attribute_id==attribute.id}.compact.first#.find_by_attribute_id(attribute.id)#collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
+    compare_item = attribute_values.collect{|av| av if (av.attribute_id==attribute.id && av.item_id == item.id)}.compact.first#.find_by_attribute_id(attribute.id)#collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
     return "" if compare_item.nil?
     value = display_specification_value(compare_item, attribute)
     return value
