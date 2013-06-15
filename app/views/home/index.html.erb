@@ -831,6 +831,9 @@ jQuery(document).ready(function() {
 <div class="container">
    <%if Rails.env == "development"%>
      <div class="home-compare-product">
+   <%else%>
+    <div class="home-compare-product" style="display:none;">
+   <%end%>
               <h3>Do you like to compare the products?<br /><span>Select two products in following text box and click compare.</span></h3>
                 <div class="white-box-div">
                   <div class="home-compare-product-div">
@@ -917,7 +920,6 @@ jQuery(document).ready(function() {
                 </div><!-- end of white box -->
             </div><!-- end of home-compare-product -->
 
-      <%end%>
    </div>
    
 
