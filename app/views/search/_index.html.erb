@@ -1,167 +1,165 @@
-  <div style="clear:both;">
-     <!--<div style="width:735" >
-       <div class="bg_border_topbottom"></div>
-      <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
-   
-    <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@items.total%></div> 
-      <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:7px"></div>
-        <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
-        <%=select_tag "search_sort_by",
-          options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]), :class => "txt_normal width50" %>
-      </div>
-      <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
-    </div>-->
-  <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:0px"></div>
-    <%if params[:page] == "1" || !params[:page] %>
-       <% session[:group_id] = [] %>
-    <%end%>  
-    <%@items.results.each do |item|%>
-       <% group_id = item.cargroup.id rescue "no" %>
-        <%unless ((session[:group_id].nil?) || (session[:group_id].include?(group_id))) %>
-           <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" class="search-result-list">
-            <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="176" height="132" onclick="parent.location='<%=link_url(item)%>'" /></div>
-              <div class="float_rgt" style="width:520px;">
-              <div class="float_rgt" style="margin-right:10px;">
-                <%if (!(item.rank.nil?) && (item.rank > 0))%>
-                              <div class="widget-div">
-                                  <a href="#"><div><%=item.rank%></div> <div class="scorespan">Score</div></a>
-                                </div>
-                            </div>
-                            
+    <div style="clear:both;">
+       <!--<div style="width:735" >
+         <div class="bg_border_topbottom"></div>
+        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+     
+      <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <%=@items.total%></div> 
+        <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:7px"></div>
+          <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
+          <%=select_tag "search_sort_by",
+            options_for_select([["Select", ""], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]), :class => "txt_normal width50" %>
+        </div>
+        <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+      </div>-->
+    <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:0px"></div>
+      <%if params[:page] == "1" || !params[:page] %>
+         <% session[:group_id] = [] %>
+      <%end%>  
+      <%@items.results.each do |item|%>
+         <% group_id = item.cargroup.id rescue "no" %>
+          <%unless ((session[:group_id].nil?) || (session[:group_id].include?(group_id))) %>
+             <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" class="search-result-list">
+                    <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="176" height="132" onclick="parent.location='<%=link_url(item)%>'" /></div>
+                    <div class="float_rgt" style="width:520px;">
+                        <div class="float_rgt" style="margin-right:10px;">
+                              <%if (!(item.rank.nil?) && (item.rank > 0))%>
+                                            <div class="widget-div">
+                                                <a href="#"><div><%=item.rank%></div> <div class="scorespan">Score</div></a>
+                                              </div>                                          
+                                          
 
-                   <!-- <div class="ratingdiv" style="background-color: #fd7200;left: 115px;width: 60px;font-size: 10px;text-transform: uppercase;text-align: center;padding: 10px 0px 5px 0px;color: #fff;margin-right:10px;">
-                       <span class="ratingspan" style="font-size: 30px;display: block;margin-bottom: -2px;text-align: center;"><%=item.rank%></span>
-                             Score
-                    </div>-->
-                <%end%>
-            
-             <span class="search-left-2">
-              <h3><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.get_name%></a><br /><span> <%@where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) %>
-            <a class="txt_price"><%= item.get_price_info('Price',true,@where_to_buy_items.size).html_safe rescue ''%></a><br /></span></h3>
-                <h1></h1>
-            <div style="float:left;">   
-              
-             <% rating_id = "search_index_#{item.id}" %>
-            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => rating_id} %>
-            <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a>
-          </div>
+                                 <!-- <div class="ratingdiv" style="background-color: #fd7200;left: 115px;width: 60px;font-size: 10px;text-transform: uppercase;text-align: center;padding: 10px 0px 5px 0px;color: #fff;margin-right:10px;">
+                                     <span class="ratingspan" style="font-size: 30px;display: block;margin-bottom: -2px;text-align: center;"><%=item.rank%></span>
+                                           Score
+                                  </div>-->
+                              <%end%>
+                      </div>
+                       <span class="search-left-2">
+                            <h3><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.get_name%></a><br />
+                                  <span> <%@where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) %>
+                                    <a class="txt_price"><%= item.get_price_info('Price',true,@where_to_buy_items.size).html_safe rescue ''%></a><br />
+                                </span>
+                            </h3>
+                          <div style="float:left;">                       
+                             <% rating_id = "search_index_#{item.id}" %>
+                            <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => rating_id} %>
+                            <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a>
+                          </div>                
+                            <br />
+                              <div style="padding-top:5px;clear:both;"><a class="txt_normal"><%=display_specifications(item)%><br /><br/></a></div>
+                      </span>
+                          <%  new_version_item = Item.find(item.new_version_item_id) if (item.new_version_item_id && item.new_version_item_id != 0) rescue nil%>
+                       <%if  new_version_item %>
+                        <br/>
+                        <font color="green" style="font-size:12px;"> <h3 style="clear:both;padding-top:5px;">New version of this product is available: </font> <a href="<%= new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%=  new_version_item.name rescue ''%></a> </h3> 
+                      <%end%>
+           </div> 
+              <div style="border-bottom: solid 0px #CCCCCC;clear:both;padding-top:10px;"></div>
+        </div>
+         <div class="result-row-btm">
+            <form>
+                <div class="comparediv" style="float:left;"><a class="txt_compare">Compare</a><input name="Compare" type="checkbox" value="<%=item.id%>"/> </div>
+                <div class="btn-div">
+                     <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item, :related_items => false %>
+                </div>
+            </form>
+        </div>
+        <div class="clr"></div>
+  
+           <script>
+            $(".action_btns_medium").click(function(e){
+             <% if !current_user %>
+              $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+                openLoginPopup("#" + $(this).attr('id'), "submit");             
+               
+                return false
+              <%end%>
+            })
+             </script>
           
-              <br />
-            <div style="padding-top:5px;clear:both;"><a class="txt_normal"><%=display_specifications(item)%><br /><br/></a></div>
-          </span>
-          <%  new_version_item = Item.find(item.new_version_item_id) if (item.new_version_item_id && item.new_version_item_id != 0) rescue nil%>
-       <%if  new_version_item %>
-        <br/>
-        <font color="green" style="font-size:12px;"> <h3 style="clear:both;padding-top:5px;">New version of this product is available: </font> <a href="<%= new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%=  new_version_item.name rescue ''%></a> </h3> 
-      <%end%>
-        </div>
-        </div>
-        <div style="border-bottom: solid 0px #CCCCCC;clear:both;padding-top:10px;"></div>
-      </div>
-       <div class="result-row-btm">
-          <form>
-              <div class="comparediv" style="float:left;"><a class="txt_compare">Compare</a><input name="Compare" type="checkbox" value="<%=item.id%>"/> </div>
-              <div class="btn-div">
-                   <%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_medium', :item => item, :related_items => false %>
-              </div>
-          </form>
-      </div>
-      <div class="clr"></div>
-         <script>
-          $(".action_btns_medium").click(function(e){
-           <% if !current_user %>
-            $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
-              openLoginPopup("#" + $(this).attr('id'), "submit");
-            
-             
-              return false
-            <%end%>
-          })
-           </script>
-        
-            <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
+              <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
 
-      <%end%>
-        <% session[:group_id] << group_id %>
-        <% session[:group_id].delete("no") %>
-  <%end%>
-
-      <%= render 'shared/show_hide_login_form', :item => "" %>
-
-    <div class="push"></div><br/>
-   <!-- <div id="searchItemsPaginate">
-   
-     <%= will_paginate @items.results , :page_links => true %> 
-    </div> 
-    -->
-
-    <!--<div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>-->
-    <script type="text/javascript">
-      $(document).ready(function(){
-        setCompareCheckBox();
-      })
-
-
-    <%@search_info_lookups.each_with_index do |search, index|%>
-        var selectedCount = 0;
-        var displayCount = true
-      <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
-          displayCount = false;
-      <%     elsif (search[:param_1][:vt] == "Click" )%>
-        <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
-          <%if search[:param_1][:av] == row.value%>
-              selectedCount = <%=row.count%><%#=row.value%>
-          <%end%>
         <%end%>
-      <% elsif search[:param_1][:vt] == "ListOfValues"  %>
-          displayCount = false;
-      <%  end%>
-        if (displayCount == true){
-          var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
-          value = value + " ( " + selectedCount + " )"
-          $("#attribute_menu_<%=index%> a").html(" ")
-          $("#attribute_menu_<%=index%> a").html(value)
-        }
+          <% session[:group_id] << group_id %>
+          <% session[:group_id].delete("no") %>
     <%end%>
-    </script>
 
-    <script type="text/javascript">
-      function loadManufacturers(){
-        var manufacturerList = [];
-    <%if @items.facet(:manufacturer).rows.count > 0%>
-      <% for row in @items.facet(:manufacturer).rows%>
-            manufacturerList.push( {
-              label: "<%="#{row.value} (#{row.count})"%>",
-              value: "<%="#{row.value}"%>"
+        <%= render 'shared/show_hide_login_form', :item => "" %>
 
-            });
-      <%end
-    end%>
-        return manufacturerList;
-      }
+      <div class="push"></div><br/>
+     <!-- <div id="searchItemsPaginate">
+     
+       <%= will_paginate @items.results , :page_links => true %> 
+      </div> 
+      -->
 
-      function loadTypes(){
-        var typeList = [];
-            <%if @items.facet(:features_string, 'Body Style'.to_sym)%>
-              <%if @items.facet(:features_string, 'Body Style'.to_sym).rows.count > 0%>
-                <% for row in @items.facet(:features_string, 'Body Style'.to_sym).rows%>
-                      typeList.push( {
-                        label: "<%="#{row.value} (#{row.count})"%>",
-                        value: "<%="#{row.value}"%>"
-                      });
-                <%end
+      <!--<div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>-->
+      <script type="text/javascript">
+        $(document).ready(function(){
+          setCompareCheckBox();
+        })
+
+
+      <%@search_info_lookups.each_with_index do |search, index|%>
+          var selectedCount = 0;
+          var displayCount = true
+        <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
+            displayCount = false;
+        <%     elsif (search[:param_1][:vt] == "Click" )%>
+          <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
+            <%if search[:param_1][:av] == row.value%>
+                selectedCount = <%=row.count%><%#=row.value%>
+            <%end%>
+          <%end%>
+        <% elsif search[:param_1][:vt] == "ListOfValues"  %>
+            displayCount = false;
+        <%  end%>
+          if (displayCount == true){
+            var value = $("#attribute_menu_<%=index%>").text().replace(/\(.*?\)/, "")
+            value = value + " ( " + selectedCount + " )"
+            $("#attribute_menu_<%=index%> a").html(" ")
+            $("#attribute_menu_<%=index%> a").html(value)
+          }
+      <%end%>
+      </script>
+
+      <script type="text/javascript">
+        function loadManufacturers(){
+          var manufacturerList = [];
+      <%if @items.facet(:manufacturer).rows.count > 0%>
+        <% for row in @items.facet(:manufacturer).rows%>
+              manufacturerList.push( {
+                label: "<%="#{row.value} (#{row.count})"%>",
+                value: "<%="#{row.value}"%>"
+
+              });
+        <%end
+      end%>
+          return manufacturerList;
+        }
+
+        function loadTypes(){
+          var typeList = [];
+              <%if @items.facet(:features_string, 'Body Style'.to_sym)%>
+                <%if @items.facet(:features_string, 'Body Style'.to_sym).rows.count > 0%>
+                  <% for row in @items.facet(:features_string, 'Body Style'.to_sym).rows%>
+                        typeList.push( {
+                          label: "<%="#{row.value} (#{row.count})"%>",
+                          value: "<%="#{row.value}"%>"
+                        });
+                  <%end
+                end%>
+
+              <%elsif @items.facet(:features_string, 'Type'.to_sym)%>
+                <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
+                  <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
+                        typeList.push( {
+                          label: "<%="#{row.value} (#{row.count})"%>",
+                          value: "<%="#{row.value}"%>"
+                        });
+                  <%end
+                end
               end%>
-
-            <%elsif @items.facet(:features_string, 'Type'.to_sym)%>
-              <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
-                <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
-                      typeList.push( {
-                        label: "<%="#{row.value} (#{row.count})"%>",
-                        value: "<%="#{row.value}"%>"
-                      });
-                <%end
-              end
-            end%>
-        return typeList;
-      }
-    </script>
+          return typeList;
+        }
+      </script>
