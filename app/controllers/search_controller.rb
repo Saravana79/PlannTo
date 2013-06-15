@@ -4,6 +4,7 @@ class SearchController < ApplicationController
   layout "product"
 
   def index
+    @static_page1 = "true"
     @search_type = params[:search_type]
     itemtype = Itemtype.find_by_itemtype(params[:search_type])
     #session[:warning] = "true"
@@ -176,7 +177,7 @@ class SearchController < ApplicationController
       order_by :launch_date,:desc if sort_by_option == "launch_date"
       order_by :created_at,:desc 
       #   order_by :Price, :desc           # descending order , check Documentation link below
-    
+        
 
     end
     #order_by :class , :desc
@@ -187,6 +188,7 @@ class SearchController < ApplicationController
     #   @display = "block;"
     #   @page += 1
     # end
+
   end
 
   def search_items
@@ -249,7 +251,7 @@ class SearchController < ApplicationController
       image_url = item.image_url(:small) rescue ""
       url = item.get_url() rescue ""
       # image_url = item.image_url
-      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
        
     else
       image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png"
@@ -295,7 +297,7 @@ class SearchController < ApplicationController
      # end
       url = item.get_url()
       # image_url = item.image_url
-      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
     }
     render :json => results
     
@@ -329,7 +331,7 @@ class SearchController < ApplicationController
       end
       url = item.get_url()
       # image_url = item.image_url
-      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
     }
     render :json => results
 

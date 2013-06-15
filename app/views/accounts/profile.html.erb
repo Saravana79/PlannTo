@@ -1,22 +1,12 @@
-<% content_for :title, @user.name + " - " %>
+  <% content_for :title, @user.name + " - " %>
 
-<!--<%unless params[:buying_plan].present?%>
-<script type="text/javascript" src="/javascripts/movingboxs.js"></script>
-<script type="text/javascript" src="/javascripts/search_profile_car.js"></script>
-<link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
-<script type="text/javascript">
-  $(function() {
-    $('#car_slider').movingBoxes({
-      startPanel   : 1,      // start with this panel
-      width        : 500,    // overall width of movingBoxes (not including navigation arrows)
-      wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
-      buildNav     : true,   // if true, navigation links will be added
-      navFormatter : function() {
-        return "&#9679;";
-      } // function which returns the navigation text for each panel
-    });
-    $(".tabing2").click(function() {
-      $('#mobile_slider').movingBoxes({
+  <!--<%unless params[:buying_plan].present?%>
+  <script type="text/javascript" src="/javascripts/movingboxs.js"></script>
+  <script type="text/javascript" src="/javascripts/search_profile_car.js"></script>
+  <link type="text/css" href="/stylesheets/movingboxs.css" rel="stylesheet"/>
+  <script type="text/javascript">
+    $(function() {
+      $('#car_slider').movingBoxes({
         startPanel   : 1,      // start with this panel
         width        : 500,    // overall width of movingBoxes (not including navigation arrows)
         wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
@@ -25,440 +15,457 @@
           return "&#9679;";
         } // function which returns the navigation text for each panel
       });
+      $(".tabing2").click(function() {
+        $('#mobile_slider').movingBoxes({
+          startPanel   : 1,      // start with this panel
+          width        : 500,    // overall width of movingBoxes (not including navigation arrows)
+          wrap         : false,   // if true, the panel will "wrap" (it really rewinds/fast forwards) at the ends
+          buildNav     : true,   // if true, navigation links will be added
+          navFormatter : function() {
+            return "&#9679;";
+          } // function which returns the navigation text for each panel
+        });
+      });
+
+
     });
-
-
-  });
-</script>
-<%end%> -->
-   <div id="newMessage">
-</div
-<div id="maincontainer" class="maincontainerCss">
-
-  <!-- Left Nav - start -->
-  <div class="leftcolumnsmall" style="display:none;">
-
-    <ul class="menu_profile">
-      <li><a href="#" class="icon_profile menu_profile_active">Profile</a></li>
-      <li id="profile_preference_buying_plans"><a href="" class="icon_prefernce">Preference / Buying Plans</a></li>
-      <li><a href="#" class="icon_points">Points</a></li>
-      <li><a href="#" class="icon_awards">Awards</a></li>
-
-      <li><%= link_to 'Followers', followers_account_path(@user), remote: true, class: "icon_followers" %></li>
-      <% unless @user == current_user %>
-        <li>
-           <% unless current_user.follow_by_type(@user, 'Plannto')  %>
-             <%= link_to 'Follow This User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'icon_followers' %>
-           <%else-%>
-             <%= link_to 'Unfollow This User', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'icon_followers' %> 
-           <%end%>  
-        </li> 
-      <%end-%>  
-  
-    </ul>
-  </div>
-  <script type="text/javascript">
-    $("ul.menu_profile li").click(function (e) {
-      $("ul.menu_profile .menu_profile_active").removeClass("menu_profile_active");
-      $(this).closest('li').addClass('menu_profile_active');
-      var id = $(this).attr('id');
-      if (id == "profile_preference_buying_plans"){
-        var url = "/accounts/buying_plans";
-        $.get(url,null,null,"script");
-      }
-      e.preventDefault();
-    });
-
-     /*$('#buyingPlansPaginate div.pagination a').live('click', function(){
-        var page = $(this).text()
-        var current = $('em.current').text();
-        if (page == "← Previous"){
-            page = parseInt(current) -1
-        }
-        else if (page == "Next →"){
-            page = parseInt(current) + 1
-        }
-
-        var url = "/accounts/buying_plans";
-        $.get(url,null,null,"script");
-
-        return false;
-    })*/
   </script>
-  <!-- Left Nav - End -->
+  <%end%> -->
+     <div id="newMessage">
+  </div
+  <div id="maincontainer" class="maincontainerCss">
 
-  <!-- Right - start -->
-  <div class="leftcolumnbig"  id="profileInfo">
-    <div style="float:left;width:120px;height:120px;">
-      <%= image_tag(@user.get_photo(:medium)) %>
-       <% unless @user == current_user %>
-        <br />
-        <br />
-      
-        <%end%> 
-    </div>
-    <div style="float:left;width:590px;padding-left:10px;">
-    <div >
-     <span style="float:left;width:380px;">
-      <h1><%= @user.name %></h1>
-     
-    </span>
-     
-      <% unless @user == current_user %>           
-       <% unless current_user.follow_by_type(@user, 'Plannto')  %>
-         <span class="action_btns" style="float:right;">  
-             <%= link_to 'Follow User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'plan_to_follow_icon'%>
-           <%else-%>
-         <span class="action_btns_selected" style="float:right;">  
-             <%= link_to 'Unfollow', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plan_to_follow_icon_selected' %> 
-       <%end%>  
-      <%end%>  
-    </span>
- 
-    </div>
-    <br/>
-    <div style="clear:both;padding-top:10px;">
-    <span id="description" style="float:left;width:380px;">
-    <%if @user.description.blank? and User.profile_owner?(@user,current_user) %>
-      Add a short bio about yourself.
-     <%end%> 
-      <%= @user.description %>
-      <%if User.profile_owner?(@user,current_user) %>
-        <%= link_to "Edit","#",:onclick=>'$("#description_form").toggle();' %>
-      <%end%>  
-    </span>
-    <br/>
-    <% unless @user == current_user %>
+    <!-- Left Nav - start -->
+  <!--  <div class="leftcolumnsmall" style="display:none;">
 
-           <span style="float:left;padding-top:20px;">
-          <%=link_to "<span>Send message</span>".html_safe, new_message_path(:user_id => @user.id), :class => "add_new_msg", :remote => true%>
-          </span>
-    <%end%>
+      <ul class="menu_profile">
+        <li><a href="#" class="icon_profile menu_profile_active">Profile</a></li>
+        <li id="profile_preference_buying_plans"><a href="" class="icon_prefernce">Preference / Buying Plans</a></li>
+        <li><a href="#" class="icon_points">Points</a></li>
+        <li><a href="#" class="icon_awards">Awards</a></li>
+
+        <li><%#= link_to 'Followers', followers_account_path(@user), remote: true, class: "icon_followers" %></li>
+        <%# unless @user == current_user %>
+          <li>
+             <%# unless current_user.follow_by_type(@user, 'Plannto')  %>
+               <#%= link_to 'Follow This User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'icon_followers' %>
+             <%#else-%>
+               <#%= link_to 'Unfollow This User', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'icon_followers' %> 
+             <%#end%>  
+          </li> 
+        <%#end-%>  
     
-    <span id="description_form" style="float:left;width:380px;display:none;">
-     <%= form_for(current_user, :as => :user, :url => registration_path(current_user),:method => :put ) do |f| %>
-      <div style="margin:0px 460px 0px 0px;"><%= f.text_area :description, :class => 'textFilling1 expanding' ,:style=>"width:300px;"%></div>
-    <div style="padding:0px 5px 5px 5px; float:right; width:60%; margin-right:40px; margin-top:20px ">  <%= f.submit 'Save', :class => 'btn_submitanswer',:id => "publishanswer" %>
+      </ul>
     </div>
-     <% end %>
-    </span>
-    <span style="float:right;width:210px;">
-      <div class="points">
-        <span class="indu_span"><a class="values"><%= @user.total_points  %></a><a class="text">Points</a></span>
-        <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
-        <span class="indu_span"><a class="values"><%= @user.total_items_following_count %></a><a class="text">Following</a></span>
-        <span class="indu_span"><a class="values"><%= @user.total_reviews_count %></a><a class="text">Reviews </a></span>
-        <!--<span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>-->
+  -->
+    <script type="text/javascript">
+      $("ul.menu_profile li").click(function (e) {
+        $("ul.menu_profile .menu_profile_active").removeClass("menu_profile_active");
+        $(this).closest('li').addClass('menu_profile_active');
+        var id = $(this).attr('id');
+        if (id == "profile_preference_buying_plans"){
+          var url = "/accounts/buying_plans";
+          $.get(url,null,null,"script");
+        }
+        e.preventDefault();
+      });
 
-      </div>
-    </span>
-   </div>
-  </div> 
-    <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
-      
-      
-  </div>
-  <br/>
-  <br/>
-  <br/>
-   <br/>
-  
-   <%if current_user.profle_view_permission?(@user) %>
-  <div style="clear:both;margin-top:110px;">
-        <ul id="Newtabs">
-         <% ['Products', 'Apps', 'Accessories',"Followers","Following" ,"Buying Plans"].each do |item_type|%>
-            <%= link_for_item_type(item_type, params[:follow], @user) %>
-          <%end%>    
-          <!--<%if Rails.env == "development"%>
-           <li id="profile_preference_buying_plans"><a href="/<%=@user.try(:username)%>?buying_plan=true" class="icon_prefernce">Preference / Buying Plans</a></li>
-     		<%end%> -->
-        </ul>
-      </div>
-      <div style="display:block;">
-      <!--  <div class="sortby">
-          <div class="icon_share">Share:
-            <span> <img src="/images/icon_fb.png"/> </span>
-            <span> <img src="/images/icon_twitter.png"/> </span>
-            <span> <img src="/images/icon_in.png"/>  </span>
-            <span> <img src="/images/icon_su.png"/>  </span>
-            <span> <img src="/images/icon_t.png"/> </span>
-          </div>
-        </div>
-        -->
-       
-         
-        <div class="Rightouter" id="tabs2">
-        	<%if (params[:follow] == 'Apps') %>
-          <%if User.profile_owner?(@user,current_user) %>
-<div class="ui-widget Blockheading">
-  <div class="Headingtext">
-  Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
-   <%= @follow_types.first %> 
-   <%else%> Product <%end%> to your profile </div>
-   <a data-content="Apps" class="quickCreate" style="display:none;"><%=content_write_tab_label("Apps")%></a>
-           
-   <div class="Searchform">
-       <input type="text" placeholder="Search <%= params[:follow]%>" id="search_apps" /> 
-       <input name="" type="button" class="Searchbut"/> 
-   </div>  
-  <div class="Searchform" style="">   
+       /*$('#buyingPlansPaginate div.pagination a').live('click', function(){
+          var page = $(this).text()
+          var current = $('em.current').text();
+          if (page == "← Previous"){
+              page = parseInt(current) -1
+          }
+          else if (page == "Next →"){
+              page = parseInt(current) + 1
+          }
 
-     
-    <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
-       <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
-                                                     ["Follow this Apps", "follower"]]) %>
-       <%= f.hidden_field :followable_id %>
-       <%= f.hidden_field :followable_type %>         
-             
-     <%end%>
-     
-  </div>
-  <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
-</div>
- <%end%>
-          <%end%>
-          
-             <script type="text/javascript">
-    	
-    	$(function(){
+          var url = "/accounts/buying_plans";
+          $.get(url,null,null,"script");
 
-    $('a.quickCreate').live("click",function(){
-
-   // $(this).parent().toggleClass('selected');
-    var category = $(this).data('content');
-   // $.ajaxSetup({
-   //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
-   // });
-   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category });
-    //$.get('/contents/quick_new',{'category' : category}, "script");
-    return false
-
-  });
-  });
+          return false;
+      })*/
     </script>
-         <div id="contentEditView"></div>
-        </div>
-    
-        	<%if (params[:follow] == "Preferences")  %>   
-        	   
-        	  <div class="Rightouter" id="tabs2">
-        	  <% if current_user.id == @user.id %>
-        	  	Select Category
-        	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list , "itemtype", "itemtype")%>
-        	  	
-        	  	<button id="plantobuySection">Create buying Plan</button>
-        	  	<%end%>
-         <div id="giveAdviceDialog"> </div>
-      <script type="text/javascript">
-  $(document).ready(function(){
-    $('#plantobuySection').click(function(){
+    <!-- Left Nav - End -->
 
-            $.get('/preferences/new',{search_type: $("#buying_plan_item_type").val()},null,"script");
-            return false;
+    <!-- Right - start -->
+    <div class="leftcolumnbig"  id="profileInfo">
+      <div>
+      <div style="float:left;width:120px;height:120px;">
+        <%= image_tag(@user.get_photo(:medium)) %>
+         <% unless @user == current_user %>
+          <br />
+          <br />
+        
+          <%end%> 
+      </div>
+      <div style="float:left;width:590px;padding-left:10px;">
+      <div >
+       <span style="float:left;width:380px;">
+        <h1><%= @user.name %></h1>
+       
+      </span>
+       
+        <% unless @user == current_user %>           
+         <% unless current_user.follow_by_type(@user, 'Plannto')  %>
+           <span class="action_btns" style="float:right;">  
+               <%= link_to 'Follow User', follows_path(:follow => {followable_id: @user.id, followable_type: 'User', follow_type: 'Plannto'}), :method => :post, :class => 'plan_to_follow_icon'%>
+             <%else-%>
+           <span class="action_btns_selected" style="float:right;">  
+               <%= link_to 'Unfollow', current_user.follow_by_type(@user, 'Plannto'), :method => :delete, :confirm => "Are you sure?", :class => 'plan_to_follow_icon_selected' %> 
+         <%end%>  
+        <%end%>  
+      </span>
+   
+      </div>
+      <br/>
+      <div style="clear:both;padding-top:10px;">
+      <span id="description" style="float:left;width:380px;">
+      <%if @user.description.blank? and User.profile_owner?(@user,current_user) %>
+        Add a short bio about yourself.
+       <%end%> 
+        <%= @user.description %>
+        <%if User.profile_owner?(@user,current_user) %>
+          <%= link_to "Edit","#",:onclick=>'$("#description_form").toggle();' %>
+        <%end%>  
+      </span>
+      <br/>
+      <% unless @user == current_user %>
+
+             <span style="float:left;padding-top:20px;">
+            <%=link_to "<span>Send message</span>".html_safe, new_message_path(:user_id => @user.id), :class => "add_new_msg", :remote => true%>
+            </span>
+      <%end%>
+      
+      <span id="description_form" style="float:left;width:380px;display:none;">
+       <%= form_for(current_user, :as => :user, :url => registration_path(current_user),:method => :put ) do |f| %>
+        <div style="margin:0px 460px 0px 0px;"><%= f.text_area :description, :class => 'textFilling1 expanding' ,:style=>"width:300px;"%></div>
+      <div style="padding:0px 5px 5px 5px; float:right; width:60%; margin-right:40px; margin-top:20px ">  <%= f.submit 'Save', :class => 'btn_submitanswer',:id => "publishanswer" %>
+      </div>
+       <% end %>
+      </span>
+      <span style="float:right;width:210px;">
+        <div class="points">
+          <span class="indu_span"><a class="values"><%= @user.total_points  %></a><a class="text">Points</a></span>
+          <!--<span class="indu_span"><a class="values">4</a><a class="text">Rewards</a></span>-->
+          <span class="indu_span"><a class="values"><%= @user.total_items_following_count %></a><a class="text">Following</a></span>
+          <span class="indu_span"><a class="values"><%= @user.total_reviews_count %></a><a class="text">Reviews </a></span>
+          <!--<span class="indu_span"><a class="values">25</a><a class="text">Followers</a></span>-->
+
+        </div>
+      </span>
+     </div>
+    </div> 
+      <div style="border:solid 0px red;  float:right;  margin-top:10px; ">
+        
+        
+    </div>
+
+  </div>
+    <br/>
+    <br/>
+    <br/>
+     <br/>
+    
+     <%if current_user.profle_view_permission?(@user) %>
+    <div style="clear:both;margin-top:110px;">
+          <ul id="Newtabs">
+           <% ['Products', 'Apps', 'Accessories',"Followers","Following" ,"Buying Plans"].each do |item_type|%>
+              <%= link_for_item_type(item_type, params[:follow], @user) %>
+            <%end%>    
+            <!--<%if Rails.env == "development"%>
+             <li id="profile_preference_buying_plans"><a href="/<%=@user.try(:username)%>?buying_plan=true" class="icon_prefernce">Preference / Buying Plans</a></li>
+       		<%end%> -->
+          </ul>
+        </div>
+        <div style="display:block;">
+        <!--  <div class="sortby">
+            <div class="icon_share">Share:
+              <span> <img src="/images/icon_fb.png"/> </span>
+              <span> <img src="/images/icon_twitter.png"/> </span>
+              <span> <img src="/images/icon_in.png"/>  </span>
+              <span> <img src="/images/icon_su.png"/>  </span>
+              <span> <img src="/images/icon_t.png"/> </span>
+            </div>
+          </div>
+          -->
+         
+           
+          <div class="Rightouter" id="tabs2">
+          	<%if (params[:follow] == 'Apps') %>
+            <%if User.profile_owner?(@user,current_user) %>
+  <div class="ui-widget Blockheading">
+    <div class="Headingtext">
+    Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
+     <%= @follow_types.first %> 
+     <%else%> Product <%end%> to your profile </div>
+     <a data-content="Apps" class="quickCreate" style="display:none;"><%=content_write_tab_label("Apps")%></a>
+             
+     <div class="Searchform">
+         <input type="text" placeholder="Search <%= params[:follow]%>" id="search_apps" /> 
+         <input name="" type="button" class="Searchbut"/> 
+     </div>  
+    <div class="Searchform" style="">   
+
+       
+      <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
+         <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
+                                                       ["Follow this Apps", "follower"]]) %>
+         <%= f.hidden_field :followable_id %>
+         <%= f.hidden_field :followable_type %>         
+               
+       <%end%>
+       
+    </div>
+    <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
+  </div>
+   <%end%>
+            <%end%>
+            
+               <script type="text/javascript">
+      	
+      	$(function(){
+
+      $('a.quickCreate').live("click",function(){
+
+     // $(this).parent().toggleClass('selected');
+      var category = $(this).data('content');
+     // $.ajaxSetup({
+     //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+     // });
+     $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category });
+      //$.get('/contents/quick_new',{'category' : category}, "script");
+      return false
 
     });
-     });
-</script>
-<div id="buying_plans_div">
-<%=render "buying_plans"%>
-</div>
-</div>
-<%end%>
-        
-               <div class="Rightouter" id="tabs2">
-        	<%if (params[:follow] == 'Accessories') %>
-          <%if User.profile_owner?(@user,current_user) %>
-<div class="ui-widget Blockheading">
-  <div class="Headingtext">
-  Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
-   <%= @follow_types.first %> 
-   <%else%> Product <%end%> to your profile </div>
-   
-   <a data-content="Apps" class="quickCreate" style="display:none;"><%=content_write_tab_label("Accessories")%></a>
-   <div class="Searchform">
-       <input type="text" placeholder="Search <%= params[:follow]%>" id="search_accessories" /> 
-       <input name="" type="button" class="Searchbut"/> 
-   </div>  
-  <div class="Searchform" style="">   
-
-     
-    <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
-       <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
-                                                     ["Follow this Accessory", "follower"]]) %>
-       <%= f.hidden_field :followable_id %>
-       <%= f.hidden_field :followable_type %>         
-             
-     <%end%>
-     
-  </div>
-  <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
-</div>
- <%end%>
-          <%end%>
-         
-        </div>
-
-      </div>
-      
-   <% if (params[:follow] == 'Followers') || (params[:follow] == "Following") %>
-           <%= render "followers" %>
-       <%else%>
-    <div class="Rightouter" id="tabs1">
-    	<%unless params[:follow] == "Preferences"%>
-        <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-        <%end%>
-     </div>
-    <%end%> 
-    
-<% unless  params[:follow] == "Preferences" %>
-   <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories')  && (params[:follow] != 'Followers') && (params[:follow]!= "Following" )%>
-    
-    <br/>
-    <div style="clear:both;"></div>
-    <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">
-        <h2><%= @user.name %> Activities</h2>
-    </div>
-    <br/>
-      <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1,"search_type" => "activities"}%>
-       <% @contents = Content.filter(params)  %>
-       <% if @contents.size == 0 %>
-          <%= render "shared/alert_message",:type => "user_activity"%>  
-       <%else%>    
-      <span id="content_all">
-        <!--filter by block start here-->
-        <div id="Filterby">
-          <div class="Filternav">
-                <div style="float:left;width:60px;">
-                  <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>     
-                </div>
-                <div style="float:left;width:630px;">
-                  <ul>
-                  <!--  <li class="Labeltext" style="padding-right:2px;">Filter by:</li>-->
-                    <li class="Currentfilter" id="All"><a href="#">All</a></li>
-                    <%@article_categories.each do |category|%>
-                      <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
-                    <%end%>
-                    <li id="User"><a href="">User</a></li>
-                  </ul>
-                  
-                </div>
+    });
+      </script>
+           <div id="contentEditView"></div>
           </div>
+      
+          	<%if (params[:follow] == "Preferences")  %>   
+          	   
+          	  <div class="Rightouter" id="tabs2">
+          	  <% if current_user.id == @user.id %>
+            	  	Select Category
+          	  	<%=select_tag "buying_plan_item_type", options_from_collection_for_select(@itemtypes_list , "itemtype", "itemtype")%>
+          	  	
+          	  	<button id="plantobuySection">Create buying Plan</button>
+          	  	<%end%>
+           <div id="giveAdviceDialog"> </div>
+        <script type="text/javascript">
+    $(document).ready(function(){
+      $('#plantobuySection').click(function(){
+
+              $.get('/preferences/new',{search_type: $("#buying_plan_item_type").val()},null,"script");
+              return false;
+
+      });
+       });
+  </script>
+  <div id="buying_plans_div">
+  <%=render "buying_plans"%>
+  </div>
+  </div>
+  <%end%>
+          
+                 <div class="Rightouter" id="tabs2">
+          	<%if (params[:follow] == 'Accessories') %>
+            <%if User.profile_owner?(@user,current_user) %>
+  <div class="ui-widget Blockheading">
+    <div class="Headingtext">
+    Add <%if  @follow_types.first == "Apps" ||  @follow_types.first == "Accessories" %> 
+     <%= @follow_types.first %> 
+     <%else%> Product <%end%> to your profile </div>
+     
+     <a data-content="Apps" class="quickCreate" style="display:none;"><%=content_write_tab_label("Accessories")%></a>
+     <div class="Searchform">
+         <input type="text" placeholder="Search <%= params[:follow]%>" id="search_accessories" /> 
+         <input name="" type="button" class="Searchbut"/> 
+     </div>  
+    <div class="Searchform" style="">   
+
+       
+      <%= form_for(Follow.new , :html=>{class: 'follow_form'}) do |f| %>
+         <%=f.select :follow_type, options_for_select([["I Own it", "owner"], ["Plan to Buy", "buyer"], 
+                                                       ["Follow this Accessory", "follower"]]) %>
+         <%= f.hidden_field :followable_id %>
+         <%= f.hidden_field :followable_type %>         
+               
+       <%end%>
+       
+    </div>
+    <input id="search_car" type='hidden'/><!--TODO If removed autocomplete is not working for above field. Should find y -->
+  </div>
+   <%end%>
+            <%end%>
+           
+          </div>
+
         </div>
-        <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
-        <div >
-      <!-- <span class="sortby" id="sortBy">
-            <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
-            <a class="txt_blue link_active" href="#">Newest</a> <span style="padding:2px 5px 0px 10px;">|</span>
-            <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
-            <a class="txt_blue" href="#">Most Comments</a>
-          </span> -->
-        </div>
-        <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+        
+     <% if (params[:follow] == 'Followers') || (params[:follow] == "Following") %>
+             <%= render "followers" %>
+         <%else%>
+      <div class="Rightouter" id="tabs1">
+      	<%unless params[:follow] == "Preferences"%>
+          <%= render 'cars', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+          <%end%>
+       </div>
+      <%end%> 
+      
+  <% unless  params[:follow] == "Preferences" %>
+     <%if (params[:follow] != 'Apps') && (params[:follow] != 'Accessories')  && (params[:follow] != 'Followers') && (params[:follow]!= "Following" )%>
+      
+      <br/>
+      <div style="clear:both;"></div>
+      <div style="background-color: #deeff3;padding:10px 5px 10px 5px;margin-top:20px;">
+          <h2><%= @user.name %> Activities</h2>
+      </div>
+      <br/>
+        <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?",0).collect(&:name), "itemtype_id" => @itemtypes  ,"user" => @user.id,"status" => 1,"search_type" => "activities"}%>
+         <% @contents = Content.filter(params)  %>
+         <% if @contents.size == 0 %>
+            <%= render "shared/alert_message",:type => "user_activity"%>  
+         <%else%>    
+      <div id="content_all">
+          <!--filter by block start here-->
+          <div id="Filterby">
+            <div class="Filternav">
+                  <div style="float:left;width:60px;">
+                    <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>     
+                  </div>
+                  <div style="float:left;width:630px;">
+                    <ul>
+                    <!--  <li class="Labeltext" style="padding-right:2px;">Filter by:</li>-->
+                      <li class="Currentfilter" id="All"><a href="#">All</a></li>
+                      <%@article_categories.each do |category|%>
+                        <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
+                      <%end%>
+                      <li id="User"><a href="">User</a></li>
+                    </ul>
+                    
+                  </div>
+            </div>
+          </div>
+          <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+          <div >
+        <!-- <span class="sortby" id="sortBy">
+              <span style="padding:2px 5px 0px 0px;"><b>Sort by:</b></span>
+              <a class="txt_blue link_active" href="#">Newest</a> <span style="padding:2px 5px 0px 10px;">|</span>
+              <a class="txt_blue" href="#">Votes</a> <span style="padding:0px 5px;">|</span>
+              <a class="txt_blue" href="#">Most Comments</a>
+            </span> -->
+          </div>
+          <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+             
+          
+            <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+            
+           <a id="content_next" style="display:none"></a>
+          </div>
+         
+           <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2) %>
            
         
-          <%= render :partial => 'contents/contents', :locals => {:params => params} %>
-          
-         <a id="content_next" style="display:none"></a>
         </div>
-       
-         <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2) %>
-         
-      </span>
-       <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-         <%= image_tag '/images/ajax-loader.gif' %>
-      </span>
-      <!-- This will go into main layout -->
-    </div>
-    <%end%>
-      <%= hidden_field_tag "search_type","activities" %>
-    <script type="text/javascript">
+         <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+           <%= image_tag '/images/ajax-loader.gif' %>
+        </span>
+      
+        <!-- This will go into main layout -->
+      </div>
+      <br clear="all"/>
+      <%end%>
+        <%= hidden_field_tag "search_type","activities" %>
+      <script type="text/javascript">
 
-        $("div#Filterby div.Filternav ul li").click(function (e) {
-           $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
-            $(this).closest('li').addClass("Currentfilter");
-          if ($(this).text() != "Labeltext"){
-            $("#filter_page_no").val('1');
-            var id = $(this).attr('id');
-            switch(id){
-              case 'All' :  var sub_type = "All";break;
-               default:  var sub_type = id;
+          $("div#Filterby div.Filternav ul li").click(function (e) {
+             $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+              $(this).closest('li').addClass("Currentfilter");
+            if ($(this).text() != "Labeltext"){
+              $("#filter_page_no").val('1');
+              var id = $(this).attr('id');
+              switch(id){
+                case 'All' :  var sub_type = "All";break;
+                 default:  var sub_type = id;
+                  }
+                  $.ajax(
+                  {
+                  url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" +  "&status=1,2" +  "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
+                    type: "get",
+                    dataType: "script"
+                  });
+                  return false
                 }
-                $.ajax(
+            });
+      </script>
+      <script>
+    
+      $(window).scroll(function () {
+
+            lnk = $('#content_next');
+            if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+
+            running = true;
+              $.ajax(
                 {
-                url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" +  "&status=1,2" +  "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
+                  url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&status=1,2" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                   type: "get",
-                  dataType: "script"
+                  dataType: "script",
+                  before: $('#spinner1').show(),
+                  success: function(data){$('#spinner1').hide();
+                   
+                    }
                 });
                 return false
-              }
+              //lnk.click();
+            }
           });
-    </script>
-    <script>
-  
-    $(window).scroll(function () {
-
-          lnk = $('#content_next');
-          if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-
-          running = true;
-            $.ajax(
-              {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&status=1,2" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
-                type: "get",
-                dataType: "script",
-                before: $('#spinner1').show(),
-                success: function(data){$('#spinner1').hide();
-                 
-                  }
-              });
-              return false
-            //lnk.click();
-          }
-        });
-      
-    </script>
-<!-- <script type="text/javascript">
-
-   $("span#sortBy a").click(function (e) {
-   $("span#sortBy").find('a').removeClass('link_active');
-        $(this).addClass("link_active");
-          
-           $("#filter_page_no").val('1');
-             running = true;
-            $.ajax(
-              {
-                url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
-                type: "get",
-                dataType: "script",
-                before: $('#spinner1').show(),
-                success: function(data){$('#spinner1').hide();
-                 
-                  }
-              });
-              return false
-       
-          
         
-   });
-</script> -->
-    <%end%>
-    <%end%>
-    <%else%>
-    <br />
-    <br />
-    <br />
-     <br />
-    <br />
-    <br />
-    <br />
-     <div class="alert alert-block"><strong><%= @user.name %> hasnt shared his profile page to Public.</strong></div>
-    <%end%>
+      </script>
+  <!-- <script type="text/javascript">
+
+     $("span#sortBy a").click(function (e) {
+     $("span#sortBy").find('a').removeClass('link_active');
+          $(this).addClass("link_active");
+            
+             $("#filter_page_no").val('1');
+               running = true;
+              $.ajax(
+                {
+                  url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&itemtype_id=<%=@itemtypes.join(",")%>" + "&user=<%= @user.id %>" + "&sort_by=" + $("span#sortBy a.link_active").text(),
+                  type: "get",
+                  dataType: "script",
+                  before: $('#spinner1').show(),
+                  success: function(data){$('#spinner1').hide();
+                   
+                    }
+                });
+                return false
+         
+            
+          
+     });
+  </script> -->
+      <%end%>
+      <%end%>
+      <%else%>
+      <br />
+      <br />
+      <br />
+       <br />
+      <br />
+      <br />
+      <br />
+       <div class="alert alert-block"><strong><%= @user.name %> hasnt shared his profile page to Public.</strong></div>
+      <%end%>
+    </div>
+    
+    <!-- Right  - End -->
+
+    <!-- This will go into main layout -->
   </div>
-  
-  <!-- Right  - End -->
-
-  <!-- This will go into main layout -->
-</div>
 
 
-<%= render "shared/expanding_text_area_style" %>
+  <%= render "shared/expanding_text_area_style" %>

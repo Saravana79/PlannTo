@@ -200,7 +200,7 @@ class ArticleContentsController < ApplicationController
       url = item.get_url()
       # image_url = item.image_url
       
-      {:id => item.id, :value => "#{item.name}", :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
     }
     return results
  end

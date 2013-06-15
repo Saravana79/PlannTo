@@ -1,12 +1,13 @@
 class HomeController < ApplicationController
   layout "product"
    def index
-     @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES-["Manufacturer","Car Group","Topic"]) 
+     @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES-["Manufacturer","Car Group","Topic"])      
     if current_user
       get_objects_for_my_feeds
       render "contents/my_feeds"
     else
       @static_page = "true"
+      @static_page1 = "true"
       render :index
     end 
       

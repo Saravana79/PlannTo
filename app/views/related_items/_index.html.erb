@@ -20,7 +20,7 @@
         <a  class="float_rgt"><input name="Compare" type="checkbox" value="<%=item.id%>" /></a>
       </div>
       <span>
-        <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.name%></a></h1>
+        <h1><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.get_name%></a></h1>
         <a class="txt_price"><%= item.get_price_info('Price') %></a><br />
           <%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "search_index_#{item.id}"} %>
           <a class="txt_normal" href="<%= item.get_url() + '?fl=Reviews'%>">Ratings<span class="txt_blue"> <%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %></span><span class="txt_blue"> <%= "Be the first one to review it" unless item.rated_users_count > 0 %></span></a><br />
@@ -42,3 +42,4 @@
   <%= will_paginate @related_items , :page_links => true %>
 </div>
 <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+<br clear="all"/>

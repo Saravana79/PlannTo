@@ -1,5 +1,7 @@
-
-  <%if @buying_warning_message == "true" %>
+<%if @static_page1=="true"%>
+<link rel="stylesheet" href="/stylesheets/newdesign.css" type="text/css" media="screen" />
+<%end%>
+  <%if @buying_warning_message == "true" && 1==2 %>
     <div class="outerdivwarning">
     <div  class="innerdivwarning">
         <span>This buying plan is created temporarily for you<!-- which will expire after sometime-->, to access it later please sign up. </span> 
@@ -7,7 +9,7 @@
    </div>
   </div>
   <div style="display:block;height:30px;"></div>
- <%elsif @static_page!="true" && (session[:product_warning_message] == "true" || (!current_user&& session[:warning] == "true") &&  session[:itemtype]!='')%>
+ <%elsif @static_page!="true" && (session[:product_warning_message] == "true" || (!current_user&& session[:warning] == "true") &&  session[:itemtype]!='') && 1==2%>
  <div id="giveAdviceDialog"> </div>
 
   <div class="outerdivwarning">
@@ -22,7 +24,7 @@
   </div>
 </div>
 <div style="display:block;height:30px;"></div>
-<%elsif @static_page!="true" && (session[:content_warning_message] == "true" || (!current_user && session[:warning]== "true") ) &&  session[:itemtype]!=''%>
+<%elsif @static_page!="true" && (session[:content_warning_message] == "true" || (!current_user && session[:warning]== "true") ) &&  session[:itemtype]!='' && 1==2%>
  <div class="outerdivwarning">
  <div id="giveAdviceDialog"> </div>
   <div  class="innerdivwarning">
@@ -38,18 +40,51 @@
 <div style="display:block;height:30px;"></div>
 <%end%>
  <% a= @static_page == 'true' ? 'display:none' : '' %>
- <%if @static_page == 'true' %>    
+ <%#if @static_page == 'true' %>    
     <div class="dppattern">
     <div id="header12" style="">       
           <div class="logodiv">
-            <h1 class="logo"><a href="index.html">
-                  <img src="images/logo_new.png" alt="PlannTo" />
+            <h1 class="logo"><a href="/">
+                  <img src="/images/logo_new.png" alt="PlannTo" />
              </a></h1>
            </div>
+      <div id="static" style="<%= a %>" >
 
+              <div class="inner-top-search">
+                <form id="search-form">
+                    <input class="search-input-text" type="text" name="plannToSearch" placeholder="Search Products or Topics or Contents"  id="plannToSearch"/>
+                    <input class="search-input-submit" type="submit" value="" />
+                </form>
+              </div>              
 
- <%else%>
-    <div class="divbody">
+              <!-- <div class="search">
+              
+                <span class="search_txt" id="plannToSearchSpan">
+                    <input name="Search" type="text" placeholder="Search Products or Topics or Contents" id="plannToSearch"/>
+                        </span>
+                    <div id="item_search1"></div>
+                  -->
+                        <!--<= select_tag "plannto_search_type",
+                    options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
+               <!--
+
+                      <a class="btn_search" href="#"></a>
+                </div>
+                
+                <span>
+                  -->
+                <div class="top-icons">
+
+                 <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
+                 
+-                  <a class="icon_chat" href="<%=messages_url%>"></a>
+                
+                </div> 
+          
+   </div>
+
+ <%#else%>
+    <!--<div class="divbody">
         <div class="header" style="clear:both;">
             <span class="logo" ><a href="/"><img src="/images/logo.png"/></a></span>
 
@@ -60,21 +95,22 @@
                     <input name="Search" type="text" placeholder="Search Products or Topics or Contents" id="plannToSearch"/>
                         </span>
                     <div id="item_search1"></div>
+                    -->
                         <!--<= select_tag "plannto_search_type",
                     options_for_select([["Select", ""], ["Car", "Car"], ["Mobile", "Mobile"], ["Tablet", "Tablet"], ["Camera", "Camera"], ["Others", "Others"] ], default_search_type(params[:search_type])), :style => "" %>   -->
-               
+               <!--
 
                       <a class="btn_search" href="#"></a>
                 </div>
 
                 <span>
-                 <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
+                 <a href="<%#= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
                  
                   <a class="icon_chat" href="<%=messages_url%>"></a>
                 </span>
             </div> 
-             
- <%end%>      
+             -->
+ <%#end%>      
        
       <!--header right part start here-->
    
@@ -130,8 +166,8 @@
            <div class="search-login-box">
               <div class="top-search">
               <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post, :html => {:class => "top-searchform"}) do |f| %>
-                  <p><%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1", :value =>"Email", :class => "inputbox"%></p>
-                    <p><%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :class=>"inputbox", :value => "Password"%></p>
+                  <p><%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1", :class => "inputbox", :style=> "width:140px;"%></p>
+                    <p><%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :class=>"inputbox", :style=>"width:140px;"%></p>
                     <p><%= f.submit "Sign In" , :tabindex => "4" , :class=>"button org small" %></p>
                     <p><label> <%= f.check_box :remember_me, :size=>"0", :tabindex => "3"%> Remember Me</label> | 
                       <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" %></p>
@@ -139,6 +175,7 @@
                 </div>
                 <div class="orimg"></div>
                 <div class="fb-signup"> <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>                
+                  <p><%#= link_to "Or with your Email Address.", :class => "sign_in_popup" , :tabindex => "5" %></p>
             </div>
             
           
@@ -146,30 +183,30 @@
           <br/>
     <%end%>
      <%else%>
-       <%if @devise != "true" %>
+      <%if @devise != "true" %>
   
-      <div style="float:right;padding:20px 90px 0px 0px;">
-         <span>
-          <%= link_to "Sign In", "#", :class => "sign_in_popup" %> | <%= link_to "Sign Up", "#",:class => "sign_up_popup"%> 
-        
-   </span>
-   </div> 
-   <%end%>
+          <div style="float:right;padding:20px 90px 0px 0px;">
+             <span style="color:white;">
+              <%= link_to "Sign In", "#", :class => "sign_in_popup",:style=> "color:white;font: 14px/21px 'PTSansRegular', sans-serif;" %> | <%= link_to "Sign Up", "#",:class => "sign_up_popup",:style=> "color:white;font: 14px/21px 'PTSansRegular', sans-serif;"%> 
+            
+            </span>
+          </div> 
+      <%end%>
    <%end%>
   
     <% end %>
 
 <!--
-    |</a>
+    |</a>,:style=> "color:white;"
     <a href="#">Home</a>-->
- 
-  
+</div> 
+</div>  
     <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
     <%= render "/layouts/navigation" %>
   
-</div>
 
-</div>
+
+
 <script type="text/javascript">
  function showLoginLinks(){
     $('#login_link').show();

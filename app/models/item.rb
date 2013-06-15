@@ -202,7 +202,13 @@ class Item < ActiveRecord::Base
   def specification
     item_attributes.select("attributes.id as id,attribute_id, value, name, unit_of_measure, category_name, attribute_type, attributes.hyperlink as attributeshyperlink,attribute_values.hyperlink as valuehyperlink, description").order("attribute_id")
   end
-  
+  def get_name
+    if((!alternative_name.nil?) && (!alternative_name.blank?))
+      name + " / " + alternative_name
+    else
+      name
+    end
+  end  
  
   def image_url(imagetype = :medium)
     if(!imageurl.blank?)

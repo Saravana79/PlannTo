@@ -1,59 +1,73 @@
 <% content_for :title, "Browse " + @search_type.pluralize.humanize + " - " %>
 <% content_for :description, "Search all available, latest and upcoming " + @search_type.pluralize.humanize + " in India."%>
-<div id="maincontainer" class="maincontainerCss">
+<div id="maincontainer" class="maincontainerCss1">
 
   <div class="leftcolumnsmall">
-    <ul class="search_criteria">
-      <div class="hdr_search">Search Criteria:</div>
-      <%@search_info_lookups.each_with_index do |lookup, index|%>
-        <%if index == 0%>
-          <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
+    <div class="left-panel">
+              
+                <div class="search-cat-container">
+                  <h3>Search Criteria</h3>
+                    <ul class="searchcat-list">
+                  <%@search_info_lookups.each_with_index do |lookup, index|%>
+                        <%if index == 0%>
+                          <li id="manufacturerAtt" onclick="openManufacturerBox('Car', this);return false" 
+                          class="<%="#{lookup[:param_1][:div_class_name]}"%>"><a href="" >Manufacturer</a></li>
 
-        <%end%>
-        <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
-      <%end%>
-      <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Available <%=@search_type.pluralize.humanize%><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%></span>
-      </span>      
-      <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, true, :onclick => "setSearchStatus();"%></span>
-     </span>
-     <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Discontinued <%=@search_type.pluralize.humanize%><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();"%></span>
-     </span>
-      <br/>
-      <br/>      
-    </ul>
-  </div>
+                          <%end%>
+                        <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
+                      <%end%>
+                    </ul>
+                    <h3>Availability Criteria</h3>
+                      <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Available <%=@search_type.pluralize.humanize%><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%></span>
+                      </span>      
+                      <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, true, :onclick => "setSearchStatus();"%></span>
+                     </span>
+                     <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Discontinued <%=@search_type.pluralize.humanize%><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();"%></span>
+                     </span>
+                      <br/>
+                      <br/>      
+
+                    
+                
+                </div><!-- end of search-cat-container -->
+                
+            </div><!-- end of left panel -->
+
   <%= render :partial => "shared/search_popup" %>
+</div>
   <div class="rightcolumnbig">
-    <div class="searchPack" style="display: none;">
-      <div class="hdr_Category">Search Preferences:</div>
-      <ul class="search_category">
-      </ul>
-      <br/>
-      <div id="btnDiv" style="height:100px;display:block;">
-        <a href="#" class="btn_gray float_lft" style="display:none;" id="clearTag">Clear All</a>
+
+    <div class="right-panel">
+  
+    <div class="search-preferences-container box-div searchPack" style="display: none;overflow-y:auto;">
+    
+      <h3>Search Preferences:</h3>
+        <div class="search-preferences-div">
+          <ul class="search_category" style="width:723px;">
+          </ul>
+        </div>
+      <div id="btnDiv" style="height:50px;display:block;">
+        <a href="#" class="btn_gray float_lft" style="display:none;margin:10px;" id="clearTag">Clear All</a>
         <!--<a href="#" class="btn_submitanswer float_rgt" style="width:150px;display:none;" id="addPreferenceTag">Create Buying Plan</a>-->
       
         <a href="#" class="btn_submitanswer float_rgt" style="width:130px;display:none;" id="getAdviceTag">Create/Update Buying Plan</a>
       
       </div>
-    </div>
+    </div><!-- end of search-preferences-container -->
+
     <div class="push"></div>
-    <div id="content_all">
+    <div id="content_all" class="search-result-container box-div" >
     
       <%= hidden_field_tag :page_pagination,2%>
-     <div style="width:735" >
-        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
-
-  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total Search Results: <span id="total_result"> <%=@items.total%></span></div> 
-    
-    <div width="358" height="50" class="txt_search_result float_rgt">Sort By:
-      <%=select_tag "search_sort_by",
-        options_for_select([["Select", ""],["Launch Date","Launch_date"], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]), :class => "txt_normal width50" %>
-    </div>
-    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
-  </div>
+      <div class="top-search-result">
+                      <div class="search-result-title" id="totalSearchResults">Total Search Results: <span id="total_result"> <%=@items.total%></span></div>
+                        <div class="sort-box"><form><label>Sort by:</label> <%=select_tag "search_sort_by",
+              options_for_select([["Select", ""],["Launch Date","Launch_date"], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]) %></form></div>
+                        <div class="clr"></div>
+                    </div>
+                    <div class="clr"></div>     
    <a id="content_next" style="display:none"></a>
-     <div id="content">
+     <div id="content" class="search-result-list">
       
       <%= render :partial => "/search/index" %>
     </div>

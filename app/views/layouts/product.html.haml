@@ -52,54 +52,60 @@
               Do you have an account. 
               =link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login-1').show();return false;",:style=>"font-weight:bold;text-decoration:underline;"        
        
-      #report_no_item    
-    #maincontainer.maincontainerCss
-      .breadcrumpbtnDiv
-        = yield
-        / This will go into main layout
+      #report_no_item        
+    - if(@static_page1 == "true")
+      #maincontainer1.maincontainerCss1
+        .breadcrumpbtnDiv
+          = yield
+          / This will go into main layout
       %br/
-      .footerdiv
-        = render 'shared/footer'
-        %div{:style => "display:none;"}
-          = render "shared/login_dialog", :item => @item
-      #sign_up_dialog{:style => "display:none"}
-        #Loginpoup
-          #login1{:style => "display:none;"}
-            = render "shared/login_dialog"
-            .Dontsignup
-              Don't have an account. 
-              = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog2').show();$('#login1').hide();return false; ",:style=>"font-weight:bold;text-decoration:underline;"
-          #sign_up_dialog2
-            = render "/shared/signup_dialog"
-            .Dontsignup
-              Do you have an account. 
-              = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();return false; ",:style=>"font-weight:bold;text-decoration:underline;"
-            
-      = render("shared/google_analytics") if Rails.env.production?
-      = render 'shared/show_hide_login_form', :item => "" 
-    - unless user_signed_in?
-      :javascript
-        $("div.rate_content a").click(function(e){
-          if (login_flag != true){
-            $("#login-1 #click_message").html("#{escape_javascript(render(:partial => "shared/login_popup_message",:locals=>{:type => "vote"})).html_safe}");
+    - else
+      #maincontainer.maincontainerCss
+        .breadcrumpbtnDiv
+          = yield
+          / This will go into main layout
+    .footerdiv
+      = render 'shared/footer'
+      %div{:style => "display:none;"}
+        = render "shared/login_dialog", :item => @item
+    #sign_up_dialog{:style => "display:none"}
+      #Loginpoup
+        #login1{:style => "display:none;"}
+          = render "shared/login_dialog"
+          .Dontsignup
+            Don't have an account. 
+            = link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog2').show();$('#login1').hide();return false; ",:style=>"font-weight:bold;text-decoration:underline;"
+        #sign_up_dialog2
+          = render "/shared/signup_dialog"
+          .Dontsignup
+            Do you have an account. 
+            = link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog2').hide();$('#login1').show();return false; ",:style=>"font-weight:bold;text-decoration:underline;"
           
-            openLoginPopup("#" +$(this).attr('id'), "click");
-            return false
-          }
-        })
-
-        $("form.new_comment").keyup(function(e){
-          if (login_flag != true){
-            $("#login-1 #click_message").html("#{escape_javascript(render(:partial => "shared/login_popup_message",:locals=>{:type => "comment"})).html_safe}");
-            openLoginPopup("#" + $(this).attr('id'), "submit");
-            return false
-          }
-        })
+    = render("shared/google_analytics") if Rails.env.production?
+    = render 'shared/show_hide_login_form', :item => "" 
+  - unless user_signed_in?
     :javascript
-      $(document).ready(function() {
-      Placeholders.init();
-      });  
-    /= render 'shared/referer_url_signup_popup'       
+      $("div.rate_content a").click(function(e){
+        if (login_flag != true){
+          $("#login-1 #click_message").html("#{escape_javascript(render(:partial => "shared/login_popup_message",:locals=>{:type => "vote"})).html_safe}");
+        
+          openLoginPopup("#" +$(this).attr('id'), "click");
+          return false
+        }
+      })
+
+      $("form.new_comment").keyup(function(e){
+        if (login_flag != true){
+          $("#login-1 #click_message").html("#{escape_javascript(render(:partial => "shared/login_popup_message",:locals=>{:type => "comment"})).html_safe}");
+          openLoginPopup("#" + $(this).attr('id'), "submit");
+          return false
+        }
+      })
+  :javascript
+    $(document).ready(function() {
+    Placeholders.init();
+    });  
+  /= render 'shared/referer_url_signup_popup'       
     
     
     
