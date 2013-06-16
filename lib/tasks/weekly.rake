@@ -3,14 +3,19 @@ namespace :plannto do
   include GlobalUtilities
   desc "task to find the related items"
    
-  task :find_related_items => :environment do
-    RelatedItem.delete_all
-    puts "----TRUNCATED related_items--------"
+  task :find_related_items,:arg1, :needs => :environment do | t, args|
+     initialitemid = args[:arg1].to_i
+    if( initialitemid != 0)
+      all_items = Item.find(:all, :conditions=> ["id = ?" ,initialitemid])
+    else
+      RelatedItem.delete_all
+      puts "----TRUNCATED related_items--------"
 
-    # include GlobalUtilities
-    item_types = Itemtype.where("itemtype IN ('Car', 'Mobile', 'Camera', 'Tablet','Cycle','Bike')").collect(&:id).join(',')
-    #puts item_types
-    all_items = Item.where("itemtype_id IN (#{item_types})")
+      # include GlobalUtilities
+      item_types = Itemtype.where("itemtype IN ('Car', 'Mobile', 'Camera', 'Tablet','Cycle','Bike')").collect(&:id).join(',')
+      #puts item_types
+      all_items = Item.where("itemtype_id IN (#{item_types})")
+    end
     #puts all_items.size
     all_items.each do |item|
       #puts item.id
@@ -89,6 +94,35 @@ namespace :plannto do
       puts item.id
         item.save
     end
+  end
+
+   task :reindex_items => :environment do
+    puts "Indexing Car"
+      Car.reindex
+      Sunspot.commit
+
+    puts "Indexing Bike"
+      Bike.reindex
+      Sunspot.commit
+
+    puts "Indexing Camera"
+      Camera.reindex
+      Sunspot.commit
+
+    puts "Indexing Mobile"
+      Mobile.reindex
+      Sunspot.commit
+
+    puts "Indexing Tablet"
+      Tablet.reindex
+      Sunspot.commit
+
+    puts "Indexing Cycle"
+      Cycle.reindex
+      Sunspot.commit
+
+    puts "Indexing Completed"
+    
   end
 
 end
