@@ -3319,7 +3319,7 @@ position:relative; }
 ul#Newtabs { width:100%; float:left; height:36px; background:url(../images/navigation_bgbot.png) repeat-x left bottom;
             padding:0 0 0 0px; margin:0 0 10px 0;}
 ul#Newtabs li:first-child { margin-left:13px;}
-ul#Newtabs li { display:block; float:left; padding:0; margin:0; list-style:none;}
+ul#Newtabs li { display:block; float:left; padding:0; list-style:none;}
 ul#Newtabs li a { font-family:Arial, Helvetica, sans-serif; font-size:13px; color:white; text-decoration:none; 
                   display:block; line-height:36px; text-align:center;  font-weight:bold;
                   padding:0 0 0 12px; float:left;}
