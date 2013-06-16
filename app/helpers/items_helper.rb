@@ -81,8 +81,8 @@ module ItemsHelper
         end
       end
     end
-    if content.length > 43
-      content = content[0..39] + "..."
+    if content.length > 35
+      content = content[0..32] + "..."
     end
     if content != ""
       content = "<li>" + content + "</li>"
