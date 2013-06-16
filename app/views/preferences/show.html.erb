@@ -8,28 +8,32 @@
 	<!-- Till this will go into main layout and common for all pages.-->
   <br/>
 	<br/>
+	<div style="clear:both;background:white;padding:5px;width:727px;float:left;margin-top:10px;">
+
 	<div class="leftcolumnbig">
 		<!-- Product Details - Start -->
 		<div class="contentDetailsMainDiv">
 
 			<!-- Question - Start -->
 			<div  class="mainContentDiv">
-				<%= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
+				<%#= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
 				<div  class="float_rgt">
 				<%unless @follow_item == '' %>
 				  <a href="<%= @buying_plan.user.get_url()%>"> 	<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" /> </a>
 				<%end%>  
 				</div>
-				<div  class="subContentDiv">
+				<div  class="subContentDiv" style="margin-left:10px;">
 					<div>
-					<div  id="questionTitle" ><h2><%= @question.title%><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h2> </div>
+					<div  id="questionTitle" ><h2 style="font-size:16px;line-height:22px;"><%= @question.title%><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h2> </div>
 					</div>
 					<div>
 					<%unless @follow_item == '' %>
-					<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown" > Asked by <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
+					<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown"  style="font-size:12px;color: #c15f24;"> Asked by <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" style="font-size:12px;color: #c15f24;" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
+					<%else%>
+					<a href="#" class="txt_brown"  style="font-size:12px;color: #c15f24;">  Asked by Guest User </a> 	<a class="txt_brown" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
 					<%end%>
 					</div>
-					<div class="subContentGap">
+					<div class="subContentGap" style="padding-top:4px;">
 						<div id="displayQuestion">
 							<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif (current_user && @buying_plan.user_id == current_user.id) || (@buying_plan.temporary_buying_plan_ip == request.remote_ip && @buying_plan.temporary_buying_plan_ip!="") %> Please add more information about your usage or buying preference here 	<%= link_to "Edit", "#",:onclick => "$('#updateQuestion').bPopup({
     closeClass:'Closebut',
@@ -82,6 +86,7 @@
 							return false
 							});
 					</script>
+					<br/>	
 						<ul class="divCommentsConent dontfloat">
 						<!--	<li class="subContentGap float_lft" >
 								<a class="txt_blue ">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</a>
@@ -215,6 +220,7 @@
      <div id="content">
       
       <%= render :partial => "/search/index" %>
+      <br clear="all/>"
     </div>
     </div>
      <div style="padding-left:100px;">
@@ -444,9 +450,10 @@
 			<% end %>
 			</div>
 			 <div style="clear:both;"></div>
+			 <br clear="all"/>
 		</div>
 		
-
+		</div>
 		<div class="rightcolumnsmall">
         <div id="owned_item"> </div>	
          <div class="rightcolumnsmall">
@@ -467,6 +474,7 @@
 							<%= render 'recommend_items', :items => @items%>
 			      </div>
 		</div>
+		<br clear="all"/>
 			   	<script type="text/javascript">
   //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
 <%@preferences_list.each do |preference|%>
@@ -528,3 +536,4 @@
 <%end%> 
 
 </script>
+<br clear="all"/>

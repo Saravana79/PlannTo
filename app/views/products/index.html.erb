@@ -1,8 +1,19 @@
 <% content_for :title, @itemtype.itemtype.pluralize.humanize + " - " %>
 <% content_for :description, "Read reviews, latest news, HowTos, Tips about all the " + @itemtype.itemtype.pluralize.humanize + " in India. Check out Buyers Guide, Beginners Guide, Owners Guide and experts guides on " + @itemtype.itemtype.pluralize.humanize%>
-<%= render "contents/quick_content_container"%>
-<div class="leftcolumnbig">
-  <ul id="Newtabs" style="margin-top:-25px;">
+<div style="border: solid 0px;width: 1000px;position:relative;margin: 0 auto;height: auto;min-height: 600px;
+    padding:10px;">
+
+<div style="background:white;padding:5px;height:40px;">
+    <div style="float:left;width:150px;">
+        <span style="float: left;display: block;"><img src="/images/<%=@itemtype.itemtype%>-icon.png" style="height:40px;"> </span>
+        <span style="float: left;margin-top: 12px;font-size: 15px;font-weight: bold;display: block;">  - <%=@itemtype.itemtype.pluralize.capitalize %> Feed</h2></span>
+
+    </div>
+    <%= render "contents/quick_content_container"%>
+</div>
+<div style="clear:both;background:white;padding:5px;width:727px;float:left;margin-top:10px;">
+<div class="leftcolumnbig" >
+  <ul id="Newtabs" style="margin-top:0px;display:none;">
      <li class="tab_active"><a href="#"><span>All Feeds</span></a></li>
   </ul>
 
@@ -27,22 +38,22 @@
 </div>
 
 <div id="contentEditView"></div>
+</div>
 
 <div class="rightcolumnsmall">
-  <br/><br/>
-  <div >
-
+  
+  <div style="background:white;padding:5px;margin-top:10px;">
    <%= render "shared/quick_links", :search_type => request.path.split("/").last%>
   </div>
-  <br/>  
-<div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;">
-  <%= render "shared/share_buttons", :caption_text => 'Check out ' + @itemtype.itemtype.downcase + ' section on PlannTo.com' %>
+  
+<div style="margin-top:10px;">
+    <%= render "shared/share_buttons", :caption_text => 'Check out ' + @itemtype.itemtype.downcase + ' section on PlannTo.com' %>
 </div>
 
 <%= render :partial => 'products/popular_items',:locals => {:type => @type} %>
 <%= render :partial => 'products/popular_topics', :locals => {:type => @type} %> 
 <br/>
-  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;background:white;">
     <tr>
       <td class="bg_widgethdr txt_white">Top Contributors</td>
     </tr>
@@ -79,20 +90,23 @@
 
   <br/>
 <%=render :partial => "shared/google_adsense_square" %>
-<% if @followers.empty? %>
-<% else %>
- <div class="txt_black imgfollowers" >Followed by - <%= @followers_count rescue 0%>
-    <ul class="imgfollowers">
-     <% @followers.each do |follower | %>
-      <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
-     <%end%>
-    </ul>
-  </div>
-  <br/>
+<% unless @followers.empty? %>
+   <table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Followed by - <%= @followers_count rescue 0%></td>
+    </tr>
+    <tr>
+    <td>
+        <ul class="imgfollowers">
+         <% @followers.each do |follower | %>
+          <li class="imgfollowers"><a href="<%=follower.get_url()%>"><%= image_tag follower.get_photo , :class => "userImageSmall"%></a></li>
+         <%end%>
+        </ul>
+  </td></tr></table>
 <%end%>
-
+<br/>
   <!-- Related Cars -- Start -->
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;background:white;padding-top:10px;">
     <tr>
       <td class="bg_widgethdr txt_white">Bookmarklet</td>
     </tr>
@@ -143,3 +157,4 @@
    
     });
 </script>	   
+</div>

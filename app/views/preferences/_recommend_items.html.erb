@@ -3,7 +3,7 @@
  
 <% if @owned == "true" %>
     
- <div class="items_list" style="clear:both;">
+ <div class="items_list" style="clear:both;background:white;">
   <% items.each do |item| %>
      <div class="product" id="product_<%= item.id %>">
       <div class="imgprofilediv">
@@ -29,11 +29,11 @@
 <%else%>
 
 
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;background;white;">
     <tr>
       <td class="th_blue" style="text-align:center;padding-left:5px;font-size: 13px;">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</td>
     </tr>
-     <tr><td><%if @buying_plan.user_question.user_answers.size == 0 %>
+     <tr><td style="background:white;"><%if @buying_plan.user_question.user_answers.size == 0 %>
        <%if (!current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip == request.remote_ip) %>
 			    <div style="padding:5px;"><strong>  Currently there are no recommendation, please sign up to share this with friends/experts to get their feedback.<br /><br /><%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a></strong></div>
 			<%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
@@ -71,7 +71,7 @@
         </script>
         <%end%>
     <tr>
-      <td valign="top">
+      <td valign="top" style="background:white;">
        <table width="226" border="0" cellspacing="0" cellpadding="0" align="center">
            
          <% items.each do |item| %>

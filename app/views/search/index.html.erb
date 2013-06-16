@@ -17,19 +17,22 @@
                         <li   class='<%="#{lookup[:param_1][:div_class_name]}"%>' id="attribute_menu_<%=index%>" onclick="openInfoBox(<%=lookup[:param_1].to_json%>, '<%=lookup[:param_2].to_json%>', this );return false"><a href=""><%=lookup[:name]%></a></li>
                       <%end%>
                     </ul>
+                    </div>
+                    <br/>
+                    <div class="search-cat-container">
                     <h3>Availability Criteria</h3>
-                      <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Available <%=@search_type.pluralize.humanize%><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%></span>
+                      <span ><span  style="padding-left:25px;display:block;" >Include Available <%=@search_type.pluralize.humanize%><%= check_box_tag "current_status", 1, true,:onclick => "setSearchStatus();"%></span>
                       </span>      
-                      <span class="search_criteriaspan"><span class="search_criteriaspanhyp" >Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, true, :onclick => "setSearchStatus();"%></span>
+                      <span ><span  style="padding-left:25px;display:block;">Include Upcoming <%=@search_type.pluralize.humanize%><%= check_box_tag "future_status", 2, true, :onclick => "setSearchStatus();"%></span>
                      </span>
-                     <span class="search_criteriaspan"><span class="search_criteriaspanhyp"  style="border-bottom: dotted 1px #CCCCCC;">Include Discontinued <%=@search_type.pluralize.humanize%><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();"%></span>
+                     <span ><span   style="padding-left:25px;display:block;">Include Discontinued <%=@search_type.pluralize.humanize%><%= check_box_tag "nonavailable_status", 3, false, :onclick => "setSearchStatus();"%></span>
                      </span>
                       <br/>
-                      <br/>      
+                     </div> 
 
                     
                 
-                </div><!-- end of search-cat-container -->
+                <!-- end of search-cat-container -->
                 
             </div><!-- end of left panel -->
 

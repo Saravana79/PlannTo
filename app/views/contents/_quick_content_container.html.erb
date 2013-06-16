@@ -1,7 +1,6 @@
 <!--<h3>Quick content create</h3>-->
-<br/>
 <%count = (@article_categories.size - 1)%>
-<span style="height:30px;display:block;">
+<span style="height:30px;display:block;padding-top:5px;">
 <span class="Bluecyanbut" style="padding-left:450px;display:block;">  <span class='quick_config_btns' >
     <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
   </span>

@@ -1,12 +1,18 @@
+<div style="border: solid 0px;width: 1000px;position:relative;margin: 0 auto;height: auto;min-height: 600px;
+    padding:10px;">
+
+<div style="background:white;padding:5px;height:40px;">
   <!-- breadcrumbs - Start -->
     <%= render "shared/breadcrumb" %>
   <!-- breadcrumbs - End -->
   <!-- buttons - Start -->
 
-  <div class="float_rgt">
+  <div class="float_rgt" style="padding:5px;">
   <!--<span style="margin-right:10px;color:green;"> Total Visitors: <%#=@item.impression_count %></span>-->
       <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
   </div>
+  </div>
+
   <div id="content_new"></div>
   <script>
   $(".plan_to_buy_icon").click(function(e){
@@ -41,6 +47,8 @@
   <% content_for :image, @item.image_url %>
   <%end%>
   <!-- buttons - End -->
+  <br/>
+  <div style="background:white;padding:5px;width:727px;float:left;">
   <div class="leftcolumnbig" id="item_info" style="clear:both;">
   <!-- Product Details - Start -->
     
@@ -84,12 +92,12 @@
         </div>
       <br />
       
-      <% cache ['minimised_specification', @item] do%>
+      <%# cache ['minimised_specification', @item] do%>
       <div style="clear:both;">
       <a class="txt_normal" ><%=display_specifications(@item)%>
         <br/>
-        <div style="clear:both;float:right;">
-        <%= link_to(" View all Specifications and Benchmarks", "#specification", :class => 'txt_blue', :id => "detailed_specification") %>
+        <div style="clear:both;float:left;padding-top:4px;">
+        <%= link_to(" View all Specifications and Benchmarks", "#specification", :class => 'bluelink-12', :id => "detailed_specification") %>
         </div>
       </a>
       </div>
@@ -99,7 +107,7 @@
           <div style="clear:both;"
           <font color="green" style="font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%= @new_version_item.name rescue ''%></a> </h3> </font></div>
         <%end%>
-      <%end%>
+      <%#end%>
        
       <% else %>
           <%if @item.is_a? CarGroup or @item.is_a? AttributeTag %>
@@ -175,7 +183,7 @@
   </div>
   <%end%>
   <br/>
-  <div>
+  <div style="padding-top:20px;">
     <ul id="Newtabs">
 
       <%= display_product_page_tabs(@item, params[:at] || "overview") %>
@@ -214,67 +222,64 @@
   <%end%>
   <%end%>
   <%end%>
-
+  <br clear="all"/>
+</div>
   <div class="rightcolumnsmall">
-  <br/>
+  <div style="background:white;padding:5px;">
   <%= render "shared/quick_links", :search_type => @item.get_base_itemtype().pluralize %>
-  <br/>
-  <div style="border-top:solid 1px #cdd3d7;padding:10px 0px 10px 0px;border-bottom:solid 1px #cdd3d7;">
-    <%= render  "shared/share_buttons",:caption_text => 'Check out ' + @item.name +  
-    ' on PlannTo.com' %>
+  </div>
+  <div style="margin-top:10px;">
+      <%= render  "shared/share_buttons",:caption_text => 'Check out ' + @item.name +  
+      ' on PlannTo.com' %>    
   </div>
   <!--follower block start here-->
 
   <%=render :partial => "shared/google_adsense_square" %>
   <!--follower block end here-->
 
-  <% unless @item.get_followers.empty? %>
-  <div class="txt_black imgfollowers" style="padding-top:5px;">Followers
-    <ul class="imgfollowers">
-        <% @item.get_followers.each do |follower| %>
-          <li class="imgfollowers">
-            <a href="<%=follower.get_url()%>"> <%= image_tag follower.get_photo(), :title => follower.name ,:class => "userImageSmall"%></a>
-          </li>
-        <% end %>
-    </ul>
-  </div>
-  <%end %>
-
   <% if( (@item.is_a? Product) )%>
-  <div class="Commandiv">
+  <div class="Commandiv" style="background:white;">
     <div class="Detailfeature">
-      <span class="Headingtxt">Plan to Buy</span>
       <div class="Featurecontent">
-        <div class="Iconblock">
-          <span class="Planbuy"><%= @item.ger_followers_count_for_type("buyer") %></span>
-        </div>
           <%= link_to("Invite a friend", "#", :id => "buyer", :class => "Bluesmall invite_friends") %>
         </div>
-        <div class="Smalltext">who plans to buy</div>
+        <div class="Smalltext">who plans to buy this.</div>
     </div>
     <div class="Detailfeature">
-      <span class="Headingtxt">Owners</span>
       <div class="Featurecontent">
-        <div class="Iconblock">
-          <span class="Wonit"><%= @item.ger_followers_count_for_type("owner") %></span>
-        </div>
           <%= link_to("Invite a friend", "#", :id => "owner", :class => "Bluesmall invite_friends") %>
         </div>
-        <div class="Smalltext">who owns it</div>
+        <div class="Smalltext">who owns it.</div>
       </div>
     <div class="Detailfeature">
-      <span class="Headingtxt">Followers</span>
       <div class="Featurecontent" style="border-right:none;">
-      <div class="Iconblock">
-        <span class="Followcar"><%= @item.ger_followers_count_for_type("follower") %></span>
-      </div>
-        <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite_friends") %>
-        
+        <%= link_to("Invite a friend", "#", :id => "follower", :class => "Bluesmall invite_friends") %>        
         </div>
-        <div class="Smalltext">who is an expert</div>
+        <div class="Smalltext">who is an expert on this.</div>
     </div>
   </div>
   <%end%>
+
+  
+  <% unless @item.get_followers.empty? %>
+
+        <table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Followers</td>
+    </tr>
+    <tr>
+    <td>
+                        <ul style="min-height:60px;padding:5px;">
+          <% @item.get_followers.each do |follower| %>
+            <li style="margin:0; padding:0; display:inline-block;">
+              <a href="<%=follower.get_url()%>"> <%= image_tag follower.get_photo(), :title => follower.name ,:class => "userImageSmall"%></a>
+            </li>
+          <% end %>
+      </ul>
+
+</td></tr></table>
+  <%end %>
+
   <script>
   $(".invite_friends").live('click', function(){
       id = $(this).attr('id');
@@ -417,3 +422,4 @@
       }
   </script>
 
+</div>

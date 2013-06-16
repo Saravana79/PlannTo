@@ -8,6 +8,7 @@ class PreferencesController < ApplicationController
     end
 
     def show
+      @static_page1= "true"
       require 'will_paginate/array'
       @buying_plan = BuyingPlan.find_by_uuid(params[:uuid])
       if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip == request.remote_ip

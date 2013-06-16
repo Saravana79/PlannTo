@@ -1,5 +1,5 @@
 <%if (@related_items.size > 0) && (@item.is_a? (Product))%>
-  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+  <table width="251" height="38" border="0" cellspacing="0" cellpadding="10px" style="border:solid 1px #cdd3d7;background:white;">
     <tr>
       <td class="bg_widgethdr txt_white">Related <%=@item.type.pluralize%></td>
     </tr>
@@ -34,7 +34,7 @@
             </td>
           </tr>
           <tr>
-            <td class="dotted_border" colspan="2"  style="width:100%"><%= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item, :related_items => true %></td>
+            <td class="dotted_border" colspan="2"  style="width:100%"><%#= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item, :related_items => true %></td>
           </tr>
          <script type="text/javascript">
            <%= render "shared/javascript_button", :formate => :js, :button_class => '_small', :item => related_item,
@@ -93,7 +93,7 @@
   </tr>
 </table>-->
 <%if @top_contributors.size > 0%>
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;">
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;background:white;">
   <tr>
     <td class="bg_widgethdr txt_white">Top Contributors</td>
   </tr>

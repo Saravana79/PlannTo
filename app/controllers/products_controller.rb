@@ -31,6 +31,7 @@ class ProductsController < ApplicationController
  end
 
   def index
+    @static_page1  = "true"
     @no_custom = "true" 
     @filter_by = params["fl"]
     search_type = request.path.split("/").last
@@ -62,6 +63,7 @@ class ProductsController < ApplicationController
   end
   
   def show
+    @static_page1  = "true"
     @filter_by = params["fl"]
     @write_review = params[:type]
     session[:warning] = "true"
