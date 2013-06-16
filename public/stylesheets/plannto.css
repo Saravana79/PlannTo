@@ -4523,8 +4523,8 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 #wrapper { margin:0 auto; padding:0;}
 #maincontainer { margin:0 auto; padding:10px; width:1000px;}
-.container { margin:0 auto; padding:0; width:960px;}
-#header12 { margin:0 auto; padding:0; width:960px; height:75px; }
+.container { margin:0 auto; padding:0; width:1000px;}
+#header12 { margin:0 auto; padding:0; width:100px; height:75px; }
 
 .dppattern { margin:0; padding:0; background:url(../images/dpattern.jpg) no-repeat center top; border-bottom:1px solid #fff;}
 .logodiv { margin:0; padding:0; width:220px; float:left;}
