@@ -216,7 +216,7 @@ class ContentsController < ApplicationController
   end
   
   def search_guide
-   
+    @static_page1 = "true"
     @guide = Guide.find_by_name params[:guide_type]
     #@article_categories= ArticleCategory.where("itemtype_id = ?", @itemtype.id)
     @item = item = Item.where("id = ? or slug = ?", params[:item_id], params[:item_id]).first
