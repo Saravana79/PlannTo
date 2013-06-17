@@ -147,6 +147,7 @@ class ItemsController < ApplicationController
   end
 
   def compare
+    @static_page1 = "true"
     @ids = params[:ids].split(',') rescue ""
      p = params[:ids].split(',') rescue ''
      unless p == ""

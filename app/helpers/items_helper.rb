@@ -170,12 +170,24 @@ module ItemsHelper
              ((item.valuehyperlink = "http://" + link) rescue item.hyperlink = "http://" + link)
           end   
         if attribute.attribute_type == Attribute::TEXT
-          if attribute.name == "Product Home Page URL" || attribute.name == "360 Degree View" 
+          if attribute.name == "Product Home Page URL" || attribute.name == "360 Degree View" || attribute.name == "Support URL" || attribute.name == "User Guide URL"
             if(item.value).include?("http://") || (item.value).include?("https://")
             else
               item.value = "http://" + item.value
             end     
-            content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 Degree View"} </a>"
+        case attribute.name
+          when "User Guide URL"
+            displaytext = "User Guide URL"
+          when "Product Home Page URL"
+             displaytext = "Home Page URL"
+          when "360 Degree View"
+             displaytext = "360 Degree View"
+          when "Support URL"
+             displaytext = "Support URL"
+          else
+             displaytext = item.value
+          end
+          content = "<a href= #{item.value} target='_blank'>" + displaytext + "</a>"
           else
             content = "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value} </a>"
           end  
@@ -216,12 +228,25 @@ module ItemsHelper
       return content
      else
       if attribute.attribute_type == Attribute::TEXT
-        if attribute.name == "Product Home Page URL" || attribute.name == "360 Degree View" 
+        if attribute.name == "Product Home Page URL" || attribute.name == "360 Degree View"  || attribute.name == "Support URL" || attribute.name == "User Guide URL"
           if(item.value).include?("http://") || (item.value).include?("https://")
           else
             item.value = "http://" + item.value
           end
-          content = "<a href= #{item.value} target='_blank'>#{attribute.name == "Product Home Page URL" ? item.value : "360 Degree View"} </a>"
+
+          case attribute.name
+          when "User Guide URL"
+            displaytext = "User Guide URL"
+          when "Product Home Page URL"
+             displaytext = "Home Page URL"
+          when "360 Degree View"
+             displaytext = "360 Degree View"
+          when "Support URLL"
+             displaytext = "Support URL"
+          else
+             displaytext = item.value
+          end
+          content = "<a href= #{item.value} target='_blank'>" + displaytext + "</a>"
         else
           content = "#{item.value}"
         end  

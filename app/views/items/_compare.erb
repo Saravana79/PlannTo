@@ -1,21 +1,21 @@
   <%if @items %>
 <div class="outerdivwarning" id="staticDiv" style="display:none;">
-  <div  style="font-size: 14px;font-weight: normal;height: 85px;line-height: 30px;margin:0; overflow:visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: rgb(240, 240, 240);color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;">
+  <div  class="divheadercompare">
     <div style="position: relative;width:1000px;margin: 0 auto;">
       <table width="1000px" border="0" cellspacing="0" cellpadding="0" style="line-height:15px;text-align:none;">
 
         <tr >
             <td class="rowline" valign="bottom" align="center" style="width:200px;border-right:1px solid #cdd3d7;">
-                <div style="width:200px;display:block;"/>
+                <div style="width:200px;"/>
             </td>
               
             <%@items.each_with_index do |item, index|%>
             <td width="200px;"  style="width:200px;vertical-align:top;border-right:1px solid #cdd3d7;text-align:left;">
                <table>
                     <tr>
-                        <td width="100px" height="85"><img src="<%=item.image_url%>" onclick="parent.location='<%=(item.get_url())%>'" width="92" height="69"/></td>
+                        <td width="100px" height="85px" style="display:block;"><img src="<%=item.image_url%>" onclick="parent.location='<%=(item.get_url())%>'" width="92" height="69"/></td>
                         <td width="">
-                        <div style="width:98px;">
+                        <div style="width:100px;">
                         <a href="<%=item.get_url()%>" class="txt_black"><%=item.name%></a>
                        </div>
                              <a class="txt_price"><%= item.get_price_info('Price',false) %></a><br />
@@ -58,22 +58,26 @@
   
   
   
-  <tr><td></td><td class="high insidebox titlename bordered" colspan="4" width="1000px" align="center">Summary of Comparison</td></tr>
+  <tr>
+    <td style="background:url(../images/dpattern.jpg) no-repeat center top;border-top: 1px solid #cdd3d7;"></td>
+    <td class="high insidebox titlename backgroundordered" colspan="4" width="1000px" align="center" style="background:url(../images/dpattern.jpg) no-repeat center top;color:white;font-weight:bold;">Summary of Comparison</td>
+  </tr>
    <% @attribute_comparision_lists.each do |attr_ca| %>
    <% display = show_comparision_summary(attr_ca, @items) %>
      <% if display %>
-      <tr>
-        <td class= "top insidebox name bordered" rowspan="2"><b> <%= "#{attr_ca.title} #{session[:item_type]}" %></b></td>
+      <tr style="width:1000px;">
+        <td class= "top insidebox name bordered" rowspan="2" style="background:#12c1e6;color:white;vertical-align:middle;font-size:13px;"><b> <%= "#{attr_ca.title} #{session[:item_type]}" %></b></td>
         <% @items.each do |i| %>
-          <td class="high insidebox bordered" style="border-bottom:0px;"><b>
-            <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id).value %>
-            <%= a == display[:highlight] ? "<h4>#{display[:highlight]}</h4>".html_safe : a %></b></td>
+          <td class="high insidebox bordered" style="border-bottom:0px;text-align:center;">
+            <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>
+            <% attribute = @attributes.find_by_id(a.attribute_id) %>
+            <%= a.value == display[:highlight] ? ("<b><h4>" + show_item_value(@items, i, attribute) + "</h4></b>").html_safe : show_item_value(@items, i, attribute) %></td>
         <% end %>
        <!--  <td class="high insidebox bordered">40 grams</td>
         <td class="high insidebox bordered">50 grams</td>
         <td class="high insidebox bordered">60 grams</td> -->
       </tr>
-      <tr>
+      <tr style="width:1000px;">
         <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  
           <%= display[:summary] %></td>
       </tr>
@@ -104,7 +108,7 @@
   <%@attributes.group_by(&:category_name).each do |group, attributes|%>
     <%if group_display_required?(@attribute_ids, @items)%>
       <tr>
-        <td></td>
+        <td style="background:url(../images/dpattern.jpg) no-repeat center top;border-top: 1px solid #cdd3d7;"></td>
         <td id="comp-info-start-here" class="high insidebox titlename bordered" colspan="4" width="1000px" align="center"><b><%=group%></b></td>
       </tr>
       <%attributes.each do |att|%>

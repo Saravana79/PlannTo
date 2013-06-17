@@ -1,25 +1,37 @@
 <!-- this page needs to be deleted -->
-<h2>Compare <%if @item_type%>
-  <%= @item_type + "s"%>
-<%else%>
-<%=@item1.itemtype.itemtype.pluralize.capitalize%>
-<%end%>
-</h2>
 <%if @items%>
-<% @itemname  = ''%>
-<%@items.each_with_index do |item, index|%>
-  <%@itemname = @itemname + item.name + ' Vs '%>
-<%end%>
-<%@itemname  = @itemname[0..-4]%>
-<% content_for :title,   @itemname + " - " %>
-<% content_for :description, "Compare "+ @itemname + " based on price, specifications, rating, reviews, deals and latest news."%>
+    <% @itemname  = ''%>
+    <%@items.each_with_index do |item, index|%>
+      <%@itemname = @itemname + item.name + ' Vs '%>
+    <%end%>
+    <%@itemname  = @itemname[0..-4]%>
 
+    <% content_for :title,   @itemname + " - " %>
+    <% content_for :description, "Compare "+ @itemname + " based on price, specifications, rating, reviews, deals and latest news."%>
 <%else%>
-
-<% content_for :title, " - Compare Items" %>
+    <% content_for :title, " - Compare Items" %>
 <%end%>
+<div style="border: solid 0px;width: 1000px;position:relative;margin: 0 auto;height: auto;min-height: 600px;">
+
+<div style="background:white;padding:5px;height:30px;">
+    <div style="float:left;width:1000px;">
+      <h2 style="padding-top:5px;padding-right:10px;">Compare 
+
+        <%if @item_type%>
+          <%= @item_type + "s"%>
+        <%else%>
+        <%=@item1.itemtype.itemtype.pluralize.capitalize%>
+        <%end%>
+        <%unless @itemname.blank? %>
+            <%=" - " + @itemname%>
+        <%end%>
+
+      </h2>
+    </div>
+</div>
+
 <div class="comparedivcontainer">
-  <div class="comparetopdiv">    
+  <div class="comparetopdiv" style="clear:both;background:white;width:1000px;float:left;margin-top:10px;">    
     <div class="rightcol">
       <ul>
         <li><a href="#" class="tweet">twitter</a></li>
@@ -133,3 +145,4 @@
 
 </script>
 -->
+</div>

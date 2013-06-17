@@ -1,5 +1,5 @@
 class InviteMailer < ActionMailer::Base
-  default from: "admin@plannto.com"
+  default from: "\"PlannTo\" <admin@plannto.com>"
  
   def invite_friend(invitation)
     @invitation = invitation

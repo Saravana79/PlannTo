@@ -75,7 +75,7 @@ background:url(../images/poup_samplebg.jpg) no-repeat center top;}
     margin: 0; text-align: center; display:block;}
 
 #Loginpoup .Popuptitlebar a.Closebut {
-display:block; width:43px; height:42px; background:url(/images/pclose_but.png) no-repeat left top;
+display:block; width:43px; height:42px;
 position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 #Loginpoup h1 a.Closebut:hover { background-position:left -41px;}
@@ -2560,7 +2560,7 @@ h2 {
 .comparedivcontainer .comparetopdiv .rightcol ul li:last-child { margin1:0;}
 .comparedivcontainer .comparetopdiv .rightcol ul li a.tweet{ margin:0; padding:0;  background:url(../images/tweet_icon.png) no-repeat top left; width:15px; height:15px; display:inline-block; text-indent:-9999px;}
 .comparedivcontainer .comparetopdiv .rightcol ul li a.fb{ margin:0; padding:0;  background:url(../images/fb_icon.png) no-repeat top left; width:15px; height:15px; display:inline-block; text-indent:-9999px;}
-.comparedivcontainer .comparetopdiv .rightcol ul li a.printer{ margin:0; padding:0;  background:url(../images/printer_icon.png) no-repeat top left; width:16px; height:15px; display:inline-block; text-indent:-9999px;}
+.comparedivcontainer .comparetopdiv .rightcol ul li a.printer{ margin:0; padding:0;  width:16px; height:15px; display:inline-block; text-indent:-9999px;}
 
 .comaredivbox 								{ margin:0; padding:0; border-top:1px solid #cdd3d7;}
 .comaredivbox .comparetbl 					{ margin:0; padding:0; -moz-box-sizing: border-box; border-collapse:collapse;}
@@ -2577,15 +2577,15 @@ h2 {
 .closebtndiv img  							{ border:none; outline:none;}
 .comparebox .img_product_cmp				{ clear:both; width:170px; height:125px; background:url(../images/bg_product_cmp.png) no-repeat; display:block; padding:8px 10px 10px 7px; text-align:right; float:left; border:solid 0px; }
 
-.comaredivbox .comparetbl td.insidebox.name 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:11px!important}
-.comaredivbox .comparetbl td.insidebox.titlename 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:12px!important;margin-left:-10px;}
+.comaredivbox .comparetbl td.insidebox.name 		{ background-color: #e3e3e3; border-top:1px solid #cdd3d7; font-size:12px;}
+.comaredivbox .comparetbl td.insidebox.titlename 		{ background:url(../images/dpattern.jpg) no-repeat center top; border-top:1px solid #cdd3d7; font-size:13px!important;margin-left:-10px;color:white;}
 .comaredivbox .comparetbl td.insidebox.name 		{ padding:8px 0 8px 13px; width: 200px;}
-.comaredivbox .comparetbl td.bordered 		{ font-size: 11px; border-top:1px solid #cdd3d7; border-right:1px solid #cdd3d7;}
+.comaredivbox .comparetbl td.bordered 		{ font-size: 12px; border-top:1px solid #cdd3d7; border-right:1px solid #cdd3d7;}
 .comaredivbox .comparetbl td.nobordered 	{  border-right:0px; border-top:1px solid #cdd3d7; }
 .comaredivbox .comparetbl td.btmbordered 	{  border-bottom:1px solid #cdd3d7; border-right:1px solid #cdd3d7; border-top:1px solid #cdd3d7;}
 .comaredivbox .comparetbl td.insidebox 			{ background-color: #fff;  padding:8px 0 8px 0px;word-wrap:break-word;}
 .comaredivbox .comparetbl td.bordered 		{ width: 200px;}
-.comaredivbox .comparetbl td.insidebox 			{ padding-left: 10px;font-size:11px!important;word-wrap:break-word;}
+.comaredivbox .comparetbl td.insidebox 			{ padding-left: 10px;font-size:12px;word-wrap:break-word;}
 .comaredivbox .comparetbl td.high 			{ vertical-align: top;}
 
 .PlanntoBuyBtncnt 							{float:center;margin-left:60px;margin-bottom:10px;}
@@ -3195,7 +3195,7 @@ float:left; margin: 0; padding: 2px 0 0 5px;}
 .Popupinputblock .PadL6 { padding:0 0 0 6px; width:20px; height:20px;}
 .Bluesubmit { width:50%; float:right; padding:7px 1px 15px 20px;}
 .Bluesubmit input[type="submit"]
-{background: url(../images/blut_inputbut1.png) no-repeat left top; width: 100px; height: 36px;
+{ width: 100px; height: 36px;
     border: none; cursor: pointer; margin: 0; text-shadow:0 1px 0 #1e779a; font-weight:bold;
 font-family:Tahoma, Arial, Helvetica, sans-serif; font-size:15px; color:#FFFFFF; padding:0 0 5px 0;}
 .Bluesubmit input:hover[type="submit"] { background-position:left bottom;}
@@ -4654,11 +4654,11 @@ ul.blue-link li a:hover { color:#ee830e; text-decoration:underline;}
 .social { margin:0 0 0 200px; padding:20px 0 0 0; text-align:center;}
 a.icn {float: left;margin-right: 65px; text-indent: -9999px; cursor: pointer;}
 .icn:focus, .icn:active {outline: none;}
-.icn.twitter { background:url(../images/twitter_new.png) no-repeat left top; width:112px; height:43px;}
+/*.icn.twitter { background:url(../images/twitter_new.png) no-repeat left top; width:112px; height:43px;}
 .icn.facebook { background:url(../images/fb.png) no-repeat left top; width:117px; height:43px;}
 .icn.gplus { background:url(../images/gplus.png) no-repeat left top; width:124px; height:43px;}
 .icn:hover{ opacity:0.8; filter:alpha(opacity=80); }
-
+*/
     .button { line-height:normal; display:inline-block !important; *display:inline; zoom:1; cursor:pointer; font-size:14px; text-transform:uppercase;  font-family: 'PTSansBold';}
     
     .button.medium { padding:16px 20px; }
@@ -5087,3 +5087,4 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#828181', endColorstr='#666666',GradientType=0 ); /* IE6-9 */
 }
 
+.divheadercompare {font-size: 14px;font-weight: normal;height: 85px;line-height: 30px;margin:0; overflow:visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: rgb(240, 240, 240);color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
