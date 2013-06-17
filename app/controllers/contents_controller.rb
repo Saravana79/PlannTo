@@ -249,6 +249,7 @@ class ContentsController < ApplicationController
           filter_params["items"] = @item_id
         end
     end
+    @popular_topics = Item.popular_topics(@itemtype.itemtype)
     filter_params["items"] = params[:item_id]
     #filter_params["itemtype_id"] = @itemtype.id  if @item.nil?
     #unless item.nil?

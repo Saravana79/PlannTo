@@ -1,7 +1,7 @@
 <div style="border: solid 0px;width: 1000px;position:relative;margin: 0 auto;height: auto;min-height: 600px;
     padding:10px;">
 <div style="background:white;padding:5px;height:40px;">
-    <div style="float:left;width:200px;">
+    <div style="float:left;width:300px;">
         <span style="float: left;display: block;"><img src="/images/<%=@itemtype.itemtype.downcase%>-icon.png" style="height:40px;"> </span>
         <span style="float: left;margin-top: 12px;font-size: 15px;font-weight: bold;display: block;">  &nbsp;&nbsp; <%=@guide.name  + " - " + @itemtype.itemtype.pluralize.capitalize  %> </h2></span>
 
@@ -48,9 +48,12 @@
 	  <%= render "shared/share_buttons", :caption_text => 'Check out the buying guides of ' + @itemtype.itemtype.downcase + ' in PlannTo.com' %>
 	</div>
 <br/>
+
 <%=render :partial => "shared/google_adsense_square" %>
 <br/>
 <!--<#%= render :partial => 'products/popular_items',:locals => {:type => 'Bike'} %>-->
-</div>
 
+
+<%= render :partial => 'products/popular_topics', :locals => {:type => @itemtype.itemtype} %> 
+</div>
 </div>
