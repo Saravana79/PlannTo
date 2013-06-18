@@ -83,7 +83,9 @@ class ArticleContentsController < ApplicationController
      @tag = 'false'
    end  
    end
-   @article.update_facebook_stats
+   unless(@article.nil?)
+        @article.update_facebook_stats
+   end
     flash[:notice]= "Article uploaded"
     respond_to do |format|
       format.js

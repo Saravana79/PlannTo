@@ -17,7 +17,7 @@
       <%end%>  
       <%@items.results.each do |item|%>
          <% group_id = item.cargroup.id rescue "no" %>
-          <%unless ((session[:group_id].nil?) || (session[:group_id].include?(group_id))) %>
+          <%#unless ((session[:group_id].nil?) || (session[:group_id].include?(group_id))) %>
              <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" class="search-result-list">
                     <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="176" height="132" onclick="parent.location='<%=link_url(item)%>'" /></div>
                     <div class="float_rgt" style="width:520px;">
@@ -79,9 +79,9 @@
           
               <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
 
-        <%end%>
-          <% session[:group_id] << group_id %>
-          <% session[:group_id].delete("no") %>
+        <%#end%>
+          <% #session[:group_id] << group_id %>
+          <% #session[:group_id].delete("no") %>
     <%end%>
 
         <%= render 'shared/show_hide_login_form', :item => "" %>

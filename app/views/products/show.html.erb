@@ -85,7 +85,7 @@
         <div style="float:right;">
           <%if (!(@item.rank.nil?) && (@item.rank > 0))%>
                        <div class="widget-div">
-                                    <a href="/<%=@item.itemtype.itemtype%>/search"><div><%=@item.rank%></div> <div class="scorespan">Score</div></a>
+                                    <a href="/<%=@item.itemtype.itemtype.downcase%>/search"><div><%=@item.rank%></div> <div class="scorespan">Score</div></a>
                                   </div>
                               
           <%end%>

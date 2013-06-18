@@ -71,7 +71,7 @@
           <td class="high insidebox bordered" style="border-bottom:0px;text-align:center;">
             <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>
             <% attribute = @attributes.find_by_id(a.attribute_id) %>
-            <%= a.value == display[:highlight] ? ("<b><h4>" + show_item_value(@items, i, attribute) + "</h4></b>").html_safe : show_item_value(@items, i, attribute) %></td>
+            <%= a.value == display[:highlight] ? ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe : show_item_value(@items, i, attribute) %></td>
         <% end %>
        <!--  <td class="high insidebox bordered">40 grams</td>
         <td class="high insidebox bordered">50 grams</td>
