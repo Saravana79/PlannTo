@@ -174,12 +174,14 @@
                 <%end%>           
                 </div>
                 <div class="orimg"></div>
-                <div class="fb-signup"> <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>                
-                  <p><%#= link_to "Or with your Email Address.", :class => "sign_in_popup" , :tabindex => "5" %></p>
+                <div class="fb-signup"> 
+                  <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>                
+                  <p><%= link_to "Sign Up", new_registration_path(User.new,:type => "without_login"), :class => "sign_in_popup" , :tabindex => "5" %></p>
             </div>
             
           
             <div class="clr" style="clear:both;"></div>
+            <%= render partial: "shared/home_signup" %>
           <br/>
     <%end%>
      <%else%>
@@ -202,7 +204,7 @@
 </div> 
 </div>  
     <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
-    <%= render "/layouts/navigation" %>
+    <%#= render "/layouts/navigation" %>
   
 
 
@@ -218,14 +220,15 @@
 
 </script>
   <script>
- $(".sign_in_popup").click(function(){
- $("#dialog-form #click_message").hide();
- $('#dialog-form').bPopup({
+ $(".sign_in_popup").click(function(e){
+ $("#Loginpoup #click_message").hide();
+ $('#Loginpoup').bPopup({
    closeClass:'Closebut',
    modalClose: false,
    position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
    follow: [false, false] //x, y
  });
+ e.preventDefault()
  });
  </script>  
  

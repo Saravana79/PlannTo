@@ -1,3 +1,4 @@
+<div id="content_comments_<%= content.id%>">
 <div class="commentblock" style="display: block;"></div>
 <% if @previous %>
 <div class="subContentDiv_comments comments_bg">
@@ -7,9 +8,11 @@
 </div>
 <div last_comment="<%= content.id %>"></div>
 <% end %>
+
 <% comments.reverse.each do |comment| %>
  <%= render  'comments/comment',:comment => comment %>
 <%end%>
+</div>
 
 
 
