@@ -1,9 +1,9 @@
 <td class="rowline" align="center" width="200px;" style="border-right:1px solid #cdd3d7;">
-  <div class="comparebox" id="compareBasicInfo<%=count%>" style="width:190px;">
+  <div class="comparebox" id="compareBasicInfo<%=count%><%=node%>" style="width:190px;">
     <p style="text-align:center;"><b>Add <%=itemtype%> to compare</b> </p> 
     <span class="img_product_cmp" style="height:auto;">
       
-      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%>" style="width: 150px;padding-left:5px;"/><div id="moreCarsSearchDiv<%=count%>"></div>
+      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%><%=node%>" style="width: 150px;padding-left:5px;"/><div id="moreCarsSearchDiv<%=count%><%=node%>"></div>
     </span>
     <div class="PlanntoBuyBtncnt">
     </div>
@@ -14,16 +14,14 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-
     $("#ui-active-menuitem").mouseout(function() {
       $("#ui-active-menuitem").hide();
     });
 
-    $('#moreCarsSearch<%=count%>').focus(function(){
+    $('#moreCarsSearch<%=count%><%=node%>').focus(function(){
       $(this).val('');
       $(this).keydown();
     });
-
 
     $.ui.autocomplete.prototype._renderMenu = function(ul, items) {
       var self = this;
@@ -31,8 +29,7 @@
         self._renderItem(ul, item, index);
       });
     };
-
-    $("#moreCarsSearch<%=count%>").autocomplete({
+    $("#moreCarsSearch<%=count%><%=node%>").autocomplete({      
       minLength: 2,
       format: "js",
       source: function( request, response )
@@ -48,7 +45,7 @@
           shadow: true, // Whether to render a shadow
           hwaccel: false // Whether to use hardware acceleration
         };
-        var target = document.getElementById('moreCarsSearchDiv<%=count%>');
+        var target = document.getElementById('moreCarsSearchDiv<%=count%><%=node%>');
         var spinner = new Spinner(opts).spin(target);
         $.ajax(
         {

@@ -1,4 +1,4 @@
-  <%if @items %>
+<%if @items %>
 <div class="outerdivwarning" id="staticDiv" style="display:none;">
   <div  class="divheadercompare">
     <div style="position: relative;width:1000px;margin: 0 auto;">
@@ -28,7 +28,7 @@
           <%end%>
           <%if empty_boxes_required?(@items)%>
             <%for i in empty_boxes_count(@items)..4%>
-              <%=render :partial =>"items/add_more_items",:locals => {:itemtype =>@item1.itemtype.itemtype, :count => i } %>
+              <%=render :partial =>"items/add_more_items",:locals => {:itemtype =>@item1.itemtype.itemtype, :count => i ,:node => "header"} %>
             <%end%>
           <%end%>
         </tr>
@@ -48,7 +48,7 @@
     <%end%>
     <%if empty_boxes_required?(@items)%>
       <%for i in empty_boxes_count(@items)..4%>
-        <%=render :partial =>"items/add_more_items",:locals => {:itemtype =>@item1.itemtype.itemtype, :count => i } %>
+        <%=render :partial =>"items/add_more_items",:locals => {:itemtype =>@item1.itemtype.itemtype, :count => i,:node=> "main" } %>
       <%end%>
     <%end%>
   </tr>
@@ -62,24 +62,33 @@
     <td style="background:url(../images/dpattern.jpg) no-repeat center top;border-top: 1px solid #cdd3d7;"></td>
     <td class="high insidebox titlename backgroundordered" colspan="4" width="1000px" align="center" style="background:url(../images/dpattern.jpg) no-repeat center top;color:white;font-weight:bold;">Summary of Comparison</td>
   </tr>
-   <% @attribute_comparision_lists.each do |attr_ca| %>
+   <% @attribute_comparision_lists.each do |attr_ca| %>   
    <% display = show_comparision_summary(attr_ca, @items) %>
+
      <% if display %>
       <tr style="width:1000px;">
-        <td class= "top insidebox name bordered" rowspan="2" style="background:#12c1e6;color:white;vertical-align:middle;font-size:13px;"><b> <%= "#{attr_ca.title} #{session[:item_type]}" %></b></td>
-        <% @items.each do |i| %>
-          <td class="high insidebox bordered" style="border-bottom:0px;text-align:center;">
-            <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>
-            <% attribute = @attributes.find_by_id(a.attribute_id) %>
-            <%= a.value == display[:highlight] ? ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe : show_item_value(@items, i, attribute).html_safe %></td>
-        <% end %>
-       <!--  <td class="high insidebox bordered">40 grams</td>
-        <td class="high insidebox bordered">50 grams</td>
-        <td class="high insidebox bordered">60 grams</td> -->
+        <td class= "top insidebox name bordered" rowspan="2" style="font-size:13px;"><b> <%= "#{attr_ca.title}" %></b></td>
+         <td colspan="4" class="high insidebox bordered" style="border-bottom:0px;"> <b>Winner: <%= display[:winner] %></b>  <br/><br/>
+          <%= display[:summary] %></td>
+       
+       
       </tr>
       <tr style="width:1000px;">
-        <td colspan="4" class="high insidebox bordered" style="border-top:0px;"> <b>Summary :</b>  
-          <%= display[:summary] %></td>
+           <% @items.each do |i| %>
+          <td class="high insidebox bordered" style="border-top:0px;text-align:center;">
+            <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>            
+            <%unless a.nil?%>
+              <% attribute = @attributes.find_by_id(a.attribute_id) %>
+              <%= a.value == display[:highlight] ? ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe : show_item_value(@items, i, attribute).html_safe %></td>
+            <%end%>
+            
+        <% end %>
+        <%if empty_boxes_required?(@items)%>
+              <%for i in empty_boxes_count(@items)..4%>
+                <td align="center" class="high insidebox bordered" width="200px" style="border-top:0px;text-align:center;"> <div class="price"></div></td>
+              <%end%>
+            <%end%>
+       
       </tr>
     <% end %>
   <% end %>
@@ -157,6 +166,7 @@
 </div>
 
 <script>
+
       $(window).scroll(function(e){
         if (($(window).scrollTop() > ($("#tblCompare").offset().top + 150)) && ($(window).scrollTop() < ($("#tblCompare").position().top +  $("#tblCompare").height() + 20 ))) {
 
@@ -166,53 +176,7 @@
             $('#staticDiv').css("display", "none");
         }
     });
-      function UpdateTableHeaders() {
-            $("div.divTableWithFloatingHeader").each(function() {
-                var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);
-                var floatingHeaderRow = $(".tableFloatingHeader", this);
-                var offset = $(this).offset();
-                var scrollTop = $(window).scrollTop();
-                if ((scrollTop > offset.top) && (scrollTop < offset.top + $(this).height())) {
-                    floatingHeaderRow.css("visibility", "visible");
-                    floatingHeaderRow.css("top", Math.min(scrollTop - offset.top, $(this).height() - floatingHeaderRow.height()) + "px");
-
-                    // Copy cell widths from original header
-                    $("th", floatingHeaderRow).each(function(index) {
-                        var cellWidth = $("th", originalHeaderRow).eq(index).css('width');
-                        $(this).css('width', cellWidth);
-                    });
-
-                    // Copy row width from whole table
-                    floatingHeaderRow.css("width", $(this).css("width"));
-                }
-                else {
-                    floatingHeaderRow.css("visibility", "hidden");
-                    floatingHeaderRow.css("top", "0px");
-                }
-            });
-        }
-
-        $(document).ready(function() {
-            $("table.comparetbl1").each(function() {
-                $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
-
-                var originalHeaderRow = $("tr:first", this)
-                originalHeaderRow.before(originalHeaderRow.clone());
-                var clonedHeaderRow = $("tr:first", this)
-
-                clonedHeaderRow.addClass("tableFloatingHeader");
-                clonedHeaderRow.css("position", "absolute");
-                clonedHeaderRow.css("top", "0px");
-                clonedHeaderRow.css("left", $(this).css("margin-left"));
-                clonedHeaderRow.css("visibility", "hidden");
-
-                originalHeaderRow.addClass("tableFloatingHeaderOriginal");
-            });
-            UpdateTableHeaders();
-            $(window).scroll(UpdateTableHeaders);
-            $(window).resize(UpdateTableHeaders);
-        });
-      $(".ui-dialog-content").dialog('destroy')
+    $(".ui-dialog-content").dialog('destroy')
       var ids = '<%= params[:ids] %>'
 
         if (ids.toString().split(",")[0] == '')
@@ -223,17 +187,17 @@
               {
                var size = 1
               }
-      if (ids.toString().split(",").length < size )
-      {
+          if (ids.toString().split(",").length < size )
+          {
 
-        $(".Closebut").show();
-      $('#compare_popup').bPopup({
-          closeClass:'Closebut',
-          modalClose: false,
-          position: [(screen.width / 2) - (520/2), $(window).scrollTop() + 120],
-          follow: [false, false] //x, y
-       });
-       }
+            $(".Closebut").show();
+          $('#compare_popup').bPopup({
+              closeClass:'Closebut',
+              modalClose: false,
+              position: [(screen.width / 2) - (520/2), $(window).scrollTop() + 120],
+              follow: [false, false] //x, y
+           });
+           }
 </script>
 <%if @items %>
 <% if !@contents.blank? %>

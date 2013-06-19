@@ -241,7 +241,7 @@ module ItemsHelper
              displaytext = "Home Page URL"
           when "360 Degree View"
              displaytext = "360 Degree View"
-          when "Support URLL"
+          when "Support URL"
              displaytext = "Support URL"
           else
              displaytext = item.value
