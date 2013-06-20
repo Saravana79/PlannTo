@@ -17,7 +17,7 @@
                           <div ><img src="<%=item.image_url%>" onclick="parent.location='<%=(item.get_url())%>'" width="92" height="69" style="float:left;position:left;"/>
                             <%if (!(item.rank.nil?) && (item.rank > 0))%>
                               <div class="scorediv">
-                                  <div style="font-size:18px;" class="scoreinnerp"><%=item.rank%></div>
+                                  <div style="font-size:15px;" class="scoreinnerp"><%=item.rank%></div>
                               </div>
                               <%end%>
                           </div>
@@ -65,11 +65,12 @@
  
   
   
-  
+  <%if @attribute_comparision_lists.size > 0%>
   <tr>
     <td style="background:url(../images/dpattern.jpg) no-repeat center top;border-top: 1px solid #cdd3d7;"></td>
     <td class="high insidebox titlename backgroundordered" colspan="4" width="1000px" align="center" style="background:url(../images/dpattern.jpg) no-repeat center top;color:white;font-weight:bold;">Summary of Comparison</td>
   </tr>
+  <%end%>
    <% @attribute_comparision_lists.each do |attr_ca| %>   
    <% display = show_comparision_summary(attr_ca, @items) %>
 
