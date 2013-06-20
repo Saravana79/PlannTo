@@ -1,539 +1,540 @@
-  <% content_for :title, @question.title + " - " %>
-  <% content_for :description, @question.question_part%>
-  <% @type = params[:type] %>
-  <% @buyer = "true" %>
-  <div id="giveAdviceDialog"> </div>
-<div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
-<div id="maincontainer" class="maincontainerCss1" style="margin-top:-40px;">
-	<!-- Till this will go into main layout and common for all pages.-->
-  <br/>
-	<br/>
-	<div style="clear:both;background:white;padding:5px;width:727px;float:left;margin-top:10px;">
+	  <% content_for :title, @question.title + " - " %>
+	  <% content_for :description, @question.question_part%>
+	  <% @type = params[:type] %>
+	  <% @buyer = "true" %>
+	  <div id="giveAdviceDialog"> </div>
+	<div id="giveAdviceDialog" title="Add a recommendation" style="display:none"></div>
+	<div id="maincontainer" class="maincontainerCss1" style="margin-top:-40px;">
+		<!-- Till this will go into main layout and common for all pages.-->
+	  <br/>
+		<br/>
+		<div style="clear:both;background:white;padding:5px;width:727px;float:left;margin-top:10px;">
 
-	<div class="leftcolumnbig">
-		<!-- Product Details - Start -->
-		<div class="contentDetailsMainDiv">
+		<div class="leftcolumnbig">
+			<!-- Product Details - Start -->
+			<div class="contentDetailsMainDiv">
 
-			<!-- Question - Start -->
-			<div  class="mainContentDiv">
-				<%#= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
-				<div  class="float_rgt">
-				<%unless @follow_item == '' %>
-				  <a href="<%= @buying_plan.user.get_url()%>"> 	<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" /> </a>
-				<%end%>  
-				</div>
-				<div  class="subContentDiv" style="margin-left:10px;">
-					<div>
-					<div  id="questionTitle" ><h2 style="font-size:16px;line-height:22px;"><%= @question.title%><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h2> </div>
-					</div>
-					<div>
+				<!-- Question - Start -->
+				<div  class="mainContentDiv">
+					<%#= render :partial => "votes/voting_detail", :locals => {:item => @buying_plan, :user => user_signed_in? ? current_user : nil}%>
+					<div  class="float_rgt">
 					<%unless @follow_item == '' %>
-					<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown"  style="font-size:12px;color: #c15f24;"> Asked by <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" style="font-size:12px;color: #c15f24;" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
-					<%else%>
-					<a href="#" class="txt_brown"  style="font-size:12px;color: #c15f24;">  Asked by Guest User </a> 	<a class="txt_brown" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
-					<%end%>
+					  <a href="<%= @buying_plan.user.get_url()%>"> 	<img src="<%= @buying_plan.user.get_photo%>" class="userImageSmall" /> </a>
+					<%end%>  
 					</div>
-					<div class="subContentGap" style="padding-top:4px;">
-						<div id="displayQuestion">
-							<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif (current_user && @buying_plan.user_id == current_user.id) || (@buying_plan.temporary_buying_plan_ip == request.remote_ip && @buying_plan.temporary_buying_plan_ip!="") %> Please add more information about your usage or buying preference here 	<%= link_to "Edit", "#",:onclick => "$('#updateQuestion').bPopup({
-    closeClass:'Closebut',
-    modalClose: false,
-    position: [(screen.width / 2) - (520 /2), $(window).scrollTop() + 120],
-    follow: [false, false]});return false;", :class => "txt_blue"%> <%end%></a>
-							
+					<div  class="subContentDiv" style="margin-left:10px;">
+						<div>
+						<div  id="questionTitle" ><h2 style="font-size:16px;line-height:22px;"><%= @question.title%><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h2> </div>
 						</div>
-					</div>
-
-					<script type="text/javascript">
-						$('#giveAdviceTag').live('click', function(){
-						$.get('/preferences/give_advice',{question_id: <%= @question.id%>},null,"script");
-						})
-
-						$('#editPreferences').live('click', function(e){
-						e.preventDefault()
-						$.get('/preferences/edit_preference',{id: <%= @buying_plan.id%>},null,"script");
-						return false
-						})
-
-						$('#preference_question').live('click', function(e){
-						$('#question_question').poshytip('destroy')
-						if ($("#question_question").val() == ""){
-						$('#question_question').poshytip({
-						className: 'tip-darkgray',
-						content: 'Please enter your question.',
-						showOn: 'none',
-						alignTo: 'target',
-						alignX: 'right',
-						offsetX: 5,
-						alignY: 'center'
-						});
-						$('#question_question').poshytip('show');
-						return false
-						}
-						e.preventDefault()
-						$.ajax(
-						{
-						url: "/preferences/update_question",
-						data: {
-						question_id: <%= @question.id%>
-							, question: $("#question_question").val(),
-							plannto_network: $("input[name='question[plannto_network]']:checked").val(),
-							title : $("#question_title").val()
-
-							}, type: "get",
-							dataType: "script"
-							});
-							return false
-							});
-					</script>
-					<br/>	
-						<ul class="divCommentsConent dontfloat">
-						<!--	<li class="subContentGap float_lft" >
-								<a class="txt_blue ">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</a>
-							</li>
-							<li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							</li> -->
-							<li class="subContentGap float_lft" >
-						
-							<a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(@buying_plan.user_question).html_safe  %></a>
-							 </li>
-							<!-- <li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							</li>
-							<li class="subContentGap float_lft">
-								<a class="txt_blue ">Report</a>
-							</li> -->
-							<%if current_user %>
-							<% if (can_update_preference?(@buying_plan) || current_user.is_admin? )%>
-							<li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							</li>
-							
-							<li class="subContentGap float_lft"><!--<img src="/images/delete.jpg"/>--><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title} ,this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
-							</li>
-							<%end%>
-							
-							<%if (!@buying_plan.completed? && can_update_preference?(@buying_plan)) %>
-							  <li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							 </li>
-							
-							<li class="subContentGap float_lft"><%= link_to "Mark as Completed",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id,:type => "complete"},:remote => true, :method => :delete, :class => "txt_blue"%>
-							</li>
-							<%end%>
-							
-							<%if can_update_preference?(@buying_plan) || current_user.is_admin? %>
-							   <li class="subContentGap float_lft">
-								<a class="txt_gray ">|</a>
-							  </li>
-						   <li class="subContentGap float_lft">
-								  <%= link_to_function "Update This", "$('#updateQuestion').bPopup({
-    closeClass:'Closebut',
-    modalClose: false,
-    position: [(screen.width / 2) - (520 /2), $(window).scrollTop() + 120],
-    follow: [false, false]});return false;", :class => "txt_blue"%>
-							 </li>
-			      <%end%>
-			      <%end%>
-						</ul>
-						<% @buying_plan_comment = true %>
-					
-						<%= render :partial => "comments/new", :locals => { :content => @buying_plan.user_question,:buying_plan => @buying_plan_comment  }  %>
-			
-
-						<!--<%if can_update_preference?(@buying_plan)%>
-						<div style="float:right;">
-							<a style="" href="#" class="btn_submitanswer">Ask Advice</a>
-						</div>
-						<%end%> -->
-					</div>
-
-<!--			  <br/>
-  <div style="border-bottom: solid 1px #cdd3d7;display:none;clear:both;" ></div>
-  <br/>-->
-
-							<ul id="Newtabs" style="padding-top:15px;">
-   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?overview=true"><span>Overview</span></a></li>
-        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
-        <%if params[:search_type] != "car" and  params[:search_type]  !="bike"%> <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li>  <%end%>
-        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
-  </ul>
-          <br/>
-					<br/>
-					<br />
-		      <%if params[:type] == "Recommendations" %>
-						<!-- Answer this question - Start -->
-			  <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;clear:both;">
-			  	Suggestions from Friends/Experts
-			  </div>			
-
-						<%if @buying_plan.user_question.user_answers.size == 0 %>
-						<%if (!current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip == request.remote_ip) %>
-						  <div class="alert alert-block"> <strong> Currently there are no recommendation, please sign up to share this with friends/experts to get their feedback.<%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a></strong></div>
-						 <%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
-						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
-						    
-						  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
-							<div class="alert alert-block">
-<strong>There are no recommendations yet from your friends/experts, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
-   </div></div>
-						<%elsif %>
-						    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
-						  <%end%>
+						<div>
+						<%unless @follow_item == '' %>
+						<a href="<%= @buying_plan.user.get_url()%>" class="txt_brown"  style="font-size:12px;color: #c15f24;"> Asked by <%= @buying_plan.user.name%> </a> 	<a class="txt_brown" style="font-size:12px;color: #c15f24;" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
 						<%else%>
-						<%end%>		
-						<!--<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>-->
-						<!-- Answer this question - End -->
-						<%= display_empty_row(@answers.size).html_safe%>
-						<%@answers.each_with_index do |ans, index|%>
-						  <%=render "preferences/update_answer", :ans => ans%>
-			      <%end%>
-			      	<%if can_add_recommendation?(@buying_plan) || !current_user %>
-								<div class="float_rgt" style="margin-top:8px;">
-								<%if @follow_item != '' || (@buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
-									<a style="margin-right:10px;margin-top:10px;float:right;margin-bottom:10px;font-size: 13px;padding: 4px 8px 4px 8px;" href="#" class="Bluesubmit3" id='giveAdviceTag'>Add Recommendation</a>
-									<%end%>
-								</div>
-							<%end%>
+						<a href="#" class="txt_brown"  style="font-size:12px;color: #c15f24;">  Asked by Guest User </a> 	<a class="txt_brown" > <%= time_ago_in_words(@buying_plan.created_at)%> ago</a>
+						<%end%>
+						</div>
+						<div class="subContentGap" style="padding-top:4px;">
+							<div id="displayQuestion">
+								<a class="txt_black_description" id="question_part"><%if  !@question.question_part.blank? %> <%= @question.question_part%> <%elsif (current_user && @buying_plan.user_id == current_user.id) || (@buying_plan.temporary_buying_plan_ip == request.remote_ip && @buying_plan.temporary_buying_plan_ip!="") %> Please add more information about your usage or buying preference here 	<%= link_to "Edit", "#",:onclick => "$('#updateQuestion').bPopup({
+	    closeClass:'Closebut',
+	    modalClose: false,
+	    position: [(screen.width / 2) - (520 /2), $(window).scrollTop() + 120],
+	    follow: [false, false]});return false;", :class => "txt_blue"%> <%end%></a>
+								
+							</div>
+						</div>
 
-			     <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;padding-top:15px;clear:both;">
-			  	Suggestions from PlannTo 
-			  </div>
-			  	<% if ((!@related_items.nil? and @related_items.size == 0) and (@preferences_list.size == 0 ) )%>
-			  		<div class="alert alert-block">
-<strong>There are no suggestions from PlannTo, please specify your buying preferences to have better recommendations.</strong> <br /></div>		
-			  	<%end%>
-			      <%if @preferences_list.size != 0 %>
-			       <div id="content_all">
-    
-      <%= hidden_field_tag :page_pagination,2%>
-     <div style="width:735" >
-        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+						<script type="text/javascript">
+							$('#giveAdviceTag').live('click', function(){
+							$.get('/preferences/give_advice',{question_id: <%= @question.id%>},null,"script");
+							})
 
-  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total: <span id="total_result"> <%=@items.total%></span></div> 
-    
- 
-    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
-  </div>
-   <a id="content_next" style="display:none"></a>
-     <div id="content">
-      
-      <%= render :partial => "/search/index" %>
-      <br clear="all/>"
-    </div>
-    </div>
-     <div style="padding-left:100px;">
- <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-         <%= image_tag '/images/ajax-loader.gif' %>
-      </span>
-      </div>
-    </div>
-     <script>
-  
-    $(window).scroll(function () {
-       lnk = $('#content_next');
-      
-    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-         running = true;
-            $.ajax(
-              {
-               
-        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() + "&type=Recommendations" ,
-               
+							$('#editPreferences').live('click', function(e){
+							e.preventDefault()
+							$.get('/preferences/edit_preference',{id: <%= @buying_plan.id%>},null,"script");
+							return false
+							})
 
+							$('#preference_question').live('click', function(e){
+							$('#question_question').poshytip('destroy')
+							if ($("#question_question").val() == ""){
+							$('#question_question').poshytip({
+							className: 'tip-darkgray',
+							content: 'Please enter your question.',
+							showOn: 'none',
+							alignTo: 'target',
+							alignX: 'right',
+							offsetX: 5,
+							alignY: 'center'
+							});
+							$('#question_question').poshytip('show');
+							return false
+							}
+							e.preventDefault()
+							$.ajax(
+							{
+							url: "/preferences/update_question",
+							data: {
+							question_id: <%= @question.id%>
+								, question: $("#question_question").val(),
+								plannto_network: $("input[name='question[plannto_network]']:checked").val(),
+								title : $("#question_title").val()
 
-                type: "get",
-                dataType: "script",
-                before: $('#spinner1').show(),
-                success: function(data){$('#spinner1').hide();
-                 
-                  }
-              });
-              return false
-            //lnk.click();
-       }
-        });
-      
-    </script>
-    <%else%>
-    <div id="content_all">
-    
-      <%= hidden_field_tag :page_pagination,2%>
-     <div style="width:735" >
-          
- 
-    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
-  </div>
-   <a id="content_next" style="display:none"></a>
-     <div id="content">
-      
-     <%= render :partial => "related_items" %>
-    </div>
-    </div>
-     <div style="padding-left:100px;">
- <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-         <%= image_tag '/images/ajax-loader.gif' %>
-      </span>
-      </div>
-    </div>
-     <div id="content_all">
-    
-      <%= hidden_field_tag :page_pagination,2%>  <a id="content_next" style="display:none"></a>
-      
-
-<script>
-  
-    $(window).scroll(function () {
-       lnk = $('#content_next');
-      
-    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-         running = true;
-            $.ajax(
-              {
-             url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() +  "&type=Recommendations" ,
-                type: "get",
-                dataType: "script",
-                before: $('#spinner1').show(),
-                success: function(data){$('#spinner1').hide();
-                 
-                  }
-              });
-              return false
-            //lnk.click();
-       }
-        });
-      
-    </script>
- <script>
-        $(".action_btns_medium").click(function(e){
-      
-         <% if !current_user %>
-             $("#login-1 #click_message").html(("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
-            openLoginPopup("#" + $(this).attr('id'), "submit");
-            return false
-          <%end%>
-        })
-         </script>
-    
-         <%end%>
-         <%end%>  
-      <%if params[:type] == "deals"%>
-        <div style="margin: 0px 0px 0px 550px;">
-          <ul class="itemdrop" >
-          	<li class="item1"><a href="#"><span>Products</span></a>
-		         <ul class="item_drop_deals">
-               <% Item.where("id in(?)",@item_ids.split(',')).each do |i| %>
-				         <li class="selected"> <a data-type=<%= i.id %> ><%= i.name %></a></li>
-			        <% end %>
-		       </ul>
-	      </ul>
-      </dl>
-   </div>
-   <script>
-      $('ul.item_drop_deals a').live("click",function(){
-      $(this).parent().toggleClass('selected');
-      var types = [];
-      $("ul.item_drop_deals li.selected a").each(function() {
-  types.push($(this).data('type'))
-});
-       $.ajaxSetup({
-      'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
-      });
-
-      $.get('/preferences/deals_filter',{'item_ids' :types});
-      });
-     </script>
-       <div id="buying_plan_deals">
-        <%unless @item_ids.nil?%>
-            <%=render "preferences/deals"%>
-         <%end%> 
-        </div>
-      <%end%>
-  	
-       <%if !params[:type].present? || params[:type] == "create"%>    
-             
-					<div>
-					<% @custom = "true" %>
-			<% unless @buying_plan.completed? %>
-        <!--<div class="hdr_Category float_lft margin_lft10">
-					 Contents
-			  </div>-->
-					<div id="content_all">
-		<%@order = @buying_plan.created_at.to_date == Time.now.to_date ? "total_votes desc" : "created_at desc" %> 
-    <%= render "contents/filter_by_options",:buying_plan => @buy_plan %>
-    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
-    <%= render "contents/sort_by_options" ,:order => @order%>
-  <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
-   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-     <% params1 = {"sub_type" => ["Reviews","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => @order} %>
-    
-      <% @contents = Content.filter(params1)%>
-       <%= render :partial => 'contents/contents', :locals => {:params => params1} %>
-        <a id="content_next" style="display:none"></a>
-    </div> 
-    
-</div>
-<%else%>
-<div class="listing_items" style="height:250px;">
- <br/>
-  <% @owned = "true" %>
- <%@items = Item.where('id =?',@buying_plan.owned_item_id)%>
- <span><h2>Owned Item</h2></span>
- <br />
- <%= @buying_plan.owned_item_description %>
-<%= render 'recommend_items', :items => @items,:complete => @owned %>
-</div>
- <%end%>
-		<%= @owned = "" %>					
-    
-	</div>
-					<!-- Product Details - End -->
-		<%end%>
-			<%if @type == 'guides' %>
- <!--<div class="hdr_Category float_lft margin_lft10">
-					 Buyer Guides
-			  
-			  </div>-->
-			  <%@order = "" %>
-			  <% @custom = "" %>
-			  <%@contents= "" %>
-			    <br />
-			    <br />
-			    <%if @considered_items.size == 0 && @follow_item.size == 0 && @preferences_list.size == 0 %>
-			  		<div class="alert alert-block">We are showing buying guides for <%=params[:search_type] %>, please update your preferences or considered items to have more personalized buying plan page. </div>
-			  		<%end%>
-					<div id="content_all">
-    <%= render "contents/filter_by_options",:buying_plan => @buy_plan%>
-    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
-    <%= render "contents/sort_by_options"%>
- 	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
-	 <%= hidden_field_tag "search_type","undefined" %>
-   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-       <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id,"order" => "total_votes desc"} %>
-      <%@contents = Content.filter(params) %>
-       <%= render :partial => 'contents/contents'%>
-        <a id="content_next" style="display:none"></a>
-    </div> 
-     <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-       <%= image_tag '/images/ajax-loader.gif' %>
-   </span>
-</div> 
-   <%end%> 
-	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
-       <%= image_tag '/images/ajax-loader.gif' %>
-   </span>
-	     </div>
-			</div>
-		</div>
-		<div style="display:none;" id="updateQuestion">
-		<div class="popup-background">
-  <a href="#" class="Closebut">&nbsp;</a>
-			<%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
-			<div style="clear:both;"></div>
-			<%= f.hidden_field :buying_plan_id%>
-			Title
-			<%= f.text_field :title, :value => @question.title %>
-		  <br />
-		  <br />
-			Description
+								}, type: "get",
+								dataType: "script"
+								});
+								return false
+								});
+						</script>
+						<br/>	
+							<ul class="divCommentsConent dontfloat">
+							<!--	<li class="subContentGap float_lft" >
+									<a class="txt_blue ">Recommendations (<%= @buying_plan.user_question.user_answers.size%>)</a>
+								</li>
+								<li class="subContentGap float_lft">
+									<a class="txt_gray ">|</a>
+								</li> -->
+								<li class="subContentGap float_lft" >
+							
+								<a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(@buying_plan.user_question).html_safe  %></a>
+								 </li>
+								<!-- <li class="subContentGap float_lft">
+									<a class="txt_gray ">|</a>
+								</li>
+								<li class="subContentGap float_lft">
+									<a class="txt_blue ">Report</a>
+								</li> -->
+								<%if current_user %>
+								<% if (can_update_preference?(@buying_plan) || current_user.is_admin? )%>
+								<li class="subContentGap float_lft">
+									<a class="txt_gray ">|</a>
+								</li>
+								
+								<li class="subContentGap float_lft"><!--<img src="/images/delete.jpg"/>--><%= link_to " Delete This",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id}, :remote => true, :confirm => "Are you sure you want to delete #{@buying_plan.user_question.title} ,this will delete the items that are considered to buy from your profile, do you like to proceed?", :method => :delete, :class => "txt_blue"%>
+								</li>
+								<%end%>
+								
+								<%if (!@buying_plan.completed? && can_update_preference?(@buying_plan)) %>
+								  <li class="subContentGap float_lft">
+									<a class="txt_gray ">|</a>
+								 </li>
+								
+								<li class="subContentGap float_lft"><%= link_to "Mark as Completed",{:controller => "preferences", :action => "delete_buying_plan", :id => @buying_plan.id,:type => "complete"},:remote => true, :method => :delete, :class => "txt_blue"%>
+								</li>
+								<%end%>
+								
+								<%if can_update_preference?(@buying_plan) || current_user.is_admin? %>
+								   <li class="subContentGap float_lft">
+									<a class="txt_gray ">|</a>
+								  </li>
+							   <li class="subContentGap float_lft">
+									  <%= link_to_function "Update This", "$('#updateQuestion').bPopup({
+	    closeClass:'Closebut',
+	    modalClose: false,
+	    position: [(screen.width / 2) - (520 /2), $(window).scrollTop() + 120],
+	    follow: [false, false]});return false;", :class => "txt_blue"%>
+								 </li>
+				      <%end%>
+				      <%end%>
+							</ul>
+							<% @buying_plan_comment = true %>
+						
+							<%= render :partial => "comments/new", :locals => { :content => @buying_plan.user_question,:buying_plan => @buying_plan_comment  }  %>
 				
-			<br/>
-			<%= f.text_area :question, :rows=>2, :cols=>60, :value => @question.question%>
-			<br/>
- <div style="clear:both;"></div>
-			<div  style="float:right;padding:5px;width:180px;">
-				<%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
 
-			</div>
-			<div style="clear:both;"></div>
-			<% end %>
-			</div>
-			 <div style="clear:both;"></div>
-			 <br clear="all"/>
-		</div>
-		
-		</div>
-		<div class="rightcolumnsmall">
-        <div id="owned_item"> </div>	
-         <div class="rightcolumnsmall">
-			       <br/>
-						 
-							<%= render 'preferences_list' %>
-			      </div>	
-          <div class="rightcolumnsmall">
-				    <%if @buying_plan.completed? || @follow_item == "" %>
-				        <% @items = Item.where('id in (?)', (@buying_plan.items_considered.split(",") rescue 0)) %>
-				       <%= render 'items', :items => @items%>
-				    <%else%> 
-				      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
-						 <%end%>
+							<!--<%if can_update_preference?(@buying_plan)%>
+							<div style="float:right;">
+								<a style="" href="#" class="btn_submitanswer">Ask Advice</a>
+							</div>
+							<%end%> -->
+						</div>
+
+	<!--			  <br/>
+	  <div style="border-bottom: solid 1px #cdd3d7;display:none;clear:both;" ></div>
+	  <br/>-->
+
+								<ul id="Newtabs" style="padding-top:15px;">
+	   <li <%unless params[:type].present?%> class="tab_active" <%end%>><a href="?overview=true"><span>Overview</span></a></li>
+	        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
+	        <%if params[:search_type] != "car" and  params[:search_type]  !="bike"%> <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li>  <%end%>
+	        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
+	  </ul>
+	          <br/>
+						<br/>
+						<br />
+			      <%if params[:type] == "Recommendations" %>
+							<!-- Answer this question - Start -->
+				  <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;clear:both;">
+				  	Suggestions from Friends/Experts
+				  </div>			
+
+							<%if @buying_plan.user_question.user_answers.size == 0 %>
+							<%if (!current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip == request.remote_ip) %>
+							  <div class="alert alert-block"> <strong> Currently there are no recommendation, please sign up to share this with friends/experts to get their feedback.<%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a></strong></div>
+							 <%elsif (current_user && @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
+							    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+							    
+							  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
+								<div class="alert alert-block">
+	<strong>There are no recommendations yet from your friends/experts, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
+	   </div></div>
+							<%elsif %>
+							    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
+							  <%end%>
+							<%else%>
+							<%end%>		
+							<!--<div  style="border-top:solid 1px #ccd4d8;clear:both;"></div>-->
+							<!-- Answer this question - End -->
+							<%= display_empty_row(@answers.size).html_safe%>
+							<%@answers.each_with_index do |ans, index|%>
+							  <%=render "preferences/update_answer", :ans => ans%>
+				      <%end%>
+				      	<%if can_add_recommendation?(@buying_plan) || !current_user %>
+									<div class="float_rgt" style="margin-top:8px;">
+									<%if @follow_item != '' || (@buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && @buying_plan.temporary_buying_plan_ip != request.remote_ip) %>
+										<a style="margin-right:10px;margin-top:10px;float:right;margin-bottom:10px;font-size: 13px;padding: 4px 8px 4px 8px;" href="#" class="Bluesubmit3" id='giveAdviceTag'>Add Recommendation</a>
+										<%end%>
+									</div>
+								<%end%>
+
+				     <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;padding-top:15px;clear:both;">
+				  	Suggestions from PlannTo 
 				  </div>
-			      <div class="rightcolumnsmall">
-			       <%@items =  BuyingPlan.recommended_items(@answers) %>
-							<%= render 'recommend_items', :items => @items%>
-			      </div>
+				  	<% if ((!@related_items.nil? and @related_items.size == 0) and (@preferences_list.size == 0 ) )%>
+				  		<div class="alert alert-block">
+	<strong>There are no suggestions from PlannTo, please specify your buying preferences to have better recommendations.</strong> <br /></div>		
+				  	<%end%>
+				      <%if @preferences_list.size != 0 %>
+				       <div id="content_all">
+	    
+	      <%= hidden_field_tag :page_pagination,2%>
+	     <div style="width:735" >
+	        <div style="border-bottom: solid 1px #CCCCCC;clear:both;margin-bottom:10px"></div>
+
+	  <div width="375" height="50" class="txt_search_result float_lft" id="totalSearchResults">Total: <span id="total_result"> <%=@items.total%></span></div> 
+	    
+	 
+	    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+	  </div>
+	   <a id="content_next" style="display:none"></a>
+	     <div id="content">
+	      
+	      <%= render :partial => "/search/index" %>
+	      <br clear="all/>"
+	    </div>
+	    </div>
+	     <div style="padding-left:100px;">
+	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+	         <%= image_tag '/images/ajax-loader.gif' %>
+	      </span>
+	      </div>
+	    </div>
+	   </div>
+	     <script>
+	  
+	    $(window).scroll(function () {
+	       lnk = $('#content_next');
+	      
+	    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+	         running = true;
+	            $.ajax(
+	              {
+	               
+	        url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() + "&type=Recommendations" ,
+	               
+
+
+	                type: "get",
+	                dataType: "script",
+	                before: $('#spinner1').show(),
+	                success: function(data){$('#spinner1').hide();
+	                 
+	                  }
+	              });
+	              return false
+	            //lnk.click();
+	       }
+	        });
+	      
+	    </script>
+	    <%else%>
+	    <div id="content_all">
+	    
+	      <%= hidden_field_tag :page_pagination,2%>
+	     <div style="width:735" >
+	          
+	 
+	    <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
+	  </div>
+	   <a id="content_next" style="display:none"></a>
+	     <div id="content">
+	      
+	     <%= render :partial => "related_items" %>
+	    </div>
+	    </div>
+	     <div style="padding-left:100px;">
+	 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+	         <%= image_tag '/images/ajax-loader.gif' %>
+	      </span>
+	      </div>
+	
+	     <div id="content_all">
+	    
+	      <%= hidden_field_tag :page_pagination,2%>  <a id="content_next" style="display:none"></a>
+	      
+
+	<script>
+	  
+	    $(window).scroll(function () {
+	       lnk = $('#content_next');
+	      
+	    if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
+	         running = true;
+	            $.ajax(
+	              {
+	             url: "/preferences/<%= @buying_plan.itemtype.itemtype.downcase %>/<%= @buying_plan.uuid %>?page=" + $("#page_pagination").val() +  "&type=Recommendations" ,
+	                type: "get",
+	                dataType: "script",
+	                before: $('#spinner1').show(),
+	                success: function(data){$('#spinner1').hide();
+	                 
+	                  }
+	              });
+	              return false
+	            //lnk.click();
+	       }
+	        });
+	      
+	    </script>
+	 <script>
+	        $(".action_btns_medium").click(function(e){
+	      
+	         <% if !current_user %>
+	             $("#login-1 #click_message").html(("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'follow')%>");
+	            openLoginPopup("#" + $(this).attr('id'), "submit");
+	            return false
+	          <%end%>
+	        })
+	         </script>
+	    
+	         <%end%>
+	         <%end%>  
+	      <%if params[:type] == "deals"%>
+	        <div style="margin: 0px 0px 0px 550px;">
+	          <ul class="itemdrop" >
+	          	<li class="item1"><a href="#"><span>Products</span></a>
+			         <ul class="item_drop_deals">
+	               <% Item.where("id in(?)",@item_ids.split(',')).each do |i| %>
+					         <li class="selected"> <a data-type=<%= i.id %> ><%= i.name %></a></li>
+				        <% end %>
+			       </ul>
+		      </ul>
+	      </dl>
+	   </div>
+	   <script>
+	      $('ul.item_drop_deals a').live("click",function(){
+	      $(this).parent().toggleClass('selected');
+	      var types = [];
+	      $("ul.item_drop_deals li.selected a").each(function() {
+	  types.push($(this).data('type'))
+	});
+	       $.ajaxSetup({
+	      'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+	      });
+
+	      $.get('/preferences/deals_filter',{'item_ids' :types});
+	      });
+	     </script>
+	       <div id="buying_plan_deals">
+	        <%unless @item_ids.nil?%>
+	            <%=render "preferences/deals"%>
+	         <%end%> 
+	        </div>
+	      <%end%>
+	  	
+	       <%if !params[:type].present? || params[:type] == "create"%>    
+	             
+						<div>
+						<% @custom = "true" %>
+				<% unless @buying_plan.completed? %>
+	        <!--<div class="hdr_Category float_lft margin_lft10">
+						 Contents
+				  </div>-->
+						<div id="content_all">
+			<%@order = @buying_plan.created_at.to_date == Time.now.to_date ? "total_votes desc" : "created_at desc" %> 
+	    <%= render "contents/filter_by_options",:buying_plan => @buy_plan %>
+	    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+	    <%= render "contents/sort_by_options" ,:order => @order%>
+	  <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+	   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+	     <% params1 = {"sub_type" => ["Reviews","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => @order} %>
+	    
+	      <% @contents = Content.filter(params1)%>
+	       <%= render :partial => 'contents/contents', :locals => {:params => params1} %>
+	        <a id="content_next" style="display:none"></a>
+	    </div> 
+	    
+	</div>
+	<%else%>
+	<div class="listing_items" style="height:250px;">
+	 <br/>
+	  <% @owned = "true" %>
+	 <%@items = Item.where('id =?',@buying_plan.owned_item_id)%>
+	 <span><h2>Owned Item</h2></span>
+	 <br />
+	 <%= @buying_plan.owned_item_description %>
+	<%= render 'recommend_items', :items => @items,:complete => @owned %>
+	</div>
+	 <%end%>
+			<%= @owned = "" %>					
+	    
 		</div>
-		<br clear="all"/>
-			   	<script type="text/javascript">
-  //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
-<%@preferences_list.each do |preference|%>
-    var lineHeight = "";
-    var searchCriteria = "";
-    var index = "<%=@search_info_lookups.index{|x|x[:id]== preference[:attribute]}%>"
-    var searchName = "<%=preference[:search_name]%>"
-    var tagId = "attribute_menu_" + index + "_tag"
-  <%if preference[:value_type] == "Between"%>
-      var minFieldId = "<%=preference[:min_attribute]%>"
-      var maxFieldId = "<%=preference[:max_attribute]%>"
-      var minValue   = "<%=preference[:min_value]%>"
-      var maxValue   = "<%=preference[:max_value]%>"
-      $("#" + minFieldId).val(minValue)
-      $("#" + maxFieldId).val(maxValue)
-      searchCriteria = ""
-      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;line-height:20px;'>: "+ searchCriteria + "</span></span>" +  "</li>" ;
+						<!-- Product Details - End -->
+			<%end%>
+				<%if @type == 'guides' %>
+	 <!--<div class="hdr_Category float_lft margin_lft10">
+						 Buyer Guides
+				  
+				  </div>-->
+				  <%@order = "" %>
+				  <% @custom = "" %>
+				  <%@contents= "" %>
+				    <br />
+				    <br />
+				    <%if @considered_items.size == 0 && @follow_item.size == 0 && @preferences_list.size == 0 %>
+				  		<div class="alert alert-block">We are showing buying guides for <%=params[:search_type] %>, please update your preferences or considered items to have more personalized buying plan page. </div>
+				  		<%end%>
+						<div id="content_all">
+	    <%= render "contents/filter_by_options",:buying_plan => @buy_plan%>
+	    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
+	    <%= render "contents/sort_by_options"%>
+	 	 <%= hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
+		 <%= hidden_field_tag "search_type","undefined" %>
+	   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
+	       <% params = {"sub_type" => ArticleCategory.where("itemtype_id = ?", @itemtype.id).collect(&:name), "itemtype_id" => @itemtype.id, "status" => 1,"guide" => @guide.id,"order" => "total_votes desc"} %>
+	      <%@contents = Content.filter(params) %>
+	       <%= render :partial => 'contents/contents'%>
+	        <a id="content_next" style="display:none"></a>
+	    </div> 
+	     <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+	       <%= image_tag '/images/ajax-loader.gif' %>
+	   </span>
+	</div> 
+	   <%end%> 
+		 <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
+	       <%= image_tag '/images/ajax-loader.gif' %>
+	   </span>
+		     </div>
+				</div>
+			</div>
+			<div style="display:none;" id="updateQuestion">
+			<div class="popup-background">
+	  <a href="#" class="Closebut">&nbsp;</a>
+				<%= form_for :question,:url => { :controller => "preferences", :action => "save_advice_question", :id =>  @question.id}, :html => {:id => "getAdviceForm"} do |f|%>
+				<div style="clear:both;"></div>
+				<%= f.hidden_field :buying_plan_id%>
+				Title
+				<%= f.text_field :title, :value => @question.title %>
+			  <br />
+			  <br />
+				Description
+					
+				<br/>
+				<%= f.text_area :question, :rows=>2, :cols=>60, :value => @question.question%>
+				<br/>
+	 <div style="clear:both;"></div>
+				<div  style="float:right;padding:5px;width:180px;">
+					<%= f.submit 'Complete',:id => "preference_question",:class=>"searchButton",:style=>"font-size:15px;" %>
 
-  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
-      var fieldId = "<%="#{preference[:attribute]}"%>"
-      var value   = "<%="#{preference[:value]}"%>"
-      $("#" + fieldId).val(value)
-      searchCriteria = ""
-      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
-      var value = searchCriteria
-      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"' ><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;line-height:20px;'>: "+ searchCriteria + "</span></span>" + "</li>" ;
-  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
-      <%if preference[:value_type] == "manufacturer"%>      
-        tagId = "manufacturerAtt_tag"
-     <%end%>
-      var fieldId = "<%="#{preference[:attribute]}"%>"
-      var value   = "<%="#{preference[:value]}"%>"
-      var selectedList = value.split(',')
-      var searchCriteria = ""
-      var anchorId
-      var spanId = 'removablePreferenceListofValues' + fieldId
-      var spanHTML = ""
-      $.each(selectedList, function(index, value) {
-        anchorId = "removeThis_" + index + "_" + fieldId
-        spanHTML = spanHTML + "<span  style='margin-left:2px;font-size:10px;line-height:20px;font-weight:normal;text-transform:none;'>" + value + " " + "</span>"
-      })
-      searchCriteria = searchCriteria + spanHTML
-      var className = "middlebg attributeTag"
-      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;line-height:20px;'>" + searchName  + ": "+ searchCriteria + "<span></li>" ;
-      var fieldId = "<%="#{preference[:attribute]}"%>"
-      var value   = "<%="#{preference[:value]}"%>"
-      $("#" + fieldId).val(value)
-  <%else%>
-      var fieldId = "<%="#{preference[:attribute]}"%>"
-      var value   = "<%="#{preference[:value]}"%>"
-      $("#" + fieldId).val(value)
-      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:auto;'><span class='title_txt' style='text-transform:none;line-height:20px;'>" + searchName  + "</span></li>" ;
-  <%end%>
-    $(list).appendTo('ul#buyingPreferences');
-<%end%> 
+				</div>
+				<div style="clear:both;"></div>
+				<% end %>
+				</div>
+				 <div style="clear:both;"></div>
+				 <br clear="all"/>
+			</div>
+			
+			</div>
+			<div class="rightcolumnsmall">
+	        <div id="owned_item"> </div>	
+	         <div class="rightcolumnsmall">
+				       <br/>
+							 
+								<%= render 'preferences_list' %>
+				      </div>	
+	          <div class="rightcolumnsmall">
+					    <%if @buying_plan.completed? || @follow_item == "" %>
+					        <% @items = Item.where('id in (?)', (@buying_plan.items_considered.split(",") rescue 0)) %>
+					       <%= render 'items', :items => @items%>
+					    <%else%> 
+					      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
+							 <%end%>
+					  </div>
+				      <div class="rightcolumnsmall">
+				       <%@items =  BuyingPlan.recommended_items(@answers) %>
+								<%= render 'recommend_items', :items => @items%>
+				      </div>
+			</div>
+			<br clear="all"/>
+				   	<script type="text/javascript">
+	  //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
+	<%@preferences_list.each do |preference|%>
+	    var lineHeight = "";
+	    var searchCriteria = "";
+	    var index = "<%=@search_info_lookups.index{|x|x[:id]== preference[:attribute]}%>"
+	    var searchName = "<%=preference[:search_name]%>"
+	    var tagId = "attribute_menu_" + index + "_tag"
+	  <%if preference[:value_type] == "Between"%>
+	      var minFieldId = "<%=preference[:min_attribute]%>"
+	      var maxFieldId = "<%=preference[:max_attribute]%>"
+	      var minValue   = "<%=preference[:min_value]%>"
+	      var maxValue   = "<%=preference[:max_value]%>"
+	      $("#" + minFieldId).val(minValue)
+	      $("#" + maxFieldId).val(maxValue)
+	      searchCriteria = ""
+	      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+	      var className = "middlebg attributeTag"
+	      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;line-height:20px;'>: "+ searchCriteria + "</span></span>" +  "</li>" ;
 
-</script>
-<br clear="all"/>
+	  <%elsif (preference[:value_type] == "GreaterThan" || preference[:value_type] == "LessThen")%>
+	      var fieldId = "<%="#{preference[:attribute]}"%>"
+	      var value   = "<%="#{preference[:value]}"%>"
+	      $("#" + fieldId).val(value)
+	      searchCriteria = ""
+	      searchCriteria   = searchCriteria + "<%=preference[:search_criteria]%>"
+	      var value = searchCriteria
+	      var searchCriteria = "<span class='txt_subcategories'>" + value +"</span>"
+	      var className = "middlebg attributeTag"
+	      var list = "<li id='" + tagId + "'" + " class='" + className +"' ><span class='title_txt' style='text-transform:none;'>" + searchName + "<span style='font-size:10px;font-weight:normal;text-transform:none;line-height:20px;'>: "+ searchCriteria + "</span></span>" + "</li>" ;
+	  <%elsif (preference[:value_type] == "ListOfValues" || preference[:value_type] == "manufacturer")%>
+	      <%if preference[:value_type] == "manufacturer"%>      
+	        tagId = "manufacturerAtt_tag"
+	     <%end%>
+	      var fieldId = "<%="#{preference[:attribute]}"%>"
+	      var value   = "<%="#{preference[:value]}"%>"
+	      var selectedList = value.split(',')
+	      var searchCriteria = ""
+	      var anchorId
+	      var spanId = 'removablePreferenceListofValues' + fieldId
+	      var spanHTML = ""
+	      $.each(selectedList, function(index, value) {
+	        anchorId = "removeThis_" + index + "_" + fieldId
+	        spanHTML = spanHTML + "<span  style='margin-left:2px;font-size:10px;line-height:20px;font-weight:normal;text-transform:none;'>" + value + " " + "</span>"
+	      })
+	      searchCriteria = searchCriteria + spanHTML
+	      var className = "middlebg attributeTag"
+	      var list = "<li id='" + tagId + "'" + " class='" + className +"'><span class='title_txt' style='text-transform:none;line-height:20px;'>" + searchName  + ": "+ searchCriteria + "<span></li>" ;
+	      var fieldId = "<%="#{preference[:attribute]}"%>"
+	      var value   = "<%="#{preference[:value]}"%>"
+	      $("#" + fieldId).val(value)
+	  <%else%>
+	      var fieldId = "<%="#{preference[:attribute]}"%>"
+	      var value   = "<%="#{preference[:value]}"%>"
+	      $("#" + fieldId).val(value)
+	      var list = "<li id='" + tagId + "'" + " class='middlebg'  style= 'height:auto;'><span class='title_txt' style='text-transform:none;line-height:20px;'>" + searchName  + "</span></li>" ;
+	  <%end%>
+	    $(list).appendTo('ul#buyingPreferences');
+	<%end%> 
+
+	</script>
+	<br clear="all"/>
