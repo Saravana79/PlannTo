@@ -4155,7 +4155,7 @@ a.bookmark_button:hover span { background-position:right bottom;}
  { 
   text-decoration: underline;
  }      
- .step_main_page{width:850px; height:auto; margin:auto; margin-top:-25px; padding-bottom:50px;}
+ .step_main_page{width:850px; height:auto; margin:auto; margin-top:0px; padding-bottom:50px;}
 
 .main_step{width:491px; height:auto; margin:auto; clear:both;padding-left:80px; background:url(../images/step_bg.png) no-repeat center center;}
 
@@ -4523,7 +4523,7 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 #wrapper { margin:0 auto; padding:0;}
 #maincontainer { margin:0 auto; padding:10px; width:1000px;}
-.container { margin:0 auto; padding:0; width:1000px;}
+.container { margin:0 auto; padding:0; width:960px;}
 #header12 { margin:0 auto; padding:0; width:1000px; height:75px; }
 
 .dppattern { margin:0; padding:0; background:url(../images/dpattern.jpg) no-repeat center top; border-bottom:1px solid #fff;}
@@ -4562,11 +4562,11 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 .home-search span{ text-align:center; color:#fff; font-size:14px;}
 
 .home-search #search-form { clear:both;-webkit-border-radius: 2px;border-radius: 2px; border: #ace5f0 1px solid;background: #12c1e6;width: 345px;float: left;padding:0; margin:20px 0 0 300px;}
-.home-search #search-form .search-input-text{width: 300px;float: left;border: 0;background: #12c1e6;color: #222;line-height: 100%;font-size: 14px;height:23px; padding:2px 5px 0 5px;}
+.home-search #search-form .search-input-text{width: 300px;float: left;border: 0;background: #12c1e6;color: #222;line-height: 100%;font-size: 14px;height:20px; padding:2px 5px 0 5px;}
 .home-search #search-form .search-input-text:focus{outline:none;color:#fff;}
 .home-search #search-form .search-input-submit{background:url(../images/search-icon.png) no-repeat right top; float:right;width:32px; height:22px;z-index: 100;cursor: pointer; display:block; border:0;}
 
-#middlecontainer { margin:0 auto; padding:20px 0 20px 0;}
+#middlecontainer { margin:0 auto; padding:20px 0 20px 0;line-height: 22px;}
 
 .home-left { margin:0 35px 0 0; padding:0; float:left; width:462px;}
 .home-right { margin:0; padding:0; float:left; width:462px;}
@@ -4618,8 +4618,8 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 .home-pop-product .category-row .category-div .col1 .cats-row{ margin:0 10px 0 0; padding:0;float:left;}
 .home-pop-product .category-row .category-div .col1 .cats-row .imgdiv{ margin:0 10px 0 0; padding:0; width:136px; height:99px; float:left;}
-.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv a img{width:166px; height:99px;border:1px solid #a0a0a0;}
-.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv a:hover img{ border:1px solid #008fe4;}
+.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv a img{width:166px; height:99px;border:0px solid #a0a0a0;}
+.home-pop-product .category-row .category-div .col1 .cats-row .imgdiv a:hover img{ border:0px solid #008fe4;}
 .home-pop-product .category-row .category-div .col1 .cats-row .desc{ margin:0; padding:0; float:left;}
 .home-pop-product .category-row .category-div .col1 .cats-row .desc h4{ margin:0; padding:0; color: #333; font-size:14px; font-family: 'PTSansBold';}
 .home-pop-product .category-row .category-div .col1 .cats-row .desc h4 a:hover{color: #00a7ca;}
@@ -4925,6 +4925,10 @@ body {
 #plannToSearch:focus::-webkit-input-placeholder {color: transparent;}
 #plannToSearch:-moz-placeholder {color: #e8e9e1;}
 #plannToSearch:-ms-input-placeholder {color: #e8e9e1;}
+#plannToSearch1::-webkit-input-placeholder {color: #e8e9e1;}
+#plannToSearch1:focus::-webkit-input-placeholder {color: transparent;}
+#plannToSearch1:-moz-placeholder {color: #e8e9e1;}
+#plannToSearch1:-ms-input-placeholder {color: #e8e9e1;}
 .top-search #user_email::-webkit-input-placeholder {color: #e8e9e1;}
 .top-search #user_email:focus::-webkit-input-placeholder {color: transparent;}
 .top-search #user_email:-moz-placeholder {color: #e8e9e1;}
@@ -4957,6 +4961,7 @@ body {
 
 .compareform { margin:0; padding:0;}
 .compareform p{ margin:0 0 15px 0; padding:0;}
+.compareform a:hover{ text-decoration: underline;}
 .compareform .inputbox{  margin:0; padding:5px; display:inline-block; background:#fff; border:1px solid #b8b8b8; font-size:12px; color:#666;}
 
 .home-compare-product-div h3 { background:#efefef; font-size:14px; color:#222;font-family: 'PTSansBold'; border-bottom:2px solid #555; text-align:center;}
@@ -4967,8 +4972,9 @@ body {
 .home-compare-product-div .comparison-div .prd-div .compare-prd{ margin:0; padding:0; text-align:center; width:150px; float:left; border:0px solid #ccc;}
 
 .home-compare-product-div .comparison-div .prd-div .compare-prd .title{ margin:0; padding:0; text-align:center;font-size:12px; color:#222;font-family: 'PTSansBold';}
+.home-compare-product-div .comparison-div .prd-div .compare-prd .title:hover{ text-decoration: underline;}
 .home-compare-product-div .comparison-div .prd-div .compare-prd .compare-img{ margin:0; padding:0; text-align:center;  border:0px solid #ccc;} 
-.home-compare-product-div .comparison-div .prd-div .compare-prd .compare-img img {width:100px; height:60px;}
+.home-compare-product-div .comparison-div .prd-div .compare-prd .compare-img img {width:100px;}
 
 .home-compare-product-div .comparison-div .prd-div .compare-symbol { background:url(../images/compare-symbol.png) no-repeat left top; width:48px; height:51px; display:block; float:left; margin:25px 0px 0 0px; position:relative;}
 
@@ -5090,3 +5096,5 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
 .divheadercompare {font-size: 14px;font-weight: normal;height: 85px;line-height: 30px;margin:0; overflow:visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: rgb(240, 240, 240);color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
 .scorediv{position: absolute;text-align: right;-moz-border-radius: 6px;border-radius: 6px;background-color: #12c1e6;font-weight: 700;color: white;opacity: .8;filter: alpha(opacity=80);font-family: arial;}
 .scoreinnerp{padding:6px;margin:0;color:white;}
+.signuplinkhome{color: #ff8400;font-size: 12px;text-decoration: none}
+.signuplinkhome:hover{text-decoration: underline;}

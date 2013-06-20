@@ -176,10 +176,21 @@
                 <div class="orimg"></div>
                 <div class="fb-signup"> 
                   <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>                
-                  <p><%= link_to "Sign Up", new_registration_path(User.new,:type => "without_login"), :class => "sign_in_popup" , :tabindex => "5" %></p>
+                  <p><%= link_to "or Sign up with Email","#", :class => "signuplinkhome" , :tabindex => "5" %></p>
             </div>
             
-          
+            <script type="text/javascript">
+                              $(".signuplinkhome").click(function(){
+              $("#sign_up_dialog #click_message").hide();
+              $('#sign_up_dialog').bPopup({
+                 closeClass:'Closebut',
+                 modalClose: false,
+                 position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+                 follow: [false, false] //x, y
+               });
+               });
+
+            </script>
             <div class="clr" style="clear:both;"></div>
             <%= render partial: "shared/home_signup" %>
           <br/>
@@ -242,4 +253,5 @@ $('#sign_up_dialog').bPopup({
    follow: [false, false] //x, y
  });
  });
+
  </script>    

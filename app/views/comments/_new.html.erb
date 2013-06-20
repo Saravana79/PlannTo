@@ -13,7 +13,7 @@
 	<%= f.text_area :comment, :class => "expanding txt_gray new_comment", :size => "80", :id => "comment_id#{content.id}" %>
 	<%= hidden_field_tag "comment_type", content.class.name%>
 	<br /> <br />
-	<%= f.submit "Submit" %><%= link_to "Cancel", "JavaScript:void(0);", class: "remove_comment", content_id: content.id %>
+	<%= f.submit "Submit" %><%= link_to "Close", "JavaScript:void(0);", class: "remove_comment", content_id: content.id, :style=> "float:right;" %>
 	<% end -%>  			
 </div>
 

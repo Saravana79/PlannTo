@@ -259,7 +259,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
   
-  $('#layerslider').layerSlider({
+ /* $('#layerslider').layerSlider({
   skinsPath : 'layerslider/skins/',
   skin : 'fullwidth',
   thumbnailNavigation : 'hover',
@@ -269,7 +269,7 @@ $(document).ready(function(){
   thumbnailNavigation : false,
   sublayerContainer : 1000
   });
-
+*/
       $('#plannToSearch1').focus(function(){
         $(this).val('');
         $(this).keydown();
@@ -387,16 +387,16 @@ jQuery(document).ready(function() {
       <div class="banner-div">
         
              
-             <div id="layerslider-container-fw">
-              <div id="layerslider" style="width: 100%; height: 354px; margin: 0px auto;">
+             <div id="layerslider-container-fw1">
+              <div id="layerslider1" style="width: 100%; height: 354px; margin: 0px auto;">
                 
                 
-                  <div class="ls-layer" style="slidedirection: top; slidedelay: 6000; durationin: 1500; durationout: 1500; delayout: 500;">
-                      <img src="images/banner-1.jpg" class="ls-bg" alt="">
-                        
-                        <h2 class="ls-s3 banner1-cap-title" style="position: absolute; top:40px; left: 30px; slidedirection : top; slideoutdirection : bottom; durationin : 3000; durationout : 750; easingin : easeInOutQuint; easingout : easeInBack; delayin : 500;">All the information you need on the products that you own or plan to buy</h2>
-                        <p class="ls-s8 banner1-sub-title" style="position: absolute; top:90px; left: 0px; slidedirection : right; slideoutdirection : top; durationin : 3000; durationout : 750; easingin : easeInOutQuint; easingout : easeInBack; delayin : 1000;">Find All Here. Its a one stop place to get all the information about a product. Informations are searched across web and organzied in a structured way for you to consume it easily. All the products that are available in the market are ranked based on the rating given by the experts around the world and can be search using various preferences.</p>
-                         <p class="banner-btns ls-s8" style="position: absolute; top:230px; left: 180px; slidedirection : bottom; slideoutdirection : top; durationin : 3000; durationout : 750; easingin : easeInOutQuint; easingout : easeInBack; delayin : 1400;">
+                  <div  style="position: absolute;position: absolute;overflow: hidden;width:100%height:100%;">
+                    <img src="images/banner-1.jpg" class="ls-bg" alt="">
+                       <div style="text-align:center;"> 
+                        <h2 class="ls-s3 banner1-cap-title" style="position: absolute; top:40px; left: 200px;" >All the information you need on the products that you own or plan to buy</h2>
+                        <p class="ls-s8 banner1-sub-title" style="position: absolute; top:90px; left: 170px; " >Find All Here. Its a one stop place to get all the information about a product. Informations are searched across web and organzied in a structured way for you to consume it easily. All the products that are available in the market are ranked based on the rating given by the experts around the world and can be search using various preferences.</p>
+                         <p class="banner-btns ls-s8"  style="position: absolute; top:210px; left: 350px;">
                             <a href="/car/search" class="cars"><span class="margin-btm"></span>Cars</a>
                             <a href="/bike/search" class="bikes"><span class="margin-btm"></span>Bikes</a>
                             <a href="/cycle/search" class="cycles"><span class="margin-btm"></span>Cycles</a>
@@ -405,6 +405,7 @@ jQuery(document).ready(function() {
                             <a href="/camera/search" class="cameras"><span class="margin-btm"></span>Cameras</a>
 
                           <!--<a href="#" class="findbutton">Find All Here</a>--></p>
+                        </div>
                       </div>
                   
                           
@@ -525,6 +526,110 @@ jQuery(document).ready(function() {
             </div><!-- end of home-right -->
             <div class="clr"></div>
             
+            <div class="container">   
+    <div class="home-compare-product" style="display:none;">
+              <h3>Do you like to compare the products?<br /><span>Select two products in following text box and click compare.</span></h3>
+                <div class="white-box-div">
+                  <div class="home-compare-product-div">
+                    
+                      <div class="compare-left">
+                          <form class="compareform">
+                              <p><input type="text" name="cmp1stitem" id="cmp1stitem" value="Add to Compare" class="inputbox" /></p>
+                                <p><input type="text" name="cmp2nditem" id="cmp2nditem" value="Add to Compare" class="inputbox" /></p>
+                                <p><input type="button" name="compare_items" id="compare_items" value="Compare" class="button staticblue" /></p>
+                            </form>
+                        
+                        </div><!-- end of compare-left -->
+                        <div class="compare-right">
+                          <h3>Popular Comparisons</h3>
+                            
+                            <div class="comparison-div">
+                              
+                                <div class="prd-div">
+                                    <%items = Item.find(3770,4744) rescue%>
+                                    <% unless (items.nil?  or items.size < 2) %>
+                                        <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>"``>
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[0].name%></p>
+                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[1].name%></p>
+                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="clr"></div>
+                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                    <% end %>
+                                </div>
+                                        <div class="prd-div">
+                                    <%items = Item.find(5727,5678) rescue%>
+                                    <% unless (items.nil?  or items.size < 2) %>
+                                        <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[0].name%></p>
+                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[1].name%></p>
+                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="clr"></div>
+                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                    <% end %>
+                                </div>
+                                        <div class="prd-div">
+                                    <%items = Item.find(4974,5023) rescue%>
+                                    <% unless (items.nil?  or items.size < 2) %>
+                                        <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[0].name%></p>
+                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[1].name%></p>
+                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="clr"></div>
+                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                    <% end %>
+                                </div>
+                                        <div class="prd-div">
+                                    <%items = Item.find(5976,5539) rescue%>
+                                    <% unless (items.nil?  or items.size < 2) %>
+                                        <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[0].name%></p>
+                                            <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-prd">
+                                            <p class="title"><%=items[1].name%></p>
+                                            <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
+                                        </div>
+                                        <div class="clr"></div>
+                                        <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
+                                    <% end %>
+                                </div>
+                                
+                                
+                                <div class="clr"></div>
+                                
+                            </div>
+                            <div class="clr"></div>
+                        
+                        </div><!-- end of compare-right -->
+                    
+                    <div class="clr"></div>
+                    </div>
+                 <div class="clr"></div>
+                </div><!-- end of white box -->
+            </div><!-- end of home-compare-product -->
+
+   </div>
+
             
             <div class="home-pop-product">
               <h3>Are you looking for popular products?<br /><span>Check out all the cars, bikes, mobiles, tablets, cameras and cycles available in the market.</span></h3>
@@ -834,99 +939,6 @@ jQuery(document).ready(function() {
 
 
 
-<div class="container">
-   <%if Rails.env == "development"%>
-     <div class="home-compare-product">
-   <%else%>
-    <div class="home-compare-product" style="display:none;">
-   <%end%>
-              <h3>Do you like to compare the products?<br /><span>Select two products in following text box and click compare.</span></h3>
-                <div class="white-box-div">
-                  <div class="home-compare-product-div">
-                    
-                      <div class="compare-left">
-                          <form class="compareform">
-                              <p><input type="text" name="cmp1stitem" id="cmp1stitem" value="Add to Compare" class="inputbox" /></p>
-                                <p><input type="text" name="cmp2nditem" id="cmp2nditem" value="Add to Compare" class="inputbox" /></p>
-                                <p><input type="button" name="compare_items" id="compare_items" value="Compare" class="button staticblue" /></p>
-                            </form>
-                        
-                        </div><!-- end of compare-left -->
-                        <div class="compare-right">
-                          <h3>Popular Comparisons</h3>
-                            
-                            <div class="comparison-div">
-                              
-                                <div class="prd-div">
-                                  <div class="compare-prd">
-                                        <p class="title">Honda Brio Diesel</p>
-                                        <p class="compare-img"><img src="images/car2.jpg" alt="" /></p>
-                                    </div>
-                                    <div class="compare-symbol compare-line"></div>
-                                    <div class="compare-prd">                                    
-                                        <p class="title">Maruti Alto 800 LX CNG</p>
-                                        <p class="compare-img"><img src="images/car3.jpg" alt="" /></p>
-                                    </div>                                    
-                                    <div class="clr"></div>
-                                    <p>Honda Brio Diesel Vs. Maruti Alto 800 LX CNG</p>
-                                </div>
-                                
-                                <div class="prd-div">
-                                  <div class="compare-prd">
-                                        <p class="title">Honda Brio Diesel</p>
-                                        <p class="compare-img"><img src="images/car2.jpg" alt="" /></p>
-                                    </div>
-                                    <div class="compare-symbol compare-line"></div>
-                                    <div class="compare-prd">                                    
-                                        <p class="title">Maruti Alto 800 LX CNG</p>
-                                        <p class="compare-img"><img src="images/car3.jpg" alt="" /></p>
-                                    </div>                                    
-                                    <div class="clr"></div>
-                                    <p>Honda Brio Diesel Vs. Maruti Alto 800 LX CNG</p>
-                                </div>
-                                
-                                <div class="prd-div">
-                                  <div class="compare-prd">
-                                        <p class="title">Honda Brio Diesel</p>
-                                        <p class="compare-img"><img src="images/car2.jpg" alt="" /></p>
-                                    </div>
-                                    <div class="compare-symbol compare-line"></div>
-                                    <div class="compare-prd">                                    
-                                        <p class="title">Maruti Alto 800 LX CNG</p>
-                                        <p class="compare-img"><img src="images/car3.jpg" alt="" /></p>
-                                    </div>                                    
-                                    <div class="clr"></div>
-                                    <p>Honda Brio Diesel Vs. Maruti Alto 800 LX CNG</p>
-                                </div>
-                                
-                                <div class="prd-div">
-                                  <div class="compare-prd">
-                                        <p class="title">Honda Brio Diesel</p>
-                                        <p class="compare-img"><img src="images/car2.jpg" alt="" /></p>
-                                    </div>
-                                    <div class="compare-symbol compare-line"></div>
-                                    <div class="compare-prd">                                    
-                                        <p class="title">Maruti Alto 800 LX CNG</p>
-                                        <p class="compare-img"><img src="images/car3.jpg" alt="" /></p>
-                                    </div>                                    
-                                    <div class="clr"></div>
-                                    <p>Honda Brio Diesel Vs. Maruti Alto 800 LX CNG</p>
-                                </div>
-                                
-                                <div class="clr"></div>
-                                
-                            </div>
-                            <div class="clr"></div>
-                        
-                        </div><!-- end of compare-right -->
-                    
-                    <div class="clr"></div>
-                    </div>
-                 <div class="clr"></div>
-                </div><!-- end of white box -->
-            </div><!-- end of home-compare-product -->
-
-   </div>
    
 
     </div><!-- end of middlecontainer -->
