@@ -38,6 +38,11 @@ development:
   rating_m_for_tablet: 5
   rating_m_for_camera: 5
   launch_date_modifier: 0.01
+  homepagecompareitems1: "3,5"
+  homepagecompareitems2: "3,5"
+  homepagecompareitems3: "3,5"
+  homepagecompareitems4: "3,5"
+
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -69,6 +74,10 @@ test:
   wizard_items_owner: "2073,2076,1473,1475,2527,2073,2076,1072"
   wizard_topics: "3935,3936,3956,3955,3962,3967,3969,3970"
   launch_date_modifier: 0.01
+  homepagecompareitems1: "3770,4744"
+  homepagecompareitems2: "5727,5678"
+  homepagecompareitems3: "4974,5023"
+  homepagecompareitems4: "5976,5539"
  
 production:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -110,3 +119,7 @@ production:
   rating_m_for_tablet: 5
   rating_m_for_camera: 5
   launch_date_modifier: 0.01
+  homepagecompareitems1: "3770,4744"
+  homepagecompareitems2: "5727,5678"
+  homepagecompareitems3: "4974,5023"
+  homepagecompareitems4: "5976,5539"

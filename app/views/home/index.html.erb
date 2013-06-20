@@ -546,9 +546,8 @@ jQuery(document).ready(function() {
                             <div class="comparison-div">
                               
                                 <div class="prd-div">
-                                    <%items = Item.find(3770,4744) rescue%>
-                                    <% unless (items.nil?  or items.size < 2) %>
-                                        <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>"``>
+                                    <%items = Item.find(configatron.homepagecompareitems1.split(",")) %>
+                                        <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>">
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
                                             <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
@@ -560,11 +559,11 @@ jQuery(document).ready(function() {
                                         </div>
                                         <div class="clr"></div>
                                         <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
-                                    <% end %>
+                                    </a>
                                 </div>
                                         <div class="prd-div">
-                                    <%items = Item.find(5727,5678) rescue%>
-                                    <% unless (items.nil?  or items.size < 2) %>
+                                    <%items = Item.find(configatron.homepagecompareitems2.split(",")) %>
+                                    
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
@@ -577,11 +576,11 @@ jQuery(document).ready(function() {
                                         </div>
                                         <div class="clr"></div>
                                         <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
-                                    <% end %>
+                                    </a>
                                 </div>
                                         <div class="prd-div">
-                                    <%items = Item.find(4974,5023) rescue%>
-                                    <% unless (items.nil?  or items.size < 2) %>
+                                    <%items = Item.find(configatron.homepagecompareitems3.split(",")) %>
+                                    
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
@@ -594,11 +593,11 @@ jQuery(document).ready(function() {
                                         </div>
                                         <div class="clr"></div>
                                         <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
-                                    <% end %>
+                                    
                                 </div>
                                         <div class="prd-div">
-                                    <%items = Item.find(5976,5539) rescue%>
-                                    <% unless (items.nil?  or items.size < 2) %>
+                                    <%items = Item.find(configatron.homepagecompareitems4.split(",")) %>
+                                    
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
@@ -611,7 +610,7 @@ jQuery(document).ready(function() {
                                         </div>
                                         <div class="clr"></div>
                                         <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
-                                    <% end %>
+                                    
                                 </div>
                                 
                                 
