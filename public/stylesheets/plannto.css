@@ -2569,9 +2569,9 @@ h2 {
 .comaredivbox .comparetbl td.rowline		{ margin:0; padding:0; border-right:1px solid #cdd3d7;}
 .comaredivbox .comparetbl td .lefttitle		{ color:#717171; font-weight:bold; padding:5px; margin:0;}
 .comparebox 								{ margin:0; padding:5px;}
-.comparebox p								{ margin:0 0 10px 0; padding:0; font-size:12px!important; color:#000;}
-.comparebox p a								{font-size:12px!important; color:#000; text-decoration:none;}
-.comparebox p a:hover						{font-size:12px!important; color:#000; text-decoration:underline;}
+.comparebox p								{ margin:0 0 10px 0; padding:0; font-size:12px; color:#000;}
+.comparebox p a								{font-size:12px; color:#000; text-decoration:none;}
+.comparebox p a:hover						{font-size:12px; color:#000; text-decoration:underline;}
 
 .closebtndiv  								{ position:absolute; float:left;text-align:right; width:180px; top:70px; height:125px; display:block; cursor:pointer; border:0px solid #000;}
 .closebtndiv img  							{ border:none; outline:none;}
@@ -5088,3 +5088,5 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
 }
 
 .divheadercompare {font-size: 14px;font-weight: normal;height: 85px;line-height: 30px;margin:0; overflow:visible;padding: 0;position: relative;text-align: center;width: 100%;z-index: 1000;border-bottom-width: 3px;border-bottom-style: solid;border-bottom-color: #fff;font-family: Tahoma,Geneva,sans-serif;background: rgb(240, 240, 240);color: #ffffff;border-bottom-color: #ffffff;-webkit-box-shadow: 6px 6px 6px -6px gray;box-shadow: 6px 6px 6px -6px gray;}
+.scorediv{position: absolute;text-align: right;-moz-border-radius: 6px;border-radius: 6px;background-color: #12c1e6;font-weight: 700;color: white;opacity: .8;filter: alpha(opacity=80);font-family: arial;}
+.scoreinnerp{padding:6px;margin:0;color:white;}

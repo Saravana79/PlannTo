@@ -219,30 +219,34 @@ module ApplicationHelper
 
     if(["asc", "desc"].include?(order[:value]))
         compare = compare.select{|key| true if Float(key) rescue false}
+        attr_v = compare.keys.sort_by{|key| key.to_f}
+        if(["desc"].include?(order[:value]))
+          attr_v = attr_v.reverse
+        end
+    else
+        attr_v = compare.keys.sort      
     end
     
     logger.info "=====================#{compare}"
 
-    attr_v = compare.keys.sort
     
     if attr_v.size > 1 and ["asc", "desc"].include?(order[:value])
         percentage = get_percentage(order, attr_v)      
-        attr_ca.description.gsub!("{2}", compare[attr_v[order[:second]]].to_sentence)
+        attr_ca.description.gsub!("{2}", compare[attr_v[1]].to_sentence)
         attr_ca.description.gsub!("{percentage}", percentage) if attr_ca.description.match("{percentage}")
-        attr_ca.description.gsub!("{1}", compare[attr_v[order[:first]]].to_sentence)
-        {summary: attr_ca.description, highlight: attr_v[order[:first]],winner:compare[attr_v[order[:first]]].to_sentence}
+        attr_ca.description.gsub!("{1}", compare[attr_v[0]].to_sentence)
+        {summary: attr_ca.description, highlight: attr_v[0],winner:compare[attr_v[0]].to_sentence}
       
-    elsif ((!compare[attr_v.first].nil?) and compare[attr_v.first].size > 0 and compare[attr_v.first].size < items.size) and attr_v.size > 0 and "eq".include?(order[:value])
+    elsif (attr_v.size > 0 and "eq".include?(order[:value]))
        matchkey = 0
        index = 0   
-       attr_v.each do |key|
-          
+       attr_v.each do |key|          
           if(attr_v[index].to_s.downcase == attr_ca.value.downcase)
               matchkey = index
           end
           index =  index + 1
        end
-       if(matchkey > 0)
+       if(matchkey > 0 and compare[attr_v[matchkey]].size < items.size )
         attr_ca.description.gsub!("{1}", compare[attr_v[matchkey]].to_sentence)
         {summary: attr_ca.description, highlight: attr_v[matchkey],winner:compare[attr_v[matchkey]].to_sentence}
        end 
@@ -254,9 +258,9 @@ module ApplicationHelper
 
   def get_percentage(order, attr_v)
     if order[:value] == "asc"
-      "#{(((attr_v[order[:second]].to_f - attr_v[order[:first]].to_f)/attr_v[order[:first]].to_f)*100).to_i}%"
+      "#{(((attr_v[1].to_f - attr_v[0].to_f)/attr_v[0].to_f)*100).round}%"
     else
-      "#{(((attr_v[order[:first]].to_f - attr_v[order[:second]].to_f)/attr_v[order[:second]].to_f)*100).to_i}%"
+      "#{(((attr_v[0].to_f - attr_v[1].to_f)/attr_v[1].to_f)*100).round}%"
     end
   end
  

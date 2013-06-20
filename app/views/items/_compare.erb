@@ -13,7 +13,15 @@
             <td width="200px;"  style="width:200px;vertical-align:top;border-right:1px solid #cdd3d7;text-align:left;">
                <table>
                     <tr>
-                        <td width="100px" height="85px" style="display:block;"><img src="<%=item.image_url%>" onclick="parent.location='<%=(item.get_url())%>'" width="92" height="69"/></td>
+                        <td width="100px" height="85px" style="display:block;">
+                          <div ><img src="<%=item.image_url%>" onclick="parent.location='<%=(item.get_url())%>'" width="92" height="69" style="float:left;position:left;"/>
+                            <%if (!(item.rank.nil?) && (item.rank > 0))%>
+                              <div class="scorediv">
+                                  <div style="font-size:18px;" class="scoreinnerp"><%=item.rank%></div>
+                              </div>
+                              <%end%>
+                          </div>
+                          </td>
                         <td width="">
                         <div style="width:100px;">
                         <a href="<%=item.get_url()%>" class="txt_black"><%=item.name%></a>

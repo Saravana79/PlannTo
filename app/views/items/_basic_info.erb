@@ -1,10 +1,16 @@
 <td class="rowline" align="center" width="200px">
   <div class="comparebox" id="compareBasicInfo<%=count%>">
        <a href="#" onclick="removeFromCompare(<%=count%>, <%=item.id%>)"><span class="icon_close2" alt="" style="float:right;" /></span></a>
-    <span class="img_product_cmp" >
+    <div class="img_product_cmp" >
  
-      <a href="<%=link_url(item)%>"><img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>" onclick="location.href = '<%=link_url(item)%>'"/></a></span>
-    <p style="clear:both;text-align:center;"><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
+      <a href="<%=link_url(item)%>"><img height="120" width="160" src="<%=item.image_url%>" alt="<%=item.name%>" onclick="location.href = '<%=link_url(item)%>'" style="float:left;position:relative;"/></a>
+      <%if (!(item.rank.nil?) && (item.rank > 0))%>
+        <div class="scorediv">
+        <div style="font-size:18px;" class="scoreinnerp"><%=item.rank%></div>
+        </div>
+      <%end%>
+    </div>
+    <p style="clear:both;text-align:center;color:white;font-size:18px;"><b><a href="<%=link_url(item)%>"><%=item.name%></a></b> </p><div id="moreCarsSearchDiv<%=count%>"></div>
 
     <!--<div class="PlanntoBuyBtncnt" style="align:center;margin-right:60px;">
       <%#= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => item, :related_items => true %>
