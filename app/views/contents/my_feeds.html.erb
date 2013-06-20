@@ -20,6 +20,7 @@
   <%if @buying_plan == "true" %>
     <%@first_time = "true" %>
   <!-- <center> <h1> Buying Plans </h1> </center>-->
+  <% unless (@buying_plans.nil? or @buying_plans.size == 0)%>
    <table style="width:600px;border:solid 1px #BCE8F1;margin-left:50px;padding-bottom:10px;">
    <tr><td class="th_blue" style="text-align:center;background-color:#D9EDF7;border:0px;">
     <!--
@@ -31,7 +32,7 @@
    <%= render "contents/buying_plans_list" %>
  </div>
 </td></tr></table>
- 
+ <%end%>
   <%end%>  
     <br/><br/>
   <ul id="Newtabs">
