@@ -1,27 +1,37 @@
 <!--filter by block start here-->
     <div id="Filterby">
     <div class="Filternav">
+     <!-- 
       <div style="float:left;width:60px;">
         <span style="padding:2px 5px 0px 0px;"><b>Filter by:</b></span>
       </div>
-      <div style="float:left;width:630px;">
+    -->
+      <div style="float:left;width:100%;">
         <ul>
          <%if @no_custom == "true" %>
               <li id="All" class="Currentfilter"><a href="#">All</a></li>
          <%elsif @custom == "true" %>
             <li id="All"><a href="#">All</a></li>
-            <li id="Custom" class="Currentfilter"><a href="">Custom</a></li>
           <%else%>  
              <li id="All" class="Currentfilter"><a href="#">All</a></li>
-             <li id="Custom"><a href="">Custom</a></li>
            <%end%>  
+           <%index = 0%>
           <%@article_categories.each do |category|%>
+            <% if(index < 10) or (index < 11 and  @no_custom == "true") %>
              <%if category[0]== "HowTo/Guide"%>
                   <li id="HowTo"><a href="">HowTo/Tips</a></li>
                 <%else%>
                 <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
-                <%end%>            
+                <%end%>         
+                <%index = index + 1%>
+            <%end%>   
           <%end%>
+
+         <%if @custom == "true" %>
+            <li id="Custom" class="Currentfilter"><a href="">Custom</a></li>
+          <%else%>  
+             <li id="Custom"><a href="">Custom</a></li>
+           <%end%>  
          
         </ul>
       </div>
