@@ -4702,16 +4702,7 @@ p {
     font-style: normal;
   font-weight: 700;
 }
-@font-face {
-    font-family: 'PTSansBold';
-    src: url('../fonts/pts75f-webfont.eot');
-    src: url('../fonts/pts75f-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/pts75f-webfont.woff') format('woff'),
-         url('../fonts/pts75f-webfont.ttf') format('truetype'),
-         url('../fonts/pts75f-webfont.svg#PTSansBold') format('svg');
-    font-style: normal;
-  font-weight: 700;
-}
+
 @font-face {
     font-family: 'LeagueGothic';
     src: url('../fonts/LeagueGothic-Regular-webfont.eot');

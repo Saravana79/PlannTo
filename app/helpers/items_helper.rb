@@ -156,6 +156,7 @@ module ItemsHelper
     compare_item = attribute_values.collect{|av| av if (av.attribute_id==attribute.id && av.item_id == item.id)}.compact.first#.find_by_attribute_id(attribute.id)#collect.select{|i| i if i.attribute_id == attribute.id}.compact.first #.include(:attribute).select("value, name, unit_of_measure, category_name, attribute_type")
     return "" if compare_item.nil?
     value = display_specification_value(compare_item, attribute)
+    return "" if value.nil?
     return value
   end
 
