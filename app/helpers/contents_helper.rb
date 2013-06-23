@@ -251,24 +251,34 @@ module ContentsHelper
     str=""
     if content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
-        unless content.field2.blank?
+        unless (content.field2.blank? or content.field4.blank? or content.field4.blank?)
+          str = "<br/><div class ='subContentGap' style='clear:both;background-color:rgb(247, 247, 247);padding:10px;'>"
+
+          unless content.field2.blank?
           str+= "<p class='pros'>" + get_content_based_on_size(content.field2,50) + "<p/>"
-        end
+          end
           unless content.field3.blank? 
            str+= "<p class='cons'>" + get_content_based_on_size(content.field3,50) + "<p/>"
           end 
            unless content.field4.blank? 
            str+= "<p class='verdict'>" + get_content_based_on_size(content.field4,60) + "</p><br/>"
           end 
+        str+="</div>"        
+        end
+        
 
       else
         str=""
-        unless content.pros.blank?
-          str+= "<p class='pros'>" + get_content_based_on_size(content.pros,100) + "</p><br/>"
-        end
-          unless content.pros.blank? 
+        unless (content.pros.blank? or content.cons.blank?)
+          str = "<br/><div class ='subContentGap' style='clear:both;background-color:rgb(247, 247, 247);padding:10px;'>"
+          unless content.pros.blank?
+            str+= "<p class='pros'>" + get_content_based_on_size(content.pros,100) + "</p><br/>"
+          end
+          unless content.cons.blank? 
            str+= "<p class='cons'>" + get_content_based_on_size(content.cons,100) + "</label><br/><br/>"
           end 
+          str+="</div>"        
+        end
       end
     end
     return str
