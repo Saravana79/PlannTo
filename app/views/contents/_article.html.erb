@@ -44,11 +44,13 @@
                   });
             </script>
             <%end%>
+        <%= raw get_content_description(content)%>
         </div>
        <%if content.thumbnail?%> 
         </div>
         <%end%>
-      <div class="subContentGap"><%= raw get_content_description(content)%></div>
+      
+      <div class ="subContentGap" style="background-color:rgb(247, 247, 247);padding:10px;"><%= raw get_pro_con_verdict(content)%></div>
     
     </div>
 

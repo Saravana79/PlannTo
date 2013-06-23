@@ -5104,3 +5104,7 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
 .scoreinnerp{padding:6px;margin:0;color:white;}
 .signuplinkhome{color: #ff8400;font-size: 12px;text-decoration: none}
 .signuplinkhome:hover{text-decoration: underline;}
+.pros { background:url(../images/icon-pros.png) no-repeat left top; padding: 3px 0 10px 25px; margin:0; text-align:left; float:none; width:100%; display:inline-block;line-height:16px;}
+.cons { background:url(../images/icon-cons.png) no-repeat left top; padding: 3px 0 10px 25px; margin:0; text-align:left; float:none; width:100%; display:inline-block;line-height:16px;}
+.verdict { background:url(../images/icon-verdict.png) no-repeat left top; padding: 3px 0 10px 25px; margin:0; text-align:left; float:none; width:100%; display:inline-block;line-height:16px;}
+

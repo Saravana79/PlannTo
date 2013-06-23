@@ -237,27 +237,37 @@ module ContentsHelper
       if(content.is_a?ArticleContent)
         if(content.field1 != '' && content.field1 != '0')
           str+="<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.field1}'></div><br/>"
-        end
-        unless content.field2.blank?
-          str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Pro :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.field2,50) + "</label><br/>"
-        end
-          unless content.field3.blank? 
-           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: brown;'>Con :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.field3,50) + "</label><br/>"
-          end 
-           unless content.field4.blank? 
-           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Verdict :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.field4,60) + "</label><br/><br/>"
-          end 
-
+        end      
       else
         str=""
         unless content.rating == 0
           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;'>Rating :</label><div class ='displayRating' id='content_show_#{content.id}#{page}' data-rating='#{content.rating}'></div><br/>"
         end
+      end
+    end
+    return str
+  end
+  def get_pro_con_verdict(content,page="")
+    str=""
+    if content.sub_type == "#{ArticleCategory::REVIEWS}"
+      if(content.is_a?ArticleContent)
+        unless content.field2.blank?
+          str+= "<p class='pros'>" + get_content_based_on_size(content.field2,50) + "<p/>"
+        end
+          unless content.field3.blank? 
+           str+= "<p class='cons'>" + get_content_based_on_size(content.field3,50) + "<p/>"
+          end 
+           unless content.field4.blank? 
+           str+= "<p class='verdict'>" + get_content_based_on_size(content.field4,60) + "</p><br/>"
+          end 
+
+      else
+        str=""
         unless content.pros.blank?
-          str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Pro :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.pros,100) + "</label><br/>"
+          str+= "<p class='pros'>" + get_content_based_on_size(content.pros,100) + "</p><br/>"
         end
           unless content.pros.blank? 
-           str+= "<label class='txt_black_description_detail' style='font-weight: bold;font-size: 12px;color: green;'>Con :</label><label style='padding-left:2px;'>" + get_content_based_on_size(content.cons,100) + "</label><br/><br/>"
+           str+= "<p class='cons'>" + get_content_based_on_size(content.cons,100) + "</label><br/><br/>"
           end 
       end
     end
