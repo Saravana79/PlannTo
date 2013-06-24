@@ -4517,11 +4517,11 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 /*new design for home page and other pages*/
 
 #wrapper { margin:0 auto; padding:0;}
-#maincontainer { margin:0 auto; padding:10px; width:1000px;}
+#maincontainer { margin:0 auto; padding:10px; width:1020px;}
 .container { margin:0 auto; padding:0; width:960px;}
-#header12 { margin:0 auto; padding:0; width:1000px; height:75px; }
+#header12 { margin:0 auto; padding:0; width:1020px; height:75px; }
 
-.dppattern { margin:0; padding:0; background:url(../images/dpattern.jpg) no-repeat center top; border-bottom:1px solid #fff;width:100%;min-width:1250px;}
+.dppattern { margin:0; padding:0; background:url(../images/dpattern.jpg) no-repeat center top; border-bottom:1px solid #fff;width:100%;min-width:1020px;}
 .logodiv { margin:0; padding:0; width:220px; float:left;}
 .logodiv .logo{ margin:0; padding:20px 0 0 0;}
 .search-login-box { margin:0; padding:15px 0 0 0; width:650px; float:right;}
