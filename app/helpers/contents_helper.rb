@@ -251,7 +251,7 @@ module ContentsHelper
     str=""
     if content.sub_type == "#{ArticleCategory::REVIEWS}"
       if(content.is_a?ArticleContent)
-        unless (content.field2.blank? or content.field4.blank? or content.field4.blank?)
+        unless (content.field2.blank? and content.field3.blank? and content.field4.blank?)
           str = "<br/><div class ='subContentGap' style='clear:both;background-color:rgb(247, 247, 247);padding:10px;'>"
 
           unless content.field2.blank?
@@ -269,7 +269,7 @@ module ContentsHelper
 
       else
         str=""
-        unless (content.pros.blank? or content.cons.blank?)
+        unless (content.pros.blank? and content.cons.blank?)
           str = "<br/><div class ='subContentGap' style='clear:both;background-color:rgb(247, 247, 247);padding:10px;'>"
           unless content.pros.blank?
             str+= "<p class='pros'>" + get_content_based_on_size(content.pros,100) + "</p><br/>"
