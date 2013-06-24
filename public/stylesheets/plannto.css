@@ -4649,11 +4649,11 @@ ul.blue-link li a:hover { color:#ee830e; text-decoration:underline;}
 .social { margin:0 0 0 200px; padding:20px 0 0 0; text-align:center;}
 a.icn {float: left;margin-right: 65px; text-indent: -9999px; cursor: pointer;}
 .icn:focus, .icn:active {outline: none;}
-/*.icn.twitter { background:url(../images/twitter_new.png) no-repeat left top; width:112px; height:43px;}
+.icn.twitter { background:url(../images/twitter_new.png) no-repeat left top; width:112px; height:43px;}
 .icn.facebook { background:url(../images/fb.png) no-repeat left top; width:117px; height:43px;}
 .icn.gplus { background:url(../images/gplus.png) no-repeat left top; width:124px; height:43px;}
 .icn:hover{ opacity:0.8; filter:alpha(opacity=80); }
-*/
+
     .button { line-height:normal; display:inline-block !important; *display:inline; zoom:1; cursor:pointer; font-size:14px; text-transform:uppercase;  font-family: 'PTSansBold';}
     
     .button.medium { padding:16px 20px; }
