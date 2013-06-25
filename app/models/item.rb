@@ -17,6 +17,7 @@ class Item < ActiveRecord::Base
   ##  has_many :inverse_relateditems, :through => :inverse_itemrelationships, :
   has_many :item_contents_relations_cache, :class_name => "ItemContentsRelationsCache"
   has_many :shares # to be removed
+  has_many :item_specification_summary_lists
   has_many :content_item_relations
   has_many :contents, :through => :item_contents_relations_cache
   has_many :reports, :as => :reportable, :dependent => :destroy 

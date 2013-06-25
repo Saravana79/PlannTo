@@ -9,6 +9,8 @@ class Attribute < ActiveRecord::Base
   has_many :search_display_attributes, :class_name => "SearchAttribute"
 
   has_one :attribute_comparison_list
+  has_many :item_specification_summary_lists 
+
 
   #belongs_to :user, :foreign_key => 'created_by'  
 end

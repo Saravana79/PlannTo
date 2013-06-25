@@ -100,6 +100,13 @@ class ProductsController < ApplicationController
     @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
     @no_popup_background = "true"
+    @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).group_by(&:proorcon)
+    @item_specification_summary_lists.delete("nothing")
+    @items_specification = {"Pro" => [], "Con" => []}
+    @item_specification_summary_lists.each do |key, value|
+      @items_specification[key[:key]] << {:values => value, description: key[:description]}
+    end
+
   end
 
   def related_items

@@ -60,4 +60,16 @@
   </div>
   <div class="dontfloat"></div>
 </div>
+
+
+<% @items_specification.each do |key, value| %>
+ <h1> <%= key %></h1>
+ <% value.each do |v| %>
+ <% v[:values].each do |av| %>
+ <h3><%=av.value %></h3>
+ <h4><%= av.attribute.name%> / <%= v[:description] %></h4>
+ <% end %>
+ <% end %>
+
+<% end %>
 <%#end%>
