@@ -237,13 +237,11 @@ module ApplicationHelper
         attr_ca.description.gsub!("{1}", compare[attr_v[0]].to_sentence)
         {summary: attr_ca.description, highlight: attr_v[0],winner:compare[attr_v[0]].to_sentence}
       
-    elsif (attr_v.size > 0 and ("eq".include?(order[:value]) or "con".include?(order[:value])))
-       matchkey = 0
+    elsif (attr_v.size > 0 and "eq".include?(order[:value]))
+       matchkey = -1
        index = 0   
        attr_v.each do |key|          
           if("eq".include?(order[:value]) and attr_v[index].to_s.downcase == attr_ca.value.downcase)
-              matchkey = index
-          elsif ("con".include?(order[:value]) and attr_v[index].to_s.downcase.include? attr_ca.value.downcase)
               matchkey = index
           end
           index =  index + 1
@@ -252,6 +250,17 @@ module ApplicationHelper
         attr_ca.description.gsub!("{1}", compare[attr_v[matchkey]].to_sentence)
         {summary: attr_ca.description, highlight: attr_v[matchkey],winner:compare[attr_v[matchkey]].to_sentence}
        end 
+    elsif (attr_v.size > 0 and "con".include?(order[:value]))
+       itemArry = Array.new       
+       attr_v.each do |key| 
+         if (key.to_s.downcase.include? attr_ca.value.downcase)
+            itemArry = itemArry +  compare[key]            
+         end
+       end
+       if(itemArry.length > 0)
+        attr_ca.description.gsub!("{1}", itemArry.to_sentence)
+        {summary: attr_ca.description, highlight: "highlight",winner:itemArry.to_sentence}       
+       end
     else
       nil
     end
