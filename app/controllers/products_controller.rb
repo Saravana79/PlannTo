@@ -101,11 +101,15 @@ class ProductsController < ApplicationController
     @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
     @no_popup_background = "true"
-    @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).group_by(&:proorcon)
+    @item_specification_summary_lists = @item.itemtype.item_specification_summary_lists.joins("inner join attributes on attributes.id=item_specification_summary_lists.attribute_id left join attribute_values on attribute_values.attribute_id=attributes.id ").where("attribute_values.item_id=? or attribute_values.item_id is null", @item.id).order("sortorder asc").select("item_specification_summary_lists.*, attributes.name as title, attribute_values.*").group_by(&:procon)
+    # @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id)
     @item_specification_summary_lists.delete("nothing")
+    # logger.info "((((((((((((((((((((((((((((#{@item_specification_summary_lists[nil ]}"
     @items_specification = {"Pro" => [], "Con" => []}
     @item_specification_summary_lists.each do |key, value|
-      @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]}
+      # logger.info "__________#{key}"
+      # logger.info "============#{value}"
+      @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]} if key
     end
 
   end

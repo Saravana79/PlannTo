@@ -9,6 +9,8 @@ class Itemtype < ActiveRecord::Base
 
   has_many :attribute_comparision_lists
 
+  has_many :item_specification_summary_lists 
+
   def self.get_followable_types(item_type)
     case item_type
       when 'Products'
