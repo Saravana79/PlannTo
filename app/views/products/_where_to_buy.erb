@@ -3,10 +3,10 @@
 <div class="clearboth pad_b29">
 <table  width="100%" border="0" cellspacing="0" cellpadding="0" >
   <tr>
-    <td class="th_blue">Seller Name</td>
-    <td class="th_blue">Price</td>
-    <td class="th_blue">Estimated Delivery Time</td>
-    <td class="th_blue">&nbsp;</td>
+    <td class="header_compare">Seller Name</td>
+    <td class="header_compare">Price</td>
+    <td class="header_compare">Estimated Delivery Time</td>
+    <td class="header_compare">&nbsp;</td>
   </tr>
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
     <% displayBorder  = 0%>
@@ -47,7 +47,7 @@
 <div id="dealer_report"> </div>
 <div style="clear:both;margin:10px 0px 5px 0px;">
   <p class="table_bot_text">Are you a dealer/seller of this product? If you like to include your listing, 
-  <%= link_to "Please get in touch with us.",new_item_report_path(@item,:type => "dealer"),:remote => true,:class => "txt_blue",:id => "report_link_#{@item.id}" %></a></li>
+  <%= link_to "Please get in touch with us.",new_item_report_path(@item,:type => "dealer"),:remote => true,:class => "blue-link",:id => "report_link_#{@item.id}" %></a></li>
   </p>
 </div>
 
@@ -62,7 +62,7 @@
 <% if (!@dealer_locators.nil?) %>
  
   <div style="display:block;clear:both;margin:30px 0px 5px 0px;">   
-  <p class="table_bot_text">Find out the various dealers/sellers from  <a href="<%=  @dealer_locators.url%>" target="_blank"`>  Manufacturer dealer locator page. </a></p>
+  <p class="table_bot_text">Find out the various dealers/sellers from  <a href="<%=  @dealer_locators.url%>" target="_blank", class="blue-link">  Manufacturer dealer locator page. </a></p>
   </div>
 
 </br>

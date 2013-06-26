@@ -1,5 +1,5 @@
   <%unless item.offer == "" || item.offer.nil? %>
-    <tr><td colspan="4"> <img src="/images/offer.jpeg" style="padding-right:5px;float:left;"/><span style="padding-top: 2px;float:left;"><%= " - " + item.offer[0..119] rescue ""%>
+    <tr><td colspan="4"> <b style="font-size:12px;padding-right:5px;"> Offer: </b><%=  item.offer[0..119] rescue ""%>
       <%if item.offer.size > 120 %> 
         <%= link_to "[Read More]","#",:onclick => "$('#offer_#{item.id}#{site}').bPopup({
     closeClass: 'Closebut',
