@@ -6,13 +6,17 @@
         <h3 class="producttabsubheader">Specifications Summary</h3>
         <table style="margin-top: 20px;">
               <tr>
-                <th style="width: 200px;padding-left:50px;text-align:left;color:green;"><h1> Pro</h1></th>
-                <th style="width: 200px;padding-left:50px;text-align:left;color: rgb(158, 0, 0)"><h1> Con</h1></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><h1 style="color:green;"> Pro</h1></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><h1 style="color:rgb(158, 0, 0)"> Con</h1></th>
               </tr>
               <tr style="vertical-align:top;">
                 <% @items_specification.each do |key, value| %>
                 <td style="padding-left:50px;">
                    <br/>
+                  <%if key == "Pro" and @items_specification["Con"].empty?%>
+                      There are no major cons.
+                      <br/>
+                  <%end%>
                    <% value.each do |v| %>
                    <% v[:values].each do |av| %>
                    <h3><%=v[:title] %></h3>
