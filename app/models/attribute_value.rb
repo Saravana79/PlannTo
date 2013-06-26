@@ -8,7 +8,7 @@ class AttributeValue < ActiveRecord::Base
   def proorcon
   	key = "nothing"
   	self.attribute.item_specification_summary_lists.each do |a|
-      unless(self.value.nil? or self.value.empty?)
+      unless(self.value.nil? or self.value.strip.empty?)
     		case a.condition
     		when "Not Equal"
   	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.downcase.strip != a.value1.downcase.strip
@@ -17,11 +17,21 @@ class AttributeValue < ActiveRecord::Base
   	  	when "Greater"
   	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.to_f > a.value1.to_f
   	  	when "Equal"
-  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.downcase.strip == a.value1.downcase.strip
+          if(a.value1 == "****")            
+              key = {key: a.proorcon, description: a.description, title: a.title}       
+          else
+             key = {key: a.proorcon, description: a.description, title: a.title} if self.value.downcase.strip == a.value1.downcase.strip          
+          end
+        when "Contains"
+             key = {key: a.proorcon, description: a.description, title: a.title} if self.value.downcase.include? a.value1.downcase.strip                    
   	  	when "Between"
   	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.to_f > a.value1.to_f && self.value.to_f < a.value2.to_f
   	  	
     		end
+      else
+        if(a.condition == "Not Equal" and a.value == "****") 
+            key = {key: a.proorcon, description: a.description, title: a.title}
+        end
   		end
   	end
   	key
