@@ -128,7 +128,7 @@ module ItemsHelper
   end
 
   def group_display_required?(attribute_ids, items)
-    return false if attribute_ids.size == 0
+     return false if attribute_ids.size == 0
     attribute_values = items.collect{|i| i.attribute_values}.flatten#where("attribute_values.attribute_id in (?)", attribute_ids)#collect{|i| i.attribute_values}.flatten.collect(&:attribute_id)
     a = attribute_values.collect{|av| av.id if attribute_ids.include?(av.attribute_id)}.compact.uniq#collect(&:id)
     # common = attribute_values | attribute_ids
@@ -217,13 +217,21 @@ module ItemsHelper
         else
           content += "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value}</a>" 
         unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
-           content += " #{attribute.unit_of_measure}"
+           if(attribute.unit_of_measure.length == 1)
+            content += "#{attribute.unit_of_measure}"
+           else          
+            content += " #{attribute.unit_of_measure}"
+          end
          end
        end
       else
          content += "<a href= #{item.valuehyperlink rescue item.hyperlink} target='_blank'>#{item.value}</a>" 
         unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
-          content += " #{attribute.unit_of_measure}"
+          if(attribute.unit_of_measure.length == 1)
+            content += "#{attribute.unit_of_measure}"
+          else          
+            content += " #{attribute.unit_of_measure}"
+          end
        end
       end
       return content
@@ -275,13 +283,21 @@ module ItemsHelper
        else
          content += "#{item.value}"
          unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
-           content += "  #{attribute.unit_of_measure}"
+           if(attribute.unit_of_measure.length == 1)
+            content += "#{attribute.unit_of_measure}"
+          else          
+            content += " #{attribute.unit_of_measure}"
+          end
          end
        end
      else
        content = "#{item.value}"
        unless (attribute.unit_of_measure == "" || attribute.unit_of_measure.nil?)
-         content += "  #{attribute.unit_of_measure}"
+         if(attribute.unit_of_measure.length == 1)
+            content += "#{attribute.unit_of_measure}"
+          else          
+            content += " #{attribute.unit_of_measure}"
+          end
        end
       end
        return content

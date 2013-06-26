@@ -20,7 +20,7 @@
                    <% value.each do |v| %>
                    <% v[:values].each do |av| %>
                    <h3><%=v[:title] %></h3>
-                   <p class="txt_brown">
+                   <p class="txt_brown" style="text-align:inherit;">
                     <%= if (v[:description].nil? or v[:description].empty?) 
                      raw display_specification_value(av,av.attribute)
                     else 
