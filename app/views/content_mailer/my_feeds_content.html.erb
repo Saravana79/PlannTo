@@ -70,13 +70,18 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
                <%end%>    
             <td width="82%" align="left" valign="top">
            <h2 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:22px; font-style:italic; color:#1393b2; font-weight:normal;">
+            <%if  content.is_a?(ArticleContent) && content.url? && (!content.url.include?("youtube.com"))%>
+            <a href="<%="http://www.plannto.com/external_contents/" + content.id.to_s + "?ref=email"%>"  style="color: #1393b2; text-decoration:none;" onmouseover="this.style.color='#0f6c83'" onmouseout="this.style.color='#1393b2'">
+            <%else%>
             <a href="<%="http://www.plannto.com/contents/" + content.id.to_s + "?ref=email"%>"  style="color: #1393b2; text-decoration:none;" onmouseover="this.style.color='#0f6c83'" onmouseout="this.style.color='#1393b2'">
+            
+            <%end%>
             <%= content.title %></a></h2>    <%if content.is_a?(ArticleContent) %> <% if content.url?  %>
         - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#1393b2;" href="http://www.plannto.com/external_contents/<%= content.id %>?ref=email"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
        <%end%>  <%end%> 
            
            <p  style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
-           <%= raw "#{content.description.split[0..(Content::WORDCOUNT-1)].join(' ')}" + "#{content.description.split.size > Content::WORDCOUNT ? "...": ""}" %>        </p>            </td>
+         <%= raw "#{content.description.split[0..(Content::WORDCOUNT-1)].join(' ')}" + "#{content.description.split.size > Content::WORDCOUNT ? "...": ""}" %>        </p>            </td>
           </tr>
         </table></td>
       </tr>

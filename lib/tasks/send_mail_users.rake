@@ -11,6 +11,7 @@ desc "send email to user"
     end 
     puts follow_users
      follow_users.each do |user|
+    unless user.id < 65
        follow_friends_ids =  User.get_follow_users_id(user)
        # for now follower id is commented as there is not proper firend mechanism built in our system yet.
        follow_friends_ids = []
@@ -103,16 +104,17 @@ WHERE
 
   if content_ids.size < 10 
     cont_ids = content_ids + configatron.top_content_ids.split(",")
-    @contents =  Content.find(:all, :conditions => ['id in (?)',cont_ids[0..9]],:order => "total_votes desc" ) 
-    puts content_ids.to_s + " content count"    
+    @contents =  Content.find(:all, :conditions => ['id in (?)',cont_ids[0..9]],:order => "total_votes desc, created_at desc" ) 
+    puts cont_ids[0..9].to_s + " content count"    
   else
-    @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc")
+    @contents = Content.find(:all, :conditions => ['id in (?)',content_ids] ,:order => "total_votes desc, created_at desc")
  end   
 puts user.id.to_s + " - User id"
 puts content_ids.to_s + " content Id"
 puts "*****"
 ContentMailer.my_feeds_content(@contents,user,followed_item_ids).deliver
- end
+end
+end
 end 
  task :send_contents_not_follow_email,:arg1, :needs => :environment do | t, args|
     userid = args[:arg1].to_i
@@ -132,8 +134,10 @@ end
   task :send_buying_plans,:arg1, :needs => :environment do | t, args|
     buying_planid = args[:arg1].to_i
     if(buying_planid != 0)
+      puts 'inside plan'
        buying_plans= BuyingPlan.find(:all, :conditions=> ["id = ?" ,buying_planid])
     else
+       puts 'outside plan'
        buying_plans = BuyingPlan.where('user_id !=? and deleted =? and completed =?',0,0,0)
     end 
     buying_plans.each do |b_plan|

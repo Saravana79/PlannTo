@@ -31,21 +31,13 @@ class ContentMailer < ActionMailer::Base
     @items = []
     @username = user.username
     @userfullname = user.name
-    Follow.where('follower_id =?  and follow_type in (?)',user.id,["owner","follower","buyer"]).map{|i| @items << Item.find(i.followable_id) }
-    mail(:to => user.email, :subject => 'Write content about your owned item') 
- end
- 
-  def content_action(content,reason)
-    user = content.user
-    @content = content
-    @reason = reason
-    if content.status == Content::DELETE_STATUS
-       subject  = "Your #{@content.sub_type} `#{@content.title}` deleted by PlannTo admin."  
-    elsif content.status == Content::DELETE_REJECTED
-       subject = "Your #{@content.sub_type} `#{@content.title}` rejected by PlannTO admin" 
+    Follow.where('follower_id =?  and follow_type in (?)',user.id,["owner"]).map{|i| @items << Item.find(i.followable_id) }
+    unless (@items.empty?)
+      subject = "Help others by sharing your knowledge on #{@items[0].name}" 
+      mail(:to => 'Saravanak@gmail.com', :subject => subject) 
     end
-    mail(:to=>user.email, :from =>'admin@plannto.com', :subject => subject)   
-  end 
+  end
+  
   def buying_plans(buying_plan)
     @buying_plan = buying_plan
     @user = @buying_plan.user
@@ -58,17 +50,28 @@ class ContentMailer < ActionMailer::Base
     @item_ids = []
     if @follow_item.size >0
       @item_ids = @follow_item[@itemtype.itemtype].collect(&:followable_id).join(",") 
-      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order(:price).limit(5)
+      @where_to_buy_items = Itemdetail.where("itemid in (?) and status = 1 and isError = 0", @item_ids.split(",")).includes(:vendor).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').limit(5)
     else
       @where_to_buy_items = []  
     end
     params1 = {"sub_type" => ["Reviews","News","Deals"], "itemtype_id" => @itemtype.id, "status" => 1, "items" => @item_ids.split(","),"order" => 'created_at desc' }
     @contents = Content.filter(params1)
-    subject = "#{@buying_plan.user_question.title}" 
+    subject = "Update on  your #{@buying_plan.itemtype.itemtype.camelize} buying plan." 
     #mail(:to => @user.email, :subject => subject)
     mail(:to => 'Saravanak@gmail.com', :subject => subject)
   end
-  
+    def content_action(content,reason)
+    user = content.user
+    @content = content
+    @reason = reason
+    if content.status == Content::DELETE_STATUS
+       subject  = "Your #{@content.sub_type} `#{@content.title}` deleted by PlannTo admin."  
+    elsif content.status == Content::DELETE_REJECTED
+       subject = "Your #{@content.sub_type} `#{@content.title}` rejected by PlannTO admin" 
+    end
+    mail(:to=>user.email, :from =>'admin@plannto.com', :subject => subject)   
+  end 
+
   def user_welcome_mail(user)
     @user = user
     buyer_item_ids =  Follow.where("follower_id=? and follow_type =?",user.id,"buyer").collect(&:followable_id)

@@ -97,6 +97,7 @@ class ProductsController < ApplicationController
     if((@item.is_a? Product) &&  (!@item.manu.nil?))
       @dealer_locators =  DealerLocator.find_by_item_id(@item.manu.id)
     end 
+
     @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
     @no_popup_background = "true"
@@ -104,7 +105,7 @@ class ProductsController < ApplicationController
     @item_specification_summary_lists.delete("nothing")
     @items_specification = {"Pro" => [], "Con" => []}
     @item_specification_summary_lists.each do |key, value|
-      @items_specification[key[:key]] << {:values => value, description: key[:description]}
+      @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]}
     end
 
   end

@@ -49,9 +49,9 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
         <p  style="padding:2px 0 0 0; border-top:1px solid #d8d8d8;margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
           <br/>
            Dear <%=@userfullname%> <br/><br/>
-           Greetings from PlannTo.com. Please find details about buying Plan  <h1><a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= @buying_plan.user_question.id %>" href="<%= 'http://www.plannto.com' + @buying_plan.preference_page_url%>/"><%=@buying_plan.try(:user_question).try(:title)%></a><%= @buying_plan.completed? ? "<font color='red'> (Completed)</font>".html_safe : "" %></h1>
              </p> 
-             <br/><br/>
+           Greetings from PlannTo.com. Please find the latest information and recommendations related to your <a href="<%= 'http://www.plannto.com' + @buying_plan.preference_page_url%>/" style="color:#787878;"><%=@buying_plan.itemtype.itemtype.camelize %> buying plan </a> and also the price comparison of the products that you are considering to buy.<h1>
+
     <td>
    </tr> 
   <tr>
@@ -89,7 +89,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
     <h3 style="padding:0 0 0 0; margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:18px; font-style:italic; color:#1393b2; font-weight:normal;"><br />
 <br />
 <%if @contents.size > 0 %>
-<%= link_to "View All Contents",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/?type=create"%> 
+<%= link_to "View All Contents",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}"%> 
 <%end%>
   </tr>
     </table></td>
@@ -103,15 +103,14 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
 
         <% if (!@where_to_buy_items.empty?) %>
       <h1><center> Price Comparisons</center></h1>
-<div class="clearboth align_right font_11 pad_tb5">Last Updated On <%=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>
    <div class="clearboth pad_b29">
   <table  width="100%" border="0" cellspacing="0" cellpadding="0" >
-    <tr>
-  	<td class="th_blue">Product Name</td>
-    <td class="th_blue">Seller Name</td>
-    <td class="th_blue">Price</td>
-    <td class="th_blue">Estimated Delivery Time</td>
-    <td class="th_blue">&nbsp;</td>
+    <tr style="font-family: Arial, Helvetica, sans-serif;  font-size: 13px;  font-weight: bold;  background: #e1f3f8;  border-right: 0px solid #FFFFFF;  padding: 5px 5px;  width: 170px;
+">
+  	<td style="width:40%">Product Name</td>
+    <td style="width:20%">Seller Name</td>
+    <td style="width:20%">Price</td>
+    <td style="width:20%">Estimated Delivery Time</td>    
   </tr>
      <% combine_list = [] %>
      <% @where_to_buy_items.group_by(&:itemid).each do |site, items| %>
@@ -125,8 +124,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
           	<td class="bdb_gray"><%=item.ItemName%></td>
             <td class="bdb_gray"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
             <td class="bdb_gray price_text"><%= price %></td>
-            <td class="bdb_gray font_13"><%= shipping %></td>
-            <td align="center" class="bdb_gray" valign="top"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
+            <td class="bdb_gray font_13"><%= shipping %></td>          
           </tr>
         
       <%end%>
@@ -137,7 +135,7 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
   <br />
 <br />
 <%if  (!@where_to_buy_items.empty?) %>
-<%= link_to "View All Compare Prices",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/" + "?type=deals"%> 
+<%= link_to "View Complete List",'http://www.plannto.com' + "#{@buying_plan.preference_page_url}/" + "?type=deals"%> 
 <%end%>
 </table>
 </div>
@@ -146,13 +144,13 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
  <h1><center> Recommendations </center></h1>
 <%end%> 
 <%@recommendations.each do |ans| %>
-  <a class="txt_brown"><%= ans.user.name%> gave a recommendation.</a>
-  <br /> 
-  <b><%= ans.answer%><b>
-  <br />
+  <a style="font: normal 12px Tahoma,Arial, Helvetica, sans-serif;color: #c15f24;text-decoration: none;"><%= ans.user.name%> gave a recommendation.</a>
+  <br />   
   <%ans.recommendations.each do |reco| %>
-    <a href="www.plannto.com/<%= reco.item.get_url() rescue ''%>" class="txt_black txt_onhover"><%= reco.item.name rescue ''%></a>, &nbsp;&nbsp;
+    <a href="www.plannto.com/<%= reco.item.get_url() rescue ''%>" style="font: normal 11px Tahoma,Arial, Helvetica, sans-serif;color: #000;text-decoration: none;"><%= reco.item.name rescue ''%></a>, &nbsp;&nbsp;
   <%end%> 
+  <br />
+  <b><%= ans.answer%><b>
   <br /> <br />
 <%end%>
 <br />
@@ -163,9 +161,48 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
   </td>
 </tr>
 </table>
-</tr>
+</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top"><table border="0" cellspacing="0" cellpadding="0" width="100%">
+  <tr>
+    <td width="37" align="left" valign="bottom" ><img src="http://www.plannto.com/images/bottomleft_shadow.png" width="37" height="173" /></td>
+    <td  align="left" valign="top" style="background:#FFFFFF; border-bottom:3px solid #d8d8d8;" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="center" valign="top" style="padding-top:20px;"><table width="494" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <!--<td width="177" align="left" valign="middle">
+            <a href="#"><img src="http://www.plannto.com/images/email.png" alt="Email" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
+<a href="#" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Forward this to a friend</a></td> -->
+            <td  align="left" valign="middle">   <a href="http://www.twitter.com/PlannTo"><img src="http://www.plannto.com/images/twitter.png" alt="Twitter" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
+<a href="http://www.twitter.com/PlannTo" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Follow us on Twitter</a></td>
+            <td>  <a href="http://www.facebook.com/PlannTo"><img src="http://www.plannto.com/images/facebook.png" alt="Facebook" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>  
+            
+                         
+<a href="http://www.facebook.com/PlannTo" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Follow us on Facebook</a></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td>
+        <p style="padding:32px 0 30px 0; margin:0px; font-family:Georgia, 'Times New Roman', Times, serif; font-size:12px; color:#676767; font-style:italic; text-align:center;">
+  Copyright © 2012 <%= link_to "PlannTo.com","http://www.plannto.com" %>  All rights reserved.<br />
+
+You are receiving this email because you are a member of PlannTo.com, if you dont like to receive this mail. Please unsubscribe by modifying your email preference in <a href="http://www.plannto.com/accounts?type=email" style="color:#787878;" >PlannTo.com Email Settings Page</a>.
+ 
+        </td>
+      </tr>
+    </table>        </td>
+    <td width="24"  align="right" valign="bottom"><img src="http://www.plannto.com/images/bottomright_shadow.png" width="24" height="173" /></td>
+  </tr>
+</table></td>
+  </tr>
 </table>
+
+  </tr>
+</table>
+
 </body>
-</html> 
+</html>
  
  

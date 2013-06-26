@@ -8,21 +8,22 @@ class AttributeValue < ActiveRecord::Base
   def proorcon
   	key = "nothing"
   	self.attribute.item_specification_summary_lists.each do |a|
-  		case a.condition
-  		when "Not Equal"
-	  		key = {key: a.proorcon, description: a.description} if self.value != a.value1
-	  	when "Lesser"
-	  		key = {key: a.proorcon, description: a.description} if self.value.to_f < a.value1.to_f
-	  	when "Greater"
-	  		key = {key: a.proorcon, description: a.description} if self.value.to_f > a.value1.to_f
-	  	when "Equal"
-	  		key = {key: a.proorcon, description: a.description} if self.value = a.value1
+      unless(self.value.nil? or self.value.empty?)
+    		case a.condition
+    		when "Not Equal"
+  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value != a.value1
+  	  	when "Lesser"
+  	  		key = {key: a.proorcon, description: a.description , title: a.title} if self.value.to_f < a.value1.to_f
+  	  	when "Greater"
+  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.to_f > a.value1.to_f
+  	  	when "Equal"
+  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value == a.value1
 
-	  	when "Between"
-	  		key = {key: a.proorcon, description: a.description} if self.value.to_f > a.value1.to_f && self.value.to_f < a.value2.to_f
-	  	
+  	  	when "Between"
+  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.to_f > a.value1.to_f && self.value.to_f < a.value2.to_f
+  	  	
+    		end
   		end
-  		
   	end
   	key
   end

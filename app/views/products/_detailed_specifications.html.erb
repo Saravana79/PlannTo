@@ -2,7 +2,38 @@
 <div class="specificationcontainer">
   <div class="spacificationdiv">
     <br/>
-    <h3 class=""><%= @item.get_name + " - " + "Specifications" %></h3>
+    <h3 class="">Specifications Summary</h3>
+
+
+    <table style="margin-left: 100px;margin-top: 20px;">
+          <tr>
+            <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Pro</h1></th>
+            <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Con</h1></th>
+          </tr>
+          <tr style="vertical-align:top;">
+            <% @items_specification.each do |key, value| %>
+            <td style="padding-left:50px;">
+               <br/>
+               <% value.each do |v| %>
+               <% v[:values].each do |av| %>
+               <h3><%=v[:title] %></h3>
+               <p class="txt_brown">
+                <%= if (v[:description].nil? or v[:description].empty?) 
+                 display_specification_value(av,av.attribute)
+               else 
+                v[:description] 
+                end%>
+              </p>
+              <br/>
+              <% end %>
+              <% end %>
+            </td>
+        <% end %>
+      </tr>
+    </table>
+    <br/>
+    <h3 class="">Detailed Specifications</h3>
+    <br/>
     
     <div class="specificationblckdiv">
       <% @item.specification.group_by(&:category_name).each do |category, product_attributes| %>
@@ -62,14 +93,4 @@
 </div>
 
 
-<% @items_specification.each do |key, value| %>
- <h1> <%= key %></h1>
- <% value.each do |v| %>
- <% v[:values].each do |av| %>
- <h3><%=av.value %></h3>
- <h4><%= av.attribute.name%> / <%= v[:description] %></h4>
- <% end %>
- <% end %>
-
-<% end %>
 <%#end%>

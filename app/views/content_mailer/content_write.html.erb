@@ -48,27 +48,71 @@ Don't want this? Safely <a href="<%= accounts_url(:type=> 'email')%>" style="col
         <p  style="padding:2px 0 0 0; border-top:1px solid #d8d8d8;margin:0; font-family: Georgia, 'Times New Roman', Times, serif; font-size:14px; font-style:italic; color:#676666;">
           <br/>
            Dear <%=@userfullname%> <br/><br/>
-           Greetings from PlannTo.com. Please write review about your  owned item. 
+           Greetings from PlannTo.com. Please share you knowledge on some of the products that you own to others by writing a review of the products. We have listed down the products that you own, click on the link to write a review about the product.
+           <br/>
+           <br/>
     </td>
    </tr> 
    <% @items.each do |item | %>
    
-        <tr><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
+        <tr><td><div style="border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background:#e9e9e9; box-shadow: 1px 1px 1px #b0b0b0; text-align:center;">
         <a href="<%= 'http://www.plannto.com' + item.get_url() %>" > <img src="<%= item.image_url() %>" alt="<%= item.name%>" border="0" style="padding:8px 8px 4px 8px;" /></a><br />
 <p style="padding:0 0 5px 0; margin:0; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#444444;"><%= item.name %></p>
         
-<a href="<%= 'http://localhost:3000' + item.get_url() + '?type=write_review' %>" > Write a Review</a><br />
+<a href="<%= 'http://www.plannto.com' + item.get_url() + '?type=write_review' %>" > Write a Review</a><br />
 
 
 
-</div> </tr>
+</div></td> </tr>
 
 <%end%>
   </td>
 </tr>
 </table>
-</tr>
+</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top"><table border="0" cellspacing="0" cellpadding="0" width="100%">
+  <tr>
+    <td width="37" align="left" valign="bottom" ><img src="http://www.plannto.com/images/bottomleft_shadow.png" width="37" height="173" /></td>
+    <td  align="left" valign="top" style="background:#FFFFFF; border-bottom:3px solid #d8d8d8;" ><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td align="center" valign="top" style="padding-top:20px;"><table width="494" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <!--<td width="177" align="left" valign="middle">
+            <a href="#"><img src="http://www.plannto.com/images/email.png" alt="Email" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
+<a href="#" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Forward this to a friend</a></td> -->
+            <td  align="left" valign="middle">   <a href="http://www.twitter.com/PlannTo"><img src="http://www.plannto.com/images/twitter.png" alt="Twitter" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>             
+<a href="http://www.twitter.com/PlannTo" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Follow us on Twitter</a></td>
+            <td>  <a href="http://www.facebook.com/PlannTo"><img src="http://www.plannto.com/images/facebook.png" alt="Facebook" width="16" height="16" border="0" align="left" style="margin-right:7px;" /></a>  
+            
+                         
+<a href="http://www.facebook.com/PlannTo" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#676767; text-decoration:none;">Follow us on Facebook</a></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td>
+        <p style="padding:32px 0 30px 0; margin:0px; font-family:Georgia, 'Times New Roman', Times, serif; font-size:12px; color:#676767; font-style:italic; text-align:center;">
+  Copyright © 2012 <%= link_to "PlannTo.com","http://www.plannto.com" %>  All rights reserved.<br />
+
+You are receiving this email because you are a member of PlannTo.com, if you dont like to receive this mail. Please unsubscribe by modifying your email preference in <a href="http://www.plannto.com/accounts?type=email" style="color:#787878;" >PlannTo.com Email Settings Page</a>.
+ 
+        </td>
+      </tr>
+    </table>        </td>
+    <td width="24"  align="right" valign="bottom"><img src="http://www.plannto.com/images/bottomright_shadow.png" width="24" height="173" /></td>
+  </tr>
+</table></td>
+  </tr>
 </table>
+
+  </tr>
+</table>
+
 </body>
-</html> 
+</html>
+ 
+ 
+
  
