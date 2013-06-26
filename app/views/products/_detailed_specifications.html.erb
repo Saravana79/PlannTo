@@ -2,37 +2,36 @@
 <div class="specificationcontainer">
   <div class="spacificationdiv">
     <br/>
-    <% unless @items_specification.empty? %>
+    <% unless @items_specification["Pro"].empty? and  @items_specification["Con"].empty? %>
         <h3 class="">Specifications Summary</h3>
-    <%end%>
-
-    <table style="margin-left: 100px;margin-top: 20px;">
-          <tr>
-            <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Pro</h1></th>
-            <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Con</h1></th>
+        <table style="margin-left: 100px;margin-top: 20px;">
+              <tr>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Pro</h1></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Con</h1></th>
+              </tr>
+              <tr style="vertical-align:top;">
+                <% @items_specification.each do |key, value| %>
+                <td style="padding-left:50px;">
+                   <br/>
+                   <% value.each do |v| %>
+                   <% v[:values].each do |av| %>
+                   <h3><%=v[:title] %></h3>
+                   <p class="txt_brown">
+                    <%= if (v[:description].nil? or v[:description].empty?) 
+                     raw display_specification_value(av,av.attribute)
+                    else 
+                    v[:description] 
+                    end%>
+                  </p>
+                  <br/>
+                  <% end %>
+                  <% end %>
+                </td>
+            <% end %>
           </tr>
-          <tr style="vertical-align:top;">
-            <% @items_specification.each do |key, value| %>
-            <td style="padding-left:50px;">
-               <br/>
-               <% value.each do |v| %>
-               <% v[:values].each do |av| %>
-               <h3><%=v[:title] %></h3>
-               <p class="txt_brown">
-                <%= if (v[:description].nil? or v[:description].empty?) 
-                 display_specification_value(av,av.attribute)
-               else 
-                v[:description] 
-                end%>
-              </p>
-              <br/>
-              <% end %>
-              <% end %>
-            </td>
-        <% end %>
-      </tr>
-    </table>
-    <br/>
+        </table>
+        <br/>
+    <%end%>
     <h3 class="">Detailed Specifications</h3>
     <br/>
     

@@ -11,14 +11,13 @@ class AttributeValue < ActiveRecord::Base
       unless(self.value.nil? or self.value.empty?)
     		case a.condition
     		when "Not Equal"
-  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value != a.value1
+  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.downcase.strip != a.value1.downcase.strip
   	  	when "Lesser"
   	  		key = {key: a.proorcon, description: a.description , title: a.title} if self.value.to_f < a.value1.to_f
   	  	when "Greater"
   	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.to_f > a.value1.to_f
   	  	when "Equal"
-  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value == a.value1
-
+  	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.downcase.strip == a.value1.downcase.strip
   	  	when "Between"
   	  		key = {key: a.proorcon, description: a.description, title: a.title} if self.value.to_f > a.value1.to_f && self.value.to_f < a.value2.to_f
   	  	
