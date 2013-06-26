@@ -76,9 +76,9 @@
 
      <% if display %>
       <tr style="width:1000px;">
-        <td class= "top insidebox name bordered" rowspan="2" style="font-size:13px;"><b> <%= "#{attr_ca.title}" %></b></td>
-         <td colspan="4" class="high insidebox bordered" style="border-bottom:0px;"> <b>Winner: <%= display[:winner] %></b>  <br/><br/>
-          <%= display[:summary] %></td>
+        <td class= "top insidebox name bordered" rowspan="2" style="font-size:13px;"><b> <%= "#{attr_ca.title}" %></b><br/><p style="padding-top:10px;color:#1F1F1F;">Winner: <%= display[:winner] %></p>  <br/></td>
+         <td colspan="4" class="high insidebox bordered" style="border-bottom:0px;"> 
+          <p style="color:brown;"><%= display[:summary] %><p><br/></td>
        
        
       </tr>

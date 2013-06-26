@@ -3,11 +3,11 @@
   <div class="spacificationdiv">
     <br/>
     <% unless @items_specification["Pro"].empty? and  @items_specification["Con"].empty? %>
-        <h3 class="">Specifications Summary</h3>
-        <table style="margin-left: 100px;margin-top: 20px;">
+        <h3 class="producttabsubheader">Specifications Summary</h3>
+        <table style="margin-top: 20px;">
               <tr>
-                <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Pro</h1></th>
-                <th style="width: 200px;padding-left:50px;text-align:left;"><h1> Con</h1></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;color:green;"><h1> Pro</h1></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;color: rgb(158, 0, 0)"><h1> Con</h1></th>
               </tr>
               <tr style="vertical-align:top;">
                 <% @items_specification.each do |key, value| %>
@@ -32,7 +32,7 @@
         </table>
         <br/>
     <%end%>
-    <h3 class="">Detailed Specifications</h3>
+    <h3 class="producttabsubheader">Detailed Specifications</h3>
     <br/>
     
     <div class="specificationblckdiv">
