@@ -7,7 +7,8 @@ class AttributeComparisonList < ActiveRecord::Base
 
 	ORDER = {"GreaterThan" => {value: "desc", first: 1, second: 0},
 			 "LeserThan" => {value: "asc", first: 0, second: 1},
-			 "Equal" => {value: "eq", first: 0, second: 1}}
+			 "Equal" => {value: "eq", first: 0, second: 1},
+			 "Contains" => {value: "con", first: 0, second: 1}}
 
 	def order
 		return ORDER[self.condition]

@@ -237,11 +237,13 @@ module ApplicationHelper
         attr_ca.description.gsub!("{1}", compare[attr_v[0]].to_sentence)
         {summary: attr_ca.description, highlight: attr_v[0],winner:compare[attr_v[0]].to_sentence}
       
-    elsif (attr_v.size > 0 and "eq".include?(order[:value]))
+    elsif (attr_v.size > 0 and ("eq".include?(order[:value]) or "con".include?(order[:value])))
        matchkey = 0
        index = 0   
        attr_v.each do |key|          
-          if(attr_v[index].to_s.downcase == attr_ca.value.downcase)
+          if("eq".include?(order[:value]) and attr_v[index].to_s.downcase == attr_ca.value.downcase)
+              matchkey = index
+          elsif ("con".include?(order[:value]) and attr_v[index].to_s.downcase.include? attr_ca.value.downcase)
               matchkey = index
           end
           index =  index + 1
