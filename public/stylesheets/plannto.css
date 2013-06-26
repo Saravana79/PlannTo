@@ -3323,7 +3323,7 @@ ul#Newtabs li a span:hover {background:#e87c07 ;}
 ul#Newtabs li a:hover { text-decoration:none;}
 .tab_active { margin:0px 0px 0px 12px;}
 ul#Newtabs li.tab_active a { background:url(../images/tabs_navi_bg.png) no-repeat left top; color:#4b85a4;}
-ul#Newtabs li.tab_active a span { background:url(../images/tabs_navi_bg.png) no-repeat right bottom; padding-left:5px;}
+ul#Newtabs li.tab_active a span { background:url(../images/tabs_navi_bg.png) no-repeat right bottom; padding-left:0px;}
 
 .Rightouter { width:732px; float:right;}
 
@@ -3430,7 +3430,7 @@ border:1px solid #528fae; display:none; top:28px; right:-1px;}
 .th_blue { font-family:Arial, Helvetica, sans-serif; font-size:13px; font-weight:bold;
 background:#e1f3f8; border-right:0px solid #FFFFFF; padding:5px 5px; width:170px;}   
 
-.price_text { font-size:15px; color:#4b85c0;}
+.price_text { font-size:14px; color:#4b85c0;}
 
 .font_13 { font-size:13px;}
 
@@ -3452,9 +3452,9 @@ height:21px; line-height:20px; padding-right:8px;}
 .pad_b29 { padding-bottom:29px;}
 
 p.table_bot_text { font-size:12px; color:#3c3c3c; padding:0 0 6px 0; margin:0; line-height:18px; }
-p.table_bot_text a{ color:#3c3c3c; background:#cde9f1; display:inline-block; padding:0px 4px 2px 4px; text-decoration:underline;
+/*p.table_bot_text a{ color:#3c3c3c; background:#cde9f1; display:inline-block; padding:0px 4px 2px 4px; text-decoration:underline;
 -moz-border-radius:3px; border-radius:3px;}
-p.table_bot_text a:hover { text-decoration:none;}
+p.table_bot_text a:hover { text-decoration:none;}*/
 /******************/
 
 body.Inner_page { background:none !important; overflow:hidden;}
@@ -5113,3 +5113,5 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
 .btn-link { margin:0; background:#12c1e6; color:#fff!important; padding:5px 8px; border:0; font-size:12px;}
 .btn-link:hover{ background:#00aace; color:#fff;}
 .header_compare{font-family: Arial, Helvetica, sans-serif;font-size: 13px;font-weight: bold;background: #CCC;border-right: 0px solid #FFF;padding: 10px 5px;width: 170px;color: #000;}
+a.blue-link { color:#00a8cb; font-size:12px;text-decoration:underline;}
+a.blue-link:hover { color:#e87800;text-decoration:none; }

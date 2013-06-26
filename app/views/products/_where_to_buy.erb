@@ -18,7 +18,7 @@
             <td class="bdb_gray1"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
             <td class="bdb_gray1 price_text"><%=display_price_detail(item)%></td>
             <td class="bdb_gray1 font_13"><%=display_shipping_detail(item)%></td>
-            <td align="center" class="bdb_gray1" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
+            <td align="center" class="bdb_gray1" ><a href="/history_details?detail_id=<%=item.item_details_id%>" class="btn-link" target="_blank">view store</a></td>
           </tr>
          <%= render "products/deals_offer",:item => item,:site => site %>
        <!--   
@@ -46,7 +46,7 @@
 <%end%>
 <div id="dealer_report"> </div>
 <div style="clear:both;margin:10px 0px 5px 0px;">
-  <p class="table_bot_text">Are you a dealer/seller of this product? If you like to include your listing, 
+  <p class="">Are you a dealer/seller of this product? If you like to include your listing, 
   <%= link_to "Please get in touch with us.",new_item_report_path(@item,:type => "dealer"),:remote => true,:class => "blue-link",:id => "report_link_#{@item.id}" %></a></li>
   </p>
 </div>
@@ -61,8 +61,8 @@
         </script>
 <% if (!@dealer_locators.nil?) %>
  
-  <div style="display:block;clear:both;margin:30px 0px 5px 0px;">   
-  <p class="table_bot_text">Find out the various dealers/sellers from  <a href="<%=  @dealer_locators.url%>" target="_blank", class="blue-link">  Manufacturer dealer locator page. </a></p>
+  <div style="display:block;clear:both;margin:20px 0px 5px 0px;">   
+  <p class="">Find out the various dealers/sellers from  <a href="<%=  @dealer_locators.url%>" target="_blank", class="blue-link">  Manufacturer dealer locator page. </a></p>
   </div>
 
 </br>
