@@ -235,9 +235,12 @@ class Item < ActiveRecord::Base
    end
   end
 
-  def self.get_related_items(item, limit)
-    # logger.info "((((((((((((((((((((((((((((((#{item.relateditems.inspect}"
-    related_item_ids = item.itemrelationships.collect(&:relateditem_id)
+  def self.get_related_items(item, limit, includ=false)
+    unless includ
+      related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
+    else
+      related_item_ids = item.itemrelationships.collect(&:relateditem_id)
+    end
     # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
     return self.where(:id => related_item_ids).first(limit)
