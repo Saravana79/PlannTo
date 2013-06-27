@@ -116,7 +116,7 @@
 
 
 
-    $("#plannToSearch1, #cmp1stitem, #cmp2nditem").autocomplete({
+    $("#plannToSearch1").autocomplete({
         minLength: 2,
         format: "js",
         // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
@@ -194,6 +194,87 @@
         }
         self._renderItem(ul, item, -1);
     };
+
+    $("#cmp1stitem, #cmp2nditem").autocomplete({
+        minLength: 2,
+        format: "js",
+        // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
+        source: function( request, response )
+        {
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 5, // The length of each line
+                width: 4, // The line thickness
+                radius: 5, // The radius of the inner circle
+                color: '#2EFE9A', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 50, // Afterglow percentage
+                shadow: true, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('plannToSearchSpan');
+            var spinner = new Spinner(opts).spin(target);
+            $.ajax(
+            {
+                url: "/search/autocomplete_items",
+                data: {
+                    term: request.term,
+                    search_type: "Car,Bike,Mobile,Tablet,Cycle,Camera"
+                },
+                type: "get",
+                dataType: "json",
+                success: function( data )
+                {
+                    response( $.map( data, function( item )
+                    {
+                        return{
+                            id: item.id,
+                            value: item.value,
+                            imgsrc: item.imgsrc,
+                            type: item.type,
+                            url: item.url
+                        }
+                    }));
+                    spinner.stop();
+                }
+            });
+        },
+        focus:function(e, ui) {
+            return false
+        },
+        select: function( event, ui ) {
+
+          if($(this).attr("id")=="cmp2nditem" || $(this).attr("id")=="cmp1stitem"){
+            $(this).attr("product_id", ui.item.id)
+          }else{
+            if (ui.item.id  == 0){
+                //alert(ui.item.url)
+                location.href = "/search/search_items?q=" + ui.item.url
+            // return false;
+            }
+            else{
+                location.href = "" + ui.item.url
+            // return false;
+            }
+          }
+        // return false;
+        }
+    })
+       _renderMenu = function(ul, items) {
+        var self = this;
+        $.each(items, function(index, item) {
+            self._renderItem(ul, item, index);
+        });
+        
+        item = {
+            value: "Search more items...",
+            id: "0",
+            imgsrc: ""
+        }
+        self._renderItem(ul, item, -1);
+    };
+
+
     jQuery.each(["#plannToSearch1", "#cmp1stitem", "#cmp2nditem"], function(index, item) {
     $(item).data("autocomplete")._renderItem = function(ul, item, index) {
         if (item.id == 0) {
