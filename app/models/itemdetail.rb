@@ -1,6 +1,7 @@
 class Itemdetail < ActiveRecord::Base
 
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
+  belongs_to :item
 
   def vendor_name
     return "" if vendor.nil?

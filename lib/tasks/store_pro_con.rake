@@ -12,11 +12,11 @@ desc "save pro cons from article content in item_pro_cons table"
                          list = pcc.list.gsub(",", "|")
                          pros.each do |pro|
                               last_index += 1
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_pro_con_categandy_id(item.id, content.id, pcc.id, text: "pro", index: 1, proandcon: "Pro") if pro.match(/#{list}/)
+                              ItemProCon.find_or_create_by_item_id_and_article_content_id(item.id, content.id, pro_con_category_id: (pro.match(/#{list}/) ? pcc.id : nil), text: "pro", index: 1, proandcon: "Pro") 
                          end
                          cons.each do |con|
                               last_index += 1
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_pro_con_categandy_id(item.id, content.id, pcc.id, text: con, index: last_index, proandcon: "Con") if con.match(/#{list}/)
+                              ItemProCon.find_or_create_by_item_id_and_article_content_id(item.id, content.id, pro_con_category_id: (con.match(/#{list}/) ? pcc.id : nil), text: con, index: last_index, proandcon: "Con")
                          end
                     end
                 end

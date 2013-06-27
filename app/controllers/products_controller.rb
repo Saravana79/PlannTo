@@ -69,16 +69,18 @@ class ProductsController < ApplicationController
     session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
-    @item = Item.find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    @item = Item.includes([:itemdetails => :vendor],[:item_attributes => :attribute_values], :itemrelationships).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user
       @custom = "true"
     end 
     @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
-    @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", @item.id).includes(:vendor).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @attribute_degree_view = Attribute.where(:name => "360 Degree View").first.attribute_values.where("item_id =?",@item.id).first.value rescue ""
+    @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    @attribute_degree_view = @item.item_attributes.collect{|ia| ia if ia.name == "360 Degree View"}.compact.collect(&:attribute_values).flatten.first.value rescue ""
+    
     @related_items = Item.get_related_items(@item, 3) 
+    
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
     #@tip = Tip.new
