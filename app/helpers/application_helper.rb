@@ -211,7 +211,7 @@ module ApplicationHelper
 
   def show_comparision_summary(attr_ca, items)
     order = attr_ca.order
-    compare = attr_ca.attribute.attribute_values.includes(:item).where("item_id in (?)", items.collect(&:id)).group_by(&:value)
+    compare = attr_ca.attribute.attribute_values.includes(:item).where("item_id in (?)", items.collect(&:id)).group_by(&:groupbyvalue)
 
     compare.each do |key, value|
       compare[key] = value.collect{|av| av.item.name}    
