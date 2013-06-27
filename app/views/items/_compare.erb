@@ -88,7 +88,15 @@
             <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>            
             <%unless a.nil?%>
               <% attribute = @attributes.find_by_id(a.attribute_id) %>
-              <%= a.value == display[:highlight] ? ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe : show_item_value(@items, i, attribute).html_safe %></td>
+              <%=
+                  if(display[:highlight].include?(i.id))
+                    ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe 
+                  else
+                    show_item_value(@items, i, attribute).html_safe 
+                  end
+              %>
+
+                </td>
             <%end%>
             
         <% end %>

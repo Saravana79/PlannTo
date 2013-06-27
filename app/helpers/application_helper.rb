@@ -212,9 +212,10 @@ module ApplicationHelper
   def show_comparision_summary(attr_ca, items)
     order = attr_ca.order
     compare = attr_ca.attribute.attribute_values.includes(:item).where("item_id in (?)", items.collect(&:id)).group_by(&:groupbyvalue)
-
+    topitems = Hash.new
     compare.each do |key, value|
       compare[key] = value.collect{|av| av.item.name}    
+      topitems[key] = value.collect{|av| av.item.id}    
     end
 
     if(["asc", "desc"].include?(order[:value]))
@@ -235,7 +236,7 @@ module ApplicationHelper
         attr_ca.description.gsub!("{2}", compare[attr_v[1]].to_sentence)
         attr_ca.description.gsub!("{percentage}", percentage) if attr_ca.description.match("{percentage}")
         attr_ca.description.gsub!("{1}", compare[attr_v[0]].to_sentence)
-        {summary: attr_ca.description, highlight: attr_v[0],winner:compare[attr_v[0]].to_sentence}
+        {summary: attr_ca.description, highlight: topitems[attr_v[0]],winner:compare[attr_v[0]].to_sentence}
       
     elsif (attr_v.size > 0 and "eq".include?(order[:value]))
        matchkey = -1
@@ -248,18 +249,20 @@ module ApplicationHelper
        end
        if(matchkey > 0 and compare[attr_v[matchkey]].size < items.size )
         attr_ca.description.gsub!("{1}", compare[attr_v[matchkey]].to_sentence)
-        {summary: attr_ca.description, highlight: attr_v[matchkey],winner:compare[attr_v[matchkey]].to_sentence}
+        {summary: attr_ca.description, highlight: topitems[attr_v[matchkey]],winner:compare[attr_v[matchkey]].to_sentence}
        end 
     elsif (attr_v.size > 0 and "con".include?(order[:value]))
        itemArry = Array.new       
+       valueArry = Array.new
        attr_v.each do |key| 
          if (key.to_s.downcase.include? attr_ca.value.downcase)
             itemArry = itemArry +  compare[key]            
+            valueArry = valueArry + topitems[key]
          end
        end
        if(itemArry.length > 0)
         attr_ca.description.gsub!("{1}", itemArry.to_sentence)
-        {summary: attr_ca.description, highlight: "highlight",winner:itemArry.to_sentence}       
+        {summary: attr_ca.description, highlight: valueArry,winner:itemArry.to_sentence}       
        end
     else
       nil
