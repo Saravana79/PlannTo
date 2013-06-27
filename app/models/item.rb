@@ -9,6 +9,7 @@ class Item < ActiveRecord::Base
   ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
   belongs_to :itemtype
   has_one :item_rating
+  has_many :itemdetails, :foreign_key => 'itemid'
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships
   #
@@ -35,6 +36,8 @@ class Item < ActiveRecord::Base
   has_many :itemrelationships, :foreign_key => :item_id
   has_many :relateditems,
     :through => :itemrelationships
+
+  has_many :item_pro_cons
 
   # default_scope includes(:attribute_values)
   
@@ -233,12 +236,16 @@ class Item < ActiveRecord::Base
   end
 
   def self.get_related_items(item, limit)
-    related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
+    # logger.info "((((((((((((((((((((((((((((((#{item.relateditems.inspect}"
+    related_item_ids = item.itemrelationships.collect(&:relateditem_id)
+    # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
     return self.where(:id => related_item_ids).first(limit)
   end
 
   def self.get_related_item_list(item, limit=10, page=1)
+    logger.info "(((((((((((((((((((((((((((((("
+
    # return item.relateditems.paginate(:page => page, :per_page => limit)
    itemdetails = Item.find_by_id(item)
     if (itemdetails.is_a?AttributeTag)    

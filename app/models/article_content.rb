@@ -6,6 +6,7 @@ class ArticleContent < Content
   belongs_to :article_category
   has_many :content_photos,  :foreign_key => 'content_id'
   accepts_nested_attributes_for :content_photos, :allow_destroy => true
+  has_many :item_pro_cons
   #  validate :validate_end_date_before_start_date
   #
   #  def validate_end_date_before_start_date
