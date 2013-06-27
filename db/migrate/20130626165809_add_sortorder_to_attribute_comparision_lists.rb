@@ -1,5 +1,5 @@
 class AddSortorderToAttributeComparisionLists < ActiveRecord::Migration
   def change
-    add_column :attribute_comparison_lists, :sort_order, :integer
+    add_column :attribute_comparison_lists, :sortorder, :integer
   end
 end
