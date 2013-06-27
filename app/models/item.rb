@@ -36,6 +36,8 @@ class Item < ActiveRecord::Base
   has_many :relateditems,
     :through => :itemrelationships
 
+  has_many :item_pro_cons
+
   # default_scope includes(:attribute_values)
   
   scope :get_price_range, lambda {|item_ids| joins(:item_attributes).
