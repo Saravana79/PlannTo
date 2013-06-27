@@ -79,7 +79,7 @@ class ProductsController < ApplicationController
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     @attribute_degree_view = @item.item_attributes.collect{|ia| ia if ia.name == "360 Degree View"}.compact.collect(&:attribute_values).flatten.first.value rescue ""
     
-    @related_items = Item.get_related_items(@item, 3) 
+    @related_items = Item.get_related_items(@item, 3, true) 
     
     @invitation=Invitation.new(:item_id => @item, :item_type => @item.itemtype)
     user_follow_type(@item, current_user)
