@@ -165,7 +165,7 @@ class ItemsController < ApplicationController
       @attribute_ids = @items.collect{|i|i.attribute_values.collect(&:attribute_id)}.flatten.uniq
        @attributes = Attribute.where("id in (?)", @attribute_ids)
       @ids[0] = "0" if @ids[0] == ""
-      content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Reviews','Deals','Lists') group by content_id order by count(*) desc").collect(&:content_id)
+      #content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Reviews','Deals','Lists') group by content_id order by count(*) desc").collect(&:content_id)
       #@contents = Content.where("id in (?)",content_ids).order("total_votes desc")
       @attribute_comparision_lists = AttributeComparisonList.where("itemtype_id = ?",  @item1.itemtype_id).order("sort_order asc")
 

@@ -15,22 +15,30 @@ module ItemsHelper
   def display_specifications(item)
     specifications = ""
     attributes_list = Array.new
-    attributes_list =  Rails.cache.fetch("attributes_list")
+    attributes_list = Rails.cache.fetch("attributes_list")
     attributes_list = nil
     if attributes_list.nil?
-      attributes_list = Attribute.where(:priority => true).to_a
+      attributes_list = Attribute.where(:priority => true).order(:sortorder).to_a
       Rails.cache.write('attributes_list', attributes_list)
     end
-    item.attribute_values.joins(:attribute).order("attributes.sortorder").each do |att|
-      field = ""
-      attributes_list.each do |list|
-        field = list if list.id == att.attribute_id
-      end
-      if field != ""
-        content = get_displayable_content(att, field)
+    # item.attribute_values.joins(:attribute).order("attributes.sortorder").each do |att|
+    #   field = ""
+    #   attributes_list.each do |list|
+    #     field = list if list.id == att.attribute_id
+    #   end
+    #   if field != ""
+    #     content = get_displayable_content(att, field)
+    #     specifications = specifications + content if content != ""
+    #   end
+    # end
+    attributes_list.each do |list|
+      field = item.attribute_values.select{|a| a.attribute_id == list.id}.first
+      unless(field.nil?)
+        content = get_displayable_content(field, list)
         specifications = specifications + content if content != ""
       end
     end
+
     specificationstemp = "<div class='featured-txt'><ul>" + specifications + "</ul></div>"
     specificationstemp.html_safe 
   end

@@ -136,26 +136,27 @@ class Item < ActiveRecord::Base
   
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
     price = "0"; 
-    item_attribute = item_attributes.select{|a| a.name == item_type}.last
+    #item_attribute = item_attributes.select{|a| a.name == item_type}.last
+    price_attribute = self.attribute_values.select{|a| a.attribute_id == 1}.last
       if (status == "1" || status == "3")
-        if item_attribute
-          attribute_value = item_attribute.attribute_values.where(:item_id => id).last
+        if price_attribute
+          attribute_value = price_attribute.value
           if !attribute_value.blank?
             if(displaycomment)
              if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-               item_attribute.name + ' - '  +
-              "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.value.to_i) + "</span>" +
-              (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )")
+               "Price " + ' - '  +
+              "Starting at <span id='item_price' style='cursor: pointer;'>" + number_to_indian_currency(attribute_value.to_i) + "</span>" +
+              (price_attribute.addition_comment.blank? ? "" : " ( #{price_attribute.addition_comment} )")
              else
-                item_attribute.name + ' - '  +
-               number_to_indian_currency(attribute_value.value.to_i)  +
-              (attribute_value.addition_comment.blank? ? "" : " ( #{attribute_value.addition_comment} )") 
-            end  
+               "Price " + ' - '  +
+               number_to_indian_currency(attribute_value.to_i)  +
+              (price_attribute.addition_comment.blank? ? "" : " ( #{price_attribute.addition_comment} )") 
+             end  
             else
             if !(self.is_a?(Car) || self.is_a?(Bike)) && buy_items_size > 1
-              "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.value.to_i)  + '</span>'
+              "Starting at <span id='item_price' style='cursor: pointer;'>" +  number_to_indian_currency(attribute_value.to_i)  + '</span>'
             else
-               number_to_indian_currency(attribute_value.value.to_i)
+               number_to_indian_currency(attribute_value.to_i)
             end    
             end 
           else
@@ -236,11 +237,11 @@ class Item < ActiveRecord::Base
   end
 
   def self.get_related_items(item, limit, includ=false)
-    unless includ
+    #unless includ
       related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
-    else
-      related_item_ids = item.itemrelationships.collect(&:relateditem_id)
-    end
+    #else
+    #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
+    #end
     # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     return self.where(:id => related_item_ids).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
     return self.where(:id => related_item_ids).first(limit)
@@ -797,8 +798,14 @@ end
       count = configatron.popular_count.to_i - 1
       item_ids =  ids[0.."#{count}".to_i] #5 items display
     end
-     @items = []
-     item_ids.map{|id| @items << Item.find(id) rescue ""}
+     @items = Item.find(ids)
+     #item_ids.map{|id| @items << Item.find(id) rescue ""}
+     return @items
+  end
+
+  def self.get_popular_items()
+     ids = configatron.popular_cars.split(",") + configatron.popular_bikes.split(",") + configatron.popular_cycles.split(",") + configatron.popular_mobiles.split(",")  + configatron.popular_tablets.split(",") + configatron.popular_cameras.split(",")
+     @items = Item.find(ids)
      return @items
   end
   

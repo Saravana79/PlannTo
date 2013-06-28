@@ -36,8 +36,16 @@
                       </div>
                        <span class="search-left-2">
                             <h3><a class="productTitle txt_onhover" href="<%=item.get_url()%>"><%=item.get_name%></a><br />
-                                  <span> <%@where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) %>
-                                    <a class="txt_price"><%= item.get_price_info('Price',true,@where_to_buy_items.size).html_safe rescue ''%></a><br />
+                                  <span> 
+                                    <%
+                                    if (!(item.is_a?(Car) || item.is_a?(Bike)) && item.status == 1)
+                                        @where_to_buy_items = Itemdetail.where("itemid = ? and status = 1 and isError = 0", item.id).includes(:vendor).order(:price) 
+                                        count = @where_to_buy_items.size
+                                    else
+                                        count = 0
+                                    end
+                                    %>
+                                    <a class="txt_price"><%= item.get_price_info('Price',true,count).html_safe rescue ''%></a><br />
                                 </span>
                             </h3>
                           <div style="float:left;">                       
