@@ -805,7 +805,7 @@ end
 
   def self.get_popular_items()
      ids = configatron.popular_cars.split(",") + configatron.popular_bikes.split(",") + configatron.popular_cycles.split(",") + configatron.popular_mobiles.split(",")  + configatron.popular_tablets.split(",") + configatron.popular_cameras.split(",")
-     @items = Item.find(ids)
+     @items = Item.where("id in (?)",ids)
      return @items
   end
   
