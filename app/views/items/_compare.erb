@@ -87,7 +87,7 @@
           <td class="high insidebox bordered" style="border-top:0px;text-align:center;">
             <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>            
             <%unless a.nil?%>
-              <% attribute = @attributes.select{|a| a if a.id==a.attribute_id}.compact.first %>
+              <% attribute = @attributes.select{|att| a if att.id==a.attribute_id}.compact.first %>
               <%=
                   if(display[:highlight].include?(i.id))
                     ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe 
