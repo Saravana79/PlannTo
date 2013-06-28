@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  caches_action :compare, :unless => :current_user, :cache_path => Proc.new { |c| "compare/" + c.params[:ids].split(",").sort.join(",")},:expires_in => 2.hour
   layout "product"
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
  
@@ -157,10 +158,11 @@ class ItemsController < ApplicationController
       end 
     end 
     unless @ids.blank? || params[:ids] == ""
-      @item1 = Item.find(@ids[1]) if @ids[0] == ''
-      @item1 = Item.find(@ids[0]) if @ids[0]!= ''
+      @items = Item.includes(:attribute_values,:item_rating).where("items.id in (?)", @ids)
+
+      @item1 = @items[0] 
       session[:item_type] =  @item1.get_base_itemtype
-      @items = Item.includes(:attribute_values).where("items.id in (?)", @ids)
+
       logger.info "======================++++++====#{@items}"
       @attribute_ids = @items.collect{|i|i.attribute_values.collect(&:attribute_id)}.flatten.uniq
        @attributes = Attribute.where("id in (?)", @attribute_ids)

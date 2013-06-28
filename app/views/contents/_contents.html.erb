@@ -2,7 +2,7 @@
 <div id="newContentList">
   </div>
 
-<% if !@contents.blank? %>
+<%# if !@contents.blank? %>
 <% content_ids = [] %>
 <% @contents.each do |content| %>
    <%if content.is_a?(UserActivity) %>
@@ -15,14 +15,14 @@
          <%end%>
        <%end%>
      <%else%> 
-      <%= render "contents/activity",:content => content,:content_ids => content_ids,:page => params[:page].blank? ? "1" : params[:page] %>
-     <% unless content_ids.include?(content.id) %> 
-        <%= render_content_type(content,params[:page].blank? ? "1" : params[:page]) %>
+        <%= render "contents/activity",:content => content,:content_ids => content_ids,:page => params[:page].blank? ? "1" : params[:page] %>
+       <% unless content_ids.include?(content.id) %> 
+          <%= render_content_type(content,params[:page].blank? ? "1" : params[:page]) %>
      <%end%>  
-     <%end%> 
-       <% content_ids << content.related_id if content.related_activity_type != 'User' rescue nil %>
-     <% content_ids << content.id rescue "" %>    
-	  <% end %>
+   <%end%> 
+   <% content_ids << content.related_id if content.related_activity_type != 'User' rescue nil %>
+   <% content_ids << content.id rescue "" %>    
+<% end %>
  <%# if @contents.current_page < @contents.total_pages %>
 <%# params ||={}  %>
 <%# params["page"] = @contents.current_page + 1 %>
@@ -31,7 +31,7 @@
 <%#= link_to "Next Page", {:controller => "contents", :action => "filter", :page => @contents.current_page + 1}, :id => "content_next", :remote => true, :style => "display:none" %>
 <%#= link_to "More...", {:method => "post"}, "data-disable-with" => "Loading...", :id => "content_next", :remote => true%>
   <%# end %>
- <% end  %>
+ <%# end  %>
 
  <script type="text/javascript">
  $(document).ready(function(){
