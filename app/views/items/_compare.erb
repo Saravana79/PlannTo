@@ -71,7 +71,7 @@
     <td class="high insidebox titlename backgroundordered" colspan="4" width="1000px" align="center" style="background:url(../images/dpattern.jpg) no-repeat center top;color:white;font-weight:bold;">Summary of Comparison</td>
   </tr>
   <%end%>
-   <% @attribute_comparision_lists.each do |attr_ca| %>   
+   <% @attribute_comparision_lists.uniq.each do |attr_ca| %>   
    <% display = show_comparision_summary(attr_ca, @items) %>
 
      <% if display %>
@@ -85,9 +85,9 @@
       <tr style="width:1000px;">
            <% @items.each do |i| %>
           <td class="high insidebox bordered" style="border-top:0px;text-align:center;">
-            <%a = attr_ca.attribute.attribute_values.find_by_item_id(i.id) %>            
+            <%a = i.attribute_values.select{|av| av.item if av.item_id == i.id && attr_ca.attribute_id==av.attribute_id}.uniq.compact.first %>            
             <%unless a.nil?%>
-              <% attribute = @attributes.select{|ab| ab if ab.id==a.attribute_id}.compact.first %>
+              <% attribute = @attributes.select{|att| a if att.id==a.attribute_id}.compact.first %>
               <%=
                   if(display[:highlight].include?(i.id))
                     ("<b><h4>" + show_item_value(@items, i, attribute).html_safe + "</h4></b>").html_safe 
