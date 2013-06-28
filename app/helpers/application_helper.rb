@@ -211,11 +211,13 @@ module ApplicationHelper
 
   def show_comparision_summary(attr_ca, items)
     order = attr_ca.order
-    compare = attr_ca.attribute.attribute_values.includes(:item).where("item_id in (?)", items.collect(&:id)).group_by(&:groupbyvalue)
+    compare = items.collect(&:attribute_values).flatten.collect{|av| av if items.collect(&:id).include?(av.item_id) && av.attribute_id==attr_ca.attribute_id}.compact.flatten.uniq.group_by(&:groupbyvalue)
+
+    # compare = attr_ca.a.attribute_values.collect{|av| av if items.collect(&:id).include?(av.item_id)}.compact.flatten.group_by(&:groupbyvalue)
     topitems = Hash.new
     compare.each do |key, value|
-      compare[key] = value.collect{|av| av.item.name}    
-      topitems[key] = value.collect{|av| av.item.id}    
+      compare[key] = value.collect{|av| items.select{|i| i if i.id==av.item_id}.flatten.compact.uniq.first.name}.flatten.compact.uniq    
+      topitems[key] = value.collect{|av| av.item_id}    
     end
 
     if(["asc", "desc"].include?(order[:value]))
@@ -228,16 +230,15 @@ module ApplicationHelper
         attr_v = compare.keys.sort      
     end
     
-    logger.info "=====================#{compare}"
-
-    
     if attr_v.size > 1 and ["asc", "desc"].include?(order[:value])
-        percentage = get_percentage(order, attr_v)      
+        percentage = get_percentage(order, attr_v) 
+
         attr_ca.description.gsub!("{2}", compare[attr_v[1]].to_sentence)
         attr_ca.description.gsub!("{percentage}", percentage) if attr_ca.description.match("{percentage}")
         attr_ca.description.gsub!("{1}", compare[attr_v[0]].to_sentence)
+
         {summary: attr_ca.description, highlight: topitems[attr_v[0]],winner:compare[attr_v[0]].to_sentence}
-      
+     
     elsif (attr_v.size > 0 and "eq".include?(order[:value]))
        matchkey = -1
        index = 0   
