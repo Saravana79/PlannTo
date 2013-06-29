@@ -243,8 +243,8 @@ class Item < ActiveRecord::Base
     #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
     #end
     # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
-    #return self.where(:id => related_item_ids).limit(limit).includes(:item_rating,:attribute_values,:cargroup).uniq{|x| x.cargroup}.first(limit) if item.type == Itemtype::CAR
-    #return self.where(:id => related_item_ids).limit(limit).includes(:item_rating,:attribute_values,:cargroup).first(limit)
+    return self.where(:id => related_item_ids).includes(:item_rating,:attribute_values,:cargroup).limit(limit+3).uniq{|x| x.cargroup} if item.type == Itemtype::CAR
+    return self.where(:id => related_item_ids).includes(:item_rating,:attribute_values,:cargroup).limit(limit)
   end
 
   def self.get_related_item_list(item, limit=10, page=1)
