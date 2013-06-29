@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  caches_action :show, :unless => :current_user, :cache_path => Proc.new { |c| c.params },:expires_in => 2.hour
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
@@ -69,7 +70,7 @@ class ProductsController < ApplicationController
     session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
-    @item = Item.includes([:itemdetails => :vendor],[:item_attributes => :attribute_values], :itemrelationships).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user
       @custom = "true"
