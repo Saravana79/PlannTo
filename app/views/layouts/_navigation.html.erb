@@ -62,7 +62,7 @@ jQuery(function(){
                             <h2>Popular Cars</h2>
                             <p><img src="/images/car-icon.png" alt="" /></p>
                             <p>
-                              <% @allitems.select{|a| configatron.popular_cars.split(",").include? a.id}.each do |item| %> 
+                              <% @allitems.select{|a| configatron.popular_cars.split(",").include? a.id.to_s}.each do |item| %> 
                                 <a href="<%=item.get_url()%>"> <%= item.name rescue '' %> </a>
                            <%end%>  
 
@@ -124,7 +124,7 @@ jQuery(function(){
                             <h2>Popular Bikes</h2>
                             <p><img src="/images/bike-icon.png" alt="" /></p>
                             <p>
-                                <% @allitems.select{|a| configatron.popular_bikes.split(",").include? a.id}.each do |item| %> 
+                                <% @allitems.select{|a| configatron.popular_bikes.split(",").include? a.id.to_s}.each do |item| %> 
                                         <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
                                 <%end%>   
                             </p>
@@ -178,7 +178,7 @@ jQuery(function(){
                             <h2>Popular Cycles</h2>
                             <p><img src="/images/cycle-icon.png" alt="" /></p>
                             <p>     
-                                    <% @allitems.select{|a| configatron.popular_cycles.split(",").include? a.id}.each do |item| %>
+                                  <% @allitems.select{|a| configatron.popular_cycles.split(",").include? a.id.to_s}.each do |item| %>
                                  
                                 <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue '' %> </a>
                            <%end%> </p>
@@ -226,7 +226,7 @@ jQuery(function(){
                         <div class="popular-prd">
                             <h2>Popular Mobile</h2>
                             <p><img src="/images/mobile-icon.png" alt="" /></p>
-                             <p>     <% @allitems.select{|a| configatron.popular_mobiles.split(",").include? a.id}.each do |item| %>
+                             <p>     <% @allitems.select{|a| configatron.popular_mobiles.split(",").include? a.id.to_s}.each do |item| %>
                                <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
                                 <%end%> </p>
                         </div>
@@ -275,7 +275,7 @@ jQuery(function(){
                         <div class="popular-prd">
                             <h2>Popular Tablets</h2>
                             <p><img src="/images/tablet-icon.png" alt="" /></p>
-                            <p> <% @allitems.select{|a| configatron.popular_tablets.split(",").include? a.id}.each do |item| %>
+                            <p> <% @allitems.select{|a| configatron.popular_tablets.split(",").include? a.id.to_s}.each do |item| %>
                                     <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>      
                                 <%end%></p>
                         </div>
@@ -325,7 +325,7 @@ jQuery(function(){
                         <div class="popular-prd">
                             <h2>Popular cameras</h2>
                             <p><img src="/images/tablet-icon.png" alt="" /></p>
-                            <p> <% @allitems.select{|a| configatron.popular_cameras.split(",").include? a.id}.each do |item| %>
+                            <p> <% @allitems.select{|a| configatron.popular_cameras.split(",").include? a.id.to_s}.each do |item| %>
                                     <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>      
                                 <%end%></p>
                         </div>
