@@ -68,9 +68,10 @@
       				});
       		</script>
       <span class="product_details">
-        <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>
+        
       <% if @item.is_a? Product %>
         <div style="float:left;">
+        <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>
         <a class="txt_price"><%= @item.get_price_info('Price',true, @where_to_buy_items.size).html_safe rescue ''%></a><br />
         <a>
         <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
@@ -94,9 +95,47 @@
       
       <%# cache ['minimised_specification', @item] do%>
       <div style="clear:both;">
-      <a class="txt_normal" ><%=display_specifications(@item)%>
-        <br/>
-        <div style="clear:both;float:left;padding-top:4px;">
+      <a class="txt_normal" >
+    <% if  (@items_specification["Pro"].length+ @items_specification["Con"].length) < 6%>
+        <%=display_specifications(@item)%>
+   <% else  %>
+        <table style="margin-top: 20px;">
+              <tr>
+                <th style="width: 200px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Advantages</p></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> TradeOffs</p></th>
+              </tr>
+              <tr style="vertical-align:top;color:  #505050;">
+                <% @items_specification.each do |key, value| %>
+                <%if key == "Con" %>
+                    <td style="padding-left:50px;">
+                <%else%>
+                    <td>
+                <%end%>                   
+                  <%if key == "Con" and @items_specification["Con"].empty?%>
+                      There are no major TradeOffs.
+                      <br/>
+                  <%end%>
+                   <% value[0..4].each do |v| %>
+                   <% v[:values].each do |av| %>
+                   <div><%=v[:title] %>  <span class="txt_brown" style="text-align:inherit;font-size:11px;">
+                    <%= if (v[:description].nil? or v[:description].empty?) 
+                     raw " - " + display_specification_value(av,av.attribute)
+                    #else 
+                    #v[:description] 
+                    
+                    end%>
+                   </span>
+                    </div>
+                  
+                  <% end %>
+                  <% end %>
+                </td>
+            <% end %>
+          </tr>
+        </table>
+        
+    <%end%>
+        <div style="clear:both;float:left;padding-top:4px;padding-bottom:15px;">
         <%= link_to(" View all Specifications and Benchmarks", "#specification", :class => 'bluelink-12', :id => "detailed_specification") %>
         </div>
       </a>
@@ -114,7 +153,7 @@
             <%if @item.is_a? CarGroup %>
             <%@type = "group" %>
               <a class="txt_price" id="group_price" style= "cursor: pointer;"><%= @item.get_group_price_info('Price') %></a><br />
-             <!-- <%= render :partial => 'shared/rating',:locals => {:item => @item,:type => @type, :rating_id => "product_item_#{@item.id}"} %></a>
+             <!-- <%#= render :partial => 'shared/rating',:locals => {:item => @item,:type => @type, :rating_id => "product_item_#{@item.id}"} %></a>
               
                <a class="txt_normal" href="<%= @item.get_url + '?fl=Reviews'%>">Ratings
         <span class="txt_blue" > <%= "(" + pluralize(@item.rated_users_count_group,'Review') + ")" if @item.rated_users_count_group  > 0 %><span style="display:none;" itemprop="count"><%=@item.rated_users_count_group %></span></span>

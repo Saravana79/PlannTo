@@ -122,7 +122,7 @@ class SearchController < ApplicationController
 
     @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "Rating"
     @items = Sunspot.search($search_type.camelize.constantize) do
-      data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating,:cargroup]
+      data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating]
       keywords "", :fields => :name
       with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
       with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)

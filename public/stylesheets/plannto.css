@@ -4518,7 +4518,7 @@ position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
 
 #wrapper { margin:0 auto; padding:0;}
 #maincontainer { margin:0 auto; padding:10px; width:1000px;}
-.container { margin:0 auto; padding:0; min-width:960px;}
+.container { margin:0 auto; padding:0; min-width:960x;width:1000px;}
 #header12 { margin:0 auto; padding:0; width:1000px; height:75px; }
 
 .dppattern { margin:0; padding:0; background:url(../images/dpattern.jpg) no-repeat center top; border-bottom:1px solid #fff;width:100%;min-width:1020px;}
@@ -4721,6 +4721,7 @@ ul.megamenu {
   line-height: 21px;
   font-size: 100%;
   font-family: PTSansRegular, sans-serif;
+  width:1000px;
 }
 
 ul.megamenu li.mm-item {
