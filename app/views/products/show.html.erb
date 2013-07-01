@@ -145,7 +145,7 @@ $("#dialog-form #click_message").hide();
           <br/>
           <%if @new_version_item %>
           <br /><br />
-          <div style="clear:both;padding-top:5px;">
+          <div style="clear:both;padding-top:5px;padding-bottom:10px;">
             <font style="color:green;font-size:12px;"> <h3>New version of this product is available: </font> <a href="<%=@new_version_item.get_url() rescue ''%>" class="txt_blue" style="font-weight:bold;"><%= @new_version_item.name rescue ''%></a> </h3> </font></div>
             <%end%>
         <%#end%>
