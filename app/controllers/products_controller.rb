@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  caches_action :show, :unless => :current_user, :cache_path => Proc.new { |c| c.params },:expires_in => 2.hour
+#  caches_action :show, :unless => :current_user, :cache_path => Proc.new { |c| c.params },:expires_in => 2.hour
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
