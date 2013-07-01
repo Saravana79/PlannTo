@@ -94,12 +94,12 @@
       <br />
       
       <%# cache ['minimised_specification', @item] do%>
-      <div style="clear:both;">
+      <div style="clear:both;padding-top:10px;">
       <a class="txt_normal" >
     <% if  (@items_specification["Pro"].length+ @items_specification["Con"].length) < 6%>
         <%=display_specifications(@item)%>
    <% else  %>
-        <table style="margin-top: 20px;">
+        <table style="">
               <tr>
                 <th style="width: 200px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Advantages</p></th>
                 <th style="width: 200px;padding-left:50px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> TradeOffs</p></th>
@@ -115,7 +115,7 @@
                       There are no major TradeOffs.
                       <br/>
                   <%end%>
-                   <% value[0..4].each do |v| %>
+                   <% value[0..5].each do |v| %>
                    <% v[:values].each do |av| %>
                    <div><%=v[:title] %>  <span class="txt_brown" style="text-align:inherit;font-size:11px;">
                     <%= if (v[:description].nil? or v[:description].empty?) 
