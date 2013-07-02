@@ -59,6 +59,13 @@ class QuestionContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.update_attribute(:status, Content::DELETE_STATUS)
     @content.remove_user_activities
+    @detail = params[:detail]
+    if @detail == "true"
+      @itemtype = @content.items.first.itemtype.itemtype
+      if @itemtype == "Car Group" || @itemtype == "Manufacturer"
+        @itemtype = "Car"
+      end
+    end  
   end
 
 end

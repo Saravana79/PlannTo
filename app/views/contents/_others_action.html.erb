@@ -7,11 +7,18 @@
 		<ul >
 			<%# content_list = content.guides.map{|c| c.id } %>
 			  <%if content.can_update_content?(current_user)%>
-			 
-        <li> <%=link_to " Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
-         <%if @detail == "true" %>
+			   
+			   <%if @detail == "true" %>
+            <%if content.is_a?ArticleContent %>
+              <li> <%=link_to "Delete This",article_content_path(content,:detail => "true"), :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
+            <%elsif content.is_a?ReviewContent %>
+                <li> <%=link_to "Delete This",review_content_path(content,:detail => "true"), :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li>
+            <%else%>
+                <li> <%=link_to "Delete This",question_content_path(content,:detail => "true"), :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li> 
+            <%end%>        
             <li><%= link_to "Update This", edit_content_path(content, :detail => true), :remote => true, :class => "txt_blue"%></li>
-         <%else%>  
+         <%else%> 
+              <li> <%=link_to "Delete This",content, :remote => true, :confirm => "Are you sure you want to delete #{content.title}?", :method => :delete, :class => "txt_blue"%></li> 
            <li> <%=link_to "Update This", edit_content_path(content), :remote => true, :class => "txt_blue"%></li>
         <%end%>   
          <%end%>

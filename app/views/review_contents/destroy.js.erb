@@ -10,7 +10,11 @@
     follow: [false, false] //x, y
  });
 <%else%>  
-$("#mainContentDiv<%=@content.id%>").remove();
-//window.location.reload();
+<%if @detail == "true" %>
+   window.location.href = "<%= "/#{@itemtype.downcase.pluralize}"
+ %>"
+ <%else%>  
+   $("#mainContentDiv<%=@content.id%>").remove();
+ <%end%>
 <%end%> 
   

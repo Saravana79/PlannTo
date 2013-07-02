@@ -216,6 +216,13 @@ class ArticleContentsController < ApplicationController
       @content.items.first.update_remove_rating(rating,@content,false)
     end  
   #@item.destroy
+    @detail = params[:detail]
+    if @detail == "true"
+      @itemtype = @content.items.first.itemtype.itemtype
+      if @itemtype == "Car Group" || @itemtype == "Manufacturer"
+        @itemtype = "Car"
+      end
+    end  
   end
   
   def bmarklet

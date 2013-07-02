@@ -82,6 +82,13 @@ class ReviewContentsController < ApplicationController
     @content.remove_user_activities
     rating = (@content.rating.to_f rescue 0.0)
     @content.items.first.update_remove_rating(rating,@content,false)
+    @detail = params[:detail]
+    if @detail == "true"
+      @itemtype = @content.items.first.itemtype.itemtype
+      if @itemtype == "Car Group" || @itemtype == "Manufacturer"
+        @itemtype = "Car"
+      end
+    end  
   end
 
 end
