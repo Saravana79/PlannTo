@@ -4775,8 +4775,8 @@ ul.megamenu div.mm-item-content {
   position: absolute;
   border: 0px solid #777;
   z-index: 1;
-  top:130px!important;
-  left:240px!important;
+  top:130px;
+  left:240px;
 }
 
 .mm-content-base {
