@@ -13,6 +13,6 @@ if(window.opener) {
  $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(display_content_type(@content)) %>');
  //window.location.reload();
 <%else%>
-// $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(render_content_type(@content)) %>');
-  window.location.reload();
+ $("#mainContentDiv<%=@content.id%>").html('<%= escape_javascript(render_content_type(@content)) %>');
+//  window.location.reload();
 <%end%> 
