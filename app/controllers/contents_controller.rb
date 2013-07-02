@@ -372,9 +372,11 @@ class ContentsController < ApplicationController
     end
     @article_content= @content = Content.find(params[:id])
     #this workaround is done to replace new line character before sending in js script. we need to find a better way to do this.
-    @article_content.field4 = @article_content.field4.gsub("\n"," ").gsub("\r","") 
-    @article_content.field3 = @article_content.field3.gsub("\n"," ").gsub("\r","") 
-    @article_content.field2 = @article_content.field2.gsub("\n"," ").gsub("\r","") 
+    if(@article_content.is_a? ArticleContent)
+        @article_content.field4 = @article_content.field4.gsub("\n"," ").gsub("\r","") 
+        @article_content.field3 = @article_content.field3.gsub("\n"," ").gsub("\r","") 
+        @article_content.field2 = @article_content.field2.gsub("\n"," ").gsub("\r","") 
+    end 
     @edit_form = true
     @detail = params[:detail]
     #put an if loop to check if its an article share. if yes then uncomment the link below
