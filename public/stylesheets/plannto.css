@@ -5107,7 +5107,7 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
 .signuplinkhome:hover{text-decoration: underline;}
 .pros { background:url(../images/icon-pros.png) no-repeat left top; padding: 1px 0 10px 25px; margin:0; text-align:left; float:none;  display:inline-block;line-height:16px;}
 .cons { background:url(../images/icon-cons.png) no-repeat left top; padding: 1px 0 10px 25px; margin:0; text-align:left; float:none; display:inline-block;line-height:16px;}
-.verdict { background:url(../images/icon-verdict.png) no-repeat left top; padding: 1px 0 10px 25px; margin:0; text-align:left; float:none;  display:inline-block;line-height:16px;}
+.verdict { background:url(../images/icon-verdict.png) no-repeat left top; padding: 1px 0 0px 25px; margin:0; text-align:left; float:none;  display:inline-block;line-height:16px;}
 
 .producttabsubheader{float: left;padding: 10px 0px 10px 10px;background: rgba(238, 238, 238, 0.93);width: 715px;margin-bottom: 10px;color: #333;}
 
