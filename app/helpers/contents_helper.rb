@@ -305,7 +305,7 @@ module ContentsHelper
   end
 
   def get_content_based_on_size(params_word,count)
-    if (params_word.size > count)
+    if (params_word.scan(/\w+/).size > count)
       params_word.split[0..(count-1)].join(" ") + "..."
     else
       params_word
