@@ -223,9 +223,9 @@ module ThumbsUp #:nodoc:
         )
         if(vote.count == 0)
           return false
-        elsif(vote[0].vote == 1 and direction ==:up)
+        elsif(vote[0].vote == true and direction ==:up)
           return true
-        elsif(vote[0].vote == 0 and direction ==:down)
+        elsif(vote[0].vote == false and direction ==:down)
           return true
         else
           return false

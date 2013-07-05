@@ -220,9 +220,10 @@ $(function(){
 });
 
 </script>
- <%= render :partial => "contents/quick_content_container", :locals => {:article_categories => @article_categories,:item => @item} %>
-<br/>
-<br/>
+<div style="height: 30px;padding: 10px;background: lightgray;padding-left: 350px;clear:both;">
+    <%= render :partial => "contents/quick_content_container", :locals => {:article_categories => @article_categories,:item => @item} %>
+</div>
+
 <div style="padding-top:20px;">
   <ul id="Newtabs">
 
