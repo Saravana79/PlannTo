@@ -1,10 +1,12 @@
 <!--<h3>Quick content create</h3>-->
 <%count = (@article_categories.size - 1)%>
-<span style="height:30px;display:block;padding-top:5px;">
-<span class="Bluecyanbut" style="padding-left:450px;display:block;">  <span class='quick_config_btns' >
+<%if @item.nil? %>
+  <span style="height:30px;display:block;padding-top:5px;">
+   <span class="Bluecyanbut" style="padding-left:450px;display:block;">  <span class='quick_config_btns' >
     <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
   </span>
 </span>
+<%end%>
       <% @article_categories.each_with_index do |article_category, index| %>
             <%if index == 0%> 
               <span class="Usrdropdown1" style="padding-left:20px;">
@@ -127,7 +129,7 @@
    // $.ajaxSetup({
    //   'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
    // });
-   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  });
+   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category + "&item_id=<%= @item.id rescue ""%>" });
     //$.get('/contents/quick_new',{'category' : category}, "script");
     return false
 

@@ -8,7 +8,7 @@ $("#articleReviewSubContainer").html("");
   $("div#contentEditView #ShareURLDiv").show();
   $("#share_from_home").val("true");
 <%else%>  
-$("#contentEditView").html("<%= escape_javascript(display_content_form(@content)) %>");
+$("#contentEditView").html("<%= escape_javascript(display_content_form_quick_create(@content,@item)) %>");
  <%end%>
  $("#content_create_form_type").val('Popup');
 

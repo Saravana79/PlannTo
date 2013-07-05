@@ -89,6 +89,7 @@ class ProductsController < ApplicationController
     @review = ReviewContent.new
     @article_content=ArticleContent.new(:itemtype_id => @item.itemtype_id)
     session[:invitation] = ""
+    @itemtype = @item.itemtype
     #@questions = QuestionContent.all
     if (@item.is_a? Product)
       @article_categories = ArticleCategory.get_by_itemtype(@item.itemtype_id)

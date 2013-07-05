@@ -335,6 +335,7 @@ class ContentsController < ApplicationController
   
   def quick_new
   @share = params[:sharecontent]
+  @item = Item.find(params[:item_id]) if !params[:item_id].blank?
   if @share!='' && !@share.nil?
      @content = ArticleContent.new
      @content.sub_type = params[:category]
