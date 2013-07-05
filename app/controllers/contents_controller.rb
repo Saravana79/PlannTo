@@ -474,6 +474,16 @@ end
     end
   end
   
+  def get_class_names
+      @contents = Content.where(id: params[:ids])
+      class_names = {}
+      @contents.collect{|content| class_names.merge!(content.rating_classnames(current_user))}
+    
+    respond_to do |format|
+      format.json{render json: class_names}
+    end
+    
+  end
   
   
   private

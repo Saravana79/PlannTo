@@ -1,23 +1,22 @@
-<%require 'global_utilities'%>
-<%if user_signed_in?%>
-  <%vote = user.nil? ? nil : user.fetch_content_user_vote?(item)%>
-  <div class="rate_content float_lft">
+<%#require "global_utilities" %>
+<%# if user_signed_in? %>
+
+  <%#vote = user.nil? ? nil : user.fetch_content_user_vote?(item)%>
+  <div id="rate_item_<%=item.id%>" class="rate_content float_lft">
     <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=item.content_vote_count%></a>
-    <%class_name = get_voting_class_name(user, item) %>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> class_name[:positive], :id => "likeVote#{item.id}" %>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> class_name[:negative], :id => "dislikeVote#{item.id}" %>
+    <%#class_name = get_voting_class_name(current_user, item) %>
+
+    <%= positive_vote(current_user, item) %>
+    <%= negative_vote(current_user, item) %>
+    <%#= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> class_name[:positive], :id => "likeVote#{item.id}" %>
+    <%#= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> class_name[:negative], :id => "dislikeVote#{item.id}" %>
   </div>
-<%else%>
-  <div class="rate_content float_lft">
-    <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=item.content_vote_count%></a>
-     <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> "btn_like_default", :id => "likeVote#{item.id}" %>
-    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike_default", :id => "dislikeVote#{item.id}" %>
+<%#else%>
+  <!--<div class="rate_content float_lft">
+    <a class="bg_ratecontent" id="votersResult<%#=item.id%>"><%#=item.content_vote_count%></a>
+     <%#= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> "btn_like_default", :id => "likeVote#{item.id}" %>
+    <%#= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike_default", :id => "dislikeVote#{item.id}" %>
 
- <!--   <a class="btn_like_default"></a><a class="btn_dislike_default" href="#"></a>-->
+  <a class="btn_like_default"></a><a class="btn_dislike_default" href="#"></a>
   </div>
-<%end%>
-
-
-
-
-
+<%#end%>-->

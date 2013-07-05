@@ -1,4 +1,7 @@
+require "global_utilities" 
+
 module ContentsHelper
+
 
   def render_content_type(item,page="")
     case item.type
@@ -330,6 +333,32 @@ module ContentsHelper
       params_word.split[0..(count-1)].join(" ") + "..."
     else
       params_word
+    end
+  end
+
+  def positive_vote(user, item)
+    # logger.info "==============================#{class_name}"
+    vote = user.nil? ? nil : user.fetch_content_user_vote?(item)
+    if user
+     # class_name = get_voting_class_name(current_user, item)
+
+      link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class  => "current_user_like_unlike", :id => "likeVote#{item.id}"
+    else
+      link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => 1,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class => "btn_like_default", :id => "likeVote#{item.id}"
+    
+    end
+      
+  end
+
+  def negative_vote(user, item)
+    vote = user.nil? ? nil : user.fetch_content_user_vote?(item)
+    if user
+     # class_name = get_voting_class_name(current_user, item)
+
+      link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class => "current_user_like_unlike", :id => "dislikeVote#{item.id}"
+    else
+      link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike_default", :id => "dislikeVote#{item.id}"
+
     end
   end
 end
