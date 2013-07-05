@@ -4,7 +4,7 @@ $("#question_contentDiv").html("");
 $("#subContainerContentCreate").html("");
 $("#articleReviewSubContainer").html("");
 <%if @share!='' && !@share.nil? %>
-  $("#contentEditView").html("<%= escape_javascript(render :partial => "article_contents/article_share", :locals => {:content_category => false,:article_content => @article_content} ) %>");
+  $("#contentEditView").html("<%= escape_javascript(render :partial => "article_contents/article_share", :locals => {:content_category => false,:article_content => @article_content,:item => @item} ) %>");
   $("div#contentEditView #ShareURLDiv").show();
   $("#share_from_home").val("true");
 <%else%>  

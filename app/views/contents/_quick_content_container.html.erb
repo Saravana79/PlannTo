@@ -114,7 +114,7 @@
       $.ajaxSetup({
         'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
       });
-	   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  + "&sharecontent=" + "true"  });
+	   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  + "&sharecontent=" + "true"  + "&item_id=<%= @item.id rescue ""%>"  });
     return false
     });
     
