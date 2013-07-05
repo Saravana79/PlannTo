@@ -357,7 +357,10 @@ class ContentsController < ApplicationController
     @article_categories = ArticleCategory.get_by_itemtype(0)
     @items = Array.new
   end  
-  end
+  if(@items.empty? && !@item.nil?)
+    @items << @item
+  end    
+end
 
   def create
     @item = Item.find(params[:default_item_id])
