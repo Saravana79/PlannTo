@@ -51,7 +51,7 @@
             success: function(data) {
                 $.each(data, function(key, value){
                   $("#likeVote"+key).addClass(value['positive'])
-                  $("#dislikeVote"+key).addClass(value['negarive'])
+                  $("#dislikeVote"+key).addClass(value['negative'])
                 });
             }
         })
