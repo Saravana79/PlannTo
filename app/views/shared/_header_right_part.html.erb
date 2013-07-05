@@ -1,0 +1,19 @@
+   <span>
+    <span class="Usrdropdown">
+       
+       <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" />
+       
+         <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
+           <div class="Useraccountinfo">
+             <%= link_to "Account Setting", accounts_path %>
+             <%= link_to "Profile",  "/" + "#{current_user.username}" %>
+             <%= link_to "My feeds", "/" %>
+              
+             <%= link_to "Buying Plans","/" + "#{current_user.username}" + "?follow=Preferences" %>
+             
+             <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+           </div>
+         </span>
+       
+    </span> 
+   </span>
