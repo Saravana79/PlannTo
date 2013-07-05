@@ -85,7 +85,28 @@ module ContentsHelper
     end
 
   end
-  
+   def display_content_form_quick_create(content,item)
+    case content.type
+    when "QuestionContent"
+      raw render :partial => "question_contents/new_question_content", :locals => { :content => content,:item => item }
+    when "AnswerContent"
+        raw render :partial => "answer_contents/edit_answer", :locals => { :content => content,:item => item }  
+    when "ReviewContent"
+      raw render :partial => "reviews/review_subcontainer", :locals => { :content => content ,:item => item}
+    else   
+      if (content.type == "ArticleContent" && content.url.blank?)
+        raw render :partial => "article_contents/create_new", :locals => { :content => content,:item => item }
+      elsif (content.type == "ArticleContent" && content.url != "")
+        raw render :partial => "article_contents/article_share", :locals => {:content_category => true,  :content => content,:item => item}
+      elsif (content.type == "ArticleContent" && content.url.nil?)
+        raw render :partial => "article_contents/create_new", :locals => { :content => content,:item => item }
+      else
+        raw render :partial => "article_contents/article_share", :locals => {:content_category => true, :content => content,:item => item }
+      end
+     
+    end
+
+  end
   def render_comments_anchor(item)
     #count = $redis.get("#{VoteCount::REDIS_CONTENT_VOTE_KEY_PREFIX}#{item.id}")
     #comment_count = count.nil? ? item.comments_count : count.split("_")[1]
