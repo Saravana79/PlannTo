@@ -1,6 +1,9 @@
 <div id="content_all">
  <%= render "contents/filter_by_options"%>
-
+<div id="quick_create"></div>
+ <script>
+   $("#quick_create").val("true");
+ </script>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
   <%= render "contents/sort_by_options"%>
   
@@ -17,6 +20,7 @@
     <%if @custom == "true" && @no_custom!="true"%>
       <% params["sub_type"] = ["Reviews","Deals"] %>
     <%end%> 
+    <%= render "contents/filter_content_create_links" %>
     <% @contents = Content.filter(params)  %>
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
   </div>
