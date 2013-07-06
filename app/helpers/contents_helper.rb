@@ -162,6 +162,7 @@ module ContentsHelper
     when "Accessories" then "Add an Accessory"
     when "Photo" then "Add a Photo"
     when "News" then "Add a Latest News"
+    when "Lists" then "Add a List"
     when "Deals" then "Add a Deal"
     when "Event" then "Add an Event"
     when "HowTo/Guide" then "Add a HowTo/Tips"
@@ -189,7 +190,8 @@ module ContentsHelper
     when "Video" then "Submit a Video"
     when "HowTo/Guide" then "Submit a HowTo/Tips"
     when "Travelogue" then "Submit a Travelogue"
-    when "Books" then "Submit a Books"
+    when "Lists" then "Submit a List"
+    when "Books" then "Submit a Book"
     else ""
     end
     return label
