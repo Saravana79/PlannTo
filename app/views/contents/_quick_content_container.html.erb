@@ -1,7 +1,14 @@
 <!--<h3>Quick content create</h3>-->
 <%count = (@article_categories.size - 1)%>
+
+<%if @item.nil?
+ direction = "left"
+else
+direction  = "right"
+end%>
+
 <%if @item.nil? %>
-  <span style="height:30px;display:block;padding-top:5px;">
+  <span style="height:30px;display:block;padding-top:5px;padding-right:20px;">
    <span class="Bluecyanbut" style="padding-left:450px;display:block;">  <span class='quick_config_btns' >
     <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
   </span>
@@ -9,7 +16,7 @@
 <%end%>
       <% @article_categories.each_with_index do |article_category, index| %>
             <%if index == 0%> 
-              <span class="Usrdropdown1" style="padding-left:20px;">
+              <span class="Usrdropdown1" style="padding-left:0px;">
                  <span class="Usernamedp1"><img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Share Knowledge</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
                    <div class="Useraccountinfo1">
                <%end%> 
@@ -23,7 +30,7 @@
 
   <% @article_categories.each_with_index do |article_category, index| %>
                <%if index == 0%> 
-                 <span class="Usrdropdown1" style="padding-left:20px;">
+                 <span class="Usrdropdown1" style="padding-left:20px;float:<%=direction%>">
 
                    <span class="Usernamedp1"> <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Submit an Article</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
                      <div class="Useraccountinfo1">
