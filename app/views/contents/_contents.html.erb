@@ -1,3 +1,7 @@
+<%if  params[:page] == "#{1}" && params[:quick_create] == "true"%>
+ <%= render "contents/filter_content_create_links" %>
+
+<%end%>
 <div id="contentEditView"></div> 
 <div id="newContentList">
   </div>
@@ -32,7 +36,6 @@
 <%#= link_to "More...", {:method => "post"}, "data-disable-with" => "Loading...", :id => "content_next", :remote => true%>
   <%# end %>
  <%# end  %>
-
  <script type="text/javascript">
  $(document).ready(function(){
  	$("#contentSearchForm").bind('submit', function() {   

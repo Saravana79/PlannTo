@@ -346,7 +346,7 @@ class ContentsController < ApplicationController
     if params[:category] == "Reviews"
       @content = ReviewContent.new
     
-    elsif params[:category] == "Q"
+    elsif params[:category] == "Q" || params[:category] == "QandA"
       @content = QuestionContent.new
     else
       @content = ArticleContent.new
