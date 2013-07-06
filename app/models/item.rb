@@ -761,7 +761,7 @@ def populate_pro_con
  contents = ArticleContent.find_by_sql("select * from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{item.id} and c.sub_type = 'Reviews' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc" )
      last_index = 0
      contents.each do |content|
-                    count+=1
+                   # count+=1
                     item_pro = item.item_pro_cons.where(:proorcon => "Pro")
                     item_con = item.item_pro_cons.where(:proorcon => "Con")
                     pros = content.field3 ? content.field2.split(/,|\.|;/) : []     
