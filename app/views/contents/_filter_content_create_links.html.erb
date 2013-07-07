@@ -2,26 +2,30 @@
 <%if params[:sub_type].blank? %>
   <% params[:items] = @item.id %>
   <% params[:sub_type] = "Reviews" %>
-  <%=link_to  "#{content_write_tab_label("Reviews")}","#",:class => "bluelink-12"  %>
+  <%=link_to  "#{content_write_tab_label("Reviews")}","#",:class => "bluelink-12 filter_quick_create"  %>
  <div style="float:right">
-    <%=link_to "#{content_submit_tab_label("Reviews")}","#",:class => "bluelink-12"  %>
+    <%=link_to "#{content_submit_tab_label("Reviews")}","#",:class => "bluelink-12 filter_quick_share"  %>
  </div>
 <%elsif params[:sub_type] == "All" %> 
   <% params[:sub_type] = "Reviews" %>
-  <%=link_to  "#{content_write_tab_label("Reviews")}","#",:class => "bluelink-12"  %>
+  <%=link_to  "#{content_write_tab_label("Reviews")}","#",:class => "bluelink-12 filter_quick_create"  %>
  <div style="float:right">
-    <%=link_to "#{content_submit_tab_label("Reviews")}","#",:class => "bluelink-12"  %>
+    <%=link_to "#{content_submit_tab_label("Reviews")}","#",:class => "bluelink-12 filter_quick_share"  %>
  </div>
 <%elsif params[:sub_type] == "QandA"%>
-  <%=link_to  "Ask a Question" , "#",:class => "bluelink-12"  %>
+  <%=link_to  "Ask a Question" , "#",:class => "bluelink-12 filter_quick_create"  %>
  <div style="float:right">
-    <%=link_to  "Submit a FAQ" ,"#",:class => "filter_quick_share"  %>
+    <%=link_to  "Submit a FAQ" ,"#",:class => "bluelink-12 filter_quick_share"  %>
  </div>
 <%elsif params[:sub_type] == "Custom"%>
-<%else%> 
-<%=link_to  "#{content_write_tab_label(params[:sub_type])}" , "#",:class => "filter_quick_create"  %>
+   <% params[:sub_type] = "Reviews" %>
+  <%=link_to  "#{content_write_tab_label("Reviews")}","#",:class => "bluelink-12 filter_quick_create"  %>
  <div style="float:right">
-    <%=link_to  "#{content_submit_tab_label(params[:sub_type])}" ,"#",:class => "bluelink-12"  %>
+    <%=link_to "#{content_submit_tab_label("Reviews")}","#",:class => "bluelink-12 filter_quick_share"  %>
+<%else%> 
+<%=link_to  "#{content_write_tab_label(params[:sub_type])}" , "#",:class => "bluelink-12 filter_quick_create"  %>
+ <div style="float:right">
+    <%=link_to  "#{content_submit_tab_label(params[:sub_type])}" ,"#",:class => "bluelink-12 filter_quick_share"  %>
  </div>
  <%end%>
  
