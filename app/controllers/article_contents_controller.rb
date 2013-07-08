@@ -255,6 +255,7 @@ class ArticleContentsController < ApplicationController
      @field4 = params[:field4]
      @rating = params[:rating]
      @description = params[:description]
+     @pop_up = "true"
     if params[:url] && params[:content].blank?
       @content = @article_content = ArticleContent.new 
     else
