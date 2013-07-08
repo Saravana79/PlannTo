@@ -2,6 +2,7 @@
    alert('This article is already shared in PlannTo.com');
    window.location.href =   "<%= "/contents/#{@previous_content.id}" %>"
 <%end%>
+$("#shared_message").html("");
 <%if @edit_form%>
   <%@title_id = "edit_txtArticleTitle_#{@default_item_id}"%>
   <%@dwnld_url = "edit_dwnld_url_#{@default_item_id}"%>
@@ -25,7 +26,7 @@ $("#<%=@title_id%>").val(unescapeHTML("<%= escape_javascript(@article.title) %>"
 $("#<%=@txtArticleDescription%>").attr("value","<%= escape_javascript(@article.description) %>");
 $("#share_spinner").hide();
 $("#<%=@new_article_type%>").val("ArticleContent");
-
+$(".facebook_share").show();
 <%unless params[:share_from_home] == "true" %>
   <%unless @external%>
     <%unless @edit_form%>

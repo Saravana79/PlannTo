@@ -115,15 +115,30 @@
       <br/>
       <br/>
         <div class="title_header float_lft">Description:</div>
-      <%= f.text_area :description, :class => 'textFilling', :id => "m_text23",:style=> 'width:400px;height:50px;' %>
+        
+      <%= f.text_area :description, :class => 'textFilling', :id => "m_text23" %>
       <br/>
     </div>
-        
-  </div>
- 
     </div>
+    </div>
+    <%if @pop_up == "true"%>
+     <style>
+       .textFilling {
+        height: 50px;
+        width: 700px;
+        
+     }
+ </style>
+  <%else%>
+        <style>
+       .textFilling {
+        height: 50px;
+        width: 400px;
+        
+     }
+ </style>
   
-  
+  <%end%>
   <script>
  function add_fields(link, association, content) {  
   var new_id = new Date().getTime();  

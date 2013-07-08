@@ -113,8 +113,11 @@
       <%end%>
       <div style="clear:both;"></div>
     </div>
-
+       <%if @article_content.new_record? %>
+      <div id="shared_message" style ="color:green;">Please share the url of the <%if params[:category] == 'Q' %> question <%else%> <%= params[:category].blank? ? "content" : params[:category].to_s.downcase.singularize %> <%end%>that you like share it in the below text box </div>
+      <%end%>
     <div style="padding:5px 5px 0px 0px;clear:both;">
+    
       <div class="title_header float_lft" ><%= f.label :url %> :</div>
       <div class="float_lft"><%= f.text_field :url, :id => "#{@url_id}", :style => "margin-left:5px;width:400px" %></div>
       <div style="clear:both;"></div>
@@ -175,7 +178,7 @@
       <br />
        <%if @article_content.new_record?%>
           <div class="title_header float_lft" ></div>
-          <div style="float:left;">
+          <div class="facebook_share" style="float:left;display:none">
             <span class="title_header">Post this in Facebook also:</span><%= check_box_tag "facebook_post" %>
            </div>
       <%end%>
