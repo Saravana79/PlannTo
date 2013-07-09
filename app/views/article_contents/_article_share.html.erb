@@ -114,7 +114,7 @@
       <div style="clear:both;"></div>
     </div>
        <%if @article_content.new_record? %>
-      <div id="shared_message" style ="color:green;">Please share the url of the <%if params[:category] == 'Q' %> question <%else%> <%= params[:category].blank? ? "content" : params[:category].to_s.downcase.singularize %> <%end%>that you like share it in the below text box </div>
+      <div id="shared_message" style ="padding: 10px 10px 10px 40px;margin: 10px 15px 10px 20px;" class="alert-info">Please share the url of the <%if params[:category] == 'Q' %> question <%else%> <%= params[:category].blank? ? "content" : params[:category].to_s.downcase.singularize %> <%end%>that you like to share with others here.</div>
       <%end%>
     <div style="padding:5px 5px 0px 0px;clear:both;">
     
