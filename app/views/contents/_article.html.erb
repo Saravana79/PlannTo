@@ -2,7 +2,7 @@
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
   <% cache ['part-1', content] do %>
   <div class="float_rgt">
-   <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
+   <a href="<%= content.user.get_url() rescue ''%>">  <img src="<%=content.user.get_photo rescue ''%>" class="userImageSmall"/>   </a>
   </div>
   <div id="content_<%= content.id  %>" class="subContentDiv">
 
@@ -16,10 +16,10 @@
         <%end%>     
           
        <% if content.url?  %>
-        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") %> </a>)
+        - (<a class="txt_black_description txt_onhover" style="cursor: pointer; cursor: hand;" href="/external_contents/<%= content.id %>"><%=  URI.parse(URI.encode(URI.decode(content.url))).host.gsub("www.","") rescue ''%> </a>)
        <%end%>
     </div>
-    <div><a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><a class="txt_brown"><%=get_anchor_name_link(content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
+    <div><a class="txt_brown_bold" href="<%= content.user.get_url() rescue ''%>"><%= content.user.name rescue '' %></a><a class="txt_brown"> shared a <%= content.sub_type.singularize %> on </a><a class="txt_brown"><%=get_anchor_name_link(content)%></a> <a class="txt_brown">- <%end%><%= time_ago_format(content)%><% cache ['part-2', content] do %> ago </a></div>
     <div class="contentsubsection">
       
       <%if content.thumbnail?%>
