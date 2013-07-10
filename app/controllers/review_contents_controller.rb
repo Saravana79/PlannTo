@@ -4,6 +4,12 @@ class ReviewContentsController < ApplicationController
 		@reviewcontent = ReviewContent.new(params['review_content'])
     @reviewcontent.ip_address = request.remote_ip
 		@reviewcontent.user = current_user
+		unless params[:review_item_id].blank?
+		  params[:item_id] = params[:review_item_id]
+		end
+		unless params[:item_id].blank? 
+		  params[:review_item_id] = params[:item_id]
+		end  
 		unless params[:content_create_form_type] == "Popup"
 		  if params[:review_content][:title] ==''
 		     @title_error= true
@@ -13,7 +19,7 @@ class ReviewContentsController < ApplicationController
 		    @reviewcontent.save_with_items!(item_id)
 		  end  
 		else
-		  if params[:review_item_id]== ''
+		  if params[:item_id] == '' 
 		    @products_error = true
 		   
 		   else   
