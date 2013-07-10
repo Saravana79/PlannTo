@@ -4,7 +4,7 @@ class ContentsController < ApplicationController
   before_filter :store_location, :only => [:show]
   before_filter :set_waring_message,:only => [:show]
   before_filter :log_impression, :only=> [:show]
-
+  #cache_sweeper :content_sweeper
   #layout :false
   layout "product"
   include FollowMethods
