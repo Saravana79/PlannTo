@@ -336,7 +336,16 @@ $("#buy span").html("Compare Prices");
       </script> 
       <br/>
       <%=render :partial =>"items/related_products" %>
-      <%= render 'shared/product_button_javascript', :button_class => '', :item => @item, :related_follower => user_follow_type(@item, current_user), :related_items => false %>
+      <script language='javascript'>
+      function follow_button_js_code(){
+         $.ajax({url : '/products/follow_buttons' , dataType:'script',type: "get",data: "&item_id=<%= @item.id rescue ""%>"  });
+      }
+      </script>
+     <script>
+          //call after page loaded
+         window.onload=follow_button_js_code; 
+      </script>
+      <div id="follow_buttons_js"></div>
       <%= render 'shared/show_hide_login_form', :item => @item %>
 
       <div id="dialog-invite-form" style="display:none">
