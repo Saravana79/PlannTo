@@ -70,7 +70,8 @@ class ProductsController < ApplicationController
     session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
-    @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    @item = Item.includes([:item_pro_cons => :pro_con_category, :itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    @pro_cons = @item.item_pro_cons.limit(16).group_by(&:proorcon)
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user
       @custom = "true"

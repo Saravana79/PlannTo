@@ -36,6 +36,37 @@
         </table>
         <br/>
     <%end%>
+
+
+      <br/>
+    <% unless @pro_cons.empty? %>
+        <h3 class="producttabsubheader">Pro Con Summary</h3>
+        <table style="margin-top: 20px;">
+              <tr>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><h1 style="color:green;"> Pros</h1></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><h1 style="color:rgb(158, 0, 0)"> Cons</h1></th>
+              </tr>
+              <tr style="vertical-align:top;">
+                <% @pro_cons.each do |key, value| %>
+                <td style="padding-left:50px;">
+                   <br/>
+                  
+                   <% value.each do |v| %>
+                   <%# v[:values].each do |av| %>
+                   <h3><%=v.pro_con_category ? v.pro_con_category.text : "No Title"  %></h3>
+                   <p class="txt_brown" style="text-align:inherit;">
+                    
+                    <%= v.text %> 
+                  </p>
+                  <br/>
+                  <%# end %>
+                  <% end %>
+                </td>
+            <% end %>
+          </tr>
+        </table>
+        <br/>
+    <%end%>
     <h3 class="producttabsubheader">Detailed Specifications</h3>
     <br/>
     
