@@ -42,6 +42,7 @@ development:
   homepagecompareitems2: "3,5"
   homepagecompareitems3: "3,5"
   homepagecompareitems4: "3,5"
+  hostname: "localhost:3000"
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -123,3 +124,4 @@ production:
   homepagecompareitems2: "5727,5678"
   homepagecompareitems3: "4974,5023"
   homepagecompareitems4: "5976,5539"
+  hostname: "www.plannto.com"

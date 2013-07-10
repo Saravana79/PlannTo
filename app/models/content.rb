@@ -23,6 +23,7 @@ class Content < ActiveRecord::Base
   has_many :content_item_relations
   has_many :item_contents_relations_cache
   has_many :items, :through => :content_item_relations
+  has_many :allitems, :through => :item_contents_relations_cache
   belongs_to :itemtype
   has_and_belongs_to_many :guides
   has_one :content_photo
@@ -456,6 +457,17 @@ end
       #end
       relateditems=Item.find_by_sql(sql)
       self.save_content_relations_cache(relateditems.collect(&:id))
+      relateditems.each do |item|
+        cache_key = "views/" + configatron.hostname.to_s + "/" + item.type.downcase.pluralize + "/" + item.slug
+        Rails.logger.info "***************************"
+        Rails.logger.info cache_key      
+        Rails.logger.info "***************************"
+        Rails.cache.delete(cache_key)
+      end 
+        cache_key = "views/" + configatron.hostname.to_s + "/contents/" + content.id.to_s     
+        Rails.cache.delete(cache_key)
+        cache_key = "views/" + configatron.hostname.to_s + "/external_contents/" + content.id.to_s    
+        Rails.cache.delete(cache_key)
     end
   end
 
