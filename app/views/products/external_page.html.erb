@@ -1,0 +1,34 @@
+<link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
+<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
+   <%= javascript_include_tag 'application' %>
+ <span class="img_product"><img  src="<%=@item.image_url%>" alt="<%=@item.name%>" width="176" height="132"/></span> 
+ <br /><br /><br />
+  <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
+ <div style="padding-top:20px;">
+  <ul id="Newtabs">
+   <%= display_external_page_tabs(@item, @showspec,@showcompare,@showreviews ,params[:at] || "reviews") %>
+  </ul>
+</div>
+<br/>
+
+<div class="question_answer main-content-section" id="reviews" style="<%=display_required(params[:at] || "reviews", "reviews")%>">
+<br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br />
+<%if (@showreviews.to_i rescue 0) == 1 %>
+  <%= render :partial => 'contents/contents' %>
+<%end%>
+</div>
+
+<div id="specification" style="<%=display_required(params[:at] || "reviews", "specification")%>" class="main-content-section">
+  <%#= render :template => 'products/specification' %>
+  <%= render :partial => "products/detailed_specifications" %>
+</div>
+
+<div id="compare_price" style="<%=display_required(params[:at] || "reviews", "compare_price")%>" class="main-content-section">
+  <%= render "products/where_to_buy" %>
+</div>
+
+
+ 
+
