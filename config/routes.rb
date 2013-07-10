@@ -223,6 +223,7 @@ resources :comments do
   resources :products do
     collection do
       get 'related_items'
+      get 'follow_buttons'
     end
     member do
       get 'related_products'

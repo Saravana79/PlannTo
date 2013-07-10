@@ -150,6 +150,10 @@ class ProductsController < ApplicationController
   def add_item_info
   end
 
+  def follow_buttons
+    @item = Item.find(params[:item_id])
+  end
+  
   private
 
   def get_item_object

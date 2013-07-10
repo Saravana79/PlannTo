@@ -11,6 +11,9 @@
         </div>
         <div style="border-bottom: solid 1px #CCCCCC;clear:both;padding-top:10px;"></div>
       </div>-->
+  
+      <div id="follow_buttons_js"></div>
+      
     <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:0px"></div>
       <%if params[:page] == "1" || !params[:page] %>
          <% session[:group_id] = [] %>
@@ -84,8 +87,9 @@
               <%end%>
             })
              </script>
-          
-              <%= render 'shared/product_button_javascript', :button_class => '_medium', :item => item, :related_follower => user_follow_type(item, current_user) ,:related_items => false%>
+              <script>
+                $.ajax({url : '/products/follow_buttons' , dataType:'script',type: "get",data: "&item_id=<%= item.id rescue ""%>"  });
+            </script>
 
         <%end%>
           <% unless(session[:group_id].nil?) 
