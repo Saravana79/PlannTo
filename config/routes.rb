@@ -28,7 +28,7 @@ namespace :admin do
   match "/about_us",:to => "home#about_us"
   match "/current_user_info",:to => "home#current_user_info"
   match "/get_class_names",:to => "contents#get_class_names"
-  
+  match "/external_page",:to => "products#external_page"
   resources :contact_us
   resources :newuser_wizards do
   collection do

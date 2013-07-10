@@ -466,6 +466,28 @@ module ItemsHelper
     end
     return html_list.html_safe
   end
+   
+  def display_external_page_tabs(item, showspec,showcompare,showreviews, tab_type)
+    str = ''
+    if (showreviews.to_i rescue 0) == 1
+      str = '<li '
+      str = str + "#{'class="tab_active"' if tab_type == "reviews"}"
+      str = str +'><a href="#reviews"><span>Reviews</span></a></li>'
+    end  
+    if (showspec.to_i rescue 0) == 1
+      str = str + "<li "
+      str = str + "#{'class="tab_active"' if tab_type == "specification"}"
+      str = str + 'id="specify"><a href="#specification"><span>Specification</span></a></li>'
+    end
+   if (showcompare.to_i rescue 0) == 1   
+     str = str + "<li "
+     str = str + "#{'class="tab_active"' if tab_type == "compare_price"}"
+     str = str + 'id="buy"><a href="#compare_price" ><span>Compare Price</span></a></li>'
+   end  
+    return str.html_safe
+  end
+  
+  
   
   def display_required(value, required)
     logger.info value

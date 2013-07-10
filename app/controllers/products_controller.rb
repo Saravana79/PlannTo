@@ -128,6 +128,22 @@ class ProductsController < ApplicationController
   end
   
   
+  def external_page
+    @item = Item.find(params[:item_id])
+    @showspec = params[:showspec]
+    @showcompare = params[:showcompare]
+    @showreviews = params[:showreviews]
+    @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
+    @contents = Content.where(:sub_type => "Reviews")
+    @item_specification_summary_lists.delete("nothing")
+    @items_specification = {"Pro" => [], "Con" => []}
+    @item_specification_summary_lists.each do |key, value|
+    @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]} if key
+    end
+    render :layout => false
+  end
+  
   def review_it
   end
 
