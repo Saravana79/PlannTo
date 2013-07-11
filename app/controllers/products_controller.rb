@@ -151,7 +151,11 @@ class ProductsController < ApplicationController
   end
 
   def follow_buttons
-    @item = Item.find(params[:item_id])
+    if !params[:item_id].blank?
+      @item = Item.find(params[:item_id])
+    elsif !params[:items_id].blank?
+      @items = Item.where("id in (?)", params[:items_id].split(","))
+    end     
   end
   
   private
