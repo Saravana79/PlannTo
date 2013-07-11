@@ -62,6 +62,14 @@ class ProductsController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(@type)
     @topic_cloud_hash = Topic.topic_clouds(@itemtype)
   end
+
+  def ratings
+    @contents = ArticleContent.find_by_sql("select * from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{params[:id]} and c.sub_type = 'Reviews' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc" )
+      respond_to do |format|
+        format.json{render json: @contents}
+      end
+    
+  end
   
   def show
     @static_page1  = "true"
@@ -71,6 +79,7 @@ class ProductsController < ApplicationController
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
     @item = Item.includes([:item_pro_cons => :pro_con_category, :itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    
     @pro_cons = @item.item_pro_cons.limit(16).group_by(&:proorcon)
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user

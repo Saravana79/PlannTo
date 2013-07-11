@@ -473,3 +473,26 @@ $("#buy span").html("Compare Prices");
     </script>
 
   </div>
+
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  jQuery('.first-carousel').jcarousel({
+    initCallback: function(carousel, state){
+      $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "ratings?id="+ jQuery('.first-carousel').attr("id"),
+            success: function(data) {
+              a = ""
+              $.each(data, function(i, item) {
+                carousel.add(i, "<li>"+item.field4+"</li>");
+              });
+            }
+        })
+    },
+    itemFallbackDimension: 300
+  });
+});
+
+</script>
