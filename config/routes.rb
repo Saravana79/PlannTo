@@ -150,6 +150,7 @@ resources :accounts do
    resources :reports 
   collection do
     get :filter
+    get :edit_guide_ajax
     post :update_guide
     get :feed
     get :feeds

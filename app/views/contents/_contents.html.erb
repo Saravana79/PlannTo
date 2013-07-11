@@ -61,7 +61,7 @@
  }
 
 
-
+$.ajax({url : '/contents/edit_guide_ajax' , dataType:'script',type: "get",data: "&contents_id=<%= @contents.collect(&:id).join(',') rescue ""%>"  });
  });
  </script>
 

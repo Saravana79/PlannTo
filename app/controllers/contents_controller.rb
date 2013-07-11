@@ -485,6 +485,9 @@ end
     
   end
   
+  def edit_guide_ajax
+     @contents = Content.where("id in (?)", params[:contents_id].split(","))
+  end
   
   private
   

@@ -1,0 +1,4 @@
+  <%if content.can_update_content?(current_user)%>
+      <%= render :partial  => 'contents/guide', :locals => {:content => content} %>
+  <%end%>
+    <%= render :partial  => 'contents/others_action', :locals => {:content => content} %>
