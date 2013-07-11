@@ -158,12 +158,15 @@ module ThumbsUp
       end
 
       def get_class_name(class_name)
-        parent_class_name = case class_name
-        when "VideoContent" then "Content"
-        when "ArticleContent" then "Content"
-        else class_name
-        end
-        return parent_class_name
+            parent_class_name = case class_name
+            when "Tip" then "Content"
+            when "VideoContent" then "Content"
+            when "QuestionContent" then "Content"
+            when "ReviewContent" then "Content"
+            when "ArticleContent" then "Content"
+            else class_name
+            end
+            return parent_class_name
       end
 
       def voting_count_result

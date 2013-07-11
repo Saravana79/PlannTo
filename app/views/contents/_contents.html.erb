@@ -53,9 +53,9 @@
             data: {ids: <%= @contents.collect(&:id) %>},
             success: function(data) {
                 $.each(data, function(key, value){
-                  $("#likeVote"+key).addClass(value['positive'])
-                  $("#dislikeVote"+key).addClass(value['negative'])
-                });
+                  $("#likeVote"+key).toggleClass(value['positive'])
+                  $("#dislikeVote"+key).toggleClass(value['negative'])
+                });                
             }
         })
  }
