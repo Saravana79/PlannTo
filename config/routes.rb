@@ -26,7 +26,10 @@ namespace :admin do
   match "/privacy_policy" ,:to => "home#privacy_policy"
   get "/contact_us" => "contact_us#new"
   match "/about_us",:to => "home#about_us"
+  match "/current_user_info",:to => "home#current_user_info"
   match "/external_page",:to => "products#external_page"
+  match "/get_class_names",:to => "contents#get_class_names"
+  
   resources :contact_us
   resources :newuser_wizards do
   collection do

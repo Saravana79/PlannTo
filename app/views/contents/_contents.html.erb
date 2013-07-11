@@ -45,6 +45,23 @@
   		$("#content_search_page").val(1);
   	}
   	});
+   if($(".current_user_like_unlike").length > 0){
+   $.ajax({
+            type: "get",
+            dataType: "json",
+            url: "/get_class_names",
+            data: {ids: <%= @contents.collect(&:id) %>},
+            success: function(data) {
+                $.each(data, function(key, value){
+                  $("#likeVote"+key).addClass(value['positive'])
+                  $("#dislikeVote"+key).addClass(value['negative'])
+                });
+            }
+        })
+ }
+
+
+
  });
  </script>
 

@@ -33,6 +33,11 @@ caches_action :about_us, :unless => :current_user, :cache_path => Proc.new { |c|
  def dialog_test
  
  end
+
+ def current_user_info
+  render partial: "shared/header_right_part"
+   
+ end
  private
  
  def get_objects_for_my_feeds

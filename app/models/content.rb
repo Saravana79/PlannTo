@@ -555,4 +555,30 @@ end
   acts_as_voteable
   acts_as_commentable
 
+  def rating_classnames(user)
+    keyword_id = "votes_#{user.id}_list"
+    vote_list = $redis.smembers "#{keyword_id}"
+    class_type = get_class_name(self.class.name)
+    value = vote_list.find {|s| s.to_s == "type_#{class_type}_voteableid_#{id}".to_s}
+    reset = true
+    unless value.nil?
+      if  user.voted_positive?(self)
+        negative_class = "btn_dislike_positive"
+        positive_class = "btn_like_positive"
+        reset = false
+      end
+      if user.voted_negative?(self)
+        positive_class = "btn_like_negative"
+        negative_class = "btn_dislike_negative"
+        reset = false
+      end
+    end
+    if reset == true
+      positive_class = "btn_like_default"
+      negative_class = "btn_dislike_default"    
+    end
+    return self.id =>{:positive => positive_class, :negative => negative_class}
+
+  end
+
 end
