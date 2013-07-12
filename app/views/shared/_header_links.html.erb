@@ -169,7 +169,7 @@
                 <%= form_for(@user, :as => :user, :url => session_path("user"), :method => :post, :html => {:class => "top-searchform"}) do |f| %>
                     <p><%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1", :class => "inputbox", :style=> "width:140px;"%></p>
                       <p><%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :class=>"inputbox", :style=>"width:140px;"%></p>
-                      <p><%= f.submit "Sign In" , :tabindex => "4" , :class=>"button org small" %></p>
+                      <p><%= f.submit "Sign In" , :tabindex => "4" , :class=>"button org small", :style=>"width:68px;" %></p>
                       <p style="padding:0px"><label style="padding:0px;"> <%= f.check_box :remember_me, :size=>"0", :tabindex => "3", :style=>"min-height:13px;"%> Remember Me</label> | 
                         <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" ,:style=>"min-height:13px;"%></p>
                   <%end%>           

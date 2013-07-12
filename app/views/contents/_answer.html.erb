@@ -1,6 +1,6 @@
+  <% cache ['part-1', content] do %>
 <div class="mainContentDiv" id="mainContentDiv<%=content.id%>">
   <%=render :partial => "votes/voting_detail", :locals => {:item => content, :user => user_signed_in? ? current_user : nil}%>
-  <% cache ['part-1', content] do %>
   <div class="float_rgt">
    <a href="<%= content.user.get_url()%>">  <img src="<%=content.user.get_photo%>" class="userImageSmall"/>   </a>
   </div>
@@ -26,19 +26,13 @@
       <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" ,:id => "report_link_#{content.id}",:style=>"float:left;padding-left:5px;"%></a></li>
-     <%end%>
-		   <script>
-         $("#report_link_<%= content.id %>").click(function(e){
-          <%if !current_user %>
-            $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'report')%>");
-            openLoginPopup("#" + $(this).attr('id'), "click");
-            return false
-          <%end%>
-         })
-        </script>
+     
+		 
         <div id="edit_actions_<%= content.id %>"> </div>
          
     </ul>
   </div>
-  <%=render :partial => "comments/new", :locals => { :content => content }  %>
+<%@fromcontent = "true"%>
+  <%=render :partial => "comments/new", :locals => { :content => content, :fromcontent => @fromcontent}  %>
 </div>
+<%end%>

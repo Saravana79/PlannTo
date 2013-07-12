@@ -556,6 +556,7 @@ end
   acts_as_commentable
 
   def rating_classnames(user)
+    unless(user.nil?)
     keyword_id = "votes_#{user.id}_list"
     vote_list = $redis.smembers "#{keyword_id}"
     class_type = get_class_name(self.class.name)
@@ -577,6 +578,10 @@ end
       positive_class = "btn_like_default"
       negative_class = "btn_dislike_default"    
     end
+  else
+      positive_class = "btn_like_default"
+      negative_class = "btn_dislike_default"    
+  end
     return self.id =>{:positive => positive_class, :negative => negative_class}
 
   end
