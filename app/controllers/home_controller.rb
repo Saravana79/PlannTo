@@ -11,6 +11,7 @@ caches_action :about_us,  :cache_path => Proc.new { |c| c.params }
       get_objects_for_my_feeds
       render "contents/my_feeds"
     else
+      @homepage = "true"
       @static_page = "true"
       @static_page1 = "true"
       render :index
