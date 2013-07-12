@@ -123,13 +123,15 @@ $("#dialog-form #click_message").hide();
                     <%end%>
                     <% value[0..5].each do |v| %>
                     <% v[:values].each do |av| %>
+                    <%unless av.value.nil? or av.value == ""%>
                     <div><%=v[:title] %>  <span class="txt_brown" style="text-align:inherit;font-size:11px;">
-                      <%= if (v[:description].nil? or v[:description].empty?) 
+                      <%= if (v[:description].nil? or v[:description].empty?)                         
                        raw " - " + display_specification_value(av,av.attribute)
                     #else 
                     #v[:description] 
                     
                     end%>
+                    <%end%>
                   </span>
                 </div>
 
