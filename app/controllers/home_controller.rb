@@ -1,8 +1,8 @@
 class HomeController < ApplicationController
 caches_action :index, :unless => :current_user, :cache_path => Proc.new { |c| c.params }
-caches_action :terms_conditions, :unless => :current_user, :cache_path => Proc.new { |c| c.params }
-caches_action :privacy_policy, :unless => :current_user, :cache_path => Proc.new { |c| c.params }
-caches_action :about_us, :unless => :current_user, :cache_path => Proc.new { |c| c.params }
+caches_action :terms_conditions,  :cache_path => Proc.new { |c| c.params }
+caches_action :privacy_policy,  :cache_path => Proc.new { |c| c.params }
+caches_action :about_us,  :cache_path => Proc.new { |c| c.params }
 
   layout "product"
    def index

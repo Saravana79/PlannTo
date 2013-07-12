@@ -12,7 +12,11 @@ padding:10px;">
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
   </div>
 </div>
-
+     <script language='javascript'>
+      function follow_button_js_code(){
+         $.ajax({url : '/products/follow_buttons' , dataType:'script',type: "get",data: "&item_id=<%= @item.id rescue ""%>"  });
+      }
+      </script>
 <div id="content_new"></div>
 <script>
 $(".plan_to_buy_icon").click(function(e){
@@ -336,11 +340,7 @@ $("#buy span").html("Compare Prices");
       </script> 
       <br/>
       <%=render :partial =>"items/related_products" %>
-      <script language='javascript'>
-      function follow_button_js_code(){
-         $.ajax({url : '/products/follow_buttons' , dataType:'script',type: "get",data: "&item_id=<%= @item.id rescue ""%>"  });
-      }
-      </script>
+ 
      <script>
           //call after page loaded
          window.onload=follow_button_js_code; 

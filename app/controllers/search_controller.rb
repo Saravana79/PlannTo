@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
    caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term],:type => params[:type] ,:content => params[:content], :search_type => params[:search_type]}}
-   caches_action :index, :unless => :current_user, :cache_path => Proc.new { |c| string =  c.params.except(:_).inspect
+   caches_action :index, :cache_path => Proc.new { |c| string =  c.params.except(:_).inspect
     {:tag => Digest::SHA256.hexdigest(string)}}
   layout "product"
 

@@ -1,4 +1,5 @@
 class ExternalContentsController < ApplicationController
+#caches_action :show, :unless => :current_user, :cache_path => Proc.new { |c| c.params }
   layout :false
   
   def show

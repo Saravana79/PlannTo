@@ -10,6 +10,19 @@
              <%= link_to "My feeds", "/" %>
               
              <%= link_to "Buying Plans","/" + "#{current_user.username}" + "?follow=Preferences" %>
+
+             <%if current_user && current_user.is_admin? %>
+
+                        <a href="/admin/feeds">All Feeds</a>
+                       
+                         <a href="/admin/users">All Users</a>
+                         <a href="/admin/follows">All Follows</a>
+                         <a href="/admin/buying_plans">All Buying Plans</a>
+                        </ul>
+                        
+                          
+            </li>
+            <%end%>
              
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>

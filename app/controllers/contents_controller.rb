@@ -1,9 +1,11 @@
 class ContentsController < ApplicationController
+  caches_action :show, :unless => :current_user, :cache_path => Proc.new { |c| c.params },:expires_in => 2.hour
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type,:my_feeds]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :store_location, :only => [:show]
   before_filter :set_waring_message,:only => [:show]
   before_filter :log_impression, :only=> [:show]
+  
   #cache_sweeper :content_sweeper
   #layout :false
   layout "product"

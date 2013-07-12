@@ -559,7 +559,7 @@ end
     keyword_id = "votes_#{user.id}_list"
     vote_list = $redis.smembers "#{keyword_id}"
     class_type = get_class_name(self.class.name)
-    value = vote_list.find {|s| s.to_s == "type_#{class_type}_voteableid_#{id}".to_s}
+    value = vote_list.find {|s| s.to_s == "type_#{class_type}_voteableid_#{self.id}".to_s}
     reset = true
     unless value.nil?
       if  user.voted_positive?(self)
