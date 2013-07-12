@@ -5116,3 +5116,34 @@ a.bluelink-12:hover {color:#f57e00; text-decoration:none;}
 .header_compare{font-family: Arial, Helvetica, sans-serif;font-size: 13px;font-weight: bold;background: #CCC;border-right: 0px solid #FFF;padding: 10px 5px;width: 170px;color: #000;}
 a.blue-link { color:#00a8cb; font-size:12px;text-decoration:underline;}
 a.blue-link:hover { color:#e87800;text-decoration:none; }
+bodyerror {
+    background: url(../images/bg_header11.png) repeat-x top;
+    margin: 0 auto;
+    font: normal 11px tahoma;
+    color: #333;
+    width: 1280px;
+}
+
+	
+.error_block { width:958px; height:auto; margin:auto; overflow:hidden; clear:both; padding:20px 0 0 0;}
+
+.error_block .top_corner, .error_block .bot_corner 	 { width:100%; height:17px; float:left;}
+.error_block .top_corner { background:url(../images/error_top.png) no-repeat left top; }
+.error_block .bot_corner { background:url(../images/error_bot.png) no-repeat left bottom;}
+.error_block .error_midbox { width:958px; height:auto; float:left; background:url(../images/error_mid.png) repeat-y left top; padding:20px 0 20px 0; }
+
+.error_midder_inner { background:url(../images/error_sepretar.png) repeat-y 465px top; padding:15px 45px;  width:868px; float:left; }
+ 
+
+.found_bg{ background:url(../images/found_icon.png) no-repeat  center top; float:left; width:300px; height:auto; margin:20px 48px 27px 75px;}
+.found_bg h3 {font-family:Century Gothic; font-size:35px; color:#9099a2; float:left;padding: 210px 0 0 0; font-weight:normal;  }
+
+.system_block {width:400px; height:auto; float:left; padding: 71px 0 0 28px ; font-family: Arial, Helvetica, sans-serif; }
+.system_block h3{font-size:25px; color:#4885a2; font-weight:normal; padding: 0 0 1px 0; font-family: Arial, Helvetica, sans-serif;}
+.system_block p {font-size:16px; color:#768497; padding:0; line-height:22px; margin:0; }
+
+
+.follow_uson {width:400px; height:auto; float:left; padding: 35px 0 0 28px;}
+.follow_uson h3{ font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#768497; padding: 0px 0 0px 0;  float:left; font-weight:normal;}
+.follow_uson img { float:left; margin:0 0 0 19px;}
+.follow_uson img:hover {opacity:0.4; filter:alpha(opacity=40);} 
