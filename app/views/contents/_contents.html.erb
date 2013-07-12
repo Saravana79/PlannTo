@@ -52,6 +52,10 @@
             url: "/get_class_names",
             data: {ids: <%= @contents.collect(&:id) %>},
             success: function(data) {
+             <%@contents.each do |content| %>
+                   $("#edit_actions_<%= content.id %>").html('<%= escape_javascript(render "contents/edit_guide_actions", :content => content) %>');
+              <%end%>
+               
                 $.each(data, function(key, value){
                   $("#likeVote"+key).toggleClass(value['positive'])
                   $("#dislikeVote"+key).toggleClass(value['negative'])
@@ -61,7 +65,7 @@
  }
 
 
-$.ajax({url : '/contents/edit_guide_ajax' , dataType:'script',type: "get",data: "&contents_id=<%= @contents.collect(&:id).join(',') rescue ""%>"  });
+//$.ajax({url : '/contents/edit_guide_ajax' , dataType:'script',type: "get",data: "&contents_id=<%= @contents.collect(&:id).join(',') rescue ""%>"  });
  });
  </script>
 
