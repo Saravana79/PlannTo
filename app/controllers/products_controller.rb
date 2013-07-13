@@ -78,7 +78,7 @@ class ProductsController < ApplicationController
     @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @attribute_degree_view = @item.item_attributes.collect{|ia| ia if ia.name == "360 Degree View"}.compact.collect(&:attribute_values).flatten.first.value rescue ""
+    @attribute_degree_view = @attribute_degree_view = @item.attribute_values.collect{|ia| ia if ia.attribute_id == 294}.compact.first.value rescue ""
     
     @related_items = Item.get_related_items(@item, 3, true) 
     
