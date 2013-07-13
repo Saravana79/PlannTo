@@ -39,4 +39,31 @@
             </span>
           </div> 
 
+        <script>
+         $(".sign_in_popup").click(function(e){
+         $("#Loginpoup #click_message").hide();
+         $('#Loginpoup').bPopup({
+           closeClass:'Closebut',
+           modalClose: false,
+           position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+           follow: [false, false] //x, y
+         });
+         e.preventDefault()
+         });
+         </script>  
+         
+        <script>
+        $(".sign_up_popup").click(function(){
+        $("#sign_up_dialog #click_message").hide();
+        $('#sign_up_dialog').bPopup({
+           closeClass:'Closebut',
+           modalClose: false,
+           position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+           follow: [false, false] //x, y
+         });
+         });
+
+         </script>    
+
+
 <%end%>

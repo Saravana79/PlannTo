@@ -3894,6 +3894,15 @@ text-decoration: underline;
  text-decoration: underline;
  color: #97263e;   
 }
+.sign_up_popup
+{
+    color:white;
+}
+.sign_up_popup:hover
+{
+ text-decoration: underline;
+ color: #97263e;   
+}
 
 .sign_inbutton
 { background:none; border:none; float:left; padding:0; margin:0; margin-top:-1px; cursor:pointer;  
