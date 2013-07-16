@@ -238,7 +238,7 @@ $(function(){
                 <th style="width: 200px;padding-left:50px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Cons</p></th>
               </tr>
               <tr style="vertical-align:top;color:  #505050;" class="txt_normal">            
-                <%@pro_cons = Hash[@pro_cons.sort.reverse]
+                <%#@pro_cons = Hash[@pro_cons.sort.reverse]
                 <% @pro_cons.each do |key, value| %>
                   <%if key == "Con" %>
                       <td style="padding-left:50px;">
