@@ -51,10 +51,14 @@ class ArticleContentsController < ApplicationController
        Content.save_thumbnail_using_uploaded_image(@article)
      end    
    
-     #@item1 = Item.find(params[:articles_item_id]) 
+     @item1 = Item.find(params[:articles_item_id])  unless params[:articles_item_id]
     if((params[:article_content][:sub_type] == "Reviews"))
       @defaultitem = Item.find(ids[0])
+      if(@item1.nil?)
        @item.add_new_rating(@article) if @article.id!=nil
+      else
+        @item1.add_new_rating(@article) if @article.id!=nil
+      end  
     end
   # unless @article.errors.any?     
   #  @article.rate_it(params[:article_content][:field1],1) unless params[:article_content][:field1].nil? 
