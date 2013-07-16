@@ -758,7 +758,7 @@ end
 
 def populate_pro_con
  item = self
- contents = ArticleContent.find_by_sql("select * from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{item.id} and c.sub_type = 'Reviews' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc" )
+ contents = ArticleContent.find_by_sql("select ac.* from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{item.id} and c.sub_type = 'Reviews' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc" )
      last_index = 0
      contents.each do |content|
                    # count+=1
@@ -769,37 +769,48 @@ def populate_pro_con
                     last_index += 1
                     
                     pros.each do |pro|
-
+                        if(pro.strip[0..2].downcase == "and")
+                          pro = pro[4..-1]
+                        else
+                          pro = pro
+                        end
+                         pro = pro.capitalize
                          if item.itemtype.pro_con_categories.blank?
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: nil, text: "pro", index: last_index, proandcon: "Pro")
+                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: nil, text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size)
                          else
                               tempid =  nil
                               item.itemtype.pro_con_categories.order(:sort_order).each do |pcc|
                                    pro_con_category_id = pcc.id
-                                   list = pcc.list.downcase.gsub(",", "|")  
+                                   list = pcc.list.downcase.strip.gsub(", ","|").gsub(",","|")
                                    if(pro.downcase.match(/#{list}/))
                                         tempid = pcc.id
                                         break
                                    end
                                                                 
                               end
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: tempid , text: pro.strip, index: last_index, proandcon: "Pro") 
+                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: tempid , text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size) 
                          end
                     end
-                    cons.each do |con|                         
+                    cons.each do |con|            
+                    if(con.strip[0..2].downcase == "and")
+                          con = con[4..-1]
+                        else
+                          con = con
+                        end
+                         con = con.capitalize             
                          if item.itemtype.pro_con_categories.blank?
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: nil, text: con.strip, index: last_index, proandcon: "Con")
+                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: nil, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size)
                          else
                               tempid =  nil
                               item.itemtype.pro_con_categories.each do |pcc|
                                    pro_con_category_id = pcc.id
-                                   list = pcc.list.downcase.gsub(",", "|")
+                                   list = pcc.list.downcase.strip.gsub(", ","|").gsub(",","|")
                                   if(con.downcase.match(/#{list}/))
                                         tempid = pcc.id
                                         break
                                    end                                  
                               end
-                               ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: tempid, text: con.strip, index: last_index, proandcon: "Con") 
+                               ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: tempid, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size) 
                          end
                     end
                #end

@@ -3,5 +3,5 @@ class ItemProCon < ActiveRecord::Base
 	belongs_to :item
 	belongs_to :article_content
 
-	attr_accessible :item_id, :article_cintent_id, :pro_con_category_id, :text, :index, :proorcon
+	attr_accessible :item_id, :article_content_id, :pro_con_category_id, :text, :index, :proorcon,:letters_count,:words_count
 end

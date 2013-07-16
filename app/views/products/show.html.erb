@@ -226,13 +226,75 @@ $(function(){
 });
 
 </script>
+<br/>
+
+<% unless (@pro_cons.empty? and @verdicts.empty?)%>  
+      <div style="width: 680px;margin-left: 13px;border: 1px solid #E3E3E3;border-bottom: 0px;clear: both;padding:10px;margin-top:20px;min-height:350px; ">
+        <h3 class="producttabsubheader" style="width:670px;">Experts Review's Summary</h3>
+        <% unless @pro_cons.empty? %>
+          <table style="">
+              <tr>
+                <th style="width: 200px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Pro</p></th>
+                <th style="width: 200px;padding-left:50px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Cons</p></th>
+              </tr>
+              <tr style="vertical-align:top;color:  #505050;" class="txt_normal">            
+                <% @pro_cons.each do |key, value| %>
+                  <%if key == "Con" %>
+                      <td style="padding-left:50px;">
+                  <%else%>
+                      <td>
+                  <%end%>                   
+                  <% value[0..9].each do |v| %>
+                       <div style="padding-bottom:2px;">
+                          <%=v.text.capitalize %>&nbsp;<a href="/external_contents/<%=v.article_content_id%>"><img src="/images/linkimage.png" style="opacity:0.4;"/></a>
+                          <!--<span class="txt_brown" style="text-align:inherit;font-size:11px;">
+                              <#%=v.pro_con_category ? " - " + v.pro_con_category.category : ""  %>
+                          </span>-->
+                       </div>
+                  <% end %>
+                </td>
+            <% end %>
+          </tr>
+        </table>
+        <%end%>
+        </div>
+    <%end%>
+  <% unless @verdicts.empty? %>
+    <script src="/javascripts/jquery.jcarousel.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/skininproduct.css" />
+      <div class="container" style="width:700px;">
+          
+         <div>   
+        <div class="box-div" style="width:700px;">
+                  <ul id="first-carousel" class="first-and-second-carousel jcarousel-skin-tango" style="width:600px;height:110px;">
+                    <% @verdicts.each do |verdict|%>
+                        <li style="width:610px;height:100px;">
+                        <div style="height:90px;font: normal 14px Tahoma,Arial, Helvetica, sans-serif;line-height: 17px;color: #505050;text-align: center;vertical-align: middle;display: table-cell;"> 
+                          &quot;&nbsp;<%= get_content_based_on_size(verdict.field4,475) %> &nbsp;&quot;
+                        </div>
+                        <div style="float:right;padding-right:10px;">
+                          <a href="/external_contents/<%=verdict.id%>"><%= "- " + verdict.domain%></a>
+                        </div>
+                        </li>
+
+                    <%end%>                              
+                    </ul>
+                  <div class="clr"></div>
+                </div>   
+            </div><!-- end of home-left -->
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('#first-carousel').jcarousel();
+        });
+    </script>
+
+  <%end%>
 <div style="height: 30px;padding: 10px;background: lightgray;padding-left: 0px;clear:both;">
     <%= render :partial => "contents/quick_content_container", :locals => {:article_categories => @article_categories,:item => @item} %>
 </div>
-
 <div style="padding-top:20px;">
   <ul id="Newtabs">
-
     <%= display_product_page_tabs(@item, params[:at] || "overview") %>
   </ul>
 </div>
@@ -342,12 +404,17 @@ $("#buy span").html("Compare Prices");
       </script> 
       <br/>
       <%=render :partial =>"items/related_products" %>
- 
+      <script language='javascript'>
+      function follow_button_js_code(){
+         $.ajax({url : '/products/follow_buttons' , dataType:'script',type: "get",data: "&item_id=<%= @item.id rescue ""%>"  });
+      }
+      </script>
      <script>
           //call after page loaded
          window.onload=follow_button_js_code; 
       </script>
-      <div id="follow_buttons_js"></div>
+      <div id="follow_buttons_js"></div>          
+      
       <%= render 'shared/show_hide_login_form', :item => @item %>
 
       <div id="dialog-invite-form" style="display:none">
@@ -475,3 +542,26 @@ $("#buy span").html("Compare Prices");
     </script>
 
   </div>
+<!--
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  jQuery('.first-carousel').jcarousel({
+    initCallback: function(carousel, state){
+      $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "ratings?id="+ jQuery('.first-carousel').attr("id"),
+            success: function(data) {
+              a = ""
+              $.each(data, function(i, item) {
+                carousel.add(i, "<li>"+item.field4+"</li>");
+              });
+            }
+        })
+    },
+    itemFallbackDimension: 300
+  });
+});
+
+</script>
+-->

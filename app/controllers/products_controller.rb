@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  caches_action :show,  :cache_path => Proc.new { |c| c.params }
+ # caches_action :show,  :cache_path => Proc.new { |c| c.params }
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
@@ -62,6 +62,14 @@ class ProductsController < ApplicationController
     @itemtype = Itemtype.find_by_itemtype(@type)
     @topic_cloud_hash = Topic.topic_clouds(@itemtype)
   end
+
+  def ratings
+   # @contents = ArticleContent.find_by_sql("select * from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{params[:id]} and c.sub_type = 'Reviews' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc" )
+      respond_to do |format|
+        format.json{render json: @contents}
+      end
+    
+  end
   
   def show
     @static_page1  = "true"
@@ -71,6 +79,15 @@ class ProductsController < ApplicationController
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
     @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
+    @pro_cons = ItemProCon.find_by_sql("select *, count(*) as count from item_pro_cons 
+        where item_id = #{@item.id} and pro_con_category_id is not null group by pro_con_category_id, proorcon
+        union 
+        select *, 1 as count from item_pro_cons 
+        where item_id = #{@item.id} and pro_con_category_id is null 
+        order by count desc, (case when pro_con_category_id is null then 99999 else pro_con_category_id end) asc, letters_count desc, `index` 
+        ")
+    @pro_cons = @pro_cons.group_by(&:proorcon)
+    @verdicts = ArticleContent.find_by_sql("select ac.* from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{@item.id} and c.sub_type = 'Reviews' and ac.field4 is not null and trim(ac.field4) != '' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc limit 5" )
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user
       @custom = "true"
@@ -151,6 +168,7 @@ class ProductsController < ApplicationController
   end
 
   def follow_buttons
+    
     if !params[:item_id].blank?
       @item = Item.find(params[:item_id])
     elsif !params[:items_id].blank?

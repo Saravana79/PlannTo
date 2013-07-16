@@ -29,6 +29,10 @@ namespace :admin do
   match "/current_user_info",:to => "home#current_user_info"
   match "/external_page",:to => "products#external_page"
   match "/get_class_names",:to => "contents#get_class_names"
+  match "/external_page",:to => "products#external_page"
+  match "/current_user_info",:to => "home#current_user_info"
+  match "/get_class_names",:to => "contents#get_class_names"
+  match "products/ratings",:to => "products#ratings"
   
   resources :contact_us
   resources :newuser_wizards do

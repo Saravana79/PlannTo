@@ -50,4 +50,12 @@ module ProductsHelper
   def display_item_url(item)
     item.get_url()
   end
+
+    def get_content_based_on_size(params_word,count)
+    if (params_word.length > count)
+      params_word[0..(count-3)] + "..."
+    else
+      params_word
+    end
+  end
 end
