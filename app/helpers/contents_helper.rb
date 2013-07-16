@@ -281,13 +281,13 @@ module ContentsHelper
           str = "<br clear='all'/><div class ='subContentGap' style='clear:both;border-radius:5px;background-color:rgb(247, 247, 247);padding:10px;margin:10px 0px 10px 0px;'>"
 
           unless content.field2.blank?
-          str+= "<p class='pros'>" + get_content_based_on_size(content.field2,50) + "<p/>"
+          str+= "<p class='pros'>" + get_content_based_on_words(content.field2,50) + "<p/>"
           end
           unless content.field3.blank? 
-           str+= "<p class='cons'>" + get_content_based_on_size(content.field3,50) + "<p/>"
+           str+= "<p class='cons'>" + get_content_based_on_words(content.field3,50) + "<p/>"
           end 
            unless content.field4.blank? 
-           str+= "<p class='verdict'>" + get_content_based_on_size(content.field4,60) + "</p><br/>"
+           str+= "<p class='verdict'>" + get_content_based_on_words(content.field4,70) + "</p><br/>"
           end 
         str+="</div>"        
         end
@@ -298,10 +298,10 @@ module ContentsHelper
         unless (content.pros.blank? and content.cons.blank?)
           str = "<br/><div class ='subContentGap' style='clear:both;background-color:rgb(247, 247, 247);padding:10px;'>"
           unless content.pros.blank?
-            str+= "<p class='pros'>" + get_content_based_on_size(content.pros,100) + "</p><br/>"
+            str+= "<p class='pros'>" + get_content_based_on_words(content.pros,100) + "</p><br/>"
           end
           unless content.cons.blank? 
-           str+= "<p class='cons'>" + get_content_based_on_size(content.cons,100) + "</label><br/><br/>"
+           str+= "<p class='cons'>" + get_content_based_on_words(content.cons,100) + "</label><br/><br/>"
           end 
           str+="</div>"        
         end
@@ -330,7 +330,7 @@ module ContentsHelper
     %w(a e i o u).include?(params_word[0].downcase) ? "an #{params_word}" : "a #{params_word}"
   end
 
-  def get_content_based_on_size(params_word,count)
+  def get_content_based_on_words(params_word,count)
     if (params_word.scan(/\w+/).size > count)
       params_word.split[0..(count-1)].join(" ") + "..."
     else
