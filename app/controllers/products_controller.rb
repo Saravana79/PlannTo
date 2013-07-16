@@ -1,5 +1,11 @@
 class ProductsController < ApplicationController
- # caches_action :show,  :cache_path => Proc.new { |c| c.params }
+  caches_action :show,  :cache_path => Proc.new { |c| 
+    if(current_user)
+      c.params.merge(user: 1) 
+    else
+      c.params.merge(user: 0) 
+    end
+     }
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }

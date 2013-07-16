@@ -458,11 +458,9 @@ end
       relateditems=Item.find_by_sql(sql)
       self.save_content_relations_cache(relateditems.collect(&:id))
       relateditems.each do |item|
-        cache_key = "views/" + configatron.hostname.to_s + "/" + item.type.downcase.pluralize + "/" + item.slug
-        Rails.logger.info "***************************"
-        Rails.logger.info cache_key      
-        Rails.logger.info "***************************"
-        Rails.cache.delete(cache_key)
+        cache_key = "views/" + configatron.hostname.to_s + "/" + item.type.downcase.pluralize + "/" + item.slug + "?user="
+        Rails.cache.delete(cache_key + "1")
+        Rails.cache.delete(cache_key + "0")
       end 
         cache_key = "views/" + configatron.hostname.to_s + "/contents/" + content.id.to_s     
         Rails.cache.delete(cache_key)
