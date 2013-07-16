@@ -87,7 +87,7 @@ class ProductsController < ApplicationController
         order by count desc, (case when pro_con_category_id is null then 99999 else pro_con_category_id end) asc, letters_count desc, `index` 
         ")
     @pro_cons = @pro_cons.group_by(&:proorcon)
-    @verdicts = ArticleContent.find_by_sql("select ac.* from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{@item.id} and c.sub_type = 'Reviews' and ac.field4 is not null and trim(ac.field4) != '' and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc limit 5" )
+    @verdicts = ArticleContent.find_by_sql("select ac.* from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{@item.id} and c.sub_type = 'Reviews' and ac.field4 is not null and trim(ac.field4) != '' and ac.video != 1 and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc limit 5" )
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user
       @custom = "true"
