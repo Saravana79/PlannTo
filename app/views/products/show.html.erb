@@ -280,7 +280,7 @@ $(function(){
                           &quot;&nbsp;<%= get_content_based_on_size(verdict.field4,475) %> &nbsp;&quot;
                         </div>
                         <div style="float:right;padding-right:10px;">
-                          <a href="/external_contents/<%=verdict.id%>" target="_blank">
+                          <a href="/external_contents/<%=verdict.id%>" target="_blank" class="txt_onhover">
                             <%= 
                             unless verdict.domain.nil? 
                               "- " +  verdict.domain 
