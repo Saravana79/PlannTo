@@ -235,22 +235,28 @@ $(function(){
           <table style="">
               <tr>
                 <th style="width: 200px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Pro</p></th>
-                <th style="width: 200px;padding-left:50px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Cons</p></th>
+                <th style="width: 200px;padding-left:10px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Cons</p></th>
               </tr>
               <tr style="vertical-align:top;color:  #505050;" class="txt_normal">            
                 <%@pro_cons = Hash[@pro_cons.sort.reverse]%>
                 <% @pro_cons.each do |key, value| %>
                   <%if key == "Con" %>
-                      <td style="padding-left:50px;">
+                      <td style="width:50%;padding-left:10px;">
                   <%else%>
-                      <td>
+                      <td style="width:50%;">
                   <%end%>                   
                   <% value[0..9].each do |v| %>
                        <div style="padding-bottom:2px;">
-                          <%=v.text.capitalize %>&nbsp;<a href="/external_contents/<%=v.article_content_id%>"><img src="/images/linkimage.png" style="opacity:0.4;"/></a>
+                        <div style="float:left;display:block;">
+                        <img src="/images/arrow_black.jpeg" style="padding-right:5px;"/>
+                        </div>
+                        <div style="float:left;width:310px;">
+                          <a href="/contents/<%=v.article_content_id%>" style="color:#333" class="txt_normal txt_onhover"><%=v.text.capitalize %><!--&nbsp;<img src="/images/linkimage.png" style="opacity:0.4;" title="View Review"/>--></a>
+                        </div>
+                        <br clear="all"/>
                           <!--<span class="txt_brown" style="text-align:inherit;font-size:11px;">
                               <#%=v.pro_con_category ? " - " + v.pro_con_category.category : ""  %>
-                          </span>-->
+                            </span>-->
                        </div>
                   <% end %>
                 </td>
@@ -274,7 +280,7 @@ $(function(){
                           &quot;&nbsp;<%= get_content_based_on_size(verdict.field4,475) %> &nbsp;&quot;
                         </div>
                         <div style="float:right;padding-right:10px;">
-                          <a href="/external_contents/<%=verdict.id%>">
+                          <a href="/external_contents/<%=verdict.id%>" target="_blank">
                             <%= 
                             unless verdict.domain.nil? 
                               "- " +  verdict.domain 
