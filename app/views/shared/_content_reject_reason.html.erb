@@ -7,6 +7,7 @@
         <div style="margin-left:80px;">
        <%= f.text_area :reason, :class => 'textFilling expanding', :id=>"report",:style=> 'width:400px;height:100px;' %>
      </div>
+      <%= hidden_field_tag 'detail',@detail %>
        <div style="clear:both;"></div>
       </div>
       <br /> <br />

@@ -1,2 +1,8 @@
 $('.Closebut').click();
-window.location.reload();
+<%if @detail == "true" %>
+   window.location.href = "<%= "/#{@itemtype.downcase.pluralize}"
+ %>"
+ <%else%>  
+   $("#mainContentDiv<%=@content.id%>").remove();
+ <%end%>
+
