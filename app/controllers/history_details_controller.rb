@@ -9,6 +9,7 @@ class HistoryDetailsController < ApplicationController
     @history.plannto_location = session[:return_to]
     @history.save
     vendor = Vendor.find(@item_detail.site)
+    url = "#{@item_detail.url}"
     if !vendor.params.nil? || !vendor.params.blank? 
       if @item_detail.url.include?('?')
         url = "#{@item_detail.url}&#{vendor.params}"
