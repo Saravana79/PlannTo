@@ -39,6 +39,7 @@ class Admin::FeedsController < ApplicationController
   
   def content_action
     @content = Content.find(params[:id])
+    @detail = params[:detail]
     if @content.rejected?
         ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "rejected" )
    elsif @content.deleted?
@@ -46,7 +47,13 @@ class Admin::FeedsController < ApplicationController
    end 
    if params[:content_action][:sent_mail] == "1"
      ContentMailer.content_action(@content,params[:content_action][:reason]).deliver 
-   end    
+   end
+   if @detail == "true"
+     @itemtype = @content.items.first.itemtype.itemtype
+     if @itemtype == "Car Group" || @itemtype == "Manufacturer"
+        @itemtype = "Car"
+      end
+   end       
   end
   
   def add_vote

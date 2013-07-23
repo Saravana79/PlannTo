@@ -2,7 +2,7 @@
 <%if current_user.is_admin? %>
 
   $("#contentEditView").html('');
-  $("#contentEditView").html("<%= escape_javascript(render '/shared/content_reject_reason') %>");
+  $("#contentEditView").html("<%= escape_javascript(render '/shared/content_reject_reason',:detail => @detail) %>");
   $("#contentEditView").bPopup({
     closeClass:'Closebut',
     modalClose: false,
