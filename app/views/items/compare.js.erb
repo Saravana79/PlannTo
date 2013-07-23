@@ -1,20 +1,20 @@
-element= jQuery('#content_next')
-<%if params[:type] == "scroll" %>
- $("#page_pagination").val("<%= (params[:page].to_i + 1).to_s %>");
+/*element= jQuery('#content_next')
+<%#if params[:type] == "scroll" %>
+	$("#page_pagination").val("<%= (params[:page].to_i + 1).to_s %>");
 
-if (<%=@contents.size%> < 10)
-{
-	running = true;
-}
-else{
+	if (<%=@contents.size%> < 10)
+	{
+		running = true;
+	}
+	else{
 
-running=false;
-}
+	running=false;
+	}
 
-$("#contentsList").append('<%= escape_javascript(render(:partial => 'contents/contents')) %>');
-element.remove();
-<%else%>
-running = false;
+	$("#contentsList").append('<%= escape_javascript(render(:partial => 'contents/contents')) %>');
+	element.remove();*/
+<%#else%>
+/*running = false;*/
   window.location.href = "/items/compare?ids=<%= params[:ids]%>"
 
-<%end%>
+<%#end%>
