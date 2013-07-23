@@ -71,7 +71,7 @@ class AttributeValue < ActiveRecord::Base
        if(self.value.include? "@")
          self.value.split("@")[0]
        else
-        self.value(/[*x]/)
+        self.value
        end
     else
       self.value

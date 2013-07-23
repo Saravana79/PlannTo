@@ -123,7 +123,7 @@ class ArticleContent < Content
           @article.field1 = score if score != ""
           @article.save_with_items!(ids)
         end
-      @article
+        @article
       end
     else
       Content.transaction do
@@ -133,11 +133,11 @@ class ArticleContent < Content
         @article.field1 = score if score != ""
         @article.save_with_items!(ids)
       end
-    @article
+      @article
     end
-  rescue
-    @article
-    end
+  #rescue
+  #  @article
+  end
 
   def self.update_content(id, val, user, ids)
     if val['url'].present?

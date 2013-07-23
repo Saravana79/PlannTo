@@ -764,8 +764,19 @@ def populate_pro_con
                    # count+=1
                     item_pro = item.item_pro_cons.where(:proorcon => "Pro")
                     item_con = item.item_pro_cons.where(:proorcon => "Con")
-                    pros = content.field3 ? content.field2.split(/,|\.|;/) : []     
-                    cons = content.field3 ? content.field3.split(/,|\.|;/) : []
+                    unless(content.field2.nil? or content.field2.empty?)
+                      
+                      pros = (content.field2.include? ";") ? content.field2.split(/\.|;/) : content.field2.split(/,|\./) 
+                    else
+                      pros = []
+                    end
+                    unless(content.field3.nil? or content.field3.empty?)
+                      cons =  (content.field3.include? ";") ? content.field3.split(/\.|;/) : content.field3.split(/,|\./) 
+                    else
+                      cons = []
+                    end
+                 #   pros = content.field2 ? content.field2.split(/,|\.|;/) : []     
+                 #   cons = content.field3 ? content.field3.split(/,|\.|;/) : []
                     last_index += 1
                     
                     pros.each do |pro|

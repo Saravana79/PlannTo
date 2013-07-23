@@ -14,7 +14,7 @@ jQuery.fn.megamenu = function(options) {
                               justify: "left",
                               enable_js_shadow: true,
                               shadow_size: 3,
-                              mm_timeout: 250
+                              mm_timeout: 0
                           }, options);
   var $megamenu_object = this;
   if( options.activate_action == "click" ) options.mm_timeout = 0;
