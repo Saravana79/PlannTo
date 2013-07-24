@@ -353,8 +353,9 @@ $("#buy span").html("Compare Prices");
     <%= render  "shared/share_buttons",:caption_text => 'Check out ' + @item.name +  
     ' on PlannTo.com' %>    
   </div>
-  <!--follower block start here-->
-
+  <div style="margin-top:10px;">
+   <%= render "best_prices" %>
+  </div>
   <%=render :partial => "shared/google_adsense_square" %>
   <!--follower block end here-->
 
