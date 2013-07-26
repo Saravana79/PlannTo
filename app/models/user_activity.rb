@@ -16,4 +16,10 @@ class UserActivity < ActiveRecord::Base
   def sort_by
     time
   end
+  
+  def self.update_user_activity(current_user,content_id,sub_type)
+    UserActivity.where('related_activity_type !=? and related_activity_type !=? and related_id =?',"User","Buying Plan",content_id).each do |act|
+      act.update_attribute('related_activity_type',sub_type)
+    end
+ end 
 end

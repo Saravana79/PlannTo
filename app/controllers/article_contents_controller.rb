@@ -140,7 +140,10 @@ class ArticleContentsController < ApplicationController
       @content.update_facebook_stats
     #elsif (art.sub_type != "Reviews" && @content.sub_type ="Reviews")
      # add_new_rating(@content)
-    end  
+    end 
+    if @content.url!=nil 
+     UserActivity.update_user_activity(current_user,@content.id,@content.sub_type) 
+    end
   end
   
   def download

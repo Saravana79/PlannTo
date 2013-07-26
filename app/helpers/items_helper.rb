@@ -418,10 +418,8 @@ module ItemsHelper
   end
 
   def display_product_page_tabs(item, tab_type)
-    html_list = ""
-    html_list = case item.type
-    when "Manufacturer"
-      then
+    str = ""
+    if item.type ==  "Manufacturer"
       str = '<li '
       str = str + "#{'class="tab_active"' if tab_type == "overview"}"
       str = str +'><a href="#overview"><span>Overview</span></a></li>
@@ -429,8 +427,7 @@ module ItemsHelper
       str = str + "#{'class="tab_active"' if tab_type == "all_models"}"
       str = str + ' id="all_variant"><a href="#all_variants" ><span>All Models</span></a></li>'
       
-    when "CarGroup"
-      then 
+    elsif item.type ==  "CarGroup"
       str = '<li '
       str = str + "#{'class="tab_active"' if tab_type == "overview"}"
       str = str +'><a href="#overview"><span>Overview</span></a></li>
@@ -438,8 +435,7 @@ module ItemsHelper
       str = str + "#{'class="tab_active"' if tab_type == "all_variants"}"
       str = str + ' id="all_variant"><a href="#all_variants" ><span>All Variants</span></a></li>'
 
-    when "AttributeTag"
-      then 
+    elsif item.type ==   "AttributeTag"
       str = '<li '
       str = str + "#{'class="tab_active"' if tab_type == "overview"}"
       str = str +'><a href="#overview"><span>Overview</span></a></li>
@@ -447,8 +443,7 @@ module ItemsHelper
       str = str + "#{'class="tab_active"' if tab_type == "all_variants"}"
       str = str + ' id="all_variant"><a href="#all_variants" ><span>All Variants</span></a></li>'
      
-    when "Topic"
-     then 
+    elsif item.type == "Topic" 
       str = '<li '
       str = str + "#{'class="tab_active"' if tab_type == "overview"}"
       str = str +'><a href="#overview"><span>Overview</span></a></li>
@@ -460,11 +455,13 @@ module ItemsHelper
     str = str + "<li "
     str = str + "#{'class="tab_active"' if tab_type == "specification"}"
     str = str + 'id="specify"><a href="#specification"><span>Specification</span></a></li>'
-    str = str + "<li "
-    str = str + "#{'class="tab_active"' if tab_type == "where_to_buy"}"
+    unless item.status.to_i == 2 
+     str = str + "<li "
+     str = str + "#{'class="tab_active"' if tab_type == "where_to_buy"}"
     str = str + 'id="buy"><a href="#where_to_buy" ><span>Where to Buy</span></a></li>'
     end
-    return html_list.html_safe
+    end
+    return str.html_safe
   end
    
   def display_external_page_tabs(item, showspec,showcompare,showreviews, tab_type)
