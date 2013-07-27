@@ -1,23 +1,37 @@
  <% if (!@where_to_buy_items.empty?) %> 
+ 
  <table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
     <tr>
-      <td><font color="red" size="4px">Best Prices</font><br/><br /></td>
+      <td class="bg_widgethdr txt_white">Best Prices</td>
     </tr>
-    <% @where_to_buy_items[0..3].group_by(&:site).each do |site, items| %> 
-          <tr>
-             <%items.each_with_index do |item, index|%>      
-              <%if display_item_details(item)%>
-             <%if index == 0%>
-               <td> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /> </td>
-               <td> <%=display_price_detail(item)%> </td>
-               <td><a href="/history_details?detail_id=<%=item.item_details_id%>" class="btn-link" target="_blank">Go</a> </td>
-              <%end%>
-              <%end%>
-              <%end%>
+    <tr>
+            <td>
+              <div style="padding:10px;">
+                <table>     
+                  <%count = 0%>      
+                  <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
+                        <% count = count + 1%>
+                         <% unless count > 3 %>
+                                <tr>
+                               <%items.each_with_index do |item, index|%>      
+                                <%if display_item_details(item)%>
+                               <%if index == 0%>
+                                 <td style="width:100px;height:30px;"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;"/> </td>
+                                 <td style="font-weight:bold;width:90px;"> <%=display_price_detail(item)%> </td>
+                                 <td><a href="/history_details?detail_id=<%=item.item_details_id%>" class="btn-link" target="_blank">Go</a> </td>
+                                <%end%>
+                                <%end%>
+                                <%end%>
+                              </tr>
+                          <%end%>
+                        <% end %>
+                          </table>
+          </div>
+            </td>
                </tr>
-          <% end %>
-         <tr> <td> <a href="<%=@item.get_url()%>?tab=compare" class="txt_black">See more prices >></a></td></tr>
+          
+         <tr> <td style="text-align: center;padding-bottom: 10px;"> <a href="<%=@item.get_url()%>?tab=compare" class="bluelink-12">See more prices</a></td></tr>
      </table>
-      <br /> 
+      
       <%end %>
       
