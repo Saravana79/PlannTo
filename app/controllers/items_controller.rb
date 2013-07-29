@@ -1,11 +1,11 @@
 class ItemsController < ApplicationController
-  caches_action :compare ,:cache_path => Proc.new { |c| 
-   unless c.params[:ids].nil? 
-     "compare/" + c.params[:ids].split(",").sort.join(",")
-   else
-    c.params
-   end
-      },:expires_in => 2.hour
+#  caches_action :compare ,:cache_path => Proc.new { |c| 
+#   unless c.params[:ids].nil? 
+#     "compare/" + c.params[:ids].split(",").sort.join(",")
+#   else
+#    c.params
+#   end
+ #     },:expires_in => 2.hour
   layout "product"
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
  
