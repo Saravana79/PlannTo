@@ -74,21 +74,7 @@
     };
     var target = document.getElementById(spinnerId);
     var spinner = new Spinner(opts).spin(target);
-
-    $.ajax(
-    {
-      url: "/items/compare",
-      data: {
-        ids: ids.toString(),
-        search_type: ''
-      },
-      type: "GET",
-      dataType: "script",
-      success: function( data )
-      {
-        spinner.stop();
-      }
-    });
+    window.location.href = "/items/compare?ids=" + ids.toString();
   }
 
 </script>
