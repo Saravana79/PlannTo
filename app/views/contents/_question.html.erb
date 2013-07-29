@@ -17,6 +17,7 @@
       <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(content).html_safe  %></a></li>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/report.jpg"/><%= link_to "Report",new_content_report_path(content,:type => "content"),:remote => true,:class => "txt_blue" ,:id => "report_link_#{content.id}",:style=>"float:left;padding-left:5px;"%></a></li>
+      <div id="edit_actions_<%= content.id %>"> </div>
       <li class="subContentGap float_lft"><a class="txt_gray ">|</a></li>
       <li class="subContentGap float_lft"><a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= link_to "Add Answer", content_path(content.id,:answer => "true" ),:id=> "answer",:class => "txt_blue"%></a></li>
     
@@ -34,7 +35,7 @@
     </ul>
   </div>
    <%@fromcontent = "true"%>
-   <%isanswer = "true%>"
+   <%isanswer = "true"%>
   <%=render :partial => "comments/new", :locals => { :content => content, :fromcontent => @fromcontent}  %>
   
 </div>

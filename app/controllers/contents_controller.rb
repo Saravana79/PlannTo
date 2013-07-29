@@ -27,6 +27,9 @@ class ContentsController < ApplicationController
      filter_params = {"sub_type" => get_sub_type(params[:sub_type],   itemtype_id)}    
      filter_params["order"] = get_sort_by(params[:sort_by])
      filter_params["itemtype_id"] =  itemtype_id 
+     
+    
+       
      if  params[:guide]!="" && params[:items]!=""
        filter_params.delete("itemtype_id") 
     end 
@@ -39,7 +42,11 @@ class ContentsController < ApplicationController
           filter_params["items_id"] = @items.split(",") if params[:search_type] == "Myfeeds"
           filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.find(:all).collect(&:id)
        end  
-      if params[:search_type] != "Myfeeds"  
+      if params[:search_type] != "Myfeeds" 
+      if params[:sub_type] == "Deals" || params[:sub_type] == "Event"
+        item_type = Itemtype.find(itemtype_id[0]).itemtype
+        params[:items] = Item.find_root_level_id(item_type,params[:items])
+      end    
        if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 
@@ -167,7 +174,10 @@ class ContentsController < ApplicationController
           filter_params["created_by"] =  params[:search_type] == "Myfeeds"? User.get_follow_users_id(current_user) : User.find(:all).collect(&:id)
        end   
       if params[:search_type] != "Myfeeds"  
-       
+       if params[:sub_type] == "Deals" || params[:sub_type] == "Event"
+         item_type = Itemtype.find(itemtype_id[0]).itemtype
+         params[:items] = Item.find_root_level_id(item_type,params[:items])
+      end
        if params[:items].present?
        if params[:items].is_a?  Array
           items = params[:items] 

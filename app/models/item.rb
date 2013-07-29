@@ -576,6 +576,27 @@ class Item < ActiveRecord::Base
   @item,@root_items = Item.find_top_level_item_ids(item_types,user)
  end
  
+  def self.find_root_level_id(type,items)
+    case type
+    when 'Mobile'
+      return (items + "," + configatron.root_level_mobile_id.to_s)
+    when 'Camera'
+      return (items + "," + configatron.root_level_camera_id.to_s)
+    when 'Tablet' 
+      return (items + "," +  configatron.root_level_tablet_id.to_s)
+    when 'Bike'
+      return (items + "," +  configatron.root_level_bike_id.to_s)
+    when "CarGroup"
+      return (items + "," + configatron.root_level_car_id.to_s)
+    when "Car"
+      return (items + "," + configatron.root_level_car_id.to_s)
+    when "Manufacturer"
+      return (items + "," +  configatron.root_level_car_id.to_s)  
+    when 'Cycle'
+      return (items + "," +  configatron.root_level_cycle_id.to_s) 
+    end 
+ end
+ 
  def self.find_top_level_item_ids(types,user)
      root_items = []
      items = []
@@ -599,7 +620,7 @@ class Item < ActiveRecord::Base
           items+= it
         
         when 'Bike'
-          items << configatron.root_level_tablet_id.to_s
+          items << configatron.root_level_bike_id.to_s
           items+= it
         when "CarGroup"
           root_items << configatron.root_level_car_id.to_s
