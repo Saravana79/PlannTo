@@ -52,9 +52,16 @@
             url: "/get_class_names",
             data: {ids: <%= @contents.collect(&:id) %>},
             success: function(data) {
-                $.each(data, function(key, value){
-                  $("#likeVote"+key).toggleClass(value['positive'])
-                  $("#dislikeVote"+key).toggleClass(value['negative'])
+                $.each(data, function(key, value){                
+                  if(value['positive'] != $("#likeVote"+key).attr('class'))
+                  {
+                    $("#likeVote"+key).toggleClass(value['positive'])
+                  }
+                  
+                  if(value['negative'] != $("#dislikeVote"+key).attr('class'))
+                  {
+                    $("#dislikeVote"+key).toggleClass(value['negative'])
+                  }
                 });                
             }
         })

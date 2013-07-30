@@ -128,6 +128,29 @@
   
  
  </script>
+ <script type="text/javascript">
+ $(document).ready(function(){
+   $.ajax({
+            type: "get",
+            dataType: "json",
+            url: "/get_class_names",
+            data: {ids: <%= content.id %>},
+            success: function(data) {
+                $.each(data, function(key, value){
+                 if(value['positive'] != $("#likeVote"+key).attr('class'))
+                  {
+                    $("#likeVote"+key).toggleClass(value['positive'])
+                  }
+                  
+                  if(value['negative'] != $("#dislikeVote"+key).attr('class'))
+                  {
+                    $("#dislikeVote"+key).toggleClass(value['negative'])
+                  }
+                });                
+            }
+        })
+});
+</script>
  <%= render "shared/google_analytics" if Rails.env.production? %>
  
 </html>

@@ -6,8 +6,11 @@
     <a class="bg_ratecontent" id="votersResult<%=item.id%>"><%=item.content_vote_count%></a>
     <%#class_name = get_voting_class_name(current_user, item) %>
 
-    <%= positive_vote(current_user, item) %>
-    <%= negative_vote(current_user, item) %>
+<%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> "btn_like_default", :id => "likeVote#{item.id}" %>
+    <%= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => nil,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> "btn_dislike_default", :id => "dislikeVote#{item.id}" %>
+
+    <%#= positive_vote(current_user, item) %>
+    <%#= negative_vote(current_user, item) %>
     <%#= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :up}, :method => 'POST' , :remote => true, :class=> class_name[:positive], :id => "likeVote#{item.id}" %>
     <%#= link_to "",{:controller => 'votes', :action => "add_vote", :id => item.id, :vote_id => vote,  :parent => "#{GlobalUtilities.get_class_name(item.class.name)}", :vote => :down}, :method => 'POST' , :remote => true, :class=> class_name[:negative], :id => "dislikeVote#{item.id}" %>
   </div>
