@@ -134,7 +134,7 @@
             type: "get",
             dataType: "json",
             url: "/get_class_names",
-            data: {ids: <%= content.id %>},
+            data: {ids: <%= @content.id %>},
             success: function(data) {
                 $.each(data, function(key, value){
                  if(value['positive'] != $("#likeVote"+key).attr('class'))
