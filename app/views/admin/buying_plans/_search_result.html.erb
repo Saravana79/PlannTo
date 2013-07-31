@@ -1,0 +1,14 @@
+<%= @item.name %>
+ <table border="1" width="100px">
+  <tr>
+    <td>User name </td>
+    <td> Buying Plan </td>
+  </tr>
+<% @buyers.each do |b| %>
+<tr>
+  <td><%= link_to b.follower.name,"/" + "#{b.follower.username}" %> </td>
+  <% buying_plan = BuyingPlan.where('user_id=? and itemtype_id =? and deleted =? and completed =?' ,b.follower.id,@item_type_id,0,0).first %>
+  <td> <a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>/"><%=buying_plan.try(:user_question).try(:title)%></a> </td>
+</tr>
+ <%end%>
+</table> 

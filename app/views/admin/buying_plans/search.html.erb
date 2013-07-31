@@ -1,0 +1,6 @@
+<%= form_for :product,:url => search_admin_buying_plans_path,:method => :post,:remote => :true do |f| %>
+   <%= f.select :product_id, Item.select_option_list %>
+ <%= f.submit "Search" %>
+ <%end%>
+ 
+ <div id="search_result"></div>

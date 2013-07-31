@@ -2,7 +2,12 @@ PlanNto::Application.routes.draw do
  
 namespace :admin do
   resources :users
-  resources :buying_plans
+  resources :buying_plans do
+  collection do  
+    get :search
+    post :search
+   end
+   end
   resources :feeds do
     member do
       get :add_vote
