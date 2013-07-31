@@ -962,6 +962,10 @@ end
     when "Camera"
        return configatron.root_level_camera_id 
     end 
-   end           
+   end 
+   
+  def self.select_option_list 
+   [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
+  end          
  end
 
