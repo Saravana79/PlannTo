@@ -76,7 +76,7 @@ $("#dialog-form #click_message").hide();
           <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
 
         <% elsif @item.is_a? Product %>
-        <div style="float:left;">
+        <div style="float:left;width:450px;">
           <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
           <a class="txt_price"><%= @item.get_price_info('Price',true, @where_to_buy_items.size).html_safe rescue ''%></a><br />
           <a>
