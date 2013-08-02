@@ -8,8 +8,8 @@ class Admin::BuyingPlansController < ApplicationController
   end 
   
   def search
-    @item = Item.find(params[:product][:product_id]) rescue ''
+    @item = Item.find(params[:product_id]) rescue ''
     @item_type_id = @item.itemtype.id rescue ''
-    @buyers = Follow.where('follow_type= ? and followable_id =?','buyer',params[:product][:product_id]) rescue ''
+    @buyers = Follow.where('follow_type= ? and followable_id =?','buyer',params[:product_id]) rescue ''
   end  
 end

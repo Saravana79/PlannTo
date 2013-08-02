@@ -345,7 +345,7 @@ class Item < ActiveRecord::Base
     top_contributors = $redis.smembers "#{keyword_id}"
     if top_contributors.size == 0
       #query to find top contributors
-      top_contributors = ActiveRecord::Base.connection.execute("select * from view_top_contributors where item_id = #{self.id} limit 5")
+      top_contributors = ActiveRecord::Base.connection.execute("select * from view_top_contributors where item_id = #{self.id} ORDER BY points DESC limit 5")
       #save in cache
       $redis.multi do
         top_contributors.each do |cont|
