@@ -488,7 +488,7 @@ def populate_pro_con
     else
       cons = []
     end
-    last_index += 1
+    #last_index += 1
 
     pros.each do |pro|
      unless (pro.length < 3 )      
