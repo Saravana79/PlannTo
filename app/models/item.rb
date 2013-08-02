@@ -801,6 +801,7 @@ def populate_pro_con
                     last_index += 1
                     
                     pros.each do |pro|
+                     unless (pro.length < 3 )      
                         if(pro.strip[0..2].downcase == "and")
                           pro = pro[4..-1]
                         else
@@ -822,29 +823,33 @@ def populate_pro_con
                               end
                               ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Pro", pro.strip, pro_con_category_id: tempid , text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size) 
                          end
+                      end 
                     end
                     cons.each do |con|            
-                    if(con.strip[0..2].downcase == "and")
-                          con = con[4..-1]
-                        else
-                          con = con
+                      unless (con.length < 3 )      
+                       
+                            if(con.strip[0..2].downcase == "and")
+                              con = con[4..-1]
+                            else
+                              con = con
+                            end
+                             con = con.capitalize             
+                             if item.itemtype.pro_con_categories.blank?
+                                  ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: nil, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size)
+                             else
+                                  tempid =  nil
+                                  item.itemtype.pro_con_categories.each do |pcc|
+                                       pro_con_category_id = pcc.id
+                                       list = pcc.list.downcase.strip.gsub(", ","|").gsub(",","|")
+                                      if(con.downcase.match(/#{list}/))
+                                            tempid = pcc.id
+                                            break
+                                       end                                  
+                                  end
+                                   ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: tempid, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size) 
+                             end
                         end
-                         con = con.capitalize             
-                         if item.itemtype.pro_con_categories.blank?
-                              ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: nil, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size)
-                         else
-                              tempid =  nil
-                              item.itemtype.pro_con_categories.each do |pcc|
-                                   pro_con_category_id = pcc.id
-                                   list = pcc.list.downcase.strip.gsub(", ","|").gsub(",","|")
-                                  if(con.downcase.match(/#{list}/))
-                                        tempid = pcc.id
-                                        break
-                                   end                                  
-                              end
-                               ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.id, content.id, "Con", con.strip, pro_con_category_id: tempid, text: con.strip, index: last_index, proandcon: "Con", letters_count: con.length, words_count: con.scan(/\w+/).size) 
-                         end
-                    end
+                    end    
                #end
           end
 

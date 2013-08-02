@@ -32,6 +32,7 @@ class Content < ActiveRecord::Base
   has_many :flags
   has_many :content_itemtype_relations
   has_many :itemtypes, :through => :content_itemtype_relations
+  has_many :item_pro_cons, :foreign_key => 'article_content_id'
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true do |item|
@@ -469,6 +470,92 @@ end
         cache_key = "views/" + configatron.hostname.to_s + "/external_contents/" + content.id.to_s    
         Rails.cache.delete(cache_key)
     end
+  end
+
+
+def populate_pro_con
+    content = self
+    ItemProCon.delete_all(["article_content_id = ?", content.id])
+    #item_pro = content.itemtype.pro_con_categories.where(:proorcon => "Pro")
+    #item_con = content.itemtype.pro_con_categories.where(:proorcon => "Con")
+    unless(content.field2.nil? or content.field2.empty?)      
+      pros = (content.field2.include? ";") ? content.field2.split(/[.]\s|;/) : content.field2.split(/,|[.]\s/) 
+    else
+      pros = []
+    end
+    unless(content.field3.nil? or content.field3.empty?)
+      cons =  (content.field3.include? ";") ? content.field3.split(/[.]\s|;/) : content.field3.split(/,|[.]\s/) 
+    else
+      cons = []
+    end
+    last_index += 1
+
+    pros.each do |pro|
+     unless (pro.length < 3 )      
+        if(pro.strip[0..2].downcase == "and")
+          pro = pro[4..-1]
+        else
+          pro = pro
+        end
+         pro = pro.capitalize
+          tempid =  nil
+          content.itemtype.pro_con_categories.order(:sort_order).each do |pcc|
+               pro_con_category_id = pcc.id
+               list = pcc.list.downcase.strip.gsub(", ","|").gsub(",","|")
+               if(pro.downcase.match(/#{list}/))
+                    tempid = pcc.id
+                    break
+               end
+                                            
+          end
+           items = content.item_contents_relations_cache
+           items.each do |item|
+            itemprocon = ItemProCon.new
+            itemprocon.item_id = item.item_id
+            itemprocon.article_content_id = content.id
+            itemprocon.proorcon = "Pro"
+            itemprocon.text = pro.strip
+            itemprocon.pro_con_category_id = tempid 
+            itemprocon.letters_count = pro.length, 
+            itemprocon.words_count = pro.scan(/\w+/).size
+            itemprocon.save
+            #ItemProCon.find_or_create_by_item_id_and_article_content_id_and_proorcon_and_text(item.item_id, content.id, "Pro", pro.strip, pro_con_category_id: tempid , text: pro.strip, index: last_index, proandcon: "Pro", letters_count: pro.length, words_count: pro.scan(/\w+/).size) 
+           end
+      end 
+    end
+    cons.each do |con|            
+      unless (con.length < 3 )      
+       
+            if(con.strip[0..2].downcase == "and")
+              con = con[4..-1]
+            else
+              con = con
+            end
+             con = con.capitalize             
+              tempid =  nil
+              content.itemtype.pro_con_categories.each do |pcc|
+                   pro_con_category_id = pcc.id
+                   list = pcc.list.downcase.strip.gsub(", ","|").gsub(",","|")
+                  if(con.downcase.match(/#{list}/))
+                        tempid = pcc.id
+                        break
+                   end                                  
+              end
+            items = content.item_contents_relations_cache
+            items.each do |item|
+                  itemprocon = ItemProCon.new
+                  itemprocon.item_id = item.item_id
+                  itemprocon.article_content_id = content.id
+                  itemprocon.proorcon = "Con"
+                  itemprocon.text = con.strip
+                  itemprocon.pro_con_category_id = tempid 
+                  itemprocon.letters_count = con.length, 
+                  itemprocon.words_count = con.scan(/\w+/).size
+                  itemprocon.save
+            end
+        end
+    end    
+ 
   end
 
   def save_content_relations_cache(related_items)
