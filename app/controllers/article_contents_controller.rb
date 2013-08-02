@@ -13,7 +13,7 @@ class ArticleContentsController < ApplicationController
     end  
     
     if params['article_content']['url']
-      if params['article_content']['url'].include?("?utm_source=")
+      if params['article_content']['url'].include?("utm_source=")
         params['article_content']['url'] = params['article_content']['url'].split("?")[0]
       end
     end  
