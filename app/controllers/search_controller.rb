@@ -197,12 +197,12 @@ class SearchController < ApplicationController
     @items = Sunspot.search(Product.search_type(params[:search_type]) + [Content]) do
       keywords params[:q].gsub("-",""), :fields => :name
       with :status,[1,2,3]
-      order_by :class, :desc
+      #order_by :class, :desc
       paginate(:page => params[:page], :per_page => 10)
       #facet :types
       order_by :orderbyid , :asc
       #order_by :status, :asc      
-      order_by :created_at, :desc
+      order_by :launch_date, :desc
     end
   end
   
@@ -219,7 +219,7 @@ class SearchController < ApplicationController
       with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
-      order_by :created_at, :desc            
+      order_by :launch_date, :desc            
       #order_by :status,:asc
     end
 
