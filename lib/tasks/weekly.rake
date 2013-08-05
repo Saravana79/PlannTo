@@ -121,6 +121,15 @@ namespace :plannto do
       Cycle.reindex
       Sunspot.commit
 
+    puts "Indexing Car Group"
+      CarGroup.reindex
+      Sunspot.commit
+
+    puts "Indexing Manufacturer"
+      Manufacturer.reindex
+      Sunspot.commit
+
+
     puts "Indexing Completed"
     
   end
