@@ -113,8 +113,8 @@ production:
   wizard_items_buyer: "2157,4963,4745,4651,4884,4099,4744,3978"
   wizard_items_owner: "1790,4057,2880,581,253,2482,1693,2756"
   wizard_topics: "4154,4160,4152,4137,4128,4165,4129,4538,4540"
-  rating_m_for_car: 2
-  rating_m_for_bike: 2
+  rating_m_for_car: 4
+  rating_m_for_bike: 4
   rating_m_for_cycle: 1
   rating_m_for_mobile: 5
   rating_m_for_tablet: 5
