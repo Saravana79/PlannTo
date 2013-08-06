@@ -4,13 +4,18 @@
  <table border="1" width="100px">
   <tr>
     <td>User name </td>
+    <td> Location </td>
     <td> Buying Plan </td>
+    <td> Send Proposal </td>
   </tr>
 <% @buyers.each do |b| %>
 <tr>
   <td><%= link_to b.follower.name,"/" + "#{b.follower.username}" %> </td>
   <% buying_plan = BuyingPlan.where('user_id=? and itemtype_id =? and deleted =? and completed =?' ,b.follower.id,@item_type_id,0,0).first %>
-  <td> <a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>/"><%=buying_plan.try(:user_question).try(:title)%></a> </td>
+  <td><%= b.follower.location %> </td> 
+  <td> <a class="txt_black txt_onhover" style="font-size:14px;" id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>/"><%="View"%></a> </td>
+  <td><%= link_to "Send Proposal", proposal_admin_buying_plans_path(:buying_plan_id => buying_plan.id ,:item_id => @item.id ) ,:remote => :true %> </td>
 </tr>
  <%end%>
 </table> 
+

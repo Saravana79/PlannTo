@@ -16,6 +16,7 @@ class PreferencesController < ApplicationController
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
+    @personal_deals = @buying_plan.proposal
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)

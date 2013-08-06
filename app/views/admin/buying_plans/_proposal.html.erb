@@ -1,0 +1,67 @@
+<%= form_for :proposal,:url => proposal_save_admin_buying_plans_path ,:remote => :true do |f| %>
+<%= hidden_field_tag "buying_plan_id",@buying_plan.id %>
+<div class="popup-background" >
+<script  type="text/javascript" src="/javascripts/expanding.js"></script>
+  <a href="#" class="Closebut" style="display:none;">&nbsp;</a>
+<%= hidden_field_tag 'proposal_item_id' %>
+  <ul id="proposal_product_list" class="tagging"></ul>
+ <br />
+ <div style="padding:0px 500px 0px 5px;">
+  <div style="margin-left:80px;">
+<input style="margin-top:5px;width:250px" placeholder="Type item name..." type="text" value="" id="proposal_product"/>
+</div></div>
+<div style="clear:both;"></div>
+    <div style="padding:0px 500px 0px 5px;">
+ <div class="title_header float_lft">Item price </div>
+ <div style="margin-left:80px;">
+<%= f.text_field :item_price %></div></div>
+<div style="padding:0px 500px 0px 5px;">
+ <div class="title_header float_lft">Delivery Period </div>
+ <div style="margin-left:80px;">
+<%= f.text_field :delivery_period %></div></div>
+<div style="padding:0px 500px 0px 5px;">
+ <div class="title_header float_lft">Expiry Date </div>
+ <div style="margin-left:80px;">
+<%= f.text_field :expiry_date %></div></div>
+<script>
+$("#proposal_expiry_date").datepicker({ altField: 'proposal_expiry_date', altFormat: 'dd/mm/yy' });
+</script>
+<div style="padding:0px 500px 0px 5px;">
+ <div class="title_header float_lft">Shipping Cost </div>
+ <div style="margin-left:80px;">
+<%= f.text_field :shipping_cost%></div></div>
+<div style="padding:0px 500px 0px 5px;">
+ <div class="title_header float_lft">color </div>
+ <div style="margin-left:80px;">
+<%= f.text_field :color%></div></div>
+<div style="padding:0px 500px 0px 5px;">
+ <div class="title_header float_lft">Purchase Details/comments </div>
+ <div style="margin-left:80px;">
+<%= f.text_area :comments,:class => 'textFilling expanding', :id=>"report",:style=> 'width:400px;height:50px;'%></div></div>
+  <div style="clear:both;"></div>
+    <div style="padding:100px 0px 0px 900px; float:right; width:100%; margin-right:5px; margin-top:20px ">
+        <%= f.submit 'Send Proposal', :class => 'btn_submitanswer',:id => "publishanswer" %>
+        <%= render "shared/ajax_loader" %>
+    </div>
+      <div style="clear:both;"></div>
+ </div> 
+ <%= render "shared/expanding_text_area_style" %>
+     
+<%end%>
+
+<script>
+ settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "proposal_item_id"
+      };
+      $.textTagger("proposal_product","proposal_product_list",settings);
+  <% unless @item.blank? %>
+       
+        $.addTag("proposal_product","proposal_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
+      // $("#article_create_product_list li:first span a.icon_close_tagging").remove();
+  <% end %>
+</script>  
+  

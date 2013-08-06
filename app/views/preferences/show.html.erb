@@ -158,10 +158,20 @@
 	        <li <%if params[:type] == "Recommendations"%> class="tab_active" <%end%>><a href="?type=Recommendations"><span>Recommendations<%if (@buying_plan.user_question.user_answers.size > 0)%> (<%=@buying_plan.user_question.user_answers.size.to_s %>)<%end%></span></a></li> 
 	        <%if params[:search_type] != "car" and  params[:search_type]  !="bike"%> <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li>  <%end%>
 	        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
+	        <%if Rails.env == "development" %>
+	        <%if @buying_plan.user_id == current_user.id %>
+	        <%unless @personal_deals.blank? %>
+	          <li <%if params[:type] == "personal_deals"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=personal_deals"><span>Personal Deals</span></a></li>
+	        <%end%> 
+	         <%end%>
+	        <%end%>
 	  </ul>
 	          <br/>
 						<br/>
 						<br />
+						<%if params[:type] == "personal_deals" %>
+						 <%= render "personal_deals" %>
+						<%end%>
 			      <%if params[:type] == "Recommendations" %>
 							<!-- Answer this question - Start -->
 				  <div style="font:bold 13px/45px Tahoma,Arial, Helvetica, sans-serif;clear:both;">
