@@ -6,6 +6,8 @@ namespace :admin do
   collection do  
     get :search
     post :search
+    get :proposal
+    post :proposal_save
    end
    end
   resources :feeds do
