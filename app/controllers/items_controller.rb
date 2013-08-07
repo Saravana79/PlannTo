@@ -164,7 +164,7 @@ class ItemsController < ApplicationController
       end 
     end 
     unless @ids.blank? || params[:ids] == ""
-      @items = Item.includes([:attribute_values => [:attribute => :attribute_comparison_list]],:item_rating).where("items.id in (?)", @ids)
+      @items = Item.includes([:attribute_values => :attribute],:item_rating).where("items.id in (?)", @ids)
 
       @item1 = @items[0] 
       session[:item_type] =  @item1.get_base_itemtype
@@ -175,7 +175,7 @@ class ItemsController < ApplicationController
       @ids[0] = "0" if @ids[0] == ""
       #content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Reviews','Deals','Lists') group by content_id order by count(*) desc").collect(&:content_id)
       #@contents = Content.where("id in (?)",content_ids).order("total_votes desc")
-      @attribute_comparision_lists = @items.collect(&:attribute_values).flatten.collect{|av| av.attribute.attribute_comparison_list if av.attribute.attribute_comparison_list && av.attribute.attribute_comparison_list.itemtype_id== @item1.itemtype_id}.flatten.compact.sort_by{|obj| obj.sort_order}
+      @attribute_comparision_lists = AttributeComparisonList.find(:all,:conditions => ["itemtype_id = ?", @item1.itemtype_id], :order => "sort_order")
 
    else
     
