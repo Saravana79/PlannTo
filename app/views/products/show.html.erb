@@ -227,6 +227,9 @@ $(function(){
 
 </script>
 <br/>
+<div style="height: 30px;padding: 10px;background: lightgray;padding-left: 0px;clear:both;">
+    <%= render :partial => "contents/quick_content_container", :locals => {:article_categories => @article_categories,:item => @item} %>
+</div>
 
 <% unless (@pro_cons.empty? and @verdicts.empty?)%>  
       <div style="width: 680px;margin-left: 13px;border: 1px solid #E3E3E3;border-bottom: 0px;clear: both;padding:10px;margin-top:20px;min-height:35px; ">
@@ -302,9 +305,6 @@ $(function(){
     </script>
 
   <%end%>
-<div style="height: 30px;padding: 10px;background: lightgray;padding-left: 0px;clear:both;">
-    <%= render :partial => "contents/quick_content_container", :locals => {:article_categories => @article_categories,:item => @item} %>
-</div>
 <div style="padding-top:20px;">
   <ul id="Newtabs">
     <%= display_product_page_tabs(@item, params[:at] || "overview") %>
