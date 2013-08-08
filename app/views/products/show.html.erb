@@ -526,7 +526,17 @@ $("#buy span").html("Compare Prices");
     $("ul#Newtabs li#buy").addClass("tab_active");
     </script>
     <%end%>
-
+    <%if @item.type == "CarGroup" || @item.type == "Manufacturer" %>
+    <script>
+     $("#overview").hide();
+     $("#where_to_buy").hide();
+     $("#all_variants").show();
+     $("#specification").hide(); 
+     $("ul#Newtabs").find("li").removeClass("tab_active");
+     $("ul#Newtabs li#all_variant").addClass("tab_active");
+    </script>
+    <%end%>
+  
     <script>
     $("#group_price").click(function(e){
      $("#overview").hide();
