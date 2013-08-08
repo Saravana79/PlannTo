@@ -231,9 +231,20 @@ $(function(){
     <%= render :partial => "contents/quick_content_container", :locals => {:article_categories => @article_categories,:item => @item} %>
 </div>
 
+<div id="expert_review_help" style="display:none; background-color:white;height:200px;width:300px;">
+   <a href="#" class="Closebut" style="float:right;padding:5px 5px 0px 0px;">Close</a>
+ <div style="padding:50px 0px 0px 20px">
+This section summaries the pros/cons based on reviews from experts, please click the items to check the complete review.
+</div>
+</div>
 <% unless (@pro_cons.empty? and @verdicts.empty?)%>  
       <div style="width: 680px;margin-left: 13px;border: 1px solid #E3E3E3;border-bottom: 0px;clear: both;padding:10px;margin-top:20px;min-height:35px; ">
-        <h3 class="producttabsubheader" style="width:670px;">Experts Review's Summary</h3>
+        <h3 class="producttabsubheader" style="width:670px;">Experts Review's Summary<%= link_to "(?)","#",:onclick => "$('#expert_review_help').bPopup({
+   closeClass:'Closebut',
+   modalClose: false,
+   position: [screen.width / 3, $(window).scrollTop() + 150],
+   follow: [false, false] 
+ });return false;", :title => "Description" %></h3>
         <% unless @pro_cons.empty? %>
           <table style="">
               <tr>

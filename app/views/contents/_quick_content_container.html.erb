@@ -20,7 +20,9 @@ end%>
                  <span class="Usernamedp1"><img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Share Knowledge</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
                    <div class="Useraccountinfo1">
                <%end%> 
+               <% unless article_category[0] == "Video" %>
                   <a data-content="<%=article_category[0]%>" class="quickCreate"><%=content_write_tab_label(article_category[0])%></a>
+               <%end%>   
                     <%if index == count %>
                    </div>
                  </span>
