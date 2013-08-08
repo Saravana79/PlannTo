@@ -4808,7 +4808,7 @@ ul.megamenu div.mm-item-content {
 .inner-top-search #search-form .search-input-text{width: 300px;float: left;border: 0;background: #12c1e6;color: #222;line-height: 100%;font-size: 14px;height:20px; padding:0 5px 0 5px;}
 .inner-top-search #search-form .search-input-text:focus{outline:none;color:#fff;}
 .inner-top-search #search-form .search-input-submit{background:url(../images/search-icon.png) no-repeat right top; float:right;width:32px; height:22px;z-index: 100;cursor: pointer; display:block; border:0;}
-
+    
 .icon_user {  background: url("../images/icons.png") no-repeat left top; border: 0 solid; display: block; float: left; height: 30px; margin: 10px 0 0 5px;  width: 32px;}
 .icon_user:hover {  background: url("../images/icons.png") no-repeat left -30px;}
 
@@ -5156,3 +5156,4 @@ bodyerror {
 .follow_uson h3{ font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#768497; padding: 0px 0 0px 0;  float:left; font-weight:normal;}
 .follow_uson img { float:left; margin:0 0 0 19px;}
 .follow_uson img:hover {opacity:0.4; filter:alpha(opacity=40);} 
+.autocompletediv:hover{cursor: pointer};

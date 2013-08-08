@@ -164,70 +164,17 @@ end
   end
 
   task :update_rank => :environment do
-
-    date_modifier = configatron.launch_date_modifier.to_s
-
-    Itemtype.where("itemtype in ('Car','Mobile','Bike','Tablet','Camera','Cycle')").each do |itemtype|  
-    
-      item_type_id = itemtype.id.to_s
-      total_rating_to_consider = configatron.retrieve(("rating_m_for_" + itemtype.itemtype.downcase).to_sym).to_s
-      
-      avearge_rating_of_average  =  ItemRating.find_by_sql("select avg(average_rating) as avg1 from item_ratings where item_id in (select id from items where itemtype_id = #{item_type_id}) and (average_rating is not null  or average_rating!=0)").first.avg1.to_s
-         
-      sql_for_max_average = "select calculated_rating - ((case when (launchdatemonth > 0 and launchdatemonth1 != '') then launchdatemonth else createddatedifference end) * "+ date_modifier + ") as final_rating from (select items.name,average_rating,review_count,
-            (((review_count/(review_count + " + total_rating_to_consider + ")) * average_rating) + ((" + total_rating_to_consider + "/(review_count+" + total_rating_to_consider + "))*" + avearge_rating_of_average + ")) as calculated_rating ,
-            (select value from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth1,
-            (select period_diff(date_format(now(), '%Y%m'), date_format(str_to_date(value,'%d-%M-%Y') , '%Y%m'))from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth,
-            period_diff(date_format(now(), '%Y%m'),date_format(items.created_at,'%Y%m')) as createddatedifference
-            from item_ratings 
-            inner join items on items.id = item_ratings.item_id where itemtype_id = " + item_type_id + " and average_rating != 0 
-            ) as a
-            order by final_rating desc limit 1"
-      
-      max_average_value = ItemRating.connection.select_value(sql_for_max_average).to_f.round(2).to_s
-      sql_for_rank = "select item_ratings_id, name, calculated_rating - ((case when (launchdatemonth > 0 and launchdatemonth1 != '') then launchdatemonth else createddatedifference end) * "+ date_modifier + ") as final_rating ,
-            ((calculated_rating - ((case when (launchdatemonth > 0 and launchdatemonth1 != '') then launchdatemonth else createddatedifference end) * "+ date_modifier + "))/"+ max_average_value +") * 100 as rank from (select item_ratings.id as item_ratings_id,items.name,average_rating,review_count,
-            (((review_count/(review_count + " + total_rating_to_consider + ")) * average_rating) + ((" + total_rating_to_consider + "/(review_count+" + total_rating_to_consider + "))*" + avearge_rating_of_average + ")) as calculated_rating ,
-            (select value from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth1,
-            (select period_diff(date_format(now(), '%Y%m'), date_format(str_to_date(value,'%d-%M-%Y') , '%Y%m'))from attribute_values av where av.attribute_id = 8 and av.item_id = item_ratings.item_id limit 1) as launchdatemonth,
-            period_diff(date_format(now(), '%Y%m'),date_format(items.created_at,'%Y%m')) as createddatedifference
-            from item_ratings 
-            inner join items on items.id = item_ratings.item_id where itemtype_id = " + item_type_id + " and average_rating != 0 
-            ) as a
-            order by final_rating desc"
-
-     temp_item_ratings = ItemRating.connection.select_all(sql_for_rank)
-     temp_item_ratings.each do |temp_item_rating|
-        temp_item_rating_id = temp_item_rating["item_ratings_id"]
-        final_rating = temp_item_rating["final_rating"]
-        rank = temp_item_rating["rank"]
-        if(!rank.nil?)
-          rank = rank.round
-          if(rank > 100)
-            rank = 100
-          elsif (rank < 0)
-            rank = 0
-          end
-        end
-
-        item_rating = ItemRating.find(temp_item_rating_id)
-        item_rating.final_rating = final_rating
-        item_rating.rank = rank
-        item_rating.save
-     end
-
-    end 
-
-
+    Item.update_rank
+   
   end
 
   desc "activate contents"
 
   task :activate_contents => :environment do
-  contents = Content.all
-  contents.each do |content|
-  content.update_attribute(:status, 1)
-  end
+    contents = Content.all
+    contents.each do |content|
+      content.update_attribute(:status, 1)
+    end
   end
 
 end

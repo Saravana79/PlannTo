@@ -84,19 +84,17 @@ namespace :plannto do
   end
   desc "task to set content item relations"
 
-  task :populate_slug ,:arg1, :arg2, :needs => :environment do | t, args|
-    #ItemContentsRelationsCache.delete_all
-    puts args[:arg1]
-    arg1 = args[:arg1]
-    arg2 = args[:arg2]
-    items = Item.find(:all,:limit => arg2.to_i, :conditions=>["id > ?" , arg1])
-    items.each do |item|
-      puts item.id
-        item.save
-    end
+  task :populate_slug  => :environment do | t, args|
+    Item.populate_slug
   end
 
    task :reindex_items => :environment do
+
+    puts "Updating Slugs"
+      Item.populate_slug
+    puts "Updating Ranks"
+      Item.update_rank
+    
     puts "Indexing Car"
       Car.reindex
       Sunspot.commit
@@ -129,9 +127,14 @@ namespace :plannto do
       Manufacturer.reindex
       Sunspot.commit
 
-
+         
     puts "Indexing Completed"
-    
+
+    puts "Cache Clearing Started"
+      Rails.cache.clear
+      $redis.flushdb
+    puts "Cache Clearing Ended"
+
   end
 
 end
