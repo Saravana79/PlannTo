@@ -1,16 +1,20 @@
-<div style="marign-right:300px;font-size:15px;" %>
+<% @personal_deals.each do |personal_deal| %> 
+<div style="marign-right:300px;font-size:13px;" %>
+ <h1>Vendor name: <%= personal_deal.vendor.name %>  </h1>
 <p> <b>Item name:</b>
- <%= @personal_deals.item.name %></p>
+ <%= personal_deal.item.name %></p>
  <p><b> Price of the Item: </b>
- <%= @personal_deals.item_price %>
+ <%= personal_deal.item_price %>
  <p><b> Delivery Period: </b>
- <%= @personal_deals.delivery_period %>
+ <%= personal_deal.delivery_period %>
  <p><b> Shipping Cost:</b>
- <%= @personal_deals.shipping_cost %>
+ <%= personal_deal.shipping_cost %>
  <p><b> Color: </b>
- <%= @personal_deals.color %>
+ <%= personal_deal.color %>
  <p><b> Expiry Date: </b>
- <%= @personal_deals.expiry_date %>
+ <%= personal_deal.expiry_date %>
  <p><b> Purchase details/comments: </b>
- <%= @personal_deals.comments %>
+ <%= personal_deal.comments %>
 </div> 
+<br /> <br /> <br />
+<%end%>

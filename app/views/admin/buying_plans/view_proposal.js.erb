@@ -1,0 +1,7 @@
+ $("#proposal").html("<%= escape_javascript(render 'view_proposal') %>");
+ $("#proposal").bPopup({
+    closeClass:'Closebut',
+    modalClose: false,
+    position: [(screen.width / 2) - (520/2),$(window).scrollTop() + 70],
+    follow: [false, false] //x, y
+ });

@@ -73,6 +73,15 @@ class User < ActiveRecord::Base
   def self.get_follow_users_id(current_user)
     user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
   end
+  
+  def is_a_vendor?
+    if UserVendor.where(:user_id => self.id).blank?
+      return false
+    else
+      return true
+    end    
+  end
+  
   def profle_view_permission?(user)
     return true if self.id == user.id
     return true if user.profile_view_setting == "pu"

@@ -1,7 +1,7 @@
 class Admin::BuyingPlansController < ApplicationController
   layout "product"
-  before_filter :authenticate_admin_user!
-  
+  before_filter :authenticate_admin_user! ,:only =>[:index]
+  before_filter :authenticate_vendor_user!,:except => [:index]
   def index
      @buying_plans = BuyingPlan.order('created_at desc').paginate(:per_page => 20,:page => params[:page])
      @admin = "true"
@@ -26,8 +26,11 @@ class Admin::BuyingPlansController < ApplicationController
   end
   
   def proposal_save
+    vendor_id = UserVendor.find_by_user_id(current_user.id).vendor_id
     p = Proposal.new
     p.item_id = params[:proposal_item_id]
+    p.user_id = current_user.id
+    p.vendor_id = vendor_id
     p.buying_plan_id = params[:buying_plan_id]
     p.expiry_date = params[:proposal][:expiry_date]
     p.item_price = params[:proposal][:item_price]
@@ -37,4 +40,8 @@ class Admin::BuyingPlansController < ApplicationController
     p.comments =  params[:proposal][:comments]
     p.save
   end
+  
+ def view_proposal
+   @proposal = Proposal.find_by_buying_plan_id(params[:buying_plan_id])
+ end 
 end

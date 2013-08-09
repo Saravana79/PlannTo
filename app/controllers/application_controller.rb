@@ -39,7 +39,14 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end  
   end 
-     
+    
+  def authenticate_vendor_user!
+     authenticate_user!
+    if UserVendor.where(:user_id => current_user.id).blank?
+      redirect_to root_path
+    end
+  end
+      
   def set_access_control_headers
      headers['Access-Control-Allow-Origin'] = '*'
      headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'

@@ -16,7 +16,7 @@ class PreferencesController < ApplicationController
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
-    @personal_deals = @buying_plan.proposal
+    @personal_deals = @buying_plan.proposals
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
@@ -62,23 +62,24 @@ class PreferencesController < ApplicationController
      
       unless params[:type] == "create"     
         if current_user
-          if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0
+          if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0 && !params[:type]
              params[:type] = "Recommendations"
+             
           end  
-           if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0
+           if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0 && !params[:type]
              params[:type] = "guides"
           end 
          if @buying_plan.temporary_buying_plan_ip && @buying_plan.temporary_buying_plan_ip != "" && session[:counter] == 1
             params[:type] = nil 
-         elsif session[:counter] == 1 && (@buying_plan.user.id != current_user.id)
+         elsif session[:counter] == 1 && (@buying_plan.user.id != current_user.id) && !params[:type] 
             params[:type] = "Recommendations"
           end
-        elsif session[:counter] == 1
+        elsif session[:counter] == 1 && !params[:type]
            params[:type] = "Recommendations"
         end
       else
         params[:type] = nil  
-         if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0
+         if @follow_item.size == 0 && @considered_items.size ==0  && @preferences_list.size > 0 && !params[:type] 
              params[:type] = "Recommendations"
           end  
            if @follow_item.size == 0 && @considered_items.size == 0  && @preferences_list.size ==  0

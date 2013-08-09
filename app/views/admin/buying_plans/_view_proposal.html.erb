@@ -1,0 +1,19 @@
+<div id="view" style="background-color:white;height:300px;width:300px;">
+   <a href="#" class="Closebut" style="float:right;padding:5px 5px 0px 0px;">Close</a>
+   <div style="padding:50px 0px 0px 20px">
+    <p> <b>Item name:</b>
+   <%= @proposal.item.name %></p>
+   <p><b> Price of the Item: </b>
+   <%= @proposal.item_price %>
+   <p><b> Delivery Period: </b>
+   <%= @proposal.delivery_period %>
+   <p><b> Shipping Cost:</b>
+   <%= @proposal.shipping_cost %>
+   <p><b> Color: </b>
+   <%= @proposal.color %>
+   <p><b> Expiry Date: </b>
+   <%= @proposal.expiry_date %>
+   <p><b> Purchase details/comments: </b>
+   <%= @proposal.comments %>
+   </div>   
+ </div>
