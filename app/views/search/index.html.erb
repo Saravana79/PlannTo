@@ -65,7 +65,7 @@
       <div class="top-search-result">
                       <div class="search-result-title" id="totalSearchResults">Total Search Results: <span id="total_result"> <%=@items.total%></span></div>
                         <div class="sort-box"><form><label>Sort by:</label> <%=select_tag "search_sort_by",
-              options_for_select([["Select", ""],["Launch Date","Launch_date"], ["Name", "Name"], ["Price", "Price"],["Rating", "Rating"]], params[:sort_by]) %></form></div>
+              options_for_select([["Select", ""],["Launch Date","Launch_date"],["Price", "Price"],["Rating", "Rating"]], params[:sort_by]) %></form></div>
                         <div class="clr"></div>
                     </div>
                     <div class="clr"></div>     
@@ -106,7 +106,7 @@
          
 
                 <% if params[:search_type] == "camera" %>
-                   url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&101=" + $("#101").val() + "&117=" + $("#117").val() + "&183=" + $("#183").val() + "&7=" + $("#7").val() + "&172=" + $("#172").val() + "&176=" + $("#176").val() + "&156=" + $("#156").val()+ "&136=" + $("#136").val()+ "&295=" + $("#295").val()+ "&302=" + $("#302").val() , 
+                   url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&101=" + $("#101").val() + "&117=" + $("#117").val() + "&183=" + $("#183").val() + "&7=" + $('<div/>').text($("#7").val()).html() + "&172=" + $("#172").val() + "&176=" + $("#176").val() + "&156=" + $("#156").val()+ "&136=" + $("#136").val()+ "&295=" + $("#295").val()+ "&302=" + $("#302").val() , 
                 <%end%>
 
 

@@ -67,6 +67,8 @@ class Car < Product
         else
           if attribute_value.attribute.attribute_type == "Numeric"
             hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
+          elsif attribute_value.attribute.attribute_type == "Rating"
+            hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
           else
             hash
           end
@@ -79,7 +81,7 @@ class Car < Product
         if attribute_value.attribute.search_display_attributes.nil?
           hash
         else
-          if attribute_value.attribute.attribute_type != "Numeric"
+          if (attribute_value.attribute.attribute_type != "Numeric" or  attribute_value.attribute.attribute_type != "Rating")
             hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
           else
             hash
