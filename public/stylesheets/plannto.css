@@ -1851,6 +1851,8 @@ li.middlebg {
     margin-left: 50px;
 }
 
+.icon_close:hover{cursor:pointer;}
+
 .txt_subcategories {
     font: normal 11px Tahoma,Arial, Helvetica, sans-serif;
     color: #c15f24;

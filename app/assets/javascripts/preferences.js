@@ -65,7 +65,7 @@ $(document).on("keyup.autocomplete", '#search_car', function(){ $(this).autocomp
             else {
                 return $("<li></li>")
                 .data("item.autocomplete", item)
-                .append('<a>' + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+                .append('<a>' + "<div style='margin-left:5px;float:left' class='autocompletediv'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
                 .appendTo(ul);
             }
         }
@@ -166,7 +166,7 @@ $(document).on("keyup.autocomplete", '#search_buying_car', function(){ $(this).a
             else {
                 return $("<li></li>")
                 .data("item.autocomplete", item)
-                .append('<a>' + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+                .append('<a>' + "<div style='margin-left:5px;float:left' class='autocompletediv'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
                 .appendTo(ul);
             }
         }
