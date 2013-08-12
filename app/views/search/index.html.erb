@@ -106,7 +106,7 @@
          
 
                 <% if params[:search_type] == "camera" %>
-                   url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&101=" + $("#101").val() + "&117=" + $("#117").val() + "&183=" + $("#183").val() + "&7=" + $('<div/>').text($("#7").val()).html() + "&172=" + $("#172").val() + "&176=" + $("#176").val() + "&156=" + $("#156").val()+ "&136=" + $("#136").val()+ "&295=" + $("#295").val()+ "&302=" + $("#302").val() , 
+                   url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&101=" + $("#101").val() + "&117=" + $("#117").val() + "&183=" + $("#183").val() + "&7=" + encodeURIComponent($("#7").val()) + "&172=" + $("#172").val() + "&176=" + $("#176").val() + "&156=" + $("#156").val()+ "&136=" + $("#136").val()+ "&295=" + $("#295").val()+ "&302=" + $("#302").val() , 
                 <%end%>
 
 
