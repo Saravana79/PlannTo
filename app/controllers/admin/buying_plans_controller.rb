@@ -42,6 +42,6 @@ class Admin::BuyingPlansController < ApplicationController
   end
   
  def view_proposal
-   @proposal = Proposal.find_by_buying_plan_id(params[:buying_plan_id])
+   @proposal = Proposal.find_by_buying_plan_id_and_user_id(params[:buying_plan_id],current_user.id)
  end 
 end
