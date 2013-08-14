@@ -66,10 +66,7 @@ $("#dialog-form #click_message").hide();
          <%= render "product_images", :locals => {:item=> @item} %>
        </div> 
        <script language="javascript">
-       $(document).ready(
-        function (){
-         $("#pikame").PikaChoose({carousel:true});
-       });
+       
        </script>
        <span class="product_details">
         <% if @item.is_a? Manufacturer %>
