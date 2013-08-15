@@ -84,10 +84,10 @@
             $.ajax(
               {
                <%if params[:search_type] == "car" %>
-                 url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&24=" + $("#24").val() + "&28=" + $("#28").val() + "&31=" + $("#31").val() + "&41=" + $("#41").val() + "&43=" + $("#43").val() + "&86=" + $("#86").val() + "&87=" + $("#87").val() + "&59=" + $("#59").val() + "&63=" + $("#63").val(),
+                 url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&24=" + $("#24").val() + "&28=" + $("#28").val() + "&31=" + $("#31").val() + "&41=" + $("#41").val() + "&43=" + $("#43").val() + "&86=" + $("#86").val() + "&87=" + $("#87").val() + "&59=" + $("#59").val() + "&63=" + $("#63").val()+ "&280=" + $("#280").val()+ "&43=" + $("#43").val()+ "&332=" + $("#332").val()+ "&29=" + $("#29").val(),
                 <%end%>
                  <%if params[:search_type] == "bike" %>
-                    url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&31=" + $("#31").val() + "&205=" + $("#205").val() + "&295=" + $("#295").val() + "&208=" + $("#208").val() ,
+                    url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&5=" + $("#5").val() + "&7=" + $("#7").val() + "&31=" + $("#31").val() + "&205=" + $("#205").val() + "&295=" + $("#295").val() + "&208=" + $("#208").val() + "&29=" + $("#29").val() + "&28=" + $("#28").val() + "&339=" + $("#339").val() ,
                  <%end%>
                  
                <%if params[:search_type] == "cycle" %>
@@ -106,7 +106,7 @@
          
 
                 <% if params[:search_type] == "camera" %>
-                   url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&101=" + $("#101").val() + "&117=" + $("#117").val() + "&183=" + $("#183").val() + "&7=" + encodeURIComponent($("#7").val()) + "&172=" + $("#172").val() + "&176=" + $("#176").val() + "&156=" + $("#156").val()+ "&136=" + $("#136").val()+ "&295=" + $("#295").val()+ "&302=" + $("#302").val() , 
+                   url: "/<%= params[:search_type] %>/search?page=" + $("#page_pagination").val() + "&type=scroll" + "&status=" + $("#status").val() + "&sort_by=" + $("#sort_by").val() + "&manufacturer=" + $("#manufacturer").val() + "&min_1=" + $("#min_1").val() +  "&max_1=" + $("#max_1").val() + "&101=" + $("#101").val() + "&117=" + $("#117").val() + "&183=" + $("#183").val() + "&7=" + encodeURIComponent($("#7").val()) + "&172=" + $("#172").val() + "&176=" + $("#176").val() + "&156=" + $("#156").val()+ "&136=" + $("#136").val()+ "&295=" + $("#295").val()+ "&302=" + $("#302").val() + "&305=" + $("#305").val() + "&310=" + $("#310").val() , 
                 <%end%>
 
 
