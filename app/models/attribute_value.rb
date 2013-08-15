@@ -52,13 +52,13 @@ class AttributeValue < ActiveRecord::Base
   # hence coverting that to a value that can be cmpared.
     if(self.attribute_id == 170)
        if(self.value.include? "/")
-         self.value.split("/")[1]
+         self.value.gsub(" ","").split("/")[1]
        else
         self.value
        end
     elsif(self.attribute_id == 116)
        if(self.value.include? "x" or self.value.include? "*" )
-         arrvalue = self.value.split(/[*x]/)
+         arrvalue = self.value..gsub(" ","").split(/[*x]/)
          if(arrvalue[0].to_f > arrvalue[1].to_f)
             arrvalue[0]
          else
@@ -69,7 +69,7 @@ class AttributeValue < ActiveRecord::Base
        end
     elsif(self.attribute_id == 328)
        if(self.value.include? "@")
-         self.value.split("@")[0]
+         self.value.gsub(" ","").split("@")[0]
        else
         self.value
        end
