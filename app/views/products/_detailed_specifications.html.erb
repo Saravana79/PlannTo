@@ -65,7 +65,7 @@
    modalClose: false,
    position: [screen.width / 3, $(window).scrollTop() + 150],
    follow: [false, false] 
- });return false;", :title => "Description", :style => "color: #808080;font-size: 9px;float: right;padding-right: 10px;" %>
+ });return false;", :title => "Description", :style => "color: #808080;font-size: 9px;padding-right: 10px;" %>
                                  :</strong>
                         </span>
                         <%= render "attribute_description_popup",:attribute => product_attribute %>
@@ -74,9 +74,9 @@
                         <% link = product_attribute.attributeshyperlink %>
                         <% if(link).include?("http://") || (link).include?("https://")  %>
                         
-                            <%= link_to "(?)",product_attribute.attributeshyperlink,:title => "Description" , :style => "color: #808080;font-size: 9px;float: right;padding-right: 10px;"%> : </strong>
+                            <%= link_to "(?)",product_attribute.attributeshyperlink,:title => "Description" , :style => "color: #808080;font-size: 9px;padding-right: 10px;"%> : </strong>
                         <%else%>
-                           <%= link_to "(?)","http://" + product_attribute.attributeshyperlink,:title => "Description" , :style => "color: #808080;font-size: 9px;float: right;padding-right: 10px;"%> : </strong>
+                           <%= link_to "(?)","http://" + product_attribute.attributeshyperlink,:title => "Description" , :style => "color: #808080;font-size: 9px;padding-right: 10px;"%> : </strong>
                          <%end%>
                     <%else%>
                          <li class="specificationblcksublvltxt">

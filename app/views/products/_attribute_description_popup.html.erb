@@ -1,12 +1,12 @@
-<div id="description_<%= attribute.attribute_id rescue attribute.id %>" style="display:none; background-color:white;height:200px;width:300px;">
+<div id="description_<%= attribute.attribute_id rescue attribute.id %>" style="display:none; background-color:white;width:300px;">
    <a href="#" class="Closebut" style="float:right;padding:5px 5px 0px 0px;">Close</a>
-   <div style="padding:50px 0px 0px 20px">
+   <div style="padding: 30px 0px 20px 20px;font-size: 12px;line-height: 1.4;">
   <%=  attribute.description %>
   <% link = attribute.attributeshyperlink rescue attribute.hyperlink %>
  <% if(link).include?("http://") || (link).include?("https://")  %>
-       <a href= "<%= attribute.attributeshyperlink rescue attribute.hyperlink %>" target='_blank'>More</a>
+       <a href= "<%= attribute.attributeshyperlink rescue attribute.hyperlink %>" target='_blank' style="font-weight: 600;">Read More...</a>
    <%else%>
-      <a href= "<%= 'http://' + attribute.attributeshyperlink rescue attribute.hyperlink %>" target='_blank'>More</a> 
+      <a href= "<%= 'http://' + attribute.attributeshyperlink rescue attribute.hyperlink %>" target='_blank' style="font-weight: 600;">Read More...</a> 
    <%end%>   
    </div>   
  </div>
