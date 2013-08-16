@@ -134,6 +134,12 @@ class Item < ActiveRecord::Base
       end
   end
   
+  
+  def get_launch_date
+    self.attribute_values.where(:attribute_id => 8).last.value rescue ''
+  end
+  
+  
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
     price = "0"; 
     #item_attribute = item_attributes.select{|a| a.name == item_type}.last
