@@ -76,6 +76,8 @@ $("#dialog-form #click_message").hide();
         <div style="float:left;width:450px;">
           <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
           <a class="txt_price"><%= @item.get_price_info('Price',true, @where_to_buy_items.size).html_safe rescue ''%></a><br />
+          <a class="txt_blue"><%= @item.get_launch_date rescue ''%> </a>
+          <br />
           <a>
             <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
 
