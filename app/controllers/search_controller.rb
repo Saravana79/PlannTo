@@ -4,6 +4,7 @@ class SearchController < ApplicationController
     {:tag => Digest::SHA256.hexdigest(string)}}
   layout "product"
 
+ 
   def index
     @static_page1 = "true"
     @search_type = params[:search_type]
@@ -11,10 +12,16 @@ class SearchController < ApplicationController
     #session[:warning] = "true"
     #session[:itemtype] = itemtype.itemtype
     status = Array.new
-    status  << 1
-    status  << 2
+    status << 1
+    status << 2
     status = params[:status].split(',') if params[:status].present?
     @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder")
+     @sort = Array.new
+     @search_attributes.each do |s|
+      if  s.value_type == "GreaterThan" || s.value_type == "LessThen" 
+         @sort << [s.attribute.name, s.attribute.name]
+      end
+    end   
     unless ($search_info_lookups.nil? || $search_type != params[:search_type])
       @search_info_lookups = $search_info_lookups
     else
@@ -31,7 +38,7 @@ class SearchController < ApplicationController
         end
       end
       @search_info_lookups = $search_info_lookups
-    end    
+    end
 
     unless ($search_form_lookups.nil? || $search_type != params[:search_type])
       @search_form_lookups = $search_form_lookups
@@ -94,7 +101,7 @@ class SearchController < ApplicationController
     end
 
 
-    BrowserPreference.save_browse_preferences(browser_user_id, params[:search_type], params, browser_ip) 
+    BrowserPreference.save_browse_preferences(browser_user_id, params[:search_type], params, browser_ip)
 
     preferences = Array.new
     if user_signed_in? && !request.xhr?
@@ -106,28 +113,28 @@ class SearchController < ApplicationController
     ############ PREFERENCE SECTION ENDS#############
     $search_type = @search_type
     @sunspot_search_fields = sunspot_search_fields
-    @page  = params[:page].nil? ? 1 : params[:page].to_i    
+    @page = params[:page].nil? ? 1 : params[:page].to_i
 
     unless params[:manufacturer].present?
       if user_signed_in? && !request.xhr?
         preference = @preferences_list.find {|s| s[:value_type] == "manufacturer" }
-        list =  preference.nil? ? Array.new : preference[:value].split(',')
+        list = preference.nil? ? Array.new : preference[:value].split(',')
       else
         list = Array.new
       end
     else
-      @manufacturer  = params[:manufacturer].blank? ? "" : params[:manufacturer]
-      list  = @manufacturer.split(',')
+      @manufacturer = params[:manufacturer].blank? ? "" : params[:manufacturer]
+      list = @manufacturer.split(',')
     end
 
     @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "Rating"
     @items = Sunspot.search($search_type.camelize.constantize) do
       data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating]
       keywords "", :fields => :name
-      with(:manufacturer, list)  if !params[:manufacturer].blank? #.any_of(@list)
+      with(:manufacturer, list) if !params[:manufacturer].blank? #.any_of(@list)
       with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
       with(:status, status) if !status.empty?
-      # with(:cargroup, cargrouplist)  if !params[cargroup[:field_name].to_sym].blank?
+      # with(:cargroup, cargrouplist) if !params[cargroup[:field_name].to_sym].blank?
       facet :manufacturer
       #facet :cargroup
       dynamic :features do
@@ -150,9 +157,23 @@ class SearchController < ApplicationController
           elsif search[:value_type] == "LessThen"
             with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           end
-          facet(search[:attribute_name].to_sym)          
+          facet(search[:attribute_name].to_sym)
         end
         order_by :Price if sort_by_option == "Price" #, :desc)
+        order_by 'Fuel Economy' if sort_by_option == "Fuel Economy"
+        order_by 'Ground Clearance' if sort_by_option == "Ground Clearance"
+        order_by 'Maximum Speed' if sort_by_option == "Maximum Speed"
+        order_by 'Engine Power' if sort_by_option == "Engine Power"
+        order_by 'Minimum Turning Radius' if sort_by_option == "Minimum Turning Radius"
+        order_by 'Weight' if sort_by_option == "Weight"
+        order_by 'Memory (RAM)' if sort_by_option == "Memory (RAM)"
+        order_by 'Extensible Storage (Memory)' if sort_by_option == "Extensible Storage (Memory)"
+        order_by 'Talk Time (2G)' if sort_by_option == "Talk Time (2G)"
+        order_by 'Screen Size' if sort_by_option == "Screen Size"
+        order_by 'Primary Camera' if sort_by_option == "Primary Camera"
+        order_by 'Battery Capacity' if sort_by_option == "Battery Capacity"
+        order_by 'Pixels' if sort_by_option == "Pixels"
+        order_by 'Optical Zoom' if sort_by_option == "Optical Zoom"  
       end
       dynamic :features_string do
         preferences.each do |preference|
@@ -166,7 +187,7 @@ class SearchController < ApplicationController
           if search[:value_type] == "Click"
             with(search[:attribute_name].to_sym, params[search[:first_value]]) if !params[search[:first_value]].blank?
           elsif search[:value_type] == "ListOfValues" #&& search[:attribute_type] == "Text"
-            with(search[:attribute_name].to_sym, search[:selected_list])  if !params[search[:first_value]].blank?
+            with(search[:attribute_name].to_sym, search[:selected_list]) if !params[search[:first_value]].blank?
           end
           facet(search[:attribute_name].to_sym)
         end
@@ -177,22 +198,21 @@ class SearchController < ApplicationController
       order_by :name if sort_by_option == "Name"
       order_by :rating_search_result,:desc if sort_by_option == "Rating"
       order_by :launch_date,:desc if sort_by_option == "Launch_date"
-      order_by :created_at,:desc 
-      #   order_by :Price, :desc           # descending order , check Documentation link below
+      order_by :created_at,:desc
+      # order_by :Price, :desc # descending order , check Documentation link below
         
 
     end
     #order_by :class , :desc
 
     # if @items.results.count < 10
-    #   @display = "none;"
+    # @display = "none;"
     # else
-    #   @display = "block;"
-    #   @page += 1
+    # @display = "block;"
+    # @page += 1
     # end
 
   end
-
   def search_items
     @items = Sunspot.search(Product.search_type(params[:search_type]) + [Content]) do
       keywords params[:q].gsub("-",""), :fields => :name

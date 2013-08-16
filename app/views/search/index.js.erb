@@ -12,6 +12,8 @@ running=false;
 
 <% unless params[:type] %>
  $("#total_result").html("<%= @items.total %>");
+ $("#sort_filter").html("<%= escape_javascript(select_tag "search_sort_by",
+              options_for_select([["Select", ""],["Launch Date","Launch_date"],["Price", "Price"],["Rating", "Rating"]] + @sort , params[:sort_by])) %>");
  $("#content").html('<%= escape_javascript(render(:partial => 'search/index')) %>');
 <%else%> 
  $("#content").append('<%= escape_javascript(render(:partial => 'search/index')) %>');
