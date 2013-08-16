@@ -440,15 +440,27 @@ $(document).click(function(e) {
   
 $(document).ready(function(){
     $('#search_sort_by').live('change',function(){
+   
         if ($(this).val()){
             $("#sort_by").val($(this).val())
+            $("#order_by").val($("#search_order_by").val())
             $("#page").val(1)
             searchData("spinner")
         //$.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
         }
         return false;
     })
-  
+    $('#search_order_by').live('change',function(){
+   
+        if ($(this).val()){
+            $("#sort_by").val($("#search_sort_by").val())
+            $("#order_by").val($("#search_order_by").val())
+            $("#page").val(1)
+            searchData("spinner")
+        //$.get(SEARCH_URL,$("#searchForm").serialize(),null,"script");
+        }
+        return false;
+    })
     $('#searchItemsPaginate div.pagination a').live('click', function(){
         var page = $(this).text()
         var current = $('em.current').text();

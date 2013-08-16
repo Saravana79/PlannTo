@@ -128,6 +128,7 @@ class SearchController < ApplicationController
     end
 
     @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "Rating"
+    @order_by = order_by_option = params[:order_by].present? ? params[:order_by] : "desc"
     @items = Sunspot.search($search_type.camelize.constantize) do
       data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating]
       keywords "", :fields => :name
@@ -159,9 +160,9 @@ class SearchController < ApplicationController
           end
           facet(search[:attribute_name].parameterize.underscore.to_sym)
         end
-        order_by :Price if sort_by_option == "Price" #, :desc)
+        order_by :Price,order_by_option if sort_by_option == "Price" #, :desc)
         if (sort_by_option != "Price" or sort_by_option != "Launch_date" or sort_by_option !="Rating")
-          order_by sort_by_option.parameterize.underscore.to_sym, :desc
+          order_by sort_by_option.parameterize.underscore.to_sym, order_by_option
         end
       end
       dynamic :features_string do
@@ -184,9 +185,9 @@ class SearchController < ApplicationController
       end
 
       paginate(:page => params[:page], :per_page => 10)      
-      order_by :rating_search_result,:desc if sort_by_option == "Rating"
-      order_by :launch_date,:desc if sort_by_option == "Launch_date"
-      order_by :created_at,:desc
+      order_by :rating_search_result,order_by_option if sort_by_option == "Rating"
+      order_by :launch_date,order_by_option if sort_by_option == "Launch_date"
+      order_by :created_at,order_by_option
       # order_by :Price, :desc # descending order , check Documentation link below
         
 
