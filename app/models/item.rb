@@ -136,7 +136,7 @@ class Item < ActiveRecord::Base
   
   
   def get_launch_date
-    date = self.attribute_values.where(:attribute_id => 8).last.value.to_date rescue ""
+    date = Date.parse(self.attribute_values.select{|a| a.attribute_id == 8}.last.value) rescue ""
     return date if date == ""
     day = date.day  rescue ''
     if day == '' 
@@ -144,9 +144,9 @@ class Item < ActiveRecord::Base
     end 
     month = date.month.to_i - 1
     year = date.year
-    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','']
+    months = ['January','February','March','April','May','June','July','August','September','October','November','December','']
     month = months[month]
-    return "#{month}-#{year}" 
+    return "#{month}, #{year}" 
  end
   
   

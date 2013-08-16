@@ -77,13 +77,7 @@ $("#dialog-form #click_message").hide();
           <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
           <a class="txt_price"><%= @item.get_price_info('Price',true, @where_to_buy_items.size).html_safe rescue ''%></a><br />
           <%l_date=  @item.get_launch_date rescue ""%>
-          <%if !l_date.blank? || !l_date.nil? %>
-            Launch date: 
-          <%end%>
-          <a class="txt_blue">
-          <%= " " + l_date %> </a>
-          <br />
-          <a>
+          
             <%= render :partial => 'shared/rating',:locals => {:item => @item, :rating_id => "product_item_#{@item.id}"} %>
 
             <!-- <a><img src="../images/rating_stars.png" width="87" height="20" /></a> -->
@@ -102,13 +96,18 @@ $("#dialog-form #click_message").hide();
               <%end%>
             </div>
             <br />
-
+        
         <%# cache ['minimised_specification', @item] do%>
         <div style="clear:both;padding-top:10px;">
           <a class="txt_normal" >
             <% if  (@items_specification["Pro"].length+ @items_specification["Con"].length) < 6%>
             <%=display_specifications(@item)%>
             <% else  %>
+            <%if !l_date.blank? || !l_date.nil? %>
+            <div style="padding-bottom:5px;color: #626262;font-weight: 600;font-size: 11px;">Released: <%= " " + l_date %></div>
+              <br />
+              
+          <%end%>  
             <table style="">
               <tr>
                 <th style="width: 200px;text-align:left;"><p style="font-size: 13px;font-weight: bold;padding-bottom: 5px;color: #333;"> Advantages</p></th>
