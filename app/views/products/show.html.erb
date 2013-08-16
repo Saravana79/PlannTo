@@ -96,16 +96,15 @@ $("#dialog-form #click_message").hide();
               <%end%>
             </div>
             <br />
-        
+
         <%# cache ['minimised_specification', @item] do%>
-        <div style="clear:both;padding-top:10px;">
+        <div style="clear:both;padding-top:5px;">
           <a class="txt_normal" >
             <% if  (@items_specification["Pro"].length+ @items_specification["Con"].length) < 6%>
             <%=display_specifications(@item)%>
             <% else  %>
             <%if !l_date.blank? || !l_date.nil? %>
-            <div style="padding-bottom:5px;color: #626262;font-weight: 600;font-size: 11px;">Released: <%= " " + l_date %></div>
-              <br />
+            <div style="padding-bottom:5px;color: #999;font-weight: 600;font-size: 11px;">Released: <%= " " + l_date %></div>              
               
           <%end%>  
             <table style="">
