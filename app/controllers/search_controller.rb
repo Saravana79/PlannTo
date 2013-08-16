@@ -161,7 +161,7 @@ class SearchController < ApplicationController
         end
         order_by :Price if sort_by_option == "Price" #, :desc)
         if (sort_by_option != "Price" or sort_by_option != "Launch_date" or sort_by_option !="Rating")
-          order_by sort_by_option.constantize, :desc
+          order_by sort_by_option, :desc
         end
       end
       dynamic :features_string do
