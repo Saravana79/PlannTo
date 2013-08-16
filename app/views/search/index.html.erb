@@ -133,7 +133,7 @@
   <%= hidden_field_tag :sort_by, @sort_by %>
   <%=hidden_field_tag :manufacturer%>
   <%@search_form_lookups.each do |form_list|%>
-    <%=hidden_field_tag form_list[:field_name].to_sym%>
+    <%=hidden_field_tag form_list[:field_name].parameterize.underscore.to_sym%>
   <%end%>
 <%end%>
 

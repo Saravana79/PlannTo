@@ -122,7 +122,7 @@
         <%   if (search[:param_1][:vt] == "Between" || search[:param_1][:vt] == "LessThen" || search[:param_1][:vt] == "GreaterThan")%>
             displayCount = false;
         <%     elsif (search[:param_1][:vt] == "Click" )%>
-          <% @items.facet(:features_string, search[:attribute_name].to_sym).rows.each do |row|%>
+          <% @items.facet(:features_string, search[:attribute_name].parameterize.underscore.to_sym).rows.each do |row|%>
             <%if search[:param_1][:av] == row.value%>
                 selectedCount = <%=row.count%><%#=row.value%>
             <%end%>
@@ -156,9 +156,9 @@
 
         function loadTypes(){
           var typeList = [];
-              <%if @items.facet(:features_string, 'Body Style'.to_sym)%>
-                <%if @items.facet(:features_string, 'Body Style'.to_sym).rows.count > 0%>
-                  <% for row in @items.facet(:features_string, 'Body Style'.to_sym).rows%>
+              <%if @items.facet(:features_string, 'Body Style'.parameterize.underscore.to_sym)%>
+                <%if @items.facet(:features_string, 'Body Style'.parameterize.underscore.to_sym).rows.count > 0%>
+                  <% for row in @items.facet(:features_string, 'Body Style'.parameterize.underscore.to_sym).rows%>
                         typeList.push( {
                           label: "<%="#{row.value} (#{row.count})"%>",
                           value: "<%="#{row.value}"%>"
@@ -166,9 +166,9 @@
                   <%end
                 end%>
 
-              <%elsif @items.facet(:features_string, 'Type'.to_sym)%>
-                <%if @items.facet(:features_string, 'Type'.to_sym).rows.count > 0%>
-                  <% for row in @items.facet(:features_string, 'Type'.to_sym).rows%>
+              <%elsif @items.facet(:features_string, 'Type'.parameterize.underscore.to_sym)%>
+                <%if @items.facet(:features_string, 'Type'.parameterize.underscore.to_sym).rows.count > 0%>
+                  <% for row in @items.facet(:features_string, 'Type'.parameterize.underscore.to_sym).rows%>
                         typeList.push( {
                           label: "<%="#{row.value} (#{row.count})"%>",
                           value: "<%="#{row.value}"%>"

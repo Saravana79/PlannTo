@@ -134,51 +134,51 @@ class SearchController < ApplicationController
       with(:manufacturer, list) if !params[:manufacturer].blank? #.any_of(@list)
       with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
       with(:status, status) if !status.empty?
-      # with(:cargroup, cargrouplist) if !params[cargroup[:field_name].to_sym].blank?
+      # with(:cargroup, cargrouplist) if !params[cargroup[:field_name].parameterize.underscore.to_sym].blank?
       facet :manufacturer
       #facet :cargroup
       dynamic :features do
         preferences.each do |preference|
           if preference[:value_type] == "Between"
-            with(preference[:attribute_name].to_sym).greater_than(preference[:min_value]) if !params[preference[:min_attribute]].present?
-            with(preference[:attribute_name].to_sym).less_than(preference[:max_value]) if !params[preference[:max_attribute]].present?
+            with(preference[:attribute_name].parameterize.underscore.to_sym).greater_than(preference[:min_value]) if !params[preference[:min_attribute]].present?
+            with(preference[:attribute_name].parameterize.underscore.to_sym).less_than(preference[:max_value]) if !params[preference[:max_attribute]].present?
           elsif preference[:value_type] == "GreaterThan"
-            with(preference[:attribute_name].to_sym).greater_than(preference[:value]) if !params[preference[:attribute]].present?
+            with(preference[:attribute_name].parameterize.underscore.to_sym).greater_than(preference[:value]) if !params[preference[:attribute]].present?
           elsif preference[:value_type] == "LessThen"
-            with(preference[:attribute_name].to_sym).less_than(preference[:value]) if !params[preference[:attribute]].present?
+            with(preference[:attribute_name].parameterize.underscore.to_sym).less_than(preference[:value]) if !params[preference[:attribute]].present?
           end
         end
         sunspot_search_fields.each do |search|
           if search[:value_type] == "Between"
-            with(search[:attribute_name].to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
-            with(search[:attribute_name].to_sym).less_than(params[search[:second_value]]) if !params[search[:second_value]].blank?
+            with(search[:attribute_name].parameterize.underscore.to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
+            with(search[:attribute_name].parameterize.underscore.to_sym).less_than(params[search[:second_value]]) if !params[search[:second_value]].blank?
           elsif search[:value_type] == "GreaterThan"
-            with(search[:attribute_name].to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
+            with(search[:attribute_name].parameterize.underscore.to_sym).greater_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           elsif search[:value_type] == "LessThen"
-            with(search[:attribute_name].to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
+            with(search[:attribute_name].parameterize.underscore.to_sym).less_than(params[search[:first_value]]) if !params[search[:first_value]].blank?
           end
-          facet(search[:attribute_name].to_sym)
+          facet(search[:attribute_name].parameterize.underscore.to_sym)
         end
         order_by :Price if sort_by_option == "Price" #, :desc)
         if (sort_by_option != "Price" or sort_by_option != "Launch_date" or sort_by_option !="Rating")
-          order_by sort_by_option, :desc
+          order_by sort_by_option.parameterize.underscore.to_sym, :desc
         end
       end
       dynamic :features_string do
         preferences.each do |preference|
           if preference[:value_type] == "Click"
-            with(preference[:attribute_name].to_sym, preference[:value]) if !params[preference[:attribute]].present?
-          elsif preference[:value_type] == "ListOfValues"
-            with(preference[:attribute_name].to_sym, preference[:search_value]) if !params[preference[:attribute]].present?
+            with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:value]) if !params[preference[:attribute]].present?
+          elsif preference[:value_type] == "ListOf.parameterize.underscore.to_symValues"
+            with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:search_value]) if !params[preference[:attribute]].present?
           end
         end
         sunspot_search_fields.each do |search|
           if search[:value_type] == "Click"
-            with(search[:attribute_name].to_sym, params[search[:first_value]]) if !params[search[:first_value]].blank?
+            with(search[:attribute_name].parameterize.underscore.to_sym, params[search[:first_value]]) if !params[search[:first_value]].blank?
           elsif search[:value_type] == "ListOfValues" #&& search[:attribute_type] == "Text"
-            with(search[:attribute_name].to_sym, search[:selected_list]) if !params[search[:first_value]].blank?
+            with(search[:attribute_name].parameterize.underscore.to_sym, search[:selected_list]) if !params[search[:first_value]].blank?
           end
-          facet(search[:attribute_name].to_sym)
+          facet(search[:attribute_name].parameterize.underscore.to_sym)
         end
         
       end

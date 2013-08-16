@@ -60,7 +60,7 @@ class Mobile < Product
           hash
         else
           if attribute_value.attribute.attribute_type == "Numeric"
-            hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
+            hash.merge(attribute_value.attribute.name.parameterize.underscore.to_sym => attribute_value.value)
           else
             hash
           end
@@ -74,7 +74,7 @@ class Mobile < Product
           hash
         else
           if attribute_value.attribute.attribute_type != "Numeric"
-            hash.merge(attribute_value.attribute.name.to_sym => attribute_value.value)
+            hash.merge(attribute_value.attribute.name.parameterize.underscore.to_sym => attribute_value.value)
           else
             hash
           end
