@@ -160,20 +160,9 @@ class SearchController < ApplicationController
           facet(search[:attribute_name].to_sym)
         end
         order_by :Price if sort_by_option == "Price" #, :desc)
-        order_by 'Fuel Economy' if sort_by_option == "Fuel Economy"
-        order_by 'Ground Clearance' if sort_by_option == "Ground Clearance"
-        order_by 'Maximum Speed' if sort_by_option == "Maximum Speed"
-        order_by 'Engine Power' if sort_by_option == "Engine Power"
-        order_by 'Minimum Turning Radius' if sort_by_option == "Minimum Turning Radius"
-        order_by 'Weight' if sort_by_option == "Weight"
-        order_by 'Memory (RAM)' if sort_by_option == "Memory (RAM)"
-        order_by 'Extensible Storage (Memory)' if sort_by_option == "Extensible Storage (Memory)"
-        order_by 'Talk Time (2G)' if sort_by_option == "Talk Time (2G)"
-        order_by 'Screen Size' if sort_by_option == "Screen Size"
-        order_by 'Primary Camera' if sort_by_option == "Primary Camera"
-        order_by 'Battery Capacity' if sort_by_option == "Battery Capacity"
-        order_by 'Pixels' if sort_by_option == "Pixels"
-        order_by 'Optical Zoom' if sort_by_option == "Optical Zoom"  
+        if (sort_by_option != "Price" or sort_by_option != "Launch_date" or sort_by_option !="Rating")
+          order_by sort_by_option.constantize, :desc
+        end
       end
       dynamic :features_string do
         preferences.each do |preference|
@@ -194,8 +183,7 @@ class SearchController < ApplicationController
         
       end
 
-      paginate(:page => params[:page], :per_page => 10)
-      order_by :name if sort_by_option == "Name"
+      paginate(:page => params[:page], :per_page => 10)      
       order_by :rating_search_result,:desc if sort_by_option == "Rating"
       order_by :launch_date,:desc if sort_by_option == "Launch_date"
       order_by :created_at,:desc
