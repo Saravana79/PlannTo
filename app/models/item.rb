@@ -136,8 +136,18 @@ class Item < ActiveRecord::Base
   
   
   def get_launch_date
-    self.attribute_values.where(:attribute_id => 8).last.value rescue ''
-  end
+    date = self.attribute_values.where(:attribute_id => 8).last.value.to_date rescue ""
+    return date if date == ""
+    day = date.day  rescue ''
+    if day == '' 
+     return ''
+    end 
+    month = date.month.to_i - 1
+    year = date.year
+    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','']
+    month = months[month]
+    return "#{month}-#{year}" 
+ end
   
   
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
