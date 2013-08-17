@@ -11,7 +11,7 @@
                   <%count = 0%>      
                   <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
                         <% count = count + 1%>
-                         <% unless count > 3 %>
+                         <% unless count > 4 %>
                                 <tr>
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
