@@ -532,7 +532,7 @@ end
      elsif sub_type =="QandA" || sub_type == "Q"
       return ["Q&A"]
      elsif sub_type == "Custom"
-      return ["Reviews","Deals","Lists"]   
+      return ["Reviews","Deals","Lists","Comparisons"]   
     else
       return sub_type.split(",")
     end

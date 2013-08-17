@@ -633,10 +633,10 @@ if ($("#article_content_sub_type").val() == ""){
     $("div#ShareURLDiv #<%=@sharefield4%>").show();
     $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Verdict:")
     <%if @content.nil?%>    
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;' />");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:70px;' />");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").val('');
     <%else%>
-      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;'><%=@content.field4%></textarea>");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:70px;'><%=@content.field4%></textarea>");
     <%end%> 
     
   } 

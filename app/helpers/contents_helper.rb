@@ -148,6 +148,8 @@ module ContentsHelper
     when "HowTo/Guide" then "Howkb"
     when "Apps" then "Apps"
     when "Books" then "Books"
+    when "Comparisons" then "Comparisons"  
+    when "Lists" then "Lists"  
     else ""
     end
     return class_name
@@ -169,6 +171,7 @@ module ContentsHelper
     when "Book" then "Add a Book"
     when "Apps" then "Add an App"
     when "Travelogue" then "Add a Travelogue"
+    when "Comparisons" then "Add a Comparison"  
     else name
     end
     return label
@@ -191,6 +194,7 @@ module ContentsHelper
     when "HowTo/Guide" then "Submit a HowTo/Tips"
     when "Travelogue" then "Submit a Travelogue"
     when "Lists" then "Submit a List"
+    when "Comparisons" then "Submit a Comparison"
     when "Books" then "Submit a Book"
     else ""
     end
