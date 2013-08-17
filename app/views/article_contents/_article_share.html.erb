@@ -585,6 +585,11 @@ if ($("#article_content_sub_type").val() == ""){
       //$("#deals1").remove();
       showReview();
     }
+    else if (category == "<%=ArticleCategory::COMPARISONS%>"){
+      //$("#deals1").remove();
+      showComparisons();
+    }
+
     else if (category == "<%=ArticleCategory::DEALS%>"){
      showArticleSubmitDealsOptFields()
     }
@@ -620,6 +625,19 @@ if ($("#article_content_sub_type").val() == ""){
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field3_id%>").replaceWith("<textarea id='<%=@field3_id%>' name='article_content[field3]' type='text' style='margin-left:5px;width:400px;min-height:40px;'><%=@content.field3%></textarea>");
       $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;'><%=@content.field4%></textarea>");
   <%end%> 
+    
+  } 
+ function showComparisons()
+  {
+
+    $("div#ShareURLDiv #<%=@sharefield4%>").show();
+    $("div#ShareURLDiv #<%=@sharefield4Label%>").text("Verdict:")
+    <%if @content.nil?%>    
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;' />");
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").val('');
+    <%else%>
+      $("div#ShareURLDiv form#<%=@form_id%> #<%=@field4_id%>").replaceWith("<textarea id='<%=@field4_id%>' name='article_content[field4]' type='text' style='margin-left:5px;width:400px;min-height:40px;'><%=@content.field4%></textarea>");
+    <%end%> 
     
   } 
  
