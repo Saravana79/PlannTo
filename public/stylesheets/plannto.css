@@ -4883,10 +4883,10 @@ ul.megamenu div.mm-item-content {
 */
 .search-result-container { padding:0;}
 
-.top-search-result { margin:0; padding:5px 10px; background:#e6e6e1; border-bottom:2px solid #d2d2cd;}
-.top-search-result .search-result-title{ margin:0; padding:0; float:left; width:500px; }
-.top-search-result .sort-box{ margin:0; padding:0; float:right; text-align:rightl width:130px;}
-.top-search-result .sort-box select { margin:0; padding:2px; width:100px; border:1px solid #c3c3c3; font-size:14px; background:#fff;}
+.top-search-result { margin:0; padding:5px 10px; background:#e6e6e1; border-bottom:2px solid #d2d2cd;font-size:12px;}
+.top-search-result .search-result-title{ margin:0; padding:5px; float:left; width:300px; }
+.top-search-result .sort-box{ margin:0; padding:0; float:right; text-align:right; width:330px;}
+.top-search-result .sort-box select { margin:0; padding:2px; width:120px; border:1px solid #c3c3c3; font-size:12px; background:#fff;}
 
 .search-result-list { margin:0; padding:0;}
 .search-result-list .result-row{ margin:0; padding:10px;}

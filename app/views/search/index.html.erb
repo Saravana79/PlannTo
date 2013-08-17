@@ -64,9 +64,9 @@
       <%= hidden_field_tag :page_pagination,2%>
       <div class="top-search-result">
                       <div class="search-result-title" id="totalSearchResults">Total Search Results: <span id="total_result"> <%=@items.total%></span></div>
-                           <div class="sort-box"><form><label>Sort by:</label><span id="sort_filter"> <%=select_tag "search_sort_by",
+                           <div class="sort-box"><form><label>Sort by:&nbsp;</label><span id="sort_filter"> <%=select_tag "search_sort_by",
               options_for_select([["Select", ""],["Launch Date","Launch_date"],["Price", "Price"],["Rating", "Rating"]] + @sort , params[:sort_by]) %></span><%=select_tag "search_order_by",
-              options_for_select([["Descending", "desc"],["Ascending","asc"]], params[:order_by]) %></form></div>
+              options_for_select([["Desc", "desc"],["Asc","asc"]], params[:order_by]), :style=> "width:70px;" %></form></div>
                         <div class="clr"></div>
                     </div>
                     <div class="clr"></div>     
