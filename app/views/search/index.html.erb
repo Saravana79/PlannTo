@@ -65,7 +65,8 @@
       <div class="top-search-result">
                       <div class="search-result-title" id="totalSearchResults">Total Search Results: <span id="total_result"> <%=@items.total%></span></div>
                            <div class="sort-box"><form><label>Sort by:</label><span id="sort_filter"> <%=select_tag "search_sort_by",
-              options_for_select([["Select", ""],["Launch Date","Launch_date"],["Price", "Price"],["Rating", "Rating"]] + @sort , params[:sort_by]) %></span></form></div>
+              options_for_select([["Select", ""],["Launch Date","Launch_date"],["Price", "Price"],["Rating", "Rating"]] + @sort , params[:sort_by]) %></span><%=select_tag "search_order_by",
+              options_for_select([["Descending", "desc"],["Ascending","asc"]], params[:order_by]) %></form></div>
                         <div class="clr"></div>
                     </div>
                     <div class="clr"></div>     
@@ -131,6 +132,7 @@
   <%= hidden_field_tag :status, "1,2"%>
   <%= hidden_field_tag :search_type, @search_type %>
   <%= hidden_field_tag :sort_by, @sort_by %>
+  <%= hidden_field_tag :order_by, @order_by %>
   <%=hidden_field_tag :manufacturer%>
   <%@search_form_lookups.each do |form_list|%>
     <%=hidden_field_tag form_list[:field_name].parameterize.underscore.to_sym%>
