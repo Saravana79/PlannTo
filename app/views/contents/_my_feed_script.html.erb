@@ -7,7 +7,7 @@
         $(this).addClass("link_active");
           if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
-          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
+          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").attr('id');
 	        var sub_type = find_sub_type(id);
             var filter_page_no = $("#filter_page_no").val();
              var itemtype_id = $("#item_types").val();
@@ -80,7 +80,7 @@
         }
       });
       $(document).ready(function(){
-   		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").text())
+   		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").attr('id'))
    		var itemtype_id = $("#item_types").val();
       var items =  $("#items").val();
       triggerScrollFunctionMyfeeds(sub_type, "", itemtype_id, ""); 

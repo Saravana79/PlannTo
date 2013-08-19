@@ -40,7 +40,7 @@
         $(this).addClass("link_active");
           if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
-          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").text();
+          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").attr('id');
 	          var sub_type = find_sub_type(id);  
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>";   

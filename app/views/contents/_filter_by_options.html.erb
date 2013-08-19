@@ -73,7 +73,7 @@
       $("div#Filterby div.Filternav ul li#<%=@filter_by%>").trigger("click");
       <%end%> 
     
-   		id = $("div#Filterby div.Filternav ul li.Currentfilter").text()
+   		id = $("div#Filterby div.Filternav ul li.Currentfilter").attr('id')
        		var sub_type = find_sub_type(id);
         var items = "<%=@item.try(:id) || @item_ids%>";
           var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>"   
