@@ -30,7 +30,7 @@
             </td>
                </tr>
           
-         <tr> <td style="text-align: center;padding-bottom: 10px;"> <a href="<%=@item.get_url()%>?tab=compare" class="bluelink-12">See more prices</a></td></tr>
+         <tr> <td style="text-align: center;padding-bottom: 10px;"> <%= link_to(" See more prices", "#", :class => 'bluelink-12', :id => "item_price") %></td></tr>
      </table>
       
       <%end %>

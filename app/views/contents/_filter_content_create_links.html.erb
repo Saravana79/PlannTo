@@ -50,7 +50,7 @@
     return false
     });
     
-    $('a.filter_quick_create').live("click",function(){
+    $('a.filter_quick_create').click(function(e){
       <%if !current_user %>
         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
