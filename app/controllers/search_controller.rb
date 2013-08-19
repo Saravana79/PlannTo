@@ -214,21 +214,21 @@ class SearchController < ApplicationController
       order_by :launch_date, :desc
     end
     if !params[:page]
-      @items1 = Sunspot.search(Product.search_type(params[:search_type])) do
-        keywords params[:q].gsub("-",""), :fields => :name
-        with :status,[1,2,3]
-        #order_by :class, :desc
-        #facet :types
-        order_by :orderbyid , :asc
-        #order_by :status, :asc      
-        order_by :launch_date, :desc
-    end
-      if @items1.results.size == 1
-        item = @items1.results.first
-        redirect_to item.get_url()
-      end   
-    end 
-  end
+      product_count = 0
+       @items.results.each do |item|
+         if item.is_a? Product
+           product_count = product_count + 1
+         end   
+       end
+      if product_count == 1
+        @items.results.each do |item|
+          if item.is_a? Product
+            redirect_to item.get_url()
+          end
+        end
+      end
+   end        
+   end
   
   def autocomplete_items
     if params[:type]
