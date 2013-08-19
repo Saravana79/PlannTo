@@ -3020,7 +3020,7 @@ div.imgfollowers { clear:both;}
 #Filterby {  float:left;padding: 0px 0px 10px 10px;/*background: url(../images/filterbackground.png) repeat;*/background:rgba(238, 238, 238, 0.93);width:715px;}
 #Filterby .Filternav { width:690px; float:left;margin-top:5px;}
 #Filterby .Filternav ul         { padding:0; margin:0; list-style:none;}
-#Filterby .Filternav ul li      { padding-right:6px;margin-right:8px;display: inline-block;border-right: 1px solid #cdcdcd;  float:left;margin-top:5px;}
+#Filterby .Filternav ul li      { padding-right:5px;margin-right:8px;display: inline-block;border-right: 1px solid #cdcdcd;  float:left;margin-top:5px;}
 #Filterby .Filternav ul li a    { display:block; padding-right:5px; font: 18px/27px 'LeagueGothic', Arial, sans-serif;color: #333;}
 #Filterby .Filternav ul li a:hover { color:#e87c07; text-decoration:underline;}
 #Filterby .Filternav ul li.Currentfilter a {color:#e87c07; text-decoration:underline;}
