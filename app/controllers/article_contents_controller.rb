@@ -17,7 +17,15 @@ class ArticleContentsController < ApplicationController
         params['article_content']['url'] = params['article_content']['url'].split("?")[0]
       end
     end  
-    
+    if params['article_content']['url']
+      if params['article_content']['title'].include?("|")
+        params['article_content']['title'] = params['article_content']['title'].slice(0..(params['article_content']['title'].index('|'))).gsub(/\|/, "")
+ 
+      end
+     if params['article_content']['title'].include?("~")
+       params['article_content']['title'] = params['article_content']['title'].slice(0..(params['article_content']['title'].index('~'))).gsub(/\~/, "")
+     end 
+    end  
    if params['article_content']['title'] == ''
       @title = false
    #elsif params['article_content']['url']  && !ArticleContent.where(:url => params['article_content']['url']).blank?
