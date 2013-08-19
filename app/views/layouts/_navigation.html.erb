@@ -224,7 +224,7 @@ jQuery(function(){
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
-                            <h2>Popular Mobile</h2>
+                            <h2>Popular Mobiles</h2>
                             <p><img src="/images/mobile-icon.png" alt="" /></p>
                              <p>     <% @allitems.select{|a| configatron.popular_mobiles.split(",").include? a.id.to_s}.each do |item| %>
                                <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
@@ -323,7 +323,7 @@ jQuery(function(){
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
-                            <h2>Popular cameras</h2>
+                            <h2>Popular Cameras</h2>
                             <p><img src="/images/tablet-icon.png" alt="" /></p>
                             <p> <% @allitems.select{|a| configatron.popular_cameras.split(",").include? a.id.to_s}.each do |item| %>
                                     <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>      
