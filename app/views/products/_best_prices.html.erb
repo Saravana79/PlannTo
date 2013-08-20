@@ -30,8 +30,17 @@
             </td>
                </tr>
           
-         <tr> <td style="text-align: center;padding-bottom: 10px;"> <%= link_to(" See more prices", "#", :class => 'bluelink-12', :id => "item_price") %></td></tr>
+         <tr> <td style="text-align: center;padding-bottom: 10px;"> <%= link_to(" See more prices", "#", :class => 'bluelink-12', :id => "more_price") %></td></tr>
      </table>
       
       <%end %>
-      
+   <script>
+     $("#more_price").click(function(e){
+     $("#overview").hide();
+     $("#where_to_buy").show();
+     $("#all_variants").hide();
+     $("#specification").hide(); 
+     $("ul#Newtabs").find("li").removeClass("tab_active");
+     $("ul#Newtabs li#buy").addClass("tab_active");
+   })
+    </script>
