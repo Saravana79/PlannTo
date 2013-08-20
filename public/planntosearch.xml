@@ -1,0 +1,12 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>PlannTo Search</ShortName>
+<Description>PlannTo: Search a Product or its contents</Description>
+<Developer>PlannTo</Developer>
+<InputEncoding>UTF-8</InputEncoding>
+<Image height="16" width="16" type="image/x-icon"></Image>
+<Url type="text/html" method="get" template="q={searchTerms}"/>
+<link rel="search" type="application/opensearchdescription+xml" title="Smartprix Search" href="http://www.smartprix.com/smartprix_search.xml"/>
+<Url type="application/opensearchdescription+xml" rel="self" template="http://www.plannto.com/planntosearch.xml"/>
+<moz:SearchForm>http://www.plannto.com</moz:SearchForm>
+<moz:UpdateUrl>http://www.plannto.com/planntosearch.xm</moz:UpdateUrl>
+</OpenSearchDescription>
