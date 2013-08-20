@@ -19,11 +19,11 @@ class ArticleContentsController < ApplicationController
     end  
     if params['article_content']['url']
       if params['article_content']['title'].include?("|")
-        params['article_content']['title'] = params['article_content']['title'].slice(0..(params['article_content']['title'].index('|'))).gsub(/\|/, "")
+        params['article_content']['title'] = params['article_content']['title'].slice(0..(params['article_content']['title'].index('|'))).gsub(/\|/, "").strip
  
       end
      if params['article_content']['title'].include?("~")
-       params['article_content']['title'] = params['article_content']['title'].slice(0..(params['article_content']['title'].index('~'))).gsub(/\~/, "")
+       params['article_content']['title'] = params['article_content']['title'].slice(0..(params['article_content']['title'].index('~'))).gsub(/\~/, "").strip
      end 
     end  
    if params['article_content']['title'] == ''
