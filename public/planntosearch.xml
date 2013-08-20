@@ -3,7 +3,7 @@
 <Description>PlannTo: Search a Product or its contents</Description>
 <Developer>PlannTo</Developer>
 <InputEncoding>UTF-8</InputEncoding>
-<Image height="16" width="16" type="image/x-icon"></Image>
+<Image height="16" width="16" type="image/x-icon">http://www.plannto.com/images/logosc.png</Image>
 <Url type="text/html" method="get" template=" http://www.plannto.com/search/search_items?q={searchTerms}"/>
 <link rel="search" type="application/opensearchdescription+xml" title="PlannTo Search" href=" http://www.plannto.com/planntosearch.xml "/>
 <Url type="application/opensearchdescription+xml" rel="self" template="http://www.plannto.com/planntosearch.xml"/>
