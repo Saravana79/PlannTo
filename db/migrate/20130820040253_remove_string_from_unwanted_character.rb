@@ -7,7 +7,7 @@ class RemoveStringFromUnwantedCharacter < ActiveRecord::Migration
           article_content.update_attribute("title",title)
         end
         if article_content.title.include?("~")
-          title = article_content.title.slice(0..(article_content.title.index('|'))).gsub(/\~/, "").strip
+          title = article_content.title.slice(0..(article_content.title.index('~'))).gsub(/\~/, "").strip
           article_content.update_attribute("title",title)
         end
       end     
