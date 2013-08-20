@@ -18,10 +18,12 @@
            <%index = 0%>
           <%@article_categories.each do |category|%>
             <% if(index < 10) or (index < 11 and  @no_custom == "true") %>
-             <%if category[0]== "HowTo/Guide"%>
-                  <li id="HowTo"><a href="">HowTo/Tips</a></li>
+                 <%if category[0]== "HowTo/Guide"%>
+                      <li id="HowTo"><a href="">HowTo/Tips</a></li>
+                <%elsif category[0]== "Lists"%>
+                      <li id="Lists"><a href="">Top 10's</a></li>
                 <%else%>
-                <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
+                    <li id="<%=category[0]%>"><a href=""><%=category[0]%></a></li>
                 <%end%>         
                 <%index = index + 1%>
             <%end%>   
