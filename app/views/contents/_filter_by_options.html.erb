@@ -42,6 +42,12 @@
 <script type="text/javascript">
   $(document).ready(function(){
   	   $("div#Filterby div.Filternav ul li").click(function (e) {
+  	   //$('#spinner6').ajaxStart(function() {
+       //$(this).show();
+       //$('#spinner1').hide();
+     //}).ajaxStop(function() {
+       //$(this).hide();
+     //});
        $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
        $(this).closest('li').addClass("Currentfilter");
       	if ($(this).text() != "Labeltext"){
@@ -81,6 +87,5 @@
           var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>"   
          var guide = "<%=@guide.try(:id)%>";
    		triggerScrollFunction(sub_type, items, itemtype_id, guide); 
-
   	    });
 </script>

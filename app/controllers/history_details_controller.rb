@@ -11,12 +11,9 @@ class HistoryDetailsController < ApplicationController
     vendor = Vendor.find(@item_detail.site)
     url = "#{@item_detail.url}"
     if !vendor.params.nil? || !vendor.params.blank? 
-      if @item_detail.url.include?('?')
-        url = "#{@item_detail.url}&#{vendor.params}"
-      else
-        url = "#{@item_detail.url}?#{vendor.params}"  
-      end
-    end    
+       url = vendor.params.gsub(/\{url}/,url)   
+     end
+    
     redirect_to url
   end
 

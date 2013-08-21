@@ -57,9 +57,15 @@ $("ul#Newtabs li a").live('click', function(){
   
     function contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
      
-  	 $.ajax({url : "/contents/" + action , dataType:'script',type: "get",data: 'sub_type=' + sub_type + '&items=' + items + '&page=' + filter_page_no + '&itemtype_id=' + itemtype_id + '&sort_by=' + sort_by + '&search_type=' + $("#search_type").val() + '&quick_create=' + $("#quick_create").val() + '&guide=' + guide,before:$('#spinner1').show(),success: function(data){$('#spinner1').hide();
+  	 $.ajax({url : "/contents/" + action , dataType:'script',type: "get",data: 'sub_type=' + sub_type + '&items=' + items + '&page=' + filter_page_no + '&itemtype_id=' + itemtype_id + '&sort_by=' + sort_by + '&search_type=' + $("#search_type").val() + '&quick_create=' + $("#quick_create").val() + '&guide=' + guide,before:$('#spinner6').show(),success: function(data){$('#spinner6').hide();
  }});    
  }
+   function contentscrollAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide){
+     
+  	 $.ajax({url : "/contents/" + action , dataType:'script',type: "get",data: 'sub_type=' + sub_type + '&items=' + items + '&page=' + filter_page_no + '&itemtype_id=' + itemtype_id + '&sort_by=' + sort_by + '&search_type=' + $("#search_type").val() + '&quick_create=' + $("#quick_create").val() + '&guide=' + guide,before:$('#spinner1').show(),success: function(data){$('#spinner1').hide();
+ }});    
+ } 	
+  	
   	
    function find_sub_type(id){
    	switch(id){
@@ -82,7 +88,7 @@ $("ul#Newtabs li a").live('click', function(){
           	var filter_page_no = $("#filter_page_no").val()
           	var sort_by = $("span#sortBy a.link_active").text();
           	var action = "feeds"
-          	contentSearchFilterAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide);        
+          	contentscrollAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide);        
         	return false
       	}
         else
@@ -108,7 +114,7 @@ $("ul#Newtabs li a").live('click', function(){
           	var itemtype_id = $("#item_types").val();
             var items =  $("#items").val();
           	var action = "feeds"
-          	contentSearchFilterAction(action, sub_type, "", filter_page_no, itemtype_id, sort_by, guide);        
+          	contentscrollAction(action, sub_type, "", filter_page_no, itemtype_id, sort_by, guide);        
         	return false
       	}
         else

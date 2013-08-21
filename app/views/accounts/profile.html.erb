@@ -348,6 +348,9 @@
                   </div>
             </div>
           </div>
+          <span id="spinner6" style="padding:0px 0px 0px 300px;display:none;">
+             <%= image_tag '/images/ajax-loader.gif' %>
+           </span>
           <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
           <div >
         <!-- <span class="sortby" id="sortBy">
@@ -392,9 +395,11 @@
                   }
                   $.ajax(
                   {
-                  url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" +  "&status=1,2" +  "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
+                  url: "/contents/filter?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() +"&items="+ "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" +  "&status=1,2" +  "&search_type=activities" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                     type: "get",
-                    dataType: "script"
+                    dataType: "script",
+                    before: $('#spinner6').show(),
+                    success: function(data){$('#spinner6').hide();}
                   });
                   return false
                 }
@@ -410,7 +415,7 @@
             running = true;
               $.ajax(
                 {
-                  url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&status=1,2" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
+                  url: "/contents/feeds?sub_type=" + $("div#Filterby div.Filternav ul li.Currentfilter").text() + "&items=" + "&page=" + $("#filter_page_no").val() + "&user=<%= @user.id %>" + "&search_type=activities" + "&status=1,2" + "&itemtype_id=<%=@itemtypes.join(",")%>" ,
                   type: "get",
                   dataType: "script",
                   before: $('#spinner1').show(),
