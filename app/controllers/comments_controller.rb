@@ -14,7 +14,7 @@ class CommentsController < ApplicationController
    
     if @comment.save
     
-      if !@content.is_a?UserQuestion and !@content.is_a?UserAnswer
+      if !@content.is_a?UserQuestion and !@content.is_a?UserAnswer and !@content.is_a?Proposal
         UserActivity.save_user_activity(current_user,@content.id,"commented",@content.type == "AnswerContent" ? "Answer"  :  @content.sub_type,@comment.id,request.remote_ip) if @comment
         Follow.content_follow(@content.type == "AnswerContent" ? @content.question_content : @content ,current_user) if @comment
       end

@@ -15,13 +15,14 @@
   <td><%= b.follower.location %> </td> 
   <td><div class="btn-group PadT10" style="margin-left:40px;"> <a class="btn btn-primary", style='background:#16c3d7;' id="questionTitle_<%= buying_plan.user_question.id %>" href="<%=buying_plan.preference_page_url%>/"><%="View"%></a></div> </td>
   <td>
-  <% if Proposal.find_by_buying_plan_id_and_user_id(buying_plan.id,current_user.id).blank? %>
+  <% proposal =  Proposal.find_by_buying_plan_id_and_user_id_and_item_id(buying_plan.id,current_user.id,@item.id) %>
+  <% if proposal.blank? %>
   <div class="btn-group PadT10" style="margin-left:40px;">
             <%= link_to "Send Proposal", proposal_admin_buying_plans_path(:buying_plan_id => buying_plan.id ,:item_id => @item.id ) ,:remote => :true, :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> </a>
    </div>
    <%else%>
         <div class="btn-group PadT10" style="margin-left:40px;">
-            <%= link_to "View Proposal", view_proposal_admin_buying_plans_path(:buying_plan_id => buying_plan.id ,:item_id => @item.id ) ,:remote => :true, :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> </a>
+            <%= link_to "View Proposal", view_proposal_admin_buying_plan_path(proposal,:edit => "true") , :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> </a>
    </div>
    <%end%>   
           </td>

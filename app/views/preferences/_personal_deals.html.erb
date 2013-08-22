@@ -1,20 +1,26 @@
+
+
+<div class="clearboth pad_b29">
+<table  width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td class="header_compare">vendor Name</td>
+    <td class="header_compare">Item Name</td>
+    <td class="header_compare">Price</td>
+     <td class="header_compare">Deilvery Period</td>
+    <td class="header_compare">&nbsp;</td>
+  </tr>
 <% @personal_deals.each do |personal_deal| %> 
-<div style="marign-right:300px;font-size:13px;" %>
- <h1>Vendor name: <%= personal_deal.vendor.name %>  </h1>
-<p> <b>Item name:</b>
- <%= personal_deal.item.name %></p>
- <p><b> Price of the Item: </b>
- <%= personal_deal.item_price %>
- <p><b> Delivery Period: </b>
- <%= personal_deal.delivery_period %>
- <p><b> Shipping Cost:</b>
- <%= personal_deal.shipping_cost %>
- <p><b> Color: </b>
- <%= personal_deal.color %>
- <p><b> Expiry Date: </b>
- <%= personal_deal.expiry_date %>
- <p><b> Purchase details/comments: </b>
- <%= personal_deal.comments %>
-</div> 
-<br /> <br /> <br />
-<%end%>
+        <tr>
+            <td class="bdb_gray1"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + personal_deal.vendor.imageurl%>" alt="<%= personal_deal.vendor.name %>" /> </td>
+            <td class="bdb_gray1 price_text"> <%= personal_deal.item.name %></td>
+            <td class="bdb_gray1 font_13"> <%= personal_deal.item_price %></td>
+            <td class="bdb_gray1 font_13"> <%= personal_deal.delivery_period %></td>
+            <%if (current_user && (personal_deal.user_id = current_user.id || current_user.id = personal_deal.buying_plan.user_id)) %>
+            <td align="center" class="bdb_gray1" ><%= link_to "Details",view_proposal_admin_buying_plan_path(personal_deal),:class=> "btn-link" %></td>
+          <%end%>  
+          </tr>
+      <%end%>    
+    </table>
+</div>
+
+

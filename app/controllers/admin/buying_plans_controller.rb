@@ -1,7 +1,7 @@
 class Admin::BuyingPlansController < ApplicationController
   layout "product"
-  before_filter :authenticate_admin_user! ,:only =>[:index]
-  before_filter :authenticate_vendor_user!,:except => [:index]
+  before_filter :authenticate_admin_user! ,:only =>[:index,:view_proposal]
+  before_filter :authenticate_vendor_user!,:except => [:index,:view_proposal]
   def index
      @buying_plans = BuyingPlan.order('created_at desc').paginate(:per_page => 20,:page => params[:page])
      @admin = "true"
@@ -37,11 +37,36 @@ class Admin::BuyingPlansController < ApplicationController
     p.delivery_period = params[:proposal][:delivery_period]
     p.shipping_cost = params[:proposal][:shipping_cost]
     p.color = params[:proposal][:color]
-    p.comments =  params[:proposal][:comments]
+    p.comment =  params[:proposal][:comment]
     p.save
   end
   
+  def update
+    p = Proposal.find(params[:proposal_id])
+    p.item_id = params[:proposal_item_id]
+    p.expiry_date = params[:proposal][:expiry_date]
+    p.item_price = params[:proposal][:item_price]
+    p.delivery_period = params[:proposal][:delivery_period]
+    p.shipping_cost = params[:proposal][:shipping_cost]
+    p.color = params[:proposal][:color]
+    p.comment =  params[:proposal][:comment]
+    p.save
+  end
+  
+  def proposal_edit
+    @proposal = Proposal.find(params[:id])
+    @buying_plan = @proposal.buying_plan
+    @item = @proposal.item
+  end
+  
  def view_proposal
-   @proposal = Proposal.find_by_buying_plan_id_and_user_id(params[:buying_plan_id],current_user.id)
+   @proposal = Proposal.find(params[:id])
+   if @proposal.user_id != current_user.id  || @proposal.buying_plan.user_id!= current_user.id
+    redirect_to root_path
+   end
+   @edit = params[:edit]
+   if params[:edit] == "true" && @proposal.user_id != current_user.id 
+     redirect_to root_path
+    end
  end 
 end

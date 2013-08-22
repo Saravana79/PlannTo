@@ -8,7 +8,10 @@ namespace :admin do
     post :search
     get :proposal
     post :proposal_save
-    get  :view_proposal
+   end
+   member do
+     get  :view_proposal
+     get  :proposal_edit
    end
    end
   resources :feeds do
@@ -23,7 +26,6 @@ namespace :admin do
  end
   match "sitemap.xml", :to => "sitemap#index", :defaults => {:format => :xml}
   get "home/index"
-  get "home/dialog_test"
   resources :follows do
    collection do 
      get :user_follow
@@ -119,7 +121,7 @@ resources :accounts do
      end 
   end
   match 'account_update', :to => "accounts#update", :as => "account_update"
-
+  match 'personal_deals', :to => "preferences#personal_deals"
  
   resources :preferences do
     collection do

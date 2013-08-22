@@ -159,18 +159,41 @@
 	        <%if params[:search_type] != "car" and  params[:search_type]  !="bike"%> <li <%if params[:type] == "deals"%> class="tab_active" <%end%>><a href="?type=deals"><span>Compare Prices</span></a></li>  <%end%>
 	        <li <%if params[:type] == "guides"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=guides"><span>Buyer Guides</span></a></li> 
 	        <%if Rails.env == "development" %>
-	        <%if (current_user && @buying_plan.user_id == current_user.id) %>
-	        <%unless @personal_deals.blank? %>
-	          <li <%if params[:type] == "personal_deals"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=personal_deals"><span>Personal Deals</span></a></li>
+	         <%unless @personal_deals.blank? %>
+	           <li <%if params[:type] == "personal_deals"%> class="tab_active" <%end%>><a href="<%=@buying_plan.preference_page_url%>/?type=personal_deals"><span>Personal Deals</span></a></li>
 	        <%end%> 
-	         <%end%>
+	        
 	        <%end%>
 	  </ul>
 	          <br/>
 						<br/>
 						<br />
 						<%if params[:type] == "personal_deals" %>
-						 <%= render "personal_deals" %>
+						<div style="float:right;">
+						 Sort by:
+						 <%=select_tag "personal_deals_sort_by",
+              options_for_select([["Price","item_price"],["Expiry Date", "expiry_date"],["Delivery Period","delivery_period"],["Item Name", "item_name"]]) %>
+              &nbsp;&nbsp;Filter by item:
+              <%=select_tag "personal_deals_filter_by",
+              options_for_select([["Select Item",""]] + Proposal.select_items_option_list(@buying_plan.id)) %>  
+             </div>
+						 <div id="personal_deal">
+						   <%= render "personal_deals" %>
+						 </div>
+						 <script>
+             $('#personal_deals_sort_by').live('change',function(){
+             $.ajaxSetup({
+              'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+              });
+          $.get('/personal_deals',{'sort_by' : $("#personal_deals_sort_by").val(),'buying_plan_id' : '<%= @buying_plan.id %>','filter_by'  : $("#personal_deals_filter_by").val() });
+                 })
+           $('#personal_deals_filter_by').live('change',function(){
+             $.ajaxSetup({
+              'beforeSend':function(xhr){xhr.setRequestHeader("Accept","text/javascript")}
+              });
+          $.get('/personal_deals',{'sort_by' : $("#personal_deals_sort_by").val(),'buying_plan_id' : '<%= @buying_plan.id %>','filter_by'  : $("#personal_deals_filter_by").val() });
+                 })  
+             </script>  
 						<%end%>
 			      <%if params[:type] == "Recommendations" %>
 							<!-- Answer this question - Start -->

@@ -1,6 +1,7 @@
-<div id="view" style="background-color:white;height:300px;width:300px;">
-   <a href="#" class="Closebut" style="float:right;padding:5px 5px 0px 0px;">Close</a>
-   <div style="padding:50px 0px 0px 20px">
+   <center><h1> Proposal Detail </h1> </center>
+   <div style="padding:50px 0px 0px 40px">
+     <p> <b>Vendor name:</b>
+     <%= @proposal.vendor.name %></p>
     <p> <b>Item name:</b>
    <%= @proposal.item.name %></p>
    <p><b> Price of the Item: </b>
@@ -13,7 +14,13 @@
    <%= @proposal.color %>
    <p><b> Expiry Date: </b>
    <%= @proposal.expiry_date %>
-   <p><b> Purchase details/comments: </b>
-   <%= @proposal.comments %>
-   </div>   
- </div>
+   <p><b> Purchase detail/comment: </b>
+   <%= @proposal.comment %>
+  <br />
+  <div id="proposal"> </div>
+ <a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(@proposal).html_safe  %></a>
+ <%if @edit == "true" && @proposal.user_id == current_user.id %>
+ |  <a class="txt_blue " style="float:left;"><%=link_to "Edit",proposal_edit_admin_buying_plan_path(@proposal),:remote => :true, :class=>"txt_blue " %> </a>
+ <%end%>
+  </div>  
+<%= render :partial => "comments/new", :locals => { :content => @proposal}  %>

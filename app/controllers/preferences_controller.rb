@@ -16,7 +16,7 @@ class PreferencesController < ApplicationController
       end
       
   #@buying_plan = BuyingPlan.where("uuid = ? and buying_plans.deleted != ? ",params[:uuid], true).first
-    @personal_deals = @buying_plan.proposals
+    @personal_deals = @buying_plan.proposals.order("item_price")
     @question = @buying_plan.user_question
     @answers = @question.try(:user_answers)
     @preferences = Preference.where("buying_plan_id = ?", @buying_plan.id).includes(:search_attribute)
@@ -106,7 +106,20 @@ class PreferencesController < ApplicationController
     end
    
     end
-
+  def personal_deals
+  
+    @buying_plan = BuyingPlan.find(params[:buying_plan_id])
+    order = params[:sort_by]
+    if order == "item_name"
+      order = "items.name"
+    end 
+    if params[:filter_by] == '' 
+      @personal_deals = @buying_plan.proposals.includes(:item).order(order)
+    else
+      @personal_deals = @buying_plan.proposals.where(:item_id => params[:filter_by]).includes(:item).order(order)  
+    end  
+  end
+  
   def search_preference_tems(buying_plan,search_type,page,status)
     @search_type = search_type.itemtype
     params["status"] = status
