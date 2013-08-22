@@ -233,7 +233,7 @@ searchData('spinner');
 <%# if user_signed_in? %>
     $("#page").val(1);
   <%if @preferences_list.size > 0%>
-      showSearchPack()
+      showSearchPack();
       showClearTag();
       showPreferenceTag();
       showGetAdviceTag();

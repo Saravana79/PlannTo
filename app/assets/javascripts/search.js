@@ -279,7 +279,7 @@ function openInfoBox(displayInfo, attr_name, elem){
         return false;
     }
     else if (displayInfo.vt == "Click"){
-        showSearchPack()
+        showSearchPack();
         showClearTag();
         showPreferenceTag();
         showGetAdviceTag();
@@ -479,10 +479,10 @@ $(document).ready(function(){
     $('#clearTag').live('click', function(){
         removeAllTags();
         resetFormData();
-        hideClearTag()
+        hideClearTag();
         hidePreferenceTag();
         hideGetAdviceTag();
-        hideSearchPack()
+        hideSearchPack();
         searchData("spinner");
     });
 
@@ -657,7 +657,7 @@ $(document).ready(function(){
     //})
 
     $('.boxClick').live('click', function(){
-        enableDocumentMouseOverEvent()
+        //enableDocumentMouseOverEvent()
         $("#criteriaPopup").hide();
     });
   
