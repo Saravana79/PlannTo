@@ -62,9 +62,9 @@ module GlobalUtilities
         end
       end
       dynamic :features_string do
-        text_hash.each do |hash|
-          with(hash[:attribute_name].to_sym, hash[:value])
-        end
+        #text_hash.each do |hash|
+        #  with(hash[:attribute_name].to_sym, hash[:value])
+        #end
         boolean_hash.each do |hash|
           with(hash[:attribute_name].to_sym, hash[:value])
         end

@@ -269,10 +269,10 @@ class Item < ActiveRecord::Base
    # return item.relateditems.paginate(:page => page, :per_page => limit)
    itemdetails = Item.find_by_id(item)
     if (itemdetails.is_a?AttributeTag)    
-      Item.find_by_sql("SELECT distinct a.* from items AS a INNER JOIN attribute_values ON attribute_values.item_id = a.id  INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value  WHERE item_attribute_tag_relations.item_id = " + item.to_s).paginate(:page => page, :per_page => limit)
+      Item.find_by_sql("SELECT distinct a.* from items AS a INNER JOIN attribute_values ON attribute_values.item_id = a.id  INNER JOIN item_attribute_tag_relations on attribute_values.attribute_id =item_attribute_tag_relations.attribute_id and  item_attribute_tag_relations.value = attribute_values.value  WHERE item_attribute_tag_relations.item_id = " + item.to_s + " order by a.created_at desc").paginate(:page => page, :per_page => limit)
     else
       related_item_ids = Itemrelationship.where(:relateditem_id => item).collect(&:item_id)
-      Item.where(:id => related_item_ids).paginate(:page => page, :per_page => limit)
+      Item.where(:id => related_item_ids).order("created_at desc").paginate(:page => page, :per_page => limit)
     end
   end
 

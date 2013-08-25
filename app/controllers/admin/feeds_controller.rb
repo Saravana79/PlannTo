@@ -49,10 +49,7 @@ class Admin::FeedsController < ApplicationController
      ContentMailer.content_action(@content,params[:content_action][:reason]).deliver 
    end
    if @detail == "true"
-     @itemtype = @content.items.first.itemtype.itemtype
-     if @itemtype == "Car Group" || @itemtype == "Manufacturer"
-        @itemtype = "Car"
-      end
+     @itemtype = @content.items.first.get_base_itemtype 
    end       
   end
   
