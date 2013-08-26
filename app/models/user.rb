@@ -70,6 +70,10 @@ class User < ActiveRecord::Base
 
   has_many :shares;
   
+  def self.find_for_authentication(conditions)
+    User.where(conditions).where("active =?", true).first
+  end
+  
   def self.get_follow_users_id(current_user)
     user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
   end

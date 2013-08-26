@@ -1,8 +1,10 @@
-$("#giveAdviceDialog").html('<%= escape_javascript(render(:partial => '/preferences/edit_preference')) %>');
+$("#editBuyingPreferences1").html('<%= escape_javascript(render(:partial => '/preferences/edit_preference')) %>');
 $(".Closebut").show();
-$("#giveAdviceDialog").bPopup({
+$("#editBuyingPreferences1").bPopup({
     closeClass:'Closebut',
     modalClose: false,
     position: [(screen.width / 2) - (920 /2), $(window).scrollTop() + 120],
     follow: [false, false] //x, y
  });
+ 
+ 
