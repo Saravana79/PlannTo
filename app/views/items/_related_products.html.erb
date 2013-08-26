@@ -14,7 +14,7 @@
             <td width="113" height="85"><img src="<%=related_item.image_url%>" width="92" height="69" onclick="parent.location='<%=(related_item.get_url())%>'"/></td>
             <td width="113">
             <div>
-            <a href="<%=related_item.get_url()%>" class="txt_black"><%=related_item.name%></a>
+            <a href="<%=related_item.get_url()%>" class="txt_black"><%=related_item.name%><a href="/items/compare?ids=<%= @item.id%>,<%= related_item.id %>">&nbsp;&nbsp;Compare</a></a>
            </div>
                  <a class="txt_price"><%= related_item.get_price_info('Price',false) %></a><br />
             <%= render :partial => 'shared/rating',:locals => {:item => related_item, :rating_id => "related_item_id#{related_item.id}"} %><br />
