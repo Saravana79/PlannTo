@@ -1,0 +1,92 @@
+<table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
+    <tr>
+      <td class="bg_widgethdr txt_white">Compare <%=@item.type.pluralize%></td>
+    </tr>
+<tr>
+            <td>
+              <div style="padding:10px;">
+                <table> 
+  <tr>
+  <td>               
+<input type="text" name="cmp2nditem" id="cmp2nditem" value="<%= @item.name%>" class="inputbox" readonly ="true" style="margin:5px" /></td></tr>
+<tr>
+  <td> <input type="text" name="cmp2nditem" id="search_product" class="inputbox" placeholder="Type <%= @item.type %>..."  style="margin:5px"/></td>
+  </tr>
+  </table>
+  </td>
+  </tr>
+  </table>
+  
+    
+    
+     <script>
+   $(document).ready(function() {
+$("#search_product").autocomplete({
+        minLength:2,
+        format:"js",
+        // source: "/search/autocomplete_items?search_type=" + $("#plannto_search_type").val() ,
+        source:function (request, response) {
+            var opts = {
+                lines:12, // The number of lines to draw
+                length:5, // The length of each line
+                width:4, // The line thickness
+                radius:5, // The radius of the inner circle
+                color:'#2EFE9A', // #rgb or #rrggbb
+                speed:1, // Rounds per second
+                trail:50, // Afterglow percentage
+                shadow:true, // Whether to render a shadow
+                hwaccel:false // Whether to use hardware acceleration
+            };
+//       var target = document.getElementById('search_car');
+//       var spinner = new Spinner(opts).spin(target);
+            $.ajax(
+                {
+                    url:"/search/autocomplete_items",
+                    data:{
+                        term:$("#search_product").val(),
+                        search_type:'<%=@item.type%>',
+                        authenticity_token: window._token,
+                         from_profile: true
+                        
+                    },
+                    type:"POST",
+                    dataType:"json",
+                    success:function (data) {
+                        response($.map(data, function (item) {
+                            return{
+                                id:item.id,
+                                value:item.value,
+                                imgsrc:item.imgsrc,
+                                type:item.type,
+                                url:item.url
+                            }
+                        }));
+//           spinner.stop();
+                    }
+                });
+        },
+        focus:function (e, ui) {
+            return false
+        },
+        select: function( event, ui ) {
+            
+              location.href = '/items/compare?ids=<%= @item.id %>,' + ui.item.id
+               
+        }
+    })
+        $("#search_product").data("autocomplete")._renderItem = function (ul, item, index) {
+        if (index == -1) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append("<a class='searchMore'>" + item.value + "" + "</a>")
+                .appendTo(ul);
+        }
+        else {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append('<a>' + "<div style='margin-left:5px;float:left' class='autocompletediv'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
+                .appendTo(ul);
+        }
+    }
+});
+</script>

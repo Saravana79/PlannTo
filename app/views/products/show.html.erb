@@ -6,7 +6,7 @@ padding:10px;">
   <%= render "shared/breadcrumb" %>
   <!-- breadcrumbs - End -->
   <!-- buttons - Start -->
-
+t
   <div class="float_rgt" style="padding:5px;">
     <!--<span style="margin-right:10px;color:green;"> Total Visitors: <%#=@item.impression_count %></span>-->
     <%= render 'shared/follow_buttons',:follow_type => @item.type, :follow_html => '', :button_class => '', :item => @item, :related_items => false %>
@@ -369,6 +369,11 @@ $("#buy span").html("Compare Prices");
   <div style="margin-top:10px;margin-bottom:10px;">
    <%= render "best_prices" %>
   </div>
+  <% if @item.is_a?Product %>
+   <div style="margin-top:10px;margin-bottom:10px;">
+   <%= render "compare_section" %>
+  </div>
+ <%end%> 
   <%=render :partial => "shared/google_adsense_square" %>
   <!--follower block end here-->
 
