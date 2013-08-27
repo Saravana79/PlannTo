@@ -11,7 +11,7 @@
 	}
 
 	$("#contentsList").append('<%= escape_javascript(render(:partial => 'contents/contents')) %>');
-	element.remove();*/
+	/* element.remove();*/
 <%else%>
 /*running = false;*/
   window.location.href = "/items/compare?ids=<%= params[:ids]%>"
