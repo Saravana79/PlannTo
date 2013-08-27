@@ -369,9 +369,11 @@ $("#buy span").html("Compare Prices");
   <div style="margin-top:10px;margin-bottom:10px;">
    <%= render "best_prices" %>
   </div>
+  <% if @item.is_a?Product %>
    <div style="margin-top:10px;margin-bottom:10px;">
    <%= render "compare_section" %>
   </div>
+ <%end%> 
   <%=render :partial => "shared/google_adsense_square" %>
   <!--follower block end here-->
 
