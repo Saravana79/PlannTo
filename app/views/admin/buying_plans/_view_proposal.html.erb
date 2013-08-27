@@ -16,11 +16,27 @@
    <%= @proposal.expiry_date %>
    <p><b> Purchase detail/comment: </b>
    <%= @proposal.comment %>
-  <br />
+  <br /><br />
   <div id="proposal"> </div>
- <a class="txt_blue " style="float:left;"><img src="/images/comment.jpg"/><%= render_comments_anchor(@proposal).html_safe  %></a>
+ 
  <%if @edit == "true" && @proposal.user_id == current_user.id %>
- |  <a class="txt_blue " style="float:left;"><%=link_to "Edit",proposal_edit_admin_buying_plan_path(@proposal),:remote => :true, :class=>"txt_blue " %> </a>
+  <a class="txt_blue " style="float:left;"><%=link_to "Edit",proposal_edit_admin_buying_plan_path(@proposal),:remote => :true, :class=>"txt_blue " %> </a>
  <%end%>
-  </div>  
-<%= render :partial => "comments/new", :locals => { :content => @proposal}  %>
+ <br /> <br />
+  </div> 
+	<div  style="border-bottom:solid 1px #ccd4d8;margin-left:55px;clear:both;">
+			<div class="float_lft margin_lft10 title" style="height:30px;text-align:middle;padding:10px 0px 0px 0px;font-weight:bold;">
+				<%= pluralize(@proposal.comments.where("status=?",1).count,'Comment') %>
+			</div>
+		
+		</div>
+		<div  style="border-top:solid 1px #ccd4d8;clear:both;margin-left:55px;"></div>
+		<!-- Answer this question - End -->
+		<%= render :partial => 'comments/detailed_comments_list',:locals => {:content =>@proposal} %>
+<%= render :partial => 'comments/new_detail_comment', :locals => {:content => @proposal, :parent => @proposal.class.name, :parent_id => @proposal.id, :detail => true}  %>
+
+	</div>
+ 
+
+
+

@@ -1,7 +1,7 @@
 <div class="float_rgt"><img src="<% if user_signed_in? %> <%= current_user.get_photo %> <%end%>" class="userImageSmall">
 	</div>
 	<div class="float_lft">
-	<%= form_for  @comment, :url => content_comment_path(content,@comment), :remote => true, :html => { :id => "comment_form_#{content.id}"},:method => :put do |f| -%>
+	<%= form_for  @comment, :url => comment_path(@comment), :remote => true, :html => { :id => "comment_form_#{content.id}"},:method => :put do |f| -%>
 	<%= f.text_area :comment, :class => "expanding", :size => "80", :id => "comment_id#{content.id}" %>
 	<br />
 	<%= f.submit "Update" %>
