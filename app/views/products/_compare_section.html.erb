@@ -1,23 +1,31 @@
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
+
+
+    <table width="251" height="38" border="0" cellspacing="0" cellpadding="0px" style="border:solid 1px #cdd3d7;background:white;">
     <tr>
       <td class="bg_widgethdr txt_white">Compare <%=@item.type.pluralize%></td>
     </tr>
 <tr>
             <td>
               <div style="padding:10px;">
+                <div style="float:left;">
                 <table> 
   <tr>
   <td>               
-<input type="text" name="cmp2nditem" id="cmp2nditem" value="<%= @item.name%>" class="inputbox" readonly ="true" style="margin:5px" /></td></tr>
+<input type="text" name="cmp2nditem" id="cmp2nditem" value="<%= @item.name%>" class="inputbox" readonly ="true" style="margin:5px;width:170px;padding-left:4px;" /></td></tr>
 <tr>
-  <td> <input type="text" name="cmp2nditem" id="search_product" class="inputbox" placeholder="Type <%= @item.type %>..."  style="margin:5px"/></td>
+  <td> <input type="text" name="cmp2nditem" id="search_product" class="inputbox" placeholder="Choose another <%= @item.type.downcase %> to compare..."  style="margin:5px;width:170px;padding-left:4px;"/></td>
   </tr>
   </table>
+</div>
+<div style="float: right;"><img src="../images/compare-symbol.png" style="width: 24px;height: 25px;margin: 20px 10px 0px 0px"></div>
+<br clear="all"/>
+
   </td>
   </tr>
   </table>
   
-    
+    </div>
+
     
      <script>
    $(document).ready(function() {
