@@ -25,6 +25,9 @@ searchable :auto_index => true, :auto_remove => true  do
   integer :orderbyid  do |item|
       item.itemtype.orderby
     end
+  date :launch_date do |item|
+     item.created_at
+  end 
   time :created_at
  end
 

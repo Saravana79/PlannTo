@@ -203,7 +203,7 @@ class SearchController < ApplicationController
 
   end
   def search_items
-    @items = Sunspot.search(Product.search_type(params[:search_type]) + [Content]) do
+    @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
       keywords params[:q].gsub("-",""), :fields => :name
       with :status,[1,2,3]
       #order_by :class, :desc
@@ -234,7 +234,7 @@ class SearchController < ApplicationController
     if params[:type]
       search_type = Product.follow_search_type(params[:type])
     elsif params[:content] == "true"
-        search_type = Product.search_type(params[:search_type]) + [Content]
+        search_type = Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]
     else
         search_type = Product.search_type(params[:search_type])
     end 

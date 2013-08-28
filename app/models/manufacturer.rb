@@ -29,6 +29,10 @@ class Manufacturer < Item
     integer :orderbyid  do |item|
       item.itemtype.orderby
     end
+    date :launch_date do |item|
+     item.created_at
+    end 
+  
     time :created_at
    end
 

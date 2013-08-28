@@ -38,29 +38,19 @@ class Content < ActiveRecord::Base
     text :title, :boost => 3.0, :more_like_this =>true do |item|
        item.title.gsub("_","") rescue ''
      end
-      
     text :description do |item|
       item.description
     end
-      
     string :sub_type
-    integer :total_votes
     integer :total_votes   do |content|
-      #unless (content.facebook_count)
-      #  content.total_votes + ((content.facebook_count.share_count + content.facebook_count.like_count)/10).to_i
-      #else
         content.total_votes  
-      #end
-      
     end
-
-
     integer :comments_count
     time :created_at
-    text :name , :boost => 6.0,  :as => :name_ac do |content|
+    text :name, :boost => 6.0,  :as => :name_ac do |content|
       content.title.gsub("_","") rescue ''
     end
-   string :status   do |content|
+    string :status   do |content|
       content.status.to_s
     end
     integer :orderbyid  do |content|
