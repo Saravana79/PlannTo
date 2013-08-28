@@ -9,17 +9,17 @@
     <div style="padding:5px 0px 2px 0px"><a class="txt_black_description" href="" ><%= comment.comment %></a></div>
     <ul class="divCommentsConent " style="padding-bottom:10px;">
 			
-			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue",:id => "report_link_#{@content.id}#{comment.id}" %></a></li>
+			<li class="subContentGap float_lft"><a class="txt_blue "><%= link_to "Report",new_comment_report_path(comment,:type => "comment"),:remote => true,:class => "txt_blue",:id => "report_link_#{comment.commentable.id}#{comment.id}" %></a></li>
 			<%if comment.can_update_content?(current_user)%>
 			  <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
 			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to "Delete This",{:controller => "comments", :action => "destroy", :id => comment.id}, :remote => true, :confirm => "Are you sure you want to delete this comment?", :method => :delete, :class => "txt_blue"%></a></li>
 			  <li class="subContentGap float_lft"><a class="txt_blue ">|</a></li>
-			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to " Update This", edit_content_comment_path(@content,comment,:detail => true), :remote => true, :class => "txt_blue"%></a></li>
+			  <li class="subContentGap float_lft"><a class="txt_blue "><%=link_to " Update This", edit_comment_path(comment,:detail => true), :remote => true, :class => "txt_blue"%></a></li>
 			   <%end%>
 		</ul>
   </div>
   	<script>
-        $("#report_link_<%= @content.id %><%= comment.id%>").keyup(function(){
+        $("#report_link_<%= comment.commentable.id %><%= comment.id%>").keyup(function(){
           <%if !current_user %>
           $("#click_message").html("");
              $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'report')%>");

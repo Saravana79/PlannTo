@@ -5,7 +5,7 @@ class CommentsController < ApplicationController
     if params[:comment_type]
     @content= params[:comment_type].camelize.constantize.find(params[:content_id])
     else
-      @content= Content.find(params[:content_id])
+      @content= params[:parent].camelize.constantize.find(params[:content_id])
     end 
     @comment = Comment.new(params[:comment])
     @comment.commentable = @content
@@ -50,8 +50,9 @@ class CommentsController < ApplicationController
   end
   
   def edit
-    @content= Content.find(params[:content_id])
+    #@content= Content.find(params[:content_id])
     @comment = Comment.find(params[:id])
+    @content = @comment.commentable
     @detail = params[:detail]
     respond_to do|format|
     format.js
@@ -59,8 +60,9 @@ class CommentsController < ApplicationController
   end
   
   def update
-    @content = Content.find(params[:content_id])
+    #@content = Content.find(params[:content_id])
     @comment = Comment.find(params[:id])
+    @content = @comment.commentable
     @detail = params[:detail]
     @comment.update_attributes(params[:comment])
   end

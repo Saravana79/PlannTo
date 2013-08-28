@@ -1,6 +1,7 @@
 class Admin::BuyingPlansController < ApplicationController
   layout "product"
-  before_filter :authenticate_admin_user! ,:only =>[:index,:view_proposal]
+  before_filter :authenticate_admin_user! ,:only =>[:index]
+  before_filter :authenticate_user!,:only =>[:view_proposal]
   before_filter :authenticate_vendor_user!,:except => [:index,:view_proposal]
   def index
      @buying_plans = BuyingPlan.order('created_at desc').paginate(:per_page => 20,:page => params[:page])
@@ -61,7 +62,7 @@ class Admin::BuyingPlansController < ApplicationController
   
  def view_proposal
    @proposal = Proposal.find(params[:id])
-   if @proposal.user_id != current_user.id  || @proposal.buying_plan.user_id!= current_user.id
+   if  @proposal.user_id != current_user.id  || @proposal.buying_plan.user_id!= current_user.id
     redirect_to root_path
    end
    @edit = params[:edit]
