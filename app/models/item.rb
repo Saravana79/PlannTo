@@ -254,7 +254,7 @@ class Item < ActiveRecord::Base
 
   def self.get_related_items(item, limit, includ=false)
     #unless includ
-      related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
+      related_item_ids = RelatedItem.where(:item_id => item.id).order(:variance).collect(&:related_item_id)
     #else
     #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
     #end
@@ -263,7 +263,7 @@ class Item < ActiveRecord::Base
     return self.where(:id => related_item_ids).includes(:item_rating,:attribute_values,:cargroup).limit(limit)
   end
 
-  def self.get_related_item_list(item, limit=10, page=1)
+  def self.get_related_item_list(item, limit=10, page=1) 
     logger.info "(((((((((((((((((((((((((((((("
 
    # return item.relateditems.paginate(:page => page, :per_page => limit)
