@@ -230,30 +230,6 @@
      <%= image_tag '/images/ajax-loader.gif' %>
 </span>
 </div>
-<script>
- var ids = "<%= params[:ids] %>"
-    $(window).scroll(function () {
- 
- 
-     if (!running && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {
-   
-             running = true;
-            $.ajax(
-              {
-                url: "/items/compare?type=scroll" + "&ids=" + ids + '&page=' + $("#page_pagination").val(),
-                type: "get",
-                dataType: "script",
-                before: $('#spinner1').show(),
-                success: function(data){$('#spinner1').hide();
-                 
-                  }
-              });
-              return false
-            //lnk.click();
-       }
-        });
-      
-    </script>
 
 
 <%end%>
