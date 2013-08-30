@@ -10,7 +10,7 @@
  <%end%>  
 <% rating_id = rating_id || "displayRating"%>
 <div class ="displayRating" id="<%=rating_id%>"></div>
-<div style="display:none;" itemprop="rating"><%="#{@type == "group" ? rating : item.rating.to_f.round(1)}"%></div>
+<div style="display:none;" itemprop="rating"><%="#{@type == "group" ? rating : item.rating.to_f.round(1)}" rescue 0.0 %></div>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('div#<%=rating_id%>').raty({
@@ -19,7 +19,7 @@ $(document).ready(function(){
     half       : true,
     readOnly   : true,
     starOn: 'assets/star-on.png',
-    start: '<%="#{item.rating.to_f.round(1)}"%>'
+    start: '<%="#{item.rating.to_f.round(1)}" rescue 0.0%>'
     
   });
   });
