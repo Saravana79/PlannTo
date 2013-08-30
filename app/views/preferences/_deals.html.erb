@@ -8,6 +8,9 @@
     <td class="th_blue">Seller Name</td>
     <td class="th_blue">Price</td>
     <td class="th_blue">Estimated Delivery Time</td>
+    <%if Rails.env == "development" %>
+      <td class="header_compare">Seller Rating</td>
+    <%end%>
     <td class="th_blue">&nbsp;</td>
   </tr>
   <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
@@ -21,6 +24,7 @@
             <td class="bdb_gray1"><img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>" /></td>
             <td class="bdb_gray1 price_text"><%=display_price_detail(item)%></td>
             <td class="bdb_gray1 font_13"><%=display_shipping_detail(item)%></td>
+             <%if Rails.env == "development" %>  <td class="bdb_gray1 font_13"><%= render :partial => 'shared/rating',:locals => {:item => Vendor.get_item_object(item), :rating_id => "product_vendor_#{item.id}"} %> </td><%end%>
             <td align="center" class="bdb_gray1" valign="top"><a href="/history_details?detail_id=<%=item.item_details_id%>" class="blue_small_but" target="_blank"><span>view store</span></a></td>
           </tr>
        <%= render "products/deals_offer",:item => item,:site => site %>
