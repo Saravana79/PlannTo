@@ -8,10 +8,10 @@ class HistoryDetailsController < ApplicationController
     @history.user_id = current_user.id if user_signed_in?    
     @history.plannto_location = session[:return_to]
     @history.save
-    vendor = Vendor.find(@item_detail.site)
+    vendor = Item.find(@item_detail.site)
     url = "#{@item_detail.url}"
-    if !vendor.params.nil? || !vendor.params.blank? 
-       url = vendor.params.gsub(/\{url}/,url)   
+    if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
+       url = vendor.vendor_detail.params.gsub(/\{url}/,url)   
      end
     
     redirect_to url

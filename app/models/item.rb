@@ -9,6 +9,7 @@ class Item < ActiveRecord::Base
   ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
   belongs_to :itemtype
   has_one :item_rating
+  has_one :vendor_detail
   has_many :itemdetails, :foreign_key => 'itemid'
   #  has_many :itemrelationships
   #  has_many :relateditems, :through => :itemrelationships

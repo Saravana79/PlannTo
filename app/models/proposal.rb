@@ -1,6 +1,6 @@
 class Proposal < ActiveRecord::Base
   belongs_to :item
-  belongs_to :vendor
+  belongs_to :vendor,:class_name => "Item", :foreign_key => "vendor_id"
   belongs_to :buying_plan
   acts_as_commentable
   
