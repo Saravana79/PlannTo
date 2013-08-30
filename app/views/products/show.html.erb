@@ -70,7 +70,7 @@ $("#dialog-form #click_message").hide();
        </script>
        <span class="product_details">
         <% if @item.is_a? Manufacturer %>
-          <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
+          <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>         
 
         <% elsif @item.is_a? Product %>
         <div style="float:left;width:450px;">
