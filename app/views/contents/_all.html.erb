@@ -18,7 +18,7 @@
       <% params = {"items" => [@item.id], "status" => 1  }%>
     <% end %>
     <%if @custom == "true" && @no_custom!="true"%>
-      <% params["sub_type"] = ["Reviews","Deals"] %>
+      <% params["sub_type"] = ["Reviews","Deals","Lists","Comparisons"] %>
     <%end%> 
     <%= render "contents/filter_content_create_links" %>
     <% @contents = Content.filter(params)  %>
