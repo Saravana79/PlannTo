@@ -217,6 +217,9 @@ resources :comments do
   resources :tablets do 
     resources :reports
    end 
+  resources :vendors do 
+    resources :reports
+   end 
   resources :cameras do 
     resources :reports
   end  
