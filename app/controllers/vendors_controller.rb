@@ -1,0 +1,3 @@
+class VendorsController < ProductsController  
+
+end
