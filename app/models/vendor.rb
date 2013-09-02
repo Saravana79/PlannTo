@@ -1,4 +1,4 @@
-class Vendor < Product
+class Vendor < Item
  
  def self.get_item_object(item)
     item = item.vendor
