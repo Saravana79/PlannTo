@@ -311,6 +311,7 @@ module ContentsHelper
         end
       end
     elsif content.sub_type == "#{ArticleCategory::COMPARISONS}"      
+      if(content.is_a?ArticleContent)
         unless (content.field4.blank?)
           str = "<br clear='all'/><div class ='subContentGap' style='clear:both;border-radius:5px;background-color:rgb(247, 247, 247);padding:10px;margin:10px 0px 10px 0px;'>"
            unless content.field4.blank? 
@@ -318,6 +319,7 @@ module ContentsHelper
            end 
           str+="</div>"        
         end
+      end
     end
     return str
   end
