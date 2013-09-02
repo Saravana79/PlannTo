@@ -1,0 +1,22 @@
+<div id="proposal"></div>
+     <center><h1> Proposal List </h1> </center>
+<br />
+<br />
+<table border="1" width="800px">
+<tr>
+<th>Buying Plan </th>
+<th> View Proposal </th>
+<th> Edit Proposal </th>
+</tr>
+<% @proposals.each do |proposal | %>
+<tr>
+<td><%= proposal.buying_plan.user_question.title %> </td>
+<td> 
+<div class="btn-group PadT10" style="margin-left:40px;">
+  <%= link_to "View Proposal", view_proposal_admin_buying_plan_path(proposal,:edit => "true") , :class=>"btn btn-primary", :style=>'background:#16c3d7;'%>
+  </div>
+</td>
+<td><div class="btn-group PadT10" style="margin-left:40px;"> <%=link_to "Edit",proposal_edit_admin_buying_plan_path(proposal),:remote => :true,  :class=>"btn btn-primary", :style=>'background:#16c3d7;' %>  </td> 
+</tr>
+<%end%>
+</table> 

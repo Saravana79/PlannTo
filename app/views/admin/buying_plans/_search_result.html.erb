@@ -18,11 +18,11 @@
   <% proposal =  Proposal.find_by_buying_plan_id_and_user_id_and_item_id(buying_plan.id,current_user.id,@item.id) %>
   <% if proposal.blank? %>
   <div class="btn-group PadT10" style="margin-left:40px;">
-            <%= link_to "Send Proposal", proposal_admin_buying_plans_path(:buying_plan_id => buying_plan.id ,:item_id => @item.id ) ,:remote => :true, :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> </a>
+            <%= link_to "Send Proposal", proposal_admin_buying_plans_path(:buying_plan_id => buying_plan.id ,:item_id => @item.id ) ,:remote => :true, :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> 
    </div>
    <%else%>
         <div class="btn-group PadT10" style="margin-left:40px;">
-            <%= link_to "View Proposal", view_proposal_admin_buying_plan_path(proposal,:edit => "true") , :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> </a>
+            <%= link_to "View Proposal", view_proposal_admin_buying_plan_path(proposal,:edit => "true") , :class=>"btn btn-primary", :style=>'background:#16c3d7;'%> 
    </div>
    <%end%>   
           </td>

@@ -27,6 +27,7 @@
             <%end%>
             <% if current_user.is_a_vendor? %>
                <a href="/admin/buying_plans/search">Proposal Send</a>
+               <a href="/admin/buying_plans/proposal_list">View Proposals</a>
             <%end%> 
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>
