@@ -8,6 +8,7 @@ namespace :admin do
     post :search
     get :proposal
     post :proposal_save
+    get :proposal_list
    end
    member do
      get  :view_proposal

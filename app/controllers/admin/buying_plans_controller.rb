@@ -60,6 +60,10 @@ class Admin::BuyingPlansController < ApplicationController
     @item = @proposal.item
   end
   
+  def proposal_list
+    @proposals = Proposal.where(:user_id => current_user.id)
+  end
+  
  def view_proposal
    @proposal = Proposal.find(params[:id])
    if  @proposal.user_id != current_user.id  || @proposal.buying_plan.user_id!= current_user.id
