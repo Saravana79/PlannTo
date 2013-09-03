@@ -256,12 +256,17 @@ class Item < ActiveRecord::Base
   def self.get_related_items(item, limit, includ=false)
     #unless includ
       related_item_ids = RelatedItem.where(:item_id => item.id).order(:variance).collect(&:related_item_id)
+      cargroup = item.cargroup
     #else
     #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
     #end
     # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
-    return Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).limit(limit+3).uniq{|x| x.cargroup} if item.type == Itemtype::CAR
-    return Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).limit(limit)
+    items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).order("id desc").limit(limit+10).uniq{|x| x.cargroup} if item.type == Itemtype::CAR
+    items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).order("id desc").limit(limit+2)
+    if(cargroup)
+      items = items.select{|a| a.cargroup != cargroup}
+    end
+    return items[0..4]
   end
 
   def self.get_related_item_list(item, limit=10, page=1) 
