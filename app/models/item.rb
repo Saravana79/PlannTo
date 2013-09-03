@@ -262,13 +262,18 @@ class Item < ActiveRecord::Base
     #end
     # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     if item.type == Itemtype::CAR
-      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).order("id desc").limit(limit+20).uniq{|x| x.cargroup} 
+      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:cargroup).order("id desc").limit(limit+15).uniq{|x| x.cargroup} 
+      if(cargroup)
+        items = items.select{|a| a.cargroup != cargroup}
+      end
+      items = Item.where(:id => items[0..4].collect(&:id)).includes(:item_rating,:attribute_values)
     else
       items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).order("id desc").limit(limit+2)
+      if(cargroup)
+        items = items.select{|a| a.cargroup != cargroup}
+      end
     end
-    if(cargroup)
-      items = items.select{|a| a.cargroup != cargroup}
-    end
+    
     return items[0..4]
   end
 
