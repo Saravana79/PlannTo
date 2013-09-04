@@ -3409,18 +3409,19 @@ color:#FFFFFF; background:url(../images/down-arrow.png) no-repeat right 13px; cu
 position:relative; z-index:90;}
 
 span.Usrdropdown span.Usernamedp a { color:#FFFFFF; text-decoration:none;}
-
+/*
 span.Usrdropdown span.Usernamedp:hover  {background: #FFFFFF url(../images/down-arrow.png) no-repeat right 13px;
 border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 3px;}
 
 
-span.Usrdropdown span.Usernamedp:hover a { color:#000000;}
-span.Usrdropdown span.Usernamedp:hover .Useraccountinfo { display:block;}
 
+span.Usrdropdown span.Usernamedp:hover .Useraccountinfo { display:block;}
+*/
+span.Usrdropdown span.Usernamedp:hover a { color:#000000;}
 .Useraccountinfo { width:150px; float:left; position:absolute; background:#FFFFFF;
 border:1px solid #528fae; display:none; top:28px; right:-1px;}
 
-.Useraccountinfo a { color:#000000; border-bottom:1px solid #528fae; display:block; padding:5px 0 5px 3px;
+.Useraccountinfo a { color:#000000 !important; border-bottom:1px solid #528fae; display:block; padding:5px 0 5px 3px;
                     font-size:11px; float:none; background:none; font-weight:normal;}
 .Useraccountinfo a:hover { background:#528fae; color:#FFFFFF !important;}
 /******************************************/
@@ -4251,19 +4252,38 @@ position:relative; border: solid 1px #bababa;}
 .downarrow {background:url(../images/user_dropdownarrow.png) no-repeat 95% 12px;height:24px;width:10px;}
 span.Usrdropdown1 span.Usernamedp1 a { color:#323232; text-decoration:none;}
 
-span.Usrdropdown1 span. Usernamedp1:hover  {height:26px;background: #FFFFFF url(../images/user_dropdownarrow.png) no-repeat 95% -12px;
+/*span.Usrdropdown1 span. Usernamedp1:hover  {height:26px;background: #FFFFFF url(../images/user_dropdownarrow.png) no-repeat 95% -12px;
 border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 10px;}
-
-
-span.Usrdropdown1 span.Usernamedp1:hover a { color:#000000;}
 span.Usrdropdown1 span.Usernamedp1:hover .Useraccountinfo1 { display:block;}
-
+*/
+span.Usrdropdown1 span.Usernamedp1:hover a { color:#000000;}
 .Useraccountinfo1 { width:150px; float:left; position:absolute; background:#FFFFFF;
 border:1px solid #528fae; display:none; top:28px; right:-1px;z-index:5001;}
 
 .Useraccountinfo1 a { color:#000000; border-bottom:1px solid #528fae; display:block; padding:5px 0 5px 3px;
                     font-size:11px; float:none; background:none; font-weight:normal;}
 .Useraccountinfo1 a:hover { background:#528fae; color:#FFFFFF !important;}
+
+span.Usrdropdown2 { width:auto; float:left; display:block; padding:0px 0 0 10px;}
+span.Usrdropdown2 img { float:left; padding:1px; background:#323232; border:0px solid #114660; margin:0 5px 0 0;}
+span.Usrdropdown2 span.Usernamedp2 { 
+ padding:7px 15px 0px 10px; height:22px; font: bold 11px/12px Tahoma,Arial, Helvetica, sans-serif; display:block; float:left;
+color:#323232; background: url(../images/btn_bg_active.png) repeat-x; cursor:pointer;
+position:relative; border: solid 1px #bababa;}
+.downarrow {background:url(../images/user_dropdownarrow.png) no-repeat 95% 12px;height:24px;width:10px;}
+span.Usrdropdown2 span.Usernamedp2 a { color:#323232; text-decoration:none;}
+
+/*span.Usrdropdown1 span. Usernamedp1:hover  {height:26px;background: #FFFFFF url(../images/user_dropdownarrow.png) no-repeat 95% -12px;
+border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 10px;}
+span.Usrdropdown1 span.Usernamedp1:hover .Useraccountinfo1 { display:block;}
+*/
+span.Usrdropdown2 span.Usernamedp2:hover a { color:#000000;}
+.Useraccountinfo2 { width:150px; float:left; position:absolute; background:#FFFFFF;
+border:1px solid #528fae; display:none; top:28px; right:-1px;z-index:5001;}
+
+.Useraccountinfo2 a { color:#000000; border-bottom:1px solid #528fae; display:block; padding:5px 0 5px 3px;
+                    font-size:11px; float:none; background:none; font-weight:normal;}
+.Useraccountinfo2 a:hover { background:#528fae; color:#FFFFFF !important;}
 
 .menu_profile1 {
     height: 30px;

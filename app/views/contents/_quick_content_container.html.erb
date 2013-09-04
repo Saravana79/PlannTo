@@ -32,10 +32,10 @@ end%>
 
   <% @article_categories.each_with_index do |article_category, index| %>
                <%if index == 0%> 
-                 <span class="Usrdropdown1" style="padding-left:20px;float:<%=direction%>">
+                 <span class="Usrdropdown2" style="padding-left:20px;float:<%=direction%>">
 
-                   <span class="Usernamedp1"> <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Submit an Article</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
-                     <div class="Useraccountinfo1">
+                   <span class="Usernamedp2"> <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Submit an Article</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
+                     <div class="Useraccountinfo2">
                 <%end%> 
                   <a data-content="<%=article_category[0]%>" class="quickShare"><%=content_submit_tab_label(article_category[0])%></a>
                    <%if index == count %>
@@ -111,6 +111,32 @@ end%>
 
     <br/>
    <script type="text/javascript">
+
+   $(document).ready(function(){
+             $('span.Usernamedp1').hoverIntent(hoverdropdown1,hoverdropdownreverse1);
+              function hoverdropdown1()
+              {
+              $('div.Useraccountinfo1').css("display","block");
+              }
+              function hoverdropdownreverse1()
+              {
+              $('div.Useraccountinfo1').css("display","none");
+              }
+
+              $('span.Usernamedp2').hoverIntent(hoverdropdown2,hoverdropdownreverse2);
+              function hoverdropdown2()
+              {
+              $('div.Useraccountinfo2').css("display","block");
+             
+              }
+              function hoverdropdownreverse2()
+              {
+              $('div.Useraccountinfo2').css("display","none");
+              }
+   
+   
+     });
+
     $(function(){
       $('a.quickShare').click(function(e){
       <%if !current_user %>

@@ -154,6 +154,18 @@
             success: function(data) {
                 // $('#DirectMessage').html(data);
                 $(".Headerrightpart").html(data);
+                
+              $('span.Usernamedp').hoverIntent(hoverdropdown,hoverdropdownreverse);
+              function hoverdropdown()
+              {
+              $('div.Useraccountinfo').css("display","block");
+              $('span.Usernamedp').attr("style","background: #FFFFFF url(../images/down-arrow.png) no-repeat right 13px;border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 3px;");
+              }
+              function hoverdropdownreverse()
+              {
+              $('div.Useraccountinfo').css("display","none");
+              $('span.Usernamedp').attr("style","padding:7px 16px 7px 4px; font-family:Arial, Helvetica, sans-serif; font-size:12px; display:block; float:left;color:#FFFFFF; background:url(../images/down-arrow.png) no-repeat right 13px; cursor:pointer;position:relative; z-index:90;");
+              }
             }
         })
    
@@ -162,7 +174,7 @@
  </script>
    </div>
   <%end%>
-        <%if @static_page == "true"  %>
+        <%if @static_page == "true" && (@homepage == "true" || current_user.nil?)  %>
           <%if @devise != "true" %>
              <div class="search-login-box">
                 <div class="top-search">
