@@ -5,6 +5,20 @@
       
       <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%><%=node%>" style="width: 150px;padding-left:5px;"/><div id="moreCarsSearchDiv<%=count%><%=node%>"></div>
     </span>
+    
+   <%if Rails.env == "development" %>
+   
+    <%if count == 4 && @ids.size < 4 %>
+      <%@related_items.each do |related_item| %>
+        <img src="<%=related_item.image_url%>" width="92" height="69" onclick="parent.location='/items/compare?ids=<%= params[:ids]%>,<%= related_item.id %>'"/>
+        <br />
+        <a href="/items/compare?ids=<%= params[:ids]%>,<%= related_item.id %>" class="txt_black"><%=related_item.name%></a>
+       <br /><br />
+      <%end%>  
+    <%end%>
+    
+    
+    <%end%>
     <div class="PlanntoBuyBtncnt">
     </div>
     <div style="clear:both">

@@ -155,14 +155,17 @@ class ItemsController < ApplicationController
 
   def compare
     @static_page1 = "true"
-    @ids = params[:ids].split(',') rescue ""
-     p = params[:ids].split(',') rescue ''
+    @ids = params[:ids].split(',').uniq rescue ""
+     p = params[:ids].split(',').uniq rescue ''
      unless p == ""
       if p.include?('')
          p.delete('')
         params[:ids] = p.join(",")
       end 
-    end 
+    end
+     related_item_ids = RelatedItem.where('item_id in (?)',@ids).order(:variance).limit(5).collect(&:related_item_id) 
+     @related_items = Item.where('id in (?)',related_item_ids)
+    
     unless @ids.blank? || params[:ids] == ""
       @items = Item.includes([:attribute_values => :attribute],:item_rating).where("items.id in (?)", @ids)
 
