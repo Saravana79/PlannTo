@@ -1,24 +1,37 @@
 <td class="rowline" align="center" width="200px;" style="border-right:1px solid #cdd3d7;">
   <div class="comparebox" id="compareBasicInfo<%=count%><%=node%>" style="width:190px;">
-    <p style="text-align:center;"><b>Add <%=itemtype%> to compare</b> </p> 
+    <p style="text-align:center;"><b>Choose Another <%=itemtype%> to Compare</b> </p> 
     <span class="img_product_cmp" style="height:auto;">
       
-      <input name="" type="text" placeholder="Select an Item" id="moreCarsSearch<%=count%><%=node%>" style="width: 150px;padding-left:5px;"/><div id="moreCarsSearchDiv<%=count%><%=node%>"></div>
+      <input name="" type="text" placeholder="Type the name of <%=itemtype%>" id="moreCarsSearch<%=count%><%=node%>" style="width: 150px;padding-left:5px;"/><div id="moreCarsSearchDiv<%=count%><%=node%>"></div>
     </span>
     
-   <%if Rails.env == "development" %>
-   
-    <%if count == 4 && @ids.size < 4 %>
-      <%@related_items.each do |related_item| %>
-        <img src="<%=related_item.image_url%>" width="92" height="69" onclick="parent.location='/items/compare?ids=<%= params[:ids]%>,<%= related_item.id %>'"/>
-        <br />
-        <a href="/items/compare?ids=<%= params[:ids]%>,<%= related_item.id %>" class="txt_black"><%=related_item.name%></a>
-       <br /><br />
-      <%end%>  
-    <%end%>
-    
-    
-    <%end%>
+   <%#if Rails.env == "development" %>
+   <%if node == "main" %>
+      <%if @ids.size < 4 %>
+          <% startCount = (count - (@ids.size + 1)) * 2
+            endCount =  startCount + 1    %>
+
+           <% if @related_items.size > endCount %>
+            <br/>
+            Or choose from below list
+            <br/><br/>
+           <%end%>
+        <%@related_items[startCount..endCount].each do |related_item| %>
+          <div style="width:92px;clear:both;float:left;">
+            <img src="<%=related_item.image_url%>" width="92" height="69" onclick="'<%=(related_item.get_url())%>'"/>
+          </div>
+          <div style="width:95px;float:right;">
+                        <a href="<%=related_item.get_url()%>" class="txt_black"><%=related_item.name%></a>          
+                        <br/><br/>
+                  <a href="/items/compare?ids=<%= params[:ids]%>,<%= related_item.id %>" class="btn-link" style="padding:3px;font-size:11px;">Add to Compare</a>
+          </div>
+          
+         <br clear="all"/><br />
+        <%end%>      
+      <%end%>
+    <%end%>      
+    <%#end%>
     <div class="PlanntoBuyBtncnt">
     </div>
     <div style="clear:both">
@@ -109,7 +122,8 @@
           var spinnerId = $(this).attr('id').replace("moreCarsSearch",'');
           spinnerId = "moreCarsSearchDiv" +spinnerId  
           ids.push(ui.item.id);
-          compareIds = ids;
+          compare
+          Ids = ids;
           reloadComparableItems(ids, spinnerId);
           // location.href = "/items/compare?ids=" + ids.toString();
         }

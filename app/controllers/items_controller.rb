@@ -163,10 +163,11 @@ class ItemsController < ApplicationController
         params[:ids] = p.join(",")
       end 
     end
-     related_item_ids = RelatedItem.where('item_id in (?)',@ids).order(:variance).limit(5).collect(&:related_item_id) 
-     @related_items = Item.where('id in (?)',related_item_ids)
+     
     
     unless @ids.blank? || params[:ids] == ""
+      related_item_ids = RelatedItem.where('item_id in (?)',@ids).order(:variance).limit(10).collect(&:related_item_id) 
+     @related_items = Item.where('id in (?) and id not in (?)' ,related_item_ids,  @ids).order("id desc")
       @items = Item.includes([:attribute_values => :attribute],:item_rating).where("items.id in (?)", @ids)
 
       @item1 = @items[0] 
