@@ -85,14 +85,14 @@ production:
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
-  popular_cars: "5976,424,65,36,4888,1039,4088,4358,4099,5546,124"
+  popular_cars: "5976,6500,65,36,4888,1039,4088,4358,4099,5546,124"
   popular_bikes: "2120,2133,2157,2361,2112,2212,2365,2214,3686,3705"
   popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"
   popular_mobiles: "4745,5727,4651,5021,5414,5678,4748,5461,6062,5892"
   popular_tablets: "4974,5023,4968,4645,5932,3948, 4073,5055,5384"
   popular_cameras: "4744,1613,3939,3770,6054,5093,4221,4946,4820,4475"
   popular_topics: "3997,3996,3995"
-  popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165,4128"
+  popular_camera_topics: "4154,4160,4137,4152,4144,4140,4165"
   popular_car_topics: ""
   popular_bike_topics: ""
   photo_field_size: 15
@@ -120,7 +120,7 @@ production:
   rating_m_for_tablet: 5
   rating_m_for_camera: 5
   launch_date_modifier: 0.01
-  homepagecompareitems1: "3770,4744"
+  homepagecompareitems1: "3770,3986"
   homepagecompareitems2: "5727,5678"
   homepagecompareitems3: "4974,5023"
   homepagecompareitems4: "5976,5539"

@@ -478,13 +478,13 @@ jQuery(document).ready(function() {
                         <h2 class="ls-s3 banner1-cap-title" style="padding-top:30px;position:relative;" >All the information you need on the products that you own or plan to buy</h2>
                         <p class="ls-s8 banner1-sub-title" style="padding:0px;" >Find it all here. Its a one stop place to get all the information about a product. Informations are searched across web and organzied in a structured way for you to consume it easily. All the products that are available in the market are ranked based on the rating given by the experts around the world and can be searched using various preferences.</p>
                          <p class="banner-btns ls-s8"  style="padding-top:50px;padding-left:170px;">
+                              <a href="/mobile/search" class="mobiles"><span class="margin-btm"></span>Mobiles</a>
+                            <a href="/tablet/search" class="tablets"><span class="margin-btm"></span>Tablets</a>
+                            <a href="/camera/search" class="cameras"><span class="margin-btm"></span>Cameras</a>
                             <a href="/car/search" class="cars"><span class="margin-btm"></span>Cars</a>
                             <a href="/bike/search" class="bikes"><span class="margin-btm"></span>Bikes</a>
                             <a href="/cycle/search" class="cycles"><span class="margin-btm"></span>Cycles</a>
-                            <a href="/mobile/search" class="mobiles"><span class="margin-btm"></span>Mobiles</a>
-                            <a href="/tablet/search" class="tablets"><span class="margin-btm"></span>Tablets</a>
-                            <a href="/camera/search" class="cameras"><span class="margin-btm"></span>Cameras</a>
-
+                          
                           <!--<a href="#" class="findbutton">Find All Here</a>--></p>
                         </div>
                       </div>
@@ -717,103 +717,7 @@ jQuery(document).ready(function() {
                 
                   <div class="home-pop-product-div">
                     
-                  <div class="category-row">
-                      <div class="top-row"><p class="title">Popular Cars</p><p class="links"><a href="/car/search">View All >></a></p></div>
-                        <div class="category-div">
-                          <div class="col1">
-                            <% configatron.popular_cars.split(",")[0..1].each do | id| %>
-                               <% item = Item.find(id) rescue "" %>
-                              <div class="cats-row">
-                                  <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
-                                      <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
-                                        <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "car#{item.id}"} %> <span>Ratings 
-                                            <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
-                                    </div>
-                                    <div class="clr"></div>
-                                </div>
-                                <%end%>
-                                <div class="clr"></div>
-                                <div class="col1-bottom">
-                                    <p> Reviews:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}","/cars?fl=Reviews"%></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Deals")}","/cars?fl=Deals"%></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;News:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","News")}","/cars?fl=News" %></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;How To:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","HowTo/Guide")}","/cars?fl=HowTo" %></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")}","/cars?fl=Travelogue" %></a>
-                                    </p>        
-                                </div>
-                                
-                            </div>
-                            <div class="col2">
-                              <div class="col2-links">
-                                  <ul class="blue-link">
-                              <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback">Top Hatchback</a></li>
-                                <li><a href="/search?search_type=car&sort_by=Rating&7=Sedan">Top Sedans</a></li>
-                                <li><a href="/search?search_type=car&sort_by=Rating&7=SUV/MUV">Top SUVs/MUVs</a></li>
-                                <li><a href="/search?search_type=car&sort_by=Rating&43=Automatic">Top Automatic Cars</a></li>
-                                <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback&41=Diesel">Top Cars Under Rs 5,00,000</a></li>   
-                               <li><a href="/search?search_type=car&sort_by=Rating&status=2">Upcoming Cars</a></li>                                     </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="clr"></div>
-                        </div>                        
-                    </div><!-- 1st category-row -->
-                    
-                    <div class="category-row">
-                      <div class="top-row"><p class="title">Popular Bikes</p><p class="links"><a href="/bike/search">View All >></a></p></div>
-                        <div class="category-div">
-                          <div class="col1">
-                              <% configatron.popular_bikes.split(",")[0..1].each do | id| %>
-                               <% item = Item.find(id) rescue "" %>
-                              <div class="cats-row">
-                                  <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
-                                      <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
-                                        <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "bike#{item.id}"} %> <span>Ratings 
-                                            <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
-                                    </div>
-                                    <div class="clr"></div>
-                                </div>
-                                <%end%>
-                                <div class="clr"></div>
-                                <div class="col1-bottom">
-                                    <p> Reviews:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Reviews")}","/bikes?fl=Reviews"%></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Deals")}","/bikes?fl=Deals"%></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;News:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","News")}","/bikes?fl=News" %></a>
-                                        &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Travelogue")}","/bikes?fl=Travelogue" %></a>
-                                    </p>        
-                                </div>
-                                
-                            </div>
-                            <div class="col2">
-                              <div class="col2-links">
-                                  <ul class="blue-link">
-                                                    
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Sports">Top Sports Bikes</a></li>
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Naked">Top Naked Bikes</a></li>                                
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Cruiser">Top Cruiser Bikes</a></li>
-        <li><a href="/search?search_type=bike&sort_by=Rating&7=Scooter">All Scooters</a></li>                                     
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Touring">Top Touring Bikes</a></li>                                
-                                <li><a href="/bike/search?type=scroll&status=1&sort_by=Rating&min_1=45000&max_1=55000">Top Bikes Under Rs 50,000</a></li>                          
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="clr"></div>
-                        </div>                        
-                    </div><!-- 2nd category-row -->
+                  
                     
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Mobiles</p><p class="links"><a href="/mobile/search">View All >></a></p></div>
@@ -958,7 +862,103 @@ jQuery(document).ready(function() {
                             <div class="clr"></div>
                         </div>                        
                     </div><!-- 5th category-row -->
+                    <div class="category-row">
+                      <div class="top-row"><p class="title">Popular Cars</p><p class="links"><a href="/car/search">View All >></a></p></div>
+                        <div class="category-div">
+                          <div class="col1">
+                            <% configatron.popular_cars.split(",")[0..1].each do | id| %>
+                               <% item = Item.find(id) rescue "" %>
+                              <div class="cats-row">
+                                  <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
+                                    <div class="desc">
+                                      <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
+                                        <p class="price"><%= item.get_price_info('Price',false) %></p>
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "car#{item.id}"} %> <span>Ratings 
+                                            <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
+                                    </div>
+                                    <div class="clr"></div>
+                                </div>
+                                <%end%>
+                                <div class="clr"></div>
+                                <div class="col1-bottom">
+                                    <p> Reviews:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Reviews")}","/cars?fl=Reviews"%></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Deals")}","/cars?fl=Deals"%></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;News:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","News")}","/cars?fl=News" %></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;How To:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","HowTo/Guide")}","/cars?fl=HowTo" %></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")}","/cars?fl=Travelogue" %></a>
+                                    </p>        
+                                </div>
+                                
+                            </div>
+                            <div class="col2">
+                              <div class="col2-links">
+                                  <ul class="blue-link">
+                              <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback">Top Hatchback</a></li>
+                                <li><a href="/search?search_type=car&sort_by=Rating&7=Sedan">Top Sedans</a></li>
+                                <li><a href="/search?search_type=car&sort_by=Rating&7=SUV/MUV">Top SUVs/MUVs</a></li>
+                                <li><a href="/search?search_type=car&sort_by=Rating&43=Automatic">Top Automatic Cars</a></li>
+                                <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback&41=Diesel">Top Cars Under Rs 5,00,000</a></li>   
+                               <li><a href="/search?search_type=car&sort_by=Rating&status=2">Upcoming Cars</a></li>                                     </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="clr"></div>
+                        </div>                        
+                    </div><!-- 1st category-row -->
                     
+                    <div class="category-row">
+                      <div class="top-row"><p class="title">Popular Bikes</p><p class="links"><a href="/bike/search">View All >></a></p></div>
+                        <div class="category-div">
+                          <div class="col1">
+                              <% configatron.popular_bikes.split(",")[0..1].each do | id| %>
+                               <% item = Item.find(id) rescue "" %>
+                              <div class="cats-row">
+                                  <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
+                                    <div class="desc">
+                                      <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
+                                        <p class="price"><%= item.get_price_info('Price',false) %></p>
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "bike#{item.id}"} %> <span>Ratings 
+                                            <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
+                                    </div>
+                                    <div class="clr"></div>
+                                </div>
+                                <%end%>
+                                <div class="clr"></div>
+                                <div class="col1-bottom">
+                                    <p> Reviews:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Reviews")}","/bikes?fl=Reviews"%></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Deals")}","/bikes?fl=Deals"%></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;News:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","News")}","/bikes?fl=News" %></a>
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Travelogue")}","/bikes?fl=Travelogue" %></a>
+                                    </p>        
+                                </div>
+                                
+                            </div>
+                            <div class="col2">
+                              <div class="col2-links">
+                                  <ul class="blue-link">
+                                                    
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Sports">Top Sports Bikes</a></li>
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Naked">Top Naked Bikes</a></li>                                
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Cruiser">Top Cruiser Bikes</a></li>
+        <li><a href="/search?search_type=bike&sort_by=Rating&7=Scooter">All Scooters</a></li>                                     
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Touring">Top Touring Bikes</a></li>                                
+                                <li><a href="/bike/search?type=scroll&status=1&sort_by=Rating&min_1=45000&max_1=55000">Top Bikes Under Rs 50,000</a></li>                          
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="clr"></div>
+                        </div>                        
+                    </div><!-- 2nd category-row -->
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Cycles</p><p class="links"><a href="cycle/search">View All >></a></p></div>
                         <div class="category-div">

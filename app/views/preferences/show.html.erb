@@ -210,7 +210,8 @@
 							    
 							  <%elsif (current_user && current_user.id == @buying_plan.user. id) %>
 								<div class="alert alert-block">
-	<strong>There are no recommendations yet from your friends/experts, please send this to your friends/experts for their feedbacks</strong> <br /><br /><div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
+	<strong>There are no recommendations yet from your friends/experts, please send this to your friends/experts for their feedbacks</strong> <br /><br />
+		<div style="padding-left:470px;"><%= render "shared/share_buttons", :caption_text => @buying_plan.user.name + ' is planning to buy a ' + @buying_plan.itemtype.itemtype.downcase + ', recommend a ' + @buying_plan.itemtype.itemtype.downcase + ' for ' + @buying_plan.user.name + '.' %>
 	   </div></div>
 							<%elsif %>
 							    <%= render  '/shared/alert_message',:type => 'no_recommendations'%>
@@ -222,6 +223,7 @@
 							<%= display_empty_row(@answers.size).html_safe%>
 							<%@answers.each_with_index do |ans, index|%>
 							  <%=render "preferences/update_answer", :ans => ans%>
+							  <br clear="all"/>
 				      <%end%>
 				      	<%if can_add_recommendation?(@buying_plan) || !current_user %>
 									<div class="float_rgt" style="margin-top:8px;">
@@ -264,6 +266,7 @@
 	      </div>
 	    </div>
 	   </div>
+		
 	     <script>
 	  
 	    $(window).scroll(function () {
@@ -315,7 +318,7 @@
 	     <div id="content_all">
 	    
 	      <%= hidden_field_tag :page_pagination,2%>  <a id="content_next" style="display:none"></a>
-	      
+	     </div>
 
 	<script>
 	  
@@ -491,11 +494,7 @@
 			</div>
 			<div class="rightcolumnsmall">
 	        <div id="owned_item"> </div>	
-	         <div class="rightcolumnsmall">
-				       <br/>
-							 
-								<%= render 'preferences_list' %>
-				      </div>	
+	         </div>
 	          <div class="rightcolumnsmall">
 					    <%if @buying_plan.completed? || @follow_item == "" %>
 					        <% @items = Item.where('id in (?)', (@buying_plan.items_considered.split(",") rescue 0)) %>
@@ -504,11 +503,17 @@
 					      <%= render 'items', :items => get_items_with_constraint(@follow_item, @follow_types)%>
 							 <%end%>
 					  </div>
-				      <div class="rightcolumnsmall">
+			
+			<div class="rightcolumnsmall">
+				       <br/>
+							 
+								<%= render 'preferences_list' %>
+				      </div>	
+		    <div class="rightcolumnsmall">
 				       <%@items =  BuyingPlan.recommended_items(@answers) %>
 								<%= render 'recommend_items', :items => @items%>
-				      </div>
 			</div>
+
 			<br clear="all"/>
 				   	<script type="text/javascript">
 	  //LOAD PREFERENCE TAGS AND SETTING UP FORM FIELDS WITH PREFERENCE VALUES///////////
