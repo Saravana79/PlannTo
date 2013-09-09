@@ -727,7 +727,7 @@ jQuery(document).ready(function() {
                                <% item = Item.find(id) rescue "" %>
                               <div class="cats-row">
                                   <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
+                                    <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
                                         <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "mobile#{item.id}"} %> <span>Ratings 
@@ -775,7 +775,7 @@ jQuery(document).ready(function() {
                                <% item = Item.find(id) rescue "" %>
                               <div class="cats-row">
                                   <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
+                                    <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
                                         <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "tablet#{item.id}"} %> <span>Ratings 
@@ -822,7 +822,7 @@ jQuery(document).ready(function() {
                                <% item = Item.find(id) rescue "" %>
                               <div class="cats-row">
                                   <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
+                                    <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
                                         <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "camera#{item.id}"} %> <span>Ratings 
@@ -870,7 +870,7 @@ jQuery(document).ready(function() {
                                <% item = Item.find(id) rescue "" %>
                               <div class="cats-row">
                                   <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
+                                    <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
                                         <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "car#{item.id}"} %> <span>Ratings 
@@ -919,7 +919,7 @@ jQuery(document).ready(function() {
                                <% item = Item.find(id) rescue "" %>
                               <div class="cats-row">
                                   <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
+                                    <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
                                         <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "bike#{item.id}"} %> <span>Ratings 
@@ -967,7 +967,7 @@ jQuery(document).ready(function() {
                                <% item = Item.find(id) rescue "" %>
                               <div class="cats-row">
                                   <div class="imgdiv"><a href="#"><img src="<%=item.image_url%>" alt="<%=item.name%>"  style="width:136px;height:102px;"/></a></div>
-                                    <div class="desc">
+                                    <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
                                         <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "cycle#{item.id}"} %> <span>Ratings 

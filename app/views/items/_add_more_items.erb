@@ -8,7 +8,7 @@
     
    <%#if Rails.env == "development" %>
    <%if node == "main" %>
-      <%if @ids.size < 4 %>
+      <%if @ids.size < 4  && !@related_items.empty?%>
           <% startCount = (count - (@ids.size + 1)) * 2
             endCount =  startCount + 1    %>
 
@@ -17,6 +17,7 @@
             Or choose from below list
             <br/><br/>
            <%end%>
+        <% if @related_items.size > endCount%>
         <%@related_items[startCount..endCount].each do |related_item| %>
           <div style="width:92px;clear:both;float:left;">
             <img src="<%=related_item.image_url%>" width="92" height="69" onclick="'<%=(related_item.get_url())%>'"/>
@@ -29,6 +30,7 @@
           
          <br clear="all"/><br />
         <%end%>      
+        <%end%>
       <%end%>
     <%end%>      
     <%#end%>
