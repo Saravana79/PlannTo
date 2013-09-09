@@ -160,7 +160,7 @@ $("#dialog-form #click_message").hide();
 
         <% else %>
 
-        <%if @item.is_a? CarGroup or @item.is_a? AttributeTag %>
+        <%if @item.is_a? CarGroup or @item.is_a? AttributeTag or @item.is_a? Topic %>
         <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
         <%if @item.is_a? CarGroup %>
         <%@type = "group" %>

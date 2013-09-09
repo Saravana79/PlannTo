@@ -48,10 +48,12 @@
 
       <%@guides = Guide.all%>
       <%@guides.each do |guide|%>
-      <%unless ((@item.is_a?Product) || (@item.is_a?CarGroup) and  (guide.name=="Expert" || guide.name=="Experts Guides" )) || ((@item.is_a?(Topic) || @item.is_a?(AttributeTag)) and  (guide.name=="Owner" || guide.name=="Owner Guides" )) %>
+      <%unless ((@item.is_a?Product) || (@item.is_a?CarGroup) and  (guide.name=="Expert" || guide.name=="Experts Guides" )) || ((@item.is_a?(Topic) || @item.is_a?(AttributeTag)) and  (guide.name=="Owner" || guide.name=="Owner Guides" ))  %>
+      <% unless @item.is_a? Topic%>
       <span class="menu_list">
         <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;"/>
         <a href="/<%=search_type%>/guides/<%=guide.name%>?item_id=<%= @item.id rescue ''%>"><%=guide.name%></a></span>
+      <%end%>
       <%end%>
     <%end%>
    

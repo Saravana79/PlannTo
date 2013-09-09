@@ -10,3 +10,4 @@ Disallow: /
 User-agent:  *
 Disallow: /contents/*/comments
 Disallow: /contents/feed
+Disallow: /votes/add_vote
