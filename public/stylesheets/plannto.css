@@ -4745,6 +4745,49 @@ p {
     font-style: normal;
 
 }
+/* firefox specific hack */
+
+@-moz-document url-prefix() { 
+@font-face {
+    font-family: 'PTSansRegular';
+    src: url('http://www.plannto.com/fonts/pts55f-webfont.eot');
+    src: url('http://www.plannto.com/fonts/pts55f-webfont.eot?#iefix') format('embedded-opentype'),
+         url('http://www.plannto.com/fonts/pts55f-webfont.woff') format('woff'),
+         url('http://www.plannto.com/fonts/pts55f-webfont.ttf') format('truetype'),
+         url('http://www.plannto.com/fonts/pts55f-webfont.svg#PTSansRegular') format('svg');
+   font-style: normal;
+  font-weight: 400;
+}
+}
+
+@-moz-document url-prefix() { 
+  @font-face {
+    font-family: 'PTSansBold';
+    src: url('http://www.plannto.com/fonts/pts75f-webfont.eot');
+    src: url('http://www.plannto.com/fonts/pts75f-webfont.eot?#iefix') format('embedded-opentype'),
+         url('http://www.plannto.com/fonts/pts75f-webfont.woff') format('woff'),
+         url('http://www.plannto.com/fonts/pts75f-webfont.ttf') format('truetype'),
+         url('http://www.plannto.com/fonts/pts75f-webfont.svg#PTSansBold') format('svg');
+    font-style: normal;
+  font-weight: 700;
+}
+}
+
+@-moz-document url-prefix() { 
+  @font-face {
+    font-family: 'LeagueGothic';
+    src: url('http://www.plannto.com/fonts/LeagueGothic-Regular-webfont.eot');
+    src: url('http://www.plannto.com/fonts/LeagueGothic-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('http://www.plannto.com/fonts/LeagueGothic-Regular-webfont.woff') format('woff'),
+         url('http://www.plannto.com/fonts/LeagueGothic-Regular-webfont.ttf') format('truetype'),
+         url('http://www.plannto.com/fonts/LeagueGothic-Regular-webfont.svg#LeagueGothicRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+}
+
+
+
 
 ul.megamenu {
   display: none;

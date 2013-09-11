@@ -11,16 +11,13 @@
 		<%= csrf_meta_tags%>
 		<%= stylesheet_link_tag 'application'%>
     <%= stylesheet_link_tag '/stylesheets/plannto.css'%>
-    <%= stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"%>
-    <%= stylesheet_link_tag "/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" %>
-    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
-    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
-	<%= javascript_include_tag 'application'%>
+    <%#= stylesheet_link_tag "/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css"%>
+    <%#= stylesheet_link_tag "/javascripts/poshytip-1.1/src/tip-darkgray/tip-darkgray.css" %>
 	 
-    <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
+    <!--<link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />-->
     <link href='/images/logosc.png' rel='shortcut icon' type='image/x-icon' />
 
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>		
+
 		<style type="text/css">
       iframe { width:100%; float:left; margin:0; padding:0px; height:1200px; overflow:auto; border:none;}
     </style>
@@ -88,6 +85,10 @@
    <%= render "shared/signup_popup"%>
 </body>
 
+    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
+  <%= javascript_include_tag 'application'%>
+
 <script language="javascript" type="text/javascript">
  function resizeIframe(obj)
  {
@@ -128,6 +129,7 @@
   
  
  </script>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>    
  <script type="text/javascript">
  $(document).ready(function(){
    $.ajax({

@@ -141,7 +141,7 @@
       </div>
     -->
 
-<%if @homepage != "true"  %>
+<%unless @homepage == "true" or (@static_page == "true" && current_user.nil?) %>
  
 <div class="Headerrightpart"> 
  <script type="text/javascript">

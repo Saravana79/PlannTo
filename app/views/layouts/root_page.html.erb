@@ -10,12 +10,62 @@
     
     <link href='/images/logosc.png' rel='shortcut icon' type='image/x-icon' />
     <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+  </head>
+  <body style="padding-bottom: 0px;" class="body">
+    <div id="fb-root"></div>
+
+    <div id="container">
+      <%= render 'shared/header_links' %>
+      <div id="dialog-form" style="display:none;">
+       <div id="login">
+       <%= render "shared/login_dialog" %>
+       <div class="Dontsignup">
+        Don't have an account.
+        <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"%>
+     </div>
+      </div>
+        <div id="sign_up_dialog_1" style="display:none;">
+     <%= render "shared/signup_dialog" %>
+      <div class="Dontsignup">
+        Do you have an account.
+       <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"   ,:style=>"font-weight:bold;text-decoration:underline;"%>
+      </div>
+     </div>
+    </div>
+    
+    <div id="sign_up_dialog" style="display:none;">
+<div id="login1" style="display:none;">
+<%= render "shared/login_dialog" %>
+<div class="Dontsignup">
+Don't have an account.
+<%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login1').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"%>
+</div>
+</div>
+<div id="sign_up_dialog_2">
+<%= render "shared/signup_dialog" %>
+<div class="Dontsignup">
+Do you have an account.
+<%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login1').show();"  ,:style=>"font-weight:bold;text-decoration:underline;" %>
+</div>
+</div>
+
+</div>
+          
+    <p class="notice" style="color:green;font-size:15px;"><%= notice %></p>
+
+    <p class="alert"><%= alert %></p>
+
+      <%= yield %>
+
+    </div>
+
+     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.cookie.js"></script>
     <script type="text/javascript" src="/javascripts/jslider/jquery.dependClass.js"></script>
    <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+   
     <script type="text/javascript">
-  		$(document).ready(function(){
+        $(document).ready(function(){
 
     $("#ui-active-menuitem").mouseout(function() {
         $("#ui-active-menuitem").hide();
@@ -115,56 +165,8 @@
     };
 
 });
-  	</script>
-  </head>
-  <body style="padding-bottom: 0px;" class="body">
-    <div id="fb-root"></div>
-
-    <div id="container">
-      <%= render 'shared/header_links' %>
-      <div id="dialog-form" style="display:none;">
-       <div id="login">
-       <%= render "shared/login_dialog" %>
-       <div class="Dontsignup">
-        Don't have an account.
-        <%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_1').show();$('#login').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"%>
-     </div>
-      </div>
-        <div id="sign_up_dialog_1" style="display:none;">
-     <%= render "shared/signup_dialog" %>
-      <div class="Dontsignup">
-        Do you have an account.
-       <%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_1').hide();$('#login').show();"   ,:style=>"font-weight:bold;text-decoration:underline;"%>
-      </div>
-     </div>
-    </div>
-    
-    <div id="sign_up_dialog" style="display:none;">
-<div id="login1" style="display:none;">
-<%= render "shared/login_dialog" %>
-<div class="Dontsignup">
-Don't have an account.
-<%= link_to "Sign up now" ,"#", :onclick =>"$('#sign_up_dialog_2').show();$('#login1').hide();" ,:style=>"font-weight:bold;text-decoration:underline;"%>
-</div>
-</div>
-<div id="sign_up_dialog_2">
-<%= render "shared/signup_dialog" %>
-<div class="Dontsignup">
-Do you have an account.
-<%= link_to "Sign in now" ,"#", :onclick =>"$('#sign_up_dialog_2').hide();$('#login1').show();"  ,:style=>"font-weight:bold;text-decoration:underline;" %>
-</div>
-</div>
-
-</div>
-          
-    <p class="notice" style="color:green;font-size:15px;"><%= notice %></p>
-
-    <p class="alert"><%= alert %></p>
-
-      <%= yield %>
-
-    </div>
-
+    </script>
+   
     <%= render 'shared/footer'  %>
     <%= render "shared/google_analytics" if Rails.env.production? %>
   </body>
