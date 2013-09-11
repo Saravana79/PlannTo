@@ -81,7 +81,7 @@ test:
   homepagecompareitems4: "5976,5539"
  
 production:
-  root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
+  root_image_url: "http://d1yhmol44kh9to.cloudfront.net/items/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
