@@ -16,7 +16,6 @@ module ItemsHelper
     specifications = ""
     attributes_list = Array.new
     attributes_list = Rails.cache.fetch("attributes_list")
-    attributes_list = nil
     if attributes_list.nil?
       attributes_list = Attribute.where(:priority => true).order(:sortorder).to_a
       Rails.cache.write('attributes_list', attributes_list)

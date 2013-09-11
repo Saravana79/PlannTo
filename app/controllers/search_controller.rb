@@ -15,7 +15,12 @@ class SearchController < ApplicationController
     status << 1
     status << 2
     status = params[:status].split(',') if params[:status].present?
-    @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder")
+    @search_attributes = Rails.cache.fetch("search_attributes")
+    if @search_attributes.nil?
+      @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder")
+      Rails.cache.write('search_attributes',  @search_attributes)
+    end
+    
      @sort = Array.new
      @search_attributes.each do |s|
       if  s.value_type == "GreaterThan" || s.value_type == "LessThen" 
@@ -130,7 +135,7 @@ class SearchController < ApplicationController
     @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "Rating"
     @order_by = order_by_option = params[:order_by].present? ? params[:order_by] : "desc"
     @items = Sunspot.search($search_type.camelize.constantize) do
-      data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating]
+      data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating,:cargroup]
       keywords "", :fields => :name
       with(:manufacturer, list) if !params[:manufacturer].blank? #.any_of(@list)
       with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
