@@ -16,9 +16,11 @@ class SearchController < ApplicationController
     status << 2
     status = params[:status].split(',') if params[:status].present?
     @search_attributes = Rails.cache.fetch("search_attributes")
+    @search_attributes = nil
     if @search_attributes.nil?
-      @search_attributes = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder")
-      Rails.cache.write('search_attributes',  @search_attributes)
+      @temp = SearchAttribute.where("itemtype_id =?", itemtype.id).includes(:attribute).order("sortorder")
+      @search_attributes = @temp
+      Rails.cache.write('search_attributes',  @temp)
     end
     
      @sort = Array.new
