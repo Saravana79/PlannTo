@@ -1,5 +1,5 @@
 <%= form_for @report,:url => @type == "content" ? content_reports_path(@reportable_object) :  comment_reports_path(@reportable_object),:remote => true,:id => "report_form" do |f| %>
-<script  type="text/javascript" src="/javascripts/expanding.js"></script>
+<%= javascript_include_tag "/javascripts/expanding.js" %>
 <div class="popup-background">
    <a href="#" class="Closebut">&nbsp;</a>
  <div ID="new_answer_content_block" style="padding:5px 5px 0px 5px;height:150px;">  

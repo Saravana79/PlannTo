@@ -1,4 +1,4 @@
- <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+<%= javascript_include_tag "/javascripts/expanding.js" %>
  <%= form_for @contact_us,:url => {:action=>"create", :controller=>"contact_us"},:method => :post,:remote => :true  do |f| %>
 <div class="popup-background">
    <a href="#" class="Closebut">&nbsp;</a>

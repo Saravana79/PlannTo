@@ -1,4 +1,4 @@
-	  <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+<%= javascript_include_tag "/javascripts/expanding.js" %>
 <div class="popup-background">
   <a href="#" class="Closebut">&nbsp;</a>
 	<%= form_for  ContentAction.new, :url => content_action_admin_feed_path(@content), :method => :post,:remote => true do |f| -%>

@@ -1,4 +1,4 @@
- <script  type="text/javascript" src="/javascripts/expanding.js"></script>
+ <%= javascript_include_tag "/javascripts/expanding.js" %>
  
  <%= form_for @report,:url => item_reports_path(@reportable_object),:remote => true,:id => "report_form" do |f| %>
 <div class="popup-background">

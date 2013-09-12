@@ -1,7 +1,7 @@
 <%= form_for @proposal || Proposal.new, :url => proposal_save_admin_buying_plans_path ,:remote => :true do |f| %>
 <%= hidden_field_tag "buying_plan_id",@buying_plan.id %>
 <div class="popup-background" >
-<script  type="text/javascript" src="/javascripts/expanding.js"></script>
+<%= javascript_include_tag "/javascripts/expanding.js" %>
   <a href="#" class="Closebut" style="display:none;">&nbsp;</a>
 <%= hidden_field_tag 'proposal_item_id' %>
 <%= hidden_field_tag 'proposal_id',(@proposal.id rescue "") %>

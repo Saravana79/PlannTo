@@ -1,4 +1,4 @@
-<script  type="text/javascript" src="/javascripts/expanding.js"></script>
+<%= javascript_include_tag "/javascripts/expanding.js" %>
 <div style="padding:5px 5px 0px 0px;height:150px;" id="new_comment_block">
   <%= form_for @comment , :url => comment_path(@comment), :remote => true do |f|  %>
     <%= hidden_field_tag :parent, parent %>
