@@ -11,3 +11,4 @@ User-agent:  *
 Disallow: /contents/*/comments
 Disallow: /contents/feed
 Disallow: /votes/add_vote
+Disallow: /history_details
