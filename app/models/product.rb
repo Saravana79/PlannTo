@@ -11,7 +11,8 @@ has_one :manufacturer,
 #        :conditions => {'relationtype' => 'Manufacturer'}
 #        :class_name => 'Manufacturer',
 #        :source => :manufacturer
-has_one :cargroup, :through => :itemrelationship, :source => :cargroup
+  has_one :cargroup, :through => :itemrelationship, :source => :cargroup
+
 
 
  def self.search_type(type)

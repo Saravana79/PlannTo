@@ -15,13 +15,12 @@
       
       
     <div id="spinner" class="spinner" style="float: left;margin-left:25px;margin-top:0px"></div>
-      <%if params[:page] == "1" || !params[:page] %>
+      <%if params[:page] == "1" || !params[:page] || session[:group_id].nil?%>
          <% session[:group_id] = [] %>
       <%end%>  
       <%@items.results.each do |item|%>
          <div id="follow_buttons_js_<%= item.id %>"></div>
-         <% group_id = item.cargroup.id rescue "no" %>
-          <%unless ((session[:group_id].nil?) || (session[:group_id].include?(group_id))) %>
+          <%unless (!item.group_id.nil?  and (session[:group_id].include?(item.group_id))) %>
              <div width="735" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;clear:both;" class="search-result-list">
                     <div class="img_product float_lft" style="width:180px;"><img src="<%=item.image_url%>" width="176" height="132" onclick="parent.location='<%=link_url(item)%>'" /></div>
                     <div class="float_rgt" style="width:520px;">
@@ -92,9 +91,9 @@
             </script>
 
         <%end%>
-          <% unless(session[:group_id].nil?) 
-                session[:group_id] << group_id 
-                session[:group_id].delete("no")
+          <% unless((session[:group_id].nil?) && (item.group_id.nil?)) 
+                session[:group_id] << item.group_id 
+                #session[:group_id].delete("no")              
              end %>
     <%end%>
             <script>

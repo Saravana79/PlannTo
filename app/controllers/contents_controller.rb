@@ -491,18 +491,23 @@ end
   end
   
   def get_class_names
-      @contents = Content.where(id: params[:ids])
-      class_names = {}
-      @contents.collect{|content| class_names.merge!(content.rating_classnames(current_user))}
-    
-    respond_to do |format|
-      format.json{render json: class_names}
-    end
-    
+    unless (current_user.nil?)
+        @contents = Content.where(id: params[:ids])
+        class_names = {}
+        @contents.collect{|content| class_names.merge!(content.rating_classnames(current_user))}
+      
+      respond_to do |format|
+        format.json{render json: class_names}
+      end
+    end 
   end
   
   def edit_guide_ajax
-     @contents = Content.where("id in (?)", params[:contents_id].split(","))
+    unless (current_user.nil?)
+       @contents = Content.where("id in (?)", params[:contents_id].split(","))
+    else
+      @contents = []
+    end 
   end
   
   private

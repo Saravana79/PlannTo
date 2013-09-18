@@ -1,7 +1,7 @@
 class SearchController < ApplicationController
    caches_action :autocomplete_items, :cache_path => proc {|c|  { :tag => params[:term],:type => params[:type] ,:content => params[:content], :search_type => params[:search_type]}}
    caches_action :index, :cache_path => Proc.new { |c| string =  c.params.except(:_).inspect
-    {:tag => Digest::SHA256.hexdigest(string)}}
+    {:tag => Digest::MD5.hexdigest(string)}}
   layout "product"
 
  
@@ -136,7 +136,7 @@ class SearchController < ApplicationController
     @sort_by = sort_by_option = params[:sort_by].present? ? params[:sort_by] : "Rating"
     @order_by = order_by_option = params[:order_by].present? ? params[:order_by] : "desc"
     @items = Sunspot.search($search_type.camelize.constantize) do
-      data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating,:cargroup]
+      data_accessor_for($search_type.camelize.constantize).include = [:attribute_values,:item_rating]
       keywords "", :fields => :name
       with(:manufacturer, list) if !params[:manufacturer].blank? #.any_of(@list)
       with(:manufacturer, list) if (!params[:manufacturer].present? && !list.empty?)
@@ -174,7 +174,7 @@ class SearchController < ApplicationController
       dynamic :features_string do
         preferences.each do |preference|
           if preference[:value_type] == "Click"
-            with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:value]) if !params[preference[:attribute]].present?
+n            with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:value]) if !params[preference[:attribute]].present?
           elsif preference[:value_type] == "ListOf.parameterize.underscore.to_symValues"
             with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:search_value]) if !params[preference[:attribute]].present?
           end

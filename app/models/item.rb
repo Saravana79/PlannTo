@@ -260,21 +260,20 @@ class Item < ActiveRecord::Base
   def self.get_related_items(item, limit, includ=false)
     #unless includ
       related_item_ids = RelatedItem.where(:item_id => item.id).order(:variance).collect(&:related_item_id)
-      cargroup = item.cargroup
     #else
     #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
     #end
     # related_item_ids = RelatedItem.where(:item_id => item.id).collect(&:related_item_id)
     if item.type == Itemtype::CAR
-      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:cargroup).order("id desc").limit(limit+15).uniq{|x| x.cargroup} 
-      if(cargroup)
-        items = items.select{|a| a.cargroup != cargroup}
+      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).order("id desc").limit(limit+15).uniq{|x| x.group_id} 
+      unless(item.group_id.nil?)
+        items = items.select{|a| (a.group_id.nil? or a.group_id != item.group_id) }
       end
       items = Item.where(:id => items[0..4].collect(&:id)).includes(:item_rating,:attribute_values)
     else
       items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).order("id desc").limit(limit+2)
-      if(cargroup)
-        items = items.select{|a| a.cargroup != cargroup}
+      unless(item.group_id.nil?)
+        items = items.select{|a| (a.group_id.nil? or a.group_id != item.group_id) }
       end
     end
     
