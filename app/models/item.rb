@@ -114,14 +114,18 @@ class Item < ActiveRecord::Base
       if !prices.blank?
         if(displaycomment)
          if prices.size > 1
+          unless item_attribute1.first.nil?
            price = item_attribute1.first.name + ' - '  +
           number_to_indian_currency(min_price.to_i) +
            '  -  ' +   number_to_indian_currency(max_price.to_i) +
           (attribute_value1.first.addition_comment.blank? ? "" : " ( #{attribute_value1.first.addition_comment} )")
+          end 
          else
+          unless item_attribute1.first.nil?
            price = item_attribute1.first.name + ' - '  +
           number_to_indian_currency(min_price.to_i) +
           (attribute_value1.first.addition_comment.blank? ? "" : " ( #{attribute_value1.first.addition_comment} )")
+          end
          end   
         else
          if prices.size > 1
