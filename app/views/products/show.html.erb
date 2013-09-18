@@ -282,7 +282,7 @@ This section summaries the pros/cons based on reviews from experts, please click
         <%end%>
         </div>
     <%end%>
-  <% unless (@verdicts.empty?)   %>
+  <% unless (@verdicts.empty?)  or (!(@item.is_a? Product)) %>
 <!--    <script src="/javascripts/jquery.jcarousel.js" type="text/javascript"></script>-->
     <%= stylesheet_link_tag "/stylesheets/skininproduct.css" %>
       <div class="container" style="width:700px;">
