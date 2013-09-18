@@ -192,6 +192,7 @@
             $('#staticDiv').css("display", "none");
         }
     });
+   $(document).ready(function() {   
     $(".ui-dialog-content").dialog('destroy')
       var ids = '<%= params[:ids] %>'
 
@@ -214,6 +215,7 @@
               follow: [false, false] //x, y
            });
            }
+         });
 </script>
 <%if @items %>
 <% if !@contents.blank? %>
