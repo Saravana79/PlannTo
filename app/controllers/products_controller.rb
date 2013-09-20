@@ -14,6 +14,7 @@ class ProductsController < ApplicationController
   before_filter :log_impression, :only=> [:show]
   layout 'product'
   include FollowMethods
+  include ItemsHelper
 
  def log_impression
    @item = Item.find(params[:id])
@@ -183,6 +184,27 @@ class ProductsController < ApplicationController
     end     
    end
   end
+
+  def where_to_buy_items
+    @item = Item.find(params[:id])
+    @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    responses = []
+    @where_to_buy_items.group_by(&:site).each do |site, items|  
+      items.each_with_index do |item, index|     
+        display_item_details(item)
+        if index == 0
+          responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
+        end
+      end
+    end
+    logger.info "__________________#{responses}"
+     html = responses
+     json = {"html" => html}.to_json
+     callback = params[:callback]
+     jsonp = callback + "(" + json + ")"
+     render :text => jsonp,  :content_type => "text/javascript"
+  end
+
   
   private
 
