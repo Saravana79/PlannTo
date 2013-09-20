@@ -39,34 +39,14 @@ function scriptLoadHandler() {
 /******** Our main function ********/
 function main() { 
     jQuery(document).ready(function(jQuery) { 
-        url = "http://0.0.0.0:3000/products/where_to_buy_items/"+jQuery("#where_to_buy_items").attr("item")+".js?callback=?"
-		jQuery.getJSON(url, function (data) {
-			console.log(data)
-	        	widget = build_widget(data.html, jQuery);
-	        	jQuery("#where_to_buy_items").html(widget);
-	    });
-    });
-}
+        var doc_title =  jQuery(document).title;
+        var item_id = jQuery("#where_to_buy_items").attr("item");
+        var pathname = window.location.pathname;
+        url = "http://0.0.0.0:3000/products/where_to_buy_items.js?item_id="+item_id+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+		    jQuery.getJSON(url, function (data) {
+	        	jQuery("#where_to_buy_items").html(data.html);
+	      });
+      });
+    }
 
-})();
-
-
-
-function build_widget(data, jQuery){
-   var table = jQuery('<table>')
-   jQuery(data).each(function( index ) {
-   	  tr = jQuery("<tr>");
-
-   	  td1 = jQuery("<td>");
-   	  td1.html(this.image_url);
-	  jQuery(td1).appendTo(jQuery(tr));
-	  td1 = jQuery("<td>");
-   	  td1.html(this.display_price);
-	  jQuery(td1).appendTo(jQuery(tr));
-	  td1 = jQuery("<td>");
-   	  td1.html(this.history_detail);
-	  jQuery(td1).appendTo(jQuery(tr));
-	  jQuery(tr).appendTo(table);
-	});
-   return jQuery(table);
-}
+  })();

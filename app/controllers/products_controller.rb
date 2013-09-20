@@ -15,6 +15,7 @@ class ProductsController < ApplicationController
   layout 'product'
   include FollowMethods
   include ItemsHelper
+  layout false, only: [:where_to_buy_items]
 
  def log_impression
    @item = Item.find(params[:id])
@@ -186,7 +187,7 @@ class ProductsController < ApplicationController
   end
 
   def where_to_buy_items
-    @item = Item.find(params[:id])
+    @item = Item.find(params[:item_id])
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     responses = []
     @where_to_buy_items.group_by(&:site).each do |site, items|  
@@ -197,8 +198,9 @@ class ProductsController < ApplicationController
         end
       end
     end
-    logger.info "__________________#{responses}"
-     html = responses
+    address = Geocoder.search(request.ip)
+    datetime = Time.now.to_i
+     html = html = render_to_string
      json = {"html" => html}.to_json
      callback = params[:callback]
      jsonp = callback + "(" + json + ")"
