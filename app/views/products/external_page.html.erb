@@ -9,8 +9,8 @@
    <%= javascript_include_tag 'application' %>
 </head>
 
-<body  style="background:white;">
-  <div style="border: solid 0px;    width: 1000px;    position: relative;    margin: 0 auto;    height: auto;    min-height: 600px;    background: white;    padding:10px;" >
+<body>
+  <div style="border: solid 0px;    width: 800px;    position: relative;    margin: 0 auto;    height: auto;    min-height: 600px;    background: white;    padding:10px;" >
  <span class="img_product"><img  src="<%=@item.image_url%>" alt="<%=@item.name%>" width="176" height="132"/></span> 
  <br /><br /><br />
   <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
@@ -40,10 +40,12 @@
 </div>
 </div>
     <script>
-  <% if (showcompare.to_i rescue 0) == 1 %>
-     $("#where_to_buy").show();
+  <% if (@showcompare.to_i rescue 0) == 1 %>
+     $("#compare_price").show();
+     $("ul#Newtabs li#compare_price").addClass("tab_active");
   <% else%>
      $("#reviews").show();     
+     $("ul#Newtabs li#reviews").addClass("tab_active");
  <% end %>
   
     </script>
