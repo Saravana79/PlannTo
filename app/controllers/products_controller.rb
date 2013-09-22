@@ -156,9 +156,9 @@ class ProductsController < ApplicationController
   
   def external_page
     @item = Item.find(params[:item_id])
-    @showspec = params[:showspec]
-    @showcompare = params[:showcompare]
-    @showreviews = params[:showreviews]
+    @showspec = params[:show_spec]
+    @showcompare = params[:show_compare]
+    @showreviews = params[:show_reviews]
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
     @contents = Content.where(:sub_type => "Reviews")
@@ -188,6 +188,7 @@ class ProductsController < ApplicationController
 
   def where_to_buy_items
     @item = Item.find(params[:item_id])
+    @moredetails = params[:price_full_details]
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     responses = []
     @where_to_buy_items.group_by(&:site).each do |site, items|  
@@ -202,7 +203,7 @@ class ProductsController < ApplicationController
     datetime = Time.now.to_i
      html = html = render_to_string
      json = {"html" => html}.to_json
-     callback = params[:callback]
+     callback = params[:callback]     
      jsonp = callback + "(" + json + ")"
      render :text => jsonp,  :content_type => "text/javascript"
   end
