@@ -42,7 +42,7 @@ function main() {
         var doc_title =  jQuery(document).title;
         var item_id = jQuery("#where_to_buy_items").attr("item");
         var pathname = window.location.pathname;
-        url = "http://0.0.0.0:3000/where_to_buy_items.js?item_id="+item_id+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        url = "http://www.plannto.com/where_to_buy_items.js?item_id="+item_id+"&price_full_details=true"+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {
 	        	jQuery("#where_to_buy_items").html(data.html);
 	      });
