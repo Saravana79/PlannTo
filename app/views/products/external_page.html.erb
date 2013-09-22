@@ -1,7 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title><%= content_for?(:title) ? yield(:title) : "PlannTo - #{@content.title}" %></title>
+    <%if (@content.thumbnail?)%>
+          <meta content='<%= change_thumb_original(@content) %>' property='og:image'>
+    <%end%> 
+    <meta name="description" content="<%= @content.description %>">
+
 <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
 <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
    <%= javascript_include_tag 'application' %>
+</head>
+
+<body  style="background:white;">
+  <div style="border: solid 0px;    width: 1000px;    position: relative;    margin: 0 auto;    height: auto;    min-height: 600px;    background: white;    padding:10px;" >
  <span class="img_product"><img  src="<%=@item.image_url%>" alt="<%=@item.name%>" width="176" height="132"/></span> 
  <br /><br /><br />
   <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>          
@@ -27,8 +42,18 @@
 
 <div id="compare_price" style="<%=display_required(params[:at] || "reviews", "compare_price")%>" class="main-content-section">
   <%= render "products/where_to_buy" %>
+
 </div>
-
-
+</div>
+    <script>
+  <% if (showcompare.to_i rescue 0) == 1 %>
+     $("#where_to_buy").show();
+  <% else%>
+     $("#reviews").show();     
+ <% end %>
+  
+    </script>
+</body>
+</html>
  
 
