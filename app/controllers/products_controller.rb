@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
   layout 'product'
   include FollowMethods
   include ItemsHelper
-  layout false, only: [:where_to_buy_items]
+#  layout false, only: [:where_to_buy_items]
 
  def log_impression
    @item = Item.find(params[:id])
@@ -201,7 +201,7 @@ class ProductsController < ApplicationController
     end
     address = Geocoder.search(request.ip)
     datetime = Time.now.to_i
-     html = html = render_to_string
+     html = html = render_to_string(:layout => false)
      json = {"html" => html}.to_json
      callback = params[:callback]     
      jsonp = callback + "(" + json + ")"
