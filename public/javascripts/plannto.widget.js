@@ -1,8 +1,15 @@
 
-(function() {
+if(scriptCount == undefined)
+{
+  var scriptCount = 0;
+  
+}
+
+
+var PlannTo = (function(window,undefined) {
 
 // Localize jQuery variable
-var jQuery;
+var jQuery; 
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
@@ -13,7 +20,7 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
     if (script_tag.readyState) {
       script_tag.onreadystatechange = function () { // For old versions of IE
           if (this.readyState == 'complete' || this.readyState == 'loaded') {
-              scriptLoadHandler();
+              scriptLoadHandler();                         
           }
       };
     } else { // Other browsers
@@ -24,7 +31,10 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
 } else {
     // The jQuery version on the window is the one we want to use
     jQuery = window.jQuery;
+    
+   
     main();
+  return PlannTo;    
 }
 
 /******** Called once jQuery has loaded ******/
@@ -33,20 +43,76 @@ function scriptLoadHandler() {
     // new jQuery in our local jQuery variable
     jQuery = window.jQuery.noConflict(true);
     // Call our main function
+
     main(); 
+}
+
+function getParam (url, sname )
+{
+  var a = document.createElement('a');
+  a.href = url;
+  params = a.search.substr(a.search.indexOf("?")+1);
+  sval = "";
+  params = params.split("&");
+    // split param and value into individual pieces
+    for (var i=0; i<params.length; i++)
+       {
+         temp = params[i].split("=");
+         if ( [temp[0]] == sname ) { sval = temp[1]; }
+       }
+  
+  return sval;
+}
+
+function getScriptUrl() {
+var scripts = document.getElementsByTagName('script');
+var element;
+var src;
+var count = 0;
+  for (var i = 0; i < scripts.length; i++) 
+  {
+    element = scripts[i];
+    src = element.src;
+      
+      if (src && /plannto\.com\/javascripts\/plannto\.widget\.js/.test(src)) 
+     // if (src && /localhost:3000\/javascripts\/plannto\.widget\.js/.test(src)) 
+      {
+        if (count >= scriptCount)
+          {
+              scriptCount= scriptCount + 1;
+              return src;
+          }
+        else
+        {
+             count = count +1 ;
+        }
+      }
+  }
+return null;
 }
 
 /******** Our main function ********/
 function main() { 
+    
     jQuery(document).ready(function(jQuery) { 
-        var doc_title =  jQuery(document).title;
-        var item_id = jQuery("#where_to_buy_items").attr("item");
+      
+        url = getScriptUrl();
+         var doc_title =  jQuery(document).title;
         var pathname = jQuery(document).referrer;
-        url = "http://www.plannto.com/where_to_buy_items.js?item_id="+item_id+"&price_full_details=true"+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        var item_id = getParam(url,"item_id");
+        var show_details = getParam(url,"show_details");
+        alert(show_details);
+        var element_id = getParam(url,"element_id");
+        if(element_id == undefined)
+        {
+          element_id = "where_to_buy_items";
+        }
+        
+        url = "http://www.plannto.com/where_to_buy_items.js?item_id="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {
-	        	jQuery("#where_to_buy_items").html(data.html);
+	        	jQuery("#"+element_id).html(data.html);
 	      });
       });
     }
 
-  })();
+  })(window);
