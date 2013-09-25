@@ -101,7 +101,7 @@ function main() {
         var pathname = jQuery(document).referrer;
         var item_id = getParam(url,"item_id");
         var show_details = getParam(url,"show_details");
-        alert(show_details);
+        
         var element_id = getParam(url,"element_id");
         if(element_id == undefined)
         {
