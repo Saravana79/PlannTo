@@ -186,26 +186,48 @@ class ProductsController < ApplicationController
    end
   end
 
+  def is_number?
+    true if Float(self) rescue false
+  end
   def where_to_buy_items
-    @item = Item.find(params[:item_id])
-    @moredetails = params[:price_full_details]
-    @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    responses = []
-    @where_to_buy_items.group_by(&:site).each do |site, items|  
-      items.each_with_index do |item, index|     
-        display_item_details(item)
-        if index == 0
-          responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
-        end
+    item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
+    unless (item_ids.blank?)
+      if (true if Float(item_ids[0]) rescue false)
+        @items = Item.where(id: item_ids)        
+      else
+        @items = Item.where(slug: item_ids)        
       end
+    else
+        #url = request.referer
+        url = params[:refer_url]
+        @articles = ArticleContent.where(url: url)
+        unless @articles.nil?
+          @items = @articles[0].items;      
+        end
+    end 
+
+    unless @items.nil?
+      @item = @items[0] 
+      @moredetails = params[:price_full_details]
+      @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+      
+      responses = []
+        @where_to_buy_items.group_by(&:site).each do |site, items|  
+          items.each_with_index do |item, index|     
+            display_item_details(item)
+            if index == 0
+              responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
+            end
+          end
+        end
+      address = Geocoder.search(request.ip)
+      defatetime = Time.now.to_i
+      html = html = render_to_string(:layout => false)
+      json = {"html" => html}.to_json
+      callback = params[:callback]     
+      jsonp = callback + "(" + json + ")"
+      render :text => jsonp,  :content_type => "text/javascript"  
     end
-    address = Geocoder.search(request.ip)
-    datetime = Time.now.to_i
-     html = html = render_to_string(:layout => false)
-     json = {"html" => html}.to_json
-     callback = params[:callback]     
-     jsonp = callback + "(" + json + ")"
-     render :text => jsonp,  :content_type => "text/javascript"
   end
 
   
