@@ -13,10 +13,14 @@ class HistoryDetailsController < ApplicationController
     if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
        url = vendor.vendor_detail.params.gsub(/\{url}/,url)
        pv = PublisherVendor.where(:vendor_id => vendor.id).first
-       unless pv.nil?
+       if !pv.nil?
+          url = url.gsub(/\{affid}/,pv.affliateid)
+          url=  url.gsub(/\{trackid}/,pv.trackid)
+       else
+         pv = PublisherVendor.where(:publisher_id => 0)
          url = url.gsub(/\{affid}/,pv.affliateid)
-         url=  url.gsub(/\{trackid}/,pv.trackid)
-       end  
+         url=  url.gsub(/\{trackid}/,pv.trackid)  
+       end   
      end
     
     redirect_to url
