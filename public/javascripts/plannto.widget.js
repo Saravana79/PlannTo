@@ -108,7 +108,7 @@ function main() {
           element_id = "where_to_buy_items";
         }
         
-        url = "http://www.plannto.com/where_to_buy_items.js?item_id="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {
 	        	jQuery("#"+element_id).html(data.html);
 	      });
