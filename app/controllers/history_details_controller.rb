@@ -18,8 +18,10 @@ class HistoryDetailsController < ApplicationController
           url=  url.gsub(/\{trackid}/,pv.trackid)
        else
          pv = PublisherVendor.where(:publisher_id => 0)
-         url = url.gsub(/\{affid}/,pv.affliateid)
-         url=  url.gsub(/\{trackid}/,pv.trackid)  
+          if !pv.nil?
+           url = url.gsub(/\{affid}/,pv.affliateid)
+           url=  url.gsub(/\{trackid}/,pv.trackid)  
+          end
        end   
      end
     

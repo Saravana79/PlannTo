@@ -193,20 +193,20 @@ class ProductsController < ApplicationController
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     unless (item_ids.blank?)
       if (true if Float(item_ids[0]) rescue false)
-        @items = Item.where(id: item_ids)        
+        @items = Item.where(id: item_ids) 
       else
-        @items = Item.where(slug: item_ids)        
+        @items = Item.where(slug: item_ids)
       end
     else
         #url = request.referer
-        url = params[:refer_url]
+        url = params[:ref_url]
         @articles = ArticleContent.where(url: url)
-        unless @articles.nil?
+        unless @articles.empty?
           @items = @articles[0].items;      
         end
     end 
 
-    unless @items.nil?
+    unless @items.nil? || @items.empty?
       @item = @items[0] 
       @moredetails = params[:price_full_details]
       @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
@@ -227,6 +227,9 @@ class ProductsController < ApplicationController
       callback = params[:callback]     
       jsonp = callback + "(" + json + ")"
       render :text => jsonp,  :content_type => "text/javascript"  
+    else
+      @where_to_buy_items =[]
+      render :text => "",  :content_type => "text/javascript"
     end
   end
 
