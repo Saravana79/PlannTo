@@ -3,7 +3,6 @@ class HistoryDetailsController < ApplicationController
   def index
     type = params[:type].present? ? params[:type] : ""
     find_item_detail(params[:detail_id], type)
-   
     @history = HistoryDetail.new(:site_url => @item_detail.url, :ip_address => request.remote_ip, :redirection_time => Time.now)
     @history.user_id = current_user.id if user_signed_in?    
     @history.plannto_location = session[:return_to]
@@ -12,19 +11,20 @@ class HistoryDetailsController < ApplicationController
     url = "#{@item_detail.url}"
     if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
        url = vendor.vendor_detail.params.gsub(/\{url}/,url)
-       pv = PublisherVendor.where(:vendor_id => vendor.id).first
+       publisher_domain = URI.parse(request.referer).host
+       publisher_id = Publisher.where(:publisher_url => publisher_domain).first 
+       pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher_id).first 
        if !pv.nil?
           url = url.gsub(/\{affid}/,pv.affliateid)
           url=  url.gsub(/\{trackid}/,pv.trackid)
        else
-         pv = PublisherVendor.where(:publisher_id => 0).first
-          if !pv.nil?
-           url = url.gsub(/\{affid}/,pv.affliateid)
-           url=  url.gsub(/\{trackid}/,pv.trackid)  
-          end
-       end   
-     end
-    
+         pv = PublisherVendor.where(:publisher_id => 0,:vendor_id => vendor.id).first
+        if !pv.nil?
+          url = url.gsub(/\{affid}/,pv.affliateid) 
+          url=  url.gsub(/\{trackid}/,pv.trackid)  
+        end   
+      end
+    end
     redirect_to url
   end
 
