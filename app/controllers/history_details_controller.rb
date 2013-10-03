@@ -7,11 +7,12 @@ class HistoryDetailsController < ApplicationController
     @history.user_id = current_user.id if user_signed_in?    
     @history.plannto_location = session[:return_to]
     @history.save
+    Click.save_click_data(@item_detail.url,request.referer,Time.now,@item_detail.itemid,current_user,request.remote_ip)
     vendor = Item.find(@item_detail.site)
     url = "#{@item_detail.url}"
     if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
        url = vendor.vendor_detail.params.gsub(/\{url}/,url)
-       publisher_domain = URI.parse(request.referer).host
+       publisher_domain = URI.parse(request.referer).host rescue ""
        publisher_id = Publisher.where(:publisher_url => publisher_domain).first 
        pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher_id).first 
        if !pv.nil?

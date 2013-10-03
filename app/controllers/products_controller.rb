@@ -210,7 +210,7 @@ class ProductsController < ApplicationController
       @item = @items[0] 
       @moredetails = params[:price_full_details]
       @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-      
+      AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     
