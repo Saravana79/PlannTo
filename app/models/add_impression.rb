@@ -1,8 +1,8 @@
 class AddImpression < ActiveRecord::Base
 
- def self.save_add_impression_data(type,itemid,request_referer,time,user,remote_ip)
+ def self.save_add_impression_data(type,itemid,request_referer,time,user,remote_ip,impression_id)
    ai = AddImpression.new
-   ai.impression_id = nil
+   ai.impression_id = impression_id
    ai.advertisement_type = type
    ai.item_id = itemid
    ai.hosted_site_url = request_referer
@@ -11,8 +11,11 @@ class AddImpression < ActiveRecord::Base
    ai.ip_address = remote_ip
    publisher_domain = URI.parse(request_referer).host rescue ""
    publisher = Publisher.where(:publisher_url => publisher_domain).first 
-   ai.publisher_id = publisher
+   unless publisher.nil?
+      ai.publisher_id = publisher.id
+   end
    ai.save 
+   return ai.id
  end
 end
 

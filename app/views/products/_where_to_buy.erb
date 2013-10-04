@@ -22,7 +22,7 @@
             <td class="bdb_gray1 price_text"><%=display_price_detail(item)%></td>
             <td class="bdb_gray1 font_13"><%=display_shipping_detail(item)%></td>
           <%if Rails.env == "development" %>  <td class="bdb_gray1 font_13"><%= render :partial => 'shared/rating',:locals => {:item => Vendor.get_item_object(item), :rating_id => "product_vendor_#{item.id}"} %> </td><%end%>
-            <td align="center" class="bdb_gray1" ><a href="/history_details?detail_id=<%=item.item_details_id%>" class="btn-link" target="_blank">View Store</a></td>
+            <td align="center" class="bdb_gray1" ><a href="/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>&req=<%=@req%>" class="btn-link" target="_blank">View Store</a></td>
           </tr>
          <%= render "products/deals_offer",:item => item,:site => site %>
        <!--   

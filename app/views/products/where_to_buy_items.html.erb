@@ -28,7 +28,7 @@
                                <%if index == 0%>
                                  <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;"/> </td>
                                  <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="35%"> <%=display_price_detail(item)%> </td>
-                                 <td width="30%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>" style="
+                                 <td width="30%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> </td>
                                 <%end%>
                                 <%end%>
@@ -42,7 +42,7 @@
                                  <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="25%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;"/> </td>
                                  <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="30%"> <%=display_price_detail(item)%> </td>
                                  <td style="font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="30%"><%=display_shipping_detail(item)%></td>
-                                 <td width="15%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>" style="
+                                 <td width="15%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> </td>
                                 <%end%>
                                 <%end%>
@@ -55,10 +55,10 @@
                             <tr>
                                   <td  style="padding-right:10px;vertical-align:middle;height:40px" colspan="4">
                                     <span style="float:left;padding-left:20px">
-                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;" target="_blank">View prices from more retailers</a>
+                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;" target="_blank">View prices from more retailers</a>
                                     </span>
                                     <span style="float:right;">
-                                    <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price" style="
+                                    <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> 
                                     </span>
         </td>

@@ -159,7 +159,13 @@ class ProductsController < ApplicationController
     @showspec = params[:show_spec]
     @showcompare = params[:show_compare]
     @showreviews = params[:show_reviews]
+    @impression_id = params[:iid]
+    unless request.referer
+      @req = request.referer  
+    end
+     
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
     @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
    # @contents = Content.where(:sub_type => "Reviews")
     @item_specification_summary_lists.delete("nothing")
@@ -210,7 +216,7 @@ class ProductsController < ApplicationController
       @item = @items[0] 
       @moredetails = params[:price_full_details]
       @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-      AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip)
+      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,nil)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     

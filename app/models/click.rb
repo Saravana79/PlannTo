@@ -1,8 +1,8 @@
 class Click < ActiveRecord::Base
 
-  def self.save_click_data(url,request_referer,time,item_id,user,remote_ip)
+  def self.save_click_data(url,request_referer,time,item_id,user,remote_ip,impression_id)
     click = Click.new
-    click.impression_id = nil
+    click.impression_id = impression_id
     click.click_url = url
     click.hosted_site_url = request_referer
     click.timestamp = time
