@@ -79,7 +79,15 @@ class User < ActiveRecord::Base
   end
   
   def is_a_vendor?
-    if UserVendor.where(:user_id => self.id).blank?
+    if UserVendor.where(:user_id => self.id,:relationship_type => "Vendor").blank?
+      return false
+    else
+      return true
+    end    
+  end
+  
+  def is_a_publisher?
+    if UserVendor.where(:user_id => self.id,:relationship_type => "Publisher").blank?
       return false
     else
       return true
