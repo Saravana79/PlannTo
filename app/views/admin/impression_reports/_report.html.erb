@@ -28,7 +28,7 @@
   </tr>
 <%end%>  
  </table> 
-  <%= will_paginate @impressions %>
+
  <h2> Clicks </h2> 
 <table border="1" width="800px">
   <tr>
@@ -52,4 +52,8 @@
     </tr>
   <%end%>
   </table>
-  <%= will_paginate @clicks %>     
+  <%if @impressions.count >= @clicks.count %>
+    <%= will_paginate @impressions %>
+  <%else%>
+   <%= will_paginate @clicks %>
+  <%end%>     
