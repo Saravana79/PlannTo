@@ -9,9 +9,11 @@ class HistoryDetailsController < ApplicationController
 #    @history.plannto_location = session[:return_to]
 #    @history.save
     req_url = request.referer
-    if request.referer.include? "plannto.com" or request.referer.include? "localhost"
-      if(params["req"].present? && params["req"] != "")
-        req_url = params["req"]
+    unless req_url.nil?
+      if request.referer.include? "plannto.com" or request.referer.include? "localhost"
+        if(params["req"].present? && params["req"] != "")
+          req_url = params["req"]
+        end
       end
     end 
     Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id)
@@ -23,13 +25,13 @@ class HistoryDetailsController < ApplicationController
        publisher_id = Publisher.where(:publisher_url => publisher_domain).first 
        pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher_id).first 
        if !pv.nil?
-          url = url.gsub(/\{affid}/,pv.affliateid)
-          url=  url.gsub(/\{trackid}/,pv.trackid)
+          url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
+          url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil?
        else
          pv = PublisherVendor.where(:publisher_id => 0,:vendor_id => vendor.id).first
         if !pv.nil?
-          url = url.gsub(/\{affid}/,pv.affliateid) 
-          url=  url.gsub(/\{trackid}/,pv.trackid)  
+   url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
+          url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil? 
         end   
       end
     end

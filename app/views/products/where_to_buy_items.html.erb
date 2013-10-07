@@ -17,6 +17,12 @@
           <td>
               <div style="padding:10px;background: #EEE;">
                 <table style="background: #FFF;" width="100%">   
+                  <tr style="border-bottom: 1px solid #EEE;height: 40px;">
+                    <td colspan="4" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;padding-left:20px;" >
+                      <%=@item.get_name%>
+                    </td>
+                  </tr>
+
                          <%count = 0%>    
                   <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
                         <% count = count + 1%>

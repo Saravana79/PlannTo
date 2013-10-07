@@ -242,7 +242,7 @@ n            with(preference[:attribute_name].parameterize.underscore.to_sym, pr
     elsif params[:content] == "true"
         search_type = Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]
     else
-        search_type = Product.search_type(params[:search_type])
+        search_type = Product.search_type(params[:search_type]) + [Game]
     end 
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name

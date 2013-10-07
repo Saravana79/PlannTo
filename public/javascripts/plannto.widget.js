@@ -75,7 +75,7 @@ var count = 0;
     src = element.src;
       
       if (src && /plannto\.com\/javascripts\/plannto\.widget\.js/.test(src)) 
-     // if (src && /localhost:3000\/javascripts\/plannto\.widget\.js/.test(src)) 
+      //if (src && /localhost:3000\/javascripts\/plannto\.widget\.js/.test(src)) 
       {
         if (count >= scriptCount)
           {
@@ -103,7 +103,7 @@ function main() {
         var show_details = getParam(url,"show_details");
         
         var element_id = getParam(url,"element_id");
-        if(element_id == undefined)
+        if(element_id == undefined || element_id == "")
         {
           element_id = "where_to_buy_items";
         }
