@@ -1,5 +1,6 @@
 class AddImpression < ActiveRecord::Base
-
+ belongs_to :user
+ belongs_to :item
  def self.save_add_impression_data(type,itemid,request_referer,time,user,remote_ip,impression_id)
    ai = AddImpression.new
    ai.impression_id = impression_id

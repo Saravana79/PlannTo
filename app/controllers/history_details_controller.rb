@@ -16,14 +16,14 @@ class HistoryDetailsController < ApplicationController
         end
       end
     end 
-    Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id)
+    publisher_domain = URI.parse(req_url).host rescue ""
+    publisher = Publisher.where(:publisher_url => publisher_domain).first
+    Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher)
     vendor = Item.find(@item_detail.site)
     url = "#{@item_detail.url}"
     if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
        url = vendor.vendor_detail.params.gsub(/\{url}/,url)
-       publisher_domain = URI.parse(req_url).host rescue ""
-       publisher_id = Publisher.where(:publisher_url => publisher_domain).first 
-       pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher_id).first 
+       pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher.id).first 
        if !pv.nil?
           url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
           url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil?

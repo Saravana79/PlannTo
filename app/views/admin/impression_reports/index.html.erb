@@ -1,0 +1,20 @@
+<center><h2> Impression and Click Report </h2> </center>
+<%= form_for :impression,:url => admin_impression_reports_path,:method => :get do |f| %>
+From Date
+<%= text_field_tag :from_date,@start_date.to_date.strftime("%d-%m-%Y") %>
+<script>
+  $("#from_date").datepicker({ dateFormat: 'dd-mm-yy' });
+</script>
+To Date
+<%= text_field_tag :to_date,@end_date.to_date.strftime("%d-%m-%Y") %>
+
+<%= f.submit 'Get Report' %>
+<%end%>
+<script>
+  $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
+</script>
+<br /><br /><br />
+<div id="report" >
+  <%= render "report" %>
+</div>
+
