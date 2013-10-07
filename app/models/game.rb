@@ -26,7 +26,7 @@ class Game < Product
   # 	  end
   #   end
     
-  #   string :status
+     string :status
   #   float :rating  do |item|
   #     item.rating
   #   end
@@ -39,19 +39,19 @@ class Game < Product
   #    end 
   # end  
     
-  #   time :created_at
-  #   date :launch_date do |item|
-  #    valuetemp = item.attribute_values.where(:attribute_id => 8).first.value rescue ""
-  #    if (valuetemp.nil? or valuetemp == ""  rescue true)
-  #      item.created_at
-  #    else
-  #        (Date.parse(valuetemp) rescue item.created_at)
-  #    end
-  #   end  
+     time :created_at
+     date :launch_date do |item|
+      valuetemp = item.attribute_values.where(:attribute_id => 8).first.value rescue ""
+      if (valuetemp.nil? or valuetemp == ""  rescue true)
+        item.created_at
+      else
+          (Date.parse(valuetemp) rescue item.created_at)
+      end
+     end  
      
-  #   integer :orderbyid  do |item|
-  #     item.itemtype.orderby
-  #   end  
+     integer :orderbyid  do |item|
+       item.itemtype.orderby
+     end  
   # dynamic_float :features do |car|
   #     car.attribute_values.inject({}) do |hash,attribute_value|
   #       if attribute_value.attribute.search_display_attributes.nil?
