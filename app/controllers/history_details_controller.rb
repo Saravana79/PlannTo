@@ -23,14 +23,16 @@ class HistoryDetailsController < ApplicationController
     url = "#{@item_detail.url}"
     if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
        url = vendor.vendor_detail.params.gsub(/\{url}/,url)
-       pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher.id).first 
+       unless publisher.nil?
+          pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher.id).first 
+       end
        if !pv.nil?
           url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
           url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil?
        else
          pv = PublisherVendor.where(:publisher_id => 0,:vendor_id => vendor.id).first
         if !pv.nil?
-   url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
+          url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
           url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil? 
         end   
       end
