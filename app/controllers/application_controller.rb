@@ -42,17 +42,24 @@ class ApplicationController < ActionController::Base
     
   def authenticate_vendor_user!
      authenticate_user!
-    if UserVendor.where(:user_id => current_user.id,:relationship_type => "Vendor").blank?
+    if UserRelationship.where(:user_id => current_user.id,:relationship_type => "Vendor").blank?
       redirect_to root_path
     end
   end
   
   def authenticate_publisher_user!
      authenticate_user!
-    if UserVendor.where(:user_id => current_user.id,:relationship_type => "Publisher").blank?
+    if UserRelationship.where(:user_id => current_user.id,:relationship_type => "Publisher").blank?
       redirect_to root_path
     end
-  end  
+  end 
+  
+  def authenticate_advertiser_user!
+     authenticate_user!
+    if UserRelationship.where(:user_id => current_user.id,:relationship_type => "Advertiser").blank?
+      redirect_to root_path
+    end
+  end   
   def set_access_control_headers
      headers['Access-Control-Allow-Origin'] = '*'
      headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'

@@ -33,6 +33,9 @@
               <% if current_user.is_a_publisher? %>
                <a href="/admin/impression_reports">Impression Report</a>
               <%end%> 
+              <% if current_user.is_a_advertiser? %>
+               <a href="/admin/advertisements">View Advertisements</a>
+              <%end%> 
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
            </div>
          </span>

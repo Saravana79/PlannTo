@@ -1,0 +1,38 @@
+<center><h2>List Of Advertisements </h2></center>
+ <%=link_to "Create Advertisement",new_admin_advertisement_path, :class=>"btn btn-primary", :style=>'background:#16c3d7;' %> 
+<br />
+<table border="1" width="800px">
+<tr>
+  <th> Name </th>
+  <th> Advertisement Size </th>
+  <th> Upload Image</th>
+  <th> Budget[Per day]</th>
+  <th> Bid[CPM/CPC]</th>
+  <th>Cost </th>
+  <th>Advertisement Type</th>
+  <th> Start Date</th>
+  <th> End Date</th>
+  <th> Products</th>
+  <th>Edit</th>
+  <th>Delete</th>
+</tr>
+ <%@advertisements.each do |ad | %>
+   <tr>
+     <td><%= ad.name  %> </td>
+     <td><%= ad.ad_size %> </td>
+     <td><%= link_to  ad.upload_image.url,ad.upload_image.url %> </td>
+     <td> <%= ad.budget %> </td>
+     <td> <%= ad.bid %> </td>
+     <td> <%= ad.cost %>
+     <td> <%= ad.advertisement_type %></td>
+     <td> <%= ad.start_date.strftime("%d-%m-%Y") %></td>
+     <td> <%= ad.end_date.strftime("%d-%m-%Y") %></td>
+     <td><% Item.where("id in (#{ad.content.related_items.collect(&:item_id).join(',')})").each do |it| %>
+     <%= it.name %>,&nbsp; <%end%></td>
+     <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) %> </td>
+     <td> <%= link_to "Delete",[:admin,ad], :confirm => 'Are you sure?', :method => :delete %> </td>
+  </tr>
+<%end%>  
+ </table> 
+ <%= will_paginate @advertisements %> 
+  
