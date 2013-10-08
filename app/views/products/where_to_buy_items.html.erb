@@ -16,9 +16,9 @@
     <tr>
           <td>
               <div style="padding:10px;background: #EEE;">
-                <table style="background: #FFF;" width="100%">   
+                <table style="background: #FFF;border-collapse:collapse;" width="100%">   
                   <tr style="border-bottom: 1px solid #EEE;height: 40px;">
-                    <td colspan="4" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;padding-left:20px;" >
+                    <td colspan="4" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;padding-left:20px;vertical-align:middle;" >
                       <%=@item.get_name%>
                     </td>
                   </tr>
@@ -61,7 +61,7 @@
                             <tr>
                                   <td  style="padding-right:10px;vertical-align:middle;height:40px" colspan="4">
                                     <span style="float:left;padding-left:20px">
-                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;" target="_blank">View prices from more retailers</a>
+                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="font-weight:bold;font-size:13px;font-family: Arial;text-decoration: underline;color:black;" target="_blank">View prices from more retailers</a>
                                     </span>
                                     <span style="float:right;">
                                     <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="
