@@ -1,22 +1,25 @@
  <% if (!@where_to_buy_items.empty?) %> 
  
 
- <table width="100%"  style="background:#EEE;" >
+ <table width="100%"  style="background:#EEE;border:0px;" >
+  <tbody style="border:0px;">
     <tr>
-      <td style="padding: 5px 10px 0px 12px;font: bold 14px Arial;color: #129FBD;">
+      <td style="padding: 5px 10px 0px 12px;margin:0px;font: bold 14px Arial;color: #129FBD;">
         <span>Best Prices</span>
         <%if @moredetails == "true" %>
         <div style="float:right;">
         <span style="font:bold 11px Arial;color: #C7C6C6;padding-right: 5px;">Powered By</span>
         <span style="padding: 2px 10px 2px 10px;font: bold 16px Arial;color: white;background: #292929;">Plann<font style="color: #129FBD;">To</font></span>
+         </div>
         <%end%>
-      </div>
+      
       </td>
     </tr>
     <tr>
-          <td>
+          <td style="padding:0;margin:0;">
               <div style="padding:10px;background: #EEE;">
-                <table style="background: #FFF;border-collapse:collapse;" width="100%">   
+                <table style="background: #FFF;border-collapse:collapse;border:0;" width="100%">   
+                  <tbody style="border:0px;">
                   <tr style="border-bottom: 1px solid #EEE;height: 40px;">
                     <td colspan="4" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;padding-left:20px;vertical-align:middle;" >
                       <%=@item.get_name%>
@@ -32,7 +35,7 @@
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
                                <%if index == 0%>
-                                 <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;"/> </td>
+                                 <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
                                  <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="35%"> <%=display_price_detail(item)%> </td>
                                  <td width="30%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> </td>
@@ -45,7 +48,7 @@
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
                                <%if index == 0%>
-                                 <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="25%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;"/> </td>
+                                 <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="25%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
                                  <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="30%"> <%=display_price_detail(item)%> </td>
                                  <td style="font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="30%"><%=display_shipping_detail(item)%></td>
                                  <td width="15%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" style="
@@ -70,11 +73,12 @@
         </td>
                             </tr>
                         <% end %>
+                      </tbody>
                           </table>
           </div>
             </td>
                </tr>
-          
+</tbody>          
      </table>
       
       <%end %>
