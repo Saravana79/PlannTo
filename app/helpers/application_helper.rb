@@ -273,9 +273,9 @@ module ApplicationHelper
 
   def get_percentage(order, attr_v)
     if order[:value] == "asc"
-      "#{(((attr_v[1].to_f - attr_v[0].to_f)/attr_v[0].to_f)*100).round}%"
+      "#{(((attr_v[1].to_f - attr_v[0].to_f)/attr_v[0].to_f)*100).round}%"  rescue '0%'
     else
-      "#{(((attr_v[0].to_f - attr_v[1].to_f)/attr_v[1].to_f)*100).round}%"
+      "#{(((attr_v[0].to_f - attr_v[1].to_f)/attr_v[1].to_f)*100).round}%"  rescue '0%'
     end
   end
  
