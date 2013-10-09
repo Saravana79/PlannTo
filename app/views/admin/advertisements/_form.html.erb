@@ -1,0 +1,110 @@
+<%= form_for [:admin,@advertisement] do |f| %>
+  <%if @advertisement.errors.any? %>
+  <div id="error_explanation"%>
+    <%= "#{pluralize(@advertisement.errors.count, "error")} prohibited this product from being saved:" %>
+    <ul>
+      <% @advertisement.errors.full_messages.each do |msg| %>
+       <li> <%= msg %> </li>
+     <%end%>  
+  <%end%>  
+  <center><h2> Advertisement </h2> </center> 
+  <%= hidden_field_tag 'ad_item_id' %>
+  
+  <div style="padding:5px 5px 0px 0px;clear:both;" id="reviewProducts">
+   
+      <div class="title_header float_lft">Product  :</div>
+      <div class="taggingdiv" style="margin-left:5px;">
+        <ul id="ad_product_list" class="tagging"></ul>
+        <div class="float_lft " style="clear:both;" id="displayTagBox"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/></div>
+        <div style="clear:both;"></div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+   <div style="padding:15px 5px 0px 0px;text-align:center">
+      <div class="title_header float_lft">Name :</div>
+      <div class="float_lft"> <%= f.text_field :name, :style=> "margin-left:5px;width:400px" %> </div>
+    </div>
+    <br />
+   
+   <div style="padding:15px 5px 0px 0px; width:550px;">
+      <div class="title_header float_lft">Advertisement Size:</div>
+     <%= f.select :ad_size,["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "" %>
+    </div>
+    <div style="padding:15px 500px 0px 5px;">
+    <div class="title_header float_lft">Image</div>
+  <div style="margin-left:80px;">
+    <%= f.file_field :upload_image %></div></div>
+     <div style="padding:15px 500px 0px 5px;">
+    <div class="title_header float_lft">Budget[per day]</div>
+    <div style="margin-left:80px;">
+    <%= f.text_field :budget%></div></div>
+    <div style="padding:15px 500px 0px 5px;">
+   <div class="title_header float_lft">Bid[CPM/CPC] </div>
+    <div style="margin-left:80px;">
+       <%= f.radio_button :bid,'CPM', :checked => true%>CPM
+       <%= f.radio_button :bid,'CPC'%>CPC</div></div>
+     <div style="padding:15px 500px 0px 5px;">
+       <div class="title_header float_lft">Cost</div>
+      <div style="margin-left:80px;">
+        <%= f.text_field :cost %></div></div>
+    <div style="padding:15px 500px 0px 5px;">
+      <div class="title_header float_lft">Advertisement Type</div>
+      <div style="margin-left:80px;">
+      <%= f.select :advertisement_type,["Offer","Features","Content"] %></div></div>
+     <div style="padding:15px 500px 0px 5px;">
+        <div class="title_header float_lft">Start Date</div>
+     <div style="margin-left:80px;">
+        <%= f.text_field :start_date %></div></div>
+      <div style="padding:15px 500px 0px 5px;">
+      <div class="title_header float_lft">End Date</div>
+      <div style="margin-left:80px;">
+        <%= f.text_field :end_date %></div></div>
+    <div style="padding:10px 0px 0px 100px; float:right; width:100%; margin-right:5px; margin-top:20px ">
+        <%= f.submit 'Add Advertisement', :class => 'btn_submitanswer',:id => "publishanswer" %>
+        
+      <div style="clear:both;"></div>
+ </div> 
+ </div>
+
+<script>
+$("#advertisement_start_date").datepicker({ dateFormat: 'dd-mm-yy' });
+$("#advertisement_end_date").datepicker({ dateFormat: 'dd-mm-yy' });
+
+    $(document).ready(function(){ 
+   
+  <%if @advertisement.nil?%>
+  settings={
+        close:true, addButton: false,
+        url: "/search/autocomplete_items",
+        editMode: false, multiple: true,
+        hidden_field: "#ad_item_id"
+      };
+      $.textTagger("#ad_product","#ad_product_list",settings);
+      
+  <% unless @item.blank? %>
+       $.addTag("#ad_product","#ad_product_list", settings,"<%= @item.name %>", "<%= @item.id %>", false);
+     $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
+     $("#ad_product_list li:first span a.icon_close_tagging").remove();
+  <% end %>
+<%else%>
+//error is here
+
+      var settings={has_parent:true, close:true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+        hidden_field: "#ad_item_id"};
+   <%unless @items.nil? %>     
+  <% @items.each do |item| %>
+     
+      $.addTag("ad_product","ad_product_list", settings,"<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
+    //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
+  <%end%>
+  <%end%>
+      $.textTagger("#ad_product","#ad_product_list",settings);
+//ends
+<%end%>
+
+
+ });
+</script>  
+<%end%>
+  

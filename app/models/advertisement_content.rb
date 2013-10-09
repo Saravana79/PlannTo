@@ -1,0 +1,3 @@
+class AdvertisementContent < Content
+
+end

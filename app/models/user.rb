@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
   end
   
   def is_a_vendor?
-    if UserVendor.where(:user_id => self.id,:relationship_type => "Vendor").blank?
+    if UserRelationship.where(:user_id => self.id,:relationship_type => "Vendor").blank?
       return false
     else
       return true
@@ -87,13 +87,20 @@ class User < ActiveRecord::Base
   end
   
   def is_a_publisher?
-    if UserVendor.where(:user_id => self.id,:relationship_type => "Publisher").blank?
+    if UserRelationship.where(:user_id => self.id,:relationship_type => "Publisher").blank?
       return false
     else
       return true
     end    
   end
   
+  def is_a_advertiser?
+    if UserRelationship.where(:user_id => self.id,:relationship_type => "Advertiser").blank?
+      return false
+    else
+      return true
+    end    
+  end
   def profle_view_permission?(user)
     return true if self.id == user.id
     return true if user.profile_view_setting == "pu"

@@ -27,7 +27,7 @@ class Admin::BuyingPlansController < ApplicationController
   end
   
   def proposal_save
-    vendor_id =  UserVendor.where(:user_id => current_user.id,:relationship_type => "Vendor").first.relationship_id
+    vendor_id = UserRelationship.where(:user_id => current_user.id,:relationship_type => "Vendor").first.relationship_id
     p = Proposal.new
     p.item_id = params[:proposal_item_id]
     p.user_id = current_user.id
