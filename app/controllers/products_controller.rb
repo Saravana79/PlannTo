@@ -156,9 +156,9 @@ class ProductsController < ApplicationController
   
   def external_page
     @item = Item.find(params[:item_id])
-    @showspec = params[:show_spec]
-    @showcompare = params[:show_compare]
-    @showreviews = params[:show_reviews]
+    @showspec = params[:show_spec].blank? ? 0 : params[:show_spec] 
+    @showcompare = params[:show_compare].blank? ? 0 : params[:show_compare]
+    @showreviews = params[:show_reviews].blank? ? 0 : params[:show_reviews]
     @impression_id = params[:iid]
     unless request.referer
       @req = request.referer  
