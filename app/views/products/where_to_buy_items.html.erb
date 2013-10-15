@@ -22,7 +22,12 @@
                   <tbody style="border:0px;">
                   <tr style="border-bottom: 1px solid #EEE;height: 40px;">
                     <td colspan="4" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;padding-left:20px;vertical-align:middle;" >
+                     <%if @items.size == 1 %>
                       <%=@item.get_name%>
+                      <%else%>
+                        <%=select_tag "w_t_b_items",
+              options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"onchange_function()" %>
+                       <%end%>
                     </td>
                   </tr>
 

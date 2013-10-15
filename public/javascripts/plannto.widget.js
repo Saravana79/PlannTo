@@ -63,7 +63,10 @@ function getParam (url, sname )
   
   return sval;
 }
+function onchange_function()
+{
 
+}
 function getScriptUrl() {
 var scripts = document.getElementsByTagName('script');
 var element;
