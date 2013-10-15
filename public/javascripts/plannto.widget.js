@@ -5,6 +5,10 @@ if(scriptCount == undefined)
   
 }
 
+function onchange_function()
+{
+alert('2');
+}
 
 var PlannTo = (function(window,undefined) {
 
@@ -63,10 +67,7 @@ function getParam (url, sname )
   
   return sval;
 }
-function onchange_function()
-{
 
-}
 function getScriptUrl() {
 var scripts = document.getElementsByTagName('script');
 var element;
@@ -110,7 +111,7 @@ function main() {
         {
           element_id = "where_to_buy_items";
         }
-        
+       // url = "http://localhost:3000/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
         url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {
 	        	jQuery("#"+element_id).html(data.html);
