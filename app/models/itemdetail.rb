@@ -42,9 +42,9 @@ class Itemdetail < ActiveRecord::Base
 
   def self.display_price_detail(item)
     if(!item.cashback.nil? && item.cashback != 0.0)
-      item.price == 0.0 ? "N/A" :  Itemdetail.number_to_indian_currency(item.price - item.cashback).to_s
+      item.price == 0.0 ? "N/A" :  Itemdetail.number_to_indian_currency((item.price - item.cashback).to_f.round(2)).to_s
     else
-    item.price == 0.0 ? "N/A" :  Itemdetail.number_to_indian_currency(item.price).to_s
+    item.price == 0.0 ? "N/A" :  Itemdetail.number_to_indian_currency(item.price.to_f.round(2)).to_s
     end
 
   end
