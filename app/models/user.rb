@@ -101,6 +101,7 @@ class User < ActiveRecord::Base
       return true
     end    
   end
+  
   def profle_view_permission?(user)
     return true if self.id == user.id
     return true if user.profile_view_setting == "pu"

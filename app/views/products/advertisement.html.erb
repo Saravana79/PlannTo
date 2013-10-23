@@ -1,0 +1,9 @@
+<% url = @advertisement.click_url  %>
+<% if(url).include?("http://") || (url).include?("https://")  %>
+  <%= link_to image_tag(@advertisement.upload_image.url(:medium)),url,target: "_blank" %> 
+<%else%>
+   <%= link_to image_tag(@advertisement.upload_image.url(:medium)), "http://" + url,target: "_blank" %> 
+<%end%>
+
+
+

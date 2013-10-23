@@ -238,7 +238,17 @@ class ProductsController < ApplicationController
       render :text => "",  :content_type => "text/javascript"
     end
   end
-
+  
+  def advertisement
+    item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
+    content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
+    @advertisement = Advertisement.find_by_content_id(content_id)
+     html = html = render_to_string(:layout => false)
+     json = {"html" => html}.to_json
+     callback = params[:callback]     
+     jsonp = callback + "(" + json + ")"
+     render :text => jsonp,  :content_type => "text/javascript"  
+  end 
   
   private
 

@@ -44,6 +44,7 @@ namespace :admin do
   match "/get_class_names",:to => "contents#get_class_names"
   match "/external_page",:to => "products#external_page"
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
+  match "/advertisement",:to => "products#advertisement"
   match "/current_user_info",:to => "home#current_user_info"
   match "/get_class_names",:to => "contents#get_class_names"
   match "products/ratings",:to => "products#ratings"

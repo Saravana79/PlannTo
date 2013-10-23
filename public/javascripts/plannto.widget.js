@@ -99,20 +99,32 @@ return null;
 function main() { 
     
     jQuery(document).ready(function(jQuery) { 
-      
         url = getScriptUrl();
-         var doc_title =  jQuery(document).title;
+        var doc_title =  jQuery(document).title;
         var pathname = jQuery(document).referrer;
         var item_id = getParam(url,"item_id");
         var show_details = getParam(url,"show_details");
-        
+        var ads = getParam(url,"advertisement");
         var element_id = getParam(url,"element_id");
+        if (ads == "")
+        {
         if(element_id == undefined || element_id == "")
         {
           element_id = "where_to_buy_items";
         }
-       // url = "http://localhost:3000/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
-        url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+       url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+       }
+       else
+       {
+      
+      if(element_id == undefined || element_id == "")
+        {
+          element_id = "advertisement";
+        }
+       url = "http://www.plannto.com/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+      }
+       
+        //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {
 	        	jQuery("#"+element_id).html(data.html);
 	      });
