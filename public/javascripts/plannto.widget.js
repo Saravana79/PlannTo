@@ -131,7 +131,16 @@ function main() {
  
  PlannTo.onchange_function = function onchange_function()
   {
-    alert('3');    
+        url = getScriptUrl();
+        var doc_title =  jQuery(document).title;
+        var pathname = jQuery(document).referrer;
+        var item_id =  PlannTo.jQuery("#w_t_b_items").val();
+        var show_details = getParam(url,"show_details");
+        var element_id = "where_to_buy_items_onchange"  
+        url = "http://www.plannto.com/where_to_buy_items_onchange.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        jQuery.getJSON(url, function (data) {
+	        	jQuery("#"+element_id).html(data.html);
+	      });
   }  
   return PlannTo;
   

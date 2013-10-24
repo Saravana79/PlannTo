@@ -1,5 +1,6 @@
 class Advertisement < ActiveRecord::Base
    validates_presence_of :name
+   validates_presence_of :click_url
    has_attached_file :upload_image, 
                      :styles => {  :medium => "120x120>", :thumb => "24x24>" },
                      :storage => :s3,
