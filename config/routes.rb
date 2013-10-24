@@ -210,6 +210,9 @@ resources :comments do
   resources :cameras do
         resources :shares
   end  
+  resources :games do
+        resources :shares
+  end  
   resources :bikes do
         resources :shares
   end   

@@ -26,7 +26,7 @@
                       <%=@item.get_name%>
                       <%else%>
                         <%=select_tag "w_t_b_items",
-              options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"onchange_function()" %>
+              options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function()" %>
                        <%end%>
                     </td>
                   </tr>

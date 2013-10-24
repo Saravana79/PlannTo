@@ -5,12 +5,9 @@ if(scriptCount == undefined)
   
 }
 
-function onchange_function()
-{
-alert('2');
-}
-
 var PlannTo = (function(window,undefined) {
+
+var PlannTo ={};
 
 // Localize jQuery variable
 var jQuery; 
@@ -35,7 +32,7 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
 } else {
     // The jQuery version on the window is the one we want to use
     jQuery = window.jQuery;
-    
+    PlannTo.jQuery = jQuery;        
    
     main();
   return PlannTo;    
@@ -46,6 +43,7 @@ function scriptLoadHandler() {
     // Restore jQuery and window.jQuery to their previous values and store the
     // new jQuery in our local jQuery variable
     jQuery = window.jQuery.noConflict(true);
+    PlannTo.jQuery = jQuery;    
     // Call our main function
 
     main(); 
@@ -130,5 +128,11 @@ function main() {
 	      });
       });
     }
-
+ 
+ PlannTo.onchange_function = function onchange_function()
+  {
+    alert('3');    
+  }  
+  return PlannTo;
+  
   })(window);
