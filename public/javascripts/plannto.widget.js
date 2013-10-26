@@ -8,7 +8,10 @@ if(scriptCount == undefined)
 var PlannTo = (function(window,undefined) {
 
 var PlannTo ={};
-
+//for production
+var domain = "www.plannto.com";
+//for development
+//var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -76,8 +79,7 @@ var count = 0;
     element = scripts[i];
     src = element.src;
       
-      if (src && /plannto\.com\/javascripts\/plannto\.widget\.js/.test(src)) 
-      //if (src && /localhost:3000\/javascripts\/plannto\.widget\.js/.test(src)) 
+      if (src.indexOf(domain+"/javascripts/plannto.widget.js") != -1)
       {
         if (count >= scriptCount)
           {
@@ -110,7 +112,7 @@ function main() {
         {
           element_id = "where_to_buy_items";
         }
-       url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+       url = "http://"+domain +"/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
        }
        else
        {
@@ -119,7 +121,7 @@ function main() {
         {
           element_id = "advertisement";
         }
-       url = "http://www.plannto.com/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+       url = "http://"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
       }
        
         //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
@@ -129,17 +131,17 @@ function main() {
       });
     }
  
- PlannTo.onchange_function = function onchange_function()
+ PlannTo.onchange_function = function onchange_function(obj,moredetails)
   {
         url = getScriptUrl();
-        var doc_title =  jQuery(document).title;
-        var pathname = jQuery(document).referrer;
-        var item_id =  PlannTo.jQuery("#w_t_b_items").val();
-        var show_details = getParam(url,"show_details");
-        var element_id = "where_to_buy_items_onchange"  
-        url = "http://www.plannto.com/where_to_buy_items_onchange.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
-        jQuery.getJSON(url, function (data) {
-	        	jQuery("#"+element_id).html(data.html);
+        var doc_title =  PlannTo.jQuery(document).title;
+        var pathname = PlannTo.jQuery(document).referrer;
+        var item_id =  PlannTo.jQuery(obj).val();
+        var show_details = moredetails;
+        var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
+        url = "http://"+domain +"/where_to_buy_items_onchange.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        PlannTo.jQuery.getJSON(url, function (data) {          
+	        	element_id.html(data.html);
 	      });
   }  
   return PlannTo;

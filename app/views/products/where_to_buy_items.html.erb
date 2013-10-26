@@ -19,23 +19,26 @@
           <td style="padding:0;margin:0;">
               <div style="padding:10px;background: #EEE;">
                 <table style="background: #FFF;border-collapse:collapse;border:0;" width="100%">   
-                  <tbody style="border:0px;">
+                  <thead style="border:0px;">
                   <tr style="border-bottom: 1px solid #EEE;height: 40px;">
                     <td colspan="4" style="font-weight:bold;font-size:13px;font-family: Arial;color:black;padding-left:20px;vertical-align:middle;" >
                      <%if @items.size == 1 %>
                       <%=@item.get_name%>
                       <%else%>
                         <%=select_tag "w_t_b_items",
-              options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function()" %>
+              options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")" %>
                        <%end%>
                     </td>
                   </tr>
-                    <div id="where_to_buy_items_onchange">
+                </thead>
+                  <tbody style="border:0px;" id="where_to_buy_items_onchange">
+                    
                          <%count = 0%>    
                   <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
                         <% count = count + 1%>
                          <% unless count > 4 %>
                           <%unless @moredetails == "true"  %>
+
                                 <tr style="border-bottom: 1px solid #EEE;height: 40px;background:white;">
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
@@ -69,18 +72,19 @@
                             <tr style="background:white;">
                                   <td  style="padding-right:10px;vertical-align:middle;height:40px" colspan="4">
                                     <span style="float:left;padding-left:20px">
-                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="font-weight:bold;font-size:13px;font-family: Arial;text-decoration: underline;color:black;" target="_blank">View prices from more retailers</a>
+                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" style="font-weight:bold;font-size:13px;font-family: Arial;text-decoration: underline;color:black;" target="_blank">View prices from more retailers</a>
                                     </span>
                                     <span style="float:right;">
-                                    <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&show_reviews=0&show_compare=1&show_spec=0&at=compare_price&iid=<%=@impression_id%>" style="
+                                    <a href="http://localhost:3000/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> 
                                     </span>
         </td>
                             </tr>
+                   
                         <% end %>
                       </tbody>
                           </table>
-          </div>
+          
             </td>
                </tr>
                </div>

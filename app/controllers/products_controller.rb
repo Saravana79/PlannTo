@@ -157,12 +157,11 @@ class ProductsController < ApplicationController
   def external_page
     @item = Item.find(params[:item_id])
     @showspec = params[:show_spec].blank? ? 0 : params[:show_spec] 
-    @showcompare = params[:show_compare].blank? ? 0 : params[:show_compare]
+    @showcompare = params[:show_compare].blank? ? 1 : params[:show_compare]
     @showreviews = params[:show_reviews].blank? ? 0 : params[:show_reviews]
+    @defaulttab = params[:at].blank? ? "compare_price" : params[:at]
     @impression_id = params[:iid]
-    unless request.referer
-      @req = request.referer  
-    end
+    @req = request.referer  
      
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
@@ -195,6 +194,7 @@ class ProductsController < ApplicationController
   def is_number?
     true if Float(self) rescue false
   end
+  
   def where_to_buy_items
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     unless (item_ids.blank?)
@@ -281,6 +281,7 @@ class ProductsController < ApplicationController
       render :text => "",  :content_type => "text/javascript"
     end
   end
+
   def advertisement
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
     content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
