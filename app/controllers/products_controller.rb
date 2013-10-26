@@ -162,7 +162,6 @@ class ProductsController < ApplicationController
     @defaulttab = params[:at].blank? ? "compare_price" : params[:at]
     @impression_id = params[:iid]
     @req = request.referer  
-     
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
 
@@ -218,6 +217,11 @@ class ProductsController < ApplicationController
     unless @items.nil? || @items.empty?
       @item = @items[0] 
       @moredetails = params[:price_full_details]
+      @displaycount = 4
+      if @moredetails == "true"
+        @displaycount = 5
+      end 
+    
       @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,nil)
       responses = []
