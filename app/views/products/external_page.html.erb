@@ -47,7 +47,9 @@
 
 <div id="specification" style="<%=display_required(params[:at] || "reviews", "specification")%>" class="main-content-section">
   <%#= render :template => 'products/specification' %>
+  <% if @showspec == 1 %>
   <%= render :partial => "products/detailed_specifications" %>
+  <%end%>
 </div>
 
 <div id="compare_price" style="<%=display_required(params[:at] || "reviews", "compare_price")%>" class="main-content-section">
