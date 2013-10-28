@@ -48,7 +48,7 @@
                                 <%if display_item_details(item)%>
                                <%if index == 0%>
                                  <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
-                                 <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="35%"> <%=display_price_detail(item)%> </td>
+                                 <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;color:black;" width="35%"> <%=display_price_detail(item)%> </td>
                                  <td width="30%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> </td>
                                 <%end%>
@@ -61,7 +61,7 @@
                                 <%if display_item_details(item)%>
                                <%if index == 0%>
                                  <td style="padding-left: 15px;text-align:left;vertical-align:middle;" width="25%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
-                                 <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="30%"> <%=display_price_detail(item)%> </td>
+                                 <td style="font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;color:black;" width="30%"> <%=display_price_detail(item)%> </td>
                                  <td style="font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;" width="30%"><%=display_shipping_detail(item)%></td>
                                  <td width="15%" style="padding-right:10px;text-align:right;vertical-align:middle;"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" style="
     margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;" target="_blank">Go</a> </td>
