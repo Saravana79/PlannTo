@@ -20,7 +20,7 @@
  #plannto_footerspan{float:left;padding-left:20px}
  #plannto_footera{font-weight:bold;font-size:13px;font-family: Arial;text-decoration: underline;color:#535353;}
  </style>
-
+<%if @onchange!="true" %>
  <table width="100%"  id="plannto_table" >
   <tbody style="border:0px;">
     <tr>
@@ -56,7 +56,7 @@
                   </tr>
                 </thead>
                   <tbody style="border:0px;" id="where_to_buy_items_onchange">
-                    
+                  <%end%>
                          <%count = 0%>    
                   <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
                         <% count = count + 1%>
@@ -103,6 +103,7 @@
                             </tr>
                    
                         <% end %>
+                         <%if @onchange!="true"%>
                       </tbody>
                           </table>
           
@@ -111,6 +112,6 @@
                </div>
 </tbody>          
      </table>
-      
+      <%end%>
       <%end %>
   

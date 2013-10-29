@@ -199,6 +199,7 @@ class ProductsController < ApplicationController
   
   def where_to_buy_items
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
+    @onchange = params[:onchange]
     unless (item_ids.blank?)
       if (true if Float(item_ids[0]) rescue false)
         @items = Item.where(id: item_ids) 
@@ -245,50 +246,7 @@ class ProductsController < ApplicationController
       render :text => "",  :content_type => "text/javascript"
     end
   end
-  def where_to_buy_items_onchange
-   item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
-    unless (item_ids.blank?)
-      if (true if Float(item_ids[0]) rescue false)
-        @items = Item.where(id: item_ids) 
-      else
-        @items = Item.where(slug: item_ids)
-      end
-    else
-        #url = request.referer
-        url = params[:ref_url]
-        @articles = ArticleContent.where(url: url)
-        unless @articles.empty?
-          @items = @articles[0].items;      
-        end
-    end 
-
-    unless @items.nil? || @items.empty?
-      @item = @items[0] 
-      @moredetails = params[:price_full_details]
-      @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,nil)
-      responses = []
-        @where_to_buy_items.group_by(&:site).each do |site, items|  
-          items.each_with_index do |item, index|     
-            display_item_details(item)
-            if index == 0
-              responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
-            end
-          end
-        end
-      address = Geocoder.search(request.ip)
-      defatetime = Time.now.to_i
-      html = html = render_to_string(:layout => false)
-      json = {"html" => html}.to_json
-      callback = params[:callback]     
-      jsonp = callback + "(" + json + ")"
-      render :text => jsonp,  :content_type => "text/javascript"  
-    else
-      @where_to_buy_items =[]
-      render :text => "",  :content_type => "text/javascript"
-    end
-  end
-
+  
   def advertisement
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
     content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
