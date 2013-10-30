@@ -1,4 +1,5 @@
  <% if (!@where_to_buy_items.empty?) %> 
+<%if @onchange!="true" %>
  
  <style type="text/css">
  #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;}
@@ -30,7 +31,7 @@
  #plannto_incol2{font-weight:normal;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
 <% end %>
  </style>
-<%if @onchange!="true" %>
+
  <table width="100%"  id="plannto_table" >
   <tbody style="border:0px;">
     <tr>
