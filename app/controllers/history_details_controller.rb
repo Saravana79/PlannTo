@@ -16,8 +16,7 @@ class HistoryDetailsController < ApplicationController
         end
       end
     end 
-    publisher_domain = URI.parse(req_url).host rescue ""
-    publisher = Publisher.where(:publisher_url => publisher_domain).first
+    publisher = Publisher.getpublisherfromdomain(req_url)
     Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher)
     vendor = Item.find(@item_detail.site)
     url = "#{@item_detail.url}"

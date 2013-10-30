@@ -101,7 +101,7 @@ function main() {
     jQuery(document).ready(function(jQuery) { 
         url = getScriptUrl();
         var doc_title =  jQuery(document).title;
-        var pathname = jQuery(document).referrer;
+        var pathname = getParam(url,"ref_url");        
         var item_id = getParam(url,"item_id");
         var show_details = getParam(url,"show_details");
         var ads = getParam(url,"advertisement");

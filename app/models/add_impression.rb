@@ -10,8 +10,7 @@ class AddImpression < ActiveRecord::Base
    ai.impression_time = time
    ai.user_id = user
    ai.ip_address = remote_ip
-   publisher_domain = URI.parse(request_referer).host rescue ""
-   publisher = Publisher.where(:publisher_url => publisher_domain).first 
+   publisher = Publisher.getpublisherfromdomain(request_referer)
    unless publisher.nil?
       ai.publisher_id = publisher.id
    end

@@ -207,11 +207,17 @@ class ProductsController < ApplicationController
         @items = Item.where(slug: item_ids)
       end
     else
-        #url = request.referer
-        url = params[:ref_url]
-        @articles = ArticleContent.where(url: url)
-        unless @articles.empty?
-          @items = @articles[0].items;      
+        
+        if(params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined' )
+          url = params[:ref_url]
+        else
+          url = request.referer
+        end
+        unless url.nil?
+          @articles = ArticleContent.where(url: url)
+          unless @articles.empty?
+            @items = @articles[0].items;      
+          end
         end
     end 
 
@@ -224,7 +230,8 @@ class ProductsController < ApplicationController
       end 
     
       @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,nil)
+      @publisher = Publisher.getpublisherfromdomain(url) 
+      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     

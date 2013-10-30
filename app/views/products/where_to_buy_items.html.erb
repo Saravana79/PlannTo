@@ -1,24 +1,34 @@
  <% if (!@where_to_buy_items.empty?) %> 
  
  <style type="text/css">
- #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font: bold 14px Arial;color: #129FBD;}
- #plannto_table{background:#EEE;border:0px;}
- #plannto_poweredby{font:bold 11px Arial;color: #C7C6C6;padding-right: 5px;}
- #plannto_logo{padding: 2px 10px 2px 10px;font: bold 16px Arial;color: white;background: #292929;}
+ #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;}
+ #plannto_table{background:#EEE;border:0px;font-family: Arial;}
+ #plannto_poweredby{font-size:9px;font-weight:bold;color: darkgray;padding-right: 1px;}
+ #plannto_logo{padding: 2px;font-size:12px;font-weight:bold;color:darkgray;}
+ #plannto_logo:hover{text-decoration: underline;cursor:pointer;}
  #plannto_logo1{color: #129FBD;}
  #plannto_insidediv{padding:10px;background: #EEE;}
  #plannto_intable{background: #FFF;border-collapse:collapse;border:0;}
  #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;}
- #plannto_intd{font-weight: 700;font-size:12px;font-family: Arial;color:black;padding-left:5px;padding-right:10px;vertical-align:middle;background:white;}
- .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;}
+ #plannto_intd{font-weight: 700;font-size:12px;color:black;padding-left:5px;padding-right:10px;vertical-align:middle;background:white;}
+ .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
  #plannto_incol1{padding-left: 15px;text-align:left;vertical-align:middle;background:white;}
- #plannto_incol2{font-weight:bold;font-size:13px;font-family: Arial;text-align:right;vertical-align:middle;min-width:80px;color:black;background:white;}
- #plannto_incol3{padding-right:10px;text-align:right;vertical-align:middle;background:white;}
+ #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+ #plannto_incol3{padding-right:10px;text-align:center;vertical-align:middle;background:white;}
  #plannto_go_button{margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
  #plannto_footertd{padding-right:10px;vertical-align:middle;height:40px;background: white;}
  #plannto_footertr{background:white;}
  #plannto_footerspan{float:left;padding-left:20px}
- #plannto_footera{font-weight:bold;font-size:13px;font-family: Arial;text-decoration: underline;color:#535353;}
+ #plannto_footera{font-weight:bold;font-size:13px;text-decoration: underline;color:#535353;}
+ #plannto_inheadertr{border-bottom: 1px solid #EEE;height: 35px;background:#FAFAFA;}
+ #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;}
+ #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;}
+/* for igyaan*/
+<% if (!@publisher.nil? && @publisher.id == 5) %>
+ #plannto_table{background:#EEE;border:0px;font-family: 'ABeeZee', sans-serif}
+ #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:16px;font-weight:bold;color: #71aded;font-family: 'Oswald', sans-serif;text-transform: uppercase;}
+ #plannto_incol2{font-weight:normal;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+<% end %>
  </style>
 <%if @onchange!="true" %>
  <table width="100%"  id="plannto_table" >
@@ -27,10 +37,13 @@
       <td id="plannto_headertd">
         <span>Best Prices</span>
         <%if @moredetails == "true" %>
+        <!--
+        
         <div style="float:right;">
             <span id="plannto_poweredby">Powered By</span>
             <span id="plannto_logo">Plann<font id="plannto_logo1">To</font></span>
         </div>
+        -->
         <%else%>
        
         <%end%>
@@ -54,15 +67,30 @@
                        <%end%>
                     </td>
                   </tr>
+                  <%unless @moredetails == "true"  %>
+                                  <tr id="plannto_inheadertr">
+                                    <td id="plannto_inheadercol1" width="35%">Seller</td>
+                                    <td id="plannto_inheadercol2"  width="35%">Price</td>
+                                    <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
+                                  </tr>
+                  <%else%>
+                         <tr id="plannto_inheadertr">
+                                    <td id="plannto_inheadercol1" width="25%">Seller</td>
+                                    <td id="plannto_inheadercol2"  width="30%">Price</td>
+                                    <td id="plannto_inheadercol2"  width="30%">Shipping Time</td>
+                                    <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
+                                  </tr>
+                  <%end%>
                 </thead>
                   <tbody style="border:0px;" id="where_to_buy_items_onchange">
                   <%end%>
+
                          <%count = 0%>    
                   <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
                         <% count = count + 1%>
                          <% unless count > @displaycount %>
                           <%unless @moredetails == "true"  %>
-
+                                
                                 <tr id="plannto_intr">
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
@@ -74,7 +102,8 @@
                                 <%end%>
                                 <%end%>
                               </tr>
-                        <% else%>
+                          <% else%>
+                             
                             <tr id="plannto_intr">
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
@@ -92,11 +121,13 @@
                         <% end %>
                         <% if count > @displaycount %>
                             <tr style="plannto_footertr">
-                                  <td  id="plannto_footertd" colspan="4">
+                                  <td  id="plannto_footertd" colspan="<%=@displaycount - 2%>">
                                     <span id="plannto_footerspan">
                                       <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_footera" target="_blank">View prices from more retailers</a>
                                     </span>
-                                    <span style="float:right;">
+                                  </td>
+                                  <td id="plannto_incol3" width="15%">
+                                    <span >
                                     <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> 
                                     </span>
                                   </td>
@@ -106,12 +137,21 @@
                          <%if @onchange!="true"%>
                       </tbody>
                           </table>
-          
+                        
             </td>
+               </tr>
+               <tr>
+                <td>  </td>
                </tr>
                </div>
 </tbody>          
      </table>
+     <!--
+     <div style="float:right;background:white;">
+            <span id="plannto_poweredby">Powered By</span>
+            <span id="plannto_logo"><a href="http://www.plannto.com" style="font:inherit;color:inherit;text-decoration:inherit;">PlannTo.com</a></span>
+        </div>
+      -->
       <%end%>
       <%end %>
   

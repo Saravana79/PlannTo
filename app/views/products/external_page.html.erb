@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet" />
+ <%= stylesheet_link_tag '/stylesheets/plannto.css'%>
 <link rel="shortcut icon" href="/images/logosc.png" type="image/x-icon" />
     <title><%= "PlannTo - #{@item.name}" %></title>
 <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
    <%= javascript_include_tag 'application' %>
-    <%= javascript_include_tag '/javascripts/layout.js'%>
+    
    <style>
    homepagestyle:hover{cursor:pointer;text-decoration:underline;}
    a:visited{color:white;}
@@ -67,6 +67,7 @@
  <% end %>
   
     </script>
+<%= javascript_include_tag '/javascripts/layout.js'%>
 </body>
 </html>
  
