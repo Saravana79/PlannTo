@@ -4,6 +4,7 @@ class Admin::ImpressionReportsController < ApplicationController
  
  def index
    publisher_id = UserRelationship.where(:relationship_type => "Publisher",:user_id => current_user.id).first.relationship_id
+   @publisher = Publisher.find(publisher_id)
    @start_date = params[:from_date].blank? ? 1.month.ago : params[:from_date]
    @end_date = params[:to_date].blank? ? Time.now : params[:to_date]
 
