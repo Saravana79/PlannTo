@@ -1,58 +1,72 @@
 
 <h2>Report From <%= @start_date.to_date.strftime("%d-%m-%Y") %> To <%= @end_date.to_date.strftime("%d-%m-%Y") %></h2>
 <br />
-<h3>Total Impressions: <%= @impressions.count %></h3>
-<h3>Total Clicks: <%= @clicks.count %></h3>
 
-<h2> Impressions </h2>
+<h2> Summary </h2>
 
-<table border="1" width="800px">
+<br/>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-  <th> Advertisement type</th>
-  <th> Impression ID </th>
-  <th> Item </th>
-  <th> Hosted Site Url </th>
-  <th> Impression Time </th>
-  <th> User </th>
-  <th> Ip address </th>
-</tr>
+  <th class="header_compare"  > Total Impressions </th>
+  <th class="header_compare" > Total Clicks </th>
+    <th class="header_compare" > Total Orders</th>
+      <th class="header_compare" > Total Revenue </th>
+  
+ </tr>
  <%@impressions.each do |im | %>
    <tr>
-     <td><%= im.advertisement_type  %> </td>
-     <td><%= im.impression_id %> </td>
-     <td><%= im.item.name rescue '' %> </td>
-     <td><%= im.hosted_site_url %> </td>
-     <td><%=  im.impression_time %> </td>
-     <td><%= im.user.name rescue '' %> </td>
-     <td><%= im.ip_address %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
+     <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;"><%= @clickscount %> </td>      
+          <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;">NA </td>   
+               <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;">NA </td>   
   </tr>
 <%end%>  
  </table> 
 
+<br/><br/>
+
+<%if @impressionscount > 0 %>
+
+<h2> Impressions </h2>
+<br/>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+  <th class="header_compare"  style="width:100px;"> Impression Time </th>
+  <th class="header_compare" width="600px"> Hosted Page </th>
+  
+ </tr>
+ <%@impressions.each do |im | %>
+   <tr>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.impression_time.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
+     <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;"><%= im.hosted_site_url %> </td>      
+     
+  </tr>
+<%end%>  
+ </table> 
+<br/><br/>
+
+<%end%>
+<%if @clickscount > 0 %>
  <h2> Clicks </h2> 
-<table border="1" width="800px">
+ <br/>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
   <tr>
-    <th> Impression ID </th>
-    <th> Click Url </th>
-    <th> Item </th>
-    <th> Hosted Site Url </th>
-    <th> Timestamp </th>
-    <th> User </th>
-    <th> Ip address </th>
+    <th> Click Time </th>
+    <th> Hosted Page </th>
+    <th> Click Url </th>    
   </tr>
   <%@clicks.each do |c| %>
     <tr>
-      <td><%= c.impression_id %> </td>
-      <td><%= c.click_url %> </td>
-      <td><%= c.item.name rescue '' %> </td>
+      <td><%= c.timestamp.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
       <td><%= c.hosted_site_url %> </td>
-      <td><%= c.timestamp %> </td>
-      <td><%= c.user.name rescue '' %> </td>
-      <td><%= c.ipaddress %> </td>
+      <td><%= c.click_url %> </td>      
     </tr>
   <%end%>
   </table>
-  <%if @impressions.count >= @clicks.count %>
+<%end%>
+<br/>
+  <%if @impressionscount >= @clickscount %>
     <%= will_paginate @impressions %>
   <%else%>
    <%= will_paginate @clicks %>
