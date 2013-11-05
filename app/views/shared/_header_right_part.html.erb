@@ -26,14 +26,16 @@
                           
             </li> 
             <%end%>
-            <% if current_user.is_a_vendor? %>
+            <% if session[:vendor] == "true" || current_user.is_a_vendor? %>
+               <%session[:vendor] = "true" %>
                <a href="/admin/buying_plans/search">Proposal Send</a>
                <a href="/admin/buying_plans/proposal_list">View Proposals</a>
             <%end%> 
-              <% if current_user.is_a_publisher? %>
-               <a href="/admin/impression_reports">Impression Report</a>
+              <% if session[:publisher] == "true" ||  current_user.is_a_publisher? %>              <%session[:publisher] = "true" %>
+                <a href="/admin/impression_reports">Impression Report</a>
               <%end%> 
-              <% if current_user.is_a_advertiser? %>
+              <% if session[:advertiser] == "true" || current_user.is_a_advertiser? %>
+                 <% session[:advertiser] = "true" %>
                <a href="/admin/advertisements">View Advertisements</a>
               <%end%> 
              <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
