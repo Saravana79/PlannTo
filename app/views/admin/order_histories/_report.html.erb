@@ -20,32 +20,35 @@
      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_revenue %></td>
   </tr>
 
- </table>  
+ </table> 
 
 <br/><br/>
 <ul id="Newtabs" style="padding-top:15px;">
 		<li  class="tab_active1" ><a href="/admin/impression_reports"><span>Impression Reports</span></a></li>
-	   <li  class="tab_active" ><a href="/admin/click_reports"><span>Click Reports</span></a></li>
-	    <li  class="tab_active1" ><a href="/admin/order_histories"><span>Order & Revenue</span></a></li>      
+	   <li  class="tab_active1" ><a href="/admin/click_reports"><span>Click Reports</span></a></li>
+	    <li  class="tab_active" ><a href="/admin/order_histories"><span>Order & Revenue</span></a></li>    
 	  </ul>
-<%if @clickscount > 0 %>
- <h2> Clicks </h2> 
- <br/>
+<%if @order_histories.count > 0 %>
+
+<h2> Order Histories </h2>
+<br/>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
-  <tr>
-    <th class="header_compare" > Click Time </th>
-    <th class="header_compare" > Hosted Page </th>
-    <th class="header_compare" > Click Url </th>    
+<tr>
+  <th class="header_compare"  style="width:100px;"> Date </th>
+  <th class="header_compare" width="600px"> No. of order</th>
+  <th class="header_compare" width="600px"> Total Revenue</th>
+ </tr>
+ <%@order_histories.each do |oh | %>
+   <tr>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  oh.order_date.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
+     <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.no_of_orders %> </td>      
+     <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.total_revenue %> </td>
   </tr>
-  <%@clicks.each do |c| %>
-    <tr>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.timestamp.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.hosted_site_url %> </td>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.click_url %> </td>      
-    </tr>
-  <%end%>
-  </table>
-  <br/><br/>
- <%= will_paginate @clicks %>
+<%end%>  
+ </table> 
+
+<br/><br/>
+ <%= will_paginate @order_histories %>
 <%end%>
+
 

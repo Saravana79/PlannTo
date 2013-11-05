@@ -1,7 +1,7 @@
 <center><h2> Impression and Click Report - <%=@publisher.publisher_url %></h2> </center>
 <br/>
 
-<%= form_for :impression,:url => admin_click_reports_path,:method => :get do |f| %>
+<%= form_for :impression,:url => admin_order_histories_path,:method => :get do |f| %>
 <div>
 	<span style="width:100px;display:block;float:left;padding-top:5px;">
 From Date
@@ -33,3 +33,4 @@ To Date
 <div id="report" >
   <%= render "report" %>
 </div>
+

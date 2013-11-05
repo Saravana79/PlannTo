@@ -1,9 +1,9 @@
-class Admin::ImpressionReportsController < ApplicationController
+class Admin::OrderHistoriesController < ApplicationController
  before_filter :authenticate_publisher_user!
  layout "product"
- 
- def index
-   publisher_id = UserRelationship.where(:relationship_type => "Publisher",:user_id => current_user.id).first.relationship_id
+
+  def index
+    publisher_id = UserRelationship.where(:relationship_type => "Publisher",:user_id => current_user.id).first.relationship_id
    @publisher = Publisher.find(publisher_id)
    @start_date = params[:from_date].blank? ? 1.month.ago : params[:from_date]
    @end_date = params[:to_date].blank? ? Time.now : params[:to_date]
@@ -14,5 +14,6 @@ class Admin::ImpressionReportsController < ApplicationController
    @clickscount = @clicks.count
    @total_orders =  OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).sum('no_of_orders')
    @total_revenue = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).sum('total_revenue')
- end
- end
+   @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).order('created_at desc').paginate(:per_page => 10,:page => params[:page])
+  end
+end

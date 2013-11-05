@@ -9,18 +9,25 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
   <th class="header_compare"  > Total Impressions </th>
-  
-  
+  <th class="header_compare"  > Total Clicks </th>
+  <th class="header_compare"  > Total Order </th>
+  <th class="header_compare"  > Total Revenue </th>
  </tr>
    <tr>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
-     
+     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @clickscount %> </td>
+     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_orders %> </td>
+     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_revenue %></td>
   </tr>
 
  </table> 
 
 <br/><br/>
-
+<ul id="Newtabs" style="padding-top:15px;">
+		<li  class="tab_active" ><a href="/admin/impression_reports"><span>Impression Reports</span></a></li>
+	   <li  class="tab_active1" ><a href="/admin/click_reports"><span>Click Reports</span></a></li>
+	     <li  class="tab_active1" ><a href="/admin/order_histories"><span>Order & Revenue</span></a></li>     
+	  </ul>
 <%if @impressionscount > 0 %>
 
 <h2> Impressions </h2>

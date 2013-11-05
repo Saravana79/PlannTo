@@ -1,10 +1,6 @@
 <center><h2> Impression and Click Report - <%=@publisher.publisher_url %></h2> </center>
 <br/>
-<ul id="Newtabs" style="padding-top:15px;">
-		<li  class="tab_active" ><a href="/admin/impression_reports"><span>Impression Reports</span></a></li>
-	   <li  class="tab_active1" ><a href="/admin/click_reports"><span>Click Reports</span></a></li>
-	        
-	  </ul>
+
 <%= form_for :impression,:url => admin_impression_reports_path,:method => :get do |f| %>
 <div>
 	<span style="width:100px;display:block;float:left;padding-top:5px;">
