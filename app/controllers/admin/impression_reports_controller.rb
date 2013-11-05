@@ -10,7 +10,7 @@ class Admin::ImpressionReportsController < ApplicationController
 
    @impressions = AddImpression.where("publisher_id=? and impression_time >=? and impression_time <=?",publisher_id,@start_date.to_date,@end_date.to_date+ 1.days).order('created_at desc').paginate(:per_page => 10,:page => params[:page])
    @impressionscount  = @impressions.count
-   @clicks = Click.where("publisher_id=? and timestamp >=? and timestamp <=?",publisher_id,@start_date.to_date,@end_date.to_date + 1.days).order('created_at desc').paginate(:per_page => 10,:page => params[:page])
-   @clickscount = @clicks.count
+  # @clicks = Click.where("publisher_id=? and timestamp >=? and timestamp <=?",publisher_id,@start_date.to_date,@end_date.to_date + 1.days).order('created_at desc').paginate(:per_page => 10,:page => params[:page])
+   #@clickscount = @clicks.count
  end
  end

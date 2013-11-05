@@ -3,6 +3,7 @@ PlanNto::Application.routes.draw do
 namespace :admin do
   resources :users
   resources :impression_reports
+  resources :click_reports
   resources :advertisements
   resources :buying_plans do
   collection do  

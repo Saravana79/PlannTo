@@ -9,16 +9,12 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
   <th class="header_compare"  > Total Impressions </th>
-  <th class="header_compare" > Total Clicks </th>
-    <th class="header_compare" > Total Orders</th>
-      <th class="header_compare" > Total Revenue </th>
+  
   
  </tr>
    <tr>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
-     <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;"><%= @clickscount %> </td>      
-          <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;">NA </td>   
-               <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;">NA </td>   
+     
   </tr>
 
  </table> 
@@ -43,32 +39,9 @@
   </tr>
 <%end%>  
  </table> 
-<br/><br/>
 
+<br/><br/>
+ <%= will_paginate @impressions %>
 <%end%>
-<%if @clickscount > 0 %>
- <h2> Clicks </h2> 
- <br/>
-<table border="0" width="100%" cellspacing="0" cellpadding="0">
-  <tr>
-    <th class="header_compare" > Click Time </th>
-    <th class="header_compare" > Hosted Page </th>
-    <th class="header_compare" > Click Url </th>    
-  </tr>
-  <%@clicks.each do |c| %>
-    <tr>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.timestamp.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.hosted_site_url %> </td>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.click_url %> </td>      
-    </tr>
-  <%end%>
-  </table>
-<%end%>
-<br/>
-  <%if @impressionscount >= @clickscount %>
-    <%= will_paginate @impressions %>
-  <%else%>
-   <%= will_paginate @clicks %>
-  <%end%>     
-<br/>
-<br/>
+
+
