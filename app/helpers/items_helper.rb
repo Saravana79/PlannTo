@@ -410,9 +410,11 @@ module ItemsHelper
 
   def display_price_detail(item)
     if(!item.cashback.nil? && item.cashback != 0.0)
-      item.price == 0.0 ? "N/A" :  number_to_indian_currency((item.price - item.cashback).to_f.round(2)).to_s
+      price = item.price == 0.0 ? "N/A" :  number_to_indian_currency("%.2f" %(item.price - item.cashback))
+     
     else
-    item.price == 0.0 ? "N/A" :  number_to_indian_currency(item.price.to_f.round(2)).to_s
+    price = item.price == 0.0 ? "N/A" :  number_to_indian_currency("%.2f" % item.price)
+     
     end
 
   end
