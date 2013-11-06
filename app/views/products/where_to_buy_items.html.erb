@@ -26,9 +26,13 @@
  #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;}
 /* for igyaan*/
 <% if (!@publisher.nil? && @publisher.id == 5) %>
- #plannto_table{background:#EEE;border:0px;font-family: 'ABeeZee', sans-serif}
- #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:16px;font-weight:bold;color: #71aded;font-family: 'Oswald', sans-serif;text-transform: uppercase;}
+ #plannto_table{background:#EEE;border:0px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+ #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'Oswald', sans-serif;text-transform: uppercase;font-weight: 300;}
  #plannto_incol2{font-weight:normal;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+  #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:12px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+ #plannto_inheadercol2{font-weight:bold;font-size:12px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+ #prodname{font-family: 'Roboto Slab',sans-serif;font-size: 14px;font-weight:normal;}
+  .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;;}
 <% end %>
  </style>
 
@@ -59,7 +63,7 @@
                   <tr id="plannto_intr">
                     <td colspan="4" id="plannto_intd" >
                      <%if @items.size == 1 %>
-                     <span style="padding-left:20px;">
+                     <span style="padding-left:20px;" id="prodname">
                       <%=@item.get_name%>
                      </span>
                       <%else%>
