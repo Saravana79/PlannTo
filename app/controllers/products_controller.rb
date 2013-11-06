@@ -201,6 +201,7 @@ class ProductsController < ApplicationController
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     @onchange = params[:onchange]
     unless (item_ids.blank?)
+      itemsaccess = "ItemId"
       if (true if Float(item_ids[0]) rescue false)
         @items = Item.where(id: item_ids) 
       else
@@ -210,17 +211,28 @@ class ProductsController < ApplicationController
         
         if(params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined' )
           url = params[:ref_url]
+          itemsaccess = "ref_url"
         else
+          itemsaccess = "referer"
           url = request.referer
         end
         unless url.nil?
+          itemsaccess = "none"
           @articles = ArticleContent.where(url: url)
           unless @articles.empty?
             @items = @articles[0].items;      
           end
         end
     end 
-
+    if params[:item_ids]
+       url_params = "item_ids"
+    elsif params[:onchange]
+       url_params = "onchange"
+    elsif  params[:ref_url]
+       url_params = "ref_url"
+    elsif  params[:price_full_details]
+       url_params =  "price_full_details"
+     end            
     unless @items.nil? || @items.empty?
       @item = @items[0] 
       @moredetails = params[:price_full_details]
@@ -231,7 +243,7 @@ class ProductsController < ApplicationController
     
       @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       @publisher = Publisher.getpublisherfromdomain(url) 
-      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil)
+      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     
