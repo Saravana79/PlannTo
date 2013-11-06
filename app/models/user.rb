@@ -78,7 +78,10 @@ class User < ActiveRecord::Base
     user_ids=  Follow.where("follower_id=? and followable_type=?",current_user,"User").collect(&:followable_id)
   end
   
-  def is_a_vendor?
+  def is_a_vendor?(vendor)
+    if vendor == "true"
+      return true
+    end  
     if UserRelationship.where(:user_id => self.id,:relationship_type => "Vendor").blank?
       return false
     else
@@ -86,7 +89,10 @@ class User < ActiveRecord::Base
     end    
   end
   
-  def is_a_publisher?
+  def is_a_publisher?(publisher)
+    if publisher == "true"
+      return true
+    end  
     if UserRelationship.where(:user_id => self.id,:relationship_type => "Publisher").blank?
       return false
     else
@@ -94,7 +100,10 @@ class User < ActiveRecord::Base
     end    
   end
   
-  def is_a_advertiser?
+  def is_a_advertiser?(advertiser)
+    if advertiser == "true"
+      return true
+    end  
     if UserRelationship.where(:user_id => self.id,:relationship_type => "Advertiser").blank?
       return false
     else
