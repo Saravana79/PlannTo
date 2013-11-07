@@ -240,9 +240,11 @@ class ProductsController < ApplicationController
       if @moredetails == "true"
         @displaycount = 5
       end 
-    
-      @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-      @publisher = Publisher.getpublisherfromdomain(url) 
+      @publisher = Publisher.getpublisherfromdomain(url)
+      vendor_ids = @publisher.vendor_ids.split(",")
+      where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and items.id in(?)',1,0,vendor_ids)
+      where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and items.id not in(?)',1,0,vendor_ids).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
