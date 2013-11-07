@@ -198,6 +198,8 @@ class ProductsController < ApplicationController
   end
   
   def where_to_buy_items
+    
+    # 
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     @onchange = params[:onchange]
     unless (item_ids.blank?)
@@ -207,6 +209,7 @@ class ProductsController < ApplicationController
       else
         @items = Item.where(slug: item_ids)
       end
+      url = request.referer
     else
         
         if(params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined' )
@@ -216,35 +219,57 @@ class ProductsController < ApplicationController
           itemsaccess = "referer"
           url = request.referer
         end
-        unless url.nil?
-          itemsaccess = "none"
+        unless url.nil?          
           @articles = ArticleContent.where(url: url)
-          unless @articles.empty?
+          unless @articles.empty?            
             @items = @articles[0].items;      
+          else
+            itemsaccess = "none"
           end
+        else
+          itemsaccess = "none"
         end
     end 
+    url_params = "Params = "
     if params[:item_ids]
-       url_params = "item_ids"
-    elsif params[:onchange]
-       url_params = "onchange"
-    elsif  params[:ref_url]
-       url_params = "ref_url"
-    elsif  params[:price_full_details]
-       url_params =  "price_full_details"
-     end            
+       url_params += "item_ids-" + params[:item_ids]
+    end
+    if params[:onchange]
+       url_params += ";onchange-" + params[:onchange]
+    end
+    if  params[:ref_url]
+       url_params += ";ref_url" + params[:ref_url] 
+    end
+    if  params[:price_full_details]
+       url_params += ";more_details->" + params[:price_full_details]
+    end  
+  
+
     unless @items.nil? || @items.empty?
       @item = @items[0] 
       @moredetails = params[:price_full_details]
       @displaycount = 4
       if @moredetails == "true"
         @displaycount = 5
-      end 
+      end     
       @publisher = Publisher.getpublisherfromdomain(url)
-      vendor_ids = @publisher.vendor_ids.split(",")
-      where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and items.id in(?)',1,0,vendor_ids)
-      where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and items.id not in(?)',1,0,vendor_ids).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
+      unless @publisher.nil?
+          vendor_ids = @publisher.vendor_ids.split(",")
+          unless vendor_ids.empty?
+              where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and itemdetails.site in(?)',1,0,vendor_ids)
+              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and itemdetails.site not in(?)',1,0,vendor_ids).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          else
+              where_to_buy_items1 = []  
+              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =?',1,0).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          end
+      else
+              where_to_buy_items1 = []            
+              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =?',1,0).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+      end
+    
+
+      
+      @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
@@ -264,8 +289,11 @@ class ProductsController < ApplicationController
       render :text => jsonp,  :content_type => "text/javascript"  
     else
       @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression_id = AddImpression.save_add_impression_data("pricecomparision",nil,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       render :text => "",  :content_type => "text/javascript"
     end
+    
   end
   
   def advertisement
