@@ -44,15 +44,37 @@
  <br/>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
   <tr>
-    <th class="header_compare" > Click Time </th>
-    <th class="header_compare" > Hosted Page </th>
-    <th class="header_compare" > Click Url </th>    
+    <th class="header_compare" style="width:150px;" > Click Time </th>
+    <th class="header_compare" style="width:450px;"> Hosted Page </th>
+    <th class="header_compare" style="width:400px;"> Click Url </th>    
   </tr>
   <%@clicks.each do |c| %>
     <tr>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.timestamp.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.hosted_site_url %> </td>
-      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%= c.click_url %> </td>      
+      <td class="bdb_gray1"  style="width:150px;text-align:center;border-bottom: 1px solid #808080;"><%= c.timestamp.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
+      <td class="bdb_gray1"  style="width:450px;text-align:left;border-bottom: 1px solid #808080;">
+      <label title="<%=c.hosted_site_url%>" style="width:430px;display:block;padding-left:20px;">
+      <%= 
+     if (c.hosted_site_url.length > 75)
+      c.hosted_site_url[0..(75-3)] + "..."
+     else
+      c.hosted_site_url
+     end
+     
+
+     %> </label> </td>    
+         </td>
+      <td class="bdb_gray1"  style="width:400px;text-align:left;border-bottom: 1px solid #808080;">
+        <label title="<%=c.click_url%>" style="width:380px;display:block;padding-left:20px;">
+            <%= 
+           if (c.click_url.length > 70)
+            c.click_url[0..(70-3)] + "..."
+           else
+            c.click_url
+           end    
+
+          %> 
+        </label>
+         </td>      
     </tr>
   <%end%>
   </table>

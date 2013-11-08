@@ -46,15 +46,25 @@
 <br/>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-  <th class="header_compare"  style="width:100px;"> Impression Time </th>
-  <th class="header_compare" width="600px"> Hosted Page </th>
+  <th class="header_compare"  width="150px"> Impression Time </th>
+  <th class="header_compare" width="750px"> Hosted Page </th>
   <th class="header_compare" width="100px"> No.of time access </th>
  </tr>
  <%@impressions.each do |im | %>
    <tr>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.impression_time.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
-     <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;"><%= im.hosted_site_url %> </td>      
-     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.count  %> </td>
+    <td class="bdb_gray1"  width="150px" style="width:150px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.impression_time.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
+     <td class="bdb_gray1" width="750px" style="width:750px;text-align:left;border-bottom: 1px solid #808080;">
+      <label title="<%=im.hosted_site_url%>" style="width:730px;display:block;padding-left:20px;">
+      <%= 
+     if (im.hosted_site_url.length > 140)
+      im.hosted_site_url[0..(140-3)] + "..."
+     else
+      im.hosted_site_url
+     end
+     
+
+     %> </label> </td>      
+     <td class="bdb_gray1"  width="100px" style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.count  %> </td>
   </tr>
 <%end%>  
  </table> 
