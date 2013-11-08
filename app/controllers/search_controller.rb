@@ -174,7 +174,7 @@ class SearchController < ApplicationController
       dynamic :features_string do
         preferences.each do |preference|
           if preference[:value_type] == "Click"
-n            with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:value]) if !params[preference[:attribute]].present?
+ with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:value]) if !params[preference[:attribute]].present?
           elsif preference[:value_type] == "ListOf.parameterize.underscore.to_symValues"
             with(preference[:attribute_name].parameterize.underscore.to_sym, preference[:search_value]) if !params[preference[:attribute]].present?
           end
