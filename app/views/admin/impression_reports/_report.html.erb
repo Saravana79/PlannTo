@@ -48,13 +48,13 @@
 <tr>
   <th class="header_compare"  style="width:100px;"> Impression Time </th>
   <th class="header_compare" width="600px"> Hosted Page </th>
-  
+  <th class="header_compare" width="100px"> No.of time access </th>
  </tr>
  <%@impressions.each do |im | %>
    <tr>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.impression_time.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
      <td class="bdb_gray1" width="600px" style="text-align:center;border-bottom: 1px solid #808080;"><%= im.hosted_site_url %> </td>      
-     
+     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  im.count  %> </td>
   </tr>
 <%end%>  
  </table> 
