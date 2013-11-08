@@ -219,6 +219,12 @@ class ProductsController < ApplicationController
           itemsaccess = "referer"
           url = request.referer
         end
+        if url.include?("?")
+          url = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+        end
+        if url.include?("#")
+           url = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip 
+        end   
         unless url.nil?          
           @articles = ArticleContent.where(url: url)
           unless @articles.empty?            
