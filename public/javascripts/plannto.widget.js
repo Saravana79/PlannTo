@@ -95,7 +95,23 @@ var count = 0;
 return null;
 }
 
-/******** Our main function ********/
+PlannTo.onchange_function = function onchange_function(obj,moredetails)
+  {
+        url = getScriptUrl();
+        var doc_title =  PlannTo.jQuery(document).title;
+        var pathname = PlannTo.jQuery(document).referrer;
+        var item_id =  PlannTo.jQuery(obj).val();
+        var show_details = moredetails;
+
+        var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
+        url = "http://"+domain +"/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+ "&onchange=" + "true" + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        PlannTo.jQuery.getJSON(url, function (data) {          
+            element_id.html(data.html);
+        });
+  }  
+
+
+/******** Main function ********/
 function main() { 
     
     jQuery(document).ready(function(jQuery) { 
@@ -127,23 +143,15 @@ function main() {
         //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {
 	        	jQuery("#"+element_id).html(data.html);
+            if(show_details == "true" && jQuery("#"+element_id).width() < 300)
+                {
+                  jQuery("#" + element_id +" table tr td:nth-child(3)").css("display","none");
+                }
 	      });
       });
     }
  
- PlannTo.onchange_function = function onchange_function(obj,moredetails)
-  {
-        url = getScriptUrl();
-        var doc_title =  PlannTo.jQuery(document).title;
-        var pathname = PlannTo.jQuery(document).referrer;
-        var item_id =  PlannTo.jQuery(obj).val();
-        var show_details = moredetails;
-        var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
-        url = "http://"+domain +"/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+ "&onchange=" + "true" + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
-        PlannTo.jQuery.getJSON(url, function (data) {          
-	        	element_id.html(data.html);
-	      });
-  }  
+ 
   return PlannTo;
   
   })(window);
