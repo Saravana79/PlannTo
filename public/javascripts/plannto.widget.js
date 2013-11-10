@@ -107,6 +107,13 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         url = "http://"+domain +"/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+ "&onchange=" + "true" + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
         PlannTo.jQuery.getJSON(url, function (data) {          
             element_id.html(data.html);
+            parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent();
+             if(moredetails == true && parentDiv.width() < 300)
+                {
+                  jQuery("#" + parentDiv.attr('id') +" table tr td:nth-child(3)").css("display","none");
+                  tr = jQuery("#" + parentDiv.attr('id') +" table tr:eq(9)");
+                  tr.children()[0].colSpan =2                
+                }
         });
   }  
 
@@ -146,6 +153,9 @@ function main() {
             if(show_details == "true" && jQuery("#"+element_id).width() < 300)
                 {
                   jQuery("#" + element_id +" table tr td:nth-child(3)").css("display","none");
+                  tr = jQuery("#" + element_id +" table tr:eq(9)");
+                  tr.children()[0].colSpan =2
+                  //tr.children()[0].children().innerText = "View more";
                 }
 	      });
       });
