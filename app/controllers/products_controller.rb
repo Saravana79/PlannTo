@@ -208,6 +208,7 @@ class ProductsController < ApplicationController
         @items = Item.where(id: item_ids) 
       else
         @items = Item.where(slug: item_ids)
+        @items = @items[0..15] 
       end
       url = request.referer
     else
@@ -230,7 +231,8 @@ class ProductsController < ApplicationController
           end          
           @articles = ArticleContent.where(url: tempurl)
           unless @articles.empty?            
-            @items = @articles[0].items;      
+            @items = @articles[0].items;  
+            @items = @items[0..15]    
           else
             itemsaccess = "none"
           end
