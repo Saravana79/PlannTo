@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
 var PlannTo ={};
 var SubPath="/where_to_buy_items.js"
 //for production
-var domain = "www.plannto.com";
+// var domain = "www.plannto.com";
 //for development
-// var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -160,6 +160,12 @@ function main() {
           
           jQuery.getJSON(url, function (data) {
             jQuery("#"+element_id).html(data.html);
+            jQuery(".navigate_offer").live("click", function(e){
+              show = jQuery(this).attr("href");
+              jQuery(this).closest("tr").hide();
+              jQuery("#"+show).show();
+              e.preventDefault()
+            })
           });
         });
 
