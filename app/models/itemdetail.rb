@@ -14,13 +14,25 @@ class Itemdetail < ActiveRecord::Base
   end
   
   def self.display_item_details(item)
-    if item.status ==1 && !item.IsError?
+if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     return true
     else
     return false
     end
   end
   
+
+  def self.display_availability_detail(item)
+
+    if(item.status  == 1)
+       "Available"
+    elsif(item.status  == 2)
+      "Out of Stock"
+    elsif(item.status  == 3) 
+      "Pre-Order"
+    end
+  end
+
    def self.display_shipping_detail(item)
     unless item.shipping.blank?
       unit = ""

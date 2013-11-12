@@ -111,8 +111,12 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
              if(moredetails == true && parentDiv.width() < 300)
                 {
                   jQuery("#" + parentDiv.attr('id') +" table tr td:nth-child(3)").css("display","none");
+                  jQuery("#" + parentDiv.attr('id') +" table tr td:nth-child(4)").css("display","none");
                   tr = jQuery("#" + parentDiv.attr('id') +" table tr:eq(9)");
-                  tr.children()[0].colSpan =2                
+                  if(tr.children()[0].colSpan ==4)
+                  {                
+                      tr.children()[0].colSpan =2                
+                  }
                 }
         });
   }  
@@ -153,8 +157,12 @@ function main() {
             if(show_details == "true" && jQuery("#"+element_id).width() < 300)
                 {
                   jQuery("#" + element_id +" table tr td:nth-child(3)").css("display","none");
+                  jQuery("#" + element_id +" table tr td:nth-child(4)").css("display","none");
                   tr = jQuery("#" + element_id +" table tr:eq(9)");
-                  tr.children()[0].colSpan =2
+                  if(tr.children()[0].colSpan ==4)
+                  {                
+                      tr.children()[0].colSpan =2                
+                  }
                   //tr.children()[0].children().innerText = "View more";
                 }
 	      });

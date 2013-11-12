@@ -265,16 +265,23 @@ class ProductsController < ApplicationController
       @publisher = Publisher.getpublisherfromdomain(url)
       unless @publisher.nil?
           vendor_ids = @publisher.vendor_ids.split(",")
+                if @moredetails == "true"
+                  status = "1,3".split(",")
+                else
+                  status = "1".split(",")
+                end     
+
+    
           unless vendor_ids.empty?
-              where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and itemdetails.site in(?)',1,0,vendor_ids)
-              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =? and itemdetails.site not in(?)',1,0,vendor_ids).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+              where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =? and itemdetails.site in(?)',status,0,vendor_ids)
+              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)   and itemdetails.isError =? and itemdetails.site not in(?)',status,0,vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
           else
               where_to_buy_items1 = []  
-              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =?',1,0).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
           end
       else
               where_to_buy_items1 = []            
-              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status = ?  and itemdetails.isError =?',1,0).order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       end
     
 

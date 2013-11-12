@@ -61,7 +61,7 @@
                 <table id="plannto_intable" width="100%">   
                   <thead style="border:0px;">
                   <tr id="plannto_intr">
-                    <td colspan="4" id="plannto_intd" >
+                    <td colspan="5" id="plannto_intd" >
                      <%if @items.size == 1 %>
                      <span style="padding-left:20px;" id="prodname">
                       <%=@item.get_name%>
@@ -80,10 +80,11 @@
                                   </tr>
                   <%else%>
                          <tr id="plannto_inheadertr">
-                                    <td id="plannto_inheadercol1" width="25%">Seller</td>
-                                    <td id="plannto_inheadercol2"  width="30%">Price</td>
-                                    <td id="plannto_inheadercol2"  width="30%">Shipping Time</td>
-                                    <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
+                                    <td id="plannto_inheadercol1" width="20%">Seller</td>
+                                    <td id="plannto_inheadercol2"  width="20%">Price</td>
+                                    <td id="plannto_inheadercol2"  width="20%">Status</td>
+                                    <td id="plannto_inheadercol2"  width="25%">Shipping Time</td>
+                                    <td width="15%" id="plannto_inheadercol2" >Buy Now</td>
                                   </tr>
                   <%end%>
                 </thead>
@@ -113,9 +114,10 @@
                                <%items.each_with_index do |item, index|%>      
                                 <%if display_item_details(item)%>
                                <%if index == 0%>
-                                 <td id="plannto_incol1" width="25%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
-                                 <td id="plannto_incol2" width="30%"> <%=display_price_detail(item)%> </td>
-                                 <td id="plannto_incol2" width="30%"><%=display_shipping_detail(item)%></td>
+                                 <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
+                                 <td id="plannto_incol2" width="20%"> <%=display_price_detail(item)%> </td>
+                                 <td id="plannto_incol2" width="20%"><%=display_availability_detail(item)%></td>
+                                 <td id="plannto_incol2" width="25%"><%=display_shipping_detail(item)%></td>
                                  <td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
                                 <%end%>
                                 <%end%>
@@ -125,8 +127,15 @@
                         <% end %>   
                         <% end %>
                         <% if count > @displaycount %>
+
                             <tr style="plannto_footertr">
-                                  <td  id="plannto_footertd" colspan="<%=@displaycount - 2%>">
+                              <%if @moredetails == "true" 
+                                  @wrapper="4" 
+                                else 
+                                  @wrapper="2" 
+                                end
+                              %>
+                                  <td  id="plannto_footertd" colspan="<%=@wrapper%>">
                                     <span id="plannto_footerspan">
                                       <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_footera" target="_blank">View prices from more retailers</a>
                                     </span>
