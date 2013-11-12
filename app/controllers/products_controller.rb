@@ -261,17 +261,15 @@ class ProductsController < ApplicationController
       @displaycount = 4
       if @moredetails == "true"
         @displaycount = 5
+        status = "1,3".split(",")
+      else
+        status = "1".split(",")        
       end     
+                        
+
       @publisher = Publisher.getpublisherfromdomain(url)
       unless @publisher.nil?
-          vendor_ids = @publisher.vendor_ids.split(",")
-                if @moredetails == "true"
-                  status = "1,3".split(",")
-                else
-                  status = "1".split(",")
-                end     
-
-    
+          vendor_ids = @publisher.vendor_ids.split(",")    
           unless vendor_ids.empty?
               where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =? and itemdetails.site in(?)',status,0,vendor_ids)
               where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)   and itemdetails.isError =? and itemdetails.site not in(?)',status,0,vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
