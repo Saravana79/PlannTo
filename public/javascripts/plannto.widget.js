@@ -8,10 +8,11 @@ if(scriptCount == undefined)
 var PlannTo = (function(window,undefined) {
 
 var PlannTo ={};
+var SubPath="/where_to_buy_items.js"
 //for production
 var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+// var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -97,6 +98,7 @@ return null;
 
 PlannTo.onchange_function = function onchange_function(obj,moredetails)
   {
+    
         url = getScriptUrl();
         var doc_title =  PlannTo.jQuery(document).title;
         var pathname = PlannTo.jQuery(document).referrer;
@@ -104,7 +106,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
 
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
-        url = "http://"+domain +"/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+ "&onchange=" + "true" + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+ "&onchange=" + "true" + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
         PlannTo.jQuery.getJSON(url, function (data) {          
             element_id.html(data.html);
             parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent();
@@ -139,7 +141,7 @@ function main() {
         {
           element_id = "where_to_buy_items";
         }
-       url = "http://"+domain +"/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+       url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
        }
        else
        {
@@ -150,6 +152,25 @@ function main() {
         }
        url = "http://"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
       }
+
+      jQuery("#product_offers").live("click", function(){
+          SubPath = "/product_offers.js"
+          element_id = "where_to_buy_items_onchange";
+          url = url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
+          
+          jQuery.getJSON(url, function (data) {
+            jQuery("#"+element_id).html(data.html);
+          });
+        });
+
+      jQuery("#where_to_buy_items").live("click", function(){
+          SubPath = "/where_to_buy_items.js"
+          url = url = "http://"+domain + SubPath + "?partially=true&item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
+          element_id = "where_to_buy_items_onchange"
+          jQuery.getJSON(url, function (data) {
+            jQuery("#"+element_id).html(data.html);
+          });
+        })
        
         //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 		    jQuery.getJSON(url, function (data) {

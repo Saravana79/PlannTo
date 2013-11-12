@@ -280,9 +280,9 @@ class ProductsController < ApplicationController
       else
               where_to_buy_items1 = []            
               where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+              
       end
     
-
       
       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
@@ -297,7 +297,8 @@ class ProductsController < ApplicationController
         end
       address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i
-      html = html = render_to_string(:layout => false)
+      layout = params[:partially] ? false : "widget"
+      html = html = render_to_string(:layout => layout)
       json = {"html" => html}.to_json
       callback = params[:callback]     
       jsonp = callback + "(" + json + ")"
@@ -309,6 +310,14 @@ class ProductsController < ApplicationController
       render :text => "",  :content_type => "text/javascript"
     end
     
+  end
+
+  def product_offers
+    html = html = render_to_string(:layout => false)
+    json = {"html" => html}.to_json
+    callback = params[:callback]     
+    jsonp = callback + "(" + json + ")"
+    render :text => jsonp,  :content_type => "text/javascript" 
   end
   
   def advertisement
