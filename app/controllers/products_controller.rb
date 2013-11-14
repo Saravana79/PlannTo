@@ -272,14 +272,8 @@ class ProductsController < ApplicationController
           vendor_ids = @publisher.vendor_ids.split(",")    
           unless vendor_ids.empty?
               where_to_buy_items = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0)
-              logger.info "==============================================================="
               where_to_buy_items1 = where_to_buy_items.where('itemdetails.site in(?)',vendor_ids)
-              logger.info "==============================================================="
               where_to_buy_items2 = where_to_buy_items.where('itemdetails.site',vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-              logger.info "==============================================================="
-
-              # where_to_buy_items1 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =? and itemdetails.site in(?)',status,0,vendor_ids)
-              # where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)   and itemdetails.isError =? and itemdetails.site not in(?)',status,0,vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
           else
               where_to_buy_items1 = []  
               where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
@@ -304,8 +298,7 @@ class ProductsController < ApplicationController
         end
       address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i
-      layout = params[:partially] ? false : "widget"
-      html = html = render_to_string(:layout => layout)
+      html = html = render_to_string(:layout => false)
       json = {"html" => html}.to_json
       callback = params[:callback]     
       jsonp = callback + "(" + json + ")"
@@ -319,12 +312,24 @@ class ProductsController < ApplicationController
       else
         @impression.update_attributes(updated_time: Time.now)
       end
-      render :text => "",  :content_type => "text/javascript"
+      address = Geocoder.search(request.ip)
+      defatetime = Time.now.to_i
+      html = html = render_to_string(:layout => false)
+      json = {"html" => html}.to_json
+      callback = params[:callback]     
+      jsonp = callback + "(" + json + ")"
+      render :text => jsonp,  :content_type => "text/javascript"  
+      # render :text => "",  :content_type => "text/javascript"
     end
     
   end
 
   def product_offers
+    item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
+
+    @best_deals = ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ?)", item_ids, 'deals', 1, '0', '', Date.today.strftime('%d/%m/%Y'))
+
+
     html = html = render_to_string(:layout => false)
     json = {"html" => html}.to_json
     callback = params[:callback]     

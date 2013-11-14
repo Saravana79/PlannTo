@@ -1,59 +1,170 @@
 
+ 
+<%if @onchange!="true" %>
+ 
+ <style type="text/css">
+ #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;}
+ #plannto_table{background:#EEE;border:0px;font-family: Arial;}
+ #plannto_poweredby{font-size:9px;font-weight:bold;color: darkgray;padding-right: 1px;}
+ #plannto_logo{padding: 2px;font-size:12px;font-weight:bold;color:darkgray;}
+ #plannto_logo:hover{text-decoration: underline;cursor:pointer;}
+ #plannto_logo1{color: #129FBD;}
+ #plannto_insidediv{padding:10px;background: #EEE;}
+ #plannto_intable{background: #FFF;border-collapse:collapse;border:0;}
+ #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;}
+ #plannto_intd{font-weight: 700;font-size:12px;color:black;padding-left:5px;padding-right:10px;vertical-align:middle;background:white;}
+ .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
+ #plannto_incol1{padding-left: 15px;text-align:left;vertical-align:middle;background:white;}
+ #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+ #plannto_incol3{padding-right:10px;text-align:center;vertical-align:middle;background:white;}
+ #plannto_go_button{margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
+ #plannto_footertd{padding-right:10px;vertical-align:middle;height:40px;background: white;}
+ #plannto_footertr{background:white;}
+ #plannto_footerspan{float:left;padding-left:20px}
+ #plannto_footera{font-weight:bold;font-size:13px;text-decoration: underline;color:#535353;}
+ #plannto_inheadertr{border-bottom: 1px solid #EEE;height: 35px;background:#FAFAFA;}
+ #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;}
+ #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;}
+/* for igyaan*/
+<% if (!@publisher.nil? && @publisher.id == 5) %>
+ #plannto_table{background:#EEE;border:0px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+ #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'Oswald', sans-serif;text-transform: uppercase;font-weight: 300;}
+ #plannto_incol2{font-weight:normal;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+  #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:12px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+ #plannto_inheadercol2{font-weight:bold;font-size:12px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+ #prodname{font-family: 'Roboto Slab',sans-serif;font-size: 14px;font-weight:normal;}
+  .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;;}
+<% end %>
+ </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-<%count = 0%>    
-<% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
-  <% count = count + 1%>
-  <% unless count > @displaycount %>
-    <%unless @moredetails == "true"  %>
-        <tr id="plannto_intr">
-          <%items.each_with_index do |item, index|%>      
-            <%if display_item_details(item)%>
-              <%if index == 0%>
-                <td id="plannto_incol1" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
-                <td id="plannto_incol2"  width="35%"> <%=display_price_detail(item)%> </td>
-                <td width="30%" id="plannto_incol3" ><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
-              <%end%>
-            <%end%>
-          <%end%>
-        </tr>
-      <% else%>
-     
-        <tr id="plannto_intr">
-          <%items.each_with_index do |item, index|%>      
-            <%if display_item_details(item)%>
-              <%if index == 0%>
-                <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
-                <td id="plannto_incol2" width="20%"> <%=display_price_detail(item)%> </td>
-                <td id="plannto_incol2" width="20%"><%=display_availability_detail(item)%></td>
-                <td id="plannto_incol2" width="25%"><%=display_shipping_detail(item)%></td>
-                <td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
-              <%end%>
-            <%end%>
-          <%end%>
-        </tr>
-      <% end %>      
-    <% end %>   
-  <% end %>
-  <% if count > @displaycount %>
-
-    <tr style="plannto_footertr">
-      <%if @moredetails == "true" 
-        @wrapper="4" 
-      else 
-        @wrapper="2" 
-      end
-      %>
-      <td  id="plannto_footertd" colspan="<%=@wrapper%>">
-        <span id="plannto_footerspan">
-          <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_footera" target="_blank">View prices from more retailers</a>
-        </span>
-      </td>
-      <td id="plannto_incol3" width="15%">
-        <span >
-          <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> 
-        </span>
+ <table width="100%"  id="plannto_table" >
+  <tbody style="border:0px;">
+    <tr>
+      <td id="plannto_headertd">
+        <span><%= link_to "Best Prices", "#", id: "where_to_buy_items" %></span>
+        <span><%= link_to "Best Offers", "#", id: "product_offers" %></span>
+        <%if @moredetails == "true" %>
+        <!--
+        
+        <div style="float:right;">
+            <span id="plannto_poweredby">Powered By</span>
+            <span id="plannto_logo">Plann<font id="plannto_logo1">To</font></span>
+        </div>
+        -->
+        <%else%>
+       
+        <%end%>
+      
       </td>
     </tr>
-  <% end %>
+    <tr>
+          <td style="padding:0;margin:0;">
+              <div id="plannto_insidediv">
+                <table id="plannto_intable" width="100%">   
+                  <thead style="border:0px;">
+                  <tr id="plannto_intr">
+                    <td colspan="5" id="plannto_intd" >
+                     <%if @items.size == 1 %>
+                     <span style="padding-left:20px;" id="prodname">
+                      <%=@item.get_name%>
+                     </span>
+                      <%else%>
+                        <%=select_tag "w_t_b_items",
+              options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
+                       <%end%>
+                    </td>
+                  </tr>
+                  <%unless @moredetails == "true"  %>
+                                  <tr id="plannto_inheadertr">
+                                    <td id="plannto_inheadercol1" width="35%">Seller</td>
+                                    <td id="plannto_inheadercol2"  width="35%">Price</td>
+                                    <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
+                                  </tr>
+                  <%else%>
+                         <tr id="plannto_inheadertr">
+                                    <td id="plannto_inheadercol1" width="20%">Seller</td>
+                                    <td id="plannto_inheadercol2"  width="20%">Price</td>
+                                    <td id="plannto_inheadercol2"  width="20%">Status</td>
+                                    <td id="plannto_inheadercol2"  width="25%">Shipping Time</td>
+                                    <td width="15%" id="plannto_inheadercol2" >Buy Now</td>
+                                  </tr>
+                  <%end%>
+                </thead>
+                  <tbody style="border:0px;" id="where_to_buy_items_onchange">
+                  <%end%>
+                    <%count = 0%>    
+                    <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
+                      <% count = count + 1%>
+                      <% unless count > @displaycount %>
+                        <%unless @moredetails == "true"  %>
+                            <tr id="plannto_intr">
+                              <%items.each_with_index do |item, index|%>      
+                                <%if display_item_details(item)%>
+                                  <%if index == 0%>
+                                    <td id="plannto_incol1" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
+                                    <td id="plannto_incol2"  width="35%"> <%=display_price_detail(item)%> </td>
+                                    <td width="30%" id="plannto_incol3" ><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
+                                  <%end%>
+                                <%end%>
+                              <%end%>
+                            </tr>
+                          <% else%>
+                         
+                            <tr id="plannto_intr">
+                              <%items.each_with_index do |item, index|%>      
+                                <%if display_item_details(item)%>
+                                  <%if index == 0%>
+                                    <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
+                                    <td id="plannto_incol2" width="20%"> <%=display_price_detail(item)%> </td>
+                                    <td id="plannto_incol2" width="20%"><%=display_availability_detail(item)%></td>
+                                    <td id="plannto_incol2" width="25%"><%=display_shipping_detail(item)%></td>
+                                    <td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
+                                  <%end%>
+                                <%end%>
+                              <%end%>
+                            </tr>
+                          <% end %>      
+                        <% end %>   
+                      <% end %>
+                      <% if count > @displaycount %>
 
+                        <tr style="plannto_footertr">
+                          <%if @moredetails == "true" 
+                            @wrapper="4" 
+                          else 
+                            @wrapper="2" 
+                          end
+                          %>
+                          <td  id="plannto_footertd" colspan="<%=@wrapper%>">
+                            <span id="plannto_footerspan">
+                              <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_footera" target="_blank">View prices from more retailers</a>
+                            </span>
+                          </td>
+                          <td id="plannto_incol3" width="15%">
+                            <span >
+                              <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> 
+                            </span>
+                          </td>
+                        </tr>
+                      <% end %>
+                    <%if @onchange!="true"%>
+                      </tbody>
+                          </table>
+                        
+            </td>
+               </tr>
+               <tr>
+                <td>  </td>
+               </tr>
+               </div>
+</tbody>          
+     </table>
+     <!--
+     <div style="float:right;background:white;">
+            <span id="plannto_poweredby">Powered By</span>
+            <span id="plannto_logo"><a href="http://www.plannto.com" style="font:inherit;color:inherit;text-decoration:inherit;">PlannTo.com</a></span>
+        </div>
+      -->
+      <%end%>
 

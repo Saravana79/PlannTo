@@ -1,43 +1,30 @@
-<tr id="offer1">
-		<td>Previous<td>
+<%if @best_deals.blank? %>
+  <%= length = @best_deals.count %>
+  	<% (0..length).step(2).each do |i| %>
+	  	<tr id="offer<%= i %>" style='<%= "display:none;" if i > 0 %>'>
+			<td>
+				<% if i>0 %>
+					<a href="offer<%= i - 2 %>" class="navigate_offer">Previous</a>
+				<% end %>
+			</td>
 
-	<td>11111111111111111111111<td>
-		<td><a href="offer2" class="navigate_offer">Next</a><td>
-</tr>
-<tr  id="offer2" style="display:none;">
-		<td><a href="offer1" class="navigate_offer">Previous</a><td>
 		
-	<td>2222222222222222222222222<td>
-		<td><a href="offer3" class="navigate_offer">Next</a><td>
-
-</tr>
-<tr id="offer3" style="display:none;">
-		<td><a href="offer2" class="navigate_offer">Previous</a><td>
-	
-	<td>33333333333333333333333333<td>
-		<td><a href="offer4" class="navigate_offer">Next</a><td>
-
-</tr>
-<tr id="offer4" style="display:none;">
-		<td><a href="offer3" class="navigate_offer">Previous</a><td>
+			
+			<td>
+				<span> <%= i %> </span>
+				<span> <%= i+1 %> </span>
+			</td>
+			<td>
+				<% if i==length-2 %>
+				<a href="offer<%= i+2 %>" class="navigate_offer">Next</a>
+				<% end %>
+			</td>
 		
-	<td>444444444444444444444444<td>
-		<td><a href="offer5" class="navigate_offer">Next</a><td>
 
-</tr>
-<tr id="offer5" style="display:none;">
-		<td><a href="offer4" class="navigate_offer">Previous</a><td>
-		
-	<td>555555555555555555555555<td>
-		<td><a href="offer6" class="navigate_offer">Next</a><td>
+		</tr>
+	<% end %>
 
-</tr>
-<tr id="offer6" style="display:none;">
-		<td><a href="offer5" class="navigate_offer">Previous</a><td>
-		
-	<td>666666666666666666666<td>
-		<td>Next<td>
+<% else %>
+No Offer
+<% end %>
 
-</tr>
-
- 

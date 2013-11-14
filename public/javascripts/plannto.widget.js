@@ -171,8 +171,8 @@ function main() {
 
       jQuery("#where_to_buy_items").live("click", function(){
           SubPath = "/where_to_buy_items.js"
-          url = url = "http://"+domain + SubPath + "?partially=true&item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
-          element_id = "where_to_buy_items_onchange"
+          url = url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
+          element_id = "where_to_buy_items1"
           jQuery.getJSON(url, function (data) {
             jQuery("#"+element_id).html(data.html);
           });
