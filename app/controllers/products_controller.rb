@@ -226,18 +226,14 @@ class ProductsController < ApplicationController
           if url.include?("?")
             tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
           end
-          if url.include?("#")
+          if url.include?("#")          
              tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip 
           end          
           @articles = ArticleContent.where(url: tempurl)
           unless @articles.empty?            
-            @items = @articles[0].items;  
+            @items = @articles[0].allitems.select{|a| a.is_a? Product};  
             @items = @items[0..15]    
-          else
-            itemsaccess = "none"
           end
-        else
-          itemsaccess = "none"
         end
     end 
     url_params = "Params = "
@@ -268,6 +264,8 @@ class ProductsController < ApplicationController
                         
 
       @publisher = Publisher.getpublisherfromdomain(url)
+
+      
       unless @publisher.nil?
           vendor_ids = @publisher.vendor_ids.split(",")    
           unless vendor_ids.empty?
@@ -285,6 +283,7 @@ class ProductsController < ApplicationController
 
       
       @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
+
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
