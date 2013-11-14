@@ -310,7 +310,7 @@ class ProductsController < ApplicationController
       if @impression.new_record?
         @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
       else
-        @impression.update_attributes(updated_time: Time.now)
+        @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
       end
       address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i
