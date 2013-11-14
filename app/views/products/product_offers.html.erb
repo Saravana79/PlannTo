@@ -1,0 +1,30 @@
+<%if @best_deals.blank? %>
+  <%= length = @best_deals.count %>
+  	<% (0..length).step(2).each do |i| %>
+	  	<tr id="offer<%= i %>" style='<%= "display:none;" if i > 0 %>'>
+			<td>
+				<% if i>0 %>
+					<a href="offer<%= i - 2 %>" class="navigate_offer">Previous</a>
+				<% end %>
+			</td>
+
+		
+			
+			<td>
+				<span> <%= i %> </span>
+				<span> <%= i+1 %> </span>
+			</td>
+			<td>
+				<% if i==length-2 %>
+				<a href="offer<%= i+2 %>" class="navigate_offer">Next</a>
+				<% end %>
+			</td>
+		
+
+		</tr>
+	<% end %>
+
+<% else %>
+No Offer
+<% end %>
+
