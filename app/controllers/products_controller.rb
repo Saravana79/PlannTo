@@ -305,7 +305,7 @@ class ProductsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url(request.original_url)
+      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(request.original_url, "PriceComparison")
       if @impression.new_record?
         @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
       else
@@ -324,10 +324,21 @@ class ProductsController < ApplicationController
   end
 
   def product_offers
+    logger.info request.inspect
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
-
+    url = request.referer
     @best_deals = ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ?)", item_ids, 'deals', 1, '0', '', Date.today.strftime('%d/%m/%Y'))
-    @best_deals.select{|a| a}
+    unless @best_deals.blank?
+      @impression_id = AddImpression.save_add_impression_data("OffersDeals",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
+      @best_deals.select{|a| a}
+    else
+      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(url, "OffersDeals")
+      if @impression.new_record?
+        @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
+      else
+        @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
+      end
+    end
     html = html = render_to_string(:layout => false)
     json = {"html" => html}.to_json
     callback = params[:callback]     
