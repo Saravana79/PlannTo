@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
 var PlannTo ={};
 var SubPath="/where_to_buy_items.js"
 //for production
-// var domain = "www.plannto.com";
+var domain = "www.plannto.com";
 //for development
-var domain = "localhost:3000";
+//var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -169,7 +169,7 @@ function main() {
           });
         });
 
-      jQuery("#where_to_buy_items").live("click", function(){
+      jQuery("#where_to_buy_items_a").live("click", function(){
           SubPath = "/where_to_buy_items.js"
           url = url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
           element_id = "where_to_buy_items1"

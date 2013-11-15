@@ -23,7 +23,7 @@ class Content < ActiveRecord::Base
   has_many :content_item_relations
   has_many :item_contents_relations_cache
   has_many :items, :through => :content_item_relations
-  has_many :allitems, :through => :item_contents_relations_cache
+  has_many :allitems,:class_name => 'Item', :through => :item_contents_relations_cache, :source => :item
   belongs_to :itemtype
   has_and_belongs_to_many :guides
   has_one :content_photo

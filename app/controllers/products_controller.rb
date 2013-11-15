@@ -327,8 +327,7 @@ class ProductsController < ApplicationController
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
 
     @best_deals = ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ?)", item_ids, 'deals', 1, '0', '', Date.today.strftime('%d/%m/%Y'))
-
-
+    @best_deals.select{|a| a}
     html = html = render_to_string(:layout => false)
     json = {"html" => html}.to_json
     callback = params[:callback]     

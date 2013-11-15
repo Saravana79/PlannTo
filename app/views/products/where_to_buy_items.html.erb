@@ -36,14 +36,19 @@
   .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;;}
 <% end %>
  </style>
+<!--
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-
+-->
  <table width="100%"  id="plannto_table" >
   <tbody style="border:0px;">
     <tr>
       <td id="plannto_headertd">
-        <span><%= link_to "Best Prices", "#", id: "where_to_buy_items" %></span>
-        <span><%= link_to "Best Offers", "#", id: "product_offers" %></span>
+        <%if Rails.env == "development"%>
+          <span><%= link_to "Best Prices", "#", id: "where_to_buy_items_a" %></span>
+          <span><%= link_to "Best Offers", "#", id: "product_offers" %></span>
+        <%else%>
+          <span>Best Prices</span>
+        <%end%>
         <%if @moredetails == "true" %>
         <!--
         
@@ -75,6 +80,10 @@
                        <%end%>
                     </td>
                   </tr>
+              </thead>
+                <tbody style="border:0px;" id="where_to_buy_items_onchange">
+                <%end%>
+              
                   <%unless @moredetails == "true"  %>
                                   <tr id="plannto_inheadertr">
                                     <td id="plannto_inheadercol1" width="35%">Seller</td>
@@ -89,9 +98,6 @@
                                     <td id="plannto_inheadercol2"  width="25%">Shipping Time</td>
                                     <td width="15%" id="plannto_inheadercol2" >Buy Now</td>
                                   </tr>
-                  <%end%>
-                </thead>
-                  <tbody style="border:0px;" id="where_to_buy_items_onchange">
                   <%end%>
                     <%count = 0%>    
                     <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
