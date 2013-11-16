@@ -529,9 +529,11 @@ end
   def get_sub_type(sub_type, itemtype_id)   
     if sub_type =="All"
       if itemtype_id.empty?
-        return ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
+        @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name).delete("Others")
+        @ac.delete("Others")
       else
-        return ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq
+        @ac ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq.delete("Others").
+        @ac.delete("Others")
       end
       
      elsif sub_type =="QandA" || sub_type == "Q"
