@@ -531,9 +531,11 @@ end
       if itemtype_id.empty?
         @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
         @ac.delete("Others")
+        return @ac
       else
-        @ac ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq
+        @ac = ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq
         @ac.delete("Others")
+        return @ac
       end
       
      elsif sub_type =="QandA" || sub_type == "Q"
