@@ -267,8 +267,8 @@ class ProductsController < ApplicationController
       @items.each do |item|
           @item = item
           unless @publisher.nil?
-              vendor_ids = @publisher.vendor_ids.split(",")    
-              unless vendor_ids.empty?
+              unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
+                  vendor_ids = @publisher.vendor_ids.split(",")    
                   where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
                   where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}
                   where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
