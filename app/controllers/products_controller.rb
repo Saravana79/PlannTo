@@ -314,7 +314,7 @@ class ProductsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url(request.original_url)
+      @impression = ImpressionMissing.find_or_create_by_hosted_site_url(tempurl)
       if @impression.new_record?
         @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
       else
