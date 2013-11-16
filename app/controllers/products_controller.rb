@@ -252,7 +252,6 @@ class ProductsController < ApplicationController
   
 
     unless @items.nil? || @items.empty?
-      @item = @items[0] 
       @moredetails = params[:price_full_details]
       @displaycount = 4
       if @moredetails == "true"
@@ -264,26 +263,36 @@ class ProductsController < ApplicationController
                         
 
       @publisher = Publisher.getpublisherfromdomain(url)
-
-      
-      unless @publisher.nil?
-          vendor_ids = @publisher.vendor_ids.split(",")    
-          unless vendor_ids.empty?
-              where_to_buy_items = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0)
-              where_to_buy_items1 = where_to_buy_items.where('itemdetails.site in(?)',vendor_ids)
-              where_to_buy_items2 = where_to_buy_items.where('itemdetails.site',vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+      @tempitems = []
+      @items.each do |item|
+          @item = item
+          unless @publisher.nil?
+              vendor_ids = @publisher.vendor_ids.split(",")    
+              unless vendor_ids.empty?
+                  where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0)
+                  where_to_buy_items1 = where_to_buy_itemstemp.where('itemdetails.site in(?)',vendor_ids)
+                  where_to_buy_items2 = where_to_buy_itemstemp.where('itemdetails.site not in (?)',vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+              else
+                  where_to_buy_items1 = []  
+                  where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+              end
           else
-              where_to_buy_items1 = []  
-              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                  where_to_buy_items1 = []            
+                  where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                  
           end
-      else
-              where_to_buy_items1 = []            
-              where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-              
+          @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
+          if(@where_to_buy_items.empty?)    
+            @tempitems << @item
+          else                        
+            break
+          end
+    end
+      @items = @items - @tempitems
+
+      if(@where_to_buy_items.empty?)
+        itemsaccess = "emptyitems"
       end
-    
-      
-      @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
 
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       responses = []
