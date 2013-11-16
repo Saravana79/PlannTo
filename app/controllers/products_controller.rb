@@ -258,10 +258,11 @@ class ProductsController < ApplicationController
         @displaycount = 5
         status = "1,3".split(",")
       else
-        status = "1".split(",")        
+        status = "1".split(",")     
+           
       end     
                         
-
+    
       @publisher = Publisher.getpublisherfromdomain(url)
       @tempitems = []
       @items.each do |item|
