@@ -529,10 +529,10 @@ end
   def get_sub_type(sub_type, itemtype_id)   
     if sub_type =="All"
       if itemtype_id.empty?
-        @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name).delete("Others")
+        @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
         @ac.delete("Others")
       else
-        @ac ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq.delete("Others")
+        @ac ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq
         @ac.delete("Others")
       end
       
