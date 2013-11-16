@@ -532,7 +532,7 @@ end
         @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name).delete("Others")
         @ac.delete("Others")
       else
-        @ac ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq.delete("Others").
+        @ac ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq.delete("Others")
         @ac.delete("Others")
       end
       
