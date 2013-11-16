@@ -19,6 +19,9 @@
     <% end %>
     <%if @custom == "true" && @no_custom!="true"%>
       <% params["sub_type"] = ["Reviews","Deals","Lists","Comparisons"] %>
+    <%else%>
+      <% params["sub_type"] = ArticleCategory.where("itemtype_id in (?)", @item.itemtype_id).collect(&:name)        
+        %>
     <%end%> 
     <%= render "contents/filter_content_create_links" %>
     <% @contents = Content.filter(params)  %>
