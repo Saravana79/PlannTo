@@ -269,9 +269,9 @@ class ProductsController < ApplicationController
           unless @publisher.nil?
               vendor_ids = @publisher.vendor_ids.split(",")    
               unless vendor_ids.empty?
-                  where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0)
-                  where_to_buy_items1 = where_to_buy_itemstemp.where('itemdetails.site in(?)',vendor_ids)
-                  where_to_buy_items2 = where_to_buy_itemstemp.where('itemdetails.site not in (?)',vendor_ids).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                  where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                  where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}
+                  where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
               else
                   where_to_buy_items1 = []  
                   where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
