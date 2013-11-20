@@ -8,7 +8,7 @@ class AddImpression < ActiveRecord::Base
    ai.item_id = itemid
    ai.hosted_site_url = request_referer
    ai.impression_time = time
-   ai.user_id = user
+   ai.user_id = user.id
    ai.ip_address = remote_ip
    ai.itemsaccess = itemsaccess
    ai.params = params
