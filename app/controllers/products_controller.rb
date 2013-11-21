@@ -201,7 +201,7 @@ class ProductsController < ApplicationController
     
     # 
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
-    @onchange = params[:onchange]
+    @path = params[:path]
     unless (item_ids.blank?)
       itemsaccess = "ItemId"
       if (true if Float(item_ids[0]) rescue false)
@@ -240,8 +240,8 @@ class ProductsController < ApplicationController
     if params[:item_ids]
        url_params += "item_ids-" + params[:item_ids]
     end
-    if params[:onchange]
-       url_params += ";onchange-" + params[:onchange]
+    if params[:path]
+       url_params += ";path-" + params[:path]
     end
     if  params[:ref_url]
        url_params += ";ref_url" + params[:ref_url] 

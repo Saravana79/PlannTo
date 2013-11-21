@@ -98,31 +98,68 @@ return null;
 
 PlannTo.onchange_function = function onchange_function(obj,moredetails)
   {
-    
-        url = getScriptUrl();
-        var doc_title =  PlannTo.jQuery(document).title;
-        var pathname = PlannTo.jQuery(document).referrer;
         var item_id =  PlannTo.jQuery(obj).val();
         var show_details = moredetails;
-
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
-        url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+ "&onchange=" + "true" + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
-        PlannTo.jQuery.getJSON(url, function (data) {          
-            element_id.html(data.html);
-            parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent();
-             if(moredetails == true && parentDiv.width() < 300)
-                {
-                  jQuery("#" + parentDiv.attr('id') +" table tr td:nth-child(3)").css("display","none");
-                  jQuery("#" + parentDiv.attr('id') +" table tr td:nth-child(4)").css("display","none");
-                  tr = jQuery("#" + parentDiv.attr('id') +" table tr:eq(9)");
-                  if(tr.children()[0].colSpan ==4)
-                  {                
-                      tr.children()[0].colSpan =2                
-                  }
-                }
-        });
+        parentDiv = element_id.parent().parent().parent().parent().parent().parent().attr('id');
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv)
   }  
 
+  PlannTo.wheretobuytabclick = function wheretobuytabclick(obj,moredetails,item_ids)
+  {
+        var show_details = moredetails;
+        var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
+        parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().attr('id');
+        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv)
+       
+  } 
+
+    PlannTo.offertabclick = function offertabclick(obj,moredetails,item_ids)
+  {
+        var doc_title =  PlannTo.jQuery(document).title;
+        var pathname = PlannTo.jQuery(document).referrer;
+        var show_details = moredetails;
+        var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
+        parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
+        url = "http://"+domain + "/product_offers.js" + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + "offer" +"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";          
+          jQuery.getJSON(url, function (data) {            
+            element_id.html(data.html);            
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).addClass("selected");
+            jQuery(".navigate_offer").live("click", function(e){
+              show = jQuery(this).attr("href");
+              jQuery(this).closest("tr").hide();
+              jQuery("#"+show).show();
+              e.preventDefault()
+            })
+          });
+        
+  } 
+
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid)
+    {
+            var doc_title =  PlannTo.jQuery(document).title;
+            var pathname = PlannTo.jQuery(document).referrer;
+      
+          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+
+            jQuery.getJSON(url, function (data) {
+                element_id.html(data.html);                
+                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children()[1]).removeClass();
+                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children()[0]).addClass("selected");
+                if(show_details == "true" && jQuery("#"+ parentdivid).width() < 300)
+                    {
+                      jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
+                      jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
+                      tr = jQuery("#" + parentdivid +" table tr:eq(9)");
+                      if(tr.children()[0].colSpan ==4)
+                      {                
+                          tr.children()[0].colSpan =2                
+                      }
+                      //tr.children()[0].children().innerText = "View more";
+                    }
+            });
+    }
 
 /******** Main function ********/
 function main() { 
@@ -137,11 +174,13 @@ function main() {
         var element_id = getParam(url,"element_id");
         if (ads == "")
         {
-        if(element_id == undefined || element_id == "")
-        {
-          element_id = "where_to_buy_items";
-        }
-       url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+          if(element_id == undefined || element_id == "")
+          {
+            element_id = "where_to_buy_items";
+          }
+          element = jQuery("#"+element_id)
+         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id)
+
        }
        else
        {
@@ -150,26 +189,17 @@ function main() {
         {
           element_id = "advertisement";
         }
-       url = "http://"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        url = "http://"+ domain +"/advertisement.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+        jQuery.getJSON(url, function (data) {
+            jQuery("#"+element_id).html(data.html);           
+        });
       }
 
       jQuery("#product_offers").live("click", function(){
-          SubPath = "/product_offers.js"
-          element_id = "where_to_buy_items_onchange";
-          url = url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
           
-          jQuery.getJSON(url, function (data) {
-            jQuery("#"+element_id).html(data.html);
-            jQuery(".navigate_offer").live("click", function(e){
-              show = jQuery(this).attr("href");
-              jQuery(this).closest("tr").hide();
-              jQuery("#"+show).show();
-              e.preventDefault()
-            })
-          });
         });
 
-      jQuery("#where_to_buy_items_a").live("click", function(){
+    /*  jQuery("#where_to_buy_items_a").live("click", function(){
           SubPath = "/where_to_buy_items.js"
           url = url = "http://"+domain + SubPath + "?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?";
           element_id = "where_to_buy_items1"
@@ -177,22 +207,9 @@ function main() {
             jQuery("#"+element_id).html(data.html);
           });
         })
-       
+      */ 
         //url = "http://www.plannto.com/where_to_buy_items.js?item_ids="+item_id+"&price_full_details="+show_details+"&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
-		    jQuery.getJSON(url, function (data) {
-	        	jQuery("#"+element_id).html(data.html);
-            if(show_details == "true" && jQuery("#"+element_id).width() < 300)
-                {
-                  jQuery("#" + element_id +" table tr td:nth-child(3)").css("display","none");
-                  jQuery("#" + element_id +" table tr td:nth-child(4)").css("display","none");
-                  tr = jQuery("#" + element_id +" table tr:eq(9)");
-                  if(tr.children()[0].colSpan ==4)
-                  {                
-                      tr.children()[0].colSpan =2                
-                  }
-                  //tr.children()[0].children().innerText = "View more";
-                }
-	      });
+		    
       });
     }
  

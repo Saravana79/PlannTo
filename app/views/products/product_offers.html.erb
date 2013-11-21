@@ -1,54 +1,59 @@
 <%unless (@best_deals.blank?) %>
     <% length = @best_deals.count %>
     <% loopcount = (length/2.0).round %>
-
-  	<% (0..loopcount-1).each do |i| %>  			
-  			<%puts i.to_s + "this is count"%>
-			<tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id=offer<%=i%>>
+    <div id="plannto_insidediv">
+          <table id="plannto_intable" width="100%">   
+            <thead style="border:0px;">                    
+		
+  			<% (0..loopcount-1).each do |i| %>  			
+			<tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%=i%>">
 				<td>				
 					<% @deal  = @best_deals[((i)*2)]%>
 					<%unless @deal.nil?%>
 			  		<div style="width:100%;border-bottom: 1px solid #EEE;">  
-			  			<div style="font-weight:bold;font-size:16px;height:20px;padding:5px;text-align:center;">   
+			  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;color:#474747;">   
 			  				<%=@deal.title%>
 			  			</div>
-			  			<div style="font-weight:normal;font-size:12px;padding-bottom:5px;text-align:center;"> <%=@deal.description%> </div>
+			  			<div style="font-weight:normal;font-size:12px;padding-bottom:10px;padding-left:10px;color:#5F5F5F;"> <%=@deal.description%> </div>
 			  			<%unless @deal.field1 == "" %>
-			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-bottom:10px;text-align:center;"><span> Expires on - <%=date_formate(@deal.field1.todate)%></span></div>
+			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-left:10px;padding-bottom:10px;"><span> Expires on - <%=date_formate(@deal.field1.to_date)%></span></div>
 			  			<%end%>
-			  			<div style="clear:both;text-align:center;"><a href="<%=@deal.url%>" id="plannto_go_button" target="_blank">Grab the deal</a></div>
+			  			<div style="clear:both;margin-left:10px;text-align:center;margin-right:30px;"><a href="<%=@deal.url%>" id="plannto_go_button" target="_blank">Grab the deal</a></div>
 			  			<br style="clear:both;"/>
 			  		</div>
 			  		<%end%>
 		  			<% @deal  = @best_deals[((i)*2 + 1)]%>
 		  			<%unless @deal.nil?%>
 				  		<div style="width:100%;border-bottom: 1px solid #EEE;">  
-			  			<div style="font-weight:bold;font-size:16px;height:20px;padding:5px;text-align:center;">   
+			  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;color:#474747;">   
 			  				<%=@deal.title%>
 			  			</div>
-			  			<div style="font-weight:normal;font-size:12px;padding-bottom:5px;text-align:center;"> <%=@deal.description%> </div>
+			  			<div style="font-weight:normal;font-size:12px;padding-bottom:10px;padding-left:10px;color:#5F5F5F;"> <%=@deal.description%> </div>
 			  			<%unless @deal.field1 == "" %>
-			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-bottom:10px;text-align:center;"><span> Expires on - <%=date_formate(@deal.field1.todate)%></span></div>
+			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-left:10px;padding-bottom:10px;"><span> Expires on - <%=date_formate(@deal.field1.todate)%></span></div>
 			  			<%end%>
-			  			<div style="clear:both;text-align:center;"><a href="<%=@deal.url%>" id="plannto_go_button" target="_blank">Grab the deal</a></div>
+			  			<div style="clear:both;margin-left:10px;text-align:center;margin-right:30px;"><a href="<%=@deal.url%>" id="plannto_go_button" target="_blank" >Grab the deal</a></div>
 			  			<br style="clear:both;"/>
 			  		</div>
 				  	
 			  		<%end%>
-			  		<div>
+			  		<div  style="height: 25px;padding: 5px;">
 					<% if i>0 %>
-						<span style="float:left;"><a href="offer<%= i - 1 %>" class="navigate_offer">Previous</a></span>
+						<span style="float:left;margin: 5px 10px;"><a href="offer<%= i - 1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
 					<% end %>
 					<% if i != loopcount -1 %>
-						<span style="float:right;"><a href="offer<%= i+1 %>" class="navigate_offer">Next</a></span>
+						<span style="float:right;margin: 5px 10px;"><a href="offer<%= i+1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Next Offers</a></span>
 					<% end %>
 					</div>	
 			  	</td>
 			</tr>
-
-	<% end %>
+			<% end %>
+		  </thead>
+		</table>
+	   </div>
+	
 
 <% else %>
-	No Offer
+	Currently there are no offers for this product.
 <% end %>
 
