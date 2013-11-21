@@ -8,7 +8,9 @@ class Click < ActiveRecord::Base
     click.hosted_site_url = request_referer
     click.timestamp = time
     click.item_id = item_id
-    click.user_id = user.id
+    unless user.nil?
+      click.user_id = user.id
+    end
     click.publisher_id = publisher.id rescue nil
     click.ipaddress = remote_ip
     click.save
