@@ -11,14 +11,15 @@
 					<% @deal  = @best_deals[((i)*2)]%>
 					<%unless @deal.nil?%>
 			  		<div style="width:100%;border-bottom: 1px solid #EEE;">  
-			  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;color:#474747;">   
-			  				<%=@deal.title%>
+			  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;">   
+			  				<a style="text-decoration:none;color:#474747;" href="http://www.plannto.com/history_details?id=<%=@deal.id%>&iid=<%=@impression_id%>"> <%=@deal.title%>  - <%= URI.parse(URI.encode(URI.decode(@deal.url))).host.gsub("www.","") %>			  					
+			  				</a>
 			  			</div>
 			  			<div style="font-weight:normal;font-size:12px;padding-bottom:10px;padding-left:10px;color:#5F5F5F;"> <%=@deal.description%> </div>
 			  			<%unless @deal.field1 == "" %>
 			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-left:10px;padding-bottom:10px;"><span> Expires on - <%=date_formate(@deal.field1.to_date)%></span></div>
 			  			<%end%>
-			  			<div style="clear:both;margin-left:10px;text-align:center;margin-right:30px;"><a href="<%=@deal.url%>" id="plannto_go_button" target="_blank">Grab the deal</a></div>
+			  			<div style="clear:both;margin-left:10px;text-align:center;margin-right:30px;"><a href="http://www.plannto.com/history_details?id=<%=@deal.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Grab the deal</a></div>
 			  			<br style="clear:both;"/>
 			  		</div>
 			  		<%end%>
@@ -26,11 +27,13 @@
 		  			<%unless @deal.nil?%>
 				  		<div style="width:100%;border-bottom: 1px solid #EEE;">  
 			  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;color:#474747;">   
-			  				<%=@deal.title%>
+			  						<a style="text-decoration:none;color:#474747;" href="http://www.plannto.com/history_details?id=<%=@deal.id%>&iid=<%=@impression_id%>"> <%=@deal.title%>  - <%= URI.parse(URI.encode(URI.decode(@deal.url))).host.gsub("www.","") %>			  					
+			  				</a>
+
 			  			</div>
 			  			<div style="font-weight:normal;font-size:12px;padding-bottom:10px;padding-left:10px;color:#5F5F5F;"> <%=@deal.description%> </div>
 			  			<%unless @deal.field1 == "" %>
-			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-left:10px;padding-bottom:10px;"><span> Expires on - <%=date_formate(@deal.field1.todate)%></span></div>
+			  			<div style="font-weight:normal;font-size:12px;font-style:italic;padding-left:10px;padding-bottom:10px;"><span> Expires on - <%=date_formate(@deal.field1.to_date)%></span></div>
 			  			<%end%>
 			  			<div style="clear:both;margin-left:10px;text-align:center;margin-right:30px;"><a href="<%=@deal.url%>" id="plannto_go_button" target="_blank" >Grab the deal</a></div>
 			  			<br style="clear:both;"/>

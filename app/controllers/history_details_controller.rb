@@ -2,23 +2,7 @@ class HistoryDetailsController < ApplicationController
 
   def index
     url = ""
-    if prams[:id]
-      @article_details = ArticleContent.find_by_id(params[:id])
-      base_uri, params = @article_details.url.split("?")
-      url = "#{@article_details.url}"
-      redirect_to url
-    else
-      type = params[:type].present? ? params[:type] : ""
-      @impression_id = params[:iid]
-      find_item_detail(params[:detail_id], type)
-      url = "#{@item_detail.url}"
-      
 
-    
-#      @history = HistoryDetail.new(:site_url => @item_detail.url, :ip_address => request.remote_ip, :redirection_time => Time.now)
-#      @history.user_id = current_user.id if user_signed_in?    
-#      @history.plannto_location = session[:return_to]
-  #    @history.save
       req_url = request.referer
       unless req_url.nil?
         if request.referer.include? "plannto.com" or request.referer.include? "localhost"
@@ -28,8 +12,32 @@ class HistoryDetailsController < ApplicationController
         end
       end 
       publisher = Publisher.getpublisherfromdomain(req_url)
-      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher)
+
+
+     if params[:id].present?
+      @article_details = ArticleContent.find_by_id(params[:id])
+    #   base_uri, params = @article_details.url.split("?")
+       url = "#{@article_details.url}"
+       host = URI.parse(url).host.downcase rescue ""
+       domain = host.start_with?('www.') ? host[4..-1] : host      
+       @vd = VendorDetail.where(baseurl: domain)
+       unless @vd.empty?            
+        vendor = Item.find(@vd[0].item_id)
+       end
+       @impression_id = "123"
+       Click.save_click_data(url,req_url,Time.now,@article_details.id,current_user,request.remote_ip,@impression_id,publisher)
+     else
+
+      type = params[:type].present? ? params[:type] : ""
+      @impression_id = params[:iid]
+      find_item_detail(params[:detail_id], "")
+      url = "#{@item_detail.url}"
       vendor = Item.find(@item_detail.site)
+      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher)
+    end
+
+    
+    unless vendor.nil?  
       if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
          url = vendor.vendor_detail.params.gsub(/\{url}/,url)
          unless publisher.nil?
@@ -46,8 +54,8 @@ class HistoryDetailsController < ApplicationController
           end   
         end
       end
-      redirect_to url
     end
+      redirect_to url    
   end
 
   private

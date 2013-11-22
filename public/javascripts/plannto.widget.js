@@ -102,7 +102,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
         parentDiv = element_id.parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv)
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname")
   }  
 
   PlannTo.wheretobuytabclick = function wheretobuytabclick(obj,moredetails,item_ids)
@@ -110,7 +110,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv)
+        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"")
        
   } 
 
@@ -136,11 +136,10 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         
   } 
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname)
     {
             var doc_title =  PlannTo.jQuery(document).title;
-            var pathname = PlannTo.jQuery(document).referrer;
-      
+           
           url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 
             jQuery.getJSON(url, function (data) {
@@ -179,7 +178,7 @@ function main() {
             element_id = "where_to_buy_items";
           }
           element = jQuery("#"+element_id)
-         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id)
+         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname)
 
        }
        else

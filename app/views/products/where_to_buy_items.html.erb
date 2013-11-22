@@ -35,8 +35,8 @@
 
          /* for igyaan*/
          <% if (!@publisher.nil? && @publisher.id == 5) %>
-         #plannto_table{background:#EEE;border:0px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
-         #plannto_headertd {padding: 5px 10px 0px 12px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'Oswald', sans-serif;text-transform: uppercase;font-weight: 300;}
+         #plannto_table{border:0px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+         #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'Oswald', sans-serif;text-transform: uppercase;font-weight: 300;}
          #plannto_incol2{font-weight:normal;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
          #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:12px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
          #plannto_inheadercol2{font-weight:bold;font-size:12px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
@@ -52,20 +52,21 @@
           <tbody style="border:0px;">
             <tr>
               <td id="plannto_headertd">
-                <%if Rails.env == "development"%>
+                
                 <ul class="shadetabs">
                   <li class="selected">
              
                 <a href="#" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
                   </li>
-                <li >
+                <%if Rails.env == "development"%>
+               <li >
 
                    <a href="#" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a> 
-                  
+                <%end%>  
               </ul>
-                <%else%>
-                <span>Best Prices</span>
-                <%end%>
+                
+                <!--<span>Best Prices</span>-->
+                
                 <%if @moredetails == "true" %>
                     <!--
                     
