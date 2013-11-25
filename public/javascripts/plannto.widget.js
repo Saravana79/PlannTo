@@ -102,7 +102,8 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
         parentDiv = element_id.parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname")
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname");
+         e.preventDefault();
   }  
 
   PlannTo.wheretobuytabclick = function wheretobuytabclick(obj,moredetails,item_ids)
@@ -110,7 +111,8 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"")
+        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"");
+         e.preventDefault();
        
   } 
 
