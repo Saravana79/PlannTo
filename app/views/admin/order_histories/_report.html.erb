@@ -46,14 +46,27 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
   <th class="header_compare"  style="width:100px;"> Date </th>
-  <th class="header_compare" width="600px"> No. of order</th>
-  <th class="header_compare" width="600px"> Total Revenue</th>
+  <th class="header_compare" width="100px"> Vendor</th> 
+  <th class="header_compare" width="100px"> No. of order</th>
+  <th class="header_compare" width="100px"> Total Revenue</th>
+  <th class="header_compare" width="100px"> Order Status</th>
+  <th class="header_compare" width="100px"> Payment Status</th>
  </tr>
  <%@order_histories.each do |oh | %>
    <tr>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  oh.order_date.to_datetime.strftime("%d-%b-%Y %I:%M %p" ) %> </td>
+    <% @vendor = @vendors.select{|a| a.item_id == oh.vendor_ids}%>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"><%=  oh.order_date.to_datetime.strftime("%d-%b-%Y" ) %> </td>
+      <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;">
+      <% unless @vendor.nil? or @vendor.empty? %>
+        <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + @vendor[0].imageurl%>"  style="border:0;padding:0;"/> 
+       <%end%>
+      </td>
      <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.no_of_orders %> </td>      
      <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.total_revenue %> </td>
+
+     <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.order_status %> </td>
+     <td class="bdb_gray1" width="100px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.payment_status %> </td>
+
   </tr>
 <%end%>  
  </table> 
