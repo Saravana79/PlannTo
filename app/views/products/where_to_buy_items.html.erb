@@ -58,10 +58,11 @@
              
                 <a href="#" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
                   </li>
-                <%if Rails.env == "development"%>
+                <%if (!@publisher.nil? && @publisher.id == 8) && @moredetails == "true" %>
                <li >
 
                    <a href="#" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a> 
+                  </li>
                 <%end%>  
               </ul>
                 

@@ -23,9 +23,10 @@ class HistoryDetailsController < ApplicationController
        @vd = VendorDetail.where(baseurl: domain)
        unless @vd.empty?            
         vendor = Item.find(@vd[0].item_id)
+        vendor_id = vendor.id
        end
        @impression_id = "123"
-       Click.save_click_data(url,req_url,Time.now,@article_details.id,current_user,request.remote_ip,@impression_id,publisher)
+       Click.save_click_data(url,req_url,Time.now,@article_details.id,current_user,request.remote_ip,@impression_id,publisher,vendor_id)
      else
 
       type = params[:type].present? ? params[:type] : ""
@@ -33,7 +34,7 @@ class HistoryDetailsController < ApplicationController
       find_item_detail(params[:detail_id], "")
       url = "#{@item_detail.url}"
       vendor = Item.find(@item_detail.site)
-      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher)
+      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher,vendor.id)
     end
 
     

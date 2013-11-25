@@ -339,12 +339,13 @@ class ProductsController < ApplicationController
     @item = Item.find(item_ids[0])
     root_id = Item.get_root_level_id(@item.itemtype.itemtype)
     temp_item_ids = item_ids << root_id
-    @best_deals = ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '', Date.today.strftime('%Y-%m-%d')).order("id desc")
+    @best_deals = ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '', Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
       url_params = "items:" + params[:item_ids]
       @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
       @best_deals.select{|a| a}
+      @vendors =  VendorDetail.all
     else
       @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(url, "OffersDeals")
       if @impression.new_record?

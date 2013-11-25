@@ -126,9 +126,10 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
             element_id.html(data.html);            
             jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
             jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).addClass("selected");
+            debugger;
             jQuery(".navigate_offer").live("click", function(e){
-              show = jQuery(this).attr("href");
-              jQuery(this).closest("tr").hide();
+              show = jQuery(this).attr("href");              
+              jQuery(this).closest("tr").parent().parent().parent().parent().hide();
               jQuery("#"+show).show();
               e.preventDefault()
             })
