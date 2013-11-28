@@ -101,7 +101,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var item_id =  PlannTo.jQuery(obj).val();
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
-        parentDiv = element_id.parent().parent().parent().parent().parent().parent().attr('id');
+        parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent().attr('id');
         planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname");
         event.preventDefault();
     
@@ -111,7 +111,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
   {
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
-        parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().attr('id');
+        parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
         planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"");
         event.preventDefault();
     
@@ -147,9 +147,9 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
 
             jQuery.getJSON(url, function (data) {
                 element_id.html(data.html);                
-                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children()[1]).removeClass();
-                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children()[0]).addClass("selected");
-                if(show_details == "true" && jQuery("#"+ parentdivid).width() < 300)
+                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).removeClass();
+                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
+                if(show_details.toString() == "true" && jQuery("#"+ parentdivid).width() < 300)
                     {
                       jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
                       jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
