@@ -256,6 +256,16 @@ class Item < ActiveRecord::Base
       end
    end
   end
+  def base_item_image_url(imagetype = :medium)
+        
+      if(imagetype == :medium)
+        configatron.root_image_url + self.type.downcase + '/medium/default_' + self.type.downcase + ".jpeg"
+      elsif (imagetype == :org)
+        configatron.root_image_url + self.type.downcase + '/org/default_' + self.type.downcase + ".jpeg"
+      else   
+         configatron.root_image_url + self.type.downcase + '/small/default_' + self.type.downcase + ".jpeg"
+      end
+  end
 
   def self.get_related_items(item, limit, includ=false)
     #unless includ
@@ -271,7 +281,7 @@ class Item < ActiveRecord::Base
       end
       items = Item.where(:id => items[0..4].collect(&:id)).includes(:item_rating,:attribute_values)
     else
-      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values,:cargroup).order("id desc").limit(limit+2)
+      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).order("id desc").limit(limit+2)
       unless(item.group_id.nil?)
         items = items.select{|a| (a.group_id.nil? or a.group_id != item.group_id) }
       end

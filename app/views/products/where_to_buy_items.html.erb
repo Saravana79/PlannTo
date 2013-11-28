@@ -42,10 +42,7 @@
          #plannto_inheadercol2{font-weight:bold;font-size:12px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
          #prodname{font-family: 'Roboto Slab',sans-serif;font-size: 14px;font-weight:normal;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;;}
-
-         
-
-
+       /* #plannto_insidediv{padding:2px 0px 2px 0px;background: #EEE;}*/
          <% end %>
          </style>
         <table width="100%"  id="plannto_table" >
@@ -58,7 +55,7 @@
              
                 <a href="#" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
                   </li>
-                <%if (!@publisher.nil? && @publisher.id == 8) && @moredetails == "true" %>
+                <%if  @moredetails == "true" && (@publisher.nil? or @publisher.id != 5) %>
                <li >
 
                    <a href="#" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a> 
@@ -86,6 +83,7 @@
               <td style="padding:0;margin:0;" id="tabreplacement">
                 <!-- main where to buy check ends here. -->                
     <%end%>
+    
     <%if @path !="onchange"%>
                       <div id="plannto_insidediv">
                           <table id="plannto_intable" width="100%">   
@@ -93,9 +91,16 @@
                               <tr id="plannto_intr">
                                 <td colspan="5" id="plannto_intd" >
                                  <%if @items.size == 1 %>
-                                 <span style="padding-left:20px;" id="prodname">
-                                  <%=@item.get_name%>
+                                 <div>
+                                 <span style="float:left;padding-left: 10px;">
+                                 
+                                 <img  src="<%=@item.image_url(:small)%>" alt="<%=@item.name%>"  onerror="this.error=null;this.src='<%=@item.base_item_image_url(:small)%>';"/>
+                               
                                 </span>
+                                 <span style="padding-left:5px;padding-top:7px;float:left;" id="prodname">
+                                   <%=@item.get_name%>
+                                </span>
+                                </div>
                                 <%else%>
                                 <%=select_tag "w_t_b_items",
                                 options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
@@ -121,6 +126,12 @@
                             </tr>
                             <%end%>
                             <%count = 0%>    
+                            <% if (!@publisher.nil? && @publisher.id == 5) %>
+                                     <% @gotext = "See It" %>
+                             <%else%>
+                                      <% @gotext = "Go" %>
+                             <% end %>
+
                             <% @where_to_buy_items.group_by(&:site).each do |site, items| %> 
                                 <% count = count + 1%>
                                 <% unless count > @displaycount %>
@@ -131,7 +142,7 @@
                                           <%if index == 0%>
                                             <td id="plannto_incol1" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
                                             <td id="plannto_incol2"  width="35%"> <%=display_price_detail(item)%> </td>
-                                            <td width="30%" id="plannto_incol3" ><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
+                                            <td width="30%" id="plannto_incol3" ><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
                                           <%end%>
                                         <%end%>
                                       <%end%>
@@ -145,7 +156,7 @@
                                               <td id="plannto_incol2" width="20%"> <%=display_price_detail(item)%> </td>
                                               <td id="plannto_incol2" width="20%"><%=display_availability_detail(item)%></td>
                                               <td id="plannto_incol2" width="25%"><%=display_shipping_detail(item)%></td>
-                                              <td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> </td>
+                                              <td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
                                             <%end%>
                                           <%end%>
                                         <%end%> 
@@ -168,7 +179,7 @@
                                   </td>
                                   <td id="plannto_incol3" width="15%">
                                     <span >
-                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank">Go</a> 
+                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> 
                                     </span>
                                   </td>
                                 </tr>
