@@ -201,7 +201,7 @@ class ProductsController < ApplicationController
   
   def where_to_buy_items
 
-    cookies[:plan_to_temp_user_id] = SecureRandom.hex(20) if cookies[:plan_to_temp_user_id].blank?
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
     
     # 
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
@@ -338,7 +338,7 @@ class ProductsController < ApplicationController
   end
 
   def product_offers
-    cookies[:plan_to_temp_user_id] = SecureRandom.hex(20) unless cookies[:plan_to_temp_user_id].blank?
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
 
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     url = request.referer
