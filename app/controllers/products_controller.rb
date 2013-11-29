@@ -1,3 +1,5 @@
+require "securerandom"
+
 class ProductsController < ApplicationController
   caches_action :show,  :cache_path => Proc.new { |c| 
     if(current_user)
@@ -198,6 +200,8 @@ class ProductsController < ApplicationController
   end
   
   def where_to_buy_items
+
+    cookies[:plan_to_temp_user_id] = SecureRandom.hex(20) if cookies[:plan_to_temp_user_id].blank?
     
     # 
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
@@ -295,7 +299,7 @@ class ProductsController < ApplicationController
         itemsaccess = "emptyitems"
       end
 
-      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
+      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     
@@ -334,6 +338,8 @@ class ProductsController < ApplicationController
   end
 
   def product_offers
+    cookies[:plan_to_temp_user_id] = SecureRandom.hex(20) unless cookies[:plan_to_temp_user_id].blank?
+
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     url = request.referer
     @item = Item.find(item_ids[0])
@@ -343,7 +349,7 @@ class ProductsController < ApplicationController
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
       url_params = "items:" + params[:item_ids]
-      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
+      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
       @best_deals.select{|a| a}
       @vendors =  VendorDetail.all
     else
