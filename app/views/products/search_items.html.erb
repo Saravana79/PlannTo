@@ -22,6 +22,7 @@
         </h2>
         <div class="feed_item_question_info">
           Type: <%=item.type%>
+          <%= link_to "Get Price", "#", :class => "where_to_buy_searched", id: item.id %>
         </div>
         <%else%>
            <h2>
@@ -31,6 +32,7 @@
         <div class="feed_item_question_info">
           Type: <%=item.sub_type%>
         </div>
+
           <%end%>
       </div>
     </div>

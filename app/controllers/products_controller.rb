@@ -374,7 +374,7 @@ class ProductsController < ApplicationController
      html = html = render_to_string(:layout => false)
      json = {"html" => html}.to_json
      callback = params[:callback]     
-     jsonp = callback + "(" + json + ")"
+     jsonp = calpublic/javascripts/search_planto.widget.jslback + "(" + json + ")"
      render :text => jsonp,  :content_type => "text/javascript"  
   end 
   

@@ -94,6 +94,18 @@ var count = 0;
   }
 return null;
 }
+function where_to_buy(item_ids,show_details,path, element_id, parentdivid,pathname)
+    {
+            var doc_title =  PlannTo.jQuery(document).title;
+           
+          url = "http://"+domain + "/where_to_buy_items.js?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+
+            jQuery.getJSON(url, function (data) {
+              console.log(data)
+                jQuery("#display_search_item").html(data.html);               
+              
+            });
+    }
 
 
     function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname)
@@ -106,6 +118,9 @@ return null;
               
 
                 jQuery("#display_search_item").html(data.html);
+                jQuery(".where_to_buy_searched").live("click", function(){
+                  where_to_buy(jQuery(this).attr("id"),show_details,path, element_id, parentdivid,pathname)
+                })
                 
             });
     }
