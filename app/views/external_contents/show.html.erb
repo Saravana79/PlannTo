@@ -132,6 +132,7 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>    
  <script type="text/javascript">
  $(document).ready(function(){
+   if($(".current_user_like_unlike").length > 0){
    $.ajax({
             type: "get",
             dataType: "json",
@@ -151,6 +152,7 @@
                 });                
             }
         })
+   }
 });
 </script>
  <%= render "shared/google_analytics" if Rails.env.production? %>
