@@ -378,6 +378,40 @@ class ProductsController < ApplicationController
      render :text => jsonp,  :content_type => "text/javascript"  
   end 
   
+    def search_items
+    @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
+      keywords params[:q].gsub("-",""), :fields => :name
+      with :status,[1,2,3]
+      #order_by :class, :desc
+      paginate(:page => params[:page], :per_page => 10)
+      #facet :types
+      order_by :orderbyid , :asc
+      #order_by :status, :asc      
+      order_by :launch_date, :desc
+    end
+    if !params[:page]
+      product_count = 0
+       @items.results.each do |item|
+         if item.is_a? Product
+           product_count = product_count + 1
+         end   
+       end
+      if product_count == 1
+        @items.results.each do |item|
+          if item.is_a? Product
+            redirect_to item.get_url()
+          end
+        end
+      end
+   end     
+    html = html = render_to_string(:layout => false)
+     json = {"html" => html}.to_json
+     callback = params[:callback]     
+     jsonp = callback + "(" + json + ")"
+     render :text => jsonp,  :content_type => "text/javascript"   
+   end
+  
+
   private
 
   def get_item_object

@@ -43,6 +43,8 @@ namespace :admin do
   match "/about_us",:to => "home#about_us"
   match "/current_user_info",:to => "home#current_user_info"
   match "/external_page",:to => "products#external_page"
+  match "/search_planto",:to => "products#search_items"
+  
   match "/get_class_names",:to => "contents#get_class_names"
   match "/external_page",:to => "products#external_page"
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
