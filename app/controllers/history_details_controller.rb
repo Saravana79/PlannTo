@@ -20,6 +20,7 @@ class HistoryDetailsController < ApplicationController
        url = "#{@article_details.url}"
        host = URI.parse(url).host.downcase rescue ""
        domain = host.start_with?('www.') ? host[4..-1] : host      
+       domain = host.start_with?('offers.') ? domain[7..-1] : domain      
        @vd = VendorDetail.where(baseurl: domain)
        unless @vd.empty?            
         vendor = Item.find(@vd[0].item_id)

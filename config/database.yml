@@ -1,19 +1,28 @@
-# MySQL. Versions 4.1 and 5.0 are recommended.
+# MySQL.  Versions 4.1 and 5.0 are recommended.
 #
 # Install the MYSQL driver
-# gem install mysql2
+#   gem install mysql2
 #
 # Ensure the MySQL gem is defined in your Gemfile
-# gem 'mysql2'
+#   gem 'mysql2'
 #
 # And be sure to use new-style password hashing:
-# http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+# development:
+#   adapter: mysql2
+#   encoding: utf8
+#   database: planntouser
+#   username: root
+#   password: 
+
 development:
   adapter: mysql2
   encoding: utf8
-  database: plannto_development
-  username: root
-  password: root
+  host: plannto.cmsyjd0smtse.us-east-1.rds.amazonaws.com
+  database: planntouser
+  username: planntomain
+  password: Ayappa2524
+
   #socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -22,23 +31,14 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
-  database: plannto_development
-  username: root
-  password: root
+  database: test_planntouser
+  username: rootcompa
+  password: isiri
 
 production:
   adapter: mysql2
   encoding: utf8
-  database: plannto_development
+  database: production_planntouser
   username: root
-  password: root
-
-
-#production:
- # adapter: mysql
- # encoding: utf8
- # host: plannto.cmsyjd0smtse.us-east-1.rds.amazonaws.com
- # database: planntouser
- # username: planntomain
- # password: Ayappa2524
+  password: isiri
 
