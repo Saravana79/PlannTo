@@ -4,7 +4,7 @@ class HistoryDetailsController < ApplicationController
 
   def index
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
-
+    temp_user_id = cookies[:plan_to_temp_user_id];
     url = ""
 
       req_url = request.referer
@@ -31,7 +31,7 @@ class HistoryDetailsController < ApplicationController
         vendor_id = vendor.id
        end
        @impression_id = "123"
-       Click.save_click_data(url,req_url,Time.now,@article_details.id,current_user,request.remote_ip,@impression_id,publisher,vendor_id,"Offer")
+       Click.save_click_data(url,req_url,Time.now,@article_details.id,current_user,request.remote_ip,@impression_id,publisher,vendor_id,"Offer",temp_user_id)
      else
 
       type = params[:type].present? ? params[:type] : ""
@@ -39,7 +39,7 @@ class HistoryDetailsController < ApplicationController
       find_item_detail(params[:detail_id], "")
       url = "#{@item_detail.url}"
       vendor = Item.find(@item_detail.site)
-      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher,vendor.id,"PC")
+      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher,vendor.id,"PC",temp_user_id)
     end
 
     
