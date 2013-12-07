@@ -359,7 +359,7 @@ class ProductsController < ApplicationController
     url = request.referer
     @item = Item.find(item_ids[0])
     root_id = Item.get_root_level_id(@item.itemtype.itemtype)
-    temp_item_ids = item_ids << root_id
+    temp_item_ids = item_ids + root_id.split(",")
     @best_deals = ArticleContent.select("distinct view_article_contents.*").joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '', Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
