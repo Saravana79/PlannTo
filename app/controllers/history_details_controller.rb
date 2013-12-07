@@ -1,6 +1,10 @@
+require "securerandom"
+
 class HistoryDetailsController < ApplicationController
 
   def index
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
+
     url = ""
 
       req_url = request.referer

@@ -1,3 +1,5 @@
+require "securerandom"
+
 class ProductsController < ApplicationController
   caches_action :show,  :cache_path => Proc.new { |c| 
     if(current_user)
@@ -198,6 +200,8 @@ class ProductsController < ApplicationController
   end
   
   def where_to_buy_items
+
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
     
     # 
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
@@ -310,7 +314,7 @@ class ProductsController < ApplicationController
       end
       
 
-      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
+      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     
@@ -349,6 +353,8 @@ class ProductsController < ApplicationController
   end
 
   def product_offers
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
+
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     url = request.referer
     @item = Item.find(item_ids[0])
@@ -358,7 +364,7 @@ class ProductsController < ApplicationController
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
       url_params = "items:" + params[:item_ids]
-      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params)
+      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
       @best_deals.select{|a| a}
       @vendors =  VendorDetail.all
     else
@@ -383,10 +389,44 @@ class ProductsController < ApplicationController
      html = html = render_to_string(:layout => false)
      json = {"html" => html}.to_json
      callback = params[:callback]     
-     jsonp = callback + "(" + json + ")"
+     jsonp = calpublic/javascripts/search_planto.widget.jslback + "(" + json + ")"
      render :text => jsonp,  :content_type => "text/javascript"  
   end 
   
+    def search_items
+    @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
+      keywords params[:q].gsub("-",""), :fields => :name
+      with :status,[1,2,3]
+      #order_by :class, :desc
+      paginate(:page => params[:page], :per_page => 10)
+      #facet :types
+      order_by :orderbyid , :asc
+      #order_by :status, :asc      
+      order_by :launch_date, :desc
+    end
+    if !params[:page]
+      product_count = 0
+       @items.results.each do |item|
+         if item.is_a? Product
+           product_count = product_count + 1
+         end   
+       end
+      if product_count == 1
+        @items.results.each do |item|
+          if item.is_a? Product
+            redirect_to item.get_url()
+          end
+        end
+      end
+   end     
+    html = html = render_to_string(:layout => false)
+     json = {"html" => html}.to_json
+     callback = params[:callback]     
+     jsonp = callback + "(" + json + ")"
+     render :text => jsonp,  :content_type => "text/javascript"   
+   end
+  
+
   private
 
   def get_item_object
