@@ -6,6 +6,5 @@ class Avatar < ActiveRecord::Base
   :bucket => ENV['planntonew'],
   :s3_credentials => "config/s3.yml",
   :path => "images/users/:id/:style/:filename",
-  :url  => ":s3_sg_url",
-  :s3_host_alias => "http://d1yhmol44kh9to.cloudfront.net"
+  :url  => ":s3_sg_url"
 end

@@ -8,21 +8,12 @@
 #
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
-# development:
-#   adapter: mysql2
-#   encoding: utf8
-#   database: planntouser
-#   username: root
-#   password: 
-
 development:
   adapter: mysql2
   encoding: utf8
-  host: plannto.cmsyjd0smtse.us-east-1.rds.amazonaws.com
-  database: planntouser
-  username: planntomain
-  password: Ayappa2524
-
+  database: plannto_development
+  username: root
+  password: root
   #socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -31,14 +22,22 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
-  database: test_planntouser
-  username: rootcompa
-  password: isiri
+  database: plannto_development
+  username: root
+  password: root
 
 production:
   adapter: mysql2
   encoding: utf8
-  database: production_planntouser
+  database: plannto_development
   username: root
-  password: isiri
+  password: root
 
+
+#production:
+ # adapter: mysql
+ # encoding: utf8
+ # host: plannto.cmsyjd0smtse.us-east-1.rds.amazonaws.com
+ # database: planntouser
+ # username: planntomain
+ # password: Ayappa2524
