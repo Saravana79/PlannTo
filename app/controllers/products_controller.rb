@@ -157,6 +157,7 @@ class ProductsController < ApplicationController
   
   
   def external_page
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
     @item = Item.find(params[:item_id])
     @showspec = params[:show_spec].blank? ? 0 : params[:show_spec] 
     @showcompare = params[:show_compare].blank? ? 1 : params[:show_compare]
@@ -165,7 +166,7 @@ class ProductsController < ApplicationController
     @impression_id = params[:iid]
     @req = request.referer  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
+    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id])
 
     if @showspec == 1
       @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
@@ -359,7 +360,7 @@ class ProductsController < ApplicationController
     url = request.referer
     @item = Item.find(item_ids[0])
     root_id = Item.get_root_level_id(@item.itemtype.itemtype)
-    temp_item_ids = item_ids + root_id.split(",")
+    temp_item_ids = item_ids + root_id.to_s.split(",")
     @best_deals = ArticleContent.select("distinct view_article_contents.*").joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '', Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
