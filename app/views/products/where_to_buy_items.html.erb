@@ -1,4 +1,4 @@
- <% if (!@where_to_buy_items.empty?) %> 
+ <% if (!@where_to_buy_items.empty?) or (!@best_deals.nil?) %> 
  
     <%if @path =="wheretobuymain" %>
  
@@ -51,11 +51,13 @@
               <td id="plannto_headertd">
                 
                 <ul class="shadetabs">
+                <% unless @show_price == "false" %>
                   <li class="selected">
              
                 <a href="#" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
                   </li>
-                <%if  @moredetails == "true" && (@publisher.nil? or @publisher.id != 5) %>
+                <%end%>
+                <%if @show_offer != "false" %>
                <li >
 
                    <a href="#" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a> 
@@ -84,7 +86,10 @@
                 <!-- main where to buy check ends here. -->                
     <%end%>
     
-    <%if @path !="onchange"%>
+   
+    <%if @show_price != "false" %>
+         <%if @path !="onchange"%>
+
                       <div id="plannto_insidediv">
                           <table id="plannto_intable" width="100%">   
                             <thead style="border:0px;">
@@ -109,7 +114,7 @@
                             </tr>
                           </thead>
                           <tbody style="border:0px;" id="where_to_buy_items_onchange">
-      <%end%>
+          <%end%>
                             <%unless @moredetails == "true"  %>
                             <tr id="plannto_inheadertr">
                               <td id="plannto_inheadercol1" width="35%">Seller</td>
@@ -187,7 +192,13 @@
                       <%if @path!="onchange"%>
                                         </tbody>
                                       </table>
+                                    <div>
                       <%end%>
+
+                    <%else%>
+                    <!-- else for only showing offers -->
+                      <%= render "products/product_offers_details" %>
+                    <%end%>
                       <%if @path=="wheretobuymain"%>
              
                                     </td>
