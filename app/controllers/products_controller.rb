@@ -204,7 +204,8 @@ class ProductsController < ApplicationController
 
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
     
-    # 
+    @show_price = params[:show_price]
+    @show_offer = params[:show_offer]
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
     @path = params[:path]
     unless (item_ids.blank?)
@@ -266,7 +267,7 @@ class ProductsController < ApplicationController
        url_params += ";more_details->" + params[:price_full_details]
     end  
   
-
+    # include pre order status if we show more details.
     unless @items.nil? || @items.empty?
       @moredetails = params[:price_full_details]
       @displaycount = 4
@@ -282,6 +283,7 @@ class ProductsController < ApplicationController
       @publisher = Publisher.getpublisherfromdomain(url)
       address = Geocoder.search(request.ip)
       
+      # get the country code for checing whether is use is from india.
       unless address.nil? || address.empty?
         country = address[0].data["country_name"]  rescue ""
       else
@@ -294,37 +296,45 @@ class ProductsController < ApplicationController
           @item = @items[0]
           itemsaccess = "othercountry"      
       else
-        @items.each do |item|
-            @item = item
-            unless @publisher.nil?
-                unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
-                    vendor_ids = @publisher.vendor_ids.split(",")    
-                    where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-                    where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}
-                    where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
-                else
-                    where_to_buy_items1 = []  
-                    where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-                end
-            else
-                    where_to_buy_items1 = []            
-                    where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-                    
-            end
-            @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
-            if(@where_to_buy_items.empty?)    
-              @tempitems << @item
-            else                        
-              break
-            end
-        end
-        @items = @items - @tempitems
+            if @show_price != "false"
+                @items.each do |item|
+                  @item = item
+                  unless @publisher.nil?
+                      unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
+                          vendor_ids = @publisher.vendor_ids.split(",")    
+                          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                          where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}
+                          where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
+                      else
+                          where_to_buy_items1 = []  
+                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                      end
+                  else
+                          where_to_buy_items1 = []            
+                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                          
+                  end
+                  @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
+                  if(@where_to_buy_items.empty?)    
+                    @tempitems << @item
+                  else                        
+                    break
+                  end
+              end
+               @items = @items - @tempitems
 
-        if(@where_to_buy_items.empty?)
-          itemsaccess = "emptyitems"
-        end
-      end
+              if(@where_to_buy_items.empty?)
+                itemsaccess = "emptyitems"
+              end
+           else
+              @where_to_buy_items = []
+              get_offers(@items.map(&:id).join(",").split(","))
+          end
       
+      end        
+
+      
+     
 
       @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
       responses = []
@@ -336,7 +346,7 @@ class ProductsController < ApplicationController
             end
           end
         end
-      address = Geocoder.search(request.ip)
+      
       defatetime = Time.now.to_i
       html = html = render_to_string(:layout => false)
       json = {"html" => html}.to_json
@@ -366,8 +376,17 @@ class ProductsController < ApplicationController
 
   def product_offers
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
-
+    @moredetails = params[:price_full_details]
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
+    get_offers(item_ids)
+    html = html = render_to_string(:layout => false)
+    json = {"html" => html}.to_json
+    callback = params[:callback]     
+    jsonp = callback + "(" + json + ")"
+    render :text => jsonp,  :content_type => "text/javascript" 
+  end
+
+  def get_offers(item_ids)
     url = request.referer
     @item = Item.find(item_ids[0])
     root_id = Item.get_root_level_id(@item.itemtype.itemtype)
@@ -387,13 +406,8 @@ class ProductsController < ApplicationController
         @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
       end
     end
-    html = html = render_to_string(:layout => false)
-    json = {"html" => html}.to_json
-    callback = params[:callback]     
-    jsonp = callback + "(" + json + ")"
-    render :text => jsonp,  :content_type => "text/javascript" 
-  end
-  
+
+  end  
   def advertisement
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
     content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id

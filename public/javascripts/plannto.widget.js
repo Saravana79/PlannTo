@@ -48,6 +48,7 @@ function scriptLoadHandler() {
     // new jQuery in our local jQuery variable
     jQuery = window.jQuery.noConflict(true);
     PlannTo.jQuery = jQuery;    
+  
     // Call our main function
 
     main(); 
@@ -102,7 +103,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
         parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname");
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","");
         event.preventDefault();
     
   }  
@@ -112,7 +113,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"");
+        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"","","");
         event.preventDefault();
     
   } 
@@ -139,11 +140,11 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
     event.preventDefault();    
   } 
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer)
     {
             var doc_title =  PlannTo.jQuery(document).title;
            
-          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
 
             jQuery.getJSON(url, function (data) {
                 element_id.html(data.html);                
@@ -160,6 +161,15 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
                       }
                       //tr.children()[0].children().innerText = "View more";
                     }
+                if(show_price.toString() == "false")
+                {
+                    jQuery(".navigate_offer").live("click", function(e){
+                    show = jQuery(this).attr("href");              
+                    jQuery(this).closest("tr").parent().parent().parent().parent().hide();
+                    jQuery("#"+show).show();
+                    event.preventDefault()
+                  })
+                }
             });
     }
 
@@ -172,6 +182,9 @@ function main() {
         var pathname = getParam(url,"ref_url");        
         var item_id = getParam(url,"item_id");
         var show_details = getParam(url,"show_details");
+        var show_offer = getParam(url,"show_offer");
+        
+        var show_price = getParam(url,"show_price");
         var ads = getParam(url,"advertisement");
         var element_id = getParam(url,"element_id");
         if (ads == "")
@@ -181,7 +194,7 @@ function main() {
             element_id = "where_to_buy_items";
           }
           element = jQuery("#"+element_id)
-         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname)
+         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer)
 
        }
        else
