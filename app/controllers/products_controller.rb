@@ -235,6 +235,17 @@ class ProductsController < ApplicationController
              tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip 
           end          
           @articles = ArticleContent.where(url: tempurl)
+
+          if @articles.empty? || @article.nil?
+              #for pagination in publisher website. removing /2/
+            tempstr = tempurl.split(//).last(3).join
+            matchobj = tempstr.match(/^\/\d{1}\/$/)
+            unless matchobj.nil?
+              tempurlpage = tempurl[0..(tempurl.length-3)]
+              @articles = ArticleContent.where(url: tempurlpage)
+            end
+          end
+
           unless @articles.empty?            
             @items = @articles[0].allitems.select{|a| a.is_a? Product};  
             @items = @items[0..15].reverse    
