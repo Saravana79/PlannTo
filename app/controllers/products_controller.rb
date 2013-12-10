@@ -236,7 +236,7 @@ class ProductsController < ApplicationController
           end          
           @articles = ArticleContent.where(url: tempurl)
 
-          if @articles.empty? || @article.nil?
+          if @articles.empty? || @articles.nil?
               #for pagination in publisher website. removing /2/
             tempstr = tempurl.split(//).last(3).join
             matchobj = tempstr.match(/^\/\d{1}\/$/)
