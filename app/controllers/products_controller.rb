@@ -326,9 +326,11 @@ class ProductsController < ApplicationController
               if(@where_to_buy_items.empty?)
                 itemsaccess = "emptyitems"
               end
+            @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
            else
               @where_to_buy_items = []
               get_offers(@items.map(&:id).join(",").split(","))
+              itemsaccess = "offers"
           end
       
       end        
@@ -336,7 +338,7 @@ class ProductsController < ApplicationController
       
      
 
-      @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
+      
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     
