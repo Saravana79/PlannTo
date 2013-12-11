@@ -25,15 +25,40 @@
       <div class="float_lft"> <%= f.text_field :name, :style=> "margin-left:5px;width:400px" %> </div>
     </div>
     <br />
-   
-   <div style="padding:15px 5px 0px 0px; width:550px;">
-      <div class="title_header float_lft">Advertisement Size:</div>
-     <%= f.select :ad_size,["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "" %>
+    <div class="files-div">
+      <% @advertisements && @advertisements.each do |a| %>
+        <% @advertisement = a %>
+        <div class="file-div">
+          <div style="padding:15px 5px 0px 0px; width:550px;">
+            <div class="title_header float_lft">Advertisement Size:</div>
+            <%= select_tag 'advertisement[ad_size][]', options_for_select([["250*250","250*250"],["300*300","300*300"],["1000*600","1000*600"]]),:style => "margin-left:5px;width:400px;",:placeholder => "" %>
+              <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+            </div>
+          <div style="padding:15px 500px 0px 5px;">
+            <div class="title_header float_lft">Image</div>
+            <div style="margin-left:80px;">
+              <%= f.file_field :upload_image, name: "advertisement[upload_image][]" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
-    <div style="padding:15px 500px 0px 5px;">
-    <div class="title_header float_lft">Image</div>
-  <div style="margin-left:80px;">
-    <%= f.file_field :upload_image %></div></div>
+    <%= link_to "Add One more file", "#", :id => "add_another_file" %>
+    <script type="text/javascript">
+      $("#add_another_file").live("click", function(){
+        a = $( ".file-div" ).clone();
+        remove_link = $("<a class='remove-file'>Remove<a>");
+        remove_link.bind("click", function(){
+          $(this).parent().remove();
+        })
+        a.removeClass("file-div")
+        a.children().find('input,select').each(function(){
+          $(this).val('');
+        });
+        remove_link.appendTo(a);
+        a.appendTo( ".files-div" );
+      })
+    </script>
       <div style="padding:15px 500px 0px 5px;">
     <div class="title_header float_lft">Click Url</div>
   <div style="margin-left:80px;">
