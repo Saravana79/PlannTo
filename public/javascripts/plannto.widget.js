@@ -129,6 +129,8 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
           jQuery.getJSON(url, function (data) {            
             element_id.html(data.html);            
             jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).addClass("unselected");
+            jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).removeClass();
             jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[1]).addClass("selected");
             jQuery(".navigate_offer").live("click", function(e){
               show = jQuery(this).attr("href");              
@@ -149,6 +151,8 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
             jQuery.getJSON(url, function (data) {
                 element_id.html(data.html);                
                  jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).removeClass();
+                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).addClass("unselected");
+                 jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).removeClass();
                  jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
                 if(show_details.toString() == "true" && jQuery("#"+ parentdivid).width() < 300)
                     {
