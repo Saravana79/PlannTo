@@ -12,7 +12,7 @@
 							<% @deal  = @best_deals[((i)*2)]%>
 							<%unless @deal.nil?%>
 							<table style="width:100%;">
-							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;">
+							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;background:white;">
 							<td style="vertical-align:top;width:100%;">
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
@@ -42,7 +42,7 @@
 				  			<% @deal  = @best_deals[((i)*2 + 1)]%>
 				  			<%unless @deal.nil?%>
 					  			
-							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;">
+							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;background:white;">
 							<td style="vertical-align:top;">
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
@@ -68,7 +68,7 @@
 					  		</td>
 					  		</tr>
 					  		<%end%>
-					  		<tr  style="height:35px;padding: 5px;">
+					  		<tr  style="height:35px;padding: 5px;background:white;">
 					  		<td colspan="2">
 							<% if i>0 %>
 								<span style="float:left;margin: 5px 10px;"><a href="offer<%= i - 1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
@@ -96,7 +96,7 @@
 							<% @deal  = @best_deals[i]%>
 							<%unless @deal.nil?%>
 							<table style="width:100%;">
-							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;">
+							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;background:white;">
 							<td style="vertical-align:top;width:100%;">
 								<div style="width:100%;padding-top:5px;vertical-align:middle;text-align:center;">
 									<div style="display: inline-block;">
@@ -127,7 +127,7 @@
 					  		</td>
 					  		<%end%>
 					  	    </tr>
-					  		<tr  style="height:35px;padding: 5px;">
+					  		<tr  style="height:35px;padding: 5px;background:white;">
 					  		<td>
 							<% if i>0 %>
 								<span style="float:left;margin: 5px 10px;"><a href="offer<%= i - 1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
