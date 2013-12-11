@@ -11,9 +11,9 @@
 						<td >				
 							<% @deal  = @best_deals[((i)*2)]%>
 							<%unless @deal.nil?%>
-							<table width="100%">
+							<table style="width:100%;">
 							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;">
-							<td style="vertical-align:top;">
+							<td style="vertical-align:top;width:100%;">
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
 					  				<% @vendor = @vendors.select{|a| a.baseurl == domain}%>
@@ -95,9 +95,9 @@
 						<td >				
 							<% @deal  = @best_deals[i]%>
 							<%unless @deal.nil?%>
-							<table>
+							<table style="width:100%;">
 							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;">
-							<td style="vertical-align:top;">
+							<td style="vertical-align:top;width:100%;">
 								<div style="width:100%;padding-top:5px;vertical-align:middle;text-align:center;">
 									<div style="display: inline-block;">
 										<%domain = VendorDetail.getdomain(@deal.url)%>
