@@ -424,9 +424,9 @@ class ProductsController < ApplicationController
   end 
   
     def search_items
-      if params[:q]
+      if params[:term]
         @items = Sunspot.search(Product.search_type(params[:search_type])) do
-          keywords params[:q].gsub("-",""), :fields => :name
+          keywords params[:term].gsub("-",""), :fields => :name
           with :status,[1,2,3]
       #order_by :class, :desc
           paginate(:page => params[:page], :per_page => 10)
@@ -476,7 +476,7 @@ class ProductsController < ApplicationController
    def product_autocomplete
      search_type = Product.search_type(params[:search_type]) 
     @items = Sunspot.search(search_type) do
-      keywords params[:q].gsub("-",""), :fields => :name
+      keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
@@ -485,7 +485,6 @@ class ProductsController < ApplicationController
     end
 
    
-
     results = @items.results.collect{|item|
     # if item.type == "CarGroup"
      #   type = "Car"
@@ -518,13 +517,14 @@ class ProductsController < ApplicationController
       {:content_id => item.id, :value => Content.title_display(item.title)  , :imgsrc =>image_url, :type => type, :url => url } 
        end
     }
-  if params[:content] == "true"
-    results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
-  end   
+    
   # html = html = render_to_string(:layout => false)
         json = results
+
         callback = params[:callback]     
         jsonp = callback + "(" + json.to_json + ")"
+    logger.info "===============================#{jsonp}"
+
         render :json => jsonp
   end
 

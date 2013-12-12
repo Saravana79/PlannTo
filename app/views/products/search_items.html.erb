@@ -1,7 +1,16 @@
-<input id="planto_search_widget_auto_item""/><a href="#" id="search_from_widget">Search</a>
+<div class="inner-top-search">
+                
+                    <input class="search-input-text" id="planto_search_widget_auto_item"/>
+                    <a href="#" id="search_from_widget">Search</a>
+                
+              </div>              
+
+
+
 <div id="display_search_item">
-<%@items.results.each do |item|%>
-<div class="col w4_5 feed_item p1">
+
+    <%@items.results.each do |item|%>
+    <div class="col w4_5 feed_item p1">
       <div class="col w0_5">
        <%if item.is_a?(Item) %>
          <% image_url = item.image_url(:small) rescue "" %>
@@ -24,7 +33,6 @@
         </h2>
         <div class="feed_item_question_info">
           Type: <%=item.type%>
-          <%= link_to "Get Price", "#", :class => "where_to_buy_searched", id: item.id %>
         </div>
         <%else%>
            <h2>
@@ -34,9 +42,79 @@
         <div class="feed_item_question_info">
           Type: <%=item.sub_type%>
         </div>
-
           <%end%>
+    <%= link_to "Get Price", "#", :class => "where_to_buy_searched", id: item.id %>
+
       </div>
     </div>
-<% end %>
-<div>
+  <%end%>
+ 
+
+</ui.item.urldiv>
+
+<style type="text/css">
+  .w4_5 {
+    width: 600px;
+  }
+
+  h1.heading {
+    border-bottom: 1px solid #B0B0B0;
+    margin-bottom: 1px;
+    padding-bottom: 0.4em;
+  }
+
+  .w0_5 {
+    width: 50px;
+  }
+  .col, .e_col {
+    float: left;
+    margin: 0 10px 0 0;
+  }
+  .feed_item {
+    border-bottom: 1px solid #E0E0E0;
+    float: left;
+    position: relative;
+  }
+  .p1 {
+    padding: 10px 0;
+  }
+
+  .ui-menu {
+    display: block;
+    left: 373px;
+    top: 41px;
+    width: 306px;
+    z-index: 1;
+}
+.ui-menu {
+    display: block;
+    float: left;
+    list-style: none outside none;
+    margin: 0;
+    padding: 2px;
+}
+.ui-autocomplete {
+    cursor: default;
+    position: absolute;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 4px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 4px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 4px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 4px;
+}
+.ui-widget-content {
+    background: none repeat scroll 0 0 #F9F9F9;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 9px #3F3F3F;
+    height: auto;
+    margin: auto;
+    width: 200px;
+}
+</style>

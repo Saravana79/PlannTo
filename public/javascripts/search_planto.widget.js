@@ -124,11 +124,11 @@ var PlannTo = (function (window, undefined) {
     function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-        url = "http://" + domain + SubPath + "?q=" + item_ids +"&search_type=mobile&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type=mobile&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
-
+console.log(data)
             jQuery("#planto_search_items").html(data.html);
             jQuery(".where_to_buy_searched").live("click", function () {
                 where_to_buy(jQuery(this).attr("id"), show_details, element_id, parentdivid, pathname)
@@ -155,57 +155,36 @@ var PlannTo = (function (window, undefined) {
         element = jQuery("#display_search_item").val()
 
 
+        jQuery.ui.autocomplete.prototype._renderMenu = function(ul, items) {
+          var self = this;
+          jQuery.each( items, function( index, item ) {
+            self._renderItem( ul, item, index );
+          });
+          item = {value: "Search more items...", id: "0", imgsrc: ""}
+          self._renderItem( ul, item, -1 );
+        };
+
         jQuery("#planto_search_widget_auto_item").autocomplete({
 
-            source: function (request, response) {
-
-                jQuery.ajax({
-                    url: "http://" + domain + "/product_autocomplete",
-                    data: {
-                        q: request.term,
-                        search_type: "mobile"
-                    },
-                    type: "GET",
-                    jsonp: "callback",
-
-                    // tell jQuery we're expecting JSONP
-                    dataType: "jsonp",
-                    success: function (data) {
-                        {
-                            response(jQuery.map(data, function (item) {
-                                return {
-                                    id: item.id,
-                                    value: item.value,
-                                    imgsrc: item.imgsrc,
-                                    type: item.type,
-                                    url: item.url
-                                }
-                            }));
-                        }
-                    }
-
-                });
-            },
-
-
-
-
+            source: "http://" + domain + "/product_autocomplete.jsonp?search_type=mobile&callback=?",
+            focus:function(e,ui) {},
+            format: "js",
             minLength: 2,
             select: function (event, ui) {
-              console.log(ui.item.id)
+              alert("Selected: " + ui.item.value + " aka " + ui.item.label);
               where_to_buy(ui.item.id, show_details, element, element_id, pathname); 
-            },
-            create: function () {
-            jQuery(this).data('ui-autocomplete')._renderItem = function (ul, item) {
-                return jQuery('<li>')
-                    .append('<a>' + item.label + '<br>' + item.value + '</a>')
-                    .appendTo(ul);
-            };
-        }
+            }
 
-        })
+        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+           return jQuery( "<li></li>" )
+            .data( "ui-autocomplete-item", item )
+            .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<div style='float:right;'><span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></div></a>" )
+            // .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></a>" )
+            .appendTo( ul );
+          
+        };
 
-        // $(ul).append("<div class='myFooter'>some footer text</div>");
+        // jQuery(ul).append("<div class='myFooter'>some footer text</div>");
 
         // console.log(jQuery("#planto_search_widget_auto_item"))
 
