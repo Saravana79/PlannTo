@@ -111,7 +111,7 @@ var PlannTo = (function (window, undefined) {
     function where_to_buy(item_id, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id + "&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type=mobile&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
             console.log(data)
@@ -124,7 +124,7 @@ var PlannTo = (function (window, undefined) {
     function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-        url = "http://" + domain + SubPath + "?q=" + item_ids + "&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+        url = "http://" + domain + SubPath + "?q=" + item_ids +"&search_type=mobile&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
@@ -162,7 +162,8 @@ var PlannTo = (function (window, undefined) {
                 jQuery.ajax({
                     url: "http://" + domain + "/product_autocomplete",
                     data: {
-                        q: request.term
+                        q: request.term,
+                        search_type: "mobile"
                     },
                     type: "GET",
                     jsonp: "callback",
@@ -212,7 +213,7 @@ var PlannTo = (function (window, undefined) {
 
     /******** Main function ********/
     function main() {
-
+        // return if jQuery("#planto_search_items").length <= 0
         jQuery(document).ready(function (jQuery) {
             url = getScriptUrl();
             var doc_title = PlannTo.jQuery(document).title;
@@ -226,7 +227,7 @@ var PlannTo = (function (window, undefined) {
             element = jQuery("#display_search_item").val()
 
 
-            url = "http://" + domain + SubPath + "?price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+            url = "http://" + domain + SubPath + "?search_type=mobile&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
