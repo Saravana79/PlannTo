@@ -301,13 +301,15 @@ class ProductsController < ApplicationController
                   @item = item
                   unless @publisher.nil?
                       unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
-                          vendor_ids = @publisher.vendor_ids.split(",")    
-                          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                          vendor_ids = @publisher.vendor_ids ? @publisher.vendor_ids.split(",") : []   
+                          exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""  
+                          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('vendors.id not in(?) && vendors.id in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids, vendor_ids,status,0).all.sort_by{|i| vendor_ids(i.item_detail.vendor_id)}
                           where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}
                           where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
                       else
+                          exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""
                           where_to_buy_items1 = []  
-                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('vendors.id not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
                       end
                   else
                           where_to_buy_items1 = []            
