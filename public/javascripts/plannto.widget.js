@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
 var PlannTo ={};
 var SubPath="/where_to_buy_items.js"
 //for production
-// var domain = "www.plannto.com";
+ var domain = "www.plannto.com";
 //for development
-var domain = "localhost:3000";
+//var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -157,9 +157,9 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
                 if(show_details.toString() == "true" && jQuery("#"+ parentdivid).width() < 300)
                     {
                       jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
-                      jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
+                      /*jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");*/
                       tr = jQuery("#" + parentdivid +" table tr:eq(9)");
-                      if(tr.children()[0].colSpan ==4)
+                      if(tr.children()[0].colSpan ==3)
                       {                
                           tr.children()[0].colSpan =2                
                       }

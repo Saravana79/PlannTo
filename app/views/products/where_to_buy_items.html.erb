@@ -12,7 +12,7 @@
          #plannto_insidediv{padding:7px 10px 10px 10px;background: #EEE;}
          #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
          #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;}
-         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding-left:5px;padding-right:10px;vertical-align:middle;background:white;}
+         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
          #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;}
          #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;}
@@ -31,19 +31,19 @@
         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center; }        
         .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;}
         .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;}        
-
+        #prodname{font-size: 15px;}
 
          /* for igyaan*/
          <% if (!@publisher.nil? && @publisher.id == 5) %>
          #plannto_table{border:0px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
          #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'Oswald', sans-serif;font-weight: 300;}
-         #plannto_incol2{font-weight:normal;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
-         #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:12px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
-         #plannto_inheadercol2{font-weight:bold;font-size:12px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
-         #prodname{font-family: 'Roboto Slab',sans-serif;font-size: 14px;font-weight:normal;}
+         #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+         #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+         #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+         #prodname{font-family: 'Roboto Slab',sans-serif;font-size: 15px;font-weight:bold;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
          .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;font-family: 'Roboto Slab',sans-serif; font-weight: 500;} 
-       /* #plannto_insidediv{padding:2px 0px 2px 0px;background: #EEE;}*/
+          #plannto_insidediv{padding:2px 0px 2px 0px;background: #EEE;}
          <% end %>
          </style>
         <table width="100%"  id="plannto_table" >
@@ -100,10 +100,10 @@
                                  <div>
                                  <span style="float:left;padding-left: 10px;padding-top: 5px;">
                                  
-                                 <img  src="<%=@item.image_url(:small)%>" alt="<%=@item.name%>"  onerror="this.error=null;this.src='<%=@item.base_item_image_url(:small)%>';"/>
+                                 <img  src="<%=@item.image_url(:medium)%>" alt="<%=@item.name%>"  onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" style="width:60px;"/>
                                
                                 </span>
-                                 <span style="padding-left:5px;padding-top:10px;float:left;" id="prodname">
+                                 <span style="padding-left:5px;padding-top:15px;float:left;" id="prodname">
                                    <%=@item.get_name%>
                                 </span>
                                 </div>
@@ -126,14 +126,13 @@
                             <tr id="plannto_inheadertr">
                               <td id="plannto_inheadercol1" width="20%">Seller</td>
                               <td id="plannto_inheadercol2"  width="20%">Price</td>
-                              <td id="plannto_inheadercol2"  width="20%">Status</td>
                               <td id="plannto_inheadercol2"  width="25%">Shipping Time</td>
                               <td width="15%" id="plannto_inheadercol2" >Buy Now</td>
                             </tr>
                             <%end%>
                             <%count = 0%>    
                             <% if (!@publisher.nil? && @publisher.id == 5) %>
-                                     <% @gotext = "See It" %>
+                                     <% @gotext = "Buy Now" %>
                              <%else%>
                                       <% @gotext = "Go" %>
                              <% end %>
@@ -158,10 +157,11 @@
                                        <%items.each_with_index do |item, index|%>      
                                           <%if display_item_details(item)%>
                                             <%if index == 0%>
-                                              <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
+                                              <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:85px;border:0;padding:0;"/> </td>
                                               <td id="plannto_incol2" width="20%"> <%=display_price_detail(item)%> </td>
-                                              <td id="plannto_incol2" width="20%"><%=display_availability_detail(item)%></td>
-                                              <td id="plannto_incol2" width="25%"><%=display_shipping_detail(item)%></td>
+                                              <!--
+                                              <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
+                                              <td id="plannto_incol2" width="25%" style="font-weight:normal;"><%=display_shipping_detail(item)%></td>
                                               <td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
                                             <%end%>
                                           <%end%>
@@ -173,7 +173,7 @@
                             <% if count > @displaycount %>
                                 <tr style="plannto_footertr">
                                   <%if @moredetails == "true" 
-                                    @wrapper="4" 
+                                    @wrapper="3" 
                                   else 
                                     @wrapper="2" 
                                   end
