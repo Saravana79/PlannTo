@@ -331,14 +331,11 @@ class ProductsController < ApplicationController
               @where_to_buy_items = []
               get_offers(@items.map(&:id).join(",").split(","))
               itemsaccess = "offers"
-          end
-      
+           end     
+          
+
       end        
 
-      
-     
-
-      
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  
           items.each_with_index do |item, index|     
@@ -422,37 +419,137 @@ class ProductsController < ApplicationController
   end 
   
     def search_items
-    @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
-      keywords params[:q].gsub("-",""), :fields => :name
-      with :status,[1,2,3]
+      if params[:q]
+        @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
+          keywords params[:q].gsub("-",""), :fields => :name
+          with :status,[1,2,3]
       #order_by :class, :desc
-      paginate(:page => params[:page], :per_page => 10)
+          paginate(:page => params[:page], :per_page => 10)
       #facet :types
-      order_by :orderbyid , :asc
+          order_by :orderbyid , :asc
       #order_by :status, :asc      
-      order_by :launch_date, :desc
-    end
-    if !params[:page]
-      product_count = 0
-       @items.results.each do |item|
-         if item.is_a? Product
-           product_count = product_count + 1
-         end   
-       end
-      if product_count == 1
+          order_by :launch_date, :desc
+
+        end
+      else
+
+        @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
+          keywords "", :fields => :name
+          with :status,[1,2,3]
+      #order_by :class, :desc
+          paginate(:page => params[:page], :per_page => 10)
+      #facet :types
+          order_by :orderbyid , :asc
+      #order_by :status, :asc      
+          order_by :launch_date, :desc
+
+        end       
+      end
+      if !params[:page]
+        product_count = 0
         @items.results.each do |item|
           if item.is_a? Product
-            redirect_to item.get_url()
+            product_count = product_count + 1
+          end   
+        end
+        if product_count == 1
+          @items.results.each do |item|
+            if item.is_a? Product
+              redirect_to item.get_url()
+            end
           end
         end
-      end
-   end     
-    html = html = render_to_string(:layout => false)
-     json = {"html" => html}.to_json
-     callback = params[:callback]     
-     jsonp = callback + "(" + json + ")"
-     render :text => jsonp,  :content_type => "text/javascript"   
+      end     
+        html = html = render_to_string(:layout => false)
+        json = {"html" => html}.to_json
+        callback = params[:callback]     
+        jsonp = callback + "(" + json + ")"
+        render :text => jsonp,  :content_type => "text/javascript"   
+      
    end
+
+   def product_autocomplete
+     search_type = Product.search_type(params[:search_type]) + [Game]
+    @items = Sunspot.search(search_type) do
+      keywords params[:q].gsub("-",""), :fields => :name
+      with :status,[1,2,3]
+      paginate(:page => 1, :per_page => 10) 
+      order_by :orderbyid , :asc
+      order_by :launch_date, :desc            
+      #order_by :status,:asc
+    end
+
+   
+
+    results = @items.results.collect{|item|
+    # if item.type == "CarGroup"
+     #   type = "Car"
+     # else
+     if(item.is_a? (Product))
+        type = item.type.humanize
+     elsif(item.is_a? (Content))
+        type = item.sub_type   
+     elsif(item.is_a? (CarGroup))
+        type = "Groups"
+     elsif(item.is_a? (AttributeTag))
+        type = "Groups"
+    elsif(item.is_a? (ItemtypeTag))
+        type = "Topics"
+     else
+        type = item.type.humanize
+      end 
+    
+     # end
+     if  item.is_a?(Item)
+      image_url = item.image_url(:small) rescue ""
+      url = item.get_url() rescue ""
+      # image_url = item.image_url
+      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
+       
+    else
+      image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png"
+      url = content_path(item)
+      # image_url = item.image_url
+      {:content_id => item.id, :value => Content.title_display(item.title)  , :imgsrc =>image_url, :type => type, :url => url } 
+       end
+    }
+  if params[:content] == "true"
+    results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
+  end   
+  # html = html = render_to_string(:layout => false)
+        json = results
+        callback = params[:callback]     
+        jsonp = callback + "(" + json.to_json + ")"
+        render :json => jsonp
+  end
+
+  
+  def get_item_for_widget
+    @item = Item.find(params[:item_id])
+    @showspec = params[:show_spec].blank? ? 0 : params[:show_spec] 
+    @showcompare = params[:show_compare].blank? ? 1 : params[:show_compare]
+    @showreviews = params[:show_reviews].blank? ? 0 : params[:show_reviews]
+    @defaulttab = params[:at].blank? ? "compare_price" : params[:at]
+    @impression_id = params[:iid]
+    @req = request.referer  
+    @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+    # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
+
+    if @showspec == 1
+      @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
+      # @contents = Content.where(:sub_type => "Reviews")
+      @item_specification_summary_lists.delete("nothing")
+      @items_specification = {"Pro" => [], "Con" => []}
+      @item_specification_summary_lists.each do |key, value|
+      @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]} if key
+      end
+    end
+            html = html = render_to_string(:layout => false)
+        json = {"html" => html}.to_json
+        callback = params[:callback]     
+        jsonp = callback + "(" + json + ")"
+        render :text => jsonp,  :content_type => "text/javascript" 
+  end
   
 
   private

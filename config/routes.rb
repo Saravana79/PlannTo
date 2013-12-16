@@ -49,8 +49,9 @@ namespace :admin do
   match "/external_page",:to => "products#external_page"
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
   match "/product_offers",:to => "products#product_offers"
+  match "/product_autocomplete",:to => "products#product_autocomplete"
+  match "/get_item_for_widget",:to => "products#get_item_for_widget"
   
-
   match "/advertisement",:to => "products#advertisement"
   match "/current_user_info",:to => "home#current_user_info"
   match "/get_class_names",:to => "contents#get_class_names"

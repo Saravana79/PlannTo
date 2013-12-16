@@ -8,6 +8,7 @@ class Admin::AdvertisementsController < ApplicationController
 
   def new
     @advertisement = Advertisement.new 
+    @advertisements = [@advertisement]
   end
 
   def edit
@@ -20,15 +21,37 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def create
-    @advertisement = Advertisement.new(params[:advertisement])
-    @content = AdvertisementContent.create(:title => "advertisement");
-    @content.save_with_items!(params['ad_item_id'])
-    @advertisement.content_id = @content.id
-    if @advertisement.save
-      redirect_to admin_advertisements_path
-    else
-      render :new
-    end    
+    images = params[:advertisement].delete(:upload_image)
+    logger.info "===================================#{params[:advertisement][:ad_size]}"
+
+    add_size = params[:advertisement].delete(:ad_size)
+    image_array = []
+    images.each_with_index do |image, i|
+      image_array << {upload_image: image, ad_size: add_size[i]}
+    end
+    flag = true
+    @advertisements = []
+    Advertisement.transaction do
+      image_array.each do |image|
+        @advertisement = Advertisement.new(params[:advertisement].merge!(image))
+        @content = AdvertisementContent.create(:title => "advertisement");
+        @content.save_with_items!(params['ad_item_id'])
+        @advertisement.content_id = @content.id
+        if !@advertisement.save
+          flag = false
+        
+        end
+      @advertisements << @advertisement
+
+      end
+      raise ActiveRecord::Rollback unless flag
+    end
+      if flag
+        redirect_to admin_advertisements_path
+      else
+        
+        render :new
+      end    
   end
   
   def update
