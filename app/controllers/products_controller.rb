@@ -301,13 +301,15 @@ class ProductsController < ApplicationController
                   @item = item
                   unless @publisher.nil?
                       unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
-                          vendor_ids = @publisher.vendor_ids.split(",")    
-                          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                          vendor_ids = @publisher.vendor_ids ? @publisher.vendor_ids.split(",") : []   
+                          exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""  
+                          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('vendors.id not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).all.sort_by{|i| vendor_ids(i.item_detail.vendor_id)}
                           where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}
                           where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
                       else
+                          exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""
                           where_to_buy_items1 = []  
-                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('vendors.id not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
                       end
                   else
                           where_to_buy_items1 = []            
@@ -419,9 +421,9 @@ class ProductsController < ApplicationController
   end 
   
     def search_items
-      if params[:q]
-        @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
-          keywords params[:q].gsub("-",""), :fields => :name
+      if params[:term]
+        @items = Sunspot.search(Product.search_type(params[:search_type])) do
+          keywords params[:term].gsub("-",""), :fields => :name
           with :status,[1,2,3]
       #order_by :class, :desc
           paginate(:page => params[:page], :per_page => 10)
@@ -433,7 +435,7 @@ class ProductsController < ApplicationController
         end
       else
 
-        @items = Sunspot.search(Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]) do
+        @items = Sunspot.search(Product.search_type(params[:search_type])) do
           keywords "", :fields => :name
           with :status,[1,2,3]
       #order_by :class, :desc
@@ -469,9 +471,9 @@ class ProductsController < ApplicationController
    end
 
    def product_autocomplete
-     search_type = Product.search_type(params[:search_type]) + [Game]
+     search_type = Product.search_type(params[:search_type]) 
     @items = Sunspot.search(search_type) do
-      keywords params[:q].gsub("-",""), :fields => :name
+      keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2,3]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
@@ -480,7 +482,6 @@ class ProductsController < ApplicationController
     end
 
    
-
     results = @items.results.collect{|item|
     # if item.type == "CarGroup"
      #   type = "Car"
@@ -513,25 +514,21 @@ class ProductsController < ApplicationController
       {:content_id => item.id, :value => Content.title_display(item.title)  , :imgsrc =>image_url, :type => type, :url => url } 
        end
     }
-  if params[:content] == "true"
-    results  << {:id => 0, :value => "View all...", :imgsrc =>"", :type => "", :url => params[:term] } if results.size > 9
-  end   
+    
   # html = html = render_to_string(:layout => false)
         json = results
+
         callback = params[:callback]     
         jsonp = callback + "(" + json.to_json + ")"
+    logger.info "===============================#{jsonp}"
+
         render :json => jsonp
   end
 
   
   def get_item_for_widget
     @item = Item.find(params[:item_id])
-    @showspec = params[:show_spec].blank? ? 0 : params[:show_spec] 
-    @showcompare = params[:show_compare].blank? ? 1 : params[:show_compare]
-    @showreviews = params[:show_reviews].blank? ? 0 : params[:show_reviews]
-    @defaulttab = params[:at].blank? ? "compare_price" : params[:at]
-    @impression_id = params[:iid]
-    @req = request.referer  
+ 
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
 
@@ -544,7 +541,7 @@ class ProductsController < ApplicationController
       @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]} if key
       end
     end
-            html = html = render_to_string(:layout => false)
+        html = html = render_to_string(:layout => false)
         json = {"html" => html}.to_json
         callback = params[:callback]     
         jsonp = callback + "(" + json + ")"
