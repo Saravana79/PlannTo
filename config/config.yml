@@ -3,6 +3,7 @@ development:
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  top_mobiles: "1935,1920,1923,1471,1908,1335,1457,1252,3998,3999"
   popular_cars: "3,5,7,9,11"
   popular_bikes: "3,5,7,9,11"
   popular_cycles: "3,5,7,9,11"
@@ -47,6 +48,7 @@ development:
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  top_mobiles: "1935,1920,1923,1471,1908,1335,1457,1252,3998,3999"
   popular_cars: "252,331,4098,580,1017,1038,4111,976,522,453"
   popular_bikes: "2862,2932,2120,2812,2194,2243,2836,2133,2438,2971"
   popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"
@@ -85,6 +87,7 @@ production:
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
+  top_mobiles: "1935,1920,1923,1471,1908,1335,1457,1252,3998,3999"
   popular_cars: "5976,6500,65,36,4888,1039,4088,4358,4099,5546,124"
   popular_bikes: "2120,2133,2157,2361,2112,2212,2365,2214,3686,3705"
   popular_cycles: "2756,2742,2691,2721,2610,2585,2575,2565,2530"

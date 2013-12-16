@@ -433,23 +433,15 @@ class ProductsController < ApplicationController
           order_by :launch_date, :desc
 
         end
+        @items = @items.results
       else
-
-        @items = Sunspot.search(Product.search_type(params[:search_type])) do
-          keywords "", :fields => :name
-          with :status,[1,2,3]
-      #order_by :class, :desc
-          paginate(:page => params[:page], :per_page => 10)
-      #facet :types
-          order_by :orderbyid , :asc
-      #order_by :status, :asc      
-          order_by :launch_date, :desc
-
-        end       
+        @items = Mobile.where("id in (?) and status in (?)",configatron.top_mobiles.split(","), [1,2,3] )
+        
       end
+      logger.info "==============================#{configatron.top_mobiles.split(",")}"
       if !params[:page]
         product_count = 0
-        @items.results.each do |item|
+        @items.each do |item|
           if item.is_a? Product
             product_count = product_count + 1
           end   
