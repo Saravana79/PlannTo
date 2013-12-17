@@ -10,7 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
     var domain = "www.plannto.com";
     //for development
-  //   var domain = "localhost:3000";
+    // var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -168,14 +168,15 @@ console.log(data)
               where_to_buy(ui.item.id, show_details, element, element_id, pathname); 
             }
 
-        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-           return jQuery( "<li></li>" )
-            .data( "ui-autocomplete-item", item )
+        }).data( "autocomplete" )._renderItem = function( ul, item,index ) {
+          
+            return jQuery( "<li></li>" )
+            .data( "item.autocomplete", item )
             .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<div style='float:right;'><span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></div></a>" )
             // .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></a>" )
             .appendTo( ul );
-          
-        };
+          }
+
 
         // jQuery(ul).append("<div class='myFooter'>some footer text</div>");
 
