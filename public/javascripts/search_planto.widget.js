@@ -10,7 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
     var domain = "www.plannto.com";
     //for development
-    // var domain = "localhost:3000";
+//     var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -36,7 +36,7 @@ var PlannTo = (function (window, undefined) {
         var script_tag = document.createElement('script');
         script_tag.setAttribute("type", "text/javascript");
         script_tag.setAttribute("src",
-            "http://code.jquery.com/ui/1.10.3/jquery-ui.js");
+            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js");
         if (script_tag.readyState) {
             script_tag.onreadystatechange = function () { // For old versions of IE
                 if (this.readyState == 'complete' || this.readyState == 'loaded') {

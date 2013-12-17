@@ -1,120 +1,60 @@
-<div class="inner-top-search">
+         <style type="text/css">
+         #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
+         #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;}
+         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;}
+         #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;}
+         #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;}
+         #plannto_incol3{padding:0px 10px 0px 0px ;text-align:center;vertical-align:middle;background:white;}
+         #plannto_go_button{margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
+         #plannto_inheadertr{border-bottom: 1px solid #EEE;height: 35px;background:#FAFAFA;}
+         #plannto_inheadercol1{padding: 0px 0px 0px 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;}
+         #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;}
+        
+         /* for igyaan*/
+         <% if (!@publisher.nil? && @publisher.id == 5) %>
+         #plannto_table{border:0px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+         #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'Oswald', sans-serif;font-weight: 300;}
+         #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+         #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+         #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: 'Roboto Slab',sans-serif;}
+         #prodname{font-family: 'Roboto Slab',sans-serif;font-size: 15px;font-weight:bold;}
+         .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
+         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;font-family: 'Roboto Slab',sans-serif; font-weight: 500;} 
+          #plannto_insidediv{padding:2px 0px 2px 0px;background: #EEE;}
+         <% end %>
+         </style>
+
+<div class="inner-top-search" style="text-align:center;">
                 
-                    <input class="search-input-text" id="planto_search_widget_auto_item"/>
-                    <a href="#" id="search_from_widget">Search</a>
+                    <input class="search-input-text" id="planto_search_widget_auto_item" 
+                    style="width: 70%;padding: 5px;margin: 10px;" placeholder="Ex Apple Iphone 5s, Samsung Galaxy S4, etc."/>
+                    <a href="#" id="search_from_widget" style="margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 15px;font-weight: bold; text-decoration: none;">Search</a>
                 
-              </div>              
+</div>              
 
 
 
 <div id="display_search_item">
 
     <%@items.each do |item|%>
-    <div class="col w4_5 feed_item p1">
-      <div class="col w0_5">
-       <%if item.is_a?(Item) %>
-         <% image_url = item.image_url(:small) rescue "" %>
-         <a>
-          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%= image_url %>"/>
-        </a>
-       <%else%>
-             <%image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png" %> 
-               <a>
-          <img class="profile_photo_img" width="50" height="50" alt="image" src="<%= image_url %>"/>
+        <div class="productinwizard" id="product_<%= item.id %>" style="float:left;width:180px;height:200px;display:block;padding:10px;text-align:center;">
+                  <div>
+                      <%= image_tag(item.image_url, height: "120", width: "160")%>
+                 </div>
+              
+                <div>
+                    <%= item.name%>
+                </div>
+                <div  style="font-size:12px;">
+                    <%= item.get_price_info("Mobile",false)%>
+                </div>
+                <div style="margin-top:10px;">
+                    <%= link_to "Find Best Price", "#", :class => "where_to_buy_searched", id: item.id , :style => "margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;"%>
+                </div>
+                
           
-        </a>
-        <%end%>
-      </div>
-      <div class="e_col w3_5">
-       <%if item.is_a?(Item) %>
-        <h2>
-          <%= link_to item.name,item.get_url() %>
-          
-        </h2>
-        <div class="feed_item_question_info">
-          Type: <%=item.type%>
         </div>
-        <%else%>
-           <h2>
-          <%= link_to "#{Content.title_display(item.title)}",content_path(item) %>
-          
-        </h2>
-        <div class="feed_item_question_info">
-          Type: <%=item.sub_type%>
-        </div>
-          <%end%>
-    <%= link_to "Get Price", "#", :class => "where_to_buy_searched", id: item.id %>
 
-      </div>
-    </div>
   <%end%>
- 
+</div> 
 
-</ui.item.urldiv>
-
-<style type="text/css">
-  .w4_5 {
-    width: 600px;
-  }
-
-  h1.heading {
-    border-bottom: 1px solid #B0B0B0;
-    margin-bottom: 1px;
-    padding-bottom: 0.4em;
-  }
-
-  .w0_5 {
-    width: 50px;
-  }
-  .col, .e_col {
-    float: left;
-    margin: 0 10px 0 0;
-  }
-  .feed_item {
-    border-bottom: 1px solid #E0E0E0;
-    float: left;
-    position: relative;
-  }
-  .p1 {
-    padding: 10px 0;
-  }
-
-  .ui-menu {
-    display: block;
-    left: 373px;
-    top: 41px;
-    width: 306px;
-    z-index: 1;
-}
-.ui-menu {
-    display: block;
-    float: left;
-    list-style: none outside none;
-    margin: 0;
-    padding: 2px;
-}
-.ui-autocomplete {
-    cursor: default;
-    position: absolute;
-}
-.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-    border-bottom-right-radius: 4px;
-}
-.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-    border-bottom-left-radius: 4px;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-    border-top-right-radius: 4px;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border-top-left-radius: 4px;
-}
-.ui-widget-content {
-    background: none repeat scroll 0 0 #F9F9F9;
-    border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 0 9px #3F3F3F;
-    height: auto;
-    margin: auto;
-    width: 200px;
-}
-</style>

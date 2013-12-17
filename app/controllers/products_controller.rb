@@ -435,10 +435,9 @@ class ProductsController < ApplicationController
         end
         @items = @items.results
       else
-        @items = Mobile.where("id in (?) and status in (?)",configatron.top_mobiles.split(","), [1,2,3] )
+        @items = Item.where("id in (?) and status in (?)",configatron.top_mobiles.split(","), [1,2] )
         
       end
-      logger.info "==============================#{configatron.top_mobiles.split(",")}"
       if !params[:page]
         product_count = 0
         @items.each do |item|
