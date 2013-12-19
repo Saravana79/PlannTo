@@ -10,7 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
     var domain = "www.plannto.com";
     //for development
-    // var domain = "localhost:3000";
+   // var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -158,8 +158,8 @@ console.log(data)
           jQuery.each( items, function( index, item ) {
             self._renderItem( ul, item, index );
           });
-          item = {value: "Search more items...", id: "0", imgsrc: ""}
-          self._renderItem( ul, item, -1 );
+          //item = {value: "Search more items...", id: "0", imgsrc: ""}
+          //self._renderItem( ul, item, -1 );
         };
             types = jQuery("#planto_search_items").attr('types')
 
@@ -171,7 +171,7 @@ console.log(data)
             focus:function(e,ui) {},
             format: "js",
             minLength: 2,
-            select: function (event, ui) {
+            select: function (event, ui) {              
               where_to_buy(ui.item.id, show_details, element, element_id, pathname); 
             }
 
@@ -179,7 +179,7 @@ console.log(data)
             
             return jQuery( "<li></li>" )
             .data( "item.autocomplete", item )
-            .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<div style='float:right;'><span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></div></a>" )
+            .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
             // .append( "<a>" + "<img width='40' height='40' src='" + item.imgsrc + "' />" + "<span class='atext'>" +item.value+ "</span><br/><span class ='atext'>" + item.type +  "</span></a>" )
             .appendTo( ul );
           }
