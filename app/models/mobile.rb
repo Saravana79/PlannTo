@@ -19,9 +19,8 @@ class Mobile < Product
         tempName =tempName + " " + item.hidden_alternative_name.gsub("-", "")
       end
       tempName
-    end     
-            
-     
+    end 
+         
     text :nameformlt do |item|
       item.name.gsub("-", "")
     end 

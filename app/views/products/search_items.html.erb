@@ -23,7 +23,14 @@
           #plannto_insidediv{padding:2px 0px 2px 0px;background: #EEE;}
          <% end %>
          </style>
-
+<% if params[:first_time] %>
+<table style="padding-right:10px;padding-left:17px;">
+    <tr>
+        <td id="Mobile" style="padding-right:10px;padding-left:17px;"><%= link_to "Mobile", "#" , class: "select_item_type_id " %></td>
+        <td id="Camera" style="padding-right:10px;padding-left:17px;"><%= link_to "Camera", "#",  class: "select_item_type_id" %></td>
+        <td id="Tablet" style="padding-right:10px;padding-left:17px;"><%= link_to "Tablet", "#",  class: "select_item_type_id" %></td>
+    </tr>
+</table>
 <div class="inner-top-search" style="text-align:center;">
                 
                     <input class="search-input-text" id="planto_search_widget_auto_item" 
@@ -32,7 +39,7 @@
                 
 </div>              
 
-
+<% end %>
 
 <div id="display_search_item">
 

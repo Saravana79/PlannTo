@@ -17,7 +17,11 @@ has_one :manufacturer,
 
  def self.search_type(type)
    return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
-   return type.camelize.constantize
+  if type.is_a?(Array)
+    return type.collect{|t| t.camelize.constantize}
+  else
+    return type.camelize.constantize
+  end
  end
 
 def self.follow_search_type(type)

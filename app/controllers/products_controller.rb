@@ -435,7 +435,8 @@ class ProductsController < ApplicationController
         end
         @items = @items.results
       else
-        @items = Item.where("id in (?) and status in (?)",configatron.top_mobiles.split(","), [1,2] )
+        item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type]
+        @items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
         
       end
       if !params[:page]
@@ -462,7 +463,8 @@ class ProductsController < ApplicationController
    end
 
    def product_autocomplete
-     search_type = Product.search_type(params[:search_type]) 
+    item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type]
+     search_type = Product.search_type(item_types) 
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2,3]
@@ -537,6 +539,10 @@ class ProductsController < ApplicationController
         callback = params[:callback]     
         jsonp = callback + "(" + json + ")"
         render :text => jsonp,  :content_type => "text/javascript" 
+  end
+
+  def show_search_widget
+     render tmpllate: 'show_search_widget', :layout => false
   end
   
 
