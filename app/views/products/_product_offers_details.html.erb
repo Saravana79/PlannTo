@@ -1,4 +1,5 @@
 <%unless (@best_deals.blank?) %>
+	<% randStr =  rand(1000).to_s%>
     <% length = @best_deals.length %>
     <%if @moredetails == "true" %>
 		    <% loopcount = (length/2.0).round %>
@@ -7,7 +8,7 @@
 		            <thead style="border:0px;">                    
 				
 		  			<% (0..loopcount-1).each do |i| %>  			
-					<tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%=i%>">
+					<tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%= randStr + i.to_s%>">
 						<td >				
 							<% @deal  = @best_deals[((i)*2)]%>
 							<%unless @deal.nil?%>
@@ -71,10 +72,10 @@
 					  		<tr  style="height:35px;padding: 5px;background:white;">
 					  		<td colspan="2">
 							<% if i>0 %>
-								<span style="float:left;margin: 5px 10px;"><a href="offer<%= i - 1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
+								<span style="float:left;margin: 5px 10px;"><a href="offer<%= randStr + (i - 1).to_s %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
 							<% end %>
 							<% if i != loopcount -1 %>
-								<span style="float:right;margin: 5px 10px;"><a href="offer<%= i+1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Next Offers</a></span>
+								<span style="float:right;margin: 5px 10px;"><a href="offer<%= randStr + (i+1).to_s %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Next Offers</a></span>
 							<% end %>
 							</td>
 							</tr>	
@@ -91,7 +92,7 @@
 		          <table id="plannto_intable" width="100%">   
 		            <thead style="border:0px;">   
 		            <% (0..length-1).each do |i| %>                  
-					  <tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%=i%>">
+					  <tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%=randStr +i.to_s%>">
 						<td >				
 							<% @deal  = @best_deals[i]%>
 							<%unless @deal.nil?%>
@@ -130,10 +131,10 @@
 					  		<tr  style="height:35px;padding: 5px;background:white;">
 					  		<td>
 							<% if i>0 %>
-								<span style="float:left;margin: 5px 10px;"><a href="offer<%= i - 1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
+								<span style="float:left;margin: 5px 10px;"><a href="offer<%= randStr + (i - 1).to_s %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
 							<% end %>
 							<% if i != length -1 %>
-								<span style="float:right;margin: 5px 10px;"><a href="offer<%= i+1 %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Next Offers</a></span>
+								<span style="float:right;margin: 5px 10px;"><a href="offer<%= randStr + (i+1).to_s %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Next Offers</a></span>
 							<% end %>
 							</td>
 							</tr>	
