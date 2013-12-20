@@ -104,7 +104,9 @@ var PlannTo = (function (window, undefined) {
     function where_to_buy(item_id, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type=mobile&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+            var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+            it_id = item_type ? item_type : " "
+        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
             console.log(data)
@@ -117,12 +119,14 @@ var PlannTo = (function (window, undefined) {
     function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type=mobile&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+            var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+            it_id = item_type ? item_type : " "
+        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
 console.log(data)
-            jQuery("#planto_search_items").html(data.html);
+            jQuery("#display_search_item").html(data.html);
             jQuery(".where_to_buy_searched").live("click", function () {
                 where_to_buy(jQuery(this).attr("id"), show_details, element_id, parentdivid, pathname)
             })
@@ -135,6 +139,7 @@ console.log(data)
 
 
     function autoComplete() {
+
 
         url = getScriptUrl();
         var doc_title = PlannTo.jQuery(document).title;
@@ -156,10 +161,11 @@ console.log(data)
           //item = {value: "Search more items...", id: "0", imgsrc: ""}
           //self._renderItem( ul, item, -1 );
         };
-
+        var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+        it_id = item_type ? item_type : " "
         jQuery("#planto_search_widget_auto_item").autocomplete({
 
-            source: "http://" + domain + "/product_autocomplete.jsonp?search_type=mobile&callback=?",
+            source: "http://" + domain + "/product_autocomplete.jsonp?search_type="+it_id+"&callback=?",
             focus:function(e,ui) {},
             format: "js",
             minLength: 2,
@@ -168,7 +174,7 @@ console.log(data)
             }
 
         }).data( "autocomplete" )._renderItem = function( ul, item,index ) {
-          
+            
             return jQuery( "<li></li>" )
             .data( "item.autocomplete", item )
             .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
@@ -187,6 +193,9 @@ console.log(data)
     function main() {
         // return if jQuery("#planto_search_items").length <= 0
         jQuery(document).ready(function (jQuery) {
+
+
+
             url = getScriptUrl();
             var doc_title = PlannTo.jQuery(document).title;
             var doc_title = jQuery(document).title;
@@ -197,9 +206,10 @@ console.log(data)
             var element_id = "#content";
 
             element = jQuery("#display_search_item").val()
+            var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+            it_id = item_type ? item_type : " "
 
-
-            url = "http://" + domain + SubPath + "?search_type=mobile&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+            url = "http://" + domain + SubPath + "?first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
@@ -211,6 +221,28 @@ console.log(data)
                 })
                 autoComplete()
 
+            });
+
+            jQuery(".select_item_type_id").live("click", function(){
+                jQuery(".select_item_type_id").removeClass("selected");
+                jQuery(this).addClass('selected')
+                var item_type = jQuery(this).parent("td").attr("id")
+                it_id = item_type ? item_type : " "
+                // jQuery(this).addClass("selected");
+                url = "http://" + domain + SubPath + "?search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+
+                jQuery.getJSON(url, function (data) {
+
+
+                    jQuery("#display_search_item").replaceWith(data.html);
+
+                    jQuery(".where_to_buy_searched").live("click", function () {
+                        where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname)
+                    })
+                    autoComplete()
+
+                });
+            
             });
             jQuery("#search_from_widget").live("click", function (e) {
                 url = getScriptUrl();
