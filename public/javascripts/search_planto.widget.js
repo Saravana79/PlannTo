@@ -10,7 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
     var domain = "www.plannto.com";
     //for development
-   // var domain = "localhost:3000";
+ //var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -104,7 +104,7 @@ var PlannTo = (function (window, undefined) {
     function where_to_buy(item_id, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-            var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
             it_id = item_type ? item_type : " "
         url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
@@ -119,7 +119,7 @@ var PlannTo = (function (window, undefined) {
     function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-            var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
             it_id = item_type ? item_type : " "
         url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
@@ -227,10 +227,15 @@ console.log(data)
             });
 
             jQuery(".select_item_type_id").live("click", function(){
-                jQuery(".select_item_type_id").removeClass("selected");
+                debugger;
+                jQuery(".select_item_type_id.selected").parent("li").removeClass("selected");
+                jQuery(".select_item_type_id.selected").parent("li").addClass("unselected");
+                jQuery(".select_item_type_id").removeClass("selected");                
                 jQuery(this).addClass('selected')
-                var item_type = jQuery(this).parent("td").attr("id")
+                jQuery(this).parent("li").addClass('selected')
+                var item_type = jQuery(this).parent("li").attr("id")
                 it_id = item_type ? item_type : " "
+                
                 // jQuery(this).addClass("selected");
                 url = "http://" + domain + SubPath + "?search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
@@ -244,7 +249,7 @@ console.log(data)
                         where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname)
                     })
                     autoComplete()
-
+                   event.preventDefault()     
                 });
             
             });

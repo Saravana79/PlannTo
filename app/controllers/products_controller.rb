@@ -443,23 +443,10 @@ class ProductsController < ApplicationController
     @item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type].split(",")
 
         @items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",@item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
+        #{}@items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
         
       end
-      if !params[:page]
-        product_count = 0
-        @items.each do |item|
-          if item.is_a? Product
-            product_count = product_count + 1
-          end   
-        end
-        if product_count == 1
-          @items.results.each do |item|
-            if item.is_a? Product
-              redirect_to item.get_url()
-            end
-          end
-        end
-      end     
+      
         html = html = render_to_string(:layout => false)
         json = {"html" => html}.to_json
         callback = params[:callback]     
