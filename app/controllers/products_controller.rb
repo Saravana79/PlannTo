@@ -435,25 +435,12 @@ class ProductsController < ApplicationController
         end
         @items = @items.results
       else
-        item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type]
-        @items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
+        item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type]
+        @items = Item.find_by_sql("select items.* from items join (select item_id,count(*) as count from add_impressions where date(impression_time) > date('#{(Date.today-30.days).strftime("%y-%m-%d")}') and date(impression_time) < date('#{Date.today.strftime("%y-%m-%d")}') group by item_id order by count(*) desc limit 1000) a on a.item_id = items.id and status = 1 and items.type in ('#{item_types}')  limit 9")
+        #{}@items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
         
       end
-      if !params[:page]
-        product_count = 0
-        @items.each do |item|
-          if item.is_a? Product
-            product_count = product_count + 1
-          end   
-        end
-        if product_count == 1
-          @items.results.each do |item|
-            if item.is_a? Product
-              redirect_to item.get_url()
-            end
-          end
-        end
-      end     
+      
         html = html = render_to_string(:layout => false)
         json = {"html" => html}.to_json
         callback = params[:callback]     
