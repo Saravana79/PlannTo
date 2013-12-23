@@ -161,8 +161,10 @@ console.log(data)
           item = {value: "Search more items...", id: "0", imgsrc: ""}
           self._renderItem( ul, item, -1 );
         };
+            types = jQuery("#planto_search_items").attr('types')
+
         var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
-        it_id = item_type ? item_type : " "
+        it_id = item_type ? item_type : types
         jQuery("#planto_search_widget_auto_item").autocomplete({
 
             source: "http://" + domain + "/product_autocomplete.jsonp?search_type="+it_id+"&callback=?",
@@ -207,7 +209,8 @@ console.log(data)
 
             element = jQuery("#display_search_item").val()
             var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
-            it_id = item_type ? item_type : " "
+            types = jQuery("#planto_search_items").attr('types')
+            it_id = item_type ? item_type : types
 
             url = "http://" + domain + SubPath + "?first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
@@ -236,7 +239,8 @@ console.log(data)
 
                     jQuery("#display_search_item").replaceWith(data.html);
 
-                    jQuery(".where_to_buy_searched").live("click", function () {
+                    jQuery(".where_to_buy_searched, .productinwizard").live("click", function () {
+                        item_id = parseInt(jQuery(this).attr("id").replace("product", ""));
                         where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname)
                     })
                     autoComplete()

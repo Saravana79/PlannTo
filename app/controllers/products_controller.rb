@@ -8,6 +8,9 @@ class ProductsController < ApplicationController
       c.params.merge(user: 0) 
     end
      }
+    caches_action :search_items, :cache_path => Proc.new { |c| c.params },:expires_in => 24.hours
+
+
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
@@ -421,8 +424,10 @@ class ProductsController < ApplicationController
   end 
   
     def search_items
+      # @types = params[:types].blank? ? ["Mobile", "Tablet", "Camera"] : params[:types].split(",")
+
       if params[:term]
-        @items = Sunspot.search(Product.search_type(params[:search_type])) do
+        @items = Sunspot.search(Product.search_type(item_types)) do
           keywords params[:term].gsub("-",""), :fields => :name
           with :status,[1,2,3]
       #order_by :class, :desc
@@ -435,8 +440,9 @@ class ProductsController < ApplicationController
         end
         @items = @items.results
       else
-        item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type]
-        @items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
+    @item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type].split(",")
+
+        @items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",@item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
         
       end
       if !params[:page]
@@ -463,7 +469,8 @@ class ProductsController < ApplicationController
    end
 
    def product_autocomplete
-    item_types =  params[:search_type].blank? ? ["Mobile", "Tablet", "Camera"] : params[:search_type]
+    item_types =  params[:search_type].blank? ? params[:search_type].split(",") : ["Mobile", "Tablet", "Camera"]
+
      search_type = Product.search_type(item_types) 
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
@@ -520,7 +527,7 @@ class ProductsController < ApplicationController
 
   
   def get_item_for_widget
-    @item = Item.find(params[:item_id])
+    @item = Item.find(params[:item_id].gsub("product_", ""))
  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
