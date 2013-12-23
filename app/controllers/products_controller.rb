@@ -425,9 +425,10 @@ class ProductsController < ApplicationController
   
     def search_items
       # @types = params[:types].blank? ? ["Mobile", "Tablet", "Camera"] : params[:types].split(",")
+        @item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type].split(",")
 
       if params[:term]
-        @items = Sunspot.search(Product.search_type(item_types)) do
+        @items = Sunspot.search(Product.search_type(@item_types)) do
           keywords params[:term].gsub("-",""), :fields => :name
           with :status,[1,2,3]
       #order_by :class, :desc
@@ -440,7 +441,8 @@ class ProductsController < ApplicationController
         end
         @items = @items.results
       else
-        @item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type].split(",")
+      @types = params[:types].blank? ? ["Mobile", "Tablet", "Camera"] : params[:types].split(",")
+        @item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type]
         @items = Item.find_by_sql("select items.* from items join (select item_id,count(*) as count from add_impressions where date(impression_time) > date('#{(Date.today-30.days).strftime("%y-%m-%d")}') and date(impression_time) < date('#{Date.today.strftime("%y-%m-%d")}') group by item_id order by count(*) desc limit 1000) a on a.item_id = items.id and status = 1 and items.type in ('#{@item_types}')  limit 9")
         #{}@items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
         

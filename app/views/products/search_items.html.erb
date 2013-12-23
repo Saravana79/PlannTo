@@ -35,7 +35,7 @@
          </style>
 
 <ul class="shadetabs" >
-    <% @item_types.each do |type| %>
+    <% @types.each do |type| %>
                   <li class="<%= type=='Mobile' ? 'selected' : 'unselected' %>" id="<%= type %>">             
                     <%= link_to type, "#" , class: "select_item_type_id selected" %>
                   </li>

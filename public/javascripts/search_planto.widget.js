@@ -10,7 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
     var domain = "www.plannto.com";
     //for development
- //var domain = "localhost:3000";
+ // var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -101,12 +101,12 @@ var PlannTo = (function (window, undefined) {
         return null;
     }
 
-    function where_to_buy(item_id, show_details, element_id, parentdivid, pathname) {
+    function where_to_buy(item_id, show_details, element_id, parentdivid, pathname, url) {
         var doc_title = PlannTo.jQuery(document).title;
 
            types = getParam(url, "types");
 
-        var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+        var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
         url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
@@ -118,12 +118,12 @@ var PlannTo = (function (window, undefined) {
     }
 
 
-    function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname) {
+    function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname, url) {
         var doc_title = PlannTo.jQuery(document).title;
 
             types = getParam(url, "types");
 
-        var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+        var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
         url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
@@ -142,8 +142,7 @@ console.log(data)
 
 
 
-    function autoComplete() {
-
+    function autoComplete(url) {
 
         url = getScriptUrl();
         var doc_title = PlannTo.jQuery(document).title;
@@ -167,16 +166,19 @@ console.log(data)
         };
             types = getParam(url, "types");
 
-        var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
-        it_id = item_type ? item_type : types
+        var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
+        var it_id = item_type ? item_type : ""
         jQuery("#planto_search_widget_auto_item").autocomplete({
 
             source: "http://" + domain + "/product_autocomplete.jsonp?search_type="+it_id+"&callback=?",
             focus:function(e,ui) {},
             format: "js",
             minLength: 2,
-            select: function (event, ui) {              
+            select: function (event, ui) { 
+
               where_to_buy(ui.item.id, show_details, element, element_id, pathname); 
+              jQuery("#planto_search_widget_auto_item").val("");
+              return false;
             }
 
         }).data( "autocomplete" )._renderItem = function( ul, item,index ) {
@@ -213,26 +215,25 @@ console.log(data)
 
             element = jQuery("#display_search_item").val()
 
-            var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
             types = getParam(url, "types");
-            it_id = item_type ? item_type : types
+            it_id = item_type ? item_type : ""
 
-            url = "http://" + domain + SubPath + "?first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+            url = "http://" + domain + SubPath + "?types="+types+"&first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
 
                 jQuery("#planto_search_items").html(data.html);
 
-                jQuery(".where_to_buy_searched").live("click", function () {
-                    where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname)
+                jQuery(".where_to_buy_searched,.productinwizard").live("click", function () {
+                    where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname, url)
                 })
-                autoComplete()
+                autoComplete(url)
 
             });
 
-            jQuery(".select_item_type_id").live("click", function(){
-                debugger;
+            jQuery(".select_item_type_id").live("click", function(event){
                 jQuery(".select_item_type_id.selected").parent("li").removeClass("selected");
                 jQuery(".select_item_type_id.selected").parent("li").addClass("unselected");
                 jQuery(".select_item_type_id").removeClass("selected");                
@@ -249,11 +250,11 @@ console.log(data)
 
                     jQuery("#display_search_item").replaceWith(data.html);
 
-                    jQuery(".where_to_buy_searched, .productinwizard").live("click", function () {
-                        item_id = parseInt(jQuery(this).attr("id").replace("product", ""));
-                        where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname)
-                    })
-                    autoComplete()
+                    // jQuery(".where_to_buy_searched,.productinwizard").bind("click", function () {
+                    //     item_id = parseInt(jQuery(this).attr("id").replace("product", ""));
+                    //     where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname, url)
+                    // })
+                    // autoComplete()
                    event.preventDefault()     
                 });
             
@@ -270,7 +271,7 @@ console.log(data)
                 element = jQuery("#display_search_item").val()
                 // if(item_id.length > 3){
                 console.log(element_id)
-                planntowtbdivcreation(item_id, show_details, element, element_id, pathname);
+                planntowtbdivcreation(item_id, show_details, element, element_id, pathname, url);
 
                 // }
 
