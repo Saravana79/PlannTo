@@ -8,9 +8,9 @@ var PlannTo = (function (window, undefined) {
     var PlannTo = {};
     var SubPath = "/search_planto.js"
     //for production
-    var domain = "www.plannto.com";
+    // var domain = "www.plannto.com";
     //for development
- // var domain = "localhost:3000";
+ var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -240,6 +240,7 @@ console.log(data)
                 jQuery(this).addClass('selected')
                 jQuery(this).parent("li").addClass('selected')
                 var item_type = jQuery(this).parent("li").attr("id")
+                jQuery("#planto_search_widget_auto_item").val("")
                 it_id = item_type ? item_type : " "
                 
                 // jQuery(this).addClass("selected");
