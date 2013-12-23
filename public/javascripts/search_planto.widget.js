@@ -104,8 +104,10 @@ var PlannTo = (function (window, undefined) {
     function where_to_buy(item_id, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
-            it_id = item_type ? item_type : " "
+           types = getParam(url, "types");
+
+        var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+        it_id = item_type ? item_type : types
         url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
@@ -119,8 +121,10 @@ var PlannTo = (function (window, undefined) {
     function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname) {
         var doc_title = PlannTo.jQuery(document).title;
 
-            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
-            it_id = item_type ? item_type : " "
+            types = getParam(url, "types");
+
+        var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
+        it_id = item_type ? item_type : types
         url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
@@ -161,7 +165,7 @@ console.log(data)
           //item = {value: "Search more items...", id: "0", imgsrc: ""}
           //self._renderItem( ul, item, -1 );
         };
-            types = jQuery("#planto_search_items").attr('types')
+            types = getParam(url, "types");
 
         var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
         it_id = item_type ? item_type : types
@@ -208,8 +212,9 @@ console.log(data)
             var element_id = "#content";
 
             element = jQuery("#display_search_item").val()
+
             var item_type = jQuery(".select_item_type_id.selected").parent("td").attr("id")
-            types = jQuery("#planto_search_items").attr('types')
+            types = getParam(url, "types");
             it_id = item_type ? item_type : types
 
             url = "http://" + domain + SubPath + "?first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
