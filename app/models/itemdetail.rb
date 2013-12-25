@@ -47,7 +47,11 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       end
       "#{item.shipping} #{unit}"
     else
-      "N/A"
+      if item.status == 3
+        "[Pre-Order]"
+      else        
+        "N/A"
+      end
     end
 
   end

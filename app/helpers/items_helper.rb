@@ -414,7 +414,11 @@ module ItemsHelper
       end
       "#{item.shipping} #{unit}"
     else
-      "N/A"
+       if item.status == 3
+        "[Pre-Order]"
+      else        
+        "N/A"
+      end
     end
 
   end
