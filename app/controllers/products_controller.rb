@@ -539,6 +539,13 @@ class ProductsController < ApplicationController
   def show_search_widget
      render tmpllate: 'show_search_widget', :layout => false
   end
+
+  def get_item_item_advertisment
+    # item_ids = ContentItemRelation.includes(:content).where('contents.url=? and contents.type=?',request.referer,'ArticleContent')
+    # content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
+    @advertisement = Advertisement.joins(:content => [:items => :contents])#.where("view_article_contents.url=?", request.referer)
+        render :layout => "get_item_item_advertisment",:layout => false
+  end
   
 
   private

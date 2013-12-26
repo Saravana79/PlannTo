@@ -52,6 +52,7 @@ namespace :admin do
   match "/product_autocomplete",:to => "products#product_autocomplete"
   match "/get_item_for_widget",:to => "products#get_item_for_widget"
   match "/show_search_widget",:to => "products#show_search_widget"
+  match "/get_item_item_advertisment",:to => "products#get_item_item_advertisment"
   
   match "/advertisement",:to => "products#advertisement"
   match "/current_user_info",:to => "home#current_user_info"
