@@ -281,7 +281,7 @@ class ProductsController < ApplicationController
                         
     
       @publisher = Publisher.getpublisherfromdomain(url)
-      address = Geocoder.search(request.ip)
+      #address = Geocoder.search(request.ip)
       
       # get the country code for checing whether is use is from india.
       unless address.nil? || address.empty?
@@ -363,7 +363,7 @@ class ProductsController < ApplicationController
       else
         @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
       end
-      address = Geocoder.search(request.ip)
+      #address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i
       html = html = render_to_string(:layout => false)
       json = {"html" => html}.to_json
