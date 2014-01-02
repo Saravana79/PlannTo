@@ -284,11 +284,11 @@ class ProductsController < ApplicationController
       #address = Geocoder.search(request.ip)
       
       # get the country code for checing whether is use is from india.
-      unless address.nil? || address.empty?
-        country = address[0].data["country_name"]  rescue ""
-      else
+      #unless address.nil? || address.empty?
+      #  country = address[0].data["country_name"]  rescue ""
+      #else
         country = ""
-      end
+      #end
 
       @tempitems = []
       if (!@publisher.nil? && @publisher.id == 9 && country != "India")
