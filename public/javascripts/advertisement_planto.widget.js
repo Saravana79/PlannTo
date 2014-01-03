@@ -6,7 +6,7 @@ if (scriptCount == undefined) {
 var PlannTo = (function (window, undefined) {
 
     var PlannTo = {};
-    var SubPath = "/search_planto.js"
+    // var SubPath = "/search_planto.js"
     //for production
     var domain = "www.plannto.com";
     //for development
@@ -62,14 +62,56 @@ var PlannTo = (function (window, undefined) {
         
     }
 
+    function getParam (url, sname )
+    {
+      var a = document.createElement('a');
+      a.href = url;
+      params = a.search.substr(a.search.indexOf("?")+1);
+      sval = "";
+      params = params.split("&");
+        // split param and value into individual pieces
+        for (var i=0; i<params.length; i++)
+           {
+             temp = params[i].split("=");
+             if ( [temp[0]] == sname ) { sval = temp[1]; }
+           }
+      
+      return sval;
+    }
+
+    function getScriptUrl() {
+        var scripts = document.getElementsByTagName('script');
+        var element;
+        var src;
+        var count = 0;
+        for (var i = 0; i < scripts.length; i++) {
+            element = scripts[i];
+            src = element.src;
+
+            if (src.indexOf(domain + "/javascripts/search_planto.widget.js") != -1) {
+                if (count >= scriptCount) {
+                    scriptCount = scriptCount + 1;
+                    return src;
+                } else {
+                    count = count + 1;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
 
     /******** Main function ********/
     function main() {
         // return if jQuery("#planto_search_items").length <= 0
         jQuery(document).ready(function (jQuery) {
+            url = getScriptUrl();
+            var dynamic = getParam(url, "dynamic");
         	iframe = jQuery("<iframe>");
         url = 
-        iframe.attr("src", "http://" + domain + "/get_item_item_advertisment?callback=?");
+        iframe.attr("src", "http://" + domain + "/get_item_item_advertisment?dynamic="+dynamic+"&callback=?");
         jQuery("#advt_planto_item").html(iframe)
         });
 

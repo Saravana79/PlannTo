@@ -543,8 +543,21 @@ class ProductsController < ApplicationController
   def get_item_item_advertisment
     # item_ids = ContentItemRelation.includes(:content).where('contents.url=? and contents.type=?',request.referer,'ArticleContent')
     # content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
-    @advertisement = Advertisement.joins(:content => [:items => :contents])#.where("view_article_contents.url=?", request.referer)
-        render :layout => "get_item_item_advertisment",:layout => false
+    unless params[:dynamic]
+      @advertisement = Advertisement.joins(:content => [:items => :contents]).where("view_article_contents.url=?", request.referer)
+      render :template => "products/get_item_item_advertisment",:layout => false
+    else
+      @ac = ArticleContent.includes(:items).where("view_article_contents.url=?", request.referer)
+      unless @ac.blank?
+        @item = @ac.first.item
+        @where_to_buy = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?', status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+      else
+        @where_to_buy = []
+      end
+      logger.info "============================================="
+      
+      render :template => "products/get_dynamic_item_advertisment",:layout => false
+    end
   end
   
 
