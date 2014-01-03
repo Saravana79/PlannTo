@@ -206,7 +206,7 @@ class ProductsController < ApplicationController
   def where_to_buy_items
 
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
-    
+
     @show_price = params[:show_price]
     @show_offer = params[:show_offer]
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
@@ -229,14 +229,17 @@ class ProductsController < ApplicationController
           itemsaccess = "referer"
           url = request.referer
         end
-    
+        if $redis.get("#{url}where_to_buy_item_ids").blank?
+          @items = Product.where("id in (?)", $redis.get("#{request.referer}where_to_buy_item_ids").split(","))
+        else
+        
         unless url.nil?  
           tempurl = url;
           if url.include?("?")
             tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
           end
           if url.include?("#")          
-             tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip 
+             tempurl = url.slice(0..(url.infile:///home/gabbsabbu/compare.htmldex('#'))).gsub(/\#/, "").strip 
           end          
           @articles = ArticleContent.where(url: tempurl)
 
@@ -254,7 +257,9 @@ class ProductsController < ApplicationController
             @items = @articles[0].allitems.select{|a| a.is_a? Product};  
             @items = @items[0..15].reverse    
           end
+          $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(","))
         end
+      end
     end 
     url_params = "Params = "
     if params[:item_ids]
@@ -269,7 +274,7 @@ class ProductsController < ApplicationController
     if  params[:price_full_details]
        url_params += ";more_details->" + params[:price_full_details]
     end  
-  
+    
     # include pre order status if we show more details.
     unless @items.nil? || @items.empty?
       @moredetails = params[:price_full_details]
