@@ -30,7 +30,7 @@ gem 'aws-sdk'
 gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'
 #gem 'execjs'
 gem 'therubyracer'
-gem "paperclip"
+#gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -55,7 +55,7 @@ gem 'sunspot_solr'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
 gem 'tinymce-rails'
-gem "psych", "~> 2.0.2"
+
 # Use unicorn as the web server
 # gem 'unicorn'
 gem 'resque', :require => 'resque/server'  
