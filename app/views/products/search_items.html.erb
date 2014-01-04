@@ -34,17 +34,12 @@
          <% end %>
          </style>
 
-
 <ul class="shadetabs" >
-                  <li class="selected" id="Mobile">             
-                    <%= link_to "Mobile", "#" , class: "select_item_type_id selected" %>
+    <% @types.each do |type| %>
+                  <li class="<%= type=='Mobile' ? 'selected' : 'unselected' %>" id="<%= type %>">             
+                    <%= link_to type, "#" , class: "select_item_type_id selected" %>
                   </li>
-                  <li class="unselected" id="Camera">             
-                    <%= link_to "Camera", "#",  class: "select_item_type_id" %>
-                  </li>
-                  <li class="unselected" id="Tablet">             
-                    <%= link_to "Tablet", "#",  class: "select_item_type_id" %>
-                  </li>
+                  <% end %>
 </ul>
 
 <div class="inner-top-search" style="text-align:center;clear:both;border-top:5px solid #eee;padding:5px;">
@@ -172,4 +167,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 
 </style>
+<<<<<<< HEAD
 <%end%>
+=======
+<%end%>
+>>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
