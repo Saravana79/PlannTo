@@ -8,6 +8,7 @@ if defined?(Bundler)
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
+
 configatron.configure_from_yaml(File.expand_path("../config.yml",__FILE__), :hash => Rails.env)
 module PlanNto
   class Application < Rails::Application
