@@ -446,7 +446,13 @@ class ProductsController < ApplicationController
       else
         @types = params[:types].blank? ? ["Mobile", "Tablet", "Camera"] : params[:types].split(",")
         @item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type]
-        @items = Item.find_by_sql("select items.* from items join (select item_id,count(*) as count from add_impressions where date(impression_time) > date('#{(Date.today-30.days).strftime("%y-%m-%d")}') and date(impression_time) < date('#{Date.today.strftime("%y-%m-%d")}') group by item_id order by count(*) desc limit 1000) a on a.item_id = items.id and status = 1 and items.type in ('#{@item_types}')  limit 9")
+        unless $redis.get("#{@item_types}_top_item_ids_comparison").blank?
+          @items = Item.includes([:attribute_values]).where("id in (?)", $redis.get("#{@item_types}_top_item_ids_comparison").split(","))
+        else
+          @items = Item.includes([:attribute_values]).find_by_sql("select items.* from items join (select item_id,count(*) as count from add_impressions where date(impression_time) > date('#{(Date.today-30.days).strftime("%y-%m-%d")}') and date(impression_time) < date('#{Date.today.strftime("%y-%m-%d")}') group by item_id order by count(*) desc limit 1000) a on a.item_id = items.id and status = 1 and items.type in ('#{@item_types}')  limit 9")
+          $redis.set("#{@item_types}_top_item_ids_comparison", @items.collect(&:id).join(","))
+          $redis.expire "#{@item_types}_top_item_ids_comparison", 24.hours
+        end  
         #{}@items = Item.joins(:itemtype, :add_impressions).select("items.*, count(add_impressions.item_id) as count").where("itemtypes.itemtype in(?) && date(impression_time) > date(?) and date(impression_time) < date(?)",item_types,(Date.today-30.days).strftime("%y-%m-%d"), Date.today.strftime("%y-%m-%d")).group("add_impressions.item_id").limit(10)
         
       end
