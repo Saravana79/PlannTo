@@ -8,9 +8,7 @@ class ProductsController < ApplicationController
       c.params.merge(user: 0) 
     end
      }
-    caches_action :search_items, :cache_path => Proc.new { |c| c.params },:expires_in => 24.hours
-
-
+  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
   before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
@@ -229,8 +227,8 @@ class ProductsController < ApplicationController
           itemsaccess = "referer"
           url = request.referer
         end
-        if $redis.get("#{url}where_to_buy_item_ids").blank?
-          @items = Product.where("id in (?)", $redis.get("#{request.referer}where_to_buy_item_ids").split(","))
+        unless $redis.get("#{url}where_to_buy_item_ids").blank?
+          @items = Item.where("id in (?)", $redis.get("#{url}where_to_buy_item_ids").split(","))
         else
         
         unless url.nil?  
@@ -239,7 +237,7 @@ class ProductsController < ApplicationController
             tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
           end
           if url.include?("#")          
-             tempurl = url.slice(0..(url.infile:///home/gabbsabbu/compare.htmldex('#'))).gsub(/\#/, "").strip 
+            tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip 
           end          
           @articles = ArticleContent.where(url: tempurl)
 
@@ -513,8 +511,7 @@ class ProductsController < ApplicationController
 
         callback = params[:callback]     
         jsonp = callback + "(" + json.to_json + ")"
-    logger.info "===============================#{jsonp}"
-
+    
         render :json => jsonp
   end
 

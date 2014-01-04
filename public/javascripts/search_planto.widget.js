@@ -10,11 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
     // var domain = "www.plannto.com";
     //for development
-<<<<<<< HEAD
- //var domain = "localhost:3000";
-=======
- var domain = "localhost:3000";
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
+    var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -108,15 +104,10 @@ var PlannTo = (function (window, undefined) {
     function where_to_buy(item_id, show_details, element_id, parentdivid, pathname, url) {
         var doc_title = PlannTo.jQuery(document).title;
 
-<<<<<<< HEAD
-            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
-            it_id = item_type ? item_type : " "
-=======
            types = getParam(url, "types");
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
         url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
@@ -130,20 +121,14 @@ var PlannTo = (function (window, undefined) {
     function planntowtbdivcreation(item_ids, show_details, element_id, parentdivid, pathname, url) {
         var doc_title = PlannTo.jQuery(document).title;
 
-<<<<<<< HEAD
-            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
-            it_id = item_type ? item_type : " "
-=======
             types = getParam(url, "types");
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
         url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
-console.log(data)
             jQuery("#display_search_item").html(data.html);
             jQuery(".where_to_buy_searched").live("click", function () {
                 where_to_buy(jQuery(this).attr("id"), show_details, element_id, parentdivid, pathname)
@@ -178,27 +163,18 @@ console.log(data)
           //item = {value: "Search more items...", id: "0", imgsrc: ""}
           //self._renderItem( ul, item, -1 );
         };
-<<<<<<< HEAD
-        var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
-        it_id = item_type ? item_type : " "
-=======
             types = getParam(url, "types");
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         var it_id = item_type ? item_type : ""
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
         jQuery("#planto_search_widget_auto_item").autocomplete({
 
             source: "http://" + domain + "/product_autocomplete.jsonp?search_type="+it_id+"&callback=?",
             focus:function(e,ui) {},
             format: "js",
             minLength: 2,
-<<<<<<< HEAD
-            select: function (event, ui) {              
-=======
             select: function (event, ui) { 
 
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
               where_to_buy(ui.item.id, show_details, element, element_id, pathname); 
               jQuery("#planto_search_widget_auto_item").val("");
               return false;
@@ -237,12 +213,6 @@ console.log(data)
             var element_id = "#content";
 
             element = jQuery("#display_search_item").val()
-<<<<<<< HEAD
-            var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
-            it_id = item_type ? item_type : " "
-=======
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
-
             var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
             types = getParam(url, "types");
             it_id = item_type ? item_type : ""
@@ -261,22 +231,14 @@ console.log(data)
 
             });
 
-<<<<<<< HEAD
-            jQuery(".select_item_type_id").live("click", function(){
-                debugger;
-=======
             jQuery(".select_item_type_id").live("click", function(event){
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
                 jQuery(".select_item_type_id.selected").parent("li").removeClass("selected");
                 jQuery(".select_item_type_id.selected").parent("li").addClass("unselected");
                 jQuery(".select_item_type_id").removeClass("selected");                
                 jQuery(this).addClass('selected')
                 jQuery(this).parent("li").addClass('selected')
                 var item_type = jQuery(this).parent("li").attr("id")
-<<<<<<< HEAD
-=======
                 jQuery("#planto_search_widget_auto_item").val("")
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
                 it_id = item_type ? item_type : " "
                 
                 // jQuery(this).addClass("selected");
@@ -287,18 +249,11 @@ console.log(data)
 
                     jQuery("#display_search_item").replaceWith(data.html);
 
-<<<<<<< HEAD
-                    jQuery(".where_to_buy_searched").live("click", function () {
-                        where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname)
-                    })
-                    autoComplete()
-=======
                     // jQuery(".where_to_buy_searched,.productinwizard").bind("click", function () {
                     //     item_id = parseInt(jQuery(this).attr("id").replace("product", ""));
                     //     where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname, url)
                     // })
                     // autoComplete()
->>>>>>> 77ae1901f3e794a3af960c5046da8e68934941f3
                    event.preventDefault()     
                 });
             
