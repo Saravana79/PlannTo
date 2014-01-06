@@ -254,8 +254,10 @@ class ProductsController < ApplicationController
           unless @articles.empty?            
             @items = @articles[0].allitems.select{|a| a.is_a? Product};  
             @items = @items[0..15].reverse    
+            $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(","))
+          
           end
-          $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(","))
+          
         end
       end
     end 
