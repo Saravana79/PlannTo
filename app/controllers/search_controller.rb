@@ -242,7 +242,11 @@ class SearchController < ApplicationController
     elsif params[:content] == "true"
         search_type = Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]
     else
-        search_type = Product.search_type(params[:search_type]) + [Game]
+        if params[:search_type].is_a?(Array)
+          search_type = Product.search_type(params[:search_type]) + [Game]
+        else
+          search_type = Product.search_type(params[:search_type])
+        end
     end 
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
