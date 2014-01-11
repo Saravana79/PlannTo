@@ -46,7 +46,7 @@
                 
                     <input class="search-input-text" id="planto_search_widget_auto_item" 
                     style="width: 70%;padding: 5px;margin: 10px;" placeholder="Ex Apple Iphone 5s, Samsung Galaxy S4, etc."/>
-                    <a href="#" id="search_from_widget" style="margin: 0; background: #979797;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 15px;font-weight: bold; text-decoration: none;">Search</a>
+                    <a href="#" id="search_from_widget" style="margin: 0; background: #979797;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 15px;font-weight: bold; text-decoration: none;"  rel= "nofollow">Search</a>
                 
 </div>              
 
@@ -67,7 +67,7 @@
                     <%= item.get_price_info("Mobile",false)%>
                 </div>
                 <div style="margin-top:10px;">
-                    <%= link_to "Find Best Price", "#", :class => "where_to_buy_searched", id: item.id , :style => "margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;"%>
+                    <%= link_to "Find Best Price", "#", :class => "where_to_buy_searched", id: item.id , :style => "margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;", :rel=> "nofollow"%>
                 </div>
                 
           
