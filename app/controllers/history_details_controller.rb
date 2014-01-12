@@ -56,7 +56,8 @@ class HistoryDetailsController < ApplicationController
             url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
             url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil? 
           end   
-        end
+         end
+         url=  url.gsub(/\{iid}/,@impression_id)  unless @impression_id.nil? 
       end
     end
       redirect_to url    
