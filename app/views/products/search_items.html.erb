@@ -57,7 +57,7 @@
     <%@items.each do |item|%>
         <div class="productinwizard" id="product_<%= item.id %>" style="float:left;width:180px;height:200px;display:block;padding:10px;text-align:center;">
                   <div>
-                      <%= image_tag(item.image_url, height: "120", width: "160")%>
+                      <%= image_tag(item.image_url, height: "120", width: "160", style: "margin:0;")%>
                  </div>
               
                 <div>
