@@ -192,6 +192,10 @@
         <ul id="<%=@ul_list_id%>" class="tagging"></ul>
         <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="<%=@search_field_id%>"/></div>
         <div style="clear:both;"></div>
+
+        <div id="search_items_by_relavance"></div>
+        <div style="clear:both;"></div>
+
       </div>
       <div style="clear:both;"></div>
     </div>
@@ -253,6 +257,9 @@
         <%= f.text_field :field4, {:style=>"margin-left:5px;width:400px",:width=>"400px", :id => @field4_id}  %>
       </div>
       <div style="clear:both;"></div>
+      
+
+      </div>
     </div>
     <!-- FIELD ENDS -->
     <br />
@@ -835,6 +842,31 @@ if ($("#article_content_sub_type").val() == ""){
 
 
   $(document).ready(function(){
+
+    $.ajax({
+      url: '/search/search_items_by_relavance',
+      dataType:'json',
+      type: "get",
+      data: {term: $("#txtArticleTitle").val(), search_type: $("#new_article_type").val()},
+      before:$('#share_spinner').show(),
+      after: $('#share_spinner').hide(),
+      success: function(data){
+          console.log(data)
+        var container = $('#search_items_by_relavance');
+        $.each(data, function( index, value ) {
+          sub_contain = $("<span></span>")
+          $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched'+value.id, value: value.id,name: "article_content[relevance_product][]" }).appendTo(sub_contain);
+          $('<label />', { 'for': 'matched'+value.id, text: value.value }).appendTo(sub_contain);
+          $(sub_contain).appendTo(container)
+
+        });
+        $(".relevant_product").live("click", function(){
+            $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+            $(this).parent().remove();
+        })
+        console.log($('#search_items_by_relavance'))
+      }
+    });
   	
   $('div#<%=@productReviewRatingField%>').raty({
     starOff:  'assets/star-off.png',

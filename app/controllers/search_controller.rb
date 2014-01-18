@@ -304,17 +304,29 @@ class SearchController < ApplicationController
   end
 
   def search_items_by_relavance
-    search_type = Product.search_type(params[:search_type])
+    if params[:type]
+      search_type = Product.follow_search_type(params[:type])
+    elsif params[:content] == "true"
+        search_type = Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]
+    else
+        if params[:search_type].is_a?(Array)
+          search_type = Product.search_type(params[:search_type]) + [Game]
+        else
+          search_type = Product.search_type(params[:search_type])
+        end
+    end 
+
+    # search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
-        fulltext params[:term].gsub("-","") do
+        fulltext params[:term] do
           minimum_match 1
-          fields :nameformlt
+          fields :title
         end
       order_by :score,:desc
       paginate(:page => 1, :per_page => 10)      
     end
 
-    results = @items.collect{|item|
+    results = @items.results.collect{|item|
 
       image_url = item.image_url(:small)
     

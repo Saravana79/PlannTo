@@ -551,22 +551,28 @@ class ProductsController < ApplicationController
   end
 
   def get_item_item_advertisment
+    @height = params[:height] ? params[:height] : 250
+    @width = params[:width] ? params[:width] : 250
     # item_ids = ContentItemRelation.includes(:content).where('contents.url=? and contents.type=?',request.referer,'ArticleContent')
     # content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id
     unless params[:dynamic]
       @advertisement = Advertisement.joins(:content => [:items => :contents]).where("view_article_contents.url=?", request.referer)
-      render :template => "products/get_item_item_advertisment",:layout => false
+      render :template => "products/get_static_item_advertisment",:layout => false
     else
       @ac = ArticleContent.includes(:items).where("view_article_contents.url=?", request.referer)
       unless @ac.blank?
         @item = @ac.first.item
-        @where_to_buy = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?', status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        @where_to_buy = @item.itemdetails.includes(:vendor).where('itemdetails.isError =?',0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       else
         @where_to_buy = []
       end
-      logger.info "============================================="
-      
-      render :template => "products/get_dynamic_item_advertisment",:layout => false
+      html = html = render_to_string(:layout => false)
+        json = {"html" => html}.to_json
+        callback = params[:callback]     
+        jsonp = callback + "(" + json + ")"
+        render :text => jsonp,  :content_type => "text/javascript" 
+
+      # render :template => "products/get_dynamic_item_advertisment",:layout => false
     end
   end
   
