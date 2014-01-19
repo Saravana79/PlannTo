@@ -311,7 +311,7 @@ class SearchController < ApplicationController
           minimum_match 1
         end
       order_by :score,:desc
-      paginate(:page => 1, :per_page => 10)      
+      paginate(:page => 1, :per_page => 5)      
     end
 
     results = @items.results.collect{|item|

@@ -118,7 +118,8 @@
       <div style="clear:both;"></div>
     </div>
        <%if @article_content.new_record? %>
-      <div id="shared_message" style ="padding: 10px 10px 10px 40px;margin: 10px 15px 10px 20px;" class="alert-info">Please share the url of the <%if params[:category] == 'Q' %> question <%else%> <%= params[:category].blank? ? "content" : params[:category].to_s.downcase.singularize %> <%end%>that you like to share with others here.</div>
+
+      <div id="shared_message" style ="padding: 10px 10px 10px 40px;margin: 10px 15px 10px 20px;display:inline;" class="alert-info">Please share the url of the <%if params[:category] == 'Q' %> question <%else%> <%= params[:category].blank? ? "content" : params[:category].to_s.downcase.singularize %> <%end%>that you like to share with others here.</div>
       <%end%>
     <div style="padding:5px 5px 0px 0px;clear:both;">
     
@@ -853,10 +854,13 @@ if ($("#article_content_sub_type").val() == ""){
       success: function(data){
           console.log(data)
         var container = $('#search_items_by_relavance');
+        sub_contain = $("<span style='padding-right:10px;'>Suggestions:</span>")
+          
+        $(sub_contain).appendTo(container)
         $.each(data, function( index, value ) {
-          sub_contain = $("<span></span>")
+          sub_contain = $("<span style='display:inline-block'"></span>")
           $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched'+value.id, value: value.id,name: "article_content[relevance_product][]" }).appendTo(sub_contain);
-          $('<label />', { 'for': 'matched'+value.id, text: value.value }).appendTo(sub_contain);
+          $('<label style='padding-right:10px'/>', { 'for': 'matched'+value.id, text: value.value }).appendTo(sub_contain);
           $(sub_contain).appendTo(container)
 
         });
