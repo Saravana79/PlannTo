@@ -304,19 +304,8 @@ class SearchController < ApplicationController
   end
 
   def search_items_by_relavance
-    if params[:type]
-      search_type = Product.follow_search_type(params[:type])
-    elsif params[:content] == "true"
-        search_type = Product.search_type(params[:search_type]) 
-    else
-        if params[:search_type].is_a?(Array)
-          search_type = Product.search_type(params[:search_type]) + [Game]
-        else
-          search_type = Product.search_type(params[:search_type])
-        end
-    end 
 
-    # search_type = Product.search_type(params[:search_type])
+    search_type = Product.search_type(nil)
     @items = Sunspot.search(search_type) do
         keywords params[:term] do
           minimum_match 1
