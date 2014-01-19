@@ -860,7 +860,7 @@ if ($("#article_content_sub_type").val() == ""){
         $.each(data, function( index, value ) {
           sub_contain = $("<span style='display:inline-block'></span>")
           $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched'+value.id, value: value.id,name: "article_content[relevance_product][]" }).appendTo(sub_contain);
-          $('<label style='padding-right:10px'/>', { 'for': 'matched'+value.id, text: value.value }).appendTo(sub_contain);
+          $('<label />', { 'for': 'matched'+value.id, text: value.value,style: "padding-right:10px;" }).appendTo(sub_contain);
           $(sub_contain).appendTo(container)
 
         });
