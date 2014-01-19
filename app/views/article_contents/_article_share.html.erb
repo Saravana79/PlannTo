@@ -194,7 +194,7 @@
         <div class="float_lft " style="clear:both;"><input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="<%=@search_field_id%>"/></div>
         <div style="clear:both;"></div>
 
-        <div id="search_items_by_relavance"></div>
+        <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;"></div>
         <div style="clear:both;"></div>
 
       </div>
@@ -854,7 +854,7 @@ if ($("#article_content_sub_type").val() == ""){
       success: function(data){
           console.log(data)
         var container = $('#search_items_by_relavance');
-        sub_contain = $("<span style='padding-right:10px;'>Suggestions:</span>")
+        sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
           
         $(sub_contain).appendTo(container)
         $.each(data, function( index, value ) {
