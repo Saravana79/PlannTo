@@ -860,7 +860,7 @@ if ($("#article_content_sub_type").val() == ""){
         $.each(data, function( index, value ) {
           sub_contain = $("<span style='display:inline-block'></span>")
           $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched'+value.id, value: value.id,name: "article_content[relevance_product][]" }).appendTo(sub_contain);
-          $('<label />', { 'for': 'matched'+value.id, text: value.value,style: "padding-right:10px;" }).appendTo(sub_contain);
+          $('<label />', { 'for': 'matched'+value.id, text: value.value + " (" + value.type + ")" ,style: "padding-right:10px;" }).appendTo(sub_contain);
           $(sub_contain).appendTo(container)
 
         });
@@ -886,7 +886,7 @@ if ($("#article_content_sub_type").val() == ""){
   	
   	//onfocus logic
   	
-  	$("#ShareURLDiv #<%=@search_field_id%>").focus(function(){  		
+  	/*$("#ShareURLDiv #<%=@search_field_id%>").focus(function(){  		
   		if ($(this).autocomplete("widget").is(":visible")) {
           return;
        }  
@@ -894,7 +894,7 @@ if ($("#article_content_sub_type").val() == ""){
          $(this).data("autocomplete").search($("#<%=@title_id%>").val());
        });
     
-    
+    */
     
     //ends
   	
