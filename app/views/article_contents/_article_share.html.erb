@@ -882,7 +882,7 @@ if ($("#article_content_sub_type").val() == ""){
   setDefaultFieldsArticleSubmit(category);
   return false;
   });
-  <%end%>
+  <%else%>
 
     $.ajax({
       url: '/search/search_items_by_relavance',
@@ -909,7 +909,8 @@ if ($("#article_content_sub_type").val() == ""){
         })
       }
     });
-    
+   
+   <%end%> 
 
   
   });
