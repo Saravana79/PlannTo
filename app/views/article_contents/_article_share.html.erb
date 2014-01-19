@@ -260,7 +260,7 @@
       <div style="clear:both;"></div>
       
 
-      </div>
+   <!--   </div>-->
     </div>
     <!-- FIELD ENDS -->
     <br />
@@ -844,34 +844,7 @@ if ($("#article_content_sub_type").val() == ""){
 
   $(document).ready(function(){
 
-    $.ajax({
-      url: '/search/search_items_by_relavance',
-      dataType:'json',
-      type: "get",
-      data: {term: $("#txtArticleTitle").val(), search_type: $("#new_article_type").val()},
-      before:$('#share_spinner').show(),
-      after: $('#share_spinner').hide(),
-      success: function(data){
-          console.log(data)
-        var container = $('#search_items_by_relavance');
-        sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
-          
-        $(sub_contain).appendTo(container)
-        $.each(data, function( index, value ) {
-          sub_contain = $("<span style='display:inline-block'></span>")
-          $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched'+value.id, value: value.id,name: "article_content[relevance_product][]" }).appendTo(sub_contain);
-          $('<label />', { 'for': 'matched'+value.id, text: value.value + " (" + value.type + ")" ,style: "padding-right:10px;" }).appendTo(sub_contain);
-          $(sub_contain).appendTo(container)
 
-        });
-        $(".relevant_product").live("click", function(){
-            $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
-            $(this).parent().remove();
-        })
-        console.log($('#search_items_by_relavance'))
-      }
-    });
-  	
   $('div#<%=@productReviewRatingField%>').raty({
     starOff:  'assets/star-off.png',
     starHalf   : 'assets/star-half.png',
@@ -886,15 +859,14 @@ if ($("#article_content_sub_type").val() == ""){
   	
   	//onfocus logic
   	
-  	/*$("#ShareURLDiv #<%=@search_field_id%>").focus(function(){  		
+  	$("#ShareURLDiv #<%=@search_field_id%>").focus(function(){  		
   		if ($(this).autocomplete("widget").is(":visible")) {
           return;
        }  
          $(this).trigger('keydown.autocomplete');
          $(this).data("autocomplete").search($("#<%=@title_id%>").val());
        });
-    
-    */
+  
     
     //ends
   	
@@ -911,6 +883,34 @@ if ($("#article_content_sub_type").val() == ""){
   return false;
   });
   <%end%>
+
+    $.ajax({
+      url: '/search/search_items_by_relavance',
+      dataType:'json',
+      type: "get",
+      data: {term: $("#txtArticleTitle").val(), search_type: $("#new_article_type").val()},
+      before:$('#share_spinner').show(),
+      after: $('#share_spinner').hide(),
+      success: function(data){
+        var container = $('#search_items_by_relavance');
+        sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
+          
+        $(sub_contain).appendTo(container)
+        $.each(data, function( index, value ) {
+          sub_contain = $("<span style='display:inline-block'></span>")
+          $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched'+value.id, value: value.id,name: "article_content[relevance_product][]" }).appendTo(sub_contain);
+          $('<label />', { 'for': 'matched'+value.id, text: value.value + " (" + value.type + ")" ,style: "padding-right:10px;" }).appendTo(sub_contain);
+          $(sub_contain).appendTo(container)
+
+        });
+        $(".relevant_product").live("click", function(){
+            $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+            $(this).parent().remove();
+        })
+      }
+    });
+    
+
   
   });
 
