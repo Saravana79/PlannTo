@@ -318,9 +318,8 @@ class SearchController < ApplicationController
 
     # search_type = Product.search_type(params[:search_type])
     @items = Sunspot.search(search_type) do
-        fulltext params[:term] do
+        keywords params[:term] do
           minimum_match 1
-          fields :title
         end
       order_by :score,:desc
       paginate(:page => 1, :per_page => 10)      
