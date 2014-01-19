@@ -307,7 +307,7 @@ class SearchController < ApplicationController
     if params[:type]
       search_type = Product.follow_search_type(params[:type])
     elsif params[:content] == "true"
-        search_type = Product.search_type(params[:search_type]) + [ArticleContent] +  [ReviewContent] + [QuestionContent] + [AnswerContent]
+        search_type = Product.search_type(params[:search_type]) 
     else
         if params[:search_type].is_a?(Array)
           search_type = Product.search_type(params[:search_type]) + [Game]
