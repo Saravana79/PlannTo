@@ -107,6 +107,7 @@ namespace :admin do
       get :autocomplete_items
       get :preference_items
       get :search_items
+      get :search_items_by_relavance
     end
   end
   match ':search_type/related-items/:car_id' => 'related_items#index'
