@@ -115,6 +115,7 @@ var PlannTo = (function (window, undefined) {
             jQuery("#display_search_item").html(data.html);
 
         });
+        event.preventDefault();
     }
 
 
@@ -137,6 +138,7 @@ var PlannTo = (function (window, undefined) {
 
 
         });
+        event.preventDefault();
     }
 
 
