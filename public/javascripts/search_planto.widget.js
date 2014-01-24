@@ -258,7 +258,9 @@ var PlannTo = (function (window, undefined) {
                     // autoComplete()
                    event.preventDefault()     
                 });
-            
+
+               event.preventDefault()     
+                
             });
             jQuery("#search_from_widget").live("click", function (e) {
                 url = getScriptUrl();
@@ -271,11 +273,11 @@ var PlannTo = (function (window, undefined) {
 
                 element = jQuery("#display_search_item").val()
                 // if(item_id.length > 3){
-                console.log(element_id)
                 planntowtbdivcreation(item_id, show_details, element, element_id, pathname, url);
 
                 // }
-
+                event.preventDefault()     
+                    
             });
 
         });
