@@ -113,7 +113,7 @@ var PlannTo = (function (window, undefined) {
         jQuery.getJSON(url, function (data) {
             console.log(data)
             jQuery("#display_search_item").html(data.html);
-
+             event.preventDefault();
         });
         event.preventDefault();
     }
@@ -135,7 +135,7 @@ var PlannTo = (function (window, undefined) {
                 where_to_buy(jQuery(this).attr("id"), show_details, element_id, parentdivid, pathname)
             })
             autoComplete()
-
+            event.preventDefault();
 
         });
         event.preventDefault();
@@ -191,7 +191,7 @@ var PlannTo = (function (window, undefined) {
             .appendTo( ul );
           }
 
-
+           event.preventDefault();
         // jQuery(ul).append("<div class='myFooter'>some footer text</div>");
 
         // console.log(jQuery("#planto_search_widget_auto_item"))
