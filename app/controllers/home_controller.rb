@@ -3,7 +3,7 @@ caches_action :index, :unless => :current_user, :cache_path => Proc.new { |c| c.
 caches_action :terms_conditions,  :cache_path => Proc.new { |c| c.params }
 caches_action :privacy_policy,  :cache_path => Proc.new { |c| c.params }
 caches_action :about_us,  :cache_path => Proc.new { |c| c.params }
-
+layout false, only: [:targeting]
   layout "product"
    def index
      @itemtypes_list =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES-["Manufacturer","Car Group","Topic"])      
@@ -30,7 +30,9 @@ caches_action :about_us,  :cache_path => Proc.new { |c| c.params }
   def about_us
     @static_page ="true"
   end
- 
+   def targeting
+    render :layout => false
+  end
  def dialog_test
  
  end
