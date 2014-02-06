@@ -33,7 +33,7 @@ class HistoryDetailsController < ApplicationController
      else
 
       type = params[:type].present? ? params[:type] : ""
-      @impression_id = params[:iid]
+      @impression_id = params[:iid].present? ? params[:iid] : "0"
       find_item_detail(params[:detail_id], "")
       url = "#{@item_detail.url}"
       vendor = Item.find(@item_detail.site)
