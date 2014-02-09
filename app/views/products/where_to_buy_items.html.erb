@@ -12,7 +12,7 @@
          #plannto_insidediv{padding:7px 10px 10px 10px;background: #EEE;}
          #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
          #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;}
-         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;}
+         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;float:none;display:table-cell;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
          #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;float:none;}
          #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;float:none;display:table-cell;}
@@ -93,11 +93,11 @@
 
                       <div id="plannto_insidediv">
                           <table id="plannto_intable" width="100%">   
-                            <thead style="border:0px;">
+                            <thead style="border:0px;display:table-cell;">
                               <tr id="plannto_intr">
                                 <td colspan="5" id="plannto_intd" >
                                  <%if @items.size == 1 %>
-                                 <div>
+                                 <div style="width:100%;">
                                  <span style="float:left;padding-left: 10px;padding-top: 5px;">
                                  
                                  <img  src="<%=@item.image_url(:medium)%>" alt="<%=@item.name%>"  onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" style="width:60px;"/>
