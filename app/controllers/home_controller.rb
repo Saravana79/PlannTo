@@ -30,6 +30,17 @@ layout false, only: [:targeting]
   def about_us
     @static_page ="true"
   end
+  
+  def opt_out
+    @static_page ="true"
+  end
+  
+  def opt_out_submit
+    cookies.delete :plan_to_temp_user_id if cookies[:plan_to_temp_user_id].blank?
+    cookies[:plannto_optout] = { value: "true", expires: 1.year.from_now } if cookies[:plannto_optout].blank?
+    @static_page ="true"
+  end
+
    def targeting
     render :layout => false
   end
