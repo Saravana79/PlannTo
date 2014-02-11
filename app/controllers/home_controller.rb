@@ -25,6 +25,7 @@ layout false, only: [:targeting]
   
   def privacy_policy
    @static_page ="true"
+   @homepage = "false"
   end
   
   def about_us
@@ -33,6 +34,7 @@ layout false, only: [:targeting]
   
   def opt_out
     @static_page ="true"
+    @homepage = "false"
   end
   
   def opt_out_submit
