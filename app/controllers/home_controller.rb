@@ -36,7 +36,7 @@ layout false, only: [:targeting]
   end
   
   def opt_out_submit
-    cookies.delete :plan_to_temp_user_id if cookies[:plan_to_temp_user_id].blank?
+    cookies.delete :plan_to_temp_user_id unless cookies[:plan_to_temp_user_id].blank?
     cookies[:plannto_optout] = { value: "true", expires: 1.year.from_now } if cookies[:plannto_optout].blank?
     @static_page ="true"
   end
