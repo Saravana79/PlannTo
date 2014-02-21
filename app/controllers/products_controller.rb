@@ -575,7 +575,7 @@ class ProductsController < ApplicationController
       # render :template => "products/get_dynamic_item_advertisment",:layout => false
     end
   end
-  
+
 
   private
 

@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include Authentication
   include Reputation
   protect_from_forgery
-  before_filter :check_authentication
+  #before_filter :check_authentication
   before_filter :store_session_url
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
   prepend_before_filter { |c| RecordCache::Strategy::RequestCache.clear }

@@ -27,7 +27,7 @@ gem  "haml"
 gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
 gem 'rails_exception_handler', "~> 2"
 gem 'aws-sdk'
-gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'
+gem 'record-cache',:git => 'https://github.com/orslumen/record-cache.git'
 #gem 'execjs'
 gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
@@ -71,3 +71,4 @@ group :test do
   gem 'turn', :require => false
 end 
 gem 'geocoder'
+gem 'progress_bar'

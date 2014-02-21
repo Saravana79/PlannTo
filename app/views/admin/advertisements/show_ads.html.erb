@@ -1,0 +1,240 @@
+<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+
+<div id="slideshow">
+
+<div class="vendor_logo">
+  <img src="<%= @vendor.image_url %>">
+</div>
+
+<% @item_details.each_with_index do |item_detail, indx| %>
+
+    <div class="item_details" id="item_detail_<%= indx + 1 %>">
+      <div class="item_image"><img src="<%= @item.blank? ? item_detail.item.image_url : @item.image_url %>" size="100*100"></div>
+      <div class="item_data">
+        <ul>
+          <br/>
+          <li><span> <%= item_detail.ItemName %> </span></li>
+          <br/>
+          <li><span> Price: <%= item_detail.price %> </span></li>
+          <br/>
+          <li>
+            <a target="_blank" id="plannto_go_button" href="http://localhost:3000/history_details?detail_id=<%= item_detail.id %>&iid=<%= @item.blank? ? item_detail.item.id : @item.id %>">Buy
+              Now</a></li>
+        </ul>
+      </div>
+    </div>
+
+<% end %>
+
+
+<ul class="dots_commands">
+  <% [*1..@item_details.count].each do |each_loop| %>
+     <li><a href="javascript:void(0)" class="" id="<%= each_loop %>" title="Show slide <%= each_loop %>">Slide <%= each_loop %></a></li>
+  <% end %>
+</ul>
+
+<span class="arrow previous"></span>
+<span class="arrow next"></span>
+
+ </div>
+
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .vendor_logo {
+        background-color: #c0c0c0;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .item_data {
+        float: left;
+        width: 58%;
+        height: 70%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item_image {
+        float: left;
+        padding: 24px 0 0 4px;
+        width: 40%;
+    }
+
+    .item_image img {
+        width: 100px;
+        height: 100px
+    }
+
+    #slideshow .arrow{
+        height:86px;
+        width:60px;
+        position:absolute;
+        background:url('/assets/arrows.png') no-repeat;
+        top:50%;
+        margin-top:-43px;
+        cursor:pointer;
+        z-index:5000;
+    }
+
+    #slideshow .previous{ background-position:left top;left:0;}
+    #slideshow .previous:hover{ background-position:left bottom;}
+
+    #slideshow .next{ background-position:right top;right:0;}
+    #slideshow .next:hover{ background-position:right bottom;}
+
+
+    .dots_commands  {
+        position: relative;
+        text-align:center;
+    }
+    .dots_commands li {
+        display:inline;
+        padding:0; margin:0;
+        list-style:none;
+    }
+    .dots_commands a {
+        position: relative;
+        display:inline-block;
+        height:8px; width: 8px;
+        margin: 0 5px;
+        text-indent: -9999px;
+        background: #fff;
+        border-bottom:0;
+
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.55) inset;
+        -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.55) inset;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.55) inset;
+
+        z-index:25;
+    }
+    .dots_commands li + li a {
+        z-index:10;
+    }
+
+    .active_dot { background: none repeat scroll 0 0 #0000FF !important;}
+
+
+
+</style>
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+  var stop_sliding = false
+
+  $(".item_details").hide();
+  $(".item_details").first().show();
+  $(".item_details").first().addClass('active')
+  $("#1").addClass('active_dot')
+
+
+
+  $(".item_details").each(function (index) {
+
+       if(index == 0)
+         return
+
+        var that = this;
+        var t = setTimeout(function () {
+            if (stop_sliding == false)
+            {
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+            $(".dots_commands li a").removeClass('active_dot')
+
+            split_div = $(that).attr('id').split('_')
+            $("#"+split_div[split_div.length - 1]).addClass('active_dot')
+
+            $(that).show();
+            $(that).addClass('active')
+            if (index == ($(".item_details").length - 1))
+                setTimeout(function () {
+                    $(".item_details").last().hide()
+                    $(".item_details").removeClass('active')
+                    $(".dots_commands li a").removeClass('active_dot')
+                    $(".item_details").first().show();
+                    $(".item_details").first().addClass('active')
+                    $("#1").addClass("active_dot")
+                }, 5000)}
+        }, 5000 * index);
+  });
+
+    $(".next").click(function()
+    {
+        var current_div = $(".item_details.active")
+        $(".item_details").hide();
+        $(".item_details").removeClass('active')
+        $(".dots_commands li a").removeClass('active_dot')
+
+        var splited_val = $(current_div).attr("id").split('_')
+
+        if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length)
+        {
+          $(current_div).next().show().addClass('active')
+            split_div = $(current_div).next().attr("id").split('_')
+            $("#"+split_div[split_div.length - 1]).addClass('active_dot')
+        }
+        else
+        {
+          $(".item_details").first().show().addClass('active')
+          $("#1").addClass('active_dot')
+        }
+    });
+
+
+    $(".previous").click(function()
+    {
+        var current_div = $(".item_details.active")
+        $(".item_details").hide();
+        $(".item_details").removeClass('active')
+        $(".dots_commands li a").removeClass('active_dot')
+
+        var splited_val = $(current_div).attr("id").split('_')
+
+        if (parseInt(splited_val[splited_val.length - 1]) > 1)
+        {
+            $(current_div).prev().show().addClass('active')
+            split_div = $(current_div).prev().attr("id").split('_')
+            $("#"+split_div[split_div.length - 1]).addClass('active_dot')
+        }
+        else
+        {
+            $(".item_details").last().show().addClass('active')
+            last = $(".item_details").length
+            $("#"+last).addClass('active_dot')
+        }
+    });
+
+    $(".dots_commands li a").click(function()
+    {
+        var that = this
+        selected_id = $(that).attr("id")
+        selected_div = $("#item_detail_"+selected_id)
+
+        $(".item_details").hide();
+        $(".item_details").removeClass('active')
+
+        $(selected_div).show()
+        $(selected_div).addClass('active')
+        $(".dots_commands li a").removeClass('active_dot')
+        $(that).addClass('active_dot')
+    })
+
+    $("#slideshow").click(function()
+    {
+        stop_sliding = true
+    })
+
+});
+
+</script>

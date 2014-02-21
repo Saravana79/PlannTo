@@ -1,5 +1,5 @@
 class Admin::AdvertisementsController < ApplicationController
- before_filter :authenticate_advertiser_user!
+ before_filter :authenticate_advertiser_user!, :except => [:show_ads]
  layout "product"
  
    def index
@@ -64,7 +64,7 @@ class Admin::AdvertisementsController < ApplicationController
       redirect_to admin_advertisements_path
     else
       render :edit
-    end     
+    end
   end
   
   def destroy
@@ -72,5 +72,26 @@ class Admin::AdvertisementsController < ApplicationController
    @advertisement.update_attribute('status',3)
    redirect_to admin_advertisements_path
   end
- 
+
+ def show_ads
+   #@page_width = params[:size].split("*")[0]
+   #@page_height = params[:size].split("*")[1]
+
+   @vendor = Vendor.where(:id => params[:vendor_id]).first
+   item_ids = params[:item_id].split(",")
+   @item_details = []
+   if item_ids.count > 1
+     item_ids.each do |each_item|
+       item = Item.where(:id => each_item).first
+       item_detail = item.itemdetails.includes(:vendor).where('itemdetails.isError =? and site = ?', 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').first
+       @item_details << item_detail unless item_detail.blank?
+     end
+   else
+     @item = Item.where(:id => params[:item_id]).first
+     @item_details = @item.itemdetails.includes(:vendor).where('itemdetails.isError =? and site = ?', 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+   end
+
+   render :layout => false
+ end
+
 end

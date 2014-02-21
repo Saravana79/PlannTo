@@ -306,7 +306,7 @@ resources :comments do
   match "/create_message/:id/:method" => 'messages#create_message', :as => :create_message
   match "/messages/block_user/:id" => 'messages#block_user', :as => :block_user
   match "/messages/:id/threaded" => 'messages#threaded_msg', :as => :threaded_msg
- 
+
   
  # match '/:search_type', :to => "products#index"
   
@@ -359,6 +359,8 @@ resources :comments do
   mount Resque::Server, :at => "/resque"  
 
   match '/:username', :to => "accounts#profile", :as => "profile"
-  
+
+  match "advertisments/show_ads" => "admin/advertisements#show_ads", :as => "show_ads"
+
   
 end
