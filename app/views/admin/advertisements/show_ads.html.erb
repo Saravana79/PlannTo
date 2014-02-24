@@ -1,240 +1,174 @@
-<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Advt 300</title>
 
-<div id="slideshow">
+  <link href="/assets/ads/style.css" type="text/css" rel="stylesheet" media="all"/>
 
-<div class="vendor_logo">
-  <img src="<%= @vendor.image_url %>">
+
+  <script type="text/javascript" language="javascript" src="/assets/ads/jquery-1.8.2.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="advt-block">
+  <div class="advt-300">
+    <% if @item_details.count != 0 %>
+        <div class="list_carousel">
+          <ul id="foo3">
+            <% @item_details.each_with_index do |item_detail, indx| %>
+                <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                  <div class="advt-box">
+                    <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt=""></a>
+                    </div>
+                    <div class="product-container">
+                      <div class="product-img-left">
+                        <a href="#"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
+                      </div>
+                      <div class="product-txt-right">
+                        <h3><%= item_detail.ItemName %></h3>
+
+                        <p class="price">Rs. <%= item_detail.price %></p>
+
+                        <p class="btn">
+                          <a href="http://localhost:3000/history_details?detail_id=<%= item_detail.id %>&iid=<%= item_detail.item.id %>" class="shop-now">Shop
+                            Now</a></p>
+
+                      </div>
+                    </div>
+                    <div class="product-txt-desc">
+                      <p>Bold and colorful 13" laptop built for affordable, on-the-go entertainment.</p></div>
+                  </div>
+                </li>
+            <% end %>
+          </ul>
+          <div class="clearfix"></div>
+          <a id="prev3" class="prev" href="#">&lt;</a>
+          <a id="next3" class="next" href="#">&gt;</a>
+
+          <div id="pager2" class="pager">
+            <% [*1..@item_details.count].each do |each_loop| %>
+                <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+            <% end %>
+          </div>
+        </div>
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-300 -->
 </div>
-
-<% @item_details.each_with_index do |item_detail, indx| %>
-
-    <div class="item_details" id="item_detail_<%= indx + 1 %>">
-      <div class="item_image"><img src="<%= @item.blank? ? item_detail.item.image_url : @item.image_url %>" size="100*100"></div>
-      <div class="item_data">
-        <ul>
-          <br/>
-          <li><span> <%= item_detail.ItemName %> </span></li>
-          <br/>
-          <li><span> Price: <%= item_detail.price %> </span></li>
-          <br/>
-          <li>
-            <a target="_blank" id="plannto_go_button" href="http://localhost:3000/history_details?detail_id=<%= item_detail.id %>&iid=<%= @item.blank? ? item_detail.item.id : @item.id %>">Buy
-              Now</a></li>
-        </ul>
-      </div>
-    </div>
-
-<% end %>
+<!-- end of advt-block -->
 
 
-<ul class="dots_commands">
-  <% [*1..@item_details.count].each do |each_loop| %>
-     <li><a href="javascript:void(0)" class="" id="<%= each_loop %>" title="Show slide <%= each_loop %>">Slide <%= each_loop %></a></li>
-  <% end %>
-</ul>
-
-<span class="arrow previous"></span>
-<span class="arrow next"></span>
-
- </div>
-
-<style type="text/css">
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    .vendor_logo {
-        background-color: #c0c0c0;
-        padding: 8px;
-        text-align: center;
-    }
-
-    .item_data {
-        float: left;
-        width: 58%;
-        height: 70%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .item_image {
-        float: left;
-        padding: 24px 0 0 4px;
-        width: 40%;
-    }
-
-    .item_image img {
-        width: 100px;
-        height: 100px
-    }
-
-    #slideshow .arrow{
-        height:86px;
-        width:60px;
-        position:absolute;
-        background:url('/assets/arrows.png') no-repeat;
-        top:50%;
-        margin-top:-43px;
-        cursor:pointer;
-        z-index:5000;
-    }
-
-    #slideshow .previous{ background-position:left top;left:0;}
-    #slideshow .previous:hover{ background-position:left bottom;}
-
-    #slideshow .next{ background-position:right top;right:0;}
-    #slideshow .next:hover{ background-position:right bottom;}
-
-
-    .dots_commands  {
-        position: relative;
-        text-align:center;
-    }
-    .dots_commands li {
-        display:inline;
-        padding:0; margin:0;
-        list-style:none;
-    }
-    .dots_commands a {
-        position: relative;
-        display:inline-block;
-        height:8px; width: 8px;
-        margin: 0 5px;
-        text-indent: -9999px;
-        background: #fff;
-        border-bottom:0;
-
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        border-radius: 50%;
-
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.55) inset;
-        -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.55) inset;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.55) inset;
-
-        z-index:25;
-    }
-    .dots_commands li + li a {
-        z-index:10;
-    }
-
-    .active_dot { background: none repeat scroll 0 0 #0000FF !important;}
-
-
-
-</style>
+</body>
+</html>
 
 
 <script type="text/javascript">
 
-$(document).ready(function(){
+    $(document).ready(function () {
 
-  var stop_sliding = false
+        var stop_sliding = false
 
-  $(".item_details").hide();
-  $(".item_details").first().show();
-  $(".item_details").first().addClass('active')
-  $("#1").addClass('active_dot')
+        $(".item_details").hide();
+        $(".item_details").first().show();
+        $(".item_details").first().addClass('active')
+        $("#1").addClass('selected')
 
 
+        $(".item_details").each(function (index) {
 
-  $(".item_details").each(function (index) {
+            if (index == 0)
+                return
 
-       if(index == 0)
-         return
+            var that = this;
+            var t = setTimeout(function () {
+                if (stop_sliding == false) {
+                    $(".item_details").hide();
+                    $(".item_details").removeClass('active')
+                    $("#pager2 a").removeClass('selected')
 
-        var that = this;
-        var t = setTimeout(function () {
-            if (stop_sliding == false)
-            {
+                    split_div = $(that).attr('id').split('_')
+                    $("#" + split_div[split_div.length - 1]).addClass('selected')
+
+                    $(that).show();
+                    $(that).addClass('active')
+                    if (index == ($(".item_details").length - 1))
+                        setTimeout(function () {
+                            if (stop_sliding == false) {
+                                $(".item_details").last().hide()
+                                $(".item_details").removeClass('active')
+                                $("#pager2 a").removeClass('selected')
+                                $(".item_details").first().show();
+                                $(".item_details").first().addClass('active')
+                                $("#1").addClass("selected")
+                            }
+                        }, 5000)
+                }
+            }, 5000 * index);
+        });
+
+        $(".next").click(function () {
+            var current_div = $(".item_details.active")
             $(".item_details").hide();
             $(".item_details").removeClass('active')
-            $(".dots_commands li a").removeClass('active_dot')
+            $("#pager2 a").removeClass('selected')
 
-            split_div = $(that).attr('id').split('_')
-            $("#"+split_div[split_div.length - 1]).addClass('active_dot')
+            var splited_val = $(current_div).attr("id").split('_')
 
-            $(that).show();
-            $(that).addClass('active')
-            if (index == ($(".item_details").length - 1))
-                setTimeout(function () {
-                    $(".item_details").last().hide()
-                    $(".item_details").removeClass('active')
-                    $(".dots_commands li a").removeClass('active_dot')
-                    $(".item_details").first().show();
-                    $(".item_details").first().addClass('active')
-                    $("#1").addClass("active_dot")
-                }, 5000)}
-        }, 5000 * index);
-  });
+            if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length) {
+                $(current_div).next().show().addClass('active')
+                split_div = $(current_div).next().attr("id").split('_')
+                $("#" + split_div[split_div.length - 1]).addClass('selected')
+            }
+            else {
+                $(".item_details").first().show().addClass('active')
+                $("#1").addClass('selected')
+            }
+        });
 
-    $(".next").click(function()
-    {
-        var current_div = $(".item_details.active")
-        $(".item_details").hide();
-        $(".item_details").removeClass('active')
-        $(".dots_commands li a").removeClass('active_dot')
 
-        var splited_val = $(current_div).attr("id").split('_')
+        $(".prev").click(function () {
+            var current_div = $(".item_details.active")
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+            $("#pager2 a").removeClass('selected')
 
-        if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length)
-        {
-          $(current_div).next().show().addClass('active')
-            split_div = $(current_div).next().attr("id").split('_')
-            $("#"+split_div[split_div.length - 1]).addClass('active_dot')
-        }
-        else
-        {
-          $(".item_details").first().show().addClass('active')
-          $("#1").addClass('active_dot')
-        }
+            var splited_val = $(current_div).attr("id").split('_')
+
+            if (parseInt(splited_val[splited_val.length - 1]) > 1) {
+                $(current_div).prev().show().addClass('active')
+                split_div = $(current_div).prev().attr("id").split('_')
+                $("#" + split_div[split_div.length - 1]).addClass('selected')
+            }
+            else {
+                $(".item_details").last().show().addClass('active')
+                last = $(".item_details").length
+                $("#" + last).addClass('selected')
+            }
+        });
+
+        $("#pager2 a").click(function () {
+            var that = this
+            selected_id = $(that).attr("id")
+            selected_div = $("#item_detail_" + selected_id)
+
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+
+            $(selected_div).show()
+            $(selected_div).addClass('active')
+            $("#pager2 a").removeClass('selected')
+            $(that).addClass('selected')
+        })
+
+        $(".list_carousel").click(function () {
+            stop_sliding = true
+        })
+
     });
-
-
-    $(".previous").click(function()
-    {
-        var current_div = $(".item_details.active")
-        $(".item_details").hide();
-        $(".item_details").removeClass('active')
-        $(".dots_commands li a").removeClass('active_dot')
-
-        var splited_val = $(current_div).attr("id").split('_')
-
-        if (parseInt(splited_val[splited_val.length - 1]) > 1)
-        {
-            $(current_div).prev().show().addClass('active')
-            split_div = $(current_div).prev().attr("id").split('_')
-            $("#"+split_div[split_div.length - 1]).addClass('active_dot')
-        }
-        else
-        {
-            $(".item_details").last().show().addClass('active')
-            last = $(".item_details").length
-            $("#"+last).addClass('active_dot')
-        }
-    });
-
-    $(".dots_commands li a").click(function()
-    {
-        var that = this
-        selected_id = $(that).attr("id")
-        selected_div = $("#item_detail_"+selected_id)
-
-        $(".item_details").hide();
-        $(".item_details").removeClass('active')
-
-        $(selected_div).show()
-        $(selected_div).addClass('active')
-        $(".dots_commands li a").removeClass('active_dot')
-        $(that).addClass('active_dot')
-    })
-
-    $("#slideshow").click(function()
-    {
-        stop_sliding = true
-    })
-
-});
 
 </script>

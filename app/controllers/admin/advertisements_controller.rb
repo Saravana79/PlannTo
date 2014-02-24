@@ -77,20 +77,19 @@ class Admin::AdvertisementsController < ApplicationController
    #@page_width = params[:size].split("*")[0]
    #@page_height = params[:size].split("*")[1]
 
-   @vendor = Vendor.where(:id => params[:vendor_id]).first
    item_ids = params[:item_id].split(",")
    @item_details = []
    if item_ids.count > 1
-     item_ids.each do |each_item|
-       item = Item.where(:id => each_item).first
-       item_detail = item.itemdetails.includes(:vendor).where('itemdetails.isError =? and site = ?', 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').first
-       @item_details << item_detail unless item_detail.blank?
-     end
+     item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, params[:vendor_id]).order('itemdetails.status asc,
+                    (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by {|a| a.itemid}
+
+     item_details.each {|_, val| @item_details << val[0]}
    else
-     @item = Item.where(:id => params[:item_id]).first
-     @item_details = @item.itemdetails.includes(:vendor).where('itemdetails.isError =? and site = ?', 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+     @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
    end
 
+   @item_details = @item_details.first(6)
+   @vendor_image_url = @item_details.first.vendor.image_url
    render :layout => false
  end
 
