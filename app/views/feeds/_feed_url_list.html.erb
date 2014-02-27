@@ -1,0 +1,19 @@
+<table>
+  <tr>
+    <th>S.No</th>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Status</th>
+    <th>Source</th>
+  </tr>
+  <% @feed_urls.each_with_index do |feed, inx| %>
+      <tr>
+        <td style="text-align: center; "><%= inx + 1 %></td>
+        <td><span class="feed_title" id="<%= feed.id %>"><%= feed.title.blank? ? feed.url : feed.title.truncate(70) %></span> </td>
+        <td><%= feed.category %></td>
+        <td class="status" style="text-align: center; "><%= feed.status %></td>
+        <td><%= feed.source %></td>
+      </tr>
+      <tr class="feed_explain"> <td colspan="5"> <div class="display" id="feed_display_<%= feed.id %>"></div> </td> </tr>
+  <% end %>
+</table>

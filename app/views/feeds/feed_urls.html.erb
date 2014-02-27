@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <title>PlannTo - Add Feeds</title>
+  <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+  <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
+  <%= javascript_include_tag "jquery_ujs" %>
+  <%= javascript_include_tag 'textTagger' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<button class="go_back" type="button" onclick="window.location='/feeds'">Go Back</button>
+<div class="list_feed_urls">
+  <div class="search_form">
+    <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
+      Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
+      Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
+      Source: <%= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
+      <%= search_form.submit "Filter" %>
+      <%= search_form.submit "Clear" %>
+    <% end %>
+  </div>
+  <%= will_paginate @feed_urls %>
+  <h4> Listing Feed Urls: </h4>
+  <div id="feed_url_list">
+    <%= render "/feeds/feed_url_list" %>
+  </div>
+</div>
+</body>
+</html>
+
+<style type="text/css">
+    body { margin: 35px; }
+
+    #feed_category {
+        height: 145px;
+        width: 110px;}
+    th {font-weight: bolder !important;}
+
+    table, th, td
+    {
+        border: 1px solid black;
+        font-weight: normal;
+        font-size: 14px;
+    }
+    table
+    {
+        width:95%;
+        margin: 11px 0 0 26px;
+    }
+
+    .feed_title { color: #0000FF;
+        cursor: pointer;}
+
+    .feed_explain td {border: none; }
+
+    .display {width: 600px;}
+
+    .search_form { color: #A52A2A;
+        font-size: 14px;
+        margin: -8px;
+        position: absolute;
+        right: 500px;}
+
+
+</style>
+
+
+<script type="text/javascript">
+  $("document").ready(function()
+  {
+    $(".feed_title").click(function()
+    {
+        $(".display").html("")
+        var id = $(this).attr("id")
+        $.ajax({
+            type: "GET",
+            url: "<%= article_details_feeds_path() %>",
+            data: { feed_url_id: id }
+        }).done(function(data)
+        {
+            $("#feed_display_"+id).html(data)
+        });
+    })
+
+      $(".relevant_product").live("click", function () {
+          $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+          $.addIdToField("articles_item_id", $(this).attr("id").replace("matched",""), false)
+          $(this).parent().remove();
+      })
+  });
+</script>

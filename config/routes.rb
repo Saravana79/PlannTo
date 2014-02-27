@@ -362,5 +362,13 @@ resources :comments do
 
   match "advertisments/show_ads" => "admin/advertisements#show_ads", :as => "show_ads"
 
+  resources :feeds do
+    collection do
+      get "process_feeds"
+      get "feed_urls"
+      get "article_details"
+      post "change_status"
+    end
+  end
   
 end

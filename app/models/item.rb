@@ -1,5 +1,8 @@
 require 'json'
 class Item < ActiveRecord::Base
+
+  validates :name, :itemtype_id, :imageurl, :presence => true
+
   has_many :add_impressions
   has_many :impressions, :as=>:impressionable
   self.inheritance_column ='type'

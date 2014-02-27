@@ -72,3 +72,4 @@ group :test do
 end 
 gem 'geocoder'
 gem 'progress_bar'
+gem "feedzirra"

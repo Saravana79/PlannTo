@@ -11,7 +11,86 @@
     </div>
   <% end %>
 
-  <div class="actions">
+
+    <label for="name">Item Name :</label>
+    <%= f.text_field :name %> <br />
+
+    <label for="itemtype_id">ItemType :</label>
+    <%= f.collection_select :itemtype_id, @item_types, :id, :itemtype, {} %> <br />
+
+    <label for="imageurl">Image Url :</label>
+    <%= f.text_field :imageurl %> <br />
+
+    <label for="manufacturer">Manufacturer :</label>
+    <%= hidden_field_tag :manufacturer_id, "", :id => "manufacturer" %>
+    <%= text_field_tag :manufacturer_search, "", :class => "auto_complete_field" %>
+
+    <br />
+    <label for="group_id">Group :</label>
+    <%= f.hidden_field :group_id, :id => "group" %>
+    <%= text_field_tag :group_serach, "", :class => "auto_complete_field" %> <br />
+
+    <label for="status">Status :</label>
+    <%= f.radio_button :status, '1', :checked => true %>
+    <%= label :status_1, 'Available' %>
+    <%= f.radio_button :status, '2' %>
+    <%= label :status_2, 'Future' %>
+    <br />
     <%= f.submit %>
-  </div>
-<% end %>
+  <% end %>
+
+
+
+<style type="text/css">
+  .new_item label {  font-size: 14px;
+      line-height: 33px;}
+
+   .new_item {padding: 30px;}
+</style>
+
+
+<script type="text/javascript">
+  $("document").ready(function()
+  {
+      $( ".auto_complete_field" ).autocomplete({
+          source:  function (request, response) {
+              that = $(this)[0]
+              variable = that.element.attr('id')
+              $required_id = variable.split("_")[0]
+
+              if ($required_id == "manufacturer")
+                var type = "manufacturer"
+              else
+                var type = "car_group"
+
+
+              $.ajax({
+                  url:"/search/autocomplete_items?search_type="+type,
+                  data:{
+                      term:request.term,
+                      authenticity_token: window._token,
+
+                  },
+                  type:"POST",
+                  dataType:"json",
+                  success:function (data) {
+                      response($.map(data, function (item) {
+                          return{
+                              id:item.id,
+                              value:item.value,
+                              type:item.type,
+                              url:item.url
+                          }
+                      }));
+//           spinner.stop();
+                  }
+              });
+          },
+
+          minLength: 2,
+          select: function( event, ui ) {
+              $('#'+$required_id).val(ui.item.id);
+          }
+      });
+  })
+</script>

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <title>PlannTo - Feed Urls</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<% if @feed.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@feed.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+        <% @feed.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+<div class="add_feed">
+<h4>Add Your Feed Here:</h4>
+<p class="feed_urls"> <a href="<%= feed_urls_feeds_path %>">Feed Urls </a> </p>
+<div class="feed_form">
+<%= form_for :feed, url: {action: "create"} do |f| %>
+    <%= f.text_field :url, :class => "input", :placeholder=>"Enter feed url" %>
+    <%= f.select :category, @categories, {:selected => "Mobile"}, :multiple => true, :class => "input" %>
+    <%= f.submit %>
+<% end %>
+</div>
+</div>
+<div class="list_feeds">
+  <p class="process_button"> <a href="<%= process_feeds_feeds_path %>">Process </a> </p>
+  <h4> Listing Feeds: </h4>
+  <table>
+    <tr>
+    <th>URL</th>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Last Updated At</th>
+    <th>Created By</th>
+    <th>Actions</th>
+    </tr>
+    <% @feeds.each do |feed| %>
+      <tr>
+        <td><%= feed.url %></td>
+        <td><%= feed.title %></td>
+        <td><%= feed.category %></td>
+        <td><%= feed.last_updated_at %></td>
+        <td><%= feed.created_by %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+</body>
+</html>
+
+<style type="text/css">
+  body { margin: 35px; }
+  .input {float: left;}
+  .feed_form {margin: 11px 0 0 26px;}
+  .feed_form input {margin: 0 10px;}
+  .list_feeds {clear: both;}
+  #feed_category {
+      height: 145px;
+      width: 110px;}
+  th {font-weight: bolder !important;}
+
+  table, th, td
+  {
+      border: 1px solid black;
+      font-weight: normal;
+      font-size: 14px;
+  }
+  table
+  {
+      width:80%;
+      margin: 11px 0 0 26px;
+  }
+
+  .process_button, .feed_urls {
+      position: absolute;
+      right: 270px; margin: 0}
+
+</style>

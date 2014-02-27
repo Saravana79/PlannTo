@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131125163922) do
+ActiveRecord::Schema.define(:version => 20140225045221) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.datetime "updated_at"
     t.string   "itemsaccess"
     t.string   "params"
+    t.string   "temp_user_id"
   end
 
   add_index "add_impressions", ["publisher_id"], :name => "publihserid"
@@ -89,6 +90,8 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.boolean "video"
     t.string  "domain"
   end
+
+  add_index "article_contents", ["url"], :name => "url"
 
   create_table "attribute_comparison_lists", :force => true do |t|
     t.string   "title"
@@ -198,21 +201,6 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
   end
 
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
-
-  create_table "clicks", :force => true do |t|
-    t.integer  "impression_id"
-    t.string   "click_url"
-    t.string   "hosted_site_url"
-    t.datetime "timestamp"
-    t.integer  "item_id"
-    t.integer  "user_id"
-    t.string   "ipaddress"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "publisher_id"
-    t.integer  "vendor_id"
-    t.string   "source_type"
-  end
 
   create_table "comments", :force => true do |t|
     t.string   "title",            :limit => 50, :default => ""
@@ -381,6 +369,28 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
   create_table "facebooks", :force => true do |t|
     t.string   "identifier"
     t.string   "access_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "feed_urls", :force => true do |t|
+    t.integer  "feed_id"
+    t.string   "url"
+    t.string   "title"
+    t.integer  "status"
+    t.string   "source"
+    t.string   "category"
+    t.text     "summary"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "feeds", :force => true do |t|
+    t.string   "url"
+    t.string   "title"
+    t.string   "category"
+    t.datetime "last_updated_at"
+    t.integer  "created_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -695,13 +705,7 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.integer  "item_id"
     t.string   "item_name"
     t.string   "product_price"
-  end
-
-  create_table "pc_batch_details", :id => false, :force => true do |t|
-    t.integer "batch_id",                                          :null => false
-    t.string  "urlsource",   :limit => 100, :default => "PlannTo", :null => false
-    t.string  "status",      :limit => 45
-    t.integer "completedId"
+    t.integer  "impression_id"
   end
 
   create_table "points", :force => true do |t|
@@ -721,14 +725,6 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.string   "value_2"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "price_comparison_batch", :force => true do |t|
-    t.string   "Status",      :limit => 20,  :null => false
-    t.datetime "starttime",                  :null => false
-    t.datetime "endtime"
-    t.string   "Source",      :limit => 100
-    t.integer  "CompletedId"
   end
 
   create_table "pro_con_categories", :force => true do |t|
@@ -783,6 +779,7 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "vendor_ids"
+    t.string   "exclude_vendor_ids"
   end
 
   create_table "question_contents", :force => true do |t|
@@ -967,6 +964,10 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.string "name"
   end
 
+  create_table "temp_article_contents", :force => true do |t|
+    t.string "url", :limit => 500
+  end
+
   create_table "tips", :force => true do |t|
     t.string   "title"
     t.string   "description"
@@ -1089,6 +1090,7 @@ ActiveRecord::Schema.define(:version => 20131125163922) do
     t.string  "imageurl", :limit => 2000, :null => false
     t.string  "params"
     t.integer "item_id"
+    t.string  "param1"
   end
 
   create_table "video_contents", :force => true do |t|

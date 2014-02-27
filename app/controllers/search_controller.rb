@@ -305,37 +305,9 @@ class SearchController < ApplicationController
 
   def search_items_by_relavance
 
-    search_type = Product.search_type(nil)
-    @items = Sunspot.search(search_type) do
-        keywords params[:term] do
-          minimum_match 1
-        end
-      order_by :score,:desc
-      order_by :orderbyid , :asc
-      paginate(:page => 1, :per_page => 5)      
-    end
 
-    results = @items.results.collect{|item|
+    results = Product.get_search_items_by_relavance(params)
 
-      image_url = item.image_url(:small)
-    
-     if(item.is_a? (Product))
-        type = item.type.humanize
-     elsif(item.is_a? (CarGroup))
-        type = "Groups"
-     elsif(item.is_a? (AttributeTag))
-        type = "Groups"
-     elsif(item.is_a? (ItemtypeTag))
-        type = "Topics"
-     else
-        type = item.type.humanize
-    end 
-    
-     # end
-      url = item.get_url()
-      # image_url = item.image_url
-      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
-    }
     render :json => results
     
   end

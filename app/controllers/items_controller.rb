@@ -97,6 +97,7 @@ class ItemsController < ApplicationController
   # GET /items/new.json
   def new
     @item = Item.new
+    @item_types = Itemtype.select("id,itemtype")
 
     respond_to do |format|
       format.html # new.html.erb
@@ -112,10 +113,19 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
-    @item = Item.new(params[:item])
+    @item_types = Itemtype.select("id,itemtype")
+    itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
+    klass = itemtype.itemtype
+    @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id))
 
     respond_to do |format|
       if @item.save
+        if (!params[:manufacturer_id].blank?)
+          Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:manufacturer_id], :relationtype => "Manufacturer")
+        end
+        if (!params[:item][:group_id].blank?)
+          Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
+        end
         format.html { redirect_to @item, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else

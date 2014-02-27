@@ -1,6 +1,12 @@
 class ArticleContentsController < ApplicationController
  before_filter :authenticate_user!,:except => [:bmarklet]
   def create
+
+    unless params[:feed_url_id].blank?
+      @through_rss = true
+      feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
+      feed_url.update_attributes(:status => 1)
+    end
     #not used anywhere
     #me = FbGraph::User.me(current_user.token)
   #me.feed!(
@@ -238,6 +244,11 @@ class ArticleContentsController < ApplicationController
   
   def bmarklet
     #@article_content = ArticleContent.new
+    unless params[:feed_url_id].blank?
+      feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
+      params.merge!(:url => feed_url.url, :external => true)
+    end
+
    if current_user 
     #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
      #params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
