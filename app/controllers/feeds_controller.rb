@@ -104,7 +104,7 @@ class FeedsController < ApplicationController
   end
 
   def process_table_feeds
-    @impression_missing = ImpressionMissing.all.first(10)
+    @impression_missing = ImpressionMissing.all
 
     @impression_missing.each do |each_record|
       status = 0
@@ -112,7 +112,7 @@ class FeedsController < ApplicationController
       status_val.default = 0
 
       status = status_val[each_record.status.to_s] unless each_record.status.blank?
-      source = (each_record.hosted_site_url == URI::regexp).blank? ? "" : URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
+      source = (each_record.hosted_site_url =~ URI::regexp).blank? ? "" : URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
 
       @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => "Others",
                                  :process_type => "impression_missing")
