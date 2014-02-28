@@ -30,7 +30,8 @@
 </div>
 </div>
 <div class="list_feeds">
-  <p class="process_button"> <a href="<%= process_feeds_feeds_path %>">Process </a> </p>
+  <p class="process_button_rss"> <a href="<%= process_rss_feeds_feeds_path %>">Process rss feeds</a> </p>
+  <p class="process_button_table"> <a href="<%= process_table_feeds_feeds_path %>">Process table feeds </a> </p>
   <h4> Listing Feeds: </h4>
   <table>
     <tr>
@@ -77,8 +78,12 @@
       margin: 11px 0 0 26px;
   }
 
-  .process_button, .feed_urls {
+  .process_button_rss, .feed_urls {
       position: absolute;
       right: 270px; margin: 0}
+
+  .process_button_table {
+      position: absolute;
+      right: 420px; margin: 0}
 
 </style>

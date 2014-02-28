@@ -23,7 +23,7 @@ class ArticleContent < Content
       @article=VideoContent.CreateContent(url, user)
     @images << @article.thumbnail if @article.thumbnail
     else
-      @article = ArticleContent.create(:url => url, :created_by => user.id)
+      @article = ArticleContent.new(:url => url, :created_by => user.id)
       require 'nokogiri'
       require 'open-uri'
       begin

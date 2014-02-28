@@ -16,7 +16,7 @@ class Feed < ActiveRecord::Base
             article_content = ArticleContent.find_by_url(each_entry.url)
             status = 0
             status = 1 unless article_content.blank?
-            FeedUrl.create(feed_id: each_feed.id, url: each_entry.url, title: each_entry.title, category: each_feed.category, status: status, source: source, summary: each_entry.summary)
+            FeedUrl.create(feed_id: each_feed.id, url: each_entry.url, title: each_entry.title, category: each_feed.category, status: status, source: source, summary: each_entry.summary, :process_type => "feed")
           end
         end
         each_feed.update_attributes!(last_updated_at: feed.last_modified)
