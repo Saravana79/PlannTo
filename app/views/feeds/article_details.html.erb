@@ -1,130 +1,140 @@
-<div class="detailed_vales">
-  <%= form_for(:article_content, :url => "/article_contents", :remote => true, :html => {}) do |f| %>
-      <%= f.hidden_field :type, :id => "new_article_type" %>
-      <%= hidden_field_tag 'feed_url_id', @feed_url.id %>
+<% if @already_shared == true %>
+    <div class="detailed_vales" style="margin: 35px">
+      Product is already shared, Please find the link below: <br/> <br/>
 
-      <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
-      <%= hidden_field_tag 'submit_url','submit_url' %>
-      <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
-      <%= hidden_field_tag 'share_from_home' %>
-      <% if @article_content %>
-          <%= hidden_field_tag :detail,@detail%>
-      <%end%>
-      <%= hidden_field_tag "articles_item_id" %>
-      <%= f.hidden_field :type, :id => "new_article_type" %>
-      <%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
-      <%= hidden_field_tag 'external', @external %>
+      <a href="<%= content_path(@article_content.id) %>" target='_blank'> <%= @article_content.title %></a>
+    </div>
+<% else %>
+    <div class="detailed_vales">
+      <%= form_for(:article_content, :url => "/article_contents", :remote => true, :html => {}) do |f| %>
+          <%= hidden_field_tag 'feed_url_id', @feed_url.id %>
 
-      <div class="category">
-        <label for="category">Category :</label>
-        <%= f.select :sub_type, @categories, {} %>
-      </div>
-      <div class="url">
-        <label for="url">Url :</label>
-        <%= f.text_field :url %>
-      </div>
-      <div class="title">
-        <label for="">Title :</label>
-        <%= f.text_field :title %>
-      </div>
-      <div class="thumbnail">
-        <label for="thumbnail">Thumbnail :</label>
-        <%= f.hidden_field :thumbnail %>
-        <img src="<%= @article_content.thumbnail %>" width="100px" height="100px">
-      </div>
-      <div class="description">
-        <label for="description">Description :</label>
-        <%= f.text_area :description %>
-      </div>
+          <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
+          <%= hidden_field_tag 'submit_url', 'submit_url' %>
+          <%= f.hidden_field :itemtype_id, :value => @item.try(:itemtype_id) %>
+          <%= hidden_field_tag 'share_from_home' %>
+          <% if @article_content %>
+              <%= hidden_field_tag :detail, @detail %>
+          <% end %>
+          <%= hidden_field_tag "articles_item_id" %>
+          <%= f.hidden_field :type, :id => "new_article_type" %>
+          <%= f.hidden_field :thumbnail, :id => "new_article_thumbnail" %>
+          <%= hidden_field_tag 'external', @external %>
 
-      <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
-        <div class="title_header float_lft">Product :</div>
-        <div class="taggingdiv" style="margin-left:5px;">
-          <ul id="new_article_product_list" class="tagging"></ul>
-          <div class="float_lft " style="clear:both;">
-            <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
+          <div class="category">
+            <label for="category">Category :</label>
+            <%= f.select :sub_type, @categories, {:selected => @selected_category} %>
           </div>
-          <div style="clear:both;"></div>
+          <div class="url">
+            <label for="url">Url :</label>
+            <%= f.text_field :url %>
+          </div>
+          <div class="title">
+            <label for="">Title :</label>
+            <%= f.text_field :title %>
+          </div>
+          <div class="thumbnail">
+            <label for="thumbnail">Thumbnail :</label>
+            <%= f.hidden_field :thumbnail %>
+            <img src="<%= @article_content.thumbnail %>" width="100px" height="100px">
+          </div>
+          <div class="description">
+            <label for="description">Description :</label>
+            <%= f.text_area :description %>
+          </div>
 
-          <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;"></div>
-          <div style="clear:both;"></div>
+          <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
+            <div class="title_header float_lft">Product :</div>
+            <div class="taggingdiv" style="margin-left:5px;">
+              <ul id="new_article_product_list" class="tagging"></ul>
+              <div class="float_lft " style="clear:both;">
+                <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
+              </div>
+              <div style="clear:both;"></div>
 
-        </div>
-        <div style="clear:both;"></div>
-      </div>
+              <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;"></div>
+              <div style="clear:both;"></div>
 
-      <div class="submit_buttons">
-        <%= f.submit "Save and Continue" %>
-        <a href="javascript:void(0)" class="mark_as" id="future">Mark as Future</a>
-        <a href="javascript:void(0)" class="mark_as" id="invalid">Mark as Invalid</a>
-        <a href="javascript:void(0)" class="" id="cancel">Cancel</a>
-      </div>
-  <% end %>
-</div>
+            </div>
+            <div style="clear:both;"></div>
+          </div>
 
+          <div class="submit_buttons">
+            <%= f.submit "Save and Continue" %>
+            <a href="javascript:void(0)" class="mark_as" id="future">Mark as Future</a>
+            <a href="javascript:void(0)" class="mark_as" id="invalid">Mark as Invalid</a>
+            <a href="javascript:void(0)" class="" id="cancel">Cancel</a>
+          </div>
+      <% end %>
 
-
-
-
-<style type="text/css">
-    .detailed_vales {
-        margin: 35px;
-    }
-
-    .submit_buttons {
-        position: relative;
-        right: -687px;
-        top: -300px;
-    }
-    a:hover {text-decoration: underline !important; }
-</style>
+    </div>
 
 
-<script type="text/javascript">
-  $("#cancel").click(function()
-  {
-      $(".display").html("")
-  })
-    $(".mark_as").click(function()
-    {
-        var that = $(this)
-        var feed_url_id = "<%= @feed_url.id %>"
-        $.ajax({
-          url: '/feeds/change_status',
-            dataType: 'json',
-            data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
-            success: function(data){
-                $("#feed_display_"+data.feed_url_id).closest('tr').prev().find('.status').text(data.status)
-                $("#feed_display_"+data.feed_url_id).closest('tr').next().find('.feed_title').click()
-            }
-        });
-    })
-    $("document").ready(function()
-    {
-       var data = <%= raw @results.to_json %>
 
-        var container = $('#search_items_by_relavance');
-        sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
 
-        $(sub_contain).appendTo(container)
-        $.each(data, function (index, value) {
-            sub_contain = $("<span style='display:inline-block'></span>")
-            $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "article_content[relevance_product][]" }).appendTo(sub_contain);
-            $('<label />', { 'for': 'matched' + value.id, text: value.value + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
+
+    <style type="text/css">
+        .detailed_vales {
+            margin: 35px;
+        }
+
+        .submit_buttons {
+            position: relative;
+            right: -687px;
+            top: -300px;
+        }
+
+        a:hover {
+            text-decoration: underline !important;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        $("#cancel").click(function () {
+            $(".display").html("")
+        })
+        $(".mark_as").click(function () {
+            var that = $(this)
+            var feed_url_id = "<%= @feed_url.id %>"
+            $.ajax({
+                url: '/feeds/change_status',
+                dataType: 'json',
+                data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
+                success: function (data) {
+                    $("#feed_display_" + data.feed_url_id).closest('tr').prev().find('.status').text(data.status)
+                    $("#feed_display_" + data.feed_url_id).closest('tr').next().find('.feed_title').click()
+                }
+            });
+        })
+        $("document").ready(function () {
+            var data =
+            <%= raw @results.to_json %>
+
+            var container = $('#search_items_by_relavance');
+            sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
+
             $(sub_contain).appendTo(container)
+            $.each(data, function (index, value) {
+                sub_contain = $("<span style='display:inline-block'></span>")
+                $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "article_content[relevance_product][]" }).appendTo(sub_contain);
+                $('<label />', { 'for': 'matched' + value.id, text: value.value + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
+                $(sub_contain).appendTo(container)
+
+            });
+
+
+            settings = {
+                close: true, addButton: false,
+                url: "/search/autocomplete_items",
+                editMode: false, multiple: true,
+                hidden_field: "articles_item_id"
+            };
+            $.textTagger("new_article_product", "new_article_product_list", settings);
 
         });
 
 
-        settings={
-            close:true, addButton: false,
-            url: "/search/autocomplete_items",
-            editMode: false, multiple: true,
-            hidden_field: "articles_item_id"
-        };
-        $.textTagger("new_article_product","new_article_product_list",settings);
+    </script>
 
-    });
-
-
-</script>
+<% end %>

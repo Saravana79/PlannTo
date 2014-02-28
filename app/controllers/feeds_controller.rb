@@ -44,7 +44,7 @@ class FeedsController < ApplicationController
 
     @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
     @sources = FeedUrl.all.map(&:source).uniq
-    @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page =>20)
+    @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 20)
 
     respond_to do |format|
       format.js
@@ -55,21 +55,36 @@ class FeedsController < ApplicationController
   def article_details
     @images = []
     @feed_url = FeedUrl.where("id =?", params[:feed_url_id]).first
-    summary = Nokogiri::HTML.fragment(@feed_url.summary)
-    @images << summary.children[0]['src']  #img source
-    @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
-    @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/,''))
-    @article.title = @feed_url.title
-    sub_type = @article.find_subtype(@article.title)
-    logger.info sub_type
-    @article.sub_type = sub_type
-    @article.description = @meta_description unless @meta_description.blank?
-    @article.thumbnail = @images.first   if @images.count > 0
-    @article_content = @article
-    @categories = ArticleCategory.get_by_itemtype(0)
-    @external = true
 
-    @results = Product.get_search_items_by_relavance(params)
+    @article_content = ArticleContent.find_by_url(@feed_url.url)
+
+    unless @article_content.blank?
+      @already_shared = true
+    else
+      @already_shared = false
+      summary = Nokogiri::HTML.fragment(@feed_url.summary)
+      @images << summary.children[0]['src'] #img source
+      @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
+      @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/, ''))
+      @article.title = @feed_url.title
+      sub_type = @article.find_subtype(@article.title)
+      logger.info sub_type
+      @article.sub_type = sub_type
+      @article.description = @meta_description unless @meta_description.blank?
+      @article.thumbnail = @images.first if @images.count > 0
+      @article_content = @article
+      @categories = ArticleCategory.get_by_itemtype(0)
+      @external = true
+
+      @selected_category = ""
+
+      sub_type = "Others" if sub_type.blank?
+
+      @categories.each {|each_cat| @selected_category = each_cat[1] if each_cat[0] == sub_type}
+
+      params[:term] = @feed_url.title
+      @results = Product.get_search_items_by_relavance(params)
+    end
 
     respond_to do |format|
       format.html { render :layout => false }
@@ -85,7 +100,7 @@ class FeedsController < ApplicationController
     elsif (params[:mark_as] == "invalid")
       status = 3
     end
-    #@feed_url.update_attributes(:status => status)
+    @feed_url.update_attributes(:status => status)
     render :json => {:status => status, :feed_url_id => @feed_url.id}.to_json
   end
 end

@@ -13,7 +13,10 @@ class Feed < ActiveRecord::Base
           feed_url = FeedUrl.where("url = ?", each_entry.url)
           source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.","")
           if (feed_url.count == 0)
-            FeedUrl.create(feed_id: each_feed.id, url: each_entry.url, title: each_entry.title, category: each_feed.category, status: 0, source: source, summary: each_entry.summary)
+            article_content = ArticleContent.find_by_url(each_entry.url)
+            status = 0
+            status = 1 unless article_content.blank?
+            FeedUrl.create(feed_id: each_feed.id, url: each_entry.url, title: each_entry.title, category: each_feed.category, status: status, source: source, summary: each_entry.summary)
           end
         end
         each_feed.update_attributes!(last_updated_at: feed.last_modified)
