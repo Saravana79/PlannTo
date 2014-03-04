@@ -7,7 +7,7 @@ $("#deals1").hide();
 if(window.opener) {
  window.close();
 <%if @facebook_post != "1" %>
-  <% if @through_rss = true %>
+  <% if @through_rss == true %>
     $("#feed_display_<%= params[:feed_url_id] %>").closest('tr').prev().find('.status').text(1)
     $("#feed_display_<%= params[:feed_url_id] %>").closest('tr').next().find('.feed_title').click()
   <% else %>

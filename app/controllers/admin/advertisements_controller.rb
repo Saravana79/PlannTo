@@ -76,7 +76,7 @@ class Admin::AdvertisementsController < ApplicationController
  def show_ads
 
    params[:type] ||= 1
-   params[:size] = [120, 300, 728].include?(params[:size]) ? params[:size] : 120
+   params[:size] = [120, 300, 728].include?(params[:size].to_i) ? params[:size] : 120
 
    item_ids = params[:item_id].split(",")
    @item_details = []

@@ -36,9 +36,10 @@ class FeedsController < ApplicationController
     if params[:commit] == "Clear"
       condition = "1=1"
       params[:search] = {}
+    elsif params[:commit] != "Filter"
+      params[:search] ||= {:status => 0}
+      condition = condition == "1=1" ? "status = 0" : condition
     end
-
-    params[:search] ||= {}
 
     @feed_urls = FeedUrl.where(condition)
 
@@ -104,7 +105,7 @@ class FeedsController < ApplicationController
   end
 
   def process_table_feeds
-    @impression_missing = ImpressionMissing.all
+    @impression_missing = ImpressionMissing.where("updated_at > ?", Time.now-2.days)   # TODO: temporary check only
 
     @impression_missing.each do |each_record|
       status = 0

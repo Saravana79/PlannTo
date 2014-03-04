@@ -1,5 +1,30 @@
+<div class="alert-notice">
+  <% unless flash[:notice].blank? %>
+      <%= flash[:notice] %>
+  <% end %>
+</div>
+<br/>
+<br/>
 <h1>New item</h1>
 
 <%= render 'form' %>
 
 <%= link_to 'Back', items_path %>
+
+
+<%= link_to 'Go to last Item', item_path(@last_item), :target => "_blank" %>
+
+
+<style type="text/css">
+    .alert-notice {
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+        color: #468847;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

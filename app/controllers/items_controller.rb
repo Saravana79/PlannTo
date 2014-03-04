@@ -98,6 +98,7 @@ class ItemsController < ApplicationController
   def new
     @item = Item.new
     @item_types = Itemtype.select("id,itemtype")
+    @last_item = Item.last
 
     respond_to do |format|
       format.html # new.html.erb
@@ -126,7 +127,7 @@ class ItemsController < ApplicationController
         if (!params[:item][:group_id].blank?)
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
         end
-        format.html { redirect_to @item, notice: 'Item was successfully created.' }
+        format.html { redirect_to new_item_path, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
         format.html { render action: "new" }
