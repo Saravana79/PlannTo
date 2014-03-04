@@ -1,0 +1,44 @@
+<div class="advt-block">
+  <div class="advt-728">
+    <% if @item_details.count != 0 %>
+        <% @item_details.each_with_index do |item_detail, indx| %>
+            <div class="item_details" id="item_detail_<%= indx + 1 %>">
+              <div class="advt-box">
+                <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+
+                <div class="product-container">
+                  <h3 class="product-title"><%= item_detail.ItemName %></h3>
+
+                  <div class="product-img"><a href="javascript:void(0)"><img src="<%= item_detail.item.image_url %>" alt="" width="50%" height="50%"></a></div>
+                  <div class="product-desc">
+                    <p class="text-desc">Explore the Lenovo Flex 14 dual-mode convertible notebook.</p>
+
+                    <p class="price">Rs. <%= item_detail.price %></p>
+                  </div>
+                </div>
+
+                <div class="right-div">
+                  <p class="btn"><a href="<%= history_details_path(:detail_id => item_detail.id, :iid => item_detail.item.id) %>" class="shop-now">Shop Now</a></p>
+
+                  <div id="pager2" class="pager">
+                    <% [*1..@item_details.count].each do |each_loop| %>
+                        <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <% end %>
+    <% else %>
+        No Product Found
+    <% end %>
+  </div>
+  <!-- end of advt-300 -->
+</div><!-- end of advt-block -->
+
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+</style>

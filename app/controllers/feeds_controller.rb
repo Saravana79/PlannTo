@@ -112,6 +112,10 @@ class FeedsController < ApplicationController
       status_val.default = 0
 
       status = status_val[each_record.status.to_s] unless each_record.status.blank?
+
+      article_content = ArticleContent.find_by_url(each_entry.url)
+      status = 1 unless article_content.blank?
+
       source = (each_record.hosted_site_url =~ URI::regexp).blank? ? "" : URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
 
       @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => "Others",

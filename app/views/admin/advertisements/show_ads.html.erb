@@ -1,74 +1,18 @@
 <!DOCTYPE html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>Advt 300</title>
-
-  <link href="/assets/ads/style.css" type="text/css" rel="stylesheet" media="all"/>
-
-
+  <title>Advt <%= params[:size] %></title>
+  <link href="/assets/ads/<%= params[:type] %>/<%= params[:size] %>/style.css" type="text/css" rel="stylesheet" media="all"/>
   <script type="text/javascript" language="javascript" src="/assets/ads/jquery-1.8.2.min.js"></script>
-
 </head>
-
 <body>
 
-<div class="advt-block">
-  <div class="advt-300">
-    <% if @item_details.count != 0 %>
-        <div class="list_carousel">
-          <ul id="foo3">
-            <% @item_details.each_with_index do |item_detail, indx| %>
-                <li class="item_details" id="item_detail_<%= indx + 1 %>">
-                  <div class="advt-box">
-                    <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt=""></a>
-                    </div>
-                    <div class="product-container">
-                      <div class="product-img-left">
-                        <a href="#"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
-                      </div>
-                      <div class="product-txt-right">
-                        <h3><%= item_detail.ItemName %></h3>
-
-                        <p class="price">Rs. <%= item_detail.price %></p>
-
-                        <p class="btn">
-                          <a href="http://localhost:3000/history_details?detail_id=<%= item_detail.id %>&iid=<%= item_detail.item.id %>" class="shop-now">Shop
-                            Now</a></p>
-
-                      </div>
-                    </div>
-                    <div class="product-txt-desc">
-                      <p>Bold and colorful 13" laptop built for affordable, on-the-go entertainment.</p></div>
-                  </div>
-                </li>
-            <% end %>
-          </ul>
-          <div class="clearfix"></div>
-          <a id="prev3" class="prev" href="#">&lt;</a>
-          <a id="next3" class="next" href="#">&gt;</a>
-
-          <div id="pager2" class="pager">
-            <% [*1..@item_details.count].each do |each_loop| %>
-                <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
-            <% end %>
-          </div>
-        </div>
-    <% else %>
-        No Product Found
-    <% end %>
-
-  </div>
-  <!-- end of advt-300 -->
-</div>
-<!-- end of advt-block -->
-
+<%= render :partial => "/admin/advertisements/type_#{params[:type]}_size_#{params[:size]}" %>
 
 </body>
 </html>
 
-
 <script type="text/javascript">
-
     $(document).ready(function () {
 
         var stop_sliding = false
@@ -165,10 +109,9 @@
             $(that).addClass('selected')
         })
 
-        $(".list_carousel").click(function () {
+        $(".advt-block").click(function () {
             stop_sliding = true
         })
 
     });
-
 </script>
