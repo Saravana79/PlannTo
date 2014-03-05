@@ -2,7 +2,7 @@ class Admin::AdvertisementsController < ApplicationController
  before_filter :authenticate_advertiser_user!, :except => [:show_ads]
  layout "product"
  
-   def index
+  def index
      @advertisements = Advertisement.where(:status => 1).order('created_at desc').paginate(:per_page => 10,:page => params[:page])
   end
 

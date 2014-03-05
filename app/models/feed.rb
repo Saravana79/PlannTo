@@ -34,7 +34,7 @@ class Feed < ActiveRecord::Base
   end
 
   def table_process()
-    @impression_missing = ImpressionMissing.where("updated_at > ?", (self.last_updated_at.blank? ? Time.now-2.days : self.last_updated_at))
+    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.now-2.days : self.last_updated_at), 10)
 
     @impression_missing.each do |each_record|
       status = 0
@@ -57,6 +57,7 @@ class Feed < ActiveRecord::Base
       @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => "Others",
                                  :feed_id => self.id)
     end
+    self.update_attributes(:last_updated_at => Time.now)
   end
 
 end

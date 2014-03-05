@@ -66,7 +66,7 @@ class FeedsController < ApplicationController
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0)
 
-      if @feed_url.feed.process_value == "impression_missing"
+      if @feed_url.feed.process_value == "ImpressionMissing"
         @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
       else
         summary = Nokogiri::HTML.fragment(@feed_url.summary)
