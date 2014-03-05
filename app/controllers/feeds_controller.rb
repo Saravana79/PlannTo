@@ -12,7 +12,7 @@ class FeedsController < ApplicationController
     feed = Feedzirra::Feed.fetch_and_parse(params[:feed][:url])
     if (!feed.blank? && feed != 0)
       categories = params[:feed][:category] ? params[:feed][:category].join(",") : ""
-      @feed = Feed.create(url: feed.feed_url, title: feed.title, category: categories, created_by: current_user.id)
+      @feed = Feed.create(url: feed.feed_url, title: feed.title, category: categories, created_by: current_user.id, process_type: "feed", process_value: "rss")
     end
     redirect_to feeds_path
   end
@@ -66,7 +66,7 @@ class FeedsController < ApplicationController
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0)
 
-      if @feed_url.process_type == "impression_missing"
+      if @feed_url.feed.process_value == "impression_missing"
         @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
       else
         summary = Nokogiri::HTML.fragment(@feed_url.summary)
@@ -104,24 +104,4 @@ class FeedsController < ApplicationController
     render :json => {:status => status, :feed_url_id => @feed_url.id}.to_json
   end
 
-  def process_table_feeds
-    @impression_missing = ImpressionMissing.where("updated_at > ?", Time.now-2.days)   # TODO: temporary check only
-
-    @impression_missing.each do |each_record|
-      status = 0
-      status_val = {"1" => 1, "3" => 2, "4" => 3}
-      status_val.default = 0
-
-      status = status_val[each_record.status.to_s] unless each_record.status.blank?
-
-      article_content = ArticleContent.find_by_url(each_entry.url)
-      status = 1 unless article_content.blank?
-
-      source = (each_record.hosted_site_url =~ URI::regexp).blank? ? "" : URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
-
-      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => "Others",
-                                 :process_type => "impression_missing")
-    end
-    redirect_to feeds_path
-  end
 end

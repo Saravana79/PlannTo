@@ -83,10 +83,14 @@
         $.ajax({
             type: "GET",
             url: "<%= article_details_feeds_path() %>",
-            data: { feed_url_id: id }
-        }).done(function(data)
-        {
-            $("#feed_display_"+id).html(data)
+            data: { feed_url_id: id },
+            success: function(data) {
+              $("#feed_display_"+id).html(data)
+            },
+            error: function(textStatus, errorThrown) {
+               alert("Invalid data")
+            }
+
         });
     })
 

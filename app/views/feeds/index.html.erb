@@ -30,24 +30,27 @@
 </div>
 </div>
 <div class="list_feeds">
-  <p class="process_button_rss"> <a href="<%= process_rss_feeds_feeds_path %>">Process rss feeds</a> </p>
-  <p class="process_button_table"> <a href="<%= process_table_feeds_feeds_path %>">Process table feeds </a> </p>
+  <p class="process_button_table"> <a href="<%= process_table_feeds_feeds_path %>">Process Feeds </a> </p>
   <h4> Listing Feeds: </h4>
   <table>
     <tr>
     <th>URL</th>
     <th>Title</th>
     <th>Category</th>
-    <th>Last Updated At</th>
+    <th>Process Type</th>
+    <th>Process Value</th>
     <th>Created By</th>
+    <th>Last Updated At</th>
     </tr>
     <% @feeds.each do |feed| %>
       <tr>
         <td><%= feed.url %></td>
         <td><%= feed.title %></td>
         <td><%= feed.category %></td>
-        <td><%= feed.last_updated_at %></td>
+        <td><%= feed.process_type %></td>
+        <td><%= feed.process_value %></td>
         <td><%= feed.created_by %></td>
+        <td><%= feed.last_updated_at %></td>
       </tr>
     <% end %>
   </table>
@@ -78,12 +81,8 @@
       margin: 11px 0 0 26px;
   }
 
-  .process_button_rss, .feed_urls {
-      position: absolute;
-      right: 270px; margin: 0}
-
   .process_button_table {
       position: absolute;
-      right: 420px; margin: 0}
+      right: 270px; margin: 0}
 
 </style>
