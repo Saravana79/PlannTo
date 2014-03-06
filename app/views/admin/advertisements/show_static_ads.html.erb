@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Advt <%= params[:size] %></title>
+  <script type="text/javascript" language="javascript" src="/assets/ads/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="main_div">
+  <div class="static_plannto_ad">
+    <%= link_to(image_tag(@ad.upload_image, :size => @ad.ad_size.to_s.gsub("*", "x")), history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link") %>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+
+<style type="text/css">
+    .main_div {
+        cursor: pointer;
+    }
+
+    .main_div {
+        width: <%= @iframe_width %>px !important;
+        height: <%= @iframe_height %>px !important;
+        overflow: hidden;
+    }
+</style>

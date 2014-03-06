@@ -1,13 +1,13 @@
 class Admin::AdvertisementsController < ApplicationController
- before_filter :authenticate_advertiser_user!, :except => [:show_ads]
- layout "product"
- 
+  before_filter :authenticate_advertiser_user!, :except => [:show_ads]
+  layout "product"
+
   def index
-     @advertisements = Advertisement.where(:status => 1).order('created_at desc').paginate(:per_page => 10,:page => params[:page])
+    @advertisements = Advertisement.where(:status => 1).order('created_at desc').paginate(:per_page => 10, :page => params[:page])
   end
 
   def new
-    @advertisement = Advertisement.new 
+    @advertisement = Advertisement.new
     @advertisements = [@advertisement]
   end
 
@@ -39,59 +39,86 @@ class Admin::AdvertisementsController < ApplicationController
         @advertisement.content_id = @content.id
         if !@advertisement.save
           flag = false
-        
+
         end
-      @advertisements << @advertisement
+        @advertisements << @advertisement
 
       end
       raise ActiveRecord::Rollback unless flag
     end
-      if flag
-        redirect_to admin_advertisements_path
-      else
-        
-        render :new
-      end    
+    if flag
+      redirect_to admin_advertisements_path
+    else
+
+      render :new
+    end
   end
-  
+
   def update
     @advertisement = Advertisement.find(params[:id])
-     @content = @advertisement.content
-     params['advertisement_content'] = {}
-     params['advertisement_content']['title'] = 'advertisement'
-     @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) 
+    @content = @advertisement.content
+    params['advertisement_content'] = {}
+    params['advertisement_content']['title'] = 'advertisement'
+    @content.update_with_items!(params['advertisement_content'], params[:ad_item_id])
     if @advertisement.update_attributes(params[:advertisement])
       redirect_to admin_advertisements_path
     else
       render :edit
     end
   end
-  
+
   def destroy
-   @advertisement = Advertisement.find(params[:id])
-   @advertisement.update_attribute('status',3)
-   redirect_to admin_advertisements_path
+    @advertisement = Advertisement.find(params[:id])
+    @advertisement.update_attribute('status', 3)
+    redirect_to admin_advertisements_path
   end
 
- def show_ads
+  def show_ads
+    @ref_url = params[:ref_url] ||= ""
+    url = ""
+    cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
+    url_params = Advertisement.url_params_process(params)
 
-   params[:type] ||= 1
-   params[:size] = [120, 300, 728].include?(params[:size].to_i) ? params[:size] : 120
+    @iframe_width, @iframe_height = params[:size].split("*")
 
-   item_ids = params[:item_id].split(",")
-   @item_details = []
-   if item_ids.count > 1
-     item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, params[:vendor_id]).order('itemdetails.status asc,
-                    (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by {|a| a.itemid}
+    if (params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined')
+      url = params[:ref_url]
+      itemsaccess = "ref_url"
+    end
 
-     item_details.each {|_, val| @item_details << val[0]}
-   else
-     @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-   end
+    unless params[:ads_id].blank?
+      @ad = Advertisement.where("id = ?", params[:ads_id]).first
+      if @ad.advertisement_type == "static"
+        # create add impression for static ads
 
-   @item_details = @item_details.first(6)
-   @vendor_image_url = @item_details.first.vendor.image_url
-   render :layout => false
- end
+        @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+        @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id])
+        render "show_static_ads", :layout => false
+      else
+        # TODO: dynamic process
+      end
+    else
+      params[:type] ||= 1
+
+      @suitable_ui_size = Advertisement.process_size(@iframe_width)
+
+      item_ids = params[:item_id].split(",")
+      @item_details = []
+      if item_ids.count > 1
+        item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, params[:vendor_id]).order('itemdetails.status asc,
+                    (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by { |a| a.itemid }
+
+        item_details.each { |_, val| @item_details << val[0] }
+      else
+        @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+      end
+
+      @item_details = @item_details.first(6)
+      @vendor_image_url = @item_details.first.vendor.image_url
+      # TODO: have to check, need to store item_ids or item_id
+      @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id])
+      render :layout => false
+    end
+  end
 
 end

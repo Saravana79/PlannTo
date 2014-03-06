@@ -3,75 +3,89 @@ require "securerandom"
 class HistoryDetailsController < ApplicationController
 
   def index
-    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
+    cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
     temp_user_id = cookies[:plan_to_temp_user_id];
     url = ""
 
-      req_url = request.referer
-      unless req_url.nil?
-        if request.referer.include? "plannto.com" or request.referer.include? "localhost"
-          if(params["req"].present? && params["req"] != "")
-            req_url = params["req"]
-          end
+    req_url = request.referer
+    unless req_url.nil?
+      if request.referer.include? "plannto.com" or request.referer.include? "localhost"
+        if (params["req"].present? && params["req"] != "")
+          req_url = params["req"]
         end
-      end 
-      publisher = Publisher.getpublisherfromdomain(req_url)
+      end
+    end
+
+    req_url = params[:ref_url].blank? ? req_url : params[:ref_url]
+
+    publisher = Publisher.getpublisherfromdomain(req_url)
 
 
-     if params[:id].present?
+    if params[:id].present?
       @article_details = ArticleContent.find_by_id(params[:id])
-    #   base_uri, params = @article_details.url.split("?")
-       url = "#{@article_details.url}"
-       domain = VendorDetail.getdomain(url)     
-       @vd = VendorDetail.where(baseurl: domain)
-       unless @vd.empty?            
+      #   base_uri, params = @article_details.url.split("?")
+      url = "#{@article_details.url}"
+      domain = VendorDetail.getdomain(url)
+      @vd = VendorDetail.where(baseurl: domain)
+      unless @vd.empty?
         vendor = Item.find(@vd[0].item_id)
         vendor_id = vendor.id
-       end
-       @impression_id = "123"
-       Click.save_click_data(url,req_url,Time.now,@article_details.id,current_user,request.remote_ip,@impression_id,publisher,vendor_id,"Offer",temp_user_id)
-     else
+      end
+      @impression_id = "123"
+      Click.save_click_data(url, req_url, Time.now, @article_details.id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "Offer", temp_user_id)
+    else
 
       type = params[:type].present? ? params[:type] : ""
       @impression_id = params[:iid].present? ? params[:iid] : "0"
       find_item_detail(params[:detail_id], "")
-      url = "#{@item_detail.url}"
-      vendor = Item.find(@item_detail.site)
-      Click.save_click_data(@item_detail.url,req_url,Time.now,@item_detail.itemid,current_user,request.remote_ip,@impression_id,publisher,vendor.id,"PC",temp_user_id)
+      if !params[:ads_id].blank? || @item_detail.blank?
+        @ad = Advertisement.where("id = ?", params[:ads_id]).first
+        url = @ad.click_url
+      else
+        url = "#{@item_detail.url}"
+      end
+
+      item_id = @item_detail.blank? ? "" : @item_detail.itemid
+      vendor_id = vendor.blank? ? "" : vendor.id
+
+      vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
+      Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
     end
 
-    
-    unless vendor.nil?  
-      if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank? 
-         url = vendor.vendor_detail.params.gsub(/\{url}/,url)
-         unless publisher.nil?
-            pv = PublisherVendor.where(:vendor_id => vendor.id,:publisher_id => publisher.id).first 
-         end
-         if !pv.nil?
-            url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
-            url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil?
-         else
-           pv = PublisherVendor.where(:publisher_id => 0,:vendor_id => vendor.id).first
+
+    unless vendor.nil?
+      if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
+        url = vendor.vendor_detail.params.gsub(/\{url}/, url)
+        unless publisher.nil?
+          pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id).first
+        end
+        if !pv.nil?
+          url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
+          url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+        else
+          pv = PublisherVendor.where(:publisher_id => 0, :vendor_id => vendor.id).first
           if !pv.nil?
-            url = url.gsub(/\{affid}/,pv.affliateid) unless pv.affliateid.nil?
-            url=  url.gsub(/\{trackid}/,pv.trackid)  unless pv.trackid.nil? 
-          end   
-         end
-         url=  url.gsub(/\{iid}/,@impression_id)  unless @impression_id.nil? 
+            url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
+            url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+          end
+        end
+        url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
       end
     end
-      redirect_to url    
+
+    redirect_to url
   end
 
   private
 
   def find_item_detail(detail_id, type)
     @item_detail = case type
-    when "Content" then Content.find(detail_id)
-    else
-      Itemdetail.find(detail_id)
-    end
-      
+                     when "Content" then
+                       Content.find_by_id(detail_id)
+                     else
+                       Itemdetail.find_by_item_details_id(detail_id)
+                   end
+
 
   end
 end

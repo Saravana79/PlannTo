@@ -21,7 +21,7 @@
 
                   <p class="price">Rs. <%= item_detail.price %></p>
 
-                  <p class="btn"><a href="<%= history_details_path(:detail_id => item_detail.id, :iid => item_detail.item.id) %>" class="shop-now">Shop Now</a></p>
+                  <p class="btn"><a href="<%= history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>" class="shop-now">Shop Now</a></p>
                 </div>
                 <div class="product-extra-desc"><p>* 100% Purchase Protection<br>* Free Delivery<br>* COD</p></div>
               </div>

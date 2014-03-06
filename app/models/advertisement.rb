@@ -12,6 +12,32 @@ class Advertisement < ActiveRecord::Base
 
    validate :file_dimensions 
 
+   def self.url_params_process(param)
+     url_params = "Params = "
+     param = param.reject {|s| ["controller", "action"].include?(s)}
+     keys = param.keys
+     values = param.values
+
+     [*0...keys.count].each do |each_val|
+       url_params = url_params + "#{keys[each_val]}-#{values[each_val]};"
+     end
+     return url_params
+   end
+
+   def self.process_size(width)
+     width = width.to_i
+     if (width < 150)
+       return_val = 120
+     elsif (width < 350)
+       return_val = 300
+     elsif (width < 750)
+       return_val = 728
+     else
+       return_val = 120
+     end
+     return return_val
+   end
+
    private
 
    def file_dimensions
@@ -21,5 +47,6 @@ class Advertisement < ActiveRecord::Base
          if dimensions.width.to_i.to_s != hieght_width[0] || dimensions.height.to_i.to_s != hieght_width[1]
             errors.add :file, "Width must be #{hieght_width[0]}px and height must be #{hieght_width[1]}px"
          end
-  end                 
+   end
+
 end
