@@ -32,9 +32,10 @@ body {
 
 .advt-block { margin:0; padding:0;}
 .advt-300 { margin:0; padding:0; width:296px; height:246px; background:#fff; border:2px solid #dddddd;}
+.advt-300 .logo{ margin:0 5px; padding:10px 0; border-bottom:1px solid #d9d9d9;}
 
 .advt-box { margin:0; padding:0;}
-.advt-box .logo{ margin:0 5px; padding:10px 0; text-align:center; border-bottom:1px solid #d9d9d9;}
+
 .advt-box .product-container{ margin:5px 0 0 0; padding:5px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
@@ -95,7 +96,7 @@ body {
 	width:21px; height:22px;
 	text-indent:-99999px;
 	position:absolute;
-	top:18%;
+	top:125px;
 }
 .next {
 	float: right;
@@ -104,16 +105,19 @@ body {
 	text-indent:-99999px;
 	position:absolute;
 	left:270px;
-	top:18%;
+	top:125px;
 }
 .pager {
 	float:right;
-	left:165px;
+	left:160px;
 	position:absolute;
-	top:220px;
+	top:5px;
+	z-index:1000;
+	background:#fff;
+	padding:5px;
 }
 .pager a {
-	/*margin: 0 2px; */
+	/* margin: 0 2px; */
 	text-decoration: none;
 	padding:2px 5px;
 	background:#ccc;
@@ -129,5 +133,7 @@ body {
 	height: 6px;
 	width: 0px;
 }
+
+a { outline: none; }
 
 /* end Sliding gallery */

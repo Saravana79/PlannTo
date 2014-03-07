@@ -32,9 +32,10 @@ body {
 
 .advt-block { margin:0; padding:0;}
 .advt-120 { margin:0; padding:0; width:120px; height:600px; background:#fff; border:2px solid #dddddd;}
+.advt-120 .logo{ margin:0 5px; padding:10px 0; border-bottom:1px solid #d9d9d9;}
 
 .advt-120 .advt-box { margin:0; padding:0;}
-.advt-120 .advt-box .logo{ margin:0 5px; padding:10px 0; border-bottom:1px solid #d9d9d9;}
+
 .advt-120 .advt-box .product-container{ margin:5px 0 0 0; padding:5px;}
 .advt-120 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-120 .advt-box .product-container:after { clear:both;}
@@ -73,4 +74,7 @@ body {
 	text-decoration: none;
 	background:#6ebfd6;
 }
+
+a { outline: none; }
+
 /* end Sliding gallery */

@@ -81,4 +81,7 @@ body {
 	text-decoration: none;
 	background:#6ebfd6;
 }
+
+a { outline: none; }
+
 /* end Sliding gallery */

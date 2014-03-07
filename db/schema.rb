@@ -11,12 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140305050041) do
+ActiveRecord::Schema.define(:version => 20140307061119) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
     t.integer  "impression_id"
-    t.integer  "item_id"
+    t.string   "item_id"
     t.string   "hosted_site_url"
     t.datetime "impression_time"
     t.integer  "publisher_id"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(:version => 20140305050041) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "click_url"
+    t.integer  "user_id"
+    t.integer  "vendor_id"
   end
 
   create_table "answer_contents", :force => true do |t|
@@ -201,6 +203,22 @@ ActiveRecord::Schema.define(:version => 20140305050041) do
   end
 
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
+
+  create_table "clicks", :force => true do |t|
+    t.integer  "impression_id"
+    t.string   "click_url"
+    t.string   "hosted_site_url"
+    t.datetime "timestamp"
+    t.integer  "item_id"
+    t.integer  "user_id"
+    t.string   "ipaddress"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "publisher_id"
+    t.integer  "vendor_id"
+    t.string   "source_type"
+    t.string   "temp_user_id"
+  end
 
   create_table "comments", :force => true do |t|
     t.string   "title",            :limit => 50, :default => ""

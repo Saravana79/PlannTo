@@ -85,39 +85,39 @@ class Admin::AdvertisementsController < ApplicationController
       url = params[:ref_url]
       itemsaccess = "ref_url"
     end
+    @ad = Advertisement.where("id = ?", params[:ads_id]).first
 
-    unless params[:ads_id].blank?
-      @ad = Advertisement.where("id = ?", params[:ads_id]).first
+    unless @ad.blank?
       if @ad.advertisement_type == "static"
-        # create add impression for static ads
-
+        # static ad process
         @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
-        @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id])
+        @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess,
+                                                                url_params, cookies[:plan_to_temp_user_id])
         render "show_static_ads", :layout => false
-      else
-        # TODO: dynamic process
+      elsif @ad.advertisement_type == "dynamic"
+        # dynamic ad process
+        vendor_id = UserRelationship.where(:user_id => @ad.user_id,:relationship_type => "Vendor").first.relationship_id
+        params[:type] ||= 1
+
+        @suitable_ui_size = Advertisement.process_size(@iframe_width)
+
+        item_ids = params[:item_id].split(",")
+        @item_details = []
+        if item_ids.count > 1
+          item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, vendor_id).order('itemdetails.status asc,
+                         (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by { |a| a.itemid }
+
+          item_details.each { |_, val| @item_details << val[0] }
+        else
+          @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, vendor_id).order('itemdetails.status asc,
+                          (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        end
+
+        @item_details = @item_details.first(6)
+        @vendor_image_url = @item_details.first.vendor.image_url
+        @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id])
+        render :layout => false
       end
-    else
-      params[:type] ||= 1
-
-      @suitable_ui_size = Advertisement.process_size(@iframe_width)
-
-      item_ids = params[:item_id].split(",")
-      @item_details = []
-      if item_ids.count > 1
-        item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, params[:vendor_id]).order('itemdetails.status asc,
-                    (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by { |a| a.itemid }
-
-        item_details.each { |_, val| @item_details << val[0] }
-      else
-        @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, params[:vendor_id]).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-      end
-
-      @item_details = @item_details.first(6)
-      @vendor_image_url = @item_details.first.vendor.image_url
-      # TODO: have to check, need to store item_ids or item_id
-      @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id])
-      render :layout => false
     end
   end
 

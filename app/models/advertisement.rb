@@ -9,6 +9,7 @@ class Advertisement < ActiveRecord::Base
                      :path => "images/advertisements/:id/:style/:filename",
                      :url  => ":s3_sg_url"
    belongs_to :content
+   belongs_to :user
 
    validate :file_dimensions 
 
