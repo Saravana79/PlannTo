@@ -37,6 +37,10 @@ class Admin::AdvertisementsController < ApplicationController
         @content = AdvertisementContent.create(:title => "advertisement");
         @content.save_with_items!(params['ad_item_id'])
         @advertisement.content_id = @content.id
+        @advertisement.user_id = current_user.id
+        user_relation = UserRelationship.where(:user_id => @advertisement.user_id,:relationship_type => "Vendor").first
+        vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
+        @advertisement.vendor_id = vendor_id
         if !@advertisement.save
           flag = false
 
