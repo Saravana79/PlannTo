@@ -59,15 +59,18 @@ body {
 .advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
 .advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 10px; background:#f1282a; color:#fff; font-size:16px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold; -webkit-border-radius: 4px; border-radius: 4px; text-align:center;}
 
-.right-div { float:right;  padding:5px 0;}
+.right-div { float:right;  padding:5px 10px 10px 0;}
 
 
 /* Sliding gallery */
 
 .pager {
 	z-index:1000;
-	background:#fff;
-	padding:10px 2px 0 2px;
+    background:#fff;
+    padding:0px 0px 0 0px;
+    position:relative;
+    float:left;
+    left:10px;
 }
 .pager a {
 	margin: 0 2px;

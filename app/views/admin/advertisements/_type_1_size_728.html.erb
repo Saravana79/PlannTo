@@ -19,17 +19,18 @@
 
                 <div class="right-div">
                   <p class="btn"><a href="<%= history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>" class="shop-now">Shop Now</a></p>
-
-                  <div id="pager2" class="pager">
-                    <% [*1..@item_details.count].each do |each_loop| %>
-                        <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
-                    <% end %>
-                  </div>
                 </div>
               </div>
             </div>
         <% end %>
-    <% else %>
+
+        <div id="pager2" class="pager">
+          <% [*1..@item_details.count].each do |each_loop| %>
+              <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+          <% end %>
+        </div>
+
+  <% else %>
         No Product Found
     <% end %>
   </div>
