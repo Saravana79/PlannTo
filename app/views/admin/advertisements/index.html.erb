@@ -4,8 +4,6 @@
 <table border="1" width="800px">
 <tr>
   <th> Name </th>
-  <th> Advertisement Size </th>
-  <th> Upload Image</th>
   <th> Click Url</th>
   <th> Budget[Per day]</th>
   <th> Bid[CPM/CPC]</th>
@@ -20,8 +18,6 @@
  <%@advertisements.each do |ad | %>
    <tr>
      <td><%= ad.name  %> </td>
-     <td><%= ad.ad_size %> </td>
-     <td><%= link_to  ad.upload_image.url,ad.upload_image.url %> </td>
      <td><%= ad.click_url %> </td>
      <td> <%= ad.budget %> </td>
      <td> <%= ad.bid %> </td>

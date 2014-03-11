@@ -9,17 +9,14 @@
         </ul>
         </div>
     <% end %>
-    <center><h2> Advertisement </h2></center>
+    <h2> Advertisement </h2>
 
     <div class="main_form">
       <div class="fields-div">
         <div class="title_header float_lft">Advertisement Type :</div>
         <div>
-          <%= f.radio_button :advertisement_type, 'static', :checked => true %>Static
-          <%= f.radio_button :advertisement_type, 'dynamic' %>Dynamic
-          <%= f.radio_button :advertisement_type, 'Offer' %>Offer
-          <%= f.radio_button :advertisement_type, 'Features' %>Features
-          <%= f.radio_button :advertisement_type, 'Content' %>Content
+          <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => true %>Static
+          <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type" %>Dynamic
         </div>
       </div>
 
@@ -52,45 +49,6 @@
           <%= f.text_field :end_date %></div>
       </div>
 
-      <br/>
-
-      <div class="files-div">
-        <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
-        <% @advertisements && @advertisements.each do |a| %>
-            <% @advertisement = a %>
-            <div class="file-div">
-              <div>
-                <div class="title_header float_lft">Advertisement Size :</div>
-                <div class="float_lft">
-                  <%= select_tag 'advertisement[ad_size][]', options_for_select([["250*250", "250*250"], ["300*300", "300*300"], ["1000*600", "1000*600"]]), :placeholder => "" %>
-                </div>
-                <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
-              </div>
-              <div class="fields-div">
-                <div class="title_header float_lft">Image :</div>
-                <div class="float_lft">
-                  <%= f.file_field :upload_image, name: "advertisement[upload_image][]" %>
-                </div>
-              </div>
-            </div>
-        <% end %>
-      </div>
-
-      <script type="text/javascript">
-          $("#add_another_file").live("click", function () {
-              a = $(".file-div").clone();
-              remove_link = $("<a class='remove-file'>Remove<a>");
-              remove_link.bind("click", function () {
-                  $(this).parent().remove();
-              })
-              a.removeClass("file-div")
-              a.children().find('input,select').each(function () {
-                  $(this).val('');
-              });
-              remove_link.appendTo(a);
-              a.appendTo(".files-div");
-          })
-      </script>
       <div class="fields-div" style="clear: both;">
         <div class="title_header float_lft">Click Url :</div>
         <div>
@@ -116,65 +74,153 @@
           <%= f.text_field :cost %></div>
       </div>
 
+      <h3>Additional Details</h3>
 
-        <%= f.submit 'Add Advertisement', :class => 'btn_submitanswer', :id => "publishanswer" %>
+      <div class="additional_details" id="static_details">
+        <div class="files-div">
+          <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
+          <% if @advertisement.new_record? %>
+              <div class="file-div">
+                <div>
+                  <div class="title_header float_lft">Advertisement Size :</div>
+                  <div class="float_lft">
+                    <%= select_tag 'ad_size[]', options_for_select([["250*250", "250*250"], ["300*300", "300*300"], ["1000*600", "1000*600"]]), :placeholder => "" %>
+                  </div>
+                  <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+                </div>
+                <div class="fields-div">
+                  <div class="title_header float_lft">Image :</div>
+                  <div class="float_lft">
+                    <%= f.file_field :upload_image, name: "avatar[]" %>
+                  </div>
+                </div>
+              </div>
+          <% else %>
 
+              <% @advertisement && @advertisement.images.each do |a| %>
+                  <div class="existing_images" id="<%= a.id %>">
+                    <%= image_tag(a.avatar, :size => a.ad_size.to_s.gsub("*", "x")) %>
 
+                    <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
+                  </div>
+              <% end %>
 
+              <div class="file-div">
+                <div>
+                  <div class="title_header float_lft">Advertisement Size :</div>
+                  <div class="float_lft">
+                    <%= select_tag 'ad_size[]', options_for_select([["250*250", "250*250"], ["300*300", "300*300"], ["1000*600", "1000*600"]]), :placeholder => "" %>
+                  </div>
+                  <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+                </div>
+                <div class="fields-div">
+                  <div class="title_header float_lft">Image :</div>
+                  <div class="float_lft">
+                    <%= f.file_field :upload_image, name: "avatar[]" %>
+                  </div>
+                </div>
+              </div>
+          <% end %>
         </div>
+      </div>
+
+      <div class="additional_details" id="dynamic_details">
+        <div class="fields-div">
+          <div class="title_header float_lft">Vendor :</div>
+          <div>
+            <%= @vendor.blank? ? "" : @vendor.name %></div>
+          <%= f.hidden_field :vendor_id %>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="submit_button">
+        <%= f.submit 'Add Advertisement', :class => 'btn_submitanswer', :id => "publishanswer" %>
+      </div>
+    </div>
+
+<% end %>
 
 
-    <script>
-        $("#advertisement_start_date").datepicker({ dateFormat: 'dd-mm-yy' });
-        $("#advertisement_end_date").datepicker({ dateFormat: 'dd-mm-yy' });
+<script>
+    $("#advertisement_start_date").datepicker({ dateFormat: 'dd-mm-yy' });
+    $("#advertisement_end_date").datepicker({ dateFormat: 'dd-mm-yy' });
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            <%if @advertisement.nil?%>
-            settings = {
-                close: true, addButton: false,
-                url: "/search/autocomplete_items",
-                editMode: false, multiple: true,
-                hidden_field: "#ad_item_id"
-            };
-            $.textTagger("#ad_product", "#ad_product_list", settings);
+        <%if @advertisement.nil?%>
+        settings = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: true,
+            hidden_field: "#ad_item_id"
+        };
+        $.textTagger("#ad_product", "#ad_product_list", settings);
 
-            <% unless @item.blank? %>
-            $.addTag("#ad_product", "#ad_product_list", settings, "<%= @item.name %>", "<%= @item.id %>", false);
-            $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
-            $("#ad_product_list li:first span a.icon_close_tagging").remove();
-            <% end %>
-            <%else%>
+        <% unless @item.blank? %>
+        $.addTag("#ad_product", "#ad_product_list", settings, "<%= @item.name %>", "<%= @item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
+        $("#ad_product_list li:first span a.icon_close_tagging").remove();
+        <% end %>
+        <%else%>
 //error is here
 
-            var settings = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
-                hidden_field: "#ad_item_id"};
-            <%unless @items.nil? %>
-            <% @items.each do |item| %>
+        var settings = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+            hidden_field: "#ad_item_id"};
+        <%unless @items.nil? %>
+        <% @items.each do |item| %>
 
-            $.addTag("ad_product", "ad_product_list", settings, "<%= item.name %>", "<%= item.id %>", false);
-            $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
-            //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
-            <%end%>
-            <%end%>
-            $.textTagger("#ad_product", "#ad_product_list", settings);
+        $.addTag("ad_product", "ad_product_list", settings, "<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
+        //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
+        <%end%>
+        <%end%>
+        $.textTagger("#ad_product", "#ad_product_list", settings);
 //ends
-            <%end%>
+        <%end%>
+
+        $("#add_another_file").live("click", function () {
+            a = $(".file-div").clone();
+            remove_link = $("<a class='remove-file'>Remove<a>");
+            remove_link.bind("click", function () {
+                $(this).parent().remove();
+            })
+            a.removeClass("file-div")
+            a.children().find('input,select').each(function () {
+                $(this).val('');
+            });
+            remove_link.appendTo(a);
+            a.appendTo(".files-div");
+        })
 
 
-        });
-    </script>
-<% end %>
+        // show additional details based on advertisement type
+        $(".additional_details").hide()
+        var exp_id = $(".ad_type:checked").val()
+        $("#" + exp_id + "_details").show()
+
+        $(".ad_type").click(function () {
+            var expected_id = $(this).val()
+            $(".additional_details").hide()
+            $("#" + expected_id + "_details").show()
+        })
+
+    });
+
+
+</script>
 
 <style type="text/css">
     .main_form {
-        margin: 38px 0 0 54px;
+        margin: 0px 0 0 54px;
         width: 600px
     }
 
     #new_advertisement h2 {
         font-size: 20px;
         margin: 22px;
+        text-align: center;
     }
 
     .title_header.float_lft {
@@ -204,9 +250,15 @@
 
     #add_another_file {
         clear: both;
+        float: right;
         font-size: 13px;
-        padding: 0px 388px 0;
-        position: absolute;
+        position: relative;
         text-decoration: underline;
+    }
+
+    .existing_images > a {
+        color: #FF0000;
+        font-size: 12px;
+        position: absolute;
     }
 </style>

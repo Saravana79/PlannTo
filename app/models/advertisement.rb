@@ -8,10 +8,12 @@ class Advertisement < ActiveRecord::Base
                      :s3_credentials => "config/s3.yml",
                      :path => "images/advertisements/:id/:style/:filename",
                      :url  => ":s3_sg_url"
+
+   has_many :images, as: :imageable, dependent: :destroy
    belongs_to :content
    belongs_to :user
 
-   validate :file_dimensions 
+   #validate :file_dimensions
 
    def self.url_params_process(param)
      url_params = "Params = "
@@ -37,6 +39,15 @@ class Advertisement < ActiveRecord::Base
        return_val = 120
      end
      return return_val
+   end
+
+   def build_images(image_array)
+     image_array.each do |image|
+       image = self.images.build(image)
+       if Image.file_dimensions(image)
+         image.save
+       end
+     end
    end
 
    private
