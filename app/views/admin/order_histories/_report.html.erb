@@ -59,7 +59,7 @@
     <td class="bdb_gray1"  style="width:80px;text-align:center;border-bottom: 1px solid #808080;"><%=  oh.order_date.to_datetime.strftime("%d-%b-%Y" ) %> </td>
       <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;">
       <% unless @vendor.nil? or @vendor.empty? %>
-        <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + @vendor[0].imageurl%>"  style="border:0;padding:0;"/> 
+        <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + @vendor[0].imageurl%>"  style="border:0;padding:0;"/>
        <%end%>
       </td>
      <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.no_of_orders %> </td>      

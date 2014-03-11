@@ -5,8 +5,11 @@ gem 'rails', '3.1.1'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 gem 'mysql2'
-gem 'uuidtools' 
-gem "configatron", "~> 2.8.4"
+gem 'uuidtools'
+
+gem "configatron", "~> 2.8.4"   # deprecated
+#gem 'recursive_open_struct'
+
 gem 'dalli'
 gem 'fb_graph'
 gem "oauth"
@@ -73,3 +76,7 @@ end
 gem 'geocoder'
 gem 'progress_bar'
 gem "feedzirra"
+
+# TO DO the daily jobs
+gem 'whenever', :require => false
+gem 'mailcatcher'

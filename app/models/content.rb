@@ -455,9 +455,9 @@ end
           Rails.cache.delete(cache_key + "0")
         end
       end 
-        cache_key = "views/" + configatron.hostname.to_s + "/contents/" + content.id.to_s     
+        cache_key = "views/" + configatron.hostname.to_s + "/contents/" + content.id.to_s
         Rails.cache.delete(cache_key)
-        cache_key = "views/" + configatron.hostname.to_s + "/external_contents/" + content.id.to_s    
+        cache_key = "views/" + configatron.hostname.to_s + "/external_contents/" + content.id.to_s
         Rails.cache.delete(cache_key)
     end
   end

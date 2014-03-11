@@ -17,7 +17,7 @@ class FeedsController < ApplicationController
     redirect_to feeds_path
   end
 
-  def process_rss_feeds
+  def process_feeds
     Feed.process_feeds()
     flash[:notice] = "FeedUrls are Successfully Updated"
     redirect_to feeds_path

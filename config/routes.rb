@@ -366,8 +366,7 @@ resources :comments do
 
   resources :feeds do
     collection do
-      get "process_rss_feeds"
-      get "process_table_feeds"
+      get "process_feeds"
       get "feed_urls"
       get "article_details"
       post "change_status"

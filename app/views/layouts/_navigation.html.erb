@@ -49,7 +49,7 @@
                             <h2>Popular Cars</h2>
                             <p><img src="/images/car-icon.png" alt="" /></p>
                             <p>
-                              <% @allitems.select{|a| configatron.popular_cars.split(",").include? a.id.to_s}.each do |item| %> 
+                              <% @allitems.select{|a| configatron.popular_cars.split(",").include? a.id.to_s}.each do |item| %>
                                 <a href="<%=item.get_url()%>"> <%= item.name rescue '' %> </a>
                            <%end%>  
 
@@ -113,7 +113,7 @@
                             <h2>Popular Bikes</h2>
                             <p><img src="/images/bike-icon.png" alt="" /></p>
                             <p>
-                                <% @allitems.select{|a| configatron.popular_bikes.split(",").include? a.id.to_s}.each do |item| %> 
+                                <% @allitems.select{|a| configatron.popular_bikes.split(",").include? a.id.to_s}.each do |item| %>
                                         <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
                                 <%end%>   
                             </p>

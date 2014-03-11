@@ -638,9 +638,9 @@ class Item < ActiveRecord::Base
     when "Car"
       return (items + "," + configatron.root_level_car_id.to_s)
     when "Manufacturer"
-      return (items + "," +  configatron.root_level_car_id.to_s)  
+      return (items + "," +  configatron.root_level_car_id.to_s)
     when 'Cycle'
-      return (items + "," +  configatron.root_level_cycle_id.to_s) 
+      return (items + "," +  configatron.root_level_cycle_id.to_s)
     end 
  end
  
@@ -681,13 +681,13 @@ class Item < ActiveRecord::Base
         when "Topic"
           items+= it        
         when "Manufacturer"
-          root_items << configatron.root_level_car_id.to_s  
+          root_items << configatron.root_level_car_id.to_s
           it.each do |i|
            object = Item.find(i)
            items+= object.related_cars.collect(&:id)
          end 
         when 'Cycle'
-           root_items <<  configatron.root_level_cycle_id.to_s 
+           root_items <<  configatron.root_level_cycle_id.to_s
            items+= it
          end
          end 
@@ -712,7 +712,7 @@ class Item < ActiveRecord::Base
     Follow.where('follower_id =? and followable_type in (?) and follow_type =?',user.id,Item::FOLLOWTYPES,"owner").limit(5).map{|f| Item.find(f.followable_id)}
   end
   def self.get_buyer_item_ids_for_user(user)
-     popular_item_ids = configatron.wizard_items_buyer.split(",") 
+     popular_item_ids = configatron.wizard_items_buyer.split(",")
      Follow.where('follower_id =? and follow_type =?',user.id,"buyer").collect(&:followable_id).collect{|i| i.to_s} - popular_item_ids
   end
   
@@ -929,11 +929,11 @@ end
     when "Car"
       ids = configatron.popular_cars.split(",")
     when "Bike"
-      ids = configatron.popular_bikes.split(",") 
+      ids = configatron.popular_bikes.split(",")
     when "Cycle"
-      ids = configatron.popular_cycles.split(",") 
+      ids = configatron.popular_cycles.split(",")
     when "Mobile"
-       ids = configatron.popular_mobiles.split(",")  
+       ids = configatron.popular_mobiles.split(",")
     when "Tablet"
       ids = configatron.popular_tablets.split(",")
     when "Camera"
@@ -1049,11 +1049,11 @@ end
     when "Car"
       ids = configatron.popular_car_topics.split(",")
     when "Bike"
-      ids = configatron.popular_bike_topics.split(",") 
+      ids = configatron.popular_bike_topics.split(",")
     when "Cycle"
-      ids = configatron.popular_cycle_topics.split(",") 
+      ids = configatron.popular_cycle_topics.split(",")
     when "Mobile"
-       ids = configatron.popular_mobile_topics.split(",")  
+       ids = configatron.popular_mobile_topics.split(",")
     when "Tablet"
       ids = configatron.popular_tablet_topics.split(",")
     when "Camera"
@@ -1069,15 +1069,15 @@ end
     when "Car"
        return configatron.root_level_car_id
     when "Mobile"
-       return configatron.root_level_mobile_id  
+       return configatron.root_level_mobile_id
     when "Tablet"
-       return configatron.root_level_tablet_id 
+       return configatron.root_level_tablet_id
     when "Cycle"
        return configatron.root_level_cycle_id
     when "Bike"
-       return configatron.root_level_bike_id   
+       return configatron.root_level_bike_id
     when "Camera"
-       return configatron.root_level_camera_id 
+       return configatron.root_level_camera_id
     end 
    end 
    

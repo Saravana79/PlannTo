@@ -90,11 +90,11 @@ class ContentMailer < ActionMailer::Base
      cylce_topic_ids = []
     if @camera == "true" && @cycle == "true"
       camera_topic_ids = configatron.popular_camera_topics.split(",")[0..1]
-      cycle_topic_ids = configatron.popular_cycle_topics.split(",")[0] 
+      cycle_topic_ids = configatron.popular_cycle_topics.split(",")[0]
     elsif @cycle == "true"
        cycle_topic_ids = configatron.popular_cycle_topics.split(",")
     elsif @camera == "true"
-      camera_topic_ids = configatron.popular_camera_topics.split(",")   
+      camera_topic_ids = configatron.popular_camera_topics.split(",")
     end          
     topic_ids =  (camera_topic_ids + cycle_topic_ids) - follow_item_ids.collect{|i| i.to_s} 
     @followed_topics = Item.where('id in (?)',topic_ids)

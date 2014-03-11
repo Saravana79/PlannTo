@@ -4,20 +4,28 @@ class Feed < ActiveRecord::Base
   has_many :feed_urls
 
   def self.process_feeds
+    puts "************************************************* Process Started *************************************************"
     @feeds = Feed.all
-    @feeds.each do |each_feed|
-      if each_feed.process_type == "feed"
-        each_feed.feed_process()
-      elsif each_feed.process_type == "table"
-        each_feed.table_process()
+    feed_url_count = FeedUrl.count
+    begin
+      @feeds.each do |each_feed|
+        if each_feed.process_type == "feed"
+          each_feed.feed_process()
+        elsif each_feed.process_type == "table"
+          each_feed.table_process()
+        end
       end
+    rescue Exception => e
+      puts e
+      NotificationMailer.feed_process_failure(e).deliver
     end
+    puts "************************************* Process Completed - #{FeedUrl.count - feed_url_count} feed_urls created *************************************"
   end
 
   def feed_process()
-    feed = Feedzirra::Feed.fetch_and_parse(each_feed.url)
+    feed = Feedzirra::Feed.fetch_and_parse(self.url)
     if (!feed.blank? && feed != 0)
-      latest_feeds = feed.entries.select {|each_val| each_val.published > (each_feed.last_updated_at.blank? ? Time.now-2.day : each_feed.last_updated_at)}
+      latest_feeds = feed.entries.select {|each_val| each_val.published > (self.last_updated_at.blank? ? Time.now-2.day : self.last_updated_at)}
 
       latest_feeds.each do |each_entry|
         feed_url = FeedUrl.where("url = ?", each_entry.url)
@@ -26,10 +34,10 @@ class Feed < ActiveRecord::Base
           article_content = ArticleContent.find_by_url(each_entry.url)
           status = 0
           status = 1 unless article_content.blank?
-          FeedUrl.create(feed_id: each_feed.id, url: each_entry.url, title: each_entry.title, category: each_feed.category, status: status, source: source, summary: each_entry.summary)
+          FeedUrl.create(feed_id: self.id, url: each_entry.url, title: each_entry.title, category: self.category, status: status, source: source, summary: each_entry.summary)
         end
       end
-      each_feed.update_attributes!(last_updated_at: feed.last_modified)
+      self.update_attributes!(last_updated_at: feed.last_modified)
     end
   end
 
