@@ -77,6 +77,7 @@ gem 'geocoder'
 gem 'progress_bar'
 gem "feedzirra"
 
-# TO DO the daily jobs
-gem 'whenever', :require => false
+# TO DO the daily jobs to queue
+gem "clockwork", "~> 0.7.2"
+
 gem 'mailcatcher'

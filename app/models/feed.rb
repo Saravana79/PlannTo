@@ -4,7 +4,7 @@ class Feed < ActiveRecord::Base
   has_many :feed_urls
 
   def self.process_feeds
-    puts "************************************************* Process Started *************************************************"
+    puts "************************************************* Process Started at - #{Time.now.strftime('%b %d,%Y %r')} *************************************************"
     @feeds = Feed.all
     feed_url_count = FeedUrl.count
     begin
@@ -19,7 +19,9 @@ class Feed < ActiveRecord::Base
       puts e
       NotificationMailer.feed_process_failure(e).deliver
     end
-    puts "************************************* Process Completed - #{FeedUrl.count - feed_url_count} feed_urls created *************************************"
+    created_feed_urls = FeedUrl.count - feed_url_count
+    puts "************************************* Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"
+    created_feed_urls
   end
 
   def feed_process()

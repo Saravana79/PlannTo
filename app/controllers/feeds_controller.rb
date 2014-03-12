@@ -64,7 +64,7 @@ class FeedsController < ApplicationController
     else
       @already_shared = false
       @external = true
-      @categories = ArticleCategory.get_by_itemtype(0)
+      @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
 
       if @feed_url.feed.process_value == "ImpressionMissing"
         @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
@@ -81,7 +81,6 @@ class FeedsController < ApplicationController
 
       @article_content = @article
       @article.sub_type = "Others" if @article.sub_type.blank?
-      @categories.each { |each_cat| @selected_category = each_cat[1] if each_cat[0] == @article.sub_type }
       params[:term] = @article.title
       @results = Product.get_search_items_by_relavance(params)
     end
