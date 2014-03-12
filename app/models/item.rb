@@ -1087,6 +1087,58 @@ end
    [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
   end
 
+  def self.update_item_details()
+    log = Logger.new("log/item_update_redis.log")
+    query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type from itemdetails id
+             inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
+    p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
+
+    log.debug "********** Started Updating Price and Vendor_id for Items **********"
+    log.debug "********** Found #{p_v_records.count} items for update price and vendor_ids **********"
+    log.debug "\n"
+
+    p_v_records.each do |each_rec|
+      redis_key = "items:#{each_rec.item_id}"
+      val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
+      redis_values = val_hash.flatten
+
+      log.debug "Hash Key => #{redis_key}"
+      log.debug "Hash value => #{redis_values}"
+      log.debug "\n"
+
+      redis_values = val_hash.flatten
+
+      $redis.HMSET(redis_key, redis_values)
+    end
+    log.debug "********** Completed Updating price and vendor_id for Items **********"
+    log.debug "\n"
+
+    query_to_get_advertisement_details = "select item_id,group_concat(distinct(a.id)) as advertisement_id,group_concat(icc.content_id) as content_id from item_contents_relations_cache icc
+    inner join advertisements a on a.content_id = icc.content_id
+    where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) >= NOW() and date(a.end_date) <= NOW()
+    group by item_id"
+
+    adv_records = Item.find_by_sql(query_to_get_advertisement_details)
+
+    log.debug "********** Started Updating advertisement_id for Items **********"
+    log.debug "********** Found #{adv_records.count} items for update advertisement_id **********"
+    log.debug "\n"
+
+    adv_records.each do |each_rec|
+      redis_key = "items:#{each_rec.item_id}"
+      redis_values = {:advertisement_id => each_rec.advertisement_id}.flatten
+
+      log.debug "Hash Key => #{redis_key}"
+      log.debug "Hash value => #{redis_values}"
+      log.debug "\n"
+
+      $redis.HMSET(redis_key, redis_values)
+    end
+    log.debug "********** Completed Updating advertisement_id for Items **********"
+    log.debug "\n"
+
+  end
+
 
   private
 

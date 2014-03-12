@@ -464,7 +464,7 @@ end
     if (self.is_a?(ArticleContent) && !self.url.blank?)
       # create content hash in redis-2
       #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
-      Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
+      Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", item_ids.join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
     end
   end
 

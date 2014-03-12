@@ -8,12 +8,22 @@ module Clockwork
   #end
 
   # handler receives the time when job is prepared to run in the 2nd argument
-  handler do |job, time|
-    puts "Running #{job}, at #{time}"
-    Resque.enqueue(FeedProcess, job, Time.now)
+  #handler do |job, time|
+  #  puts "Running #{job}, at #{time}"
+  #  Resque.enqueue(FeedProcess, job, Time.now)
+  #end
+
+  #every(1.minutes, 'process_feeds')
+
+  every(1.day, 'Queeing Feed Process', :at => '00:00') do
+    puts "Running Feed Process, at #{Time.now}"
+    Resque.enqueue(FeedProcess, "process_feeds", Time.now)
   end
 
-  every(1.minutes, 'process_feeds')
+  every(1.day, 'Queeing Redis Update for Item', :at => '04:00') do
+    puts "Running Redis Update for Item, at #{Time.now}"
+    Resque.enqueue(ItemUpdate, "update_item_details", Time.now)
+  end
 
   #every(3.minutes, 'less.frequent.job')
   #every(1.hour, 'hourly.job')
