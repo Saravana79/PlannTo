@@ -13,7 +13,8 @@ module Clockwork
     Resque.enqueue(FeedProcess, job, Time.now)
   end
 
-  every(10.minutes, 'process_feeds')
+  every(1.minutes, 'process_feeds')
+
   #every(3.minutes, 'less.frequent.job')
   #every(1.hour, 'hourly.job')
   #

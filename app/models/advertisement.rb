@@ -13,6 +13,8 @@ class Advertisement < ActiveRecord::Base
    belongs_to :content
    belongs_to :user
 
+   after_save :update_redis_with_advertisement
+
    #validate :file_dimensions
 
    def self.url_params_process(param)
@@ -60,5 +62,10 @@ class Advertisement < ActiveRecord::Base
             errors.add :file, "Width must be #{hieght_width[0]}px and height must be #{hieght_width[1]}px"
          end
    end
+
+  def update_redis_with_advertisement
+    #$redis.HMSET("advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
+    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
+  end
 
 end

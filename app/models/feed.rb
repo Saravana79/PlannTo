@@ -17,7 +17,6 @@ class Feed < ActiveRecord::Base
       end
     rescue Exception => e
       puts e
-      NotificationMailer.feed_process_failure(e).deliver
     end
     created_feed_urls = FeedUrl.count - feed_url_count
     puts "************************************* Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"

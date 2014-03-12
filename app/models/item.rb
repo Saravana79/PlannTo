@@ -44,6 +44,8 @@ class Item < ActiveRecord::Base
 
   has_many :item_pro_cons
 
+  after_create :update_redis_with_item
+
   # default_scope includes(:attribute_values)
   
   scope :get_price_range, lambda {|item_ids| joins(:item_attributes).
@@ -1083,6 +1085,15 @@ end
    
   def self.select_option_list 
    [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
-  end          
+  end
+
+
+  private
+
+  def update_redis_with_item
+    #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
+    Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
+  end
+
  end
 
