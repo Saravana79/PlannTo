@@ -23,7 +23,7 @@
 
           <div class="category">
             <label for="category">Category :</label>
-            <%= f.select :sub_type, @categories, {:selected => @selected_category} %>
+            <%= f.select :sub_type, @categories, {:selected => @article.sub_type } %>
           </div>
           <div class="url">
             <label for="url">Url :</label>
