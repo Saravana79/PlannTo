@@ -20,7 +20,8 @@ module Clockwork
 
   #every(1.minutes, 'process_feeds')
 
-  every(1.day, 'Queeing Feed Process', :at => '00:00') do
+  #every(1.day, 'Queeing Feed Process', :at => '00:00') do
+  every(15.minutes, 'Queeing Feed Process') do # testing
     puts "Running Feed Process, at #{Time.now}"
     Resque.enqueue(FeedProcess, "process_feeds", Time.now)
   end
