@@ -4,10 +4,6 @@ require File.expand_path('../../config/environment', __FILE__)
 
 module Clockwork
 
-  #configure do |config|
-  #  config[:logger] = Logger.new("log/clockwork.log")
-  #end
-
   #handler do |job|
   #  puts "Running #{job}"
   #end
@@ -21,12 +17,12 @@ module Clockwork
   #every(1.minutes, 'process_feeds')
 
   #every(1.day, 'Queeing Feed Process', :at => '00:00') do
-  every(1.day, 'Queeing Feed Process', :at => '14:58') do # testing
+  every(1.day, 'Queeing Feed Process', :at => '15:35', :tz => "Asia/Kolkata") do # testing
     puts "Running Feed Process, at #{Time.now}"
       Resque.enqueue(FeedProcess, "process_feeds", Time.now)
   end
 
-  every(1.day, 'Queeing Redis Update for Item', :at => '04:00') do
+  every(1.day, 'Queeing Redis Update for Item', :at => '04:00', :tz => "Asia/Kolkata") do
     puts "Running Redis Update for Item, at #{Time.now}"
     Resque.enqueue(ItemUpdate, "update_item_details", Time.now)
   end
