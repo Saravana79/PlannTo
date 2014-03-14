@@ -27,17 +27,46 @@
           </div>
           <div class="url">
             <label for="url">Url :</label>
-            <%= f.text_field :url %>
+            <%= f.text_field :url %> <%= link_to "Open Page", @article_content.url, :target => "_blank" %>
           </div>
-          <div class="title">
+
+<div class="image_process">
+
+  <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
+    <div class="title_header float_lft <%=@article_image%>">Thumbnail :</div>
+
+        <div id="share_1" style="display:none;">
+          <img id="<%=@img_thumb%>"  style="margin-left:5px;width:75px;height:75px; display:none;" class="float_lft" />
+        </div>
+
+        <div id="share_2">
+          <img src="<%= @article_content.thumbnail%>"  style="margin-left:5px;width:75px;height:75px;" class="float_lft" />
+        </div>
+
+    <div class="float_lft <%=@article_image%>"><input type="checkbox" id="noincludethumbnail" name="noincludethumbnail">Don't Include Thumbnail</input></div>
+    <div class="float_lft"><input type="checkbox" id="<%=@manual_image%>">Add Image Url</input>
+      <%=f.text_field :thumbnail, :id => "#{@thumbnail_id}", :style => "display:none;width:400px"%>
+    </div>
+
+  </div>
+
+  <div style="padding:5px 5px 0px 5px;clear:both;display:none;" class="<%=@dwnld_url%>">
+    <div class="title_header float_lft <%=@article_image%>"></div>
+    <div class="float_lft <%=@article_image%>">
+      <span id="<%=@current_image_size%>"></span> <br />
+      <span id="<%=@current_image_id%>" class="txt_blue"><%if @article_content.new_record?%>0 <%else%> 1 <%end%></span>/ <span id="<%=@total_images%>" class="txt_blue total_img">0</span> &nbsp;
+      <a id="aPrev" class="txt_blue">Prev</a>
+      <a id="aNext" class="txt_blue">Next</a>
+    </div>
+  </div>
+
+</div>
+
+          <div class="title" style="clear:both;">
             <label for="">Title :</label>
             <%= f.text_field :title %>
           </div>
-          <div class="thumbnail">
-            <label for="thumbnail">Thumbnail :</label>
-            <%= f.hidden_field :thumbnail %>
-            <img src="<%= @article_content.thumbnail %>" width="100px" height="100px">
-          </div>
+
           <div class="description">
             <label for="description">Description :</label>
             <%= f.text_area :description %>
@@ -87,6 +116,14 @@
         a:hover {
             text-decoration: underline !important;
         }
+
+
+        .image_process {
+            margin: 10px;
+            padding: 0;
+            position: relative;
+        }
+
     </style>
 
 
@@ -134,6 +171,120 @@
 
         });
 
+
+    </script>
+
+    <script type="text/javascript">
+        var MIN_SIZE=[100,50];
+        var first=false;
+        var images_index=0;
+        var images = new Array();
+        var sizes = new Array();
+
+        $("document").ready(function()
+        {
+            $('#aPrev').click(function(){
+                if(images  && images.length>0 && images_index>0 ){
+                    images_index--;
+                    $('#<%=@current_image_id%>').html(images_index+1);
+                    $("#<%=@img_thumb%>").attr("src",images[images_index]);
+                    $('#<%=@current_image_size%>').html(sizes[images_index]);
+                    $("#<%=@new_article_thumbnail%>").val(images[images_index]);
+                    $("#<%=@thumbnail_id%>").val(images[images_index]);
+
+                }
+            });
+            $('#aNext').click(function(){
+                if(images && images.length>0 && images_index<images.length-1 ){
+                    images_index++;
+                    $("#share_2").hide();
+                    $("#share_1").show();
+                    $('#<%=@current_image_id%>').html(images_index+1);
+                    $('#<%=@current_image_size%>').html(sizes[images_index]);
+                    $("#<%=@img_thumb%>").attr("src",images[images_index]);
+                    $("#<%=@new_article_thumbnail%>").val(images[images_index]);
+                    $("#<%=@thumbnail_id%>").val(images[images_index]);
+                }
+            });
+
+            $("#<%=@manual_image%>").click(function(event){
+
+                if ($('#<%=@manual_image%>').is(':checked')) {$("#<%=@thumbnail_id%>").show(); } else { $("#<%=@thumbnail_id%>").hide(); }
+            });
+
+        })
+
+
+        function check_imagesize_on_load(url){
+            images_index=0;
+            images = new Array();
+            sizes = new Array();
+            var img = new Image();
+            img.onload = function() {
+                if(this.width >=MIN_SIZE[0] &&  this.height >=MIN_SIZE[1]){
+                    add_image_to_list(url,[this.width,this.height]);
+                }
+            }
+            img.src = url;
+        }
+        function add_image_to_list(url,size){
+            ;
+
+            images.push(url);
+            sizes.push(size[0]+"*"+size[1]);
+            if(images.length == 1){
+                first=false;
+
+                $("#<%=@img_thumb%>").attr("src",url);
+                $("#<%=@new_article_thumbnail%>").val(url);
+                <%if @article_content.new_record?%>
+                $("#<%=@thumbnail_id%>").val(url);
+                <%end%>
+                $("#<%=@img_thumb%>").show();
+                $(".<%=@article_image%>").show();
+                $('#<%=@current_image_size%>').html(size[0]+"*"+size[1]);
+                $('#<%=@current_image_id%>').html(1);
+                images_index=0;
+
+            }
+            <%if @article_content.new_record?%>
+            $('#<%=@total_images%>').html(images.length);
+            <%else%>
+            $('.total_img').html(images.length);
+            <%end%>
+        }
+
+        function unescapeHTML(html) {
+            return $("<div />").html(html).text();
+        }
+        function escapeHTML(html) {
+            return $("<div />").text(html).html();
+        }
+
+
+        function hideAddImageUrl(){
+            $('#<%=@manual_image%>').attr('checked', false)
+            $("#<%=@thumbnail_id%>").val('');
+            $("#<%=@thumbnail_id%>").hide();
+        }
+
+        <% if @images.present? and @images.count > 0 %>
+
+        images = new Array();
+        sizes = new Array();
+        <% @images.each_with_index do |image,index| %>
+          check_imagesize_on_load(unescapeHTML("<%= escape_javascript(image) %>"));
+        <% end %>
+        $('#<%=@current_image_id%>').html(0);
+        <% else %>
+        $('#<%=@current_image_id%>').html(0);
+        $('#<%=@total_images%>').html(0);
+        <% end %>
+
+        first=true;
+        images_index=0;
+
+        $('div.<%=@dwnld_url%>').show();
 
     </script>
 

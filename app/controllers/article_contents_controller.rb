@@ -1,6 +1,7 @@
 class ArticleContentsController < ApplicationController
  before_filter :authenticate_user!,:except => [:bmarklet]
   def create
+    @through_rss = false
 
     unless params[:feed_url_id].blank?
       @through_rss = true
@@ -100,6 +101,8 @@ class ArticleContentsController < ApplicationController
    unless(@article.nil?)
         @article.update_facebook_stats
    end
+
+
     flash[:notice]= "Article uploaded"
     respond_to do |format|
       format.js

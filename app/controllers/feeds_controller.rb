@@ -54,6 +54,20 @@ class FeedsController < ApplicationController
   end
 
   def article_details
+    #for images
+
+    @dwnld_url = "dwnld_url"
+    @article_image = "article_image"
+    @current_image_size = "current_image_size"
+    @img_thumb = "img_thumb"
+    @new_article_type ="new_article_type"
+    @total_images = "total_images"
+    @new_article_thumbnail = "new_article_thumbnail"
+    @manual_image= "new_manual_image"
+    @thumbnail_id = "new_thumbnail_url"
+    @current_image_id = "current_image"
+
+
     @images = []
     @feed_url = FeedUrl.where("id =?", params[:feed_url_id]).first
 
@@ -66,17 +80,24 @@ class FeedsController < ApplicationController
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
 
-      if @feed_url.feed.process_value == "ImpressionMissing"
+      if @feed_url.feed.process_type == "table"
         @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
       else
         summary = Nokogiri::HTML.fragment(@feed_url.summary)
-        @images << summary.children[0]['src'] #img source
+        #@images << summary.children[0]['src'] #img source
         @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
         @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/, ''))
         @article.title = @feed_url.title
         @article.sub_type = @article.find_subtype(@article.title)
         @article.description = @meta_description unless @meta_description.blank?
+
+        doc = Nokogiri::HTML(open(@feed_url.url))
+
+        @images = ArticleContent.get_images_from_doc(doc, @images)
+
         @article.thumbnail = @images.first if @images.count > 0
+
+        p @images
       end
 
       @article_content = @article

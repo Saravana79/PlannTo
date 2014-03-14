@@ -3,16 +3,13 @@ $("#deals1").hide();
     alert('Please Enter Title.')
 <%elsif @tag == 'false' %>
   alert('Please at least one product')
-<%else%>  
+<% elsif @through_rss == true %>
+$("#feed_display_<%= params[:feed_url_id] %>").closest('tr').prev().find('.status').text(1)
+$("#feed_display_<%= params[:feed_url_id] %>").closest('tr').next().find('.feed_title').click()
+<% else %>
 if(window.opener) {
  window.close();
 <%if @facebook_post != "1" %>
-  <% if @through_rss == true %>
-    $("#feed_display_<%= params[:feed_url_id] %>").closest('tr').prev().find('.status').text(1)
-    $("#feed_display_<%= params[:feed_url_id] %>").closest('tr').next().find('.feed_title').click()
-  <% else %>
-    window.location.href = "<%= "#{session[:return_to]}" %>"
-  <% end %>
  <%else%>
     window.location.href = "/oauth/new";
 <%end%>

@@ -60,15 +60,9 @@ class ArticleContent < Content
             #   @images << CGI.unescapeHTML(attr.value)
             # end
             # */
-            doc.xpath("//meta[@property='og:image']/@content").each do |attr|
-              @images << CGI.unescapeHTML(attr.value)
-            end
-            #doc.xpath("/html/body//img[@src[contains(.,'://')
-            #       and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
-            doc.xpath("/html/body//img[@src[contains(.,'://')
-                   and not(contains(.,'ads.') or contains(.,'ad.'))]]//@src") .each do |attr|
-              @images << CGI.unescapeHTML(attr.value)
-            end
+
+            @images = ArticleContent.get_images_from_doc(doc, @images)
+
         rescue OpenURI::HTTPError=>e
             @title_info=""
             @meta_description =""
@@ -178,6 +172,19 @@ class ArticleContent < Content
 
   def facebook_statlink
     "http://api.facebook.com/restserver.php?method=links.getStats&urls=#{self.url}"
+  end
+
+  def self.get_images_from_doc(doc, images)
+    doc.xpath("//meta[@property='og:image']/@content").each do |attr|
+      images << CGI.unescapeHTML(attr.value)
+    end
+    #doc.xpath("/html/body//img[@src[contains(.,'://')
+    #       and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]//@src") .each do |attr|
+    doc.xpath("/html/body//img[@src[contains(.,'://')
+                   and not(contains(.,'ads.') or contains(.,'ad.'))]]//@src") .each do |attr|
+      images << CGI.unescapeHTML(attr.value)
+    end
+    images
   end
 
 end
