@@ -10,7 +10,7 @@ class ItemUpdate
       if item_ids.blank?
         updated_items = Item.send(method_name, log)
       else
-        updated_items = Item.send(method_name, log, item_ids+)
+        updated_items = Item.send(method_name, log, item_ids)
       end
       log.debug "********** Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} **********"
     rescue Exception => e
