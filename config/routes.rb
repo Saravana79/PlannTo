@@ -229,6 +229,9 @@ resources :comments do
   resources :games do
         resources :shares
   end  
+  resources :laptops do
+        resources :shares
+  end  
   resources :bikes do
         resources :shares
   end   
