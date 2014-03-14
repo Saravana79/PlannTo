@@ -10,6 +10,7 @@ class Advertisement < ActiveRecord::Base
                      :url  => ":s3_sg_url"
 
    has_many :images, as: :imageable, dependent: :destroy
+   has_many :add_impressions
    belongs_to :content
    belongs_to :user
 
@@ -66,6 +67,12 @@ class Advertisement < ActiveRecord::Base
   def update_redis_with_advertisement
     #$redis.HMSET("advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
+
+    # Enqueue ItemUpdate with created advertisement item_ids
+    item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
+    item_ids = item_ids_array.map(&:inspect).join(',')
+    Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.now, item_ids)
+
   end
 
 end

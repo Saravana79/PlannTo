@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140311060711) do
+ActiveRecord::Schema.define(:version => 20140313064624) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20140311060711) do
     t.string   "itemsaccess"
     t.string   "params"
     t.string   "temp_user_id"
+    t.integer  "advertisement_id"
   end
 
   add_index "add_impressions", ["publisher_id"], :name => "publihserid"

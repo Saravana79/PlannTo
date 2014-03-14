@@ -1087,8 +1087,7 @@ end
    [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
   end
 
-  def self.update_item_details()
-    log = Logger.new("log/item_update_redis.log")
+  def self.update_item_details(log)
     query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type from itemdetails id
              inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
     p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
@@ -1113,6 +1112,17 @@ end
     log.debug "********** Completed Updating price and vendor_id for Items **********"
     log.debug "\n"
 
+    update_item_details_with_ad_ids(log)
+  end
+
+  def update_item_details_with_ad_ids(log, item_ids=nil)
+
+    custom_query = "1=1"
+
+    unless item_ids.blank?
+      custom_query = "item_id in (#{item_ids})"
+    end
+
     query_to_get_advertisement_details = "select item_id,group_concat(distinct(a.id)) as advertisement_id,group_concat(icc.content_id) as content_id from item_contents_relations_cache icc
     inner join advertisements a on a.content_id = icc.content_id
     where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) >= NOW() and date(a.end_date) <= NOW()
@@ -1136,7 +1146,6 @@ end
     end
     log.debug "********** Completed Updating advertisement_id for Items **********"
     log.debug "\n"
-
   end
 
 
