@@ -1,0 +1,3 @@
+class LaptopsController < ProductsController 
+
+end
