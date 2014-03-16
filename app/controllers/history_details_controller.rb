@@ -46,6 +46,13 @@ class HistoryDetailsController < ApplicationController
       end
 
       item_id = @item_detail.blank? ? "" : @item_detail.itemid
+
+      domain = VendorDetail.getdomain(url)
+      @vd = VendorDetail.where(baseurl: domain)
+      unless @vd.empty?
+        vendor = Item.find(@vd[0].item_id)
+      end
+
       vendor_id = vendor.blank? ? "" : vendor.id
 
       vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
