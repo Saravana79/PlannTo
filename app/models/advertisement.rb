@@ -53,6 +53,22 @@ class Advertisement < ActiveRecord::Base
      end
    end
 
+   def self.calculate_ecpm
+     advertisements = Advertisement.where("bid = 'CPC'")
+     count = 0
+     advertisements.each do |advertisement|
+       clicks_count = Click.joins(:add_impression).where("add_impressions.advertisement_id = ?", advertisement.id).count
+       impressions_count = advertisement.add_impressions.count
+
+       if (clicks_count != 0 &&  impressions_count != 0)
+         count = count + 1
+         ecpm = (clicks_count/impressions_count) * 1000 * advertisement.cost
+         advertisement.update_attributes(:ecpm => ecpm)
+       end
+     end
+     return count
+   end
+
    private
 
    def file_dimensions
@@ -66,7 +82,7 @@ class Advertisement < ActiveRecord::Base
 
   def update_redis_with_advertisement
     #$redis.HMSET("advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
-    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
+    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget)
 
     # Enqueue ItemUpdate with created advertisement item_ids
     item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)

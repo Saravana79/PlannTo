@@ -4,7 +4,7 @@ class AddImpression < ActiveRecord::Base
  belongs_to :advertisement
  has_one :click, :foreign_key => "impression_id"
 
- def self.save_add_impression_data(type,itemid,request_referer,time,user,remote_ip,impression_id,itemsaccess=nil,params=nil, temp_user_id)
+ def self.save_add_impression_data(type,itemid,request_referer,time,user,remote_ip,impression_id,itemsaccess=nil,params=nil, temp_user_id, ad_id)
   # ai = AddImpression.find_by_impression_id_and_advertisement_type_and_item_id_and_hosted_site_url_and_temp_user_id(impression_id, type, itemid, request_referer, temp_user_id )
   # unless ai
       ai = AddImpression.new
@@ -24,6 +24,9 @@ class AddImpression < ActiveRecord::Base
       unless publisher.nil?
          ai.publisher_id = publisher.id
       end
+
+      # save advertisement id
+      ai.advertisement_id = ad_id
       ai.save 
   # end
    return ai.id

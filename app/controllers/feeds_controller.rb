@@ -96,8 +96,6 @@ class FeedsController < ApplicationController
         @images = ArticleContent.get_images_from_doc(doc, @images)
 
         @article.thumbnail = @images.first if @images.count > 0
-
-        p @images
       end
 
       @article_content = @article

@@ -99,7 +99,7 @@ def show_ads
       # static ad process
       @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
       @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess,
-                                                              url_params, cookies[:plan_to_temp_user_id])
+                                                              url_params, cookies[:plan_to_temp_user_id], @ad.id)
       render "show_static_ads", :layout => false
     elsif @ad.advertisement_type == "dynamic"
       # dynamic ad process
@@ -122,7 +122,7 @@ def show_ads
 
       @item_details = @item_details.first(6)
       @vendor_image_url = @item_details.first.vendor.image_url
-      @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id])
+      @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
       render :layout => false
     end
   end
