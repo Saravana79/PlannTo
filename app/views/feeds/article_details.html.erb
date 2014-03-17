@@ -93,8 +93,8 @@
 
           <div class="" style="clear:both;margin-left:40px;margin-bottom:20px;">
             <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer"%>
-            <a href="javascript:void(0)" class="btn_submitanswer" id="future">Mark as Future</a>
-            <a href="javascript:void(0)" class="btn_submitanswer" id="invalid">Mark as Invalid</a>
+            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future">Mark as Future</a>
+            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel">Cancel</a>
           </div>
       <% end %>
@@ -142,8 +142,8 @@
                 dataType: 'json',
                 data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
                 success: function (data) {
-                    $("#feed_display_" + data.feed_url_id).closest('tr').prev().find('.status').text(data.status)
-                    $("#feed_display_" + data.feed_url_id).closest('tr').next().find('.feed_title').click()
+                    $("#feed_display_" + data.feed_url_id).next().find('.feed_title').click()
+
                 }
             });
         })
