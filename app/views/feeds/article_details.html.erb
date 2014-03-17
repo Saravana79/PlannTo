@@ -134,6 +134,7 @@
         $("#cancel").click(function () {
             $(".display").html("")
         })
+
         $(".mark_as").click(function () {
             var that = $(this)
             var feed_url_id = "<%= @feed_url.id %>"
@@ -147,6 +148,7 @@
                 }
             });
         })
+
         $("document").ready(function () {
             var data =
             <%= raw @results.to_json %>
@@ -168,9 +170,28 @@
                 close: true, addButton: false,
                 url: "/search/autocomplete_items",
                 editMode: false, multiple: true,
-                hidden_field: "articles_item_id"
+                hidden_field: "articles_item_id",
+                has_parent: false
             };
             $.textTagger("new_article_product", "new_article_product_list", settings);
+
+            $('#deleteTag').live('click', function(){
+                if (settings.hidden_field != ""){
+                    var deleteId = $(this).closest('li').attr('id').replace("matched",'');
+                    $.removeIdFromField(settings.hidden_field, deleteId, settings.has_parent);
+                }
+                $(this).closest('li').remove();
+
+                $("span #matched"+deleteId).attr("checked", false)
+                $("span #matched"+deleteId).parent().show()
+
+                if (settings.deleteFunctionName){
+                    data = new Object()
+                    data.id = deleteId;
+                    $.selectEvent(data, settings.deleteFunctionName)
+                }
+                return false;
+            })
 
         });
 

@@ -60,7 +60,7 @@
 
       .feed_explain td {border: none; }
 
-      .display {width: 1000px;}
+      .display {width: 1050px;}
 
       .search_form { color: #A52A2A;
           font-size: 14px;
@@ -72,6 +72,10 @@
           margin: 5px;
           position: relative;
           top: -22px;}
+
+      .mark_as_list img {
+          padding: 0 0 0 10px;
+      }
 
   </style>
 
@@ -100,8 +104,25 @@
         $(".relevant_product").live("click", function () {
             $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
             $.addIdToField("articles_item_id", $(this).attr("id").replace("matched",""), false)
-            $(this).parent().remove();
+            $(this).parent().hide();
         })
+
+        $(".mark_as_button").click(function () {
+            var that = $(this)
+            var feed_url_id = that.parent().next().find('.feed_title').attr('id')
+            $.ajax({
+                url: '/feeds/change_status',
+                dataType: 'json',
+                data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
+                success: function (data) {
+
+                    that.closest('.each_row').next('.display').hide()
+                    that.closest('.each_row').hide()
+
+                }
+            });
+        })
+
     });
   </script>
   </body>
