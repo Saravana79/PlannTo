@@ -167,7 +167,7 @@ class ProductsController < ApplicationController
     @impression_id = params[:iid]
     @req = request.referer  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id])
+    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
 
     if @showspec == 1
       @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
