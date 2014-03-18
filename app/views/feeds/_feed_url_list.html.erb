@@ -18,8 +18,8 @@
          <%= image_tag "/assets/invalid.png", :size => "16x16", :alt => "mark as invalid", :id => "invalid", :class => "mark_as_button", :title => "mark as invalid" %>
      </div>
       <div style="width:550px;float:left;"><span class="feed_title" id="<%= feed.id %>"><%= feed.title.blank? ? feed.url : feed.title.truncate(70) %></span> </div>
-      <div style="width:130px;float:left;"><%= feed.category %></div>
-      <div style="width:150px;float:left;"><%= feed.published_at.strftime('%d %b %Y') %></div>
+      <div style="width:150px;float:left;"><%= feed.category %></div>
+      <div style="width:150px;float:left;"><%= feed.published_at.blank? ? "" : feed.published_at.strftime('%d %b %Y') %></div>
 
       <div class="feed_explain"> <td colspan="5">  </div>
 
