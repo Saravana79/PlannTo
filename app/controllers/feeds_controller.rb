@@ -47,6 +47,10 @@ class FeedsController < ApplicationController
     @sources = FeedUrl.all.map(&:source).uniq
     @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 20)
 
+    if params[:page]
+      return render :partial => "/feeds/feed_url_list", :layout => false
+    end
+
     respond_to do |format|
       format.js
       format.html

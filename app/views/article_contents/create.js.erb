@@ -4,8 +4,9 @@ $("#deals1").hide();
 <%elsif @tag == 'false' %>
   alert('Please at least one product')
 <% elsif @through_rss == true %>
-$("#feed_display_<%= params[:feed_url_id] %>").closest('tr').prev().find('.status').text(1)
-$("#feed_display_<%= params[:feed_url_id] %>").closest('tr').next().find('.feed_title').click()
+$("#feed_display_<%= params[:feed_url_id] %>").prev('.each_row').remove()
+$("#feed_display_<%= params[:feed_url_id] %>").next('.each_row').find('.feed_title').click()
+$("#feed_display_<%= params[:feed_url_id] %>").remove()
 <% else %>
 if(window.opener) {
  window.close();
