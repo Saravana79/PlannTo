@@ -24,6 +24,10 @@ class FeedsController < ApplicationController
   end
 
   def feed_urls
+    params[:feed_urls_sort_by] ||= "published_at"
+    params[:feed_urls_order_by] ||= "desc"
+
+    sort =
     condition = "1=1"
     unless params[:search].blank?
       #condition = "1=1"
@@ -41,11 +45,11 @@ class FeedsController < ApplicationController
       condition = condition == "1=1" ? "status = 0" : condition
     end
 
-    @feed_urls = FeedUrl.where(condition)
+    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}")
 
     @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
     @sources = FeedUrl.all.map(&:source).uniq
-    @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 20)
+    @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 25)
 
     if params[:page]
       return render :partial => "/feeds/feed_url_list", :layout => false

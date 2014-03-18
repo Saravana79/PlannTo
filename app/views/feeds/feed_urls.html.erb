@@ -24,6 +24,18 @@
         <%= search_form.submit "Clear" %>
       <% end %>
     </div>
+
+    <div class="sorting">
+        <form>
+          <label>Sort by:&nbsp;</label>
+          <span id="sort_filter">
+            <select name="feed_urls_sort_by" id="feed_urls_sort_by"><option value="published_at">Published Date</option> </select>
+          </span>
+          <select style="width:70px;" name="feed_urls_order_by" id="feed_urls_order_by"><option value="desc">Desc</option>
+        <option value="asc">Asc</option></select>
+        </form>
+    </div>
+
     <br/>
     <div style="clear:both;display:block;margin-top:20px;">
       <div id="feed_url_list" class='jscroll'>
@@ -57,7 +69,7 @@
 
       .feed_explain td {border: none; }
 
-      .display {width: 1265px;}
+      .display {width: 1065px;}
 
       .search_form { color: #A52A2A;
           font-size: 14px;
@@ -76,6 +88,14 @@
 
       .mark_as_button {
           cursor: pointer;
+      }
+
+      .sorting {
+          color: #A52A2A;
+          font-size: 14px;
+          margin: -8px;
+          position: absolute;
+          right: 225px;
       }
 
   </style>
@@ -132,6 +152,22 @@
                     that.closest('.each_row').next('.display').hide()
                     that.closest('.each_row').hide()
 
+                }
+            });
+        })
+
+
+        $("#feed_urls_order_by").change(function()
+        {
+            var params_str = $(".search_form form").serialize()
+            var order_by = $("#feed_urls_order_by").val()
+
+            var new_params = $.param({feed_urls_order_by: order_by})
+
+            $.ajax({
+                url: '/feeds/feed_urls?'+params_str+'&'+new_params,
+                success: function (data) {
+                  console.log(data)
                 }
             });
         })
