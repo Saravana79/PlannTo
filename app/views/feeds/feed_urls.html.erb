@@ -164,12 +164,8 @@
 
             var new_params = $.param({feed_urls_order_by: order_by})
 
-            $.ajax({
-                url: '/feeds/feed_urls?'+params_str+'&'+new_params,
-                success: function (data) {
-                  console.log(data)
-                }
-            });
+            window.location.href='/feeds/feed_urls?'+params_str+'&'+new_params
+
         })
 
     });
