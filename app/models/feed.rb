@@ -5,7 +5,7 @@ class Feed < ActiveRecord::Base
 
   def self.process_feeds
     puts "************************************************* Process Started at - #{Time.now.strftime('%b %d,%Y %r')} *************************************************"
-    @feeds = Feed.all
+    @feeds = Feed.find_all_by_process_type('table')
     feed_url_count = FeedUrl.count
     begin
       @feeds.each do |each_feed|
@@ -65,7 +65,14 @@ class Feed < ActiveRecord::Base
         source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
       end
 
-      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => "Others",
+      category = "Others"
+
+      if source != ""
+        feed_by_source = FeedUrl.find_by_source(source)
+        category = feed_by_source.blank? ? 'Others' : feed_by_source.category
+      end
+
+      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => category,
                                  :feed_id => self.id, :published_at => Time.now)
     end
     self.update_attributes(:last_updated_at => Time.now)

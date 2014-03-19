@@ -31,7 +31,14 @@ namespace :feed do
         source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
       end
 
-      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => "Others",
+      category = "Others"
+
+      if source != ""
+        feed_by_source = FeedUrl.find_by_source(source)
+        category = feed_by_source.blank? ? 'Others' : feed_by_source.category
+      end
+
+      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => category,
                                  :feed_id => @feed.id, :published_at => Time.now)
     end
     @feed.update_attributes(:last_updated_at => Time.now)
