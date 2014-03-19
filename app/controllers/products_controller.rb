@@ -336,7 +336,7 @@ class ProductsController < ApplicationController
               if(@where_to_buy_items.empty?)
                 itemsaccess = "emptyitems"
               end
-            @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
+            @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
            else
               @where_to_buy_items = []
               get_offers(@items.map(&:id).join(",").split(","))
@@ -404,7 +404,7 @@ class ProductsController < ApplicationController
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
       url_params = "items:" + params[:item_ids]
-      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id])
+      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
       @best_deals.select{|a| a}
       @vendors =  VendorDetail.all
     else

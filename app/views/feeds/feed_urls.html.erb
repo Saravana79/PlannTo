@@ -31,8 +31,9 @@
           <span id="sort_filter">
             <select name="feed_urls_sort_by" id="feed_urls_sort_by"><option value="published_at">Published Date</option> </select>
           </span>
-          <select style="width:70px;" name="feed_urls_order_by" id="feed_urls_order_by"><option value="desc">Desc</option>
-        <option value="asc">Asc</option></select>
+
+          <%= select_tag(:feed_urls_order_by, options_for_select([['Asc', 'asc'], ['Desc', 'desc']], selected: params[:feed_urls_order_by] )) %>
+
         </form>
     </div>
 

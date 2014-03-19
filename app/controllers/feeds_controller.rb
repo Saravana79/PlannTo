@@ -83,6 +83,7 @@ class FeedsController < ApplicationController
 
     unless @article_content.blank?
       @already_shared = true
+      @feed_url.update_attributes!(:status => 1)
     else
       @already_shared = false
       @external = true

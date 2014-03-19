@@ -26,7 +26,9 @@ class Feed < ActiveRecord::Base
   def feed_process()
     feed = Feedzirra::Feed.fetch_and_parse(self.url)
     if (!feed.blank? && feed != 0)
-      latest_feeds = feed.entries.select {|each_val| each_val.published > (self.last_updated_at.blank? ? Time.now-1.month : self.last_updated_at)}
+      latest_feeds = feed.entries
+
+      latest_feeds = latest_feeds.select {|each_val| each_val.published > self.last_updated_at} unless self.last_updated_at.blank?
 
       latest_feeds.each do |each_entry|
         feed_url = FeedUrl.where("url = ?", each_entry.url)
