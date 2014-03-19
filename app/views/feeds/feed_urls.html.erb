@@ -45,6 +45,10 @@
     </div>
   </div>
 
+  <div id="loading_div">
+    <%= image_tag "/assets/ajax-loader.gif" %>
+  </div>
+
   <style type="text/css">
       body { margin: 35px; }
 
@@ -81,7 +85,7 @@
       .go_back {left: 654px;
           margin: 5px;
           position: relative;
-          top: -22px;}
+          top: 0px;}
 
       .mark_as_list img {
           padding: 0 0 0 10px;
@@ -97,6 +101,27 @@
           margin: -8px;
           position: absolute;
           right: 225px;
+      }
+
+      #loading_div {
+          position: absolute;
+          background-color: #FAFAFA;
+          z-index: 2147483647 !important;
+          opacity: 0.8;
+          overflow: hidden;
+          text-align: center; top: 0; left: 0;
+          height: 100%;
+          width: 100%;
+          padding-top:20%;
+      }
+
+      .each_row {
+          line-height: 22px;
+          font-size: 11px;
+      }
+
+      .list_feed_urls {
+          padding-top: 15px;
       }
 
   </style>
@@ -115,6 +140,7 @@
         $('.jscroll').jscroll();
 
         $('.pagination a').attr('data-remote', 'true')
+
 
 
       $(".feed_title").live('click', function()
@@ -168,6 +194,12 @@
             window.location.href='/feeds/feed_urls?'+params_str+'&'+new_params
 
         })
+
+        $('#loading_div').hide().ajaxStart(function(){
+            $(this).show();
+        }).ajaxStop(function() {
+            $(this).hide();
+        });
 
     });
   </script>

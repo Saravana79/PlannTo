@@ -11,13 +11,13 @@
 <%#= will_paginate @feed_urls %>
 
   <% @feed_urls.each_with_index do |feed, inx| %>
-    <div style="height:20px;overflow: hidden;position: relative;" class='each_row'>
+    <div style="height:25px;overflow: hidden;position: relative;" class='each_row'>
      <div style="width:200px;float:left;"><%= feed.source.blank? ? "-- blank -- " : feed.source %></div>
      <div style="width:100px;float:left;" class="mark_as_list">
          <%= image_tag "/assets/star-on.png", :alt => "mark as future", :id => "future", :class => "mark_as_button", :title => "mark as future" %>
          <%= image_tag "/assets/invalid.png", :size => "16x16", :alt => "mark as invalid", :id => "invalid", :class => "mark_as_button", :title => "mark as invalid" %>
      </div>
-      <div style="width:550px;float:left;"><span class="feed_title" id="<%= feed.id %>"><%= feed.title.blank? ? feed.url : feed.title.truncate(70) %></span> </div>
+      <div style="width:550px;float:left;"><span class="feed_title" id="<%= feed.id %>"><%= feed.title.blank? ? feed.url.to_s.truncate(95) : feed.title.to_s.truncate(95) %></span> </div>
       <div style="width:150px;float:left;"><%= feed.category %></div>
       <div style="width:150px;float:left;"><%= feed.published_at.blank? ? "" : feed.published_at.strftime('%d %b %Y') %></div>
 
