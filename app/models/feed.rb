@@ -5,7 +5,7 @@ class Feed < ActiveRecord::Base
 
   def self.process_feeds
     puts "************************************************* Process Started at - #{Time.now.strftime('%b %d,%Y %r')} *************************************************"
-    @feeds = Feed.find_all_by_process_type('table')
+    @feeds = Feed.all
     feed_url_count = FeedUrl.count
     begin
       @feeds.each do |each_feed|
@@ -28,7 +28,9 @@ class Feed < ActiveRecord::Base
     if (!feed.blank? && feed != 0)
       latest_feeds = feed.entries
 
-      latest_feeds = latest_feeds.select {|each_val| each_val.published > self.last_updated_at} unless self.last_updated_at.blank?
+      if !self.last_updated_at.blank?
+        latest_feeds = latest_feeds.select {|each_val| each_val.published > self.last_updated_at}
+      end
 
       latest_feeds.each do |each_entry|
         feed_url = FeedUrl.where("url = ?", each_entry.url)
@@ -37,10 +39,11 @@ class Feed < ActiveRecord::Base
           article_content = ArticleContent.find_by_url(each_entry.url)
           status = 0
           status = 1 unless article_content.blank?
-          check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url, :category => category).first
+          check_exist_feed_url = FeedUrl.where(:url => each_entry.url, :category => category).first
 
           if check_exist_feed_url.blank?
-            FeedUrl.create(feed_id: self.id, url: each_entry.url, title: each_entry.title, category: self.category, status: status, source: source, summary: each_entry.summary, :published_at => each_entry.published)
+            FeedUrl.create(feed_id: self.id, url: each_entry.url, title: each_entry.title, category: self.category,
+                           status: status, source: source, summary: each_entry.summary, :published_at => each_entry.published)
           end
         end
       end
