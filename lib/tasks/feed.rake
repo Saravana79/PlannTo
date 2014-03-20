@@ -47,4 +47,29 @@ namespace :feed do
     puts "Successfully created #{count} feed_urls from #{@feed.process_value} table"
     puts "**************************************************************************************"
   end
+
+  desc 'update feed_url title, summary and images based on nokogiri'
+  task :update_feed_url_values => :environment do
+    puts "**************************************************************************************"
+    puts "Started to update feed_url values"
+    puts "**************************************************************************************"
+
+    @feed_urls = FeedUrl.last(100)
+    count = 0
+    @feed_urls.each do |each_feed_url|
+      count = count + 1
+      begin
+        title, description, images = Feed.get_feed_url_values(each_feed_url.url)
+        each_feed_url.update_attributes(:title => title, :summary => description, :images => images)
+        puts "Updated #{count} of #{@feed_urls.count} feed_urls remaining #{@feed_urls.count - count} values \n"
+      rescue Exception => e
+        puts "Error while process FeedUrl"
+        puts e
+      end
+    end
+
+    puts "**************************************************************************************"
+    puts "Successfully updated #{count} feed_urls"
+    puts "**************************************************************************************"
+  end
 end

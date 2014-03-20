@@ -89,21 +89,30 @@ class FeedsController < ApplicationController
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
 
-      if @feed_url.feed.process_type == "table"
-        @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
-      else
-        summary = Nokogiri::HTML.fragment(@feed_url.summary)
-        #@images << summary.children[0]['src'] #img source
+      #if @feed_url.feed.process_type == "table"
+      #  @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
+      #else
+      #  summary = Nokogiri::HTML.fragment(@feed_url.summary)
+      #  #@images << summary.children[0]['src'] #img source
+      #  @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
+      #  @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/, '')) rescue summary
+      #  @article.title = @feed_url.title
+      #  @article.sub_type = @article.find_subtype(@article.title)
+      #  @article.description = @meta_description unless @meta_description.blank?
+      #
+      #  doc = Nokogiri::HTML(open(@feed_url.url))
+      #
+      #  @images = ArticleContent.get_images_from_doc(doc, @images)
+      #
+      #  @article.thumbnail = @images.first if @images.count > 0
+      #end
+
+      if !@feed_url.blank?
         @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
-        @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/, '')) rescue summary
         @article.title = @feed_url.title
         @article.sub_type = @article.find_subtype(@article.title)
-        @article.description = @meta_description unless @meta_description.blank?
-
-        doc = Nokogiri::HTML(open(@feed_url.url))
-
-        @images = ArticleContent.get_images_from_doc(doc, @images)
-
+        @article.description = @feed_url.summary
+        @images = @feed_url.images.split(",")
         @article.thumbnail = @images.first if @images.count > 0
       end
 
