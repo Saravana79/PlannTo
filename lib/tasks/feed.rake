@@ -54,7 +54,7 @@ namespace :feed do
     puts "Started to update feed_url values"
     puts "**************************************************************************************"
 
-    @feed_urls = FeedUrl.last(100)
+    @feed_urls = FeedUrl.all
     count = 0
     @feed_urls.each do |each_feed_url|
       count = count + 1
