@@ -39,7 +39,7 @@ namespace :feed do
       end
 
       @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => category,
-                                 :feed_id => @feed.id, :published_at => Time.now)
+                                 :feed_id => @feed.id, :published_at => each_record.created_at)
     end
     @feed.update_attributes(:last_updated_at => Time.now)
 

@@ -37,7 +37,11 @@ class Feed < ActiveRecord::Base
           article_content = ArticleContent.find_by_url(each_entry.url)
           status = 0
           status = 1 unless article_content.blank?
-          FeedUrl.create(feed_id: self.id, url: each_entry.url, title: each_entry.title, category: self.category, status: status, source: source, summary: each_entry.summary, :published_at => each_entry.published)
+          check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url, :category => category).first
+
+          if check_exist_feed_url.blank?
+            FeedUrl.create(feed_id: self.id, url: each_entry.url, title: each_entry.title, category: self.category, status: status, source: source, summary: each_entry.summary, :published_at => each_entry.published)
+          end
         end
       end
       self.update_attributes!(last_updated_at: feed.last_modified)
@@ -72,8 +76,12 @@ class Feed < ActiveRecord::Base
         category = feed_by_source.blank? ? 'Others' : feed_by_source.category
       end
 
-      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => category,
-                                 :feed_id => self.id, :published_at => Time.now)
+      check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url, :category => category).first
+
+      if check_exist_feed_url.blank?
+        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => category,
+                                 :feed_id => self.id, :published_at => each_record.created_at)
+      end
     end
     self.update_attributes(:last_updated_at => Time.now)
   end
