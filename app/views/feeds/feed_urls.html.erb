@@ -137,7 +137,11 @@
 //        var href_val = $(".next_page").attr('href')
 //        $("#next-scroll-page").attr('href', href_val)
 
-        $('.jscroll').jscroll();
+        $('.jscroll').jscroll({
+            loadingHtml: '<img src="/assets/ajax-loader.gif" alt="Loading" /> Loading...',
+            padding: 20,
+            nextSelector: '.jscroll-next a:last'
+        });
 
         $('.pagination a').attr('data-remote', 'true')
 

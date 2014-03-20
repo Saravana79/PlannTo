@@ -5,7 +5,7 @@
       <a href="<%= content_path(@article_content.id) %>" target='_blank'> <%= @article_content.title %></a>
     </div>
 <% else %>
-    <div class="detailed_vales">
+    <div class="detailed_values">
       <%= form_for(:article_content, :url => "/article_contents", :remote => true, :html => {}) do |f| %>
           <%= hidden_field_tag 'feed_url_id', @feed_url.id %>
 
@@ -91,12 +91,17 @@
             <div style="clear:both;"></div>
           </div>
 
-          <div class="" style="clear:both;margin-left:40px;margin-bottom:20px;">
+          <div class="page_buttons" style="clear:both;margin-left:40px;margin-bottom:20px;">
             <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer"%>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future">Mark as Future</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel">Cancel</a>
           </div>
+
+          <div class='empty_div'>
+
+          </div>
+
       <% end %>
 
     </div>

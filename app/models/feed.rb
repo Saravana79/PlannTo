@@ -32,6 +32,8 @@ class Feed < ActiveRecord::Base
         latest_feeds = latest_feeds.select {|each_val| each_val.published > self.last_updated_at}
       end
 
+      latest_feeds = latest_feeds.last(200)
+
       latest_feeds.each do |each_entry|
         feed_url = FeedUrl.where("url = ?", each_entry.url)
         source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.","")
@@ -52,7 +54,7 @@ class Feed < ActiveRecord::Base
   end
 
   def table_process()
-    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.now-2.days : self.last_updated_at), 10)
+    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.now-2.days : self.last_updated_at), 50)
 
     @impression_missing.each do |each_record|
       status = 0

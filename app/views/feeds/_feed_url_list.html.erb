@@ -30,22 +30,22 @@
   <% end %>
 
 
-<div class="next jscroll-next-parent" style="display: none;">
+<div class="jscroll-next" style="display: none;">
   <%= will_paginate @feed_urls %>
 </div>
 
 <script type="text/javascript">
     $(function()
     {
-        <% if !params[:page].blank? %>
+        <% if (@feed_urls.count < 25) %>
+          $(".jscroll-loading").hide()
+        <% end %>
 
-        console.log($page_count)
-        console.log(<%= params[:page] %>)
-        console.log($page_count == <%= params[:page] %>)
+        <% if !params[:page].blank? %>
 
         if ($page_count == <%= params[:page] %>)
         {
-            $(".jscroll-next-parent").remove()
+            $(".jscroll-next").remove()
             $(".jscroll-loading").remove()
         }
         <% end %>

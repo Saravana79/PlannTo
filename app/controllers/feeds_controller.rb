@@ -95,7 +95,7 @@ class FeedsController < ApplicationController
         summary = Nokogiri::HTML.fragment(@feed_url.summary)
         #@images << summary.children[0]['src'] #img source
         @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
-        @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/, ''))
+        @meta_description = CGI.unescapeHTML(summary.children[1].text.gsub(/[^\x20-\x7e]/, '')) rescue summary
         @article.title = @feed_url.title
         @article.sub_type = @article.find_subtype(@article.title)
         @article.description = @meta_description unless @meta_description.blank?
