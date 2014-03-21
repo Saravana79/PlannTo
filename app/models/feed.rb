@@ -8,7 +8,6 @@ class Feed < ActiveRecord::Base
     @feeds = Feed.all
     feed_url_count = FeedUrl.count
     begin
-      xx
       @feeds.each do |each_feed|
         if each_feed.process_type == "feed"
           each_feed.feed_process()
@@ -18,8 +17,6 @@ class Feed < ActiveRecord::Base
       end
     rescue Exception => e
       puts e
-      log = Logger.new 'log/feed_process.log'
-      NotificationMailer.resque_process_failure(e, log, "Feed Process").deliver
     end
     created_feed_urls = FeedUrl.count - feed_url_count
     puts "************************************* Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"
