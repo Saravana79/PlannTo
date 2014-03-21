@@ -77,8 +77,10 @@ class Feed < ActiveRecord::Base
       category = "Others"
 
       if source != ""
-        feed_by_source = FeedUrl.find_by_source(source)
-        category = feed_by_source.blank? ? 'Others' : feed_by_source.category
+        feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
+        unless feed_by_sources.blank?
+          category = feed_by_sources.map(&:category).join(',')
+        end
       end
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url, :category => category).first
 

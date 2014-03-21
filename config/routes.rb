@@ -373,6 +373,7 @@ resources :comments do
       get "feed_urls"
       get "article_details"
       post "change_status"
+      post "change_category"
     end
   end
   

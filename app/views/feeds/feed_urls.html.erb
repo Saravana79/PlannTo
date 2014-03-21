@@ -77,7 +77,7 @@
 
       .feed_explain td {border: none; }
 
-      .display {width: 1065px;}
+      .display {width: 1230px;}
 
       .search_form { color: #A52A2A;
           font-size: 14px;
@@ -181,6 +181,23 @@
                 url: '/feeds/change_status',
                 dataType: 'json',
                 data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
+                success: function (data) {
+
+                    that.closest('.each_row').next('.display').hide()
+                    that.closest('.each_row').hide()
+
+                }
+            });
+        })
+
+        $(".change_category").live('change', function () {
+            var that = $(this)
+            var change_type_id = that.attr('id')
+            var feed_url_id = change_type_id.replace('change_type_', '')
+            $.ajax({
+                url: '/feeds/change_category',
+                dataType: 'json',
+                data: {feed_url_id: feed_url_id, category: that.val()},
                 success: function (data) {
 
                     that.closest('.each_row').next('.display').hide()

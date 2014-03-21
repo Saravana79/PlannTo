@@ -140,4 +140,14 @@ class FeedsController < ApplicationController
     render :json => {:status => status, :feed_url_id => @feed_url.id}.to_json
   end
 
+  def change_category
+    @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
+    category = params[:category] ||= "Others"
+
+    unless @feed_url.blank?
+      @feed_url.update_attributes!(:category => category)
+    end
+    render :json => {:category => category, :feed_url_id => @feed_url.id}.to_json
+  end
+
 end

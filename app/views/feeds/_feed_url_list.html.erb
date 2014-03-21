@@ -23,7 +23,12 @@
         </a>
       </div>
       <div style="width:150px;float:left;"><%= feed.category %></div>
-      <div style="width:150px;float:left;"><%= feed.published_at.blank? ? "" : feed.published_at.strftime('%d %b %Y') %></div>
+      <div style="width:90px;float:left;">
+        <%= feed.published_at.blank? ? "" : feed.published_at.strftime('%d %b %Y') %>
+      </div>
+      <div style="width:150px;float:left;">
+        <%= select_tag("change_type_#{feed.id}", options_for_select(@categories), :prompt => 'Change Category', :class => "change_category" )%>
+      </div>
 
       <div class="feed_explain"> <td colspan="5">  </div>
 
