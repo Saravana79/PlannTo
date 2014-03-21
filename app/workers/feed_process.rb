@@ -13,6 +13,7 @@ class FeedProcess
       log.debug "Have some problem while executing feed process, please find the error below"
       log.debug e
       NotificationMailer.resque_process_failure(e, log, "Feed Process").deliver
+      NotificationMailer.resque_process_failure(e, e.backtrace, log, "Feed Process").deliver
     end
     log.debug "********** End Processing Feed **********"
     log.debug "\n"

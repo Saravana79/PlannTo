@@ -12,7 +12,7 @@ class AdvertisementProcess
     rescue Exception => e
       log.debug "Have some problem while executing calculate ecpm, please find the error below"
       log.debug e
-      NotificationMailer.resque_process_failure(e, log, "Feed Process").deliver
+      NotificationMailer.resque_process_failure(e, e.backtrace, log, "Advertisement Process").deliver
     end
     log.debug "********** End Processing calculate ecpm **********"
     log.debug "\n"

@@ -11,7 +11,13 @@
   <div class="error_body">
     There is a problem while running Resque for <%= @error_for %>. Please find more details below. <br />
     <div class="error_details">
-      <span style="color:red;"> <%= @error_message %> </span> <br />
+      <%= @error_message %> <br/> <br/>
+      Backtrace: <br/> <br/>
+      <span style="color:red;">
+        <% @backtrace.each do |each_line| %>
+          <%= each_line %> <br />
+        <% end %>
+      </span> <br />
     </div>
     Kindly check and resolve this as soon as possible.
   </div>
