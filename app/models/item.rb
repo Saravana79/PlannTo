@@ -643,6 +643,8 @@ class Item < ActiveRecord::Base
       return (items + "," +  configatron.root_level_car_id.to_s)
     when 'Cycle'
       return (items + "," +  configatron.root_level_cycle_id.to_s)
+    when 'Laptop'
+      return (items + "," +  configatron.root_level_laptop_id.to_s)
     end 
  end
  

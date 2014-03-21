@@ -72,6 +72,17 @@ end
       # image_url = item.image_url
       {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
     }
+
+    # Append suggestions based on category
+
+    unless param[:category].blank?
+      categories = param[:category].split(",")
+      categories.each do |each_category|
+        name, id = Item.find_root_level_id(each_category, each_category.pluralize).to_s.split(",")
+        results << {:id => id, :value => name, :imgsrc =>"", :type => "Groups", :url => "" }
+      end
+    end
+
     return results
   end
 
