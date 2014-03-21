@@ -77,7 +77,7 @@ class FeedsController < ApplicationController
 
 
     @images = []
-    @feed_url = FeedUrl.where("id =?", params[:feed_url_id]).first
+    @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
 
     @article_content = ArticleContent.find_by_url(@feed_url.url)
 
@@ -119,7 +119,7 @@ class FeedsController < ApplicationController
       @article_content = @article
       @article.sub_type = "Others" if @article.sub_type.blank?
       params[:term] = @article.title
-      @results = Product.get_search_items_by_relavance(params)
+      #@results = Product.get_search_items_by_relavance(params)
     end
 
     respond_to do |format|

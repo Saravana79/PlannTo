@@ -35,6 +35,7 @@
             <span style="width:75px;float:left;" class="title_header"><label for="category" style="width:100px;">Category :</label></span>
             <span style="float:left;"><%= f.select :sub_type, @categories, {:selected => @article.sub_type } %></span>
           </div>
+          <br />
           
 <div class="image_process">
 
@@ -155,20 +156,45 @@
         })
 
         $("document").ready(function () {
-            var data =
-            <%= raw @results.to_json %>
+//            var data =
+            <!--<%#= raw @results.to_json %>-->
 
-            var container = $('#search_items_by_relavance');
-            sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
+//            var container = $('#search_items_by_relavance');
+//            sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
+//
+//            $(sub_contain).appendTo(container)
+//            $.each(data, function (index, value) {
+//                sub_contain = $("<span style='display:inline-block'></span>")
+//                $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "relevance_product[]" }).appendTo(sub_contain);
+//                $('<label />', { 'for': 'matched' + value.id, text: value.value + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
+//                $(sub_contain).appendTo(container)
+//
+//            });
 
-            $(sub_contain).appendTo(container)
-            $.each(data, function (index, value) {
-                sub_contain = $("<span style='display:inline-block'></span>")
-                $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "relevance_product[]" }).appendTo(sub_contain);
-                $('<label />', { 'for': 'matched' + value.id, text: value.value + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
-                $(sub_contain).appendTo(container)
 
+
+            $.ajax({
+                url: '/search/search_items_by_relavance',
+                dataType:'json',
+                type: "get",
+                data: {term: $("#article_content_title").val(), search_type: $("#new_article_type").val()},
+                before:$('#share_spinner').show(),
+                after: $('#share_spinner').hide(),
+                success: function(data){
+                    var container = $('#search_items_by_relavance');
+                    sub_contain = $("<span style='padding-right:10px;font-weight:bold;'>Suggestions:</span>")
+
+                    $(sub_contain).appendTo(container)
+                    $.each(data, function (index, value) {
+                        sub_contain = $("<span style='display:inline-block'></span>")
+                        $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "relevance_product[]" }).appendTo(sub_contain);
+                        $('<label />', { 'for': 'matched' + value.id, text: value.value + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
+                        $(sub_contain).appendTo(container)
+
+                    });
+                }
             });
+
 
 
             settings = {

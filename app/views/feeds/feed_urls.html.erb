@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <div id="loading_div">
+  <div id="loading_div" style="display:none">
     <%= image_tag "/assets/ajax-loader.gif" %>
   </div>
 
@@ -199,11 +199,6 @@
 
         })
 
-        $('#loading_div').hide().ajaxStart(function(){
-            $(this).show();
-        }).ajaxStop(function() {
-            $(this).hide();
-        });
 
     });
   </script>

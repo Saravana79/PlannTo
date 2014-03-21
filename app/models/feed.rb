@@ -94,6 +94,30 @@ class Feed < ActiveRecord::Base
     self.update_attributes(:last_updated_at => Time.now)
   end
 
+  def self.get_find_subtype(title)
+    title_words = title.downcase #.split
+
+    tips = %w[tip trick]
+    reviews = %w[review]
+    comparisons = %w[vs]
+    how_to = ["tutorial", "guide", "how to"]
+    how_to.each do |how|
+      return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
+    end
+    logger.info "how to"
+    tips.each do |tip|
+      return ArticleCategory::HOW_TO if title_words.scan(tip).size >0
+    end
+    comparisons.each do |comparison|
+      return ArticleCategory::COMPARISONS if title_words.scan(comparison).size >0
+    end
+    reviews.each do |review|
+      return ArticleCategory::REVIEWS if title_words.scan(review).size >0
+    end
+
+    return ""
+  end
+
   private
 
   def self.get_feed_url_values(url)
@@ -123,6 +147,7 @@ class Feed < ActiveRecord::Base
       end
 
       images = ArticleContent.get_images_from_doc(doc, images)
+      images = [] if images.blank?
 
     rescue OpenURI::HTTPError => e
       title_info = ""
