@@ -70,5 +70,5 @@ PlanNto::Application.configure do
   PlanNto::Application.config.middleware.use ExceptionNotifier,
                                              :email_prefix => "Plannto - ",
                                              :sender_address => %{"admin" <saravana@plannto.com>},
-                                             :exception_recipients => %w{saravana@plannto.com,sivakumar@plannto.com}
+                                             :exception_recipients => %w{saravana@plannto.com,siva@plannto.com}
 end
