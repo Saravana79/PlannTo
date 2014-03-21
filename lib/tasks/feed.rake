@@ -60,7 +60,7 @@ namespace :feed do
       count = count + 1
       begin
         title, description, images = Feed.get_feed_url_values(each_feed_url.url)
-        each_feed_url.update_attributes(:title => title, :summary => description, :images => images)
+        each_feed_url.update_attributes(:title => title.strip, :summary => description, :images => images)
         puts "Updated #{count} of #{@feed_urls.count} feed_urls remaining #{@feed_urls.count - count} values \n"
       rescue Exception => e
         puts "Error while process FeedUrl"

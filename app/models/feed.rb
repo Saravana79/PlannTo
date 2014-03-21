@@ -44,7 +44,7 @@ class Feed < ActiveRecord::Base
 
           title, description, images = Feed.get_feed_url_values(each_entry.url)
 
-          FeedUrl.create(feed_id: id, url: each_entry.url, title: title, category: category,
+          FeedUrl.create(feed_id: id, url: each_entry.url, title: title.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
                          :published_at => each_entry.published)
         end
@@ -86,7 +86,7 @@ class Feed < ActiveRecord::Base
 
         title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
 
-        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source,
+        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => self.id, :published_at => each_record.created_at)
       end
@@ -95,7 +95,7 @@ class Feed < ActiveRecord::Base
   end
 
   def self.get_find_subtype(title)
-    title_words = title.downcase #.split
+    title_words = title.to_s.downcase #.split
 
     tips = %w[tip trick]
     reviews = %w[review]
@@ -159,7 +159,7 @@ class Feed < ActiveRecord::Base
       title_info = ""
     end
 
-    images = images.join(',')
+    images = images.join(',') rescue ""
 
     return title_info, meta_description, images
   end
