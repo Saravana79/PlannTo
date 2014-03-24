@@ -35,7 +35,7 @@ class Feed < ActiveRecord::Base
       latest_feeds = latest_feeds.last(200)
 
       latest_feeds.each do |each_entry|
-        check_exist_feed_url = FeedUrl.where(:url => each_entry.url, :category => category).first
+        check_exist_feed_url = FeedUrl.where(:url => each_entry.url).first
         if check_exist_feed_url.blank?
           source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.", "")
           article_content = ArticleContent.find_by_url(each_entry.url)
@@ -79,10 +79,12 @@ class Feed < ActiveRecord::Base
       if source != ""
         feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
         unless feed_by_sources.blank?
-          category = feed_by_sources.map(&:category).join(',')
+          categories = feed_by_sources.map(&:category)
+          categories = categories.map {|each_cat| each_cat.split(',')}
+          category = categories.flatten.uniq.join(',')
         end
       end
-      check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url, :category => category).first
+      check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
 
       if check_exist_feed_url.blank?
 
