@@ -32,9 +32,12 @@ class Admin::AdvertisementsController < ApplicationController
     add_size = params.delete(:ad_size)
 
     image_array = []
-    images.each_with_index do |image, i|
-      image_array << {avatar: image, ad_size: add_size[i]}
+    unless images.blank?
+      images.each_with_index do |image, i|
+        image_array << {avatar: image, ad_size: add_size[i]}
+      end
     end
+
 
     logger.info "===================================#{params[:ad_size]}"
 
@@ -83,6 +86,8 @@ end
 def show_ads
   @ref_url = params[:ref_url] ||= ""
   url = ""
+  params[:type] ||= "1"
+
   cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
   url_params = Advertisement.url_params_process(params)
 
@@ -104,7 +109,6 @@ def show_ads
     elsif @ad.advertisement_type == "dynamic"
       # dynamic ad process
       vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
-      params[:type] ||= 1
 
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
@@ -123,6 +127,11 @@ def show_ads
       @item_details = @item_details.first(6)
       @vendor_image_url = @item_details.first.vendor.image_url
       @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+
+      if params[:type] == "2"
+        @sliced_item_details = @item_details.each_slice(2)
+      end
+
       render :layout => false
     end
   end
