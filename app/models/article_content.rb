@@ -263,7 +263,7 @@ class ArticleContent < Content
             @article.update_attributes!(:domain => updated_host)
           end
 
-          if (@article.id!=nil && param['feed_url_id'].blank?)
+          if (@article.id != nil && !param['feed_url_id'].blank?)
             feed_url = FeedUrl.where("id = ?", param['feed_url_id']).first
             feed_url.update_attributes(:status => 1)
           end

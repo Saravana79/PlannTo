@@ -150,4 +150,9 @@ class FeedsController < ApplicationController
     render :json => {:category => category, :feed_url_id => @feed_url.id}.to_json
   end
 
+  def load_suggestions
+    Resque.enqueue(SourceItemProcess, "update_suggestions", Time.now)
+    render :text => "Load Suggestion Process Successfully Initiated"
+  end
+
 end

@@ -13,7 +13,6 @@ class ArticleContentProcess
     rescue Exception => e
       log.debug "Have some problem while executing Article Content Creation, please find the error below"
       log.debug e
-      NotificationMailer.resque_process_failure(e, log, "Article Content Creation").deliver
       NotificationMailer.resque_process_failure(e, e.backtrace, log, "Article Content Creation").deliver
     end
     log.debug "********** End Article Content Creation **********"

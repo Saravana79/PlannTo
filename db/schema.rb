@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140320111104) do
+ActiveRecord::Schema.define(:version => 20140325061949) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -943,19 +943,21 @@ ActiveRecord::Schema.define(:version => 20140320111104) do
   add_index "shares", ["item_id"], :name => "index_shares_on_item_id"
 
   create_table "sourceitems", :force => true do |t|
-    t.string   "name",          :limit => 100, :null => false
-    t.string   "url",           :limit => 500, :null => false
-    t.string   "urlsource",     :limit => 100, :null => false
-    t.integer  "status",                       :null => false
+    t.string   "name",            :limit => 100, :null => false
+    t.string   "url",             :limit => 500, :null => false
+    t.string   "urlsource",       :limit => 100, :null => false
+    t.integer  "status",                         :null => false
     t.integer  "matchfoundby"
     t.integer  "matchitemid"
-    t.string   "matchitemname", :limit => 100
-    t.boolean  "verified",                     :null => false
-    t.integer  "itemtype_id",                  :null => false
-    t.string   "created_by",    :limit => 50,  :null => false
-    t.string   "updated_by",    :limit => 50
-    t.datetime "created_at",                   :null => false
+    t.string   "matchitemname",   :limit => 100
+    t.boolean  "verified",                       :null => false
+    t.integer  "itemtype_id",                    :null => false
+    t.string   "created_by",      :limit => 50,  :null => false
+    t.string   "updated_by",      :limit => 50
+    t.datetime "created_at",                     :null => false
     t.datetime "updated_at"
+    t.integer  "suggestion_id"
+    t.string   "suggestion_name"
   end
 
   add_index "sourceitems", ["matchitemid"], :name => "matchitemid_itemid"

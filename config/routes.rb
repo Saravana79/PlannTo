@@ -367,6 +367,8 @@ resources :comments do
 
   match "advertisments/show_ads" => "admin/advertisements#show_ads", :as => "show_ads"
 
+  match "sourceitems/load_suggestions" => "feeds#load_suggestions"
+
   resources :feeds do
     collection do
       get "process_feeds"
