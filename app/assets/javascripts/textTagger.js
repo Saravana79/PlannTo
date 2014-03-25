@@ -105,7 +105,8 @@ $(document).ready(function(){
            fieldId = "#" + fieldId;
         }
         $( "" + fieldId ).autocomplete({
-            minLength: 0,
+            minLength: 1,
+            delay: 800,
             format: "js",
             source: function( request, response )
             {
