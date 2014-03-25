@@ -78,7 +78,7 @@ class ItemsController < ApplicationController
   def show
     @user = User.last    
     @user.follow_type = 'Buyer'
-    @item = Item.where(:id => params[:id]).includes(:item_attributes).last
+    @item = Item.where(:slug => params[:id]).includes(:item_attributes).last
     @review = Review.new
     @review.pros.build
     @review.cons.build
