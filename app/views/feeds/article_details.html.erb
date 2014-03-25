@@ -6,7 +6,7 @@
     </div>
 <% else %>
     <div class="detailed_values">
-      <%= form_for(:article_content, :url => "/article_contents", :remote => true, :html => {}) do |f| %>
+      <%= form_for(:article_content, :url => "/article_contents", :remote => true, :html => {:id => "article_detail_form"}) do |f| %>
           <%= hidden_field_tag 'feed_url_id', @feed_url.id %>
 
           <%= hidden_field_tag 'default_item_id', @item.try(:id) %>
@@ -341,6 +341,29 @@
 
         $('div.<%=@dwnld_url%>').show();
 
+        var submit = 0
+        $("#article_detail_form").submit(function()
+        {
+            if (submit != 0)
+              return true
+
+            var title = $("#article_content_title").val()
+            var article_ids = $("#articles_item_id").val()
+            if (title == "")
+            {
+                alert('Please Enter Title.');
+                return false;
+            }
+            else if (article_ids == "")
+            {
+                alert('Please at least one product');
+                return false;
+            }
+            else
+            {
+                return true
+            }
+        })
     </script>
 
 <% end %>
