@@ -2,10 +2,18 @@ class Feed < ActiveRecord::Base
   validates :category, :presence => true
   validates :url, :presence => true, :if => Proc.new { |f| f.process_type != "table" }
   has_many :feed_urls
+  after_create :start_process_feeds
 
-  def self.process_feeds
+  def self.process_feeds(feed_id=nil)
     puts "************************************************* Process Started at - #{Time.now.strftime('%b %d,%Y %r')} *************************************************"
-    @feeds = Feed.all
+
+    if feed_id.blank?
+      @feeds = Feed.all
+    else
+      feed = Feed.find_by_id(feed_id)
+      @feeds = [*feed]
+    end
+
     feed_url_count = FeedUrl.count
     begin
       @feeds.each do |each_feed|
@@ -166,6 +174,12 @@ class Feed < ActiveRecord::Base
     images = images.join(',') rescue ""
 
     return title_info, meta_description, images
+  end
+
+  private
+
+  def start_process_feeds
+    Resque.enqueue(FeedProcess, "process_feeds", Time.now, self.id)
   end
 
 
