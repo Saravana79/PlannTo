@@ -62,9 +62,9 @@
       <div class="fields-div">
         <div class="title_header float_lft">Bid[CPM/CPC/CPA] :</div>
         <div>
-          <%= f.radio_button :bid, 'CPM', :checked => true %>CPM
-          <%= f.radio_button :bid, 'CPC' %>CPC
-          <%= f.radio_button :bid, 'CPA' %>CPA
+          <%= f.radio_button :bid, 'CPM', :class => "bid_radio_button", :checked => true %>CPM
+          <%= f.radio_button :bid, 'CPC', :class => "bid_radio_button" %>CPC
+          <%= f.radio_button :bid, 'CPA', :class => "bid_radio_button" %>CPA
         </div>
       </div>
 
@@ -260,5 +260,9 @@
         color: #FF0000;
         font-size: 12px;
         position: absolute;
+    }
+
+    .ad_type, .bid_radio_button {
+        width: 10px !important;
     }
 </style>

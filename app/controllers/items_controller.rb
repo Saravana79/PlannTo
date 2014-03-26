@@ -98,7 +98,6 @@ class ItemsController < ApplicationController
   def new
     @item = Item.new
     @item_types = Itemtype.select("id,itemtype")
-    @last_item = Item.last
 
     respond_to do |format|
       format.html # new.html.erb
@@ -117,6 +116,7 @@ class ItemsController < ApplicationController
     @item_types = Itemtype.select("id,itemtype")
     itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
     klass = itemtype.itemtype
+
     @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id))
 
     respond_to do |format|
