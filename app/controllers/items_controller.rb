@@ -115,7 +115,7 @@ class ItemsController < ApplicationController
   def create
     @item_types = Itemtype.select("id,itemtype")
     itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
-    klass = itemtype.itemtype
+    klass = itemtype.itemtype.to_s.gsub(" ", "")
 
     @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id))
 
