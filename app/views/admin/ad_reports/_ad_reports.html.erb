@@ -1,0 +1,77 @@
+<center><h2>Report From <%= @start_date.to_date.strftime("%d-%m-%Y") %> To <%= @end_date.to_date.strftime("%d-%m-%Y") %></h2></center>
+<br />
+
+<div class="advertisement_list">
+  <div class="list_titles">
+    <div class="ad_name list_title">
+      Name
+    </div>
+    <div class="ad_budget list_title">
+      Budget
+    </div>
+    <div class="ad_bid list_title">
+      Bid
+    </div>
+    <div class="ad_cost list_title">
+      Cost (Rs)
+    </div>
+    <div class="ad_impressions list_title">
+      Impressions
+    </div>
+    <div class="ad_clicks list_title">
+      Clicks
+    </div>
+    <div class="ad_ecpm list_title">
+      ecpm
+    </div>
+    <div class="ad_ectr list_title">
+      ectr
+    </div>
+    <div class="ad_chart_view list_title">
+      Chart View
+    </div>
+  </div>
+
+  <% @advertisements.each do |advertisement| %>
+
+      <div class="list_values">
+        <div class="ad_name ad_value">
+          <%= advertisement.name %>
+        </div>
+
+        <div class="ad_budget ad_value">
+          <%= advertisement.budget %>
+        </div>
+
+        <div class="ad_bid ad_value">
+          <%= advertisement.bid %>
+        </div>
+
+        <div class="ad_cost ad_value">
+          <%= advertisement.cost %>
+        </div>
+
+        <div class="ad_impressions ad_value">
+          <%= @impression_report[advertisement.id.to_s] %>
+        </div>
+
+        <div class="ad_clicks ad_value">
+          <%= @click_report[advertisement.id.to_s] %>
+        </div>
+
+        <div class="ad_ecpm ad_value">
+          <%= advertisement.ecpm ||= 0 %>
+        </div>
+
+        <div class="ad_ectr ad_value">
+          <%= advertisement.ectr ||= 0 %>
+        </div>
+
+        <div class="ad_chart_view ad_value">
+          <%= link_to "View Chart", "/" %>
+        </div>
+
+      </div>
+
+  <% end %>
+</div>
