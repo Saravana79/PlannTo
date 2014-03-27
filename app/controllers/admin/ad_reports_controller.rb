@@ -22,6 +22,20 @@ class Admin::AdReportsController < ApplicationController
     @impression_report.default = 0
 
     impression_report.each {|each_impression| @impression_report.merge!("#{each_impression.id}" => "#{each_impression.impressions_count}")}
+  end
 
+  def view_chart
+    @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
+    @end_date = params[:to_date].blank? ? Time.now : params[:to_date].to_date
+
+    imp_report_results = AddImpression.chart_data(params[:ad_id], @start_date, @end_date)
+    @result_array = imp_report_results.map {|result| result.values}
+    @x_values = @result_array.map {|each_array| each_array[0]}
+    @impressions = @result_array.map {|each_array| each_array[1]}
+
+    click_report_results = Click.chart_data(params[:ad_id], @start_date, @end_date)
+    @click_result_array = click_report_results.map {|result| result.values}
+    @click_x_values = @click_result_array.map {|each_array| each_array[0]}
+    @clicks = @click_result_array.map {|each_array| each_array[1]}
   end
 end

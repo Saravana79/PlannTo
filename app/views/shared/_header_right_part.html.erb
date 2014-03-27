@@ -34,7 +34,8 @@
               <% if current_user.is_a_publisher?(session[:publisher]) %>              
               <%session[:publisher] = "true" %>
                 <a href="/admin/impression_reports">Impression Report</a>
-              <%end%> 
+                <a href="/admin/ad_reports">Advertisement Report</a>
+              <%end%>
               <% if current_user.is_a_advertiser?(session[:advertiser]) %>
                  <% session[:advertiser] = "true" %>
                <a href="/admin/advertisements">View Advertisements</a>

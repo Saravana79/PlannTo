@@ -68,7 +68,7 @@
         </div>
 
         <div class="ad_chart_view ad_value">
-          <%= link_to "View Chart", "/" %>
+          <%= link_to "View Chart", admin_ad_report_chart_path(:ad_id => advertisement.id, :from_date => @start_date, :to_date => @end_date), :target => "_blank" %>
         </div>
 
       </div>

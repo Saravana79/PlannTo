@@ -21,6 +21,54 @@ class Click < ActiveRecord::Base
       click.publisher_id = publisher.id rescue nil
       click.ipaddress = remote_ip
       click.save
+  end
+
+  def self.chart_data(ad_id, start_date, end_date)
+    if start_date.nil?
+      start_date = 2.weeks.ago
     end
+
+    if end_date.nil?
+      end_date = Date.today
+    end
+
+    range = start_date.beginning_of_day..(end_date.end_of_day + 1.day)
+
+    if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
+
+      kliks = count(
+
+          :joins => [:add_impression],
+          :group => 'month(impression_time)',
+          :conditions => { :add_impressions => {:advertisement_id => ad_id} , :timestamp => range }
+      )
+
+      # CREATE JSON DATA FOR EACH MONTH
+      (start_date.to_date..end_date.to_date).map(&:beginning_of_month).uniq.map do |date|
+        {
+            impression_time: date.strftime("%b, %Y"),
+            clicks: kliks[date.month] || 0
+        }
+      end
+
+
+    else
+
+      kliks = count(
+          :joins => [:add_impression],
+          :group => 'date(impression_time)',
+          :conditions => { :add_impressions => {:advertisement_id => ad_id} , :timestamp => range }
+      )
+
+      #WORKS FINE DATA FOR EACH DAY
+      (start_date.to_date..end_date.to_date).map do |date|
+        {
+            impression_time: date.strftime("%F"),
+            clicks: kliks[date] || 0
+        }
+      end
+    end
+  end
+
   #end
 end

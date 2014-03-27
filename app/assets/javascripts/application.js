@@ -12,6 +12,10 @@
 //= require jquery.remotipart
 //= require_self
 
+//= require highcharts
+//= require highcharts/modules/exporting
+//= require highcharts/themes/gray
+
 $(document).ready(function() { 
   $('a.fbpopup').click(function(e) {
     var width = 600, height = 400;

@@ -6,7 +6,6 @@ namespace :admin do
   resources :click_reports
   resources :order_histories
   resources :advertisements
-  resource :ad_reports, :only => [:index]
   resources :buying_plans do
   collection do  
     get :search
@@ -371,6 +370,7 @@ resources :comments do
   match "sourceitems/load_suggestions" => "feeds#load_suggestions"
 
   get "admin/ad_reports" => "admin/ad_reports#index", :as => "admin_ad_reports"
+  get "admin/ad_reports/view_chart" => "admin/ad_reports#view_chart", :as => "admin_ad_report_chart"
 
   resources :feeds do
     collection do
