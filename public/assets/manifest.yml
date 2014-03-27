@@ -5,7 +5,17 @@ Lancer.jpg: Lancer-4eba19f0d413e5ff4a030435af3f4468.jpg
 MarutiRitz_100x60.jpg: MarutiRitz_100x60-a92028f89e9386e983c9c07c9aef22ef.jpg
 Saravana_50x50.jpg: Saravana_50x50-3e9d48e91bec125576055f2d1f7d6ccc.jpg
 add-big.png: add-big-6e80c6698d7afb19f9e1ea8fbfa68bc3.png
+ads/laptop-1.jpg: ads/laptop-1-5cd8871f47813208c72774d9a8b0b191.jpg
+ads/lenovo-logo.jpg: ads/lenovo-logo-f7ba631657f6693faad06f83fa69ea5b.jpg
+ads/next-arrow.png: ads/next-arrow-b3e3e6ce05dd57e255f7a5c0265b1d6a.png
+ads/prev-arrow.png: ads/prev-arrow-9b99b98f7ca0d518b5e5944e250f0cf8.png
+ads/product-2.jpg: ads/product-2-b77b6c1bd4b2cb7b787cd20ee422bd5b.jpg
+ads/product-3.jpg: ads/product-3-065d421c7f9a98ce739c3ebfa0cef90b.jpg
+ads/product-4.jpg: ads/product-4-683a808ad77620af97277fab9388510d.jpg
+ads/shop-now-btn.png: ads/shop-now-btn-ce2abd868345afb51eb9c8d1995c864d.png
+ajax-loader.gif: ajax-loader-fc0e8505665017199abf9badeffbaf9d.gif
 arrow_selecttab.png: arrow_selecttab-f49d7f5adc51f59849f2106f939c972b.png
+arrows.png: arrows-ad235134392b3fbcda5461dcccfd682a.png
 background.gif: background-bc5e035a4e4f0b8f3d51e95d9aa7bc94.gif
 bdr_bot.png: bdr_bot-7404c2c80135557b1f8f556b2257dafa.png
 bg_boder_topbottom.png: bg_boder_topbottom-26c5625c1489f343219ab6ec0b3b023f.png
@@ -113,6 +123,7 @@ input-left.png: input-left-b6bde00c6afa91c404b42f076e4c464b.png
 input-right.png: input-right-fcac02ab236737fe5fdf192af530016e.png
 input.png: input-37cbecd0b82c4823a3a1f376a4eea5e8.png
 input_bg.png: input_bg-efe506bb1ea623180995952b9311e9e7.png
+invalid.png: invalid-3bdcfc4d6249afe1e00f2286f8c92131.png
 li_bg.png: li_bg-47a5d51ae45b2fa3a60190753cb3c019.png
 logo.png: logo-f14161039fd3d9f41ab25a1745bdb40f.png
 map_icon.png: map_icon-8ae36ea3c3e73626218c73775c77ccd5.png
@@ -153,8 +164,8 @@ up_downarrow.png: up_downarrow-50f14d9fe5aad0a79cf5dc4fcdab1afd.png
 users.png: users-8231a05a25c7959aa685b2e902e32783.png
 white.gif: white-9dad3d78e3507ca84206f5e785f68305.gif
 won_it.png: won_it-376cd2325d5ed46e62a809b77a43d2d3.png
-application.js: application-ff35c7eb1be48cf4bf71f0e5c087b7b7.js
-application.css: application-4b6b6ac4f4db037b9123d780a503bca3.css
+application.js: application-25a397e45a8d90a04806e3fa2534f0e0.js
+application.css: application-b86c0eb9f26905424215c1a037e78790.css
 jslider/jslider.blue.png: jslider/jslider.blue-fd6dafcd5b09818f1fa7ba27638f4270.png
 jslider/jslider.plastic.png: jslider/jslider.plastic-306940f1946dd2a68054cac4ea0c66a0.png
 jslider/jslider.png: jslider/jslider-75b46d05ed195b484956c65f0a743371.png
@@ -173,6 +184,9 @@ jquery_ui/ui-icons_2e83ff_256x240.png: jquery_ui/ui-icons_2e83ff_256x240-3df4f6b
 jquery_ui/ui-icons_454545_256x240.png: jquery_ui/ui-icons_454545_256x240-459ceb652008329fc30cbdcd5174e675.png
 jquery_ui/ui-icons_888888_256x240.png: jquery_ui/ui-icons_888888_256x240-fec105a1d7f0ffe4c4c5c23aff7bf4b3.png
 jquery_ui/ui-icons_cd0a0a_256x240.png: jquery_ui/ui-icons_cd0a0a_256x240-bd43e2992f44775697eee538fa9c0173.png
+highcharts/skies.jpg: highcharts/skies-1fb078e7db7ca238aa3db04ceb22c1c4.jpg
+highcharts/snow.png: highcharts/snow-c2487094d966f8c0c6a343b89f89477b.png
+highcharts/sun.png: highcharts/sun-ac47a0b720dee0849908b820a94d0b0d.png
 tinymce/plugins/uploadimage/editor_plugin.js: tinymce/plugins/uploadimage/editor_plugin-3643a2a262130b01c385ea695942bdc6.js
 tinymce/plugins/uploadimage/dialog.html: tinymce/plugins/uploadimage/dialog-bac1c3ab9ae1528e118490ed5664ffa8.html
 tinymce/plugins/uploadimage/img/uploadimage.png: tinymce/plugins/uploadimage/img/uploadimage-411ab570e3af90ce4664cc39acbfb7e5.png
@@ -184,7 +198,7 @@ tinymce/plugins/uploadimage/langs/pt.js: tinymce/plugins/uploadimage/langs/pt-b6
 tinymce/plugins/uploadimage/langs/pt_dlg.js: tinymce/plugins/uploadimage/langs/pt_dlg-5539e636b6497603b2e62a451f3982e0.js
 tinymce/plugins/uploadimage/langs/ru.js: tinymce/plugins/uploadimage/langs/ru-1076db4cadabd9d89fe17f2e4efe81eb.js
 tinymce/plugins/uploadimage/langs/ru_dlg.js: tinymce/plugins/uploadimage/langs/ru_dlg-4dd768d45c9c16fbc0eafc32f5a630eb.js
-tinymce.js: tinymce-970707ba99a468677b97bafb539a8f92.js
+tinymce.js: tinymce-b416c0775034af833ee898d3450fe7e0.js
 tinymce/license.txt: tinymce/license-ea025462cfe58a7fac6ad1c458354a79.txt
 tinymce/plugins/advhr/rule.htm: tinymce/plugins/advhr/rule-34ef833bebe23ec67f4e4ab9063efbb6.htm
 tinymce/plugins/advimage/image.htm: tinymce/plugins/advimage/image-9d93015c9477da7c09607e84e6597372.htm
