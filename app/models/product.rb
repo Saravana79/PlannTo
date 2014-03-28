@@ -39,9 +39,11 @@ def manu
 end
 
 
-  def self.get_search_items_by_relavance(param)
-
-    search_type = Product.search_type(nil)
+  def self.get_search_items_by_relavance(param, itemtypes=nil)
+    unless param[:category].blank?
+      itemtypes = param[:category].split(',')
+    end
+    search_type = Product.search_type(itemtypes)
     @items = Sunspot.search(search_type) do
       keywords param[:term] do
         minimum_match 1

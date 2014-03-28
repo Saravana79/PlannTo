@@ -52,6 +52,9 @@ class Feed < ActiveRecord::Base
 
           title, description, images = Feed.get_feed_url_values(each_entry.url)
 
+          title = title[/[^-|]+/]
+          title = title.blank? ? "" : title.strip
+
           FeedUrl.create(feed_id: id, url: each_entry.url, title: title.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
                          :published_at => each_entry.published)
@@ -97,6 +100,9 @@ class Feed < ActiveRecord::Base
       if check_exist_feed_url.blank?
 
         title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
+
+        title = title[/[^-|]+/]
+        title = title.blank? ? "" : title.strip
 
         @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,

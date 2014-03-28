@@ -1,12 +1,16 @@
 class Sourceitem < ActiveRecord::Base
+  belongs_to :itemtype
 
   def self.update_suggestions
-    @source_items = Sourceitem.where(:verified => false, :suggestion_id => nil)
+    @source_items = Sourceitem.where(:verified => false, :suggestion_id => nil).last(10)
     count = 0
     @source_items.each do |source_item|
       begin
         param = {:term => source_item.name}
-        result = Product.get_search_items_by_relavance(param).first
+        type = source_item.itemtype.itemtype
+        itemtypes = type.blank? ? nil : [*type]
+
+        result = Product.get_search_items_by_relavance(param, itemtypes).first
         unless result.blank?
           count = count + 1
           source_item.update_attributes!(:suggestion_id => result[:id], :suggestion_name => result[:value])

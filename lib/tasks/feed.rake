@@ -34,12 +34,26 @@ namespace :feed do
       category = "Others"
 
       if source != ""
-        feed_by_source = FeedUrl.find_by_source(source)
-        category = feed_by_source.blank? ? 'Others' : feed_by_source.category
+        feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
+        unless feed_by_sources.blank?
+          categories = feed_by_sources.map(&:category)
+          categories = categories.map {|each_cat| each_cat.split(',')}
+          category = categories.flatten.uniq.join(',')
+        end
       end
+      check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
 
-      @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :status => status, :source => source, :category => category,
-                                 :feed_id => @feed.id, :published_at => each_record.created_at)
+      if check_exist_feed_url.blank?
+
+        title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
+
+        title = title[/[^-|]+/]
+        title = title.blank? ? "" : title.strip
+
+        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
+                                   :category => category, :summary => description, :images => images,
+                                   :feed_id => @feed.id, :published_at => each_record.created_at)
+      end
     end
     @feed.update_attributes(:last_updated_at => Time.now)
 
