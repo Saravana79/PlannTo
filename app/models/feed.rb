@@ -52,7 +52,8 @@ class Feed < ActiveRecord::Base
 
           title, description, images = Feed.get_feed_url_values(each_entry.url)
 
-          title = title[/[^-|]+/]
+          # remove characters after come with space + '- or |' symbols
+          title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.strip
 
           FeedUrl.create(feed_id: id, url: each_entry.url, title: title.strip, category: category,
@@ -101,7 +102,8 @@ class Feed < ActiveRecord::Base
 
         title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
 
-        title = title[/[^-|]+/]
+        # remove characters after come with space + '- or |' symbols
+        title = title.to_s.gsub(/\s(-|\|).+/, '')
         title = title.blank? ? "" : title.strip
 
         @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,

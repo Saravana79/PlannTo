@@ -44,8 +44,15 @@ end
       itemtypes = param[:category].split(',')
     end
     search_type = Product.search_type(itemtypes)
+
+    term = param[:term]
+
+    removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launched",
+                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on"]
+    term = term.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+
     @items = Sunspot.search(search_type) do
-      keywords param[:term] do
+      keywords term do
         minimum_match 1
       end
       order_by :score,:desc
@@ -85,7 +92,11 @@ end
       end
     end
 
-    return results
+    items_by_score = {}
+    @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score > 0.5}
+    selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
+
+    return results, selected_list
   end
 
 end

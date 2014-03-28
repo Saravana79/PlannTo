@@ -304,12 +304,11 @@ class SearchController < ApplicationController
   end
 
   def search_items_by_relavance
+    results, selected_list = Product.get_search_items_by_relavance(params)
 
-
-    results = Product.get_search_items_by_relavance(params)
+    results << {:selected_list => selected_list}
 
     render :json => results
-    
   end
 
   def autocomplete_manufacturers
