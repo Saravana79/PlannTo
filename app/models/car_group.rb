@@ -42,7 +42,7 @@ end
 
 def image_url(imagetype = :medium)
       firstcar = related_cars.first
-      firstcar.image_url
+      firstcar.image_url rescue ""
 end
 
 def manu
