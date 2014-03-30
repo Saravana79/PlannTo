@@ -18,9 +18,9 @@ has_one :manufacturer,
  def self.search_type(type)
    return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
   if type.is_a?(Array)
-    return type.collect{|t| t.camelize.constantize}
+    return type.collect{|t| t.camelize.singularize.constantize}
   else
-    return type.camelize.constantize
+    return type.camelize.singularize.constantize
   end
  end
 
@@ -44,7 +44,6 @@ end
       itemtypes = param[:category].split(',')
     end
     search_type = Product.search_type(itemtypes)
-
     term = param[:term]
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launched",
