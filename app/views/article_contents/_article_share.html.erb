@@ -913,7 +913,7 @@ if ($("#article_content_sub_type").val() == ""){
                         $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
                         //debugger;
                         $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
-                        $(that).parent().remove();
+                        $(that).parent().hide();
                     }
                     else if ($("#article_content_sub_type").val() == "Comparisons")
                     {
@@ -921,7 +921,7 @@ if ($("#article_content_sub_type").val() == ""){
                         $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
                         //debugger;
                         $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
-                        $(that).parent().remove();
+                        $(that).parent().hide();
                     }
 
                 });
@@ -930,11 +930,13 @@ if ($("#article_content_sub_type").val() == ""){
         });
 
 
+
+
         $(".relevant_product").live("click", function(){
             $("<li id='" + $(this).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(this).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
             //debugger;
             $.addIdToField("<%=@articles_item_id%>", $(this).attr("id").replace("matched",""), false)
-            $(this).parent().remove();
+            $(this).parent().hide();
         })
       }
     });
@@ -942,6 +944,23 @@ if ($("#article_content_sub_type").val() == ""){
    <%end%>
 
    $("#search_items_by_relavance input:checked").click()
+
+      $('#deleteTag').live('click', function(){
+          console.log(settings.hidden_field)
+          if (settings.hidden_field != ""){
+              var deleteId = $(this).closest('li').attr('id').replace("matched",'');
+              $.removeIdFromField(settings.hidden_field, deleteId, false);
+          }
+          $(this).closest('li').remove();
+          $("span #matched"+deleteId).attr("checked", false)
+          $("span #matched"+deleteId).parent().show()
+          if (settings.deleteFunctionName){
+              data = new Object()
+              data.id = deleteId;
+              $.selectEvent(data, settings.deleteFunctionName)
+          }
+          return false;
+      })
   
   });
 

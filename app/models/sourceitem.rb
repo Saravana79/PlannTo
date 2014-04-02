@@ -2,7 +2,7 @@ class Sourceitem < ActiveRecord::Base
   belongs_to :itemtype
 
   def self.update_suggestions
-    @source_items = Sourceitem.where(:verified => false, :suggestion_id => nil).last(10)
+    @source_items = Sourceitem.where(:verified => false, :suggestion_id => nil)
     count = 0
     @source_items.each do |source_item|
       begin
