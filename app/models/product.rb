@@ -16,11 +16,11 @@ has_one :manufacturer,
 
 
  def self.search_type(type)
-   return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
+   return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Car".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize] if (type == "" || type == "Others" || type.nil?)
   if type.is_a?(Array)
-    return type.collect{|t| t.camelize.singularize.constantize}
+    return type.collect{|t| t.strip.camelize.singularize.constantize}
   else
-    return type.camelize.singularize.constantize
+    return type.strip.camelize.singularize.constantize
   end
  end
 
@@ -92,7 +92,7 @@ end
     end
 
     items_by_score = {}
-    @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score > 0.5}
+    @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
     selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
 
     return results, selected_list

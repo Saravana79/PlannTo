@@ -10,7 +10,8 @@ class Sourceitem < ActiveRecord::Base
         type = source_item.itemtype.itemtype
         itemtypes = type.blank? ? nil : [*type]
 
-        result = Product.get_search_items_by_relavance(param, itemtypes).first
+        results, selected_list = Product.get_search_items_by_relavance(param, itemtypes)
+        result = results.first
         unless result.blank?
           count = count + 1
           source_item.update_attributes!(:suggestion_id => result[:id], :suggestion_name => result[:value])
