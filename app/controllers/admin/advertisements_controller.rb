@@ -19,7 +19,7 @@ class Admin::AdvertisementsController < ApplicationController
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
 
 
-    @items = Item.where("id in (#{@advertisement.content.related_items.collect(&:item_id).join(',')})")
+    @items = Item.where("id in ('#{@advertisement.content.related_items.collect(&:item_id).join(',')}')")
   end
 
   def show
@@ -41,6 +41,8 @@ class Admin::AdvertisementsController < ApplicationController
 
     logger.info "===================================#{params[:ad_size]}"
 
+    params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
+
     @advertisement = Advertisement.new(params[:advertisement])
     @content = AdvertisementContent.create(:title => "advertisement");
     @content.save_with_items!(params['ad_item_id'])
@@ -60,9 +62,15 @@ def update
   add_size = params.delete(:ad_size)
 
   image_array = []
-  images.each_with_index do |image, i|
-    image_array << {avatar: image, ad_size: add_size[i]}
+
+  unless images.blank?
+    images.each_with_index do |image, i|
+      image_array << {avatar: image, ad_size: add_size[i]}
+    end
   end
+
+
+  params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
 
   @advertisement = Advertisement.find(params[:id])
   @content = @advertisement.content
@@ -86,7 +94,6 @@ end
 def show_ads
   @ref_url = params[:ref_url] ||= ""
   url = ""
-  params[:type] ||= "1"
 
   cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
   url_params = Advertisement.url_params_process(params)
@@ -128,7 +135,7 @@ def show_ads
       @vendor_image_url = @item_details.first.vendor.image_url
       @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
-      if params[:type] == "2"
+      if @ad.template_type == "type_2"
         @sliced_item_details = @item_details.each_slice(2)
       end
 
