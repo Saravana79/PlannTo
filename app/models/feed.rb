@@ -122,7 +122,7 @@ class Feed < ActiveRecord::Base
     comparisons = %w[vs]
     how_to = ["tutorial", "guide", "how to"]
     lists = ["top"]
-    news = ['launch', 'release', 'online', 'available']
+    news = ['launch', 'release', 'online', 'available','annonce']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
