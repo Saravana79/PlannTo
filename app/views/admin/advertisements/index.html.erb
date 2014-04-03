@@ -9,6 +9,7 @@
   <th> Bid[CPM/CPC]</th>
   <th>Cost </th>
   <th>Advertisement Type</th>
+  <th>Template Type</th>
   <th> Start Date</th>
   <th> End Date</th>
   <th> Products</th>
@@ -23,9 +24,11 @@
      <td> <%= ad.bid %> </td>
      <td> <%= ad.cost %>
      <td> <%= ad.advertisement_type %></td>
+     <td> <%= ad.template_type %></td>
      <td> <%= ad.start_date.strftime("%d-%m-%Y") %></td>
      <td> <%= ad.end_date.strftime("%d-%m-%Y") %></td>
-     <td><% Item.where("id in (#{ad.content.related_items.collect(&:item_id).join(',')})").each do |it| %>
+     <% collected_item_ids = ad.content.related_items.collect(&:item_id).join(',') %>
+     <td><% Item.where("id in ('#{collected_item_ids}')").each do |it| %>
      <%= it.name %>,&nbsp; <%end%></td>
      <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) %> </td>
      <td> <%= link_to "Delete",[:admin,ad], :confirm => 'Are you sure?', :method => :delete %> </td>

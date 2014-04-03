@@ -20,6 +20,14 @@
         </div>
       </div>
 
+      <div class="fields-div dynamic_details additional_details">
+        <div class="title_header float_lft">Template Type :</div>
+        <div>
+          <%= f.radio_button :template_type, 'type_1', :class => "template_type", :checked => true %>Type 1
+          <%= f.radio_button :template_type, 'type_2', :class => "template_type" %>Type 2
+        </div>
+      </div>
+
       <div class="fields-div">
         <div class="title_header float_lft">Name :</div>
         <div class="float_lft"> <%= f.text_field :name %> </div>
@@ -76,7 +84,7 @@
 
       <h3>Additional Details</h3>
 
-      <div class="additional_details" id="static_details">
+      <div class="additional_details static_details" id="static_details">
         <div class="files-div">
           <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
           <% if @advertisement.new_record? %>
@@ -124,7 +132,7 @@
         </div>
       </div>
 
-      <div class="additional_details" id="dynamic_details">
+      <div class="additional_details dynamic_details" id="dynamic_details">
         <div class="fields-div">
           <div class="title_header float_lft">Vendor :</div>
           <div>
@@ -198,12 +206,12 @@
         // show additional details based on advertisement type
         $(".additional_details").hide()
         var exp_id = $(".ad_type:checked").val()
-        $("#" + exp_id + "_details").show()
+        $("." + exp_id + "_details").show()
 
         $(".ad_type").click(function () {
             var expected_id = $(this).val()
             $(".additional_details").hide()
-            $("#" + expected_id + "_details").show()
+            $("." + expected_id + "_details").show()
         })
 
     });
@@ -262,7 +270,7 @@
         position: absolute;
     }
 
-    .ad_type, .bid_radio_button {
+    .ad_type, .template_type, .bid_radio_button {
         width: 10px !important;
     }
 </style>
