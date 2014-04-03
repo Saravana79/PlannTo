@@ -126,7 +126,13 @@ namespace :plannto do
     puts "Indexing Manufacturer"
       Manufacturer.reindex
       Sunspot.commit
-
+    
+    puts "Indexing Game"
+      Game.reindex
+      Sunspot.commit
+    puts "Indexing Laptops"
+      Laptop.reindex
+      Sunspot.commit  
          
     puts "Indexing Completed"
 
