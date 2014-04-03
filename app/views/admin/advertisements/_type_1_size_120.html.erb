@@ -19,7 +19,7 @@
                   </div>
                   <p class="product-desc">If you think a notebook this out of your price range, think again.</p>
 
-                  <p class="price-strike">Rs. <%= item_detail.price %></p>
+                 <!-- <p class="price-strike">Rs. <%#= item_detail.price %></p> -->
 
                   <p class="price">Rs. <%= item_detail.price %></p>
 
@@ -28,7 +28,7 @@
                       Now</a>
                   </p>
                 </div>
-                <div class="product-extra-desc"><p>* 100% Purchase Protection<br>* Free Delivery<br>* COD</p></div>
+                <div class="product-extra-desc"><p><%= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(45) : item_detail.offer.to_s.truncate(45) %></p></div>
               </div>
             </div>
         <% end %>

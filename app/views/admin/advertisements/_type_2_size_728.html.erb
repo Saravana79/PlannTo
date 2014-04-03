@@ -33,7 +33,17 @@
                     </div>
               <% end %>
               <div class="product-extra-desc">
-                <p>Buy a laptop/mobile through 3.6,9 months EMI options & Get Interest paid to bank as Cashback. </p>
+                <p>
+                  <% if !sliced_item_detail.first.offer.blank? %>
+                     <% default_text = sliced_item_detail.first.offer %>
+                  <% elsif !sliced_item_detail.last.offer.blank? %>
+                      <% default_text = sliced_item_detail.last.offer %>
+                  <% else %>
+                      <% default_text = @vendor_detail.default_text %>
+                  <% end %>
+
+                  <%= default_text.to_s.truncate(65) %>
+                </p>
               </div>
               </div>
             </div>

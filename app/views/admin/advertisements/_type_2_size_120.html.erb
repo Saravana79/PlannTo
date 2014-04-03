@@ -19,7 +19,9 @@
                     </div>
                     <h3 class="product-title"><%= item_detail.ItemName %></h3>
 
-                    <p class="product-desc">Buy a laptop through 3.6,9 months EMI option.</p>
+                    <p class="product-desc">
+                      <%= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(45) : item_detail.offer.to_s.truncate(45) %>
+                    </p>
                     <!--<p class="price-strike">Rs. 40, 000</p>-->
                     <p class="price">Rs. <%= item_detail.price %></p>
 
@@ -30,8 +32,7 @@
                   </div>
               <% end %>
               <div class="product-extra-desc">
-                <p>EMI CASHBACK <br>
-                  *Select Items</p>
+                <p> <%= @vendor_detail.default_text.to_s.truncate(25) %></p>
               </div>
               </div>
           <% end %>

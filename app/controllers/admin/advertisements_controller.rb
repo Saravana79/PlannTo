@@ -133,11 +133,23 @@ def show_ads
 
       @item_details = @item_details.first(6)
       @vendor_image_url = @item_details.first.vendor.image_url
+      @vendor = @item_details.first.vendor
+      @vendor_detail = @vendor.vendor_details.first
       @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       if @ad.template_type == "type_2"
         @sliced_item_details = @item_details.each_slice(2)
       end
+
+      # TODO: Offers based on item_ids
+
+      #@item = Item.find(item_ids[0])
+      #root_id = Item.get_root_level_id(@item.itemtype.itemtype)
+      #temp_item_ids = item_ids + root_id.to_s.split(",")
+      #@best_deals = ArticleContent.select("distinct view_article_contents.*").joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in
+      #                              (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and
+      #                              (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '',
+      #                              Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
 
       render :layout => false
     end

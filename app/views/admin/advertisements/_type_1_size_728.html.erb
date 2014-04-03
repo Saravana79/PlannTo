@@ -11,7 +11,7 @@
 
                   <div class="product-img"><a href="javascript:void(0)"><img src="<%= item_detail.item.image_url %>" alt="" width="50%" height="50%"></a></div>
                   <div class="product-desc">
-                    <p class="text-desc">Explore the Lenovo Flex 14 dual-mode convertible notebook.</p>
+                    <p class="text-desc"><%= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(45) : item_detail.offer.to_s.truncate(45) %></p>
 
                     <p class="price">Rs. <%= item_detail.price %></p>
                   </div>

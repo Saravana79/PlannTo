@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140403094555) do
+ActiveRecord::Schema.define(:version => 20140403121244) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -1120,12 +1120,13 @@ ActiveRecord::Schema.define(:version => 20140403094555) do
   add_index "users", ["uid"], :name => "index_users_on_uid"
 
   create_table "vendor_details", :force => true do |t|
-    t.string  "name",     :limit => 500,  :null => false
-    t.string  "baseurl",  :limit => 2000, :null => false
-    t.string  "imageurl", :limit => 2000, :null => false
+    t.string  "name",         :limit => 500,  :null => false
+    t.string  "baseurl",      :limit => 2000, :null => false
+    t.string  "imageurl",     :limit => 2000, :null => false
     t.string  "params"
     t.integer "item_id"
     t.string  "param1"
+    t.text    "default_text"
   end
 
   create_table "video_contents", :force => true do |t|
