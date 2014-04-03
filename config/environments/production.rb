@@ -67,8 +67,8 @@ PlanNto::Application.configure do
   config.active_support.deprecation = :notify
   config.action_mailer.default_url_options = { :host => 'www.plannto.com' }
 
-  PlanNto::Application.config.middleware.use ExceptionNotifier,
-                                             :email_prefix => "Plannto - ",
-                                             :sender_address => %{"admin" <saravana@plannto.com>},
-                                             :exception_recipients => %w{saravana@plannto.com,siva@plannto.com}
+  #PlanNto::Application.config.middleware.use ExceptionNotifier,
+  #                                           :email_prefix => "Plannto - ",
+  #                                           :sender_address => %{"admin" <saravana@plannto.com>},
+  #                                           :exception_recipients => %w{saravana@plannto.com,siva@plannto.com}
 end
