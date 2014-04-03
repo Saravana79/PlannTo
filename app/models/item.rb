@@ -1157,7 +1157,9 @@ end
 
   def update_redis_with_item
     #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
-    Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
+    related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(50).collect(&:related_item_id)
+
+    Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
   end
 
  end

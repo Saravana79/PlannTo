@@ -21,12 +21,17 @@ module Clockwork
       Resque.enqueue(FeedProcess, "process_feeds", Time.now)
   end
 
-  every(1.day, 'Queeing Advertisement ecpm calculation', :at => '01:00', :tz => "Asia/Kolkata") do
+  every(1.day, 'Queeing Advertisement ecpm calculation', :at => '02:00', :tz => "Asia/Kolkata") do
     puts "Running Advertisement ecpm calculation, at #{Time.now}"
     Resque.enqueue(AdvertisementProcess, "calculate_ecpm", Time.now)
   end
 
-  every(1.day, 'Queeing Redis Update for Item', :at => '04:00', :tz => "Asia/Kolkata") do
+  every(1.day, 'Queeing Redis Update for RelatedItem', :at => '03:00', :tz => "Asia/Kolkata") do
+    puts "Running Redis Update for RelatedItem, at #{Time.now}"
+    Resque.enqueue(RelatedItemUpdateProcess, Time.now)
+  end
+
+  every(1.day, 'Queeing Redis Update for Item', :at => '05:00', :tz => "Asia/Kolkata") do
     puts "Running Redis Update for Item, at #{Time.now}"
     Resque.enqueue(ItemUpdate, "update_item_details", Time.now)
   end
