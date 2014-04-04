@@ -1119,7 +1119,7 @@ end
     update_item_details_with_ad_ids(log)
   end
 
-  def update_item_details_with_ad_ids(log, item_ids=nil)
+  def self.update_item_details_with_ad_ids(log, item_ids=nil)
 
     custom_query = "1=1"
 
