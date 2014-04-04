@@ -370,6 +370,7 @@ resources :comments do
   match "sourceitems/load_suggestions" => "feeds#load_suggestions"
 
   get "admin/ad_reports" => "admin/ad_reports#index", :as => "admin_ad_reports"
+  get "admin/widget_reports" => "admin/ad_reports#widget_reports", :as => "admin_widget_reports"
   get "admin/ad_reports/view_chart" => "admin/ad_reports#view_chart", :as => "admin_ad_report_chart"
 
   resources :feeds do
