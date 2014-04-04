@@ -36,6 +36,9 @@
                 <a href="/admin/impression_reports">Impression Report</a>
                 <a href="/admin/ad_reports">Advertisement Report</a>
               <%end%>
+             <%if current_user && current_user.is_admin? %>
+                 <a href="/admin/widget_reports">Widgets Report</a>
+             <% end %>
               <% if current_user.is_a_advertiser?(session[:advertiser]) %>
                  <% session[:advertiser] = "true" %>
                <a href="/admin/advertisements">View Advertisements</a>

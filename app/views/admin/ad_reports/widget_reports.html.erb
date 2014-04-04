@@ -1,0 +1,144 @@
+
+<h3 class="report_title">
+  Widgets Reports
+</h3>
+
+<br/>
+
+<%= form_for :impression,:url => admin_widget_reports_path,:method => :get do |f| %>
+    <div>
+<span style="width:100px;display:block;float:left;padding-top:5px;">
+Select A date Range
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+
+	<%= select_tag(:date_from_dropdown, options_for_select([["Select a date Range", 0],['Yesterday', 1], ['Last Week', 7], ['Last month', 30], ['Last 3 months', 90], ['Last 6 Months', 180]])) %>
+</span>
+
+      <script>
+          $("#date_from_dropdown").live("change", function(){
+              days = $(this).val();
+              var date = new Date();
+              date.setDate(date.getDate() - days);
+              var from_date = date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear();
+              $("#from_date").val(from_date);
+              date = new Date();
+              // date.setDate(date.getDate() - 1);
+              var to_date = date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear();
+              $("#to_date").val(to_date);
+          });
+      </script>
+      <br/>
+      <br/>
+      <br/>
+	<span style="width:100px;display:block;float:left;padding-top:5px;">
+From Date
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= text_field_tag :from_date,@start_date.to_date.strftime("%d-%m-%Y"), :style=> "padding:2px;width:100px;" %>
+</span>
+      <script>
+          $("#from_date").datepicker({ dateFormat: 'dd-mm-yy' });
+      </script>
+      <br/>
+    </div>
+    <div style="display:block;padding-top:10px;clear:both;">
+<span style="width:100px;display:block;float:left;padding-top:5px;">
+To Date
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= text_field_tag :to_date,@end_date.to_date.strftime("%d-%m-%Y"), :style=> "padding:2px;width:100px;" %>
+</span>
+    </div>
+    <div style="display:block;padding-top:10px;clear:both;">
+<span style="width:100px;display:block;float:left;padding-top:5px;">
+Publisher
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= select_tag(:publisher_id, options_from_collection_for_select(@publishers, 'id', 'publisher_url', params[:publisher_id])) %>
+</span>
+    </div>
+    <div style="width:200px;padding-left:100px;display:block;clear:both;padding-top:20px;">
+      <%= f.submit 'Generate Report', :class => "btn-link" %>
+    </div>
+<%end%>
+<script>
+    $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
+</script>
+<div style="border-bottom: 1px solid lightgray;width: 100%;clear: both;padding-top: 10px;"></div><br /><br />
+<div id="report" >
+  <%= render "admin/ad_reports/widget_chart" %>
+</div>
+
+
+
+<style type="text/css">
+
+    .list_titles {
+        height: 30px;
+    }
+
+    .list_title {
+        float: left;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .list_values {
+        clear: both;
+        height: 26px;
+    }
+
+    .ad_value {
+        float: left;
+        font-size: 12px;
+    }
+
+    .ad_name {
+        padding-left: 30px;
+        width: 151px;
+    }
+
+    .ad_budget {
+        width: 75px;
+    }
+
+    .ad_bid {
+        width: 75px;
+    }
+
+    .ad_cost {
+        width: 75px;
+    }
+
+    .ad_impressions {
+        width: 94px;
+    }
+
+    .ad_clicks {
+        width: 75px;
+    }
+
+    .ad_ecpm {
+        width: 75px;
+    }
+
+    .ad_ectr {
+        width: 75px;
+    }
+
+    .ad_chart_view {
+        width: 75px;
+    }
+
+    .advertisement_list {
+        margin: 20px;
+    }
+
+    .report_title {
+        font-size: 24px;
+        margin: 20px;
+        text-align: center;
+    }
+
+</style>

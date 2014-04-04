@@ -38,4 +38,23 @@ class Admin::AdReportsController < ApplicationController
     @click_x_values = @click_result_array.map {|each_array| each_array[0]}
     @clicks = @click_result_array.map {|each_array| each_array[1]}
   end
+
+  def widget_reports
+    @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
+    @end_date = params[:to_date].blank? ? Time.now : params[:to_date].to_date
+
+    @publishers = Publisher.all
+    params[:publisher_id] ||= Publisher.first.id
+
+
+    imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date)
+    @result_array = imp_report_results.map {|result| result.values}
+    @x_values = @result_array.map {|each_array| each_array[0]}
+    @impressions = @result_array.map {|each_array| each_array[1]}
+
+    click_report_results = Click.chart_data_widgets(params[:publisher_id], @start_date, @end_date)
+    @click_result_array = click_report_results.map {|result| result.values}
+    @click_x_values = @click_result_array.map {|each_array| each_array[0]}
+    @clicks = @click_result_array.map {|each_array| each_array[1]}
+  end
 end
