@@ -66,8 +66,6 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def load_vendors
-    p params
-    p params[:publisher_id]
     @publisher = Publisher.find_by_id(params[:publisher_id])
     @vendors = Vendor.where(:id => [@publisher.vendor_ids.to_s.split(',')])
     render :partial => "vendor_details", :object => @vendors
