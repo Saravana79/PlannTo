@@ -118,11 +118,12 @@ class Feed < ActiveRecord::Base
     title_words = title.to_s.downcase #.split
 
     tips = %w[tip trick]
-    reviews = ['review', 'first impression', 'hands on', 'hands-on']
-    comparisons = %w[vs]
+    reviews = ['review', 'first impression', 'hands on', 'hands-on','first look']
+    comparisons = %w['vs','versus']
     how_to = ["tutorial", "guide", "how to"]
-    lists = ["top"]
-    news = ['launch', 'release', 'online', 'available','annonce']
+    lists = ["top","best"]
+    photos = ["gallery"]
+    news = ['launch', 'release', 'online', 'available','announce','official']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
@@ -139,6 +140,10 @@ class Feed < ActiveRecord::Base
     lists.each do |list|
       return ArticleCategory::LIST if title_words.scan(list).size >0
       end
+    photos.each do |images|
+      return ArticleCategory::PHOTO if title_words.scan(images).size >0
+    end
+
     news.each do |each_news|
       return ArticleCategory::NEWS if title_words.scan(each_news).size >0
     end
