@@ -70,7 +70,7 @@ class Click < ActiveRecord::Base
     end
   end
 
-  def self.chart_data_widgets(publisher_id, start_date, end_date)
+  def self.chart_data_widgets(publisher_id, start_date, end_date, types, vendor_id)
     if start_date.nil?
       start_date = 2.weeks.ago
     end
@@ -81,13 +81,17 @@ class Click < ActiveRecord::Base
 
     range = start_date.beginning_of_day..(end_date.end_of_day + 1.day)
 
+    conditions = { :add_impressions => {:advertisement_type => [types]}, :publisher_id => publisher_id , :timestamp => range, :vendor_id => vendor_id }
+
+    conditions.delete(:vendor_id) if vendor_id.blank?
+
     if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
 
       kliks = count(
 
           :joins => [:add_impression],
           :group => 'month(impression_time)',
-          :conditions => { :publisher_id => publisher_id , :timestamp => range }
+          :conditions => conditions
       )
 
       # CREATE JSON DATA FOR EACH MONTH
@@ -104,7 +108,7 @@ class Click < ActiveRecord::Base
       kliks = count(
           :joins => [:add_impression],
           :group => 'date(impression_time)',
-          :conditions => { :publisher_id => publisher_id , :timestamp => range }
+          :conditions => conditions
       )
 
       #WORKS FINE DATA FOR EACH DAY

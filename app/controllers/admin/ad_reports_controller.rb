@@ -46,15 +46,30 @@ class Admin::AdReportsController < ApplicationController
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id
 
+    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @vendors = Vendor.where(:id => [@publisher.vendor_ids.to_s.split(',')])
 
-    imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date)
+    params[:vendor_id] ||= nil
+
+    ad_types = AddImpression.select("distinct advertisement_type").map(&:advertisement_type)
+    types = ad_types - ['advertisement']
+
+    imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)
     @result_array = imp_report_results.map {|result| result.values}
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
 
-    click_report_results = Click.chart_data_widgets(params[:publisher_id], @start_date, @end_date)
+    click_report_results = Click.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types, params[:vendor_id])
     @click_result_array = click_report_results.map {|result| result.values}
     @click_x_values = @click_result_array.map {|each_array| each_array[0]}
     @clicks = @click_result_array.map {|each_array| each_array[1]}
+  end
+
+  def load_vendors
+    p params
+    p params[:publisher_id]
+    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @vendors = Vendor.where(:id => [@publisher.vendor_ids.to_s.split(',')])
+    render :partial => "vendor_details", :object => @vendors
   end
 end
