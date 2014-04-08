@@ -9,14 +9,14 @@ class Itemrelationship < ActiveRecord::Base
   belongs_to :items, :foreign_key => :item_id , :class_name => "Item"
   belongs_to :relateditems, :class_name => 'Item', :foreign_key => :relateditem_id
 
-  belongs_to :country, :class_name => 'Country', :foreign_key => :item_id
+  belongs_to :states, :class_name => 'State', :foreign_key => :item_id
+  belongs_to :country, :class_name => 'Country', :foreign_key => :relateditem_id
+  #
+  belongs_to :cities, :class_name => 'City', :foreign_key => :item_id
   belongs_to :state, :class_name => 'State', :foreign_key => :relateditem_id
 
-  belongs_to :state, :class_name => 'State', :foreign_key => :item_id
+  belongs_to :hotels, :class_name => 'Hotel', :foreign_key => :item_id
   belongs_to :city, :class_name => 'City', :foreign_key => :relateditem_id
-
-  belongs_to :city, :class_name => 'City', :foreign_key => :item_id
-  belongs_to :hotel, :class_name => 'Hotel', :foreign_key => :relateditem_id
 
 
 end

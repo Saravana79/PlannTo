@@ -347,6 +347,9 @@ class ContentsController < ApplicationController
     puts results.results.count
     puts results.results[0]
     @related_contents = results.results
+    unless request.xhr?
+      render :text => "Invalid Request Format"
+    end
   end
   
   def quick_new
