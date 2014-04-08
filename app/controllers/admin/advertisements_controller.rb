@@ -115,7 +115,8 @@ def show_ads
       render "show_static_ads", :layout => false
     elsif @ad.advertisement_type == "dynamic"
       # dynamic ad process
-      vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
+      # vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
+      vendor_id = @ad.vendor_id
 
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
@@ -132,9 +133,9 @@ def show_ads
       end
 
       @item_details = @item_details.first(6)
-      @vendor_image_url = @item_details.first.vendor.image_url
-      @vendor = @item_details.first.vendor
-      @vendor_detail = @vendor.vendor_details.first
+      @vendor_image_url = @item_details.first.blank? ? "" : @item_details.first.vendor.image_url
+      @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
+      @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
       @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       if @ad.template_type == "type_2"

@@ -82,4 +82,6 @@ body {
 	background:#cc0000;
 	color:#fff;
 }
+
+a { outline: none; }
 /* end Sliding gallery */

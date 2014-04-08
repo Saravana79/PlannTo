@@ -137,4 +137,5 @@ body {
 	width: 0px;
 }
 
+a { outline: none; }
 /* end Sliding gallery */
