@@ -32,8 +32,10 @@ class Advertisement < ActiveRecord::Base
 
    def self.process_size(width)
      width = width.to_i
-     if (width < 150)
+     if (width <= 120)
        return_val = 120
+     elsif (width <= 130)
+       return_val = 127
      elsif (width < 350)
        return_val = 300
      elsif (width < 750)

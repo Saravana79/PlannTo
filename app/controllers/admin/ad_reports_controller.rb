@@ -47,7 +47,7 @@ class Admin::AdReportsController < ApplicationController
     params[:publisher_id] ||= Publisher.first.id
 
     @publisher = Publisher.find_by_id(params[:publisher_id])
-    @vendors = Vendor.where(:id => [@publisher.vendor_ids.to_s.split(',')])
+    @vendors = Vendor.all
 
     params[:vendor_id] ||= nil
 
@@ -67,7 +67,7 @@ class Admin::AdReportsController < ApplicationController
 
   def load_vendors
     @publisher = Publisher.find_by_id(params[:publisher_id])
-    @vendors = Vendor.where(:id => [@publisher.vendor_ids.to_s.split(',')])
+    @vendors = Vendor.all
     render :partial => "vendor_details", :object => @vendors
   end
 end
