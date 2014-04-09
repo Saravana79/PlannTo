@@ -155,7 +155,8 @@ class Feed < ActiveRecord::Base
 
   def self.get_feed_url_values(url)
     begin
-      doc = Nokogiri::HTML(open(url))
+      uri = URI.parse(URI.encode(url.strip))
+      doc = Nokogiri::HTML(open(uri))
       title_info = doc.xpath('.//title').to_s.strip
       rating_value = 0
       meta_description = ''
