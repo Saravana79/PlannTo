@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Advt <%= @suitable_ui_size %></title>
+  <link href="/stylesheets/travel_ads/<%= @ad.template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+</head>
+<body>
+
+<div class="main_div">
+  <%= render :partial => "/travels/#{@ad.template_type}_size_#{@suitable_ui_size}" %>
+</div>
+
+</body>
+</html>
+
+<style type="text/css">
+    .main_div {
+        width: <%= @iframe_width %>px !important;
+        height: <%= @iframe_height %>px !important;
+        overflow: hidden;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var stop_sliding = false
+
+        $(".item_details").hide();
+        $(".item_details").first().show();
+        $(".item_details").first().addClass('active')
+        $("#1").addClass('selected')
+
+
+        $(".item_details").each(function (index) {
+
+            if (index == 0)
+                return
+
+            var that = this;
+            var t = setTimeout(function () {
+                if (stop_sliding == false) {
+                    $(".item_details").hide();
+                    $(".item_details").removeClass('active')
+                    $("#pager2 a").removeClass('selected')
+
+                    split_div = $(that).attr('id').split('_')
+                    $("#" + split_div[split_div.length - 1]).addClass('selected')
+
+                    $(that).show();
+                    $(that).addClass('active')
+                    if (index == ($(".item_details").length - 1))
+                        setTimeout(function () {
+                            if (stop_sliding == false) {
+                                $(".item_details").last().hide()
+                                $(".item_details").removeClass('active')
+                                $("#pager2 a").removeClass('selected')
+                                $(".item_details").first().show();
+                                $(".item_details").first().addClass('active')
+                                $("#1").addClass("selected")
+                            }
+                        }, 5000)
+                }
+            }, 5000 * index);
+        });
+
+        $(".next").click(function () {
+            var current_div = $(".item_details.active")
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+            $("#pager2 a").removeClass('selected')
+
+            var splited_val = $(current_div).attr("id").split('_')
+
+            if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length) {
+                $(current_div).next().show().addClass('active')
+                split_div = $(current_div).next().attr("id").split('_')
+                $("#" + split_div[split_div.length - 1]).addClass('selected')
+            }
+            else {
+                $(".item_details").first().show().addClass('active')
+                $("#1").addClass('selected')
+            }
+        });
+
+
+        $(".prev").click(function () {
+            var current_div = $(".item_details.active")
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+            $("#pager2 a").removeClass('selected')
+
+            var splited_val = $(current_div).attr("id").split('_')
+
+            if (parseInt(splited_val[splited_val.length - 1]) > 1) {
+                $(current_div).prev().show().addClass('active')
+                split_div = $(current_div).prev().attr("id").split('_')
+                $("#" + split_div[split_div.length - 1]).addClass('selected')
+            }
+            else {
+                $(".item_details").last().show().addClass('active')
+                last = $(".item_details").length
+                $("#" + last).addClass('selected')
+            }
+        });
+
+        $("#pager2 a").click(function () {
+            var that = this
+            selected_id = $(that).attr("id")
+            selected_div = $("#item_detail_" + selected_id)
+
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+
+            $(selected_div).show()
+            $(selected_div).addClass('active')
+            $("#pager2 a").removeClass('selected')
+            $(that).addClass('selected')
+        })
+
+        $(".advt-block").click(function () {
+            stop_sliding = true
+        })
+
+    });
+</script>

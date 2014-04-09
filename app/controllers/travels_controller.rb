@@ -1,4 +1,5 @@
 class TravelsController < ApplicationController
+
   def show_ads
     @ref_url = params[:ref_url] ||= ""
     url = ""
@@ -23,26 +24,27 @@ class TravelsController < ApplicationController
         render "show_static_ads", :layout => false
       elsif @ad.advertisement_type == "dynamic"
         # dynamic ad process
-        vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
+        # vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
+        vendor_id = @ad.vendor_id
 
         @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
         item_ids = params[:item_id].split(",")
         @item_details = []
         if item_ids.count > 1
-          item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, vendor_id).order('itemdetails.status asc,
-                         (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by { |a| a.itemid }
+          item_details = HotelVendorDetail.joins(:hotel).where('items.id in (?) and hotel_vendor_details.vendor_id = ?', item_ids, vendor_id).group_by { |a| a.item_id }
 
           item_details.each { |_, val| @item_details << val[0] }
         else
-          @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, vendor_id).order('itemdetails.status asc,
-                          (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          @item_details = HotelVendorDetail.joins(:hotel).where('items.id = ? and hotel_vendor_details.vendor_id = ?', params[:item_id], vendor_id)
         end
 
         @item_details = @item_details.first(6)
-        @vendor_image_url = @item_details.first.vendor.image_url
-        @vendor = @item_details.first.vendor
-        @vendor_detail = @vendor.vendor_details.first
+
+        @vendor_image_url = @item_details.first.blank? ? "" : @item_details.first.vendor.image_url
+        @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
+        @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
+
         @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
         if @ad.template_type == "type_2"

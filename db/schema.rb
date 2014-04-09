@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140403121244) do
+ActiveRecord::Schema.define(:version => 20140409053033) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -470,6 +470,16 @@ ActiveRecord::Schema.define(:version => 20140403121244) do
     t.string   "ip_address"
     t.string   "plannto_location"
     t.datetime "redirection_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "hotel_vendor_details", :force => true do |t|
+    t.integer  "item_id"
+    t.string   "vendor_id"
+    t.integer  "reference_id"
+    t.float    "price"
+    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

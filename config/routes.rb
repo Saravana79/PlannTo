@@ -366,6 +366,7 @@ resources :comments do
   match '/:username', :to => "accounts#profile", :as => "profile"
 
   match "advertisments/show_ads" => "admin/advertisements#show_ads", :as => "show_ads"
+  match "travels/show_ads" => "travels#show_ads", :as => "travel_ads"
 
   match "sourceitems/load_suggestions" => "feeds#load_suggestions"
 

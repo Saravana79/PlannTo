@@ -1,0 +1,55 @@
+<div class="advt-block">
+  <div class="advt-300">
+    <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt=""></a>
+    </div>
+    <% if @item_details.count != 0 %>
+        <div class="list_carousel">
+          <div id="pager2" class="pager">
+            <% [*1..@item_details.count].each do |each_loop| %>
+                <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+            <% end %>
+          </div>
+          <ul id="foo3">
+            <% @item_details.each_with_index do |item_detail, indx| %>
+                <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                  <div class="advt-box">
+                    <div class="product-container">
+                      <div class="product-img-left">
+                        <a href="#"><img src="<%= item_detail.hotel.image_url %>" alt="" width="100px" height="100px"></a>
+                      </div>
+                      <div class="product-txt-right">
+                        <h3><%= item_detail.hotel.name %></h3>
+
+                        <p class="price">Rs: <%= item_detail.price %></p>
+
+                        <p class="btn">
+                          <a href="<%= history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>" target="_blank" class="shop-now">Check Availablity</a></p>
+
+                      </div>
+                    </div>
+                    <div class="product-txt-desc">
+                      <p> This is sample description<%#= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(90) : item_detail.offer.to_s.truncate(90) %></p>
+                    </div>
+                  </div>
+                </li>
+            <% end %>
+          </ul>
+          <div class="clearfix"></div>
+          <a id="prev3" class="prev" href="#">&lt;</a>
+          <a id="next3" class="next" href="#">&gt;</a>
+
+        </div>
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-300 -->
+</div>
+<!-- end of advt-block -->
+
+<style type="text/css">
+  .btn {
+      padding-top: 5px !important;
+  }
+</style>
