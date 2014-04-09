@@ -32,22 +32,22 @@ body {
 
 .advt-block { margin:0; padding:0;}
 .advt-300 { margin:0; padding:0; width:296px; height:246px; background:#fff; border:2px solid #dddddd;}
-.advt-300 .logo{ margin:0 5px; padding:10px 0; border-bottom:1px solid #d9d9d9;}
+.advt-300 .logo{ margin:0 5px; padding:5px 0; border-bottom:1px solid #d9d9d9;}
 
 .advt-box { margin:0; padding:0;}
 
-.advt-box .product-container{ margin:5px 0 0 0; padding:5px;}
+.advt-box .product-container{ margin:5px 0 0 0; padding:5px;height:160px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
-.advt-box .product-container .product-img-left{ margin:0 10px 0 0; padding:0; float:left; width:148px;}
+.advt-box .product-container .product-img-left{ margin:0 10px 0 0; padding:0; float:left; width:132px;float:left;}
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;}
-.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:left; width:125px;}
-.advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:18px; color:#222; font-weight:bold; height:60px;}
-.advt-box .product-container .price{ margin:0; padding:0 0 10px 0; color:#bf0000; font-size:18px; font-weight:bold;}
-.advt-box .product-container .btn{ margin:0; padding:0;}
+.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:140px;}
+.advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:15px; color:#222; font-weight:bold; }
+.advt-box .product-container .price{ margin:0; padding:10px 0 10px 0; color:#bf0000; font-size:18px; font-weight:bold;}
+.advt-box .product-container .btn{ margin:0; padding:5px 0 0 0;}
 .advt-box .product-container .btn .shop-now{ margin:0; padding:0; background:url(/assets/ads/shop-now-btn.png) no-repeat left top; width:105px; height:28px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0;}
 
-.advt-box .product-txt-desc { margin:0; padding:5px 10px;}
+.advt-box .product-txt-desc { margin:0; padding:5px 10px;text-align: center}
 .advt-box .product-txt-desc p{ margin:0; padding:0; font-size:12px; color:#222;}
 
 
@@ -65,8 +65,8 @@ body {
 /* Sliding gallery */
 .list_carousel {
 	margin: 0;
-	width: 296px;
-	height:246px;
+	width: 120px;
+	float:right;
 }
 .list_carousel ul {
 	margin: 0;
@@ -109,12 +109,11 @@ body {
 }
 .pager {
 	float:right;
-	left:160px;
 	position:absolute;
 	top:5px;
 	z-index:1000;
 	background:#fff;
-	padding:5px;
+	padding:5px 0px 0px 0px;
 }
 .pager a {
 	/* margin: 0 2px; */

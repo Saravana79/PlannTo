@@ -30,24 +30,24 @@ body {
 
 }
 
-.advt-block { margin:0; padding:0;}
+.advt-block { margin:0; padding:0;text-align: center}
 .advt-120 { margin:0; padding:0; width:120px; height:407px; background:#fff; border:2px solid #dddddd;}
 .advt-120 .logo{ margin:0 5px; padding:10px 0;}
 
 .advt-120 .advt-box { margin:0; padding:0;}
 
-.advt-120 .advt-box .product-container{ margin:0; padding:10px 5px; background:#e2e2e2; border-top:#CCC solid 1px;}
+.advt-120 .advt-box .product-container{ margin:0; padding:15px 5px; background:#e2e2e2; border-top:#CCC solid 1px;}
 .advt-120 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-120 .advt-box .product-container:after { clear:both;}
 .advt-120 .advt-box .product-container .product-img{ margin:0;}
-.advt-120 .advt-box .product-container .product-img img { margin:0 auto; text-align:center; border:#CCC solid 1px;}
+.advt-120 .advt-box .product-container .product-img img { margin:0 auto; text-align:center; border:#CCC solid 1px;background: white;padding:5px;}
 
 
-.advt-120 .advt-box .product-container h3{ margin:0; padding:0 0 5px 0; font-size:11px; color:#222; font-weight:bold;}
+.advt-120 .advt-box .product-container h3{ margin:0; padding:10px 0 5px 0; font-size:13px; color:#222; font-weight:bold;}
 
 .advt-120 .advt-box .product-container .price-strike{margin:5px 0;padding: 0;color: #585858;font-size: 18px;text-decoration: line-through; text-align:center;}
 .advt-120 .advt-box .product-container .price{ margin:5px 0; padding:0; color:#bf0000; font-size:14px; font-weight:bold;}
-.advt-120 .advt-box .product-container .btn{ margin:0; padding:0; text-align:center;}
+.advt-120 .advt-box .product-container .btn{ margin:10px 0px; padding:0; text-align:center;}
 /*.advt-120 .advt-box .product-container .btn .shop-now{ margin:0 0 0 15px; padding:0; background:url(../images/shop-now-btn.png) no-repeat left top; width:105px; height:28px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0; font-family:'pt_sansregular', Arial, Helvetica, sans-serif;}*/
 .advt-box .product-container .btn .shop-now{ margin:0; padding:3px 10px; background:#cc0000; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold; -webkit-border-radius: 4px; border-radius: 3px; text-align:center;}
 
