@@ -34,7 +34,7 @@
                       </div>
                     </div>
                     <div class="product-txt-desc">
-                      <p> <%= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(90) : item_detail.offer.to_s.truncate(90) %></p>
+                      <p> <%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 90) : truncate_without_dot(item_detail.offer.to_s, 90) %></p>
                     </div>
                   </div>
                 </li>

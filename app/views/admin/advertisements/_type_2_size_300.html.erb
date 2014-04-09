@@ -22,7 +22,7 @@
                             <h3><%= item_detail.ItemName %></h3>
 
                             <p class="product-desc">
-                              <%= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(50) : item_detail.offer.to_s.truncate(50) %>
+                              <%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 50) : truncate_without_dot(item_detail.offer.to_s, 50) %>
                             </p>
 
                             <p class="price">Rs. <%= item_detail.price %></p>

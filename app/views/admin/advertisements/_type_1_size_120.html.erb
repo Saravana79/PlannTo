@@ -28,7 +28,7 @@
                       Now</a>
                   </p>
                 </div>
-                <div class="product-extra-desc"><p><%= item_detail.offer.blank? ? @vendor_detail.default_text.to_s.truncate(45) : item_detail.offer.to_s.truncate(45) %></p></div>
+                <div class="product-extra-desc"><p><%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 45) : truncate_without_dot(item_detail.offer.to_s, 45) %></p></div>
               </div>
             </div>
         <% end %>

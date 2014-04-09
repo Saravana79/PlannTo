@@ -278,5 +278,11 @@ module ApplicationHelper
       "#{(((attr_v[0].to_f - attr_v[1].to_f)/attr_v[1].to_f)*100).round}%"  rescue '0%'
     end
   end
+
+  def truncate_without_dot(str, size)
+    truncated_str = str.to_s.truncate(size)
+    result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
+    return result_str
+  end
  
 end

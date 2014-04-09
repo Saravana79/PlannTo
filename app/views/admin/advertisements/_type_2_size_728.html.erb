@@ -42,7 +42,7 @@
                       <% default_text = @vendor_detail.default_text %>
                   <% end %>
 
-                  <%= default_text.to_s.truncate(65) %>
+                  <%= truncate_without_dot(default_text.to_s, 65) %>
                 </p>
               </div>
               </div>
