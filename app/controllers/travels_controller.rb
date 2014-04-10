@@ -36,7 +36,24 @@ class TravelsController < ApplicationController
 
           item_details.each { |_, val| @item_details << val[0] }
         else
-          @item_details = HotelVendorDetail.joins(:hotel).where('items.id = ? and hotel_vendor_details.vendor_id = ?', params[:item_id], vendor_id)
+          item = Item.find_by_id(params[:item_id])
+
+          if item.is_a?(City)
+            item_ids_based_on_city = item.hotels.map(&:id)
+            @item_details = HotelVendorDetail.joins(:hotel).where('items.id in (?) and hotel_vendor_details.vendor_id = ?', item_ids_based_on_city, vendor_id)
+          else
+            @item_details = HotelVendorDetail.joins(:hotel).where('items.id = ? and hotel_vendor_details.vendor_id = ?', params[:item_id], vendor_id)
+            if (@item_details.count <= 6)
+              city = item.city
+              item_ids_based_on_city = city.hotels.map(&:id)
+              item_ids_based_on_city = item_ids_based_on_city - [params[:item_id].to_i]
+              item_details = HotelVendorDetail.joins(:hotel).where('items.id in (?) and hotel_vendor_details.vendor_id = ?', item_ids_based_on_city, vendor_id)
+              required_item_details_count = 6 - @item_details.count
+              item_details = item_details.first(required_item_details_count)
+              @item_details << item_details
+              @item_details = @item_details.flatten
+            end
+          end
         end
 
         @item_details = @item_details.first(6)
