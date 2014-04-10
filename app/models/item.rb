@@ -1129,7 +1129,7 @@ end
 
     query_to_get_advertisement_details = "select item_id,group_concat(distinct(a.id)) as advertisement_id,group_concat(icc.content_id) as content_id from item_contents_relations_cache icc
     inner join advertisements a on a.content_id = icc.content_id
-    where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) >= NOW() and date(a.end_date) <= NOW()
+    where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) <= NOW() and date(a.end_date) >= NOW()
     group by item_id"
 
     adv_records = Item.find_by_sql(query_to_get_advertisement_details)
@@ -1159,7 +1159,7 @@ end
     #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
     related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(50).collect(&:related_item_id)
 
-    Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
+    Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
   end
 
  end
