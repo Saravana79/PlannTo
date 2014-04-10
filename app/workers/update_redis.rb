@@ -9,7 +9,7 @@ class UpdateRedis
     log.debug "Hash Key => #{redis_key}"
     log.debug "Hash value => #{redis_values}"
     #begin
-      $redis.HMSET(redis_key, redis_values)
+    $redis_rtb.HMSET(redis_key, redis_values)
     #rescue Exception => e
     #  log.debug "Have some problem while executing redis update for #{updated_for}, please find the error below"
     #  log.debug e

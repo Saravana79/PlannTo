@@ -1111,7 +1111,7 @@ end
 
       redis_values = val_hash.flatten
 
-      $redis.HMSET(redis_key, redis_values)
+      $redis_rtb.HMSET(redis_key, redis_values)
     end
     log.debug "********** Completed Updating price and vendor_id for Items **********"
     log.debug "\n"
@@ -1146,7 +1146,7 @@ end
       log.debug "Hash value => #{redis_values}"
       log.debug "\n"
 
-      $redis.HMSET(redis_key, redis_values)
+      $redis_rtb.HMSET(redis_key, redis_values)
     end
     log.debug "********** Completed Updating advertisement_id for Items **********"
     log.debug "\n"
