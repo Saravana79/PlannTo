@@ -118,7 +118,7 @@ class Feed < ActiveRecord::Base
     title_words = title.to_s.downcase #.split
 
     tips = %w[tip trick]
-    reviews = ['review', 'first impression', 'hands on', 'hands-on','first look']
+    reviews = ['review', 'first impression', 'hands on', 'hands-on','first look','unboxing']
     comparisons = %w['vs','versus']
     how_to = ["tutorial", "guide", "how to"]
     lists = ["top","best"]
