@@ -1,5 +1,5 @@
 class AddImageToItemDetails < ActiveRecord::Migration
   def change
-    add_column :item_details, :Image, :string
+    add_column :itemdetails, :Image, :string
   end
 end
