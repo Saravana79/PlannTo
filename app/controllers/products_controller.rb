@@ -200,14 +200,14 @@ class ProductsController < ApplicationController
   def is_number?
     true if Float(self) rescue false
   end
-  
+
   def where_to_buy_items
 
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
 
     @show_price = params[:show_price]
     @show_offer = params[:show_offer]
-    item_ids = params[:item_ids] ? params[:item_ids].split(",") : [] 
+    item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
     @path = params[:path]
     unless (item_ids.blank?)
       itemsaccess = "ItemId"

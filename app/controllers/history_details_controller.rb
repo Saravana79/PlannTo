@@ -36,27 +36,49 @@ class HistoryDetailsController < ApplicationController
     else
 
       type = params[:type].present? ? params[:type] : ""
-      @impression_id = params[:iid].present? ? params[:iid] : "0"
-      find_item_detail(params[:detail_id], "")
-      if !params[:ads_id].blank? || @item_detail.blank?
-        @ad = Advertisement.where("id = ?", params[:ads_id]).first
-        url = @ad.click_url
+
+      if (type == "Hotel")
+        @impression_id = params[:iid].present? ? params[:iid] : "0"
+        find_item_detail(params[:detail_id], 'Hotel')
+        if !params[:ads_id].blank? || @item_detail.blank?
+          @ad = Advertisement.where("id = ?", params[:ads_id]).first
+          url = @ad.click_url
+        else
+          url = "#{@item_detail.url}"
+        end
+
+        item_id = @item_detail.blank? ? "" : @item_detail.item_id
+
+        unless @item_detail.blank?
+          vendor = @item_detail.vendor
+        end
+
+        vendor_id = vendor.blank? ? "" : vendor.id
+
+        Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
       else
-        url = "#{@item_detail.url}"
+        @impression_id = params[:iid].present? ? params[:iid] : "0"
+        find_item_detail(params[:detail_id], type)
+        if !params[:ads_id].blank? || @item_detail.blank?
+          @ad = Advertisement.where("id = ?", params[:ads_id]).first
+          url = @ad.click_url
+        else
+          url = "#{@item_detail.url}"
+        end
+
+        item_id = @item_detail.blank? ? "" : @item_detail.itemid
+
+        domain = VendorDetail.getdomain(url)
+        @vd = VendorDetail.where(baseurl: domain)
+        unless @vd.empty?
+          vendor = Item.find(@vd[0].item_id)
+        end
+
+        vendor_id = vendor.blank? ? "" : vendor.id
+
+        vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
+        Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
       end
-
-      item_id = @item_detail.blank? ? "" : @item_detail.itemid
-
-      domain = VendorDetail.getdomain(url)
-      @vd = VendorDetail.where(baseurl: domain)
-      unless @vd.empty?
-        vendor = Item.find(@vd[0].item_id)
-      end
-
-      vendor_id = vendor.blank? ? "" : vendor.id
-
-      vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
-      Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
     end
 
 
@@ -89,6 +111,8 @@ class HistoryDetailsController < ApplicationController
     @item_detail = case type
                      when "Content" then
                        Content.find_by_id(detail_id)
+                     when "Hotel" then
+                       HotelVendorDetail.find_by_id(detail_id)
                      else
                        Itemdetail.find_by_item_details_id(detail_id)
                    end

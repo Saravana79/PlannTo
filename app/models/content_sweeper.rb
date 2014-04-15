@@ -3,7 +3,7 @@ observe Content
 
 	def after_create(content)
 		Rails.logger.info "***************123******************"
-	 	cache_key = "views/localhost:3000/cars/5"
+	 	cache_key = "views/#{configatron.hostname}/cars/5"
 	 	Rails.logger.info "***************" + cache_key + "******************"
 	 	Rails.logger.info url_for :controller => '/products', :action => 'show', :id => 10 
     	Rails.cache.delete(cache_key)

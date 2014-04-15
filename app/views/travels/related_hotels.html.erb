@@ -1,0 +1,447 @@
+<% if (!@related_hotels.blank?) or (!@best_deals.nil?) %>
+
+    <% if @path =="wheretobuymain" %>
+
+        <style type="text/css">
+            #plannto_headertd {
+                padding: 5px 10px 0px 0px;
+                margin: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #129FBD;
+            }
+
+            #plannto_table {
+                border: 0px;
+                font-family: Arial;
+                border-collapse: collapse;
+            }
+
+            #plannto_poweredby {
+                font-size: 9px;
+                font-weight: bold;
+                color: darkgray;
+                padding-right: 1px;
+            }
+
+            #plannto_logo {
+                padding: 2px;
+                font-size: 12px;
+                font-weight: bold;
+                color: darkgray;
+            }
+
+            #plannto_logo:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            #plannto_logo1 {
+                color: #129FBD;
+            }
+
+            #plannto_insidediv {
+                padding: 7px 10px 10px 10px;
+                background: #EEE;
+            }
+
+            #plannto_intable {
+                background: #FFF;
+                border-collapse: collapse;
+                border: 0;
+                margin: 0px;
+            }
+
+            #plannto_intr {
+                border-bottom: 1px solid #EEE;
+                height: 40px;
+                background: white;
+            }
+
+            #plannto_intd {
+                font-weight: 700;
+                font-size: 12px;
+                color: black;
+                padding: 5px;
+                vertical-align: middle;
+                background: white;
+                float: none;
+                display: table-cell;
+            }
+
+            .plannto_selector {
+                padding: 3px 12px;
+                border: 1px solid #CCC;
+                width: 100%;
+                border-radius: 2px;
+                font-weight: 700;
+                font-size: 12px;
+                font-family: inherit;
+            }
+
+            #plannto_incol1 {
+                padding: 0px 0px 0px 15px;
+                text-align: left;
+                vertical-align: middle;
+                background: white;
+                float: none;
+            }
+
+            #plannto_incol2 {
+                font-weight: bold;
+                font-size: 13px;
+                text-align: center;
+                vertical-align: middle;
+                min-width: 80px;
+                color: black;
+                background: white;
+                padding: 0px;
+                float: none;
+                display: table-cell;
+            }
+
+            #plannto_incol3 {
+                padding: 0px 10px 0px 0px;
+                text-align: center;
+                vertical-align: middle;
+                background: white;
+            }
+
+            #plannto_go_button {
+                margin: 0;
+                background: #12C1E6;
+                color: #FFF !important;
+                padding: 5px 8px;
+                border: 0;
+                font-size: 12px;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            #plannto_footertd {
+                padding-right: 10px;
+                vertical-align: middle;
+                height: 40px;
+                background: white;
+                padding: 0px;
+                float: none;
+                display: table-cell;
+            }
+
+            #plannto_footertr {
+                background: white;
+            }
+
+            #plannto_footerspan {
+                float: left;
+                padding-left: 20px
+            }
+
+            #plannto_footera {
+                font-weight: bold;
+                font-size: 13px;
+                text-decoration: underline;
+                color: #535353;
+            }
+
+            #plannto_inheadertr {
+                border-bottom: 1px solid #EEE;
+                height: 35px;
+                background: #FAFAFA;
+            }
+
+            #plannto_inheadercol1 {
+                padding: 0px 0px 0px 25px;
+                font-weight: bold;
+                font-size: 13px;
+                text-align: left;
+                vertical-align: middle;
+                background: #FAFAFA;
+                float: none;
+            }
+
+            #plannto_inheadercol2 {
+                font-weight: bold;
+                font-size: 13px;
+                text-align: center;
+                vertical-align: middle;
+                min-width: 80px;
+                color: black;
+                background: #FAFAFA;
+                padding: 0px;
+                float: none;
+                display: table-cell;
+            }
+
+            .shadetabs {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                list-style-type: none;
+                text-align: left;
+                z-index: -1;
+            }
+
+            .shadetabs li.unselected {
+                float: left;
+                padding: 0px !important;
+                margin: 0 5px 0 5px !important;
+                background: #12c1e6 !important;
+                list-style-type: none !important;
+            }
+
+            .shadetabs li.unselected a {
+                text-decoration: none;
+                font-size: 14px;
+                color: #fff !important;
+                text-decoration: none;
+                padding: 6px 15px;
+                float: left;
+                display: inline-block;
+                margin: 0;
+                text-align: center;
+            }
+
+            .shadetabs li.selected {
+                float: left;
+                position: relative;
+                padding: 0px !important;
+                margin: 0px;
+                text-align: center;
+                border-bottom: 3px solid #EEE;
+                background: #EEE !important;
+                list-style-type: none !important;
+            }
+
+            .shadetabs li.selected a {
+                color: #12c1e6 !important;
+                text-decoration: none;
+                font-size: 14px;
+                text-decoration: none;
+                padding: 6px 15px;
+                float: left;
+                display: inline-block;
+                margin: 0;
+                text-align: center;
+            }
+
+            #prodname {
+                font-size: 15px;
+            }
+
+            /* for igyaan*/
+            <% if (!@publisher.nil? && @publisher.id == 5) %>
+            #plannto_table {
+                border: 0px;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+            #plannto_headertd {
+                padding: 5px 10px 0px 0px;
+                margin: 0px;
+                font-size: 13px;
+                color: #07ABE2;
+                font-family: 'PT Sans', sans-serif;
+                font-weight: 300;
+            }
+
+            #plannto_incol2 {
+                font-weight: bold;
+                font-size: 13px;
+                text-align: center;
+                vertical-align: middle;
+                min-width: 80px;
+                color: black;
+                background: white;
+            }
+
+            #plannto_inheadercol1 {
+                padding-left: 25px;
+                font-weight: bold;
+                font-size: 13px;
+                text-align: left;
+                vertical-align: middle;
+                background: #FAFAFA;
+                font-family: Arvo, serif;
+            }
+
+            #plannto_inheadercol2 {
+                font-weight: bold;
+                font-size: 13px;
+                text-align: center;
+                vertical-align: middle;
+                min-width: 80px;
+                color: black;
+                background: #FAFAFA;
+                font-family: Arvo, serif;
+            }
+
+            #prodname {
+                font-family: Arvo, serif;
+                font-size: 15px;
+                font-weight: bold;
+            }
+
+            .plannto_selector {
+                padding: 3px 12px;
+                border: 1px solid #CCC;
+                width: 100%;
+                border-radius: 2px;
+                font-size: 14px;
+                font-family: 'Roboto Slab', sans-serif;
+                font-weight: 500;
+                margin-top: 5px;
+            }
+
+            .shadetabs li.unselected a {
+                text-decoration: none;
+                font-size: 14px;
+                color: #fff !important;
+                text-decoration: none;
+                padding: 6px 15px;
+                float: left;
+                display: inline-block;
+                margin: 0;
+                text-align: center;
+                font-family: Arvo, serif;
+                font-weight: 500;
+            }
+
+            #plannto_insidediv {
+                padding: 2px 0px 2px 0px;
+                background: #EEE;
+            }
+
+            <% end %>
+        </style>
+        <table width="100%" id="plannto_table">
+          <tbody style="border:0px;">
+          <tr>
+            <td id="plannto_headertd">
+
+              <ul class="shadetabs">
+                <% if @show_price != "false"  && @show_by_city != true %>
+                    <li class="selected">
+
+                      <a href="#" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')" %>"><%= @item.name %></a>
+                    </li>
+                <% end %>
+                <% if @show_offer != "false" %>
+                    <li class="unselected">
+                      <% related_ids = (@show_by_city == true ? @cities.map(&:id).join(",") : @items.map(&:id).join(",")) %>
+                      <a href="#" id="product_offers" onclick="<%= "PlannTo.related_hotel_tab_click(this," + @moredetails+ ",'" + related_ids + "')" %>">Related
+                        Hotels</a>
+                    </li>
+                <% end %>
+              </ul>
+
+              <!--<span>Best Prices</span>-->
+
+              <% if @moredetails == "true" %>
+                  <!--
+
+                  <div style="float:right;">
+                      <span id="plannto_poweredby">Powered By</span>
+                      <span id="plannto_logo">Plann<font id="plannto_logo1">To</font></span>
+                  </div>
+                -->
+              <% else %>
+
+              <% end %>
+
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0;margin:0;" id="tabreplacement">
+              <!-- main where to buy check ends here. -->
+    <% end %>
+
+
+    <% if @show_price != "false" %>
+        <% if @path !="onchange" %>
+
+            <div id="plannto_insidediv">
+              <table id="plannto_intable" width="100%">
+                <thead style="border:0px;display:table-header-group;">
+
+                </thead>
+                <tbody style="border:0px;" id="where_to_buy_items_onchange">
+        <% end %>
+            <tr id="plannto_inheadertr">
+              <td id="plannto_inheadercol1" width="35%">Hotel</td>
+              <td id="plannto_inheadercol2" width="35%">Name</td>
+              <td width="30%" id="plannto_inheadercol2">Details</td>
+            </tr>
+        <% count = 0 %>
+        <% if (!@publisher.nil? && @publisher.id == 5) %>
+            <% @gotext = "Buy Now" %>
+        <% else %>
+            <% @gotext = "Go" %>
+        <% end %>
+
+        <% @related_hotels.each do |hotel| %>
+            <% count = count + 1 %>
+            <% unless count > @displaycount %>
+                <tr id="plannto_intr">
+                  <% if @display_item_details_val %>
+                          <td id="plannto_incol1" width="20%">
+                            <img class="imagevendor" src="<%= hotel.image_url %>" alt="<%= hotel.name %>" style="width:85px;border:0;padding:0;"/>
+                          </td>
+                          <td id="plannto_incol2" width="20%"> <%= hotel.name %> </td>
+                          <!--
+                                              <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
+                          <!-- <td id="plannto_incol2" width="25%" style="font-weight:normal;"><%#=display_shipping_detail(item)%></td> -->
+                          <td width="15%" id="plannto_incol3">
+                            <a href="http://<%= configatron.hostname %>/travels/external_page?item_id=<%= hotel.id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
+                          </td>
+                  <% end %>
+                </tr>
+            <% end %>
+        <% end %>
+
+        <% if count > @displaycount.to_i %>
+            <tr style="plannto_footertr">
+              <% if @moredetails == "true"
+                   @wrapper="3"
+                 else
+                   @wrapper="2"
+                 end
+              %>
+              <td id="plannto_footertd" colspan="<%= @wrapper %>">
+                                    <span id="plannto_footerspan">
+                                      <a href="http://<%= configatron.hostname %>/travels/external_page?item_id=<%= @item.id %>&iid=<%= @impression_id %>" id="plannto_footera" target="_blank">View all related hotels</a>
+                                    </span>
+              </td>
+              <td id="plannto_incol3" width="15%">
+                                    <span>
+                                      <a href="http://<%= configatron.hostname %>/travels/external_page?item_id=<%= @item.id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
+                                    </span>
+              </td>
+            </tr>
+        <% end %>
+        <% if @path!="onchange" %>
+            </tbody>
+            </table>
+            <div>
+        <% end %>
+
+    <% else %>
+        <!-- else for only showing offers -->
+        <%= render "products/product_offers_details" %>
+    <% end %>
+    <% if @path=="wheretobuymain" %>
+
+        </td>
+        </tr>
+        </div>
+        </tbody>
+        </table>
+        <!--
+<div style="float:right;background:white;">
+   <span id="plannto_poweredby">Powered By</span>
+   <span id="plannto_logo"><a href="http://www.plannto.com" style="font:inherit;color:inherit;text-decoration:inherit;">PlannTo.com</a></span>
+</div>
+-->
+    <% end %>
+
+<% end %>
