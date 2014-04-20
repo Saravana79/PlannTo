@@ -40,15 +40,20 @@
          #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
          #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: Arvo, serif;}
          #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: Arvo, serif;}
-         #prodname{font-family: Arvo, serif;font-size: 15px;font-weight:bold;}
+         #prodname{font-family: "Arvo", serif;color: #4C4A4A;line-height: 1.61;font-size: 1.07143rem;text-transform: uppercase;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
          .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;} 
-          #plannto_insidediv{padding:2px 0px 2px 0px;background: #EEE;}
+          #plannto_insidediv{padding:2px 0px 0px 0px;background: #EEE;}
          <% end %>
          </style>
+
+          <!-- /* for igyaan*/ -->
+         <% if (!@publisher.nil? && @publisher.id == 5) %>
+         <hr class="separator  separator--subsection">
+         <%end%>
         <table width="100%"  id="plannto_table" >
           <tbody style="border:0px;">
-            <tr>
+            <tr style="border:0px;">
               <td id="plannto_headertd">
                 
                 <ul class="shadetabs">
@@ -82,7 +87,7 @@
       
               </td>
             </tr>
-            <tr>
+            <tr style="border:0px;">
               <td style="padding:0;margin:0;" id="tabreplacement">
                 <!-- main where to buy check ends here. -->                
     <%end%>
@@ -207,6 +212,12 @@
                                 </div>
                               </tbody>          
                             </table>
+
+
+          <!-- /* for igyaan*/ -->
+         <% if (!@publisher.nil? && @publisher.id == 5) %>
+         <hr class="separator  separator--subsection">
+         <%end%>
                                        <!--
                            <div style="float:right;background:white;">
                                   <span id="plannto_poweredby">Powered By</span>
