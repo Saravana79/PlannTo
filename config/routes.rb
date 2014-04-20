@@ -367,6 +367,8 @@ resources :comments do
 
   match "advertisments/show_ads" => "admin/advertisements#show_ads", :as => "show_ads"
   match "travels/show_ads" => "travels#show_ads", :as => "travel_ads"
+  match "travels/where_to_find_hotels",:to => "travels#where_to_find_hotels"
+  match "travels/related_hotels",:to => "travels#related_hotels"
 
   match "sourceitems/load_suggestions" => "feeds#load_suggestions"
 

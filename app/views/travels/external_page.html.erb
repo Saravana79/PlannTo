@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <%= stylesheet_link_tag '/stylesheets/plannto.css' %>
+  <link rel="shortcut icon" href="/images/logosc.png" type="image/x-icon"/>
+  <title><%= "PlannTo - #{@item.name}" %></title>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
+  <%= javascript_include_tag 'application' %>
+
+  <style>
+      homepagestyle:hover {
+          cursor: pointer;
+          text-decoration: underline;
+      }
+
+      a:visited {
+          color: white;
+      }
+  </style>
+</head>
+
+<body>
+<div style="border: solid 0px;    width: 800px;    position: relative;    margin: 0 auto;    height: auto;    min-height: 600px;    background: white;    padding:10px;">
+  <span class="img_product"><img src="<%= @item.image_url %>" alt="<%= @item.name %>" width="176" height="132"/></span>
+
+  <div style="padding-top: 20px;">
+    <div style="float:left;">
+      <h1 itemprop="itemreviewed"><%= @item.get_name %></h1>
+    </div>
+    <div style="float:right;">
+      <span style="font: 11px Arial bold;color: #C7C6C6;padding-right: 5px;">Powered By</span>
+      <span class="homepagestyle" style="padding: 2px 10px 2px 10px;font: 16px Arial bold;color: white;background: #292929;text-decoration:none;"><a href="http://www.plannto.com" class="homepagelink">Plann<font style="color: #129FBD;">To</a></font></span>
+    </div>
+  </div>
+
+  <div style="padding-top:20px;">
+    <ul id="Newtabs">
+      <ul id="Newtabs">
+        <li id="buy" class="tab_active"><a href="#compare_price"><span>Hotels</span></a></li>
+      </ul>
+    </ul>
+  </div>
+  <br/>
+
+
+  <% if (!@where_to_buy_items.empty?) %>
+      <!--<div class="clearboth align_right font_11 pad_tb5">Last Updated On <%#=@where_to_buy_items.collect(&:last_verified_date).max.strftime("%d-%m-%Y- %H:%M") %></div>-->
+      <div class="clearboth pad_b29">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="header_compare">Seller Name</td>
+            <td class="header_compare">Price</td>
+            <% if Rails.env == "development" %>
+                <td class="header_compare">Seller Rating</td>
+            <% end %>
+            <td class="header_compare">&nbsp;</td>
+          </tr>
+          <% @where_to_buy_items.each do |item| %>
+
+              <tr>
+                <td class="bdb_gray1">
+                  <img class="imagevendor" src="<%= item.vendor.image_url %>" alt="<%= item.vendor.name %>"/>
+                </td>
+                <td class="bdb_gray1 price_text">Rs. <%= item.price %></td>
+                <% if Rails.env == "development" %>
+                    <td class="bdb_gray1 font_13"><%#= render :partial => 'shared/rating', :locals => {:item => Vendor.get_item_object(item), :rating_id => "product_vendor_#{item.id}"} %> </td>
+                <% end %>
+                <td align="center" class="bdb_gray1">
+                  <a href="/history_details?detail_id=<%= item.id %>&iid=<%= @impression_id %>&req=<%= @req %>" class="btn-link" target="_blank">Hotel Details</a></td>
+              </tr>
+              <%#= render "products/deals_offer",:item => item,:site => site %>
+
+              <tr>
+                <td colspan="4" style="border-bottom: solid 1px #cdd3d7;height:5px;"></td>
+              </tr>
+
+          <% end %>
+          <tr></tr>
+        </table>
+      </div>
+  <% else %>
+      <h2> No Stores Available</h2>
+  <% end %>
+  <div id="dealer_report"></div>
+  <div style="clear:both;margin:10px 0px 5px 0px;">
+    <p class="">Are you a dealer/seller of this product? If you like to include your listing,
+      <%= link_to "Please get in touch with us.", new_item_report_path(@item, :type => "dealer"), :remote => true, :class => "blue-link", :id => "report_link_#{@item.id}" %></a></li>
+    </p>
+  </div>
+
+  <script>
+      $("#report_link_<%= @item.id %>").click(function (e) {
+          <%if !current_user %>
+          openLoginPopup("#" + $(this).attr('id'), "click");
+          return false
+          <%end%>
+      })
+  </script>
+  <% if (!@dealer_locators.nil?) %>
+
+      <div style="display:block;clear:both;margin:20px 0px 5px 0px;">
+        <p class="">Find out the various dealers/sellers from <a href="<%= @dealer_locators.url %>" target="_blank",
+          class="blue-link"> Manufacturer dealer locator page. </a></p>
+      </div>
+
+      </br>
+
+  <% end %>
+
+</div>
+<script>
+    <% if (@showcompare.to_i rescue 0) == 1 %>
+    $("#compare_price").show();
+    $("ul#Newtabs li#compare_price").addClass("tab_active");
+    <% else%>
+    $("#reviews").show();
+    $("ul#Newtabs li#reviews").addClass("tab_active");
+    <% end %>
+
+</script>
+<%= javascript_include_tag '/javascripts/layout.js' %>
+<%= render "shared/google_analytics" if Rails.env.production? %>
+</body>
+</html>
+
+
