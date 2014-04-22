@@ -4,8 +4,10 @@
       <div style="float:left;width:110px;"><a href="#"><img src="<%= @vendor_image_url %>" alt=""></a></div>
       <div class="list_carousel">
           <div id="pager2" class="pager">
+            <%if @item_details.count > 1 %>
             <% [*1..@item_details.count].each do |each_loop| %>
                 <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+            <% end %>
             <% end %>
           </div>
      </div>
