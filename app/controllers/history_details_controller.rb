@@ -102,7 +102,7 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
-    redirect_to url
+      redirect_to url
   end
 
   private

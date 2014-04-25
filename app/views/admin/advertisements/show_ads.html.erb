@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div class="main_div">
+<div class="plannto-advertisement main_div">
   <%= render :partial => "/admin/advertisements/#{@ad.template_type}_size_#{@suitable_ui_size}" %>
 </div>
 
@@ -121,6 +121,20 @@
 
         $(".advt-block").click(function () {
             stop_sliding = true
+        })
+
+        $(".plannto-advertisement").click(function(event)
+        {
+            check_navigation = $(event.target).closest('#pager2')
+
+            console.log(check_navigation)
+
+            if (check_navigation.size() == 0)
+            {
+                event.preventDefault()
+                url = $(".shop-now").attr('href')
+                window.open(url);
+            }
         })
 
     });

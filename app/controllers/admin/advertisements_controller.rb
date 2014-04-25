@@ -100,10 +100,14 @@ def show_ads
 
   @iframe_width, @iframe_height = params[:size].split("*")
 
-  if (params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined')
+  if(params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined' )
     url = params[:ref_url]
     itemsaccess = "ref_url"
+  else
+    itemsaccess = "referer"
+    url = request.referer
   end
+
   @ad = Advertisement.where("id = ?", params[:ads_id]).first
 
   unless @ad.blank?
@@ -121,6 +125,52 @@ def show_ads
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
       item_ids = params[:item_id].split(",")
+      @items = []
+      unless (item_ids.blank?)
+        itemsaccess = "ItemId"
+        if (true if Float(item_ids[0]) rescue false)
+          @items = Item.where(id: item_ids)
+        else
+          @items = Item.where(slug: item_ids)
+          @items = @items[0..15]
+        end
+        url = request.referer
+      else
+        unless $redis.get("#{url}ad_item_ids").blank?
+          @items = Item.where("id in (?)", $redis.get("#{url}ad_item_ids").split(","))
+        else
+          unless url.nil?
+            tempurl = url;
+            if url.include?("?")
+              tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+            end
+            if url.include?("#")
+              tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
+            end
+            @articles = ArticleContent.where(url: tempurl)
+
+            if @articles.empty? || @articles.nil?
+              #for pagination in publisher website. removing /2/
+              tempstr = tempurl.split(//).last(3).join
+              matchobj = tempstr.match(/^\/\d{1}\/$/)
+              unless matchobj.nil?
+                tempurlpage = tempurl[0..(tempurl.length-3)]
+                @articles = ArticleContent.where(url: tempurlpage)
+              end
+            end
+
+            unless @articles.empty?
+              @items = @articles[0].allitems.select{|a| a.is_a? Product};
+              @items = @items[0..15].reverse
+              $redis.set("#{url}ad_item_ids", @items.collect(&:id).join(","))
+            end
+
+          end
+        end
+      end
+
+      item_ids = @items.map(&:id)
+
       @item_details = []
       if item_ids.count > 1
         item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, vendor_id).order('itemdetails.status asc,
@@ -128,15 +178,26 @@ def show_ads
 
         item_details.each { |_, val| @item_details << val[0] }
       else
-        @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', params[:item_id], 0, vendor_id).order('itemdetails.status asc,
+        @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', item_ids.first, 0, vendor_id).order('itemdetails.status asc,
                           (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       end
 
       @item_details = @item_details.first(6)
+
+      # Default item_details based on vendor if item_details empty
+      #TODO: temporary solution, have to change based on ecpm
+      if @item_details.blank?
+        clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
+        clicks.each do |click|
+          @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', click.item_id, 0, vendor_id).order('itemdetails.status asc,
+                          (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          break unless @item_details.blank?
+        end
+      end
       @vendor_image_url = @item_details.first.blank? ? "" : @item_details.first.vendor.image_url
       @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
       @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
-      @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+      @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       if @ad.template_type == "type_2"
         @sliced_item_details = @item_details.each_slice(2)
@@ -152,6 +213,7 @@ def show_ads
       #                              (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '',
       #                              Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
 
+      @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
       render :layout => false
     end
   end
