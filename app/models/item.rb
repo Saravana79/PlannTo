@@ -1091,35 +1091,42 @@ end
    [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
   end
 
-  def self.update_item_details(log)
+  def self.update_item_details(log, batch_size=2000)
     query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from itemdetails id
              inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
-    p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
+    # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
     log.debug "********** Started Updating Price and Vendor_id for Items **********"
-    log.debug "********** Found #{p_v_records.count} items for update price and vendor_ids **********"
+    # log.debug "********** Found #{p_v_records.count} items for update price and vendor_ids **********"
     log.debug "\n"
 
-    p_v_records.each do |each_rec|
-      redis_key = "items:#{each_rec.item_id}"
-      val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
-      redis_values = val_hash.flatten
+    page = 1
+    begin
+      p_v_records = Item.paginate_by_sql(query_to_get_price_and_vendor_ids, :page => page, :per_page => batch_size)
 
-      log.debug "Hash Key => #{redis_key}"
-      log.debug "Hash value => #{redis_values}"
-      log.debug "\n"
+      p_v_records.each do |each_rec|
+        redis_key = "items:#{each_rec.item_id}"
+        val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
+        redis_values = val_hash.flatten
 
-      redis_values = val_hash.flatten
+        log.debug "Hash Key => #{redis_key}"
+        log.debug "Hash value => #{redis_values}"
+        log.debug "\n"
 
-      $redis_rtb.HMSET(redis_key, redis_values)
-    end
+        redis_values = val_hash.flatten
+
+        $redis_rtb.HMSET(redis_key, redis_values)
+      end
+      page += 1
+    end while !p_v_records.empty?
+
     log.debug "********** Completed Updating price and vendor_id for Items **********"
     log.debug "\n"
 
-    update_item_details_with_ad_ids(log)
+    update_item_details_with_ad_ids(log, nil, batch_size)
   end
 
-  def self.update_item_details_with_ad_ids(log, item_ids=nil)
+  def self.update_item_details_with_ad_ids(log, item_ids=nil, batch_size=2000)
 
     custom_query = "1=1"
 
@@ -1135,23 +1142,28 @@ end
     adv_records = Item.find_by_sql(query_to_get_advertisement_details)
 
     log.debug "********** Started Updating advertisement_id for Items **********"
-    log.debug "********** Found #{adv_records.count} items for update advertisement_id **********"
+    # log.debug "********** Found #{adv_records.count} items for update advertisement_id **********"
     log.debug "\n"
 
-    adv_records.each do |each_rec|
-      redis_key = "items:#{each_rec.item_id}"
-      redis_values = {:advertisement_id => each_rec.advertisement_id}.flatten
+    page = 1
+    begin
+      adv_records = Item.paginate_by_sql(query_to_get_advertisement_details, :page => page, :per_page => 2000)
+      adv_records.each do |each_rec|
+        redis_key = "items:#{each_rec.item_id}"
+        redis_values = {:advertisement_id => each_rec.advertisement_id}.flatten
 
-      log.debug "Hash Key => #{redis_key}"
-      log.debug "Hash value => #{redis_values}"
-      log.debug "\n"
+        log.debug "Hash Key => #{redis_key}"
+        log.debug "Hash value => #{redis_values}"
+        log.debug "\n"
 
-      $redis_rtb.HMSET(redis_key, redis_values)
-    end
+        $redis_rtb.HMSET(redis_key, redis_values)
+      end
+      page += 1
+    end while !adv_records.empty?
+
     log.debug "********** Completed Updating advertisement_id for Items **********"
     log.debug "\n"
   end
-
 
   private
 
