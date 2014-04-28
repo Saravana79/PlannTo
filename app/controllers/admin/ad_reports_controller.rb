@@ -63,6 +63,7 @@ class Admin::AdReportsController < ApplicationController
     @click_result_array = click_report_results.map {|result| result.values}
     @click_x_values = @click_result_array.map {|each_array| each_array[0]}
     @clicks = @click_result_array.map {|each_array| each_array[1]}
+    render :layout => false
   end
 
   def load_vendors
