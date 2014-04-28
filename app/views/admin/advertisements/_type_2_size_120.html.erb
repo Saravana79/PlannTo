@@ -23,7 +23,7 @@
                       <%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 45) : truncate_without_dot(item_detail.offer.to_s, 45) %>
                     </p>
                     <!--<p class="price-strike">Rs. 40, 000</p>-->
-                    <p class="price">Rs. <%= prettify(item_detail.price) %></p>
+                    <p class="price"><%= prettify(item_detail.price) %></p>
 
                     <p class="btn">
                       <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>

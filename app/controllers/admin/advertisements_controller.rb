@@ -182,8 +182,6 @@ def show_ads
                           (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
       end
 
-      @item_details = @item_details.first(6)
-
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
       if @item_details.blank?
@@ -200,7 +198,10 @@ def show_ads
       @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       if @ad.template_type == "type_2"
+        @item_details = @item_details.first(12)
         @sliced_item_details = @item_details.each_slice(2)
+      else
+        @item_details = @item_details.first(6)
       end
 
       # TODO: Offers based on item_ids

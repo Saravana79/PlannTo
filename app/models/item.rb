@@ -1092,7 +1092,7 @@ end
   end
 
   def self.update_item_details(log)
-    query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type from itemdetails id
+    query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from itemdetails id
              inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
     p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
