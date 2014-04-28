@@ -77,7 +77,17 @@ class HistoryDetailsController < ApplicationController
         vendor_id = vendor.blank? ? "" : vendor.id
 
         vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
-        Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
+
+        if type == "advertisement"
+          # Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
+
+
+          click_params =  {:url => url, :request_referer => req_url, :time => Time.now, :item_id => item_id, :user => current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
+                           :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id}.to_json
+          Resque.enqueue(CreateImpressionAndClick, 'Click', click_params)
+        else
+          Click.save_click_data(url, req_url, Time.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
+        end
       end
     end
 

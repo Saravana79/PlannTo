@@ -114,8 +114,12 @@ def show_ads
     if @ad.advertisement_type == "static"
       # static ad process
       @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
-      @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess,
-                                                              url_params, cookies[:plan_to_temp_user_id], @ad.id)
+      # @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+      @impression_id = DateTime.now.to_i + SecureRandom.random_number(99999)  #TODO: have to comfirm with saravana
+      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => nil, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+       :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
+      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+
       render "show_static_ads", :layout => false
     elsif @ad.advertisement_type == "dynamic"
       # dynamic ad process
@@ -197,7 +201,12 @@ def show_ads
       @vendor_image_url = @item_details.first.blank? ? "" : @item_details.first.vendor.image_url
       @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
       @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
-      @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+      # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.first, url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+
+      @impression_id = DateTime.now.to_i + SecureRandom.random_number(99999)  #TODO: have to comfirm with saravana
+      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
+      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
       if @ad.template_type == "type_2"
         @sliced_item_details = @item_details.each_slice(2)

@@ -3,6 +3,26 @@ class Click < ActiveRecord::Base
   belongs_to :user
   belongs_to :add_impression, :foreign_key => "impression_id"
 
+  def self.create_new_record(obj_params)
+    click = Click.new
+    click.impression_id = obj_params[:impression_id]
+    click.click_url = obj_params[:url]
+    click.hosted_site_url = obj_params[:request_referer]
+    click.timestamp = obj_params[:time]
+    click.item_id = obj_params[:item_id]
+    click.vendor_id = obj_params[:vendor_id]
+    click.source_type = obj_params[:source_type]
+    unless obj_params[:user].nil?
+      click.user_id = obj_params[:user]
+    end
+    click.temp_user_id = obj_params[:temp_user_id]
+    click.publisher_id = obj_params[:publisher]
+    click.ipaddress = obj_params[:remote_ip]
+    click.created_at = obj_params[:time]
+    click.updated_at = obj_params[:time]
+    click.save
+  end
+
   def self.save_click_data(url,request_referer,time,item_id,user,remote_ip,impression_id,publisher,vendor_id,source_type,temp_user_id)
  #   click = Click.find_by_impression_id_and_source_type_and_item_id_and_hosted_site_url_and_temp_user_id_and_vendor_id_and_click_url(impression_id, source_type, itemid, request_referer, temp_user_id, vendor_id, url )
  #   unless click

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140414114004) do
+ActiveRecord::Schema.define(:version => 20140426080631) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(:version => 20140414114004) do
     t.decimal  "ecpm",               :precision => 10, :scale => 0
     t.decimal  "ectr",               :precision => 10, :scale => 0
     t.string   "template_type"
+  end
+
+  create_table "aggregated_details", :force => true do |t|
+    t.string   "entity_type"
+    t.integer  "entity_id"
+    t.integer  "impressions_count", :default => 0
+    t.integer  "clicks_count",      :default => 0
+    t.date     "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "answer_contents", :force => true do |t|
