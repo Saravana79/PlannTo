@@ -71,6 +71,16 @@ class Advertisement < ActiveRecord::Base
      return count
    end
 
+   def update_redis_with_advertisement
+     #$redis.HMSET("advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
+     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget)
+
+     # Enqueue ItemUpdate with created advertisement item_ids
+     item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
+     item_ids = item_ids_array.map(&:inspect).join(',')
+     Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.now, item_ids)
+   end
+
    private
 
    def file_dimensions
@@ -81,16 +91,5 @@ class Advertisement < ActiveRecord::Base
             errors.add :file, "Width must be #{hieght_width[0]}px and height must be #{hieght_width[1]}px"
          end
    end
-
-  def update_redis_with_advertisement
-    #$redis.HMSET("advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
-    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget)
-
-    # Enqueue ItemUpdate with created advertisement item_ids
-    item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
-    item_ids = item_ids_array.map(&:inspect).join(',')
-    Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.now, item_ids)
-
-  end
 
 end

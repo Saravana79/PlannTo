@@ -286,7 +286,13 @@ module ApplicationHelper
   end
 
   def prettify(float_val)
-    float_val.to_i == float_val ? float_val.to_i : ("%.2f" % float_val)
+    return_val = float_val.to_i == float_val ? float_val.to_i : ("%.2f" % float_val)
+
+    if return_val.to_i == 0
+      return "Pre-Order"
+    else
+      return "Rs. #{return_val}"
+    end
   end
 
 end
