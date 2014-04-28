@@ -3,36 +3,36 @@ module ApplicationHelper
   def get_follow_link(name, path, options = {})
     link_to(name, path, options).to_s
   end
-  
+
   def date_formate(d)
     day = d.day  rescue ''
-    if day == '' 
+    if day == ''
      return ''
-    end 
+    end
     month = d.month.to_i - 1
     year = d.year
     months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','']
     month = months[month]
-    return "#{day}-#{month}-#{year}" 
+    return "#{day}-#{month}-#{year}"
   end
-  
-   def link_to_add_fields(name, f, association, path=nil)  
+
+   def link_to_add_fields(name, f, association, path=nil)
    # association = ':' + association
-    new_object = f.object.class.reflect_on_association(association).klass.new  
-    
-    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|  
+    new_object = f.object.class.reflect_on_association(association).klass.new
+
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
       unless path
-        render(association.to_s.singularize + "_fields", :ff => builder)  
+        render(association.to_s.singularize + "_fields", :ff => builder)
       else
-        render(path + association.to_s.singularize + "_fields", :ff => builder) 
+        render(path + association.to_s.singularize + "_fields", :ff => builder)
       end
-    end  
+    end
      link_to_function(name, "add_fields(this, '#{association}', '#{escape_javascript(fields)}')")
   end
-  
+
 
   def get_follow_types(item, follow_type, type, button_class = '_medium', options = {})
-   
+
     array_follow = get_follow_text(follow_type)
     if type == "select_box"
       select_tag("follow_type", options_for_select(array_follow),
@@ -40,7 +40,7 @@ module ApplicationHelper
           :id => array_follow.first[1].to_s+"_select"})
     else
       links_follow = ""
-      array_follow.each do |text_val, id_val, follow| 
+      array_follow.each do |text_val, id_val, follow|
         text_val = "" if button_class == "_small"
         title_value = !options[:related_items] ? (I18n.t item.class.superclass.to_s+'.'+id_val) : " "
 
@@ -49,7 +49,7 @@ module ApplicationHelper
         if(item.is_a?Content)
           classname = "contents"
         end
-        
+
         links_follow += "<span class='action_btns#{button_class}' id=#{id_val+'_span_'+item.id.to_s}>" +
           get_follow_link(text_val, url_for(:action => 'follow_item_type', :controller => classname, :id => item, :button_class => button_class, :follow_type => follow, :related_items => options[:related_items]),
           options.merge(:id => id_val+'_'+item.id.to_s, :class => id_val+'_icon'+button_class, :title => title_value)) +
@@ -57,7 +57,7 @@ module ApplicationHelper
             '</span><span class="plantobuycounter">' + item.ger_followers_count_for_type(follow).to_s + '</span>'
          else
           '</span>'
-         end  
+         end
       end
       links_follow.html_safe
     end
@@ -139,10 +139,10 @@ module ApplicationHelper
     return "" if (search_type == " " || search_type.nil?)
     return search_type.singularize.camelize.constantize
   end
-  
+
   def errors_for(object, message=nil)
     html=""
-    object.errors.full_messages.each do |msg| 
+    object.errors.full_messages.each do |msg|
       html ="<li>#{msg}</li>"
     end
     html
@@ -195,7 +195,7 @@ module ApplicationHelper
     end
     if reset == true
       positive_class = "btn_like_default"
-      negative_class = "btn_dislike_default"    
+      negative_class = "btn_dislike_default"
     end
     return {:positive => positive_class, :negative => negative_class}
   end
@@ -216,8 +216,8 @@ module ApplicationHelper
     # compare = attr_ca.a.attribute_values.collect{|av| av if items.collect(&:id).include?(av.item_id)}.compact.flatten.group_by(&:groupbyvalue)
     topitems = Hash.new
     compare.each do |key, value|
-      compare[key] = value.collect{|av| items.select{|i| i if i.id==av.item_id}.flatten.compact.uniq.first.name}.flatten.compact.uniq    
-      topitems[key] = value.collect{|av| av.item_id}    
+      compare[key] = value.collect{|av| items.select{|i| i if i.id==av.item_id}.flatten.compact.uniq.first.name}.flatten.compact.uniq
+      topitems[key] = value.collect{|av| av.item_id}
     end
 
     if(["asc", "desc"].include?(order[:value]))
@@ -227,22 +227,22 @@ module ApplicationHelper
           attr_v = attr_v.reverse
         end
     else
-        attr_v = compare.keys.sort      
+        attr_v = compare.keys.sort
     end
-    
+
     if attr_v.size > 1 and ["asc", "desc"].include?(order[:value])
-        percentage = get_percentage(order, attr_v) 
+        percentage = get_percentage(order, attr_v)
 
         attr_ca.description.gsub!("{2}", compare[attr_v[1]].to_sentence)
         attr_ca.description.gsub!("{percentage}", percentage) if attr_ca.description.match("{percentage}")
         attr_ca.description.gsub!("{1}", compare[attr_v[0]].to_sentence)
 
         {summary: attr_ca.description, highlight: topitems[attr_v[0]],winner:compare[attr_v[0]].to_sentence}
-     
+
     elsif (attr_v.size > 0 and "eq".include?(order[:value]))
        matchkey = -1
-       index = 0   
-       attr_v.each do |key|          
+       index = 0
+       attr_v.each do |key|
           if("eq".include?(order[:value]) and attr_v[index].to_s.downcase == attr_ca.value.downcase)
               matchkey = index
           end
@@ -251,25 +251,25 @@ module ApplicationHelper
        if(matchkey > 0 and compare[attr_v[matchkey]].size < items.size )
         attr_ca.description.gsub!("{1}", compare[attr_v[matchkey]].to_sentence)
         {summary: attr_ca.description, highlight: topitems[attr_v[matchkey]],winner:compare[attr_v[matchkey]].to_sentence}
-       end 
+       end
     elsif (attr_v.size > 0 and "con".include?(order[:value]))
-       itemArry = Array.new       
+       itemArry = Array.new
        valueArry = Array.new
-       attr_v.each do |key| 
+       attr_v.each do |key|
          if (key.to_s.downcase.include? attr_ca.value.downcase)
-            itemArry = itemArry +  compare[key]            
+            itemArry = itemArry +  compare[key]
             valueArry = valueArry + topitems[key]
          end
        end
        if(itemArry.length > 0)
         attr_ca.description.gsub!("{1}", itemArry.to_sentence)
-        {summary: attr_ca.description, highlight: valueArry,winner:itemArry.to_sentence}       
+        {summary: attr_ca.description, highlight: valueArry,winner:itemArry.to_sentence}
        end
     else
       nil
     end
 
-  end 
+  end
 
   def get_percentage(order, attr_v)
     if order[:value] == "asc"
@@ -284,5 +284,9 @@ module ApplicationHelper
     result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
     return result_str
   end
- 
+
+  def prettify(float_val)
+    float_val.to_i == float_val ? float_val.to_i : ("%.2f" % float_val)
+  end
+
 end

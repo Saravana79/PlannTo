@@ -25,10 +25,11 @@
                               <%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 50) : truncate_without_dot(item_detail.offer.to_s, 50) %>
                             </p>
 
-                            <p class="price">Rs. <%= item_detail.price %></p>
+                            <p class="price">Rs. <%= prettify(item_detail.price) %></p>
 
                             <p class="btn">
-                              <a href="<%= history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>"  target="_blank" class="shop-now">Shop
+                              <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
+                              <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">Shop
                                 Now</a>
                             </p>
                           </div>
