@@ -2,24 +2,31 @@
   <div class="advt-728">
     <% if @item_details.count != 0 %>
         <% @item_details.each_with_index do |item_detail, indx| %>
+            <% ad_url = history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
+
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
                 <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt=""></a></div>
 
                 <div class="product-container">
-                  <h3 class="product-title"><%= item_detail.ItemName %></h3>
+                  <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
+                    <h3 class="product-title"><%= item_detail.ItemName %></h3>
+                  </a>
 
-                  <div class="product-img"><a href="javascript:void(0)"><img src="<%= item_detail.item.image_url %>" alt="" width="50%" height="50%"></a></div>
+                  <div class="product-img">
+                    <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="50%" height="50%">
+                    </a>
+                  </div>
                   <div class="product-desc">
-                    <p class="text-desc"><%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 45) : truncate_without_dot(item_detail.offer.to_s, 45) %></p>
-
-                    <p class="price"><%= prettify(item_detail.price) %></p>
+                    <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">
+                      <p class="text-desc"><%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 45) : truncate_without_dot(item_detail.offer.to_s, 45) %></p>
+                      <p class="price"><%= prettify(item_detail.price) %></p>
+                    </a>
                   </div>
                 </div>
 
                 <div class="right-div">
                   <p class="btn">
-                    <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
                     <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">Shop
                       Now</a>
                   </p>
@@ -46,4 +53,5 @@
     .pager a {
         margin: 0px !important;
     }
+    .product-container a {text-decoration: none !important;}
 </style>

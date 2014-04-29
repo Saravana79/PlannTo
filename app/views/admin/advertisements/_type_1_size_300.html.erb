@@ -27,9 +27,11 @@
                         <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="132px"></a>
                       </div>
                       <div class="product-txt-right">
-                        <h3><%= item_detail.ItemName %></h3>
+                        <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
+                          <h3><%= item_detail.ItemName %></h3>
 
-                        <p class="price"><%= prettify(item_detail.price) %></p>
+                          <p class="price"><%= prettify(item_detail.price) %></p>
+                        </a>
 
                         <p class="btn">
                           <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">Shop
@@ -58,3 +60,11 @@
   <!-- end of advt-300 -->
 </div>
 <!-- end of advt-block -->
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {text-decoration: none !important;}
+</style>
