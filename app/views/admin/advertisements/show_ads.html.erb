@@ -123,19 +123,19 @@
             stop_sliding = true
         })
 
-        $(".plannto-advertisement").click(function(event)
-        {
-            check_navigation = $(event.target).closest('#pager2')
-
-            console.log(check_navigation)
-
-            if (check_navigation.size() == 0)
-            {
-                event.preventDefault()
-                url = $(".shop-now").attr('href')
-                window.open("http://"+url);
-            }
-        })
+//        $(".plannto-advertisement").click(function(event)
+//        {
+//            check_navigation = $(event.target).closest('#pager2')
+//
+//            console.log(check_navigation)
+//
+//            if (check_navigation.size() == 0)
+//            {
+//                event.preventDefault()
+//                url = $(".shop-now").attr('href')
+//                window.open("http://"+url);
+//            }
+//        })
 
     });
 </script>
