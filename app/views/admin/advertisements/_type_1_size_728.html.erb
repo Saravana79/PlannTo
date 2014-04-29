@@ -6,7 +6,7 @@
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
-                <div class="logo"><a href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+                <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
 
                 <div class="product-container">
                   <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">

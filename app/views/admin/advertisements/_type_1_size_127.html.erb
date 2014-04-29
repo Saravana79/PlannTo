@@ -3,7 +3,7 @@
 <div class="advt-block">
   <div class="advt-120">
     <% if @item_details.count != 0 %>
-        <div class="logo"><a href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt="" width="" height=""></a></div>
+        <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt="" width="" height=""></a></div>
         <div id="pager2" class="pager">
           <% [*1..@item_details.count].each do |each_loop| %>
               <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
