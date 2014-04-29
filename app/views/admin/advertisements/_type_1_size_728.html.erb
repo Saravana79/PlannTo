@@ -6,7 +6,7 @@
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
-                <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+                <div class="logo"><a href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
 
                 <div class="product-container">
                   <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
@@ -18,7 +18,7 @@
                     </a>
                   </div>
                   <div class="product-desc">
-                    <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">
+                    <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
                       <p class="text-desc"><%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 45) : truncate_without_dot(item_detail.offer.to_s, 45) %></p>
                       <p class="price"><%= prettify(item_detail.price) %></p>
                     </a>
