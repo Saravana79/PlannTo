@@ -1,7 +1,10 @@
 <div class="advt-block">
   <div class="advt-300">
     <div class="logo">
-      <div style="float:left;width:110px;"><a href="#"><img src="<%= @vendor_image_url %>" alt=""></a></div>
+      <div style="float:left;width:110px;">
+        <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt="">
+        </a>
+      </div>
       <div class="list_carousel">
           <div id="pager2" class="pager">
             <%if @item_details.count > 1 %>
@@ -18,19 +21,22 @@
 
           <ul id="foo3" height="190px;">
             <% @item_details.each_with_index do |item_detail, indx| %>
+                <% ad_url = history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
+
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <div class="advt-box">
                     <div class="product-container">
                       <div class="product-img-left">
-                        <a href="#"><img src="<%= item_detail.item.image_url %>" alt="" width="132px"></a>
+                        <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="132px"></a>
                       </div>
                       <div class="product-txt-right">
-                        <h3><%= item_detail.ItemName %></h3>
+                        <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
+                          <h3><%= item_detail.ItemName %></h3>
 
-                        <p class="price"><%= prettify(item_detail.price) %></p>
+                          <p class="price"><%= prettify(item_detail.price) %></p>
+                        </a>
 
                         <p class="btn">
-                          <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
                           <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">Shop
                             Now</a>
                         </p>
@@ -57,3 +63,11 @@
   <!-- end of advt-300 -->
 </div>
 <!-- end of advt-block -->
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {text-decoration: none !important;}
+</style>

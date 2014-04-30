@@ -92,6 +92,7 @@ def destroy
 end
 
 def show_ads
+  #TODO: everything is clickable is only updated for type1 have to update for type2
   @ref_url = params[:ref_url] ||= ""
   url = ""
 
