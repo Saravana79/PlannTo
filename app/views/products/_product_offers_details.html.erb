@@ -9,7 +9,7 @@
 				
 		  			<% (0..loopcount-1).each do |i| %>  			
 					<tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%= randStr + i.to_s%>">
-						<td >				
+						<td style="background:white;border:0px;">				
 							<% @deal  = @best_deals[((i)*2)]%>
 							<%unless @deal.nil?%>
 							<table style="width:100%;">
