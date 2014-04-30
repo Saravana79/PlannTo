@@ -14,7 +14,7 @@
 							<%unless @deal.nil?%>
 							<table style="width:100%;">
 							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;background:white;">
-							<td style="vertical-align:top;">
+							<td style="vertical-align:top;background:white;border:0px;">
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
 					  				<% @vendor = @vendors.select{|a| a.baseurl == domain}%>
@@ -25,7 +25,7 @@
 					  				<% end %>
 					  				
 					  		</td>
-					  		<td width="100%">
+					  		<td width="100%" style="background:white;border:0px;">
 					  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;">   
 					  				<a style="text-decoration:none;color:#474747;" href="http://www.plannto.com/history_details?id=<%=@deal.id%>&iid=<%=@impression_id%>"> <%=@deal.title%> 					
 					  				</a>
@@ -44,7 +44,7 @@
 				  			<%unless @deal.nil?%>
 					  			
 							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;background:white;">
-							<td style="vertical-align:top;">
+							<td style="vertical-align:top;background:white;border:0px;">
 								<div style="width:100px;float:left;padding-top:20px;">
 									<%domain = VendorDetail.getdomain(@deal.url)%>
 					  				<% @vendor = @vendors.select{|a| a.baseurl == domain}%>
@@ -54,7 +54,7 @@
 					  					<span style="font-size: 12px;word-wrap: break-word;font-weight:bold;"><%=domain%></span>
 					  				<% end %>
 					  		</td>
-					  			  		<td width="100%">
+					  			  		<td width="100%" style="background:white;border:0px;">
 					  			<div style="font-weight:bold;font-size:16px;min-height:20px;padding:10px 5px 5px 10px;">   
 					  				<a style="text-decoration:none;color:#474747;" href="http://www.plannto.com/history_details?id=<%=@deal.id%>&iid=<%=@impression_id%>"> <%=@deal.title%> 					
 					  				</a>
@@ -70,7 +70,7 @@
 					  		</tr>
 					  		<%end%>
 					  		<tr  style="height:35px;padding: 5px;background:white;">
-					  		<td colspan="2">
+					  		<td colspan="2" style="background:white;border:0px;">
 							<% if i>0 %>
 								<span style="float:left;margin: 5px 10px;"><a href="offer<%= randStr + (i - 1).to_s %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
 							<% end %>
@@ -93,12 +93,12 @@
 		            <thead style="border:0px;">   
 		            <% (0..length-1).each do |i| %>                  
 					  <tr colspan="5" style='<%= "display:none;" if i > 0 %>'  colspan="5" id="offer<%=randStr +i.to_s%>">
-						<td >				
+						<td style="background:white;border:0px;">				
 							<% @deal  = @best_deals[i]%>
 							<%unless @deal.nil?%>
 							<table style="width:100%;">
 							<tr style="width:100%;border-bottom: 1px solid #EEE;clear:both;display:block;background:white;">
-							<td style="vertical-align:top;width:100%;">
+							<td style="vertical-align:top;width:100%;background:white;border:0px;">
 								<div style="width:100%;padding-top:5px;vertical-align:middle;text-align:center;">
 									<div style="display: inline-block;">
 										<%domain = VendorDetail.getdomain(@deal.url)%>
@@ -129,7 +129,7 @@
 					  		<%end%>
 					  	    </tr>
 					  		<tr  style="height:35px;padding: 5px;background:white;">
-					  		<td>
+					  		<td style="background:white;border:0px;">
 							<% if i>0 %>
 								<span style="float:left;margin: 5px 10px;"><a href="offer<%= randStr + (i - 1).to_s %>" class="navigate_offer" style="text-decoration: none;padding:5px;font-size:12px;background-color: #F5F5F5;height: 30px;border: solid 1px #CCD4D8;border-radius: 3px;color: #4E4E4E;">Previous Offers</a></span>
 							<% end %>
