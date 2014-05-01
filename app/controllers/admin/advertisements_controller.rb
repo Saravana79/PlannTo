@@ -209,7 +209,7 @@ def show_ads
       @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
       @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
-      @item_details = @item_details.uniq!(&:url)
+      @item_details = @item_details.uniq(&:url)
 
       if @ad.template_type == "type_2"
         @item_details = @item_details.first(12)
