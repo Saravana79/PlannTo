@@ -11,12 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140414114004) do
+ActiveRecord::Schema.define(:version => 20140430113355) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
+    t.integer  "advertisement_id"
     t.integer  "impression_id"
-    t.string   "item_id"
+    t.integer  "item_id"
     t.string   "hosted_site_url"
     t.datetime "impression_time"
     t.integer  "publisher_id"
@@ -27,7 +28,7 @@ ActiveRecord::Schema.define(:version => 20140414114004) do
     t.string   "itemsaccess"
     t.string   "params"
     t.string   "temp_user_id"
-    t.integer  "advertisement_id"
+    t.integer  "old_id"
   end
 
   add_index "add_impressions", ["publisher_id"], :name => "publihserid"
@@ -50,6 +51,16 @@ ActiveRecord::Schema.define(:version => 20140414114004) do
     t.decimal  "ecpm",               :precision => 10, :scale => 0
     t.decimal  "ectr",               :precision => 10, :scale => 0
     t.string   "template_type"
+  end
+
+  create_table "aggregated_details", :force => true do |t|
+    t.string   "entity_type"
+    t.integer  "entity_id"
+    t.integer  "impressions_count", :default => 0
+    t.integer  "clicks_count",      :default => 0
+    t.date     "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "answer_contents", :force => true do |t|
@@ -204,7 +215,7 @@ ActiveRecord::Schema.define(:version => 20140414114004) do
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
 
   create_table "clicks", :force => true do |t|
-    t.integer  "impression_id"
+    t.uuid     "impression_id"
     t.string   "click_url"
     t.string   "hosted_site_url"
     t.datetime "timestamp"
@@ -217,6 +228,7 @@ ActiveRecord::Schema.define(:version => 20140414114004) do
     t.integer  "vendor_id"
     t.string   "source_type"
     t.string   "temp_user_id"
+    t.integer  "old_impression_id"
   end
 
   create_table "comments", :force => true do |t|
@@ -749,7 +761,8 @@ ActiveRecord::Schema.define(:version => 20140414114004) do
     t.integer  "item_id"
     t.string   "item_name"
     t.string   "product_price"
-    t.integer  "impression_id"
+    t.uuid     "impression_id"
+    t.integer  "old_impression_id"
   end
 
   create_table "points", :force => true do |t|
