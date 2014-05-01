@@ -186,17 +186,30 @@ def show_ads
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
       if @item_details.blank?
-        clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
-        clicks.each do |click|
-          @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', click.item_id, 0, vendor_id).order('itemdetails.status asc,
+        unless $redis.get("default_item_id_for_vendor_#{vendor_id}").blank?
+          @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', $redis.get("default_item_id_for_vendor_#{vendor_id}"), 0, vendor_id).order('itemdetails.status asc,
                           (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-          break unless @item_details.blank?
+        end
+        if @item_details.blank?
+          clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
+          clicks.each do |click|
+            @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', click.item_id, 0, vendor_id).order('itemdetails.status asc,
+                          (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+            unless @item_details.blank?
+              $redis.set("default_item_id_for_vendor_#{vendor_id}", click.item_id)
+              $redis.expire("default_item_id_for_vendor_#{vendor_id}", 86400)
+              break
+            end
+          end
         end
       end
+
       @vendor_image_url = @item_details.first.blank? ? "" : @item_details.first.vendor.image_url
       @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
       @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
       @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+
+      @item_details = @item_details.uniq!(&:url)
 
       if @ad.template_type == "type_2"
         @item_details = @item_details.first(12)
