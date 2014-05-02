@@ -54,15 +54,17 @@ class Admin::AdReportsController < ApplicationController
     ad_types = AddImpression.select("distinct advertisement_type").map(&:advertisement_type)
     types = ad_types - ['advertisement']
 
-    imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)
+    # imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)   #TODO: have to remove method definition also
+    imp_report_results = AggregatedDetail.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)
     @result_array = imp_report_results.map {|result| result.values}
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
+    @clicks = @result_array.map {|each_array| each_array[2]}
 
-    click_report_results = Click.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types, params[:vendor_id])
-    @click_result_array = click_report_results.map {|result| result.values}
-    @click_x_values = @click_result_array.map {|each_array| each_array[0]}
-    @clicks = @click_result_array.map {|each_array| each_array[1]}
+    # click_report_results = AggregatedDetail.chart_data_widgets_for_click(params[:publisher_id], @start_date, @end_date, types, params[:vendor_id])
+    # @click_result_array = imp_report_results.map {|result| result.values}
+    # @click_x_values = @click_result_array.map {|each_array| each_array[0]}
+    # @clicks = @click_result_array.map {|each_array| each_array[2]}
   end
 
   def load_vendors
