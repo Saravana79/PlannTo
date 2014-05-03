@@ -92,6 +92,7 @@ def destroy
 end
 
 def show_ads
+  #TODO: everything is clickable is only updated for type1 have to update for type2
   @ref_url = params[:ref_url] ||= ""
   url = ""
 
@@ -108,7 +109,7 @@ def show_ads
     url = request.referer
   end
 
-  @ad = Advertisement.where("id = ?", params[:ads_id]).first
+  @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
   unless @ad.blank?
     if @ad.advertisement_type == "static"
@@ -177,13 +178,11 @@ def show_ads
 
       @item_details = []
       if item_ids.count > 1
-        item_details = Itemdetail.joins(:item).where('items.id in (?) and itemdetails.isError =? and site = ?', item_ids, 0, vendor_id).order('itemdetails.status asc,
-                         (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc').group_by { |a| a.itemid }
+        item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_id).group_by {|each_rec| each_rec.itemid}
 
         item_details.each { |_, val| @item_details << val[0] }
-      else
-        @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', item_ids.first, 0, vendor_id).order('itemdetails.status asc,
-                          (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+      elsif item_ids.count > 0
+        @item_details = Itemdetail.get_item_details(item_ids.first, vendor_id)
       end
 
       @item_details = @item_details.first(6)
@@ -191,25 +190,33 @@ def show_ads
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
       if @item_details.blank?
-        clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
-        clicks.each do |click|
-          @item_details = Itemdetail.joins(:item).where('items.id = ? and itemdetails.isError =? and site = ?', click.item_id, 0, vendor_id).order('itemdetails.status asc,
-                          (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-          break unless @item_details.blank?
+        unless $redis.get("default_item_id_for_vendor_#{vendor_id}").blank?
+          @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_id}"), vendor_id)
+        end
+        if @item_details.blank?
+          clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
+          clicks.each do |click|
+            @item_details = Itemdetail.get_item_details(click.item_id, vendor_id)
+            unless @item_details.blank?
+              $redis.set("default_item_id_for_vendor_#{vendor_id}", click.item_id)
+              $redis.expire("default_item_id_for_vendor_#{vendor_id}", 86400)
+              break
+            end
+          end
         end
       end
-      @vendor_image_url = @item_details.first.blank? ? "" : @item_details.first.vendor.image_url
-      @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
-      @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
-      # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.first, url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
-      @impression_id = DateTime.now.to_i + SecureRandom.random_number(99999)  #TODO: have to comfirm with saravana
-      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
-      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+      @vendor_image_url, @vendor_default_text = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
+
+      @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+
+      @item_details = @item_details.uniq(&:url)
 
       if @ad.template_type == "type_2"
+        @item_details = @item_details.first(12)
         @sliced_item_details = @item_details.each_slice(2)
+      else
+        @item_details = @item_details.first(6)
       end
 
       # TODO: Offers based on item_ids

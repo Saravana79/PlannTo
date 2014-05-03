@@ -30,7 +30,7 @@ body {
 
 }
 
-.advt-block { margin:0; padding:0;}
+.advt-block { margin:0; padding:0;text-align: center;}
 .advt-120 { margin:0; padding:0; width:120px; height:600px; background:#fff; border:2px solid #dddddd;}
 .advt-120 .logo{ margin:0 5px; padding:10px 0; border-bottom:1px solid #d9d9d9;}
 

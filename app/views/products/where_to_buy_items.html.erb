@@ -3,7 +3,7 @@
     <%if @path =="wheretobuymain" %>
  
          <style type="text/css">
-         #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;}
+         #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;background:white;border:0px;}
          #plannto_table{border:0px;font-family: Arial;border-collapse: collapse;}
          #plannto_poweredby{font-size:9px;font-weight:bold;color: darkgray;padding-right: 1px;}
          #plannto_logo{padding: 2px;font-size:12px;font-weight:bold;color:darkgray;}
@@ -12,19 +12,19 @@
          #plannto_insidediv{padding:7px 10px 10px 10px;background: #EEE;}
          #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
          #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;border-top: 0px;}
-         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;float:none;display:table-cell;}
+         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;float:none;display:table-cell;border:0px;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
-         #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;float:none;}
-         #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;float:none;display:table-cell;}
-         #plannto_incol3{padding:0px 10px 0px 0px ;text-align:center;vertical-align:middle;background:white;}
+         #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;float:none;border:0px;}
+         #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;float:none;display:table-cell;border:0px;}
+         #plannto_incol3{padding:0px 10px 0px 0px ;text-align:center;vertical-align:middle;background:white;border:0px;}
          #plannto_go_button{margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
-         #plannto_footertd{padding-right:10px;vertical-align:middle;height:40px;background: white;padding:0px;float:none;display:table-cell;}
+         #plannto_footertd{padding-right:10px;vertical-align:middle;height:40px;background: white;padding:0px;float:none;display:table-cell;border:0px;}
          #plannto_footertr{background:white;}
          #plannto_footerspan{float:left;padding-left:20px}
          #plannto_footera{font-weight:bold;font-size:13px;text-decoration: underline;color:#535353;}
          #plannto_inheadertr{border-bottom: 1px solid #EEE;height: 35px;background:#FAFAFA;}
-         #plannto_inheadercol1{padding: 0px 0px 0px 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;float:none;}
-         #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;float:none;display:table-cell;}
+         #plannto_inheadercol1{padding: 0px 0px 0px 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;float:none;background:white;border:0px;}
+         #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;float:none;display:table-cell;background:white;border:0px;}
         
         .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
         .shadetabs li.unselected{float:left; padding:0px!important; margin:0 5px 0 5px!important;background: #12c1e6!important;list-style-type: none!important; }
@@ -33,8 +33,9 @@
         .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;}        
         #prodname{font-size: 15px;}
 
-         /* for igyaan*/
+        
          <% if (!@publisher.nil? && @publisher.id == 5) %>
+          /* for igyaan*/
          #plannto_table{border:0px;font-family:'PT Sans', sans-serif;}
          #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'PT Sans', sans-serif;font-weight: 300;}
          #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
@@ -88,7 +89,7 @@
               </td>
             </tr>
             <tr style="border:0px;">
-              <td style="padding:0;margin:0;" id="tabreplacement">
+              <td style="padding:0;margin:0;border:0px;" id="tabreplacement">
                 <!-- main where to buy check ends here. -->                
     <%end%>
     
@@ -100,7 +101,7 @@
                           <table id="plannto_intable" width="100%">   
                             <thead style="border:0px;display:table-header-group;">
                               <tr id="plannto_intr">
-                                <td colspan="5" id="plannto_intd" >
+                                <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
                                  <%if @items.size == 1 %>
                                  <div style="width:100%;">
                                  <span style="float:left;padding-left: 10px;padding-top: 5px;">

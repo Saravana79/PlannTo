@@ -16,19 +16,19 @@
                       <div class="advt-box">
                         <div class="product-container">
                           <div class="product-img-left">
-                            <a href="#"><img src="<%= item_detail.item.image_url %>" alt="" width="119px" height="89px"></a>
+                            <a href="#"><img src="<%= get_image_url(item_detail) %>" alt="" width="119px" height="89px"></a>
                           </div>
                           <div class="product-txt-right">
                             <h3><%= item_detail.ItemName %></h3>
 
                             <p class="product-desc">
-                              <%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 50) : truncate_without_dot(item_detail.offer.to_s, 50) %>
+                              <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_default_text), 50) %>
                             </p>
 
-                            <p class="price">Rs. <%= prettify(item_detail.price) %></p>
+                            <p class="price"><%= prettify(item_detail.price) %></p>
 
                             <p class="btn">
-                              <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
+                              <% ad_url = history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
                               <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">Shop
                                 Now</a>
                             </p>
