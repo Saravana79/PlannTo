@@ -1,4 +1,7 @@
 class AddImpression < ActiveRecord::Base
+  include ActiveUUID::UUID
+  self.primary_key = "id"
+  
  belongs_to :user
  belongs_to :item
  belongs_to :advertisement

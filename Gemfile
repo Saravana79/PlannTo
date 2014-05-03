@@ -83,3 +83,4 @@ gem "clockwork", "~> 0.7.2"
 gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'
 gem 'highcharts-rails', '~> 3.0.10'
+gem 'activeuuid'
