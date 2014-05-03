@@ -27,7 +27,9 @@
                   <div class="advt-box">
                     <div class="product-container">
                       <div class="product-img-left">
-                        <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="132px"></a>
+                        <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank">
+                          <img src="<%= get_image_url(item_detail) %>" alt="" width="132px">
+                        </a>
                       </div>
                       <div class="product-txt-right">
                         <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
@@ -44,7 +46,7 @@
                       </div>
                     </div>
                     <div class="product-txt-desc">
-                      <p> <%= item_detail.offer.blank? ? truncate_without_dot(@vendor_detail.default_text.to_s, 90) : truncate_without_dot(item_detail.offer.to_s, 90) %></p>
+                      <p> <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_default_text), 90) %></p>
                     </div>
                   </div>
                 </li>

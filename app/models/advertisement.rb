@@ -18,6 +18,8 @@ class Advertisement < ActiveRecord::Base
    after_save :update_click_url_based_on_vendor
    after_save :update_redis_with_advertisement
 
+   scope :get_ad_by_id, lambda {|id| where("id = ?", id)}
+
    #validate :file_dimensions
 
    def self.url_params_process(param)

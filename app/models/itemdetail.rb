@@ -3,6 +3,22 @@ class Itemdetail < ActiveRecord::Base
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
   belongs_to :item, :foreign_key => "itemid"
 
+  def self.get_item_details(item_id, vendor_id)
+    item_id = sanitize(item_id)
+    vendor_id = sanitize(vendor_id)
+    find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE (items.id = #{item_id}
+                 and itemdetails.isError = 0 and site = #{vendor_id}) ORDER BY itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0
+                 else itemdetails.cashback end) asc")
+  end
+
+  def self.get_item_details_by_item_ids(item_ids, vendor_id)
+    vendor_id = sanitize(vendor_id)
+
+    find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE (items.id in (#{item_ids.map(&:inspect).join(', ')})
+                 and itemdetails.isError =0 and site = #{vendor_id}) ORDER BY itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
+                 itemdetails.cashback end) asc")
+  end
+
   def vendor_name
     return "" if vendor.nil?
     return vendor.name
