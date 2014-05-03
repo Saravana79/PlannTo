@@ -167,7 +167,12 @@ class ProductsController < ApplicationController
     @impression_id = params[:iid]
     @req = request.referer  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
+    # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
+
+    @impression_id = SecureRandom.uuid
+    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
+                          :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
+    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
     if @showspec == 1
       @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
@@ -336,7 +341,13 @@ class ProductsController < ApplicationController
               if(@where_to_buy_items.empty?)
                 itemsaccess = "emptyitems"
               end
-            @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+            # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params,
+            #                                                         cookies[:plan_to_temp_user_id], nil)
+
+                @impression_id = SecureRandom.uuid
+                impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                                      :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
+                Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
            else
               @where_to_buy_items = []
               get_offers(@items.map(&:id).join(",").split(","))
@@ -404,7 +415,13 @@ class ProductsController < ApplicationController
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
       url_params = "items:" + params[:item_ids]
-      @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+      # @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+
+      @impression_id = SecureRandom.uuid
+      impression_params =  {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
+      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+
       @best_deals.select{|a| a}
       @vendors =  VendorDetail.all
     else
