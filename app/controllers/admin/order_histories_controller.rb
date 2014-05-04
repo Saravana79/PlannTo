@@ -18,7 +18,7 @@ class Admin::OrderHistoriesController < ApplicationController
    @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).order('created_at desc').paginate(:per_page => 20,:page => params[:page])
    @vendors =  VendorDetail.all
 
-    @result = AggregatedDetail.get_counts(params[:from_date].to_date, params[:to_date].to_date, publisher_id).first
+    @result = AggregatedDetail.get_counts(@start_date.to_date, @end_date.to_date, publisher_id).first
     unless @result.blank?
       @impressionscount = @result.impressions_count.to_i
       @clickscount = @result.clicks_count.to_i
