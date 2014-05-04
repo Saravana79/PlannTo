@@ -36,6 +36,11 @@ module Clockwork
     Resque.enqueue(ItemUpdate, "update_item_details", Time.now)
   end
 
+  every(1.hour, 'Queeing Aggregated Process') do
+    puts "Running Queeing Aggregated Process, at #{Time.now}"
+    Resque.enqueue(AggregatedDetailProcess, Time.now)
+  end
+
   #every(3.minutes, 'less.frequent.job')
   #every(1.hour, 'hourly.job')
   #

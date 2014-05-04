@@ -24,11 +24,11 @@
 
 <br/><br/>
 <ul id="Newtabs" style="padding-top:15px;">
-		<li  class="tab_active1 impression_report" ><a href="#"><span>Impression Reports</span></a></li>
-	   <li  class="tab_active1 click_report" ><a href="#"><span>Click Reports</span></a></li>
-	     <li  class="tab_active order" ><a href="#"><span>Order & Revenue</span></a></li>     
+		<!-- <li  class="tab_active1 impression_report" ><a href="#"><span>Impression Reports</span></a></li>
+	   <li  class="tab_active1 click_report" ><a href="#"><span>Click Reports</span></a></li> -->
+	     <li  class="tab_active order" ><a href="#"><span>Order & Revenue</span></a></li>
 	  </ul>
-	  <script>
+<!--	  <script>
 	  $(".click_report").click(function(e){
 	     window.location.href = "/admin/click_reports?to_date=" + $("#to_date").val() + "&from_date=" + $("#from_date").val()
 	  })
@@ -39,6 +39,7 @@
 	     window.location.href = "/admin/order_histories?to_date=" + $("#to_date").val() + "&from_date=" + $("#from_date").val()
 	  })
 	  </script>
+ -->
 <%if @order_histories.count > 0 %>
 
 <h2> Order Histories </h2>

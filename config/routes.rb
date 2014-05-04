@@ -2,7 +2,7 @@ PlanNto::Application.routes.draw do
  
 namespace :admin do
   resources :users
-  resources :impression_reports
+  # resources :impression_reports
   resources :click_reports
   resources :order_histories
   resources :advertisements
@@ -37,6 +37,8 @@ namespace :admin do
    end
   end   
   resources :error_messages
+
+  match "/admin/impression_reports", :to => "admin/order_histories#index"
   match "/terms_conditions" ,:to => "home#terms_conditions"
   match "/privacy_policy" ,:to => "home#privacy_policy"
   get "/contact_us" => "contact_us#new"
