@@ -44,8 +44,11 @@ class AggregatedDetail < ActiveRecord::Base
 
     # range = start_date.beginning_of_day..(end_date.end_of_day + 1.day)
 
-    if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
+    # if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
+    if (end_date.to_date - start_date.to_date).to_i > 31
 
+      start_date = start_date.beginning_of_month
+      end_date = end_date.end_of_month
       # kliks = count(
       #     :group => 'month(date)',
       #     :select => "id",
@@ -67,8 +70,6 @@ class AggregatedDetail < ActiveRecord::Base
             clicks: results[date.month].blank? ? 0 : results[date.month].first.clicks_count
         }
       end
-
-
     else
 
       query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"

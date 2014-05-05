@@ -34,7 +34,7 @@
               <% if current_user.is_a_publisher?(session[:publisher]) %>              
               <%session[:publisher] = "true" %>
                 <a href="/admin/impression_reports">Impression Report</a>
-                <a href="/admin/ad_reports">Advertisement Report</a>
+                <!-- <a href="/admin/ad_reports">Advertisement Report</a> -->  <!-- TODO: have to implement in future -->
               <%end%>
              <%if current_user && current_user.is_admin? %>
                  <a href="/admin/widget_reports">Widgets Report</a>

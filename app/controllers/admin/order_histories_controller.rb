@@ -23,5 +23,13 @@ class Admin::OrderHistoriesController < ApplicationController
       @impressionscount = @result.impressions_count.to_i
       @clickscount = @result.clicks_count.to_i
     end
+
+    # reports graph
+    imp_report_results = AggregatedDetail.chart_data_widgets(publisher_id, @start_date, @end_date, types=[])
+    @result_array = imp_report_results.map {|result| result.values}
+    @x_values = @result_array.map {|each_array| each_array[0]}
+    @impressions = @result_array.map {|each_array| each_array[1]}
+    @clicks = @result_array.map {|each_array| each_array[2]}
+
   end
 end
