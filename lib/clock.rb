@@ -11,34 +11,34 @@ module Clockwork
   # handler receives the time when job is prepared to run in the 2nd argument
   #handler do |job, time|
   #  puts "Running #{job}, at #{time}"
-  #  Resque.enqueue(FeedProcess, job, Time.now)
+  #  Resque.enqueue(FeedProcess, job, Time.zone.now)
   #end
 
   #every(1.minutes, 'process_feeds')
 
   every(1.day, 'Queeing Feed Process', :at => '00:00', :tz => "Asia/Kolkata") do
-    puts "Running Feed Process, at #{Time.now}"
-      Resque.enqueue(FeedProcess, "process_feeds", Time.now)
+    puts "Running Feed Process, at #{Time.zone.now}"
+      Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now)
   end
 
   every(1.day, 'Queeing Advertisement ecpm calculation', :at => '02:00', :tz => "Asia/Kolkata") do
-    puts "Running Advertisement ecpm calculation, at #{Time.now}"
-    Resque.enqueue(AdvertisementProcess, "calculate_ecpm", Time.now)
+    puts "Running Advertisement ecpm calculation, at #{Time.zone.now}"
+    Resque.enqueue(AdvertisementProcess, "calculate_ecpm", Time.zone.now)
   end
 
   every(1.day, 'Queeing Redis Update for RelatedItem', :at => '03:00', :tz => "Asia/Kolkata") do
-    puts "Running Redis Update for RelatedItem, at #{Time.now}"
-    Resque.enqueue(RelatedItemUpdateProcess, Time.now)
+    puts "Running Redis Update for RelatedItem, at #{Time.zone.now}"
+    Resque.enqueue(RelatedItemUpdateProcess, Time.zone.now)
   end
 
   every(1.day, 'Queeing Redis Update for Item', :at => '05:00', :tz => "Asia/Kolkata") do
-    puts "Running Redis Update for Item, at #{Time.now}"
-    Resque.enqueue(ItemUpdate, "update_item_details", Time.now)
+    puts "Running Redis Update for Item, at #{Time.zone.now}"
+    Resque.enqueue(ItemUpdate, "update_item_details", Time.zone.now)
   end
 
   every(1.hour, 'Queeing Aggregated Process') do
-    puts "Running Queeing Aggregated Process, at #{Time.now}"
-    Resque.enqueue(AggregatedDetailProcess, Time.now)
+    puts "Running Queeing Aggregated Process, at #{Time.zone.now}"
+    Resque.enqueue(AggregatedDetailProcess, Time.zone.now)
   end
 
   #every(3.minutes, 'less.frequent.job')

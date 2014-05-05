@@ -98,7 +98,7 @@ class Content < ActiveRecord::Base
   end
   
   def self.get_top_active_deals(item_ids)
-    ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=? and field3=? and (field1>=? or field1 = '')",item_ids.split(","),"Deals",1,'0', Time.now.to_date.strftime("%d/%m/%Y")).group('item_contents_relations_cache.content_id').order('item_contents_relations_cache.created_at desc').limit(10)
+    ArticleContent.joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and sub_type=? and status=? and field3=? and (field1>=? or field1 = '')",item_ids.split(","),"Deals",1,'0', Time.zone.now.to_date.strftime("%d/%m/%Y")).group('item_contents_relations_cache.content_id').order('item_contents_relations_cache.created_at desc').limit(10)
   end
    
   def impression_count

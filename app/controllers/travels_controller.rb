@@ -21,7 +21,7 @@ class TravelsController < ApplicationController
       if @ad.advertisement_type == "static"
         # static ad process
         @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
-        @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess,
+        @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess,
                                                                 url_params, cookies[:plan_to_temp_user_id], @ad.id)
         render "show_static_ads", :layout => false
       elsif @ad.advertisement_type == "dynamic"
@@ -64,7 +64,7 @@ class TravelsController < ApplicationController
         @vendor = @item_details.first.blank? ? Vendor.new : @item_details.first.vendor
         @vendor_detail = @vendor.new_record? ? VendorDetail.new : @vendor.vendor_details.first
 
-        @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+        @impression_id = AddImpression.save_add_impression_data("advertisement", params[:item_id], url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
         if @ad.template_type == "type_2"
           @sliced_item_details = @item_details.each_slice(2)
@@ -234,7 +234,7 @@ class TravelsController < ApplicationController
           if(@where_to_buy_items.empty?)
             itemsaccess = "emptyitems"
           end
-          @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+          @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
         else
           @where_to_buy_items = []
           get_offers(@items.map(&:id).join(",").split(","))
@@ -389,10 +389,10 @@ class TravelsController < ApplicationController
       #     if(@where_to_buy_items.empty?)
       #       itemsaccess = "emptyitems"
       #     end
-      #     @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+      #     @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
       # end
 
-      @impression_id = AddImpression.save_add_impression_data("related_hotels",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+      @impression_id = AddImpression.save_add_impression_data("related_hotels",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
 
       # responses = []
       # @where_to_buy_items.group_by(&:vendor_id).each do |site, items|
@@ -442,7 +442,7 @@ class TravelsController < ApplicationController
 
     @where_to_buy_items = @item.hotel_vendor_details
 
-    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
+    @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.zone.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
 
     if @showspec == 1
       @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)

@@ -6,9 +6,9 @@ class SourceItemProcess
     #begin
       log.debug "********** Start Processing SourceItem Suggestion details **********"
       log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
-      log.debug "********** Article Content Creation Started at - #{Time.now.strftime('%b %d,%Y %r')} **********"
+      log.debug "********** Article Content Creation Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
       source_items = Sourceitem.send(method_name)
-      log.debug "********** Article Content Creation Completed At - #{Time.now.strftime('%b %d,%Y %r')} - #{source_items} sourceitems updated **********"
+      log.debug "********** Article Content Creation Completed At - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{source_items} sourceitems updated **********"
     #rescue Exception => e
     #  log.debug "Have some problem while updating SourceItem Suggestion details, please find the error below"
     #  log.debug e

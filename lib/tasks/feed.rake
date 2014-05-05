@@ -56,7 +56,7 @@ namespace :feed do
                                    :feed_id => @feed.id, :published_at => each_record.created_at)
       end
     end
-    @feed.update_attributes(:last_updated_at => Time.now)
+    @feed.update_attributes(:last_updated_at => Time.zone.now)
 
     puts "**************************************************************************************"
     puts "Successfully created #{count} feed_urls from #{@feed.process_value} table"

@@ -6,9 +6,9 @@ class FeedProcess
     #begin
       log.debug "********** Start Processing Feeds **********"
       log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
-      log.debug "********** Feed Process Started at - #{Time.now.strftime('%b %d,%Y %r')} **********"
+      log.debug "********** Feed Process Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
       created_feed_urls = Feed.send(method_name, feed_id)
-      log.debug "********** Feed Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created **********"
+      log.debug "********** Feed Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created **********"
     #rescue Exception => e
     #  log.debug "Have some problem while executing feed process, please find the error below"
     #  log.debug e

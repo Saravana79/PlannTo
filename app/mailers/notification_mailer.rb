@@ -6,7 +6,7 @@ class NotificationMailer < ActionMailer::Base
     @error_message = error_message
     @backtrace = backtrace
     @error_for = error_for
-    subject = "Resque process failure for #{error_for} at #{Time.now}"
+    subject = "Resque process failure for #{error_for} at #{Time.zone.now}"
     mail(:to => ["saravana@plannto.com", "siva@plannto.com"], :subject => subject)
   end
 end

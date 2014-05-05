@@ -8,7 +8,7 @@ class ArticleContentsController < ApplicationController
       param = params
       param = param.reject {|key| ["utf8", "authenticity_token", "commit", "action", "controller"].include?(key)}
       @through_rss = true
-      Resque.enqueue(ArticleContentProcess, "create_article_content", Time.now, param.to_json, current_user.id, request.remote_ip)
+      Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, request.remote_ip)
 
       feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
       feed_url.update_attributes(:status => 1)

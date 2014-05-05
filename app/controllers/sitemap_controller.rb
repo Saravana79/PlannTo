@@ -39,10 +39,10 @@ class SitemapController < ApplicationController
       if params[:object_type] == "item" 
         @pages_to_visit1+= item_type.items.collect{ |item| {:url =>  base_url + item.get_url() ,  :updated_at => I18n.l(last_wedday.to_time, :format => :w3c), :priority => 0.8 }}
       elsif params[:object_type] == "content"  
-        @pages_to_visit1+= item_type.contents.includes(:comments).where('status = ?',1).select { |con| con.comments.size >= 2 }.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
+        @pages_to_visit1+= item_type.contents.includes(:comments).where('status = ?',1).select { |con| con.comments.size >= 2 }.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.zone.now : content.updated_at , :format => :w3c)} }
      elsif params[:object_type] == "original_content"
-           @pages_to_visit1+= item_type.contents.where('type!=? and status=?','ArticleContent',1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at ,:format => :w3c)} }
-            @pages_to_visit1+= ArticleContent.where('itemtype_id =? and status=? and url is  null ',item_type.id,1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
+           @pages_to_visit1+= item_type.contents.where('type!=? and status=?','ArticleContent',1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.zone.now: content.updated_at ,:format => :w3c)} }
+            @pages_to_visit1+= ArticleContent.where('itemtype_id =? and status=? and url is  null ',item_type.id,1).collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.zone.now: content.updated_at , :format => :w3c)} }
       elsif params[:object_type] == "compare_items" && params[:page]
         items = item_type.items.paginate(:per_page => 600,:page => params[:page])
         @pages_to_visit1+= items.collect{ |item| Item.get_related_items(item, 3).size > 0 ? {:url =>  base_url + "/items/compare?ids=#{item.id},#{Item.get_related_items(item, 3).collect(&:id).join(",")}", :updated_at => I18n.l(last_wedday.to_time, :format => :w3c), :priority => 0.8 } : "bb" } 
@@ -53,8 +53,8 @@ class SitemapController < ApplicationController
         @pages_to_visit1.delete("bb")        
      end  
    else
-     #@pages_to_visit1+= Item.all.collect{ |item| {:url =>  base_url + item.get_url() ,  :updated_at => I18n.l(item.updated_at.nil? ? Time.now : item.updated_at, :format => :w3c), :priority => 0.8 }}
-     #@pages_to_visit1+= Content.all.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.now : content.updated_at , :format => :w3c)} }
+     #@pages_to_visit1+= Item.all.collect{ |item| {:url =>  base_url + item.get_url() ,  :updated_at => I18n.l(item.updated_at.nil? ? Time.zone.now: item.updated_at, :format => :w3c), :priority => 0.8 }}
+     #@pages_to_visit1+= Content.all.collect{  |content| {:url =>  base_url + "/contents/" + content.id.to_s,  :updated_at => I18n.l(content.updated_at.nil?? Time.zone.now: content.updated_at , :format => :w3c)} }
    end  
     respond_to do |format|
       format.xml {   @pages_to_visit=@pages_to_visit1}

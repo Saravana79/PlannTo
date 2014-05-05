@@ -10,8 +10,8 @@ class RelatedItemUpdateProcess
     #begin
       log.debug "********** Start Processing RelatedItem Update **********"
       log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
-      log.debug "********** Process Started at - #{Time.now.strftime('%b %d,%Y %r')} **********"
-      log.debug "********** Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} **********"
+      log.debug "********** Process Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
+      log.debug "********** Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
       Rake::Task["related_items"].invoke
     #rescue Exception => e
     #  log.debug "Have some problem while executing RelatedItem Update, please find the error below"

@@ -115,10 +115,10 @@ def show_ads
     if @ad.advertisement_type == "static"
       # static ad process
       @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
-      # @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+      # @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       @impression_id = SecureRandom.uuid
-      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => nil, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => nil, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
        :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
@@ -209,10 +209,10 @@ def show_ads
 
       @vendor_image_url, @vendor_default_text = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
 
-      # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+      # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       @impression_id = SecureRandom.uuid
-      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                                                                :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 

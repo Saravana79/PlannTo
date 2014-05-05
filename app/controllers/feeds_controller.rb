@@ -151,7 +151,7 @@ class FeedsController < ApplicationController
   end
 
   def load_suggestions
-    Resque.enqueue(SourceItemProcess, "update_suggestions", Time.now)
+    Resque.enqueue(SourceItemProcess, "update_suggestions", Time.zone.now)
     render :text => "Load Suggestion Process Successfully Initiated"
   end
 

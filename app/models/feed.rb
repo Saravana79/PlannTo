@@ -5,7 +5,7 @@ class Feed < ActiveRecord::Base
   after_create :start_process_feeds
 
   def self.process_feeds(feed_id=nil)
-    puts "************************************************* Process Started at - #{Time.now.strftime('%b %d,%Y %r')} *************************************************"
+    puts "************************************************* Process Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} *************************************************"
 
     if feed_id.blank?
       @feeds = Feed.all
@@ -27,7 +27,7 @@ class Feed < ActiveRecord::Base
       puts e
     end
     created_feed_urls = FeedUrl.count - feed_url_count
-    puts "************************************* Process Completed at - #{Time.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"
+    puts "************************************* Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"
     created_feed_urls
   end
 
@@ -66,7 +66,7 @@ class Feed < ActiveRecord::Base
   end
 
   def table_process()
-    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.now-2.days : self.last_updated_at), 50)
+    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 50)
 
     @impression_missing.each do |each_record|
       status = 0
@@ -111,7 +111,7 @@ class Feed < ActiveRecord::Base
                                    :feed_id => self.id, :published_at => each_record.created_at)
       end
     end
-    self.update_attributes(:last_updated_at => Time.now)
+    self.update_attributes(:last_updated_at => Time.zone.now)
   end
 
   def self.get_find_subtype(title)
@@ -201,7 +201,7 @@ class Feed < ActiveRecord::Base
   private
 
   def start_process_feeds
-    Resque.enqueue(FeedProcess, "process_feeds", Time.now, self.id)
+    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, self.id)
   end
 
 

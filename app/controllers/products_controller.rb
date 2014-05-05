@@ -167,10 +167,10 @@ class ProductsController < ApplicationController
     @impression_id = params[:iid]
     @req = request.referer  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
+    # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.zone.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
 
     @impression_id = SecureRandom.uuid
-    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
+    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
                           :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
@@ -341,11 +341,11 @@ class ProductsController < ApplicationController
               if(@where_to_buy_items.empty?)
                 itemsaccess = "emptyitems"
               end
-            # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params,
+            # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params,
             #                                                         cookies[:plan_to_temp_user_id], nil)
 
                 @impression_id = SecureRandom.uuid
-                impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                                       :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
                 Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
            else
@@ -378,9 +378,9 @@ class ProductsController < ApplicationController
       itemsaccess = "none"
       @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(tempurl, "PriceComparison")
       if @impression.new_record?
-        @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
+        @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
       else
-        @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
+        @impression.update_attributes(updated_time: Time.zone.now, :count => @impression.count + 1)
       end
       #address = Geocoder.search(request.ip)
       defatetime = Time.now.to_i
@@ -415,10 +415,10 @@ class ProductsController < ApplicationController
     unless @best_deals.blank?
       itemsaccess ="offeritem_ids"
       url_params = "items:" + params[:item_ids]
-      # @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+      # @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
 
       @impression_id = SecureRandom.uuid
-      impression_params =  {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+      impression_params =  {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                             :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
@@ -427,9 +427,9 @@ class ProductsController < ApplicationController
     else
       @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(url, "OffersDeals")
       if @impression.new_record?
-        @impression.update_attributes(created_time: Time.now, updated_time: Time.now)
+        @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
       else
-        @impression.update_attributes(updated_time: Time.now, :count => @impression.count + 1)
+        @impression.update_attributes(updated_time: Time.zone.now, :count => @impression.count + 1)
       end
     end
 
@@ -545,7 +545,7 @@ class ProductsController < ApplicationController
     @item = Item.find(params[:item_id].gsub("product_", ""))
  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.now,current_user,request.remote_ip,@impression_id)
+    # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.zone.now,current_user,request.remote_ip,@impression_id)
 
     if @showspec == 1
       @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)

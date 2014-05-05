@@ -17,7 +17,7 @@ class Admin::FeedsController < ApplicationController
   def approve
     content = Content.find(params[:id])
     content.update_attribute('status',1)
-    ContentAction.create(:action_done_by => current_user.id,:reason => "",:time => Time.now, :sent_mail => false,:content_id => content.id,:action => "approved" )
+    ContentAction.create(:action_done_by => current_user.id,:reason => "",:time => Time.zone.now, :sent_mail => false,:content_id => content.id,:action => "approved" )
     if content.is_a?ArticleContent
       if content.url!=nil
          Point.add_point_system(current_user, content, Point::PointReason::CONTENT_SHARE)
@@ -41,9 +41,9 @@ class Admin::FeedsController < ApplicationController
     @content = Content.find(params[:id])
     @detail = params[:detail]
     if @content.rejected?
-        ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "rejected" )
+        ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.zone.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "rejected" )
    elsif @content.deleted?
-       ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "deleted" )
+       ContentAction.create(:action_done_by => current_user.id,:reason =>  params[:content_action][:reason],:time => Time.zone.now, :sent_mail => params[:content_action][:sent_mail],:content_id => @content.id,:action => "deleted" )
    end 
    if params[:content_action][:sent_mail] == "1"
      ContentMailer.content_action(@content,params[:content_action][:reason]).deliver 

@@ -4,7 +4,7 @@ class Admin::AdReportsController < ApplicationController
 
   def index
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date]
-    @end_date = params[:to_date].blank? ? Time.now : params[:to_date]
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date]
     # reports by advertisements
     @advertisements = Advertisement.all
     click_report = Click.find_by_sql("select count(*) as clicks_count, ad.id from clicks c join add_impressions i on c.impression_id=i.id join advertisements ad
@@ -26,7 +26,7 @@ class Admin::AdReportsController < ApplicationController
 
   def view_chart
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
-    @end_date = params[:to_date].blank? ? Time.now : params[:to_date].to_date
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
 
     imp_report_results = AddImpression.chart_data(params[:ad_id], @start_date, @end_date)
     @result_array = imp_report_results.map {|result| result.values}
@@ -41,7 +41,7 @@ class Admin::AdReportsController < ApplicationController
 
   def widget_reports
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
-    @end_date = params[:to_date].blank? ? Time.now : params[:to_date].to_date
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
 
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id

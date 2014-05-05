@@ -7,7 +7,7 @@ class UserActivity < ActiveRecord::Base
     u.related_id = related_id
     u.related_activity = related_activity
     u.related_activity_type = related_activity_type
-    u.time = Time.now
+    u.time = Time.zone.now
     u.activity_id = activity_id
     u.ip_address = remote_ip
     u.save   

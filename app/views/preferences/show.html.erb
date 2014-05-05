@@ -398,7 +398,7 @@
 						 Contents
 				  </div>-->
 						<div id="content_all">
-			<%@order = @buying_plan.created_at.to_date == Time.now.to_date ? "total_votes desc" : "created_at desc" %> 
+			<%@order = @buying_plan.created_at.to_date == Time.zone.now.to_date ? "total_votes desc" : "created_at desc" %>
 	    <%= render "contents/filter_by_options",:buying_plan => @buy_plan %>
 	    <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
 	    <%= render "contents/sort_by_options" ,:order => @order%>
