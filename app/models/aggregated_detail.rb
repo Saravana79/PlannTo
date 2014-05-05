@@ -2,7 +2,7 @@ class AggregatedDetail < ActiveRecord::Base
 
   def self.update_aggregated_detail(time, entity_type)
     entity_field = entity_type + "_id"
-    date_for_query = time.utc # converted to UTC
+    date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
 
     if entity_type == "publisher"
       impression_query = "select publisher_id as entity_id,count(*) as impression_count from add_impressions where date(impression_time) = date('#{date_for_query}') group by publisher_id"
