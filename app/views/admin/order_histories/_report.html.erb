@@ -6,6 +6,10 @@
 
 <br/>
 
+<div id="report">
+  <%= render "admin/ad_reports/widget_chart" %>
+</div>
+
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
   <th class="header_compare"  > Total Impressions </th>
@@ -53,6 +57,7 @@
   <th class="header_compare" width="80px"> Order Status</th>
   <th class="header_compare" width="80px"> Payment Status</th>
   <th class="header_compare" width="80px"> Product Name</th>
+  <th class="header_compare" width="80px"> Product Price</th>
  </tr>
  <%@order_histories.each do |oh | %>
    <tr>
@@ -64,11 +69,12 @@
        <%end%>
       </td>
      <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.no_of_orders %> </td>      
-     <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.total_revenue %> </td>
+     <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;font-weight: bold;"><%= oh.total_revenue %> </td>
 
      <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.order_status %> </td>
      <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.payment_status %> </td>
        <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.item_name %> </td>
+       <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.product_price %> </td>
 
   </tr>
 <%end%>  

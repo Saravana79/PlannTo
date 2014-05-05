@@ -11,7 +11,7 @@
                 text: 'Widgets Report'
             },
             subtitle: {
-                text: 'Source: plannto.com'
+                text: 'Source: <%= @publisher.blank? ? "PlannTo.com" : @publisher.publisher_url %>'
             },
             xAxis: {
                 categories: <%= raw @x_values.to_json %>

@@ -15,7 +15,7 @@ class Admin::OrderHistoriesController < ApplicationController
    # @clickscount = @clicks.count
    @total_orders =  OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).sum('no_of_orders')
    @total_revenue = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).sum('total_revenue')
-   @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).order('created_at desc').paginate(:per_page => 20,:page => params[:page])
+   @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
    @vendors =  VendorDetail.all
 
     @result = AggregatedDetail.get_counts(@start_date.to_date, @end_date.to_date, publisher_id).first
@@ -25,7 +25,7 @@ class Admin::OrderHistoriesController < ApplicationController
     end
 
     # reports graph
-    imp_report_results = AggregatedDetail.chart_data_widgets(publisher_id, @start_date, @end_date, types=[])
+    imp_report_results = AggregatedDetail.chart_data_widgets(publisher_id, @start_date.to_date, @end_date.to_date, types=[])
     @result_array = imp_report_results.map {|result| result.values}
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
