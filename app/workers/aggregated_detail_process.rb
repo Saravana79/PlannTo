@@ -11,10 +11,17 @@ class AggregatedDetailProcess
 
     before_hour = now_time - 1.hour
 
-    AggregatedDetail.update_aggregated_detail(now_time)
+    AggregatedDetail.update_aggregated_detail(now_time, 'publisher')
 
     if (before_hour.day != now_time.day)
-      AggregatedDetail.update_aggregated_detail(before_hour)
+      AggregatedDetail.update_aggregated_detail(before_hour, 'publisher')
+    end
+
+    # Update for advertisement_id
+    AggregatedDetail.update_aggregated_detail(now_time, 'advertisement')
+
+    if (before_hour.day != now_time.day)
+      AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement')
     end
 
     #rescue Exception => e

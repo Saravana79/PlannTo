@@ -35,7 +35,7 @@ class HistoryDetailsController < ApplicationController
       # Click.save_click_data(url, req_url, Time.zone.now, @article_details.id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "Offer", temp_user_id)
 
       click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now, :item_id => @article_details.id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
-                       :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "Offer", :temp_user_id => temp_user_id}.to_json
+                       :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => nil}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params)
     else
 
@@ -62,7 +62,7 @@ class HistoryDetailsController < ApplicationController
         # Click.save_click_data(url, req_url, Time.zone.now, item_id, current_user, request.remote_ip, @impression_id, publisher, vendor_id, "PC", temp_user_id)
 
         click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
-                         :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id}.to_json
+                         :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id]}.to_json
         Resque.enqueue(CreateImpressionAndClick, 'Click', click_params)
       else
         @impression_id = params[:iid].present? ? params[:iid] : "0"
@@ -87,7 +87,7 @@ class HistoryDetailsController < ApplicationController
         vendor = @item_detail.blank? ? nil : Item.find_by_id(@item_detail.site)
 
         click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
-                         :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id}.to_json
+                         :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id]}.to_json
         Resque.enqueue(CreateImpressionAndClick, 'Click', click_params)
 
         # if type == "advertisement"
