@@ -11,10 +11,10 @@ class AggregatedDetailProcess
 
     before_hour = now_time - 1.hour
 
-    AggregatedDetail.update_aggregated_detail(now_time.to_date)
+    AggregatedDetail.update_aggregated_detail(now_time)
 
     if (before_hour.day != now_time.day)
-      AggregatedDetail.update_aggregated_detail(before_hour.day)
+      AggregatedDetail.update_aggregated_detail(before_hour)
     end
 
     #rescue Exception => e

@@ -7,8 +7,8 @@ class Admin::OrderHistoriesController < ApplicationController
     @clickscount = 0
     publisher_id = UserRelationship.where(:relationship_type => "Publisher",:user_id => current_user.id).first.relationship_id
    @publisher = Publisher.find(publisher_id)
-   @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date]
-   @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date]
+   @start_date = params[:from_date].blank? ? 1.week.ago.utc : params[:from_date]
+   @end_date = params[:to_date].blank? ? Time.zone.now.utc : params[:to_date]
 
    # @impressionscount  = AddImpression.where("publisher_id=? and DATE(impression_time) >=? and DATE(impression_time) <=?",publisher_id,@start_date.to_date,@end_date.to_date).order('created_at desc').count
    # @clicks = Click.where("publisher_id=? and DATE(timestamp) >=? and DATE(timestamp) <=?",publisher_id,@start_date.to_date,@end_date.to_date).order('created_at desc').paginate(:per_page => 20,:page => params[:page])

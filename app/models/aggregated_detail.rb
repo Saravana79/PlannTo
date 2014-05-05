@@ -1,20 +1,21 @@
 class AggregatedDetail < ActiveRecord::Base
 
-  def self.update_aggregated_detail(date)
-    impression_query = "select publisher_id,count(*) as impression_count from add_impressions where date(impression_time)  =  date('#{date}') group by publisher_id"
-    click_query = "select publisher_id,count(*)  as click_count from clicks where date(timestamp)  =  date('#{date}') group by publisher_id"
+  def self.update_aggregated_detail(time)
+    date_for_query = time.utc # converted to UTC
+    impression_query = "select publisher_id,count(*) as impression_count from add_impressions where date(impression_time)  =  date('#{date_for_query}') group by publisher_id"
+    click_query = "select publisher_id,count(*)  as click_count from clicks where date(timestamp)  =  date('#{date_for_query}') group by publisher_id"
 
     @impressions = AddImpression.find_by_sql(impression_query)
 
     @impressions.each do |each_imp|
-      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.publisher_id, :date => "#{date}")
+      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.publisher_id, :date => time)
       aggregated_detail.update_attributes(:entity_type => "publisher", :impressions_count => each_imp.impression_count)
     end
 
     @clicks = Click.find_by_sql(click_query)
 
     @clicks.each do |each_click|
-      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.publisher_id, :date => "#{date}")
+      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.publisher_id, :date => time)
       aggregated_detail.update_attributes(:entity_type => "publisher", :clicks_count => each_click.click_count)
     end
   end
