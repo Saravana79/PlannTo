@@ -42,7 +42,7 @@ class AggregatedDetail < ActiveRecord::Base
       end_date = Date.today
     end
 
-    range = start_date.beginning_of_day..(end_date.end_of_day + 1.day)
+    # range = start_date.beginning_of_day..(end_date.end_of_day + 1.day)
 
     if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
 
@@ -53,7 +53,11 @@ class AggregatedDetail < ActiveRecord::Base
       #     :conditions => { :entity_id => publisher_id, :entity_type => 'publisher', :date => range }
       # )
 
-      results = AggregatedDetail.where(:entity_id => publisher_id, :entity_type => 'publisher', :date => range).select("impressions_count, clicks_count, date").group_by {|each_rec| each_rec.date.month}
+      # results = AggregatedDetail.where(:entity_id => publisher_id, :entity_type => 'publisher', :date => range).select("impressions_count, clicks_count, date").group_by {|each_rec| each_rec.date.month}
+
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by month(date)"
+      results = find_by_sql(query).group_by {|each_rec| each_rec.date.month}
+
 
       # CREATE JSON DATA FOR EACH MONTH
       (start_date.to_date..end_date.to_date).map(&:beginning_of_month).uniq.map do |date|
@@ -67,7 +71,11 @@ class AggregatedDetail < ActiveRecord::Base
 
     else
 
-      results = AggregatedDetail.where(:entity_id => publisher_id, :entity_type => 'publisher', :date => range).select("impressions_count, clicks_count, date").group_by(&:date)
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"
+
+      results = find_by_sql(query).group_by {|each_rec| each_rec.date}
+
+      # results = AggregatedDetail.where(:entity_id => publisher_id, :entity_type => 'publisher', :date => range).select("impressions_count, clicks_count, date").group_by(&:date)
 
       #WORKS FINE DATA FOR EACH DAY
       (start_date.to_date..end_date.to_date).map do |date|
