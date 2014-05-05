@@ -4,7 +4,7 @@ class AggregatedDetail < ActiveRecord::Base
     impression_query = "select publisher_id,count(*) as impression_count from add_impressions where date(impression_time)  =  date('#{date}') group by publisher_id"
     click_query = "select publisher_id,count(*)  as click_count from clicks where date(timestamp)  =  date('#{date}') group by publisher_id"
 
-    @impressions = Impression.find_by_sql(impression_query)
+    @impressions = AddImpression.find_by_sql(impression_query)
 
     @impressions.each do |each_imp|
       aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.publisher_id, :date => "#{date}")
@@ -20,7 +20,7 @@ class AggregatedDetail < ActiveRecord::Base
   end
 
   def self.get_counts(date1, date2, publisher_id)
-    query = "SELECT sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{date1}' and '#{date2}'"
+    query = "SELECT sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{date1}' and '#{date2}' group by publisher_id"
     results = find_by_sql(query)
     return results
   end
