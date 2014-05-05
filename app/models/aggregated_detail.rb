@@ -15,14 +15,14 @@ class AggregatedDetail < ActiveRecord::Base
     @impressions = AddImpression.find_by_sql(impression_query)
 
     @impressions.each do |each_imp|
-      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.entity_id, :date => time)
+      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.entity_id, :date => time.to_date)
       aggregated_detail.update_attributes(:entity_type => entity_type, :impressions_count => each_imp.impression_count)
     end
 
     @clicks = Click.find_by_sql(click_query)
 
     @clicks.each do |each_click|
-      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.entity_id, :date => time)
+      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.entity_id, :date => time.to_date)
       aggregated_detail.update_attributes(:entity_type => entity_type, :clicks_count => each_click.click_count)
     end
   end
