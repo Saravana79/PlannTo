@@ -4,9 +4,8 @@ class Click < ActiveRecord::Base
   belongs_to :add_impression, :foreign_key => "impression_id"
 
   def self.create_new_record(obj_params)
-    p obj_params = obj_params.symbolize_keys
-    logger.info obj_params
-    
+    obj_params = obj_params.symbolize_keys
+
     click = Click.new
     click.impression_id = obj_params[:impression_id]
     click.click_url = obj_params[:url]

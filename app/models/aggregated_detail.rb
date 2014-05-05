@@ -20,7 +20,7 @@ class AggregatedDetail < ActiveRecord::Base
   end
 
   def self.get_counts(date1, date2, publisher_id)
-    query = "SELECT sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{date1}' and '#{date2}' group by publisher_id"
+    query = "SELECT sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{date1}' and '#{date2}' group by entity_id"
     results = find_by_sql(query)
     return results
   end

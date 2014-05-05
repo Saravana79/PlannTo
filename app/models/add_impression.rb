@@ -8,8 +8,7 @@ class AddImpression < ActiveRecord::Base
  has_one :click, :foreign_key => "impression_id"
 
  def self.create_new_record(obj_params)
-   p obj_params = obj_params.symbolize_keys
-   logger.info obj_params
+   obj_params = obj_params.symbolize_keys
    ai = AddImpression.new
    ai.id = obj_params[:imp_id]
    ai.impression_id = obj_params[:impression_id]
