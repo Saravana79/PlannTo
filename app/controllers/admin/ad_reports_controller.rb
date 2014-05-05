@@ -51,8 +51,9 @@ class Admin::AdReportsController < ApplicationController
 
     params[:vendor_id] ||= nil
 
-    ad_types = AddImpression.select("distinct advertisement_type").map(&:advertisement_type)
-    types = ad_types - ['advertisement']
+    types = []
+    # ad_types = AddImpression.select("distinct advertisement_type").map(&:advertisement_type)
+    # types = ad_types - ['advertisement']
 
     # imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)   #TODO: have to remove method definition also
     imp_report_results = AggregatedDetail.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)
