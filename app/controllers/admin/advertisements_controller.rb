@@ -130,7 +130,8 @@ def show_ads
 
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
-      item_ids = params[:item_id].split(",")
+      item_ids = params[:item_id].split(",") unless params[:item_id].nil?
+
       @items = []
       unless (item_ids.blank?)
         itemsaccess = "ItemId"
@@ -190,53 +191,72 @@ def show_ads
 
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
-      if @item_details.blank?
-        unless $redis.get("default_item_id_for_vendor_#{vendor_id}").blank?
-          @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_id}"), vendor_id)
-        end
-        if @item_details.blank?
-          clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
-          clicks.each do |click|
-            @item_details = Itemdetail.get_item_details(click.item_id, vendor_id)
-            unless @item_details.blank?
-              $redis.set("default_item_id_for_vendor_#{vendor_id}", click.item_id)
-              $redis.expire("default_item_id_for_vendor_#{vendor_id}", 86400)
-              break
-            end
-          end
-        end
-      end
+      if @item_details.blank? and @ad.id == 2
+  
+         #### - Saravana - temporarily redirecting to static image ad. we need to implement this.
 
-      @vendor_image_url, @vendor_default_text = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
+          @ad = Advertisement.get_ad_by_id(4).first
+          itemaccess = "MissingURL"
+          @impression_id = SecureRandom.uuid
+          impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => nil, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+           :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
+          Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
-      # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+          render "show_static_ads", :layout => false  
 
-      @impression_id = SecureRandom.uuid
-      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                                                               :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
-      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
-
-      @item_details = @item_details.uniq(&:url)
-
-      if @ad.template_type == "type_2"
-        @item_details = @item_details.first(12)
-        @sliced_item_details = @item_details.each_slice(2)
       else
-        @item_details = @item_details.first(6)
+         if @item_details.blank?
+            unless $redis.get("default_item_id_for_vendor_#{vendor_id}").blank?
+              @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_id}"), vendor_id)
+            end
+            if @item_details.blank?
+              clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
+              clicks.each do |click|
+                @item_details = Itemdetail.get_item_details(click.item_id, vendor_id)
+                unless @item_details.blank?
+                  $redis.set("default_item_id_for_vendor_#{vendor_id}", click.item_id)
+                  $redis.expire("default_item_id_for_vendor_#{vendor_id}", 86400)
+                  break
+                end
+              end
+            end
+         end  
+           @vendor_image_url, @vendor_default_text = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
+
+          # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+
+          @impression_id = SecureRandom.uuid
+          impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                                                                   :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
+          Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+
+          @item_details = @item_details.uniq(&:url)
+
+          if @ad.template_type == "type_2"
+            @item_details = @item_details.first(12)
+            @sliced_item_details = @item_details.each_slice(2)
+          else
+            @item_details = @item_details.first(6)
+          end
+
+          # TODO: Offers based on item_ids
+
+          #@item = Item.find(item_ids[0])
+          #root_id = Item.get_root_level_id(@item.itemtype.itemtype)
+          #temp_item_ids = item_ids + root_id.to_s.split(",")
+          #@best_deals = ArticleContent.select("distinct view_article_contents.*").joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in
+          #                              (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and
+          #                              (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '',
+          #                              Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
+
+          @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+          render :layout => false
+              
+
+
       end
 
-      # TODO: Offers based on item_ids
-
-      #@item = Item.find(item_ids[0])
-      #root_id = Item.get_root_level_id(@item.itemtype.itemtype)
-      #temp_item_ids = item_ids + root_id.to_s.split(",")
-      #@best_deals = ArticleContent.select("distinct view_article_contents.*").joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in
-      #                              (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and
-      #                              (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '',
-      #                              Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
-
-      @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
-      render :layout => false
+     
     end
   end
 end
