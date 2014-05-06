@@ -33,9 +33,7 @@ class Admin::OrderHistoriesController < ApplicationController
    @total_revenue = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=?",publisher_id,@start_date.to_date,@end_date.to_date).sum('total_revenue')
    @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=? #{condition}",publisher_id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
 
-   vendor_ids = @order_histories.map(&:vendor_ids)
-
-   @vendors =  VendorDetail.where(:item_id => vendor_ids.uniq)
+   @vendors =  VendorDetail.all
 
     @result = AggregatedDetail.get_counts(@start_date.to_date, @end_date.to_date, publisher_id).first
     unless @result.blank?
