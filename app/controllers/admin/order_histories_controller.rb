@@ -35,7 +35,7 @@ class Admin::OrderHistoriesController < ApplicationController
 
    vendor_ids = @order_histories.map(&:vendor_ids)
 
-   @vendors =  Vendor.where(:id => vendor_ids.uniq)
+   @vendors =  VendorDetail.where(:item_id => vendor_ids.uniq)
 
     @result = AggregatedDetail.get_counts(@start_date.to_date, @end_date.to_date, publisher_id).first
     unless @result.blank?

@@ -10,15 +10,8 @@
   <%= render "admin/ad_reports/widget_chart" %>
 </div>
 
-<div class="search_form">
-  <%= form_for :search, :url => "/admin/impression_reports", :html => {:method => 'get'} do |search_form| %>
-      Vendor: <%= search_form.select :vendor_id, @vendors.collect {|a| [a.id, a.name]}, {:include_blank => true, :selected => params[:search][:vendor_id]} %>
-      Order Status: <%= search_form.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:include_blank => true, :selected => params[:search][:order_status]} %>
-      Payment Status: <%= search_form.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:include_blank => true, :selected => params[:search][:payment_status]} %>
-      <%= search_form.submit "Filter" %>
-      <%= search_form.submit "Clear" %>
-  <% end %>
-</div>
+<br/><br/>
+
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
@@ -34,9 +27,20 @@
      <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_revenue %></td>
   </tr>
 
- </table> 
+ </table>
 
-<br/><br/>
+<div class="search_form">
+  <%= form_for :search, :url => "/admin/impression_reports", :html => {:method => 'get'} do |search_form| %>
+      <%= hidden_field_tag :from_date, @start_date.to_date %>
+      <%= hidden_field_tag :to_date, @end_date.to_date %>
+      Vendor: <%= search_form.select :vendor_id, @vendors.collect {|a| [a.name, a.item_id]}, {:include_blank => true, :selected => params[:search][:vendor_id]} %>
+      Order Status: <%= search_form.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:include_blank => true, :selected => params[:search][:order_status]} %>
+      Payment Status: <%= search_form.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:include_blank => true, :selected => params[:search][:payment_status]} %>
+      <%= search_form.submit "Filter" %>
+      <%= search_form.submit "Clear" %>
+  <% end %>
+</div>
+
 <ul id="Newtabs" style="padding-top:15px;">
 		<!-- <li  class="tab_active1 impression_report" ><a href="#"><span>Impression Reports</span></a></li>
 	   <li  class="tab_active1 click_report" ><a href="#"><span>Click Reports</span></a></li> -->
@@ -99,7 +103,7 @@
     .search_form {
         color: #A52A2A;
         font-size: 14px;
-        margin: 45px;
+        margin: 30px;
         position: relative;
     }
 </style>
