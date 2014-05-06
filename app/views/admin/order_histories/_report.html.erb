@@ -6,28 +6,29 @@
 
 <br/>
 
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="header_compare"  > Total Impressions </th>
+    <th class="header_compare"  > Total Clicks </th>
+    <th class="header_compare"  > Total Order </th>
+    <th class="header_compare"  > Total Revenue </th>
+  </tr>
+  <tr>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @clickscount %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_orders %></td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_revenue %></td>
+  </tr>
+
+</table>
+
+<br/><br/>
+
 <div id="report">
   <%= render "admin/ad_reports/widget_chart" %>
 </div>
 
 <br/><br/>
-
-
-<table border="0" width="100%" cellspacing="0" cellpadding="0">
-<tr>
-  <th class="header_compare"  > Total Impressions </th>
-  <th class="header_compare"  > Total Clicks </th>
-  <th class="header_compare"  > Total Order </th>
-  <th class="header_compare"  > Total Revenue </th>
- </tr>
-   <tr>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
-     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @clickscount %> </td>
-     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_orders %></td>
-     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_revenue %></td>
-  </tr>
-
- </table>
 
 <div class="search_form">
   <%= form_for :search, :url => "/admin/impression_reports", :html => {:method => 'get'} do |search_form| %>
