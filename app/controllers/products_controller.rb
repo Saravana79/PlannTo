@@ -208,6 +208,9 @@ class ProductsController < ApplicationController
 
   def where_to_buy_items
 
+    @active_tabs_for_publisher = [5]
+    @activate_tab = false
+
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
 
     @show_price = params[:show_price]
@@ -217,7 +220,8 @@ class ProductsController < ApplicationController
     unless (item_ids.blank?)
       itemsaccess = "ItemId"
       if (true if Float(item_ids[0]) rescue false)
-        @items = Item.where(id: item_ids)
+        @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
+        #@items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 5")
       else
         @items = Item.where(slug: item_ids)
         @items = @items[0..15] 
@@ -278,22 +282,41 @@ class ProductsController < ApplicationController
     end
     if  params[:price_full_details]
        url_params += ";more_details->" + params[:price_full_details]
-    end  
+    end
     
     # include pre order status if we show more details.
-    unless @items.nil? || @items.empty?
+    unless @items.blank?
       @moredetails = params[:price_full_details]
       @displaycount = 4
       if @moredetails == "true"
         @displaycount = 5
-        status = "1,3".split(",")
+          status = "1,3".split(",")
       else
         status = "1".split(",")     
            
       end     
                         
-    
+
       @publisher = Publisher.getpublisherfromdomain(url)
+
+      # Check have to activate tabs for publisher or not
+
+      @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+
+      # Update Items if there is only one item
+
+      if (@activate_tab && @items.count == 1)
+        item = @items.first
+        item_ad_detail = item.item_ad_detail
+        items = []
+        unless item_ad_detail.blank?
+          related_item_ids = item_ad_detail.related_item_ids.to_s.split(',')
+          items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 4") unless related_item_ids.blank?
+          @items << items
+          @items = @items.flatten
+        end
+      end
+
       #address = Geocoder.search(request.ip)
       
       # get the country code for checing whether is use is from india.
@@ -310,33 +333,30 @@ class ProductsController < ApplicationController
           itemsaccess = "othercountry"      
       else
             if @show_price != "false"
-                @items.each do |item|
-                  @item = item
-                  unless @publisher.nil?
-                      unless @publisher.vendor_ids.nil? or @publisher.vendor_ids.empty?
-                          vendor_ids = @publisher.vendor_ids ? @publisher.vendor_ids.split(",") : []   
-                          exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""  
-                          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-                          where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
-                          where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
-                      else
-                          exclude_vendor_ids = @publisher.exclude_vendor_ids ? @publisher.exclude_vendor_ids.split(",")  : ""
-                          where_to_buy_items1 = []  
-                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-                      end
-                  else
-                          where_to_buy_items1 = []            
-                          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-                          
+
+              @where_to_buy_items, @tempitems, @item = Item.process_and_get_where_to_buy_items(@items, @publisher, status)
+
+              main_item = @item
+
+              @items = @items - @tempitems
+
+              # for activate_tab users
+              if (@items.blank? && @where_to_buy_items.blank?)
+                item = main_item
+                @items = Item.where(:id => item.new_version_item_id)
+                @where_to_buy_items, @tempitems, @item = Item.process_and_get_where_to_buy_items(@items, @publisher, status)
+
+                @items = @items - @tempitems
+
+                if (@items.blank? && @where_to_buy_items.blank?)
+                  item_ad_detail = main_item.item_ad_detail
+                  unless item_ad_detail.blank?
+                    @items = Item.where(:id => item_ad_detail.old_version_id)
+                    @where_to_buy_items, @tempitems, @item = Item.process_and_get_where_to_buy_items(@items, @publisher, status)
+                    @items = @items - @tempitems
                   end
-                  @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
-                  if(@where_to_buy_items.empty?)    
-                    @tempitems << @item
-                  else                        
-                    break
-                  end
+                end
               end
-               @items = @items - @tempitems
 
               if(@where_to_buy_items.empty?)
                 itemsaccess = "emptyitems"
@@ -353,8 +373,6 @@ class ProductsController < ApplicationController
               get_offers(@items.map(&:id).join(",").split(","))
               itemsaccess = "offers"
            end
-
-
       end        
 
       responses = []

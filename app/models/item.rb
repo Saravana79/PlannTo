@@ -1177,6 +1177,40 @@ end
     old_version_item.blank? ? nil : old_version_item.id
   end
 
+  def self.process_and_get_where_to_buy_items(items, publisher, status)
+    @tempitems = []
+    @where_to_buy_items = []
+    items.each do |item|
+      @item = item
+      unless publisher.nil?
+        unless publisher.vendor_ids.nil? or publisher.vendor_ids.empty?
+          vendor_ids = publisher.vendor_ids ? publisher.vendor_ids.split(",") : []
+          exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
+          where_to_buy_items2 = where_to_buy_itemstemp.select{|a| !vendor_ids.include? a.site}
+        else
+          exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+          where_to_buy_items1 = []
+          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        end
+      else
+        where_to_buy_items1 = []
+        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+
+      end
+      @where_to_buy_items = where_to_buy_items1 + where_to_buy_items2
+
+      if(@where_to_buy_items.empty?)
+        @tempitems << @item
+      else
+        break
+      end
+    end
+
+    return @where_to_buy_items, @tempitems, @item
+  end
+
   private
 
   def update_redis_with_item

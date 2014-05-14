@@ -292,6 +292,7 @@
                                 </span>
                                 </div>
                                 <%else%>
+                                      <% if @activate_tab %>
                                       <ul id="menu" class="nav nav-pills">
                                         <% @items.each_with_index do |each_item, index| %>
                                             <% if index < 3 %>
@@ -315,14 +316,16 @@
                                         </li>
                                         <% end %>
                                       </ul>
-                                <%#=select_tag "w_t_b_items", options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
+                                    <% else %>
+                                      <%=select_tag "w_t_b_items", options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
+                                    <%end%>
                                 <%end%>
                               </td>
                             </tr>
                           </thead>
                           <tbody style="border:0px;" id="where_to_buy_items_onchange">
           <%end%>
-         <% if @items.size != 1 %>
+         <% if @activate_tab && @items.size != 1 %>
              <tr>
                <td colspan="5" id="">
 
