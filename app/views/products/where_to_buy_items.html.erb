@@ -13,6 +13,9 @@
                  list-style-type: none;
                  display: inline-block;
              }
+             ul#menu ul.sub-menu li {
+              width:200px;
+             }
 
              /*Link Appearance*/
              /*ul#menu li a, ul#menu li ul.sub-menu li a {*/
@@ -32,8 +35,8 @@
              ul#menu li ul.sub-menu {
                  display: none;
                  position: absolute;
-                 left: 0;
-                 width: 100px;
+                 right: 0;
+                 width: 200px;
              }
 
              ul#menu li:hover ul.sub-menu {
@@ -54,6 +57,8 @@
              }
              .dropdown {
                  position: relative;
+                 float:right!important;
+                 text-align: right;
              }
              .dropdown-toggle:focus {
                  outline: 0;
@@ -61,10 +66,10 @@
              .dropdown-menu {
                  position: absolute;
                  top: 100%;
-                 left: 0;
+                 right: -1px;
                  z-index: 1000;
                  display: none;
-                 float: left;
+                 float: right;
                  min-width: 160px;
                  padding: 5px 0;
                  margin: 2px 0 0;
@@ -177,6 +182,91 @@
                  background-color: #428bca;
              }
 
+             .nav-tabs,
+                .nav-pills {
+                  *zoom: 1;
+                }
+
+                .nav-tabs:before,
+                .nav-pills:before,
+                .nav-tabs:after,
+                .nav-pills:after {
+                  display: table;
+                  line-height: 0;
+                  content: "";
+                }
+
+                .nav-tabs:after,
+                .nav-pills:after {
+                  clear: both;
+                }
+
+                .nav-tabs > li,
+                .nav-pills > li {
+                  float: left;
+                  min-width: 120px;
+                }
+
+                .nav-tabs > li > a,
+                .nav-pills > li > a {
+                  padding-right: 12px;
+                  padding-left: 12px;
+                  margin-right: 2px;
+                  line-height: 14px;
+                }
+
+                .nav-tabs {
+                  border-bottom: 1px solid #ddd;
+                }
+
+                .nav-tabs > li {
+                  margin-bottom: -1px;
+                }
+
+                .nav-tabs > li > a {
+                  padding-top: 10px;
+                  padding-bottom: 5px;
+                  line-height: 20px;
+                  border: 1px solid transparent;
+                  -webkit-border-radius: 4px 4px 0 0;
+                     -moz-border-radius: 4px 4px 0 0;
+                          border-radius: 4px 4px 0 0;
+                  height:23px;
+                  font-size: 13px;
+                }
+
+                .nav-tabs > li > a:hover,
+                .nav-tabs > li > a:focus {
+                  border-color: #eeeeee #eeeeee #dddddd;
+                }
+
+                .nav-tabs > .active > a,
+                .nav-tabs > .active > a:hover,
+                .nav-tabs > .active > a:focus {
+                  color: #555555;
+                  cursor: default;
+                  background-color: #ffffff;
+                  border: 1px solid #ddd;
+                  border-bottom-color: transparent;
+                }
+
+                .nav-pills > li > a {
+                  padding-top: 8px;
+                  padding-bottom: 8px;
+                  margin-top: 2px;
+                  margin-bottom: 2px;
+                  -webkit-border-radius: 5px;
+                     -moz-border-radius: 5px;
+                          border-radius: 5px;
+                }
+
+                .nav-pills > .active > a,
+                .nav-pills > .active > a:hover,
+                .nav-pills > .active > a:focus {
+                  color: #ffffff;
+                  background-color: #0088cc;
+                }
+
              a {
                  color: #428BCA;
                  text-decoration: none;
@@ -189,8 +279,8 @@
          #plannto_logo1{color: #129FBD;}
          #plannto_insidediv{padding:7px 10px 10px 10px;background: #EEE;}
          #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
-         #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;border-top: 0px;}
-         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:5px;vertical-align:middle;background:white;float:none;display:table-cell;border:0px;}
+         #plannto_intr{border-bottom: 0px solid #EEE;height: 40px;background:white;border-top: 0px;}
+         #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:10px 5px 10px 0px;;vertical-align:middle;background:white;float:none;display:table-cell;border:0px;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
          #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;float:none;border:0px;}
          #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;float:none;display:table-cell;border:0px;}
@@ -205,10 +295,10 @@
          #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;float:none;display:table-cell;background:white;border:0px;}
         
         .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
-        .shadetabs li.unselected{float:left; padding:0px!important; margin:0 5px 0 5px!important;background: #12c1e6!important;list-style-type: none!important; }
-        .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center; }        
-        .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;}
-        .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;}        
+        .shadetabs li.unselected{float:left; padding:0px!important; margin:0 5px 0 5px!important;background: #12c1e6!important;list-style-type: none!important; width:49%;text-align: center;border-bottom:2px solid #12c1e6;}
+        .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }        
+        .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:49%;text-align: center;}
+        .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}        
         #prodname{font-size: 15px;}
 
          /* for igyaan*/
@@ -221,7 +311,7 @@
          #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: Arvo, serif;}
          #prodname{font-family: "Arvo", serif;color: #4C4A4A;line-height: 1.61;font-size: 1.07143rem;text-transform: uppercase;font-weight: normal;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
-         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; float:left; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;} 
+         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;} 
           #plannto_insidediv{padding:2px 0px 0px 0px;background: #EEE;}
          <% end %>
          </style>
@@ -280,7 +370,7 @@
                             <thead style="border:0px;display:table-header-group;">
                               <tr id="plannto_intr">
                                 <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
-                                 <%if @items.size == 1 %>
+                                 <%if @items.size == 1%>
                                  <div style="width:100%;">
                                  <span style="float:left;padding-left: 10px;padding-top: 5px;">
                                  
@@ -293,22 +383,29 @@
                                 </div>
                                 <%else%>
                                       <% if @activate_tab %>
-                                      <ul id="menu" class="nav nav-pills">
+                                      <ul id="menu" class="nav nav-tabs">
+                                        <span style="float: left;">&nbsp;</span>
                                         <% @items.each_with_index do |each_item, index| %>
-                                            <% if index < 3 %>
+                                            <% if index < 2 %>
                                                 <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
-                                                  <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)"><%= each_item.name.to_s.truncate(22) %></a>
+                                    
+                                                  <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)">
+                                                    <span style="float:left;"><img  src="<%=each_item.image_url(:small)%>" alt="<%=each_item.name%>"  onerror="this.error=null;this.src='<%=each_item.base_item_image_url(:small)%>';" style="width:30px;"/>
+                                                  </span><span style="float:left;">
+                                                    <%= each_item.name.to_s.truncate(30) %>
+                                                </span></a>
+                              
                                                 </li>
                                             <% end %>
                                         <% end %>
-                                        <% if @items.count > 3 %>
+                                        <% if @items.count > 2 %>
                                         <li class="dropdown"><a href="#">More <b class="caret"></b></a>
                                           <ul class="sub-menu dropdown-menu">
                                             <% @items.each_with_index do |each_item, index| %>
                                                 <% next if index == 0 %>
                                                 <% if index > 2 %>
                                                     <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
-                                                      <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)"><%= each_item.name.to_s.truncate(22) %></a>
+                                                      <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)"><%= each_item.name.to_s.truncate(30) %></a>
                                                     </li>
                                                 <% end %>
                                             <% end %>
