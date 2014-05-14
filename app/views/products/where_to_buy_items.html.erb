@@ -300,8 +300,8 @@
                                                 </li>
                                             <% end %>
                                         <% end %>
+                                        <% if @items.count > 3 %>
                                         <li class="dropdown"><a href="#">More <b class="caret"></b></a>
-
                                           <ul class="sub-menu dropdown-menu">
                                             <% @items.each_with_index do |each_item, index| %>
                                                 <% next if index == 0 %>
@@ -313,6 +313,7 @@
                                             <% end %>
                                           </ul>
                                         </li>
+                                        <% end %>
                                       </ul>
                                 <%#=select_tag "w_t_b_items", options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
                                 <%end%>

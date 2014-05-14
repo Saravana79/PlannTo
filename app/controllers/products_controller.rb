@@ -217,7 +217,7 @@ class ProductsController < ApplicationController
     unless (item_ids.blank?)
       itemsaccess = "ItemId"
       if (true if Float(item_ids[0]) rescue false)
-        @items = Item.where(id: item_ids) 
+        @items = Item.where(id: item_ids)
       else
         @items = Item.where(slug: item_ids)
         @items = @items[0..15] 
@@ -352,8 +352,8 @@ class ProductsController < ApplicationController
               @where_to_buy_items = []
               get_offers(@items.map(&:id).join(",").split(","))
               itemsaccess = "offers"
-           end     
-          
+           end
+
 
       end        
 
@@ -366,7 +366,7 @@ class ProductsController < ApplicationController
             end
           end
         end
-      
+
       defatetime = Time.now.to_i
       html = html = render_to_string(:layout => false)
       json = {"html" => html}.to_json

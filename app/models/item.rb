@@ -43,7 +43,6 @@ class Item < ActiveRecord::Base
     :through => :itemrelationships
 
   has_many :item_pro_cons
-  has_one :new_version_item, :foreign_key => :new_version_item_id, :class_name => "Item"
   has_one :item_ad_detail
 
   after_create :update_redis_with_item
