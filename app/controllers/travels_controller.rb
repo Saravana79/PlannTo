@@ -46,7 +46,7 @@ class TravelsController < ApplicationController
           else
             @item_details = HotelVendorDetail.joins(:hotel).where('items.id = ? and hotel_vendor_details.vendor_id = ?', params[:item_id], vendor_id)
             if (@item_details.count <= 6)
-              city = item.city
+              city = item.related_city
               item_ids_based_on_city = city.hotels.map(&:id)
               item_ids_based_on_city = item_ids_based_on_city - [params[:item_id].to_i]
               item_details = HotelVendorDetail.joins(:hotel).where('items.id in (?) and hotel_vendor_details.vendor_id = ?', item_ids_based_on_city, vendor_id)
@@ -258,7 +258,7 @@ class TravelsController < ApplicationController
 
       if @items.blank? && !@cities.blank?
         @item = @cities.first
-        city = @item.is_a?(City) ? @item : @item.city
+        city = @item.is_a?(City) ? @item : @item.related_city
         @related_hotels = city.hotels
         html = html = render_to_string(:template => '/travels/related_hotels', :layout => false)
       else
@@ -347,7 +347,7 @@ class TravelsController < ApplicationController
 
       @item = @items.first
 
-      city = @item.is_a?(City) ? @item : @item.city
+      city = @item.is_a?(City) ? @item : @item.related_city
 
       @related_hotels = city.hotels
 

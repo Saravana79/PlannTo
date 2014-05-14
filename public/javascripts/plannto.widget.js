@@ -10,9 +10,9 @@ var PlannTo = (function(window,undefined) {
 var PlannTo ={};
 var SubPath="/where_to_buy_items.js"
 //for production
- var domain = "www.plannto.com";
+// var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -106,9 +106,23 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","");
         event.preventDefault();
     
-  }  
+  }
 
-  PlannTo.wheretobuytabclick = function wheretobuytabclick(obj,moredetails,item_ids)
+    PlannTo.onclick_function = function onclick_function(id, obj,moredetails)
+    {
+        var item_id =  id;
+        var show_details = moredetails;
+        PlannTo.jQuery(".nav-pills li").removeClass('active')
+        PlannTo.jQuery(obj).parent().addClass('active')
+        var element_id = PlannTo.jQuery("#where_to_buy_items_onchange")
+        parentDiv = "where_to_buy_items1"
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","");
+        event.preventDefault();
+
+    }
+
+
+    PlannTo.wheretobuytabclick = function wheretobuytabclick(obj,moredetails,item_ids)
   {
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
