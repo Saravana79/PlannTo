@@ -43,6 +43,8 @@ class Item < ActiveRecord::Base
     :through => :itemrelationships
 
   has_many :item_pro_cons
+  has_one :new_version_item, :foreign_key => :new_version_item_id, :class_name => "Item"
+  has_one :item_ad_detail
 
   after_create :update_redis_with_item
 
@@ -1109,6 +1111,10 @@ end
         val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
         redis_values = val_hash.flatten
 
+        related_item_ids = RelatedItem.where('item_id = ?', each_rec.item_id).limit(10).collect(&:related_item_id)
+
+        redis_values.merge!(:related_item_ids => related_item_ids)
+
         log.debug "Hash Key => #{redis_key}"
         log.debug "Hash value => #{redis_values}"
         log.debug "\n"
@@ -1163,13 +1169,20 @@ end
 
     log.debug "********** Completed Updating advertisement_id for Items **********"
     log.debug "\n"
+
+
+  end
+
+  def self.old_version_item_id(item_id=nil)
+    old_version_item = Item.where(:new_version_item_id => item_id).last
+    old_version_item.blank? ? nil : old_version_item.id
   end
 
   private
 
   def update_redis_with_item
     #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
-    related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(50).collect(&:related_item_id)
+    related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(10).collect(&:related_item_id)
 
     Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
   end

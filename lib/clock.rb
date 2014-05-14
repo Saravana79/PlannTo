@@ -36,6 +36,11 @@ module Clockwork
     Resque.enqueue(ItemUpdate, "update_item_details", Time.zone.now)
   end
 
+  every(1.day, 'Queeing ItemAdDetail Update for Items', :at => '06:00', :tz => "Asia/Kolkata") do
+    puts "Running ItemAdDetail Update for Items, at #{Time.zone.now}"
+    Resque.enqueue(ItemAdDetailProcess, "update_ad_details_for_items", Time.zone.now, 1000)
+  end
+
   every(1.hour, 'Queeing Aggregated Process') do
     puts "Running Queeing Aggregated Process, at #{Time.zone.now}"
     Resque.enqueue(AggregatedDetailProcess, Time.zone.now)
