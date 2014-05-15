@@ -2,7 +2,7 @@
 uri = URI.parse(ENV["REDISTOGO_URL"])
 $redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
 
-$redis_rtb = Redis.new(:host => '54.83.203.184', :port => 6379)
+$redis_rtb = Redis.new(:host => '184.73.182.76', :port => 6379)
 
 # $redis_rtb = $redis
 
