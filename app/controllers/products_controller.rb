@@ -220,11 +220,17 @@ class ProductsController < ApplicationController
     unless (item_ids.blank?)
       itemsaccess = "ItemId"
       if (true if Float(item_ids[0]) rescue false)
-        @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
-        #@items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 5")
+
+        if (params[:sort_disable] == "true")
+          @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
+        else
+          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+        end
       else
-        @items = Item.where(slug: item_ids)
-        @items = @items[0..15] 
+        # @items = Item.where(slug: item_ids)
+        # @items = @items[0..15]
+        slug_ids = item_ids
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.slug in (#{slug_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
       end
       url = request.referer
     else
@@ -237,7 +243,9 @@ class ProductsController < ApplicationController
           url = request.referer
         end
         unless $redis.get("#{url}where_to_buy_item_ids").blank?
-          @items = Item.where("id in (?)", $redis.get("#{url}where_to_buy_item_ids").split(","))
+          # @items = Item.where("id in (?)", $redis.get("#{url}where_to_buy_item_ids").split(","))
+          redis_item_ids = $redis.get("#{url}where_to_buy_item_ids").split(",")
+          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
         else
         
         unless url.nil?  
@@ -311,7 +319,7 @@ class ProductsController < ApplicationController
         items = []
         unless item_ad_detail.blank?
           related_item_ids = item_ad_detail.related_item_ids.to_s.split(',')
-          items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 4") unless related_item_ids.blank?
+          items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 5") unless related_item_ids.blank?
           @items << items
           @items = @items.flatten
         end

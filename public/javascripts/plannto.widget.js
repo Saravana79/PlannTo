@@ -114,6 +114,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         PlannTo.jQuery(".nav-tabs li").removeClass('active')
         PlannTo.jQuery(obj).parent().addClass('active')
+        PlannTo.jQuery(obj).closest("li.dropdown").addClass('active')
         var element_id = PlannTo.jQuery("#where_to_buy_items_onchange")
         parentDiv = "where_to_buy_items1"
         planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","");
@@ -160,7 +161,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
     {
             var doc_title =  PlannTo.jQuery(document).title;
            
-          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&callback=?"
+          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable=true"+"&callback=?"
 
             jQuery.getJSON(url, function (data) {
                 element_id.html(data.html);                
