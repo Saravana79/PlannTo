@@ -103,7 +103,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
         parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","");
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","", true);
         event.preventDefault();
     
   }
@@ -117,7 +117,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         PlannTo.jQuery(obj).closest("li.dropdown").addClass('active')
         var element_id = PlannTo.jQuery("#where_to_buy_items_onchange")
         parentDiv = "where_to_buy_items1"
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","");
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","", true);
         event.preventDefault();
 
     }
@@ -128,7 +128,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"","","");
+        planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"","","", true);
         event.preventDefault();
     
   } 
@@ -157,11 +157,11 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
     event.preventDefault();    
   } 
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable=false)
     {
             var doc_title =  PlannTo.jQuery(document).title;
            
-          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable=true"+"&callback=?"
+          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&callback=?"
 
             jQuery.getJSON(url, function (data) {
                 element_id.html(data.html);                
