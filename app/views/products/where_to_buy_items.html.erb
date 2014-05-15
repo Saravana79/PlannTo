@@ -12,6 +12,7 @@
              ul#menu li, ul#menu ul.sub-menu li {
                  list-style-type: none;
                  display: inline-block;
+                 margin: -1px!important;
              }
              ul#menu ul.sub-menu li {
               width:250px;
@@ -64,13 +65,13 @@
                  outline: 0;
              }
              .dropdown-menu {
-                 position: absolute;
-                 top: 100%;
-                 right: -1px;
+                 position: absolute!important;
+                 top: 100%!important;
+                 right: -1px!important;
                  z-index: 1000;
-                 display: none;
-                 float: right;
-                 min-width: 160px;
+                 display: none!important;
+                 float: right!important;
+                 min-width: 160px!important;
                  padding: 5px 0;
                  margin: 2px 0 0;
                  font-size: 14px;
@@ -313,6 +314,17 @@
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
          .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;} 
           #plannto_insidediv{padding:2px 0px 0px 0px;background: #EEE;}
+                    .nav-tabs > li > a {
+                  padding-top: 10px;
+                  padding-bottom: 5px;
+                  line-height: 20px;
+                  border: 1px solid transparent;
+                  -webkit-border-radius: 4px 4px 0 0;
+                     -moz-border-radius: 4px 4px 0 0;
+                          border-radius: 4px 4px 0 0;
+                  height:35px;
+                  font-size: 13px;
+                }
          <% end %>
 
           a { outline: none; }
