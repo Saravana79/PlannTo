@@ -157,7 +157,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
     event.preventDefault();    
   } 
 
-    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable=false)
+    function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable)
     {
             var doc_title =  PlannTo.jQuery(document).title;
            
@@ -213,7 +213,7 @@ function main() {
             element_id = "where_to_buy_items";
           }
           element = jQuery("#"+element_id)
-         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer)
+         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer, false)
 
        }
        else
