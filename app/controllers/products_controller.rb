@@ -209,7 +209,7 @@ class ProductsController < ApplicationController
   def where_to_buy_items
 
     @active_tabs_for_publisher = [5]
-    @activate_tab = false
+    @activate_tab = true
 
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
 
