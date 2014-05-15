@@ -219,19 +219,19 @@ class ProductsController < ApplicationController
     @path = params[:path]
     unless (item_ids.blank?)
       itemsaccess = "ItemId"
-      if (true if Float(item_ids[0]) rescue false)
+      # if (true if Float(item_ids[0]) rescue false)
 
         if (params[:sort_disable] == "true")
           @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
         else
           @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
         end
-      else
+      # else
         # @items = Item.where(slug: item_ids)
         # @items = @items[0..15]
-        slug_ids = item_ids
-        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.slug in (#{slug_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-      end
+      #   slug_ids = item_ids
+      #   @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.slug in (#{slug_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+      # end
       url = request.referer
     else
         
@@ -270,7 +270,8 @@ class ProductsController < ApplicationController
 
           unless @articles.empty?            
             @items = @articles[0].allitems.select{|a| a.is_a? Product};  
-            @items = @items[0..15].reverse    
+            article_items_ids = @items.map(&:id)
+            @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
             $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(","))
           
           end
@@ -313,7 +314,7 @@ class ProductsController < ApplicationController
 
       # Update Items if there is only one item
 
-      if (@activate_tab && @items.count == 1)
+      if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
         item = @items.first
         item_ad_detail = item.item_ad_detail
         items = []
