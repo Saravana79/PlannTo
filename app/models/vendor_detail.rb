@@ -12,9 +12,7 @@ class VendorDetail < ActiveRecord::Base
   def self.get_vendor_detail_for_ad(item_detail)
     unless item_detail.blank?
       vendor_detail = ""
-      vendor = item_detail.vendor
-      vendor_id = vendor.blank? ? "" : vendor.id
-      vendor_detail = find_by_sql("SELECT name, imageurl, default_text FROM `vendor_details` WHERE (item_id = #{vendor_id})").first unless vendor_id.blank?
+      vendor_detail = find_by_sql("SELECT name, imageurl, default_text FROM `vendor_details` WHERE (item_id = #{item_detail.site})").first
       return configatron.root_image_url + "vendor" + '/medium/' + vendor_detail.imageurl.to_s, vendor_detail.default_text, vendor_detail.name unless vendor_detail.blank?
     end
     return "", ""
