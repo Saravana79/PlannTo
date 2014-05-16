@@ -1,5 +1,5 @@
 class Admin::AdvertisementsController < ApplicationController
-  before_filter :authenticate_advertiser_user!, :except => [:show_ads]
+  # before_filter :authenticate_advertiser_user!, :except => [:show_ads]
   layout "product"
 
   def index
@@ -194,7 +194,7 @@ def show_ads
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
       if @item_details.blank? and @ad.id == 2
-  
+
          #### - Saravana - temporarily redirecting to static image ad. we need to implement this.
 
           @ad = Advertisement.get_ad_by_id(4).first
@@ -204,7 +204,7 @@ def show_ads
            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
           Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
-          render "show_static_ads", :layout => false  
+          render "show_static_ads", :layout => false
 
       else
          if @item_details.blank?
@@ -222,7 +222,7 @@ def show_ads
                 end
               end
             end
-         end  
+         end
            @vendor_image_url, @vendor_default_text, @vendor_name = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
 
           # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
@@ -253,12 +253,12 @@ def show_ads
 
           @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
           render :layout => false
-              
+
 
 
       end
 
-     
+
     end
   end
 end

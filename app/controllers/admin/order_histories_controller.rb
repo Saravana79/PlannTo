@@ -49,6 +49,40 @@ class Admin::OrderHistoriesController < ApplicationController
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
     @clicks = @result_array.map {|each_array| each_array[2]}
+  end
 
+  def orders
+    # user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
+    # vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
+    # @vendor = Vendor.find_by_id(vendor_id)
+    # @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id)
+    # @advertisements = [@advertisement]
+    @publishers = Publisher.all
+    @vendors =  VendorDetail.all
+    @order_history = OrderHistory.new
+  end
+
+  def get_item_details
+    return_val = {:invalid_id => true}
+    p impression = AddImpression.where(:id => params[:impression_id]).first
+    unless impression.blank?
+      item = impression.item
+      return_val = {:item_id => item.id, :item_name => item.name, :invalid_id => false} unless item.blank?
+    end
+    render :js => return_val.to_json
+  end
+
+  def create
+    @publishers = Publisher.all
+    @vendors =  VendorDetail.all
+
+    p @order_history = OrderHistory.new(params[:order_history])
+
+    if @order_history.save
+      p @order_history
+      redirect_to admin_orders_path
+    else
+      render :orders
+    end
   end
 end

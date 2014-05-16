@@ -39,6 +39,10 @@ namespace :admin do
   resources :error_messages
 
   match "/admin/impression_reports", :to => "admin/order_histories#index"
+  match "/admin/orders", :to => "admin/order_histories#orders", :as => :admin_orders
+  match "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
+
+
   match "/terms_conditions" ,:to => "home#terms_conditions"
   match "/privacy_policy" ,:to => "home#privacy_policy"
   get "/contact_us" => "contact_us#new"
