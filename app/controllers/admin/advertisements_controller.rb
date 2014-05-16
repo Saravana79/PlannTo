@@ -178,6 +178,8 @@ def show_ads
 
       item_ids = @items.map(&:id)
 
+      @item = @items.first
+
       @item_details = []
       if item_ids.count > 1
         item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_id).group_by {|each_rec| each_rec.itemid}
@@ -221,7 +223,7 @@ def show_ads
               end
             end
          end  
-           @vendor_image_url, @vendor_default_text = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
+           @vendor_image_url, @vendor_default_text, @vendor_name = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
 
           # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 

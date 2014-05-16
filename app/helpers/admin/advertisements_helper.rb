@@ -9,6 +9,12 @@ module Admin::AdvertisementsHelper
   end
 
   def get_image_url(item_detail)
-    return_val = configatron.root_image_url + item_detail.type.downcase + '/medium/' + item_detail.imageurl.to_s
+    return_val = ''
+    if !item_detail.blank? && !item_detail.Image.blank?
+      return_val = configatron.root_image_path + 'vendors/' + @vendor_name + '/medium/' + item_detail.Image.to_s
+    else
+      return_val = configatron.root_image_url + item_detail.type.downcase + '/medium/' + item_detail.imageurl.to_s
+    end
+    return_val
   end
 end

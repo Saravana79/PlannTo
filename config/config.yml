@@ -1,5 +1,6 @@
 development:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
+  root_image_path: "http://s3-ap-southeast-1.amazonaws.com/planntonew/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
@@ -49,6 +50,7 @@ development:
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
+  root_image_path: "http://s3-ap-southeast-1.amazonaws.com/planntonew/"
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em
   top_mobiles: "1935,1920,1923,1471,1908,1335,1457,1252,3998,3999"
   popular_cars: "252,331,4098,580,1017,1038,4111,976,522,453"
@@ -86,6 +88,7 @@ test:
  
 production:
   root_image_url: "http://cdn1.plannto.com/items/"
+  root_image_path: "http://cdn1.plannto.com/"
   no_of_main_item: 1
   no_of_item_in_tab: 10
   EXPANDING_TEXT_AREA_MAX_HEIGHT: 25em

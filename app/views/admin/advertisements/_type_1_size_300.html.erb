@@ -28,7 +28,7 @@
                     <div class="product-container">
                       <div class="product-img-left">
                         <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank">
-                          <img src="<%= get_image_url(item_detail) %>" alt="" width="132px">
+                          <img src="<%= get_image_url(item_detail) %>" onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" alt="" width="132px">
                         </a>
                       </div>
                       <div class="product-txt-right">
