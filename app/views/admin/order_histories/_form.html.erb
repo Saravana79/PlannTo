@@ -1,0 +1,249 @@
+<%= form_for [:admin, @order_history] do |f| %>
+    <% if @order_history.errors.any? %>
+        <div id="error_explanation"%>
+        <%= "#{pluralize(@order_history.errors.count, "error")} prohibited this product from being saved:" %>
+        <ul>
+          <% @order_history.errors.full_messages.each do |msg| %>
+              <li> <%= msg %> </li>
+          <% end %>
+        </ul>
+        </div>
+    <% end %>
+
+    <h2 class="order_title"> Order </h2>
+
+    <div class="main_form">
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Order Date :</div>
+        <div>
+          <%= f.text_field :order_date, :value => Date.today.strftime("%d-%m-%Y") %></div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">No Of Orders :</div>
+        <div class="float_lft"> <%= f.text_field :no_of_orders %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Publisher :</div>
+        <div class="float_lft"> <%= f.select :publisher_id, @publishers.collect {|a| [a.name, a.id]}, {:include_blank => true} %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Vendor :</div>
+        <div class="float_lft"> <%= f.select :vendor_ids, @vendors.collect {|a| [a.name, a.item_id]}, {:include_blank => true} %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Order Status :</div>
+        <div class="float_lft"><%= f.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:selected => "Validated"} %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Payment Status: </div>
+        <div class="float_lft"><%= f.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:selected => "Pending"} %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Total Revenue :</div>
+        <div class="float_lft"> <%= f.text_field :total_revenue %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Product Price :</div>
+        <div class="float_lft"> <%= f.text_field :product_price %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Impression ID :</div>
+        <div class="float_lft"> <%= f.text_field :impression_id, :placeholder => "Enter Impression ID", :value => @order_history.impression_id.to_s %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft"></div>
+        <div class="float_lft optional"> OR </div>
+      </div>
+
+
+      <div class="fields-div" id="reviewProducts">
+
+        <div class="title_header float_lft">Product :</div>
+        <div class="taggingdiv">
+          <ul id="ad_product_list" class="tagging"></ul>
+          <div class="float_lft " id="displayTagBox">
+            <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Item ID :</div>
+        <div class="float_lft"> <%= f.text_field :item_id, :readonly => true, :value => @order_history.item_id %> </div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Item Name :</div>
+        <div class="float_lft"> <%= f.text_field :item_name, :readonly => true, :value => @order_history.item_name %> </div>
+      </div>
+
+      <br/>
+
+      <div class="submit_button">
+        <% button_name = ["edit", "update"].include?(params[:action]) ? "Update Order" : "Add Order" %>
+        <%= f.submit button_name, :class => 'btn_submitanswer', :id => "publishanswer" %>
+      </div>
+    </div>
+
+<% end %>
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        settings = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: false,
+            hidden_field: "order_history_item_id",
+            has_parent: false
+        };
+        $.textTagger("ad_product", "ad_product_list", settings)
+
+
+        $("#order_history_impression_id").blur(function()
+        {
+            var impression_id = $(this).val()
+            console.log(impression_id)
+
+            $.ajax({
+                url: '/admin/get_item_details',
+                dataType: 'json',
+                data: {impression_id: impression_id},
+                success: function(response) {
+                    console.log(response.invalid_id)
+
+                    if (response.invalid_id == false)
+                    {
+                        $("#order_history_item_id").val(response.item_id)
+                        $("#order_history_item_name").val(response.item_name)
+                    }
+                }
+            });
+        })
+
+        $("#ad_product").keypress(function(e)
+        {
+            $("#order_history_item_id").val('')
+            $("#order_history_item_name").val('')
+            $("#order_history_impression_id").val('')
+
+        })
+
+
+        $("#ad_product").blur(function(){
+            $("#order_history_item_name").val($(".txt_tagging").text())
+        })
+
+        $("#order_history_order_date").datepicker({ dateFormat: 'dd-mm-yy' });
+
+        $("#deleteTag").live('click', function()
+        {
+            $("#order_history_item_name").val('')
+        })
+
+    });
+
+
+</script>
+
+<style type="text/css">
+    .main_form {
+        margin: 0px 0 0 54px;
+        width: 600px
+    }
+
+    #new_advertisement h2 {
+        font-size: 20px;
+        margin: 22px;
+        text-align: center;
+    }
+
+    .title_header.float_lft {
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .main_form .fields-div {
+        line-height: 40px;
+    }
+
+    .title_header {
+        width: 150px;
+        clear: both;
+        margin: 10px 10px 0 0;;
+    }
+
+    .fields-div input, .fields-div select {
+        width: 250px;
+    }
+
+    .remove-file {
+        cursor: pointer;
+        color: blue;
+        float: left;
+    }
+
+    #add_another_file {
+        clear: both;
+        float: right;
+        font-size: 13px;
+        position: relative;
+        text-decoration: underline;
+    }
+
+    .existing_images > a {
+        color: #FF0000;
+        font-size: 12px;
+        position: absolute;
+    }
+
+    .ad_type, .template_type, .bid_radio_button {
+        width: 10px !important;
+    }
+    .breadcrumpbtnDiv {
+        display: block;
+        height: 500px;
+        width: 100%;
+    }
+
+    .float_lft.optional {
+        font-weight: bold;
+        padding: 0 0 0 97px;
+        text-align: center;
+    }
+
+    .order_title {
+        padding: 25px 0 25px 475px;
+        font-size: 20px;
+    }
+
+    .order_histories {
+        float: left;
+    }
+
+    .order_history_form {
+        float: left;
+    }
+
+
+    #maincontainer {
+        height: 310%;
+    }
+
+    .search_form {
+        float: left;
+    }
+</style>

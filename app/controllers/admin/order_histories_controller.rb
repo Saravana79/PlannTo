@@ -1,8 +1,10 @@
 class Admin::OrderHistoriesController < ApplicationController
  before_filter :authenticate_publisher_user!
+ before_filter :authenticate_admin_user!, :only => [:orders]
  layout "product"
 
   def index
+    @search_path = "/admin/impression_reports"
 
     # condition = "1=1"
     condition = ""
@@ -52,19 +54,41 @@ class Admin::OrderHistoriesController < ApplicationController
   end
 
   def orders
+    @search_path = "/admin/orders"
     # user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     # vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
     # @vendor = Vendor.find_by_id(vendor_id)
     # @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id)
     # @advertisements = [@advertisement]
     @publishers = Publisher.all
-    @vendors =  VendorDetail.all
+    # @vendors =  VendorDetail.all
     @order_history = OrderHistory.new
+
+    condition = "1=1"
+    unless params[:search].blank?
+      condition = condition + " and vendor_ids = #{params[:search][:vendor_id]}" unless params[:search][:vendor_id].blank?
+      condition = condition + " and order_status = '#{params[:search][:order_status]}'" unless params[:search][:order_status].blank?
+      condition = condition + " and payment_status = '#{params[:search][:payment_status]}'" unless params[:search][:payment_status].blank?
+    end
+
+    if params[:commit] == "Clear"
+      condition = "1=1"
+      params[:search] = {}
+    elsif params[:commit] != "Filter"
+      params[:search] ||= {}
+    end
+
+    @order_histories = OrderHistory.where(condition).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
+    vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
+
+    @vendors =  VendorDetail.where(:item_id => vendor_ids)
+
+    # render :layout => false
   end
 
   def get_item_details
     return_val = {:invalid_id => true}
-    p impression = AddImpression.where(:id => params[:impression_id]).first
+    impression = AddImpression.where(:id => params[:impression_id]).first
     unless impression.blank?
       item = impression.item
       return_val = {:item_id => item.id, :item_name => item.name, :invalid_id => false} unless item.blank?
@@ -76,7 +100,7 @@ class Admin::OrderHistoriesController < ApplicationController
     @publishers = Publisher.all
     @vendors =  VendorDetail.all
 
-    p @order_history = OrderHistory.new(params[:order_history])
+    @order_history = OrderHistory.new(params[:order_history])
 
     if @order_history.save
       p @order_history
@@ -84,5 +108,35 @@ class Admin::OrderHistoriesController < ApplicationController
     else
       render :orders
     end
+  end
+
+  def edit
+    p params[:id]
+    @publishers = Publisher.all
+    @vendors = VendorDetail.all
+
+    @order_history = OrderHistory.where(:id => params[:id]).first
+  end
+
+  def update
+    @publishers = Publisher.all
+    @vendors = VendorDetail.all
+
+    @order_history = OrderHistory.where(:id => params[:id]).first
+
+    if @order_history.update_attributes(params[:order_history])
+      redirect_to admin_orders_path
+    else
+      render "edit"
+    end
+  end
+
+  def destroy
+    @order_history = OrderHistory.where(:id => params[:id]).first
+
+    if @order_history
+      @order_history.destroy
+    end
+    redirect_to admin_orders_path
   end
 end

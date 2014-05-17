@@ -77,10 +77,17 @@ Vendor
     $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
 </script>
 <div style="border-bottom: 1px solid lightgray;width: 100%;clear: both;padding-top: 10px;"></div><br/><br/>
+<!--
 <div id="report">
-  <%= render "admin/ad_reports/widget_chart" %>
+  <%#= render "admin/ad_reports/widget_chart" %>
 </div>
+-->
 
+<br /><br />
+
+<div id="report" >
+  <%= render "admin/order_histories/report" %>
+</div>
 
 
 <style type="text/css">

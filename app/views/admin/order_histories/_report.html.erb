@@ -1,5 +1,8 @@
 
-<center><h2>Report From <%= @start_date.to_date.strftime("%d-%m-%Y") %> To <%= @end_date.to_date.strftime("%d-%m-%Y") %></h2></center>
+<% if @start_date %>
+  <center><h2>Report From <%= @start_date.to_date.strftime("%d-%m-%Y") %> To <%= @end_date.to_date.strftime("%d-%m-%Y") %></h2></center>
+
+
 <br />
 
 <h2> Summary </h2>
@@ -27,13 +30,18 @@
 <div id="report">
   <%= render "admin/ad_reports/widget_chart" %>
 </div>
-
+<% end %>
 <br/><br/>
 
 <div class="search_form">
-  <%= form_for :search, :url => "/admin/impression_reports", :html => {:method => 'get'} do |search_form| %>
-      <%= hidden_field_tag :from_date, @start_date.to_date %>
-      <%= hidden_field_tag :to_date, @end_date.to_date %>
+  <%= form_for :search, :url => @search_path, :html => {:method => 'get'} do |search_form| %>
+      <%= hidden_field_tag :from_date, @start_date.to_date unless @start_date.blank? %>
+      <%= hidden_field_tag :to_date, @end_date.to_date unless @end_date.blank? %>
+
+      <% if @search_path == "/admin/widget_reports" %>
+          <%= hidden_field_tag :publisher_id, @publisher.id unless @publisher.blank? %>
+          <%= hidden_field_tag :vendor_id, params[:vendor_id] unless params[:vendor_id].blank? %>
+      <% end %>
       Vendor: <%= search_form.select :vendor_id, @vendors.collect {|a| [a.name, a.item_id]}, {:include_blank => true, :selected => params[:search][:vendor_id]} %>
       Order Status: <%= search_form.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:include_blank => true, :selected => params[:search][:order_status]} %>
       Payment Status: <%= search_form.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:include_blank => true, :selected => params[:search][:payment_status]} %>
@@ -61,7 +69,7 @@
  -->
 <%if @order_histories.count > 0 %>
 
-<h2> Order Histories </h2>
+<% if @start_date %> <h2> Order Histories </h2> <% end %>
 <br/>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
@@ -73,8 +81,10 @@
   <th class="header_compare" width="80px"> Payment Status</th>
   <th class="header_compare" width="80px"> Product Name</th>
   <th class="header_compare" width="80px"> Product Price</th>
- </tr>
- <%@order_histories.each do |oh | %>
+  <% if current_user.is_admin? %>
+    <th class="header_compare" colspan="2" width="80px"> Actions </th> <% end %>
+  </tr>
+ <% @order_histories.each do |oh | %>
    <tr>
     <% @vendor = @vendors.select{|a| a.item_id == oh.vendor_ids}%>
     <td class="bdb_gray1"  style="width:80px;text-align:center;border-bottom: 1px solid #808080;"><%=  oh.order_date.to_datetime.strftime("%d-%b-%Y" ) %> </td>
@@ -90,9 +100,13 @@
      <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.payment_status %> </td>
        <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.item_name %> </td>
        <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.product_price %> </td>
-
+      <% if current_user.is_admin? %>
+        <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"> <%= link_to "Edit", admin_order_edit_path(:id => oh.id) %> </td>
+        <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"> <%= link_to "Delete", admin_order_destroy_path(:id => oh.id), :method => :delete, :confirm => 'Are you sure you want to delete this?' %> </td>
+      <% end %>
   </tr>
-<%end%>  
+<%end%>
+
  </table> 
 
 <br/><br/>

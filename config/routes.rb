@@ -42,6 +42,11 @@ namespace :admin do
   match "/admin/orders", :to => "admin/order_histories#orders", :as => :admin_orders
   match "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
 
+  match "/admin/orders/edit/:id", :to => "admin/order_histories#edit", :as => :admin_order_edit
+  match "/admin/orders/update", :to => "admin/order_histories#update", :as => :admin_order_update
+  match "/admin/orders/delete", :to => "admin/order_histories#destroy", :as => :admin_order_destroy
+  match "/admin/get_item_details", :to => "admin/order_histories#get_item_details"
+
 
   match "/terms_conditions" ,:to => "home#terms_conditions"
   match "/privacy_policy" ,:to => "home#privacy_policy"
