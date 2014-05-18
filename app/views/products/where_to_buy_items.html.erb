@@ -225,6 +225,7 @@
                 }
 
                 .plnav-tabs > li > a {
+                  color:#428BCA!important;  
                   padding-top: 10px;
                   padding-bottom: 5px;
                   line-height: 20px;
@@ -244,7 +245,7 @@
                 .plnav-tabs > .active > a,
                 .plnav-tabs > .active > a:hover,
                 .plnav-tabs > .active > a:focus {
-                  color: #555555;
+                  color: #555!important;
                   cursor: default;
                   background-color: #ffffff;
                   border: 1px solid #ddd;
@@ -472,7 +473,7 @@
              
                   <table style="width:30%;float:left;border:0px;">
                <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding-left: 15px;text-align:center;border:0px;background:white;">
-               <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"></div><div style="font-size:15px;font-weight:bold;padding: 20px;"> <%= @item.name %> </div><img>
+               <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"></div><div style="font-size:15px;font-weight:bold;padding: 20px 0px;"> <%= @item.name %> </div><img>
                </td></tr></tbody></table>
              <table style="width:65%;float:right;border:0px;">
                <tbody style="border:0px;">
