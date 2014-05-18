@@ -456,22 +456,23 @@
 
          <tr>
            <td>
-             <table style="width:35%;float:left;">
-               <tbody><tr><td style="
-               padding-left: 15px;
-               "><div style="
-               padding-top: 40px;
-               "><img src="<%= @item.image_url %>"></div><div style="font-size:15px;font-weight:bold;padding-top: 20px;padding-left: 20px;"> <%= @item.name %> </div><img>
-               </td></tr></tbody></table>
-             <table style="width:60%;float:right;">
-               <tbody>
-                 <%unless @moredetails == "true"  %>
+            
+             <%unless @moredetails == "true"  %>
+                  <table style="width:100%;float:right;">
+                    <tbody>
                    <tr id="plannto_inheadertr">
                      <td id="plannto_inheadercol1" width="35%">Seller</td>
                      <td id="plannto_inheadercol2"  width="35%">Price</td>
                      <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
                    </tr>
                <%else%>
+             
+                  <table style="width:30%;float:left;">
+               <tbody><tr><td style="padding-left: 15px;text-align:center;">
+               <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"></div><div style="font-size:15px;font-weight:bold;padding: 20px;"> <%= @item.name %> </div><img>
+               </td></tr></tbody></table>
+             <table style="width:65%;float:right;">
+               <tbody>
                    <tr id="plannto_inheadertr">
                      <td id="plannto_inheadercol1" width="20%">Seller</td>
                      <td id="plannto_inheadercol2"  width="20%">Price</td>
@@ -522,7 +523,7 @@
                <% if count > @displaycount %>
                    <tr style="plannto_footertr">
                      <%if @moredetails == "true"
-                         @wrapper="3"
+                         @wrapper="2"
                        else
                          @wrapper="2"
                        end

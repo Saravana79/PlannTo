@@ -299,9 +299,11 @@ class ProductsController < ApplicationController
       @displaycount = 4
       if @moredetails == "true"
         @displaycount = 5
+        
           status = "1,3".split(",")
       else
-        status = "1".split(",")     
+        status = "1".split(",")    
+        @activate_tab = false 
            
       end     
                         
