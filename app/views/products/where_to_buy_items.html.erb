@@ -326,7 +326,7 @@
                   font-size: 13px;
                 }
          <% end %>
-          <% if (!@publisher.nil? && @publisher.id == 15) %>    
+          <% if (!@publisher.nil? && @publisher.id == 16) %>    
           #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #F7F9FA;background:white;border:0px;}
                                                                                                
           <% end %>
@@ -440,7 +440,7 @@
                           <tbody style="border:0px;" id="where_to_buy_items_onchange">
           <%end%>
          <% if @activate_tab && @items.size != 1 && 1 != 1%>
-             <tr>
+             <tr >
                <td colspan="5" id="">
 
                  <div style="width:100%;">
@@ -457,7 +457,7 @@
              </tr>
          <% end %>
 
-         <tr>
+         <tr style="border:0px;">
            <td>
             
              <%unless @moredetails == "true"  %>
@@ -470,7 +470,7 @@
                    </tr>
                <%else%>
              
-                  <table style="width:30%;float:left;">
+                  <table style="width:30%;float:left;border:0px;">
                <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding-left: 15px;text-align:center;border:0px;background:white;">
                <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"></div><div style="font-size:15px;font-weight:bold;padding: 20px;"> <%= @item.name %> </div><img>
                </td></tr></tbody></table>
