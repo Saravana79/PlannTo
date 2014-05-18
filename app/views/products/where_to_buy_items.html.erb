@@ -278,7 +278,7 @@
          #plannto_logo{padding: 2px;font-size:12px;font-weight:bold;color:darkgray;}
          #plannto_logo:hover{text-decoration: underline;cursor:pointer;}
          #plannto_logo1{color: #129FBD;}
-         #plannto_insidediv{padding:7px 10px 10px 10px;background: #EEE;}
+         #plannto_insidediv{padding:3px 5px 5px 5px;background: #EEE;}
          #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
          #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;border-top: 0px;}
          #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:10px 5px 10px 0px;;vertical-align:middle;background:white;float:none;display:table-cell;border:0px;}
@@ -326,7 +326,10 @@
                   font-size: 13px;
                 }
          <% end %>
-
+          <% if (!@publisher.nil? && @publisher.id == 15) %>    
+          #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #F7F9FA;background:white;border:0px;}
+                                                                                               
+          <% end %>
           a { outline: none; }
          </style>
 
@@ -398,7 +401,7 @@
                                 <%else%>
                                       <% if @activate_tab %>
                                       <ul id="plmenu" class="plnav plnav-tabs">
-                                        <span style="float: left;">&nbsp;</span>
+                                        <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
                                         <% @items.each_with_index do |each_item, index| %>
                                             <% if index < 2 %>
                                                 <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
@@ -459,8 +462,8 @@
             
              <%unless @moredetails == "true"  %>
                   <table style="width:100%;float:right;">
-                    <tbody>
-                   <tr id="plannto_inheadertr">
+                    <tbody style="border:0px;">
+                   <tr id="plannto_inheadertr" style="border:0px;">
                      <td id="plannto_inheadercol1" width="35%">Seller</td>
                      <td id="plannto_inheadercol2"  width="35%">Price</td>
                      <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
@@ -468,12 +471,12 @@
                <%else%>
              
                   <table style="width:30%;float:left;">
-               <tbody><tr><td style="padding-left: 15px;text-align:center;">
+               <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding-left: 15px;text-align:center;border:0px;background:white;">
                <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"></div><div style="font-size:15px;font-weight:bold;padding: 20px;"> <%= @item.name %> </div><img>
                </td></tr></tbody></table>
-             <table style="width:65%;float:right;">
-               <tbody>
-                   <tr id="plannto_inheadertr">
+             <table style="width:65%;float:right;border:0px;">
+               <tbody style="border:0px;">
+                   <tr id="plannto_inheadertr" style="border:0px;">
                      <td id="plannto_inheadercol1" width="20%">Seller</td>
                      <td id="plannto_inheadercol2"  width="20%">Price</td>
                      <!-- <td id="plannto_inheadercol2"  width="25%">Shipping Time</td> -->
