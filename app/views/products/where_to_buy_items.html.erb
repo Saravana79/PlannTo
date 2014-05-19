@@ -458,8 +458,8 @@
              </tr>
          <% end %>
 
-         <tr style="border:0px;">
-           <td>
+         <tr style="border:0px;background:white;">
+           <td style="padding:0px;">
             
              <%unless @moredetails == "true"  %>
                   <table style="width:100%;float:right;">
@@ -475,9 +475,9 @@
                <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding-left: 15px;text-align:center;border:0px;background:white;">
                <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"></div><div style="font-size:15px;font-weight:bold;padding: 20px 0px;"> <%= @item.name %> </div><img>
                </td></tr></tbody></table>
-             <table style="width:65%;float:right;border:0px;">
+             <table style="width:65%;float:right;border:0px;border-collapse: collapse;">
                <tbody style="border:0px;">
-                   <tr id="plannto_inheadertr" style="border:0px;">
+                   <tr id="plannto_inheadertr" style="border-top:0px;">
                      <td id="plannto_inheadercol1" width="20%">Seller</td>
                      <td id="plannto_inheadercol2"  width="20%">Price</td>
                      <!-- <td id="plannto_inheadercol2"  width="25%">Shipping Time</td> -->
