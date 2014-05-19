@@ -404,7 +404,7 @@
                                       <ul id="plmenu" class="plnav plnav-tabs">
                                         <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
                                         <% @items.each_with_index do |each_item, index| %>
-                                            <% if index < 2 %>
+                                            <% if index < @show_count %>
                                                 <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
 
                                                   <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)">
@@ -416,12 +416,12 @@
                                                 </li>
                                             <% end %>
                                         <% end %>
-                                        <% if @items.count > 2 %>
+                                        <% if @items.count > @show_count %>
                                         <li class="pldropdown"><a href="#">More <b class="plcaret"></b></a>
                                           <ul class="plsub-menu pldropdown-menu">
                                             <% @items.each_with_index do |each_item, index| %>
                                                 <% next if index == 0 %>
-                                                <% if index >= 2 %>
+                                                <% if index >= @show_count %>
                                                     <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
                                                       <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)"><%= each_item.name.to_s.truncate(30) %></a>
                                                     </li>

@@ -54,6 +54,7 @@ class Admin::OrderHistoriesController < ApplicationController
   end
 
   def orders
+    params[:search] ||= {}
     @search_path = "/admin/orders"
     # user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     # vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
@@ -62,7 +63,7 @@ class Admin::OrderHistoriesController < ApplicationController
     # @advertisements = [@advertisement]
     @publishers = Publisher.all
     # @vendors =  VendorDetail.all
-    @order_history = OrderHistory.new
+    @order_history = OrderHistory.new(:no_of_orders => 1)
 
     condition = "1=1"
     unless params[:search].blank?
@@ -97,10 +98,13 @@ class Admin::OrderHistoriesController < ApplicationController
   end
 
   def create
+    condition = "1=1"
+    params[:search] ||= {}
     @publishers = Publisher.all
     @vendors =  VendorDetail.all
 
     @order_history = OrderHistory.new(params[:order_history])
+    @order_histories = OrderHistory.where(condition).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
 
     if @order_history.save
       p @order_history
@@ -111,7 +115,6 @@ class Admin::OrderHistoriesController < ApplicationController
   end
 
   def edit
-    p params[:id]
     @publishers = Publisher.all
     @vendors = VendorDetail.all
 

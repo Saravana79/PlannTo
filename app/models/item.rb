@@ -1211,6 +1211,21 @@ end
     return @where_to_buy_items, @tempitems, @item
   end
 
+  def self.get_show_item_count(items)
+    return_val = 2
+    items_count = items.count
+    item_names = items.map(&:name)
+    item_names.each_with_index do |_, index|
+      count_val = items_count - index
+      selected_items = item_names[0..count_val]
+      if selected_items.join('').length <= 40
+        return_val = selected_items.count
+        break
+      end
+    end
+    return return_val
+  end
+
   private
 
   def update_redis_with_item

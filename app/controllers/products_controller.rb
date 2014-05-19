@@ -384,7 +384,9 @@ class ProductsController < ApplicationController
               get_offers(@items.map(&:id).join(",").split(","))
               itemsaccess = "offers"
            end
-      end        
+      end
+
+      @show_count = Item.get_show_item_count(@items)
 
       responses = []
         @where_to_buy_items.group_by(&:site).each do |site, items|  

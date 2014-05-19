@@ -27,7 +27,7 @@
 
       <div class="fields-div">
         <div class="title_header float_lft">Publisher :</div>
-        <div class="float_lft"> <%= f.select :publisher_id, @publishers.collect {|a| [a.name, a.id]}, {:include_blank => true} %> </div>
+        <div class="float_lft"> <%= f.select :publisher_id, @publishers.collect {|a| [a.publisher_url, a.id]}, {:include_blank => true} %> </div>
       </div>
 
       <div class="fields-div">
@@ -123,10 +123,10 @@
                 dataType: 'json',
                 data: {impression_id: impression_id},
                 success: function(response) {
-                    console.log(response.invalid_id)
 
                     if (response.invalid_id == false)
                     {
+                        $("#ad_product_list .taggingmain").remove()
                         $("#order_history_item_id").val(response.item_id)
                         $("#order_history_item_name").val(response.item_name)
                     }
@@ -136,15 +136,21 @@
 
         $("#ad_product").keypress(function(e)
         {
-            $("#order_history_item_id").val('')
-            $("#order_history_item_name").val('')
-            $("#order_history_impression_id").val('')
+            if (e.keyCode != 9)
+            {
+                $("#order_history_item_id").val('')
+                $("#order_history_item_name").val('')
+                $("#order_history_impression_id").val('')
+            }
 
         })
 
 
         $("#ad_product").blur(function(){
-            $("#order_history_item_name").val($(".txt_tagging").text())
+            if ($(".txt_tagging").text() != "")
+            {
+                $("#order_history_item_name").val($(".txt_tagging").text())
+            }
         })
 
         $("#order_history_order_date").datepicker({ dateFormat: 'dd-mm-yy' });
