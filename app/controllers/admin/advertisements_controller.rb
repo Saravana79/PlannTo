@@ -252,8 +252,15 @@ def show_ads
           #                              Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
 
           @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
-          render :layout => false
 
+
+         respond_to do |format|
+           format.json {
+               render :json => {:success => true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
+           }
+           format.html {render :layout => false}
+         end
+          # render :layout => false
 
 
       end
