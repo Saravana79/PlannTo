@@ -297,9 +297,9 @@
          #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;float:none;display:table-cell;background:white;border:0px;}
         
         .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
-        .shadetabs li.unselected{float:left; padding:0px!important; margin:0 5px 0 5px!important;background: #12c1e6!important;list-style-type: none!important; width:49%;text-align: center;border-bottom:2px solid #12c1e6;}
+        .shadetabs li.unselected{float:left; padding:0px!important; margin:0 5px 0 5px!important;background: #12c1e6!important;list-style-type: none!important; width:48%;text-align: center;border-bottom:2px solid #12c1e6;}
         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }        
-        .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:49%;text-align: center;}
+        .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:48%;text-align: center;}
         .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}        
         #prodname{font-size: 15px;}
 
@@ -389,7 +389,7 @@
                               <tr id="plannto_intr" style="border:0px">
                                 <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
                                  <%if @items.size == 1%>
-                                 <div style="width:100%;">
+                                 <div style="width:100%;border-bottom: 1px solid #EEE;display: block;">
                                  <span style="float:left;padding-left: 10px;padding-top: 5px;">
 
                                  <img  src="<%=@item.image_url(:medium)%>" alt="<%=@item.name%>"  onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" style="width:60px;"/>
@@ -398,6 +398,7 @@
                                  <span style="padding-left:5px;padding-top:15px;float:left;" id="prodname">
                                    <%=@item.get_name%>
                                 </span>
+                                <br clear="all" />
                                 </div>
                                 <%else%>
                                       <% if @activate_tab %>
@@ -464,7 +465,7 @@
              <%unless @moredetails == "true"  %>
                   <table style="width:100%;float:right;">
                     <tbody style="border:0px;">
-                   <tr id="plannto_inheadertr" style="border:0px;">
+                   <tr id="plannto_inheadertr" style="">
                      <td id="plannto_inheadercol1" width="35%">Seller</td>
                      <td id="plannto_inheadercol2"  width="35%">Price</td>
                      <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
