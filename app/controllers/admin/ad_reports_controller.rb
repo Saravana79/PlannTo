@@ -1,5 +1,5 @@
 class Admin::AdReportsController < ApplicationController
-  before_filter :authenticate_publisher_user!
+  before_filter :authenticate_admin_user!
   layout "product"
 
   def index
