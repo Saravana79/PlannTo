@@ -1,5 +1,6 @@
 class Admin::OrderHistoriesController < ApplicationController
  before_filter :authenticate_publisher_user!
+ skip_before_filter :authenticate_publisher_user!, :if => proc {|c| current_user && current_user.is_admin?}
  before_filter :authenticate_admin_user!, :only => [:orders]
  layout "product"
 
