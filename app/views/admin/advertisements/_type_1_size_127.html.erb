@@ -35,10 +35,9 @@
                 <%# end %>
                 <div class="product-extra-desc">
                            <p class="product-desc">
-                             <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 45) %>
+                             <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_default_text), 45) %>
                       </p>
                 </div>
-                <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
               </div>
           <% end %>
         </div>

@@ -92,9 +92,6 @@ def destroy
 end
 
 def show_ads
-  params[:more_details] ||= "false"
-
-  @vendor_ids = [9861, 9882, 9874, 9880, 9856] if params[:more_details] == "true"
   #TODO: everything is clickable is only updated for type1 have to update for type2
   @ref_url = params[:ref_url] ||= ""
   url = ""
@@ -131,8 +128,6 @@ def show_ads
       # vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
       vendor_id = @ad.vendor_id
 
-      vendor_ids = @vendor_ids.blank? ? [@ad.vendor_id] : @vendor_ids
-
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
       item_ids = params[:item_id].split(",") unless params[:item_id].nil?
@@ -140,19 +135,16 @@ def show_ads
       @items = []
       unless (item_ids.blank?)
         itemsaccess = "ItemId"
-        # if (true if Float(item_ids[0]) rescue false)
-        # @items = Item.where(id: item_ids)
-        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-        # else
-        #   @items = Item.where(slug: item_ids)
-        #   @items = @items[0..15]
-        # end
+        if (true if Float(item_ids[0]) rescue false)
+          @items = Item.where(id: item_ids)
+        else
+          @items = Item.where(slug: item_ids)
+          @items = @items[0..15]
+        end
         url = request.referer
       else
         unless $redis.get("#{url}ad_item_ids").blank?
-          # @items = Item.where("id in (?)", $redis.get("#{url}ad_item_ids").split(","))
-          redis_item_ids = $redis.get("#{url}ad_item_ids").split(",")
-          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+          @items = Item.where("id in (?)", $redis.get("#{url}ad_item_ids").split(","))
         else
           unless url.nil?
             tempurl = url;
@@ -176,31 +168,28 @@ def show_ads
 
             unless @articles.empty?
               @items = @articles[0].allitems.select{|a| a.is_a? Product};
-              # @items = @items[0..15].reverse
-              article_items_ids = @items.map(&:id)
-              @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+              @items = @items[0..15].reverse
               $redis.set("#{url}ad_item_ids", @items.collect(&:id).join(","))
             end
+
           end
         end
       end
+
+      item_ids = @items.map(&:id)
 
       @item = @items.first
 
       @item_details = []
       if item_ids.count > 1
-        item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by {|each_rec| each_rec.itemid}
-        @item_details = Itemdetail.get_sort_by_vendor(item_details)
+        item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_id).group_by {|each_rec| each_rec.itemid}
 
-
-        # item_details.each { |_, val| @item_details << val }
-        @item_details = @item_details.flatten
+        item_details.each { |_, val| @item_details << val[0] }
       elsif item_ids.count > 0
-        @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids)
+        @item_details = Itemdetail.get_item_details(item_ids.first, vendor_id)
       end
 
-      @item_details = @item_details.uniq(&:url)
-      # @item_details = @item_details.first(6)
+      @item_details = @item_details.first(6)
 
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
@@ -219,24 +208,23 @@ def show_ads
 
       else
          if @item_details.blank?
-            unless $redis.get("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}").blank?
-              @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}"), vendor_ids)
+            unless $redis.get("default_item_id_for_vendor_#{vendor_id}").blank?
+              @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_id}"), vendor_id)
             end
             if @item_details.blank?
-              clicks = Click.where("vendor_id in (?)", vendor_ids).order("created_at desc").limit(10)
+              clicks = Click.where("vendor_id = ?", vendor_id).order("created_at desc").limit(10)
               clicks.each do |click|
-                @item_details = Itemdetail.get_item_details(click.item_id, vendor_ids)
+                @item_details = Itemdetail.get_item_details(click.item_id, vendor_id)
                 unless @item_details.blank?
-                  $redis.set("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}", click.item_id)
-                  $redis.expire("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}", 86400)
+                  $redis.set("default_item_id_for_vendor_#{vendor_id}", click.item_id)
+                  $redis.expire("default_item_id_for_vendor_#{vendor_id}", 86400)
                   break
                 end
               end
             end
          end
-         @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+           @vendor_image_url, @vendor_default_text, @vendor_name = VendorDetail.get_vendor_detail_for_ad(@item_details.first)
 
-         @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
           # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
           @impression_id = SecureRandom.uuid

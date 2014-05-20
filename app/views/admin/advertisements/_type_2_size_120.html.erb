@@ -20,7 +20,7 @@
                     <h3 class="product-title"><%= item_detail.ItemName %></h3>
 
                     <p class="product-desc">
-                      <%= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text']), 45) %>
+                      <%= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_default_text), 45) %>
                     </p>
                     <!--<p class="price-strike">Rs. 40, 000</p>-->
                     <p class="price"><%= prettify(item_detail.price) %></p>
@@ -34,10 +34,9 @@
               <% end %>
               <div class="product-extra-desc">
                 <p>
-                  <%= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text']), 25) %>
+                  <%= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_default_text), 25) %>
                 </p>
               </div>
-                <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
               </div>
           <% end %>
         </div>

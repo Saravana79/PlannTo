@@ -20,7 +20,7 @@
                   <div class="product-desc">
                     <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
                       <p class="text-desc">
-                        <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 45) %>
+                        <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_default_text), 45) %>
                       </p>
                       <p class="price"><%= prettify(item_detail.price) %></p>
                     </a>
@@ -34,7 +34,6 @@
                   </p>
                 </div>
               </div>
-              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
             </div>
         <% end %>
 

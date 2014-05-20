@@ -159,13 +159,10 @@
     {
         var href_val = $(that).find("."+class_name).attr('href')
 
-        var image_src = $(that).find(".vendor_image_src").attr('src')
-
         if (href_val == "" || href_val == undefined)
         {
             href_val = $("."+class_name).attr('href')
         }
-        $(".logo").find('a img').attr('src', image_src)
         $(".logo").find('a.vendor_image').attr('href', href_val)
     }
 </script>
