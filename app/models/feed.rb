@@ -15,17 +15,19 @@ class Feed < ActiveRecord::Base
     end
 
     feed_url_count = FeedUrl.count
-    begin
-      @feeds.each do |each_feed|
+
+    @feeds.each do |each_feed|
+      begin
         if each_feed.process_type == "feed"
           each_feed.feed_process()
         elsif each_feed.process_type == "table"
           each_feed.table_process()
         end
+      rescue Exception => e
+        puts e.backtrace
       end
-    rescue Exception => e
-      puts e
     end
+
     created_feed_urls = FeedUrl.count - feed_url_count
     puts "************************************* Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"
     created_feed_urls
@@ -54,9 +56,9 @@ class Feed < ActiveRecord::Base
 
           # remove characters after come with space + '- or |' symbols
           title = title.to_s.gsub(/\s(-|\|).+/, '')
-          title = title.blank? ? "" : title.strip
+          title = title.blank? ? "" : title.to_s.strip
 
-          FeedUrl.create(feed_id: id, url: each_entry.url, title: title.strip, category: category,
+          FeedUrl.create(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
                          :published_at => each_entry.published)
         end
@@ -92,7 +94,7 @@ class Feed < ActiveRecord::Base
         feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
         unless feed_by_sources.blank?
           categories = feed_by_sources.map(&:category)
-          categories = categories.map {|each_cat| each_cat.split(',')}
+          categories = categories.map { |each_cat| each_cat.split(',') }
           category = categories.flatten.uniq.join(',')
         end
       end
@@ -104,9 +106,9 @@ class Feed < ActiveRecord::Base
 
         # remove characters after come with space + '- or |' symbols
         title = title.to_s.gsub(/\s(-|\|).+/, '')
-        title = title.blank? ? "" : title.strip
+        title = title.blank? ? "" : title.to_s.strip
 
-        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
+        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.to_s.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => self.id, :published_at => each_record.created_at)
       end
@@ -118,12 +120,12 @@ class Feed < ActiveRecord::Base
     title_words = title.to_s.downcase #.split
 
     tips = %w[tip trick]
-    reviews = ['review', 'first impression', 'hands on', 'hands-on','first look','unboxing']
+    reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing']
     comparisons = %w['vs','versus']
     how_to = ["tutorial", "guide", "how to"]
-    lists = ["top","best"]
+    lists = ["top", "best"]
     photos = ["gallery"]
-    news = ['launch', 'release', 'online', 'available','announce','official']
+    news = ['launch', 'release', 'online', 'available', 'announce', 'official']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
@@ -139,7 +141,7 @@ class Feed < ActiveRecord::Base
     end
     lists.each do |list|
       return ArticleCategory::LIST if title_words.scan(list).size >0
-      end
+    end
     photos.each do |images|
       return ArticleCategory::PHOTO if title_words.scan(images).size >0
     end
@@ -155,7 +157,7 @@ class Feed < ActiveRecord::Base
 
   def self.get_feed_url_values(url)
     begin
-      uri = URI.parse(URI.encode(url.strip))
+      uri = URI.parse(URI.encode(url.to_s.strip))
       doc = Nokogiri::HTML(open(uri))
       title_info = doc.xpath('.//title').to_s.strip
       rating_value = 0
@@ -183,7 +185,7 @@ class Feed < ActiveRecord::Base
       images = ArticleContent.get_images_from_doc(doc, images)
       images = [] if images.blank?
 
-    rescue OpenURI::HTTPError => e
+    rescue => e
       title_info = ""
       meta_description = ""
     end
