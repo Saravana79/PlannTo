@@ -3,6 +3,7 @@ caches_action :index, :unless => :current_user, :cache_path => Proc.new { |c| c.
 caches_action :terms_conditions,  :cache_path => Proc.new { |c| c.params }
 caches_action :privacy_policy,  :cache_path => Proc.new { |c| c.params }
 caches_action :about_us,  :cache_path => Proc.new { |c| c.params }
+caches_action :targeting,  :cache_path => Proc.new { |c| c.params }
 layout false, only: [:targeting]
   layout "product"
    def index
