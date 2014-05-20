@@ -79,12 +79,12 @@
 
       <div class="fields-div">
         <div class="title_header float_lft">Item ID :</div>
-        <div class="float_lft"> <%= f.text_field :item_id, :readonly => true, :value => @order_history.item_id %> </div>
+        <div class="float_lft"> <%= f.text_field :item_id, :readonly => false, :value => @order_history.item_id %> </div>
       </div>
 
       <div class="fields-div">
         <div class="title_header float_lft">Item Name :</div>
-        <div class="float_lft"> <%= f.text_field :item_name, :readonly => true, :value => @order_history.item_name %> </div>
+        <div class="float_lft"> <%= f.text_field :item_name, :readonly => false, :value => @order_history.item_name %> </div>
       </div>
 
       <br/>
