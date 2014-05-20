@@ -185,6 +185,8 @@ def show_ads
         end
       end
 
+      item_ids = @items.map(&:id)
+
       @item = @items.first
 
       @item_details = []
