@@ -12,80 +12,60 @@
 
     <h2 class="order_title"> Order </h2>
 
-    <div class="main_form">
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Order Date :</div>
-        <div>
-          <%= f.text_field :order_date, :value => Date.today.strftime("%d-%m-%Y") %></div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">No Of Orders :</div>
-        <div class="float_lft"> <%= f.text_field :no_of_orders %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Publisher :</div>
-        <div class="float_lft"> <%= f.select :publisher_id, @publishers.collect {|a| [a.publisher_url, a.id]}, {:include_blank => true} %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Vendor :</div>
-        <div class="float_lft"> <%= f.select :vendor_ids, @vendors.collect {|a| [a.name, a.item_id]}, {:include_blank => true} %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Order Status :</div>
-        <div class="float_lft"><%= f.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:selected => "Validated"} %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Payment Status: </div>
-        <div class="float_lft"><%= f.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:selected => "Pending"} %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Total Revenue :</div>
-        <div class="float_lft"> <%= f.text_field :total_revenue %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Product Price :</div>
-        <div class="float_lft"> <%= f.text_field :product_price %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft">Impression ID :</div>
-        <div class="float_lft"> <%= f.text_field :impression_id, :placeholder => "Enter Impression ID", :value => @order_history.impression_id.to_s %> </div>
-      </div>
-
-      <div class="fields-div">
-        <div class="title_header float_lft"></div>
-        <div class="float_lft optional"> OR </div>
-      </div>
+    <style>
+    .label{font-size:12px;text-align:right;font-weight: bold;width:200px;}
+    .input {font-size:12px;text-align:left;width:200px;}
+    .input input {size:"160px;"}
+    </style>
 
 
-      <div class="fields-div" id="reviewProducts">
-
-        <div class="title_header float_lft">Product :</div>
-        <div class="taggingdiv">
+    <table style="width:800px;">
+        <tr>
+            <td class="label" width="25%">Order Date :</td>
+            <td class="input" width="25%"><%= f.text_field :order_date, :value => Date.today.strftime("%d-%m-%Y") %></td>
+            <td class="label" width="25%">No Of Orders :</td>
+            <td class="input" width="25%"><%= f.text_field :no_of_orders %></td>
+        </tr>
+            <tr>
+            <td class="label">Publisher :</td>
+            <td class="input"><%= f.select :publisher_id, @publishers.collect {|a| [a.publisher_url, a.id]}, {:include_blank => true} %></td>
+            <td class="label">Vendor :</td>
+            <td class="input"><%= f.select :vendor_ids, @vendors.collect {|a| [a.name, a.item_id]}, {:include_blank => true} %></td>
+        </tr>
+    <tr>
+            <td class="label">Order Status :</td>
+            <td class="input"><%= f.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:selected => "Validated"} %></td>
+            <td class="label">Payment Status :</td>
+            <td class="input"><%= f.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:selected => "Pending"} %></td>
+        </tr>
+            <tr>
+            <td class="label">Total Revenue :</td>
+            <td class="input"><%= f.text_field :total_revenue %></td>
+            <td class="label">Product Price :</td>
+            <td class="input"><%= f.text_field :product_price %></td>
+        </tr>
+            <tr>
+            <td class="label">Impression ID :</td>
+            <td class="input"><%= f.text_field :impression_id, :placeholder => "Enter Impression ID", :value => @order_history.impression_id.to_s %></td>
+            <td class="label">Product :</td>
+            <td class="input"><div class="taggingdiv">
           <ul id="ad_product_list" class="tagging"></ul>
           <div class="float_lft " id="displayTagBox">
             <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
           </div>
-        </div>
-      </div>
+        </div></td>
+        </tr>
+                    <tr>
+             <td class="label">Item Name :</td>
+            <td class="input"> <%= f.text_field :item_name, :readonly => false, :value => @order_history.item_name %></td>
+            <td class="label">Item ID :</td>
+            <td class="input"><%= f.text_field :item_id, :readonly => false, :value => @order_history.item_id %></td>
+           
+        </tr>
+    </table>
 
-      <div class="fields-div">
-        <div class="title_header float_lft">Item ID :</div>
-        <div class="float_lft"> <%= f.text_field :item_id, :readonly => false, :value => @order_history.item_id %> </div>
-      </div>
+  
 
-      <div class="fields-div">
-        <div class="title_header float_lft">Item Name :</div>
-        <div class="float_lft"> <%= f.text_field :item_name, :readonly => false, :value => @order_history.item_name %> </div>
-      </div>
 
       <br/>
 
@@ -93,7 +73,7 @@
         <% button_name = ["edit", "update"].include?(params[:action]) ? "Update Order" : "Add Order" %>
         <%= f.submit button_name, :class => 'btn_submitanswer', :id => "publishanswer" %>
       </div>
-    </div>
+  
 
 <% end %>
 
