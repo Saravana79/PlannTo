@@ -303,8 +303,7 @@ class ProductsController < ApplicationController
           status = "1,3".split(",")
       else
         status = "1".split(",")    
-        @activate_tab = false 
-           
+        @activate_tab = false
       end     
                         
 

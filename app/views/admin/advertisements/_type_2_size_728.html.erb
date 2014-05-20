@@ -42,13 +42,14 @@
                   <% elsif !sliced_item_detail.last.offer.blank? %>
                       <% default_text = sliced_item_detail.last.offer %>
                   <% else %>
-                      <% default_text = @vendor_default_text %>
+                      <% default_text = @vendor_ad_details[sliced_item_detail.last.site.to_i]['default_text'] %>
                   <% end %>
 
                   <%= truncate_without_dot(default_text.to_s, 65) %>
                 </p>
               </div>
               </div>
+              <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.last.site.to_i]['imageurl'] %>" alt="" style="display: none;">
             </div>
         <% end %>
     <% else %>

@@ -1108,11 +1108,13 @@ end
       p_v_records.each do |each_rec|
         redis_key = "items:#{each_rec.item_id}"
         val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
-        redis_values = val_hash.flatten
+        redis_values = val_hash
 
         related_item_ids = RelatedItem.where('item_id = ?', each_rec.item_id).limit(10).collect(&:related_item_id)
 
         redis_values.merge!(:related_item_ids => related_item_ids)
+
+        redis_values = val_hash.flatten
 
         log.debug "Hash Key => #{redis_key}"
         log.debug "Hash value => #{redis_values}"
