@@ -205,7 +205,6 @@ def show_ads
       end
 
       item_ids = @items.map(&:id)
-      @item = @items.first
 
       @item_details = []
       if item_ids.count > 1
@@ -290,6 +289,16 @@ def show_ads
           #                              Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
 
           @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+
+         # assign items
+         if !@items.blank?
+           @item = @items.first
+         elsif @items.blank? && !@item_details.blank?
+           list_item_ids = @item_details.map(&:itemid).uniq
+
+           @items = Item.where("id in (?)", list_item_ids)
+           @item = @items.first
+         end
 
 
          respond_to do |format|
