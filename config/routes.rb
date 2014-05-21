@@ -366,7 +366,7 @@ resources :comments do
   # root :to => 'home#index'
   root :to => 'home#targeting'
 
-  match "/home" => 'home#index'
+  match "/home" => 'home#index', :as => "home_products"
   #root :controller => :item, :action => :index
   # See how all your routes lay out with "rake routes"
 
