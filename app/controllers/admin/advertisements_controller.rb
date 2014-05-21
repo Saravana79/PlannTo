@@ -294,7 +294,11 @@ def show_ads
 
          respond_to do |format|
            format.json {
+             if @item_details.blank?
+               render :json => {:success => false, :html => "", :callback => params[:callback]}
+             else
                render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
+             end
            }
            format.html {render :layout => false}
          end
