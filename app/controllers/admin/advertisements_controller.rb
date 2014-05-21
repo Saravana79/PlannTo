@@ -94,6 +94,8 @@ end
 def show_ads
   params[:more_vendors] ||= "false"
 
+  impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+
   @vendor_ids =[]
   @vendor_ids = [9861, 9882, 9874, 9880, 9856] if params[:more_vendors] == "true"
   #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -122,7 +124,7 @@ def show_ads
       # @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
       @impression_id = SecureRandom.uuid
-      impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => nil, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+      impression_params =  {:imp_id => @impression_id, :type => impression_type, :itemid => nil, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
        :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
@@ -223,14 +225,14 @@ def show_ads
 
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
-      if @item_details.blank? and ad_id == 2
+      if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
 
          #### - Saravana - temporarily redirecting to static image ad. we need to implement this.
 
           @ad = Advertisement.get_ad_by_id(4).first
           itemaccess = "MissingURL"
           @impression_id = SecureRandom.uuid
-          impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => nil, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+          impression_params =  {:imp_id => @impression_id, :type => impression_type, :itemid => nil, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
           Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
@@ -243,7 +245,7 @@ def show_ads
           end
 
       else
-         if @item_details.blank?
+         if impression_type != "advertisement_widget" && @item_details.blank?
             unless $redis.get("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}").blank?
               @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}"), vendor_ids)
             end
@@ -265,7 +267,7 @@ def show_ads
           # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
           @impression_id = SecureRandom.uuid
-          impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+          impression_params =  {:imp_id => @impression_id, :type => impression_type, :itemid => item_ids.first, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                                                                    :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => ad_id}.to_json
           Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
@@ -299,21 +301,18 @@ def show_ads
            @items = Item.where("id in (?)", list_item_ids)
            @item = @items.first
          end
-
-
-         respond_to do |format|
-           format.json {
-             if @item_details.blank?
-               render :json => {:success => false, :html => "", :callback => params[:callback]}
-             else
-               render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
-             end
-           }
-           format.html {render :layout => false}
-         end
           # render :layout => false
+      end
 
-
+      respond_to do |format|
+        format.json {
+          if @item_details.blank?
+            render :json => {:success => false, :html => ""}, :callback => params[:callback]
+          else
+            render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
+          end
+        }
+        format.html {render :layout => false}
       end
 
 end
