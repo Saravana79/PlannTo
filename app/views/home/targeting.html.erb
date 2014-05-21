@@ -37,7 +37,14 @@
 						<li><a href="#services">Services</a></li>
 						<li><a href="#aboutus">About Us</a></li>
 						<li><a href="#contact">Contact Us</a></li>
-                        <li><%= link_to "Sign In", new_user_session_path, :class => "external" %></li>
+                        <li>
+                          <% if current_user %>
+                              <%= link_to "Products", home_products_path, :class => "external" %>
+                              </li><li><%= link_to "Logout", destroy_user_session_path, :class => "external" %></li>
+                          <% else %>
+                              <%= link_to "Sign In", new_user_session_path, :class => "external" %>
+                          <% end %>
+                        </li>
 					</ul>
 				</div>
 
