@@ -16,13 +16,13 @@
                       <div class="advt-box">
                         <div class="product-container">
                           <div class="product-img-left">
-                            <a href="#"><img src="<%= get_image_url(item_detail) %>" alt="" width="119px" height="89px"></a>
+                            <a href="#"><img src="<%= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" alt="" width="119px" height="89px"></a>
                           </div>
                           <div class="product-txt-right">
                             <h3><%= item_detail.ItemName %></h3>
 
                             <p class="product-desc">
-                              <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_default_text), 50) %>
+                              <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 50) %>
                             </p>
 
                             <p class="price"><%= prettify(item_detail.price) %></p>
@@ -36,6 +36,7 @@
                         </div>
                       </div>
                   <% end %>
+                  <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
                 </li>
             <% end %>
           </ul>
