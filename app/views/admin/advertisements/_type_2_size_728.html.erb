@@ -35,7 +35,7 @@
               <% end %>
               <div class="product-extra-desc">
                 <p>
-                  <% if !@ad.offer.blank? %>
+                  <% if !@ad.blank? && !@ad.offer.blank? %>
                       <% default_text = @ad.offer %>
                   <% elsif !sliced_item_detail.first.offer.blank? %>
                      <% default_text = sliced_item_detail.first.offer %>

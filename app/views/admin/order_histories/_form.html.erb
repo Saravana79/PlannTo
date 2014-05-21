@@ -93,8 +93,9 @@
         $.textTagger("ad_product", "ad_product_list", settings)
 
 
-        $("#order_history_impression_id").blur(function()
+        $("#order_history_impression_id").change(function()
         {
+            console.log('change')
             var impression_id = $(this).val()
             console.log(impression_id)
 
@@ -106,7 +107,6 @@
 
                     if (response.invalid_id == false)
                     {
-                        $("#ad_product_list .taggingmain").remove()
                         $("#order_history_item_id").val(response.item_id)
                         $("#order_history_item_name").val(response.item_name)
                     }
@@ -120,7 +120,6 @@
             {
                 $("#order_history_item_id").val('')
                 $("#order_history_item_name").val('')
-                $("#order_history_impression_id").val('')
             }
 
         })

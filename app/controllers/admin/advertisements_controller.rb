@@ -92,9 +92,10 @@ def destroy
 end
 
 def show_ads
-  params[:more_details] ||= "false"
+  params[:more_vendors] ||= "false"
 
-  @vendor_ids = [9861, 9882, 9874, 9880, 9856] if params[:more_details] == "true"
+  @vendor_ids =[]
+  @vendor_ids = [9861, 9882, 9874, 9880, 9856] if params[:more_vendors] == "true"
   #TODO: everything is clickable is only updated for type1 have to update for type2
   @ref_url = params[:ref_url] ||= ""
   url = ""
@@ -114,8 +115,8 @@ def show_ads
 
   @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
-  unless @ad.blank?
-    if @ad.advertisement_type == "static"
+
+    if !@ad.blank? && @ad.advertisement_type == "static"
       # static ad process
       @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
       # @impression_id = AddImpression.save_add_impression_data("advertisement", nil, url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
@@ -125,13 +126,31 @@ def show_ads
        :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
-      render "show_static_ads", :layout => false
-    elsif @ad.advertisement_type == "dynamic"
+      # return render "show_static_ads.html.erb", :layout => false
+      respond_to do |format|
+        format.json {
+          return render :json => {:success => true, :html => render_to_string("admin/advertisements/show_static_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        }
+        format.html { return render "show_static_ads.html.erb", :layout => false}
+      end
+    end
+
+    # if (@ad.blank? || (!@ad.blank? & @ad.advertisement_type == "dynamic"))
       # dynamic ad process
       # vendor_id = UserRelationship.where(:user_id => @ad.user_id, :relationship_type => "Vendor").first.relationship_id
-      vendor_id = @ad.vendor_id
 
+
+    if !@ad.blank?
       vendor_ids = @vendor_ids.blank? ? [@ad.vendor_id] : @vendor_ids
+      ad_id = @ad.id
+      @ad_template_type = @ad.template_type
+    else
+      vendor_ids = @vendor_ids
+      ad_id = ""
+      @ad_template_type = "type_1"
+    end
+
+      # vendor_ids = @vendor_ids.blank? ? [@ad.vendor_id] : @vendor_ids
 
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
@@ -191,7 +210,7 @@ def show_ads
       @item_details = []
       if item_ids.count > 1
         item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by {|each_rec| each_rec.itemid}
-        @item_details = Itemdetail.get_sort_by_vendor(item_details)
+        @item_details = item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(item_details)
 
 
         # item_details.each { |_, val| @item_details << val }
@@ -205,7 +224,7 @@ def show_ads
 
       # Default item_details based on vendor if item_details empty
       #TODO: temporary solution, have to change based on ecpm
-      if @item_details.blank? and @ad.id == 2
+      if @item_details.blank? and ad_id == 2
 
          #### - Saravana - temporarily redirecting to static image ad. we need to implement this.
 
@@ -216,7 +235,13 @@ def show_ads
            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
           Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
-          render "show_static_ads", :layout => false
+          # render "show_static_ads.html.erb", :layout => false
+          respond_to do |format|
+            format.json {
+              return render :json => {:success => true, :html => render_to_string("admin/advertisements/show_static_ads.html.erb", :layout => false)}, :callback => params[:callback]
+            }
+            format.html { return render "show_static_ads.html.erb", :layout => false}
+          end
 
       else
          if @item_details.blank?
@@ -237,17 +262,17 @@ def show_ads
          end
          @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
 
-         @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+         @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
           # @impression_id = AddImpression.save_add_impression_data("advertisement", item_ids.join(','), url, Time.zone.now, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
 
           @impression_id = SecureRandom.uuid
           impression_params =  {:imp_id => @impression_id, :type => "advertisement", :itemid => item_ids.first, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                                                                   :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => @ad.id}.to_json
+                                                                   :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => ad_id}.to_json
           Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
 
           @item_details = @item_details.uniq(&:url)
 
-          if @ad.template_type == "type_2"
+          if @ad_template_type == "type_2"
             @item_details = @item_details.first(12)
             @sliced_item_details = @item_details.each_slice(2)
           else
@@ -269,7 +294,7 @@ def show_ads
 
          respond_to do |format|
            format.json {
-               render :json => {:success => true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
+               render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
            }
            format.html {render :layout => false}
          end
@@ -278,9 +303,6 @@ def show_ads
 
       end
 
-
-    end
-  end
 end
 
   def delete_ad_image
