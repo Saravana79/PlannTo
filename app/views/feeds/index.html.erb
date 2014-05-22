@@ -24,6 +24,7 @@
 <div class="feed_form">
 <%= form_for :feed, url: {action: "create"} do |f| %>
     <%= f.text_field :url, :class => "input", :placeholder=>"Enter feed url" %>
+    <%= f.select :priorities, [1,2,3], {:selected => 3}, :class => "input", :style => "margin-right: 9px;" %>
     <%= f.select :category, @categories, {:selected => "Mobile"}, :multiple => true, :class => "input" %>
     <%= f.submit %>
 <% end %>

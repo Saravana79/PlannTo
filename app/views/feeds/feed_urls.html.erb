@@ -17,6 +17,7 @@
   <div class="list_feed_urls">
     <div class="search_form">
       <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
+        Priorities: <%= search_form.select :priorities, [1,2,3], {:include_blank => true, :selected => params[:search][:priorities]} %>
         Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
         Source: <%= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>

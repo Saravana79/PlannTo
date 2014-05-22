@@ -46,6 +46,11 @@ module Clockwork
     Resque.enqueue(AggregatedDetailProcess, Time.zone.now)
   end
 
+  every(2.hours, 'Queeing Feed Process') do
+    puts "Running Priorities Feed Process, at #{Time.zone.now}"
+    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=true)
+  end
+
   #every(3.minutes, 'less.frequent.job')
   #every(1.hour, 'hourly.job')
   #

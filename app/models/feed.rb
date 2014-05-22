@@ -4,14 +4,13 @@ class Feed < ActiveRecord::Base
   has_many :feed_urls
   after_create :start_process_feeds
 
-  def self.process_feeds(feed_id=nil)
+  def self.process_feeds(feed_ids=[])
     puts "************************************************* Process Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} *************************************************"
 
-    if feed_id.blank?
+    if feed_ids.blank?
       @feeds = Feed.all
     else
-      feed = Feed.find_by_id(feed_id)
-      @feeds = [*feed]
+      @feeds = Feed.where("id in (?)", feed_ids)
     end
 
     feed_url_count = FeedUrl.count
@@ -60,7 +59,7 @@ class Feed < ActiveRecord::Base
 
           FeedUrl.create(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
-                         :published_at => each_entry.published)
+                         :published_at => each_entry.published, :priorities => priorities)
         end
       end
       self.update_attributes!(last_updated_at: feed.last_modified)
@@ -110,7 +109,7 @@ class Feed < ActiveRecord::Base
 
         @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.to_s.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
-                                   :feed_id => self.id, :published_at => each_record.created_at)
+                                   :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities)
       end
     end
     self.update_attributes(:last_updated_at => Time.zone.now)
@@ -203,7 +202,7 @@ class Feed < ActiveRecord::Base
   private
 
   def start_process_feeds
-    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, self.id)
+    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, self.id, false)
   end
 
 

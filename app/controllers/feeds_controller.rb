@@ -12,7 +12,7 @@ class FeedsController < ApplicationController
     feed = Feedzirra::Feed.fetch_and_parse(params[:feed][:url])
     if (!feed.blank? && feed != 0)
       categories = params[:feed][:category] ? params[:feed][:category].join(",") : ""
-      @feed = Feed.create(url: feed.feed_url, title: feed.title, category: categories, created_by: current_user.id, process_type: "feed", process_value: "rss")
+      @feed = Feed.create(url: feed.feed_url, title: feed.title, category: categories, created_by: current_user.id, process_type: "feed", process_value: "rss", :priorities => params[:feed][:priorities])
     end
     redirect_to feeds_path
   end
@@ -31,6 +31,7 @@ class FeedsController < ApplicationController
     condition = "1=1"
     unless params[:search].blank?
       #condition = "1=1"
+      condition = condition + " and priorities = #{params[:search][:priorities]}" unless params[:search][:priorities].blank?
       condition = condition + " and category like '%#{params[:search][:category]}%'" unless params[:search][:category].blank?
       condition = condition + " and status = #{params[:search][:status]}" unless params[:search][:status].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
