@@ -199,8 +199,12 @@ def show_ads
               @items = @articles[0].allitems.select{|a| a.is_a? Product};
               # @items = @items[0..15].reverse
               article_items_ids = @items.map(&:id)
-              @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-              $redis.set("#{url}ad_item_ids", @items.collect(&:id).join(","))
+              new_items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+
+              if !new_items.blank?
+                @items = new_items
+              end
+              $redis.set("#{url}ad_item_ids", @items.collect(&:id).join(",")) unless @items.blank?
             end
           end
         end

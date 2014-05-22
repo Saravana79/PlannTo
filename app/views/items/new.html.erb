@@ -12,7 +12,7 @@
 <%= link_to 'Back', items_path %>
 
 
-<%= link_to 'Go to last Item', item_path(Item.last), :target => "_blank" %>
+<%= link_to 'Go to last Item', item_path(Item.last rescue Item.first), :target => "_blank" %>
 
 
 <style type="text/css">

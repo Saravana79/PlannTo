@@ -16,7 +16,7 @@ class ItemAdDetail < ActiveRecord::Base
 
       items.each do |each_item|
         new_version_id = each_item.new_version_item_id
-        old_version_id = Item.old_version_item_id(each_item.item_id)
+        # old_version_id = Item.old_version_item_id(each_item.item_id) # TODO: we can update manually to improve performance
 
         related_item_ids = RelatedItem.where('item_id = ?', each_item.item_id).limit(10).collect(&:related_item_id)
         related_item_ids = related_item_ids.map(&:inspect).join(',')

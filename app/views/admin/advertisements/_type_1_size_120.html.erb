@@ -10,21 +10,22 @@
 
         <% @item_details.each_with_index do |item_detail, indx| %>
             <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
+            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
             <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <div class="advt-box">
                 <div class="product-container">
-                  <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
-                     <h3 class="product-title"><%= item_detail.ItemName %></h3>
+                  <a href="<%= shop_now_url %>" target="_blank" class="">
+                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
                   </a>
 
 
                   <div class="product-img">
-                    <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
+                    <a href="<%= shop_now_url %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
                   </div>
-                  <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="">
+                  <a href="<%= shop_now_url %>" target="_blank" class="">
                     <p class="product-desc">
-                      <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 45) %>
+                      <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 45) %>
                     </p>
 
                  <!-- <p class="price-strike">Rs. <%#= item_detail.price %></p> -->
@@ -33,12 +34,12 @@
                   </a>
 
                   <p class="btn">
-                    <a href="<%= @click_url.blank? ? ad_url : (@click_url+ad_url) %>" target="_blank" class="shop-now">Shop
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
                       Now</a>
                   </p>
                 </div>
                 <div class="product-extra-desc"><p>
-                  <%= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 45) %>
+                  <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 45, shop_now_url) %>
                 </p></div>
               </div>
               <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
