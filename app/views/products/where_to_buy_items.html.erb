@@ -347,13 +347,13 @@
                 <% unless @show_price == "false" %>
                   <li class="selected">
              
-                <a href="#" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
+                <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
                   </li>
                 <%end%>
                 <%if @show_offer != "false" %>
                <li class="unselected">
 
-                   <a href="#" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a> 
+                   <a href="javascript:void(0)" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a>
                   </li>
                 <%end%>  
               </ul>
@@ -418,7 +418,7 @@
                                             <% end %>
                                         <% end %>
                                         <% if @items.count > @show_count %>
-                                        <li class="pldropdown"><a href="#">More <b class="plcaret"></b></a>
+                                        <li class="pldropdown"><a href="javascript:void(0)">More <b class="plcaret"></b></a>
                                           <ul class="plsub-menu pldropdown-menu">
                                             <% @items.each_with_index do |each_item, index| %>
                                                 <% next if index == 0 %>
