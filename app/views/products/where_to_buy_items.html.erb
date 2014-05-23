@@ -408,7 +408,7 @@
                                             <% if index < @show_count %>
                                                 <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
 
-                                                  <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)">
+                                                  <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)">
                                                     <span style="float:left;"><img  src="<%=each_item.image_url(:small)%>" alt="<%=each_item.name%>"  onerror="this.error=null;this.src='<%=each_item.base_item_image_url(:small)%>';" style="width:30px;"/>
                                                   </span><span style="float:left;">
                                                     <%= each_item.name.to_s.truncate(30) %>
@@ -424,7 +424,7 @@
                                                 <% next if index == 0 %>
                                                 <% if index >= @show_count %>
                                                     <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
-                                                      <a href="#" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)"><%= each_item.name.to_s.truncate(30) %></a>
+                                                      <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>)"><%= each_item.name.to_s.truncate(30) %></a>
                                                     </li>
                                                 <% end %>
                                             <% end %>
