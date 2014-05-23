@@ -112,7 +112,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
     {
         var item_id =  id;
         var show_details = moredetails;
-        PlannTo.jQuery(".plnav-tabs li").removeClass('active')
+        PlannTo.jQuery(obj).parents("#plannto_intd").find(".plnav-tabs li").removeClass('active')
         PlannTo.jQuery(obj).parent().addClass('active')
         PlannTo.jQuery(obj).closest("li.pldropdown").addClass('active')
         var element_id = PlannTo.jQuery(obj).parents("table#plannto_intable").find("tbody#where_to_buy_items_onchange")
