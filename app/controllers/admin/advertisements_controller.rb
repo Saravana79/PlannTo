@@ -214,15 +214,15 @@ def show_ads
 
       @item_details = []
       if item_ids.count > 1
-        item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by {|each_rec| each_rec.itemid}
-        @item_details = item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(item_details)
-
+        @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by {|each_rec| each_rec.itemid}
 
         # item_details.each { |_, val| @item_details << val }
-        @item_details = @item_details.flatten
       elsif item_ids.count > 0
-        @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids)
+        @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by {|each_rec| each_rec.itemid}
       end
+
+      @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details)
+      @item_details = @item_details.flatten
 
       @item_details = @item_details.uniq(&:url)
       # @item_details = @item_details.first(6)
