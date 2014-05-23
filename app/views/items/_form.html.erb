@@ -36,6 +36,13 @@
     <%= f.radio_button :status, '2' %>
     <%= label :status_2, 'Future' %>
     <br />
+
+    <label for="manufacturer">Previous Version :</label>
+    <%= hidden_field_tag "old_version_id", "", :id => "old-version" %>
+    <%= text_field_tag "old-version_search", "", :class => "auto_complete_field" %>
+
+    <br/>
+
     <%= f.submit %>
   <% end %>
 
@@ -60,8 +67,10 @@
 
               if ($required_id == "manufacturer")
                 var type = "manufacturer"
-              else
+              else if ($required_id == "car_group")
                 var type = "car_group"
+              else
+                var type = $("#item_itemtype_id :selected").text()
 
 
               $.ajax({

@@ -2,6 +2,7 @@ require 'json'
 class Item < ActiveRecord::Base
 
   validates :name, :itemtype_id, :imageurl, :presence => true
+  attr_accessor :old_version_id
 
   has_many :add_impressions
   has_many :impressions, :as=>:impressionable
@@ -45,6 +46,7 @@ class Item < ActiveRecord::Base
   has_many :item_pro_cons
   has_one :item_ad_detail
 
+  after_create :create_item_ad_detail
   after_create :update_redis_with_item
 
   # default_scope includes(:attribute_values)
@@ -1229,6 +1231,21 @@ end
   end
 
   private
+
+  def create_item_ad_detail
+    old_item = Item.where(:id => self.old_version_id).last
+
+    unless old_item.blank?
+      old_item.update_attributes!(:new_version_item_id => self.id)
+      old_item_ad_detail = old_item.item_ad_detail
+      if old_item_ad_detail.blank?
+        ItemAdDetail.create(:item_id => old_item.id, :new_version_id => self.id) # old_item_ad_detail
+      else
+        old_item_ad_detail.update_attributes!(:new_version_id => self.id)
+      end
+      ItemAdDetail.create(:item_id => self.id, :old_version_id => old_item.id) # new_item_ad_detail
+    end
+  end
 
   def update_redis_with_item
     #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)

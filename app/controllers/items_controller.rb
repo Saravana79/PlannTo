@@ -117,7 +117,7 @@ class ItemsController < ApplicationController
     itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
     klass = itemtype.itemtype.to_s.gsub(" ", "")
 
-    @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id))
+    @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id, :old_version_id => params[:old_version_id]))
 
     respond_to do |format|
       if @item.save
