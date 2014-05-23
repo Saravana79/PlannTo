@@ -1230,6 +1230,49 @@ end
     return return_val
   end
 
+  def self.make_item_with_valid_details(items, publisher, status)
+    ret_items = []
+    item = items.first
+    where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
+
+    where_to_buy_items = []
+
+    if where_to_buy_items.blank?
+      new_version_item_by_current_item = item.new_version_item_id.blank? ? nil : Item.where(:id => item.new_version_item_id).last
+
+      unless new_version_item_by_current_item.blank?
+        new_where_to_buy_items, new_tempitems, new_item = Item.process_and_get_where_to_buy_items([new_version_item_by_current_item], publisher, status)
+        unless new_where_to_buy_items.blank?
+          ret_items = [new_version_item_by_current_item]
+        end
+      else
+        current_item_ad_detail = item.item_ad_detail
+
+        unless current_item_ad_detail.blank?
+          new_version_item_by_current_item_ad_detail = current_item_ad_detail.new_version_id.blank? ? nil : Item.where(:id => current_item_ad_detail.new_version_id).last
+          unless new_version_item_by_current_item_ad_detail.blank?
+            new_where_to_buy_items, new_tempitems, new_item = Item.process_and_get_where_to_buy_items([new_version_item_by_current_item_ad_detail], publisher, status)
+            unless new_where_to_buy_items.blank?
+              ret_items = [new_version_item_by_current_item_ad_detail]
+            end
+          else
+            old_version_item_by_current_item_ad_detail = current_item_ad_detail.old_version_id.blank? ? nil : Item.where(:id => current_item_ad_detail.old_version_id).last
+            unless old_version_item_by_current_item_ad_detail.blank?
+              new_where_to_buy_items, new_tempitems, new_item = Item.process_and_get_where_to_buy_items([old_version_item_by_current_item_ad_detail], publisher, status)
+              unless new_where_to_buy_items.blank?
+                ret_items = [old_version_item_by_current_item_ad_detail]
+              end
+            end
+          end
+        end
+      end
+    else
+      ret_items = items
+    end
+
+    return ret_items
+  end
+
   private
 
   def create_item_ad_detail

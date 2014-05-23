@@ -199,7 +199,7 @@ def show_ads
               @items = @articles[0].allitems.select{|a| a.is_a? Product};
               # @items = @items[0..15].reverse
               article_items_ids = @items.map(&:id)
-              new_items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+              new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
 
               if !new_items.blank?
                 @items = new_items

@@ -319,8 +319,15 @@ class ProductsController < ApplicationController
       # Update Items if there is only one item
 
       if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
+        # check is there valid item_details
+
+        get_items = Item.make_item_with_valid_details(@items, @publisher, status)
+
+        @items = get_items unless get_items.blank?
+
         item = @items.first
         item_ad_detail = item.item_ad_detail
+
         items = []
         unless item_ad_detail.blank?
           related_item_ids = item_ad_detail.related_item_ids.to_s.split(',')
