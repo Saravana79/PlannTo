@@ -118,7 +118,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var element_id = PlannTo.jQuery("#where_to_buy_items_onchange")
         parentDiv = "where_to_buy_items1"
         planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","", true);
-        event.preventDefault();
+//        event.preventDefault();
 
     }
 
@@ -129,7 +129,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
         planntowtbdivcreation (item_ids,show_details,"wheretobuytab",element_id,parentDiv,"","","", true);
-        event.preventDefault();
+//        event.preventDefault();
     
   } 
 
@@ -154,7 +154,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
               event.preventDefault()
             })
           });
-    event.preventDefault();    
+//    event.preventDefault();
   } 
 
     function planntowtbdivcreation(item_ids,show_details,path, element_id, parentdivid,pathname,show_price,show_offer, sort_disable)

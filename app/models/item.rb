@@ -1235,8 +1235,6 @@ end
     item = items.first
     where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
 
-    where_to_buy_items = []
-
     if where_to_buy_items.blank?
       new_version_item_by_current_item = item.new_version_item_id.blank? ? nil : Item.where(:id => item.new_version_item_id).last
 
