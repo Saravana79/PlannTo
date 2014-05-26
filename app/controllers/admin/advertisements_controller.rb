@@ -93,6 +93,7 @@ end
 
 def show_ads
   params[:more_vendors] ||= "false"
+  @ad_template_type ||= "type_1"
 
   impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
 
@@ -145,7 +146,7 @@ def show_ads
     if !@ad.blank?
       vendor_ids = @vendor_ids.blank? ? [@ad.vendor_id] : @vendor_ids
       ad_id = @ad.id
-      @ad_template_type = @ad.template_type
+      @ad_template_type = @ad.template_type unless @ad.template_type.blank?
     else
       vendor_ids = @vendor_ids
       ad_id = ""
@@ -156,7 +157,7 @@ def show_ads
 
       @suitable_ui_size = Advertisement.process_size(@iframe_width)
 
-      item_ids = params[:item_id].split(",") unless params[:item_id].nil?
+      item_ids = params[:item_id].split(",") unless params[:item_id].blank?
 
       @items = []
       unless (item_ids.blank?)

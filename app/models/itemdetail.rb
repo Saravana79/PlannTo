@@ -99,7 +99,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     end
 
     item_keys = exp_result.keys
-    max_count = exp_result.map {|_, s| s.values.count}.max
+    max_count = exp_result.map {|_, s| s.map {|_, x| x.count}}.flatten.max
 
     vendor_orders = [9861, 9882, 9874, 9880, 9856]
 

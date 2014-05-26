@@ -1,0 +1,47 @@
+<div style="border: solid 0px; margin: 0 auto;background: white;padding:10px;">
+  <div style="font-size:18px;padding:5px;background:#FAFAFA;">
+    <h1 itemprop="itemreviewed" style="font-size:15px;margin:0px;"><%= @item.get_name %></h1>
+  </div>
+  <div style="width:100%;">
+    <div style="float:left;">
+      <span><img src="<%= @item.image_url %>" alt="<%= @item.name %>" width="176" height="132"/></span>
+    </div>
+  </div>
+
+  <br style="clear:both;"/><br/>
+
+  <div id="compare_price" class="main-content-section">
+    <%#= render "products/where_to_buy" %>
+    <% @gotext = "Buy Now" %>
+    <table id="plannto_intable" width="100%">
+      <thead style="border:0px;">
+      <tr id="plannto_inheadertr">
+        <td id="plannto_inheadercol1" width="20%">Seller</td>
+        <td id="plannto_inheadercol2" width="20%">Price</td>
+        <td width="15%" id="plannto_inheadercol2">Buy Now</td>
+      </tr>
+      <% @where_to_buy_items.group_by(&:site).each do |site, items| %>
+          <tr id="plannto_intr">
+            <% items.each_with_index do |item, index| %>
+                <% if display_item_details(item) %>
+                    <% if index == 0 %>
+                        <td id="plannto_incol1" width="20%">
+                          <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url %>" alt="<%= item.vendor_name %>" style="width:85px;border:0;padding:0;"/>
+                        </td>
+                        <td id="plannto_incol2" width="20%"> <%= display_price_detail(item) %> </td>
+                        <!--<td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
+                        <td width="15%" id="plannto_incol3">
+                          <a rel="nofollow" href="http://www.plannto.com/history_details?detail_id=<%= item.item_details_id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
+                        </td>
+                    <% end %>
+                <% end %>
+            <% end %>
+          </tr>
+      <% end %>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+</div>

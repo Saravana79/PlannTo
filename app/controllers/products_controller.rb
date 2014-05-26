@@ -487,7 +487,10 @@ class ProductsController < ApplicationController
   
     def search_items
       # @types = params[:types].blank? ? ["Mobile", "Tablet", "Camera"] : params[:types].split(",")
-        @item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type].split(",")
+      @page_type ||= "large_screen"
+      @page_type = params[:page_type] unless params[:page_type].blank?
+
+      @item_types =  params[:search_type].blank? ? "Mobile" : params[:search_type].split(",")
 
       if params[:term]
         @items = Sunspot.search(Product.search_type(@item_types)) do
@@ -582,6 +585,22 @@ class ProductsController < ApplicationController
 
   
   def get_item_for_widget
+    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
+
+    @page_type ||= "large_screen"
+    @page_type = params[:page_type] unless params[:page_type].blank?
+
+    url = ""
+    url_params = Advertisement.url_params_process(params)
+
+    if(params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined' )
+      url = params[:ref_url]
+      itemsaccess = "ref_url"
+    else
+      itemsaccess = "referer"
+      url = request.referer
+    end
+
     @item = Item.find(params[:item_id].gsub("product_", ""))
  
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
@@ -596,6 +615,12 @@ class ProductsController < ApplicationController
       @items_specification[key[:key]] << {:values => value, description: key[:description],title: key[:title]} if key
       end
     end
+
+    @impression_id = SecureRandom.uuid
+    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                          :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
+    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+
         html = html = render_to_string(:layout => false)
         json = {"html" => html}.to_json
         callback = params[:callback]     

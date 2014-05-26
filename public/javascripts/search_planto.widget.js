@@ -10,7 +10,7 @@ var PlannTo = (function (window, undefined) {
     //for production
      var domain = "www.plannto.com";
     //for development
-    //var domain = "localhost:3000";
+//    var domain = "localhost:3000";
     // Localize jQuery variable
     var jQuery;
 
@@ -20,7 +20,7 @@ var PlannTo = (function (window, undefined) {
         script_tag.setAttribute("type", "text/javascript");
         script_tag.setAttribute("src",
             "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
-        
+
         if (script_tag.readyState) {
             script_tag.onreadystatechange = function () { // For old versions of IE
                 if (this.readyState == 'complete' || this.readyState == 'loaded') {
@@ -29,11 +29,11 @@ var PlannTo = (function (window, undefined) {
             };
         } else { // Other browsers
             script_tag.onload = scriptLoadHandler;
-            
+
         }
         // Try to find the head, otherwise default to the documentElement
         (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
-        
+
 
 
     } else {
@@ -59,10 +59,10 @@ var PlannTo = (function (window, undefined) {
             });
         }
         main();
-        
+
     }
 
-  
+
     function getParam(url, sname) {
         var a = document.createElement('a');
         a.href = url;
@@ -108,14 +108,12 @@ var PlannTo = (function (window, undefined) {
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
-        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
-            console.log(data)
             jQuery("#display_search_item").html(data.html);
-             event.preventDefault();
+//             event.preventDefault();
         });
-        event.preventDefault();
     }
 
 
@@ -126,7 +124,7 @@ var PlannTo = (function (window, undefined) {
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
-        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
@@ -135,17 +133,16 @@ var PlannTo = (function (window, undefined) {
                 where_to_buy(jQuery(this).attr("id"), show_details, element_id, parentdivid, pathname)
             })
             autoComplete()
-            event.preventDefault();
+//            event.preventDefault();
 
         });
-        event.preventDefault();
+//        event.preventDefault();
     }
 
 
 
     function autoComplete(url) {
-
-        url = getScriptUrl();
+//        url = getScriptUrl();
         var doc_title = PlannTo.jQuery(document).title;
         var doc_title = jQuery(document).title;
         var pathname = getParam(url, "ref_url");
@@ -175,15 +172,14 @@ var PlannTo = (function (window, undefined) {
             focus:function(e,ui) {},
             format: "js",
             minLength: 2,
-            select: function (event, ui) { 
-
-              where_to_buy(ui.item.id, show_details, element, element_id, pathname); 
+            select: function (event, ui) {
+              where_to_buy(ui.item.id, show_details, element, element_id, pathname);
               jQuery("#planto_search_widget_auto_item").val("");
               return false;
             }
 
         }).data( "autocomplete" )._renderItem = function( ul, item,index ) {
-            
+
             return jQuery( "<li></li>" )
             .data( "item.autocomplete", item )
             .append("<a>" + "<div style='margin-left:5px;float:left'><img width='40' height='40' src='" + item.imgsrc + "' /></div>" + "<div style='margin-left:53px;'><span class='atext'>" + item.value + "</span><br/><span class ='atext'>" + item.type + "</span></div></a>")
@@ -191,7 +187,7 @@ var PlannTo = (function (window, undefined) {
             .appendTo( ul );
           }
 
-           event.preventDefault();
+//           event.preventDefault();
         // jQuery(ul).append("<div class='myFooter'>some footer text</div>");
 
         // console.log(jQuery("#planto_search_widget_auto_item"))
@@ -212,6 +208,7 @@ var PlannTo = (function (window, undefined) {
             // var item_id = jQuery("#planto_search_widget_auto_item").val();
             var show_details = getParam(url, "show_details");
             var ads = getParam(url, "advertisement");
+            page_type = getParam(url, "page_type");
             var element_id = "#content";
 
             element = jQuery("#display_search_item").val()
@@ -219,7 +216,7 @@ var PlannTo = (function (window, undefined) {
             types = getParam(url, "types");
             it_id = item_type ? item_type : ""
 
-            url = "http://" + domain + SubPath + "?types="+types+"&first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+            url = "http://" + domain + SubPath + "?types="+types+"&first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
@@ -236,15 +233,15 @@ var PlannTo = (function (window, undefined) {
             jQuery(".select_item_type_id").live("click", function(event){
                 jQuery(".select_item_type_id.selected").parent("li").removeClass("selected");
                 jQuery(".select_item_type_id.selected").parent("li").addClass("unselected");
-                jQuery(".select_item_type_id").removeClass("selected");                
+                jQuery(".select_item_type_id").removeClass("selected");
                 jQuery(this).addClass('selected')
                 jQuery(this).parent("li").addClass('selected')
                 var item_type = jQuery(this).parent("li").attr("id")
                 jQuery("#planto_search_widget_auto_item").val("")
                 it_id = item_type ? item_type : " "
-                
+
                 // jQuery(this).addClass("selected");
-                url = "http://" + domain + SubPath + "?search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&callback=?"
+                url = "http://" + domain + SubPath + "?search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
 
                 jQuery.getJSON(url, function (data) {
 
@@ -256,11 +253,11 @@ var PlannTo = (function (window, undefined) {
                     //     where_to_buy(jQuery(this).attr("id"), show_details, element, element_id, pathname, url)
                     // })
                     // autoComplete()
-                   event.preventDefault()     
+                   event.preventDefault()
                 });
 
-               event.preventDefault()     
-                
+//               event.preventDefault()
+
             });
             jQuery("#search_from_widget").live("click", function (e) {
                 url = getScriptUrl();
@@ -276,7 +273,7 @@ var PlannTo = (function (window, undefined) {
                 planntowtbdivcreation(item_id, show_details, element, element_id, pathname, url);
 
                 // }
-                event.preventDefault()     
+//                event.preventDefault()
                     
             });
 
