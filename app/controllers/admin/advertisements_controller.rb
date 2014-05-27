@@ -174,7 +174,8 @@ def show_ads
         unless $redis.get("#{url}ad_item_ids").blank?
           # @items = Item.where("id in (?)", $redis.get("#{url}ad_item_ids").split(","))
           redis_item_ids = $redis.get("#{url}ad_item_ids").split(",")
-          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+          # @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
+          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')})")  #TODO: have to update tomorrow
         else
           unless url.nil?
             tempurl = url;
@@ -226,6 +227,7 @@ def show_ads
       @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details)
       @item_details = @item_details.flatten
 
+      @item_details = @item_details.uniq
       @item_details = @item_details.uniq(&:url)
       # @item_details = @item_details.first(6)
 
