@@ -69,7 +69,11 @@ class Advertisement < ActiveRecord::Base
        if (clicks_count != 0 &&  impressions_count != 0)
          count = count + 1
          ecpm = (clicks_count/impressions_count) * 1000 * advertisement.cost
-         advertisement.update_attributes(:ecpm => ecpm)
+         if (advertisement.ecpm.to_i > 0)
+           advertisement.update_attributes(:ecpm => ecpm) if (ecpm.to_i > 0)
+         else
+           advertisement.update_attributes(:ecpm => ecpm)
+         end
        end
      end
      return count
@@ -86,12 +90,28 @@ class Advertisement < ActiveRecord::Base
 
    def update_redis_with_advertisement
      #$redis.HMSET("advertisments:#{id}", "type", type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", dailybudget)
-     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", click_url)
+
+     formatted_click_url = Advertisement.make_valid_url(click_url)
+
+     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url)
 
      # Enqueue ItemUpdate with created advertisement item_ids
      item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
      item_ids = item_ids_array.map(&:inspect).join(',')
      Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+   end
+
+   def self.make_valid_url(click_url)
+     click_url = click_url.to_s
+     if click_url.include?("www.")
+       exp = click_url.split("www.")
+       click_url = "http://www." + exp[1].to_s
+     elsif click_url.include?("http://")
+       exp = click_url.split("http://")
+       click_url = "http://www." + exp[1].to_s
+     else
+       click_url = click_url.blank? ? "" : "http://www." + click_url
+     end
    end
 
    private

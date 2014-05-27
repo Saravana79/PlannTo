@@ -1112,7 +1112,7 @@ end
         val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
         redis_values = val_hash
 
-        related_item_ids = RelatedItem.where('item_id = ?', each_rec.item_id).limit(10).collect(&:related_item_id)
+        related_item_ids = RelatedItem.where('item_id = ?', each_rec.item_id).limit(10).collect(&:related_item_id).join(",")
 
         redis_values.merge!(:related_item_ids => related_item_ids)
 
@@ -1290,7 +1290,7 @@ end
 
   def update_redis_with_item
     #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
-    related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(10).collect(&:related_item_id)
+    related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(10).collect(&:related_item_id).join(",")
 
     Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
   end
