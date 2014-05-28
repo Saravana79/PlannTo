@@ -174,8 +174,7 @@ def show_ads
         unless $redis.get("#{url}ad_item_ids").blank?
           # @items = Item.where("id in (?)", $redis.get("#{url}ad_item_ids").split(","))
           redis_item_ids = $redis.get("#{url}ad_item_ids").split(",")
-          # @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')})")  #TODO: have to update tomorrow
+          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
         else
           unless url.nil?
             tempurl = url;
@@ -201,8 +200,7 @@ def show_ads
               @items = @articles[0].allitems.select{|a| a.is_a? Product};
               # @items = @items[0..15].reverse
               article_items_ids = @items.map(&:id)
-              # new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6") # TODO: have to check tomorrow
-              new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')})")
+              new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
 
               if !new_items.blank?
                 @items = new_items
