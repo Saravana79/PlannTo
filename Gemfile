@@ -58,6 +58,7 @@ gem 'sunspot_solr'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
 gem 'tinymce-rails'
+gem 'redis', '~> 3.0.7'
 
 # Use unicorn as the web server
 # gem 'unicorn'

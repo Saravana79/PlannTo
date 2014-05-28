@@ -93,7 +93,14 @@ class Advertisement < ActiveRecord::Base
 
      formatted_click_url = Advertisement.make_valid_url(click_url)
 
-     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url)
+     ad_status = false
+     if status.to_i == 1
+       if ((!start_date.blank? && start_date.to_date >= Date.today) && (!end_date.blank? && end_date.to_date <= Date.today))
+         ad_status = true
+       end
+     end
+
+     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "enabled", ad_status)
 
      # Enqueue ItemUpdate with created advertisement item_ids
      item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)

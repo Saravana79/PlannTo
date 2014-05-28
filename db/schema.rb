@@ -11,12 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140426080631) do
+ActiveRecord::Schema.define(:version => 20140528092450) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
+    t.integer  "advertisement_id"
     t.integer  "impression_id"
-    t.string   "item_id"
+    t.integer  "item_id"
     t.string   "hosted_site_url"
     t.datetime "impression_time"
     t.integer  "publisher_id"
@@ -27,7 +28,7 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.string   "itemsaccess"
     t.string   "params"
     t.string   "temp_user_id"
-    t.integer  "advertisement_id"
+    t.integer  "old_id"
   end
 
   add_index "add_impressions", ["publisher_id"], :name => "publihserid"
@@ -50,6 +51,9 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.decimal  "ecpm",               :precision => 10, :scale => 0
     t.decimal  "ectr",               :precision => 10, :scale => 0
     t.string   "template_type"
+    t.string   "offer"
+    t.string   "offer_url"
+    t.date     "expiry_date"
   end
 
   create_table "aggregated_details", :force => true do |t|
@@ -214,7 +218,7 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
 
   create_table "clicks", :force => true do |t|
-    t.integer  "impression_id"
+    t.uuid     "impression_id"
     t.string   "click_url"
     t.string   "hosted_site_url"
     t.datetime "timestamp"
@@ -227,6 +231,8 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.integer  "vendor_id"
     t.string   "source_type"
     t.string   "temp_user_id"
+    t.integer  "old_impression_id"
+    t.integer  "advertisement_id"
   end
 
   create_table "comments", :force => true do |t|
@@ -267,6 +273,15 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.integer  "content_id"
     t.datetime "time"
     t.boolean  "sent_mail",      :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "content_ad_details", :force => true do |t|
+    t.string   "url"
+    t.integer  "impressions"
+    t.integer  "clicks"
+    t.float    "ectr"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -412,6 +427,7 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.datetime "updated_at"
     t.datetime "published_at"
     t.string   "images",       :default => ""
+    t.integer  "priorities",   :default => 3
   end
 
   create_table "feeds", :force => true do |t|
@@ -424,6 +440,7 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.datetime "updated_at"
     t.string   "process_type"
     t.string   "process_value"
+    t.integer  "priorities",      :default => 3
   end
 
   create_table "field_values", :force => true do |t|
@@ -547,6 +564,18 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.datetime "updated_at"
   end
 
+  create_table "item_ad_details", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "impressions"
+    t.integer  "clicks"
+    t.float    "ectr"
+    t.string   "related_item_ids"
+    t.integer  "new_version_id"
+    t.integer  "old_version_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "item_attribute_tag_relations", :force => true do |t|
     t.integer  "attribute_id",                 :null => false
     t.integer  "item_id",                      :null => false
@@ -631,6 +660,7 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.string   "offer",                     :limit => 1000
     t.integer  "itemexternalurl_id"
     t.string   "Image"
+    t.decimal  "mrpprice",                                  :precision => 10, :scale => 0
   end
 
   add_index "itemdetails", ["itemexternalurl_id"], :name => "itemexternalurl_ids"
@@ -746,6 +776,13 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
   add_index "messages", ["ancestry"], :name => "index_messages_on_ancestry"
   add_index "messages", ["sent_messageable_id", "received_messageable_id"], :name => "acts_as_messageable_ids"
 
+  create_table "missing_ad_details", :force => true do |t|
+    t.string   "url"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "order_histories", :force => true do |t|
     t.datetime "order_date"
     t.integer  "no_of_orders"
@@ -759,7 +796,9 @@ ActiveRecord::Schema.define(:version => 20140426080631) do
     t.integer  "item_id"
     t.string   "item_name"
     t.string   "product_price"
-    t.integer  "impression_id"
+    t.uuid     "impression_id"
+    t.integer  "old_impression_id"
+    t.datetime "payment_date"
   end
 
   create_table "points", :force => true do |t|

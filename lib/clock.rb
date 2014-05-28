@@ -51,6 +51,16 @@ module Clockwork
     Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=true)
   end
 
+  every(1.day, 'Queeing ContentAdDetail Update for Items', :at => '07:00', :tz => "Asia/Kolkata") do
+    puts "Running ContentAdDetail Update for Items, at #{Time.zone.now}"
+    Resque.enqueue(ContentAdDetailProcess, "update_ad_details_for_contents", Time.zone.now, 1000)
+  end
+
+  every(6.hours, 'Queeing Missingurl Process from Redis') do
+    puts "Running Missingurl Process, at #{Time.zone.now}"
+    Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now)
+  end
+
   #every(3.minutes, 'less.frequent.job')
   #every(1.hour, 'hourly.job')
   #
