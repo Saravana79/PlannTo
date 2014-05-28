@@ -33,6 +33,7 @@ class Content < ActiveRecord::Base
   has_many :content_itemtype_relations
   has_many :itemtypes, :through => :content_itemtype_relations
   has_many :item_pro_cons, :foreign_key => 'article_content_id'
+  after_save :remove_ad_item_ids_from_redis
 
   searchable :auto_index => true, :auto_remove => true  do
     text :title, :boost => 3.0, :more_like_this =>true do |item|
@@ -464,7 +465,7 @@ end
     if (self.is_a?(ArticleContent) && !self.url.blank?)
       # create content hash in redis-2
       #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
-      Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", item_ids.join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
+      Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", relateditems.collect(&:id).join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
     end
   end
 
@@ -667,6 +668,13 @@ def populate_pro_con
   end
     return self.id =>{:positive => positive_class, :negative => negative_class}
 
+  end
+
+  def remove_ad_item_ids_from_redis
+    url = self.url
+    ad_key = "#{url}ad_item_ids"
+    widget_key = "#{url}where_to_buy_item_ids"
+    $redis.del(ad_key, widget_key)
   end
 
 end
