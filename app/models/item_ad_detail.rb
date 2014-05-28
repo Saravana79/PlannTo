@@ -22,7 +22,8 @@ class ItemAdDetail < ActiveRecord::Base
         related_item_ids = related_item_ids.map(&:inspect).join(',')
 
         item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_item.item_id)
-        item_ad_detail.update_attributes(:new_version_id => new_version_id, :old_version_id => old_version_id, :related_item_ids => related_item_ids)
+        # item_ad_detail.update_attributes(:new_version_id => new_version_id, :old_version_id => old_version_id, :related_item_ids => related_item_ids)
+        item_ad_detail.update_attributes(:new_version_id => new_version_id, :related_item_ids => related_item_ids)
       end
       page += 1
     end while !items.empty?
