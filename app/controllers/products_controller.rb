@@ -269,14 +269,14 @@ class ProductsController < ApplicationController
           end
 
           unless @articles.blank?
-            @items = @articles[0].allitems.select{|a| a.is_a? Product};  
+            @items = @articles[0].allitems.select{|a| a.is_a? Product}
             article_items_ids = @items.map(&:id)
+            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
 
-            unless article_items_ids.blank?
-              @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-              $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(","))
+            if !new_items.blank?
+              @items = new_items
             end
-          
+             $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(",")) unless @items.blank?
           end
           
         end
