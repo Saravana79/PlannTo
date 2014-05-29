@@ -82,7 +82,7 @@ class Point < ActiveRecord::Base
     end
   end
 
-  def self.add_voting_point(user, object,type)
+  def self.add_voting_point(user, object,type=nil)
     vote_count = VoteCount.search_vote(object).first
     points = Point.get_points(object, Point::PointReason::VOTE)
     point = Point.search_item(object, user).first
