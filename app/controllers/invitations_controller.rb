@@ -2,6 +2,7 @@ class InvitationsController < ApplicationController
   def create
     @invitation= Invitation.new(params[:invitation])
     @invitation.sender = current_user
+    @invitation.sender_id = current_user.id unless current_user.blank?
     @invitation.user_ip = request.remote_ip
     if @invitation.save
       InviteMailer.invite_friend(@invitation).deliver

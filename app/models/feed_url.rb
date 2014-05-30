@@ -63,7 +63,10 @@ class FeedUrl < ActiveRecord::Base
 
           FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
                            status: status, source: source, summary: description, :images => images,
-                           :published_at => Time.now, :priorities => feed.priorities)
+                           :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count)
+        else
+          new_count = check_exist_feed_url.missing_count + missingurl_count
+          check_exist_feed_url.update_attributes(:missing_count => new_count)
         end
 
         # remove key from redis

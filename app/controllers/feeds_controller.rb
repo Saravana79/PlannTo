@@ -35,6 +35,7 @@ class FeedsController < ApplicationController
       condition = condition + " and category like '%#{params[:search][:category]}%'" unless params[:search][:category].blank?
       condition = condition + " and status = #{params[:search][:status]}" unless params[:search][:status].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
+      condition = condition + " and missing_count = '#{params[:search][:missing_count]}'" unless params[:search][:missing_count].blank?
       #condition = condition == "1=1" ? "status != 1" : condition
     end
 

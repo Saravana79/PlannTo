@@ -21,6 +21,7 @@
         Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
         Source: <%= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
+        Count: <%= search_form.select :missing_count, [*1..500], {:include_blank => true, :selected => params[:search][:missing_count]} %>
         <%= search_form.submit "Filter" %>
         <%= search_form.submit "Clear" %>
       <% end %>
