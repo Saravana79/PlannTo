@@ -145,4 +145,25 @@ class Click < ActiveRecord::Base
   # end
 
   #end
+
+  def self.get_item_details_when_ad_not_as_widget(impression_type, item_details, vendor_ids)
+    @item_details = item_details
+    if impression_type != "advertisement_widget" && @item_details.blank?
+      unless $redis.get("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}").blank?
+        @item_details = Itemdetail.get_item_details($redis.get("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}"), vendor_ids)
+      end
+      if @item_details.blank?
+        clicks = Click.where("vendor_id in (?)", vendor_ids).order("created_at desc").limit(10)
+        clicks.each do |click|
+          @item_details = Itemdetail.get_item_details(click.item_id, vendor_ids)
+          unless @item_details.blank?
+            $redis.set("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}", click.item_id)
+            $redis.expire("default_item_id_for_vendor_#{vendor_ids.sort.join("_")}", 86400)
+            break
+          end
+        end
+      end
+    end
+    @item_details
+  end
 end

@@ -1271,6 +1271,98 @@ end
     return ret_items
   end
 
+  def self.get_items_by_item_ids(item_ids, url, itemsaccess, request, for_widget=false, sort_disable='false')
+    new_item_access = itemsaccess
+    tempurl = url
+    @items = []
+    unless (item_ids.blank?)
+      new_item_access = "ItemId"
+      if (for_widget == true && sort_disable == "true")
+        @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
+      else
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
+      end
+      url = request.referer
+    else
+      unless $redis.get("#{url}ad_or_widget_item_ids").blank?
+        # @items = Item.where("id in (?)", $redis.get("#{url}ad_or_widget_item_ids").split(","))
+        redis_item_ids = $redis.get("#{url}ad_or_widget_item_ids").split(",")
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
+      else
+        unless url.nil?
+          tempurl = url;
+          if url.include?("?")
+            tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+          end
+          if url.include?("#")
+            tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
+          end
+          @articles = ArticleContent.where(url: tempurl)
+
+          if @articles.empty? || @articles.nil?
+            #for pagination in publisher website. removing /2/
+            tempstr = tempurl.split(//).last(3).join
+            matchobj = tempstr.match(/^\/\d{1}\/$/)
+            unless matchobj.nil?
+              tempurlpage = tempurl[0..(tempurl.length-3)]
+              @articles = ArticleContent.where(url: tempurlpage)
+            end
+          end
+
+          unless @articles.empty?
+            @items = @articles[0].allitems.select{|a| a.is_a? Product}
+            article_items_ids = @items.map(&:id)
+            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
+
+            if !new_items.blank?
+              @items = new_items
+            end
+            $redis.set("#{url}ad_or_widget_item_ids", @items.collect(&:id).join(",")) unless @items.blank?
+          end
+        end
+      end
+    end
+    return @items, new_item_access, url, tempurl
+
+  end
+
+  def self.assign_template_and_item(ad_template_type, item_details, items)
+    if ad_template_type == "type_2"
+      item_details = item_details.first(12)
+      sliced_item_details = item_details.each_slice(2)
+    else
+      item_details = item_details.first(6)
+      sliced_item_details = []
+    end
+
+    # assign items
+    if !items.blank?
+      item = items.first
+    elsif items.blank? && !item_details.blank?
+      list_item_ids = item_details.map(&:itemid).uniq
+      items = Item.where("id in (?)", list_item_ids)
+      item = items.first
+    end
+    return item_details, sliced_item_details, item, items
+  end
+
+  def self.get_related_items_if_one_item(items, publisher, status)
+    # check is there valid item_details
+    get_items = Item.make_item_with_valid_details(items, publisher, status)
+    items = get_items unless get_items.blank?
+    item = items.first
+    item_ad_detail = item.item_ad_detail
+    items = []
+    unless item_ad_detail.blank?
+      related_item_ids = item_ad_detail.related_item_ids.to_s.split(',')
+      new_items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 5") unless related_item_ids.blank?
+      items << new_items
+
+      items = items.flatten
+    end
+    items
+  end
+
   private
 
   def create_item_ad_detail
