@@ -330,4 +330,31 @@ end
     render :js => "$('##{image_id}').remove(); alert('Image deleted successfully');"
   end
 
+  def test_ads
+    @app_url = Rails.env == "production" ? "http://www.plannto.com" : "http://localhost:3000"
+    if params[:commit] == "clear"
+      params[:item_id] = ""
+      params[:ref_url] = "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+      params[:ads_id] = 2
+      params[:more_vendors] = true
+      params[:page_type] ||= "small_screen"
+    else
+      params[:item_id] ||= "" #5414,1469
+      params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+      params[:ads_id] ||= 2
+      params[:more_vendors] ||= true
+      params[:page_type] ||= "small_screen"
+    end
+    render :layout => false
+  end
+
+  def search_widget_via_iframe
+    @app_url = params[:app_url]
+    render :layout => false
+  end
+
+  def ad_via_iframe
+    render :layout => false
+  end
+
 end

@@ -400,5 +400,9 @@ resources :comments do
       post "change_category"
     end
   end
-  
+
+  match "advertisements/test_ads" => "admin/advertisements#test_ads"
+  match "advertisements/search_widget_via_iframe" => "admin/advertisements#search_widget_via_iframe"
+  match "advertisements/ad_via_iframe" => "admin/advertisements#ad_via_iframe"
+
 end

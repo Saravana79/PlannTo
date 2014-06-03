@@ -1,0 +1,8 @@
+<html>
+<head> <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> </head>
+<body> <iframe id="plannto_ad_frame" src="" width="300px" height="250px" style="border: medium none;;"></iframe> </body>
+</html>
+
+<script type="text/javascript">
+    iframe_path=  "http://localhost:3000/advertisments/show_ads.json?item_id=5414,1469&ads_id=15&size=300*250&more_vendors=true&ad_as_widget=true&ref_url="+encodeURIComponent(document.location.href);  $.get(iframe_path, function(response) { if (response['success'])  { var s = document.getElementById("plannto_ad_frame");  s.contentDocument.write(response['html']); s.contentDocument.close(); } else { var s = document.getElementById("plannto_ad_frame"); s.remove(); } }, "jsonp");
+</script>
