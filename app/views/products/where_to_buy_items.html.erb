@@ -1,7 +1,7 @@
- <% if (!@where_to_buy_items.empty?) or (!@best_deals.nil?) %> 
- 
+ <% if (!@where_to_buy_items.empty?) or (!@best_deals.nil?) %>
+
     <%if @path =="wheretobuymain" %>
- 
+
          <style type="text/css">
              /*Initialize*/
              ul#plmenu, ul#plmenu ul.plsub-menu {
@@ -226,7 +226,7 @@
                 }
 
                 .plnav-tabs > li > a {
-                  color:#428BCA!important;  
+                  color:#428BCA!important;
                   padding-top: 10px;
                   padding-bottom: 5px;
                   line-height: 20px;
@@ -296,12 +296,12 @@
          #plannto_inheadertr{border-bottom: 1px solid #EEE;height: 35px;background:#FAFAFA;}
          #plannto_inheadercol1{padding: 0px 0px 0px 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;float:none;background:white;border:0px;}
          #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;float:none;display:table-cell;background:white;border:0px;}
-        
+
         .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
         .shadetabs li.unselected{float:left; padding:0px!important; margin:0 5px 0 5px!important;background: #12c1e6!important;list-style-type: none!important; width:48%;text-align: center;border-bottom:2px solid #12c1e6;}
-        .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }        
+        .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
         .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:48%;text-align: center;}
-        .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}        
+        .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}
         #prodname{font-size: 15px;}
 
          /* for igyaan*/
@@ -314,7 +314,7 @@
          #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: Arvo, serif;}
          #prodname{font-family: "Arvo", serif;color: #4C4A4A;line-height: 1.61;font-size: 1.07143rem;text-transform: uppercase;font-weight: normal;}
          .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
-         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;} 
+         .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;}
           #plannto_insidediv{padding:2px 0px 0px 0px;background: #EEE;}
                     .plnav-tabs > li > a {
                   padding-top: 10px;
@@ -328,7 +328,7 @@
                   font-size: 13px;
                 }
          <% end %>
-          <% if (!@publisher.nil? && @publisher.id == 16) %>    
+          <% if (!@publisher.nil? && @publisher.id == 16) %>
           #plannto_headertd {padding: 5px 10px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;background:#F7F9FA;border:0px;}
 
           <% end %>
@@ -343,11 +343,11 @@
           <tbody style="border:0px;">
             <tr style="border:0px;background:white;">
               <td id="plannto_headertd">
-                
+
                 <ul class="shadetabs">
                 <% unless @show_price == "false" %>
                   <li class="selected">
-             
+
                 <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
                   </li>
                 <%end%>
@@ -356,14 +356,14 @@
 
                    <a href="javascript:void(0)" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a>
                   </li>
-                <%end%>  
+                <%end%>
               </ul>
-                
+
                 <!--<span>Best Prices</span>-->
-                
+
                 <%if @moredetails == "true" %>
                     <!--
-                    
+
                     <div style="float:right;">
                         <span id="plannto_poweredby">Powered By</span>
                         <span id="plannto_logo">Plann<font id="plannto_logo1">To</font></span>
@@ -372,20 +372,20 @@
                 <%else%>
 
                 <%end%>
-      
+
               </td>
             </tr>
             <tr style="border:0px;">
               <td style="padding:0;margin:0;border:0px;" id="tabreplacement">
-                <!-- main where to buy check ends here. -->                
+                <!-- main where to buy check ends here. -->
     <%end%>
-    
-   
+
+
     <%if @show_price != "false" %>
          <%if @path !="onchange"%>
 
                       <div id="plannto_insidediv">
-                          <table id="plannto_intable" width="100%">   
+                          <table id="plannto_intable" width="100%">
                             <thead style="border:0px;display:table-header-group;">
                               <tr id="plannto_intr" style="border:0px">
                                 <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
@@ -462,7 +462,7 @@
 
          <tr style="border:0px;background:white;">
            <td style="padding:0px;">
-            
+
              <%unless @moredetails == "true"  %>
                   <table style="width:100%;float:right;">
                     <tbody style="border:0px;">
@@ -472,7 +472,7 @@
                      <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
                    </tr>
                <%else%>
-             
+
                   <table style="width:30%;float:left;border:0px;margin:0px;border:0px;">
                <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
                <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';"/></div><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= @item.name %> </div>
@@ -569,7 +569,7 @@
 
 
 
-                              </tbody>          
+                              </tbody>
                             </table>
 
 

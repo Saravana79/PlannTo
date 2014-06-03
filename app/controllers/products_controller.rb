@@ -18,6 +18,7 @@ class ProductsController < ApplicationController
   layout 'product'
   include FollowMethods
   include ItemsHelper
+  include Admin::AdvertisementsHelper
 #  layout false, only: [:where_to_buy_items]
 
  def log_impression
@@ -206,232 +207,61 @@ class ProductsController < ApplicationController
     true if Float(self) rescue false
   end
 
-  def where_to_buy_items
+   def where_to_buy_items
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
 
-    @active_tabs_for_publisher = [5]
-    @activate_tab = true
-
-    cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
-
-    @show_price = params[:show_price]
-    @show_offer = params[:show_offer]
-    item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
-    @path = params[:path]
-    unless (item_ids.blank?)
-      itemsaccess = "ItemId"
-      # if (true if Float(item_ids[0]) rescue false)
-
-        if (params[:sort_disable] == "true")
-          @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
-        else
-          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-        end
-      # else
-        # @items = Item.where(slug: item_ids)
-        # @items = @items[0..15]
-      #   slug_ids = item_ids
-      #   @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.slug in (#{slug_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-      # end
-      url = request.referer
-    else
-        
-        if(params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined' )
-          url = params[:ref_url]
-          itemsaccess = "ref_url"
-        else
-          itemsaccess = "referer"
-          url = request.referer
-        end
-        unless $redis.get("#{url}where_to_buy_item_ids").blank?
-          # @items = Item.where("id in (?)", $redis.get("#{url}where_to_buy_item_ids").split(","))
-          redis_item_ids = $redis.get("#{url}where_to_buy_item_ids").split(",")
-          @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 6")
-        else
-        
-        unless url.nil?  
-          tempurl = url;
-          if url.include?("?")
-            tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
-          end
-          if url.include?("#")          
-            tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip 
-          end          
-          @articles = ArticleContent.where(url: tempurl)
-
-          if @articles.empty? || @articles.nil?
-              #for pagination in publisher website. removing /2/
-            tempstr = tempurl.split(//).last(3).join
-            matchobj = tempstr.match(/^\/\d{1}\/$/)
-            unless matchobj.nil?
-              tempurlpage = tempurl[0..(tempurl.length-3)]
-              @articles = ArticleContent.where(url: tempurlpage)
-            end
-          end
-
-          unless @articles.blank?
-            @items = @articles[0].allitems.select{|a| a.is_a? Product}
-            article_items_ids = @items.map(&:id)
-            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 15")
-
-            if !new_items.blank?
-              @items = new_items
-            end
-             $redis.set("#{url}where_to_buy_item_ids", @items.collect(&:id).join(",")) unless @items.blank?
-          end
-          
-        end
-      end
-    end 
-    url_params = "Params = "
-    if params[:item_ids]
-       url_params += "item_ids-" + params[:item_ids]
-    end
-    if params[:path]
-       url_params += ";path-" + params[:path]
-    end
-    if  params[:ref_url]
-       url_params += ";ref_url" + params[:ref_url] 
-    end
-    if  params[:price_full_details]
-       url_params += ";more_details->" + params[:price_full_details]
-    end
-    
     # include pre order status if we show more details.
     unless @items.blank?
-      @moredetails = params[:price_full_details]
-      @displaycount = 4
-      if @moredetails == "true"
-        @displaycount = 5
-        
-          status = "1,3".split(",")
-      else
-        status = "1".split(",")    
-        @activate_tab = false
-      end     
-                        
-
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       @publisher = Publisher.getpublisherfromdomain(url)
-
       # Check have to activate tabs for publisher or not
-
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
-
       # Update Items if there is only one item
+      @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
 
-      if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
-        # check is there valid item_details
-
-        get_items = Item.make_item_with_valid_details(@items, @publisher, status)
-
-        @items = get_items unless get_items.blank?
-
-        item = @items.first
-        item_ad_detail = item.item_ad_detail
-
-        items = []
-        unless item_ad_detail.blank?
-          related_item_ids = item_ad_detail.related_item_ids.to_s.split(',')
-          items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 5") unless related_item_ids.blank?
-          @items << items
-          @items = @items.flatten
-        end
-      end
-
-      #address = Geocoder.search(request.ip)
-      
-      # get the country code for checing whether is use is from india.
-      #unless address.nil? || address.empty?
-      #  country = address[0].data["country_name"]  rescue ""
-      #else
-        country = ""
-      #end
-
-      @tempitems = []
-      if (!@publisher.nil? && @publisher.id == 9 && country != "India")
-          @where_to_buy_items = []  
-          @item = @items[0]
-          itemsaccess = "othercountry"      
-      else
-            if @show_price != "false"
-
-              @where_to_buy_items, @tempitems, @item = Item.process_and_get_where_to_buy_items(@items, @publisher, status)
-
-              main_item = @item
-
-              @items = @items - @tempitems
-
-              # for activate_tab users
-              if (@items.blank? && @where_to_buy_items.blank?)
-                item = main_item
-                @items = Item.where(:id => item.new_version_item_id)
-                @where_to_buy_items, @tempitems, @item = Item.process_and_get_where_to_buy_items(@items, @publisher, status)
-
-                @items = @items - @tempitems
-
-                if (@items.blank? && @where_to_buy_items.blank?)
-                  item_ad_detail = main_item.item_ad_detail
-                  unless item_ad_detail.blank?
-                    @items = Item.where(:id => item_ad_detail.old_version_id)
-                    @where_to_buy_items, @tempitems, @item = Item.process_and_get_where_to_buy_items(@items, @publisher, status)
-                    @items = @items - @tempitems
-                  end
-                end
-              end
-
-              if(@where_to_buy_items.empty?)
-                itemsaccess = "emptyitems"
-              end
-            # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params,
-            #                                                         cookies[:plan_to_temp_user_id], nil)
-
-                @impression_id = SecureRandom.uuid
-                impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                                      :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
-                Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
-           else
-              @where_to_buy_items = []
-              get_offers(@items.map(&:id).join(",").split(","))
-              itemsaccess = "offers"
-           end
-      end
-
+      @where_to_buy_items, @item, @best_deals = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id])
       @show_count = Item.get_show_item_count(@items)
 
       responses = []
-        @where_to_buy_items.group_by(&:site).each do |site, items|  
-          items.each_with_index do |item, index|     
-            display_item_details(item)
-            if index == 0
-              responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
-            end
+      @where_to_buy_items.group_by(&:site).each do |site, items|
+        items.each_with_index do |item, index|
+          display_item_details(item)
+          if index == 0
+            responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
           end
         end
-
-      defatetime = Time.now.to_i
-      html = html = render_to_string(:layout => false)
-      json = {"html" => html}.to_json
-      callback = params[:callback]     
-      jsonp = callback + "(" + json + ")"
-      render :text => jsonp,  :content_type => "text/javascript"  
+      end
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(tempurl, "PriceComparison")
-      if @impression.new_record?
-        @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
-      else
-        @impression.update_attributes(updated_time: Time.zone.now, :count => @impression.count + 1)
-      end
-      #address = Geocoder.search(request.ip)
-      defatetime = Time.now.to_i
-      html = html = render_to_string(:layout => false)
-      json = {"html" => html}.to_json
-      callback = params[:callback]     
-      jsonp = callback + "(" + json + ")"
-      render :text => jsonp,  :content_type => "text/javascript"  
-      # render :text => "",  :content_type => "text/javascript"
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
-    
+    jsonp = prepare_response_json()
+    render :text => jsonp, :content_type => "text/javascript"
+  end
+
+  def prepare_response_json
+    defatetime = Time.now.to_i
+    html = html = render_to_string(:layout => false)
+    json = {"html" => html}.to_json
+    callback = params[:callback]
+    jsonp = callback + "(" + json + ")"
+  end
+
+  def check_and_assigns_widget_default_values()
+    @active_tabs_for_publisher = [5]
+    @activate_tab = true
+    @show_price = params[:show_price]
+    @show_offer = params[:show_offer]
+    item_ids = params[:item_ids] ? params[:item_ids].to_s.split(",") : []
+    @path = params[:path]
+    @moredetails = params[:price_full_details]
+
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    return url_params, url, itemsaccess, item_ids
   end
 
   def product_offers
@@ -447,33 +277,15 @@ class ProductsController < ApplicationController
   end
 
   def get_offers(item_ids)
+    url_params = "items:" + params[:item_ids]
     url = request.referer
-    @item = Item.find(item_ids[0])
-    root_id = Item.get_root_level_id(@item.itemtype.itemtype)
-    temp_item_ids = item_ids + root_id.to_s.split(",")
-    @best_deals = ArticleContent.select("distinct view_article_contents.*").joins(:item_contents_relations_cache).where("item_contents_relations_cache.item_id in (?) and view_article_contents.sub_type=? and view_article_contents.status=? and view_article_contents.field3=? and (view_article_contents.field1=? or str_to_date(view_article_contents.field1,'%d/%m/%Y') > ? )", temp_item_ids, 'deals', 1, '0', '', Date.today.strftime('%Y-%m-%d')).order("field4 asc, id desc")
-    unless @best_deals.blank?
-      itemsaccess ="offeritem_ids"
-      url_params = "items:" + params[:item_ids]
-      # @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.zone.now,current_user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
+    @item, @best_deals = ArticleContent.get_best_deals(item_ids, url, url_params)
 
-      @impression_id = SecureRandom.uuid
-      impression_params =  {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
-      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    p @item
+    p @best_deals
+    @vendors = VendorDetail.all unless @best_deals.blank?
+  end
 
-      @best_deals.select{|a| a}
-      @vendors =  VendorDetail.all
-    else
-      @impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(url, "OffersDeals")
-      if @impression.new_record?
-        @impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
-      else
-        @impression.update_attributes(updated_time: Time.zone.now, :count => @impression.count + 1)
-      end
-    end
-
-  end  
   def advertisement
     item_ids = params[:item_ids] ? params[:item_ids].split(",") : []
     content_id = ContentItemRelation.includes(:content).where('item_id=? and contents.type=?',item_ids[0],'AdvertisementContent').first.content_id

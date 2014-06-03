@@ -672,8 +672,8 @@ def populate_pro_con
   end
 
   def remove_ad_item_ids_from_redis
-    ad_key = "#{self.url}ad_item_ids"
-    widget_key = "#{self.url}where_to_buy_item_ids"
+    ad_key = "#{self.url}ad_or_widget_item_ids"
+    widget_key = "#{self.url}ad_or_widget_item_ids"
     $redis.del(ad_key, widget_key)
   end
 

@@ -112,8 +112,8 @@ class TravelsController < ApplicationController
         itemsaccess = "referer"
         url = request.referer
       end
-      unless $redis.get("#{url}where_to_buy_item_ids").blank?
-        @items = Item.where("id in (?)", $redis.get("#{url}where_to_buy_item_ids").split(","))
+      unless $redis.get("#{url}ad_or_widget_item_ids").blank?
+        @items = Item.where("id in (?)", $redis.get("#{url}ad_or_widget_item_ids").split(","))
         @cities = @items.select {|s| s.is_a?(City)}
         if @cities.count != 0
           @show_by_city = true
@@ -150,7 +150,7 @@ class TravelsController < ApplicationController
             end
 
             ids = @items.collect(&:id) + @cities.collect(&:id)
-            $redis.set("#{url}where_to_buy_item_ids", ids.join(","))
+            $redis.set("#{url}ad_or_widget_item_ids", ids.join(","))
 
           end
 

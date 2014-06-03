@@ -20,6 +20,17 @@ class Itemdetail < ActiveRecord::Base
                  itemdetails.cashback end) asc")
   end
 
+  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids)
+    @item_details = []
+    if item_ids.count > 1
+      @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by { |each_rec| each_rec.itemid }
+    elsif item_ids.count > 0
+      @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
+    end
+
+    @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details).flatten.uniq(&:url)
+  end
+
   def vendor_name
     return "" if vendor.nil?
     return vendor.name
@@ -115,5 +126,53 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     end
 
     return_val
+  end
+
+  def self.get_where_to_buy_items(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id)
+    country = ""
+    tempitems = []
+    if (!publisher.nil? && publisher.id == 9 && country != "India")
+      where_to_buy_items = []
+      item = items[0]
+      itemsaccess = "othercountry"
+    elsif show_price != "false"
+        where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
+        main_item = item
+        items = items - tempitems
+
+        # for activate_tab users
+        if (items.blank? && where_to_buy_items.blank?)
+          item = main_item
+          items = Item.where(:id => item.new_version_item_id)
+          where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
+
+          items = items - tempitems
+
+          if (items.blank? && where_to_buy_items.blank?)
+            item_ad_detail = main_item.item_ad_detail
+            unless item_ad_detail.blank?
+              items = Item.where(:id => item_ad_detail.old_version_id)
+              where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
+              items = items - tempitems
+            end
+          end
+        end
+
+        if (where_to_buy_items.empty?)
+          itemsaccess = "emptyitems"
+        end
+
+        AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
+                                               plan_to_temp_user_id, nil)
+      else
+        where_to_buy_items = []
+        item, best_deals = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params)
+        p 4444444
+        p item
+        p best_deals
+        itemsaccess = "offers"
+      end
+
+    return where_to_buy_items, item, best_deals
   end
 end
