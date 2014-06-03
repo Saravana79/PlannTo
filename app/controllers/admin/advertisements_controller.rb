@@ -100,6 +100,9 @@ class Admin::AdvertisementsController < ApplicationController
 
     item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
+
+    vendor_ids = Vendor.get_vendor_ids_by_publisher(url, vendor_ids) if params[:more_vendors] == "true"
+
     item_ids = @items.map(&:id)
 
     @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids)

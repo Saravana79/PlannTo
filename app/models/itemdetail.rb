@@ -28,7 +28,7 @@ class Itemdetail < ActiveRecord::Base
       @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
     end
 
-    @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details).flatten.uniq(&:url)
+    @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
   end
 
   def vendor_name
@@ -100,7 +100,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     "Rs #{number}"
   end
 
-  def self.get_sort_by_vendor(item_details)
+  def self.get_sort_by_vendor(item_details, vendor_ids)
     exp_result = {}
     return_val = []
 
@@ -112,7 +112,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     item_keys = exp_result.keys
     max_count = exp_result.map {|_, s| s.map {|_, x| x.count}}.flatten.max
 
-    vendor_orders = [9861, 9882, 9874, 9880, 9856]
+    vendor_orders = vendor_ids
 
     [*0...max_count].each do |each_val|
       item_keys.each do |each_item|
