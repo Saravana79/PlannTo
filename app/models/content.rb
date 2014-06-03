@@ -451,14 +451,14 @@ end
       self.save_content_relations_cache(relateditems.collect(&:id))
       relateditems.each do |item|
         unless(item.slug.nil?)
-          cache_key = "views/" + configatron.hostname.to_s + "/" + item.type.downcase.pluralize + "/" + item.slug + "?user="
+          cache_key = "views/" + APP_URL.to_s + "/" + item.type.downcase.pluralize + "/" + item.slug + "?user="
           Rails.cache.delete(cache_key + "1")
           Rails.cache.delete(cache_key + "0")
         end
       end 
-        cache_key = "views/" + configatron.hostname.to_s + "/contents/" + content.id.to_s
+        cache_key = "views/" + APP_URL.to_s + "/contents/" + content.id.to_s
         Rails.cache.delete(cache_key)
-        cache_key = "views/" + configatron.hostname.to_s + "/external_contents/" + content.id.to_s
+        cache_key = "views/" + APP_URL.to_s + "/external_contents/" + content.id.to_s
         Rails.cache.delete(cache_key)
     end
 

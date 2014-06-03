@@ -11,7 +11,7 @@
         </div>
         <div class="advt-box">
           <% @item_details.each_with_index do |item_detail, indx| %>
-              <% ad_url = configatron.hostname + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
+              <% ad_url = APP_URL + history_details_path(:detail_id => item_detail.id, :iid => @impression_id, :ref_url => @ref_url) %>
               <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
               <div class="item_details" id="item_detail_<%= indx + 1 %>">

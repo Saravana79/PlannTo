@@ -4,7 +4,7 @@ module Admin::AdvertisementsHelper
       url = ad.offer_url.blank? ? shop_now_url : ad.offer_url
       return_val = "<a href='#{url}' >#{truncate_without_dot(ad.offer, text_size)}</a>"
     else
-      return_val = item_detail.offer.blank? ? vendor_default_text.to_s : item_detail.offer.to_s
+      return_val = item_detail.offer.blank? ? truncate_without_dot(vendor_default_text.to_s, text_size) : truncate_without_dot(item_detail.offer.to_s, text_size)
     end
     return_val
   end

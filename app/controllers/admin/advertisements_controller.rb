@@ -171,7 +171,7 @@ class Admin::AdvertisementsController < ApplicationController
 
   def test_ads
     @app_url = Rails.env == "production" ? "http://www.plannto.com" : "http://localhost:3000"
-    if params[:commit] == "clear"
+    if params[:commit] == "Clear"
       params[:item_id] = ""
       params[:ref_url] = "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
       params[:ads_id] = 2

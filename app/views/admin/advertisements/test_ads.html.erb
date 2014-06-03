@@ -80,7 +80,7 @@
 </div>
 <script type="text/javascript">
     iframe_path=  "<%= @app_url %>/advertisments/show_ads.json?item_id="+"<%= params[:item_id] %>"+"&ads_id="+"<%= params[:ads_id] %>"+"&size=728*90&more_vendors="+"<%= params[:more_vendors] %>"+"&ref_url="+"<%= params[:ref_url] %>"+"&ad_as_widget=true";
-    $.get(iframe_path, function(response) { if (response['success'])  { var s = document.getElementById("plannto_ad_frame_728");  s.contentDocument.write(response['html']); s.contentDocument.close(); } else { var s = document.getElementById("plannto_ad_frame_120"); s.remove(); } }, "jsonp");
+    $.get(iframe_path, function(response) { if (response['success'])  { var s = document.getElementById("plannto_ad_frame_728");  s.contentDocument.write(response['html']); s.contentDocument.close(); } else { var s = document.getElementById("plannto_ad_frame_728"); s.remove(); } }, "jsonp");
 </script>
 
 

@@ -17,3 +17,5 @@ AWS::S3::DEFAULT_HOST = "s3-ap-southeast-1.amazonaws.com" # if using sg buckets
 # Initialize the rails application
 PlanNto::Application.initialize!
 
+APP_URL = Rails.env == "production" ? "http://www.plannto.com" : "http://localhost:3000"
+

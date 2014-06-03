@@ -217,6 +217,7 @@ class ProductsController < ApplicationController
       @publisher = Publisher.getpublisherfromdomain(url)
       # Check have to activate tabs for publisher or not
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+
       # Update Items if there is only one item
       @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
 
