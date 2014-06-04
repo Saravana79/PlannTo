@@ -100,12 +100,13 @@ class Admin::AdvertisementsController < ApplicationController
 
     item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
-
-    vendor_ids = Vendor.get_vendor_ids_by_publisher(url, vendor_ids) if params[:more_vendors] == "true"
+    status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+    publisher = Publisher.getpublisherfromdomain(url)
+    vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
 
     item_ids = @items.map(&:id)
 
-    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids)
+    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, @activate_tab)
 
     # Default item_details based on vendor if item_details empty
     #TODO: temporary solution, have to change based on ecpm
@@ -137,6 +138,8 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def check_and_assigns_ad_default_values()
+    @moredetails = params[:price_full_details]
+    @activate_tab = true
     params[:more_vendors] ||= "false"
     @ad_template_type ||= "type_1"
     impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"

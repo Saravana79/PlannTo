@@ -6,9 +6,7 @@ class Vendor < Item
     item = item.vendor
  end
 
-  def self.get_vendor_ids_by_publisher(url, vendor_ids)
-    publisher = Publisher.getpublisherfromdomain(url)
-
+  def self.get_vendor_ids_by_publisher(publisher, vendor_ids)
     pub_vendor_ids = publisher.vendor_ids.split(',') unless publisher.blank?
     if !pub_vendor_ids.blank?
       pub_vendor_ids = pub_vendor_ids.map(&:to_i)

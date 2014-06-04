@@ -20,12 +20,14 @@ class Itemdetail < ActiveRecord::Base
                  itemdetails.cashback end) asc")
   end
 
-  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids)
+  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, activate_tab)
     @item_details = []
     if item_ids.count > 1
       @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by { |each_rec| each_rec.itemid }
-    elsif item_ids.count > 0
-      @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
+    elsif item_ids.count == 1
+      items = Item.get_related_items_if_one_item(items, @publisher, status) if (activate_tab && items.count == 1)
+      @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by { |each_rec| each_rec.itemid }
+      # @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
     end
 
     @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
