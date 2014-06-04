@@ -157,6 +157,7 @@ class AddImpression < ActiveRecord::Base
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
                          :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    return impression_id
   end
 
 end

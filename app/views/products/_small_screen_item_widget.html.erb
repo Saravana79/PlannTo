@@ -31,7 +31,7 @@
                         <td id="plannto_incol2" width="20%"> <%= display_price_detail(item) %> </td>
                         <!--<td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
                         <td width="15%" id="plannto_incol3">
-                          <a rel="nofollow" href="http://www.plannto.com/history_details?detail_id=<%= item.item_details_id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
+                          <a rel="nofollow" href="http://www.plannto.com/history_details?detail_id=<%= item.item_details_id %>&iid=<%= @impression_id %><%= @test_condition %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
                         </td>
                     <% end %>
                 <% end %>

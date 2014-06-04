@@ -130,9 +130,10 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     return_val
   end
 
-  def self.get_where_to_buy_items(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id)
+  def self.get_where_to_buy_items(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id, is_test)
     country = ""
     tempitems = []
+    @impression_id = ""
     if (!publisher.nil? && publisher.id == 9 && country != "India")
       where_to_buy_items = []
       item = items[0]
@@ -164,17 +165,14 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           itemsaccess = "emptyitems"
         end
 
-        AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
-                                               plan_to_temp_user_id, nil)
+        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
+                                               plan_to_temp_user_id, nil)  if is_test != "true"
       else
         where_to_buy_items = []
         item, best_deals = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params)
-        p 4444444
-        p item
-        p best_deals
         itemsaccess = "offers"
       end
 
-    return where_to_buy_items, item, best_deals
+    return where_to_buy_items, item, best_deals, @impression_id
   end
 end

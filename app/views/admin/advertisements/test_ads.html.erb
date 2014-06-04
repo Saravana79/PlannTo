@@ -15,6 +15,7 @@
           border-collapse: collapse;
           border-spacing: 0;
       }
+
       .ad > span {
           font-size: 14px;
       }
@@ -26,65 +27,124 @@
 <div class="search_form">
   <%= form_for :search, :url => "/advertisements/test_ads", :html => {:method => 'get'} do |search_form| %>
       Item ID: <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id] %>
-      Ads ID: <%= search_form.text_field :ads_id, :name => "ads_id", :value => params[:ads_id] %> <br />
+      Ads ID: <%= search_form.text_field :ads_id, :name => "ads_id", :value => params[:ads_id] %> <br/>
       Ref URL: <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url] %>
-      More Vendors: <%= search_form.select :more_vendors, ["true", "false"], {:include_blank => true, :selected => params[:more_vendors]}, :name => "more_vendors" %>
-      Page Type: <%= search_form.select :page_type, ["small_screen", "large_screen"], {:include_blank => true, :selected => params[:page_type]}, :name => "page_type" %> <br />
+      Is
+      Test: <%= search_form.select :is_test, ["true", "false"], {:include_blank => true, :selected => params[:is_test]}, :name => "is_test" %>
+      More
+      Vendors: <%= search_form.select :more_vendors, ["true", "false"], {:include_blank => true, :selected => params[:more_vendors]}, :name => "more_vendors" %>
+      Page
+      Type: <%= search_form.select :page_type, ["small_screen", "large_screen"], {:include_blank => true, :selected => params[:page_type]}, :name => "page_type" %>
+      <br/>
+      Select To Show:
+      <% ['All', 'widget-1', 'search-widget', 'ad-300', 'ad-120', 'ad-728'].each do |option| %>
+          <%= check_box_tag 'show_list[]', option, params[:show_list].include?(option), :id => option, :class => option != 'All' ? "show_list_options" : '' -%>
+          <%= h option -%>
+      <% end %>
+      <br/>
       <%= search_form.submit "Referesh" %>
       <%= search_form.submit "Clear" %>
   <% end %>
 </div>
 
-<br />
-<div class="widget-1">
-  <span>1) Widget-1</span>
-  <span>URL => <%= "#{@app_url}/javascripts/plannto.widget.js?item_id=#{params[:item_id]}&ref_url=#{params[:ref_url]}&show_details=true&element_id=where_to_buy_items" %></span>
-  <div  id="where_to_buy_items" style="width:610px;">
-  </div>
-  <script async src="<%= @app_url %>/javascripts/plannto.widget.js?item_id=<%= params[:item_id] %>&ref_url=<%= params[:ref_url] %>&show_details=true&element_id=where_to_buy_items"></script>
-</div>
+<br/>
+<% if params[:show_list].include?('widget-1') %>
+    <div class="widget-1">
+      <span>1) Widget-1</span>
+      <span>URL => <%= "#{APP_URL}/javascripts/plannto.widget.js?item_id=#{params[:item_id]}&ref_url=#{params[:ref_url]}&show_details=true&element_id=where_to_buy_items&is_test=#{params[:is_test]}" %></span>
+
+      <div id="where_to_buy_items" style="width:610px;">
+      </div>
+      <script async src="<%= APP_URL %>/javascripts/plannto.widget.js?item_id=<%= params[:item_id] %>&ref_url=<%= params[:ref_url] %>&show_details=true&element_id=where_to_buy_items&is_test=<%= params[:is_test] %>"></script>
+    </div>
+<% end %>
 <!-- check new_version_id or old_version_id when one item_id no item_details => item_id = 13652-->
 
-<iframe id="search_widget" src="<%= @app_url %>/advertisements/search_widget_via_iframe?page_type=<%= params[:page_type] %>&app_url=<%= @app_url %>" style="width:100%; height: 100%;">
+<% if params[:show_list].include?('search-widget') %>
+    <iframe id="search_widget" src="<%= APP_URL %>/advertisements/search_widget_via_iframe?page_type=<%= params[:page_type] %>&is_test=<%= params[:is_test] %>" style="width:100%; height: 100%;">
 
-</iframe>
+    </iframe>
+<% end %>
 
-<div class="ad ad-1">
-  <span>3) Ad-300</span>
-  <span>URL => <%= "#{@app_url}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*250&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true"; %></span>
-  <br />
-  <iframe id="plannto_ad_frame" src="" width="300px" height="250px" style="border: medium none;;"></iframe>
-</div>
-<script type="text/javascript">
-    iframe_path=  "<%= @app_url %>/advertisments/show_ads.json?item_id="+"<%= params[:item_id] %>"+"&ads_id="+"<%= params[:ads_id] %>"+"&size=300*250&more_vendors="+"<%= params[:more_vendors] %>"+"&ref_url="+"<%= params[:ref_url] %>"+"&ad_as_widget=true";
-    $.get(iframe_path, function(response) { if (response['success'])  { var s = document.getElementById("plannto_ad_frame");  s.contentDocument.write(response['html']); s.contentDocument.close(); } else { var s = document.getElementById("plannto_ad_frame"); s.remove(); } }, "jsonp");
-</script>
+<% if params[:show_list].include?('ad-300') %>
 
+    <div class="ad ad-1">
+      <span>3) Ad-300</span>
+      <span>URL => <%= "#{APP_URL}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*250&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
+      <br/>
+      <iframe id="plannto_ad_frame" src="" width="300px" height="250px" style="border: medium none;;"></iframe>
+    </div>
+    <script type="text/javascript">
+        iframe_path = "<%= APP_URL %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=300*250&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
+        $.get(iframe_path, function (response) {
+            if (response['success']) {
+                var s = document.getElementById("plannto_ad_frame");
+                s.contentDocument.write(response['html']);
+                s.contentDocument.close();
+            } else {
+                var s = document.getElementById("plannto_ad_frame");
+                s.remove();
+            }
+        }, "jsonp");
+    </script>
+<% end %>
 
-<div class="ad ad-2">
-  <span>4) Ad-120</span>
-  <span>URL => <%= "#{@app_url}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=120*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true"; %></span>
-  <br />
-  <iframe id="plannto_ad_frame_120" src="" width="120px" height="600px" style="border: medium none;;"></iframe>
-</div>
-<script type="text/javascript">
-    iframe_path=  "<%= @app_url %>/advertisments/show_ads.json?item_id="+"<%= params[:item_id] %>"+"&ads_id="+"<%= params[:ads_id] %>"+"&size=120*600&more_vendors="+"<%= params[:more_vendors] %>"+"&ref_url="+"<%= params[:ref_url] %>"+"&ad_as_widget=true";
-    $.get(iframe_path, function(response) { if (response['success'])  { var s = document.getElementById("plannto_ad_frame_120");  s.contentDocument.write(response['html']); s.contentDocument.close(); } else { var s = document.getElementById("plannto_ad_frame_120"); s.remove(); } }, "jsonp");
-</script>
+<% if params[:show_list].include?('ad-120') %>
+    <div class="ad ad-2">
+      <span>4) Ad-120</span>
+      <span>URL => <%= "#{APP_URL}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=120*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
+      <br/>
+      <iframe id="plannto_ad_frame_120" src="" width="120px" height="600px" style="border: medium none;;"></iframe>
+    </div>
+    <script type="text/javascript">
+        iframe_path = "<%= APP_URL %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=120*600&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
+        $.get(iframe_path, function (response) {
+            if (response['success']) {
+                var s = document.getElementById("plannto_ad_frame_120");
+                s.contentDocument.write(response['html']);
+                s.contentDocument.close();
+            } else {
+                var s = document.getElementById("plannto_ad_frame_120");
+                s.remove();
+            }
+        }, "jsonp");
+    </script>
+<% end %>
 
-<div class="ad ad-3">
-  <span>5) Ad-728</span>
-  <span>URL => <%= "#{@app_url}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=728*90&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true"; %></span>
-  <br />
-  <iframe id="plannto_ad_frame_728" src="" width="728px" height="90px" style="border: medium none;;"></iframe>
-</div>
-<script type="text/javascript">
-    iframe_path=  "<%= @app_url %>/advertisments/show_ads.json?item_id="+"<%= params[:item_id] %>"+"&ads_id="+"<%= params[:ads_id] %>"+"&size=728*90&more_vendors="+"<%= params[:more_vendors] %>"+"&ref_url="+"<%= params[:ref_url] %>"+"&ad_as_widget=true";
-    $.get(iframe_path, function(response) { if (response['success'])  { var s = document.getElementById("plannto_ad_frame_728");  s.contentDocument.write(response['html']); s.contentDocument.close(); } else { var s = document.getElementById("plannto_ad_frame_728"); s.remove(); } }, "jsonp");
-</script>
+<% if params[:show_list].include?('ad-728') %>
 
-
+    <div class="ad ad-3">
+      <span>5) Ad-728</span>
+      <span>URL => <%= "#{APP_URL}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=728*90&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
+      <br/>
+      <iframe id="plannto_ad_frame_728" src="" width="728px" height="90px" style="border: medium none;;"></iframe>
+    </div>
+    <script type="text/javascript">
+        iframe_path = "<%= APP_URL %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=728*90&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
+        $.get(iframe_path, function (response) {
+            if (response['success']) {
+                var s = document.getElementById("plannto_ad_frame_728");
+                s.contentDocument.write(response['html']);
+                s.contentDocument.close();
+            } else {
+                var s = document.getElementById("plannto_ad_frame_728");
+                s.remove();
+            }
+        }, "jsonp");
+    </script>
+<% end %>
 <br/>
 <br/>
 </body>
 </html>
+
+<script>
+    $("#All").click(function () {
+        var all_val = $("#All").is(":checked")
+        console.log(all_val == true)
+        if (all_val == true)
+            $(".show_list_options").prop("checked", true)
+        else
+            $(".show_list_options").prop("checked", false)
+    })
+</script>

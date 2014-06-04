@@ -209,6 +209,7 @@ class ProductsController < ApplicationController
 
    def where_to_buy_items
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
 
     # include pre order status if we show more details.
@@ -221,8 +222,8 @@ class ProductsController < ApplicationController
       # Update Items if there is only one item
       @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
 
-      @where_to_buy_items, @item, @best_deals = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
-                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id])
+      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test)
       @show_count = Item.get_show_item_count(@items)
 
       responses = []
@@ -252,6 +253,8 @@ class ProductsController < ApplicationController
   end
 
   def check_and_assigns_widget_default_values()
+    params[:is_test] ||= false
+    @is_test = params[:is_test]
     @active_tabs_for_publisher = [5]
     @activate_tab = true
     @show_price = params[:show_price]
@@ -278,12 +281,11 @@ class ProductsController < ApplicationController
   end
 
   def get_offers(item_ids)
+    params[:is_test] ||= 'false'
     url_params = "items:" + params[:item_ids]
     url = request.referer
-    @item, @best_deals = ArticleContent.get_best_deals(item_ids, url, url_params)
+    @item, @best_deals = ArticleContent.get_best_deals(item_ids, url, url_params, params[:is_test])
 
-    p @item
-    p @best_deals
     @vendors = VendorDetail.all unless @best_deals.blank?
   end
 
@@ -399,6 +401,9 @@ class ProductsController < ApplicationController
   
   def get_item_for_widget
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
+    params[:is_test] ||= false
+    @is_test = params[:is_test]
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
     @page_type ||= "large_screen"
     @page_type = params[:page_type] unless params[:page_type].blank?
@@ -432,7 +437,7 @@ class ProductsController < ApplicationController
     @impression_id = SecureRandom.uuid
     impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                           :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
-    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if @is_test != "true"
 
         html = html = render_to_string(:layout => false)
         json = {"html" => html}.to_json

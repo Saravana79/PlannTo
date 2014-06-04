@@ -118,8 +118,8 @@ class Admin::AdvertisementsController < ApplicationController
       @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-      AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                             cookies[:plan_to_temp_user_id], ad_id)
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                             cookies[:plan_to_temp_user_id], ad_id) if @is_test != "true"
       @item_details = @item_details.uniq(&:url)
       @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items)
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
@@ -138,6 +138,8 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def check_and_assigns_ad_default_values()
+    params[:is_test] ||= false
+    @is_test = params[:is_test]
     @moredetails = params[:price_full_details]
     @activate_tab = true
     params[:more_vendors] ||= "false"
@@ -158,7 +160,7 @@ class Admin::AdvertisementsController < ApplicationController
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
-    AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id)
+    @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id) if @is_test != "true"
 
     respond_to do |format|
       format.json {
@@ -176,25 +178,27 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def test_ads
-    @app_url = Rails.env == "production" ? "http://www.plannto.com" : "http://localhost:3000"
     if params[:commit] == "Clear"
       params[:item_id] = ""
       params[:ref_url] = "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
       params[:ads_id] = 2
       params[:more_vendors] = true
       params[:page_type] ||= "small_screen"
+      params[:is_test] = "true"
+      params[:show_list] = ["All","widget-1", "search-widget", "ad-300", "ad-120", "ad-728"]
     else
       params[:item_id] ||= "" #5414,1469
       params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
       params[:ads_id] ||= 2
       params[:more_vendors] ||= true
       params[:page_type] ||= "small_screen"
+      params[:is_test] ||= "true"
+      params[:show_list] ||= ["All","widget-1", "search-widget", "ad-300", "ad-120", "ad-728"]
     end
     render :layout => false
   end
 
   def search_widget_via_iframe
-    @app_url = params[:app_url]
     render :layout => false
   end
 

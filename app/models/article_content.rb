@@ -286,8 +286,7 @@ class ArticleContent < Content
     end
   end
 
-  def self.get_best_deals(item_ids, url, url_params)
-    p 8888
+  def self.get_best_deals(item_ids, url, url_params, is_test)
     @item = Item.find(item_ids[0])
     root_id = Item.get_root_level_id(@item.itemtype.itemtype)
     temp_item_ids = item_ids + root_id.to_s.split(",")
@@ -299,7 +298,7 @@ class ArticleContent < Content
       @impression_id = SecureRandom.uuid
       impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                            :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
-      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if is_test != "true"
 
       @best_deals.select { |a| a }
     else
