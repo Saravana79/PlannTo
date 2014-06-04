@@ -22,17 +22,25 @@ task :related_items_with_count, [:all_item] => :environment do |t, args|
   if all_item != "true"
     time_condition = "contents.updated_at > '#{2.days.ago}' and"
   end
-  Item.find_by_sql("select distinct item_id, itemtype_id from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id
-                    where #{time_condition} contents.sub_type in ('Comparisons')").each do |item|
-    query = "select a.item_id as item_id,b.item_id as related_item_id,count(*) as variance from (select content_id, item_id from item_contents_relations_cache ) a join (select content_id,
-             item_id from item_contents_relations_cache ) b on  a.content_id = b.content_id where b.item_id != a.item_id and a.item_id = #{item.item_id} and a.content_id in (select id
-             from contents where itemtype_id = #{item.itemtype_id} and contents.sub_type in ('Comparisons'))  group by item_id,related_item_id order by variance"
 
-    related_items = RelatedItem.find_by_sql(query)
-    related_items.each do |each_rec|
-      puts item.item_id.to_s + " - " + related_item_ids.count.to_s
-      related_item = RelatedItem.find_or_initialize_by_item_id_and_related_item_id(:item_id => each_rec.item_id, :related_item_id => each_rec.related_item_id)
-      related_item.update_attributes(:variance => each_rec.variance)
+  query_to_get_items = "select distinct item_id, itemtype_id from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id
+                    where #{time_condition} contents.sub_type in ('Comparisons')"
+
+  page = 1
+  begin
+    items = Item.paginate_by_sql(query_to_get_items, :page => page, :per_page => 500)
+    items.each do |item|
+      query = "select a.item_id as item_id,b.item_id as related_item_id,count(*) as variance from (select content_id, item_id from item_contents_relations_cache ) a join (select content_id,
+             item_id from item_contents_relations_cache ) b on  a.content_id = b.content_id where b.item_id != a.item_id and a.item_id = #{item.item_id} and a.content_id in (select id
+             from contents where itemtype_id = #{item.itemtype_id} and contents.sub_type in ('Comparisons'))  group by item_id,related_item_id order by variance limit 20"
+
+      related_items = RelatedItem.find_by_sql(query)
+      related_items.each do |each_rec|
+        puts each_rec.item_id.to_s + " - " + each_rec.related_item_id.to_s
+        related_item = RelatedItem.find_or_initialize_by_item_id_and_related_item_id(:item_id => each_rec.item_id, :related_item_id => each_rec.related_item_id)
+        related_item.update_attributes(:variance => each_rec.variance)
+      end
     end
-  end
+    page += 1
+  end while !items.empty?
 end
