@@ -1355,7 +1355,8 @@ end
     # items = []
     unless item_ad_detail.blank?
       related_item_ids = item_ad_detail.related_item_ids.to_s.split(',')
-      new_items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')}) order by i.ectr DESC limit 5") unless related_item_ids.blank?
+      new_items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{related_item_ids.map(&:inspect).join(',')})
+                                    order by i.ectr DESC limit 5") unless related_item_ids.blank?
       items << new_items
 
       items = items.flatten
