@@ -28,7 +28,7 @@
                               <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
                             </p>
 
-                            <p class="price"><%= prettify(item_detail.price) %></p>
+                            <p class="price"><%= prettify(item_detail) %></p>
 
                             <p class="btn">
                               <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop

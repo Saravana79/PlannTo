@@ -36,7 +36,7 @@
             <td class="label">Order Status :</td>
             <td class="input"><%= f.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:selected => "Validated"} %></td>
             <td class="label">Payment Status :</td>
-            <td class="input"><%= f.select :payment_status, ["Ready for Payment", "Pending", "Cancelled"], {:selected => "Pending"} %></td>
+            <td class="input"><%= f.select :payment_status, ["Paid", "Pending", "Cancelled", "Ready for Payment"], {:selected => "Pending"} %></td>
         </tr>
             <tr>
             <td class="label">Total Revenue :</td>

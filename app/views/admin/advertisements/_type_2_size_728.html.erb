@@ -24,7 +24,7 @@
                       </div>
                       <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
 
-                      <p class="price"><%= prettify(item_detail.price) %></p>
+                      <p class="price"><%= prettify(item_detail) %></p>
 
                     <p class="btn">
                       <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url) %>

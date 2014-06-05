@@ -285,13 +285,12 @@ module ApplicationHelper
     return result_str
   end
 
-  def prettify(float_val)
-    return_val = float_val.to_i == float_val ? float_val.to_i : ("%.2f" % float_val)
-
-    if return_val.to_i == 0
-      return "Pre-Order"
+  def prettify(item_detail)
+    pre_order_val = item_detail.status == 3 ? "Pre-Order" : ""
+    if(!item_detail.cashback.nil? && item_detail.cashback != 0.0)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" %(item_detail.price - item_detail.cashback))
     else
-      return "Rs. #{return_val}"
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" % item_detail.price)
     end
   end
 

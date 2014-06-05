@@ -401,7 +401,7 @@ class ProductsController < ApplicationController
   
   def get_item_for_widget
     cookies[:plan_to_temp_user_id] = { value: SecureRandom.hex(20), expires: 1.year.from_now } if cookies[:plan_to_temp_user_id].blank?
-    params[:is_test] ||= false
+    params[:is_test] ||= 'false'
     @is_test = params[:is_test]
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
 

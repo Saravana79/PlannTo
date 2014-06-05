@@ -87,10 +87,11 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
   end
 
   def self.display_price_detail(item)
+    pre_order_val = item.status == 3 ? "Pre-Order" : ""
     if(!item.cashback.nil? && item.cashback != 0.0)
-      item.price == 0.0 ? "N/A" :  Itemdetail.number_to_indian_currency((item.price - item.cashback).to_f.round(2)).to_s
+      item.price == 0.0 ? pre_order_val :  Itemdetail.number_to_indian_currency((item.price - item.cashback).to_f.round(2)).to_s
     else
-    item.price == 0.0 ? "N/A" :  Itemdetail.number_to_indian_currency(item.price.to_f.round(2)).to_s
+    item.price == 0.0 ? pre_order_val :  Itemdetail.number_to_indian_currency(item.price.to_f.round(2)).to_s
     end
 
   end

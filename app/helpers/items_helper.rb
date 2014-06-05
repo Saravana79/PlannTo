@@ -423,15 +423,13 @@ module ItemsHelper
 
   end
 
-  def display_price_detail(item)
-    if(!item.cashback.nil? && item.cashback != 0.0)
-      price = item.price == 0.0 ? "N/A" :  number_to_indian_currency("%.2f" %(item.price - item.cashback))
-     
+  def display_price_detail(item_detail)
+    pre_order_val = item_detail.status == 3 ? "Pre-Order" : ""
+    if(!item_detail.cashback.nil? && item_detail.cashback != 0.0)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" %(item_detail.price - item_detail.cashback))
     else
-    price = item.price == 0.0 ? "N/A" :  number_to_indian_currency("%.2f" % item.price)
-     
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" % item_detail.price)
     end
-
   end
 
   def display_product_page_tabs(item, tab_type)
