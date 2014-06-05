@@ -138,7 +138,7 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def check_and_assigns_ad_default_values()
-    params[:is_test] ||= false
+    params[:is_test] ||= 'false'
     @is_test = params[:is_test]
     @moredetails = params[:price_full_details]
     @activate_tab = true

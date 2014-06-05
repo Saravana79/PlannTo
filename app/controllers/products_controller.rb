@@ -253,7 +253,7 @@ class ProductsController < ApplicationController
   end
 
   def check_and_assigns_widget_default_values()
-    params[:is_test] ||= false
+    params[:is_test] ||= 'false'
     @is_test = params[:is_test]
     @active_tabs_for_publisher = [5]
     @activate_tab = true
