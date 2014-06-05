@@ -32,7 +32,7 @@ task :related_items_with_count, [:all_item] => :environment do |t, args|
     items.each do |item|
       query = "select a.item_id as item_id,b.item_id as related_item_id,count(*) as variance from (select content_id, item_id from item_contents_relations_cache ) a join (select content_id,
              item_id from item_contents_relations_cache ) b on  a.content_id = b.content_id where b.item_id != a.item_id and a.item_id = #{item.item_id} and a.content_id in (select id
-             from contents where itemtype_id = #{item.itemtype_id} and contents.sub_type in ('Comparisons'))  group by item_id,related_item_id order by variance limit 20"
+             from contents where itemtype_id = #{item.itemtype_id} and contents.sub_type in ('Comparisons'))  group by item_id,related_item_id order by variance DESC limit 20"
 
       related_items = RelatedItem.find_by_sql(query)
       related_items.each do |each_rec|
