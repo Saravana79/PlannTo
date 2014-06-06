@@ -1,0 +1,80 @@
+<% ad_url = get_ad_url(@item_detail.id, @impression_id, @ref_url) %>
+<% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+<div class="plannto-advertisement main_div">
+  <div class="advt-block">
+    <div class="advt-300">
+      <div class="logo">
+        <div style="float:left;width:110px;">
+          <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a>
+            <a target="_blank" href="http://localhost:3000/history_details?detail_id=81562&amp;is_test=true&amp;ref_url=http%3A%2F%2Fgadgetstouse.com%2Ffull-reviews%2Fgionee-elife-e6-review%2F11205" class="vendor_image"><img alt="" src="http://s3-ap-southeast-1.amazonaws.com/planntonew/items/vendor/medium/amazon.jpeg">
+            </a>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="advt-box">
+        <div class="product-img-left">
+          <a href="<%= shop_now_url %>" target="_blank">
+            <img src="<%= get_image_url(@item_detail) %>" onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" alt="">
+          </a>
+        </div>
+        <div class="product-img-right">Now
+Find the best price
+on
+<%= @item_detail.ItemName %>
+      </div>
+    <div class="ad-footer">
+      <span> starts with </span><%= prettify(@item_detail) %>
+    </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+    body {
+        background: none repeat scroll 0 0 #FFFFFF;
+        color: #222222;
+        font-family: 'pt_sansregular',Arial,Helvetica,sans-serif;
+        padding: 0;
+        margin: 0;
+    }
+    .main_div {
+        height: 250px !important;
+        overflow: hidden;
+        width: 300px !important;
+    }
+    .advt-block {
+        margin: 0;
+        padding: 0;
+    }
+    .advt-300 {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 2px solid #DDDDDD;
+        height: 246px;
+        margin: 0;
+        padding: 0;
+        width: 296px;
+    }
+    .advt-box {
+        clear: both;
+    }
+    .product-img-right {
+        float: left;
+        margin: 2px;
+        white-space: pre-wrap;
+        width: 45%;
+        line-height: 28px;
+        text-align: center
+    }
+    .product-img-left {
+        width: 50%;
+        float: left;
+    }
+    .ad-footer {
+        color: #0000FF;
+        float: right;
+        font-size: small;
+        margin: 6px;
+        text-decoration: underline;
+    }
+</style>

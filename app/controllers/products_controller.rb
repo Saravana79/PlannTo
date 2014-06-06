@@ -284,7 +284,7 @@ class ProductsController < ApplicationController
     params[:is_test] ||= 'false'
     url_params = "items:" + params[:item_ids]
     url = request.referer
-    @item, @best_deals = ArticleContent.get_best_deals(item_ids, url, url_params, params[:is_test])
+    @item, @best_deals, @impression_id = ArticleContent.get_best_deals(item_ids, url, url_params, params[:is_test], current_user, request.remote_ip, cookies[:plan_to_temp_user_id])
 
     @vendors = VendorDetail.all unless @best_deals.blank?
   end

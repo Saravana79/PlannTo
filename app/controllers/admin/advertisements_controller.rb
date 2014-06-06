@@ -100,6 +100,9 @@ class Admin::AdvertisementsController < ApplicationController
 
     item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
+
+    return show_plannto_ads() if !@ad.blank? && @ad.advertisement_type == "plannto"
+
     status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
     publisher = Publisher.getpublisherfromdomain(url)
     vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
@@ -131,6 +134,24 @@ class Admin::AdvertisementsController < ApplicationController
           render :json => {:success => false, :html => ""}, :callback => params[:callback]
         else
           render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("admin/advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        end
+      }
+      format.html { render :layout => false }
+    end
+  end
+
+  def show_plannto_ads
+    @item = @items.first
+    item_details = @item.blank? ? [] : Itemdetail.get_item_detail_with_lowest_price(@item.id)
+    item_details.delete_if {|a| a.price == 0.0}
+    @item_detail = item_details.first
+
+    respond_to do |format|
+      format.json {
+        if @item_detail.blank?
+          render :json => {:success => false, :html => ""}, :callback => params[:callback]
+        else
+          render :json => {:success => @item_detail.blank? ? false : true, :html => render_to_string("admin/advertisements/show_plannto_ads.html.erb", :layout => false)}, :callback => params[:callback]
         end
       }
       format.html { render :layout => false }

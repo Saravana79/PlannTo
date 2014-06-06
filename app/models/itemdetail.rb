@@ -20,6 +20,13 @@ class Itemdetail < ActiveRecord::Base
                  itemdetails.cashback end) asc")
   end
 
+  def self.get_item_detail_with_lowest_price(item_id)
+    # item_id = sanitize(item_id)
+    find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id = #{item_id}
+                 and itemdetails.isError = 0 ORDER BY itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0
+                 else itemdetails.cashback end) asc")
+  end
+
   def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, activate_tab)
     @item_details = []
     if item_ids.count > 1
@@ -171,7 +178,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         end
       else
         where_to_buy_items = []
-        item, best_deals = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test)
+        item, best_deals, impression_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
         itemsaccess = "offers"
       end
 
