@@ -108,7 +108,7 @@ var PlannTo = (function (window, undefined) {
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
-        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
+        url = "http://" + domain + "/get_item_for_widget.js?item_id=" + item_id +"&search_type="+it_id+"&at=compare_price&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&is_test=" + is_test + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
             jQuery("#display_search_item").html(data.html);
@@ -124,7 +124,7 @@ var PlannTo = (function (window, undefined) {
 
         var item_type = jQuery(".select_item_type_id.selected").parent("li").attr("id")
         it_id = item_type ? item_type : types
-        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
+        url = "http://" + domain + SubPath + "?term=" + item_ids +"&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&is_test=" + is_test + "&callback=?"
 
         jQuery.getJSON(url, function (data) {
 
@@ -209,6 +209,7 @@ var PlannTo = (function (window, undefined) {
             var show_details = getParam(url, "show_details");
             var ads = getParam(url, "advertisement");
             page_type = getParam(url, "page_type");
+            is_test = getParam(url,"is_test");
             var element_id = "#content";
 
             element = jQuery("#display_search_item").val()
@@ -216,7 +217,7 @@ var PlannTo = (function (window, undefined) {
             types = getParam(url, "types");
             it_id = item_type ? item_type : ""
 
-            url = "http://" + domain + SubPath + "?types="+types+"&first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
+            url = "http://" + domain + SubPath + "?types="+types+"&first_time=yes&search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&is_test="+ is_test + "&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
@@ -241,7 +242,7 @@ var PlannTo = (function (window, undefined) {
                 it_id = item_type ? item_type : " "
 
                 // jQuery(this).addClass("selected");
-                url = "http://" + domain + SubPath + "?search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&callback=?"
+                url = "http://" + domain + SubPath + "?search_type="+it_id+"&price_full_details=" + show_details + "&ref_url=" + pathname + "&doc_title-" + doc_title + "&page_type=" + page_type + "&is_test=" + is_test +"&callback=?"
 
                 jQuery.getJSON(url, function (data) {
 

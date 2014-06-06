@@ -1,7 +1,10 @@
 desc "Tasks for Heroku scheduler"
-task :feed_process => :environment do
+task :feed_process, [:priorities] => :environment do |t, args|
+  args.with_defaults(:priorities => "false")
+  priorities = args[:priorities]
+
   puts "Running Priorities Feed Process, at #{Time.zone.now}"
-  Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=true)
+  Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=priorities)
 end
 
 task :advertisement_process => :environment do
