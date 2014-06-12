@@ -1,0 +1,95 @@
+<h3>Payment Report</h3>
+
+<table class="payment_report_table">
+  <tr>
+    <td class="label">Payment Date :</td>
+    <td class="input"><%=  @payment_report.payment_date %></td>
+  </tr>
+  <% if current_user.is_admin? %>
+  <tr>
+    <td class="label">Publisher :</td>
+    <td class="input"><%= @payment_report.publisher_id %></td>
+  </tr>
+  <% end %>
+  <tr>
+    <td class="label">Payment Method :</td>
+    <td class="input"><%= @payment_report.payment_method %></td>
+  </tr>
+  <tr>
+    <td class="label">Commission Amount :</td>
+    <td class="input"><%= @payment_report.commission_amount %></td>
+  </tr>
+  <tr>
+    <td class="label">Tax Amount :</td>
+    <td class="input"><%= @payment_report.tax_amount %></td>
+  </tr>
+  <tr>
+    <td class="label">Final Amount :</td>
+    <td class="input"><%= @payment_report.final_amount %></td>
+  </tr>
+</table>
+
+<h3>Order Histories</h3>
+
+<%= render :partial => "admin/order_histories/list_orders" %>
+
+<style type="text/css">
+    .main_form {
+        margin: 0px 0 0 54px;
+        width: 600px
+    }
+
+    #new_advertisement h2 {
+        font-size: 20px;
+        margin: 22px;
+        text-align: center;
+    }
+
+    .title_header.float_lft {
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .main_form .fields-div {
+        line-height: 40px;
+    }
+
+    .title_header {
+        width: 150px;
+        clear: both;
+        margin: 10px 10px 0 0;;
+    }
+
+    .fields-div input, .fields-div select {
+        width: 250px;
+    }
+
+    .payment_report_table tr {
+        line-height: 45px;
+    }
+
+    .label {
+        font-size: 12px;
+        text-align: right;
+        font-weight: bold;
+        width: 200px;
+    }
+
+    .input {
+        font-size: 12px;
+        text-align: left;
+        width: 200px;
+    }
+
+    .input input {
+        size: "160px;"
+    }
+    tr td.input {
+        padding: 0 0 0 28px;
+    }
+    .submit_button {
+        float: left;
+        padding: 23px 0 0 207px;
+    }
+
+</style>

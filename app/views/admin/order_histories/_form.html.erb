@@ -60,8 +60,11 @@
             <td class="input"> <%= f.text_field :item_name, :readonly => false, :value => @order_history.item_name %></td>
             <td class="label">Item ID :</td>
             <td class="input"><%= f.text_field :item_id, :readonly => false, :value => @order_history.item_id %></td>
-           
         </tr>
+      <tr>
+        <td class="label">Payment Report ID :</td>
+        <td class="input"><%= f.text_field :payment_report_id, :value => @order_history.payment_report_id %></td>
+      </tr>
     </table>
 
   

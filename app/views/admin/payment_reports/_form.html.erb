@@ -1,0 +1,164 @@
+<%= form_for [:admin, @payment_report] do |f| %>
+    <% if @payment_report.errors.any? %>
+        <div id="error_explanation" %>
+        <%= "#{pluralize(@payment_report.errors.count, "error")} prohibited this product from being saved:" %>
+        <ul>
+          <% @payment_report.errors.full_messages.each do |msg| %>
+              <li> <%= msg %> </li>
+          <% end %>
+        </ul>
+        </div>
+    <% end %>
+
+    <h2 class="order_title"> Payment Report </h2>
+
+    <style>
+        .label {
+            font-size: 12px;
+            text-align: right;
+            font-weight: bold;
+            width: 200px;
+        }
+
+        .input {
+            font-size: 12px;
+            text-align: left;
+            width: 200px;
+        }
+
+        .input input {
+            size: "160px;"
+        }
+        tr td.input {
+            padding: 0 0 0 28px;
+        }
+        .submit_button {
+            float: left;
+            padding: 23px 0 0 207px;
+        }
+    </style>
+
+
+    <table class="payment_report_table">
+      <tr>
+        <td class="label">Payment Date :</td>
+        <td class="input"><%= f.text_field :payment_date, :value => Date.today.strftime("%d-%m-%Y") %></td>
+      </tr>
+      <tr>
+        <td class="label">Publisher :</td>
+        <td class="input"><%= f.select :publisher_id, @publishers.collect { |a| [a.publisher_url, a.id] }, {:include_blank => true} %></td>
+      </tr>
+      <tr>
+        <td class="label">Payment Method :</td>
+        <td class="input"><%= f.select :payment_method, ["Cheque", "Online Transfer", "Cash"], {:selected => "Cheque"} %></td>
+      </tr>
+      <tr>
+        <td class="label">Commission Amount :</td>
+        <td class="input"><%= f.text_field :commission_amount %></td>
+      </tr>
+      <tr>
+        <td class="label">Tax Amount :</td>
+        <td class="input"><%= f.text_field :tax_amount %></td>
+      </tr>
+      <tr>
+        <td class="label">Final Amount :</td>
+        <td class="input"><%= f.text_field :final_amount %></td>
+      </tr>
+    </table>
+
+
+    <div class="submit_button">
+      <% button_name = ["edit", "update"].include?(params[:action]) ? "Update" : "Create" %>
+      <%= f.submit button_name, :class => 'btn_submitanswer', :id => "publishanswer" %>
+    </div>
+    <%= link_to "Cancel", admin_payment_reports_path, :class => "btn_submitanswer", :id => "cancel_button" %>
+
+<% end %>
+
+<script>
+    $(document).ready(function () {
+
+        $("#payment_report_payment_date").datepicker({ dateFormat: 'dd-mm-yy' });
+
+    });
+
+
+</script>
+
+<style type="text/css">
+    .main_form {
+        margin: 0px 0 0 54px;
+        width: 600px
+    }
+
+    #new_advertisement h2 {
+        font-size: 20px;
+        margin: 22px;
+        text-align: center;
+    }
+
+    .title_header.float_lft {
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .main_form .fields-div {
+        line-height: 40px;
+    }
+
+    .title_header {
+        width: 150px;
+        clear: both;
+        margin: 10px 10px 0 0;;
+    }
+
+    .fields-div input, .fields-div select {
+        width: 250px;
+    }
+
+    .remove-file {
+        cursor: pointer;
+        color: blue;
+        float: left;
+    }
+
+    #add_another_file {
+        clear: both;
+        float: right;
+        font-size: 13px;
+        position: relative;
+        text-decoration: underline;
+    }
+
+    .existing_images > a {
+        color: #FF0000;
+        font-size: 12px;
+        position: absolute;
+    }
+
+    .ad_type, .template_type, .bid_radio_button {
+        width: 10px !important;
+    }
+
+    .breadcrumpbtnDiv {
+        display: block;
+        height: 500px;
+        width: 100%;
+    }
+
+    .float_lft.optional {
+        font-weight: bold;
+        padding: 0 0 0 97px;
+        text-align: center;
+    }
+
+    .order_title {
+        padding: 25px 0 25px 475px;
+        font-size: 20px;
+    }
+
+    .payment_report_table tr {
+        line-height: 45px;
+    }
+
+</style>
