@@ -21,13 +21,14 @@
         <div class="product-img-right">Now
 Find the best price
 on
-<%= @item_detail.ItemName %>
+<span><%= @item_detail.ItemName %></span>
       </div>
     <div class="ad-footer">
-      <span> starts with </span><%= prettify(@item_detail) %>
+      <span class="price_start">starts with</span> <span class="price"> <%= prettify(@item_detail) %> </span>
     </div>
     </div>
   </div>
+</div>
 </div>
 
 <style type="text/css">
@@ -71,10 +72,24 @@ on
         float: left;
     }
     .ad-footer {
-        color: #0000FF;
-        float: right;
-        font-size: small;
         margin: 6px;
+    }
+    .price_start {
+        color: #0000FF;
+        font-size: small;
         text-decoration: underline;
+    }
+    .price {
+        color: #BF0000;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+        padding: 10px 0;
+    }
+    .ad-footer .price {
+        text-decoration: none !important;
+    }
+    .product-img-right > span {
+        font-weight: bold;
     }
 </style>
