@@ -1,6 +1,7 @@
 PlanNto::Application.routes.draw do
  
 namespace :admin do
+  resources :payment_reports
   resources :users
   # resources :impression_reports
   resources :click_reports
@@ -390,6 +391,7 @@ resources :comments do
   get "admin/widget_reports" => "admin/ad_reports#widget_reports", :as => "admin_widget_reports"
   get "ad_reports/load_vendors" => "admin/ad_reports#load_vendors", :as => "admin_load_vendors"
   get "admin/ad_reports/view_chart" => "admin/ad_reports#view_chart", :as => "admin_ad_report_chart"
+  # get "admin/payment_reports" => "admin/ad_reports#payment_reports", :as => "admin_payment_reports"
 
   resources :feeds do
     collection do
