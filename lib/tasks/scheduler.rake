@@ -41,3 +41,8 @@ task :missing_url_process => :environment do
   puts "Running Missingurl Process, at #{Time.zone.now}"
   Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now)
 end
+
+task :rtb_budget_update_process => :environment do
+  puts "Running RTB Budget Update Process, at #{Time.zone.now}"
+  Resque.enqueue(RtbBudgetUpdateProcess, "update_rtb_budget", Time.zone.now)
+end

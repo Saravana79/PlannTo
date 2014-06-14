@@ -25,9 +25,9 @@
      <td> <%= ad.cost %>
      <td> <%= ad.advertisement_type %></td>
      <td> <%= ad.template_type %></td>
-     <td> <%= ad.start_date.strftime("%d-%m-%Y") %></td>
-     <td> <%= ad.end_date.strftime("%d-%m-%Y") %></td>
-     <% collected_item_ids = ad.content.related_items.collect(&:item_id).join(',') %>
+     <td> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
+     <td> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
+     <% collected_item_ids = ad.content.blank? ? "" : ad.content.related_items.collect(&:item_id).join(',') %>
      <td><% Item.where("id in ('#{collected_item_ids}')").each do |it| %>
      <%= it.name %>,&nbsp; <%end%></td>
      <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) %> </td>

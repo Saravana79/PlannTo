@@ -121,6 +121,45 @@ class Advertisement < ActiveRecord::Base
      end
    end
 
+   def self.update_rtb_budget(log)
+     advertisements = Advertisement.where("status = ? and start_date <= ? and end_date >= ?",1,Date.today, Date.today)
+     advertisements.each do |advertisement|
+       account_name = "PlannToAccount_#{advertisement.id}"
+       hourly_budget = advertisement.get_hourly_budget()
+       uri = URI("#{configatron.rtbkit_hostname}/v1/accounts/#{account_name}")
+       account = Net::HTTP.get(uri)
+
+       if account == "\"couldn't get account\"\n"
+         uri_to_create = URI("#{configatron.rtbkit_hostname}/v1/accounts?accountName=#{account_name}&accountType=budget")
+         response = Net::HTTP.post_form(uri_to_create, {})
+         raise advertisement unless response.code == "200"
+         puts "Response #{response.code}: Created New Account #{accout_name}"
+         account = response.body
+       end
+
+       account_hash = JSON.parse(account)
+
+       existing_budget = account_hash["budgetIncreases"].blank? ? 0 : account_hash["budgetIncreases"]["USD/1M"]
+       budget_now = existing_budget + (hourly_budget * 1000000)
+       payload = {"USD/1M" => budget_now}.to_json
+       post_budget(account_name, payload)
+     end
+   end
+
+   def get_hourly_budget
+     hourly_budget = self.budget.to_f / 24
+   end
+
+   def self.post_budget(account_name, payload)
+     p uri_post = URI("#{configatron.rtbkit_hostname}/v1/accounts/#{account_name}/budget")
+     req = Net::HTTP::Post.new(uri_post.path, initheader = {'Content-Type' =>'application/json'})
+     req.body = payload
+     response = Net::HTTP.new(uri_post.host, uri_post.port).start {|http| http.request(req) }
+     puts "Response #{response.code} #{response.message}:
+          #{response.body}"
+     raise advertisement unless response.code == "200"
+   end
+
    private
 
    def file_dimensions

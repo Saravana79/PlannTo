@@ -47,6 +47,7 @@ development:
   homepagecompareitems3: "3,5"
   homepagecompareitems4: "3,5"
   hostname: "http://localhost:3000"
+  rtbkit_hostname: "http://184.73.182.76:9985"
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -85,6 +86,7 @@ test:
   homepagecompareitems2: "5727,5678"
   homepagecompareitems3: "4974,5023"
   homepagecompareitems4: "5976,5539"
+  rtbkit_hostname: "http://184.73.182.76:9985"
  
 production:
   root_image_url: "http://cdn1.plannto.com/items/"
@@ -135,3 +137,4 @@ production:
   homepagecompareitems3: "4974,5023"
   homepagecompareitems4: "5976,5539"
   hostname: "http://www.plannto.com"
+  rtbkit_hostname: "http://184.73.182.76:9985"
