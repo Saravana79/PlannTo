@@ -1095,8 +1095,12 @@ end
   end
 
   def self.update_item_details(log, batch_size=2000)
-    query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from itemdetails id
-             inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
+    # query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from
+    #                                     itemdetails id inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
+
+    query_to_get_price_and_vendor_ids = "select itemid as item_id, min(price) as price, group_concat(site order by price) as vendor_id, group_concat(price order by price) as
+                                         pricestring from (select itemid, site, min(price)  as price from itemdetails where status in (1,3) and iserror != 1 and site in
+                                         (9861,9882,9874,9880)  group by itemid,site ) a group by itemid"
     # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
     log.debug "********** Started Updating Price and Vendor_id for Items **********"
@@ -1109,12 +1113,14 @@ end
 
       p_v_records.each do |each_rec|
         redis_key = "items:#{each_rec.item_id}"
-        val_hash = each_rec.attributes.reject {|g| ['item_id','item_type'].include?(g)}
+        val_hash = each_rec.attributes.reject {|g| ['item_id', 'pricestring'].include?(g)}
         redis_values = val_hash
 
         related_item_ids = RelatedItem.where('item_id = ?', each_rec.item_id).limit(10).collect(&:related_item_id).join(",")
 
-        redis_values.merge!(:related_item_ids => related_item_ids)
+        pc_vendor_id = Item.get_pc_vendor_ids(each_rec)
+
+        redis_values.merge!(:related_item_ids => related_item_ids, :pc_vendor_id => pc_vendor_id)
 
         redis_values = val_hash.flatten
 
@@ -1133,6 +1139,15 @@ end
     log.debug "\n"
 
     update_item_details_with_ad_ids(log, nil, batch_size)
+  end
+
+  def self.get_pc_vendor_ids(each_rec)
+    price = each_rec.price * 1.02
+    vendor_ids = each_rec.vendor_id.split(',')
+    pricestring = each_rec.pricestring.split(',').map(&:to_f)
+    hash_val = Hash[vendor_ids.zip(pricestring)]
+    pc_vendor_id = hash_val.select {|k, v| v <= price }.keys
+    pc_vendor_id = pc_vendor_id.join(",")
   end
 
   def self.update_item_details_with_ad_ids(log, item_ids=nil, batch_size=2000)
