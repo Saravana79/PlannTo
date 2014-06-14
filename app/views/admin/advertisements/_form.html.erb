@@ -17,6 +17,10 @@
         <div>
           <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => true %>Static
           <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type" %>Dynamic
+          <% if current_user.is_admin? %>
+            <%= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type" %>Dynamic PC
+            <%= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto
+          <% end %>
         </div>
       </div>
 

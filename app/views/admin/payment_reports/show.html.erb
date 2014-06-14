@@ -3,12 +3,12 @@
 <table class="payment_report_table">
   <tr>
     <td class="label">Payment Date :</td>
-    <td class="input"><%=  @payment_report.payment_date %></td>
+    <td class="input"><%=  @payment_report.payment_date ? @payment_report.payment_date.strftime('%b %d, %Y') : "" %></td>
   </tr>
   <% if current_user.is_admin? %>
   <tr>
     <td class="label">Publisher :</td>
-    <td class="input"><%= @payment_report.publisher_id %></td>
+    <td class="input"><%= @publisher.publisher_url %></td>
   </tr>
   <% end %>
   <tr>
@@ -24,12 +24,21 @@
     <td class="input"><%= @payment_report.tax_amount %></td>
   </tr>
   <tr>
+    <td class="label">Plannto Percentage :</td>
+    <td class="input"><%= "#{@payment_report.plannto_percentage ? @payment_report.plannto_percentage : 0}  %" %></td>
+  </tr>
+  <tr>
+    <td class="label">Plannto Amount :</td>
+    <td class="input"><%= @payment_report.plannto_amount ? @payment_report.plannto_amount : 0 %></td>
+  </tr>
+  <tr>
     <td class="label">Final Amount :</td>
     <td class="input"><%= @payment_report.final_amount %></td>
   </tr>
 </table>
 
-<h3>Order Histories</h3>
+<h3 style="float:left;">Order Histories</h3>
+<%= link_to "show all Orders", admin_orders_path, :class => "btn_submitanswer show_all_orders" %>
 
 <%= render :partial => "admin/order_histories/list_orders" %>
 
@@ -90,6 +99,12 @@
     .submit_button {
         float: left;
         padding: 23px 0 0 207px;
+    }
+
+    .show_all_orders {
+        float: right;
+        margin: 0 16px 16px 0;
+        position: relative;
     }
 
 </style>

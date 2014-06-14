@@ -14,6 +14,8 @@
         <th class="header_compare"  style="width:80px;"> Date </th>
         <th class="header_compare" width="80px"> Commission Amount</th>
         <th class="header_compare" width="80px"> Tax Amount</th>
+        <th class="header_compare" width="80px"> Plannto Percentage</th>
+        <th class="header_compare" width="80px"> Plannto Amount</th>
         <th class="header_compare" width="80px"> Final Amount</th>
         <th class="header_compare" width="80px"> Payment Method</th>
 
@@ -27,11 +29,13 @@
             <td class="bdb_gray1"  style="width:80px;text-align:center;border-bottom: 1px solid #808080;"><%=  p_report.payment_date.to_datetime.strftime("%d-%b-%Y" ) %> </td>
             <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= p_report.commission_amount %> </td>
             <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;font-weight: bold;"><%= p_report.tax_amount %> </td>
+            <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;font-weight: bold;"><%= "#{p_report.plannto_percentage ? p_report.plannto_percentage : 0}  %" %> </td>
+            <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;font-weight: bold;"><%= p_report.plannto_amount ? p_report.plannto_amount : 0 %> </td>
             <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= p_report.final_amount %> </td>
             <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= p_report.payment_method %> </td>
 
             <% if current_user.is_admin? %>
-                <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= p_report.publisher_id %> </td>
+                <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= @publisher.publisher_url %> </td>
             <% end %>
             <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"> <%= link_to "Show", admin_payment_report_path(:id => p_report.id), :target => "_blank" %> </td>
             <% if current_user.is_admin? %>

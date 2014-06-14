@@ -39,7 +39,7 @@
 
             <% if current_user.is_admin? %>
                 <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.impression_id %> </td>
-                <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.payment_report_id %> </td>
+                <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= link_to oh.payment_report_id, admin_payment_report_path(:id => oh.payment_report_id) unless oh.payment_report_id.blank? %> </td>
                 <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"><%= oh.publisher_id %> </td>
                 <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"> <%= link_to "Edit", admin_order_edit_path(:id => oh.id) %> </td>
                 <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;"> <%= link_to "Delete", admin_order_destroy_path(:id => oh.id), :method => :delete, :confirm => 'Are you sure you want to delete this?' %> </td>

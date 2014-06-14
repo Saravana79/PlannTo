@@ -61,6 +61,7 @@ class Admin::PaymentReportsController < ApplicationController
 
   def show
     @payment_report = PaymentReport.find_by_id(params[:id])
+    @publisher = Publisher.find_by_id(@payment_report.publisher_id)
     return redirect_to admin_payment_reports_path if @payment_report.blank?
 
     @order_histories = @payment_report.order_histories.order('order_date desc').paginate(:per_page => 20,:page => params[:page])

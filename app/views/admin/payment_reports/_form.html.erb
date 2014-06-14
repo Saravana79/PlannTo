@@ -61,6 +61,17 @@
         <td class="input"><%= f.text_field :tax_amount %></td>
       </tr>
       <tr>
+        <td class="label">Plannto Percentage :</td>
+        <td class="input"><%= f.text_field :plannto_percentage %></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center;">OR</td>
+      </tr>
+      <tr>
+        <td class="label">Plannto Amount :</td>
+        <td class="input"><%= f.text_field :plannto_amount %></td>
+      </tr>
+      <tr>
         <td class="label">Final Amount :</td>
         <td class="input"><%= f.text_field :final_amount %></td>
       </tr>
@@ -71,7 +82,7 @@
       <% button_name = ["edit", "update"].include?(params[:action]) ? "Update" : "Create" %>
       <%= f.submit button_name, :class => 'btn_submitanswer', :id => "publishanswer" %>
     </div>
-    <%= link_to "Cancel", admin_payment_reports_path, :class => "btn_submitanswer", :id => "cancel_button" %>
+    <%= link_to "Cancel", admin_payment_reports_path, :class => "btn_submitanswer btn_submitcancel", :id => "cancel_button" %>
 
 <% end %>
 
@@ -161,4 +172,74 @@
         line-height: 45px;
     }
 
+    .btn_submitcancel {
+        float: left;
+        margin-top: 21px;
+    }
+
 </style>
+
+
+<script type="text/javascript">
+    $("#payment_report_commission_amount").keyup(function()
+    {
+        var commission_amount = $("#payment_report_commission_amount").val()
+        var tax_amount = commission_amount * (10 / 100)
+        $("#payment_report_tax_amount").val(tax_amount)
+        clear_final_and_plannto_amounts()
+
+    })
+
+    $("#payment_report_tax_amount").on('input propertychange paste', function()
+    {
+        clear_final_and_plannto_amounts()
+    })
+
+    $("#payment_report_plannto_percentage").keyup(function()
+    {
+        get_and_assign_by_plannto_percentage()
+    })
+
+    $("#payment_report_plannto_amount").keyup(function()
+    {
+        get_and_assign_by_plannto_amount()
+    })
+
+    function get_amounts()
+    {
+        var commission_amount = $("#payment_report_commission_amount").val()
+        var tax_amount = $("#payment_report_tax_amount").val()
+        var remainig_amount = commission_amount - tax_amount
+        var plannto_percentage = $("#payment_report_plannto_percentage").val()
+        var plannto_amount = $("#payment_report_plannto_amount").val()
+        return {commission_amount: commission_amount, tax_amount: tax_amount, remainig_amount: remainig_amount, plannto_percentage: plannto_percentage, plannto_amount: plannto_amount}
+    }
+
+    function get_and_assign_by_plannto_percentage()
+    {
+        var form_val = get_amounts()
+
+        var plannto_amount = form_val.remainig_amount * (form_val.plannto_percentage / 100)
+        $("#payment_report_plannto_amount").val(plannto_amount)
+        final_amount = form_val.remainig_amount - plannto_amount
+        $("#payment_report_final_amount").val(final_amount)
+
+    }
+
+    function get_and_assign_by_plannto_amount()
+    {
+        var form_val = get_amounts()
+
+        var plannto_percentage = (form_val.plannto_amount / form_val.remainig_amount) * 100
+        $("#payment_report_plannto_percentage").val(plannto_percentage)
+        final_amount = form_val.remainig_amount - form_val.plannto_amount
+        $("#payment_report_final_amount").val(final_amount)
+    }
+
+    function clear_final_and_plannto_amounts()
+    {
+        $("#payment_report_plannto_percentage").val("")
+        $("#payment_report_plannto_amount").val("")
+        $("#payment_report_final_amount").val("")
+    }
+</script>
