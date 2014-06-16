@@ -47,7 +47,7 @@ class Item < ActiveRecord::Base
   has_one :item_ad_detail
 
   after_save :create_item_ad_detail
-  after_create :update_redis_with_item
+  after_save :update_redis_with_item
 
   # default_scope includes(:attribute_values)
   
