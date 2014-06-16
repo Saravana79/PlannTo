@@ -65,7 +65,7 @@ class FeedUrl < ActiveRecord::Base
                            status: status, source: source, summary: description, :images => images,
                            :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count)
         else
-          new_count = check_exist_feed_url.missing_count + missingurl_count
+          new_count = check_exist_feed_url.missing_count + missingurl_count.to_i
           check_exist_feed_url.update_attributes(:missing_count => new_count)
         end
 
