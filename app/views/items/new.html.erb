@@ -7,24 +7,9 @@
 <br/>
 <h1>New item</h1>
 
-<%= render 'form' %>
+<%= render :partial => 'form', :locals => {:button_name => "Create"} %>
 
 <%= link_to 'Back', items_path %>
 
 
 <%= link_to 'Go to last Item', item_path(Item.last), :target => "_blank" %>
-
-
-<style type="text/css">
-    .alert-notice {
-        background-color: #dff0d8;
-        border-color: #d6e9c6;
-        color: #468847;
-        text-align: center;
-        font-size: 18px;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-</style>

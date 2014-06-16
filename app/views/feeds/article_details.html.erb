@@ -5,7 +5,7 @@
       <a href="<%= content_path(@article_content.id) %>" target='_blank'> <%= @article_content.title %></a>
     </div>
 <% else %>
-    <div class="detailed_values">
+    <div id="ShareURLDiv" class="detailed_values">
       <%= form_for(:article_content, :url => "/article_contents", :remote => true, :html => {:id => "article_detail_form"}) do |f| %>
           <%= hidden_field_tag 'feed_url_id', @feed_url.id %>
 
@@ -75,6 +75,12 @@
             <span style="width:75px;float:left;" class="title_header"><label for="description">Description :</label></span>
            <span style="float:left;"> <%= f.text_area :description ,:style=>"width:600px;height:100px;"%> </span>
           </div>
+
+          <div class="productreview" style="clear:both;display:none;" id="<%=@productReviewRating%>">
+            <div class="title_header float_lft">Rating :</div>
+            <div id="<%=@productReviewRatingField%>" class="thereisnosuchclass"></div>
+          </div>
+
 
           <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
             <div class="title_header float_lft">Product :</div>
@@ -260,6 +266,16 @@
         var images = new Array();
         var sizes = new Array();
 
+        <%if @article_content.new_record?%>
+        var score = 0;
+        <%else%>
+        <%if @article_content.is_review?%>
+        var score = '<%=@article_content.field1.to_f.round(1)%>';
+        <%else%>
+        var score = 0;
+        <%end%>
+        <%end%>
+
         $("document").ready(function()
         {
             $('#aPrev').click(function(){
@@ -290,6 +306,32 @@
 
                 if ($('#<%=@manual_image%>').is(':checked')) {$("#<%=@thumbnail_id%>").show(); } else { $("#<%=@thumbnail_id%>").hide(); }
             });
+
+            $('div#<%=@productReviewRatingField%>').raty({
+                starOff:  'assets/star-off.png',
+                starHalf   : 'assets/star-half.png',
+                half       : true,
+                starOn: 'assets/star-on.png',
+                start: score,
+                width:  '200px',
+                click: function(score, evt) {
+                    $(".rating_field").val("" + score);
+                }
+            });
+
+            $("#article_content_sub_type").live("change", function()
+            {
+                var category = $("#article_content_sub_type").val()
+                if (category == "Reviews")
+                    $("div#ShareURLDiv div#<%=@productReviewRating%>").show();
+                else
+                   hideReview()
+
+            })
+
+            var category = $("#article_content_sub_type").val()
+            if (category == "Reviews")
+                $("div#ShareURLDiv div#<%=@productReviewRating%>").show();
 
         })
 
@@ -388,6 +430,10 @@
                 return true
             }
         })
+        function hideReview(){
+            $("div#ShareURLDiv div#<%=@productReviewRating%>").hide();
+            $("#<%=@productReviewRatingField%>-score").val('')
+        }
     </script>
 
 <% end %>

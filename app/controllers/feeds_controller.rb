@@ -75,6 +75,8 @@ class FeedsController < ApplicationController
     @manual_image= "new_manual_image"
     @thumbnail_id = "new_thumbnail_url"
     @current_image_id = "current_image"
+    @productReviewRatingField = "new_productReviewRatingField"
+    @productReviewRating = "new_product_review_rating"
 
 
     @images = []

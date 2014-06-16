@@ -46,7 +46,7 @@ class Item < ActiveRecord::Base
   has_many :item_pro_cons
   has_one :item_ad_detail
 
-  after_create :create_item_ad_detail
+  after_save :create_item_ad_detail
   after_create :update_redis_with_item
 
   # default_scope includes(:attribute_values)
@@ -1392,7 +1392,8 @@ end
       else
         old_item_ad_detail.update_attributes!(:new_version_id => self.id)
       end
-      ItemAdDetail.create(:item_id => self.id, :old_version_id => old_item.id) # new_item_ad_detail
+      new_item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => self.id) # new_item_ad_detail
+      new_item_ad_detail.update_attributes(:old_version_id => old_item.id)
     end
   end
 

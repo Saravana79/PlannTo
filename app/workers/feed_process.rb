@@ -2,7 +2,6 @@ class FeedProcess
   @queue = :feed_process
 
   def self.perform(method_name, actual_time, feed_id=nil, priorities="false")
-    p priorities
     log = Logger.new 'log/feed_process.log'
     #begin
       log.debug "********** Start Processing Feeds **********"

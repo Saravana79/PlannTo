@@ -296,6 +296,7 @@ resources :comments do
        resources :reports    
     collection do
       get :compare
+      get :update_page
     end
     member do
       get 'follow_item_type'

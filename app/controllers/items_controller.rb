@@ -96,8 +96,9 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.json
   def new
-    @item = Item.new
+    @item = Item.new(:status => "1")
     @item_types = Itemtype.select("id,itemtype")
+    @action = "/items/create"
 
     respond_to do |format|
       format.html # new.html.erb
@@ -108,6 +109,8 @@ class ItemsController < ApplicationController
   # GET /items/1/edit
   def edit
     @item = Item.find(params[:id])
+    @item_types = Itemtype.select("id,itemtype")
+    @action = "/items/update/#{@item.id}"
   end
 
   # POST /items
@@ -117,7 +120,7 @@ class ItemsController < ApplicationController
     itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
     klass = itemtype.itemtype.to_s.gsub(" ", "")
 
-    @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id, :old_version_id => params[:old_version_id]))
+    @item = klass.constantize.new(params[:item].merge(:created_by => current_user.id))
 
     respond_to do |format|
       if @item.save
@@ -143,6 +146,16 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
+        if (!params[:manufacturer_id].blank?)
+          manufacturer = Itemrelationship.where(:item_id => @item.id, :relationtype => "Manufacturer").last
+          manufacturer.destroy unless manufacturer.blank?
+          Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:manufacturer_id], :relationtype => "Manufacturer")
+        end
+        if (!params[:item][:group_id].blank?)
+          group = Itemrelationship.create(:item_id => @item.id, :relationtype => "CarGroup").last
+          group.destroy unless group.blank?
+          Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
+        end
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
         format.json { head :ok }
       else
@@ -199,6 +212,10 @@ class ItemsController < ApplicationController
      end 
      @item_type = session[:item_type]
    end   
+  end
+
+  def update_page
+
   end
 
 end

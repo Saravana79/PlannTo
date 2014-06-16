@@ -1,0 +1,38 @@
+<%= hidden_field_tag "articles_item_id" %>
+<div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
+  <div class="title_header float_lft">Select Product to Update:</div>
+  <div class="taggingdiv" style="margin-left:5px;">
+    <ul id="new_article_product_list" class="tagging"></ul>
+    <div class="float_lft " style="clear:both;">
+      <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
+    </div>
+    <div style="clear:both;"></div>
+
+    <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;"></div>
+    <div style="clear:both;"></div>
+
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+  $("document").ready(function()
+  {
+      settings = {
+          close: true, addButton: false,
+          url: "/search/autocomplete_items",
+          editMode: false, multiple: false,
+          hidden_field: "articles_item_id",
+          has_parent: false
+      };
+      $.textTagger("new_article_product", "new_article_product_list", settings);
+
+      $("li.ui-menu-item").live("click", function(event)
+      {
+         var item_id = $("#articles_item_id").val()
+         console.log(item_id)
+         window.location.href = "/items/edit/"+item_id
+
+      })
+  })
+</script>

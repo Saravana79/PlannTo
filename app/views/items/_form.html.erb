@@ -1,4 +1,4 @@
-<%= form_for(Item.new, :url => {:action => "create"}) do |f| %>
+<%= form_for(Item.new, :url => @action) do |f| %>
   <% if @item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
@@ -13,13 +13,13 @@
 
 
     <label for="name">Item Name<span style="color: red">*</span> :</label>
-    <%= f.text_field :name %> <br />
+    <%= f.text_field :name, :value => @item.name %> <br />
 
     <label for="itemtype_id">ItemType :</label>
-    <%= f.collection_select :itemtype_id, @item_types, :id, :itemtype, {} %> <br />
+    <%= f.collection_select :itemtype_id, @item_types, :id, :itemtype, {:selected => @item.itemtype_id} %> <br />
 
     <label for="imageurl">Image Name<span style="color: red">*</span> :</label>
-    <%= f.text_field :imageurl %> <br />
+    <%= f.text_field :imageurl, :value => @item.imageurl %> <br />
 
     <label for="manufacturer">Manufacturer :</label>
     <%= hidden_field_tag :manufacturer_id, "", :id => "manufacturer" %>
@@ -31,19 +31,19 @@
     <%= text_field_tag :group_serach, "", :class => "auto_complete_field" %> <br />
 
     <label for="status">Status :</label>
-    <%= f.radio_button :status, '1', :checked => true %>
+    <%= f.radio_button :status, '1', :checked => @item.status == "1" %>
     <%= label :status_1, 'Available' %>
-    <%= f.radio_button :status, '2' %>
+    <%= f.radio_button :status, '2', :checked => @item.status == "2" %>
     <%= label :status_2, 'Future' %>
     <br />
 
     <label for="manufacturer">Previous Version :</label>
-    <%= hidden_field_tag "old_version_id", "", :id => "old-version" %>
+    <%= f.hidden_field "old_version_id", :id => "old-version" %>
     <%= text_field_tag "old-version_search", "", :class => "auto_complete_field" %>
 
     <br/>
 
-    <%= f.submit %>
+    <%= f.submit button_name %>
   <% end %>
 
 
