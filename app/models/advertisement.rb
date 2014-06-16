@@ -132,8 +132,8 @@ class Advertisement < ActiveRecord::Base
        if account == "\"couldn't get account\"\n"
          uri_to_create = URI("#{configatron.rtbkit_hostname}/v1/accounts?accountName=#{account_name}&accountType=budget")
          response = Net::HTTP.post_form(uri_to_create, {})
-         raise advertisement unless response.code == "200"
-         puts "Response #{response.code}: Created New Account #{accout_name}"
+         raise "#{advertisement.id}" unless response.code == "200"
+         puts "Response #{response.code}: Created New Account #{account_name}"
          account = response.body
        end
 
@@ -157,7 +157,7 @@ class Advertisement < ActiveRecord::Base
      response = Net::HTTP.new(uri_post.host, uri_post.port).start {|http| http.request(req) }
      puts "Response #{response.code} #{response.message}:
           #{response.body}"
-     raise advertisement unless response.code == "200"
+     raise "#{advertisement.id}" unless response.code == "200"
    end
 
    private
