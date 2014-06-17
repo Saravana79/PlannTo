@@ -132,7 +132,7 @@ class Advertisement < ActiveRecord::Base
        if account == "\"couldn't get account\"\n"
          uri_to_create = URI("#{configatron.rtbkit_hostname}/v1/accounts?accountName=#{account_name}&accountType=budget")
          response = Net::HTTP.post_form(uri_to_create, {})
-         raise "#{advertisement.id}" unless response.code == "200"
+         raise "#{advertisement.id} - #{response.body}" unless response.code == "200"
          puts "Response #{response.code}: Created New Account #{account_name}"
          account = response.body
        end
@@ -151,13 +151,13 @@ class Advertisement < ActiveRecord::Base
    end
 
    def self.post_budget(account_name, payload)
-     p uri_post = URI("#{configatron.rtbkit_hostname}/v1/accounts/#{account_name}/budget")
+     uri_post = URI("#{configatron.rtbkit_hostname}/v1/accounts/#{account_name}/budget")
      req = Net::HTTP::Post.new(uri_post.path, initheader = {'Content-Type' =>'application/json'})
      req.body = payload
      response = Net::HTTP.new(uri_post.host, uri_post.port).start {|http| http.request(req) }
      puts "Response #{response.code} #{response.message}:
           #{response.body}"
-     raise "#{advertisement.id}" unless response.code == "200"
+     raise "#{advertisement.id} - #{response.body}" unless response.code == "200"
    end
 
    private
