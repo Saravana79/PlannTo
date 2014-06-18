@@ -111,7 +111,7 @@ class Admin::AdvertisementsController < ApplicationController
 
     item_ids = @items.map(&:id)
 
-    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, @activate_tab)
+    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, @moredetails)
 
     # Default item_details based on vendor if item_details empty
     #TODO: temporary solution, have to change based on ecpm

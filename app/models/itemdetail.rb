@@ -15,6 +15,7 @@ class Itemdetail < ActiveRecord::Base
     status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
     # vendor_id = sanitize(vendor_id)
 
+
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')}) ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
                  itemdetails.cashback end) asc")
@@ -27,17 +28,22 @@ class Itemdetail < ActiveRecord::Base
                  else itemdetails.cashback end) asc")
   end
 
-  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, activate_tab)
+  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, moredetails)
     @item_details = []
     if item_ids.count > 1
       @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by { |each_rec| each_rec.itemid }
     elsif item_ids.count == 1
-      items = Item.get_related_items_if_one_item(items, @publisher, status) if (activate_tab && items.count == 1)
+      items = Item.get_related_items_if_one_item(items, publisher, status) #if (activate_tab && items.count == 1)
+      item_ids = items.map(&:id)
       @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by { |each_rec| each_rec.itemid }
       # @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
     end
 
-    @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
+    if moredetails == "true"
+      @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
+    else
+      @item_details = @item_details.values.flatten
+    end
   end
 
   def vendor_name
