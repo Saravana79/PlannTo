@@ -280,11 +280,10 @@ module ApplicationHelper
   end
 
   def truncate_without_dot(str, size)
-    p str
-    p size
     # truncated_str = str.to_s.truncate(size)
     # result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
 
+    str = str.to_s
     result_str = str
     if str.length > size
       splitted_str_by_dot = str.split(/\./)
