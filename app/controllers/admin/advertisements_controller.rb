@@ -96,6 +96,8 @@ class Admin::AdvertisementsController < ApplicationController
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id = check_and_assigns_ad_default_values()
 
+    @ad_template_type = "type_2" if @suitable_ui_size == 120
+
     return static_ad_process(impression_type, url, itemsaccess, url_params) if !@ad.blank? && @ad.advertisement_type == "static"
 
     item_ids = params[:item_id].split(",") unless params[:item_id].blank?
