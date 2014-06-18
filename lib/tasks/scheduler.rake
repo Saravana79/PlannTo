@@ -34,7 +34,7 @@ end
 
 task :content_ad_detail_process => :environment do
   puts "Running ContentAdDetail Update for Items, at #{Time.zone.now}"
-  Resque.enqueue(ContentAdDetailProcess, "update_ad_details_for_contents", Time.zone.now, 1000)
+  Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now, 1000, Time.now)
 end
 
 task :missing_url_process => :environment do

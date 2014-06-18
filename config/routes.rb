@@ -72,7 +72,7 @@ namespace :admin do
   match "/delete_ad_image/:id" => "admin/advertisements#delete_ad_image", :as => "delete_ad_image", :via => [:delete]
   
   match "/advertisement",:to => "products#advertisement"
-  match "/current_user_info",:to => "home#current_user_info"
+  # match "/current_user_info",:to => "home#current_user_info"
   match "/get_class_names",:to => "contents#get_class_names"
   match "products/ratings",:to => "products#ratings"
   

@@ -1,7 +1,7 @@
 class ContentAdDetailProcess
   @queue = :content_ad_detail_process
 
-  def self.perform(method_name, actual_time, batch_size)
+  def self.perform(method_name, actual_time, batch_size, now_time)
     log = Logger.new 'log/content_ad_detail_process.log'
     #begin
     log.debug "********** Start Processing ContentAdDetail **********"
@@ -9,7 +9,7 @@ class ContentAdDetailProcess
 
     now_time = actual_time.to_time
 
-    ContentAdDetail.send(method_name, log, batch_size)
+    ContentAdDetail.send(method_name, log, batch_size, now_time)
 
     #rescue Exception => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
