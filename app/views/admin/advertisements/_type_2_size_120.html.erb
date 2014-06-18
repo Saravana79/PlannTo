@@ -5,8 +5,10 @@
     <% if @sliced_item_details.count != 0 %>
         <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt="" width="100px" height="32px"></a></div>
         <div id="pager2" class="pager">
+          <% if @item_details.count > 2 %>
           <% [*1..@sliced_item_details.count].each do |each_loop| %>
               <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+          <% end %>
           <% end %>
         </div>
         <div class="advt-box">
@@ -68,5 +70,8 @@
     }
     .main_div {
         text-align: center;
+    }
+    .advt-120 .advt-box .product-container h3 {
+        padding: 0px !important;
     }
 </style>

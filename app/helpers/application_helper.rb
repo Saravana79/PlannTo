@@ -280,8 +280,22 @@ module ApplicationHelper
   end
 
   def truncate_without_dot(str, size)
-    truncated_str = str.to_s.truncate(size)
-    result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
+    p str
+    p size
+    # truncated_str = str.to_s.truncate(size)
+    # result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
+
+    result_str = str
+    if str.length > size
+      splitted_str_by_dot = str.split(/\./)
+      val = splitted_str_by_dot[0]
+      if val.length > size
+        splitted_str_by_comma = val.split(/\,/)
+        result_str = splitted_str_by_comma[0].length > size ? "" : splitted_str_by_comma[0]
+      else
+        result_str = val
+      end
+    end
     return result_str
   end
 

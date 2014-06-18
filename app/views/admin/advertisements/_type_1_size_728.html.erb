@@ -21,7 +21,7 @@
                   <div class="product-desc">
                     <a href="<%= shop_now_url %>" target="_blank" class="">
                       <p class="text-desc">
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 45, shop_now_url) %>
+                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
                       </p>
                       <p class="price"><%= prettify(item_detail) %></p>
                     </a>
@@ -40,8 +40,10 @@
         <% end %>
 
         <div id="pager2" class="pager">
+          <% if @item_details.count > 1 %>
           <% [*1..@item_details.count].each do |each_loop| %>
               <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+          <% end %>
           <% end %>
         </div>
 
@@ -58,4 +60,15 @@
         margin: 0px !important;
     }
     .product-container a {text-decoration: none !important;}
+
+    .advt-728 .advt-box .product-container h3 {
+        word-break: normal;
+        padding: 7px 0 0;
+    }
+
+    <% if @item_details.count < 2 %>
+      .advt-728 .advt-box .btn {
+        padding: 25px 0 0 !important;
+      }
+    <% end %>
 </style>
