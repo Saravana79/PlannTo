@@ -3,10 +3,10 @@ require File.expand_path('../application', __FILE__)
 require 'rails_sql_views'
 ActionMailer::Base.smtp_settings = {
     :address => "smtp.gmail.com",
-    :port => 25,
-    :domain => "plannto.com",
+    :port => 587,
+    :domain => "www.plannto.com",
     :user_name => "plannto.test@gmail.com",
-    :password => "plannto@6",
+    :password => "saravana@6",
     :authentication => :plain,
     :enable_starttls_auto => true,
     :openssl_verify_mode => 'none'
