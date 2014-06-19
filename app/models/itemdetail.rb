@@ -42,7 +42,7 @@ class Itemdetail < ActiveRecord::Base
     if moredetails == "true"
       @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
     else
-      @item_details = @item_details.values.flatten
+      @item_details = @item_details.is_a?(Hash) ? @item_details.values.flatten : @item_details.flatten
     end
   end
 
