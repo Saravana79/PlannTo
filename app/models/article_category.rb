@@ -50,7 +50,7 @@ class ArticleCategory < ActiveRecord::Base
       #save in cache
       $redis.multi do
         article_categories.each do |cont|
-        logger.info cont.name
+        #logger.info cont.name
           $redis.zadd "#{keyword_id}", cont.orderby, "#{cont.id}_#{cont.name}"
         end
       end

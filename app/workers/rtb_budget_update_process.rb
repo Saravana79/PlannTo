@@ -9,7 +9,7 @@ class RtbBudgetUpdateProcess
 
     now_time = actual_time.to_time
 
-    Advertisement.send(method_name, log)
+    Advertisement.send(method_name, log, actual_time)
 
     #rescue Exception => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
