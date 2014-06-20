@@ -175,6 +175,7 @@ GEM
     multi_xml (0.5.1)
     multipart-post (1.1.5)
     mysql2 (0.3.11)
+    newrelic_rpm (3.8.1.221)
     nokogiri (1.5.5)
     oauth (0.4.6)
     oauth2 (0.8.0)
@@ -349,6 +350,7 @@ DEPENDENCIES
   mailcatcher
   mogli
   mysql2
+  newrelic_rpm
   nokogiri
   oauth
   oauth2
