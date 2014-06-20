@@ -223,7 +223,7 @@ class ProductsController < ApplicationController
       @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
 
       @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
-                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test)
+                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
       @show_count = Item.get_show_item_count(@items)
 
       responses = []

@@ -94,11 +94,11 @@ class Admin::AdvertisementsController < ApplicationController
 
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
-    impression_type, url, url_params, itemsaccess, vendor_ids, ad_id = check_and_assigns_ad_default_values()
+    impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
 
     @ad_template_type = "type_2" if @suitable_ui_size == 120
 
-    return static_ad_process(impression_type, url, itemsaccess, url_params) if !@ad.blank? && @ad.advertisement_type == "static"
+    return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc) if !@ad.blank? && @ad.advertisement_type == "static"
 
     item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
@@ -118,13 +118,13 @@ class Admin::AdvertisementsController < ApplicationController
     if @item_details.blank? && ad_id == 2 && impression_type != "advertisement_widget"
       #TODO: - Saravana - temporarily redirecting to static image ad. we need to implement this.
       @ad = Advertisement.get_ad_by_id(4).first
-      return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params)
+      return static_ad_process(impression_type, url, itemsaccess="MissingURL", url_params, winning_price_enc)
     else
       @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                             cookies[:plan_to_temp_user_id], ad_id) if @is_test != "true"
+                                             cookies[:plan_to_temp_user_id], ad_id, winning_price_enc) if @is_test != "true"
       @item_details = @item_details.uniq(&:url)
       @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items)
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
@@ -176,14 +176,15 @@ class Admin::AdvertisementsController < ApplicationController
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
-    return impression_type, url, url_params, itemsaccess, vendor_ids, ad_id
+    winning_price_enc = params[:wp]
+    return impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc
   end
 
-  def static_ad_process(impression_type, url, itemsaccess, url_params)
+  def static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc)
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
-    @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id) if @is_test != "true"
+    @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc) if @is_test != "true"
 
     respond_to do |format|
       format.json {

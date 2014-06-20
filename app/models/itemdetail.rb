@@ -144,7 +144,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     return_val
   end
 
-  def self.get_where_to_buy_items(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id, is_test)
+  def self.get_where_to_buy_items(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id, is_test, winning_price_enc)
     country = ""
     tempitems = []
     impression_id = ""
@@ -180,7 +180,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         end
         if is_test != "true"
           impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
-                                                                  plan_to_temp_user_id, nil)
+                                                                  plan_to_temp_user_id, nil, winning_price_enc)
         end
       else
         where_to_buy_items = []
