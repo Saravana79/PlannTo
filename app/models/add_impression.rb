@@ -30,12 +30,79 @@ class AddImpression < ActiveRecord::Base
 
    # save advertisement id
    ai.advertisement_id = obj_params[:ad_id]
-   ai.winning_price = obj_params[:winning_price]
    ai.winning_price_enc = obj_params[:winning_price_enc]
+   begin
+     winning_price = get_winning_price_value(obj_params[:winning_price_enc])
+     ai.winning_price = winning_price
+   rescue
+     ai.winning_price = obj_params[:winning_price]
+   end
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
  end
+
+  def self.get_winning_price_value(winning_price_enc)
+    google_adx_encryption_key = "A3kD/CgaaDwrkYT+l8Fn3BSoCPS+nnJ2EdJc+EwOa/E="
+    google_adx_integrity_key = "Qbpmbfcih39Z64lodZXJ5Gn8ABQgUS09wMrGRk6rEaM="
+    enc_data = adx_websafe_pad(winning_price_enc)
+    adx_decrypt(enc_data,google_adx_encryption_key,google_adx_integrity_key)
+  end
+
+  def self.adx_websafe_pad(str)
+    pad = "";
+    if str.length%4== 2
+      pad = "==";
+    elsif str.length%4 == 3
+      pad = "=";
+    end
+    str = str+pad
+    str.tr('-_','+/')
+  end
+
+  def self.adx_decrypt(encrypted_data,google_adx_encryption_key,google_adx_integrity_key)
+    enc_key = google_adx_encryption_key
+    ciphertext = Base64.urlsafe_decode64(encrypted_data)
+    plaintext_length = ciphertext.length-16-4
+    iv = ciphertext[0..15]
+    ciphertext_end = 16+plaintext_length
+    add_iv_counter_byte = true
+    ciphertext_begin=16
+    plaintext_begin=0
+    plaintext = Array.new
+    while ciphertext_begin<ciphertext_end do
+      digest = OpenSSL::Digest.new('sha1')
+      pad = OpenSSL::HMAC.digest(digest, enc_key, iv)
+      i = 0
+      while (i<20 and ciphertext_begin != ciphertext_end) do
+        plaintext[plaintext_begin] = ciphertext[ciphertext_begin] ^ pad[i]
+        plaintext_begin+=1
+        ciphertext_begin+=1
+        i+=1
+      end
+
+      unless add_iv_counter_byte
+        index = iv.length - 1;
+        iv[index] = (iv[index].ord+1).chr
+        add_iv_counter_byte = iv[index] == 0;
+      end
+      if add_iv_counter_byte
+        add_iv_counter_byte = false
+        iv += "\x0"
+      end
+    end
+    #Integrity Checks
+    sig = ciphertext[24..27]
+    int_key = google_adx_integrity_key
+    digest = OpenSSL::Digest.new('sha1')
+    conf_sig = OpenSSL::HMAC.digest(digest, int_key, plaintext.join('')+ciphertext[0..15])
+    if conf_sig[0..3]==sig
+      j =plaintext.join("")
+      p j.unpack("H*").first.to_i(16).to_s(10)
+    else
+      p "Signature mismatch"
+    end
+  end
 
  def self.save_add_impression_data(type,itemid,request_referer,time,user,remote_ip,impression_id,itemsaccess=nil,params=nil, temp_user_id, ad_id)
   # ai = AddImpression.find_by_impression_id_and_advertisement_type_and_item_id_and_hosted_site_url_and_temp_user_id(impression_id, type, itemid, request_referer, temp_user_id )
