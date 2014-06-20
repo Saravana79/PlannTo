@@ -50,6 +50,7 @@ development:
   rtbkit_hostname: "http://rtbtarget.plannto.com:9985"
   rtb_budget_reset_time: 2
   rtb_initial_budget: 2200000
+  ectr_default_value: 0.02
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -91,6 +92,7 @@ test:
   rtbkit_hostname: "http://rtbtarget.plannto.com:9985"
   rtb_budget_reset_time: 2
   rtb_initial_budget: 2200000
+  ectr_default_value: 0.02
  
 production:
   root_image_url: "http://cdn1.plannto.com/items/"
@@ -144,3 +146,4 @@ production:
   rtbkit_hostname: "http://rtbtarget.plannto.com:9985"
   rtb_budget_reset_time: 2
   rtb_initial_budget: 2200000
+  ectr_default_value: 0.02
