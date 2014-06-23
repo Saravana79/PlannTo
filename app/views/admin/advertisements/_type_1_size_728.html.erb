@@ -10,10 +10,16 @@
                 <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
 
                 <div class="product-container">
+                  <div style="float:left;width:150px;">
                   <a href="<%= shop_now_url %>" target="_blank" class="">
+                    <div style="float:left;">
                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
+                  </div>
+                    <div style="float:left;">
+                      <p class="price"><%= prettify(item_detail) %></p>
+                    </div>
                   </a>
-
+                  </div>  
                   <div class="product-img">
                     <a href="<%= shop_now_url %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="50%" height="50%">
                     </a>
@@ -23,7 +29,7 @@
                       <p class="text-desc">
                         <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
                       </p>
-                      <p class="price"><%= prettify(item_detail) %></p>
+                      
                     </a>
                   </div>
                 </div>
