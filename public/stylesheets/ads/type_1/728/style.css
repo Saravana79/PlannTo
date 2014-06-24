@@ -29,7 +29,7 @@ body {
 .advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 20px;display: block; }
     
 
-.advt-728 .advt-box .product-container{ margin:0; padding:5px 0; float:left; width:470px; }
+.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:470px; }
 .advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-728 .advt-box .product-container:after { clear:both;}
 
