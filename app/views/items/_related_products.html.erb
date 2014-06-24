@@ -22,19 +22,6 @@
             </td>
           </tr>
           <tr>
-            <td  colspan="2"  valign="top">
-              <% related_follower = related_item.get_followers(@follow_type) %>              
-              <%- related_follower[0..2].each do |user| %>
-                <a href="<%= user.get_url()%>"> <%= image_tag user.get_photo(:thumb), :title => user.name ,:class => "userImageSmall"%></a>
-              <% end %>
-              <% if ((related_follower.count - 2) > 0) %>
-                and <%= (related_follower.count - 2) %> other people owns this.
-              <% elsif related_follower.count > 0 %>
-                owns this
-              <% end %>
-            </td>
-          </tr>
-          <tr>
             <td class="dotted_border" colspan="2"  style="width:100%"><%#= render 'shared/follow_buttons',:follow_type => 'Car', :follow_html => '', :button_class => '_small', :item => related_item, :related_items => true %></td>
           </tr>
          <script type="text/javascript">
@@ -93,37 +80,5 @@
     <td height="33" class="padding1_lft15"><a href="#" class="txt_blue">View All</a></td>
   </tr>
 </table>-->
-<%if @top_contributors.size > 0%>
-<table width="251" height="38" border="0" cellspacing="0" cellpadding="0" style="border:solid 1px #cdd3d7;background:white;">
-  <tr>
-    <td class="bg_widgethdr txt_white">Top Contributors</td>
-  </tr>
-  <tr>
-    <td height="170" valign="top">
-      <ul class="imgContributors">
-       <%@top_contributors.each do |contributor|%>
-          <%user_info = contributor.split("@")%>
-          <li class="imgContributors">
-            <div style="clear:both;">
-              <div class="float_lft">
-               <a href="<%=user_info[4]%>"> <img  src="<%=user_info[3]%>" class="imgContributes imageThumbnail" /></a>
-              </div>
-              <div class="contributorname">
-                <a class="txt_black" href="<%=user_info[4]%>">
-                  <%=user_info[2]%>
-                </a>
-              </div>
-              <div class="contributorpoints">
-                <%= user_info[1].to_i %> Points
-              </div>
-            </div>
-
-          </li>
-
-        <%end%>
-      </ul>
-    </td></tr>
-</table>
-<%end%>
 
 

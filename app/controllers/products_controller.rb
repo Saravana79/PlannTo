@@ -90,16 +90,16 @@ class ProductsController < ApplicationController
     session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
-    @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
-    @pro_cons = ItemProCon.find_by_sql("select *, count(*) as count from item_pro_cons 
-        where item_id = #{@item.id} and pro_con_category_id is not null group by pro_con_category_id, proorcon
-        union 
-        select *, 1 as count from item_pro_cons 
-        where item_id = #{@item.id} and pro_con_category_id is null 
-        order by count desc, (case when pro_con_category_id is null then 99999 else pro_con_category_id end) asc, letters_count desc, `index` 
-        ")
-    @pro_cons = @pro_cons.group_by(&:proorcon)
-    @verdicts = ArticleContent.find_by_sql("select ac.* from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{@item.id} and c.sub_type = 'Reviews' and ac.field4 is not null and trim(ac.field4) != '' and ac.video is null and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc limit 6" )
+    @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).where("slug = ?", params[:id]).last#where(:id => params[:id]).includes(:item_attributes).last
+    # @pro_cons = ItemProCon.find_by_sql("select *, count(*) as count from item_pro_cons
+    #     where item_id = #{@item.id} and pro_con_category_id is not null group by pro_con_category_id, proorcon
+    #     union
+    #     select *, 1 as count from item_pro_cons
+    #     where item_id = #{@item.id} and pro_con_category_id is null
+    #     order by count desc, (case when pro_con_category_id is null then 99999 else pro_con_category_id end) asc, letters_count desc, `index`
+    #     ")
+    # @pro_cons = @pro_cons.group_by(&:proorcon)
+    # @verdicts = ArticleContent.find_by_sql("select ac.* from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id left outer join facebook_counts fc on fc.content_id = ac.id where icc.item_id = #{@item.id} and c.sub_type = 'Reviews' and ac.field4 is not null and trim(ac.field4) != '' and ac.video is null and c.status = 1  order by (if(total_votes is null,0,total_votes) + like_count + share_count) desc limit 6" )
     @new_version_item = Item.find(@item.new_version_item_id) if (@item.new_version_item_id && @item.new_version_item_id != 0)
     if !current_user
       @custom = "true"
@@ -107,7 +107,7 @@ class ProductsController < ApplicationController
     @no_custom = "true" if @item.type == "Topic" 
     session[:itemtype] = @item.get_base_itemtype
     @where_to_buy_items = @item.itemdetails.where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
-    @attribute_degree_view = @attribute_degree_view = @item.attribute_values.collect{|ia| ia if ia.attribute_id == 294}.compact.first.value rescue ""
+    # @attribute_degree_view = @attribute_degree_view = @item.attribute_values.collect{|ia| ia if ia.attribute_id == 294}.compact.first.value rescue ""
     
     if (@item.is_a? Product)
       @related_items = Item.get_related_items(@item, 3, true) 
@@ -121,18 +121,20 @@ class ProductsController < ApplicationController
     session[:invitation] = ""
     @itemtype = @item.itemtype
     #@questions = QuestionContent.all
-    if (@item.is_a? Product)
-      @article_categories = ArticleCategory.get_by_itemtype(@item.itemtype_id)
-     # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
-    else
-      @article_categories = ArticleCategory.get_by_itemtype(0)
-     # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
-    end    
+
+    # if (@item.is_a? Product)
+    #   @article_categories = ArticleCategory.get_by_itemtype(@item.itemtype_id)
+    #  # @article_categories = ArticleCategory.by_itemtype_id(@item.itemtype_id).map { |e|[e.name, e.id]  }
+    # else
+    #   @article_categories = ArticleCategory.get_by_itemtype(0)
+    #  # @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  }
+    # end
+
     if((@item.is_a? Product) &&  (!@item.manu.nil?))
       @dealer_locators =  DealerLocator.find_by_item_id(@item.manu.id)
     end 
 
-    @top_contributors = @item.get_top_contributors
+    # @top_contributors = @item.get_top_contributors
     @related_items = Item.get_related_item_list(@item.id, 10) if @item.can_display_related_item?
     @no_popup_background = "true"
     @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)

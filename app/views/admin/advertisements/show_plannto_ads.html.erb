@@ -1,5 +1,6 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <% ad_url = get_ad_url(@item_detail.id, @impression_id, @ref_url) %>
-<% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+<% @shop_now_url = "#{APP_URL}"+@item.get_url %>
 
 <div class="plannto-advertisement main_div">
   <div class="advt-block">
@@ -14,7 +15,7 @@
       </div>
       <div class="advt-box">
         <div class="product-img-left">
-          <a href="<%= shop_now_url %>" target="_blank">
+          <a href="<%= @shop_now_url %>" target="_blank">
             <img src="<%= get_image_url(@item_detail) %>" onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" alt="">
           </a>
         </div>
@@ -92,4 +93,18 @@ on
     .product-img-right > span {
         font-weight: bold;
     }
+    .plannto-advertisement.main_div {
+        cursor: pointer;
+    }
+    a { outline: none; }
 </style>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".plannto-advertisement.main_div").click(function(e)
+        {
+            window.open("<%= @shop_now_url %>", "_blank")
+            e.preventDefault()
+        })
+    });
+</script>

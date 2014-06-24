@@ -11,7 +11,7 @@ module Admin::AdvertisementsHelper
 
   def get_image_url(item_detail, vendor_name='')
     return_val = ''
-    if !item_detail.blank? && !item_detail.Image.blank? && vendor_name.blank?
+    if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
       return_val = configatron.root_image_path + 'vendors/' + vendor_name + '/medium/' + item_detail.Image.to_s
     else
       return_val = configatron.root_image_url + item_detail.type.downcase + '/medium/' + item_detail.imageurl.to_s
@@ -28,6 +28,7 @@ module Admin::AdvertisementsHelper
   end
 
   def assign_ad_and_vendor_id(ad, vendor_ids)
+    ad_template_type = "type_1"
     if !ad.blank?
       vendor_ids = vendor_ids.blank? ? [ad.vendor_id] : vendor_ids
       ad_id = ad.id

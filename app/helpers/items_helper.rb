@@ -464,17 +464,16 @@ module ItemsHelper
       str = str +'><a href="#overview"><span>Overview</span></a></li>
             <li '   
     else
-    str = '<li '
-    str = str + "#{'class="tab_active"' if tab_type == "overview"}"
-    str = str +'><a href="#overview"><span>Overview</span></a></li>'
-    str = str + "<li "
-    str = str + "#{'class="tab_active"' if tab_type == "specification"}"
-    str = str + 'id="specify"><a href="#specification"><span>Specification</span></a></li>'
-    unless item.status.to_i == 2 
-     str = str + "<li "
-     str = str + "#{'class="tab_active"' if tab_type == "where_to_buy"}"
-    str = str + 'id="buy"><a href="#where_to_buy" ><span>Where to Buy</span></a></li>'
-    end
+      str = ''
+      unless item.status.to_i == 2
+        str = str + "<li "
+        str = str + "#{'class="tab_active"'}"
+        str = str + 'id="buy"><a href="#where_to_buy" ><span>Where to Buy</span></a></li>'
+      end
+      str = str + "<li "
+      str = str + 'id="specify"><a href="#specification"><span>Specification</span></a></li>'
+      #str = str + '<li '
+      #str = str +'><a href="#overview"><span>Overview</span></a></li>'
     end
     return str.html_safe
   end
@@ -501,7 +500,8 @@ module ItemsHelper
   
   
   
-  def display_required(value, required)
+  def
+  display_required(value, required)
     logger.info value
     logger.info required
     return "display: none;" if value != required
