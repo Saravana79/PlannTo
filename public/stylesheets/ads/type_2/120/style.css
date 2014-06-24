@@ -29,10 +29,10 @@ body {
 .advt-120 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-120 .advt-box .product-container:after { clear:both;}
 .advt-120 .advt-box .product-container .product-img{ margin:0;}
-.advt-120 .advt-box .product-container .product-img img { margin:15px 0px; text-align:center;}
+.advt-120 .advt-box .product-container .product-img img { margin:8px 0px; text-align:center;}
 
 
-.advt-120 .advt-box .product-container h3{ margin:0; padding:0 0 5px 0; font-size:14px; color:#222; font-weight:bold;font-family: Arial}
+.advt-120 .advt-box .product-container h3{ margin:0; padding:0 0 5px 0; font-size:13px; color:#222; font-weight:bold;font-family: Arial;word-break:break-word;}
 
 .advt-120 .advt-box .product-container .price-strike{margin:5px 0;padding: 0;color: #585858;font-size: 18px;text-decoration: line-through; text-align:center;}
 .advt-120 .advt-box .product-container .price{ margin:5px 0; padding:0; color:#bf0000; font-size:14px; font-weight:bold;font-family: Arial monospace}
@@ -42,8 +42,8 @@ body {
 
 
 
-.advt-120 .advt-box .product-desc { margin:0; font-size:11px; color:#505050; font-family:'pt_sansregular', Arial, Helvetica, sans-serif;}
-.advt-120 .advt-box .product-extra-desc { margin:0; padding:10px; font-size:11px; color:#222; text-align: center;}
+.advt-120 .advt-box .product-desc { margin:0; font-size:11px; color:#505050; font-family: Arial, Helvetica, sans-serif;position: absolute;bottom: 0;left: 0;line-height: 15px;}
+.advt-120 .advt-box .product-extra-desc { margin:0; padding:10px; font-size:11px; color:#222; text-align: center;position: absolute;bottom: 0;left: 0;line-height: 15px;width:120px;}
 
 
 

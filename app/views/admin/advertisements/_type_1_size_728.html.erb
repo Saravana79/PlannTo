@@ -10,7 +10,7 @@
                 <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a></div>
 
                 <div class="product-container">
-                  <div style="float:left;width:150px;">
+                  <div style="float:left;width:200px;">
                   <a href="<%= shop_now_url %>" target="_blank" class="">
                     <div style="float:left;">
                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
@@ -21,7 +21,7 @@
                   </a>
                   </div>  
                   <div class="product-img">
-                    <a href="<%= shop_now_url %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="50%" height="50%">
+                    <a href="<%= shop_now_url %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" height="82px">
                     </a>
                   </div>
                   <div class="product-desc">
