@@ -16,17 +16,19 @@
               <div class="item_details" id="item_detail_<%= indx + 1 %>">
               <% sliced_item_detail.each do |item_detail| %>
                   <div class="product-container">
+                    <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(47) %></h3>
+                    <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
                       <a href="javascript:void(0)"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
                     </div>
-                    <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(75) %></h3>
+                    
 
                     <!--
                     <p class="product-desc">
                       <%#= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text']), 45) %>
                     </p> -->
                     <!--<p class="price-strike">Rs. 40, 000</p>-->
-                    <p class="price"><%= prettify(item_detail) %></p>
+                    
 
                     <p class="btn">
                       <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url) %>
@@ -66,7 +68,7 @@
         padding: 5px !important;
     }
     .advt-120 .advt-box .product-container {
-        height: 230px;
+        height: 235px;
     }
     .main_div {
         text-align: center;
