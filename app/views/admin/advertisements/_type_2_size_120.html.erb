@@ -14,6 +14,7 @@
         <div class="advt-box">
           <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
               <div class="item_details" id="item_detail_<%= indx + 1 %>">
+                <% if sliced_item_detail.count > 1 %>
               <% sliced_item_detail.each do |item_detail| %>
                   <div class="product-container">
                     <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(47) %></h3>
@@ -44,6 +45,10 @@
                 </p>
               </div>
                 <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                <% else %>
+                    <%= render :partial => '/admin/advertisements/get_120_page_content.html.erb', :locals => {:item_detail => sliced_item_detail.first, :indx => indx} %>
+                    <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                <% end %>
               </div>
           <% end %>
         </div>

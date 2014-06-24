@@ -1,0 +1,84 @@
+<% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url) %>
+<% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+<div class="product-container-new">
+  <a href="<%= shop_now_url %>" target="_blank" class="">
+    <h3 class="product-title-new"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
+    <p class="price"><%= prettify(item_detail) %></p>
+  </a>
+
+
+  <div class="product-img">
+    <a href="<%= shop_now_url %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
+  </div>
+
+
+  <p class="btn">
+    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
+      Now</a>
+  </p>
+</div>
+<div class="product-extra-desc-new"><p>
+  <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 60, shop_now_url) %>
+</p></div>
+
+
+<style type="text/css">
+    .advt-120 .advt-box .product-container-new {
+        height: 420px;
+        margin: 5px 0 0;
+        padding: 5px;
+    }
+    .product-container-new a {
+        text-decoration: none !important;
+    }
+
+    .advt-120 .advt-box .product-container-new h3 {
+        color: #222;
+        font-family: Arial;
+        font-size: 15px;
+        font-weight: bold;
+        height: 60px;
+        margin: 15px 0;
+        padding: 0;
+        text-align: center;
+    }
+    h3.product-title-new {
+        word-break: break-all;
+    }
+    .advt-120 .advt-box .product-container-new .price {
+        color: #bf0000;
+        font-family: Arial monospace;
+        font-size: 15px;
+        font-weight: bold;
+        margin: 10px 0;
+        padding: 0;
+        text-align: center;
+    }
+    .advt-120 .advt-box .product-container-new .product-img {
+        margin: 0;
+        padding: 30px 0;
+        width: 112px;
+    }
+    .advt-120 .advt-box .product-container-new .product-img img {
+        margin: 0 auto;
+        text-align: center;
+        width: 112px;
+    }
+    .advt-120 .advt-box .product-container-new .btn .shop-now {
+        background: none repeat scroll 0 0 #f76300;
+        border: 0 none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 15px 0;
+        padding: 5px;
+        text-transform: uppercase;
+    }
+    .advt-120 .advt-box .product-extra-desc-new {
+        color: #222;
+        font-size: 11px;
+        margin: 5px 0 0;
+        padding: 0 5px 5px;
+    }
+</style>
