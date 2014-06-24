@@ -284,7 +284,7 @@ module ApplicationHelper
 
     result_str = str
     if result_str.length > size
-      truncated_str = str.to_s.truncate(size)
+      truncated_str = str.to_s[0...size]
       if truncated_str.include?(".")
         splitted_str_by_dot = truncated_str.split(/\.[^\\.]*$/)
         result_str = splitted_str_by_dot[0] + "."
