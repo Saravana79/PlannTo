@@ -20,7 +20,10 @@
                     <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(47) %></h3>
                     <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
-                      <a href="javascript:void(0)"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
+                      <a href="javascript:void(0)">
+                        <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100, 100).html_safe %>
+                        <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
+                      </a>
                     </div>
                     
 

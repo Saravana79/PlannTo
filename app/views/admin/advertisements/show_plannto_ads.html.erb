@@ -16,7 +16,8 @@
       <div class="advt-box">
         <div class="product-img-left">
           <a href="<%= @shop_now_url %>" target="_blank">
-            <img src="<%= get_image_url(@item_detail) %>" onerror="this.error=null;this.src='<%=@item.base_item_image_url(:medium)%>';" alt="">
+            <%= get_image_tag(@item_detail, '', @item.base_item_image_url(:medium), '', '').html_safe %>
+            <!-- <img src="<%#= get_image_url(@item_detail) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt=""> -->
           </a>
         </div>
         <div class="product-img-right">Now

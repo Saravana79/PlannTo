@@ -24,7 +24,10 @@
 
 
                   <div class="product-img">
-                    <a href="<%= shop_now_url %>" target="_blank"><img src="<%= item_detail.item.image_url %>" alt="" width="100px" height="100px"></a>
+                    <a href="<%= shop_now_url %>" target="_blank">
+                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100, 100).html_safe %>
+                      <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
+                    </a>
                   </div>
                   
 

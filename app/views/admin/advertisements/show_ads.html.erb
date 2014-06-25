@@ -29,6 +29,20 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+        $(".ad_img_tag").on("error", function()
+        {
+           var img_id = $(this).attr('id')
+            if (img_id == "item_details") {
+              $(this).attr('id', 'item')
+              $(this).attr("src", $(this).attr('next_src'))
+            }
+            else if (img_id == "item")
+            {
+                $(this).attr('id', 'default_image')
+                $(this).attr("src", $(this).attr('default_src'))
+            }
+        });
+
         var stop_sliding = false
 
         $(".item_details").hide();
