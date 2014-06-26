@@ -5,7 +5,7 @@
   	$("span#sortBy a").click(function (e) {
   		 $("span#sortBy").find('a').removeClass('link_active');
         $(this).addClass("link_active");
-          if ($("#content_search_search").val().toString() == ""){
+//          if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
           	var id = $("div#Filterby div.Filternav ul li.Currentfilter").attr('id');
 	        var sub_type = find_sub_type(id);
@@ -16,13 +16,13 @@
             
             contentSearchFilterAction("filter", sub_type,"", filter_page_no, itemtype_id, sort_by, "");        
           return false
-           }
-           else{
-         $("#content_search_page").val(1);
-         $("#content_search_sort_by").val($(this).text());
-          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
-         $("#contentSearchForm").submit();
-         }
+//           }
+//           else{
+//         $("#content_search_page").val(1);
+//         $("#content_search_sort_by").val($(this).text());
+//          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+//         $("#contentSearchForm").submit();
+//         }
   	});
   	
     $("div#Filterby div.Filternav ul li").click(function (e) {
@@ -80,7 +80,7 @@
         }
       });
       $(document).ready(function(){
-   		var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").attr('id'))
+   		var sub_type = find_sub_type($(".filter_option.tab_active").attr('id'))
    		var itemtype_id = $("#item_types").val();
       var items =  $("#items").val();
       triggerScrollFunctionMyfeeds(sub_type, "", itemtype_id, ""); 

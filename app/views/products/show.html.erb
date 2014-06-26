@@ -165,6 +165,10 @@ padding:10px;">
 <div style="padding-top:20px;">
   <ul id="Newtabs">
     <%= display_product_page_tabs(@item, params[:at] || "overview") %>
+    <li id="Reviews" class="filter_option"><a href="#overview"><span>Reviews</span></a></li>
+    <li id="Deals" class="filter_option"><a href="#overview"><span>Deals</span></a></li>
+    <li id="Comparisons" class="filter_option"><a href="#overview"><span>Comparisons</span></a></li>
+    <li id="Lists" class="filter_option"><a href="#overview"><span>Top 10's</span></a></li>
   </ul>
 </div>
 <br/>
@@ -178,9 +182,9 @@ padding:10px;">
   <%= render :partial => "products/detailed_specifications" %>
 </div>
 
-<!-- <div class="question_answer main-content-section" id="overview" style="<%#=display_required(params[:at] || "where_to_buy", "overview")%>">
-  <%#= render "contents/all"%>
-</div> -->
+<div class="question_answer main-content-section" id="overview" style="<%=display_required(params[:at] || "where_to_buy", "overview")%>">
+  <%= render "contents/all"%>
+</div>
 
 <div id="all_variants" style="<%=display_required(params[:at] || "where_to_buy", "all_variants")%>" class="main-content-section">
  <%if @item.can_display_related_item?%>
@@ -249,8 +253,18 @@ $("#buy span").html("Compare Prices");
      $("ul#Newtabs").find("li").removeClass("tab_active");
      $("ul#Newtabs li#buy").addClass("tab_active");
    })
-
     </script>
+  <script>
+      $(".filter_option").click(function(e){
+          $("#overview").show();
+          $("#where_to_buy").hide();
+          $("#all_variants").hide();
+          $("#specification").hide();
+          $("ul#Newtabs").find("li").removeClass("tab_active");
+          $(this).addClass("tab_active");
+      })
+  </script>
+
     <%if params[:tab] =="compare" %>
     <script>
     $("#overview").hide();
@@ -308,3 +322,49 @@ jQuery(document).ready(function() {
 
 </script>
 -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".filter_option").click(function (e) {
+            //$('#spinner6').ajaxStart(function() {
+            //$(this).show();
+            //$('#spinner1').hide();
+            //}).ajaxStop(function() {
+            //$(this).hide();
+            //});
+//            $("div#Filterby div.Filternav ul").find('li').removeClass('Currentfilter');
+//            $(this).closest('li').addClass("Currentfilter");
+            if ($(this).text() != "Labeltext"){
+                $("#filter_page_no").val('1');
+                var id = $(this).attr('id');
+                var sub_type = find_sub_type(id);
+                if (sub_type == "All" || sub_type == "Custom" ||  sub_type == "News" || sub_type == "Deals" || sub_type == "Event" || sub_type ==  "Miles" || sub_type ==  "Lists" ){
+                    $("span#sortBy").find('a').removeClass('link_active');
+                    $("#sortByNewest").addClass("link_active");
+                }
+                else {
+                    $("span#sortBy").find('a').removeClass('link_active');
+                    $("#sortByVotes").addClass("link_active");
+                }
+                $("#content_search_page").val(1)
+                $("#content_search_search").val("")
+                $("#content_search_sub_type").val(sub_type);
+                var filter_page_no = $("#filter_page_no").val();
+                var items = "<%=@item.try(:id) || @item_ids%>";
+                var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>"
+                var sort_by = $("span#sortBy a.link_active").text();
+
+                var guide = "<%=@guide.try(:id)%>";
+
+                contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, guide);
+            }
+        });
+
+        id = $(".filter_option.tab_active").attr('id')
+        var sub_type = find_sub_type(id);
+        var items = "<%=@item.try(:id) || @item_ids%>";
+        var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>"
+        var guide = "<%=@guide.try(:id)%>";
+        triggerScrollFunction(sub_type, items, itemtype_id, guide);
+    });
+</script>

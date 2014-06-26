@@ -1,19 +1,19 @@
 <%if content.is_a?(UserActivity) %>
-  <div id="activity_<%= page %><%= content.related_activity_type != 'User' ? content.related_id 
+  <div id="activity_<%= page %><%= content.related_activity_type != 'User' ? content.related_id
 : '' %>">
-   <%if content.related_activity =="followed" &&  content.related_activity_type == "User"%> 
-       <a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a> 
+   <%if content.related_activity =="followed" &&  content.related_activity_type == "User"%>
+       <a class="txt_brown_bold" href="<%= content.user.get_url()%>"><%= content.user.name %></a>
 	     <a class="txt_brown_bold"> <%= content.related_activity + " " %> </a>
-      <% u = User.find(content.related_id) %> 
+      <% u = User.find(content.related_id) %>
       <a class="txt_brown_bold" href="<%= u.get_url()%>">
       <%= u.name %> </a> <a class="txt_brown_bold"> - <%= time_ago_format(content)%> ago.</a>
    <div class="mainContentDiv">
     <div style="width:100px;height:120px;">
      <%= image_tag(u.get_photo(:medium)) %></div> <br /> </div>
   <%elsif !content_ids.include?(content.related_id)%>
-  
+
      <% unless  content.related_activity == "created" || content.related_activity == "answered" %>
-    
+
  <span id="username_<%= page %><%= content.related_id%>"> <a class="txt_brown_bold" href="<%= content.user.get_url()%>"> <%= content.user.name %></a> </span>
 	<span id="related_activity_<%= page %><%= content.related_id%>"> <a class="txt_brown_bold">  <%= content.related_activity + " " %> </a> </span>
 <a class="txt_brown_bold"><%= indefinite_articlerize(content.related_activity_type.singularize) %></a> <a class="txt_brown_bold"> - <%= time_ago_format(content)%> ago.</a>
@@ -36,7 +36,7 @@
       $("#related_activity_<%= page %><%= content.related_id%>").append("<a class='txt_brown_bold'>/<%= escape_javascript(content.related_activity + " ") %></a>");
    }
       }
-  
+
     </script>
  <%end%>
 <%end%>

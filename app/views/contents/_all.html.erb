@@ -1,15 +1,16 @@
 <div id="content_all">
- <%= render "contents/filter_by_options"%>
-<div id="quick_create"></div>
+ <%#= render "contents/filter_by_options"%>
+<!-- <div id="quick_create"></div>
  <script>
    $("#quick_create").val("true");
- </script>
+ </script> -->
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;padding-top:5px;"></div>
   <%= render "contents/sort_by_options"%>
   
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;"></div>
   <div style="border-bottom:solid 1px #e4e4e4;;clear:both;" id="contentsList">
-    
+
+    <% if false %>
     <%if @item.show_models %>
       <% params = {"items" => @item.related_cars.collect(&:id), "status" => 1 } %>
     <%elsif @item.is_a?AttributeTag %>
@@ -22,13 +23,15 @@
     <%else%>
       <% params["sub_type"] = ArticleCategory.where("itemtype_id in (?)", @item.itemtype_id).collect(&:name)        
         %>
-    <%end%> 
-    <%= render "contents/filter_content_create_links" %>
+    <%end%>
+    <%#= render "contents/filter_content_create_links" %>
     <% @contents = Content.filter(params)  %>
     <%= render :partial => 'contents/contents', :locals => {:params => params} %>
+    <% end %>
   </div>
    
-  <a id="content_next" style="display:none"></a>
+  <a id="content_next"
+     style="display:none"></a>
   <%=hidden_field_tag :filter_page_no, (@contents.current_page+ 1 rescue 2)%>
 </div>
  <span id="spinner1" style="padding:0px 0px 0px 300px;display:none">
@@ -62,8 +65,8 @@
       }
     });
 
-  });
-  
- 
-</script>
 
+  });
+
+
+</script>

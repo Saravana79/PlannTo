@@ -1,7 +1,7 @@
-<%if  params[:page] == "#{1}" && params[:quick_create] == "true"%>
- <%= render "contents/filter_content_create_links" %>
+<%#if  params[:page] == "#{1}" && params[:quick_create] == "true"%>
+ <%#= render "contents/filter_content_create_links" %>
 
-<%end%>
+<%#end%>
 <div id="contentEditView"></div> 
 <div id="newContentList">
   </div>
@@ -38,13 +38,13 @@
  <%# end  %>
  <script type="text/javascript">
  $(document).ready(function(){
- 	$("#contentSearchForm").bind('submit', function() {   
-  	if ($("#content_search_search").val().toString() != $("#content_search_previous_search_value").val().toString())
-  	{
-  		$("#content_search_previous_search_value").val($("#content_search_search").val())
-  		$("#content_search_page").val(1);
-  	}
-  	});
+// 	$("#contentSearchForm").bind('submit', function() {
+//  	if ($("#content_search_search").val().toString() != $("#content_search_previous_search_value").val().toString())
+//  	{
+//  		$("#content_search_previous_search_value").val($("#content_search_search").val())
+//  		$("#content_search_page").val(1);
+//  	}
+//  	});
    if($(".current_user_like_unlike").length > 0){
    $.ajax({
             type: "get",
@@ -52,17 +52,17 @@
             url: "/get_class_names",
             data: {ids: <%= @contents.collect(&:id) %>},
             success: function(data) {
-                $.each(data, function(key, value){                
+                $.each(data, function(key, value){
                   if(value['positive'] != $("#likeVote"+key).attr('class'))
                   {
                     $("#likeVote"+key).toggleClass(value['positive'])
                   }
-                  
+
                   if(value['negative'] != $("#dislikeVote"+key).attr('class'))
                   {
                     $("#dislikeVote"+key).toggleClass(value['negative'])
                   }
-                });                
+                });
             }
         })
  }
