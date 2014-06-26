@@ -1296,6 +1296,7 @@ end
         @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
       else
         @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        @items = Item.where(:id => item_ids) if @items.blank?
       end
       url = request.referer
     else
