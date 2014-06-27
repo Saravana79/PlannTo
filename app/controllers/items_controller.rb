@@ -146,6 +146,9 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
+        item_type = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
+        @item.type = item_type.itemtype
+        @item.save!
         if (!params[:manufacturer_id].blank?)
           manufacturer = Itemrelationship.where(:item_id => @item.id, :relationtype => "Manufacturer").last
           manufacturer.destroy unless manufacturer.blank?

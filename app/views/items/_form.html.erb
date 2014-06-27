@@ -40,8 +40,13 @@
     <label for="manufacturer">Previous Version :</label>
     <%= f.hidden_field "old_version_id", :id => "old-version" %>
     <%= text_field_tag "old-version_search", "", :class => "auto_complete_field" %>
-
     <br/>
+
+    <label for="alternative_name">Alternative Name :</label>
+    <%= f.text_field :alternative_name, :value => @item.alternative_name %> <br />
+
+    <label for="hidden_alternative_name">Hidden Alternative Name :</label>
+    <%= f.text_field :hidden_alternative_name, :value => @item.hidden_alternative_name %> <br />
 
     <%= f.submit button_name %>
   <% end %>
