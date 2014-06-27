@@ -4,7 +4,7 @@
   <%if @buying_warning_message == "true" && 1==2 %>
     <div class="outerdivwarning">
     <div  class="innerdivwarning">
-        <span>This buying plan is created temporarily for you<!-- which will expire after sometime-->, to access it later please sign up. </span> 
+        <span>This buying plan is created temporarily for you<!-- which will expire after sometime-->, to access it later please sign up. </span>
      <%= link_to "Sign up", new_registration_path(User.new,:type => "without_login"),:class =>"hyperlinkwarning" %></a>
    </div>
   </div>
@@ -14,13 +14,13 @@
 
   <div class="outerdivwarning">
   <div  class="innerdivwarning">
-    <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span> 
+    <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span>
       <%buying_plan =  BuyingPlan.finding_buyng_plan(current_user,session[:itemtype],request.remote_ip) %>
       <%if buying_plan.blank? %>
         <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
       <%else%>
-       <%=link_to  'Show Me'.html_safe, buying_plan.preference_page_url,:class=> "hyperlinkwarning" %> 
-     <%end%>    
+       <%=link_to  'Show Me'.html_safe, buying_plan.preference_page_url,:class=> "hyperlinkwarning" %>
+     <%end%>
   </div>
 </div>
 <div style="display:block;height:30px;"></div>
@@ -28,21 +28,21 @@
  <div class="outerdivwarning">
  <div id="giveAdviceDialog"> </div>
   <div  class="innerdivwarning">
-    <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span> 
+    <span>Are you planning to buy a <%= session[:itemtype] %>? Get all the information required for you to take a informed decision.</span>
    <%buying_plan =  BuyingPlan.finding_buyng_plan(current_user,session[:itemtype],request.remote_ip) %>
       <%if buying_plan.blank? %>
         <%=link_to  'Show Me'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class=> "hyperlinkwarning",:remote => :true %>
       <%else%>
-       <%=link_to  'Show Me'.html_safe, buying_plan.preference_page_url,:class=> "hyperlinkwarning" %> 
-     <%end%>    
+       <%=link_to  'Show Me'.html_safe, buying_plan.preference_page_url,:class=> "hyperlinkwarning" %>
+     <%end%>
   </div>
 </div>
 <div style="display:block;height:30px;"></div>
 <%end%>
- <% a= @static_page == 'true' ? 'display:none' : '' %>
- <%#if @static_page == 'true' %>    
+ <% a= current_user.blank? ? 'display:none' : '' %>
+ <%#if @static_page == 'true' %>
     <div class="dppattern">
-    <div id="header12" style="">       
+    <div id="header12" style="">
           <div class="logodiv">
             <h1 class="logo"><a href="/">
                   <img src="/images/logo_new.png" alt="PlannTo" />
@@ -55,10 +55,10 @@
                     <input class="search-input-text" type="text" name="plannToSearch" placeholder="Search"  id="plannToSearch"/>
                     <input class="search-input-submit" type="submit" value="" />
                 </form>
-              </div>              
+              </div>
 
               <!-- <div class="search">
-              
+
                 <span class="search_txt" id="plannToSearchSpan">
                     <input name="Search" type="text" placeholder="Search Products or Topics or Contents" id="plannToSearch"/>
                         </span>
@@ -70,17 +70,17 @@
 
                       <a class="btn_search" href="#"></a>
                 </div>
-                
+
                 <span>
                   -->
                 <div class="top-icons">
 
                  <a href="<%= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
-                 
+
 -                  <a class="icon_chat" href="<%=messages_url%>"></a>
-                
-                </div> 
-          
+
+                </div>
+
    </div>
    <!-- dont delete div it requires for search autocomplete -->
 <div id="item_search1"></div>
@@ -92,7 +92,7 @@
 
             <div id="static" style="<%= a %>" >
                <div class="search">
-              
+
                 <span class="search_txt" id="plannToSearchSpan">
                     <input name="Search" type="text" placeholder="Search Products or Topics or Contents" id="plannToSearch"/>
                         </span>
@@ -107,16 +107,16 @@
 
                 <span>
                  <a href="<%#= "/" + "#{current_user.username}" + "?follow=Followers"  rescue "#" %>" class="icon_user"></a>
-                 
+
                   <a class="icon_chat" href="<%=messages_url%>"></a>
                 </span>
-            </div> 
+            </div>
              -->
- <%#end%>      
-       
+ <%#end%>
+
       <!--header right part start here-->
-   
-      
+
+
       <!--buttons-->
       <!--
       <div class="Headerrightbuttons">
@@ -141,12 +141,12 @@
       </div>
     -->
 
-<%unless @homepage == "true" or (@static_page == "true" && current_user.nil?) %>
- 
-<div class="Headerrightpart"> 
+<% unless current_user.blank? %>
+
+<div class="Headerrightpart">
  <script type="text/javascript">
  $(document).ready(function(){
-   
+
     $.ajax({
             type: "get",
             dataType: "html",
@@ -154,7 +154,7 @@
             success: function(data) {
                 // $('#DirectMessage').html(data);
                 $(".Headerrightpart").html(data);
-                
+
               $('span.Usernamedp').hoverIntent(hoverdropdown,hoverdropdownreverse);
               function hoverdropdown()
               {
@@ -168,13 +168,13 @@
               }
             }
         })
-   
+
  })
 
  </script>
    </div>
   <%end%>
-        <%if @static_page == "true" && (@homepage == "true" || current_user.nil?)  %>
+        <%if current_user.nil? %>
           <%if @devise != "true" %>
              <div class="search-login-box">
                 <div class="top-search">
@@ -182,16 +182,16 @@
                     <p><%= f.text_field :email,:placeholder=>"Email" ,:tabindex => "1", :class => "inputbox", :style=> "width:140px;"%></p>
                       <p><%= f.password_field :password,:placeholder=>"Password" ,:tabindex => "2" , :class=>"inputbox", :style=>"width:140px;"%></p>
                       <p><%= f.submit "Sign In" , :tabindex => "4" , :class=>"button org small", :style=>"width:68px;" %></p>
-                      <p style="padding:0px"><label style="padding:0px;"> <%= f.check_box :remember_me, :size=>"0", :tabindex => "3", :style=>"min-height:13px;"%> Remember Me</label> | 
+                      <p style="padding:0px"><label style="padding:0px;"> <%= f.check_box :remember_me, :size=>"0", :tabindex => "3", :style=>"min-height:13px;"%> Remember Me</label> |
                         <%= link_to "Forgot password?",new_password_path(:user), :tabindex => "5" ,:style=>"min-height:13px;"%></p>
-                  <%end%>           
+                  <%end%>
                   </div>
                   <div class="orimg"></div>
-                  <div class="fb-signup"> 
-                    <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>                
+                  <div class="fb-signup">
+                    <%= link_to "Sign Up with Facebook", user_omniauth_authorize_path(:facebook, :display=>"popup"), :class => "fbpopup" %></div>
                     <p><%= link_to "or Sign up with Email","#", :class => "signuplinkhome" , :tabindex => "5" %></p>
               </div>
-              
+
               <script type="text/javascript">
                                 $(".signuplinkhome").click(function(){
                 $("#sign_up_dialog #click_message").hide();
@@ -209,17 +209,17 @@
             <br/>
       <%end%>
      <%else%>
-     
+
    <%end%>
- 
+
 <!--
     |</a>,:style=> "color:white;"
     <a href="#">Home</a>-->
-</div> 
-</div>  
+</div>
+</div>
     <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
     <%= render "/layouts/navigation" %>
-  
+
 
 
 

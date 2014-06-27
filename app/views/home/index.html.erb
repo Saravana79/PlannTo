@@ -42,7 +42,7 @@
   };
 
 //##################################### ADDED BY GANESH #####################################
-  function reinitialiseVotingPoshyTip(){   
+  function reinitialiseVotingPoshyTip(){
     $('.btn_dislike_positive').poshytip('destroy')
 
     $('.btn_like_positive').poshytip('destroy')
@@ -186,7 +186,7 @@
         $.each(items, function(index, item) {
             self._renderItem(ul, item, index);
         });
-        
+
         item = {
             value: "Search more items...",
             id: "0",
@@ -265,7 +265,7 @@
         $.each(items, function(index, item) {
             self._renderItem(ul, item, index);
         });
-        
+
         item = {
             value: "Search more items...",
             id: "0",
@@ -293,9 +293,9 @@
     });
 });
 
-  
+
   $(document).ready(function() {
-        
+
       $('a.youtube').youtube();
       $('span.buttonLink a#youtube_form').click(function() {
           $("#image_share").hide();
@@ -336,7 +336,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  
+
  /* $('#layerslider').layerSlider({
   skinsPath : 'layerslider/skins/',
   skin : 'fullwidth',
@@ -354,7 +354,7 @@ $(document).ready(function(){
     });
 
 
-  
+
 
     $("#plannToSearch1").autocomplete({
         minLength: 2,
@@ -421,7 +421,7 @@ $(document).ready(function(){
         $.each(items, function(index, item) {
             self._renderItem(ul, item, index);
         });
-        
+
         item = {
             value: "Search more items...",
             id: "0",
@@ -430,10 +430,10 @@ $(document).ready(function(){
         self._renderItem(ul, item, -1);
     };
 
-  
+
 
     $("#plannToSearch1").data("autocomplete")._renderItem = function(ul, item, index) {
-      
+
         if (item.id == 0) {
             return $("<li></li>")
             .data("item.autocomplete", item)
@@ -448,22 +448,22 @@ $(document).ready(function(){
         }
     };
 
-});   
+});
 </script>
 
     <%= stylesheet_link_tag "/stylesheets/skin.css" %>
     <%#= stylesheet_link_tag "layerslider/css/layerslider.css" %>
-    
+
 <a name="top" class="top"></a>
     <div class="banner-container">
       <div class="banner-div">
-        
-             
+
+
              <div id="layerslider-container-fw1">
               <div id="layerslider1" class="homepageimage" style="width: 100%; height: 354px; margin: 0px auto;background: url(../images/banner-1.jpg) no-repeat center top;">
                   <div  style="position: relative;width:960px; margin: 0px auto;">
                     <!--<img src="images/banner-1.jpg" class="ls-bg" alt="">-->
-                       <div style="text-align:center;margin: 0 auto;"> 
+                       <div style="text-align:center;margin: 0 auto;">
                         <h2 class="ls-s3 banner1-cap-title" style="padding-top:30px;position:relative;" >All the information you need on the products that you own or plan to buy</h2>
                         <p class="ls-s8 banner1-sub-title" style="padding:0px;" >Find it all here. Its a one stop place to get all the information about a product. Informations are searched across web and organzied in a structured way for you to consume it easily. All the products that are available in the market are ranked based on the rating given by the experts around the world and can be searched using various preferences.</p>
                          <p class="banner-btns ls-s8"  style="padding-top:50px;padding-left:170px;">
@@ -473,21 +473,21 @@ $(document).ready(function(){
                             <a href="/car/search" class="cars"><span class="margin-btm"></span>Cars</a>
                             <a href="/bike/search" class="bikes"><span class="margin-btm"></span>Bikes</a>
                             <a href="/cycle/search" class="cycles"><span class="margin-btm"></span>Cycles</a>
-                          
+
                           <!--<a href="#" class="findbutton">Find All Here</a>--></p>
                         </div>
                       </div>
-                  
-                          
-      
-                
-                <div class="clr"></div>  
+
+
+
+
+                <div class="clr"></div>
                 </div>
             </div><!-- end of layerslider-container-fw -->
-             
-             
+
+
              <div class="clr"></div>
-             
+
         </div><!-- end of banner div -->
     </div><!-- end of banner container -->
 
@@ -498,16 +498,16 @@ $(document).ready(function(){
 <div>
   <div style="width:745px;height:373px;margin-left:0px;float:left;border: solid 1px #cdd3d7;display:block;padding:0px;">
    <div id="wrapper">
-  
+
         <div class="slider-wrapper theme-light">
             <div id="slider" class="nivoSlider">
                <img src="images/slider1_img.png" data-thumb="images/slider1.png" alt=""/>
-                  
+
                 <img src="images/slider2_img.png" data-thumb="images/slider2.png" alt=""  />
                 <img src="images/slider3_img.png" data-thumb="images/slider3.png" alt="" />
                 <img src="images/slider4_img.png" data-thumb="images/slider4.png" alt="" />
             </div>
-    
+
             </div>
         </div>
 
@@ -527,19 +527,19 @@ $(document).ready(function(){
       <div class="home-search">
           <h2>Are you looking to find information about specific product?</h2>
             <span>Enter the name of the car, bike, mobile, tablet, camera or cycle in the following box to get all the information.</span><br />
-           <form id="search-form"> 
+           <form id="search-form">
                 <input class="search-input-text" type="text" name="Search"  id="plannToSearch1" placeholder="Search Products" />
                 <input class="search-input-submit" type="submit" value="" />
             </form>
             <div class="clr"></div>
         </div><!-- end of home-search -->
         </div>
-    
+
     </div>
-    
+
     <div id="middlecontainer">
       <div class="container" style="width:960px;">
-          
+
             <div class="home-left">
               <h3>Are you planning to buy?<br />
                   <span>Click the products below to get all the information required for you to take a informed buying decision.</span>
@@ -561,7 +561,7 @@ $(document).ready(function(){
                         </li>
                         </ul>
                   <div class="clr"></div>
-                </div>                
+                </div>
             </div><!-- end of home-left -->
             <div class="home-right">
               <h3>Are you interested in Photography or Cycling?<br />
@@ -595,26 +595,26 @@ $(document).ready(function(){
                 </div>
             </div><!-- end of home-right -->
             <div class="clr"></div>
-            
-            <div class="container" style="width:960px;">   
+
+            <div class="container" style="width:960px;">
     <div class="home-compare-product" >
               <h3>Do you like to compare the products?<br /><span>Select two products in following text box and click compare.</span></h3>
                 <div class="white-box-div">
                   <div class="home-compare-product-div">
-                    
+
                       <div class="compare-left">
                           <form class="compareform">
                               <p><input type="text" name="cmp1stitem" id="cmp1stitem" value="Add to Compare" class="inputbox" /></p>
                                 <p><input type="text" name="cmp2nditem" id="cmp2nditem" value="Add to Compare" class="inputbox" /></p>
                                 <p><input type="button" name="compare_items" id="compare_items" value="Compare" class="button staticblue" /></p>
                             </form>
-                        
+
                         </div><!-- end of compare-left -->
                         <div class="compare-right">
                           <h3>Popular Comparisons</h3>
-                            
+
                             <div class="comparison-div">
-                              
+
                                 <div class="prd-div">
                                     <%items = Item.find(configatron.homepagecompareitems1.split(",")) %>
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>">
@@ -622,7 +622,7 @@ $(document).ready(function(){
                                             <p class="title"><%=items[0].name%></p>
                                             <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
                                         </div>
-                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
                                             <p class="title"><%=items[1].name%></p>
                                             <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
@@ -633,13 +633,13 @@ $(document).ready(function(){
                                 </div>
                                         <div class="prd-div">
                                     <%items = Item.find(configatron.homepagecompareitems2.split(",")) %>
-                                    
+
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
                                             <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
                                         </div>
-                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
                                             <p class="title"><%=items[1].name%></p>
                                             <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
@@ -650,47 +650,47 @@ $(document).ready(function(){
                                 </div>
                                         <div class="prd-div">
                                     <%items = Item.find(configatron.homepagecompareitems3.split(",")) %>
-                                    
+
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
                                             <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
                                         </div>
-                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
                                             <p class="title"><%=items[1].name%></p>
                                             <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
                                         </div>
                                         <div class="clr"></div>
                                         <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
-                                    
+
                                 </div>
                                         <div class="prd-div">
                                     <%items = Item.find(configatron.homepagecompareitems4.split(",")) %>
-                                    
+
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
                                             <p class="compare-img"><img src="<%=items[0].image_url%>" alt="" /></p>
                                         </div>
-                                        <div class="compare-symbol compare-line"></div> 
+                                        <div class="compare-symbol compare-line"></div>
                                         <div class="compare-prd">
                                             <p class="title"><%=items[1].name%></p>
                                             <p class="compare-img"><img src="<%=items[1].image_url%>" alt="" /></p>
                                         </div>
                                         <div class="clr"></div>
                                         <p><a><%= items[0].name + " Vs. " + items[1].name%></a></p>
-                                    
+
                                 </div>
-                                
-                                
+
+
                                 <div class="clr"></div>
-                                
+
                             </div>
                             <div class="clr"></div>
-                        
+
                         </div><!-- end of compare-right -->
-                    
+
                     <div class="clr"></div>
                     </div>
                  <div class="clr"></div>
@@ -699,15 +699,15 @@ $(document).ready(function(){
 
    </div>
 
-            
+
             <div class="home-pop-product">
               <h3>Are you looking for popular products?<br /><span>Check out all the cars, bikes, mobiles, tablets, cameras and cycles available in the market.</span></h3>
                 <div class="white-box-div">
-                
+
                   <div class="home-pop-product-div">
-                    
-                  
-                    
+
+
+
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Mobiles</p><p class="links"><a href="/mobile/search">View All >></a></p></div>
                         <div class="category-div">
@@ -719,7 +719,7 @@ $(document).ready(function(){
                                     <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "mobile#{item.id}"} %> <span>Ratings 
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "mobile#{item.id}"} %> <span>Ratings
                                             <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
                                     </div>
                                     <div class="clr"></div>
@@ -733,29 +733,29 @@ $(document).ready(function(){
                                         &nbsp;&nbsp;|&nbsp;&nbsp;News:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Mobile","News")}","/mobiles?fl=News" %></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;How To:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Mobile","HowTo/Guide")}","/mobiles?fl=HowTo" %></a>                                       
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Mobile","HowTo/Guide")}","/mobiles?fl=HowTo" %></a>
                                     </p>        </div>
-                                
+
                             </div>
                             <div class="col2">
                               <div class="col2-links">
                                   <ul class="blue-link">
-                                   
+
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&265=Android">Top Android Mobiles</a></li>
                                    <li><a href="/search?search_type=mobile&sort_by=Rating&265=Windows">Top Windows Mobiles</a></li>
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&min_1=4000&max_1=10000">Top Mobiles under Rs 10,000</a></li>
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&min_1=10000&max_1=25000">Top Mobiles under Rs 25,000</a></li>
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&117=5">Top Phablets</a></li>
-                                <li><a href="/search?search_type=mobile&sort_by=Rating&status=2">Upcoming Mobiles</a></li>   
-                       
+                                <li><a href="/search?search_type=mobile&sort_by=Rating&status=2">Upcoming Mobiles</a></li>
+
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="clr"></div>
-                        </div>                        
+                        </div>
                     </div><!-- 3rd category-row -->
-                    
+
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Tablets</p><p class="links"><a href="tablet/search">View All >></a></p></div>
                         <div class="category-div">
@@ -767,14 +767,14 @@ $(document).ready(function(){
                                     <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "tablet#{item.id}"} %> <span>Ratings 
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "tablet#{item.id}"} %> <span>Ratings
                                             <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
                                     </div>
                                     <div class="clr"></div>
                                 </div>
                                 <%end%>
                                 <div class="clr"></div>
-                                <div class="col1-bottom"> 
+                                <div class="col1-bottom">
                                   <p> Reviews:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Tablet","Reviews")}","/tablets?fl=Reviews"%></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
@@ -784,25 +784,25 @@ $(document).ready(function(){
                                         &nbsp;&nbsp;|&nbsp;&nbsp;How To:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Tablet","HowTo/Guide")}","/tablets?fl=HowTo" %></a>
                                          </div>
-                                
+
                             </div>
                             <div class="col2">
                               <div class="col2-links">
                                   <ul class="blue-link">
-                                                       <li><a href="/search?search_type=tablet&sort_by=Rating&265=Android">Top Android Tablets</a></li>                    
+                                                       <li><a href="/search?search_type=tablet&sort_by=Rating&265=Android">Top Android Tablets</a></li>
               <li><a href="/search?search_type=tablet&sort_by=Rating&193=True">Top Voice Calling Tablets</a></li>
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&min_1=4000&max_1=10000">Top Tablets under Rs 10,000</a></li>
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&min_1=10000&max_1=15000">Top Tablets under Rs 15,000</a></li>
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&min_1=15000&max_1=25000">Top Tablets under Rs 25,000</a></li>
-                                <li><a href="/search?search_type=tablet&sort_by=Rating&status=2">Upcoming Tablets</a></li>  
+                                <li><a href="/search?search_type=tablet&sort_by=Rating&status=2">Upcoming Tablets</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="clr"></div>
-                        </div>                        
+                        </div>
                     </div><!-- 4th category-row -->
-                    
+
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Cameras</p><p class="links"><a href="/camera/search">View All >></a></p></div>
                         <div class="category-div">
@@ -814,14 +814,14 @@ $(document).ready(function(){
                                     <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "camera#{item.id}"} %> <span>Ratings 
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "camera#{item.id}"} %> <span>Ratings
                                             <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
                                     </div>
                                     <div class="clr"></div>
                                 </div>
                                 <%end%>
                                 <div class="clr"></div>
-                                <div class="col1-bottom">   
+                                <div class="col1-bottom">
                                     <p> Reviews:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Camera","Reviews")}","/cameras?fl=Reviews"%></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
@@ -833,7 +833,7 @@ $(document).ready(function(){
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Camera","Travelogue")}","/cameras?fl=Travelogue" %></a>
                                     </p>   </div>
-                                
+
                             </div>
                             <div class="col2">
                               <div class="col2-links">
@@ -841,15 +841,15 @@ $(document).ready(function(){
                                             <li><a href="/search?search_type=camera&sort_by=Rating&7=SLR">Top SLRs</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&7=Mirrorless">Top Mirrorless</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&295=Ultracompact">Top Sleek Compact Cameras</a></li>
-                                <li><a href="/search?search_type=camera&sort_by=Rating&7=Point & Shoot&183=10">Top High Zoom Compacts</a></li>   
+                                <li><a href="/search?search_type=camera&sort_by=Rating&7=Point & Shoot&183=10">Top High Zoom Compacts</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&295=Compact SLR">Top Entry Level SLR Cameras</a></li>
-                                <li><a href="/search?search_type=camera&sort_by=Rating&302=True">Top WaterProof Cameras</a></li>       
+                                <li><a href="/search?search_type=camera&sort_by=Rating&302=True">Top WaterProof Cameras</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="clr"></div>
-                        </div>                        
+                        </div>
                     </div><!-- 5th category-row -->
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Cars</p><p class="links"><a href="/car/search">View All >></a></p></div>
@@ -862,7 +862,7 @@ $(document).ready(function(){
                                     <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "car#{item.id}"} %> <span>Ratings 
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "car#{item.id}"} %> <span>Ratings
                                             <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
                                     </div>
                                     <div class="clr"></div>
@@ -880,9 +880,9 @@ $(document).ready(function(){
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","HowTo/Guide")}","/cars?fl=HowTo" %></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Car","Travelogue")}","/cars?fl=Travelogue" %></a>
-                                    </p>        
+                                    </p>
                                 </div>
-                                
+
                             </div>
                             <div class="col2">
                               <div class="col2-links">
@@ -891,15 +891,15 @@ $(document).ready(function(){
                                 <li><a href="/search?search_type=car&sort_by=Rating&7=Sedan">Top Sedans</a></li>
                                 <li><a href="/search?search_type=car&sort_by=Rating&7=SUV/MUV">Top SUVs/MUVs</a></li>
                                 <li><a href="/search?search_type=car&sort_by=Rating&43=Automatic">Top Automatic Cars</a></li>
-                                <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback&41=Diesel">Top Cars Under Rs 5,00,000</a></li>   
+                                <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback&41=Diesel">Top Cars Under Rs 5,00,000</a></li>
                                <li><a href="/search?search_type=car&sort_by=Rating&status=2">Upcoming Cars</a></li>                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="clr"></div>
-                        </div>                        
+                        </div>
                     </div><!-- 1st category-row -->
-                    
+
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Bikes</p><p class="links"><a href="/bike/search">View All >></a></p></div>
                         <div class="category-div">
@@ -911,7 +911,7 @@ $(document).ready(function(){
                                     <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "bike#{item.id}"} %> <span>Ratings 
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "bike#{item.id}"} %> <span>Ratings
                                             <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
                                     </div>
                                     <div class="clr"></div>
@@ -927,26 +927,26 @@ $(document).ready(function(){
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","News")}","/bikes?fl=News" %></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Bike","Travelogue")}","/bikes?fl=Travelogue" %></a>
-                                    </p>        
+                                    </p>
                                 </div>
-                                
+
                             </div>
                             <div class="col2">
                               <div class="col2-links">
                                   <ul class="blue-link">
-                                                    
+
                                 <li><a href="/search?search_type=bike&sort_by=Rating&295=Sports">Top Sports Bikes</a></li>
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Naked">Top Naked Bikes</a></li>                                
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Naked">Top Naked Bikes</a></li>
                                 <li><a href="/search?search_type=bike&sort_by=Rating&295=Cruiser">Top Cruiser Bikes</a></li>
-        <li><a href="/search?search_type=bike&sort_by=Rating&7=Scooter">All Scooters</a></li>                                     
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Touring">Top Touring Bikes</a></li>                                
-                                <li><a href="/bike/search?type=scroll&status=1&sort_by=Rating&min_1=45000&max_1=55000">Top Bikes Under Rs 50,000</a></li>                          
+        <li><a href="/search?search_type=bike&sort_by=Rating&7=Scooter">All Scooters</a></li>
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Touring">Top Touring Bikes</a></li>
+                                <li><a href="/bike/search?type=scroll&status=1&sort_by=Rating&min_1=45000&max_1=55000">Top Bikes Under Rs 50,000</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="clr"></div>
-                        </div>                        
+                        </div>
                     </div><!-- 2nd category-row -->
                     <div class="category-row">
                       <div class="top-row"><p class="title">Popular Cycles</p><p class="links"><a href="cycle/search">View All >></a></p></div>
@@ -959,24 +959,24 @@ $(document).ready(function(){
                                     <div class="desc" style="width:200px;">
                                       <h4><a href="<%=item.get_url()%>"><%= item.name %></a></h4>
                                         <p class="price"><%= item.get_price_info('Price',false) %></p>
-                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "cycle#{item.id}"} %> <span>Ratings 
+                                        <div class="rating"><%= render :partial => 'shared/rating',:locals => {:item => item, :rating_id => "cycle#{item.id}"} %> <span>Ratings
                                             <a href="<%= item.get_url + '?fl=Reviews'%>"><%= "(" + pluralize(item.rated_users_count,'Review') + ")" if item.rated_users_count > 0 %>   </a></span></div>
                                     </div>
                                     <div class="clr"></div>
                                 </div>
                                 <%end%>
                                 <div class="clr"></div>
-                                <div class="col1-bottom">   
+                                <div class="col1-bottom">
                                   <p> Reviews:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Cycle","Reviews")}","/cycles?fl=Reviews"%></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Deals:&nbsp;&nbsp;
-                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Cycle","Deals")}","/cycles?fl=Deals"%></a>                                      
+                                        <a href="#"><%= link_to  "#{Content.total_number_of_contents("Cycle","Deals")}","/cycles?fl=Deals"%></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;How To:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Cycle","HowTo/Guide")}","/cycles?fl=HowTo" %></a>
                                         &nbsp;&nbsp;|&nbsp;&nbsp;Travelogue:&nbsp;&nbsp;
                                         <a href="#"><%= link_to  "#{Content.total_number_of_contents("Cycle","Travelogue")}","/cycles?fl=Travelogue" %></a>
                                     </p>  </div>
-                                
+
                             </div>
                             <div class="col2">
                               <div class="col2-links">
@@ -990,25 +990,25 @@ $(document).ready(function(){
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="clr"></div>
-                        </div>                        
+                        </div>
                     </div><!-- 6th category-row -->
-                    
-                    
+
+
                     <div class="clr"></div>
                     </div><!-- end of home-pop-product-div -->
                 </div><!-- end of box div -->
-            
+
             </div><!-- end of home-pop-product -->
-            
-            
+
+
         </div>
 
 
 
 
-   
+
 
     </div><!-- end of middlecontainer -->
     <%= javascript_include_tag "/javascripts/jquery.smooth-scroll.min.js" %>
