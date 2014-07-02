@@ -278,7 +278,7 @@ class Item < ActiveRecord::Base
 
   def self.get_related_items(item, limit, includ=false)
     #unless includ
-      related_item_ids = RelatedItem.where(:item_id => item.id).order(:variance).collect(&:related_item_id)
+      related_item_ids = RelatedItem.where(:item_id => item.id).order("variance desc").collect(&:related_item_id)
     #else
     #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
     #end
@@ -290,9 +290,10 @@ class Item < ActiveRecord::Base
       end
       items = Item.where(:id => items[0..4].collect(&:id)).includes(:item_rating,:attribute_values)
     else
-      items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).order("id desc").limit(limit+2)
+      # items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).order("id desc").limit(limit+2)
+      items = Item.find(related_item_ids, :order => "field(id, #{related_item_ids.map(&:inspect).join(',')})")
       unless(item.group_id.nil?)
-        items = items.select{|a| (a.group_id.nil? or a.group_id != item.group_id) }
+        items = items.select {|a| (a.group_id.nil? or a.group_id != item.group_id) }
       end
     end
     

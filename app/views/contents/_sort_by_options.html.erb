@@ -24,6 +24,7 @@
 		 <span id="spinner6" style="float:left;padding:0px 0px 0px 100px;display:none">
      <%= image_tag '/images/ajax-loader.gif' %>
     </span>
+      <% if false %>
 		<%= form_for :content_search, :url => {:controller => "contents", :action => "search_contents"}, :remote => true, :html => { :style => "float:right;", :id => "contentSearchForm"} do |f| -%>
     <label style="padding-right:10px;color:#7A7A7A;font-size:11px;">Search Content:</label>
 		<%= f.text_field :search, :class => "txt_gray new_comment", :size => "20", "placeholder"=> "" %>
@@ -33,7 +34,9 @@
 		<%= f.hidden_field :itemtype_ids, :value => @item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>
 		<%= f.hidden_field :previous_search_value%>
 		<%= f.hidden_field :page, :value =>1%>
-		<% end -%> </span>
+		<% end -%>
+		<% end %>
+          </span>
 </div>
 
 
@@ -43,9 +46,9 @@
   	$("span#sortBy a").click(function (e) {
   		 $("span#sortBy").find('a').removeClass('link_active');
         $(this).addClass("link_active");
-          if ($("#content_search_search").val().toString() == ""){
+//          if ($("#content_search_search").val().toString() == ""){
           	$("#filter_page_no").val('1');
-          	var id = $("div#Filterby div.Filternav ul li.Currentfilter").attr('id');
+          	var id = $(".filter_option.tab_active").attr('id');
 	          var sub_type = find_sub_type(id);  
             var filter_page_no = $("#filter_page_no").val();
             var itemtype_id = "<%=@item.try(:get_base_itemtypeid) || @itemtype.try(:id)%>";   
@@ -54,13 +57,13 @@
             var items = "<%= @item.try(:id) || ""%>";
             contentSearchFilterAction("filter", sub_type, items, filter_page_no, itemtype_id, sort_by, guide);       
           return false
-           }
-           else{
-         $("#content_search_page").val(1);
-         $("#content_search_sort_by").val($(this).text());
-          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
-         $("#contentSearchForm").submit();
-         }
+//           }
+//           else{
+//         $("#content_search_page").val(1);
+//         $("#content_search_sort_by").val($(this).text());
+//          $("#contentSearchForm").bind('ajax:complete', function() { running = false});
+//         $("#contentSearchForm").submit();
+//         }
   	});
   	
   

@@ -64,6 +64,8 @@
       <tr>
         <td class="label">Payment Report ID :</td>
         <td class="input"><%= f.text_field :payment_report_id, :value => @order_history.payment_report_id %></td>
+        <td class="label">Hosted Site Url :</td>
+        <td class="input"><%= text_field_tag :hosted_site_url, "", :id => "hosted_site_url_text_field" %></td>
       </tr>
     </table>
 
@@ -112,6 +114,10 @@
                     {
                         $("#order_history_item_id").val(response.item_id)
                         $("#order_history_item_name").val(response.item_name)
+                        if ($("#order_history_publisher_id").val() == "")
+                           $("#order_history_publisher_id").val(response.publisher_id)
+                        $("#hosted_site_url_text_field").val(response.hosted_site_url)
+
                     }
                 }
             });
@@ -233,5 +239,8 @@
 
     .search_form {
         float: left;
+    }
+    #hosted_site_url_text_field {
+        width: 500px;
     }
 </style>

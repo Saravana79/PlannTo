@@ -83,21 +83,13 @@ $("ul#Newtabs li a").live('click', function(){
       lnk = $('#content_next');
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
         running = true;
-        if ($("#content_search_search").val().toString() == ""){       	
-        	var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").attr('id')) 
+        	var sub_type = find_sub_type($(".filter_option.tab_active").attr('id'))
           	var filter_page_no = $("#filter_page_no").val()
           	var sort_by = $("span#sortBy a.link_active").text();
           	var action = "feeds"
           	contentscrollAction(action, sub_type, items, filter_page_no, itemtype_id, sort_by, guide);        
         	return false
-      	}
-        else
-      {
-      	$("#contentSearchForm").bind('ajax:complete', function() { running = false});
-    	$("#contentSearchForm").submit()    	
-    	 return false     	 
       }
-      }    
     });
    }
   
@@ -107,7 +99,6 @@ $("ul#Newtabs li a").live('click', function(){
       lnk = $('#content_next');
       if (!running && lnk && $(window).scrollTop() >= $('#content_all').height() - $(window).height()) {     
         running = true;
-        if ($("#content_search_search").val().toString() == ""){       	
         	var sub_type = find_sub_type($("div#Filterby div.Filternav ul li.Currentfilter").attr('id')) 
           	var filter_page_no = $("#filter_page_no").val()
           	var sort_by = $("span#sortBy a.link_active").text();
@@ -116,13 +107,6 @@ $("ul#Newtabs li a").live('click', function(){
           	var action = "feeds"
           	contentscrollAction(action, sub_type, "", filter_page_no, itemtype_id, sort_by, guide);        
         	return false
-      	}
-        else
-      {
-      	$("#contentSearchForm").bind('ajax:complete', function() { running = false});
-    	$("#contentSearchForm").submit()    	
-    	 return false     	 
-      }
       }    
     });
    }  

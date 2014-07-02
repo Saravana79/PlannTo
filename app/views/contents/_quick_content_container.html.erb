@@ -10,40 +10,40 @@ end%>
 <%if @item.nil? %>
   <span style="height:30px;display:block;padding-top:5px;padding-right:20px;">
    <span class="Bluecyanbut" style="padding-left:450px;display:block;">  <span class='quick_config_btns' >
-    <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>     
+    <%= link_to  'Create a Buying Plan'.html_safe ,new_preference_path(:search_type => "#{session[:itemtype]}",:search => "true"),:class => 'quick_config_btns_icon',:remote => :true %>
   </span>
 </span>
 <%end%>
       <% @article_categories.each_with_index do |article_category, index| %>
-            <%if index == 0%> 
+            <%if index == 0%>
               <span class="Usrdropdown1" style="padding-left:0px;">
                  <span class="Usernamedp1"><img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Share Knowledge</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
                    <div class="Useraccountinfo1">
-               <%end%> 
+               <%end%>
                <% unless article_category[0] == "Video" %>
                   <a data-content="<%=article_category[0]%>" class="quickCreate"><%=content_write_tab_label(article_category[0])%></a>
-               <%end%>   
+               <%end%>
                     <%if index == count %>
                    </div>
                  </span>
-              </span> 
-            <%end%>  
+              </span>
+            <%end%>
           <%end%>
 
   <% @article_categories.each_with_index do |article_category, index| %>
-               <%if index == 0%> 
+               <%if index == 0%>
                  <span class="Usrdropdown2" style="padding-left:20px;float:<%=direction%>">
 
                    <span class="Usernamedp2"> <img src="/images/icon_searchcriteria_active.png" style="padding-right:5px;float:left;margin-top:-1px;background:none;"><a href="#">Submit an Article</a><span style="background: url('/images/arrows.png') no-repeat 0px 3px transparent;float: right;margin: 3px 0px 0px 2px;height: 8px;width: 10px;"></span>
                      <div class="Useraccountinfo2">
-                <%end%> 
+                <%end%>
                   <a data-content="<%=article_category[0]%>" class="quickShare"><%=content_submit_tab_label(article_category[0])%></a>
                    <%if index == count %>
                   </div>
                   </span>
-                 </span> 
-                <%end%>  
-               <%end%>    
+                 </span>
+                <%end%>
+               <%end%>
 </span>
 <!--
 <div class="Homepopupgraybox" style="display:none;">
@@ -59,22 +59,22 @@ end%>
     <div class="Homeinnercontent">
 
       <div class="Blueblockhome smallhomeblock">
-      
+
         <div class="Textdescriptions" id="plantobuySection">
           <p>
             Are you planning to buy a <%=@itemtype.itemtype.downcase%>? Get all the information required for you to take informed decision from one place by creating a buying plan.
           </p>
 
         </div>
-        
+
 
 
       </div>
       <div class="Blueblockhome smallhomeblock">
-      
+
         <div class="Textdescriptions">
           <p>
-            Help others by sharing your knowledge/information about the <%=@itemtype.itemtype.downcase%> by writing a Review, How Tos, Latest ews, Photos. 
+            Help others by sharing your knowledge/information about the <%=@itemtype.itemtype.downcase%> by writing a Review, How Tos, Latest ews, Photos.
           </p>
 
         </div>
@@ -82,21 +82,21 @@ end%>
         </div>
 
       </div>
-      <div class="Blueblockhome smallhomeblock">        
+      <div class="Blueblockhome smallhomeblock">
 
-        <div class="Textdescriptions">          
+        <div class="Textdescriptions">
           <p>
             Did you read a great article/story on <%=@itemtype.itemtype.downcase%> in any other sites, you can share it with others here.
           </p>
         </div>
 
         <div class="Bluecyanbut"><a href="#">
-           
+
         </div>
 
 
       </div>
-      
+
 
     </div>
 
@@ -127,14 +127,14 @@ end%>
               function hoverdropdown2()
               {
               $('div.Useraccountinfo2').css("display","block");
-             
+
               }
               function hoverdropdownreverse2()
               {
               $('div.Useraccountinfo2').css("display","none");
               }
-   
-   
+
+
      });
 
     $(function(){
@@ -143,7 +143,7 @@ end%>
          $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
          openLoginPopup("#" + $(this).attr('id'), "click");
         return false
-      <%end%>    
+      <%end%>
       $(this).parent().toggleClass('selected');
       var category = $(this).data('content');
       $.ajaxSetup({
@@ -152,13 +152,13 @@ end%>
 	   $.ajax({url : '/contents/quick_new' , dataType:'script',type: "get",data: 'category=' +  category  + "&sharecontent=" + "true"  + "&item_id=<%= @item.id rescue ""%>"  });
     return false
     });
-    
+
     $('a.quickCreate').live("click",function(){
       <%if !current_user %>
         $("#login-1 #click_message").html("<%= escape_javascript(render  '/shared/login_popup_message',:type => 'content')%>");
         openLoginPopup("#" + $(this).attr('id'), "click");
         return false
-      <%end%>  
+      <%end%>
    // $(this).parent().toggleClass('selected');
     var category = $(this).data('content');
    // $.ajaxSetup({
