@@ -10,7 +10,7 @@
 
   <div class="product-img">
     <a href="<%= shop_now_url %>" target="_blank">
-      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100, 100).html_safe %>
+      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 106, 0).html_safe %>
       <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
     </a>
   </div>
@@ -30,7 +30,7 @@
     .advt-120 .advt-box .product-container-new {
         height: 420px;
         margin: 5px 0 0;
-        padding: 5px;
+        padding: 5px 0px;
     }
     .product-container-new a {
         text-decoration: none !important;
@@ -62,27 +62,20 @@
     .advt-120 .advt-box .product-container-new .product-img {
         margin: 0;
         padding: 30px 0;
-        width: 112px;
-    }
+      }
     .advt-120 .advt-box .product-container-new .product-img img {
         margin: 0 auto;
         text-align: center;
-        width: 112px;
-    }
-    .advt-120 .advt-box .product-container-new .btn .shop-now {
-        background: none repeat scroll 0 0 #f76300;
-        border: 0 none;
-        color: #fff;
-        cursor: pointer;
-        font-size: 16px;
-        margin: 15px 0;
-        padding: 5px;
-        text-transform: uppercase;
-    }
+      }
+
+    .advt-120 .advt-box .product-container-new.btn{ margin:15px 0px 0px 0px; padding:0; text-align:center;}
+    .advt-120 .advt-box .product-container-new .btn .shop-now { margin:0; padding:5px 5px; background:#F76300; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold;  text-align:center;}
+
     .advt-120 .advt-box .product-extra-desc-new {
+        position: absolute;;
         color: #222;
         font-size: 11px;
         margin: 5px 0 0;
-        padding: 0 5px 5px;
+        padding: 15px 5px 5px 0px;
     }
 </style>
