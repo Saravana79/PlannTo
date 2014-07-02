@@ -18,12 +18,12 @@ body {
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
 	-webkit-text-size-adjust: 100%;
 }
-
+.item_details{display: block;margin: 2px 5px 5px 4px;border: 1px solid rgba(158, 157, 157, 0.65098);border-radius: 10px;-webkit-box-shadow: #C7C7C7 1px 2px 3px 3px;box-shadow: #C7C7C7 1px 2px 3px 3px;}
 .advt-block { margin:0; padding:0;}
 .advt-120 { margin:0; padding:0; width:120px; height:600px; background:#fff; border:1px solid #F1F0F0;}
 .advt-120 .logo{ margin:0 5px; padding:10px 0;}
 
-.advt-120 .advt-box { margin:0; padding:0;border-top: 1px solid #F1F0F0;}
+.advt-120 .advt-box { margin:0; padding:0;border-top: 0px solid #F1F0F0;}
 
 .advt-120 .advt-box .product-container{ margin:0; padding:10px 5px;  border-bottom:#F1F0F0 solid 1px;}
 .advt-120 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
@@ -32,20 +32,21 @@ body {
 .advt-120 .advt-box .product-container .product-img img { margin:2px 0px; text-align:center;}
 
 
-.advt-120 .advt-box .product-container h3{ margin:0; padding:0 0 5px 0; font-size:13px; color:#222; font-weight:bold;font-family: Arial;word-break:break-word;}
+.advt-120 .advt-box .product-container h3{ margin:0; padding:0 0 5px 0; font-size:13px; color:#222; font-weight:bold;font-family: Arial;word-break:break-word;min-height: 40px;}
 
 .advt-120 .advt-box .product-container .price-strike{margin:5px 0;padding: 0;color: #585858;font-size: 18px;text-decoration: line-through; text-align:center;}
 .advt-120 .advt-box .product-container .price{ margin:5px 0; padding:0; color:#bf0000; font-size:14px; font-weight:bold;font-family: Arial monospace}
-.advt-120 .advt-box .product-container .btn{ margin:0; padding:0; text-align:center;}
+.advt-120 .advt-box .product-container .btn{ margin:15px 0px 0px 0px; padding:0; text-align:center;}
 /*.advt-120 .advt-box .product-container .btn .shop-now{ margin:0 0 0 15px; padding:0; background:url(../images/shop-now-btn.png) no-repeat left top; width:105px; height:28px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0; font-family:'pt_sansregular', Arial, Helvetica, sans-serif;}*/
 .advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px; background:#F76300; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold;  text-align:center;}
 
 
 
 .advt-120 .advt-box .product-desc { margin:0; font-size:11px; color:#505050; font-family: Arial, Helvetica, sans-serif;position: absolute;bottom: 0;left: 0;line-height: 15px;}
-.advt-120 .advt-box .product-extra-desc { margin:0; padding:10px; font-size:11px; color:#222; text-align: center;position: absolute;width:118px;}
+.advt-120 .advt-box .product-extra-desc { margin:0; padding:7px; font-size:11px; color:#222; text-align: center;position: absolute;width:115px;}
 
-
+.planntoadlogo{float: right;position: absolute;top: -1px;right: 1px;opacity: .8;margin: 0px 0px 2px 0px;height: 12px;}
+.planntoadlogo:hover{opacity:1;cursor:pointer;}
 
 /* Sliding gallery */
 

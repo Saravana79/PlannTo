@@ -3,6 +3,8 @@
 <div class="advt-block">
   <div class="advt-120">
     <% if @sliced_item_details.count != 0 %>
+         <div class="planntoadlogo">
+          <img style="width: 12px;" src="http://www.plannto.com/images/logosc.png"></div>
         <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt="" width="100px" height="32px"></a></div>
         <div id="pager2" class="pager">
           <% if @item_details.count > 2 %>
@@ -15,13 +17,17 @@
           <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
               <div class="item_details" id="item_detail_<%= indx + 1 %>">
                 <% if sliced_item_detail.count > 1 %>
-              <% sliced_item_detail.each do |item_detail| %>
-                  <div class="product-container">
+              <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
+                  <%if (itindex == 0) %>
+                       <div class="product-container">
+                  <%else%>
+                      <div class="product-container" style="border-bottom:0px;">
+                  <%  end %>
                     <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(47) %></h3>
                     <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
                       <a href="javascript:void(0)">
-                        <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100, 100).html_safe %>
+                        <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100,0).html_safe %>
                         <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
                       </a>
                     </div>
@@ -72,9 +78,7 @@
         padding: 5px 0 !important;
     }
 
-    .advt-120 .advt-box .product-extra-desc {
-        padding: 5px !important;
-    }
+
     .advt-120 .advt-box .product-container {
         height: 234px;
     }
