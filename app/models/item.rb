@@ -292,6 +292,7 @@ class Item < ActiveRecord::Base
     else
       # items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).order("id desc").limit(limit+2)
       items = Item.find(related_item_ids, :order => "field(id, #{related_item_ids.map(&:inspect).join(',')})")
+      items = items.select {|each_item| each_item.itemtype_id == item.itemtype_id}
       unless(item.group_id.nil?)
         items = items.select {|a| (a.group_id.nil? or a.group_id != item.group_id) }
       end
