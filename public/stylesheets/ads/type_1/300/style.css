@@ -55,7 +55,7 @@ body {
 
 /* Sliding gallery */
 .list_carousel {
-	margin: 0;
+	margin-top: 2px;
 	width: 130px;
 	float:right;
 }
