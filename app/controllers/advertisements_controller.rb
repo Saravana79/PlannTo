@@ -9,7 +9,7 @@ class AdvertisementsController < ApplicationController
 
     return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc) if !@ad.blank? && @ad.advertisement_type == "static"
 
-    item_ids = params[:item_id].split(",") unless params[:item_id].blank?
+    p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
 
     return show_plannto_ads() if !@ad.blank? && @ad.advertisement_type == "plannto"
@@ -20,7 +20,7 @@ class AdvertisementsController < ApplicationController
 
     item_ids = @items.map(&:id)
 
-    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, @moredetails)
+    @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids)
 
     # Default item_details based on vendor if item_details empty
     #TODO: temporary solution, have to change based on ecpm
