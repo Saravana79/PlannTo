@@ -33,6 +33,10 @@ module Admin::AdvertisementsHelper
       img_id = 'item'
     end
 
+    if height == 0
+      height =''
+    end
+
     "<img src='#{return_url}' alt='' default_src='#{default_src}' id='#{img_id}' class='ad_img_tag' next_src='#{next_src}' width='#{width}px' height='#{height}px'>"
   end
 
