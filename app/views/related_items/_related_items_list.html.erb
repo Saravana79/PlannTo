@@ -1,0 +1,40 @@
+<ul class="related_product_table">
+  <% @related_items.each_with_index do |related_item, indx| %>
+      <li class=<%= indx%2 == 0 ? 'float_left' : 'float_right' %>>
+        <%= check_box_tag "related_items[]", related_item.id, false, :id => "related_items_#{related_item.id}", :class => "related_item" %> <%= related_item.name %>
+      </li>
+  <% end %>
+</ul>
+
+
+<style type="text/css">
+
+    .float_left {
+        clear: left;
+        float: left;
+        font-size: 14px;
+        padding-left: 60px;
+        width: 200px;
+    }
+
+    .float_right {
+        float: left;
+        font-size: 14px;
+        padding-left: 40px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function Populate(){
+        vals = $('.related_item:checked').map(function() {
+            return this.value;
+        }).get().join(',');
+        console.log(vals);
+        $('#related_item_ids').val(vals);
+    }
+
+    $('.related_item').on('change', function() {
+        Populate()
+    }).change();
+</script>

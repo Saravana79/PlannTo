@@ -88,6 +88,32 @@
 
       <h3>Additional Details</h3>
 
+      <a href="javascript:void(0)" class="select_button_for_rel_products">Select Relevant Product to Show Ad </a>
+      <%= hidden_field_tag "related_item_ids" %>
+
+      <div id="related_product_list" style="display:none;">
+        <a href="#" class="Closebut">&nbsp;</a>
+        <%= hidden_field_tag "articles_item_id" %>
+        <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
+          <div class="title_header float_lft">Select Relevant Product to Show Ad:</div>
+          <div class="taggingdiv" style="margin-left:5px;">
+            <ul id="new_article_product_list" class="tagging"></ul>
+            <div class="float_lft " style="clear:both;">
+              <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
+            </div>
+            <div style="clear:both;"></div>
+
+            <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;"></div>
+            <div style="clear:both;"></div>
+
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div id="list_of_products">
+
+        </div>
+       </div>
+
       <div class="additional_details static_details" id="static_details">
         <div class="files-div">
           <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
@@ -218,7 +244,38 @@
             $("." + expected_id + "_details").show()
         })
 
-    });
+
+        settings = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: false,
+            hidden_field: "articles_item_id",
+            has_parent: false
+        };
+        $.textTagger("new_article_product", "new_article_product_list", settings);
+
+        $("li.ui-menu-item").live("click", function(event)
+        {
+            var item_id = $("#articles_item_id").val()
+            console.log(item_id)
+
+            $.get( "/related_items", {car_id: item_id, popup: true }, function( data ) {
+                $( "#list_of_products" ).html( data );
+            });
+
+        })
+
+        $(".select_button_for_rel_products").live("click", function()
+        {
+            $('#related_product_list').bPopup({
+                closeClass:'Closebut',
+                modalClose: false,
+                position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+                follow: [false, false] //x, y
+            });
+
+        })
+    })
 
 
 </script>
@@ -276,5 +333,18 @@
 
     .ad_type, .template_type, .bid_radio_button {
         width: 10px !important;
+    }
+
+    a.Closebut {
+        display:block; width:43px; height:42px; background:url(/images/pclose_but.png) no-repeat left top;
+        position:absolute; right:-18px; text-indent:-9999px; top:-18px;}
+
+    a.Closebut:hover { background-position:left -41px;}
+
+    #related_product_list {
+        background: none repeat scroll 0 0 #f9f9f9;
+        left: 30% !important;
+        width: 600px;
+        height:350px;
     }
 </style>
