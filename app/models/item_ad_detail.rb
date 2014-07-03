@@ -45,6 +45,7 @@ class ItemAdDetail < ActiveRecord::Base
 
     impression_query = "select item_id, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by item_id"
     click_query = "select item_id,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by item_id"
+    order_query = "select item_id,count(*) as count from order_histories where date(order_date) >= date('#{date_for_query}') group by item_id"
 
     @impressions = AddImpression.find_by_sql(impression_query)
 
@@ -58,6 +59,13 @@ class ItemAdDetail < ActiveRecord::Base
     @clicks.each do |each_click|
       item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_click.item_id)
       item_ad_detail.update_attributes(:clicks => each_click.click_count)
+    end
+
+    @orders = OrderHistory.find_by_sql(order_query)
+
+    @orders.each do |each_order|
+      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_order.item_id)
+      item_ad_detail.update_attributes(:orders => each_order.count)
     end
 
     update_ectr_for_item_ad_detail(log, batch_size)

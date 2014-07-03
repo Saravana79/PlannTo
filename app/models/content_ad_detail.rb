@@ -36,6 +36,8 @@ class ContentAdDetail < ActiveRecord::Base
 
     impression_query = "select hosted_site_url as url, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by hosted_site_url"
     click_query = "select hosted_site_url as url,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by hosted_site_url"
+    order_query = "select hosted_site_url as url,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
+where date(ai.impression_time) >= date('#{date_for_query}') group by hosted_site_url order by count(*) desc"
 
     @impressions = AddImpression.find_by_sql(impression_query)
 
@@ -49,6 +51,13 @@ class ContentAdDetail < ActiveRecord::Base
     @clicks.each do |each_click|
       content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_click.url)
       content_ad_detail.update_attributes(:clicks => each_click.click_count)
+    end
+
+    @orders = OrderHistory.find_by_sql(order_query)
+
+    @orders.each do |each_order|
+      content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_order.url)
+      content_ad_detail.update_attributes(:orders => each_order.count)
     end
 
     update_ectr_for_content_ad_detail(log, batch_size)
