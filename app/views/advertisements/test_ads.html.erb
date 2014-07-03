@@ -28,7 +28,9 @@
   <%= form_for :search, :url => "/advertisements/test_ads", :html => {:method => 'get'} do |search_form| %>
       Item ID: <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id] %>
       Ads ID: <%= search_form.text_field :ads_id, :name => "ads_id", :value => params[:ads_id] %> <br/>
-      Ref URL: <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url] %>
+      Ref URL: <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url] ,:size => 200%>
+        <br/>
+
       Is
       Test: <%= search_form.select :is_test, ["true", "false"], {:include_blank => true, :selected => params[:is_test]}, :name => "is_test" %>
       More
@@ -42,7 +44,7 @@
           <%= h option -%>
       <% end %>
       <br/>
-      <%= search_form.submit "Referesh" %>
+      <%= search_form.submit "Refresh" %>
       <%= search_form.submit "Clear" %>
   <% end %>
 </div>
@@ -52,26 +54,26 @@
     <div class="widget-1">
       <span>1) Widget-1</span>
       <span>URL => <%= "#{APP_URL}/javascripts/plannto.widget.js?item_id=#{params[:item_id]}&ref_url=#{params[:ref_url]}&show_details=true&element_id=where_to_buy_items&is_test=#{params[:is_test]}" %></span>
-
+       <br/> <br/>
       <div id="where_to_buy_items" style="width:610px;">
       </div>
       <script async src="<%= APP_URL %>/javascripts/plannto.widget.js?item_id=<%= params[:item_id] %>&ref_url=<%= params[:ref_url] %>&show_details=true&element_id=where_to_buy_items&is_test=<%= params[:is_test] %>"></script>
     </div>
 <% end %>
 <!-- check new_version_id or old_version_id when one item_id no item_details => item_id = 13652-->
-
+ <br/> <br/>
 <% if params[:show_list].include?('search-widget') %>
     <iframe id="search_widget" src="<%= APP_URL %>/advertisements/search_widget_via_iframe?page_type=<%= params[:page_type] %>&is_test=<%= params[:is_test] %>" style="width:100%; height: 100%;">
 
     </iframe>
 <% end %>
-
+ <br/> <br/>
 <% if params[:show_list].include?('ad-300') %>
 
     <div class="ad ad-1">
       <span>3) Ad-300</span>
       <span>URL => <%= "#{APP_URL}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*250&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
-      <br/>
+      <br/> <br/> <br/>
       <iframe id="plannto_ad_frame" src="" width="300px" height="250px" style="border: medium none;;"></iframe>
     </div>
     <script type="text/javascript">
@@ -88,12 +90,12 @@
         }, "jsonp");
     </script>
 <% end %>
-
+ <br/> <br/>
 <% if params[:show_list].include?('ad-120') %>
     <div class="ad ad-2">
       <span>4) Ad-120</span>
       <span>URL => <%= "#{APP_URL}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=120*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
-      <br/>
+      <br/> <br/> <br/>
       <iframe id="plannto_ad_frame_120" src="" width="120px" height="600px" style="border: medium none;;"></iframe>
     </div>
     <script type="text/javascript">
@@ -110,13 +112,13 @@
         }, "jsonp");
     </script>
 <% end %>
-
+ <br/> <br/>
 <% if params[:show_list].include?('ad-728') %>
 
     <div class="ad ad-3">
       <span>5) Ad-728</span>
       <span>URL => <%= "#{APP_URL}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=728*90&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
-      <br/>
+      <br/> <br/> <br/>
       <iframe id="plannto_ad_frame_728" src="" width="728px" height="90px" style="border: medium none;;"></iframe>
     </div>
     <script type="text/javascript">

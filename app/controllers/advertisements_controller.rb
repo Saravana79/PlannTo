@@ -115,19 +115,19 @@ class AdvertisementsController < ApplicationController
     if params[:commit] == "Clear"
       params[:item_id] = ""
       params[:ref_url] = "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-      params[:ads_id] = 2
-      params[:more_vendors] = true
+      params[:ads_id] = 1
+      params[:more_vendors] = false
       params[:page_type] ||= "small_screen"
       params[:is_test] = "true"
-      params[:show_list] = ["All","widget-1", "search-widget", "ad-300", "ad-120", "ad-728"]
+      params[:show_list] = ["All","widget-1",  "ad-300", "ad-120", "ad-728"]
     else
       params[:item_id] ||= "" #5414,1469
       params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-      params[:ads_id] ||= 2
-      params[:more_vendors] ||= true
+      params[:ads_id] ||= 1
+      params[:more_vendors] ||= false
       params[:page_type] ||= "small_screen"
       params[:is_test] ||= "true"
-      params[:show_list] ||= ["All","widget-1", "search-widget", "ad-300", "ad-120", "ad-728"]
+      params[:show_list] ||= ["All","widget-1", "ad-300", "ad-120", "ad-728"]
     end
     render :layout => false
   end
