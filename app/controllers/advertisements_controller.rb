@@ -9,6 +9,7 @@ class AdvertisementsController < ApplicationController
 
     return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc) if !@ad.blank? && @ad.advertisement_type == "static"
 
+    p_item_ids = item_ids = []
     p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
 
