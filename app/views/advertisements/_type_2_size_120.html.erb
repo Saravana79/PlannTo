@@ -49,7 +49,7 @@
               </div>
                 <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
                 <% else %>
-                    <%= render :partial => '/admin/advertisements/get_120_page_content.html.erb', :locals => {:item_detail => sliced_item_detail.first, :indx => indx} %>
+                    <%= render :partial => '/advertisements/get_120_page_content.html.erb', :locals => {:item_detail => sliced_item_detail.first, :indx => indx} %>
                     <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
                 <% end %>
               </div>
