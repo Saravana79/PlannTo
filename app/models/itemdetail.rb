@@ -28,7 +28,7 @@
                  else itemdetails.cashback end) asc")
   end
 
-  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, more_vendors, p_item_ids=0)
+  def self.get_item_details_by_item_ids_count(item_ids, vendor_ids, items, publisher, status, more_vendors, p_item_ids=[])
     @item_details = []
     if item_ids.count > 1
       @item_details = Itemdetail.get_item_details_by_item_ids(item_ids, vendor_ids).group_by { |each_rec| each_rec.itemid }

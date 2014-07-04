@@ -1,7 +1,16 @@
 <ul class="related_product_table">
+  <li class="float_left">
+    <%= check_box_tag "all_items", "All", false, :id => "related_items_all", :class => "related_item all_related_items" %>
+    <span class="item_name"> ALL </span>
+  </li>
+  <li class="float_right">
+    <%= check_box_tag "related_items[]", @item.id, true, :id => "related_items_#{@item.id}", :class => "related_item" %>
+    <span class="item_name"> <%= @item.name %> </span>
+  </li>
   <% @related_items.each_with_index do |related_item, indx| %>
       <li class=<%= indx%2 == 0 ? 'float_left' : 'float_right' %>>
-        <%= check_box_tag "related_items[]", related_item.id, false, :id => "related_items_#{related_item.id}", :class => "related_item" %> <%= related_item.name %>
+        <%= check_box_tag "related_items[]", related_item.id, false, :id => "related_items_#{related_item.id}", :class => "related_item" %>
+        <span class="item_name"><%= related_item.name %></span>
       </li>
   <% end %>
 </ul>
@@ -20,21 +29,44 @@
     .float_right {
         float: left;
         font-size: 14px;
-        padding-left: 40px;
+        padding-left: 20px;
+        width: 200px;
     }
 </style>
 
 <script type="text/javascript">
 
-    function Populate(){
+    function Populate(event){
+        console.log('------------')
+        var id = $(event).val()
+        var name = $(event).siblings(".item_name").text()
+        console.log(id)
+        console.log(name)
+
+        if (id == "All")
+        {
+            var all_val = $("#related_items_all").is(":checked")
+            console.log(all_val == true)
+            if (all_val == true)
+                $(".related_item").prop("checked", true)
+            else
+                $(".related_item").prop("checked", false)
+        }
+
+
         vals = $('.related_item:checked').map(function() {
-            return this.value;
+            if (this.value != "All")
+               return this.value;
         }).get().join(',');
         console.log(vals);
         $('#related_item_ids').val(vals);
     }
 
-    $('.related_item').on('change', function() {
-        Populate()
-    }).change();
+    $(function()
+    {
+        $('.related_item').on('change', function() {
+            Populate(this)
+        })
+    })
+
 </script>

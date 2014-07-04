@@ -122,7 +122,8 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.update_rtb_budget(log, actual_time)
-    advertisements = Advertisement.where("status = ? and start_date <= ? and end_date >= ?", 1, Date.today, Date.today)
+    date = actual_time.to_date
+    advertisements = find_by_start_and_end_date(date)
     advertisements.each do |advertisement|
       account_name = "PlannToAccount_#{advertisement.id}"
       actual_time = actual_time.to_time
@@ -155,6 +156,10 @@ class Advertisement < ActiveRecord::Base
         post_budget(account_name, payload)
       end
     end
+  end
+
+  def self.find_by_start_and_end_date(date)
+    Advertisement.where("status = ? and start_date <= ? and end_date >= ?", 1, date, date)
   end
 
   def get_hourly_budget(hour)
@@ -195,7 +200,7 @@ class Advertisement < ActiveRecord::Base
     response = Net::HTTP.new(uri_post.host, uri_post.port).start { |http| http.request(req) }
     puts "Response #{response.code} #{response.message}:
           #{response.body}"
-    raise "#{advertisement.id} - #{response.body}" unless response.code == "200"
+    raise "#{account_name} - #{response.body}" unless response.code == "200"
   end
 
   private

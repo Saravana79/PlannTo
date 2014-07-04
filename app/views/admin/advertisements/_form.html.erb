@@ -42,15 +42,13 @@
       <div class="fields-div" id="reviewProducts">
 
         <div class="title_header float_lft">Product :</div>
-        <div class="taggingdiv">
-          <ul id="ad_product_list" class="tagging"></ul>
-          <div class="float_lft " id="displayTagBox">
-            <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
-          </div>
+        <div class="float_lft">
+          <a href="javascript:void(0)" class="select_button_for_rel_products">Select Relevant Product to Show Ad </a>
+          <%= hidden_field_tag "related_item_ids" %>
         </div>
       </div>
 
-      <div class="fields-div">
+      <div class="fields-div" style="clear:both;">
         <div class="title_header float_lft">Start Date :</div>
         <div>
           <%= f.text_field :start_date %></div>
@@ -88,9 +86,6 @@
 
       <h3>Additional Details</h3>
 
-      <a href="javascript:void(0)" class="select_button_for_rel_products">Select Relevant Product to Show Ad </a>
-      <%= hidden_field_tag "related_item_ids" %>
-
       <div id="related_product_list" style="display:none;">
         <a href="#" class="Closebut">&nbsp;</a>
         <%= hidden_field_tag "articles_item_id" %>
@@ -108,6 +103,9 @@
 
           </div>
           <div style="clear:both;"></div>
+        </div>
+        <div class="selected_products">
+
         </div>
         <div id="list_of_products">
 
@@ -187,37 +185,6 @@
 
     $(document).ready(function () {
 
-        <%if @advertisement.nil?%>
-        settings = {
-            close: true, addButton: false,
-            url: "/search/autocomplete_items",
-            editMode: false, multiple: true,
-            hidden_field: "#ad_item_id"
-        };
-        $.textTagger("#ad_product", "#ad_product_list", settings);
-
-        <% unless @item.blank? %>
-        $.addTag("#ad_product", "#ad_product_list", settings, "<%= @item.name %>", "<%= @item.id %>", false);
-        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
-        $("#ad_product_list li:first span a.icon_close_tagging").remove();
-        <% end %>
-        <%else%>
-//error is here
-
-        var settings = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
-            hidden_field: "#ad_item_id"};
-        <%unless @items.nil? %>
-        <% @items.each do |item| %>
-
-        $.addTag("ad_product", "ad_product_list", settings, "<%= item.name %>", "<%= item.id %>", false);
-        $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
-        //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
-        <%end%>
-        <%end%>
-        $.textTagger("#ad_product", "#ad_product_list", settings);
-//ends
-        <%end%>
-
         $("#add_another_file").live("click", function () {
             a = $(".file-div").clone();
             remove_link = $("<a class='remove-file'>Remove<a>");
@@ -254,15 +221,15 @@
         };
         $.textTagger("new_article_product", "new_article_product_list", settings);
 
-        $("li.ui-menu-item").live("click", function(event)
+        $("li.ui-menu-item a").live("click", function(event)
         {
             var item_id = $("#articles_item_id").val()
+            $("#articles_item_id").val('')
             console.log(item_id)
 
             $.get( "/related_items", {car_id: item_id, popup: true }, function( data ) {
                 $( "#list_of_products" ).html( data );
             });
-
         })
 
         $(".select_button_for_rel_products").live("click", function()
@@ -344,7 +311,8 @@
     #related_product_list {
         background: none repeat scroll 0 0 #f9f9f9;
         left: 30% !important;
+        top: 30% !important;
         width: 600px;
-        height:350px;
+        height:500px;
     }
 </style>

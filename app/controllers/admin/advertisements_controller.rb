@@ -48,13 +48,15 @@ class Admin::AdvertisementsController < ApplicationController
     params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
 
     @advertisement = Advertisement.new(params[:advertisement])
-    @content = AdvertisementContent.create(:title => "advertisement");
-    @content.save_with_items!(params['ad_item_id'])
-    @advertisement.content_id = @content.id
-    @advertisement.user_id = current_user.id
-    if @advertisement.save
-      @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
-      redirect_to admin_advertisements_path
+    if @advertisement.valid?
+      @content = AdvertisementContent.create(:title => "advertisement");
+      @content.save_with_items!(params[:related_item_ids])
+      @advertisement.content_id = @content.id
+      @advertisement.user_id = current_user.id
+      if @advertisement.save
+        @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
+      end
+        redirect_to admin_advertisements_path
     else
       render :new
     end
