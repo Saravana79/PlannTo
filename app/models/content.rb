@@ -451,7 +451,8 @@ end
       self.save_content_relations_cache(relateditems.collect(&:id))
       relateditems.each do |item|
         unless(item.slug.nil?)
-          cache_key = "views/" + APP_URL.to_s + "/" + item.type.downcase.pluralize + "/" + item.slug + "?user="
+          item_type = item.type.blank? ? "" : item.type.downcase.pluralize
+          cache_key = "views/" + APP_URL.to_s + "/" + item_type + "/" + item.slug + "?user="
           Rails.cache.delete(cache_key + "1")
           Rails.cache.delete(cache_key + "0")
         end

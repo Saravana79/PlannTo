@@ -23,7 +23,7 @@ class Admin::AdvertisementsController < ApplicationController
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
 
 
-    @items = Item.where("id in ('#{@advertisement.content.related_items.collect(&:item_id).join(',')}')")
+    @items = Item.where(:id => @advertisement.content.related_items.collect(&:item_id)) rescue []
   end
 
   def show
@@ -48,16 +48,26 @@ class Admin::AdvertisementsController < ApplicationController
     params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
 
     @advertisement = Advertisement.new(params[:advertisement])
-    if @advertisement.valid?
-      @content = AdvertisementContent.create(:title => "advertisement");
-      @content.save_with_items!(params[:related_item_ids])
+
+    if !params[:content_id].blank?
+      @content = AdvertisementContent.find(params[:content_id]);
+      params['advertisement_content'] = {}
+      params['advertisement_content']['title'] = 'advertisement'
+      @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) unless @content.blank?
       @advertisement.content_id = @content.id
       @advertisement.user_id = current_user.id
-      if @advertisement.save
-        @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
-      end
-        redirect_to admin_advertisements_path
     else
+      @content = AdvertisementContent.create(:title => "advertisement");
+      @content.save_with_items!(params[:ad_item_id])
+      @advertisement.content_id = @content.id
+      @advertisement.user_id = current_user.id
+    end
+
+    if @advertisement.save
+      @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
+      redirect_to admin_advertisements_path
+    else
+      @items = Item.where(:id => @content.related_items.collect(&:item_id)) rescue []
       render :new
     end
   end
@@ -82,8 +92,8 @@ class Admin::AdvertisementsController < ApplicationController
     @content = @advertisement.content
     params['advertisement_content'] = {}
     params['advertisement_content']['title'] = 'advertisement'
-    @content.update_with_items!(params['advertisement_content'], params[:ad_item_id])
     if @advertisement.update_attributes(params[:advertisement])
+      @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) unless @content.blank?
       @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
       redirect_to admin_advertisements_path
     else

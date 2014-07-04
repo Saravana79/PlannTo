@@ -38,13 +38,25 @@
       </div>
 
       <%= hidden_field_tag 'ad_item_id' %>
+      <%= hidden_field_tag 'content_id', @advertisement.content_id %>
+
+      <div class="fields-div" id="reviewProducts">
+
+        <div class="title_header float_lft">Product :</div>
+        <div class="taggingdiv">
+          <ul id="ad_product_list" class="tagging"></ul>
+          <div class="float_lft " id="displayTagBox">
+            <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
+          </div>
+        </div>
+      </div>
 
       <div class="fields-div" id="reviewProducts">
 
         <div class="title_header float_lft">Product :</div>
         <div class="float_lft">
           <a href="javascript:void(0)" class="select_button_for_rel_products">Select Relevant Product to Show Ad </a>
-          <%= hidden_field_tag "related_item_ids" %>
+          <%= hidden_field_tag "related_item_ids", @items.blank? ? "" : @items.map(&:id).join(",") %>
         </div>
       </div>
 
@@ -104,12 +116,13 @@
           </div>
           <div style="clear:both;"></div>
         </div>
-        <div class="selected_products">
+        <ul class="selected_products">
 
-        </div>
+        </ul>
         <div id="list_of_products">
 
         </div>
+        <%= link_to "Populate", "javascript:void(0)", :class => "btn_submitanswer btn_submitcancel populate_btn", :id => "cancel_button" %>
        </div>
 
       <div class="additional_details static_details" id="static_details">
@@ -185,6 +198,37 @@
 
     $(document).ready(function () {
 
+        <%if @advertisement.nil?%>
+        settings = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: true,
+            hidden_field: "#ad_item_id"
+        };
+        $.textTagger("#ad_product", "#ad_product_list", settings);
+
+        <% unless @item.blank? %>
+        $.addTag("#ad_product", "#ad_product_list", settings, "<%= @item.name %>", "<%= @item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= @item.id %>", false);
+        $("#ad_product_list li:first span a.icon_close_tagging").remove();
+        <% end %>
+        <% else %>
+//error is here
+
+        var settings = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+            hidden_field: "#ad_item_id"};
+        <%unless @items.nil? %>
+        <% @items.each do |item| %>
+
+        $.addTag("ad_product", "ad_product_list", settings, "<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
+        //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
+        <%end%>
+        <%end%>
+        $.textTagger("#ad_product", "#ad_product_list", settings);
+//ends
+        <%end%>
+
         $("#add_another_file").live("click", function () {
             a = $(".file-div").clone();
             remove_link = $("<a class='remove-file'>Remove<a>");
@@ -219,6 +263,7 @@
             hidden_field: "articles_item_id",
             has_parent: false
         };
+
         $.textTagger("new_article_product", "new_article_product_list", settings);
 
         $("li.ui-menu-item a").live("click", function(event)
@@ -234,6 +279,9 @@
 
         $(".select_button_for_rel_products").live("click", function()
         {
+            $("#new_article_product_list").html("")
+            $("#list_of_products").html("")
+
             $('#related_product_list').bPopup({
                 closeClass:'Closebut',
                 modalClose: false,
@@ -241,6 +289,46 @@
                 follow: [false, false] //x, y
             });
 
+        })
+
+        $('#deleteTag').live('click', function(){
+            var item_id = $(this).attr("item_id")
+            console.log(item_id)
+
+            var item_ids = $("#related_item_ids").val()
+
+            item_ids = item_ids.split(",")
+
+            item_ids = $.grep(item_ids, function(value) {
+                return value != item_id;
+            });
+
+            $("#related_item_ids").val(item_ids.join(","))
+
+            $(this).closest('li').remove();
+
+            return false;
+        })
+
+        $(".populate_btn").live("click", function()
+        {
+            var checked_length = $('.related_item:checked').length
+            $.each($('.related_item:checked'), function(i, val) {
+                var item_id = $(val).attr("value")
+                var name = $(val).siblings(".item_name").text()
+
+                if (item_id != "All"){
+                    $.addTag("ad_product", "ad_product_list", settings_new, name, item_id, false);
+                    $.addIdToField(settings_new.hidden_field, item_id, true);
+                }
+            })
+
+            $("#new_article_product_list").html("")
+            $("#list_of_products").html("")
+            if (checked_length == 0)
+                alert("Nothing to populate")
+            else
+                alert("populated selected product to related product list")
         })
     })
 
@@ -314,5 +402,10 @@
         top: 30% !important;
         width: 600px;
         height:500px;
+    }
+
+    .populate_btn {
+        margin-right: 250px;
+        margin-top: 30px;
     }
 </style>

@@ -67,6 +67,20 @@
         $('.related_item').on('change', function() {
             Populate(this)
         })
+
+        settings_new = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
+            hidden_field: "#ad_item_id"};
+
+//        $.addTag("ad_product", "ad_product_list", settings_new, "<%#= @item.name %>", "<%#= @item.id %>", false);
+//        $.addIdToField(settings_new.hidden_field, "<%#= @item.id %>", true);
+
+//        var item_ids = $("#related_item_ids").val()
+//        item_ids = item_ids.split(",")
+//        console.log(item_ids == [''])
+//        item_ids.push("<%#= @item.id %>")
+//        console.log(item_ids)
+//
+//        $("#related_item_ids").val(item_ids.filter(Boolean).join(","))
     })
 
 </script>
