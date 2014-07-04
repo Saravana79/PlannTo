@@ -35,37 +35,37 @@ class Content < ActiveRecord::Base
   has_many :item_pro_cons, :foreign_key => 'article_content_id'
   # after_save :remove_ad_item_ids_from_redis
 
-  searchable :auto_index => true, :auto_remove => true  do
-    text :title, :boost => 3.0, :more_like_this =>true do |item|
-       item.title.gsub("_","") rescue ''
-     end
-    text :description do |item|
-      item.description
-    end
-    string :sub_type
-    integer :total_votes   do |content|
-        content.total_votes  
-    end
-    integer :comments_count
-    time :created_at
-    text :name, :boost => 6.0,  :as => :name_ac do |content|
-      content.title.gsub("_","") rescue ''
-    end
-    string :status   do |content|
-      content.status.to_s
-    end
-    integer :orderbyid  do |content|
-      100
-    end
+  # searchable :auto_index => true, :auto_remove => true  do
+  #   text :title, :boost => 3.0, :more_like_this =>true do |item|
+  #      item.title.gsub("_","") rescue ''
+  #    end
+  #   text :description do |item|
+  #     item.description
+  #   end
+  #   string :sub_type
+  #   integer :total_votes   do |content|
+  #       content.total_votes  
+  #   end
+  #   integer :comments_count
+  #   time :created_at
+  #   text :name, :boost => 6.0,  :as => :name_ac do |content|
+  #     content.title.gsub("_","") rescue ''
+  #   end
+  #   string :status   do |content|
+  #     content.status.to_s
+  #   end
+  #   integer :orderbyid  do |content|
+  #     100
+  #   end
 
-    integer :itemtype_ids,  :multiple => true do
-      content_itemtype_relations.map {|items| items.itemtype_id}    
-    #content.itemtype_id
-    end
-    integer :item_ids,  :multiple => true do
-      item_contents_relations_cache.map {|items| items.item_id}
-    end
-  end
+  #   integer :itemtype_ids,  :multiple => true do
+  #     content_itemtype_relations.map {|items| items.itemtype_id}    
+  #   #content.itemtype_id
+  #   end
+  #   integer :item_ids,  :multiple => true do
+  #     item_contents_relations_cache.map {|items| items.item_id}
+  #   end
+  # end
   
   def self.total_number_of_contents(type,sub_type)
     itemtype = Itemtype.where(:itemtype => type).first
