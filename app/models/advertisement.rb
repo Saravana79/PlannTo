@@ -50,10 +50,12 @@ class Advertisement < ActiveRecord::Base
     return return_val
   end
 
-  def build_images(image_array)
+  def build_images(image_array, ad_type=nil)
     image_array.each do |image|
       image = self.images.build(image)
-      if Image.file_dimensions(image)
+      if ad_type != "flash" && Image.file_dimensions(image)
+        image.save
+      else
         image.save
       end
     end

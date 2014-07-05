@@ -90,7 +90,7 @@ class ProductsController < ApplicationController
     session[:warning] = "true"
     Vote.get_vote_list(current_user) if user_signed_in? 
     #session[:product_warning_message] = "true"
-    @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).where("slug = ?", params[:id]).last#where(:id => params[:id]).includes(:item_attributes).last
+    @item = Item.includes([:itemdetails => :vendor],[:attribute_values], :itemrelationships, :item_rating).find(params[:id])#where(:id => params[:id]).includes(:item_attributes).last
     # @pro_cons = ItemProCon.find_by_sql("select *, count(*) as count from item_pro_cons
     #     where item_id = #{@item.id} and pro_con_category_id is not null group by pro_con_category_id, proorcon
     #     union

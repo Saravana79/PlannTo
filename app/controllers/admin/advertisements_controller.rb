@@ -1,5 +1,4 @@
 class Admin::AdvertisementsController < ApplicationController
-  # before_filter :authenticate_advertiser_user!, :except => [:show_ads]
   before_filter :authenticate_publisher_user!
   skip_before_filter :authenticate_publisher_user!, :if => proc {|c| current_user && current_user.is_admin?}
   before_filter :make_user_condition
@@ -64,7 +63,7 @@ class Admin::AdvertisementsController < ApplicationController
     end
 
     if @advertisement.save
-      @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
+      @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
       redirect_to admin_advertisements_path
     else
       @items = Item.where(:id => @content.related_items.collect(&:item_id)) rescue []

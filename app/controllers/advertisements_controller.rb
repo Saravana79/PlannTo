@@ -7,7 +7,7 @@ class AdvertisementsController < ApplicationController
 
     @ad_template_type = "type_2" if @suitable_ui_size == 120
 
-    return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc) if !@ad.blank? && @ad.advertisement_type == "static"
+    return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc) if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
 
     p_item_ids = item_ids = []
     p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
@@ -93,6 +93,8 @@ class AdvertisementsController < ApplicationController
   def static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc)
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+
+    @image = @ad.images.first
 
     @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc) if @is_test != "true"
 

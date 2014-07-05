@@ -41,7 +41,7 @@ class ItemAdDetail < ActiveRecord::Base
 
     date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
 
-    date_for_query = date_for_query - 1.month
+    date_for_query = date_for_query - 2.month
 
     impression_query = "select item_id, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by item_id"
     click_query = "select item_id,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by item_id"
@@ -75,7 +75,7 @@ class ItemAdDetail < ActiveRecord::Base
     log.debug "********** Updating ectr **********"
     log.debug "\n"
 
-    query_to_get_clicks_and_impressions = "select item_id, clicks, impressions from item_ad_details"
+    query_to_get_clicks_and_impressions = "select item_id, clicks, impressions, orders from item_ad_details"
 
     page = 1
     begin
@@ -84,11 +84,12 @@ class ItemAdDetail < ActiveRecord::Base
       items.each do |each_item|
         clicks_count = each_item.clicks.to_f
         impressions_count = each_item.impressions.to_f
+        orders_count = each_item.orders.to_f
 
         ectr = 0.0
 
         if (clicks_count != 0.0 && impressions_count != 0.0)
-          ectr = (clicks_count.to_f / impressions_count.to_f) rescue 0.0
+          ectr = (clicks_count / impressions_count) + (orders_count / clicks_count) rescue 0.0
         end
 
 
