@@ -32,7 +32,7 @@ class AddImpression < ActiveRecord::Base
    ai.advertisement_id = obj_params[:ad_id]
    ai.winning_price_enc = obj_params[:winning_price_enc]
    begin
-     winning_price = get_winning_price_value(obj_params[:winning_price_enc])
+     winning_price = obj_params[:winning_price_enc].blank? ? nil : get_winning_price_value(obj_params[:winning_price_enc])
      ai.winning_price = winning_price
    rescue
      ai.winning_price = obj_params[:winning_price]
