@@ -2,14 +2,17 @@ class AggregatedDetail < ActiveRecord::Base
 
   def self.update_aggregated_detail(time, entity_type, batch_size=1000)
     entity_field = entity_type + "_id"
-    date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
+    time = time.is_a?(Time) ? time.utc : time # converted to UTC
+
+    impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
+    click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
 
     if entity_type == "publisher"
-      impression_query = "select publisher_id as entity_id,count(*) as impression_count from add_impressions where date(impression_time) = date('#{date_for_query}') group by publisher_id"
-      click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where date(timestamp) = date('#{date_for_query}') group by publisher_id"
+      impression_query = "select publisher_id as entity_id,count(*) as impression_count from add_impressions where #{impression_date_condition} group by publisher_id"
+      click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
     else
-      impression_query = "select advertisement_id as entity_id,count(*) as impression_count from add_impressions where date(impression_time)  =  date('#{date_for_query}') and advertisement_type='advertisement' group by advertisement_id"
-      click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where date(timestamp) = date('#{date_for_query}') and advertisement_id is NOT NULL group by advertisement_id"
+      impression_query = "select advertisement_id as entity_id,count(*) as impression_count from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
+      click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
     end
 
     page = 1
