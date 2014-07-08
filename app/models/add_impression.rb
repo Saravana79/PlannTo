@@ -8,6 +8,7 @@ class AddImpression < ActiveRecord::Base
  has_one :click, :foreign_key => "impression_id"
 
  def self.create_new_record(obj_params)
+   obj_params = JSON.parse(obj_params)
    obj_params = obj_params.symbolize_keys
    ai = AddImpression.new
    ai.id = obj_params[:imp_id]

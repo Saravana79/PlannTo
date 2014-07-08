@@ -4,6 +4,7 @@ class Click < ActiveRecord::Base
   belongs_to :add_impression, :foreign_key => "impression_id"
 
   def self.create_new_record(obj_params)
+    obj_params = JSON.parse(obj_params)
     obj_params = obj_params.symbolize_keys
 
     click = Click.new
