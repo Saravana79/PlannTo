@@ -1,6 +1,6 @@
 class AggregatedDetail < ActiveRecord::Base
 
-  def self.update_aggregated_detail(time, entity_type)
+  def self.update_aggregated_detail(time, entity_type, batch_size=1000)
     entity_field = entity_type + "_id"
     date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
 
@@ -12,19 +12,28 @@ class AggregatedDetail < ActiveRecord::Base
       click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where date(timestamp) = date('#{date_for_query}') and advertisement_id is NOT NULL group by advertisement_id"
     end
 
-    @impressions = AddImpression.find_by_sql(impression_query)
+    page = 1
+    begin
+      impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
-    @impressions.each do |each_imp|
-      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.entity_id, :date => time.to_date)
-      aggregated_detail.update_attributes(:entity_type => entity_type, :impressions_count => each_imp.impression_count)
-    end
+      impressions.each do |each_imp|
+        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.entity_id, :date => time.to_date)
+        aggregated_detail.update_attributes(:entity_type => entity_type, :impressions_count => each_imp.impression_count)
+      end
+      page += 1
+    end while !impressions.empty?
 
-    @clicks = Click.find_by_sql(click_query)
+    page = 1
+    begin
+      clicks = Click.paginate_by_sql(click_query, :page => page, :per_page => batch_size)
 
-    @clicks.each do |each_click|
-      aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.entity_id, :date => time.to_date)
-      aggregated_detail.update_attributes(:entity_type => entity_type, :clicks_count => each_click.click_count)
-    end
+      clicks.each do |each_click|
+        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.entity_id, :date => time.to_date)
+        aggregated_detail.update_attributes(:entity_type => entity_type, :clicks_count => each_click.click_count)
+      end
+      page += 1
+    end while !clicks.empty?
+
   end
 
   def self.get_counts(date1, date2, publisher_id)
