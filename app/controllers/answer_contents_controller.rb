@@ -22,11 +22,12 @@ class AnswerContentsController < ApplicationController
     @content = Content.find(params[:id])
     @content.ip_address = request.remote_ip
     @content.update_attributes(params['answer_content'])
-    results = Sunspot.more_like_this(@content) do
-      fields :title
-      minimum_term_frequency 1
-    end
-    @related_contents = results.results 
+    # results = Sunspot.more_like_this(@content) do
+    #   fields :title
+    #   minimum_term_frequency 1
+    # end
+    # @related_contents = results.results
+    @related_contents = []
   end
   
   def destroy

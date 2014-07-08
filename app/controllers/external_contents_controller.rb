@@ -8,15 +8,16 @@ class ExternalContentsController < ApplicationController
                          user_id: current_user.try(:id), plannto_location: session[:return_to])
   
     frequency = 1
-    results = Sunspot.more_like_this(@content) do
-      fields :title
-      minimum_term_frequency 1
-      boost_by_relevance true
-      minimum_word_length 2
-      paginate(:page => 1, :per_page => 6)
-    end
-    @related_contents = results.results
-  
+    # results = Sunspot.more_like_this(@content) do
+    #   fields :title
+    #   minimum_term_frequency 1
+    #   boost_by_relevance true
+    #   minimum_word_length 2
+    #   paginate(:page => 1, :per_page => 6)
+    # end
+    # @related_contents = results.results
+    @related_contents = []
+
   end
 
 end
