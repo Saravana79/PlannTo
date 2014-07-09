@@ -123,11 +123,12 @@ class Feed < ActiveRecord::Base
 
     tips = %w[tip trick]
     reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing']
-    comparisons = %w['vs','versus']
+    comparisons = ['vs','versus']
     how_to = ["tutorial", "guide", "how to"]
     lists = ["top", "best"]
     photos = ["gallery"]
     news = ['launch', 'release', 'online', 'available', 'announce', 'official']
+    specs = ['spec']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
@@ -138,6 +139,8 @@ class Feed < ActiveRecord::Base
     comparisons.each do |comparison|
       return ArticleCategory::COMPARISONS if title_words.scan(comparison).size >0
     end
+  
+    
     reviews.each do |review|
       return ArticleCategory::REVIEWS if title_words.scan(review).size >0
     end
@@ -147,7 +150,9 @@ class Feed < ActiveRecord::Base
     photos.each do |images|
       return ArticleCategory::PHOTO if title_words.scan(images).size >0
     end
-
+    specs.each do |spec|
+      return ArticleCategory::SPECS if title_words.scan(spec).size >0
+    end
     news.each do |each_news|
       return ArticleCategory::NEWS if title_words.scan(each_news).size >0
     end
