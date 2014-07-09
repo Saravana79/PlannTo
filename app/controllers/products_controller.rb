@@ -172,10 +172,16 @@ class ProductsController < ApplicationController
     @where_to_buy_items = @item.itemdetails.includes(:vendor).where("status = 1 and isError = 0").order('(itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
     # @impression_id = AddImpression.save_add_impression_data("pricecomparision",@item.id,request.referer,Time.zone.now,current_user,request.remote_ip,@impression_id,cookies[:plan_to_temp_user_id],nil)
 
-    @impression_id = SecureRandom.uuid
+    # @impression_id = SecureRandom.uuid
+    # impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
+    #                       :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
+
+    @impression_id = nil
     impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
-                          :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
-    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+                          :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}
+
+    # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    @impression_id = AddImpression.add_impression_to_resque(impression_params[:type], impression_params[:item_id], impression_params[:request_referer], impression_params[:user], impression_params[:remote_ip], impression_params[:impression_id], impression_params[:itemaccess], impression_params[:params], impression_params[:temp_user_id], impression_params[:ad_id], nil)
 
     if @showspec == 1
       @item_specification_summary_lists = @item.attribute_values.includes(:attribute => :item_specification_summary_lists).where("attribute_values.item_id=? and item_specification_summary_lists.itemtype_id =?", @item.id, @item.itemtype_id).order("item_specification_summary_lists.sortorder ASC").group_by(&:proorcon)
@@ -436,10 +442,16 @@ class ProductsController < ApplicationController
       end
     end
 
-    @impression_id = SecureRandom.uuid
+    # @impression_id = SecureRandom.uuid
+    # impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+    #                       :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
+
+    @impression_id = nil
     impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                          :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
-    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if @is_test != "true"
+                          :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}
+
+    # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if @is_test != "true"
+    @impression_id = AddImpression.add_impression_to_resque(impression_params[:type], impression_params[:item_id], impression_params[:request_referer], impression_params[:user], impression_params[:remote_ip], impression_params[:impression_id], impression_params[:itemaccess], impression_params[:params], impression_params[:temp_user_id], impression_params[:ad_id], nil) if @is_test != "true"
 
         html = html = render_to_string(:layout => false)
         json = {"html" => html}.to_json

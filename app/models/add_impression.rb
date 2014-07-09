@@ -8,8 +8,11 @@ class AddImpression < ActiveRecord::Base
  has_one :click, :foreign_key => "impression_id"
 
  def self.create_new_record(obj_params)
-   obj_params = JSON.parse(obj_params)
-   obj_params = obj_params.symbolize_keys
+   unless obj_params.is_a?(Hash)
+     obj_params = JSON.parse(obj_params)
+     obj_params = obj_params.symbolize_keys
+   end
+
    ai = AddImpression.new
    ai.id = obj_params[:imp_id]
    ai.impression_id = obj_params[:impression_id]
@@ -228,7 +231,8 @@ class AddImpression < ActiveRecord::Base
     impression_id = SecureRandom.uuid
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
                          :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => 0.0, :winning_price_enc => winning_price_enc}.to_json
-    Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
+    AddImpression.create_new_record(impression_params)
     return impression_id
   end
 

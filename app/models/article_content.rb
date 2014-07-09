@@ -28,7 +28,7 @@ class ArticleContent < Content
       require 'open-uri'
       begin
         begin
-          doc = Nokogiri::HTML(open(url))
+          doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
           @title_info = doc.xpath('.//title').to_s.strip
           @rating_value = 0
           @rating_value = doc.at("span.rating").inner_text.to_i rescue 0
@@ -295,10 +295,16 @@ class ArticleContent < Content
       itemsaccess ="offeritem_ids"
       # @impression_id = AddImpression.save_add_impression_data("OffersDeals",item_ids[0],url,Time.zone.now,user,request.remote_ip,nil,itemsaccess,url_params, cookies[:plan_to_temp_user_id], nil)
 
-      @impression_id = SecureRandom.uuid
+      # @impression_id = SecureRandom.uuid
+      # impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+      #                      :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}.to_json
+
+      @impression_id = nil
       impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                           :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}.to_json
-      Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if is_test != "true"
+                           :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}
+      @impression_id = AddImpression.add_impression_to_resque(impression_params[:type], impression_params[:item_id], impression_params[:request_referer], impression_params[:user], impression_params[:remote_ip], impression_params[:impression_id], impression_params[:itemaccess], impression_params[:params], impression_params[:temp_user_id], impression_params[:ad_id], nil) if @is_test != "true"
+
+      # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if is_test != "true"
 
       @best_deals.select { |a| a }
     else
