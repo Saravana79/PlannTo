@@ -177,7 +177,7 @@ class ProductsController < ApplicationController
     #                       :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
 
     @impression_id = nil
-    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
+    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => request.referer, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user, :remote_ip => request.remote_ip, :impression_id => @impression_id, :itemaccess => nil,
                           :params => nil, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}
 
     # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
@@ -447,7 +447,7 @@ class ProductsController < ApplicationController
     #                       :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}.to_json
 
     @impression_id = nil
-    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+    impression_params =  {:imp_id => @impression_id, :type => "pricecomparision", :itemid => @item.id, :request_referer => url, :time => Time.zone.now, :user => current_user.blank? ? nil : current_user, :remote_ip => request.remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                           :params => url_params, :temp_user_id => cookies[:plan_to_temp_user_id], :ad_id => nil}
 
     # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if @is_test != "true"

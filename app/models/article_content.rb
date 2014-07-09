@@ -300,7 +300,7 @@ class ArticleContent < Content
       #                      :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}.to_json
 
       @impression_id = nil
-      impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+      impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => user.blank? ? nil : user, :remote_ip => remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
                            :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}
       @impression_id = AddImpression.add_impression_to_resque(impression_params[:type], impression_params[:item_id], impression_params[:request_referer], impression_params[:user], impression_params[:remote_ip], impression_params[:impression_id], impression_params[:itemaccess], impression_params[:params], impression_params[:temp_user_id], impression_params[:ad_id], nil) if @is_test != "true"
 
