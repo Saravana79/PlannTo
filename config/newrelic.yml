@@ -3,9 +3,9 @@
 # .NET, PHP, Python and Node applications with deep visibility and low
 # overhead.  For more information, visit www.newrelic.com.
 #
-# Generated July 08, 2014
+# Generated July 09, 2014
 #
-# This configuration file is custom generated for PlannTo_1
+# This configuration file is custom generated for PlannTo Technologies Private Limited
 
 
 # Here are the settings that are common to all environments
@@ -15,7 +15,7 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: 'dbd12c47c3d06b8c2be0274cc915dde1b3972634'
+  license_key: '823d770be07e56b8b7bc0acba6376a11b6986f7a'
 
   # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
@@ -42,7 +42,7 @@ common: &default_settings
   #       - Ajax Service
   #       - All Services
   #
-  app_name: My Application
+  app_name: PlannTo
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
@@ -185,7 +185,7 @@ development:
   <<: *default_settings
   # Turn on communication to New Relic service in development mode
   monitor_mode: true
-  app_name: My Application (Development)
+  app_name: PlannTo (Development)
 
   # Rails Only - when running in Developer Mode, the New Relic Agent will
   # present performance information on the last 100 transactions you have
@@ -214,4 +214,4 @@ production:
 staging:
   <<: *default_settings
   monitor_mode: true
-  app_name: My Application (Staging)
+  app_name: PlannTo (Staging)
