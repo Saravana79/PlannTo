@@ -16,6 +16,7 @@ class ArticleCategory < ActiveRecord::Base
   LIST = "Lists"
   COMPARISONS = "Comparisons"
   NEWS = "News"
+  SPECS = "Spec"
   has_one :article_content
   belongs_to :itemtype
   validates_uniqueness_of :name, :scope => [:itemtype_id]
