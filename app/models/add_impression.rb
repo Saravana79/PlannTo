@@ -41,6 +41,8 @@ class AddImpression < ActiveRecord::Base
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
+   p 444444444444444444444444444444444444444
+   p Time.now
  end
 
   def self.get_winning_price_value(winning_price_enc)
