@@ -86,7 +86,12 @@ where date(ai.impression_time) >= date('#{date_for_query}') group by hosted_site
 
 
         content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_content.url)
-        content_ad_detail.update_attributes(:ectr => ectr)
+        content_ad_detail.update_attributes!(:ectr => ectr)
+
+        # Redis url:XXX update with impresssions, clicks and orders
+        # redis_key = "url:#{content_ad_detail.url}"
+        # redis_values = "impressions", content_ad_detail.impressions, "clicks", content_ad_detail.clicks, "orders", content_ad_detail.orders
+        # $redis_rtb.HMSET(redis_key, redis_values)
       end
     end while !content_ad_details.empty?
   end
