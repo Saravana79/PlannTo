@@ -466,7 +466,10 @@ end
     if (self.is_a?(ArticleContent) && !self.url.blank?)
       # create content hash in redis-2
       #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
-      Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", relateditems.collect(&:id).join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
+      # Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", relateditems.collect(&:id).join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
+      redis_key = "url:#{self.url}"
+      redis_values = "item_ids", relateditems.collect(&:id).join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0
+      $redis_rtb.HMSET(redis_key, redis_values)
       remove_ad_item_ids_from_redis
     end
   end
