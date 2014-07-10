@@ -1,6 +1,7 @@
 class AdvertisementsController < ApplicationController
   include Admin::AdvertisementsHelper
   layout "product"
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()

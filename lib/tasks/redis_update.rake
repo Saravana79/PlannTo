@@ -15,7 +15,7 @@ namespace :redis_update do
     end
 
     # ArticleContent Update
-    query = "select c.id,ac.url, c.sub_type, c.itemtype_id, group_concat(distinct(item_id)) as item_ids from article_contents ac inner join contents c on c.id = ac.id
+    query = "select c.id,ac.url, c.sub_type, c.itemtype_id, group_concat(distinct(item_id)) as rel_item_ids from article_contents ac inner join contents c on c.id = ac.id
              inner join item_contents_relations_cache icc on icc.content_id = ac.id group by ac.id"
 
     # Using paginate_by_sql to batches the records
@@ -25,11 +25,11 @@ namespace :redis_update do
       contents = Content.paginate_by_sql(query, :page => page, :per_page => batch_size)
       contents.each do |each_content|
         if !each_content.url.blank?
-          item_ids = each_content.item_ids.split(',')
-          item_ids = item_ids.first(50)
+          rel_item_ids = each_content.rel_item_ids.split(',')
+          rel_item_ids = rel_item_ids.first(50)
           # create content hash in redis-2
           #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
-          Resque.enqueue(UpdateRedis, "url:#{each_content.url}", "item_ids", item_ids.join(','), "id", each_content.id, "article_type", each_content.sub_type, "itemtype", each_content.itemtype_id, "count", 0)
+          Resque.enqueue(UpdateRedis, "url:#{each_content.url}", "item_ids", rel_item_ids.join(','), "id", each_content.id, "article_type", each_content.sub_type, "itemtype", each_content.itemtype_id, "count", 0)
         end
       end
 
@@ -50,9 +50,9 @@ namespace :redis_update do
       contents.each do |each_content|
         p each_content.url
         if !each_content.url.blank?
-          item_ids = each_content.item_ids.split(',')
-          item_ids = item_ids.first(50)
-          Resque.enqueue(UpdateRedis, "url:#{each_content.url}", "item_ids", item_ids.join(','))
+          rel_item_ids = each_content.rel_item_ids.split(',')
+          rel_item_ids = rel_item_ids.first(50)
+          Resque.enqueue(UpdateRedis, "url:#{each_content.url}", "item_ids", rel_item_ids.join(','))
         end
       end
       page += 1

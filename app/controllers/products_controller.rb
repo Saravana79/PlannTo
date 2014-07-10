@@ -1,20 +1,21 @@
 require "securerandom"
 
 class ProductsController < ApplicationController
-  caches_action :show,  :cache_path => Proc.new { |c| 
+  caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)
-      c.params.merge(user: 1) 
+      c.params.merge(user: 1)
     else
-      c.params.merge(user: 0) 
+      c.params.merge(user: 0)
     end
      }
 #  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
-  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }
+  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items]
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items]
   layout 'product'
   include FollowMethods
   include ItemsHelper
