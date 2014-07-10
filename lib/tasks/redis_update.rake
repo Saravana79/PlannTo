@@ -37,4 +37,26 @@ namespace :redis_update do
     end while !contents.empty?
   end
 
+  desc "One time task to load item_ids to content"
+  task :load_item_ids => :environment do
+    batch_size = 1000
+    query = "select c.id,ac.url, c.sub_type, c.itemtype_id, group_concat(distinct(item_id)) as item_ids from article_contents ac inner join contents c on c.id = ac.id inner join item_contents_relations_cache icc on icc.content_id = ac.id group by ac.id"
+
+# Using paginate_by_sql to batches the records
+
+    page = 1
+    begin
+      contents = Content.paginate_by_sql(query, :page => page, :per_page => batch_size)
+      contents.each do |each_content|
+        p each_content.url
+        if !each_content.url.blank?
+          item_ids = each_content.item_ids.split(',')
+          item_ids = item_ids.first(50)
+          Resque.enqueue(UpdateRedis, "url:#{each_content.url}", "item_ids", item_ids.join(','))
+        end
+      end
+      page += 1
+    end while !contents.empty?
+  end
+
 end
