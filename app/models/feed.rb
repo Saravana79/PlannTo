@@ -111,7 +111,7 @@ class Feed < ActiveRecord::Base
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count)
       else
-        new_count = check_exist_feed_url.missing_count + each_record.count
+        new_count = each_record.count
         check_exist_feed_url.update_attributes(:missing_count => new_count)
       end
     end

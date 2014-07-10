@@ -94,7 +94,12 @@ class ItemAdDetail < ActiveRecord::Base
 
 
         item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_item.item_id)
-        item_ad_detail.update_attributes(:ectr => ectr)
+        item_ad_detail.update_attributes!(:ectr => ectr)
+
+        # Redis items:"#{id}" update with impresssions, clicks and orders
+        redis_key = "items:#{item_ad_detail.id}"
+        redis_values = "impressions", item_ad_detail.impressions, "clicks", item_ad_detail.clicks, "orders", item_ad_detail.orders
+        $redis_rtb.HMSET(redis_key, redis_values)
       end
       page += 1
     end while !items.empty?
