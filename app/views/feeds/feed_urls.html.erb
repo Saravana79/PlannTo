@@ -226,6 +226,7 @@
         })
 
 
+        // For firefox
         $(document).keypress(function(e) {
             console.log(e.altKey)
             console.log(e.which)
@@ -254,6 +255,33 @@
             }
         });
 
+
+        // For chrome and Chromium
+
+        $(document).ready(function() {
+            // Other Bindings/Initializations Removed
+            // Hotkey Event Handler to 'doSomething'
+            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+            $(document).on("click", "[accesskey=o]", function() {
+                var url_val = $("#open_window").attr("href")
+                if (url_val != undefined)
+                    window.open(url_val, "_blank")
+            });
+
+            $(document).on("click", "[accesskey=n]", function() {
+                var next_div = $("#article_detail_form").parents(".display").next()
+                next_div.find(".feed_title").click()
+            });
+
+            $(document).on("click", "[accesskey=c]", function() {
+                $("#article_content_sub_type").focus()
+            });
+
+            $(document).on("click", "[accesskey=x]", function() {
+
+            });
+        });
 
     });
   </script>
