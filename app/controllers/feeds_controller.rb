@@ -1,6 +1,7 @@
 class FeedsController < ApplicationController
   layout false
-  before_filter :authenticate_admin_user!
+  before_filter :authenticate_admin_user!, :except => [:article_details]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:article_details]
 
   def index
     @feed = Feed.new()
