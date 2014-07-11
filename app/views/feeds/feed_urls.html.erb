@@ -248,10 +248,10 @@
                 else if(e.which == 120 || e.which == 8776) { //alt+x
                     $("#save_and_continue").click();
                 }
+                else if(e.which == 122 || e.which == 8706) { //alt+x
+                    $("#new_article_product").focus();
+                }
 
-            }
-            if(e.which == 13) {
-                alert('You pressed enter!');
             }
         });
 
@@ -285,6 +285,10 @@
             $(document).on("click", "[accesskey=b]", function() {
                 var next_div = $("#article_detail_form").parents(".display").next()
                 next_div.find(".feed_title").click()
+            });
+
+            $(document).on("click", "[accesskey=z]", function() {
+                $("#new_article_product").focus();
             });
         });
 
