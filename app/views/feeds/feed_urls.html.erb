@@ -226,6 +226,34 @@
         })
 
 
+        $(document).keypress(function(e) {
+            console.log(e.altKey)
+            console.log(e.which)
+
+            if (e.altKey)
+            {
+                if(e.which == 111) { //alt+o
+                    var url_val = $("#open_window").attr("href")
+                    if (url_val != undefined)
+                        window.open(url_val, "_blank")
+                }
+                else if(e.which == 110) { //alt+n
+                    var next_div = $("#article_detail_form").parents(".display").next()
+                    next_div.find(".feed_title").click()
+                }
+                else if(e.which == 99) { //alt+c
+                    $("#article_content_sub_type").focus()
+                }
+                else if(e.which == 120) { //alt+x
+                    $("#save_and_continue").click();
+                }
+
+            }
+            if(e.which == 13) {
+                alert('You pressed enter!');
+            }
+        });
+
 
     });
   </script>

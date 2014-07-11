@@ -28,7 +28,7 @@
           </div>
           <div class="url" style="clear:both;">
             <span style="width:75px;float:left;" class="title_header"><label for="url" style="width:100px;">Url :</label></span>
-            <span style="float:left;"><%= f.text_field :url , :style => "width:750px;"%> <%= link_to image_tag("/images/open-window.png",:style=>"width:15px;"), @article_content.url, :target => "_blank" %></span>
+            <span style="float:left;"><%= f.text_field :url , :style => "width:750px;"%> <%= link_to image_tag("/images/open-window.png",:style=>"width:15px;"), @article_content.url, :target => "_blank", :id => "open_window" %></span>
           </div>
 
           <div class="category" style="clear:both;">
@@ -99,7 +99,7 @@
           </div>
 
           <div class="page_buttons" style="clear:both;margin-left:40px;margin-bottom:20px;">
-            <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :accesskey => "s" %>
+            <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :accesskey => "s", :id => "save_and_continue" %>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid" accesskey="i">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel" accesskey="c">Cancel</a>
@@ -418,11 +418,13 @@
             if (title == "")
             {
                 alert('Please Enter Title.');
+                $("#article_content_title").focus()
                 return false;
             }
             else if (article_ids == "")
             {
                 alert('Please at least one product');
+                $("#new_article_product").focus()
                 return false;
             }
             else
