@@ -233,19 +233,19 @@
 
             if (e.altKey)
             {
-                if(e.which == 111) { //alt+o
+                if(e.which == 111 || e.which == 248) { //alt+o
                     var url_val = $("#open_window").attr("href")
                     if (url_val != undefined)
                         window.open(url_val, "_blank")
                 }
-                else if(e.which == 110) { //alt+n
+                else if(e.which == 110 || e.which == 8747) { //alt+n
                     var next_div = $("#article_detail_form").parents(".display").next()
                     next_div.find(".feed_title").click()
                 }
-                else if(e.which == 99) { //alt+c
+                else if(e.which == 99 || e.which == 231) { //alt+c
                     $("#article_content_sub_type").focus()
                 }
-                else if(e.which == 120) { //alt+x
+                else if(e.which == 120 || e.which == 8776) { //alt+x
                     $("#save_and_continue").click();
                 }
 
@@ -280,6 +280,11 @@
 
             $(document).on("click", "[accesskey=x]", function() {
 
+            });
+
+            $(document).on("click", "[accesskey=b]", function() {
+                var next_div = $("#article_detail_form").parents(".display").next()
+                next_div.find(".feed_title").click()
             });
         });
 
