@@ -228,8 +228,9 @@
 
         // For firefox
         $(document).keypress(function(e) {
-            console.log(e.altKey)
-            console.log(e.which)
+            console.log("altKey => "+ e.altKey)
+            console.log("which => "+ e.which)
+            console.log("keyCode =>"+ e.keyCode)
 
             if (e.altKey)
             {
@@ -248,50 +249,76 @@
                 else if(e.which == 120 || e.which == 8776) { //alt+x
                     $("#save_and_continue").click();
                 }
-                else if(e.which == 122 || e.which == 8706) { //alt+x
+                else if(e.which == 122 || e.which == 937) { //alt+z
                     $("#new_article_product").focus();
                 }
 
             }
+
+            if (e.ctrlKey)
+            {
+                if (e.keyCode == 13)
+                {
+                    return false;
+                }
+            }
         });
 
+        $(document.body).bind('keydown',function(e){
+            if (e.ctrlKey)
+            {
+                if (e.keyCode == 40)
+                {
+                    var next_div = $("#article_detail_form").parents(".display").next()
+                    next_div.find(".feed_title").click()
+                }
+                else if (e.keyCode == 38)
+                {
+                    var prev_div = $("#article_detail_form").parents(".display").prev().prev().prev()
+                    prev_div.find(".feed_title").click()
+                }
+                else if (e.keyCode == 10 || e.keyCode == 13)
+                {
+                    $("#save_and_continue").click();
+                }
+            }
+        });
+    });
 
-        // For chrome and Chromium
+    // For chrome and Chromium
 
-        $(document).ready(function() {
-            // Other Bindings/Initializations Removed
-            // Hotkey Event Handler to 'doSomething'
-            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    $(document).ready(function() {
+        // Other Bindings/Initializations Removed
+        // Hotkey Event Handler to 'doSomething'
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-            $(document).on("click", "[accesskey=o]", function() {
-                var url_val = $("#open_window").attr("href")
-                if (url_val != undefined)
-                    window.open(url_val, "_blank")
-            });
-
-            $(document).on("click", "[accesskey=n]", function() {
-                var next_div = $("#article_detail_form").parents(".display").next()
-                next_div.find(".feed_title").click()
-            });
-
-            $(document).on("click", "[accesskey=c]", function() {
-                $("#article_content_sub_type").focus()
-            });
-
-            $(document).on("click", "[accesskey=x]", function() {
-
-            });
-
-            $(document).on("click", "[accesskey=b]", function() {
-                var next_div = $("#article_detail_form").parents(".display").next()
-                next_div.find(".feed_title").click()
-            });
-
-            $(document).on("click", "[accesskey=z]", function() {
-                $("#new_article_product").focus();
-            });
+        $(document).on("click", "[accesskey=o]", function() {
+            var url_val = $("#open_window").attr("href")
+            if (url_val != undefined)
+                window.open(url_val, "_blank")
         });
 
+        $(document).on("click", "[accesskey=n]", function() {
+            var next_div = $("#article_detail_form").parents(".display").next()
+            next_div.find(".feed_title").click()
+        });
+
+        $(document).on("click", "[accesskey=c]", function() {
+            $("#article_content_sub_type").focus()
+        });
+
+        $(document).on("click", "[accesskey=x]", function() {
+
+        });
+
+        $(document).on("click", "[accesskey=b]", function() {
+            var next_div = $("#article_detail_form").parents(".display").next()
+            next_div.find(".feed_title").click()
+        });
+
+        $(document).on("click", "[accesskey=z]", function() {
+            $("#new_article_product").focus();
+        });
     });
   </script>
   </body>

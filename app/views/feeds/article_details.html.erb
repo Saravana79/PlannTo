@@ -99,7 +99,7 @@
           </div>
 
           <div class="page_buttons" style="clear:both;margin-left:40px;margin-bottom:20px;">
-            <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :accesskey => "x", :id => "save_and_continue" %>
+            <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :id => "save_and_continue" %>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid" accesskey="i">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel" accesskey="c">Cancel</a>
@@ -110,6 +110,7 @@
           <a accesskey="o" />
           <a accesskey="b" />
           <a accesskey="z" />
+          <a accesskey="x" />
           <div class='empty_div'>
 
           </div>
@@ -167,6 +168,7 @@
         })
 
         $("document").ready(function () {
+            $("#article_content_sub_type").focus()
 //            var data =
             <!--<%#= raw @results.to_json %>-->
 
