@@ -23,7 +23,7 @@
                   <%else%>
                       <div class="product-container" style="border-bottom:0px;">
                   <%  end %>
-                    <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(47) %></h3>
+                    <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
                     <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
                       <a href="javascript:void(0)">
