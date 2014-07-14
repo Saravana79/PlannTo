@@ -1,4 +1,8 @@
 class AddImpression < ActiveRecord::Base
+  require 'base64'
+  require 'facets/string/xor'
+  require 'openssl'
+
   include ActiveUUID::UUID
   self.primary_key = "id"
   
@@ -48,9 +52,14 @@ class AddImpression < ActiveRecord::Base
  end
 
   def self.get_winning_price_value(winning_price_enc)
-    google_adx_encryption_key = "A3kD/CgaaDwrkYT+l8Fn3BSoCPS+nnJ2EdJc+EwOa/E="
-    google_adx_integrity_key = "Qbpmbfcih39Z64lodZXJ5Gn8ABQgUS09wMrGRk6rEaM="
+    google_adx_encryption_key = "\x03\x79\x03\xfc\x28\x1a\x68\x3c\x2b\x91\x84\xfe\x97\xc1\x67\xdc\x14\xa8\x08\xf4\xbe\x9e\x72\x76\x11\xd2\x5c\xf8\x4c\x0e\x6b\xf1"
+    google_adx_integrity_key  = "\x41\xba\x66\x6d\xf7\x22\x87\x7f\x59\xeb\x89\x68\x75\x95\xc9\xe4\x69\xfc\x00\x14\x20\x51\x2d\x3d\xc0\xca\xc6\x46\x4e\xab\x11\xa3"
     enc_data = adx_websafe_pad(winning_price_enc)
+    #
+    # google_adx_encryption_key = "\xb0\x8c\x70\xcf\xbc\xb0\xeb\x6c\xab\x7e\x82\xc6\xb7\x5d\xa5\x20\x72\xae\x62\xb2\xbf\x4b\x99\x0b\xb8\x0a\x48\xd8\x14\x1e\xec\x07"
+    # google_adx_integrity_key  = "\xbf\x77\xec\x55\xc3\x01\x30\xc1\xd8\xcd\x18\x62\xed\x2a\x4c\xd2\xc7\x6a\xc3\x3b\xc0\xc4\xce\x8a\x3d\x3b\xbd\x3a\xd5\x68\x77\x92"
+    # enc_data = adx_websafe_pad('SjpvRwAB4kB7jEpgW5IA8p73ew9ic6VZpFsPnA')
+
     adx_decrypt(enc_data,google_adx_encryption_key,google_adx_integrity_key)
   end
 
@@ -80,7 +89,7 @@ class AddImpression < ActiveRecord::Base
       pad = OpenSSL::HMAC.digest(digest, enc_key, iv)
       i = 0
       while (i<20 and ciphertext_begin != ciphertext_end) do
-        plaintext[plaintext_begin] = ciphertext[ciphertext_begin].to_i ^ pad[i].to_i
+        plaintext[plaintext_begin] = ciphertext[ciphertext_begin] ^ pad[i]
         plaintext_begin+=1
         ciphertext_begin+=1
         i+=1
