@@ -4,7 +4,8 @@
   <div class="advt-120">
     <% if @sliced_item_details.count != 0 %>
          <div class="planntoadlogo">
-          <img style="width: 12px;" src="http://www.plannto.com/images/logosc.png"></div>
+           <%= link_to image_tag("http://www.plannto.com/images/logosc.png", :width => "12px"), APP_URL + "/opt_out", :target => "_blank" %>
+         </div>
         <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt="" width="100px" height="32px"></a></div>
         <div id="pager2" class="pager">
           <% if @item_details.count > 2 %>
@@ -18,11 +19,7 @@
               <div class="item_details" id="item_detail_<%= indx + 1 %>">
                 <% if sliced_item_detail.count > 1 %>
               <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
-                  <%if (itindex == 0) %>
-                       <div class="product-container">
-                  <%else%>
-                      <div class="product-container" style="border-bottom:0px;">
-                  <%  end %>
+                    <div class="product-container" style="<%= itindex == 0 ? "" : "border-bottom:0px;" %>">
                     <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
                     <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
