@@ -41,7 +41,7 @@ class AddImpression < ActiveRecord::Base
    rescue
      ai.winning_price = obj_params[:winning_price]
    end
-   ai.sid = obj_params[:sid]
+   # ai.sid = obj_params[:sid] # TODO: have to update later
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
@@ -80,7 +80,7 @@ class AddImpression < ActiveRecord::Base
       pad = OpenSSL::HMAC.digest(digest, enc_key, iv)
       i = 0
       while (i<20 and ciphertext_begin != ciphertext_end) do
-        plaintext[plaintext_begin] = ciphertext[ciphertext_begin] ^ pad[i]
+        plaintext[plaintext_begin] = ciphertext[ciphertext_begin].to_i ^ pad[i].to_i
         plaintext_begin+=1
         ciphertext_begin+=1
         i+=1
@@ -100,7 +100,7 @@ class AddImpression < ActiveRecord::Base
     sig = ciphertext[24..27]
     int_key = google_adx_integrity_key
     digest = OpenSSL::Digest.new('sha1')
-    conf_sig = OpenSSL::HMAC.digest(digest, int_key, plaintext.join('')+ciphertext[0..15])
+    p conf_sig = OpenSSL::HMAC.digest(digest, int_key, plaintext.join('')+ciphertext[0..15])
     if conf_sig[0..3]==sig
       j =plaintext.join("")
       p j.unpack("H*").first.to_i(16).to_s(10)
