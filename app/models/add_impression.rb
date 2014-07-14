@@ -45,7 +45,7 @@ class AddImpression < ActiveRecord::Base
    rescue
      ai.winning_price = obj_params[:winning_price]
    end
-   # ai.sid = obj_params[:sid] # TODO: have to update later
+   ai.old_id = obj_params[:sid] # TODO: have to update to sid later
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
