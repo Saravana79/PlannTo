@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140528092450) do
+ActiveRecord::Schema.define(:version => 20140714055304) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -29,9 +29,18 @@ ActiveRecord::Schema.define(:version => 20140528092450) do
     t.string   "params"
     t.string   "temp_user_id"
     t.integer  "old_id"
+    t.text     "winning_price_enc"
+    t.float    "winning_price"
+    t.string   "sid"
   end
 
+  add_index "add_impressions", ["advertisement_id"], :name => "index_add_impressions_on_advertisement_id"
+  add_index "add_impressions", ["advertisement_type"], :name => "index_add_impressions_on_advertisement_type"
+  add_index "add_impressions", ["impression_id"], :name => "index_add_impressions_on_impression_id"
+  add_index "add_impressions", ["impression_time"], :name => "index_add_impressions_on_impression_time"
+  add_index "add_impressions", ["item_id"], :name => "index_add_impressions_on_item_id"
   add_index "add_impressions", ["publisher_id"], :name => "publihserid"
+  add_index "add_impressions", ["user_id"], :name => "index_add_impressions_on_user_id"
 
   create_table "advertisements", :force => true do |t|
     t.string   "name"
@@ -235,6 +244,8 @@ ActiveRecord::Schema.define(:version => 20140528092450) do
     t.integer  "advertisement_id"
   end
 
+  add_index "clicks", ["advertisement_id"], :name => "index_clicks_on_advertisement_id"
+
   create_table "comments", :force => true do |t|
     t.string   "title",            :limit => 50, :default => ""
     t.text     "comment"
@@ -284,6 +295,7 @@ ActiveRecord::Schema.define(:version => 20140528092450) do
     t.float    "ectr"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "orders"
   end
 
   create_table "content_as_items", :force => true do |t|
@@ -426,8 +438,9 @@ ActiveRecord::Schema.define(:version => 20140528092450) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "published_at"
-    t.string   "images",       :default => ""
-    t.integer  "priorities",   :default => 3
+    t.string   "images",        :default => ""
+    t.integer  "priorities",    :default => 3
+    t.integer  "missing_count", :default => 0
   end
 
   create_table "feeds", :force => true do |t|
@@ -574,6 +587,7 @@ ActiveRecord::Schema.define(:version => 20140528092450) do
     t.integer  "old_version_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "orders"
   end
 
   create_table "item_attribute_tag_relations", :force => true do |t|
@@ -799,6 +813,20 @@ ActiveRecord::Schema.define(:version => 20140528092450) do
     t.uuid     "impression_id"
     t.integer  "old_impression_id"
     t.datetime "payment_date"
+    t.integer  "payment_report_id"
+  end
+
+  create_table "payment_reports", :force => true do |t|
+    t.integer  "publisher_id"
+    t.datetime "payment_date"
+    t.float    "commission_amount"
+    t.float    "tax_amount"
+    t.float    "final_amount"
+    t.string   "payment_method"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "plannto_percentage"
+    t.float    "plannto_amount"
   end
 
   create_table "points", :force => true do |t|

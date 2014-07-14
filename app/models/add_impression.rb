@@ -41,6 +41,7 @@ class AddImpression < ActiveRecord::Base
    rescue
      ai.winning_price = obj_params[:winning_price]
    end
+   ai.sid = obj_params[:sid]
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
@@ -225,10 +226,10 @@ class AddImpression < ActiveRecord::Base
    end
  end
 
-  def self.add_impression_to_resque(impression_type, item_id, request_referer, user, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc)
+  def self.add_impression_to_resque(impression_type, item_id, request_referer, user, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil)
     impression_id = SecureRandom.uuid
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
-                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => 0.0, :winning_price_enc => winning_price_enc}.to_json
+                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => 0.0, :winning_price_enc => winning_price_enc, :sid => sid}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
     # AddImpression.create_new_record(impression_params)
     return impression_id

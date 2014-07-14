@@ -186,7 +186,8 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.release_unspent_rtb_budget(account_name)
-    payload = {"USD/1M" => configatron.rtb_initial_budget}.to_json
+    inflight = 75000
+    payload = { "USD/1M" => configatron.rtb_initial_budget + inflight }.to_json
     post_budget(account_name, payload)
   end
 
