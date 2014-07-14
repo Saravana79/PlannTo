@@ -109,7 +109,7 @@ class AddImpression < ActiveRecord::Base
     sig = ciphertext[24..27]
     int_key = google_adx_integrity_key
     digest = OpenSSL::Digest.new('sha1')
-    p conf_sig = OpenSSL::HMAC.digest(digest, int_key, plaintext.join('')+ciphertext[0..15])
+    conf_sig = OpenSSL::HMAC.digest(digest, int_key, plaintext.join('')+ciphertext[0..15])
     if conf_sig[0..3]==sig
       j =plaintext.join("")
       p j.unpack("H*").first.to_i(16).to_s(10)
@@ -238,7 +238,7 @@ class AddImpression < ActiveRecord::Base
   def self.add_impression_to_resque(impression_type, item_id, request_referer, user, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil)
     impression_id = SecureRandom.uuid
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now, :user => user.blank? ? nil : user.id, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
-                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => 0.0, :winning_price_enc => winning_price_enc, :sid => sid}.to_json
+                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => nil, :winning_price_enc => winning_price_enc, :sid => sid}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
     # AddImpression.create_new_record(impression_params)
     return impression_id

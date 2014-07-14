@@ -1307,7 +1307,7 @@ end
         @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
         @items = Item.where(:id => item_ids) if @items.blank?
       end
-      url = request.referer
+      url = url.blank? ? request.referer : url
     else
       unless $redis.get("#{url}ad_or_widget_item_ids").blank?
         # @items = Item.where("id in (?)", $redis.get("#{url}ad_or_widget_item_ids").split(","))
