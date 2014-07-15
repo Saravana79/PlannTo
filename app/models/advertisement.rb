@@ -186,7 +186,11 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.release_unspent_rtb_budget(account_name)
-    inflight = 75000
+    summary_url = "#{configatron.rtbkit_hostname}/v1/accounts/#{account_name}/summary"
+    account = RestClient.get summary_url
+    account_hash = JSON.parse(account)
+    inflight = account_hash["inFlight"]["USD/1M"].to_i
+
     payload = { "USD/1M" => configatron.rtb_initial_budget + inflight }.to_json
     post_budget(account_name, payload)
   end
