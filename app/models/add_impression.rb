@@ -38,14 +38,14 @@ class AddImpression < ActiveRecord::Base
 
    # save advertisement id
    ai.advertisement_id = obj_params[:ad_id]
-   ai.winning_price_enc = obj_params[:winning_price_enc]
+   # ai.winning_price_enc = obj_params[:winning_price_enc] # removed from db
    begin
      winning_price = obj_params[:winning_price_enc].blank? ? nil : get_winning_price_value(obj_params[:winning_price_enc])
      ai.winning_price = winning_price
    rescue
      ai.winning_price = obj_params[:winning_price]
    end
-   ai.old_id = obj_params[:sid] # TODO: have to update to sid later
+   ai.sid = obj_params[:sid]
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
