@@ -103,12 +103,13 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().next();
         parentDiv = element_id.parent().parent().parent().parent().parent().parent().parent().attr('id');
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","", true);
+        var pathname = PlannTo.jQuery(document).referrer;
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,pathname,"","", true);
         event.preventDefault();
     
   }
 
-    PlannTo.onclick_function = function onclick_function(id, obj,moredetails)
+    PlannTo.onclick_function = function onclick_function(id, obj,moredetails, pathname)
     {
         var item_id =  id;
         var show_details = moredetails;
@@ -117,7 +118,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         PlannTo.jQuery(obj).closest("li.pldropdown").addClass('active')
         var element_id = PlannTo.jQuery(obj).parents("table#plannto_intable").find("tbody#where_to_buy_items_onchange")
         parentDiv = "where_to_buy_items1"
-        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,"pathname","","", true);
+        planntowtbdivcreation (item_id,show_details,"onchange",element_id,parentDiv,pathname,"","", true);
 //        event.preventDefault();
 
     }

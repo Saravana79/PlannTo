@@ -28,7 +28,7 @@ class FeedUrl < ActiveRecord::Base
   def self.process_missing_url(missingurl_keys=[])
     missingurl_keys.each do |each_url_key|
       missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
-      if missingurl_count.to_i > 300
+      if missingurl_count.to_i > 200
         if feed_url_id.blank?
           missing_url = each_url_key.split("missingurl:")[1]
 

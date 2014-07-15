@@ -249,6 +249,7 @@ class ProductsController < ApplicationController
       itemsaccess = "none"
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
+    @ref_url = url
     jsonp = prepare_response_json()
     render :text => jsonp, :content_type => "text/javascript"
   end
