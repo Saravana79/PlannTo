@@ -85,6 +85,6 @@ gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'
 gem 'highcharts-rails', '~> 3.0.10'
 gem 'activeuuid'
-gem 'newrelic_rpm'
+# gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
 gem "facets", require: false
