@@ -65,14 +65,7 @@ module Admin::AdvertisementsHelper
   def set_cookie_for_temp_user_and_url_params_process(param)
     cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
 
-    url_params = "Params = "
-    param = param.reject {|s| ["controller", "action"].include?(s)}
-    keys = param.keys
-    values = param.values
-
-    [*0...keys.count].each do |each_val|
-      url_params = url_params + "#{keys[each_val]}-#{values[each_val]};"
-    end
+    url_params = Advertisement.make_url_params(param)
     return url_params
   end
 

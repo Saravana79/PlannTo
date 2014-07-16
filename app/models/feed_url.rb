@@ -103,11 +103,11 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.get_missing_keys_from_redis(macth)
+  def self.get_missing_keys_from_redis(match)
     exp_val = []
     next_val = 0
     begin
-      redis_val = $redis_rtb.scan(next_val, match: macth, count: 300)
+      redis_val = $redis_rtb.scan(next_val, match: match, count: 300)
       next_val = redis_val[0].to_i
       val = redis_val[1]
       exp_val << val
