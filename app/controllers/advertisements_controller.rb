@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.xhr? }
-  caches_action :show_ads, :cache_path => proc {|c|  param = c.params; param[:item_id].blank? ? param.slice("ads_id", "size", "more_vendors", "ref_url") : param.slice("item_id", "ads_id", "size", "more_vendors") }, :expires_in => 2.hours, :if => lambda { !request.format.json? }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url") : params.slice("item_id", "ads_id", "size", "more_vendors") }, :expires_in => 2.hours, :if => proc { |s| !request.xhr? }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -150,13 +150,14 @@ class AdvertisementsController < ApplicationController
  private
 
   def create_impression_before_show_ads
-    host_name = APP_URL.gsub(/(http|https):\/\/(\s|www\.|)/, '')
+    host_name = APP_URL.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
       cache_key = "views/#{host_name}/advertisements/show_ads?ads_id=#{params[:ads_id]}&more_vendors=#{params[:more_vendors]}&ref_url=#{params[:ref_url]}&size=#{params[:size]}"
     else
       cache_key = "views/#{host_name}/advertisements/show_ads?ads_id=#{params[:ads_id]}&item_id=#{params[:item_id]}&more_vendors=#{params[:more_vendors]}&size=#{params[:size]}"
     end
 
+    logger.info cache_key
     cache = Rails.cache.read(cache_key)
     unless cache.blank?
       url_params = set_cookie_for_temp_user_and_url_params_process(params)

@@ -249,6 +249,7 @@ class Advertisement < ActiveRecord::Base
       url_params = url_params + "#{keys[each_val].to_s}-#{values[each_val].to_s};"
     end
 
+    url_params
   end
 
   def self.assign_url_and_item_access(ref_url, request_referer)
