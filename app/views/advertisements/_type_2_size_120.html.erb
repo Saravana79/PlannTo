@@ -19,7 +19,7 @@
               <div class="item_details" id="item_detail_<%= indx + 1 %>">
                 <% if sliced_item_detail.count > 1 %>
               <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
-                    <div class="product-container" style="<%= itindex == 0 ? "" : "border-bottom:0px;" %>">
+                    <div class="product-container" >
                     <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
                     <p class="price"><%= prettify(item_detail) %></p>
                     <div class="product-img">
