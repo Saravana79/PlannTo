@@ -1,7 +1,7 @@
 class MissingurlProcess
   @queue = :missing_record_process
 
-  def self.perform(method_name, actual_time)
+  def self.perform(method_name, actual_time, count, invalid_urls, valid_urls, missing_ad, force)
     log = Logger.new 'log/missing_record_process.log'
     #begin
     log.debug "********** Start Processing Missingurl **********"
@@ -9,7 +9,14 @@ class MissingurlProcess
 
     now_time = actual_time.to_time
 
-    FeedUrl.send(method_name, log)
+    invalid_urls = invalid_urls.to_s.split(",")
+    valid_urls = valid_urls.to_s.split(",")
+
+    if (force.to_s == "false" && now_time.hour % 2 == 0)
+      FeedUrl.send(method_name, log, count, invalid_urls, valid_urls, missing_ad)
+    else
+      FeedUrl.send(method_name, log, count, invalid_urls, valid_urls, missing_ad)
+    end
 
     #rescue Exception => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"

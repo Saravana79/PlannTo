@@ -1,11 +1,7 @@
 class FeedUrl < ActiveRecord::Base
   belongs_to :feed
 
-  def self.update_by_missing_records(log)
-    # process for missingurl
-    missingurl_keys = get_missing_keys_from_redis('missingurl*')
-    process_missing_url(missingurl_keys)
-
+  def self.update_by_missing_records(log, count, invalid_urls, valid_urls, missing_ad)
     # separate missingurl and missingad
     # missingurl_keys = []
     # missingad_keys = []
@@ -17,18 +13,73 @@ class FeedUrl < ActiveRecord::Base
     #   end
     # end
 
+    unless invalid_urls.blank?
+      invalid_urls = invalid_urls.delete_if {|x| x.blank?}
+      missing_invalid_url_keys = []
+      invalid_urls.each do |each_url|
+         collected_urls = get_missing_keys_from_redis("missingurl*#{each_url}*")
+         missing_invalid_url_keys << collected_urls
+      end
+      missing_invalid_url_keys = missing_invalid_url_keys.flatten
+      process_invalid_missing_url(missing_invalid_url_keys, count)
+    end
+
+    unless valid_urls.blank?
+      # process for missingurl
+      valid_urls = valid_urls.delete_if {|x| x.blank?}
+      missingurl_keys = []
+      valid_urls.each do |each_url|
+        match_url =  each_url == "missingurl*" ? "missingurl*" : "missingurl*#{each_url}*"
+        collected_urls = get_missing_keys_from_redis(match_url)
+        missingurl_keys << collected_urls
+      end
+      missingurl_keys = missingurl_keys.flatten
+      process_missing_url(missingurl_keys, count)
+    end
+
     # Process missingad
-    now_time = Time.zone.now.hour
-    if [2,3].include?(now_time)
+    if missing_ad.to_s == "true"
       missingad_keys = get_missing_keys_from_redis('missingad*')
-      process_missing_ad(missingad_keys)
+      process_missing_ad(missingad_keys, count)
     end
   end
 
-  def self.process_missing_url(missingurl_keys=[])
+  def self.process_invalid_missing_url(missing_invalid_url_keys, count)
+    feed = Feed.where("process_type = 'missingurl'").last
+    missing_invalid_url_keys.each do |each_url_key|
+      missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
+      if missingurl_count.to_i > count.to_i
+        if feed_url_id.blank?
+          missing_url = each_url_key.split("missingurl:")[1]
+
+          check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+          if check_exist_feed_url.blank?
+            source = ""
+            if (missing_url =~ URI::regexp).blank?
+              source = ""
+              status = 3
+            else
+              source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+            end
+
+            new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: "", category: "Others",
+                                          status: 3, source: source, summary: "", :images => "",
+                                          :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count)
+
+            $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
+          end
+        else
+          $redis_rtb.hset(each_url_key, "count", 0) if Rails.env == "production"
+        end
+      end
+    end
+  end
+
+  def self.process_missing_url(missingurl_keys=[], count)
+    feed = Feed.where("process_type = 'missingurl'").last
     missingurl_keys.each do |each_url_key|
       missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
-      if missingurl_count.to_i > 200
+      if missingurl_count.to_i > count.to_i
         if feed_url_id.blank?
           missing_url = each_url_key.split("missingurl:")[1]
 
@@ -65,8 +116,6 @@ class FeedUrl < ActiveRecord::Base
             title = title.to_s.gsub(/\s(-|\|).+/, '')
             title = title.blank? ? "" : title.to_s.strip
 
-            feed = Feed.where("process_type = 'missingurl'").last
-
             new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
                                           status: status, source: source, summary: description, :images => images,
                                           :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count)
@@ -87,10 +136,10 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.process_missing_ad(missingad_keys)
+  def self.process_missing_ad(missingad_keys, count)
     missingad_keys.each do |each_ad_key|
       missingad_count = $redis_rtb.hget(each_ad_key, 'count')
-      if missingad_count.to_i > 500
+      if missingad_count.to_i > count.to_i
         missing_ad_url = each_ad_key.split("missingad:")[1]
 
         missing_ad_detail = MissingAdDetail.find_or_initialize_by_url(:url => missing_ad_url)

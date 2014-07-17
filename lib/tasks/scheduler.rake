@@ -37,11 +37,11 @@ task :content_ad_detail_process => :environment do
   Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now, 1000, Time.now)
 end
 
-task :missing_url_process => :environment do
+desc "missing url process with example: force=true, count=200, valid_urls='fonearena.com,gadgetstouse.com,..', invalid_urls='www.cnet.com,www.xxx.com,..', missing_ad=false"
+task :missing_url_process, [:force, :count, :valid_urls, :invalid_urls, :missing_ad] => :environment do |_, args|
+  args.with_defaults(:force => false, :count => 200, :valid_urls => "missingurl*", :invalid_urls => "download.cnet.com", :missing_ad => false)
   puts "Running Missingurl Process, at #{Time.zone.now}"
-  if (Time.zone.now.hour % 2 == 0)
-    Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now)
-  end
+  Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now, args[:count], args[:invalid_urls], args[:valid_urls], args[:missing_ad], args[:force])
 end
 
 task :rtb_budget_update_process => :environment do
