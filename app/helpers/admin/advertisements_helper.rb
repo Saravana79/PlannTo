@@ -2,7 +2,7 @@ module Admin::AdvertisementsHelper
   def get_offer_for_ad(ad, item_detail, vendor_default_text, text_size=80, shop_now_url=nil)
     if !ad.blank? && !ad.expiry_date.blank? && ad.expiry_date <= Date.today && !ad.offer.blank?
       url = ad.offer_url.blank? ? shop_now_url : ad.offer_url
-      return_val = "<a href='#{url}' >#{truncate_without_dot(ad.offer, text_size)}</a>"
+      return_val = "<a href='#{url}' id='offer_ad' target='_blank' >#{truncate_without_dot(ad.offer, text_size)}</a>"
     else
       return_val = item_detail.offer.blank? ? truncate_without_dot(vendor_default_text.to_s, text_size) : truncate_without_dot(item_detail.offer.to_s, text_size)
     end

@@ -2,8 +2,8 @@ class AdvertisementsController < ApplicationController
   include Admin::AdvertisementsHelper
   layout "product"
 
-  before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.xhr? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url") : params.slice("item_id", "ads_id", "size", "more_vendors") }, :expires_in => 2.hours, :if => proc { |s| !request.xhr? && params[:is_test] != "true" }
+  before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.format.json? }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url") : params.slice("item_id", "ads_id", "size", "more_vendors") }, :expires_in => 2.hours, :if => proc { |s| !request.format.json? && params[:is_test] != "true" }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -161,8 +161,8 @@ class AdvertisementsController < ApplicationController
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
         url_params = set_cookie_for_temp_user_and_url_params_process(params)
-        impression_type = param[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], param[:ads_id])
+        impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], params[:ads_id])
 
         cache = cache.gsub(/iid=\S+&/, "iid=#{@impression_id}&")
         return render :text => cache.html_safe
