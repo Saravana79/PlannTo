@@ -41,7 +41,7 @@ desc "missing url process with example: force=true, count=200, valid_urls='fonea
 task :missing_url_process, [:force, :count, :valid_urls, :invalid_urls, :missing_ad] => :environment do |_, args|
   args.with_defaults(:force => false, :count => 200, :valid_urls => "missingurl*", :invalid_urls => "download.cnet.com", :missing_ad => false)
   puts "Running Missingurl Process, at #{Time.zone.now}"
-  Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now, args[:count], args[:invalid_urls], args[:valid_urls], args[:missing_ad], args[:force])
+  Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now, args[:force], args[:count], args[:valid_urls], args[:invalid_urls], args[:missing_ad])
 end
 
 task :rtb_budget_update_process => :environment do

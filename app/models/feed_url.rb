@@ -1,7 +1,7 @@
 class FeedUrl < ActiveRecord::Base
   belongs_to :feed
 
-  def self.update_by_missing_records(log, count, invalid_urls, valid_urls, missing_ad)
+  def self.update_by_missing_records(log, count, valid_urls, invalid_urls, missing_ad)
     # separate missingurl and missingad
     # missingurl_keys = []
     # missingad_keys = []
@@ -14,7 +14,7 @@ class FeedUrl < ActiveRecord::Base
     # end
 
     unless invalid_urls.blank?
-      invalid_urls = invalid_urls.delete_if {|x| x.blank?}
+      invalid_urls = invalid_urls.delete_if {|x| (x.blank? || x == "nil")}
       missing_invalid_url_keys = []
       invalid_urls.each do |each_url|
          collected_urls = get_missing_keys_from_redis("missingurl*#{each_url}*")
@@ -26,7 +26,7 @@ class FeedUrl < ActiveRecord::Base
 
     unless valid_urls.blank?
       # process for missingurl
-      valid_urls = valid_urls.delete_if {|x| x.blank?}
+      valid_urls = valid_urls.delete_if {|x| (x.blank? || x == "nil")}
       missingurl_keys = []
       valid_urls.each do |each_url|
         match_url =  each_url == "missingurl*" ? "missingurl*" : "missingurl*#{each_url}*"
