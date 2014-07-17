@@ -157,11 +157,14 @@ class AdvertisementsController < ApplicationController
       cache_key = "views/#{host_name}/advertisements/show_ads?ads_id=#{params[:ads_id]}&item_id=#{params[:item_id]}&more_vendors=#{params[:more_vendors]}&size=#{params[:size]}"
     end
 
-    logger.info cache_key
     cache = Rails.cache.read(cache_key)
     unless cache.blank?
+      logger.info request.referer
+      logger.info Benchmark.measure { request.referer }
+      logger.info request.remote_ip
+      logger.info Benchmark.measure { request.remote_ip }
       url_params = set_cookie_for_temp_user_and_url_params_process(params)
-      @impression_id = Advertisement.create_impression_for_show_ads(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip)
+      # @impression_id = Advertisement.create_impression_for_show_ads(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip)
 
       cache = cache.gsub(/iid=\S+&/, "iid=#{@impression_id}&")
       Rails.cache.write(cache_key, cache)
