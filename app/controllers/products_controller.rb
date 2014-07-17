@@ -1,6 +1,9 @@
 require "securerandom"
 
 class ProductsController < ApplicationController
+  before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
+  caches_action :where_to_buy_items, :cache_path => proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
+
   caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)
       c.params.merge(user: 1)
@@ -492,10 +495,37 @@ class ProductsController < ApplicationController
     end
   end
 
+  def create_impression_before_widgets
+    host_name = APP_URL.gsub(/(http|https):\/\//, '')
+    if params[:item_ids].blank?
+      cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&ref_url=#{params[:ref_url]}&sort_disable=#{params[:sort_disable]}.js"
+    else
+      cache_key = "views/#{host_name}/where_to_buy_items.js?item_ids=#{params[:item_ids]}&path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&sort_disable=#{params[:sort_disable]}.js"
+    end
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        cache = reset_json_callback(cache, params[:callback])
+        url_params = set_cookie_for_temp_user_and_url_params_process(params)
+        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", params[:item_ids], nil)
+
+        cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
+        return render :text => cache.html_safe
+        ## Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
 
   private
 
   def get_item_object
     @item = Item.find(params[:id])
+  end
+
+  def reset_json_callback(cache, callback)
+    cache = cache.sub(/^\w+\((.*)\)$/, '\1')
+    cache = callback.present? ? "#{callback}(#{cache})" : cache
+    return cache
   end
 end
