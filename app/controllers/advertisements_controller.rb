@@ -162,8 +162,8 @@ class AdvertisementsController < ApplicationController
       url_params = set_cookie_for_temp_user_and_url_params_process(params)
       @impression_id = Advertisement.create_impression_for_show_ads(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip)
 
-      cache = cache.gsub(/iid=\S+&/, "iid=#{@impression_id}&")
-      Rails.cache.write(cache_key, cache)
+      # cache = cache.gsub(/iid=\S+&/, "iid=#{@impression_id}&")
+      # Rails.cache.write(cache_key, cache)
     end
   end
 
