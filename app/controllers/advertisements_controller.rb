@@ -2,7 +2,7 @@ class AdvertisementsController < ApplicationController
   include Admin::AdvertisementsHelper
   layout "product"
 
-  before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.xhr? }
+  # before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.xhr? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url") : params.slice("item_id", "ads_id", "size", "more_vendors") }, :expires_in => 2.hours, :if => proc { |s| !request.xhr? }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   def show_ads
