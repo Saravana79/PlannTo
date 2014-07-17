@@ -163,7 +163,7 @@ class AdvertisementsController < ApplicationController
       @impression_id = Advertisement.create_impression_for_show_ads(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip)
 
       cache = cache.gsub(/iid=\S+&/, "iid=#{@impression_id}&")
-      return render :text => cache.html_safe
+      # return render :text => cache.html_safe
       # Rails.cache.write(cache_key, cache)
     end
   end
