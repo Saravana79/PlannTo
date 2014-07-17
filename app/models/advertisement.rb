@@ -234,8 +234,8 @@ class Advertisement < ActiveRecord::Base
     impression_type = param[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
     param[:ref_url] ||= ""
     url, itemsaccess = assign_url_and_item_access(param[:ref_url], request_referer)
-    @impression_id = AddImpression.add_impression_to_resque(impression_type, param[:item_ids], url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                            plan_to_temp_user_id, param[:ads_id], param[:winning_price_enc], param[:sid]) if param[:is_test] != "true"
+    # @impression_id = AddImpression.add_impression_to_resque(impression_type, param[:item_ids], url, user_id, remote_ip, nil, itemsaccess, url_params,
+    #                                                         plan_to_temp_user_id, param[:ads_id], param[:winning_price_enc], param[:sid]) if param[:is_test] != "true"
     return @impression_id
   end
 
