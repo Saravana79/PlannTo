@@ -231,10 +231,6 @@ class ProductsController < ApplicationController
   end
 
    def where_to_buy_items
-     p 999999999999999999999999999
-     logger.info 999999999999999999999999999
-     p request.referer
-     logger.info request.referer
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
@@ -514,6 +510,7 @@ class ProductsController < ApplicationController
     host_name = APP_URL.gsub(/(http|https):\/\//, '')
     if (params[:item_ids].blank? && params[:ref_url].blank?)
       # param = param.merge!(:request_referer => request.referer)
+      params[:request_referer] = request.referer
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&request_referer=#{params[:request_referer]}&sort_disable=#{params[:sort_disable]}.js"
     elsif params[:item_ids].blank?
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&ref_url=#{params[:ref_url]}&sort_disable=#{params[:sort_disable]}.js"
