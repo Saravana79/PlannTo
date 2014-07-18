@@ -220,6 +220,10 @@ class ProductsController < ApplicationController
   end
 
    def where_to_buy_items
+     p 999999999999999999999999999
+     logger.info 999999999999999999999999999
+     p request.referer
+     logger.info request.referer
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
