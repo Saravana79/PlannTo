@@ -2,7 +2,18 @@ require "securerandom"
 
 class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
-  caches_action :where_to_buy_items, :cache_path => proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
+  # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
+  caches_action :where_to_buy_items, :cache_path => proc {|c|
+    if (params[:item_ids].blank? && params[:ref_url].blank?)
+      # param = param.merge!(:request_referer => request.referer)
+      params[:request_referer] = "request.referer"
+      params.slice("price_full_details", "path", "sort_disable", "request_referer")
+    elsif params[:item_ids].blank?
+      params.slice("price_full_details", "path", "sort_disable", "ref_url")
+    else
+      params.slice("price_full_details", "path", "sort_disable", "item_ids")
+    end
+  }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
 
   caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)
@@ -501,7 +512,10 @@ class ProductsController < ApplicationController
 
   def create_impression_before_widgets
     host_name = APP_URL.gsub(/(http|https):\/\//, '')
-    if params[:item_ids].blank?
+    if (params[:item_ids].blank? && params[:ref_url].blank?)
+      # param = param.merge!(:request_referer => request.referer)
+      cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&request_referer=#{params[:request_referer]}&sort_disable=#{params[:sort_disable]}.js"
+    elsif params[:item_ids].blank?
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&ref_url=#{params[:ref_url]}&sort_disable=#{params[:sort_disable]}.js"
     else
       cache_key = "views/#{host_name}/where_to_buy_items.js?item_ids=#{params[:item_ids]}&path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&sort_disable=#{params[:sort_disable]}.js"
