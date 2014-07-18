@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
       # param = param.merge!(:request_referer => request.referer)
-      params[:request_referer] = "request.referer"
+      params[:request_referer] = request.referer
       params.slice("price_full_details", "path", "sort_disable", "request_referer")
     elsif params[:item_ids].blank?
       params.slice("price_full_details", "path", "sort_disable", "ref_url")
