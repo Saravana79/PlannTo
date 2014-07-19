@@ -6,5 +6,6 @@ task :aggregated_detail_process => :environment do
     log.debug date
     AggregatedDetail.update_aggregated_detail(date, 'publisher')
     AggregatedDetail.update_aggregated_detail(date, 'advertisement')
+    AggregatedDetail.update_aggregated_detail(date, 'sid')
   end
 end
