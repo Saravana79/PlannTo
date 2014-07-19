@@ -150,6 +150,10 @@ class AdvertisementsController < ApplicationController
  private
 
   def create_impression_before_show_ads
+    params[:more_vendors] ||= "false"
+    params[:ads_id] ||= ""
+    params[:ref_url] ||= ""
+    params[:item_id] ||= ""
     host_name = APP_URL.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
       cache_key = "views/#{host_name}/advertisements/show_ads?ads_id=#{params[:ads_id]}&more_vendors=#{params[:more_vendors]}&ref_url=#{params[:ref_url]}&size=#{params[:size]}"

@@ -511,6 +511,8 @@ class ProductsController < ApplicationController
     if (params[:item_ids].blank? && params[:ref_url].blank?)
       # param = param.merge!(:request_referer => request.referer)
       params[:request_referer] = request.referer
+      params[:path] ||= ""
+      params[:sort_disable] ||= "false"
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&request_referer=#{params[:request_referer]}&sort_disable=#{params[:sort_disable]}.js"
     elsif params[:item_ids].blank?
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&ref_url=#{params[:ref_url]}&sort_disable=#{params[:sort_disable]}.js"
