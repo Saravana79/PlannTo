@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140708090515) do
+ActiveRecord::Schema.define(:version => 20140719094603) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
     t.integer  "advertisement_id"
     t.integer  "impression_id"
-    t.integer  "item_id"
+    t.string   "item_id",            :limit => 100
     t.string   "hosted_site_url"
     t.datetime "impression_time"
     t.integer  "publisher_id"
@@ -28,8 +28,7 @@ ActiveRecord::Schema.define(:version => 20140708090515) do
     t.string   "itemsaccess"
     t.string   "params"
     t.string   "temp_user_id"
-    t.integer  "old_id"
-    t.text     "winning_price_enc"
+    t.string   "sid",                :limit => 100
     t.float    "winning_price"
   end
 
@@ -241,6 +240,7 @@ ActiveRecord::Schema.define(:version => 20140708090515) do
     t.string   "temp_user_id"
     t.integer  "old_impression_id"
     t.integer  "advertisement_id"
+    t.string   "sid"
   end
 
   add_index "clicks", ["advertisement_id"], :name => "index_clicks_on_advertisement_id"

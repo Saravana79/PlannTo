@@ -80,12 +80,12 @@ module Admin::AdvertisementsHelper
     return status, displaycount, activate_tab
   end
 
-  def get_ad_url(item_detail_id, impression_id, ref_url)
+  def get_ad_url(item_detail_id, impression_id, ref_url, sid, ads_id)
     ad_url = ""
     if @is_test == "true"
-      ad_url = APP_URL + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :ref_url => ref_url, :is_test => 'true')
+      ad_url = APP_URL + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :is_test => 'true')
     else
-      ad_url = APP_URL + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :ref_url => ref_url)
+      ad_url = APP_URL + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url)
     end
     ad_url
   end

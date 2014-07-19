@@ -22,6 +22,7 @@ class Click < ActiveRecord::Base
     click.publisher_id = obj_params[:publisher]
     click.ipaddress = obj_params[:remote_ip]
     click.advertisement_id = obj_params[:advertisement_id]
+    click.sid = obj_params[:sid]
     click.created_at = obj_params[:time]
     click.updated_at = obj_params[:time]
     click.save

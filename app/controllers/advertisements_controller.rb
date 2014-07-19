@@ -8,7 +8,7 @@ class AdvertisementsController < ApplicationController
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
-    sid = params[:sid]
+    @sid = sid = params[:sid] ||= ""
 
     @ad_template_type = "type_2" if @suitable_ui_size == 120
 
@@ -167,8 +167,9 @@ class AdvertisementsController < ApplicationController
         url_params = set_cookie_for_temp_user_and_url_params_process(params)
         impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
         @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], params[:ads_id])
-
-        cache = cache.gsub(/iid=\S+&/, "iid=#{@impression_id}&")
+        cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
+        cache.match "sid=#{params[:sid]}\""
+        cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
         return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
       end
