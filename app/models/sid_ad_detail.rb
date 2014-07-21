@@ -43,13 +43,15 @@ where date(ai.impression_time) >= date('#{date_for_query}') group by sid order b
       sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
       sid_ad_detail.update_attributes(:impressions => each_imp.impression_count)
 
-      sid_key = "spottags:#{sid_ad_detail.sid}"
-      sid_val = $redis_rtb.get(sid_key)
-      unless sid_val.blank?
-        sid_hash = JSON.parse(eval(sid_val))
-        host = URI.parse(sid_hash["url"]).host.downcase
-        updated_host = host.start_with?('www.') ? host[4..-1] : host
-        sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{a["imp"][0]["banner"]["w"]}x#{a["imp"][0]["banner"]["h"]}", :position => a["imp"][0]["banner"]["pos"])
+      if sid_ad_detail.sample_url.blank?
+        sid_key = "spottags:#{sid_ad_detail.sid}"
+        sid_val = $redis_rtb.get(sid_key)
+        unless sid_val.blank?
+          sid_hash = JSON.parse(eval(sid_val))
+          host = URI.parse(sid_hash["url"]).host.downcase
+          updated_host = host.start_with?('www.') ? host[4..-1] : host
+          sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
+        end
       end
     end
 
