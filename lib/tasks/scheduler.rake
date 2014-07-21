@@ -4,7 +4,9 @@ task :feed_process, [:priorities] => :environment do |t, args|
   priorities = args[:priorities]
 
   puts "Running Priorities Feed Process, at #{Time.zone.now}"
-  Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=priorities)
+  if $redis.llen("resque:queue:feed_process") == 0
+    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=priorities)
+  end
 end
 
 task :advertisement_process => :environment do
@@ -41,7 +43,9 @@ desc "missing url process with example: force=true, count=200, valid_urls='fonea
 task :missing_url_process, [:force, :count, :valid_urls, :invalid_urls, :missing_ad] => :environment do |_, args|
   args.with_defaults(:force => false, :count => 200, :valid_urls => "missingurl*", :invalid_urls => "download.cnet.com", :missing_ad => false)
   puts "Running Missingurl Process, at #{Time.zone.now}"
-  Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now, args[:force], args[:count], args[:valid_urls], args[:invalid_urls], args[:missing_ad])
+  if $redis.llen("resque:queue:missing_record_process") == 0
+    Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now, args[:force], args[:count], args[:valid_urls], args[:invalid_urls], args[:missing_ad])
+  end
 end
 
 task :rtb_budget_update_process => :environment do
