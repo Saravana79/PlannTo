@@ -163,7 +163,7 @@ class AdvertisementsController < ApplicationController
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-    @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], params[:ads_id]) if params[:is_test] != "true"
+    @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], params[:ads_id], true) if params[:is_test] != "true"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)

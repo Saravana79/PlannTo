@@ -7,6 +7,7 @@ class ProductsController < ApplicationController
     if (params[:item_ids].blank? && params[:ref_url].blank?)
       # param = param.merge!(:request_referer => request.referer)
       params[:request_referer] = request.referer
+      params[:request_referer] ||= ""
       params.slice("price_full_details", "path", "sort_disable", "request_referer")
     elsif params[:item_ids].blank?
       params.slice("price_full_details", "path", "sort_disable", "ref_url")
@@ -245,7 +246,7 @@ class ProductsController < ApplicationController
       # Update Items if there is only one item
       @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
 
-      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+      @where_to_buy_items, @item, @best_deals = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
       @show_count = Item.get_show_item_count(@items)
 
@@ -507,12 +508,16 @@ class ProductsController < ApplicationController
   end
 
   def create_impression_before_widgets
+    params[:price_full_details] ||= "true"
     host_name = APP_URL.gsub(/(http|https):\/\//, '')
+    params[:request_referer] ||= request.referer
+    params[:request_referer] ||= ""
+    params[:ref_url] ||= ""
+    params[:path] ||= ""
+    params[:sort_disable] ||= "false"
+
     if (params[:item_ids].blank? && params[:ref_url].blank?)
       # param = param.merge!(:request_referer => request.referer)
-      params[:request_referer] = request.referer
-      params[:path] ||= ""
-      params[:sort_disable] ||= "false"
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&request_referer=#{params[:request_referer]}&sort_disable=#{params[:sort_disable]}.js"
     elsif params[:item_ids].blank?
       cache_key = "views/#{host_name}/where_to_buy_items.js?path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&ref_url=#{params[:ref_url]}&sort_disable=#{params[:sort_disable]}.js"
@@ -520,12 +525,13 @@ class ProductsController < ApplicationController
       cache_key = "views/#{host_name}/where_to_buy_items.js?item_ids=#{params[:item_ids]}&path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&sort_disable=#{params[:sort_disable]}.js"
     end
 
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", params[:item_ids], nil)
+
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
         cache = reset_json_callback(cache, params[:callback])
-        url_params = set_cookie_for_temp_user_and_url_params_process(params)
-        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", params[:item_ids], nil)
 
         cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         return render :text => cache.html_safe

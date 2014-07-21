@@ -178,16 +178,16 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         if (where_to_buy_items.empty?)
           itemsaccess = "emptyitems"
         end
-        if is_test != "true"
-          impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
-                                                                  plan_to_temp_user_id, nil, winning_price_enc, nil)
-        end
+        # if is_test != "true"
+        #   impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
+        #                                                           plan_to_temp_user_id, nil, winning_price_enc, nil)
+        # end
       else
         where_to_buy_items = []
-        item, best_deals, impression_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
+        item, best_deals, imp_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id, true)
         itemsaccess = "offers"
       end
 
-    return where_to_buy_items, item, best_deals, impression_id
+    return where_to_buy_items, item, best_deals
   end
 end
