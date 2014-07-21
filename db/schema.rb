@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140719094603) do
+ActiveRecord::Schema.define(:version => 20140721064954) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -813,6 +813,7 @@ ActiveRecord::Schema.define(:version => 20140719094603) do
     t.integer  "old_impression_id"
     t.datetime "payment_date"
     t.integer  "payment_report_id"
+    t.string   "sid"
   end
 
   create_table "payment_reports", :force => true do |t|
@@ -1029,6 +1030,20 @@ ActiveRecord::Schema.define(:version => 20140719094603) do
   end
 
   add_index "shares", ["item_id"], :name => "index_shares_on_item_id"
+
+  create_table "sid_ad_details", :force => true do |t|
+    t.integer  "sid"
+    t.integer  "impressions"
+    t.integer  "clicks"
+    t.float    "ectr"
+    t.integer  "orders"
+    t.string   "sample_url"
+    t.string   "domain"
+    t.string   "size"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sourceitems", :force => true do |t|
     t.string   "name",            :limit => 100, :null => false

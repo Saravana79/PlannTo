@@ -93,7 +93,7 @@ class Admin::OrderHistoriesController < ApplicationController
     impression = AddImpression.where(:id => params[:impression_id]).first
     unless impression.blank?
       item = impression.item
-      return_val = {:item_id => item.id, :item_name => item.name, :invalid_id => false, :publisher_id => impression.publisher_id, :hosted_site_url => impression.hosted_site_url} unless item.blank?
+      return_val = { :item_id => item.id, :item_name => item.name, :invalid_id => false, :publisher_id => impression.publisher_id, :hosted_site_url => impression.hosted_site_url, :sid => impression.sid } unless item.blank?
     end
     render :js => return_val.to_json
   end

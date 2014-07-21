@@ -67,6 +67,10 @@
         <td class="label">Hosted Site Url :</td>
         <td class="input"><%= text_field_tag :hosted_site_url, "", :id => "hosted_site_url_text_field" %></td>
       </tr>
+      <tr>
+        <td class="label">Sid :</td>
+        <td class="input"> <%= f.text_field :sid, :readonly => false, :value => @order_history.sid %></td>
+      </tr>
     </table>
 
   
@@ -104,23 +108,7 @@
             var impression_id = $(this).val()
             console.log(impression_id)
 
-            $.ajax({
-                url: '/admin/get_item_details',
-                dataType: 'json',
-                data: {impression_id: impression_id},
-                success: function(response) {
-
-                    if (response.invalid_id == false)
-                    {
-                        $("#order_history_item_id").val(response.item_id)
-                        $("#order_history_item_name").val(response.item_name)
-                        if ($("#order_history_publisher_id").val() == "")
-                           $("#order_history_publisher_id").val(response.publisher_id)
-                        $("#hosted_site_url_text_field").val(response.hosted_site_url)
-
-                    }
-                }
-            });
+            update_form_with_item_details(impression_id)
         })
 
         $("#ad_product").keypress(function(e)
@@ -149,6 +137,28 @@
         })
 
     });
+
+    function update_form_with_item_details(impression_id)
+    {
+        $.ajax({
+            url: '/admin/get_item_details',
+            dataType: 'json',
+            data: {impression_id: impression_id},
+            success: function(response) {
+
+                if (response.invalid_id == false)
+                {
+                    $("#order_history_item_id").val(response.item_id)
+                    $("#order_history_item_name").val(response.item_name)
+                    $("#order_history_sid").val(response.sid)
+                    if ($("#order_history_publisher_id").val() == "")
+                        $("#order_history_publisher_id").val(response.publisher_id)
+                    $("#hosted_site_url_text_field").val(response.hosted_site_url)
+
+                }
+            }
+        });
+    }
 
 
 </script>
