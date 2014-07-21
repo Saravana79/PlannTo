@@ -13,9 +13,6 @@ class AggregatedDetail < ActiveRecord::Base
     elsif entity_type == "advertisement"
       impression_query = "select advertisement_id as entity_id,count(*) as impression_count from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
       click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
-    elsif entity_type == "sid"
-      impression_query = "select sid as entity_id,count(*) as impression_count from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by sid"
-      click_query = "select sid as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by sid"
     end
 
     page = 1

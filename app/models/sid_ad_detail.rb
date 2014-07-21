@@ -45,10 +45,12 @@ where date(ai.impression_time) >= date('#{date_for_query}') group by sid order b
 
       sid_key = "spottags:#{sid_ad_detail.sid}"
       sid_val = $redis_rtb.get(sid_key)
-      sid_hash = JSON.parse(eval(sid_val))
-      host = URI.parse(sid_hash["url"]).host.downcase
-      updated_host = host.start_with?('www.') ? host[4..-1] : host
-      sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{a["imp"][0]["banner"]["w"]}x#{a["imp"][0]["banner"]["h"]}", :position => a["imp"][0]["banner"]["pos"])
+      unless sid_val.blank?
+        sid_hash = JSON.parse(eval(sid_val))
+        host = URI.parse(sid_hash["url"]).host.downcase
+        updated_host = host.start_with?('www.') ? host[4..-1] : host
+        sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{a["imp"][0]["banner"]["w"]}x#{a["imp"][0]["banner"]["h"]}", :position => a["imp"][0]["banner"]["pos"])
+      end
     end
 
     @clicks = Click.find_by_sql(click_query)
@@ -72,7 +74,7 @@ where date(ai.impression_time) >= date('#{date_for_query}') group by sid order b
     log.debug "********** Updating ectr **********"
     log.debug "\n"
 
-    query_to_get_clicks_and_impressions = "select sid, clicks, impressions from sid_ad_details"
+    query_to_get_clicks_and_impressions = "select sid, clicks, impressions, orders from sid_ad_details"
 
     page = 1
     begin
@@ -82,7 +84,7 @@ where date(ai.impression_time) >= date('#{date_for_query}') group by sid order b
       sid_ad_details.each do |each_sid_ad_detail|
         clicks_count = each_sid_ad_detail.clicks.to_f
         impressions_count = each_sid_ad_detail.impressions.to_f
-        orders_count = each_item.orders.to_f
+        orders_count = each_sid_ad_detail.orders.to_f
 
         ectr = 0.0
 
