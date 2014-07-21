@@ -38,8 +38,8 @@ class AdvertisementsController < ApplicationController
       @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                              cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid) if @is_test != "true"
+      # @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+      #                                                         cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid) if @is_test != "true"
       @item_details = @item_details.uniq(&:url)
       @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items)
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
@@ -101,7 +101,7 @@ class AdvertisementsController < ApplicationController
 
     @image = @ad.images.first
 
-    @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid) if @is_test != "true"
+    # @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid) if @is_test != "true"
 
     respond_to do |format|
       format.json {
@@ -161,12 +161,13 @@ class AdvertisementsController < ApplicationController
       cache_key = "views/#{host_name}/advertisements/show_ads?ads_id=#{params[:ads_id]}&item_id=#{params[:item_id]}&more_vendors=#{params[:more_vendors]}&size=#{params[:size]}"
     end
 
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+    @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], params[:ads_id]) if params[:is_test] != "true"
+
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        url_params = set_cookie_for_temp_user_and_url_params_process(params)
-        impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, params[:item_id], params[:ads_id])
         cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
         cache.match "sid=#{params[:sid]}\""
         cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
