@@ -51,7 +51,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
           sid_val = $redis_rtb.get(sid_key)
           unless sid_val.blank?
             sid_hash = JSON.parse(eval(sid_val))
-            host = URI.parse(sid_hash["url"]).host.downcase
+            host = URI.parse(sid_hash["url"]).host.downcase rescue ""
             updated_host = host.start_with?('www.') ? host[4..-1] : host
             sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
           end
