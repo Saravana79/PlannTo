@@ -32,31 +32,51 @@ class SidAdDetail < ActiveRecord::Base
 
     date_for_query = date_for_query - 1.month
 
-    impression_query = "select sid, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by sid"
-
-    # select sid, count(*) as impression_count from add_impressions where date(impression_time) >= "2014-6-22" and date(impression_time) >= "2014-7-20" group by sid
-    impression_query = "select sid, count(*) as impression_count from add_impressions where date(impression_time) >= '2014-06-21' group by sid"
-    click_query = "select sid,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by sid"
+    # select sid, count(*) as impression_count from add_impressions where impression_time >= "2014-07-20 00:00:00" and impression_time >= "2014-06-22 00:00:00" and sid is not null group by sid
+    impression_query = "select sid, count(*) as impression_count from add_impressions where impression_time >= '2014-07-20' and impression_time >= '#{date_for_query}' and sid is not null group by sid"
+    click_query = "select sid,count(*) as click_count from clicks where timestamp >= '2014-07-20' and timestamp >= '#{date_for_query}' group by sid"
     order_query = "select sid,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
-where date(ai.impression_time) >= date('#{date_for_query}') group by sid order by count(*) desc"
+where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) desc"
 
-    @impressions = AddImpression.find_by_sql(impression_query)
+    page = 1
+    begin
+      impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
-    @impressions.each do |each_imp|
-      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
-      sid_ad_detail.update_attributes(:impressions => each_imp.impression_count)
+      impressions.each do |each_imp|
+        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
+        sid_ad_detail.update_attributes(:impressions => each_imp.impression_count)
 
-      if sid_ad_detail.sample_url.blank?
-        sid_key = "spottags:#{sid_ad_detail.sid}"
-        sid_val = $redis_rtb.get(sid_key)
-        unless sid_val.blank?
-          sid_hash = JSON.parse(eval(sid_val))
-          host = URI.parse(sid_hash["url"]).host.downcase
-          updated_host = host.start_with?('www.') ? host[4..-1] : host
-          sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
+        if sid_ad_detail.sample_url.blank?
+          sid_key = "spottags:#{sid_ad_detail.sid}"
+          sid_val = $redis_rtb.get(sid_key)
+          unless sid_val.blank?
+            sid_hash = JSON.parse(eval(sid_val))
+            host = URI.parse(sid_hash["url"]).host.downcase
+            updated_host = host.start_with?('www.') ? host[4..-1] : host
+            sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
+          end
         end
       end
-    end
+      page += 1
+    end while !impressions.empty?
+
+    # @impressions = AddImpression.find_by_sql(impression_query)
+    #
+    # @impressions.each do |each_imp|
+    #   sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
+    #   sid_ad_detail.update_attributes(:impressions => each_imp.impression_count)
+    #
+    #   if sid_ad_detail.sample_url.blank?
+    #     sid_key = "spottags:#{sid_ad_detail.sid}"
+    #     sid_val = $redis_rtb.get(sid_key)
+    #     unless sid_val.blank?
+    #       sid_hash = JSON.parse(eval(sid_val))
+    #       host = URI.parse(sid_hash["url"]).host.downcase
+    #       updated_host = host.start_with?('www.') ? host[4..-1] : host
+    #       sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
+    #     end
+    #   end
+    # end
 
     @clicks = Click.find_by_sql(click_query)
 

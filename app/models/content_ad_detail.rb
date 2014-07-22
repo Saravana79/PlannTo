@@ -34,17 +34,28 @@ class ContentAdDetail < ActiveRecord::Base
 
     date_for_query = date_for_query - 1.month
 
-    impression_query = "select hosted_site_url as url, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by hosted_site_url"
-    click_query = "select hosted_site_url as url,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by hosted_site_url"
+    impression_query = "select hosted_site_url as url, count(*) as impression_count from add_impressions where impression_time >= '#{date_for_query}' group by hosted_site_url"
+    click_query = "select hosted_site_url as url,count(*) as click_count from clicks where timestamp >= '#{date_for_query}' group by hosted_site_url"
     order_query = "select hosted_site_url as url,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
-where date(ai.impression_time) >= date('#{date_for_query}') group by hosted_site_url order by count(*) desc"
+where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order by count(*) desc"
 
-    @impressions = AddImpression.find_by_sql(impression_query)
+    page = 1
+    begin
+      impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
-    @impressions.each do |each_imp|
-      content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_imp.url)
-      content_ad_detail.update_attributes(:impressions => each_imp.impression_count)
-    end
+      impressions.each do |each_imp|
+        content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_imp.url)
+        content_ad_detail.update_attributes(:impressions => each_imp.impression_count)
+      end
+      page += 1
+    end while !impressions.empty?
+
+    # @impressions = AddImpression.find_by_sql(impression_query)
+    #
+    # @impressions.each do |each_imp|
+    #   content_ad_detail = ContentAdDetail.find_or_initialize_by_url(:url => each_imp.url)
+    #   content_ad_detail.update_attributes(:impressions => each_imp.impression_count)
+    # end
 
     @clicks = Click.find_by_sql(click_query)
 

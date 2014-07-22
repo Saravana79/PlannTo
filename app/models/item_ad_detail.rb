@@ -43,16 +43,27 @@ class ItemAdDetail < ActiveRecord::Base
 
     date_for_query = date_for_query - 2.month
 
-    impression_query = "select item_id, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by item_id"
-    click_query = "select item_id,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by item_id"
-    order_query = "select item_id,count(*) as count from order_histories where date(order_date) >= date('#{date_for_query}') group by item_id"
+    impression_query = "select item_id, count(*) as impression_count from add_impressions where impression_time >= '#{date_for_query}' group by item_id"
+    click_query = "select item_id,count(*) as click_count from clicks where timestamp >= '#{date_for_query}' group by item_id"
+    order_query = "select item_id,count(*) as count from order_histories where order_date >= '#{date_for_query}' group by item_id"
 
-    @impressions = AddImpression.find_by_sql(impression_query)
+    page = 1
+    begin
+      impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
-    @impressions.each do |each_imp|
-      item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_imp.item_id)
-      item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
-    end
+      impressions.each do |each_imp|
+        item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_imp.item_id)
+        item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
+      end
+      page += 1
+    end while !impressions.empty?
+
+    # @impressions = AddImpression.find_by_sql(impression_query)
+    #
+    # @impressions.each do |each_imp|
+    #   item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_imp.item_id)
+    #   item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
+    # end
 
     @clicks = Click.find_by_sql(click_query)
 
