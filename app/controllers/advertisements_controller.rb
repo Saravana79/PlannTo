@@ -54,7 +54,13 @@ class AdvertisementsController < ApplicationController
           render :json => {:success => @item_details.blank? ? false : true, :html => render_to_string("advertisements/show_ads.html.erb", :layout => false)}, :callback => params[:callback]
         end
       }
-      format.html { render :layout => false }
+      format.html {
+        if @item_details.blank?
+          render :nothing => true
+        else
+          render :layout => false
+        end
+      }
     end
   end
 
@@ -163,27 +169,28 @@ class AdvertisementsController < ApplicationController
     end
 
     cache_params = CGI::unescape(cache_params)
-    p cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
+    cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        url_params = set_cookie_for_temp_user_and_url_params_process(params)
-        impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-        item_id = params[:item_ids]
-        matched_val = cache.match(/present_item_id=.*#/)
-        unless matched_val.blank?
-          val = matched_val[0]
-          item_id = val.split("=")[1].gsub("#", "")
+        valid_html = cache.match(/plannto-advertisement main_div/).blank? ? false : true
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+          item_id = params[:item_ids]
+          matched_val = cache.match(/present_item_id=.*#/)
+          unless matched_val.blank?
+            val = matched_val[0]
+            item_id = val.split("=")[1].gsub("#", "")
+          end
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
+          cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
+          cache.match "sid=#{params[:sid]}\""
+          cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
         end
-        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
-        cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
-        cache.match "sid=#{params[:sid]}\""
-        cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
         return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
-      else
-        Rails.cache.delete(cache_key)
       end
     end
   end

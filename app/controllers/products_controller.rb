@@ -529,17 +529,20 @@ class ProductsController < ApplicationController
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        url_params = set_cookie_for_temp_user_and_url_params_process(params)
-        item_id = params[:item_ids]
-        matched_val = cache.match(/present_item_id=.*#/)
-        unless matched_val.blank?
-          val = matched_val[0]
-          item_id = val.split("=")[1].gsub("#", "")
-        end
-        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", item_id, nil)
-
+        valid_html = cache.match(/table/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
-        cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          item_id = params[:item_ids]
+          matched_val = cache.match(/present_item_id=.*#/)
+          unless matched_val.blank?
+            val = matched_val[0]
+            item_id = val.split("=")[1].gsub("#", "")
+          end
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", item_id, nil)
+
+          cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
+        end
         return render :text => cache.html_safe
         ## Rails.cache.write(cache_key, cache)
       end
