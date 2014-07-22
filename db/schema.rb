@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140722125624) do
+ActiveRecord::Schema.define(:version => 20140722134240) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -1043,6 +1043,7 @@ ActiveRecord::Schema.define(:version => 20140722125624) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "avg_winning_price"
   end
 
   create_table "sourceitems", :force => true do |t|
