@@ -522,6 +522,7 @@ class ProductsController < ApplicationController
     else
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("price_full_details", "path", "sort_disable", "item_ids"))
     end
+    cache_params = CGI::unescape(cache_params)
 
     cache_key = "views/#{host_name}/where_to_buy_items.js?#{cache_params}.js"
 
