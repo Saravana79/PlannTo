@@ -62,7 +62,7 @@ gem 'redis', '~> 3.0.7'
 
 # Use unicorn as the web server
 # gem 'unicorn'
-gem 'resque', :require => 'resque/server'  
+gem 'resque', '~> 1.25.2', :require => 'resque/server'
 
 # Deploy with Capistrano
 # gem 'capistrano'
@@ -88,3 +88,4 @@ gem 'activeuuid'
 # gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
 gem "facets", require: false
+gem 'resque-lock-timeout', '~> 0.4.4'

@@ -1,5 +1,14 @@
 class MissingurlProcess
+  extend Resque::Plugins::LockTimeout
   @queue = :missing_record_process
+  # Lock may be held for up to an hour.
+  @lock_timeout = 1.hour
+  @loner = true
+
+  # Run only one at a time, regardless of repo_id.
+  def self.identifier(method_name, actual_time, force, count, valid_urls, invalid_urls, missing_ad)
+    nil
+  end
 
   def self.perform(method_name, actual_time, force, count, valid_urls, invalid_urls, missing_ad)
     log = Logger.new 'log/missing_record_process.log'
