@@ -33,6 +33,9 @@ class SidAdDetail < ActiveRecord::Base
     date_for_query = date_for_query - 1.month
 
     impression_query = "select sid, count(*) as impression_count from add_impressions where date(impression_time) >= date('#{date_for_query}') group by sid"
+
+    # select sid, count(*) as impression_count from add_impressions where date(impression_time) >= "2014-6-22" and date(impression_time) >= "2014-7-20" group by sid
+    impression_query = "select sid, count(*) as impression_count from add_impressions where date(impression_time) >= '2014-06-21' group by sid"
     click_query = "select sid,count(*) as click_count from clicks where date(timestamp) >= date('#{date_for_query}') group by sid"
     order_query = "select sid,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
 where date(ai.impression_time) >= date('#{date_for_query}') group by sid order by count(*) desc"

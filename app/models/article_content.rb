@@ -286,7 +286,7 @@ class ArticleContent < Content
     end
   end
 
-  def self.get_best_deals(item_ids, url, url_params, is_test, user, remote_ip, plan_to_temp_user_id,widget=false)
+  def self.get_best_deals(item_ids, url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
     @item = Item.find(item_ids[0])
     root_id = Item.get_root_level_id(@item.itemtype.itemtype)
     temp_item_ids = item_ids + root_id.to_s.split(",")
@@ -300,11 +300,9 @@ class ArticleContent < Content
       #                      :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}.to_json
 
       @impression_id = nil
-      if widget != true
-        impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => user.blank? ? nil : user, :remote_ip => remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
-                             :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}
-        @impression_id = AddImpression.add_impression_to_resque(impression_params[:type], impression_params[:item_id], impression_params[:request_referer], impression_params[:user], impression_params[:remote_ip], impression_params[:impression_id], impression_params[:itemaccess], impression_params[:params], impression_params[:temp_user_id], impression_params[:ad_id], nil) if @is_test != "true"
-      end
+      impression_params = {:imp_id => @impression_id, :type => "OffersDeals", :itemid => item_ids[0], :request_referer => url, :time => Time.zone.now, :user => user.blank? ? nil : user, :remote_ip => remote_ip, :impression_id => nil, :itemaccess => itemsaccess,
+                           :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => nil}
+      @impression_id = AddImpression.add_impression_to_resque(impression_params[:type], impression_params[:item_id], impression_params[:request_referer], impression_params[:user], impression_params[:remote_ip], impression_params[:impression_id], impression_params[:itemaccess], impression_params[:params], impression_params[:temp_user_id], impression_params[:ad_id], nil) if @is_test != "true"
 
       # Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params) if is_test != "true"
 

@@ -584,5 +584,6 @@
                               </div>
                             -->
                         <%end%>
+     <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
 
       <% end %>

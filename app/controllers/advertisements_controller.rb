@@ -173,6 +173,8 @@ class AdvertisementsController < ApplicationController
         cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
         return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
+      else
+        Rails.cache.delete(cache_key)
       end
     end
   end

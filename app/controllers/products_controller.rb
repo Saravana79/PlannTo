@@ -246,7 +246,7 @@ class ProductsController < ApplicationController
       # Update Items if there is only one item
       @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
 
-      @where_to_buy_items, @item, @best_deals = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
       @show_count = Item.get_show_item_count(@items)
 
@@ -259,6 +259,8 @@ class ProductsController < ApplicationController
           end
         end
       end
+      p 777777777777777777777777777777
+      p @item
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
@@ -525,17 +527,24 @@ class ProductsController < ApplicationController
       cache_key = "views/#{host_name}/where_to_buy_items.js?item_ids=#{params[:item_ids]}&path=#{params[:path]}&price_full_details=#{params[:price_full_details]}&sort_disable=#{params[:sort_disable]}.js"
     end
 
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
-    @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", params[:item_ids], nil)
-
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        cache = reset_json_callback(cache, params[:callback])
+        url_params = set_cookie_for_temp_user_and_url_params_process(params)
+        item_id = params[:item_ids]
+        matched_val = cache.match(/present_item_id=.*#/)
+        unless matched_val.blank?
+          val = matched_val[0]
+          item_id = val.split("=")[1].gsub("#", "")
+        end
+        @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", item_id, nil)
 
+        cache = reset_json_callback(cache, params[:callback])
         cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         return render :text => cache.html_safe
         ## Rails.cache.write(cache_key, cache)
+      else
+        Rails.cache.delete(cache_key)
       end
     end
   end
