@@ -256,8 +256,6 @@ class ProductsController < ApplicationController
           end
         end
       end
-      p 777777777777777777777777777777
-      p @item
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
