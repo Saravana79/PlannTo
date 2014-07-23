@@ -13,15 +13,15 @@ class FeedUrl < ActiveRecord::Base
     #   end
     # end
 
+    missing_invalid_url_keys = []
     unless invalid_urls.blank?
       invalid_urls = invalid_urls.delete_if {|x| (x.blank? || x == "nil")}
-      missing_invalid_url_keys = []
       invalid_urls.each do |each_url|
          collected_urls = get_missing_keys_from_redis("missingurl*#{each_url}*")
          missing_invalid_url_keys << collected_urls
       end
       missing_invalid_url_keys = missing_invalid_url_keys.flatten
-      process_invalid_missing_url(missing_invalid_url_keys, count)
+      # process_invalid_missing_url(missing_invalid_url_keys, count)
     end
 
     unless valid_urls.blank?
@@ -34,6 +34,7 @@ class FeedUrl < ActiveRecord::Base
         missingurl_keys << collected_urls
       end
       missingurl_keys = missingurl_keys.flatten
+      missingurl_keys = missingurl_keys - missing_invalid_url_keys
       process_missing_url(missingurl_keys, count)
     end
 
@@ -77,9 +78,16 @@ class FeedUrl < ActiveRecord::Base
 
   def self.process_missing_url(missingurl_keys=[], count)
     feed = Feed.where("process_type = 'missingurl'").last
+    counting = 1
+    greater_count = 1
+    t_count = missingurl_keys
     missingurl_keys.each do |each_url_key|
+      logger.info "#{counting} - #{t_count}"
+      counting = counting + 1
       missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
       if missingurl_count.to_i > count.to_i
+        greater_count = greater_count + 1
+        logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
         if feed_url_id.blank?
           missing_url = each_url_key.split("missingurl:")[1]
 
