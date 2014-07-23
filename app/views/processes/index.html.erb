@@ -1,0 +1,31 @@
+<div class="flash_notice"><%= flash[:notice] %></div>
+<div class="list_of_process">
+  <div class="item_update">
+    <%= link_to "Item Update Process", item_update_processes_path, :class => "btn_submitanswer", :id => "item_update_process" %>
+    <p>Initiate Item Update Process, It will update the price details and vendor_id for all items also will update the item details with ad ids</p>
+  </div>
+</div>
+
+
+<style type="text/css">
+    .list_of_process {
+        margin: 70px;
+    }
+    #item_update_process {
+        float: left !important;
+        width: 13%;
+    }
+    .item_update > p {
+        float: left;
+        font-size: 20px;
+        margin-top: -8px;
+        padding: 0 0 0 37px;
+        width: 78%;
+    }
+    .flash_notice {
+        color: green;
+        font-size: 17px;
+        margin-top: 35px;
+        text-align: center;
+    }
+</style>

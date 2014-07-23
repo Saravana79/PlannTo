@@ -311,6 +311,13 @@ resources :comments do
   resources :answers
   resources :tips
   resources :invitations
+  resources :processes, :only => [:index] do
+    collection do
+      get "item_update"
+    end
+  end
+
+
   match 'invitation/accept/:token' => "invitations#accept", :as => :accept_invitation
     
   resources :imageuploads, :only => [:show] 
