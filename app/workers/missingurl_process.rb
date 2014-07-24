@@ -6,11 +6,11 @@ class MissingurlProcess
   @loner = true
 
   # Run only one at a time, regardless of repo_id.
-  def self.identifier(method_name, actual_time, force, count, valid_urls, invalid_urls, missing_ad)
+  def self.identifier(method_name, actual_time, force, process_type, count, valid_urls, invalid_urls, missing_ad)
     nil
   end
 
-  def self.perform(method_name, actual_time, force, count, valid_urls, invalid_urls, missing_ad)
+  def self.perform(method_name, actual_time, force, process_type, count, valid_urls, invalid_urls, missing_ad)
     log = Logger.new 'log/missing_record_process.log'
     #begin
     log.debug "********** Start Processing Missingurl **********"
@@ -21,10 +21,10 @@ class MissingurlProcess
     valid_urls = valid_urls.to_s.split(",")
     invalid_urls = invalid_urls.to_s.split(",")
 
-    if (force.to_s == "false" && now_time.hour % 2 == 0)
-      FeedUrl.send(method_name, log, count, valid_urls, invalid_urls, missing_ad)
-    else
-      FeedUrl.send(method_name, log, count, valid_urls, invalid_urls, missing_ad)
+    if force.to_s == "true"
+      FeedUrl.send(method_name, log, process_type, count, valid_urls, invalid_urls, missing_ad)
+    elsif (now_time.hour % 2 == 0)
+      FeedUrl.send(method_name, log, process_type, count, valid_urls, invalid_urls, missing_ad)
     end
 
     #rescue Exception => e

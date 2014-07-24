@@ -1,27 +1,31 @@
 class FeedUrl < ActiveRecord::Base
   belongs_to :feed
 
-  def self.update_by_missing_records(log, count, valid_urls, invalid_urls, missing_ad)
-    # separate missingurl and missingad
-    # missingurl_keys = []
-    # missingad_keys = []
-    # missing_keys.each do |each_key|
-    #   if each_key.include?("missingurl:")
-    #     missingurl_keys << each_key
-    #   elsif each_key.include?("missingad")
-    #     missingad_keys << each_key
-    #   end
-    # end
-
+  def self.update_by_missing_records(log, process_type, count, valid_urls, invalid_urls, missing_ad)
     invalid_urls = invalid_urls.delete_if {|x| (x.blank? || x == "nil")}
 
-    unless valid_urls.blank?
-      # process for missingurl
-      valid_urls = valid_urls.delete_if {|x| (x.blank? || x == "nil")}
-      valid_urls.each do |each_url|
-        match_url =  each_url == "missingurl*" ? "missingurl*" : "missingurl*#{each_url}*"
-        get_missing_keys_and_process(match_url, count, invalid_urls)
+    if process_type != "all"
+      past_date = Date.yesterday.strftime("%-Y-%-m-%d")
+      current_date = Date.today.strftime("%-Y-%-m-%d")
+      set_keys = ["missingurl-#{past_date}", "missingurl-#{current_date}"]
+
+      set_keys.each do |each_key|
+        get_missing_keys_and_process_recent(each_key, count, "process_missing_url", invalid_urls)
       end
+    else
+      unless valid_urls.blank?
+        # process for missingurl
+        valid_urls = valid_urls.delete_if {|x| (x.blank? || x == "nil")}
+        valid_urls.each do |each_url|
+          match_url =  each_url == "missingurl*" ? "missingurl*" : "missingurl*#{each_url}*"
+          get_missing_keys_and_process(match_url, count, "process_missing_url", invalid_urls)
+        end
+      end
+    end
+
+    # Process missingad
+    if missing_ad.to_s == "true"
+      get_missing_keys_and_process('missingad*', count, "process_missing_ad", invalid_urls)
     end
 
     # missing_invalid_url_keys = []
@@ -50,41 +54,10 @@ class FeedUrl < ActiveRecord::Base
     # end
 
     # Process missingad
-    if missing_ad.to_s == "true"
-      missingad_keys = get_missing_keys_from_redis('missingad*')
-      process_missing_ad(missingad_keys, count)
-    end
-  end
-
-  def self.process_invalid_missing_url(missing_invalid_url_keys, count)
-    feed = Feed.where("process_type = 'missingurl'").last
-    missing_invalid_url_keys.each do |each_url_key|
-      missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
-      if missingurl_count.to_i > count.to_i
-        if feed_url_id.blank?
-          missing_url = each_url_key.split("missingurl:")[1]
-
-          check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-          if check_exist_feed_url.blank?
-            source = ""
-            if (missing_url =~ URI::regexp).blank?
-              source = ""
-              status = 3
-            else
-              source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
-            end
-
-            new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: "", category: "Others",
-                                          status: 3, source: source, summary: "", :images => "",
-                                          :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count)
-
-            $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
-          end
-        else
-          $redis_rtb.hset(each_url_key, "count", 0) if Rails.env == "production"
-        end
-      end
-    end
+    # if missing_ad.to_s == "true"
+    #   missingad_keys = get_missing_keys_from_redis('missingad*')
+    #   process_missing_ad(missingad_keys, count)
+    # end
   end
 
   def self.process_missing_url(missingurl_keys=[], count)
@@ -186,7 +159,7 @@ class FeedUrl < ActiveRecord::Base
     exp_val.flatten
   end
 
-  def self.get_missing_keys_and_process(match, count, invalid_urls=[])
+  def self.get_missing_keys_and_process(match, count, method, invalid_urls=[])
     next_val = 0
     begin
       redis_val = $redis_rtb.scan(next_val, match: match, count: 300)
@@ -195,7 +168,23 @@ class FeedUrl < ActiveRecord::Base
       invalid_urls.each  do |each_invalid_url|
         val = val.delete_if {|each_key| each_key.include?(each_invalid_url)}
       end
-      process_missing_url(val, count)
+      # process_missing_url(val, count)
+      FeedUrl.send(method, val, count)
+    end while next_val != 0
+    return
+  end
+
+  def self.get_missing_keys_and_process_recent(redis_key, count, method, invalid_urls=[])
+    next_val = 0
+    begin
+      redis_val = $redis_rtb.sscan(redis_key, next_val, count: 300)
+      next_val = redis_val[0].to_i
+      val = redis_val[1]
+      invalid_urls.each  do |each_invalid_url|
+        val = val.delete_if {|each_key| each_key.include?(each_invalid_url)}
+      end
+      # process_missing_url(val, count)
+      FeedUrl.send(method, val, count)
     end while next_val != 0
     return
   end
