@@ -189,6 +189,8 @@ class Feed < ActiveRecord::Base
         end
       end
 
+      page_category = doc.css(".content #eow-category").inner_text.to_s.strip rescue ""
+
       images = ArticleContent.get_images_from_doc(doc, images)
       images = [] if images.blank?
 
@@ -204,7 +206,7 @@ class Feed < ActiveRecord::Base
 
     images = images.join(',') rescue ""
 
-    return title_info, meta_description, images
+    return title_info, meta_description, images, page_category
   end
 
   private

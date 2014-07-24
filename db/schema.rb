@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140722134240) do
+ActiveRecord::Schema.define(:version => 20140724133222) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -437,9 +437,10 @@ ActiveRecord::Schema.define(:version => 20140722134240) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "published_at"
-    t.string   "images",        :default => ""
-    t.integer  "priorities",    :default => 3
-    t.integer  "missing_count", :default => 0
+    t.string   "images",             :default => ""
+    t.integer  "priorities",         :default => 3
+    t.integer  "missing_count",      :default => 0
+    t.string   "additional_details"
   end
 
   create_table "feeds", :force => true do |t|

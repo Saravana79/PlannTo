@@ -1124,13 +1124,13 @@ end
 
         redis_values.merge!(:related_item_ids => related_item_ids, :pc_vendor_id => pc_vendor_id)
 
-        redis_values = val_hash.flatten
+        redis_values = redis_values.flatten
 
         log.debug "Hash Key => #{redis_key}"
         log.debug "Hash value => #{redis_values}"
         log.debug "\n"
 
-        redis_values = val_hash.flatten
+        # redis_values = val_hash.flatten
 
         $redis_rtb.HMSET(redis_key, redis_values)
       end

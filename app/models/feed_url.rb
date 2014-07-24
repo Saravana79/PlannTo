@@ -69,6 +69,7 @@ class FeedUrl < ActiveRecord::Base
       logger.info "#{counting} - #{t_count}"
       p "#{counting} - #{t_count}"
       counting = counting + 1
+      each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
       missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
       if missingurl_count.to_i > count.to_i
         greater_count = greater_count + 1
@@ -104,15 +105,19 @@ class FeedUrl < ActiveRecord::Base
             status = 0
             status = 1 unless article_content.blank?
 
-            title, description, images = Feed.get_feed_url_values(missing_url)
+            title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
+            valid_categories = ["gaming", "science & technology"]
+            if !page_category.blank?
+              status = 3 unless valid_categories.include?(page_category.downcase)
+            end
             # remove characters after come with space + '- or |' symbols
             title = title.to_s.gsub(/\s(-|\|).+/, '')
             title = title.blank? ? "" : title.to_s.strip
 
             new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
                                           status: status, source: source, summary: description, :images => images,
-                                          :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count)
+                                          :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
 
             $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
           else
