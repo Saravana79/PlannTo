@@ -53,17 +53,17 @@
 <% if params[:show_list].include?('widget-1') %>
     <div class="widget-1">
       <span>1) Widget-1</span>
-      <span>URL => <%= "#{config.hostname}/javascripts/plannto.widget.js?item_id=#{params[:item_id]}&ref_url=#{params[:ref_url]}&show_details=true&element_id=where_to_buy_items&is_test=#{params[:is_test]}" %></span>
+      <span>URL => <%= "#{configatron.hostname}/javascripts/plannto.widget.js?item_id=#{params[:item_id]}&ref_url=#{params[:ref_url]}&show_details=true&element_id=where_to_buy_items&is_test=#{params[:is_test]}" %></span>
        <br/> <br/>
       <div id="where_to_buy_items" style="width:610px;">
       </div>
-      <script async src="<%= config.hostname %>/javascripts/plannto.widget.js?item_id=<%= params[:item_id] %>&ref_url=<%= params[:ref_url] %>&show_details=true&element_id=where_to_buy_items&is_test=<%= params[:is_test] %>"></script>
+      <script async src="<%= configatron.hostname %>/javascripts/plannto.widget.js?item_id=<%= params[:item_id] %>&ref_url=<%= params[:ref_url] %>&show_details=true&element_id=where_to_buy_items&is_test=<%= params[:is_test] %>"></script>
     </div>
 <% end %>
 <!-- check new_version_id or old_version_id when one item_id no item_details => item_id = 13652-->
  <br/> <br/>
 <% if params[:show_list].include?('search-widget') %>
-    <iframe id="search_widget" src="<%= config.hostname %>/advertisements/search_widget_via_iframe?page_type=<%= params[:page_type] %>&is_test=<%= params[:is_test] %>" style="width:100%; height: 100%;">
+    <iframe id="search_widget" src="<%= configatron.hostname %>/advertisements/search_widget_via_iframe?page_type=<%= params[:page_type] %>&is_test=<%= params[:is_test] %>" style="width:100%; height: 100%;">
 
     </iframe>
 <% end %>
@@ -72,12 +72,12 @@
 
     <div class="ad ad-1">
       <span>3) Ad-300</span>
-      <span>URL => <%= "#{config.hostname}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*250&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
+      <span>URL => <%= "#{configatron.hostname}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*250&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
       <br/> <br/> <br/>
       <iframe id="plannto_ad_frame" src="" width="300px" height="250px" style="border: medium none;;"></iframe>
     </div>
     <script type="text/javascript">
-        iframe_path = "<%= config.hostname %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=300*250&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
+        iframe_path = "<%= configatron.hostname %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=300*250&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
         $.get(iframe_path, function (response) {
             if (response['success']) {
                 var s = document.getElementById("plannto_ad_frame");
@@ -94,12 +94,12 @@
 <% if params[:show_list].include?('ad-120') %>
     <div class="ad ad-2">
       <span>4) Ad-120</span>
-      <span>URL => <%= "#{config.hostname}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=120*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
+      <span>URL => <%= "#{configatron.hostname}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=120*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
       <br/> <br/> <br/>
       <iframe id="plannto_ad_frame_120" src="" width="120px" height="600px" style="border: medium none;;"></iframe>
     </div>
     <script type="text/javascript">
-        iframe_path = "<%= config.hostname %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=120*600&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
+        iframe_path = "<%= configatron.hostname %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=120*600&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
         $.get(iframe_path, function (response) {
             if (response['success']) {
                 var s = document.getElementById("plannto_ad_frame_120");
@@ -117,12 +117,12 @@
 
     <div class="ad ad-3">
       <span>5) Ad-728</span>
-      <span>URL => <%= "#{config.hostname}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=728*90&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
+      <span>URL => <%= "#{configatron.hostname}/advertisments/show_ads.json?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=728*90&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}"; %></span>
       <br/> <br/> <br/>
       <iframe id="plannto_ad_frame_728" src="" width="728px" height="90px" style="border: medium none;;"></iframe>
     </div>
     <script type="text/javascript">
-        iframe_path = "<%= config.hostname %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=728*90&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
+        iframe_path = "<%= configatron.hostname %>/advertisments/show_ads.json?item_id=" + "<%= params[:item_id] %>" + "&ads_id=" + "<%= params[:ads_id] %>" + "&size=728*90&more_vendors=" + "<%= params[:more_vendors] %>" + "&ref_url=" + "<%= params[:ref_url] %>" + "&ad_as_widget=true&is_test=<%= params[:is_test] %>";
         $.get(iframe_path, function (response) {
             if (response['success']) {
                 var s = document.getElementById("plannto_ad_frame_728");

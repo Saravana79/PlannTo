@@ -506,7 +506,7 @@ class ProductsController < ApplicationController
 
   def create_impression_before_widgets
     params[:price_full_details] ||= "true"
-    host_name = config.hostname.gsub(/(http|https):\/\//, '')
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     params[:request_referer] ||= request.referer
     params[:request_referer] ||= ""
     params[:ref_url] ||= ""

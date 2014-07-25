@@ -19,10 +19,10 @@
 <body style="padding:30px;">
 <div class="widget-2">
   <span>2) Search Widget</span>
-  <span>URL => <%= "#{config.hostname}/javascripts/search_planto.widget.js?types=Mobile,Tablet,Camera&page_type=#{params[:page_type]}&is_test=#{params[:is_test]}" %></span>
+  <span>URL => <%= "#{configatron.hostname}/javascripts/search_planto.widget.js?types=Mobile,Tablet,Camera&page_type=#{params[:page_type]}&is_test=#{params[:is_test]}" %></span>
 <div style="width: <%= params[:page_type] == "small_screen" ? 300 : 900 %>px;padding: 40px 100px;" id="planto_search_items" >
 </div>
 </div>
-  <script async src="<%= config.hostname %>/javascripts/search_planto.widget.js?types=Mobile,Tablet,Camera&page_type=<%= params[:page_type] %>&is_test=<%= params[:is_test] %>"></script>
+  <script async src="<%= configatron.hostname %>/javascripts/search_planto.widget.js?types=Mobile,Tablet,Camera&page_type=<%= params[:page_type] %>&is_test=<%= params[:is_test] %>"></script>
 </body>
 </html>

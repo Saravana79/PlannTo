@@ -161,7 +161,7 @@ class AdvertisementsController < ApplicationController
     params[:ads_id] ||= ""
     params[:ref_url] ||= ""
     params[:item_id] ||= ""
-    host_name = config.hostname.gsub(/(http|https):\/\//, '')
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url"))
     else

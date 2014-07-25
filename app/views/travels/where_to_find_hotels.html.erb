@@ -147,7 +147,7 @@
                                           <%if index == 0%>
                                             <td id="plannto_incol1" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor.name%>"  style="width:75px;border:0;padding:0;"/> </td>
                                             <td id="plannto_incol2"  width="35%"> <%= item.price %> </td>
-                                            <td width="30%" id="plannto_incol3" ><a href="<%= config.hostname %>/history_details?detail_id=<%=item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
+                                            <td width="30%" id="plannto_incol3" ><a href="<%= configatron.hostname %>/history_details?detail_id=<%=item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
                                           <%end%>
                                         <%end%>
                                       <%end%>
@@ -162,7 +162,7 @@
                                               <!--
                                               <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
                                              <!-- <td id="plannto_incol2" width="25%" style="font-weight:normal;"><%#=display_shipping_detail(item)%></td> -->
-                                              <td width="15%" id="plannto_incol3"><a href="<%= config.hostname %>/history_details?detail_id=<%=item.id%>&iid=<%=@impression_id%>&type=Hotel" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
+                                              <td width="15%" id="plannto_incol3"><a href="<%= configatron.hostname %>/history_details?detail_id=<%=item.id%>&iid=<%=@impression_id%>&type=Hotel" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
                                             <%end%>
                                           <%end%>
                                         <%end%>
@@ -181,12 +181,12 @@
                                   %>
                                   <td  id="plannto_footertd" colspan="<%=@wrapper%>">
                                     <span id="plannto_footerspan">
-                                      <a href="<%= config.hostname %>/travels/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_footera" target="_blank">View prices from more retailers</a>
+                                      <a href="<%= configatron.hostname %>/travels/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_footera" target="_blank">View prices from more retailers</a>
                                     </span>
                                   </td>
                                   <td id="plannto_incol3" width="15%">
                                     <span >
-                                      <a href="<%= config.hostname %>/travels/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"> Go </a>
+                                      <a href="<%= configatron.hostname %>/travels/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank"> Go </a>
                                     </span>
                                   </td>
                                 </tr>
