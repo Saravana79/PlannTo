@@ -6,7 +6,8 @@ class ApplicationController < ActionController::Base
   before_filter :store_session_url
   rescue_from FbGraph::Exception, :with => :fb_graph_exception
   prepend_before_filter { |c| RecordCache::Strategy::RequestCache.clear }
-  before_filter :cache_follow_items 
+  before_filter :cache_follow_items
+  before_filter :change_image_url_path
   #before_filter :set_referer
   
   #def set_referer
@@ -23,6 +24,13 @@ class ApplicationController < ActionController::Base
    #end
     
   #end
+
+  def change_image_url_path
+    unless request.protocol != "http://"
+      p configatron.root_image_path = configatron.root_image_path.gsub("http://", "https://")
+      p configatron.root_image_url = configatron.root_image_url.gsub("http://", "https://")
+    end
+  end
 
   def cache_follow_items
     user = current_user
