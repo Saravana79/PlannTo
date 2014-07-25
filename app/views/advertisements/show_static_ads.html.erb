@@ -2,15 +2,15 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= params[:size] %></title>
-  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 </head>
 <body>
 <div class="main_div">
   <div class="static_plannto_ad">
     <% if @ad.advertisement_type == "static" %>
-      <%= link_to(image_tag("http://cdn1.plannto.com/static/images/amazon-01-mpu.jpg", :style => "height:240px;"), APP_URL + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
+      <%= link_to(image_tag("http://cdn1.plannto.com/static/images/amazon-01-mpu.jpg", :style => "height:240px;"), config.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
     <% else %>
-      <%#= link_to(image_tag("http://planntonew.s3.amazonaws.com/images/advertisements/7/1/flashvortex.swf", :style => "height:240px;"), APP_URL + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
+      <%#= link_to(image_tag("http://planntonew.s3.amazonaws.com/images/advertisements/7/1/flashvortex.swf", :style => "height:240px;"), config.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
       <embed src="<%= @image.avatar.url %>"/>
     <% end %>
   </div>

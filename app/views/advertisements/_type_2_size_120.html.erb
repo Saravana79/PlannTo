@@ -4,7 +4,7 @@
   <div class="advt-120">
     <% if @sliced_item_details.count != 0 %>
          <div class="planntoadlogo">
-           <%= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), APP_URL + "/opt_out", :target => "_blank" %>
+           <%= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), config.hostname + "/opt_out", :target => "_blank" %>
          </div>
         <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt="" width="100px" height="32px"></a></div>
         <div id="pager2" class="pager">

@@ -1,6 +1,6 @@
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <% ad_url = get_ad_url(@item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id]) %>
-<% @shop_now_url = "#{APP_URL}"+@item.get_url %>
+<% @shop_now_url = "#{config.hostname}"+@item.get_url %>
 
 <div class="plannto-advertisement main_div">
   <div class="advt-block">

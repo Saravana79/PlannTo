@@ -452,14 +452,14 @@ end
       relateditems.each do |item|
         unless(item.slug.nil?)
           item_type = item.type.blank? ? "" : item.type.downcase.pluralize
-          cache_key = "views/" + APP_URL.to_s + "/" + item_type + "/" + item.slug + "?user="
+          cache_key = "views/" + config.hostname.to_s + "/" + item_type + "/" + item.slug + "?user="
           Rails.cache.delete(cache_key + "1")
           Rails.cache.delete(cache_key + "0")
         end
       end 
-        cache_key = "views/" + APP_URL.to_s + "/contents/" + content.id.to_s
+        cache_key = "views/" + config.hostname.to_s + "/contents/" + content.id.to_s
         Rails.cache.delete(cache_key)
-        cache_key = "views/" + APP_URL.to_s + "/external_contents/" + content.id.to_s
+        cache_key = "views/" + config.hostname.to_s + "/external_contents/" + content.id.to_s
         Rails.cache.delete(cache_key)
     end
 

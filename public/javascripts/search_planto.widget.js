@@ -19,7 +19,7 @@ var PlannTo = (function (window, undefined) {
         var script_tag = document.createElement('script');
         script_tag.setAttribute("type", "text/javascript");
         script_tag.setAttribute("src",
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
+            "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
 
         if (script_tag.readyState) {
             script_tag.onreadystatechange = function () { // For old versions of IE
@@ -54,7 +54,7 @@ var PlannTo = (function (window, undefined) {
         // Call our main function
         if (window.jQuery.ui === undefined)
         {
-            jQuery.getScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js', function() {
+            jQuery.getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js', function() {
                      jQuery.noConflict(true);
             });
         }

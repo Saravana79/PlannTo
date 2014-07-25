@@ -392,7 +392,7 @@
                                               <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
                           <!-- <td id="plannto_incol2" width="25%" style="font-weight:normal;"><%#=display_shipping_detail(item)%></td> -->
                           <td width="15%" id="plannto_incol3">
-                            <a href="<%= APP_URL %>/travels/external_page?item_id=<%= hotel.id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
+                            <a href="<%= config.hostname %>/travels/external_page?item_id=<%= hotel.id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
                           </td>
                   <% end %>
                 </tr>
@@ -409,12 +409,12 @@
               %>
               <td id="plannto_footertd" colspan="<%= @wrapper %>">
                                     <span id="plannto_footerspan">
-                                      <a href="<%= APP_URL %>/travels/external_page?item_id=<%= @item.id %>&iid=<%= @impression_id %>" id="plannto_footera" target="_blank">View all related hotels</a>
+                                      <a href="<%= config.hostname %>/travels/external_page?item_id=<%= @item.id %>&iid=<%= @impression_id %>" id="plannto_footera" target="_blank">View all related hotels</a>
                                     </span>
               </td>
               <td id="plannto_incol3" width="15%">
                                     <span>
-                                      <a href="<%= APP_URL %>/travels/external_page?item_id=<%= @item.id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
+                                      <a href="<%= config.hostname %>/travels/external_page?item_id=<%= @item.id %>&iid=<%= @impression_id %>" id="plannto_go_button" target="_blank"><%= @gotext %></a>
                                     </span>
               </td>
             </tr>
