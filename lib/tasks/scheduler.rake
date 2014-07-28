@@ -58,3 +58,12 @@ task :sid_ad_detail_process => :environment do
   puts "Running SidAdDetail process, at #{Time.zone.now}"
   Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
 end
+
+desc "missing url process for youtube with example: count=100,valid_categories='gaming,science & technology'"
+task :youtube_missing_url_process, [:count, :valid_categories] => :environment do |_, args|
+  args.with_defaults(:count => 25, :valid_categories => 'science & technology')
+  puts "Running youtube_missing_url_process, at #{Time.zone.now}"
+  valid_categories = args[:valid_categories]
+  valid_categories = valid_categories.to_s.split(",")
+  FeedUrl.get_missing_youtube_keys(args[:count], valid_categories)
+end
