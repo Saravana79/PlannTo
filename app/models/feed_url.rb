@@ -199,7 +199,7 @@ class FeedUrl < ActiveRecord::Base
     next_val = 0
     loop_count = 0
     begin
-      redis_val = $redis_rtb.sscan("missingurl:http://www.youtube.com*", next_val, count: 300)
+      redis_val = $redis_rtb.scan(next_val, match: "missingurl:http://www.youtube.com*", count: 300)
       next_val = redis_val[0].to_i
       val = redis_val[1]
       # process_missing_url(val, count)
