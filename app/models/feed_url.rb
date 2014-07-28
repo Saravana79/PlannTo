@@ -60,10 +60,12 @@ class FeedUrl < ActiveRecord::Base
     # end
   end
 
-  def self.process_missing_url(missingurl_keys=[], count)
+  def self.process_missing_url(missingurl_keys, count, valid_categories=["gaming","science & technology"])
+    p valid_categories
     feed = Feed.where("process_type = 'missingurl'").last
     counting = 1
     greater_count = 1
+    missingurl_keys = [] if missingurl_keys.blank?
     t_count = missingurl_keys.count
     missingurl_keys.each do |each_url_key|
       logger.info "#{counting} - #{t_count}"
@@ -107,7 +109,6 @@ class FeedUrl < ActiveRecord::Base
 
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
-            valid_categories = ["gaming", "science & technology"]
             if !page_category.blank?
               status = 3 unless valid_categories.include?(page_category.downcase)
             end
@@ -192,6 +193,17 @@ class FeedUrl < ActiveRecord::Base
       FeedUrl.send(method, val, count)
     end while next_val != 0
     return
+  end
+
+  def self.get_missing_youtube_keys(count, valid_categories=[])
+    next_val = 0
+    begin
+      redis_val = $redis_rtb.sscan("missingurl:http://www.youtube.com", next_val, count: 300)
+      next_val = redis_val[0].to_i
+      val = redis_val[1]
+      # process_missing_url(val, count)
+      FeedUrl.process_missing_url(val, count, valid_categories)
+    end while next_val != 0
   end
 
 end

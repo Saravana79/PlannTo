@@ -2,7 +2,7 @@ class MissingurlProcess
   extend Resque::Plugins::LockTimeout
   @queue = :missing_record_process
   # Lock may be held for up to an hour.
-  @lock_timeout = 1.hour
+  @lock_timeout = 2.hours
   @loner = true
 
   # Run only one at a time, regardless of repo_id.
