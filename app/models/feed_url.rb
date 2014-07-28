@@ -60,7 +60,7 @@ class FeedUrl < ActiveRecord::Base
     # end
   end
 
-  def self.process_missing_url(missingurl_keys, count, valid_categories=["gaming","science & technology"])
+  def self.process_missing_url(missingurl_keys, count, valid_categories=["gaming","science & technology"],process_category="recent")
     p valid_categories
     feed = Feed.where("process_type = 'missingurl'").last
     counting = 1
@@ -137,6 +137,8 @@ class FeedUrl < ActiveRecord::Base
 
         # remove key from redis
         # $redis_rtb.del(each_url_key) if Rails.env == "production"
+      elsif process_category == "all" && missingurl_count.to_i == 0
+        $redis_rtb.del(each_url_key) if Rails.env == "production"
       end
     end
   end
@@ -180,7 +182,11 @@ class FeedUrl < ActiveRecord::Base
         val = val.delete_if {|each_key| each_key.include?(each_invalid_url)}
       end
       # process_missing_url(val, count)
-      FeedUrl.send(method, val, count)
+      if method == "process_missing_url"
+        FeedUrl.send(method, val, count, ["gaming","science & technology"], "all")
+      else
+        FeedUrl.send(method, val, count)
+      end
     end while next_val != 0
     return
   end
