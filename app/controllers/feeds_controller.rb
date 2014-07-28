@@ -25,11 +25,13 @@ class FeedsController < ApplicationController
   end
 
   def feed_urls
+    params[:page_loaded_time] ||= Time.now.utc
+    @loaded_time = params[:page_loaded_time]
     params[:feed_urls_sort_by] ||= "published_at"
     params[:feed_urls_order_by] ||= "desc"
 
-    sort =
-    condition = "1=1"
+    # sort =
+    condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
     unless params[:search].blank?
       #condition = "1=1"
       condition = condition + " and priorities = #{params[:search][:priorities]}" unless params[:search][:priorities].blank?

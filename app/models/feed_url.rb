@@ -110,7 +110,12 @@ class FeedUrl < ActiveRecord::Base
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
             if !page_category.blank?
-              status = 3 unless valid_categories.include?(page_category.downcase)
+              unless valid_categories.include?(page_category.downcase)
+                status = 3
+                if page_category.downcase == 'science & technology'
+                  category = "Mobile,Tablet,Camera,Laptop"
+                end
+              end
             end
             # remove characters after come with space + '- or |' symbols
             title = title.to_s.gsub(/\s(-|\|).+/, '')
