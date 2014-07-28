@@ -220,4 +220,18 @@ class FeedUrl < ActiveRecord::Base
     end while next_val != 0
   end
 
+  def self.remove_missing_keys(match="")
+    next_val = 0
+    loop_count = 0
+    begin
+      redis_val = $redis_rtb.scan(next_val, match: match, count: 300)
+      next_val = redis_val[0].to_i
+      val = redis_val[1]
+      # process_missing_url(val, count)
+      p "Loop Count => #{loop_count}"
+      loop_count+=1
+      removed_item_count = $redis_rtb.del(val)
+      p "removed items #{removed_item_count}"
+    end while next_val != 0
+  end
 end
