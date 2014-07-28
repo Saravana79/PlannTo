@@ -67,3 +67,8 @@ task :youtube_missing_url_process, [:count, :valid_categories] => :environment d
   valid_categories = valid_categories.to_s.split(",")
   FeedUrl.get_missing_youtube_keys(args[:count], valid_categories)
 end
+
+task :remove_missing_keys => :environment do
+  puts "remove_missing_keys"
+  FeedUrl.remove_missing_keys("missing*")
+end
