@@ -230,7 +230,7 @@ class FeedUrl < ActiveRecord::Base
       # process_missing_url(val, count)
       p "Loop Count => #{loop_count}"
       loop_count+=1
-      removed_item_count = $redis_rtb.del(val)
+      removed_item_count = $redis_rtb.del(val) unless val.blank?
       p "removed items #{removed_item_count}"
     end while next_val != 0
   end
