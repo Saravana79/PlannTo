@@ -1,0 +1,50 @@
+<div class="new_container">
+  <h1 class="center_heading">Ab Test Settings</h1>
+  <div class="ab_test_form">
+    <%= form_for "ab_test", :url => {action: "create_ab_settings"} do |f| %>
+        Enabled: <%= f.select("enabled", options_for_select(["true","false"], "#{@ab_test_details.enabled}"), {}, {:class => "field"}) %>
+        <br />
+        Alternatives:
+        <ul>
+          <% @alternative_list.each do |role| %>
+              <li><%= role[0] %>:
+                <% role[1].each do |each_key| %>
+                  <%= check_box_tag "alternatives[#{role[0]}][]", each_key, @alternatives.include?("#{role[0]}:#{each_key}") -%>
+                  <%= each_key -%>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+        <%= f.submit "Save", :class => "btn-success" %>
+    <% end %>
+  </div>
+</div>
+
+
+<style type="text/css">
+  .ab_test_details {
+      margin: 100px;
+      font-size: 15px;;
+  }
+  .center_heading {
+      font-size: 25px;
+      padding-top: 30px;
+      text-align: center;
+  }
+
+  .ab_test_form .field {
+      margin-left: 10%;
+  }
+
+  .ab_test_form {
+      padding-left: 20%;
+      font-size: 15px;
+  }
+  .ab_test_form > form {
+      line-height: 40px;
+  }
+  .grp-select {
+      height: 175px;
+      width: 200px;
+  }
+</style>

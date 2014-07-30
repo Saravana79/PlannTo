@@ -414,5 +414,7 @@ resources :comments do
   match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"
   match "advertisements/ad_via_iframe" => "advertisements#ad_via_iframe"
   match "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"
+  match "advertisements/ab_test" => "advertisements#ab_test", :as => "advertisement_ab_test"
+  match "advertisements/create_ab_settings" => "advertisements#create_ab_settings", :as => "create_ab_settings", :via => [:post]
 
 end
