@@ -10,7 +10,7 @@ class AdvertisementsController < ApplicationController
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
     @sid = sid = params[:sid] ||= ""
 
-    @ad_template_type = "type_2" if @suitable_ui_size == 120
+    @ad_template_type = "type_2" if @suitable_ui_size == "120"
     @ad_template_type = params[:page_type] unless params[:page_type].blank?
 
     return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid) if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
@@ -43,7 +43,7 @@ class AdvertisementsController < ApplicationController
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                               cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid) if @is_test != "true"
       @item_details = @item_details.uniq(&:url)
-      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items)
+      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
     end
 
@@ -94,7 +94,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856] : []
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
-    @suitable_ui_size = Advertisement.process_size(@iframe_width)
+    @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
@@ -156,7 +156,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def ab_test
-    @alternative_list = [['300*250', ["type_1","type_2"]], ["120*600", ["type_1","type_2"]], ["728*90", ["type_1","type_2"]]]
+    @alternative_list = [['300*250', ["type_1","type_2"]], ["120*600", ["type_1","type_2"]], ["728*90", ["type_1","type_2"]], ["300*600", ["type_1","type_2"]]]
     ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
     @ab_test_details = Struct.new(:enabled, :alternatives).new(ab_test_details[0], ab_test_details[1])
     @alternatives = []

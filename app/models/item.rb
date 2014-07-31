@@ -1351,8 +1351,11 @@ end
 
   end
 
-  def self.assign_template_and_item(ad_template_type, item_details, items)
-    if ad_template_type == "type_2"
+  def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size)
+    if suitable_ui_size == "300_600"
+      item_details = item_details.first(18)
+      sliced_item_details = item_details.each_slice(3)
+    elsif ad_template_type == "type_2"
       item_details = item_details.first(12)
       sliced_item_details = item_details.each_slice(2)
     else

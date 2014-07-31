@@ -34,18 +34,21 @@ class Advertisement < ActiveRecord::Base
     return url_params
   end
 
-  def self.process_size(width)
+  def self.process_size(width, height=0)
     width = width.to_i
+    height = height.to_i
     if (width <= 120)
-      return_val = 120
+      return_val = "120"
     elsif (width <= 130)
-      return_val = 127
+      return_val = "127"
+    elsif (width < 350 && height == 600)
+      return_val = "300_600"
     elsif (width < 350)
-      return_val = 300
+      return_val = "300"
     elsif (width < 750)
-      return_val = 728
+      return_val = "728"
     else
-      return_val = 120
+      return_val = "120"
     end
     return return_val
   end
