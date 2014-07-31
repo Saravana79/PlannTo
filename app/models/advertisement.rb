@@ -274,7 +274,7 @@ class Advertisement < ActiveRecord::Base
   private
 
   def file_dimensions
-    hieght_width = self.ad_size.split("*")
+    hieght_width = self.ad_size.split("x")
     dimensions = Paperclip::Geometry.from_file(upload_image.queued_for_write[:original].path)
     logger.info "===========================================#{dimensions.width} +++++++++++++++#{dimensions.height}"
     if dimensions.width.to_i.to_s != hieght_width[0] || dimensions.height.to_i.to_s != hieght_width[1]

@@ -93,7 +93,7 @@ class AdvertisementsController < ApplicationController
     impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
     @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856] : []
     @ref_url = params[:ref_url] ||= ""
-    @iframe_width, @iframe_height = params[:size].split("*")
+    @iframe_width, @iframe_height = params[:size].split("x")
     @suitable_ui_size = Advertisement.process_size(@iframe_width)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
@@ -179,7 +179,9 @@ class AdvertisementsController < ApplicationController
     params[:ref_url] ||= ""
     params[:item_id] ||= ""
     params[:page_type] ||= ""
+    params[:size] ||= ""
 
+    params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
     enabled, alternatives = ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
     if enabled == "true"

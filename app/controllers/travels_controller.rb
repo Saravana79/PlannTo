@@ -9,7 +9,7 @@ class TravelsController < ApplicationController
     cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
     url_params = Advertisement.url_params_process(params)
 
-    @iframe_width, @iframe_height = params[:size].split("*")
+    @iframe_width, @iframe_height = params[:size].split("x")
 
     if (params[:ref_url] && params[:ref_url] != "" && params[:ref_url] != 'undefined')
       url = params[:ref_url]

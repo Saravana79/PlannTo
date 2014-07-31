@@ -7,7 +7,7 @@ class Image < ActiveRecord::Base
       :url  => ":s3_sg_url"
 
   def self.file_dimensions(image)
-    hieght_width = image.ad_size.split("*")
+    hieght_width = image.ad_size.split("x")
     dimensions = Paperclip::Geometry.from_file(image.avatar.queued_for_write[:original].path)
     logger.info "===========================================#{dimensions.width} +++++++++++++++#{dimensions.height}"
     return_val = true
