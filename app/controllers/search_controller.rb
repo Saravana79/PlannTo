@@ -250,7 +250,7 @@ class SearchController < ApplicationController
     end 
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
-      with :status,[1,2,3]
+      with :status,[1,2]
       paginate(:page => 1, :per_page => 10) 
       order_by :orderbyid , :asc
       order_by :launch_date, :desc            
