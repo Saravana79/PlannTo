@@ -58,16 +58,17 @@
         <div class="float_lft">
           <a href="javascript:void(0)" class="select_button_for_rel_products">Select Relevant Product to Show Ad </a>
           <%= hidden_field_tag "related_item_ids", @items.blank? ? "" : @items.map(&:id).join(",") %>
+          <%= f.hidden_field 'exclusive_item_ids', :id => "exclusive_item_ids" %>
         </div>
       </div>
 
       <div class="fields-div" id="reviewProducts">
 
-        <div class="title_header float_lft">Product :</div>
+        <div class="title_header float_lft">Exclusive Product :</div>
         <div class="taggingdiv">
-          <ul id="ad_product_list" class="tagging"></ul>
+          <ul id="exclusive_product_list" class="tagging"></ul>
           <div class="float_lft " id="displayTagBox">
-            <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
+            <input placeholder="Start Typing for suggestions.." type="text" value="" id="exclusive_product"/>
           </div>
         </div>
       </div>
@@ -240,6 +241,25 @@
         $.textTagger("#ad_product", "#ad_product_list", settings);
 //ends
         <%end%>
+
+        //exclusive product
+
+        var new_settings = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: true,
+            hidden_field: "exclusive_item_ids"
+        };
+        <%unless @exclusive_items.nil? %>
+        <% @exclusive_items.each do |item| %>
+
+        $.addTag('exclusive_product', 'exclusive_product_list', new_settings, "<%= item.name %>", "<%= item.id %>", false);
+        $.addIdToField(new_settings.hidden_field, "<%= item.id %>",false);
+        //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
+        <%end%>
+        <%end%>
+
+        $.textTagger("exclusive_product", "exclusive_product_list", new_settings);
 
         $("#add_another_file").live("click", function () {
             a = $(".file-div").clone();

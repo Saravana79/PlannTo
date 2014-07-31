@@ -32,6 +32,7 @@ class FeedsController < ApplicationController
 
     # sort =
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
+    intial_condition = condition
     unless params[:search].blank?
       #condition = "1=1"
       condition = condition + " and priorities = #{params[:search][:priorities]}" unless params[:search][:priorities].blank?
@@ -42,11 +43,11 @@ class FeedsController < ApplicationController
     end
 
     if params[:commit] == "Clear"
-      condition = "1=1"
+      condition = intial_condition
       params[:search] = {}
     elsif params[:commit] != "Filter"
       params[:search] ||= {:status => 0}
-      condition = condition == "1=1" ? "status = 0" : condition
+      condition = condition == intial_condition ? "status = 0" : condition
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}")

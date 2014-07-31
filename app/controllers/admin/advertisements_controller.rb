@@ -23,6 +23,7 @@ class Admin::AdvertisementsController < ApplicationController
 
 
     @items = Item.where(:id => @advertisement.content.related_items.collect(&:item_id)) rescue []
+    @exclusive_items = Item.where(:id => @advertisement.exclusive_item_ids.to_s.split(",")) rescue []
   end
 
   def show
@@ -67,6 +68,7 @@ class Admin::AdvertisementsController < ApplicationController
       redirect_to admin_advertisements_path
     else
       @items = Item.where(:id => @content.related_items.collect(&:item_id)) rescue []
+      @exclusive_items = Item.where(:id => params[:advertisement][:exclusive_item_ids].to_s.split(",")) rescue []
       render :new
     end
   end
