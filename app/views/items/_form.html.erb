@@ -35,6 +35,8 @@
     <%= label :status_1, 'Available' %>
     <%= f.radio_button :status, '2', :checked => @item.status == "2" %>
     <%= label :status_2, 'Future' %>
+      <%= f.radio_button :status, '3', :checked => @item.status == "2" %>
+    <%= label :status_2, 'Not Available' %>
     <br />
 
     <label for="manufacturer">Previous Version :</label>
