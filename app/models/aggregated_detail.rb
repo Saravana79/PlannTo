@@ -101,6 +101,46 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
+  def self.chart_data_for_ad(advertisement_id, start_date, end_date, types=[])
+    if start_date.nil?
+      start_date = 2.weeks.ago
+    end
+
+    if end_date.nil?
+      end_date = Date.today
+    end
+
+    if (end_date.to_date - start_date.to_date).to_i > 31
+      start_date = start_date.beginning_of_month
+      end_date = end_date.end_of_month
+
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='advertisement' and entity_id= #{advertisement_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by month(date)"
+      results = find_by_sql(query).group_by {|each_rec| each_rec.date.month}
+
+      # CREATE JSON DATA FOR EACH MONTH
+      (start_date.to_date..end_date.to_date).map(&:beginning_of_month).uniq.map do |date|
+        {
+            impression_time: date.strftime("%b, %Y"),
+            impressions: results[date.month].blank? ? 0 : results[date.month].first.impressions_count,
+            clicks: results[date.month].blank? ? 0 : results[date.month].first.clicks_count
+        }
+      end
+    else
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='advertisement' and entity_id= #{advertisement_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"
+
+      results = find_by_sql(query).group_by {|each_rec| each_rec.date}
+
+      #WORKS FINE DATA FOR EACH DAY
+      (start_date.to_date..end_date.to_date).map do |date|
+        {
+            impression_time: date.strftime("%F"),
+            impressions: results[date].blank? ? 0 : results[date].first.impressions_count,
+            clicks: results[date].blank? ? 0 : results[date].first.clicks_count
+        }
+      end
+    end
+  end
+
   # def self.chart_data_widgets_for_click(publisher_id, start_date, end_date, types, vendor_id)
   #   if start_date.nil?
   #     start_date = 2.weeks.ago

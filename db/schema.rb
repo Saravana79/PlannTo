@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140731101123) do
+ActiveRecord::Schema.define(:version => 20140806094721) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20140731101123) do
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "winning_price"
   end
 
   create_table "answer_contents", :force => true do |t|
@@ -816,6 +817,7 @@ ActiveRecord::Schema.define(:version => 20140731101123) do
     t.datetime "payment_date"
     t.integer  "payment_report_id"
     t.string   "sid"
+    t.integer  "advertisement_id"
   end
 
   create_table "payment_reports", :force => true do |t|

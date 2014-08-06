@@ -51,6 +51,8 @@ development:
   rtb_budget_reset_time: 2
   rtb_initial_budget: 6000000
   ectr_default_value: 0.02
+  enabled_ab_test: true #remove cache using following command in rails console, Rails.cache.clear
+  ab_test_alternatives: "type_1,type_2"
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -93,6 +95,8 @@ test:
   rtb_budget_reset_time: 2
   rtb_initial_budget: 6000000
   ectr_default_value: 0.02
+  enabled_ab_test: true #remove cache using following command in rails console, Rails.cache.clear
+  ab_test_alternatives: "type_1,type_2"
  
 production:
   root_image_url: "http://cdn1.plannto.com/items/"
@@ -147,3 +151,5 @@ production:
   rtb_budget_reset_time: 2
   rtb_initial_budget: 6000000
   ectr_default_value: 0.02
+  enabled_ab_test: true #remove cache using following command in rails console, Rails.cache.clear#remove cache using following command in rails console, Rails.cache.clear#remove cache using following command in rails console, Rails.cache.clear
+  ab_test_alternatives: "type_1,type_2"

@@ -397,6 +397,7 @@ resources :comments do
   get "ad_reports/load_vendors" => "admin/ad_reports#load_vendors", :as => "admin_load_vendors"
   get "admin/ad_reports/view_chart" => "admin/ad_reports#view_chart", :as => "admin_ad_report_chart"
   get "admin/ad_reports/widget_reports" => "admin/ad_reports#widget_reports", :as => "admin_ad_report_widget_reports"
+  get "admin/ad_reports/view_ad_chart" => "admin/ad_reports#view_ad_chart", :as => "admin_ad_report_view_ad_chart"
   # get "admin/payment_reports" => "admin/ad_reports#payment_reports", :as => "admin_payment_reports"
 
   resources :feeds do

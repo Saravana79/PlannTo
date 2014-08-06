@@ -9,6 +9,7 @@ class AddImpression < ActiveRecord::Base
  belongs_to :user
  belongs_to :item
  belongs_to :advertisement
+ has_one :order_history, :foreign_key => :impression_id
  has_one :click, :foreign_key => "impression_id"
 
  def self.create_new_record(obj_params)

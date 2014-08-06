@@ -93,4 +93,46 @@ class Admin::AdReportsController < ApplicationController
     @vendors = Vendor.all
     render :partial => "vendor_details", :object => @vendors
   end
+
+  def view_ad_chart
+    @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+    @search_path = admin_widget_reports_path
+
+    @publishers = Publisher.all
+    params[:publisher_id] ||= Publisher.first.id
+
+    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @vendors = Vendor.all
+
+    params[:vendor_id] ||= nil
+
+    types = []
+
+    imp_report_results = AggregatedDetail.chart_data_for_ad(params[:advertisement_id], @start_date, @end_date, types)
+    @result_array = imp_report_results.map {|result| result.values}
+    @x_values = @result_array.map {|each_array| each_array[0]}
+    @impressions = @result_array.map {|each_array| each_array[1]}
+    @clicks = @result_array.map {|each_array| each_array[2]}
+    @winning_price = @result_array.map {|each_array| each_array[3]}
+
+    condition = ""
+    unless params[:search].blank?
+      condition = condition + " and vendor_ids = #{params[:search][:vendor_id]}" unless params[:search][:vendor_id].blank?
+      condition = condition + " and order_status = '#{params[:search][:order_status]}'" unless params[:search][:order_status].blank?
+      condition = condition + " and payment_status = '#{params[:search][:payment_status]}'" unless params[:search][:payment_status].blank?
+    end
+
+    if params[:commit] == "Clear"
+      condition = ""
+      params[:search] = {}
+    elsif params[:commit] != "Filter"
+      params[:search] ||= {}
+    end
+
+    @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @publisher.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
+    vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
+
+    @vendors =  VendorDetail.where(:item_id => vendor_ids)
+  end
 end

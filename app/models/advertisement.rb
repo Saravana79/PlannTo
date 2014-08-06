@@ -11,6 +11,7 @@ class Advertisement < ActiveRecord::Base
 
   has_many :images, as: :imageable, dependent: :destroy
   has_many :add_impressions
+  has_many :order_histories
   belongs_to :content
   belongs_to :user
   belongs_to :vendor
