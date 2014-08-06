@@ -8,10 +8,10 @@ class AggregatedDetail < ActiveRecord::Base
     click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
 
     if entity_type == "publisher"
-      impression_query = "select publisher_id as entity_id,count(*) as impression_count from add_impressions where #{impression_date_condition} group by publisher_id"
+      impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price) as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
       click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
     elsif entity_type == "advertisement"
-      impression_query = "select advertisement_id as entity_id,count(*) as impression_count from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
+      impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price) as winning_price from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
       click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
     end
 
@@ -20,8 +20,8 @@ class AggregatedDetail < ActiveRecord::Base
       impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
       impressions.each do |each_imp|
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
-        aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count)
+        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
+        aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
       end
       page += 1
     end while !impressions.empty?
@@ -31,7 +31,7 @@ class AggregatedDetail < ActiveRecord::Base
       clicks = Click.paginate_by_sql(click_query, :page => page, :per_page => batch_size)
 
       clicks.each do |each_click|
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date(:entity_id => each_click.entity_id, :date => time.to_date, :entity_type => entity_type)
+        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_click.entity_id, :date => time.to_date, :entity_type => entity_type)
         aggregated_detail.update_attributes(:clicks_count => each_click.click_count)
       end
       page += 1

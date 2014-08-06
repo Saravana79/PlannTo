@@ -1,4 +1,3 @@
-
 <h3 class="report_title">
   Advertisement Reports
 </h3>
@@ -50,24 +49,6 @@ To Date
 <%= text_field_tag :to_date, @end_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
 </span>
     </div>
-    <div style="display:block;padding-top:10px;clear:both;">
-<span style="width:100px;display:block;float:left;padding-top:5px;">
-Publisher
-</span>
-<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-<%= select_tag(:publisher_id, options_from_collection_for_select(@publishers, 'id', 'publisher_url', params[:publisher_id])) %>
-</span>
-    </div>
-
-    <div style="display:block;padding-top:10px;clear:both;">
-<span style="width:100px;display:block;float:left;padding-top:5px;">
-Vendor
-</span>
-<span class="vendor_details" style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-  <%= render :partial => "admin/ad_reports/vendor_details" %>
-</span>
-    </div>
-
     <%= hidden_field_tag "advertisement_id", params[:advertisement_id] %>
 
     <div style="width:200px;padding-left:100px;display:block;clear:both;padding-top:20px;">
@@ -84,9 +65,9 @@ Vendor
 </div>
 -->
 
-<br /><br />
+<br/><br/>
 
-<div id="report" >
+<div id="report">
   <%= render "admin/order_histories/report" %>
 </div>
 
@@ -161,18 +142,3 @@ Vendor
     }
 
 </style>
-
-<script type="text/javascript">
-    $("#publisher_id").change(function () {
-        $.ajax({
-            url: '/ad_reports/load_vendors',
-            dataType:'json',
-            type: "get",
-            dataType: 'html',
-            data: {publisher_id: $("#publisher_id").val()},
-            success: function(data){
-                $(".vendor_details").html(data)
-            }
-        });
-    })
-</script>
