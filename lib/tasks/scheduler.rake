@@ -31,7 +31,7 @@ end
 
 task :aggregated_detail_process_scheduler => :environment do
   puts "Running Queeing Aggregated Process, at #{Time.zone.now}"
-  Resque.enqueue(AggregatedDetailProcess, Time.zone.now)
+  Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc)
 end
 
 task :content_ad_detail_process => :environment do
