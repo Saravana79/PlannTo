@@ -5,13 +5,13 @@ task :feed_process, [:priorities] => :environment do |t, args|
 
   puts "Running Priorities Feed Process, at #{Time.zone.now}"
   if $redis.llen("resque:queue:feed_process") == 0
-    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now, nil, priorities=priorities)
+    Resque.enqueue(FeedProcess, "process_feeds", Time.zone.now.utc, nil, priorities=priorities)
   end
 end
 
 task :advertisement_process => :environment do
   puts "Running Advertisement ecpm calculation, at #{Time.zone.now}"
-  Resque.enqueue(AdvertisementProcess, "calculate_ecpm", Time.zone.now)
+  Resque.enqueue(AdvertisementProcess, "calculate_ecpm", Time.zone.now.utc)
 end
 
 task :related_item_process => :environment do
@@ -36,7 +36,7 @@ end
 
 task :content_ad_detail_process => :environment do
   puts "Running ContentAdDetail Update for Items, at #{Time.zone.now}"
-  Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now, 1000, Time.now)
+  Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now.utc, 1000, Time.now)
 end
 
 desc "missing url process with example: force=true, process_type=recent, count=200, valid_urls='fonearena.com,gadgetstouse.com,..', invalid_urls='www.cnet.com,www.xxx.com,..', missing_ad=false"

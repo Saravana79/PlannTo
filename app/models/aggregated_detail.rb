@@ -8,10 +8,10 @@ class AggregatedDetail < ActiveRecord::Base
     click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
 
     if entity_type == "publisher"
-      impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price) as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
+      impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/100000 as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
       click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
     elsif entity_type == "advertisement"
-      impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price) as winning_price from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
+      impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/100000 as winning_price from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
       click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
     end
 
@@ -70,7 +70,7 @@ class AggregatedDetail < ActiveRecord::Base
 
       # results = AggregatedDetail.where(:entity_id => publisher_id, :entity_type => 'publisher', :date => range).select("impressions_count, clicks_count, date").group_by {|each_rec| each_rec.date.month}
 
-      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by month(date)"
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count, sum(winning_price) as winning_price FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by month(date)"
       results = find_by_sql(query).group_by {|each_rec| each_rec.date.month}
 
 
@@ -79,12 +79,13 @@ class AggregatedDetail < ActiveRecord::Base
         {
             impression_time: date.strftime("%b, %Y"),
             impressions: results[date.month].blank? ? 0 : results[date.month].first.impressions_count,
-            clicks: results[date.month].blank? ? 0 : results[date.month].first.clicks_count
+            clicks: results[date.month].blank? ? 0 : results[date.month].first.clicks_count,
+            winning_price: results[date.month].blank? ? 0 : results[date.month].first.winning_price
         }
       end
     else
 
-      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count, sum(winning_price) as winning_price FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"
 
       results = find_by_sql(query).group_by {|each_rec| each_rec.date}
 
@@ -95,7 +96,8 @@ class AggregatedDetail < ActiveRecord::Base
         {
             impression_time: date.strftime("%F"),
             impressions: results[date].blank? ? 0 : results[date].first.impressions_count,
-            clicks: results[date].blank? ? 0 : results[date].first.clicks_count
+            clicks: results[date].blank? ? 0 : results[date].first.clicks_count,
+            winning_price: results[date].blank? ? 0 : results[date].first.winning_price
         }
       end
     end
