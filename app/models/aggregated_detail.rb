@@ -2,7 +2,7 @@ class AggregatedDetail < ActiveRecord::Base
 
   def self.update_aggregated_detail(time, entity_type, batch_size=1000)
     entity_field = entity_type + "_id"
-    time = time.is_a?(Time) ? time.utc : time # converted to UTC
+    # time = time.is_a?(Time) ? time.utc : time # converted to UTC
 
     impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
     click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
@@ -114,7 +114,7 @@ class AggregatedDetail < ActiveRecord::Base
       start_date = start_date.beginning_of_month
       end_date = end_date.end_of_month
 
-      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='advertisement' and entity_id= #{advertisement_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by month(date)"
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count, sum(winning_price) as winning_price FROM aggregated_details WHERE entity_type='advertisement' and entity_id= #{advertisement_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by month(date)"
       results = find_by_sql(query).group_by {|each_rec| each_rec.date.month}
 
       # CREATE JSON DATA FOR EACH MONTH
@@ -122,11 +122,12 @@ class AggregatedDetail < ActiveRecord::Base
         {
             impression_time: date.strftime("%b, %Y"),
             impressions: results[date.month].blank? ? 0 : results[date.month].first.impressions_count,
-            clicks: results[date.month].blank? ? 0 : results[date.month].first.clicks_count
+            clicks: results[date.month].blank? ? 0 : results[date.month].first.clicks_count,
+            winning_price: results[date.month].blank? ? 0 : results[date.month].first.winning_price
         }
       end
     else
-      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='advertisement' and entity_id= #{advertisement_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"
+      query = "SELECT date, sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count, sum(winning_price) as winning_price FROM aggregated_details WHERE entity_type='advertisement' and entity_id= #{advertisement_id} and date BETWEEN '#{start_date}' and '#{end_date}' group by date"
 
       results = find_by_sql(query).group_by {|each_rec| each_rec.date}
 
@@ -135,7 +136,8 @@ class AggregatedDetail < ActiveRecord::Base
         {
             impression_time: date.strftime("%F"),
             impressions: results[date].blank? ? 0 : results[date].first.impressions_count,
-            clicks: results[date].blank? ? 0 : results[date].first.clicks_count
+            clicks: results[date].blank? ? 0 : results[date].first.clicks_count,
+            winning_price: results[date].blank? ? 0 : results[date].first.winning_price
         }
       end
     end
