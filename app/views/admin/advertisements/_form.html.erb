@@ -12,6 +12,14 @@
     <h2> Advertisement </h2>
 
     <div class="main_form">
+      <% unless @advertisement.new_record? %>
+      <div class="fields-div">
+        <div class="title_header float_lft">Advertisement Status :</div>
+        <div>
+          <%= select_tag :ad_status, options_for_select(["Enable", "Disable", "Delete"], @ad_status) %>
+        </div>
+      </div>
+      <% end %>
       <div class="fields-div">
         <div class="title_header float_lft">Advertisement Type :</div>
         <div>
@@ -441,3 +449,28 @@
         margin-top: 30px;
     }
 </style>
+
+<% unless @advertisement.new_record? %>
+<script type="application/javascript">
+  $(function()
+  {
+      previous_val = $("#ad_status").val()
+
+      $("#ad_status").change(function()
+      {
+          var ad_status = $(this).val()
+          var return_val = confirm("Are you sure?")
+          if (return_val == true)
+          {
+              console.log(ad_status)
+              window.location.href = "/admin/advertisements/change_ad_status?status="+ad_status+"&ad_id="+<%= @advertisement.id %>
+          }
+          else
+          {
+              console.log(previous_val)
+              $("#ad_status").val(previous_val)
+          }
+      })
+  })
+</script>
+<% end %>

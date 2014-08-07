@@ -9,7 +9,7 @@ class Advertisement < ActiveRecord::Base
                     :path => "images/advertisements/:id/:style/:filename",
                     :url => ":s3_sg_url"
 
-  has_many :images, as: :imageable, dependent: :destroy
+  has_many :images, as: :imageable, :dependent => :destroy
   has_many :add_impressions
   has_many :order_histories
   belongs_to :content

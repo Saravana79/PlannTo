@@ -6,7 +6,11 @@ namespace :admin do
   # resources :impression_reports
   resources :click_reports
   resources :order_histories
-  resources :advertisements
+  resources :advertisements do
+    collection do
+      get "change_ad_status"
+    end
+  end
   resources :buying_plans do
   collection do  
     get :search
