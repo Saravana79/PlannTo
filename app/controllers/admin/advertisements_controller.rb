@@ -20,7 +20,7 @@ class Admin::AdvertisementsController < ApplicationController
   def edit
     @advertisement = Advertisement.where("id=#{params[:id]} #{@user_condition}").first
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
-    @ad_status = $redis.hget("advertisments:#{@advertisement.id}", "enabled") == "true" ? "Enable" : "Disable"
+    @ad_status = $redis_rtb.hget("advertisments:#{@advertisement.id}", "enabled") == "true" ? "Enable" : "Disable"
 
     @items = Item.where(:id => @advertisement.content.related_items.collect(&:item_id)) rescue []
     @exclusive_items = Item.where(:id => @advertisement.exclusive_item_ids.to_s.split(",")) rescue []
@@ -112,7 +112,7 @@ class Admin::AdvertisementsController < ApplicationController
     status = params[:status]
     if (["Enable","Disable"].include?(status))
       ad_status = status == "Enable" ? "true" : "false"
-      $redis.hset("advertisments:#{params[:ad_id]}", "enabled", ad_status)
+      $redis_rtb.hset("advertisments:#{params[:ad_id]}", "enabled", ad_status)
       redirect_to edit_admin_advertisement_path(params[:ad_id])
     elsif status == "Delete"
       advertisement = Advertisement.where(:id => params[:ad_id]).first
@@ -121,7 +121,7 @@ class Admin::AdvertisementsController < ApplicationController
       rescue
         advertisement.delete
       end
-      $redis.del("advertisments:#{params[:ad_id]}")
+      $redis_rtb.del("advertisments:#{params[:ad_id]}")
       redirect_to admin_advertisements_path
     end
   end
