@@ -23,6 +23,5 @@ task "resque:paused" => :environment do
   puts "Resque paused: #{paused}"
 end
 
-
 desc "Alias for resque:work (To run workers on Heroku)"
 task "jobs:work" => "resque:work"
