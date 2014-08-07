@@ -39,11 +39,11 @@ task :content_ad_detail_process => :environment do
   Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now.utc, 1000, Time.now)
 end
 
-desc "missing url process with example: force=true, process_type=recent, count=200, valid_urls='fonearena.com,gadgetstouse.com,..', invalid_urls='www.cnet.com,www.xxx.com,..', missing_ad=false"
+desc "missing url process with example: force=true, process_type=recent, count=200, valid_urls='fonearena.com-gadgetstouse.com,..', invalid_urls='www.cnet.com-www.xxx.com,..', missing_ad=false"
 task :missing_url_process, [:force, :process_type, :count, :valid_urls, :invalid_urls, :missing_ad] => :environment do |_, args|
   args.with_defaults(:force => false, :process_type => "recent", :count => 200, :valid_urls => "missingurl:*", :invalid_urls => "download.cnet.com", :missing_ad => false)
   puts "Running Missingurl Process, at #{Time.zone.now}"
-  if $redis.llen("resque:queue:missing_record_process") == 0
+  if (args[:force] == "true" || $redis.llen("resque:queue:missing_record_process") == 0)
     Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now, args[:force], args[:process_type], args[:count], args[:valid_urls], args[:invalid_urls], args[:missing_ad])
   end
 end

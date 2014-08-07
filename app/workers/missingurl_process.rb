@@ -7,7 +7,7 @@ class MissingurlProcess
 
   # Run only one at a time, regardless of repo_id.
   def self.identifier(method_name, actual_time, force, process_type, count, valid_urls, invalid_urls, missing_ad)
-    nil
+    "#{force}-#{valid_urls}"
   end
 
   def self.perform(method_name, actual_time, force, process_type, count, valid_urls, invalid_urls, missing_ad)
@@ -18,8 +18,8 @@ class MissingurlProcess
 
     now_time = actual_time.to_time
 
-    valid_urls = valid_urls.to_s.split(",")
-    invalid_urls = invalid_urls.to_s.split(",")
+    valid_urls = valid_urls.to_s.split("-")
+    invalid_urls = invalid_urls.to_s.split("-")
 
     if force.to_s == "true"
       FeedUrl.send(method_name, log, process_type, count, valid_urls, invalid_urls, missing_ad)

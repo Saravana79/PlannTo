@@ -21,6 +21,8 @@ class Advertisement < ActiveRecord::Base
 
   scope :get_ad_by_id, lambda { |id| where("id = ?", id) }
 
+  STATUS = ["","valid"]
+
   #validate :file_dimensions
 
   def self.url_params_process(param)
@@ -101,7 +103,7 @@ class Advertisement < ActiveRecord::Base
 
     ad_status = false
     if status.to_i == 1
-      if ((!start_date.blank? && start_date.to_date >= Date.today) && (!end_date.blank? && end_date.to_date <= Date.today))
+      if ((!start_date.blank? && start_date.to_date <= Date.today) && (!end_date.blank? && end_date.to_date >= Date.today))
         ad_status = true
       end
     end
