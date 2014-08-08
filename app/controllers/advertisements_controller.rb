@@ -115,6 +115,7 @@ class AdvertisementsController < ApplicationController
     @image = @ad.images.where(:ad_size => params[:size]).first
 
     @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid) if @is_test != "true"
+    @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
 
     respond_to do |format|
       format.json {

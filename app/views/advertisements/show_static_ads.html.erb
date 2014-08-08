@@ -12,8 +12,16 @@
     <% elsif @ad.advertisement_type == "static" %>
         <%= link_to(image_tag(@image.avatar.url), configatron.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
     <% else %>
+        <% ad_url = @ad.click_url %>
+        <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
       <%#= link_to(image_tag("http://planntonew.s3.amazonaws.com/images/advertisements/7/1/flashvortex.swf", :style => "height:240px;"), configatron.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
-      <embed src="<%= @image.avatar.url %>"/>
+      <!-- <embed src="<%#= @image.avatar.url %>"/> -->
+      <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"
+              id="plannto-flash-ad" name="plannto-ad" width="300" height="250"><param name="FlashVars" value="clickTag=<%= shop_now_url %>>">
+              <param name="plannto-flash-movie" value="<%= @image.avatar.url %>"><param name="wmode" value="opaque">
+              <param name="allowscriptaccess" value="always"><embed wmode="opaque" allowscriptaccess="always" name="plannto-flash-movie" src="<%= @image.avatar.url %>"
+              flashvars="clickTag=<%= shop_now_url %>" swliveconnect="false" width="300" height="250" type="application/x-shockwave-flash" pluginspage="">
+      </object>
     <% end %>
   </div>
 </div>
