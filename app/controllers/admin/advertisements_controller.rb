@@ -95,7 +95,7 @@ class Admin::AdvertisementsController < ApplicationController
     params['advertisement_content']['title'] = 'advertisement'
     if @advertisement.update_attributes(params[:advertisement])
       @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) unless @content.blank?
-      @advertisement.build_images(image_array) if @advertisement.advertisement_type == "static"
+      @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
       redirect_to admin_advertisements_path
     else
       render :edit
