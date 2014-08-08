@@ -37,9 +37,9 @@ body {
 .advt-box .product-container .btn{ margin:10px 0px; }
 .advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:15px;text-transform: uppercase;}
 
-.item_details .product-txt-desc { margin:0; padding:18px 10px;text-align: center;min-height: 34px;}
+.item_details .product-txt-desc { margin:0; padding:18px 10px;text-align: center;min-height: 60px;}
 .item_details .product-txt-desc p{ margin:0; padding:0; font-size:11px; color:#222;font-family: Arial;}
-.divshadow{margin: 0px 7px 7px 7px;border: 1px solid rgba(158, 157, 157, 0.65);border-radius: 10px 10px 10px 10px;-moz-box-shadow: 2px 2px 3px 3px #E0E0E0;-webkit-box-shadow: 2px 2px 3px 3px #E0E0E0;box-shadow: 2px 2px 3px 3px #E0E0E0;}
+.divshadow{margin: 0px 7px 7px 7px;border: 0px solid rgba(158, 157, 157, 0.65);border-radius: 10px 10px 10px 10px;-moz-box-shadow: 2px 2px 3px 3px #E0E0E0;-webkit-box-shadow: 2px 2px 3px 3px #E0E0E0;box-shadow: 2px 2px 3px 3px #E0E0E0;}
 .planntoadlogo{float: right;position: absolute;top: -1px;right: 1px;opacity: .8;margin: 0px 0px 2px 0px;height: 12px;}
 .planntoadlogo:hover{opacity:1;cursor:pointer;}
 
