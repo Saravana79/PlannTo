@@ -43,7 +43,12 @@ class AdvertisementsController < ApplicationController
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                               cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid) if @is_test != "true"
       @item_details = @item_details.uniq(&:url)
-      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
+      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details.first(2), @items, @suitable_ui_size)
+      if (@suitable_ui_size == "300_600" && @item_details.count < 3)
+        new_item_ids = Item.get_item_ids_for_300_600()
+        @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids)
+        @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
+      end
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
     end
 
