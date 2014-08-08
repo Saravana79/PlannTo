@@ -5,8 +5,8 @@ class FeedUrl < ActiveRecord::Base
     invalid_urls = invalid_urls.delete_if {|x| (x.blank? || x == "nil")}
 
     if process_type != "all"
-      past_date = Date.yesterday.strftime("%-Y-%-m-%d")
-      current_date = Date.today.strftime("%-Y-%-m-%d")
+      past_date = Date.yesterday.strftime("%Y-%-m-%-d")
+      current_date = Date.today.strftime("%Y-%-m-%-d")
       set_keys = ["missingurl-#{past_date}", "missingurl-#{current_date}"]
 
       set_keys.each do |each_key|
