@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.format.json? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url") }, :expires_in => 2.hours, :if => proc { |s| !request.format.json? && params[:is_test] != "true" }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol") }, :expires_in => 2.hours, :if => proc { |s| !request.format.json? && params[:is_test] != "true" }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -189,6 +189,7 @@ class AdvertisementsController < ApplicationController
     params[:page_type] ||= ""
     params[:size] ||= ""
     params[:click_url] ||= ""
+    params[:protocol] ||= request.protocol
 
     params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
@@ -205,9 +206,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol"))
     end
 
     cache_params = CGI::unescape(cache_params)
