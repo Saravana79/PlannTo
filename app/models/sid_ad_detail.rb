@@ -48,7 +48,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
 
         if sid_ad_detail.sample_url.blank?
           sid_key = "spottags:#{sid_ad_detail.sid}"
-          sid_val = $redis_rtb.get(sid_key)
+          sid_val = $redis_rtb.hget(sid_key, "sid_details")
           unless sid_val.blank?
             sid_hash = JSON.parse(eval(sid_val))
             host = URI.parse(sid_hash["url"]).host.downcase rescue ""
@@ -103,7 +103,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
 
     page = 1
     begin
-      sid_ad_details = AddImpression.paginate_by_sql(query_to_get_clicks_and_impressions, :page => page, :per_page => batch_size)
+      sid_ad_details = SidAdDetail.paginate_by_sql(query_to_get_clicks_and_impressions, :page => page, :per_page => batch_size)
 
       page += 1
       sid_ad_details.each do |each_sid_ad_detail|
@@ -125,6 +125,25 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
         redis_key = "sid:#{sid_ad_detail.sid}"
         redis_values = "impressions", sid_ad_detail.impressions, "clicks", sid_ad_detail.clicks, "orders", sid_ad_detail.orders
         $redis_rtb.HMSET(redis_key, redis_values)
+
+        #update spottags with ectr
+        if impressions_count > 500
+          spottag_key = "spottags:#{sid_ad_detail.id}"
+          ectr_val = ectr * 1000
+
+          if ectr_val >= 10
+            final_ectr = 1.25
+          elsif ectr_val >= 6 && ectr_val < 10
+            final_ectr = 1
+          elsif ectr_val >= 3 && ectr_val < 6
+            final_ectr = 0.75
+          elsif ectr_val >= 1 && ectr_val < 3
+            final_ectr = 0.50
+          elsif ectr_val < 1
+            final_ectr = 0.0
+          end
+          $redis_rtb.HMSET(spottag_key, "ectr", final_ectr)
+        end
       end
     end while !sid_ad_details.empty?
   end
