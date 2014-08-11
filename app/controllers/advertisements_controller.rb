@@ -189,11 +189,8 @@ class AdvertisementsController < ApplicationController
     params[:page_type] ||= ""
     params[:size] ||= ""
     params[:click_url] ||= ""
-    params[:protocol] ||= ""
-    params[:protocol] ||= request.protocol
-
-    p 88888888888888888888888888888888
-    p params
+    # params[:protocol] ||= ""
+    params[:protocol] = request.protocol
 
     params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
@@ -217,9 +214,6 @@ class AdvertisementsController < ApplicationController
 
     cache_params = CGI::unescape(cache_params)
     cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
-
-    p 777777777777777777777777777777
-    p cache_key
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
