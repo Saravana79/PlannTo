@@ -20,8 +20,9 @@
               id="plannto-flash-ad" name="plannto-ad" width="300" height="250">
               <param name="plannto-flash-movie" value="<%= @image.base_url unless @image.blank? %>">
               <param name="wmode" value="opaque">
+              <param name="allowscriptaccess" value="always">
               <object type="application/x-shockwave-flash" data="<%= @image.base_url unless @image.blank? %>" width="300" height="250">
-                <img src="<%= configatron.root_image_path + "static/images/dell_ad.jpg" %>" alt="Put your alternate content here" />
+                <%= link_to(image_tag(configatron.root_image_path + "static/images/dell_ad.jpg", :alt => "PlannTo Flash Ad"), shop_now_url, :target => "_blank") %>
                 <param name="FlashVars" value="clickTag=<%= shop_now_url %>">
                 <param name="wmode" value="opaque">
                 <param name="allowscriptaccess" value="always">
