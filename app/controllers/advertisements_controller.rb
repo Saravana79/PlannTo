@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.format.json? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type") }, :expires_in => 2.hours, :if => proc { |s| !request.format.json? && params[:is_test] != "true" }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url") }, :expires_in => 2.hours, :if => proc { |s| !request.format.json? && params[:is_test] != "true" }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -43,10 +43,12 @@ class AdvertisementsController < ApplicationController
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                               cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid) if @is_test != "true"
       @item_details = @item_details.uniq(&:url)
-      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details.first(2), @items, @suitable_ui_size)
+      @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
       if (@suitable_ui_size == "300_600" && @item_details.count < 3)
+        old_item_details = @item_details
         new_item_ids = Item.get_item_ids_for_300_600()
         @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids)
+        @item_details = old_item_details + @item_details
         @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
       end
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
@@ -186,6 +188,7 @@ class AdvertisementsController < ApplicationController
     params[:item_id] ||= ""
     params[:page_type] ||= ""
     params[:size] ||= ""
+    params[:click_url] ||= ""
 
     params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
@@ -202,9 +205,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url"))
     end
 
     cache_params = CGI::unescape(cache_params)

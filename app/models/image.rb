@@ -17,4 +17,12 @@ class Image < ActiveRecord::Base
     end
     return return_val
   end
+
+  def base_url
+    if self.avatar.blank?
+      ""
+    else
+      configatron.root_image_path + self.avatar.path
+    end
+  end
 end

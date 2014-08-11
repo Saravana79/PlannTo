@@ -1354,7 +1354,7 @@ end
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size)
     if suitable_ui_size == "300_600"
       item_details = item_details.first(18)
-      correct_count = item_details.count - (item_details.count % 3)
+      correct_count = item_details.count > 2 ? item_details.count - (item_details.count % 3) : item_details.count
       item_details = item_details.first(correct_count)
       sliced_item_details = item_details.each_slice(3)
     elsif ad_template_type == "type_2"
