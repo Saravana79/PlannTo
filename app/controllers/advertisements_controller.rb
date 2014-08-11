@@ -192,6 +192,12 @@ class AdvertisementsController < ApplicationController
     # params[:protocol] ||= ""
     params[:protocol] = request.protocol
 
+    p 7777
+    p request.protocol
+
+    p 88888888888888888888888888888888
+    p params
+
     params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
     enabled, alternatives = ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
@@ -214,6 +220,9 @@ class AdvertisementsController < ApplicationController
 
     cache_params = CGI::unescape(cache_params)
     cache_key = "views/#{host_name}/advertisements/show_ads?#{cache_params}"
+
+    p 777777777777777777777777777777
+    p cache_key
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
