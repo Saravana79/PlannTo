@@ -26,7 +26,6 @@ class ApplicationController < ActionController::Base
   #end
 
   def change_image_url_path
-    p request.protocol
     if request.protocol == "https://"
       configatron.root_image_path = configatron.root_image_path.gsub("http://", "https://")
       configatron.root_image_url = configatron.root_image_url.gsub("http://", "https://")
