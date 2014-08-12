@@ -137,8 +137,8 @@ class FeedUrl < ActiveRecord::Base
           ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
           $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
         end
-        $redis_rtb.srem("missingurl-toplist", each_url_key) if Rails.env == "production"
       end
+      $redis_rtb.srem("missingurl-toplist", each_url_key) if Rails.env == "production"
     end
   end
 
