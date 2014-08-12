@@ -138,7 +138,8 @@ class FeedUrl < ActiveRecord::Base
           $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
         end
       end
-      $redis_rtb.srem("missingurl-toplist", each_url_key) if Rails.env == "production"
+      mem_key = each_url_key.gsub("missingurl:", "")
+      $redis_rtb.srem("missingurl-toplist", mem_key) if Rails.env == "production"
     end
   end
 

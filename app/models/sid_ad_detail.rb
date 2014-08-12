@@ -12,8 +12,10 @@ class SidAdDetail < ActiveRecord::Base
       add_impressions = AddImpression.paginate_by_sql(query_to_get_add_impressions, :page => page, :per_page => batch_size)
 
       add_impressions.each do |each_impression|
-        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_impression.sid)
+        s_id = each_impression.sid
+        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => s_id)
         sid_ad_detail.save!
+        p "Initialize sid: #{s_id}"
       end
       page += 1
     end while !add_impressions.empty?
@@ -129,7 +131,8 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
 
         #update spottags with ectr
         if impressions_count > 500
-          spottag_key = "spottags:#{sid_ad_detail.id}"
+          spottag_key = "spottags:#{sid_ad_detail.sid}"
+          p "spottag key: #{spottag_key}"
           ectr_val = ectr * 1000
 
           if ectr_val >= 10
