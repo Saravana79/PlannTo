@@ -1,6 +1,7 @@
 class SidAdDetail < ActiveRecord::Base
   def self.update_ad_details_for_sid(log, batch_size=2000)
-    query_to_get_add_impressions = "select sid FROM add_impressions where sid is not null  group by sid"
+    date_for_query = Time.now.utc - 2.month
+    query_to_get_add_impressions = "select sid FROM add_impressions where impression_time >= '2014-07-20' and impression_time >= '#{date_for_query}' and sid is not null group by sid"
     # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
     log.debug "********** Started Updating SidAdDetail for add impressions **********"

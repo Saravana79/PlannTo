@@ -72,3 +72,11 @@ task :remove_missing_keys => :environment do
   puts "remove_missing_keys"
   FeedUrl.remove_missing_keys("missing*")
 end
+
+desc "missing url process for collection 'missingurl-toplist'"
+task :missing_url_process_top_list => :environment do
+  time = Time.zone.now.utc
+  if ($redis.llen("resque:queue:missing_record_process") == 0 && (time.hour % 2 == 0))
+    Resque.enqueue(MissingUrlProcessTopList, "missing_url_process_top_list", Time.zone.now.utc)
+  end
+end
