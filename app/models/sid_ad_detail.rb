@@ -14,7 +14,7 @@ class SidAdDetail < ActiveRecord::Base
       add_impressions.each do |each_impression|
         s_id = each_impression.sid
         sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => s_id)
-        sid_ad_detail.save!
+        sid_ad_detail.save! if sid_ad_detail.new_record?
         p "Initialize sid: #{s_id}"
       end
       page += 1
@@ -50,7 +50,9 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
         sid_ad_detail.update_attributes(:impressions => each_imp.impression_count, :avg_winning_price => each_imp.avg_winning_price)
 
         if sid_ad_detail.sample_url.blank?
-          sid_key = "spottags:#{sid_ad_detail.sid}"
+          sid_ad_detail_sid = sid_ad_detail.sid
+          p "Updating impression for #{sid_ad_detail_sid}"
+          sid_key = "spottags:#{sid_ad_detail_sid}"
           sid_val = $redis_rtb.hget(sid_key, "sid_details")
           unless sid_val.blank?
             sid_hash = JSON.parse(eval(sid_val))
@@ -84,14 +86,18 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
     @clicks = Click.find_by_sql(click_query)
 
     @clicks.each do |each_click|
-      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_click.sid)
+      each_click_sid = each_click.sid
+      p "Updating Clicks for #{each_click_sid}"
+      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_click_sid)
       sid_ad_detail.update_attributes(:clicks => each_click.click_count)
     end
 
     @orders = OrderHistory.find_by_sql(order_query)
 
     @orders.each do |each_order|
-      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_order.sid)
+      each_order_sid = each_order.sid
+      p "Updating Orders for #{each_order_sid}"
+      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_order_sid)
       sid_ad_detail.update_attributes(:orders => each_order.count)
     end
 
@@ -120,8 +126,9 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
           ectr = (clicks_count / impressions_count) + (orders_count / clicks_count) rescue 0.0
         end
 
-
-        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_sid_ad_detail.sid)
+        each_sid_ad_detail_sid = each_sid_ad_detail.sid
+        p "Updating ectr for #{each_sid_ad_detail_sid}"
+        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_sid_ad_detail_sid)
         sid_ad_detail.update_attributes!(:ectr => ectr)
 
         # Redis sid:XXX update with impresssions, clicks and orders
