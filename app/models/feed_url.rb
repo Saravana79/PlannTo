@@ -129,16 +129,16 @@ class FeedUrl < ActiveRecord::Base
                                           :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
 
             $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
+          else
+            ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+            $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
           end
         else
-          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
-          $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
+          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+          $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
         end
-      else
-        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
-        $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
+        $redis_rtb.srem("missingurl-toplist", each_url_key) if Rails.env == "production"
       end
-      $redis_rtb.srem("missingurl-toplist", each_url_key) if Rails.env == "production"
     end
   end
 
