@@ -83,14 +83,20 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
     #   end
     # end
 
-    @clicks = Click.find_by_sql(click_query)
+    p "Started Clicks Update"
 
-    @clicks.each do |each_click|
-      each_click_sid = each_click.sid
-      p "Updating Clicks for #{each_click_sid}"
-      sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_click_sid)
-      sid_ad_detail.update_attributes(:clicks => each_click.click_count)
-    end
+    page = 1
+    begin
+      clicks = Click.paginate_by_sql(click_query, :page => page, :per_page => batch_size)
+
+      clicks.each do |each_click|
+        each_click_sid = each_click.sid
+        p "Updating Clicks for #{each_click_sid}"
+        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_click_sid)
+        sid_ad_detail.update_attributes(:clicks => each_click.click_count)
+      end
+      page += 1
+    end while !clicks.empty?
 
     @orders = OrderHistory.find_by_sql(order_query)
 
