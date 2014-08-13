@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140806094721) do
+ActiveRecord::Schema.define(:version => 20140813121638) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -108,11 +108,13 @@ ActiveRecord::Schema.define(:version => 20140806094721) do
     t.string  "url"
     t.string  "thumbnail"
     t.string  "field1"
-    t.string  "field2",    :limit => 800
-    t.string  "field3",    :limit => 800
-    t.string  "field4",    :limit => 1000
+    t.string  "field2",             :limit => 800
+    t.string  "field3",             :limit => 800
+    t.string  "field4",             :limit => 1000
     t.boolean "video"
     t.string  "domain"
+    t.string  "old_default_values"
+    t.string  "new_default_values"
   end
 
   add_index "article_contents", ["url"], :name => "url"
@@ -443,6 +445,9 @@ ActiveRecord::Schema.define(:version => 20140806094721) do
     t.integer  "priorities",         :default => 3
     t.integer  "missing_count",      :default => 0
     t.string   "additional_details"
+    t.string   "old_default_values"
+    t.string   "new_default_values"
+    t.boolean  "default_status"
   end
 
   create_table "feeds", :force => true do |t|

@@ -98,6 +98,9 @@
             <div style="clear:both;"></div>
           </div>
 
+          <%= hidden_field_tag 'old_default_values', "" %>
+          <%= hidden_field_tag 'new_default_values', "" %>
+
           <div class="page_buttons" style="clear:both;margin-left:40px;margin-bottom:20px;">
             <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :id => "save_and_continue" %>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
@@ -230,7 +233,13 @@
 
                     });
                 }
-            });
+            }).done(function()
+            {
+                var cat = $("#article_content_sub_type").val()
+                var item_ids = $("#articles_item_id").val()
+                var old_def_values = cat+"-"+item_ids
+                $("#old_default_values").val(old_def_values)
+            })
 
 
 
@@ -260,9 +269,7 @@
                 }
                 return false;
             })
-
-        });
-
+        })
 
     </script>
 
