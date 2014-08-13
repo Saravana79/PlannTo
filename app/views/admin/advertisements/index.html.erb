@@ -1,7 +1,10 @@
 <center><h1>List Of Advertisements </h1></center>
  <%=link_to "Create New Advertisement",new_admin_advertisement_path, :class=>"btn btn-primary new_ad", :style=>'background:#16c3d7;' %>
  <%= select_tag(:date_from_dropdown, options_for_select(@collections_for_dropdown, params[:date]), :class => "styled-select") %>
-<br />
+
+ <div class="show_date_range">
+   <span>Date: <%= @start_date.to_date.strftime("%d %b %y") %><%= "  -  #{@end_date.to_date.strftime("%d %b %y")}" unless @end_date.blank? %></span>
+ </div>
 <table border="1" width="90%">
 <tr>
   <th> Name </th>
@@ -59,6 +62,10 @@
         margin: 23px 83px 0 0;
         padding: 3px;
         width: 170px;
+    }
+    .show_date_range > span {
+        font-size: 13px;
+        margin: 0 0 0 18px;
     }
 </style>
 
