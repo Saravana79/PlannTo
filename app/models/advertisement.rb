@@ -277,6 +277,20 @@ class Advertisement < ActiveRecord::Base
     end
   end
 
+  def self.get_extra_details(advertisements, date)
+    extra_details = {}
+    advertisements.each do |each_ad|
+      aggrgated_detail = AggregatedDetail.where("entity_type = 'advertisement' and entity_id = #{each_ad.id} and date = '#{date}'").first
+      aggrgated_detail = AggregatedDetail.new if aggrgated_detail.blank?
+      ctr = 0.0
+      if (aggrgated_detail.clicks_count != 0.0 && aggrgated_detail.impressions_count != 0.0)
+        ctr = (aggrgated_detail.clicks_count.to_f / aggrgated_detail.impressions_count.to_f) * 100 rescue 0.0
+      end
+      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => aggrgated_detail.winning_price.to_f, "ctr" => ctr})
+    end
+    extra_details
+  end
+
   private
 
   def file_dimensions

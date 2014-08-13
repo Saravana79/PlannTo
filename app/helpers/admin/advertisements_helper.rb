@@ -89,4 +89,8 @@ module Admin::AdvertisementsHelper
     end
     ad_url
   end
+
+  def get_ad_status(ad_id)
+    $redis_rtb.hget("advertisments:#{ad_id}", "enabled") == "true" ? "Enable" : "Disable"
+  end
 end
