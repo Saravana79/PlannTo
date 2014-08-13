@@ -8,8 +8,8 @@
   <th> Status </th>
   <th> Start Date</th>
   <th> End Date</th>
-  <th> Clicks</th>
   <th> Impr.</th>
+  <th> Clicks</th>
   <th> CTR</th>
   <th> Cost</th>
   <th> Products</th>
@@ -33,7 +33,7 @@
   </tr>
 <%end%>  
  </table>
- <%= will_paginate @advertisements, :params => {:test => 123} %>
+ <%= will_paginate @advertisements %>
 
 
 <style type="text/css">

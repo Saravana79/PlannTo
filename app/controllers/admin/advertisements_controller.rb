@@ -7,7 +7,7 @@ class Admin::AdvertisementsController < ApplicationController
 
   def index
     params[:date] ||= Date.today
-    @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}-#{Date.today}"], ['Last month', "#{Date.today-1.month}-#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}-#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}-#{Date.today}"]]
+    @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}/#{Date.today}"], ['Last month', "#{Date.today-1.month}/#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}/#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}/#{Date.today}"]]
     @advertisements = Advertisement.where("status=1 #{@user_condition}").order('created_at desc').paginate(:per_page => 10, :page => params[:page])
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date])
   end

@@ -278,15 +278,21 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.get_extra_details(advertisements, date)
+    start_date, end_date = date.to_s.split("/")
     extra_details = {}
     advertisements.each do |each_ad|
-      aggrgated_detail = AggregatedDetail.where("entity_type = 'advertisement' and entity_id = #{each_ad.id} and date = '#{date}'").first
+      if end_date.blank?
+        query = "SELECT `aggregated_details`.* FROM `aggregated_details` WHERE (entity_type = 'advertisement' and entity_id = #{each_ad.id} and date = '#{start_date}')"
+      else
+        query = "select sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count, sum(winning_price) as winning_price from aggregated_details WHERE (entity_type = 'advertisement' and entity_id = #{each_ad.id} and date >= '#{start_date}' and date <= '#{end_date}')"
+      end
+      aggrgated_detail = AggregatedDetail.find_by_sql(query).first
       aggrgated_detail = AggregatedDetail.new if aggrgated_detail.blank?
       ctr = 0.0
-      if (aggrgated_detail.clicks_count != 0.0 && aggrgated_detail.impressions_count != 0.0)
+      if (aggrgated_detail.clicks_count.to_f != 0.0 && aggrgated_detail.impressions_count.to_f != 0.0)
         ctr = (aggrgated_detail.clicks_count.to_f / aggrgated_detail.impressions_count.to_f) * 100 rescue 0.0
       end
-      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => aggrgated_detail.winning_price.to_f, "ctr" => ctr})
+      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => aggrgated_detail.winning_price.to_f.round(2), "ctr" => "#{ctr.round(2)} %"})
     end
     extra_details
   end
