@@ -57,7 +57,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
           unless sid_val.blank?
             begin
               sid_hash = JSON.parse(sid_val)
-            rescue SyntaxError => e
+            rescue JSON::ParserError => e
               JSON.parse(eval(sid_val))
             end
 
