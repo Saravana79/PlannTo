@@ -58,7 +58,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
             begin
               sid_hash = JSON.parse(sid_val)
             rescue JSON::ParserError => e
-              JSON.parse(eval(sid_val))
+              sid_hash = JSON.parse(eval(sid_val))
             end
 
             host = URI.parse(sid_hash["url"]).host.downcase rescue ""
