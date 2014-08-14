@@ -74,6 +74,7 @@ class ArticleContent < Content
         end
         sub_type = @article.find_subtype(@article.title)
         logger.info sub_type
+        sub_type = "Others" if sub_type.blank?
         @article.sub_type = sub_type
         @article.description = @meta_description if @meta_description
         @article.thumbnail = @images.first if @images.count>0
