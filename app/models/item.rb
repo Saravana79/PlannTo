@@ -650,7 +650,9 @@ class Item < ActiveRecord::Base
       return (items + "," +  configatron.root_level_cycle_id.to_s)
     when 'Laptop'
       return (items + "," +  configatron.root_level_laptop_id.to_s)
-    when 'Games'
+    when 'Game'
+      return (items + "," +  configatron.root_level_game_id.to_s)
+    when 'GamingConsole'
       return (items + "," +  configatron.root_level_game_id.to_s)
     end 
  end
