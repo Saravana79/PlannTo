@@ -117,6 +117,24 @@
           <%= f.text_field :cost %></div>
       </div>
 
+      <div class="fields-div">
+        <div class="title_header float_lft">Offer :</div>
+        <div>
+          <%= f.text_area :offer %></div>
+      </div>
+
+      <div class="fields-div">
+        <div class="title_header float_lft">Offer Url :</div>
+        <div>
+          <%= f.text_field :offer_url %></div>
+      </div>
+
+      <div class="fields-div" style="clear:both;">
+        <div class="title_header float_lft">Expiry Date :</div>
+        <div>
+          <%= f.text_field :expiry_date %></div>
+      </div>
+
       <h3>Additional Details</h3>
 
       <div id="related_product_list" style="display:none;">
@@ -216,6 +234,7 @@
 <script>
     $("#advertisement_start_date").datepicker({ dateFormat: 'dd-mm-yy' });
     $("#advertisement_end_date").datepicker({ dateFormat: 'dd-mm-yy' });
+    $("#advertisement_expiry_date").datepicker({ dateFormat: 'dd-mm-yy' });
 
     $(document).ready(function () {
 
@@ -447,6 +466,10 @@
     .populate_btn {
         margin-right: 250px;
         margin-top: 30px;
+    }
+
+    #advertisement_offer {
+        height: 65px;
     }
 </style>
 
