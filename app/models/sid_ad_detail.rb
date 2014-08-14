@@ -55,7 +55,12 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
           sid_key = "spottags:#{sid_ad_detail_sid}"
           sid_val = $redis_rtb.hget(sid_key, "sid_details")
           unless sid_val.blank?
-            sid_hash = JSON.parse(sid_val)
+            begin
+              sid_hash = JSON.parse(sid_val)
+            rescue SyntaxError => e
+              JSON.parse(eval(sid_val))
+            end
+
             host = URI.parse(sid_hash["url"]).host.downcase rescue ""
             updated_host = host.start_with?('www.') ? host[4..-1] : host
             sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
