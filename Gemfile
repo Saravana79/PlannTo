@@ -88,3 +88,4 @@ gem 'activeuuid'
 # gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
 gem "facets", require: false
+gem 'addressable'

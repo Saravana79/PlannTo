@@ -1,4 +1,5 @@
 class FeedUrl < ActiveRecord::Base
+  require "addressable/uri"
   belongs_to :feed
 
   def self.update_by_missing_records(log, process_type, count, valid_urls, invalid_urls, missing_ad)
@@ -90,7 +91,11 @@ class FeedUrl < ActiveRecord::Base
               source = ""
               status = 3
             else
-              source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+              begin
+                source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+              rescue Exception => e
+                source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
+              end
             end
 
             category = "Others"
