@@ -46,25 +46,29 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
       impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
       impressions.each do |each_imp|
-        sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
-        sid_ad_detail.update_attributes(:impressions => each_imp.impression_count, :avg_winning_price => each_imp.avg_winning_price)
+        begin
+          sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_imp.sid)
+          sid_ad_detail.update_attributes(:impressions => each_imp.impression_count, :avg_winning_price => each_imp.avg_winning_price)
 
-        if sid_ad_detail.sample_url.blank?
-          sid_ad_detail_sid = sid_ad_detail.sid
-          p "Updating impression for #{sid_ad_detail_sid}"
-          sid_key = "spottags:#{sid_ad_detail_sid}"
-          sid_val = $redis_rtb.hget(sid_key, "sid_details")
-          unless sid_val.blank?
-            begin
-              sid_hash = JSON.parse(sid_val)
-            rescue JSON::ParserError => e
-              sid_hash = JSON.parse(eval(sid_val))
+          if sid_ad_detail.sample_url.blank?
+            sid_ad_detail_sid = sid_ad_detail.sid
+            p "Updating impression for #{sid_ad_detail_sid}"
+            sid_key = "spottags:#{sid_ad_detail_sid}"
+            sid_val = $redis_rtb.hget(sid_key, "sid_details")
+            unless sid_val.blank?
+              begin
+                sid_hash = JSON.parse(sid_val)
+              rescue JSON::ParserError => e
+                sid_hash = JSON.parse(eval(sid_val))
+              end
+
+              host = URI.parse(sid_hash["url"]).host.downcase rescue ""
+              updated_host = host.start_with?('www.') ? host[4..-1] : host
+              sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
             end
-
-            host = URI.parse(sid_hash["url"]).host.downcase rescue ""
-            updated_host = host.start_with?('www.') ? host[4..-1] : host
-            sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
           end
+        rescue Exception => e
+          p "skipped this spottag"
         end
       end
       page += 1
