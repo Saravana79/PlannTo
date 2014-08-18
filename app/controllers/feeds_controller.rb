@@ -50,11 +50,11 @@ class FeedsController < ApplicationController
       condition = condition == intial_condition ? "status = 0" : condition
     end
 
-    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}")
+    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25)
 
     @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
-    @sources = FeedUrl.all.map(&:source).uniq
-    @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 25)
+    @sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if {|x| x.blank?}
+    # @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 25)
 
     if params[:page]
       return render :partial => "/feeds/feed_url_list", :layout => false
