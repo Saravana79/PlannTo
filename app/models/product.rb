@@ -93,9 +93,9 @@ end
       group = each_selected_item.cargroup
       unless group.blank?
         groups << group
-        new_selected_list << group.id
+        new_selected_list << group.id.to_s
       else
-        new_selected_list << each_selected_item.id
+        new_selected_list << each_selected_item.id.to_s
       end
     end
     # selected_groups = groups.map(&:id)
@@ -103,6 +103,7 @@ end
     new_results = Product.get_results_from_items(groups)
     results << new_results
     results.flatten!
+    new_selected_list.uniq!
     return results, new_selected_list
   end
 
@@ -126,7 +127,7 @@ end
       # end
       url = item.get_url()
       # image_url = item.image_url
-      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id.to_s, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
     }
 
     return results
