@@ -146,10 +146,10 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
         sid_ad_detail = SidAdDetail.find_or_initialize_by_sid(:sid => each_sid_ad_detail_sid)
         sid_ad_detail.update_attributes!(:ectr => ectr)
 
-        # Redis sid:XXX update with impresssions, clicks and orders
-        redis_key = "sid:#{sid_ad_detail.sid}"
-        redis_values = "impressions", sid_ad_detail.impressions, "clicks", sid_ad_detail.clicks, "orders", sid_ad_detail.orders
-        $redis_rtb.HMSET(redis_key, redis_values)
+        # Redis sid:XXX update with impresssions, clicks and orders #TODO: remove permanatly later
+        # redis_key = "sid:#{sid_ad_detail.sid}"
+        # redis_values = "impressions", sid_ad_detail.impressions, "clicks", sid_ad_detail.clicks, "orders", sid_ad_detail.orders
+        # $redis_rtb.HMSET(redis_key, redis_values)
 
         #update spottags with ectr
         if impressions_count > 500

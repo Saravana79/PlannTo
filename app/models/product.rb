@@ -59,7 +59,42 @@ end
       paginate(:page => 1, :per_page => 5)
     end
 
-    results = @items.results.collect{|item|
+    items = @items.results
+    items << Product.find(9954)
+    items.flatten!
+    results = Product.get_results_from_items(items)
+
+    # Append suggestions based on category
+
+    unless param[:category].blank?
+      if param[:category] == "Others"
+        categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
+      else
+        categories = param[:category].split(",")
+      end
+      categories.each do |each_category|
+        name, id = Item.find_root_level_id(each_category, each_category.pluralize).to_s.split(",")
+        results << {:id => id, :value => name, :imgsrc =>"", :type => "Groups", :url => "" }
+      end
+    end
+
+    items_by_score = {}
+    @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
+    selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
+    # selected_list = [9954]
+
+    new_items = items.select {|each_item| selected_list.include?(each_item.id)}
+    groups = new_items.map {|each_new_item| each_new_item.cargroup}.compact
+    selected_groups = groups.map(&:id)
+    # selected_groups = [9950]
+    new_results = Product.get_results_from_items(groups)
+    results << new_results
+    results.flatten!
+    return results, selected_list, selected_groups
+  end
+
+  def self.get_results_from_items(items)
+    results = items.collect{|item|
 
       image_url = item.image_url(:small)
 
@@ -81,21 +116,7 @@ end
       {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
     }
 
-    # Append suggestions based on category
-
-    unless param[:category].blank?
-      categories = param[:category].split(",")
-      categories.each do |each_category|
-        name, id = Item.find_root_level_id(each_category, each_category.pluralize).to_s.split(",")
-        results << {:id => id, :value => name, :imgsrc =>"", :type => "Groups", :url => "" }
-      end
-    end
-
-    items_by_score = {}
-    @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
-    selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
-
-    return results, selected_list
+    return results
   end
 
 end

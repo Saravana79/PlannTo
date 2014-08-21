@@ -36,7 +36,7 @@
             <span style="float:left;"><%= f.select :sub_type, @categories, {:selected => @article.sub_type } %></span>
           </div>
           <br />
-          
+
 <div class="image_process">
 
   <div style="padding:5px 5px 0px 0px;clear:both;display:none;" class="<%=@dwnld_url%> <%=@article_image%>">
@@ -69,7 +69,7 @@
 
 </div>
 
-     
+
 
           <div class="description" style="clear:both;">
             <span style="width:75px;float:left;" class="title_header"><label for="description">Description :</label></span>
@@ -148,6 +148,17 @@
             position: relative;
         }
 
+        #search_items_by_relavance label {
+            position: relative;
+            top: -4px;
+            cursor: pointer;
+        }
+
+        #search_items_by_relavance .option {
+            background-color: palegoldenrod;
+            margin: 1px;
+            cursor: pointer;
+        }
     </style>
 
 
@@ -193,7 +204,7 @@
                 url: '/search/search_items_by_relavance',
                 dataType:'json',
                 type: "get",
-                data: {term: $("#article_content_title").val(), search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>'},
+                data: {term: $("#article_content_title").val(), search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val()},
                 before:$('#share_spinner').show(),
                 after: $('#share_spinner').hide(),
                 success: function(data){
@@ -203,14 +214,14 @@
 
                     $(sub_contain).appendTo(container)
                     $.each(data, function (index, value) {
-                        if (value.selected_list == undefined)
+                        if (value.selected_list == undefined && value.selected_groups == undefined)
                         {
-                            sub_contain = $("<span style='display:inline-block'></span>")
+                            sub_contain = $("<span class='option' style='display:inline-block'></span>")
                             $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "relevance_product[]" }).appendTo(sub_contain);
                             $('<label />', { 'for': 'matched' + value.id, text: value.value + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
                             $(sub_contain).appendTo(container)
                         }
-                        else
+                        else if (value.selected_groups == undefined)
                         {
                             $.each(value.selected_list, function (inx, val) {
                                 if (inx == 0)
@@ -228,6 +239,15 @@
                                     $(that).parent().hide();
                                 }
 
+                            });
+                        }
+                        else
+                        {
+                            $.each(value.selected_groups, function (inx, val) {
+                                var that = $("#matched"+val)
+                                $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+                                $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
+                                $(that).parent().hide();
                             });
                         }
 

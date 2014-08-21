@@ -304,9 +304,10 @@ class SearchController < ApplicationController
   end
 
   def search_items_by_relavance
-    results, selected_list = Product.get_search_items_by_relavance(params)
-
+    results, selected_list, selected_groups = Product.get_search_items_by_relavance(params)
+    results = results.select {|each_hsh| each_hsh unless each_hsh[:value].blank?}
     results << {:selected_list => selected_list}
+    results << {:selected_groups => selected_groups}
 
     render :json => results
   end

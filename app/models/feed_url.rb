@@ -126,7 +126,7 @@ class FeedUrl < ActiveRecord::Base
               end
             end
             # remove characters after come with space + '- or |' symbols
-            title = title.to_s.gsub(/\s(-|\|).+/, '')
+            # title = title.to_s.gsub(/\s(-|\|).+/, '')
             title = title.blank? ? "" : title.to_s.strip
 
             new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
