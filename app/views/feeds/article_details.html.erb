@@ -91,7 +91,7 @@
               </div>
               <div style="clear:both;"></div>
 
-              <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;"></div>
+              <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;line-height: 25px;"></div>
               <div style="clear:both;"></div>
 
             </div>
@@ -101,11 +101,11 @@
           <%= hidden_field_tag 'old_default_values', "" %>
           <%= hidden_field_tag 'new_default_values', "" %>
 
-          <div class="page_buttons" style="clear:both;margin-left:40px;margin-bottom:20px;">
+          <div class="page_buttons" style="clear:both;margin-left:40px;margin-bottom:20px;float:left;">
             <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :id => "save_and_continue" %>
-            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
-            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid" accesskey="i">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel" accesskey="c">Cancel</a>
+            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid" accesskey="i">Mark as Invalid</a>
+            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
           </div>
 
           <a accesskey="n" />
@@ -149,15 +149,28 @@
         }
 
         #search_items_by_relavance label {
-            position: relative;
+            background-color: #e6e6e6;
             cursor: pointer;
+            padding: 5px !important;
+            position: relative;
         }
 
         #search_items_by_relavance .option {
             background-color: #E6E6E6;
-            margin: 1px;
+            margin: 2px;
             cursor: pointer;
         }
+
+        #search_items_by_relavance .option input {
+            display: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #save_and_continue {
+            float: left;
+        }
+
     </style>
 
 

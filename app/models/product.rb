@@ -63,6 +63,7 @@ end
     results = Product.get_results_from_items(items)
 
     # Append suggestions based on category
+    categories = []
 
     unless param[:category].blank?
       if param[:category] == "Others"
@@ -76,12 +77,21 @@ end
       end
     end
 
+    if categories.include?('Mobile')
+      app_items = ItemtypeTag.where("name = 'App'")
+      app_results = Product.get_results_from_items(app_items)
+      results << app_results
+      results.flatten!
+    end
+
     items_by_score = {}
     @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
     selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
 
     if param[:ac_sub_type] != "Comparisons"
       selected_list = selected_list.first(1)
+    elsif param[:ac_sub_type] != "Lists"
+      selected_list = []
     end
 
     groups = []
@@ -93,7 +103,11 @@ end
         groups << group
         new_selected_list << group.id.to_s
       else
-        new_selected_list << each_selected_item.id.to_s
+        if ["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type])
+          new_selected_list << each_selected_item.id.to_s if (each_selected_item.is_a?(Product) || each_selected_item.is_a?(CarGroup))
+        else
+          new_selected_list << each_selected_item.id.to_s
+        end
       end
     end
     new_results = Product.get_results_from_items(groups)
