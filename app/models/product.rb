@@ -83,7 +83,7 @@ end
     selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
     # selected_list = [9954]
 
-    new_items = items.select {|each_item| selected_list.include?(each_item.id)}
+    new_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
     groups = new_items.map {|each_new_item| each_new_item.cargroup}.compact
     selected_groups = groups.map(&:id)
     # selected_groups = [9950]
