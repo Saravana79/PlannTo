@@ -83,14 +83,12 @@ end
     if param[:ac_sub_type] != "Comparisons"
       selected_list = selected_list.first(1)
     end
-    # selected_list = [9954]
 
     groups = []
     new_selected_list = []
     selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
-    # groups = selected_items.map {|each_new_item| each_new_item.cargroup}.compact
     selected_items.each_with_index do |each_selected_item, index|
-      group = each_selected_item.cargroup
+      group = each_selected_item.cargroup rescue nil
       unless group.blank?
         groups << group
         new_selected_list << group.id.to_s
@@ -98,8 +96,6 @@ end
         new_selected_list << each_selected_item.id.to_s
       end
     end
-    # selected_groups = groups.map(&:id)
-    # selected_groups = [9950]
     new_results = Product.get_results_from_items(groups)
     results << new_results
     results.flatten!
