@@ -98,14 +98,22 @@ class FeedUrl < ActiveRecord::Base
               end
             end
 
-            category = "Others"
+            category = ""
 
             if source != ""
-              feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
-              unless feed_by_sources.blank?
-                categories = feed_by_sources.map(&:category)
-                categories = categories.map { |each_cat| each_cat.split(',') }
-                category = categories.flatten.uniq.join(',')
+              sources_list = Rails.cache.read("feed_url-sources-list")
+              if !sources_list.blank?
+                category = sources_list[source]
+              end
+
+              if category.blank?
+                category = "Others"
+                feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
+                unless feed_by_sources.blank?
+                  categories = feed_by_sources.map(&:category)
+                  categories = categories.map { |each_cat| each_cat.split(',') }
+                  category = categories.flatten.uniq.join(',')
+                end
               end
             end
 
@@ -178,14 +186,22 @@ class FeedUrl < ActiveRecord::Base
               source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
             end
 
-            category = "Others"
+            category = ""
 
             if source != ""
-              feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
-              unless feed_by_sources.blank?
-                categories = feed_by_sources.map(&:category)
-                categories = categories.map { |each_cat| each_cat.split(',') }
-                category = categories.flatten.uniq.join(',')
+              sources_list = Rails.cache.read("feed_url-sources-list")
+              if !sources_list.blank?
+                category = sources_list[source]
+              end
+
+              if category.blank?
+                category = "Others"
+                feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
+                unless feed_by_sources.blank?
+                  categories = feed_by_sources.map(&:category)
+                  categories = categories.map { |each_cat| each_cat.split(',') }
+                  category = categories.flatten.uniq.join(',')
+                end
               end
             end
 
