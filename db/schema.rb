@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140813121638) do
+ActiveRecord::Schema.define(:version => 20140822055817) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -448,6 +448,7 @@ ActiveRecord::Schema.define(:version => 20140813121638) do
     t.string   "old_default_values"
     t.string   "new_default_values"
     t.boolean  "default_status"
+    t.integer  "article_content_id"
   end
 
   create_table "feeds", :force => true do |t|

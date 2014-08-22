@@ -325,4 +325,25 @@ class FeedUrl < ActiveRecord::Base
       p "removed items #{removed_item_count}"
     end while next_val != 0
   end
+
+  def self.check_and_assign_sources_hash_to_cache()
+    sources_list = Rails.cache.read("feed_url-sources-list")
+    if sources_list.blank?
+      sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if {|x| x.blank?}
+      result = {}
+
+      sources.each do |each_source|
+        feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{each_source}'")
+        category = "Others"
+        unless feed_by_sources.blank?
+          categories = feed_by_sources.map(&:category)
+          categories = categories.map { |each_cat| each_cat.split(',') }
+          category = categories.flatten.uniq.join(',')
+        end
+        result.merge!("#{each_source}" => category)
+      end
+      result
+      Rails.cache.write("feed_url-sources-list", result, :expires_in => 1.day)
+    end
+  end
 end

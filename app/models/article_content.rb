@@ -258,15 +258,15 @@ class ArticleContent < Content
           # @article,@images = ArticleContent.CreateContent(@article.url,user) unless @article.url.blank?
           if param['article_content']['url'] && @article.id!=nil
             url = param['article_content']['url']
-            url = "http://#{url}" if URI.parse(url).scheme.nil?
-            host = URI.parse(url).host.downcase
+            url = "http://#{url}" if Addressable::URI.parse(url).scheme.nil?
+            host = Addressable::URI.parse(url).host.downcase
             updated_host = host.start_with?('www.') ? host[4..-1] : host
             @article.update_attributes!(:domain => updated_host)
           end
 
           if (@article.id != nil && !param['feed_url_id'].blank?)
             feed_url = FeedUrl.where("id = ?", param['feed_url_id']).first
-            feed_url.update_attributes(:status => 1)
+            feed_url.update_attributes(:status => 1, :article_content_id => @article.id)
           end
         else
           @tag = 'false'

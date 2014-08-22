@@ -126,6 +126,7 @@ namespace :admin do
       get :autocomplete_items
       get :preference_items
       get :search_items
+      get :autocomplete_source_items
       get :search_items_by_relavance
     end
   end

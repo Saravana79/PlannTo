@@ -6,22 +6,26 @@
     <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <link type="text/css" href="/stylesheets/plannto.css" rel="stylesheet"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script src="/assets/textTagger" type="text/javascript"></script>
     <script src="/assets/jquery_ujs" type="text/javascript"></script>
     <script src="/assets/jquery.jscroll.min.js" type="text/javascript"></script>
+    <script src="/assets/textTagger" type="text/javascript"></script>
     <script src="/javascripts/jquery.raty.js" type="text/javascript"></script>
     <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
     <%= csrf_meta_tags %>
   </head>
   <body style="background:white;position:relative;width:1000px;">
-  <button class="go_back" type="button" onclick="window.location='/feeds'">Go Back</button>
+  <button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds'">Go Back</button>
   <div class="list_feed_urls">
     <div class="search_form">
       <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
         Priorities: <%= search_form.select :priorities, [1,2,3], {:include_blank => true, :selected => params[:search][:priorities]} %>
         Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
-        Source: <%= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
+        Source: <%#= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
+        <%= search_form.text_field :source, :readonly => true, :value => params[:search][:source] %>
+        <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="search_source_item"/>
+
+
         <%= search_form.submit "Filter" %>
         <%= search_form.submit "Clear" %>
       <% end %>
@@ -85,16 +89,21 @@
 
       .display {width: 1230px;}
 
-      .search_form { color: #A52A2A;
+      .search_form {
+          color: #a52a2a;
           font-size: 14px;
           margin: -8px;
-          position: absolute;
-          right: 405px;}
-
-      .go_back {left: 654px;
-          margin: 5px;
           position: relative;
-          top: 0px;}
+          right: -18px;
+          width: 70%;
+      }
+
+      .go_back {
+          left: -78px;
+          margin: 10px;
+          position: relative;
+          top: -40px;
+      }
 
       .mark_as_list img {
           padding: 0 0 0 10px;
@@ -105,11 +114,12 @@
       }
 
       .sorting {
-          color: #A52A2A;
+          color: #a52a2a;
+          float: right;
           font-size: 14px;
           margin: -8px;
-          position: absolute;
-          right: 89px;
+          position: relative;
+          top: -10px;
       }
 
       #loading_div {
@@ -133,6 +143,13 @@
           padding-top: 15px;
       }
 
+      #search_source {
+          float: right;
+          margin: -27px 239px 0 0;
+          position: relative;
+          width: 250px;
+          cursor: not-allowed;
+      }
   </style>
 
 
@@ -141,20 +158,21 @@
     $("document").ready(function()
     {
 
-        $page_count = $(".pagination a.next_page").prev().text()
+        if (<%= !@feed_urls.blank? %>)
+        {
+          $page_count = $(".pagination a.next_page").prev().text()
 
 //        var href_val = $(".next_page").attr('href')
 //        $("#next-scroll-page").attr('href', href_val)
 
-        $('.jscroll').jscroll({
+                $('.jscroll').jscroll({
             loadingHtml: '<img src="/assets/ajax-loader.gif" alt="Loading" /> Loading...',
             padding: 20,
             nextSelector: '.jscroll-next a:last'
         });
 
         $('.pagination a').attr('data-remote', 'true')
-
-
+        }
 
       $(".feed_title").live('click', function()
       {
@@ -284,6 +302,36 @@
                 }
             }
         });
+
+        source_settings = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_source_items",
+            editMode: false, multiple: false,
+            hidden_field: "search_source",
+            has_parent: false
+        };
+        $.textTagger("search_source_item", "search_source_item_list", source_settings);
+
+        $("#search_source_item").keypress(function(e)
+        {
+            if (e.keyCode != 9)
+            {
+                $("#search_source").val('')
+            }
+
+        })
+
+        $("#search_source").change(function()
+        {
+            alert(1)
+            var val = $(this).val()
+            console.log("change"+val)
+            if (val != "")
+            {
+                console.log(val)
+            }
+        })
+
     });
 
     // For chrome and Chromium

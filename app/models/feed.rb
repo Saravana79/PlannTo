@@ -46,7 +46,11 @@ class Feed < ActiveRecord::Base
       latest_feeds.each do |each_entry|
         check_exist_feed_url = FeedUrl.where(:url => each_entry.url).first
         if check_exist_feed_url.blank?
-          source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.", "")
+          begin
+            source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.", "")
+          rescue Exception => e
+            source = Addressable::URI.parse(each_entry.url).host.gsub("www.", "")
+          end
           article_content = ArticleContent.find_by_url(each_entry.url)
           status = 0
           status = 1 unless article_content.blank?
@@ -84,7 +88,11 @@ class Feed < ActiveRecord::Base
         source = ""
         status = 3
       else
-        source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
+        begin
+          source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
+        rescue Exception => e
+          source = Addressable::URI.parse(each_record.hosted_site_url).host.gsub("www.", "")
+        end
       end
 
       category = "Others"

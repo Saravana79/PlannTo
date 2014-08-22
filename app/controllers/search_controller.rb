@@ -355,4 +355,15 @@ class SearchController < ApplicationController
     }
     render :json => results
   end
+
+   def autocomplete_source_items
+     sources_list = Rails.cache.read("feed_url-sources-list")
+     sources = sources_list.blank? ? [] : sources_list.keys
+
+     searched_sources = sources.grep(/^#{params[:term]}/)
+     results = searched_sources.map {|x| {:id => x, :value => x, :type => "Source", :imgsrc => ""}}
+
+     render :json => results
+   end
+
 end
