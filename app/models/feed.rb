@@ -136,9 +136,7 @@ class Feed < ActiveRecord::Base
     tips.each do |tip|
       return ArticleCategory::HOW_TO if title_words.scan(tip).size >0
     end
-    comparisons.each do |comparison|
-      return ArticleCategory::COMPARISONS if title_words.scan(comparison).size >0
-    end
+
     
     reviews.each do |review|
       return ArticleCategory::REVIEWS if title_words.scan(review).size >0
@@ -149,6 +147,10 @@ class Feed < ActiveRecord::Base
 
     specs.each do |spec|
       return ArticleCategory::SPECS if title_words.scan(spec).size >0
+    end
+
+    comparisons.each do |comparison|
+      return ArticleCategory::COMPARISONS if title_words.scan(comparison).size >0
     end
     photos.each do |images|
       return ArticleCategory::PHOTO if title_words.scan(images).size >0
