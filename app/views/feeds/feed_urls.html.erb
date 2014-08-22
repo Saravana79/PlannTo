@@ -22,8 +22,8 @@
         Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
         Source: <%#= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
-        <%= search_form.text_field :source, :readonly => true, :value => params[:search][:source] %>
-        <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="search_source_item"/>
+        <%= search_form.hidden_field :source, :readonly => true, :value => params[:search][:source] %>
+        <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
 
 
         <%= search_form.submit "Filter" %>
@@ -302,37 +302,46 @@
                 }
             }
         });
-
-        source_settings = {
-            close: true, addButton: false,
-            url: "/search/autocomplete_source_items",
-            editMode: false, multiple: false,
-            hidden_field: "search_source",
-            has_parent: false
-        };
-        $.textTagger("search_source_item", "search_source_item_list", source_settings);
-
-        $("#search_source_item").keypress(function(e)
-        {
-            if (e.keyCode != 9)
-            {
-                $("#search_source").val('')
-            }
-
-        })
-
-        $("#search_source").change(function()
-        {
-            alert(1)
-            var val = $(this).val()
-            console.log("change"+val)
-            if (val != "")
-            {
-                console.log(val)
-            }
-        })
-
     });
+
+    $("document").ready(function()
+    {
+        $( ".auto_complete_field" ).autocomplete({
+            source:  function (request, response) {
+                $.ajax({
+                    url:"/search/autocomplete_source_items",
+                    data:{
+                        term:request.term,
+                        authenticity_token: window._token
+                    },
+                    type:"GET",
+                    dataType:"json",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return{
+                                id: item.id,
+                                value: item.value
+                            }
+                        }));
+                    }
+                });
+            },
+            open: function(event, ui) {
+                $(this).autocomplete("widget").css({
+                    "width": ($(this).width() + "px")
+                });
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                $('#search_source').val(ui.item.id);
+            }
+        });
+
+        var selected_val = $("#search_source").val()
+
+        if (selected_val != "")
+            $(".auto_complete_field").val(selected_val)
+    })
 
     // For chrome and Chromium
 
