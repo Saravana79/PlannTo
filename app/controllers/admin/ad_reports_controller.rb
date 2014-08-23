@@ -104,7 +104,7 @@ class Admin::AdReportsController < ApplicationController
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
     @search_path = admin_ad_report_view_ad_chart_path
-    @advertisement = Advertisement.where(:id => params[:advertisement_id]).first
+    @advertisement = Advertisement.where(:id => params[:advertisement_id], :review_status => 'approved').first
 
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id
@@ -117,11 +117,15 @@ class Admin::AdReportsController < ApplicationController
     types = []
 
     imp_report_results = AggregatedDetail.chart_data_for_ad(params[:advertisement_id], @start_date, @end_date, types)
+
     @result_array = imp_report_results.map {|result| result.values}
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
     @clicks = @result_array.map {|each_array| each_array[2]}
     @winning_price = @result_array.map {|each_array| ("%.2f" % each_array[3].to_f).to_f}
+    @winning_price = @winning_price.map {|each_win| @advertisement.commission.blank? ? each_win : each_win+each_win/@advertisement.commission.to_f/100}
+
+
 
     condition = ""
     unless params[:search].blank?

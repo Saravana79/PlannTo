@@ -9,7 +9,7 @@ class Admin::AdvertisementsController < ApplicationController
     params[:date] ||= Date.today
     @start_date, @end_date = params[:date].to_s.split("/")
     @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}/#{Date.today}"], ['Last month', "#{Date.today-1.month}/#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}/#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}/#{Date.today}"]]
-    @advertisements = Advertisement.where("status=1 #{@user_condition}").order('created_at desc').paginate(:per_page => 10, :page => params[:page])
+    p @advertisements = Advertisement.where("status=1 #{@user_condition}").order('created_at desc').paginate(:per_page => 10, :page => params[:page])
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date])
   end
 
@@ -17,7 +17,7 @@ class Admin::AdvertisementsController < ApplicationController
     user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
     @vendor = Vendor.find_by_id(vendor_id)
-    @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id)
+    @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25)
     @advertisements = [@advertisement]
   end
 
@@ -66,6 +66,8 @@ class Admin::AdvertisementsController < ApplicationController
       @advertisement.content_id = @content.id
       @advertisement.user_id = current_user.id
     end
+
+    @advertisement.review_status = "pending"
 
     if @advertisement.save
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
@@ -128,6 +130,24 @@ class Admin::AdvertisementsController < ApplicationController
       $redis_rtb.del("advertisments:#{params[:ad_id]}")
       redirect_to admin_advertisements_path
     end
+  end
+
+  def review
+    @advertisement = Advertisement.find(params[:advertisement_id])
+  end
+
+  def approved
+    @advertisement = Advertisement.find(params[:id])
+    @advertisement.update_attributes!(:review_status => "approved")
+    flash[:notice] = "Advertisement is approved"
+    redirect_to admin_advertisements_path
+  end
+
+  def denied
+    @advertisement = Advertisement.find(params[:id])
+    @advertisement.update_attributes!(:review_status => "denied")
+    flash[:notice] = "Advertisement is denied"
+    redirect_to admin_advertisements_path
   end
 
   private

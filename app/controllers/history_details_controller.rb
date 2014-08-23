@@ -46,7 +46,7 @@ class HistoryDetailsController < ApplicationController
         @impression_id = params[:iid].present? ? params[:iid] : "0"
         find_item_detail(params[:detail_id], 'Hotel')
         if !params[:ads_id].blank? || @item_detail.blank?
-          @ad = Advertisement.where("id = ?", params[:ads_id]).first
+          @ad = Advertisement.where("id = ? and review_status='approved'", params[:ads_id]).first
           url = @ad.click_url
         else
             url = "#{@item_detail.url}"
@@ -69,7 +69,7 @@ class HistoryDetailsController < ApplicationController
         @impression_id = params[:iid].present? ? params[:iid] : "0"
         find_item_detail(params[:detail_id], type)
         if !params[:ads_id].blank? && @item_detail.blank?
-          @ad = Advertisement.where("id = ?", params[:ads_id]).first
+          @ad = Advertisement.where("id = ? and review_status='approved'", params[:ads_id]).first
           url = @ad.click_url
         else
           url = "#{@item_detail.url}"

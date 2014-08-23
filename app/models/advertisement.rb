@@ -19,7 +19,7 @@ class Advertisement < ActiveRecord::Base
   after_save :update_click_url_based_on_vendor
   after_save :update_redis_with_advertisement
 
-  scope :get_ad_by_id, lambda { |id| where("id = ?", id) }
+  scope :get_ad_by_id, lambda { |id| where("id = ? and review_status='approved'", id) }
 
   STATUS = ["","valid"]
 
@@ -292,7 +292,13 @@ class Advertisement < ActiveRecord::Base
       if (aggrgated_detail.clicks_count.to_f != 0.0 && aggrgated_detail.impressions_count.to_f != 0.0)
         ctr = (aggrgated_detail.clicks_count.to_f / aggrgated_detail.impressions_count.to_f) * 100 rescue 0.0
       end
-      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => aggrgated_detail.winning_price.to_f.round(2), "ctr" => "#{ctr.round(2)} %"})
+
+      winning_price = aggrgated_detail.winning_price.to_f
+      commission = each_ad.commission.blank? ? 25 : each_ad.commission.to_f
+      winning_price = winning_price + ((winning_price / commission)/100)
+      winning_price = winning_price.to_f.round(2)
+
+      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => winning_price, "ctr" => "#{ctr.round(2)} %"})
     end
     extra_details
   end

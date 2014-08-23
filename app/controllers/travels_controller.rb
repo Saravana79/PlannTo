@@ -15,7 +15,7 @@ class TravelsController < ApplicationController
       url = params[:ref_url]
       itemsaccess = "ref_url"
     end
-    @ad = Advertisement.where("id = ?", params[:ads_id]).first
+    @ad = Advertisement.where("id = ? and review_status='approved'", params[:ads_id]).first
 
     unless @ad.blank?
       if @ad.advertisement_type == "static"

@@ -9,6 +9,9 @@ namespace :admin do
   resources :advertisements do
     collection do
       get "change_ad_status"
+      get "review"
+      get "approved"
+      get "denied"
     end
   end
   resources :buying_plans do

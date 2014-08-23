@@ -117,6 +117,16 @@
           <%= f.text_field :cost %></div>
       </div>
 
+      <% if current_user.is_admin? %>
+        <div class="fields-div">
+          <div class="title_header float_lft">Commission :</div>
+          <div>
+            <%= f.text_field :commission %></div>
+        </div>
+      <% else %>
+        <%= hidden_field_tag :commission, @advertisement.commission %>
+      <% end %>
+
       <div class="fields-div">
         <div class="title_header float_lft">Offer :</div>
         <div>
