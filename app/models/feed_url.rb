@@ -65,7 +65,7 @@ class FeedUrl < ActiveRecord::Base
     get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
   end
 
-  def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["gaming", "science & technology"])
+  def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["science & technology"])
     feed = Feed.where("process_type = 'missingurl'").last
     counting = 1
     greater_count = 1
