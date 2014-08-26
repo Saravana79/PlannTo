@@ -104,7 +104,7 @@ class Admin::AdReportsController < ApplicationController
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
     @search_path = admin_ad_report_view_ad_chart_path
-    @advertisement = Advertisement.where(:id => params[:advertisement_id], :review_status => 'approved').first
+    @advertisement = Advertisement.where(:id => params[:advertisement_id]).first
 
     @publishers = Publisher.all
     params[:publisher_id] ||= Publisher.first.id

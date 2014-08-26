@@ -62,10 +62,10 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.missing_url_process_top_list
-    get_missing_keys_and_process_recent("missingurl-toplist", 200, "process_missing_url_top_list", invalid_urls=[])
+    get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
   end
 
-  def self.process_missing_url_top_list(missingurl_keys, count=200, valid_categories=["gaming", "science & technology"])
+  def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["gaming", "science & technology"])
     feed = Feed.where("process_type = 'missingurl'").last
     counting = 1
     greater_count = 1
@@ -77,7 +77,7 @@ class FeedUrl < ActiveRecord::Base
       counting = counting + 1
       each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
       missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
-      if missingurl_count.to_i >= count.to_i
+      if missingurl_count.to_i >= 0
         greater_count = greater_count + 1
         logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
         p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
@@ -126,11 +126,10 @@ class FeedUrl < ActiveRecord::Base
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
             if !page_category.blank?
-              unless valid_categories.include?(page_category.downcase)
+              if !valid_categories.include?(page_category.downcase)
                 status = 3
-                if page_category.downcase == 'science & technology'
+              elsif page_category.downcase == 'science & technology'
                   category = "Mobile,Tablet,Camera,Laptop"
-                end
               end
             end
             # remove characters after come with space + '- or |' symbols
