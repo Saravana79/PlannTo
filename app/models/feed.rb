@@ -184,7 +184,13 @@ class Feed < ActiveRecord::Base
   def self.get_feed_url_values(url)
     begin
       uri = URI.parse(URI.encode(url.to_s.strip))
-      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
+      unless url.include?("youtube.com")
+        doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
+      else
+        url = url.gsub("http://", "https://")
+        uri = URI.parse(URI.encode(url.to_s.strip))
+        doc = Nokogiri::HTML(open(uri))
+      end
       title_info = doc.xpath('.//title').to_s.strip
       rating_value = 0
       meta_description = ''
@@ -208,7 +214,12 @@ class Feed < ActiveRecord::Base
         end
       end
 
-      page_category = doc.css(".content #eow-category").inner_text.to_s.strip rescue ""
+      # category
+
+      page_category = ""
+      watch_meta_item = doc.search('.watch-meta-item')
+      watch_meta_item.each {|each_item| page_category = each_item.search('.content li a.spf-link').inner_text.to_s.strip if each_item.search('.title').inner_text.to_s.strip == "Category"}
+      # page_category = doc.css(".content #eow-category").inner_text.to_s.strip rescue ""
 
       images = ArticleContent.get_images_from_doc(doc, images)
       images = [] if images.blank?
