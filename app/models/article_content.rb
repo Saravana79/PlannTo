@@ -282,7 +282,7 @@ class ArticleContent < Content
 
     rescue Exception => e
       feed_url = FeedUrl.where("id = ?", param['feed_url_id']).first
-      feed_url.update_attributes(:status => 3)
+      feed_url.update_attributes(:status => 0)
       return e
     end
   end

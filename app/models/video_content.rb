@@ -32,7 +32,9 @@ class VideoContent < ArticleContent
     @article.field1 =  score if score != ""
     @article.video = true
     url = @article.url
-    if url.split('v=')[1]
+    if url.include?("youtube.com/video")
+      video_id = url.split("/video/")[1].split('&')[0]
+    elsif url.split('v=')[1]
       video_id = (url.split('v=')[1]).split('&')[0]
     elsif url.split('/v/')
       video_id = (url.split('v=')[1]).split('&')[0]
@@ -42,7 +44,7 @@ class VideoContent < ArticleContent
     @article.ip_address = ip
     @article.type = "ArticleContent"
     @article.user=user
-    @article.save_with_items!(ids) 
+    @article.save_with_items!(ids)
     @article
   end
 

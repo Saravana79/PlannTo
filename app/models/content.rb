@@ -463,6 +463,7 @@ end
         Rails.cache.delete(cache_key)
     end
 
+
     # if (self.is_a?(ArticleContent) || self.is_a?(VideoContent)) && !self.url.blank?
     if (self.type == "ArticleContent" || self.type == "VideoContent") && !self.url.blank?
       # create content hash in redis-2
