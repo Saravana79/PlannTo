@@ -88,10 +88,10 @@ end
     @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
     selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
 
-    if param[:ac_sub_type] != "Comparisons"
-      selected_list = selected_list.first(1)
-    elsif param[:ac_sub_type] != "Lists"
+    if param[:ac_sub_type] == "Lists"
       selected_list = []
+    elsif param[:ac_sub_type] != "Comparisons"
+      selected_list = selected_list.first(1)
     end
 
     groups = []
