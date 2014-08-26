@@ -57,8 +57,8 @@ GEM
       activesupport (>= 3.0.0)
       ancestry (~> 1.2.4)
       railties (>= 3.0.0)
-    acts-as-taggable-on (2.1.1)
-      rails
+    acts-as-taggable-on (2.2.2)
+      rails (~> 3.0)
     acts_as_commentable (3.0.1)
     acts_as_follower (0.1.1)
     acts_as_rateable (2.0.1)
@@ -333,7 +333,7 @@ PLATFORMS
 DEPENDENCIES
   activeuuid
   acts-as-messageable
-  acts-as-taggable-on (~> 2.1.1)
+  acts-as-taggable-on (~> 2.2.1)
   acts_as_commentable
   acts_as_follower
   acts_as_rateable

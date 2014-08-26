@@ -2,5 +2,6 @@
 
 <%= render :partial => 'form', :locals => {:button_name => "Update"} %>
 
-<%= link_to 'Show', @item %> |
-<%= link_to 'Back', items_path %>
+<%= link_to 'Back', update_page_items_path, :class => "btn_submitanswer" %>
+<%= link_to 'Delete', item_path, :method => :delete, :class => "btn_submitanswer" %>
+<%= link_to 'Show', @item, :class => "btn_submitanswer" %>

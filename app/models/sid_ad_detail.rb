@@ -123,7 +123,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
     log.debug "********** Updating ectr **********"
     log.debug "\n"
 
-    query_to_get_clicks_and_impressions = "select sid, clicks, impressions, orders from sid_ad_details order by impressions desc"
+    query_to_get_clicks_and_impressions = "select sid, clicks, impressions, orders from sid_ad_details  where impressions > 500 order by impressions desc"
 
     page = 1
     begin

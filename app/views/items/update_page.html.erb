@@ -1,10 +1,10 @@
 <%= hidden_field_tag "articles_item_id" %>
-<div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
-  <div class="title_header float_lft">Select Product to Update:</div>
+<div id="shareProduct">
+  <div class="title_header input-label float_lft">Select Product to Update:</div>
   <div class="taggingdiv" style="margin-left:5px;">
     <ul id="new_article_product_list" class="tagging"></ul>
     <div class="float_lft " style="clear:both;">
-      <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
+      <input placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
     </div>
     <div style="clear:both;"></div>
 
@@ -36,3 +36,26 @@
       })
   })
 </script>
+
+<style type="text/css">
+  #new_article_product {
+      border-style: groove;
+      border-width: 2px;
+      font-size: 14px;
+      height: 25px;
+      margin-top: 5px;
+      width: 305px;
+  }
+
+  #shareProduct {
+      clear: both;
+      display: block;
+      margin: 35px 0 0 211px;
+      padding: 5px 5px 0 0;
+  }
+
+  .input-label {
+      font-size: 16px !important;
+      padding: 9px 0 0;
+  }
+</style>

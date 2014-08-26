@@ -79,18 +79,22 @@ class ItemsController < ApplicationController
     @user = User.last    
     @user.follow_type = 'Buyer'
     @item = Item.where(:slug => params[:id]).includes(:item_attributes).last
-    @review = Review.new
-    @review.pros.build
-    @review.cons.build
-    @review.best_uses.build
-    @comment = Comment.new
-    @questions = Question.all
-    #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
-    #@item = Car.find params[:id]
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @item }
-    end if @item
+    unless @item.blank?
+      @review = Review.new
+      @review.pros.build
+      @review.cons.build
+      @review.best_uses.build
+      @comment = Comment.new
+      @questions = Question.all
+      #logger.warn "Relation Count :: " + @item.relateditems.length.to_s
+      #@item = Car.find params[:id]
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render json: @item }
+      end if @item
+    else
+      redirect_to items_path
+    end
   end
 
   # GET /items/new
