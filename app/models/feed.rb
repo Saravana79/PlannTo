@@ -184,13 +184,7 @@ class Feed < ActiveRecord::Base
   def self.get_feed_url_values(url)
     begin
       uri = URI.parse(URI.encode(url.to_s.strip))
-      unless url.include?("youtube.com")
-        doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"))
-      else
-        url = url.gsub("http://", "https://")
-        uri = URI.parse(URI.encode(url.to_s.strip))
-        doc = Nokogiri::HTML(open(uri))
-      end
+      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
       title_info = doc.xpath('.//title').to_s.strip
       rating_value = 0
       meta_description = ''
