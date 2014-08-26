@@ -463,7 +463,7 @@ end
         Rails.cache.delete(cache_key)
     end
 
-    if (self.is_a?(ArticleContent || self.is_a?(VideoContent)) && !self.url.blank?)
+    if (self.is_a?(ArticleContent) || self.is_a?(VideoContent)) && !self.url.blank?
       # create content hash in redis-2
       #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
       # Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", relateditems.collect(&:id).join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
