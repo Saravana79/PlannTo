@@ -155,6 +155,18 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def index
+    redirect_to advertisements_demo_path
+  end
+
+  def demo
+    params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+    params[:ads_id] ||= 1
+    params[:more_vendors] ||= false
+    params[:is_test] ||= "true"
+    render :layout => false
+  end
+
   def search_widget_via_iframe
     render :layout => false
   end
