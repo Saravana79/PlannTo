@@ -82,3 +82,11 @@ task :missing_url_process_top_list => :environment do
     Resque.enqueue(MissingUrlProcessTopList, "missing_url_process_top_list", Time.zone.now.utc)
   end
 end
+
+desc "Cleanup Keys from redis every week"
+task :clean_up_redis_keys => :environment do
+  time = Time.zone.now.utc
+  if (time.wday == 0)
+    Resque.enqueue(CleanUpRedisKeys, "clean_up_redis_keys", Time.zone.now.utc)
+  end
+end

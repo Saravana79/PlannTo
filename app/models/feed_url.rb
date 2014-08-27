@@ -360,4 +360,18 @@ class FeedUrl < ActiveRecord::Base
       Rails.cache.write("feed_url-sources-list", result, :expires_in => 1.day)
     end
   end
+
+  def self.clean_up_redis_keys
+    #clean missingurl:*
+    remove_missing_keys("missingurl:*")
+
+    #clean missingad:*
+    remove_missing_keys("missingad:*")
+
+    #clean spottags:*
+    remove_missing_keys("spottags:*")
+
+    #start sid_ad_detail_process
+    Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
+  end
 end
