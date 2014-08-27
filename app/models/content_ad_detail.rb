@@ -78,7 +78,7 @@ where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order b
     log.debug "********** Updating ectr **********"
     log.debug "\n"
 
-    query_to_get_clicks_and_impressions = "select url, clicks, impressions from content_ad_details"
+    query_to_get_clicks_and_impressions = "select url, clicks, impressions from content_ad_details  where impressions > 100 order by impressions desc"
 
     page = 1
     begin

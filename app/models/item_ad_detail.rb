@@ -86,7 +86,7 @@ class ItemAdDetail < ActiveRecord::Base
     log.debug "********** Updating ectr **********"
     log.debug "\n"
 
-    query_to_get_clicks_and_impressions = "select item_id, clicks, impressions, orders from item_ad_details"
+    query_to_get_clicks_and_impressions = "select item_id, clicks, impressions, orders from item_ad_details where impressions > 100 order by impressions desc"
 
     page = 1
     begin

@@ -36,7 +36,9 @@ end
 
 task :content_ad_detail_process => :environment do
   puts "Running ContentAdDetail Update for Items, at #{Time.zone.now}"
-  Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now.utc, 1000, Time.now)
+  if Time.now.wday == 0
+    Resque.enqueue(ContentAdDetailProcess, "update_clicks_and_impressions_for_content_ad_details", Time.zone.now.utc, 1000, Time.now)
+  end
 end
 
 desc "missing url process with example: force=true, process_type=recent, count=200, valid_urls='fonearena.com-gadgetstouse.com,..', invalid_urls='www.cnet.com-www.xxx.com,..', missing_ad=false"

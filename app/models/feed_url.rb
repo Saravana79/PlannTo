@@ -77,86 +77,85 @@ class FeedUrl < ActiveRecord::Base
       counting = counting + 1
       each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
       missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
-      if missingurl_count.to_i >= 0
-        greater_count = greater_count + 1
-        logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-        p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-        if feed_url_id.blank?
-          missing_url = each_url_key.split("missingurl:")[1]
 
-          check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-          if check_exist_feed_url.blank?
+      greater_count = greater_count + 1
+      logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
+      p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
+      if feed_url_id.blank?
+        missing_url = each_url_key.split("missingurl:")[1]
+
+        check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+        if check_exist_feed_url.blank?
+          source = ""
+          if (missing_url =~ URI::regexp).blank?
             source = ""
-            if (missing_url =~ URI::regexp).blank?
-              source = ""
-              status = 3
-            else
-              begin
-                source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
-              rescue Exception => e
-                source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
-              end
-            end
-
-            category = ""
-
-            if source != ""
-              sources_list = Rails.cache.read("feed_url-sources-list")
-              if !sources_list.blank?
-                category = sources_list[source]
-              end
-
-              if category.blank?
-                category = "Others"
-                feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
-                unless feed_by_sources.blank?
-                  categories = feed_by_sources.map(&:category)
-                  categories = categories.map { |each_cat| each_cat.split(',') }
-                  category = categories.flatten.uniq.join(',')
-                end
-              end
-            end
-
-            # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-            # if check_exist_feed_url.blank?
-            article_content = ArticleContent.find_by_url(missing_url)
-            status = 0
-            status = 1 unless article_content.blank?
-
-            title, description, images, page_category = Feed.get_feed_url_values(missing_url)
-
-            if !page_category.blank?
-              if !valid_categories.include?(page_category.downcase)
-                status = 3
-              elsif page_category.downcase == 'science & technology'
-                  category = "Mobile,Tablet,Camera,Laptop"
-              end
-            end
-            # remove characters after come with space + '- or |' symbols
-            # title = title.to_s.gsub(/\s(-|\|).+/, '')
-            title = title.blank? ? "" : title.to_s.strip
-
-            new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
-                                          status: status, source: source, summary: description, :images => images,
-                                          :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
-
-            $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
+            status = 3
           else
-            ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
-            $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
+            begin
+              source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+            rescue Exception => e
+              source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
+            end
           end
+
+          category = ""
+
+          if source != ""
+            sources_list = Rails.cache.read("feed_url-sources-list")
+            if !sources_list.blank?
+              category = sources_list[source]
+            end
+
+            if category.blank?
+              category = "Others"
+              feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
+              unless feed_by_sources.blank?
+                categories = feed_by_sources.map(&:category)
+                categories = categories.map { |each_cat| each_cat.split(',') }
+                category = categories.flatten.uniq.join(',')
+              end
+            end
+          end
+
+          # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+          # if check_exist_feed_url.blank?
+          article_content = ArticleContent.find_by_url(missing_url)
+          status = 0
+          status = 1 unless article_content.blank?
+
+          title, description, images, page_category = Feed.get_feed_url_values(missing_url)
+
+          if !page_category.blank?
+            if !valid_categories.include?(page_category.downcase)
+              status = 3
+            elsif page_category.downcase == 'science & technology'
+              category = "Mobile,Tablet,Camera,Laptop"
+            end
+          end
+          # remove characters after come with space + '- or |' symbols
+          # title = title.to_s.gsub(/\s(-|\|).+/, '')
+          title = title.blank? ? "" : title.to_s.strip
+
+          new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
+                                        status: status, source: source, summary: description, :images => images,
+                                        :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+
+          $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
         else
-          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
-          $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
+          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+          $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
         end
+      else
+        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+        $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
       end
+
       mem_key = each_url_key.gsub("missingurl:", "")
       $redis_rtb.srem("missingurl-toplist", mem_key) if Rails.env == "production"
     end
   end
 
   def self.process_missing_url(missingurl_keys, count, valid_categories=["gaming", "science & technology"], process_category="recent")
-    p valid_categories
     feed = Feed.where("process_type = 'missingurl'").last
     counting = 1
     greater_count = 1
@@ -344,7 +343,7 @@ class FeedUrl < ActiveRecord::Base
   def self.check_and_assign_sources_hash_to_cache()
     sources_list = Rails.cache.read("feed_url-sources-list")
     if sources_list.blank?
-      sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if {|x| x.blank?}
+      sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if { |x| x.blank? }
       result = {}
 
       sources.each do |each_source|
