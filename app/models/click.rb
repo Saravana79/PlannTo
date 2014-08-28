@@ -7,25 +7,37 @@ class Click < ActiveRecord::Base
     obj_params = JSON.parse(obj_params)
     obj_params = obj_params.symbolize_keys
 
-    click = Click.new
-    click.impression_id = obj_params[:impression_id]
-    click.click_url = obj_params[:url]
-    click.hosted_site_url = obj_params[:request_referer]
-    click.timestamp = obj_params[:time]
-    click.item_id = obj_params[:item_id]
-    click.vendor_id = obj_params[:vendor_id]
-    click.source_type = obj_params[:source_type]
-    unless obj_params[:user].nil?
-      click.user_id = obj_params[:user]
+    last_click_details = "#{obj_params[:url]}-#{obj_params[:request_referer]}-#{obj_params[:remote_ip]}"
+
+    last_20_clicks = $redis_rtb.lrange("ads_last_20_clicks", 0, 19)
+
+    unless last_20_clicks.include?(last_click_details)
+      click = Click.new
+      click.impression_id = obj_params[:impression_id]
+      click.click_url = obj_params[:url]
+      click.hosted_site_url = obj_params[:request_referer]
+      click.timestamp = obj_params[:time]
+      click.item_id = obj_params[:item_id]
+      click.vendor_id = obj_params[:vendor_id]
+      click.source_type = obj_params[:source_type]
+      unless obj_params[:user].nil?
+        click.user_id = obj_params[:user]
+      end
+      click.temp_user_id = obj_params[:temp_user_id]
+      click.publisher_id = obj_params[:publisher]
+      click.ipaddress = obj_params[:remote_ip]
+      click.advertisement_id = obj_params[:advertisement_id]
+      click.sid = obj_params[:sid]
+      click.created_at = obj_params[:time]
+      click.updated_at = obj_params[:time]
+      click.save!
+      Click.redis_push(last_click_details)
     end
-    click.temp_user_id = obj_params[:temp_user_id]
-    click.publisher_id = obj_params[:publisher]
-    click.ipaddress = obj_params[:remote_ip]
-    click.advertisement_id = obj_params[:advertisement_id]
-    click.sid = obj_params[:sid]
-    click.created_at = obj_params[:time]
-    click.updated_at = obj_params[:time]
-    click.save
+  end
+
+  def self.redis_push(last_click_details)
+    $redis_rtb.lpush("ads_last_20_clicks", last_click_details)
+    $redis_rtb.ltrim("ads_last_20_clicks", 0, 19)
   end
 
   def self.save_click_data(url,request_referer,time,item_id,user,remote_ip,impression_id,publisher,vendor_id,source_type,temp_user_id)
