@@ -140,10 +140,10 @@ class Feed < ActiveRecord::Base
     tips = %w[tip trick]
     reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson']
     comparisons = ['vs','versus','comparison']
-    how_to = ["tutorial", "guide", "how to",'update','Wallpapers','root','reset']
+    how_to = ["tutorial", "guide", "how to",'update','Wallpaper','root','reset']
     lists = ["top", "best"]
     photos = ["gallery",'photos']
-    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled']
+    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks']
     specs = ['spec']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
