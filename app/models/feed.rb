@@ -143,7 +143,7 @@ class Feed < ActiveRecord::Base
     how_to = ["tutorial", "guide", "how to",'update']
     lists = ["top", "best"]
     photos = ["gallery",'photos']
-    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming']
+    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled']
     specs = ['spec']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
@@ -157,17 +157,20 @@ class Feed < ActiveRecord::Base
     reviews.each do |review|
       return ArticleCategory::REVIEWS if title_words.scan(review).size >0
     end
-    lists.each do |list|
-      return ArticleCategory::LIST if title_words.scan(list).size >0
+    
+    comparisons.each do |comparison|
+      return ArticleCategory::COMPARISONS if title_words.scan(comparison).size >0
     end
 
     specs.each do |spec|
       return ArticleCategory::SPECS if title_words.scan(spec).size >0
     end
 
-    comparisons.each do |comparison|
-      return ArticleCategory::COMPARISONS if title_words.scan(comparison).size >0
+    lists.each do |list|
+      return ArticleCategory::LIST if title_words.scan(list).size >0
     end
+
+ 
     photos.each do |images|
       return ArticleCategory::PHOTO if title_words.scan(images).size >0
     end
