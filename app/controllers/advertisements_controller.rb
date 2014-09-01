@@ -53,6 +53,7 @@ class AdvertisementsController < ApplicationController
       end
       @ad_template_type = "type_1" if @suitable_ui_size == "300_600"
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+      @click_url = @click_url.gsub("&amp;", "&")
     end
 
     respond_to do |format|
