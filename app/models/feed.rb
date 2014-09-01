@@ -140,7 +140,7 @@ class Feed < ActiveRecord::Base
     tips = %w[tip trick]
     reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson']
     comparisons = ['vs','versus','comparison']
-    how_to = ["tutorial", "guide", "how to",'update']
+    how_to = ["tutorial", "guide", "how to",'update','Wallpapers','root','reset']
     lists = ["top", "best"]
     photos = ["gallery",'photos']
     news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled']
