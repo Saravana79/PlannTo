@@ -1,4 +1,4 @@
-class GamingConsole < Product
+class Console < Product
 
   has_many :compares, :as => :comparable
 
