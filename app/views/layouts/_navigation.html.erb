@@ -1,5 +1,6 @@
 <% if @static_page !="true"%>
 <%@allitems = Item.get_popular_items %>
+    <% if current_user.blank? || !current_user.is_admin? %>
     <div id="nav">
         <div class="container">
         <ul class="megamenu">
@@ -13,17 +14,17 @@
                                 <li><a href="/search?search_type=car&sort_by=Rating&7=Sedan">Top Sedans</a></li>
                                 <li><a href="/search?search_type=car&sort_by=Rating&7=SUV/MUV">Top SUVs/MUVs</a></li>
                                 <li><a href="/search?search_type=car&sort_by=Rating&43=Automatic">Top Automatic Cars</a></li>
-                                <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback&41=Diesel">Top Diesel Hatchback</a></li>   
-                                
+                                <li><a href="/search?search_type=car&sort_by=Rating&7=Hatchback&41=Diesel">Top Diesel Hatchback</a></li>
+
                                 <li><a href="/search?search_type=car&sort_by=Rating&min_1=250000&max_1=500000&7=Hatchback">Top Hatchback within Rs 5,00,000</a></li>
                                 <li><a href="/search?search_type=car&sort_by=Rating&min_1=700000&max_1=100000&7=Sedan">Top Sedan within Rs 10,00,000</a></li>
-                               <li><a href="/search?search_type=car&sort_by=Rating&status=2">Upcoming Cars</a></li> 
+                               <li><a href="/search?search_type=car&sort_by=Rating&status=2">Upcoming Cars</a></li>
                         </ul>
                         <h2 class="padding-top"><a href="/items/compare?item_type=Car">Compare</a></h2>
                        <ul class="navi_link">
                            <li><a href="/items/compare?item_type=Car">Compare Cars</a></li>
                        </ul>
-                          
+
                     </div>
                     <div class="left-2">
                         <h2><a href="/cars">Browse Articles</a></h2>
@@ -33,16 +34,16 @@
                              <li><a href="/cars?fl=News">Latest News</a></li>
                              <li><a href="/cars?fl=Comparisons">Comparisons</a></li>
                              <li><a href="/cars?fl=Lists">Top 10's</a></li>
-                             <li><a href="/cars?fl=HowTo">How To's</a></li>                                         
-                             <li><a href="/cars?fl=Travelogue">Travelogues</a></li>        
-                             <li><a href="/cars?fl=Photo">Photos</a></li>          
+                             <li><a href="/cars?fl=HowTo">How To's</a></li>
+                             <li><a href="/cars?fl=Travelogue">Travelogues</a></li>
+                             <li><a href="/cars?fl=Photo">Photos</a></li>
                        </ul>
-                            
+
                        <h2 class="padding-top">Guides</h2>
                        <ul class="navi_link">
                            <li><a href="/cars/guides/Buyer%20Guides">Buyer's Guides</a></li>
                            <li><a href="/cars/guides/Beginner%20Guides">Begineer's Guides</a></li>
-                       </ul>                        
+                       </ul>
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
@@ -51,13 +52,13 @@
                             <p>
                               <% @allitems.select{|a| configatron.popular_cars.split(",").include? a.id.to_s}.each do |item| %>
                                 <a href="<%=item.get_url()%>"> <%= item.name rescue '' %> </a>
-                           <%end%>  
+                           <%end%>
 
                                </p>
                         </div>
                     </div>
                     <div class="clr"></div>
-                    
+
                     <!--<div class="popular-prd">
                         <h2>Popular Cars</h2>
                         <a href="#">Honda Amaze Diesel VX</a> | <a href="#">Lamborghini Gallardo Spyder</a> | <a href="#">BMW 3 Series 320i</a> | <a href="#">
@@ -66,7 +67,7 @@
                         Chevrolet Beat PS</a>
                     </div>
                     <div class="clr"></div>-->
-                    
+
                 </div><!-- end about menu -->
             </li>
             <li><a href="#" class="">Bikes <span><img src="/images/white-arrow.png" alt="" class="downarrow"></span></a>
@@ -78,16 +79,16 @@
                                 <li><a href="/search?search_type=bike&sort_by=Rating&7=Scooter">All Scooters</a></li>
                                 <li><a href="/search?search_type=bike&sort_by=Rating&295=Sports">Top Sports Bikes</a></li>
                                 <li><a href="/search?search_type=bike&sort_by=Rating&295=Super Sports">Top Super Sports Bikes</a></li>
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Naked">Top Naked Bikes</a></li>                                
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Naked">Top Naked Bikes</a></li>
                                 <li><a href="/search?search_type=bike&sort_by=Rating&295=Cruiser">Top Cruiser Bikes</a></li>
-                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Touring">Top Touring Bikes</a></li>                                
-                                <li><a href="/bike/search?type=scroll&status=1&sort_by=Rating&min_1=45000&max_1=55000">Top Bikes Around Rs 50,000</a></li>                                 
+                                <li><a href="/search?search_type=bike&sort_by=Rating&295=Touring">Top Touring Bikes</a></li>
+                                <li><a href="/bike/search?type=scroll&status=1&sort_by=Rating&min_1=45000&max_1=55000">Top Bikes Around Rs 50,000</a></li>
                         </ul>
                         <h2 class="padding-top"><a href="/items/compare?item_type=Bike">Compare Bikes</a></h2>
                        <ul class="navi_link">
                            <li><a href="/items/compare?item_type=Bike">Compare Bikes</a></li>
                        </ul>
-                          
+
                     </div>
                     <div class="left-2">
                         <h2><a href="/bikes">Browse Articles</a></h2>
@@ -97,16 +98,16 @@
                              <li><a href="/bikes?fl=News">Latest News</a></li>
                              <li><a href="/bikes?fl=Comparisons">Comparisons</a></li>
                              <li><a href="/bikes?fl=Lists">Top 10's</a></li>
-                             <li><a href="/bikes?fl=Travelogue">Travelogues</a></li>                         
-                             <li><a href="/bikes?fl=HowTo">How To's</a></li>                
-                             <li><a href="/bikes?fl=Photo">Photos</a></li>   
+                             <li><a href="/bikes?fl=Travelogue">Travelogues</a></li>
+                             <li><a href="/bikes?fl=HowTo">How To's</a></li>
+                             <li><a href="/bikes?fl=Photo">Photos</a></li>
                        </ul>
-                            
+
                        <h2 class="padding-top"><a href="/bikes/guides/Buyer%20Guides">Guides</a></h2>
                        <ul class="navi_link">
                             <li><a href="/bikes/guides/Buyer%20Guides">Buyer's Guides</a></li>
                             <li><a href="/bikes/guides/Beginner%20Guides">Begineer Guides</a></li>
-                       </ul>                        
+                       </ul>
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
@@ -115,13 +116,13 @@
                             <p>
                                 <% @allitems.select{|a| configatron.popular_bikes.split(",").include? a.id.to_s}.each do |item| %>
                                         <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
-                                <%end%>   
+                                <%end%>
                             </p>
                         </div>
                     </div>
-                   
+
                     <div class="clr"></div>
-                    
+
                 </div><!-- end about menu -->
             </li>
             <li><a href="#" class="">Cycles <span><img src="/images/white-arrow.png" alt="" class="downarrow"></span></a>
@@ -134,7 +135,7 @@
                                 <li><a href="/search?search_type=cycle&sort_by=Rating&7=Road">All Road Bikes</a></li>
                                 <li><a href="/search?search_type=cycle&sort_by=Rating&7=Hybrid">All Hybrid Bikes</a></li>
                                 <li><a href="/search?search_type=cycle&sort_by=Rating&7=Folding">All Folding Bikes</a></li>
-                                <li><a href="/search?search_type=cycle&sort_by=Rating&7=BMX">All BMX Bikes</a></li>   
+                                <li><a href="/search?search_type=cycle&sort_by=Rating&7=BMX">All BMX Bikes</a></li>
                                 <li><a href="/search?search_type=cycle&sort_by=Rating&7=Kids">All Kids Bikes</a></li>
                                 <li><a href="/search?search_type=cycle&sort_by=Rating&min_1=10000&max_1=30000&7=Mountain">Mountain Bikes within Rs 30,000</a></li>
                                 <li><a href="/search?search_type=cycle&sort_by=Rating&min_1=10000&max_1=30000&7=Road">Road Bikes within Rs 30,000</a></li>
@@ -143,7 +144,7 @@
                        <ul class="navi_link">
                            <li><a href="/items/compare?item_type=Cycle">Compare Cycles</a></li>
                        </ul>
-                          
+
                     </div>
                     <div class="left-2">
                         <h2>Browse Articles</h2>
@@ -152,30 +153,30 @@
                            <li><a href="/cycles?fl=Deals">Deals & Offers</a></li>
                            <li><a href="/cycles?fl=Comparisons">Comparisons</a></li>
                            <li><a href="/cycles?fl=Lists">Top 10's</a></li>
-                           <li><a href="/cycles?fl=HowTo">How To's</a></li>                                         
-                           <li><a href="/cycles?fl=Travelogue">Travelogues</a></li>                         
-                           <li><a href="/cycles?fl=Event">Events</a></li>                 
-                           <li><a href="/cycles?fl=Photo">Photos</a></li> 
+                           <li><a href="/cycles?fl=HowTo">How To's</a></li>
+                           <li><a href="/cycles?fl=Travelogue">Travelogues</a></li>
+                           <li><a href="/cycles?fl=Event">Events</a></li>
+                           <li><a href="/cycles?fl=Photo">Photos</a></li>
                        </ul>
-                            
+
                        <h2 class="padding-top"><a href="/cycles/guides/Buyer%20Guides">Guides</a></h2>
                        <ul class="navi_link">
                            <li><a href="/cycles/guides/Buyer%20Guides">Buyer's Guides</a></li>
                            <li><a href="/cycles/guides/Beginner%20Guides">Begineer's Guides</a></li>
-                       </ul>                        
+                       </ul>
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
                             <h2>Popular Cycles</h2>
                             <p><img src="/images/cycle-icon.png" alt="" /></p>
-                            <p>     
+                            <p>
                                   <% @allitems.select{|a| configatron.popular_cycles.split(",").include? a.id.to_s}.each do |item| %>
-                                 
+
                                 <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue '' %> </a>
                            <%end%> </p>
                         </div>
                     </div>
-                   
+
                     <div class="clr"></div>
                 </div><!-- end about menu -->
             </li>
@@ -190,13 +191,13 @@
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&min_1=4000&max_1=10000">Top Mobiles under Rs 10,000</a></li>
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&min_1=10000&max_1=25000">Top Mobiles under Rs 25,000</a></li>
                                 <li><a href="/search?search_type=mobile&sort_by=Rating&117=5">Top Phablets</a></li>
-                                <li><a href="/search?search_type=mobile&sort_by=Rating&status=2">Upcoming Mobiles</a></li>   
+                                <li><a href="/search?search_type=mobile&sort_by=Rating&status=2">Upcoming Mobiles</a></li>
                         </ul>
                         <h2 class="padding-top"><a href="/items/compare?item_type=Mobile">Compare</a></h2>
                        <ul class="navi_link">
                            <li><a href="/items/compare?item_type=Mobile">Compare Mobiles</a></li>
                        </ul>
-                          
+
                     </div>
                     <div class="left-2">
                         <h2><a href="/mobiles">Browse Articles</a></h2>
@@ -205,15 +206,15 @@
                              <li><a href="/mobiles?fl=Deals">Deals & Offers</a></li>
                              <li><a href="/mobiles?fl=Comparisons">Comparisons</a></li>
                              <li><a href="/mobiles?fl=Lists">Top 10's</a></li>
-                             <li><a href="/mobiles?fl=HowTo">How To's</a></li>                              
+                             <li><a href="/mobiles?fl=HowTo">How To's</a></li>
                              <li><a href="/mobiles?fl=Apps">Apps</a></li>
                              <li><a href="/mobiles?fl=Photo">Photos</a></li>                          </ul>
-                            
+
                        <h2 class="padding-top"><a href="/mobiles/guides/Buyer%20Guides">Guides</a></h2>
                        <ul class="navi_link">
                             <li><a href="/mobiles/guides/Buyer%20Guides">Buyer's Guides</a></li>
                          <li><a href="/mobiles/guides/Beginner%20Guides">Begineer's Guides</a></li>
-                       </ul>                        
+                       </ul>
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
@@ -224,7 +225,7 @@
                                 <%end%> </p>
                         </div>
                     </div>
-                   
+
                     <div class="clr"></div>
                 </div><!-- end about menu -->
             </li>
@@ -235,17 +236,17 @@
                         <ul class="navi_link">
                                 <li><a href="/tablet/search">All Tablets</a></li>
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&265=Android">Top Android Tablets</a></li>
-                    
+
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&min_1=4000&max_1=10000">Top Tablets under Rs 10,000</a></li>
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&min_1=10000&max_1=15000">Top Tablets under Rs 15,000</a></li>
                                 <li><a href="/search?search_type=tablet&sort_by=Rating&min_1=15000&max_1=25000">Top Tablets under Rs 25,000</a></li>
-                                <li><a href="/search?search_type=tablet&sort_by=Rating&status=2">Upcoming Tablets</a></li>  
+                                <li><a href="/search?search_type=tablet&sort_by=Rating&status=2">Upcoming Tablets</a></li>
                         </ul>
                         <h2 class="padding-top"><a href="/items/compare?item_type=Tablet">Compare</a></h2>
                        <ul class="navi_link">
                            <li><a href="/items/compare?item_type=Tablet">Compare Tablets</a></li>
                        </ul>
-                          
+
                     </div>
                     <div class="left-2">
                         <h2><a href="/tablets">Browse Articles</a></h2>
@@ -255,27 +256,27 @@
                              <li><a href="/tablets?fl=Apps">Apps</a></li>
                                  <li><a href="/tablets?fl=Comparisons">Comparisons</a></li>
                              <li><a href="/tablets?fl=Lists">Top 10's</a></li>
-                             <li><a href="/tablets?fl=HowTo">How To's</a></li>                             
-                             <li><a href="/tablets?fl=Photo">Photos</a></li> 
+                             <li><a href="/tablets?fl=HowTo">How To's</a></li>
+                             <li><a href="/tablets?fl=Photo">Photos</a></li>
                        </ul>
-                            
+
                        <h2 class="padding-top"><a href="/tablets/guides/Buyer%20Guides">Guides</a></h2>
                        <ul class="navi_link">
                           <li><a href="/tablets/guides/Buyer%20Guides">Buyer's Guides</a></li>
                          <li><a href="/tablets/guides/Beginner%20Guides">Begineer's Guides</a></li>
-                         
-                       </ul>                        
+
+                       </ul>
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
                             <h2>Popular Tablets</h2>
                             <p><img src="/images/tablet-icon.png" alt="" /></p>
                             <p> <% @allitems.select{|a| configatron.popular_tablets.split(",").include? a.id.to_s}.each do |item| %>
-                                    <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>      
+                                    <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
                                 <%end%></p>
                         </div>
                     </div>
-                   
+
                     <div class="clr"></div>
                 </div><!-- end about menu -->
             </li>
@@ -288,11 +289,11 @@
                                 <li><a href="/search?search_type=camera&sort_by=Rating&7=Point%20%26%20Shoot">All Point & Shoot</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&7=Mirrorless">All Mirrorless</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&295=Ultracompact">All Sleek Compact Cameras</a></li>
-                                <li><a href="/search?search_type=camera&sort_by=Rating&7=Point%20%26%20Shoot&183=10">Top High Zoom Compacts</a></li>   
+                                <li><a href="/search?search_type=camera&sort_by=Rating&7=Point%20%26%20Shoot&183=10">Top High Zoom Compacts</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&295=Compact SLR">Top Entry Level SLR Cameras</a></li>
                                 <li><a href="/search?search_type=camera&sort_by=Rating&295=Mid-size SLR">Top Semi Pro SLR Cameras</a></li>
-                                <li><a href="/search?search_type=camera&sort_by=Rating&295=SLR-like (bridge) ">Top SLR Style Bridge Cameras</a></li>                                                              
-                                <li><a href="/search?search_type=camera&sort_by=Rating&302=True">Top WaterProof Cameras</a></li>     
+                                <li><a href="/search?search_type=camera&sort_by=Rating&295=SLR-like (bridge) ">Top SLR Style Bridge Cameras</a></li>
+                                <li><a href="/search?search_type=camera&sort_by=Rating&302=True">Top WaterProof Cameras</a></li>
                         </ul>
                         <h2 class="padding-top"><a href="/items/compare?item_type=Camera">Compare</a></h2>
                        <ul class="navi_link">
@@ -307,36 +308,38 @@
                                  <li><a href="/cameras?fl=Comparisons">Comparisons</a></li>
                              <li><a href="/cameras?fl=Lists">Top 10's</a></li>
                              <li><a href="/cameras?fl=Apps">Apps</a></li>
-                             <li><a href="/cameras?fl=HowTo">How To's</a></li>                             
-                             <li><a href="/cameras?fl=Photo">Photos</a></li> 
+                             <li><a href="/cameras?fl=HowTo">How To's</a></li>
+                             <li><a href="/cameras?fl=Photo">Photos</a></li>
                        </ul>
-                            
+
                        <h2 class="padding-top"><a href="/cameras/guides/Buyer%20Guides">Guides</a></h2>
                        <ul class="navi_link">
                           <li><a href="/cameras/guides/Buyer%20Guides">Buyer's Guides</a></li>
                          <li><a href="/cameras/guides/Beginner%20Guides">Begineer's Guides</a></li>
-                         
-                       </ul>                        
+
+                       </ul>
                     </div>
                     <div class="left-3">
                         <div class="popular-prd">
                             <h2>Popular Cameras</h2>
                             <p><img src="/images/tablet-icon.png" alt="" /></p>
                             <p> <% @allitems.select{|a| configatron.popular_cameras.split(",").include? a.id.to_s}.each do |item| %>
-                                    <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>      
+                                    <a href="<%= item.get_url() rescue ''%>"> <%= item.name rescue ''%> </a>
                                 <%end%></p>
                         </div>
                     </div>
-                   
+
                     <div class="clr"></div>
                 </div><!-- end about menu -->
             </li>
           <!-- end about menu -->
-            
+
         </ul>
         <div class="clr"></div>
         </div>
     </div><!-- end of nav div -->
+
+    <% end %>
 
 <%= javascript_include_tag src="/javascripts/jquery.megamenu.js" %>
 <script>
@@ -353,5 +356,5 @@ jQuery(document).ready(function() {
       });
 
 </script>
-     
+
  <%end%>
