@@ -151,6 +151,8 @@ class Admin::AdReportsController < ApplicationController
       @total_ectr = (@clickscount.to_f / @impressionscount.to_f) rescue 0.0
     end
 
+    @total_ectr = @total_ectr * 100
+
     # @total_orders = @order_histories.count
     # @total_revenue = @order_histories.map(&:total_revenue).compact.inject(:+) rescue 0
     @total_cost = @winning_price.compact.inject(:+) rescue 0.0
