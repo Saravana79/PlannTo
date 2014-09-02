@@ -1,0 +1,86 @@
+
+<% if @start_date %>
+    <center><h2>Report From <%= @start_date.to_date.strftime("%d-%m-%Y") %> To <%= @end_date.to_date.strftime("%d-%m-%Y") %></h2></center>
+
+
+    <br />
+
+    <h2> Summary </h2>
+
+    <br/>
+
+    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <th class="header_compare"  > Total Impressions </th>
+        <th class="header_compare"  > Total Clicks </th>
+        <th class="header_compare"  > CTR </th>
+        <th class="header_compare"  > Cost Per Click </th>
+        <th class="header_compare"  > Total Cost </th>
+      </tr>
+      <tr>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @clickscount %> </td>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_ectr %></td>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @cost_per_click %></td>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_cost %></td>
+      </tr>
+
+    </table>
+
+    <br/><br/>
+
+    <div id="report">
+      <%= render "admin/ad_reports/ad_chart" %>
+    </div>
+<% end %>
+<br/><br/>
+<!--
+<div class="search_form">
+  <%= form_for :search, :url => @search_path, :html => {:method => 'get'} do |search_form| %>
+      <%= hidden_field_tag :from_date, @start_date.to_date unless @start_date.blank? %>
+      <%= hidden_field_tag :to_date, @end_date.to_date unless @end_date.blank? %>
+
+      <% if @search_path == "/admin/widget_reports" %>
+          <%= hidden_field_tag :publisher_id, @publisher.id unless @publisher.blank? %>
+          <%= hidden_field_tag :vendor_id, params[:vendor_id] unless params[:vendor_id].blank? %>
+      <% elsif @search_path == "/admin/ad_reports/view_ad_chart" %>
+          <%= hidden_field_tag "advertisement_id", params[:advertisement_id] %>
+      <% end %>
+      Vendor: <%= search_form.select :vendor_id, @vendors.collect {|a| [a.name, a.item_id]}, {:include_blank => true, :selected => params[:search][:vendor_id]} %>
+      Order Status: <%= search_form.select :order_status, ["Validated", "Cancelled", "Pending Validation"], {:include_blank => true, :selected => params[:search][:order_status]} %>
+      Payment Status: <%= search_form.select :payment_status, ["Paid", "Pending", "Cancelled", "Ready for Payment"], {:include_blank => true, :selected => params[:search][:payment_status]} %>
+      <%= search_form.submit "Filter" %>
+      <%= search_form.submit "Clear" %>
+  <% end %>
+
+  -->
+</div>
+<!--
+<ul id="Newtabs" style="padding-top:15px;">
+  <li  class="tab_active order" ><a href="#"><span>Order & Revenue</span></a></li>
+</ul>
+-->
+<!--	  <script>
+	  $(".click_report").click(function(e){
+	     window.location.href = "/admin/click_reports?to_date=" + $("#to_date").val() + "&from_date=" + $("#from_date").val()
+	  })
+	  $(".impression_report").click(function(e){
+	     window.location.href = "/admin/impression_reports?to_date=" + $("#to_date").val() + "&from_date=" + $("#from_date").val()
+	  })
+	    $(".order").click(function(e){
+	     window.location.href = "/admin/order_histories?to_date=" + $("#to_date").val() + "&from_date=" + $("#from_date").val()
+	  })
+	  </script>
+ -->
+
+<%#= render :partial => "admin/order_histories/list_orders" %>
+
+
+<style type="text/css">
+    .search_form {
+        color: #A52A2A;
+        font-size: 14px;
+        margin: 30px;
+        position: relative;
+    }
+</style>

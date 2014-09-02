@@ -1,6 +1,6 @@
 <%= form_for [:admin, @advertisement] do |f| %>
     <% if @advertisement.errors.any? %>
-        <div id="error_explanation"%>
+        <div id="error_explanation">
         <%= "#{pluralize(@advertisement.errors.count, "error")} prohibited this product from being saved:" %>
         <ul>
           <% @advertisement.errors.full_messages.each do |msg| %>
@@ -9,124 +9,225 @@
         </ul>
         </div>
     <% end %>
-    <h2> Advertisement </h2>
+    <h2> <%= @advertisement.new_record? ? "New" : "Edit" %> Campaign </h2>
+
+    <ul id="plmenu" class="plnav plnav-tabs">
+      <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
+      <li class="active" id="default"> <a href="javascript:void(0)">Default</a> </li>
+      <li class="" id="offers"> <a href="javascript:void(0)" >Offers</a> </li>
+    </ul>
 
     <div class="main_form">
-      <% unless @advertisement.new_record? %>
-      <div class="fields-div">
-        <div class="title_header float_lft">Advertisement Status :</div>
-        <div>
-          <%= select_tag :ad_status, options_for_select(["Enable", "Disable", "Delete"], @ad_status) %>
+
+    <div class="div_values default">
+
+    <% unless @advertisement.new_record? %>
+        <div class="fields-div">
+          <div class="title_header float_lft">Advertisement Status :</div>
+          <div>
+            <%= select_tag :ad_status, options_for_select(["Enable", "Disable", "Delete"], @ad_status) %>
+          </div>
         </div>
-      </div>
-      <% end %>
-      <div class="fields-div">
-        <div class="title_header float_lft">Advertisement Type :</div>
-        <div>
-          <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => true %>Static
-          <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type" %>Dynamic
-          <% if current_user.is_admin? %>
+    <% end %>
+    <div class="fields-div">
+      <div class="title_header float_lft">Advertisement Type :</div>
+      <div>
+        <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => true %>Static
+        <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type" %>Dynamic
+        <% if current_user.is_admin? %>
             <%= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type" %>Dynamic PC
             <%= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto
             <%= f.radio_button :advertisement_type, 'flash', :class => "ad_type" %>Flash
-          <% end %>
-        </div>
+        <% end %>
       </div>
+    </div>
 
-      <div class="fields-div dynamic_details additional_details">
-        <div class="title_header float_lft">Template Type :</div>
-        <div>
-          <%= f.radio_button :template_type, 'type_1', :class => "template_type", :checked => true %>Type 1
-          <%= f.radio_button :template_type, 'type_2', :class => "template_type" %>Type 2
-        </div>
+    <div class="fields-div dynamic_details additional_details">
+      <div class="title_header float_lft">Template Type :</div>
+      <div>
+        <%= f.radio_button :template_type, 'type_1', :class => "template_type", :checked => true %>Type 1
+        <%= f.radio_button :template_type, 'type_2', :class => "template_type" %>Type 2
       </div>
+    </div>
 
-      <div class="fields-div">
-        <div class="title_header float_lft">Name :</div>
-        <div class="float_lft"> <%= f.text_field :name %> </div>
-      </div>
+    <div class="fields-div">
+      <div class="title_header float_lft">Name :</div>
+      <div class="float_lft"> <%= f.text_field :name %> </div>
+    </div>
 
-      <%= hidden_field_tag 'ad_item_id' %>
-      <%= hidden_field_tag 'content_id', @advertisement.content_id %>
+    <div class="fields-div">
+      <div class="title_header float_lft">Target Audience :</div>
+      <div class="float_lft"> <%= f.select :target_audience, options_for_select(["Buyer", "Owner", "Both"], @advertisement.target_audience) %> </div>
+    </div>
 
-      <div class="fields-div" id="reviewProducts">
+    <%= hidden_field_tag 'ad_item_id' %>
+    <%= hidden_field_tag 'content_id', @advertisement.content_id %>
 
-        <div class="title_header float_lft">Product :</div>
-        <div class="taggingdiv">
-          <ul id="ad_product_list" class="tagging"></ul>
-          <div class="float_lft " id="displayTagBox">
-            <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
-          </div>
-        </div>
-      </div>
+    <div class="fields-div">
+      <div class="title_header float_lft"></div>
+      <div class="float_lft"> <ul id="ad_product_list" class="tagging"></ul> </div>
+    </div>
 
-      <div class="fields-div" id="reviewProducts">
-
-        <div class="title_header float_lft">Product :</div>
-        <div class="float_lft">
-          <a href="javascript:void(0)" class="select_button_for_rel_products">Select Relevant Product to Show Ad </a>
+    <div class="fields-div" id="reviewProducts">
+      <ul id="ad_product_list" class="tagging"></ul>
+      <div class="title_header float_lft">Product :</div>
+      <div class="taggingdiv">
+        <div class="float_lft " id="displayTagBox">
+          <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
+          <%= link_to(image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "select_button_for_rel_products", :width => "20px;"), "javascript:void(0)") %>
           <%= hidden_field_tag "related_item_ids", @items.blank? ? "" : @items.map(&:id).join(",") %>
           <%= f.hidden_field 'exclusive_item_ids', :id => "exclusive_item_ids" %>
         </div>
       </div>
+    </div>
 
-      <div class="fields-div" id="reviewProducts">
+    <div class="fields-div" id="reviewProducts">
 
-        <div class="title_header float_lft">Exclusive Product :</div>
-        <div class="taggingdiv">
-          <ul id="exclusive_product_list" class="tagging"></ul>
-          <div class="float_lft " id="displayTagBox">
-            <input placeholder="Start Typing for suggestions.." type="text" value="" id="exclusive_product"/>
-          </div>
+      <div class="title_header float_lft">Exclusive Product :</div>
+      <div class="taggingdiv">
+        <ul id="exclusive_product_list" class="tagging"></ul>
+        <div class="float_lft " id="displayTagBox">
+          <input placeholder="Start Typing for suggestions.." type="text" value="" id="exclusive_product"/>
         </div>
       </div>
+    </div>
 
-      <div class="fields-div" style="clear:both;">
-        <div class="title_header float_lft">Start Date :</div>
-        <div>
-          <%= f.text_field :start_date %></div>
-      </div>
-      <div class="fields-div">
-        <div class="title_header float_lft">End Date :</div>
-        <div>
-          <%= f.text_field :end_date %></div>
-      </div>
+    <div class="fields-div" style="clear:both;">
+      <div class="title_header float_lft">Start Date :</div>
+      <div>
+        <%= f.text_field :start_date %></div>
+    </div>
+    <div class="fields-div">
+      <div class="title_header float_lft">End Date :</div>
+      <div>
+        <%= f.text_field :end_date %></div>
+    </div>
 
-      <div class="fields-div" style="clear: both;">
-        <div class="title_header float_lft">Click Url :</div>
-        <div>
-          <%= f.text_field :click_url %></div>
+    <div class="fields-div" style="clear: both;">
+      <div class="title_header float_lft">Click Url :</div>
+      <div>
+        <%= f.text_field :click_url %></div>
+    </div>
+    <div class="fields-div">
+      <div class="title_header float_lft">Budget[per day] :</div>
+      <div>
+        <%= f.text_field :budget %></div>
+    </div>
+    <div class="fields-div">
+      <div class="title_header float_lft">Bid[CPM/CPC/CPA] :</div>
+      <div>
+        <%= f.radio_button :bid, 'CPM', :class => "bid_radio_button", :checked => true %>CPM
+        <%= f.radio_button :bid, 'CPC', :class => "bid_radio_button" %>CPC
+        <%= f.radio_button :bid, 'CPA', :class => "bid_radio_button" %>CPA
       </div>
-      <div class="fields-div">
-        <div class="title_header float_lft">Budget[per day] :</div>
-        <div>
-          <%= f.text_field :budget %></div>
-      </div>
-      <div class="fields-div">
-        <div class="title_header float_lft">Bid[CPM/CPC/CPA] :</div>
-        <div>
-          <%= f.radio_button :bid, 'CPM', :class => "bid_radio_button", :checked => true %>CPM
-          <%= f.radio_button :bid, 'CPC', :class => "bid_radio_button" %>CPC
-          <%= f.radio_button :bid, 'CPA', :class => "bid_radio_button" %>CPA
-        </div>
-      </div>
+    </div>
 
-      <div class="fields-div">
-        <div class="title_header float_lft">Cost :</div>
-        <div>
-          <%= f.text_field :cost %></div>
-      </div>
+    <div class="fields-div">
+      <div class="title_header float_lft">Cost :</div>
+      <div>
+        <%= f.text_field :cost %></div>
+    </div>
 
-      <% if current_user.is_admin? %>
+    <% if current_user.is_admin? %>
         <div class="fields-div">
           <div class="title_header float_lft">Commission :</div>
           <div>
             <%= f.text_field :commission %></div>
         </div>
-      <% else %>
+    <% else %>
         <%= hidden_field_tag :commission, @advertisement.commission %>
-      <% end %>
+    <% end %>
 
+    <h3>Additional Details</h3>
+
+    <div id="related_product_list" style="display:none;">
+      <a href="#" class="Closebut">&nbsp;</a>
+      <%= hidden_field_tag "articles_item_id" %>
+      <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
+        <div class="title_header float_lft">Select Relevant Product to Show Ad:</div>
+        <div class="taggingdiv" style="margin-left:5px;">
+          <ul id="new_article_product_list" class="tagging"></ul>
+          <div class="float_lft " style="clear:both;">
+            <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
+          </div>
+          <div style="clear:both;"></div>
+
+          <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;"></div>
+          <div style="clear:both;"></div>
+
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+      <ul class="selected_products">
+
+      </ul>
+      <div id="list_of_products">
+
+      </div>
+      <%= link_to "Populate", "javascript:void(0)", :class => "btn_submitanswer btn_submitcancel populate_btn", :id => "cancel_button" %>
+    </div>
+
+    <div class="additional_details static_details flash_details" id="static_details">
+      <div class="files-div">
+        <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
+        <% if @advertisement.new_record? %>
+            <div class="file-div">
+              <div>
+                <div class="title_header float_lft">Advertisement Size :</div>
+                <div class="float_lft">
+                  <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
+                </div>
+                <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+              </div>
+              <div class="fields-div">
+                <div class="title_header float_lft">Image :</div>
+                <div class="float_lft">
+                  <%= f.file_field :upload_image, name: "avatar[]" %>
+                </div>
+              </div>
+            </div>
+        <% else %>
+
+            <% @advertisement && @advertisement.images.each do |a| %>
+                <div class="existing_images" id="<%= a.id %>">
+                  <%= image_tag(a.avatar, :size => a.ad_size.to_s.gsub("*", "x")) %>
+
+                  <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
+                </div>
+            <% end %>
+
+            <div class="file-div">
+              <div>
+                <div class="title_header float_lft">Advertisement Size :</div>
+                <div class="float_lft">
+                  <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
+                </div>
+                <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+              </div>
+              <div class="fields-div">
+                <div class="title_header float_lft">Image :</div>
+                <div class="float_lft">
+                  <%= f.file_field :upload_image, name: "avatar[]" %>
+                </div>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="additional_details dynamic_details" id="dynamic_details">
+      <div class="fields-div">
+        <div class="title_header float_lft">Vendor :</div>
+        <div>
+          <%= @vendor.blank? ? "" : @vendor.name %></div>
+        <%= f.hidden_field :vendor_id %>
+      </div>
+    </div>
+
+    <br/>
+    </div>
+
+    <div class="div_values offers" style="display: none;">
       <div class="fields-div">
         <div class="title_header float_lft">Offer :</div>
         <div>
@@ -145,93 +246,7 @@
           <%= f.text_field :expiry_date %></div>
       </div>
 
-      <h3>Additional Details</h3>
-
-      <div id="related_product_list" style="display:none;">
-        <a href="#" class="Closebut">&nbsp;</a>
-        <%= hidden_field_tag "articles_item_id" %>
-        <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
-          <div class="title_header float_lft">Select Relevant Product to Show Ad:</div>
-          <div class="taggingdiv" style="margin-left:5px;">
-            <ul id="new_article_product_list" class="tagging"></ul>
-            <div class="float_lft " style="clear:both;">
-              <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
-            </div>
-            <div style="clear:both;"></div>
-
-            <div id="search_items_by_relavance" style="font-size: 12px;margin: 5px 0px 10px 5px;width:800px;"></div>
-            <div style="clear:both;"></div>
-
-          </div>
-          <div style="clear:both;"></div>
-        </div>
-        <ul class="selected_products">
-
-        </ul>
-        <div id="list_of_products">
-
-        </div>
-        <%= link_to "Populate", "javascript:void(0)", :class => "btn_submitanswer btn_submitcancel populate_btn", :id => "cancel_button" %>
-       </div>
-
-      <div class="additional_details static_details flash_details" id="static_details">
-        <div class="files-div">
-          <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
-          <% if @advertisement.new_record? %>
-              <div class="file-div">
-                <div>
-                  <div class="title_header float_lft">Advertisement Size :</div>
-                  <div class="float_lft">
-                    <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
-                  </div>
-                  <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
-                </div>
-                <div class="fields-div">
-                  <div class="title_header float_lft">Image :</div>
-                  <div class="float_lft">
-                    <%= f.file_field :upload_image, name: "avatar[]" %>
-                  </div>
-                </div>
-              </div>
-          <% else %>
-
-              <% @advertisement && @advertisement.images.each do |a| %>
-                  <div class="existing_images" id="<%= a.id %>">
-                    <%= image_tag(a.avatar, :size => a.ad_size.to_s.gsub("*", "x")) %>
-
-                    <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
-                  </div>
-              <% end %>
-
-              <div class="file-div">
-                <div>
-                  <div class="title_header float_lft">Advertisement Size :</div>
-                  <div class="float_lft">
-                    <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
-                  </div>
-                  <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
-                </div>
-                <div class="fields-div">
-                  <div class="title_header float_lft">Image :</div>
-                  <div class="float_lft">
-                    <%= f.file_field :upload_image, name: "avatar[]" %>
-                  </div>
-                </div>
-              </div>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="additional_details dynamic_details" id="dynamic_details">
-        <div class="fields-div">
-          <div class="title_header float_lft">Vendor :</div>
-          <div>
-            <%= @vendor.blank? ? "" : @vendor.name %></div>
-          <%= f.hidden_field :vendor_id %>
-        </div>
-      </div>
-
-      <br/>
+    </div>
 
       <div class="submit_button">
         <%= f.submit button_val, :class => 'btn_submitanswer', :id => "publishanswer" %>
@@ -399,6 +414,17 @@
             else
                 alert("populated selected product to related product list")
         })
+
+        $("#plmenu li").click(function()
+        {
+            var this_val = $(this)
+            console.log(this_val)
+            $("#plmenu li").removeClass('active')
+            this_val.addClass('active')
+            $(".div_values").hide()
+            var exp_id = this_val.attr("id")
+            $("."+exp_id).show()
+        });
     })
 
 
@@ -407,10 +433,11 @@
 <style type="text/css">
     .main_form {
         margin: 0px 0 0 54px;
-        width: 600px
+        width: 600px;
+        padding-top: 20px;
     }
 
-    #new_advertisement h2 {
+    #new_advertisement h2, .edit_advertisement h2 {
         font-size: 20px;
         margin: 22px;
         text-align: center;
@@ -481,6 +508,156 @@
     #advertisement_offer {
         height: 65px;
     }
+
+    .plnav {
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+    .plnav > li {
+        position: relative;
+        display: block;
+        text-align: center;
+    }
+    .plnav > li > a {
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+    }
+    .plnav > li > a:hover,
+    .plnav > li > a:focus {
+        text-decoration: none;
+        background-color: #eee;
+    }
+    .plnav > li.disabled > a {
+        color: #999;
+    }
+    .plnav > li.disabled > a:hover,
+    .plnav > li.disabled > a:focus {
+        color: #999;
+        text-decoration: none;
+        cursor: not-allowed;
+        background-color: transparent;
+    }
+    .plnav .open > a,
+    .plnav .open > a:hover,
+    .plnav .open > a:focus {
+        background-color: #eee;
+        border-color: #428bca;
+    }
+    .plnav .plnav-divider {
+        height: 1px;
+        margin: 9px 0;
+        overflow: hidden;
+        background-color: #e5e5e5;
+    }
+    .plnav > li > a > img {
+        max-width: none;
+    }
+
+    .plnav-pills > li {
+        float: left;
+    }
+    .plnav-pills > li > a {
+        border-radius: 4px;
+    }
+    .plnav-pills > li + li {
+        margin-left: 2px;
+    }
+    .plnav-pills > li.active > a,
+    .plnav-pills > li.active > a:hover,
+    .plnav-pills > li.active > a:focus {
+        color: #fff;
+        background-color: #428bca;
+    }
+
+    .plnav-tabs,
+    .plnav-pills {
+        *zoom: 1;
+    }
+
+    .plnav-tabs:before,
+    .plnav-pills:before,
+    .plnav-tabs:after,
+    .plnav-pills:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+
+    .plnav-tabs:after,
+    .plnav-pills:after {
+        clear: both;
+    }
+
+    .plnav-tabs > li,
+    .plnav-pills > li {
+        float: left;
+        min-width: 120px;
+    }
+
+    .plnav-tabs > li > a,
+    .plnav-pills > li > a {
+        padding-right: 12px;
+        padding-left: 12px;
+        margin-right: 2px;
+        line-height: 14px;
+    }
+
+    .plnav-tabs {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .plnav-tabs > li {
+        margin-bottom: -1px;
+    }
+
+    .plnav-tabs > li > a {
+        color:#428BCA!important;
+        padding-top: 10px;
+        padding-bottom: 5px;
+        line-height: 20px;
+        border: 1px solid transparent;
+        -webkit-border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;
+        height:23px;
+        font-size: 13px;
+    }
+
+    .plnav-tabs > li > a:hover,
+    .plnav-tabs > li > a:focus {
+        border-color: #eeeeee #eeeeee #dddddd;
+    }
+
+    .plnav-tabs > .active > a,
+    .plnav-tabs > .active > a:hover,
+    .plnav-tabs > .active > a:focus {
+        color: #555!important;
+        cursor: default;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-bottom-color: transparent;
+    }
+
+    .plnav-pills > li > a {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    .plnav-pills > .active > a,
+    .plnav-pills > .active > a:hover,
+    .plnav-pills > .active > a:focus {
+        color: #ffffff;
+        background-color: #0088cc;
+    }
+
+    a { outline: none; }
 </style>
 
 <% unless @advertisement.new_record? %>
@@ -504,6 +681,6 @@
               $("#ad_status").val(previous_val)
           }
       })
-  })
+  });
 </script>
 <% end %>

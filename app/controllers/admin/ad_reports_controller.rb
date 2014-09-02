@@ -144,8 +144,23 @@ class Admin::AdReportsController < ApplicationController
     @order_histories = OrderHistory.where("advertisement_id=? and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @advertisement.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
     @impressionscount = @impressions.sum
     @clickscount = @clicks.sum
-    @total_orders = @order_histories.count
-    @total_revenue = @order_histories.map(&:total_revenue).compact.inject(:+) rescue 0
+
+    @total_ectr = 0.0
+
+    if (@clickscount != 0.0 && @impressionscount != 0.0)
+      @total_ectr = (@clickscount.to_f / @impressionscount.to_f) rescue 0.0
+    end
+
+    # @total_orders = @order_histories.count
+    # @total_revenue = @order_histories.map(&:total_revenue).compact.inject(:+) rescue 0
+    @total_cost = @winning_price.compact.inject(:+) rescue 0.0
+
+    @cost_per_click = 0.0
+
+    if (@total_cost != 0.0 && @clickscount != 0.0)
+      @cost_per_click = (@total_cost.to_f / @clickscount.to_f) rescue 0.0
+    end
+
     vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
 
     @vendors =  VendorDetail.where(:item_id => vendor_ids)
