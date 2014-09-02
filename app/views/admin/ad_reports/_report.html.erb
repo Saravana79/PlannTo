@@ -20,8 +20,8 @@
       <tr>
         <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @impressionscount %> </td>
         <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @clickscount %> </td>
-        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_ectr %></td>
-        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @cost_per_click %></td>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_ectr.round(2) %></td>
+        <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @cost_per_click.round(2) %></td>
         <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= @total_cost %></td>
       </tr>
 

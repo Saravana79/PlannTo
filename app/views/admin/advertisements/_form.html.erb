@@ -143,11 +143,12 @@
     <div id="related_product_list" style="display:none;">
       <a href="#" class="Closebut">&nbsp;</a>
       <%= hidden_field_tag "articles_item_id" %>
-      <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
-        <div class="title_header float_lft">Select Relevant Product to Show Ad:</div>
-        <div class="taggingdiv" style="margin-left:5px;">
-          <ul id="new_article_product_list" class="tagging"></ul>
-          <div class="float_lft " style="clear:both;">
+      <ul id="new_article_product_list" class="tagging" style="padding-left: 264px;"></ul>
+      <div style="padding:5px 5px 0px 0px;clear:both;display:block;margin-top: 20px;" id="shareProduct">
+        <div class="title_header float_lft" style="width: 250px;">Select Relevant Product to Show Ad:</div>
+        <div class="taggingdiv" style="margin-left:5px;width: 300px !important;">
+
+          <div class="left_input_tag float_lft " style="clear:both;">
             <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" id="new_article_product"/>
           </div>
           <div style="clear:both;"></div>
@@ -495,7 +496,7 @@
     #related_product_list {
         background: none repeat scroll 0 0 #f9f9f9;
         left: 30% !important;
-        top: 30% !important;
+        top: 10% !important;
         width: 600px;
         height:500px;
     }
