@@ -75,7 +75,7 @@
       <div class="taggingdiv">
         <div class="float_lft " id="displayTagBox">
           <input placeholder="Start Typing for suggestions.." type="text" value="" id="ad_product"/>
-          <%= link_to(image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "select_button_for_rel_products", :width => "20px;"), "javascript:void(0)") %>
+          <%= link_to(image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "select_button_for_rel_products", :width => "15px;"), "javascript:void(0)") %>
           <%= hidden_field_tag "related_item_ids", @items.blank? ? "" : @items.map(&:id).join(",") %>
           <%= f.hidden_field 'exclusive_item_ids', :id => "exclusive_item_ids" %>
         </div>
@@ -417,8 +417,6 @@
             $("#list_of_products").html("")
             if (checked_length == 0)
                 alert("Nothing to populate")
-            else
-                alert("populated selected product to related product list")
         })
 
         $("#plmenu li").click(function()
