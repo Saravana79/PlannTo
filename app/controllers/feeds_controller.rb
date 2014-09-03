@@ -55,7 +55,7 @@ class FeedsController < ApplicationController
 
     #Assign sources to memcache
 
-    FeedUrl.check_and_assign_sources_hash_to_cache()
+    # FeedUrl.check_and_assign_sources_hash_to_cache_from_table()
 
     # @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 25)
 

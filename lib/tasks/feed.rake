@@ -9,6 +9,10 @@ namespace :feed do
       puts "**************************************************************************************"
       next
     end
+
+    source_category = SourceCategory.new
+    source_category.check_and_assign_sources_hash_to_cache_from_table()
+
     @impression_missing = @feed.process_value.constantize.where("count > ?", 100)
 
     count = 0
@@ -31,24 +35,9 @@ namespace :feed do
         source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
       end
 
-      category = ""
+      sources_list = Rails.cache.read("feed_url-sources-list")
+      category = sources_list[source]
 
-      if source != ""
-        sources_list = Rails.cache.read("feed_url-sources-list")
-        if !sources_list.blank?
-          category = sources_list[source]
-        end
-
-        if category.blank?
-          category = "Others"
-          feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
-          unless feed_by_sources.blank?
-            categories = feed_by_sources.map(&:category)
-            categories = categories.map { |each_cat| each_cat.split(',') }
-            category = categories.flatten.uniq.join(',')
-          end
-        end
-      end
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
 
       if check_exist_feed_url.blank?

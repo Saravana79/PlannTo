@@ -3,6 +3,8 @@ class FeedUrl < ActiveRecord::Base
   belongs_to :feed
 
   def self.update_by_missing_records(log, process_type, count, valid_urls, invalid_urls, missing_ad)
+    source_category = SourceCategory.new
+    source_category.check_and_assign_sources_hash_to_cache_from_table()
     invalid_urls = invalid_urls.delete_if { |x| (x.blank? || x == "nil") }
 
     if process_type != "all"
@@ -62,6 +64,8 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.missing_url_process_top_list
+    source_category = SourceCategory.new
+    source_category.check_and_assign_sources_hash_to_cache_from_table()
     get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
   end
 
@@ -98,24 +102,8 @@ class FeedUrl < ActiveRecord::Base
             end
           end
 
-          category = ""
-
-          if source != ""
-            sources_list = Rails.cache.read("feed_url-sources-list")
-            if !sources_list.blank?
-              category = sources_list[source]
-            end
-
-            if category.blank?
-              category = "Others"
-              feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
-              unless feed_by_sources.blank?
-                categories = feed_by_sources.map(&:category)
-                categories = categories.map { |each_cat| each_cat.split(',') }
-                category = categories.flatten.uniq.join(',')
-              end
-            end
-          end
+          sources_list = Rails.cache.read("feed_url-sources-list")
+          category = sources_list[source]
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
           # if check_exist_feed_url.blank?
@@ -184,24 +172,8 @@ class FeedUrl < ActiveRecord::Base
               source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
             end
 
-            category = ""
-
-            if source != ""
-              sources_list = Rails.cache.read("feed_url-sources-list")
-              if !sources_list.blank?
-                category = sources_list[source]
-              end
-
-              if category.blank?
-                category = "Others"
-                feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{source}'")
-                unless feed_by_sources.blank?
-                  categories = feed_by_sources.map(&:category)
-                  categories = categories.map { |each_cat| each_cat.split(',') }
-                  category = categories.flatten.uniq.join(',')
-                end
-              end
-            end
+            sources_list = Rails.cache.read("feed_url-sources-list")
+            category = sources_list[source]
 
             # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
             # if check_exist_feed_url.blank?
