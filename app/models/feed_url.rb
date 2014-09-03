@@ -3,8 +3,6 @@ class FeedUrl < ActiveRecord::Base
   belongs_to :feed
 
   def self.update_by_missing_records(log, process_type, count, valid_urls, invalid_urls, missing_ad)
-    source_category = SourceCategory.new
-    source_category.check_and_assign_sources_hash_to_cache_from_table()
     invalid_urls = invalid_urls.delete_if { |x| (x.blank? || x == "nil") }
 
     if process_type != "all"
@@ -64,8 +62,6 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.missing_url_process_top_list
-    source_category = SourceCategory.new
-    source_category.check_and_assign_sources_hash_to_cache_from_table()
     get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
   end
 
@@ -324,13 +320,48 @@ class FeedUrl < ActiveRecord::Base
         unless feed_by_sources.blank?
           categories = feed_by_sources.map(&:category)
           categories = categories.map { |each_cat| each_cat.split(',') }
-          category = categories.flatten.uniq.join(',')
+          categories = categories.flatten.uniq
+          categories = categories - ['Others'] if categories.count > 1
+          category = categories.join(',')
         end
         result.merge!("#{each_source}" => category)
       end
       result
       Rails.cache.write("feed_url-sources-list", result, :expires_in => 1.day)
     end
+  end
+
+  def self.check_and_assign_sources_hash_to_source_category_daily()
+    sources_categories = SourceCategory.find_by_sql("select distinct source from source_categories")
+
+    source_list = sources_categories.map(&:source)
+
+    source_condition = source_list.blank? ? " 1=1 and " : " source not in (#{source_list.map(&:inspect).join(',')}) and "
+    sources = FeedUrl.where("#{source_condition} source != ''").select("distinct source")
+
+    sources.each do |each_source|
+      feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{each_source.source}'")
+      category = "Others"
+      unless feed_by_sources.blank?
+        categories = feed_by_sources.map(&:category)
+        categories = categories.map { |each_cat| each_cat.split(',') }
+        categories = categories.flatten.uniq
+        categories = categories - ['Others'] if categories.count > 1
+        category = categories.join(',')
+      end
+      begin
+        source_category = SourceCategory.new(:source => each_source.source, :categories => category)
+        source_category.save!
+        p source_category
+      rescue Exception => e
+        puts "skip if exist already"
+        p e
+      end
+    end
+
+    #update all source categories to cache
+
+    SourceCategory.update_all_to_cache()
   end
 
   def self.clean_up_redis_keys

@@ -14,8 +14,6 @@ class Feed < ActiveRecord::Base
     end
 
     feed_url_count = FeedUrl.count
-    source_category = SourceCategory.new
-    source_category.check_and_assign_sources_hash_to_cache_from_table()
 
     @feeds.each do |each_feed|
       begin

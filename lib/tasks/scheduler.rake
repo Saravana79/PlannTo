@@ -90,3 +90,9 @@ task :clean_up_redis_keys => :environment do
     Resque.enqueue(CleanUpRedisKeys, "clean_up_redis_keys", Time.zone.now.utc)
   end
 end
+
+desc "Create new source category from feed urls every day"
+task :update_source_categories => :environment do
+  time = Time.zone.now.utc
+  Resque.enqueue(SourceCategoryProcess, "check_and_assign_sources_hash_to_source_category_daily", Time.zone.now.utc)
+end

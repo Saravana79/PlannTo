@@ -10,9 +10,6 @@ namespace :feed do
       next
     end
 
-    source_category = SourceCategory.new
-    source_category.check_and_assign_sources_hash_to_cache_from_table()
-
     @impression_missing = @feed.process_value.constantize.where("count > ?", 100)
 
     count = 0
