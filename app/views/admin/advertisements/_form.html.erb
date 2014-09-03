@@ -15,6 +15,7 @@
       <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
       <li class="active" id="default"> <a href="javascript:void(0)">Default</a> </li>
       <li class="" id="offers"> <a href="javascript:void(0)" >Offers</a> </li>
+      <li class="" id="add_details"> <a href="javascript:void(0)" >Add Details</a> </li>
     </ul>
 
     <div class="main_form">
@@ -138,8 +139,6 @@
         <%= hidden_field_tag :commission, @advertisement.commission %>
     <% end %>
 
-    <h3>Additional Details</h3>
-
     <div id="related_product_list" style="display:none;">
       <a href="#" class="Closebut">&nbsp;</a>
       <%= hidden_field_tag "articles_item_id" %>
@@ -168,63 +167,6 @@
       <%= link_to "Populate", "javascript:void(0)", :class => "btn_submitanswer btn_submitcancel populate_btn", :id => "cancel_button" %>
     </div>
 
-    <div class="additional_details static_details flash_details" id="static_details">
-      <div class="files-div">
-        <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
-        <% if @advertisement.new_record? %>
-            <div class="file-div">
-              <div>
-                <div class="title_header float_lft">Advertisement Size :</div>
-                <div class="float_lft">
-                  <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
-                </div>
-                <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
-              </div>
-              <div class="fields-div">
-                <div class="title_header float_lft">Image :</div>
-                <div class="float_lft">
-                  <%= f.file_field :upload_image, name: "avatar[]" %>
-                </div>
-              </div>
-            </div>
-        <% else %>
-
-            <% @advertisement && @advertisement.images.each do |a| %>
-                <div class="existing_images" id="<%= a.id %>">
-                  <%= image_tag(a.avatar, :size => a.ad_size.to_s.gsub("*", "x")) %>
-
-                  <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
-                </div>
-            <% end %>
-
-            <div class="file-div">
-              <div>
-                <div class="title_header float_lft">Advertisement Size :</div>
-                <div class="float_lft">
-                  <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
-                </div>
-                <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
-              </div>
-              <div class="fields-div">
-                <div class="title_header float_lft">Image :</div>
-                <div class="float_lft">
-                  <%= f.file_field :upload_image, name: "avatar[]" %>
-                </div>
-              </div>
-            </div>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="additional_details dynamic_details" id="dynamic_details">
-      <div class="fields-div">
-        <div class="title_header float_lft">Vendor :</div>
-        <div>
-          <%= @vendor.blank? ? "" : @vendor.name %></div>
-        <%= f.hidden_field :vendor_id %>
-      </div>
-    </div>
-
     <br/>
     </div>
 
@@ -246,13 +188,76 @@
         <div>
           <%= f.text_field :expiry_date %></div>
       </div>
-
     </div>
+
+    <div class="div_values add_details" style="display: none;">
+
+      <h3>Additional Details</h3>
+      <div class="additional_details static_details flash_details" id="static_details">
+        <div class="files-div">
+          <%= link_to "Add One more file", "javascript:void(0)", :id => "add_another_file", :style => 'clear: both;' %>
+          <% if @advertisement.new_record? %>
+              <div class="file-div">
+                <div>
+                  <div class="title_header float_lft">Advertisement Size :</div>
+                  <div class="float_lft">
+                    <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
+                  </div>
+                  <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+                </div>
+                <div class="fields-div">
+                  <div class="title_header float_lft">Image :</div>
+                  <div class="float_lft">
+                    <%= f.file_field :upload_image, name: "avatar[]" %>
+                  </div>
+                </div>
+              </div>
+          <% else %>
+
+              <% @advertisement && @advertisement.images.each do |a| %>
+                  <div class="existing_images" id="<%= a.id %>">
+                    <%= image_tag(a.avatar, :size => a.ad_size.to_s.gsub("*", "x")) %>
+
+                    <%= link_to "X", delete_ad_image_path(a), :method => :delete, :remote => true, :confirm => 'Are you sure you want to delete this?'  %>
+                  </div>
+              <% end %>
+
+              <div class="file-div">
+                <div>
+                  <div class="title_header float_lft">Advertisement Size :</div>
+                  <div class="float_lft">
+                    <%= select_tag 'ad_size[]', options_for_select([["300x250", "300x250"], ["728x90", "728x90"], ["120x600", "120x600"], ["300x600", "300x600"]]), :placeholder => "" %>
+                  </div>
+                  <%#= f.select "ad_size[]",["250*250","300*300","1000*600"],:style => "margin-left:5px;width:400px;",:placeholder => "", :multiple => true%>
+                </div>
+                <div class="fields-div">
+                  <div class="title_header float_lft">Image :</div>
+                  <div class="float_lft">
+                    <%= f.file_field :upload_image, name: "avatar[]" %>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="additional_details dynamic_details" id="dynamic_details">
+        <div class="fields-div">
+          <div class="title_header float_lft">Vendor :</div>
+          <div>
+            <%= @vendor.blank? ? "" : @vendor.name %></div>
+          <%= f.hidden_field :vendor_id %>
+        </div>
+      </div>
+    </div>
+
 
       <div class="submit_button">
         <%= f.submit button_val, :class => 'btn_submitanswer', :id => "publishanswer" %>
       </div>
     </div>
+
+    <br style="clear: both;">
 
 <% end %>
 

@@ -1,5 +1,5 @@
 <center><h1>List Of Campaigns </h1></center>
- <%=link_to "Create New Campaign",new_admin_advertisement_path, :class=>"btn btn-primary new_ad", :style=>'background:#16c3d7;' %>
+ <%=link_to "Create New Campaign",new_admin_advertisement_path + "#maincontainer", :class=>"btn btn-primary new_ad", :style=>'background:#16c3d7;' %>
  <%= select_tag(:date_from_dropdown, options_for_select(@collections_for_dropdown, params[:date]), :class => "styled-select") %>
 
  <div class="show_date_range">
@@ -31,7 +31,7 @@
      <% collected_item_ids = ad.content.blank? ? "" : ad.content.related_items.collect(&:item_id).join(',') %>
      <td><% Item.where("id in ('#{collected_item_ids}')").each do |it| %>
      <%= it.name %>,&nbsp; <%end%></td>
-     <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) %> </td>
+     <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) + "#maincontainer" %> </td>
      <td> <%= link_to "view chart", admin_ad_report_view_ad_chart_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
      <% if current_user.is_admin? && ad.review_status.blank? || ad.review_status == "pending" %>
          <td><%= link_to "Review", review_admin_advertisements_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
