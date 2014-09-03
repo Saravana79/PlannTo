@@ -283,9 +283,9 @@ module ApplicationHelper
     # result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
 
     skip_values = ["rs."]
-    result_str = str
+    result_str = str.to_s.strip
     if result_str.length > size
-      truncated_str = str.to_s[0...size]
+      truncated_str = result_str.to_s[0...size]
       if truncated_str.include?(".")
         splitted_str_by_dot = truncated_str.split(/\.[^\\.]*$/)
         result_str = splitted_str_by_dot[0] + "."
@@ -301,7 +301,7 @@ module ApplicationHelper
       end
     end
 
-    return result_str
+    return result_str.strip
   end
 
   def prettify(item_detail)

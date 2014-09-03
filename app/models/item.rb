@@ -1174,7 +1174,7 @@ end
     where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) <= NOW() and date(a.end_date) >= NOW()
     group by item_id"
 
-    adv_records = Item.find_by_sql(query_to_get_advertisement_details)
+    # adv_records = Item.find_by_sql(query_to_get_advertisement_details)
 
     log.debug "********** Started Updating advertisement_id for Items **********"
     # log.debug "********** Found #{adv_records.count} items for update advertisement_id **********"

@@ -35,8 +35,8 @@
         <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => true %>Static
         <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type" %>Dynamic
         <% if current_user.is_admin? %>
-            <%= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type" %>Dynamic PC
-            <%= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto
+            <%= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type" %>Dynamic Best Price
+            <!-- <%#= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto -->
             <%= f.radio_button :advertisement_type, 'flash', :class => "ad_type" %>Flash
         <% end %>
       </div>
@@ -83,7 +83,7 @@
 
     <div class="fields-div" id="reviewProducts">
 
-      <div class="title_header float_lft">Exclusive Product :</div>
+      <div class="title_header float_lft">Excluded Product :</div>
       <div class="taggingdiv">
         <ul id="exclusive_product_list" class="tagging"></ul>
         <div class="float_lft " id="displayTagBox">
@@ -118,7 +118,7 @@
       <div>
         <%= f.radio_button :bid, 'CPM', :class => "bid_radio_button", :checked => true %>CPM
         <%= f.radio_button :bid, 'CPC', :class => "bid_radio_button" %>CPC
-        <%= f.radio_button :bid, 'CPA', :class => "bid_radio_button" %>CPA
+        <!-- <%#= f.radio_button :bid, 'CPA', :class => "bid_radio_button" %>CPA -->
       </div>
     </div>
 
@@ -128,7 +128,7 @@
         <%= f.text_field :cost %></div>
     </div>
 
-    <% if current_user.is_admin? %>
+    <% if current_user.is_admin? && 1 != 1 %>
         <div class="fields-div">
           <div class="title_header float_lft">Commission :</div>
           <div>
