@@ -1,0 +1,67 @@
+<%#= will_paginate @feed_urls %>
+<!--<table>
+  <tr>
+    <th>S.No</th>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Status</th>
+    <th>Source</th>
+  </tr>
+ -->
+<%#= will_paginate @feed_urls %>
+
+<% @feed_urls.each_with_index do |feed, inx| %>
+    <div style="height:25px;overflow: hidden;position: relative;" class='each_row' id="each_row_feed_display_<%= feed.id %>">
+      <div style="width:50px;float:left;" class="check_feed_urls">
+        <%= check_box_tag 'feed_urls[]', feed.id, [].include?(feed.id), :id => feed.id, :class => feed.id != 'All' ? "show_list_options" : '', :class => "check_box_cls" -%>
+      </div>
+      <div style="width:750px;float:left;">
+        <a href="#each_row_feed_display_<%= feed.id %>" class="feed_title" id="<%= feed.id %>">
+          <%= feed.title.blank? ? feed.url.to_s.truncate(95) : feed.title.to_s.truncate(95) %>
+        </a>
+      </div>
+      <div style="width:120px;float:left;"><%= feed.source.blank? ? "-- blank -- " : feed.source %></div>
+      <div style="width:100px;float:left;"><%= feed.missing_count %></div>
+      <div style="width:90px;float:left;">
+        <%= feed.published_at.blank? ? "" : feed.published_at.strftime('%d %b %Y') %>
+      </div>
+
+      <div style="width:100px;float:left;">
+        <span style="float:left;"><%= link_to image_tag("/images/open-window.png",:style=>"width:15px;"), feed.url, :target => "_blank", :id => "open_window" %></span>
+      </div>
+
+    </div>
+    <div class="display" id="feed_display_<%= feed.id %>" style="overflow: hidden;position: relative;border:1px solid #CFCFCF">
+
+    </div>
+<% end %>
+
+
+<div class="jscroll-next" style="display: none;">
+  <%= will_paginate @feed_urls %>
+</div>
+
+<script type="text/javascript">
+    $(function()
+    {
+        <% if (@feed_urls.count < 25) %>
+        $(".jscroll-loading").hide()
+        <% end %>
+
+        <% if !params[:page].blank? %>
+
+        if ($page_count == <%= params[:page] %>)
+        {
+            $(".jscroll-next").remove()
+            $(".jscroll-loading").remove()
+        }
+        <% end %>
+    })
+</script>
+
+
+<style type="text/css">
+    .check_box_cls {
+        margin: 0 0 0 16px;
+    }
+</style>

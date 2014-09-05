@@ -69,6 +69,92 @@ class FeedsController < ApplicationController
     end
   end
 
+
+  def feed_urls_batch_update
+    params[:page_loaded_time] ||= Time.now.utc
+    @loaded_time = params[:page_loaded_time]
+    params[:feed_urls_sort_by] ||= "published_at"
+    params[:feed_urls_order_by] ||= "desc"
+
+    p params[:search][:title] unless params[:search].blank?
+    # sort =
+    condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
+    intial_condition = condition
+    unless params[:search].blank?
+      condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
+      condition = condition + " and title like '%#{params[:search][:title]}%'" unless params[:search][:title].blank?
+    end
+
+    condition = condition + " and status = 0"
+
+    if params[:commit] == "Clear"
+      condition = intial_condition
+      params[:search] = {}
+    elsif params[:commit] != "Filter"
+      params[:search] ||= {:status => 0}
+      condition = condition == intial_condition ? "status = 0" : condition
+    end
+
+    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50)
+    @categories = ["","Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
+
+    #Assign sources to memcache
+
+    # FeedUrl.check_and_assign_sources_hash_to_cache_from_table()
+
+    # @feed_urls = @feed_urls.paginate(:page => params[:page], :per_page => 25)
+
+    if params[:page]
+      return render :partial => "/feeds/feed_url_list_batch_update", :layout => false
+    end
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
+  end
+
+  def batch_update
+    p params
+
+    @feed_urls = FeedUrl.where(:id => params[:feed_urls])
+    p @feed_urls.count
+    if params[:commit] == "Mark As Feature"
+      @feed_urls.update_all(:status => 2)
+    elsif params[:commit] == "Mark As Invalid"
+      @feed_urls.update_all(:status => 3)
+    elsif params[:commit] == "Save"
+      @feed_urls.update_all(:article_category => params[:article_category], :article_item_ids => params[:articles_item_id])
+    elsif params[:commit] == "Save And Tag"
+      # old_def_val = params[:old_default_values]
+      # new_def_val = params[:article_content][:sub_type].to_s + "-" + params[:articles_item_id].to_s
+      # def_status = old_def_val == new_def_val
+      # feed_url.update_attributes!(:old_default_values => old_def_val, :new_default_values => new_def_val, :default_status => def_status)
+
+      remote_ip = request.remote_ip
+
+      @feed_urls.each do |feed_url|
+
+        category = params[:article_category]
+        old_category = ArticleContent.new.find_subtype(feed_url.title)
+        category = old_category if category.blank?
+
+        relevance_product = params[:articles_item_id].to_s.split(",")
+
+        thumbnail = feed_url.images.split(",").first.to_s
+        param = { "feed_url_id" => feed_url.id, "default_item_id" => "", "submit_url" => "submit_url",
+                 "article_content" => { "itemtype_id" => "", "type" => "ArticleContent", "thumbnail" => thumbnail, "title" => feed_url.title, "url" => feed_url.url,
+                                        "sub_type" => category, "description" => feed_url.summary },
+                 "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product,
+                 "old_default_values"=>"#{old_category}-", "new_default_values"=>"#{category}-" }
+
+        @through_rss = true
+        Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
+      end
+      @feed_urls.update_all(:status => 1)
+    end
+  end
+
   def article_details
     #for images
 

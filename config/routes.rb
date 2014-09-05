@@ -412,8 +412,10 @@ resources :comments do
     collection do
       get "process_feeds"
       get "feed_urls"
+      get 'feed_urls_batch_update'
       get "article_details"
       post "change_status"
+      post "batch_update"
       post "change_category"
     end
   end

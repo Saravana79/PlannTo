@@ -294,7 +294,7 @@ class FeedUrl < ActiveRecord::Base
     end while next_val != 0
   end
 
-  def self.remove_missing_keys(match="")
+  def self.remove_missing_keys(match)
     next_val = 0
     loop_count = 0
     begin
@@ -366,7 +366,7 @@ class FeedUrl < ActiveRecord::Base
 
   def self.clean_up_redis_keys
     #clean missingurl:*
-    remove_missing_keys("missingurl:*")
+    # remove_missing_keys("missingurl:*") #TOODO: commented
 
     #clean missingad:*
     remove_missing_keys("missingad:*")

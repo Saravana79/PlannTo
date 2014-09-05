@@ -213,7 +213,8 @@
 
 
             $.ajax({
-                url: '/search/search_items_by_relavance',
+                url: '/search/search_items_by_relavance' +
+                        '',
                 dataType:'json',
                 type: "get",
                 data: {term: $("#article_content_title").val(), search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val()},

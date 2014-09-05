@@ -15,6 +15,7 @@
   </head>
   <body style="background:white;position:relative;width:1000px;">
   <button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds'">Go Back</button>
+  <button class="btn_submitanswer go_back" type="button" onclick="window.location='/feeds/feed_urls_batch_update'">Batch Update</button>
   <div class="list_feed_urls">
     <div class="search_form">
       <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
@@ -158,7 +159,7 @@
     $("document").ready(function()
     {
 
-        if (<%= !@feed_urls.blank? %>)
+        if (<%= !@feed_urls.blank? && @feed_urls.count > 24 %>)
         {
           $page_count = $(".pagination a.next_page").prev().text()
 
@@ -232,16 +233,13 @@
         })
 
 
+        //order by change
+
         $(".order_by_category").change(function()
         {
             var params_str = $(".search_form form").serialize()
-            var order_by = $(this).val()
-
-            var param_name = $(this).attr('id')
-            var new_params = param_name+'='+order_by
-
-            window.location.href='/feeds/feed_urls?'+params_str+'&'+new_params
-
+            var sort_and_order_by = "feed_urls_sort_by="+$("#feed_urls_sort_by").val() + "&feed_urls_order_by=" + $("#feed_urls_order_by").val();
+            window.location.href='/feeds/feed_urls_batch_update?'+params_str+'&'+sort_and_order_by
         })
 
 
