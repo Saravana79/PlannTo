@@ -327,7 +327,7 @@ class FeedUrl < ActiveRecord::Base
         result.merge!("#{each_source}" => category)
       end
       result
-      Rails.cache.write("feed_url-sources-list", result, :expires_in => 1.day)
+      Rails.cache.write("feed_url-sources-list", result)
     end
   end
 

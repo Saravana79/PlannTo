@@ -239,7 +239,7 @@
         {
             var params_str = $(".search_form form").serialize()
             var sort_and_order_by = "feed_urls_sort_by="+$("#feed_urls_sort_by").val() + "&feed_urls_order_by=" + $("#feed_urls_order_by").val();
-            window.location.href='/feeds/feed_urls_batch_update?'+params_str+'&'+sort_and_order_by
+            window.location.href='/feeds/feed_urls?'+params_str+'&'+sort_and_order_by
         })
 
 
