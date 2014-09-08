@@ -56,6 +56,7 @@
         </div>
         <br />
 
+        <%= hidden_field_tag "category_list" %>
         <%= hidden_field_tag "articles_item_id" %>
 
         <ul id="new_article_product_list" class="tagging"></ul>
@@ -326,16 +327,20 @@
                 alert('Please Select at least one Feed Urls');
                 return false;
             }
-            else if ($(this).attr('id') == "only_save" && $("#article_category").val() == "")
-            {
-                alert('Please Select Category to Update Feed Urls');
-                return false;
-            }
             else if ($(this).attr('id') == "save_and_tag" && $("#articles_item_id").val() == "")
             {
                 alert('Please Select at least one product');
                 return false;
             }
+
+            var x = $(".check_box_cls:checked").parent().next().find('select')
+            var category_list=[]
+            $.each(x, function(inx, val)
+            {
+                category_list.push($(val).val())
+            });
+
+            $("#category_list").val(category_list)
         })
 
     });

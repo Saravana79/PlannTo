@@ -30,16 +30,25 @@ class FeedsController < ApplicationController
     params[:feed_urls_sort_by] ||= "published_at"
     params[:feed_urls_order_by] ||= "desc"
 
+    title = ""
+    unless params[:search].blank?
+      title = params[:search][:title]
+      begin
+        title = eval(title)
+      rescue Exception => e
+        title = title.to_s.gsub(' ', '%')
+      end
+    end
+
     # sort =
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
     intial_condition = condition
     unless params[:search].blank?
       #condition = "1=1"
-      condition = condition + " and priorities = #{params[:search][:priorities]}" unless params[:search][:priorities].blank?
       condition = condition + " and category like '%#{params[:search][:category]}%'" unless params[:search][:category].blank?
       condition = condition + " and status = #{params[:search][:status]}" unless params[:search][:status].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
-      #condition = condition == "1=1" ? "status != 1" : condition
+      condition = condition + " and title like '%#{title}%'" unless title.blank?
     end
 
     if params[:commit] == "Clear"
@@ -76,13 +85,21 @@ class FeedsController < ApplicationController
     params[:feed_urls_sort_by] ||= "published_at"
     params[:feed_urls_order_by] ||= "desc"
 
-    p params[:search][:title] unless params[:search].blank?
+    title = ""
+    unless params[:search].blank?
+      title = params[:search][:title]
+      begin
+        title = eval(title)
+      rescue Exception => e
+        title = title.to_s.gsub(' ', '%')
+      end
+    end
     # sort =
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
     intial_condition = condition
     unless params[:search].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
-      condition = condition + " and title like '%#{params[:search][:title]}%'" unless params[:search][:title].blank?
+      condition = condition + " and title like '%#{title}%'" unless title.blank?
     end
 
     condition = condition + " and status = 0"
@@ -96,7 +113,9 @@ class FeedsController < ApplicationController
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50)
-    @categories = ["","Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
+    @categories = [""]
+    @categories << ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
+    @categories = @categories.flatten
 
     #Assign sources to memcache
 
@@ -124,7 +143,24 @@ class FeedsController < ApplicationController
     elsif params[:commit] == "Mark As Invalid"
       @feed_urls.update_all(:status => 3)
     elsif params[:commit] == "Save"
-      @feed_urls.update_all(:article_category => params[:article_category], :article_item_ids => params[:articles_item_id])
+      # updates = {}
+      # updates.merge!(:article_category => params[:article_category]) unless params[:article_category].blank?
+      # updates.merge!(:article_item_ids => params[:articles_item_id]) unless params[:articles_item_id].blank?
+      # @feed_urls.update_all(updates)
+
+      articles_item_id = params[:articles_item_id]
+      @feed_urls.each_with_index do |feed_url, index|
+        category = params[:article_category]
+        category_list = params[:category_list].to_s.split(",")
+        category = category_list[index] if category.blank?
+        category = "Others" if category.blank?
+
+        updates = {}
+        updates.merge!(:article_category => category) unless category.blank?
+        updates.merge!(:article_item_ids => articles_item_id) unless articles_item_id.blank?
+
+        feed_url.update_attributes!(updates)
+      end
     elsif params[:commit] == "Save And Tag"
       # old_def_val = params[:old_default_values]
       # new_def_val = params[:article_content][:sub_type].to_s + "-" + params[:articles_item_id].to_s
@@ -133,11 +169,12 @@ class FeedsController < ApplicationController
 
       remote_ip = request.remote_ip
 
-      @feed_urls.each do |feed_url|
-
+      @feed_urls.each_with_index do |feed_url, index|
         category = params[:article_category]
-        old_category = ArticleContent.new.find_subtype(feed_url.title)
+        category_list = params[:category_list].to_s.split(",")
+        old_category = category_list[index]
         category = old_category if category.blank?
+        category = "Others" if category.blank?
 
         relevance_product = params[:articles_item_id].to_s.split(",")
 
@@ -206,7 +243,7 @@ class FeedsController < ApplicationController
       if !@feed_url.blank?
         @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
         @article.title = @feed_url.title
-        @article.sub_type = @article.find_subtype(@article.title)
+        p @article.sub_type = @article.find_subtype(@article.title)
         @article.description = @feed_url.summary
         @images = @feed_url.images.split(",")
         @article.thumbnail = @images.first if @images.count > 0

@@ -19,13 +19,12 @@
   <div class="list_feed_urls">
     <div class="search_form">
       <%= form_for :search, :url => "/feeds/feed_urls", :html => {:method => 'get'} do |search_form| %>
-        Priorities: <%= search_form.select :priorities, [1,2,3], {:include_blank => true, :selected => params[:search][:priorities]} %>
         Category: <%= search_form.select :category, @categories, {:include_blank => true, :selected => params[:search][:category]} %>
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
         Source: <%#= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
         <%= search_form.hidden_field :source, :readonly => true, :value => params[:search][:source] %>
         <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
-
+        Title: <%= search_form.text_field :title, :size => 60 %>
 
         <%= search_form.submit "Filter" %>
         <%= search_form.submit "Clear" %>
@@ -49,7 +48,7 @@
     </div>
 
     <br/>
-    <div style="clear:both;display:block;margin-top:20px;">
+    <div style="clear:both;display:block;margin-top:33px;">
       <div id="feed_url_list" class='jscroll'>
         <%= render "/feeds/feed_url_list" %>
       </div>
@@ -96,7 +95,7 @@
           margin: -8px;
           position: relative;
           right: -18px;
-          width: 70%;
+          width: 92%;
       }
 
       .go_back {
@@ -118,9 +117,10 @@
           color: #a52a2a;
           float: right;
           font-size: 14px;
+          left: 124px;
           margin: -8px;
           position: relative;
-          top: -10px;
+          top: 21px;
       }
 
       #loading_div {

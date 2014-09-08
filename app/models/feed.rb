@@ -149,7 +149,7 @@ class Feed < ActiveRecord::Base
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
-    logger.info "how to"
+    # logger.info "how to"
     tips.each do |tip|
       return ArticleCategory::HOW_TO if title_words.scan(tip).size >0
     end
