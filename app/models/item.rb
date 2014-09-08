@@ -1416,7 +1416,11 @@ end
         old_item_ad_detail.update_attributes!(:new_version_id => self.id)
       end
       new_item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => self.id) # new_item_ad_detail
-      new_item_ad_detail.update_attributes(:old_version_id => old_item.id)
+      if old_item.blank?
+        new_item_ad_detail.save
+      else
+        new_item_ad_detail.update_attributes(:old_version_id => old_item.id)
+      end
     end
   end
 
