@@ -1,4 +1,8 @@
-<% @feed_urls.each do |each_url| %>
-  $("#each_row_feed_display_<%= each_url.id %>").remove()
-  $("#feed_display_<%= each_url.id %>").remove()
+<% if @error != true %>
+  <% @feed_urls.each do |each_url| %>
+    $("#each_row_feed_display_<%= each_url.id %>").remove()
+    $("#feed_display_<%= each_url.id %>").remove()
+  <% end %>
+<% else %>
+  alert("There was some error!!!")
 <% end %>

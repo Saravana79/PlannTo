@@ -18,7 +18,7 @@
 
       <div style="width:135px;float:left;">
         <% category = feed.article_category.blank? ? ArticleContent.new.find_subtype(feed.title) : feed.article_category %>
-        <span style="float:left;"><%= select_tag :feed_url_article_category, options_for_select(@categories, category)%></span>
+        <span style="float:left;"><%= select_tag :feed_url_article_category, options_for_select(@new_categories, category)%></span>
       </div>
 
       <div style="width:650px;float:left;">

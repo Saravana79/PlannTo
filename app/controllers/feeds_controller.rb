@@ -113,9 +113,10 @@ class FeedsController < ApplicationController
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50)
-    @categories = [""]
-    @categories << ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
-    @categories = @categories.flatten
+    @new_categories = ["Others"]
+    @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
+    @new_categories = (@new_categories << @categories).flatten
+    @categories = ([""] << @categories).flatten
 
     #Assign sources to memcache
 
@@ -134,61 +135,58 @@ class FeedsController < ApplicationController
   end
 
   def batch_update
-    p params
+    @error = false
+    begin
+      @feed_urls = FeedUrl.where(:id => params[:feed_urls])
+      if params[:commit] == "Mark As Feature"
+        @feed_urls.update_all(:status => 2)
+      elsif params[:commit] == "Mark As Invalid"
+        @feed_urls.update_all(:status => 3)
+      elsif params[:commit] == "Save"
+        articles_item_id = params[:articles_item_id]
+        @feed_urls.each_with_index do |feed_url, index|
+          category = params[:article_category]
+          category_list = params[:category_list].to_s.split(",")
+          category = category_list[index] if category.blank?
+          category = "Others" if category.blank?
 
-    @feed_urls = FeedUrl.where(:id => params[:feed_urls])
-    p @feed_urls.count
-    if params[:commit] == "Mark As Feature"
-      @feed_urls.update_all(:status => 2)
-    elsif params[:commit] == "Mark As Invalid"
-      @feed_urls.update_all(:status => 3)
-    elsif params[:commit] == "Save"
-      # updates = {}
-      # updates.merge!(:article_category => params[:article_category]) unless params[:article_category].blank?
-      # updates.merge!(:article_item_ids => params[:articles_item_id]) unless params[:articles_item_id].blank?
-      # @feed_urls.update_all(updates)
+          updates = {}
+          updates.merge!(:article_category => category) unless category.blank?
+          updates.merge!(:article_item_ids => articles_item_id) unless articles_item_id.blank?
 
-      articles_item_id = params[:articles_item_id]
-      @feed_urls.each_with_index do |feed_url, index|
-        category = params[:article_category]
-        category_list = params[:category_list].to_s.split(",")
-        category = category_list[index] if category.blank?
-        category = "Others" if category.blank?
+          feed_url.update_attributes!(updates)
+        end
+      elsif params[:commit] == "Save And Tag"
+        # old_def_val = params[:old_default_values]
+        # new_def_val = params[:article_content][:sub_type].to_s + "-" + params[:articles_item_id].to_s
+        # def_status = old_def_val == new_def_val
+        # feed_url.update_attributes!(:old_default_values => old_def_val, :new_default_values => new_def_val, :default_status => def_status)
 
-        updates = {}
-        updates.merge!(:article_category => category) unless category.blank?
-        updates.merge!(:article_item_ids => articles_item_id) unless articles_item_id.blank?
+        remote_ip = request.remote_ip
 
-        feed_url.update_attributes!(updates)
+        @feed_urls.each_with_index do |feed_url, index|
+          category = params[:article_category]
+          category_list = params[:category_list].to_s.split(",")
+          old_category = category_list[index]
+          category = old_category if category.blank?
+          category = "Others" if category.blank?
+
+          relevance_product = params[:articles_item_id].to_s.split(",")
+
+          thumbnail = feed_url.images.split(",").first.to_s
+          param = { "feed_url_id" => feed_url.id, "default_item_id" => "", "submit_url" => "submit_url",
+                    "article_content" => { "itemtype_id" => "", "type" => "ArticleContent", "thumbnail" => thumbnail, "title" => feed_url.title, "url" => feed_url.url,
+                                           "sub_type" => category, "description" => feed_url.summary },
+                    "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product,
+                    "old_default_values"=>"#{old_category}-", "new_default_values"=>"#{category}-" }
+
+          @through_rss = true
+          Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
+        end
+        @feed_urls.update_all(:status => 1)
       end
-    elsif params[:commit] == "Save And Tag"
-      # old_def_val = params[:old_default_values]
-      # new_def_val = params[:article_content][:sub_type].to_s + "-" + params[:articles_item_id].to_s
-      # def_status = old_def_val == new_def_val
-      # feed_url.update_attributes!(:old_default_values => old_def_val, :new_default_values => new_def_val, :default_status => def_status)
-
-      remote_ip = request.remote_ip
-
-      @feed_urls.each_with_index do |feed_url, index|
-        category = params[:article_category]
-        category_list = params[:category_list].to_s.split(",")
-        old_category = category_list[index]
-        category = old_category if category.blank?
-        category = "Others" if category.blank?
-
-        relevance_product = params[:articles_item_id].to_s.split(",")
-
-        thumbnail = feed_url.images.split(",").first.to_s
-        param = { "feed_url_id" => feed_url.id, "default_item_id" => "", "submit_url" => "submit_url",
-                 "article_content" => { "itemtype_id" => "", "type" => "ArticleContent", "thumbnail" => thumbnail, "title" => feed_url.title, "url" => feed_url.url,
-                                        "sub_type" => category, "description" => feed_url.summary },
-                 "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product,
-                 "old_default_values"=>"#{old_category}-", "new_default_values"=>"#{category}-" }
-
-        @through_rss = true
-        Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
-      end
-      @feed_urls.update_all(:status => 1)
+    rescue Exception => e
+      @error = true
     end
   end
 
