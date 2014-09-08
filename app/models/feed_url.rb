@@ -100,6 +100,7 @@ class FeedUrl < ActiveRecord::Base
 
           # sources_list = Rails.cache.read("feed_url-sources-list")
           sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+          sources_list.default = "Others"
           category = sources_list[source]
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -171,6 +172,7 @@ class FeedUrl < ActiveRecord::Base
 
             # sources_list = Rails.cache.read("feed_url-sources-list")
             sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+            sources_list.default = "Others"
             category = sources_list[source]
 
             # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -313,6 +315,7 @@ class FeedUrl < ActiveRecord::Base
   def self.check_and_assign_sources_hash_to_cache()
     # sources_list = Rails.cache.read("feed_url-sources-list")
     sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+    sources_list.default = "Others"
     if sources_list.blank?
       sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if { |x| x.blank? }
       result = {}

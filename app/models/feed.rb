@@ -97,6 +97,7 @@ class Feed < ActiveRecord::Base
 
       # sources_list = Rails.cache.read("feed_url-sources-list")
       sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+      sources_list.default = "Others"
       category = sources_list[source]
 
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first

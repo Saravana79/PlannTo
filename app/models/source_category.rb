@@ -14,6 +14,7 @@ class SourceCategory < ActiveRecord::Base
   def check_and_assign_sources_hash_to_cache_from_table()
     # sources_list = Rails.cache.read("feed_url-sources-list")
     sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+    sources_list.default = "Others"
     sources_list = sources_list.blank? ? {} : sources_list
     sources_list = sources_list.merge({self.source => self.categories})
     # Rails.cache.write("feed_url-sources-list", sources_list)
