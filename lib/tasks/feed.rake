@@ -32,7 +32,8 @@ namespace :feed do
         source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
       end
 
-      sources_list = Rails.cache.read("feed_url-sources-list")
+      # sources_list = Rails.cache.read("feed_url-sources-list")
+      sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
       category = sources_list[source]
 
       check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first

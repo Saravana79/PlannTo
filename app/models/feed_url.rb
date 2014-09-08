@@ -98,7 +98,8 @@ class FeedUrl < ActiveRecord::Base
             end
           end
 
-          sources_list = Rails.cache.read("feed_url-sources-list")
+          # sources_list = Rails.cache.read("feed_url-sources-list")
+          sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
           category = sources_list[source]
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -168,7 +169,8 @@ class FeedUrl < ActiveRecord::Base
               source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
             end
 
-            sources_list = Rails.cache.read("feed_url-sources-list")
+            # sources_list = Rails.cache.read("feed_url-sources-list")
+            sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
             category = sources_list[source]
 
             # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
@@ -309,7 +311,8 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.check_and_assign_sources_hash_to_cache()
-    sources_list = Rails.cache.read("feed_url-sources-list")
+    # sources_list = Rails.cache.read("feed_url-sources-list")
+    sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
     if sources_list.blank?
       sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if { |x| x.blank? }
       result = {}
@@ -327,7 +330,8 @@ class FeedUrl < ActiveRecord::Base
         result.merge!("#{each_source}" => category)
       end
       result
-      Rails.cache.write("feed_url-sources-list", result)
+      # Rails.cache.write("feed_url-sources-list", result)
+      $redis_rtb.set("feed_url-sources-list", result.to_json)
     end
   end
 
