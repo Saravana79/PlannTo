@@ -47,9 +47,16 @@ namespace :feed do
         title = title.to_s.gsub(/\s(-|\|).+/, '')
         title = title.blank? ? "" : title.strip
 
-        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
+        @feed_url = FeedUrl.new(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => @feed.id, :published_at => each_record.created_at, :priorities => @feed.priorities)
+
+        begin
+          new_feed_url.save!
+        rescue Exception => e
+          p e
+        end
+
       end
     end
     @feed.update_attributes(:last_updated_at => Time.zone.now)

@@ -61,9 +61,16 @@ class Feed < ActiveRecord::Base
           title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.to_s.strip
 
-          FeedUrl.create(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
+          FeedUrl.new(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
                          :published_at => each_entry.published, :priorities => priorities)
+
+          begin
+            new_feed_url.save!
+          rescue Exception => e
+            p e
+          end
+
         end
       end
       self.update_attributes!(last_updated_at: feed.last_modified)
@@ -110,9 +117,16 @@ class Feed < ActiveRecord::Base
         title = title.to_s.gsub(/\s(-|\|).+/, '')
         title = title.blank? ? "" : title.to_s.strip
 
-        @feed_url = FeedUrl.create(:url => each_record.hosted_site_url, :title => title.to_s.strip, :status => status, :source => source,
+        @feed_url = FeedUrl.new(:url => each_record.hosted_site_url, :title => title.to_s.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count)
+
+        begin
+          new_feed_url.save!
+        rescue Exception => e
+          p e
+        end
+        
       else
         new_count = each_record.count
         check_exist_feed_url.update_attributes(:missing_count => new_count)

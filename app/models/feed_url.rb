@@ -2,6 +2,8 @@ class FeedUrl < ActiveRecord::Base
   require "addressable/uri"
   belongs_to :feed
 
+  validates_uniqueness_of :url
+
   def self.update_by_missing_records(log, process_type, count, valid_urls, invalid_urls, missing_ad)
     invalid_urls = invalid_urls.delete_if { |x| (x.blank? || x == "nil") }
 
@@ -122,9 +124,15 @@ class FeedUrl < ActiveRecord::Base
           # title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.to_s.strip
 
-          new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
+          new_feed_url = FeedUrl.new(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
                                         status: status, source: source, summary: description, :images => images,
                                         :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+
+          begin
+            new_feed_url.save!
+          rescue Exception => e
+            p e
+          end
 
           $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
         else
@@ -196,9 +204,15 @@ class FeedUrl < ActiveRecord::Base
             # title = title.blank? ? "" : title.to_s.strip
             title = title.to_s.strip
 
-            new_feed_url = FeedUrl.create(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
+            new_feed_url = FeedUrl.new(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
                                           status: status, source: source, summary: description, :images => images,
                                           :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+
+            begin
+              new_feed_url.save!
+            rescue Exception => e
+              p e
+            end
 
             $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
           else
