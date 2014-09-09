@@ -20,7 +20,7 @@ task :related_items_with_count, [:all_item] => :environment do |t, args|
   all_item = args[:all_item]
   time_condition = ""
   if all_item != "true"
-    time_condition = "contents.updated_at > '#{2.days.ago.utc}' and"
+    time_condition = "contents.updated_at > '#{1.days.ago.utc}' and"
   end
 
   query_to_get_items = "select distinct item_id, itemtype_id from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id

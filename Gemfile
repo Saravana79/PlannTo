@@ -88,5 +88,5 @@ gem 'activeuuid'
 # gem 'newrelic_rpm'
 gem 'rest-client', '~> 1.7.1'
 gem "facets", require: false
-gem 'addressable'
+gem 'addressable', '~> 2.3.6'
 gem 'open_uri_redirections', '~> 0.1.4'

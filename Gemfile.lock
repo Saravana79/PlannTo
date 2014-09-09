@@ -338,7 +338,7 @@ DEPENDENCIES
   acts_as_commentable
   acts_as_follower
   acts_as_rateable
-  addressable
+  addressable (~> 2.3.6)
   aws-sdk
   citier (~> 0.1.15)
   clockwork (~> 0.7.2)

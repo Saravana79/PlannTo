@@ -1,7 +1,6 @@
 class ArticleContent < Content
   acts_as_citier
 
-
   #validates :url, :presence => true
   belongs_to :article_category
   has_many :content_photos, :foreign_key => 'content_id'
@@ -317,6 +316,37 @@ class ArticleContent < Content
       end
     end
     return @item, @best_deals, @impression_id
+  end
+
+  def check_and_update_mobile_site_feed_urls_from_content(feed_url, user, remote_ip)
+    new_feed_url = nil
+    url = feed_url.blank? ? self.url : feed_url.url
+    host = Addressable::URI.parse(url).host.downcase
+    source_category = SourceCategory.where(:source => host).last
+    if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
+      prefix = source_category.prefix
+      processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
+      processed_url = url.gsub(host, processed_host)
+
+      new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+
+      unless new_feed_url.blank?
+        param = {}
+        item_ids = ContentItemRelation.where(:content_id => self.id).map(&:item_id)
+        article_item_ids = item_ids.join(",")
+
+        param.merge!(:feed_url_id => new_feed_url.id, :default_item_id => "", :submit_url => "submit_url",
+                     :article_content => { :itemtype_id => self.itemtype_id, :type => self.type, :thumbnail => self.thumbnail,
+                                           :title => self.title, :url => processed_url, :sub_type => self.sub_type, :description => self.description },
+                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => self.old_default_values,
+                     :new_default_values => self.new_default_values)
+
+        param.merge!(:score => self.field1) if self.sub_type == ArticleCategory::REVIEWS
+        Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
+        new_feed_url.update_attributes!(:status => 1)
+      end
+    end
+    new_feed_url
   end
 
 end

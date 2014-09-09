@@ -398,4 +398,25 @@ class FeedUrl < ActiveRecord::Base
     #start sid_ad_detail_process
     Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
   end
+
+  def check_and_update_mobile_site_feed_url(param, user, remote_ip)
+    url = self.url
+    host = Addressable::URI.parse(url).host.downcase
+    source_category = SourceCategory.where(:source => host).last
+    if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
+      prefix = source_category.prefix
+      processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
+      processed_url = url.gsub(host, processed_host)
+
+      new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+
+      unless new_feed_url.blank?
+        new_param = param
+        new_param.merge!(:feed_url_id => new_feed_url.id)
+        new_param[:article_content].merge!(:url => new_feed_url.url)
+        Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, new_param.to_json, user.blank? ? nil : user.id, remote_ip)
+        new_feed_url.update_attributes(:status => 1)
+      end
+    end
+  end
 end

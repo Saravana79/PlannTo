@@ -14,8 +14,9 @@ class ArticleContentsController < ApplicationController
       param = param.reject {|key| ["utf8", "authenticity_token", "commit", "action", "controller"].include?(key)}
       @through_rss = true
       Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, request.remote_ip)
-
       feed_url.update_attributes(:status => 1)
+
+      feed_url.check_and_update_mobile_site_feed_url(param, current_user, request.remote_ip)
     else
 
       #not used anywhere
@@ -113,6 +114,7 @@ class ArticleContentsController < ApplicationController
         @article.update_facebook_stats
       end
 
+      @article.check_and_update_mobile_site_feed_urls_from_content(nil, current_user, request.remote_ip)
     end
     flash[:notice]= "Article uploaded"
     respond_to do |format|
@@ -272,6 +274,7 @@ class ArticleContentsController < ApplicationController
       @previous_content = ArticleContent.where(:url => params[:url]).first
       if params['url'] && !@previous_content.blank?
         @duplicate_url = 'true'
+        @previous_content.check_and_update_mobile_site_feed_urls_from_content(nil, current_user, request.remote_ip)
       end
       @article, @images = ArticleContent.CreateContent(params[:url], current_user)
       @article_content= @article

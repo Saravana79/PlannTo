@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140904090329) do
+ActiveRecord::Schema.define(:version => 20140909084731) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -1067,6 +1067,7 @@ ActiveRecord::Schema.define(:version => 20140904090329) do
     t.boolean  "have_mobile_site", :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "prefix"
   end
 
   create_table "sourceitems", :force => true do |t|
