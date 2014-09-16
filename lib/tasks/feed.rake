@@ -52,7 +52,7 @@ namespace :feed do
                                    :feed_id => @feed.id, :published_at => each_record.created_at, :priorities => @feed.priorities)
 
         begin
-          new_feed_url.save!
+          @feed_url.save!
         rescue Exception => e
           p e
         end

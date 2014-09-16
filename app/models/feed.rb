@@ -61,7 +61,7 @@ class Feed < ActiveRecord::Base
           title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.to_s.strip
 
-          FeedUrl.new(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
+          new_feed_url = FeedUrl.new(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
                          :published_at => each_entry.published, :priorities => priorities)
 
@@ -122,7 +122,7 @@ class Feed < ActiveRecord::Base
                                    :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count)
 
         begin
-          new_feed_url.save!
+          @feed_url.save!
         rescue Exception => e
           p e
         end
