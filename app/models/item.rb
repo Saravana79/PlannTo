@@ -1415,12 +1415,12 @@ end
       else
         old_item_ad_detail.update_attributes!(:new_version_id => self.id)
       end
-      new_item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => self.id) # new_item_ad_detail
-      if old_item.blank?
-        new_item_ad_detail.save
-      else
-        new_item_ad_detail.update_attributes(:old_version_id => old_item.id)
-      end
+    end
+    new_item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => self.id) # new_item_ad_detail
+    if old_item.blank?
+      new_item_ad_detail.save
+    else
+      new_item_ad_detail.update_attributes(:old_version_id => old_item.id)
     end
   end
 
@@ -1428,7 +1428,8 @@ end
     #$redis.HMSET("items:#{id}", "price", nil, "vendor_id", nil, "avertisement_id", nil, "type", type)
     related_item_ids = RelatedItem.where('item_id = ?', self.id).limit(10).collect(&:related_item_id).join(",")
 
-    Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
+    # Resque.enqueue(UpdateRedis, "items:#{id}", "price", nil, "vendor_id", nil, "advertisement_id", nil, "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
+    $redis_rtb.HMSET("items:#{id}", "type", type, "related_item_ids", related_item_ids, "new_version_item_id", new_version_item_id)
   end
 
  end

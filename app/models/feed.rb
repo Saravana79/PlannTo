@@ -70,7 +70,6 @@ class Feed < ActiveRecord::Base
           rescue Exception => e
             p e
           end
-
         end
       end
       self.update_attributes!(last_updated_at: feed.last_modified)
