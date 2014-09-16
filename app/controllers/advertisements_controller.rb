@@ -164,7 +164,7 @@ class AdvertisementsController < ApplicationController
 
   def demo
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-    params[:ads_id] ||= 1
+    params[:ads_id] ||= 5
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"
     render :layout => false
