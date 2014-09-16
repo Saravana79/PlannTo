@@ -112,7 +112,7 @@ class Advertisement < ActiveRecord::Base
 
     # Enqueue ItemUpdate with created advertisement item_ids
     item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
-    item_ids = item_ids_array.map(&:inspect).join(',')
+    p item_ids = item_ids_array.map(&:inspect).join(',')
     Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
   end
 

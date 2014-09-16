@@ -147,6 +147,8 @@ class ItemsController < ApplicationController
   # PUT /items/1.json
   def update
     @item = Item.find(params[:id])
+    @item_types = Itemtype.select("id,itemtype")
+    @action = "/items/update/#{@item.id}"
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
