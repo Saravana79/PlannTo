@@ -159,7 +159,6 @@ class AggregatedDetail < ActiveRecord::Base
 
     # if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
     if (end_date.to_date - start_date.to_date).to_i > 31
-
       start_date = start_date.beginning_of_month.to_time
       end_date = end_date.end_of_month.to_time
 
@@ -173,13 +172,14 @@ class AggregatedDetail < ActiveRecord::Base
       clk_match = {"$match" => {"timestamp" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
       clk_sort = {"$sort" => {"_id" => 1}}
 
-      p imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group,imp_sort])
-      p clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group,clk_sort])
+      imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group,imp_sort])
+      clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group,clk_sort])
       return imp_results, clk_results
     else
 
       #TODO: Have to update
       # start_date = start_date.to_time
+      # end_date = end_date.to_time
       start_date = Time.new(2014,7,8)
       end_date = Time.new(2014,7,18)
 
@@ -193,8 +193,8 @@ class AggregatedDetail < ActiveRecord::Base
       clk_match = {"$match" => {"timestamp" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
       clk_sort = {"$sort" => {"_id" => 1}}
 
-      p imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group,imp_sort])
-      p clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group,clk_sort])
+      imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group,imp_sort])
+      clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group,clk_sort])
       return imp_results, clk_results
     end
   end

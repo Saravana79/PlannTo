@@ -148,11 +148,11 @@ class Admin::AdReportsController < ApplicationController
     @total_revenue = @order_histories.map(&:total_revenue).compact.inject(:+) rescue 0
 
     @vendors =  VendorDetail.where(:item_id => vendor_ids)
+  end
 
-    # click_report_results = AggregatedDetail.chart_data_widgets_for_click(params[:publisher_id], @start_date, @end_date, types, params[:vendor_id])
-    # @click_result_array = imp_report_results.map {|result| result.values}
-    # @click_x_values = @click_result_array.map {|each_array| each_array[0]}
-    # @clicks = @click_result_array.map {|each_array| each_array[2]}
+  def more_reports
+    option_type = params[:type] ||= "Item"
+    @results = AdImpression.get_results_from_mongo(option_type)
   end
 
   def load_vendors

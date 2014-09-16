@@ -20,4 +20,16 @@ class AdImpression
   field :winning_price, type: Float
 
   has_one :m_click
+
+
+  def self.get_results_from_mongo(option_type)
+    option = "item_id"
+    option = option_type == "Sid" ? "sid" : option_type == "Temp User ID" ? "temp_user_id" : "item_id"
+    project = {"$project" =>  { "#{option}" => 1}}
+    group =  { "$group" => { "_id" => "$#{option}", "count" => { "$sum" => 1 } } }
+    sort = {"$sort" => {"count" => -1}}
+    limit = {"$limit" => 100}
+
+    items_by_count = AdImpression.collection.aggregate([project,group,sort,limit])
+  end
 end
