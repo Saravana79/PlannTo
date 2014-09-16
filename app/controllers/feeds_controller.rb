@@ -165,23 +165,27 @@ class FeedsController < ApplicationController
         remote_ip = request.remote_ip
 
         @feed_urls.each_with_index do |feed_url, index|
-          category = params[:article_category]
-          category_list = params[:category_list].to_s.split(",")
-          old_category = category_list[index]
-          category = old_category if category.blank?
-          category = "Others" if category.blank?
+          article_content = ArticleContent.find_by_url(feed_url.url)
 
-          relevance_product = params[:articles_item_id].to_s.split(",")
+          if article_content.blank?
+            category = params[:article_category]
+            category_list = params[:category_list].to_s.split(",")
+            old_category = category_list[index]
+            category = old_category if category.blank?
+            category = "Others" if category.blank?
 
-          thumbnail = feed_url.images.split(",").first.to_s
-          param = { "feed_url_id" => feed_url.id, "default_item_id" => "", "submit_url" => "submit_url",
-                    "article_content" => { "itemtype_id" => "", "type" => "ArticleContent", "thumbnail" => thumbnail, "title" => feed_url.title, "url" => feed_url.url,
-                                           "sub_type" => category, "description" => feed_url.summary },
-                    "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product,
-                    "old_default_values"=>"#{old_category}-", "new_default_values"=>"#{category}-" }
+            relevance_product = params[:articles_item_id].to_s.split(",")
 
-          @through_rss = true
-          Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
+            thumbnail = feed_url.images.split(",").first.to_s
+            param = { "feed_url_id" => feed_url.id, "default_item_id" => "", "submit_url" => "submit_url",
+                      "article_content" => { "itemtype_id" => "", "type" => "ArticleContent", "thumbnail" => thumbnail, "title" => feed_url.title, "url" => feed_url.url,
+                                             "sub_type" => category, "description" => feed_url.summary },
+                      "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product,
+                      "old_default_values"=>"#{old_category}-", "new_default_values"=>"#{category}-" }
+
+            @through_rss = true
+            Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
+          end
         end
         @feed_urls.update_all(:status => 1)
       end

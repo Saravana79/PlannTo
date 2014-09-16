@@ -1,6 +1,12 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'rails/all'
+# require 'rails/all'
+
+# For mongodb
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "active_resource/railtie" # Comment this line for Rails 4.0+
+require "rails/test_unit/railtie"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -50,6 +56,10 @@ module PlanNto
     config.action_view.field_error_proc = Proc.new { |html_tag, instance|
       html_tag
     }
+
+    config.generators do |g|
+      g.orm :active_record
+    end
 
   end
 end

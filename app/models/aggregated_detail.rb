@@ -145,6 +145,55 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
+
+
+  def self.chart_data_widgets_from_mongo(publisher_id, start_date, end_date)
+    if start_date.nil?
+      start_date = 2.weeks.ago
+    end
+
+    if end_date.nil?
+      end_date = Date.today
+    end
+
+    # if start_date.to_date.beginning_of_month.to_s != end_date.to_date.beginning_of_month.to_s
+    if (end_date.to_date - start_date.to_date).to_i > 31
+
+      start_date = start_date.beginning_of_month.to_time
+      end_date = end_date.end_of_month.to_time
+
+      imp_project = {"$project" =>  { "year" => { "$year" => "$impression_time"}, "month" => { "$month" => "$impression_time"}, "winning_price" => 1}}
+      imp_group =  { "$group" => { "_id" => {"year"=>"$year", "month"=>"$month"}, "winning_price" => {"$sum" => "$winning_price"}, "count" => { "$sum" => 1 } } }
+      imp_match = {"$match" => {"impression_time" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+
+      clk_project = {"$project" =>  { "year" => { "$year" => "$timestamp"}, "month" => { "$month" => "$timestamp"}}}
+      clk_group =  { "$group" => { "_id" => {"year"=>"$year", "month"=>"$month"}, "count" => { "$sum" => 1 } } }
+      clk_match = {"$match" => {"timestamp" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+
+      imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group])
+      clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group])
+      return imp_results, clk_results
+    else
+
+      #TODO: Have to update
+      # start_date = start_date.to_time
+      start_date = Time.new(2014,7,8)
+      end_date = Time.new(2014,7,18)
+
+      imp_project = {"$project" =>  { "month" => { "$month" => "$impression_time"}, "day" => { "$dayOfMonth" => "$impression_time"}, "winning_price" => 1}}
+      imp_group =  { "$group" => { "_id" => {"year"=>"$month", "month" => "$day"}, "winning_price" => {"$sum" => "$winning_price"}, "count" => { "$sum" => 1 } } }
+      imp_match = {"$match" => {"impression_time" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+
+      clk_project = {"$project" =>  { "month" => { "$month" => "$timestamp"}, "day" => { "$dayOfMonth" => "$timestamp"}}}
+      clk_group =  { "$group" => { "_id" => {"year"=>"$month", "month"=>"$day"}, "count" => { "$sum" => 1 } } }
+      clk_match = {"$match" => {"timestamp" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+
+      p imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group])
+      p clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group])
+      return imp_results, clk_results
+    end
+  end
+
   # def self.chart_data_widgets_for_click(publisher_id, start_date, end_date, types, vendor_id)
   #   if start_date.nil?
   #     start_date = 2.weeks.ago
