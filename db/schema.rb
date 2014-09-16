@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140909084731) do
+ActiveRecord::Schema.define(:version => 20140916091704) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20140909084731) do
     t.string   "review_status"
     t.float    "commission"
     t.string   "target_audience"
+    t.string   "excluded_sites"
   end
 
   create_table "aggregated_details", :force => true do |t|

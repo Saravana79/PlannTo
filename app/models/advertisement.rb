@@ -108,7 +108,7 @@ class Advertisement < ActiveRecord::Base
       end
     end
 
-    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "enabled", ad_status, "exclusive_item_ids", exclusive_item_ids)
+    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "enabled", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites)
 
     # Enqueue ItemUpdate with created advertisement item_ids
     item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
