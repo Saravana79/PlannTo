@@ -116,7 +116,7 @@ class Admin::AdReportsController < ApplicationController
 
     new_imp_results = {}
     imp_report_results.each {|each_row| new_imp_results.merge!("#{each_row['_id']['year']}-#{each_row['_id']['month']}" => {"winning_price" => each_row["winning_price"], "count" => each_row["count"]})}
-    new_imp_results = Hash[new_imp_results.sort]
+    # new_imp_results = Hash[new_imp_results.sort]
     @x_values = new_imp_results.keys
     @impressions = new_imp_results.values.map{|each_val| each_val['count']}
     @winning_price = new_imp_results.values.map{|each_val| ("%.2f" % each_val['winning_price'].to_f).to_f}

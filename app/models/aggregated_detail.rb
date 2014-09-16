@@ -148,6 +148,7 @@ class AggregatedDetail < ActiveRecord::Base
 
 
   def self.chart_data_widgets_from_mongo(publisher_id, start_date, end_date)
+    publisher_id = publisher_id.to_i
     if start_date.nil?
       start_date = 2.weeks.ago
     end
@@ -165,13 +166,15 @@ class AggregatedDetail < ActiveRecord::Base
       imp_project = {"$project" =>  { "year" => { "$year" => "$impression_time"}, "month" => { "$month" => "$impression_time"}, "winning_price" => 1}}
       imp_group =  { "$group" => { "_id" => {"year"=>"$year", "month"=>"$month"}, "winning_price" => {"$sum" => "$winning_price"}, "count" => { "$sum" => 1 } } }
       imp_match = {"$match" => {"impression_time" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+      imp_sort = {"$sort" => {"_id" => 1}}
 
       clk_project = {"$project" =>  { "year" => { "$year" => "$timestamp"}, "month" => { "$month" => "$timestamp"}}}
       clk_group =  { "$group" => { "_id" => {"year"=>"$year", "month"=>"$month"}, "count" => { "$sum" => 1 } } }
       clk_match = {"$match" => {"timestamp" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+      clk_sort = {"$sort" => {"_id" => 1}}
 
-      imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group])
-      clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group])
+      p imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group,imp_sort])
+      p clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group,clk_sort])
       return imp_results, clk_results
     else
 
@@ -183,13 +186,15 @@ class AggregatedDetail < ActiveRecord::Base
       imp_project = {"$project" =>  { "month" => { "$month" => "$impression_time"}, "day" => { "$dayOfMonth" => "$impression_time"}, "winning_price" => 1}}
       imp_group =  { "$group" => { "_id" => {"year"=>"$month", "month" => "$day"}, "winning_price" => {"$sum" => "$winning_price"}, "count" => { "$sum" => 1 } } }
       imp_match = {"$match" => {"impression_time" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+      imp_sort = {"$sort" => {"_id" => 1}}
 
       clk_project = {"$project" =>  { "month" => { "$month" => "$timestamp"}, "day" => { "$dayOfMonth" => "$timestamp"}}}
       clk_group =  { "$group" => { "_id" => {"year"=>"$month", "month"=>"$day"}, "count" => { "$sum" => 1 } } }
       clk_match = {"$match" => {"timestamp" => {"$gte" => start_date, "$lte" => end_date}, "publisher_id" => publisher_id}}
+      clk_sort = {"$sort" => {"_id" => 1}}
 
-      p imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group])
-      p clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group])
+      p imp_results = AdImpression.collection.aggregate([imp_match,imp_project,imp_group,imp_sort])
+      p clk_results = MClick.collection.aggregate([clk_match,clk_project,clk_group,clk_sort])
       return imp_results, clk_results
     end
   end
