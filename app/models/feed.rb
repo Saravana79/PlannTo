@@ -142,7 +142,7 @@ class Feed < ActiveRecord::Base
     comparisons = [' vs','versus','comparison','Competitor']
     how_to = ["tutorial", "guide", "how to",'update','Wallpaper',' root',' reset']
     lists = [" top", " best"]
-    photos = ["gallery",'photos']
+    photos = ["gallery",'photos','picture']
     news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs']
     specs = [' spec',' 3D']
     how_to.each do |how|
