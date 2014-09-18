@@ -178,10 +178,10 @@ class AggregatedDetail < ActiveRecord::Base
     else
 
       #TODO: Have to update
-      # start_date = start_date.to_time
-      # end_date = end_date.to_time
-      start_date = Time.new(2014,7,8)
-      end_date = Time.new(2014,7,18)
+      start_date = start_date.to_time
+      end_date = end_date.to_time
+      # start_date = Time.new(2014,7,8)
+      # end_date = Time.new(2014,7,18)
 
       imp_project = {"$project" =>  { "month" => { "$month" => "$impression_time"}, "day" => { "$dayOfMonth" => "$impression_time"}, "winning_price" => 1}}
       imp_group =  { "$group" => { "_id" => {"year"=>"$month", "month" => "$day"}, "winning_price" => {"$sum" => "$winning_price"}, "count" => { "$sum" => 1 } } }

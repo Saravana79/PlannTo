@@ -30,6 +30,7 @@ class AdImpression
     sort = {"$sort" => {"count" => -1}}
     limit = {"$limit" => 100}
 
-    items_by_count = AdImpression.collection.aggregate([project,group,sort,limit])
+    # items_by_count = AdImpression.collection.aggregate([project,group,sort,limit])
+    items_by_count = AdImpression.collection.aggregate([group,sort,limit])
   end
 end
