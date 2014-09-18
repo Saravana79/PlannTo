@@ -137,14 +137,14 @@ class Feed < ActiveRecord::Base
   def self.get_find_subtype(title)
     title_words = title.to_s.downcase #.split
 
-    tips = %w[tip trick]
-    reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson']
-    comparisons = ['vs','versus','comparison']
-    how_to = ["tutorial", "guide", "how to",'update','Wallpaper','root','reset']
-    lists = ["top", "best"]
+    tips = [' tip', ' trick']
+    reviews = [' review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson']
+    comparisons = [' vs','versus','comparison','Competitor']
+    how_to = ["tutorial", "guide", "how to",'update','Wallpaper',' root',' reset']
+    lists = [" top", " best"]
     photos = ["gallery",'photos']
-    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks']
-    specs = ['spec']
+    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs']
+    specs = [' spec',' 3D']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
