@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140916091704) do
+ActiveRecord::Schema.define(:version => 20140920102724) do
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -1065,10 +1065,12 @@ ActiveRecord::Schema.define(:version => 20140916091704) do
   create_table "source_categories", :force => true do |t|
     t.string   "source"
     t.string   "categories"
-    t.boolean  "have_mobile_site", :default => false
+    t.boolean  "have_mobile_site",     :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "prefix"
+    t.boolean  "is_having_pagination", :default => false
+    t.string   "pattern"
   end
 
   create_table "sourceitems", :force => true do |t|
