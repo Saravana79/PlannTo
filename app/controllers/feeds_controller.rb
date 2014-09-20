@@ -222,6 +222,26 @@ class FeedsController < ApplicationController
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
 
+      @feed_url, @article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, current_user, request.remote_ip)
+
+      if @feed_url.status == 1
+        @already_shared = true
+      else
+        if !@feed_url.blank?
+          @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
+          @article.title = @feed_url.title
+          p @article.sub_type = @article.find_subtype(@article.title)
+          @article.description = @feed_url.summary
+          @images = @feed_url.images.split(",")
+          @article.thumbnail = @images.first if @images.count > 0
+        end
+
+        @article_content = @article
+        @article.sub_type = "Others" if @article.sub_type.blank?
+        params[:term] = @article.title
+      end
+
+
       #if @feed_url.feed.process_type == "table"
       #  @article,@images = ArticleContent.CreateContent(@feed_url.url,current_user)
       #else
@@ -240,18 +260,6 @@ class FeedsController < ApplicationController
       #  @article.thumbnail = @images.first if @images.count > 0
       #end
 
-      if !@feed_url.blank?
-        @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
-        @article.title = @feed_url.title
-        p @article.sub_type = @article.find_subtype(@article.title)
-        @article.description = @feed_url.summary
-        @images = @feed_url.images.split(",")
-        @article.thumbnail = @images.first if @images.count > 0
-      end
-
-      @article_content = @article
-      @article.sub_type = "Others" if @article.sub_type.blank?
-      params[:term] = @article.title
       #@results = Product.get_search_items_by_relavance(params)
     end
 

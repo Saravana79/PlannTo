@@ -3,7 +3,7 @@
     // alert('This article is already shared in PlannTo.com');
     window.location.href =   "<%= "/contents/#{@previous_content.id}" %>"
   </script>
-<%end%>
+<%else%>
 <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js" %>
 <link type="text/css" href="/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
@@ -181,3 +181,4 @@ a.Blacklink:hover { text-decoration: underline;}
     
 
 </style>
+<%end%>

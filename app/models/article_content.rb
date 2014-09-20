@@ -322,13 +322,14 @@ class ArticleContent < Content
     new_feed_url = nil
     url = feed_url.blank? ? self.url : feed_url.url
     host = Addressable::URI.parse(url).host.downcase
+    host = host.start_with?('www.') ? host[4..-1] : host
     source_category = SourceCategory.where(:source => host).last
     if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
       processed_url = url.gsub(host, processed_host)
 
-      new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+      new_feed_url = FeedUrl.where(:url => processed_url, :status => 0).last
 
       unless new_feed_url.blank?
         param = {}
@@ -338,8 +339,8 @@ class ArticleContent < Content
         param.merge!(:feed_url_id => new_feed_url.id, :default_item_id => "", :submit_url => "submit_url",
                      :article_content => { :itemtype_id => self.itemtype_id, :type => self.type, :thumbnail => self.thumbnail,
                                            :title => self.title, :url => processed_url, :sub_type => self.sub_type, :description => self.description },
-                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => self.old_default_values,
-                     :new_default_values => self.new_default_values)
+                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => nil,
+                     :new_default_values => nil)
 
         param.merge!(:score => self.field1) if self.sub_type == ArticleCategory::REVIEWS
         Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
@@ -347,6 +348,39 @@ class ArticleContent < Content
       end
     end
     new_feed_url
+  end
+
+  def self. check_and_update_mobile_site_feed_urls_from_feed(feed_url, user, remote_ip, param_url='')
+    url = feed_url.blank? ? param_url : feed_url.url
+    article_content = nil
+    host = Addressable::URI.parse(url).host.downcase
+    host = host.start_with?('www.') ? host[4..-1] : host
+    source_category = SourceCategory.where(:source => host).last
+    if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
+      prefix = source_category.prefix
+      processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
+      processed_url = url.gsub(host, processed_host)
+
+      p article_content = @article_content = ArticleContent.find_by_url(processed_url)
+      # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+
+      unless article_content.blank?
+        param = {}
+        item_ids = ContentItemRelation.where(:content_id => article_content.id).map(&:item_id)
+        article_item_ids = item_ids.join(",")
+
+        param.merge!(:feed_url_id => feed_url.blank? ? nil : feed_url.id, :default_item_id => "", :submit_url => "submit_url",
+                     :article_content => { :itemtype_id => article_content.itemtype_id, :type => article_content.type, :thumbnail => article_content.thumbnail,
+                                           :title => article_content.title, :url => processed_url, :sub_type => article_content.sub_type, :description => article_content.description },
+                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => nil,
+                     :new_default_values => nil)
+
+        param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
+        Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
+        feed_url.update_attributes!(:status => 1) unless feed_url.blank?
+      end
+    end
+    return feed_url, article_content
   end
 
 end
