@@ -404,11 +404,11 @@ end
     items.each do |item|
     #item = Item.find(item)
       if item.type == "AttributeTag"
-      attribute_item_ids << item.id
+      #attribute_item_ids << item.id
       itemtype_id << item.get_base_itemtypeid
       elsif item.type == "Manufacturer"
       #manufacturer_item_ids = item.itemrelationships.collect(&:relateditem_id)
-      manufacturer_and_cargroup_item_ids << item.id
+      #manufacturer_and_cargroup_item_ids << item.id
       elsif item.type == "CarGroup"
       #logger.info item.itemrelationships.collect(&:relateditem_id)
       #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
