@@ -327,9 +327,10 @@ class ArticleContent < Content
     if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
-      processed_url = url.gsub(host, processed_host)
+      processed_url = url.gsub(host, "%#{processed_host}%")
 
-      new_feed_url = FeedUrl.where(:url => processed_url, :status => 0).last
+      # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0).last
+      new_feed_url = FeedUrl.where("url like ? and status = 0", processed_url).last
 
       unless new_feed_url.blank?
         param = {}
@@ -353,15 +354,15 @@ class ArticleContent < Content
   def self. check_and_update_mobile_site_feed_urls_from_feed(feed_url, user, remote_ip, param_url='')
     url = feed_url.blank? ? param_url : feed_url.url
     article_content = nil
-    host = Addressable::URI.parse(url).host.downcase
-    host = host.start_with?('www.') ? host[4..-1] : host
+    old_host = Addressable::URI.parse(url).host.downcase
+    host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
     source_category = SourceCategory.where(:source => host).last
     if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
-      processed_url = url.gsub(host, processed_host)
+      processed_url = url.gsub(host, "%#{processed_host}%")
 
-      p article_content = @article_content = ArticleContent.find_by_url(processed_url)
+      article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
       # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
 
       unless article_content.blank?
