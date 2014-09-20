@@ -339,7 +339,7 @@ class ArticleContent < Content
 
         param.merge!(:feed_url_id => new_feed_url.id, :default_item_id => "", :submit_url => "submit_url",
                      :article_content => { :itemtype_id => self.itemtype_id, :type => self.type, :thumbnail => self.thumbnail,
-                                           :title => self.title, :url => new_feed_url.url, :sub_type => self.sub_type, :description => self.description },
+                                           :title => self.title, :url => url, :sub_type => self.sub_type, :description => self.description },
                      :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => nil,
                      :new_default_values => nil)
 
@@ -365,7 +365,7 @@ class ArticleContent < Content
       article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
       # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
 
-      
+
       unless article_content.blank?
         param = {}
         item_ids = ContentItemRelation.where(:content_id => article_content.id).map(&:item_id)
@@ -373,13 +373,13 @@ class ArticleContent < Content
 
         param.merge!(:feed_url_id => feed_url.blank? ? nil : feed_url.id, :default_item_id => "", :submit_url => "submit_url",
                      :article_content => { :itemtype_id => article_content.itemtype_id, :type => article_content.type, :thumbnail => article_content.thumbnail,
-                                           :title => article_content.title, :url => article_content.url, :sub_type => article_content.sub_type, :description => article_content.description },
+                                           :title => article_content.title, :url => url, :sub_type => article_content.sub_type, :description => article_content.description },
                      :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => nil,
                      :new_default_values => nil)
 
         param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
         Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
-        feed_url.update_attributes!(:status => 1) unless feed_url.blank?
+        feed_url.update_attributes!(:status => 1) if !feed_url.blank?
       end
     end
     return feed_url, article_content
