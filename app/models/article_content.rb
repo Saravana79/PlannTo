@@ -365,6 +365,7 @@ class ArticleContent < Content
       article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
       # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
 
+      
       unless article_content.blank?
         param = {}
         item_ids = ContentItemRelation.where(:content_id => article_content.id).map(&:item_id)
