@@ -34,6 +34,8 @@ class Feed < ActiveRecord::Base
 
   def feed_process()
     feed = Feedzirra::Feed.fetch_and_parse(url)
+    admin_user = User.where(:is_admin => true).first
+
     if (!feed.blank? && feed != 0)
       latest_feeds = feed.entries
 
@@ -67,6 +69,7 @@ class Feed < ActiveRecord::Base
 
           begin
             new_feed_url.save!
+            feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
           rescue Exception => e
             p e
           end
@@ -78,6 +81,7 @@ class Feed < ActiveRecord::Base
 
   def table_process()
     @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 50)
+    admin_user = User.where(:is_admin => true).first
 
     @impression_missing.each do |each_record|
       status = 0
@@ -122,6 +126,7 @@ class Feed < ActiveRecord::Base
 
         begin
           @feed_url.save!
+          feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, admin_user, nil)
         rescue Exception => e
           p e
         end

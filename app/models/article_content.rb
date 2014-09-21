@@ -321,14 +321,16 @@ class ArticleContent < Content
   def check_and_update_mobile_site_feed_urls_from_content(feed_url, user, remote_ip)
     new_feed_url = nil
     url = feed_url.blank? ? self.url : feed_url.url
-    host = Addressable::URI.parse(url).host.downcase
+    old_host = Addressable::URI.parse(url).host.downcase
+    host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
     source_category = SourceCategory.where(:source => host).last
     if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
-      processed_url = url.gsub(host, processed_host)
+      processed_url = url.gsub(old_host, "%#{processed_host}%")
 
-      new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+      # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0).last
+      new_feed_url = FeedUrl.where("url like ? and status = 0", processed_url).last
 
       unless new_feed_url.blank?
         param = {}
@@ -337,9 +339,9 @@ class ArticleContent < Content
 
         param.merge!(:feed_url_id => new_feed_url.id, :default_item_id => "", :submit_url => "submit_url",
                      :article_content => { :itemtype_id => self.itemtype_id, :type => self.type, :thumbnail => self.thumbnail,
-                                           :title => self.title, :url => processed_url, :sub_type => self.sub_type, :description => self.description },
-                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => self.old_default_values,
-                     :new_default_values => self.new_default_values)
+                                           :title => self.title, :url => url, :sub_type => self.sub_type, :description => self.description },
+                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => nil,
+                     :new_default_values => nil)
 
         param.merge!(:score => self.field1) if self.sub_type == ArticleCategory::REVIEWS
         Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
@@ -347,6 +349,55 @@ class ArticleContent < Content
       end
     end
     new_feed_url
+  end
+
+  def self.check_and_update_mobile_site_feed_urls_from_feed(feed_url, user, remote_ip, param_url='')
+    url = feed_url.blank? ? param_url : feed_url.url
+    article_content = nil
+    old_host = Addressable::URI.parse(url).host.downcase
+    host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
+    source_category = SourceCategory.where(:source => host).last
+    if !source_category.blank?
+      if source_category.have_mobile_site && !source_category.prefix.blank?
+        prefix = source_category.prefix
+        processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
+        processed_url = url.gsub(old_host, "%#{processed_host}%")
+
+        article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
+        # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+        ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+      end
+
+      if source_category.is_having_pagination && !source_category.pattern.blank?
+        pattern = source_category.pattern
+        str1, str2 = pattern.split("<page>")
+        exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]
+        if exp_val.to_s.is_an_integer?
+          patten_with_val = pattern.gsub("<page>", exp_val)
+          patten_for_query = pattern.gsub("<page>", "%")
+          p url_for_query = url.gsub(patten_with_val, patten_for_query)
+          p article_content = @article_content = ArticleContent.where("url like ?", url_for_query).last
+          ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+        end
+      end
+    end
+    return feed_url, article_content
+  end
+
+  def self.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url=nil)
+    param = {}
+    item_ids = ContentItemRelation.where(:content_id => article_content.id).map(&:item_id)
+    article_item_ids = item_ids.join(",")
+
+    param.merge!(:feed_url_id => feed_url.blank? ? nil : feed_url.id, :default_item_id => "", :submit_url => "submit_url",
+                 :article_content => { :itemtype_id => article_content.itemtype_id, :type => article_content.type, :thumbnail => article_content.thumbnail,
+                                       :title => article_content.title, :url => url, :sub_type => article_content.sub_type, :description => article_content.description },
+                 :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0", :old_default_values => nil,
+                 :new_default_values => nil)
+
+    param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
+    Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
+    feed_url.update_attributes!(:status => 1) if !feed_url.blank?
   end
 
 end

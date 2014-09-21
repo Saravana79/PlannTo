@@ -69,6 +69,8 @@ class FeedUrl < ActiveRecord::Base
 
   def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["science & technology"])
     feed = Feed.where("process_type = 'missingurl'").last
+    admin_user = User.where(:is_admin => true).first
+
     counting = 1
     greater_count = 1
     missingurl_keys = [] if missingurl_keys.blank?
@@ -130,6 +132,7 @@ class FeedUrl < ActiveRecord::Base
 
           begin
             new_feed_url.save!
+            feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
           rescue Exception => e
             p e
           end
@@ -151,6 +154,8 @@ class FeedUrl < ActiveRecord::Base
 
   def self.process_missing_url(missingurl_keys, count, valid_categories=["gaming", "science & technology"], process_category="recent")
     feed = Feed.where("process_type = 'missingurl'").last
+    admin_user = User.where(:is_admin => true).first
+
     counting = 1
     greater_count = 1
     missingurl_keys = [] if missingurl_keys.blank?
@@ -210,6 +215,7 @@ class FeedUrl < ActiveRecord::Base
 
             begin
               new_feed_url.save!
+              feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
             rescue Exception => e
               p e
             end

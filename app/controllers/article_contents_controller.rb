@@ -275,10 +275,16 @@ class ArticleContentsController < ApplicationController
       if params['url'] && !@previous_content.blank?
         @duplicate_url = 'true'
         @previous_content.check_and_update_mobile_site_feed_urls_from_content(nil, current_user, request.remote_ip)
+      else
+        feed_url, @previous_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(nil, current_user, request.remote_ip, params['url'])
+        if !@previous_content.blank?
+          @duplicate_url = 'true'
+        else
+          @article, @images = ArticleContent.CreateContent(params[:url], current_user)
+          @article_content= @article
+          @external = params[:external]
+        end
       end
-      @article, @images = ArticleContent.CreateContent(params[:url], current_user)
-      @article_content= @article
-      @external = params[:external]
     end
     #@article_string = render_to_string :partial => "article" 
     respond_to do |format|
