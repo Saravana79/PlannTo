@@ -1402,6 +1402,56 @@ end
     return item_ids
   end
 
+  def self.buying_list_process_in_redis
+    length = $redis_rtb.llen("users:visits")
+    [*1..length].each do |each_loop|
+      user_val = $redis_rtb.lpop("users:visits")
+
+      unless user_val.blank?
+        user_id, url, type, item_ids, advertisement_id = user_val.split("<<")
+
+        ranking = 0
+
+        case type
+          when "Reviews", "Spec", "Photo"
+            ranking = 1.0
+          when "Comparisons"
+            ranking = 0.5
+          when "Lists", "Others"
+            ranking = 0.2
+        end
+
+        item_ids = item_ids.split(",")
+
+        item_ids.each do |item_id|
+          key = "users:#{user_id}:item:#{item_id}"
+          ranking_val = $redis_rtb.incrbyfloat(key, ranking)
+          $redis_rtb.expire(key, 2.weeks)
+          if ranking_val > 3.0
+            new_key = "users:buyinglist:#{user_id}"
+            buying_list = $redis_rtb.get("new_key")
+            if !buying_list.blank?
+              buying_list = buying_list.split(",")
+              have_to_del = []
+              buying_list.each do |each_key|
+                check_key = "users:#{user_id}:item:#{each_key}"
+                old_ranking_val = $redis_rtb.get(check_key)
+                have_to_del << each_key if old_ranking_val.blank?
+              end
+              buying_list = buying_list - have_to_del
+              buying_list << item_id unless buying_list.include?(item_id)
+              $redis_rtb.set(new_key, buying_list.join(","))
+              $redis_rtb.expire(key, 2.weeks)
+            else
+              $redis_rtb.set(new_key, item_id)
+              $redis_rtb.expire(key, 2.weeks)
+            end
+          end
+        end
+      end
+    end
+  end
+
   private
 
   def create_item_ad_detail
