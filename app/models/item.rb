@@ -1423,7 +1423,7 @@ end
               ranking = 0.2
           end
 
-          item_ids = item_ids.split(",")
+          item_ids = item_ids.to_s.split(",")
 
           item_ids.each do |item_id|
             key = "users:#{user_id}:item:#{item_id}"
@@ -1461,7 +1461,7 @@ end
           end
         end
       end
-      $redis_rtb.ltrim("users:visits", user_vals.count+1, -1)
+      $redis_rtb.ltrim("users:visits", user_vals.count, -1)
       length = length - 1001
       p "Remaining Length - #{length}"
     end while length > 0
