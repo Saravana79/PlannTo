@@ -1402,12 +1402,11 @@ end
     return item_ids
   end
 
-  def self.buying_list_process_in_redis
+  def buying_list_process_in_redis
     length = $redis_rtb.llen("users:visits")
 
     begin
       user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
-      already_processed = false
 
       user_vals.each do |each_user_val|
         unless each_user_val.blank?
@@ -1416,48 +1415,42 @@ end
 
           case type
             when "Reviews", "Spec", "Photo"
-              ranking = 1.0
+              ranking = 10
             when "Comparisons"
-              ranking = 0.5
+              ranking = 5
             when "Lists", "Others"
-              ranking = 0.2
+              ranking = 2
           end
 
           item_ids = item_ids.to_s.split(",")
+          item_key_list = []
+          proc_item_ids = []
+          item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
+          ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
+          $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
+          ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
 
-          item_ids.each do |item_id|
-            key = "users:#{user_id}:item:#{item_id}"
-            ranking_val = $redis_rtb.incrbyfloat(key, ranking)
-            $redis_rtb.expire(key, 2.weeks)
-            if ranking_val > 3.0
-              new_key = "users:buyinglist:#{user_id}"
-              buying_list = $redis_rtb.get(new_key)
-              if !buying_list.blank?
-                buying_list = buying_list.split(",")
-                have_to_del = []
-                keys_list = []
+          new_key = "users:buyinglist:#{user_id}"
+          buying_list = $redis_rtb.get(new_key)
+          buying_list = buying_list.to_s.split(",")
 
-                if already_processed == false
-                  already_processed = true
-                  buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-                  ranking_values = $redis_rtb.multi {keys_list.each {|key| $redis_rtb.get(key)}}
-                  ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
-                end
+          if !buying_list.blank?
+            have_to_del = []
+            keys_list = []
 
-                buying_list = buying_list - have_to_del
-                buying_list << item_id unless buying_list.include?(item_id)
+            buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
+            ranking_values = $redis_rtb.multi {keys_list.each {|key| $redis_rtb.get(key)}}
+            ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
 
-                $redis_rtb.pipelined do
-                  $redis_rtb.set(new_key, buying_list.join(","))
-                  $redis_rtb.expire(key, 2.weeks)
-                end
-              else
-                $redis_rtb.pipelined do
-                  $redis_rtb.set(new_key, item_id)
-                  $redis_rtb.expire(key, 2.weeks)
-                end
-              end
-            end
+            buying_list = buying_list - have_to_del
+            buying_list << proc_item_ids
+            buying_list = buying_list.flatten.uniq
+          else
+            buying_list = proc_item_ids
+          end
+          $redis_rtb.pipelined do
+            $redis_rtb.set(new_key, buying_list.join(","))
+            $redis_rtb.expire(new_key, 2.weeks)
           end
         end
       end
