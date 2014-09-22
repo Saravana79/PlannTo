@@ -1463,6 +1463,7 @@ end
       end
       $redis_rtb.ltrim("users:visits", user_vals.count+1, -1)
       length = length - 1001
+      p "Remaining Length - #{length}"
     end while length > 0
   end
 
