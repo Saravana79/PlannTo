@@ -1405,11 +1405,14 @@ end
   def self.buying_list_process_in_redis
     length = $redis_rtb.llen("users:visits")
     base_item_ids = self.get_base_items_from_config()
+    t_length = length
 
     begin
       user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
 
       user_vals.each do |each_user_val|
+        t_length-=1
+        p "Remaining Length each - #{t_length}"
         unless each_user_val.blank?
           user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
           ranking = 0
