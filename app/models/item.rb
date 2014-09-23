@@ -1469,7 +1469,6 @@ end
                    "root_level_game_id","root_level_laptop_id", "root_level_gaming_console_id", "root_level_app_id"]
     item_ids = []
     root_levels.each do |root_level|
-      p configatron.send(root_level).to_s.split(",")
       item_ids << configatron.send(root_level).to_s.split(",")
     end
     item_ids
