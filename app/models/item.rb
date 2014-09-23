@@ -1404,69 +1404,110 @@ end
 
   def self.buying_list_process_in_redis
     length = $redis_rtb.llen("users:visits")
-    base_item_ids = self.get_base_items_from_config()
+    base_item_ids = Item.get_base_items_from_config()
+    last_used_item_urls = $redis.lrange("last_accessed_item_urls", 0, 5000)
+    last_used_item_ids = $redis.lrange("last_accessed_item_ids", 0, 5000)
     t_length = length
 
     begin
       user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
+      redis_rtb_hash = {}
 
       user_vals.each do |each_user_val|
         t_length-=1
-        p "Remaining Length each - #{t_length}"
+        p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
         unless each_user_val.blank?
           user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
+          already_exist, last_used_item_urls, last_used_item_ids = Item.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
           ranking = 0
 
-          case type
-            when "Reviews", "Spec", "Photo"
-              ranking = 10
-            when "Comparisons"
-              ranking = 5
-            when "Lists", "Others"
-              ranking = 2
-          end
-
-          item_ids = item_ids.to_s.split(",")
-          item_key_list = []
-          proc_item_ids = []
-          item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
-          ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
-          $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
-          ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
-
-          unless proc_item_ids.blank?
-            new_key = "users:buyinglist:#{user_id}"
-            buying_list = $redis_rtb.get(new_key)
-            buying_list = buying_list.to_s.split(",")
-
-            if !buying_list.blank?
-              have_to_del = []
-              keys_list = []
-
-              buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-              ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
-              ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
-
-              buying_list = buying_list - have_to_del
-              buying_list << proc_item_ids
-              buying_list = buying_list.flatten.uniq
-            else
-              buying_list = proc_item_ids
+          if already_exist == false
+            case type
+              when "Reviews", "Spec", "Photo"
+                ranking = 10
+              when "Comparisons"
+                ranking = 5
+              when "Lists", "Others"
+                ranking = 2
             end
 
-            buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+            item_ids = item_ids.to_s.split(",")
+            item_key_list = []
+            proc_item_ids = []
+            item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
+            ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
+            $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
+            ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
 
-            $redis_rtb.pipelined do
-              $redis_rtb.set(new_key, buying_list.join(","))
-              $redis_rtb.expire(new_key, 2.weeks)
+            unless proc_item_ids.blank?
+              new_key = "users:buyinglist:#{user_id}"
+              buying_list = $redis.get(new_key)
+              buying_list = buying_list.to_s.split(",")
+
+              if !buying_list.blank?
+                have_to_del = []
+                keys_list = []
+
+                buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
+                ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
+                ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
+
+                buying_list = buying_list - have_to_del
+                buying_list << proc_item_ids
+                buying_list = buying_list.flatten.uniq
+              else
+                buying_list = proc_item_ids
+              end
+
+              buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+
+              $redis.pipelined do
+                $redis.set(new_key, buying_list.join(","))
+                $redis.expire(new_key, 2.weeks)
+              end
+              redis_rtb_hash.merge!(new_key => buying_list.join(","))
             end
           end
         end
       end
-      $redis_rtb.ltrim("users:visits", user_vals.count, -1)
+      $redis_rtb.pipelined do
+        redis_rtb_hash.each do |key, val|
+          $redis_rtb.set(key, val)
+          $redis_rtb.expire(key, 2.weeks)
+        end
+      end
+
+      # TODO: have to add trim from users:visits
+
       length = length - 1001
       p "Remaining Length - #{length}"
     end while length > 0
+
+    unless last_used_item_urls.blank?
+      $redis.pipelined do
+        $redis.lpush("last_accessed_item_urls", last_used_item_urls)
+        $redis.ltrim("last_accessed_item_urls", 0, 4999)
+
+        $redis.lpush("last_accessed_item_urls", last_used_item_urls)
+        $redis.ltrim("last_accessed_item_urls", 0, 4999)
+      end
+    end
+  end
+
+  def self.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
+    url_for_check = "#{user_id}:#{url}"
+    item_id_for_check = "#{user_id}:#{item_ids}"
+    exists = false
+    if last_used_item_urls.include?(url_for_check)
+      exists = true
+    elsif last_used_item_ids.include?(item_id_for_check)
+      exists = true
+    end
+    last_used_item_urls << url_for_check
+    last_used_item_ids << item_id_for_check
+    last_used_item_urls.shift if last_used_item_urls.count > 5000
+    last_used_item_ids.shift if last_used_item_ids.count > 5000
+    return exists, last_used_item_ids, last_used_item_ids
   end
 
   def self.get_base_items_from_config()
