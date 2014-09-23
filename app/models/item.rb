@@ -1439,7 +1439,7 @@ end
             keys_list = []
 
             buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-            ranking_values = $redis_rtb.multi {keys_list.each {|key| $redis_rtb.get(key)}}
+            ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
             ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
 
             buying_list = buying_list - have_to_del
