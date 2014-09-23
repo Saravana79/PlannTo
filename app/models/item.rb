@@ -1488,8 +1488,8 @@ end
         $redis.lpush("last_accessed_item_urls", last_used_item_urls)
         $redis.ltrim("last_accessed_item_urls", 0, 4999)
 
-        $redis.lpush("last_accessed_item_urls", last_used_item_urls)
-        $redis.ltrim("last_accessed_item_urls", 0, 4999)
+        $redis.lpush("last_accessed_item_ids", last_used_item_ids)
+        $redis.ltrim("last_accessed_item_ids", 0, 4999)
       end
     end
   end
