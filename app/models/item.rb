@@ -1402,7 +1402,7 @@ end
     return item_ids
   end
 
-  def buying_list_process_in_redis
+  def self.buying_list_process_in_redis
     length = $redis_rtb.llen("users:visits")
 
     begin
