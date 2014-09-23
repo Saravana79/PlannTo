@@ -1404,6 +1404,7 @@ end
 
   def self.buying_list_process_in_redis
     length = $redis_rtb.llen("users:visits")
+    base_item_ids = self.get_base_items_from_config()
 
     begin
       user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
@@ -1448,6 +1449,9 @@ end
           else
             buying_list = proc_item_ids
           end
+
+          buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+
           $redis_rtb.pipelined do
             $redis_rtb.set(new_key, buying_list.join(","))
             $redis_rtb.expire(new_key, 2.weeks)
@@ -1458,6 +1462,17 @@ end
       length = length - 1001
       p "Remaining Length - #{length}"
     end while length > 0
+  end
+
+  def self.get_base_items_from_config()
+    root_levels = ["root_level_car_id", "root_level_mobile_id", "root_level_cycle_id", "root_level_tablet_id", "root_level_bike_id",
+                   "root_level_game_id","root_level_laptop_id", "root_level_gaming_console_id", "root_level_app_id"]
+    item_ids = []
+    root_levels.each do |root_level|
+      p configatron.send(root_level).to_s.split(",")
+      item_ids << configatron.send(root_level).to_s.split(",")
+    end
+    item_ids
   end
 
   private
