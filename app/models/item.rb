@@ -1434,30 +1434,32 @@ end
           $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
           ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
 
-          new_key = "users:buyinglist:#{user_id}"
-          buying_list = $redis_rtb.get(new_key)
-          buying_list = buying_list.to_s.split(",")
+          unless proc_item_ids.blank?
+            new_key = "users:buyinglist:#{user_id}"
+            buying_list = $redis_rtb.get(new_key)
+            buying_list = buying_list.to_s.split(",")
 
-          if !buying_list.blank?
-            have_to_del = []
-            keys_list = []
+            if !buying_list.blank?
+              have_to_del = []
+              keys_list = []
 
-            buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-            ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
-            ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
+              buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
+              ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
+              ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
 
-            buying_list = buying_list - have_to_del
-            buying_list << proc_item_ids
-            buying_list = buying_list.flatten.uniq
-          else
-            buying_list = proc_item_ids
-          end
+              buying_list = buying_list - have_to_del
+              buying_list << proc_item_ids
+              buying_list = buying_list.flatten.uniq
+            else
+              buying_list = proc_item_ids
+            end
 
-          buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+            buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
-          $redis_rtb.pipelined do
-            $redis_rtb.set(new_key, buying_list.join(","))
-            $redis_rtb.expire(new_key, 2.weeks)
+            $redis_rtb.pipelined do
+              $redis_rtb.set(new_key, buying_list.join(","))
+              $redis_rtb.expire(new_key, 2.weeks)
+            end
           end
         end
       end
