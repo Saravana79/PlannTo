@@ -1,5 +1,4 @@
 class FeedUrl < ActiveRecord::Base
-  require "addressable/uri"
   belongs_to :feed
 
   validates_uniqueness_of :url
