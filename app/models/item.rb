@@ -1437,40 +1437,42 @@ end
             end
 
             item_ids = item_ids.to_s.split(",")
-            item_key_list = []
-            proc_item_ids = []
-            item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
-            ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
-            $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
-            ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
+            if item_ids.count < 10
+              item_key_list = []
+              proc_item_ids = []
+              item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
+              ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
+              $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
+              ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
 
-            unless proc_item_ids.blank?
-              new_key = "users:buyinglist:#{user_id}"
-              buying_list = $redis.get(new_key)
-              buying_list = buying_list.to_s.split(",")
+              unless proc_item_ids.blank?
+                new_key = "users:buyinglist:#{user_id}"
+                buying_list = $redis.get(new_key)
+                buying_list = buying_list.to_s.split(",")
 
-              if !buying_list.blank?
-                have_to_del = []
-                keys_list = []
+                if !buying_list.blank?
+                  have_to_del = []
+                  keys_list = []
 
-                buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-                ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
-                ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
+                  buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
+                  ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
+                  ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
 
-                buying_list = buying_list - have_to_del
-                buying_list << proc_item_ids
-                buying_list = buying_list.flatten.uniq
-              else
-                buying_list = proc_item_ids
+                  buying_list = buying_list - have_to_del
+                  buying_list << proc_item_ids
+                  buying_list = buying_list.flatten.uniq
+                else
+                  buying_list = proc_item_ids
+                end
+
+                buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+
+                $redis.pipelined do
+                  $redis.set(new_key, buying_list.join(","))
+                  $redis.expire(new_key, 2.weeks)
+                end
+                redis_rtb_hash.merge!(new_key => buying_list.join(","))
               end
-
-              buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
-
-              $redis.pipelined do
-                $redis.set(new_key, buying_list.join(","))
-                $redis.expire(new_key, 2.weeks)
-              end
-              redis_rtb_hash.merge!(new_key => buying_list.join(","))
             end
           end
         end
@@ -1482,7 +1484,7 @@ end
         end
       end
 
-      # TODO: have to add trim from users:visits
+      $redis_rtb.ltrim("users:visits", user_vals.count, -1)
 
       length = length - 1001
       start_point = start_point + 1001
