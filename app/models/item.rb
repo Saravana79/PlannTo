@@ -1519,8 +1519,7 @@ end
   def self.check_if_already_exist_in_user_visits(user_id, url)
     exists = false
     key = "users:last_visits:#{user_id}"
-    visited_url_length = $redis.llen(key)
-    visited_urls = $redis.lrange(key, 0, visited_url_length)
+    visited_urls = $redis.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
       exists = true
@@ -1551,7 +1550,7 @@ end
     end
 
     $redis.pipelined do
-      $redis.lpush(key, url)
+      $redis.lpush(key, url) if exists == false
       $redis.expire(key, 30.minutes)
     end
     exists
