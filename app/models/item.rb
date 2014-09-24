@@ -1408,9 +1408,10 @@ end
     last_used_item_urls = $redis.lrange("last_accessed_item_urls", 0, 5000)
     last_used_item_ids = $redis.lrange("last_accessed_item_ids", 0, 5000)
     t_length = length
+    start_point = 0
 
     begin
-      user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
+      user_vals = $redis_rtb.lrange("users:visits", start_point, start_point+1000)
       redis_rtb_hash = {}
 
       user_vals.each do |each_user_val|
@@ -1480,6 +1481,7 @@ end
       # TODO: have to add trim from users:visits
 
       length = length - 1001
+      start_point = start_point + 1001
       p "Remaining Length - #{length}"
     end while length > 0
 
