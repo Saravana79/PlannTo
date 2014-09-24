@@ -1419,6 +1419,9 @@ end
         p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
         unless each_user_val.blank?
           user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
+          if !url.blank?
+
+          end
           # already_exist, last_used_item_urls, last_used_item_ids = Item.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
           already_exist = Item.check_if_already_exist_in_user_visits(user_id, url)
           ranking = 0
@@ -1522,22 +1525,28 @@ end
     if visited_urls.include?(url)
       exists = true
     else
-      old_host = Addressable::URI.parse(url).host.downcase
-      host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
-      source_category = SourceCategory.where(:source => host).last
+      begin
+        old_host = Addressable::URI.parse(url).host.downcase
+        host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
+        source_category = SourceCategory.where(:source => host).last
 
-      if source_category.is_having_pagination && !source_category.pattern.blank?
-        pattern = source_category.pattern
-        str1, str2 = pattern.split("<page>")
-        exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]
-        if exp_val.to_s.is_an_integer?
-          patten_with_val = pattern.gsub("<page>", exp_val)
-          patten_for_query = pattern.gsub("<page>", ".*")
-          url_for_query = url.gsub(patten_with_val, patten_for_query)
-          regex_url = /#{url_for_query}/
-          results = visited_urls.grep(regex_url)
-          exists = true if results.count > 0
+        if !source_category.blank? && source_category.is_having_pagination && !source_category.pattern.blank?
+          pattern = source_category.pattern
+          str1, str2 = pattern.split("<page>")
+          exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]
+          if exp_val.to_s.is_an_integer?
+            patten_with_val = pattern.gsub("<page>", exp_val)
+            patten_for_query = pattern.gsub("<page>", ".*")
+            url_for_query = url.gsub(patten_with_val, patten_for_query)
+            regex_url = /#{url_for_query}/
+            results = visited_urls.grep(regex_url)
+            exists = true if results.count > 0
+          end
         end
+      rescue Exception => e
+        exists = true
+        p "Error url => #{url}"
+        p e
       end
     end
 
