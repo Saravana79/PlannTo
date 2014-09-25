@@ -4,6 +4,8 @@ $redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.passwo
 
 $redis_rtb = Redis.new(:host => 'rtbtarget.plannto.com', :port => 6379)
 
+new_uri = URI.parse("redisrtb.q0gfew.0001.apse1.cache.amazonaws.com:6379")
+$redis_new = Redis.new(:host => new_uri.host, :port => new_uri.port)
 # $redis_rtb = $redis
 
 Resque.redis = $redis
