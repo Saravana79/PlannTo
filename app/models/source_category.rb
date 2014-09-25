@@ -20,4 +20,10 @@ class SourceCategory < ActiveRecord::Base
     # Rails.cache.write("feed_url-sources-list", sources_list)
     $redis_rtb.set("feed_url-sources-list", sources_list.to_json)
   end
+
+  def self.get_source_category_with_paginations()
+    source_categories = {}
+    SourceCategory.all.map {|f| source_categories.merge!({f.source => {"is_having_pagination" => f.is_having_pagination, "pattern" => f.pattern}})}
+    source_categories
+  end
 end

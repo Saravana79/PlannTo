@@ -1405,8 +1405,7 @@ end
   def self.buying_list_process_in_redis
     length = $redis_rtb.llen("users:visits")
     base_item_ids = Item.get_base_items_from_config()
-    # last_used_item_urls = $redis.lrange("last_accessed_item_urls", 0, 5000)
-    # last_used_item_ids = $redis.lrange("last_accessed_item_ids", 0, 5000)
+    source_categories = SourceCategory.get_source_category_with_paginations()
     t_length = length
     start_point = 0
 
@@ -1419,11 +1418,7 @@ end
         p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
         unless each_user_val.blank?
           user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-          if !url.blank?
-
-          end
-          # already_exist, last_used_item_urls, last_used_item_ids = Item.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
-          already_exist = Item.check_if_already_exist_in_user_visits(user_id, url)
+          already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url)
           ranking = 0
 
           if already_exist == false
@@ -1441,13 +1436,13 @@ end
               item_key_list = []
               proc_item_ids = []
               item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
-              ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
-              $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
+              ranking_values = $redis_new.multi {item_key_list.each {|key| $redis_new.incrby(key, ranking)}}
+              $redis_new.pipelined { item_key_list.each {|key| $redis_new.expire(key, 2.weeks)} }
               ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
 
               unless proc_item_ids.blank?
                 new_key = "users:buyinglist:#{user_id}"
-                buying_list = $redis.get(new_key)
+                buying_list = $redis_new.get(new_key)
                 buying_list = buying_list.to_s.split(",")
 
                 if !buying_list.blank?
@@ -1455,7 +1450,7 @@ end
                   keys_list = []
 
                   buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-                  ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
+                  ranking_values = $redis_new.multi {keys_list.each {|key| $redis_new.get(key)}}
                   ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
 
                   buying_list = buying_list - have_to_del
@@ -1467,9 +1462,9 @@ end
 
                 buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
-                $redis.pipelined do
-                  $redis.set(new_key, buying_list.join(","))
-                  $redis.expire(new_key, 2.weeks)
+                $redis_new.pipelined do
+                  $redis_new.set(new_key, buying_list.join(","))
+                  $redis_new.expire(new_key, 2.weeks)
                 end
                 redis_rtb_hash.merge!(new_key => buying_list.join(","))
               end
@@ -1484,44 +1479,18 @@ end
         end
       end
 
-      $redis_rtb.ltrim("users:visits", user_vals.count, -1)
+      $redis_rtb.ltrim("users:visits", user_vals.count, -1) #TODO: temporary comment
 
       length = length - 1001
       start_point = start_point + 1001
       p "Remaining Length - #{length}"
     end while length > 0
-
-    # unless last_used_item_urls.blank?
-    #   $redis.pipelined do
-    #     $redis.lpush("last_accessed_item_urls", last_used_item_urls)
-    #     $redis.ltrim("last_accessed_item_urls", 0, 4999)
-    #
-    #     $redis.lpush("last_accessed_item_ids", last_used_item_ids)
-    #     $redis.ltrim("last_accessed_item_ids", 0, 4999)
-    #   end
-    # end
   end
 
-  # def self.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
-  #   url_for_check = "#{user_id}:#{url}"
-  #   item_id_for_check = "#{user_id}:#{item_ids}"
-  #   exists = false
-  #   if last_used_item_urls.include?(url_for_check)
-  #     exists = true
-  #   elsif last_used_item_ids.include?(item_id_for_check)
-  #     exists = true
-  #   end
-  #   last_used_item_urls << url_for_check
-  #   last_used_item_ids << item_id_for_check
-  #   last_used_item_urls.shift if last_used_item_urls.count > 5000
-  #   last_used_item_ids.shift if last_used_item_ids.count > 5000
-  #   return exists, last_used_item_ids, last_used_item_ids
-  # end
-
-  def self.check_if_already_exist_in_user_visits(user_id, url)
+  def self.check_if_already_exist_in_user_visits(source_categories, user_id, url)
     exists = false
     key = "users:last_visits:#{user_id}"
-    visited_urls = $redis.lrange(key, 0, -1)
+    visited_urls = $redis_new.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
       exists = true
@@ -1529,10 +1498,10 @@ end
       begin
         old_host = Addressable::URI.parse(url).host.downcase
         host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
-        source_category = SourceCategory.where(:source => host).last
+        source_category = source_categories[host]
 
-        if !source_category.blank? && source_category.is_having_pagination && !source_category.pattern.blank?
-          pattern = source_category.pattern
+        if !source_category.blank? && source_category["is_having_pagination"] && !source_category["pattern"].blank?
+          pattern = source_category["pattern"]
           str1, str2 = pattern.split("<page>")
           exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]
           if exp_val.to_s.is_an_integer?
@@ -1551,9 +1520,9 @@ end
       end
     end
 
-    $redis.pipelined do
-      $redis.lpush(key, url) if exists == false
-      $redis.expire(key, 30.minutes)
+    $redis_new.pipelined do
+      $redis_new.lpush(key, url) if exists == false
+      $redis_new.expire(key, 30.minutes)
     end
     exists
   end
