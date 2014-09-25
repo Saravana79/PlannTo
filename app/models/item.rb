@@ -1436,13 +1436,13 @@ end
               item_key_list = []
               proc_item_ids = []
               item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
-              ranking_values = $redis_new.multi {item_key_list.each {|key| $redis_new.incrby(key, ranking)}}
-              $redis_new.pipelined { item_key_list.each {|key| $redis_new.expire(key, 2.weeks)} }
+              ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
+              $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
               ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
 
               unless proc_item_ids.blank?
                 new_key = "users:buyinglist:#{user_id}"
-                buying_list = $redis_new.get(new_key)
+                buying_list = $redis.get(new_key)
                 buying_list = buying_list.to_s.split(",")
 
                 if !buying_list.blank?
@@ -1450,7 +1450,7 @@ end
                   keys_list = []
 
                   buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-                  ranking_values = $redis_new.multi {keys_list.each {|key| $redis_new.get(key)}}
+                  ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
                   ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
 
                   buying_list = buying_list - have_to_del
@@ -1462,9 +1462,9 @@ end
 
                 buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
-                $redis_new.pipelined do
-                  $redis_new.set(new_key, buying_list.join(","))
-                  $redis_new.expire(new_key, 2.weeks)
+                $redis.pipelined do
+                  $redis.set(new_key, buying_list.join(","))
+                  $redis.expire(new_key, 2.weeks)
                 end
                 redis_rtb_hash.merge!(new_key => buying_list.join(","))
               end
@@ -1472,14 +1472,15 @@ end
           end
         end
       end
+
+      $redis_rtb.ltrim("users:visits", user_vals.count, -1) #TODO: temporary comment
+
       $redis_rtb.pipelined do
         redis_rtb_hash.each do |key, val|
           $redis_rtb.set(key, val)
           $redis_rtb.expire(key, 2.weeks)
         end
       end
-
-      $redis_rtb.ltrim("users:visits", user_vals.count, -1) #TODO: temporary comment
 
       length = length - 1001
       start_point = start_point + 1001
@@ -1490,7 +1491,7 @@ end
   def self.check_if_already_exist_in_user_visits(source_categories, user_id, url)
     exists = false
     key = "users:last_visits:#{user_id}"
-    visited_urls = $redis_new.lrange(key, 0, -1)
+    visited_urls = $redis.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
       exists = true
@@ -1520,9 +1521,9 @@ end
       end
     end
 
-    $redis_new.pipelined do
-      $redis_new.lpush(key, url) if exists == false
-      $redis_new.expire(key, 30.minutes)
+    $redis.pipelined do
+      $redis.lpush(key, url) if exists == false
+      $redis.expire(key, 30.minutes)
     end
     exists
   end
