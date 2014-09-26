@@ -74,6 +74,15 @@ class AdvertisementsController < ApplicationController
     end
   end
 
+  def video_ads
+
+  end
+
+  def video_ad_tracking
+    p params
+    render :nothing => true
+  end
+
   def show_plannto_ads
     @item = @items.first
     item_details = @item.blank? ? [] : Itemdetail.get_item_detail_with_lowest_price(@item.id)
