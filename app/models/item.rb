@@ -1433,25 +1433,46 @@ end
 
             item_ids = item_ids.to_s.split(",")
             if item_ids.count < 10
-              item_key_list = []
-              proc_item_ids = []
-              item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
-              ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
-              $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
-              ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
+
+              u_key = "u:ac:#{user_id}"
+              u_values = $redis.hgetall(u_key)
+
+              # Remove expired items from user details
+              u_values.each do |key,val|
+                if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
+                  item_id = key.gsub("_la", "")
+                  u_values.delete("#{item_id}_c")
+                  u_values.delete("#{item_id}_la")
+                end
+              end
+
+              # incrby count for items
+              item_ids.each do |each_key|
+                if u_values["#{each_key}_c"].blank?
+                  u_values["#{each_key}_c"] = ranking
+                  u_values["#{each_key}_la"] = Date.today.to_s
+                else
+                  old_ranking = u_values["#{each_key}_c"]
+                  u_values["#{each_key}_c"] = old_ranking.to_i + ranking
+                  u_values["#{each_key}_la"] = Date.today.to_s
+                end
+              end
+
+              proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
 
               unless proc_item_ids.blank?
-                new_key = "users:buyinglist:#{user_id}"
-                buying_list = $redis.get(new_key)
+                buying_list = u_values["buyinglist"]
                 buying_list = buying_list.to_s.split(",")
 
                 if !buying_list.blank?
                   have_to_del = []
-                  keys_list = []
 
-                  buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-                  ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
-                  ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
+                  #remove items from buyinglist which detail is expired
+                  buying_list.each do |each_item|
+                    if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
+                      have_to_del << each_item
+                    end
+                  end
 
                   buying_list = buying_list - have_to_del
                   buying_list << proc_item_ids
@@ -1462,11 +1483,18 @@ end
 
                 buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
+                u_values["buyinglist"] = buying_list.join(",")
+
                 $redis.pipelined do
-                  $redis.set(new_key, buying_list.join(","))
-                  $redis.expire(new_key, 2.weeks)
+                  $redis.hmset(u_key, u_values.to_a.flatten)
+                  $redis.expire(u_key, 2.weeks)
                 end
-                redis_rtb_hash.merge!(new_key => buying_list.join(","))
+                redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => u_values["buyinglist"])
+              else
+                $redis.pipelined do
+                  $redis.hmset(u_key, u_values.to_a.flatten)
+                  $redis.expire(u_key, 2.weeks)
+                end
               end
             end
           end
