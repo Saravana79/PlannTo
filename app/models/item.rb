@@ -1407,10 +1407,10 @@ end
     base_item_ids = Item.get_base_items_from_config()
     source_categories = SourceCategory.get_source_category_with_paginations()
     t_length = length
-    start_point = 0
+    # start_point = 0
 
     begin
-      user_vals = $redis_rtb.lrange("users:visits", start_point, start_point+1000)
+      user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
       redis_rtb_hash = {}
 
       user_vals.each do |each_user_val|
@@ -1511,7 +1511,7 @@ end
       end
 
       length = length - 1001
-      start_point = start_point + 1001
+      # start_point = start_point + 1001
       p "Remaining Length - #{length}"
     end while length > 0
   end
