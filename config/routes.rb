@@ -428,5 +428,7 @@ resources :comments do
   match "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"
   match "advertisements/ab_test" => "advertisements#ab_test", :as => "advertisement_ab_test"
   match "advertisements/create_ab_settings" => "advertisements#create_ab_settings", :as => "create_ab_settings", :via => [:post]
+  match "advertisements/video_ad_tracking" => "advertisements#video_ad_tracking", :as => "video_ad_tracking", :via => [:get]
+  match "advertisements/video_ads" => "advertisements#video_ads", :as => "video_ads", :via => [:get]
 
 end

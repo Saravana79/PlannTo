@@ -1403,122 +1403,124 @@ end
   end
 
   def self.buying_list_process_in_redis
-    length = $redis_rtb.llen("users:visits")
-    base_item_ids = Item.get_base_items_from_config()
-    # last_used_item_urls = $redis.lrange("last_accessed_item_urls", 0, 5000)
-    # last_used_item_ids = $redis.lrange("last_accessed_item_ids", 0, 5000)
-    t_length = length
-    start_point = 0
+    if $redis.get("buying_list_is_running").to_i == 0
+      $redis.set("buying_list_is_running", 1)
+      length = $redis_rtb.llen("users:visits")
+      base_item_ids = Item.get_base_items_from_config()
+      source_categories = SourceCategory.get_source_category_with_paginations()
+      t_length = length
+      # start_point = 0
 
-    begin
-      user_vals = $redis_rtb.lrange("users:visits", start_point, start_point+1000)
-      redis_rtb_hash = {}
+      begin
+        user_vals = $redis_rtb.lrange("users:visits", 0, 1000)
+        redis_rtb_hash = {}
 
-      user_vals.each do |each_user_val|
-        t_length-=1
-        p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
-        unless each_user_val.blank?
-          user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-          if !url.blank?
+        user_vals.each do |each_user_val|
+          t_length-=1
+          p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
+          unless each_user_val.blank?
+            user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
+            already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url)
+            ranking = 0
 
-          end
-          # already_exist, last_used_item_urls, last_used_item_ids = Item.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
-          already_exist = Item.check_if_already_exist_in_user_visits(user_id, url)
-          ranking = 0
+            if already_exist == false
+              case type
+                when "Reviews", "Spec", "Photo"
+                  ranking = 10
+                when "Comparisons"
+                  ranking = 5
+                when "Lists", "Others"
+                  ranking = 2
+              end
 
-          if already_exist == false
-            case type
-              when "Reviews", "Spec", "Photo"
-                ranking = 10
-              when "Comparisons"
-                ranking = 5
-              when "Lists", "Others"
-                ranking = 2
-            end
+              item_ids = item_ids.to_s.split(",")
+              if item_ids.count < 10
 
-            item_ids = item_ids.to_s.split(",")
-            if item_ids.count < 10
-              item_key_list = []
-              proc_item_ids = []
-              item_ids.each {|each_key| item_key_list << "users:#{user_id}:item:#{each_key}"}
-              ranking_values = $redis.multi {item_key_list.each {|key| $redis.incrby(key, ranking)}}
-              $redis.pipelined { item_key_list.each {|key| $redis.expire(key, 2.weeks)} }
-              ranking_values.each_with_index { |val,index| proc_item_ids << item_ids[index] if val > 30}
+                u_key = "u:ac:#{user_id}"
+                u_values = $redis.hgetall(u_key)
 
-              unless proc_item_ids.blank?
-                new_key = "users:buyinglist:#{user_id}"
-                buying_list = $redis.get(new_key)
-                buying_list = buying_list.to_s.split(",")
+                # Remove expired items from user details
+                u_values.each do |key,val|
+                  if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
+                    item_id = key.gsub("_la", "")
+                    u_values.delete("#{item_id}_c")
+                    u_values.delete("#{item_id}_la")
+                  end
+                end
 
-                if !buying_list.blank?
-                  have_to_del = []
-                  keys_list = []
+                # incrby count for items
+                item_ids.each do |each_key|
+                  if u_values["#{each_key}_c"].blank?
+                    u_values["#{each_key}_c"] = ranking
+                    u_values["#{each_key}_la"] = Date.today.to_s
+                  else
+                    old_ranking = u_values["#{each_key}_c"]
+                    u_values["#{each_key}_c"] = old_ranking.to_i + ranking
+                    u_values["#{each_key}_la"] = Date.today.to_s
+                  end
+                end
 
-                  buying_list.each {|each_key| keys_list << "users:#{user_id}:item:#{each_key}"}
-                  ranking_values = $redis.multi {keys_list.each {|key| $redis.get(key)}}
-                  ranking_values.each_with_index { |val,index| have_to_del << buying_list[index] if val.blank?}
+                proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
 
-                  buying_list = buying_list - have_to_del
-                  buying_list << proc_item_ids
-                  buying_list = buying_list.flatten.uniq
+                unless proc_item_ids.blank?
+                  buying_list = u_values["buyinglist"]
+                  buying_list = buying_list.to_s.split(",")
+
+                  if !buying_list.blank?
+                    have_to_del = []
+
+                    #remove items from buyinglist which detail is expired
+                    buying_list.each do |each_item|
+                      if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
+                        have_to_del << each_item
+                      end
+                    end
+
+                    buying_list = buying_list - have_to_del
+                    buying_list << proc_item_ids
+                    buying_list = buying_list.flatten.uniq
+                  else
+                    buying_list = proc_item_ids
+                  end
+
+                  buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+
+                  u_values["buyinglist"] = buying_list.join(",")
+
+                  $redis.pipelined do
+                    $redis.hmset(u_key, u_values.to_a.flatten)
+                    $redis.expire(u_key, 2.weeks)
+                  end
+                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => u_values["buyinglist"])
                 else
-                  buying_list = proc_item_ids
+                  $redis.pipelined do
+                    $redis.hmset(u_key, u_values.to_a.flatten)
+                    $redis.expire(u_key, 2.weeks)
+                  end
                 end
-
-                buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
-
-                $redis.pipelined do
-                  $redis.set(new_key, buying_list.join(","))
-                  $redis.expire(new_key, 2.weeks)
-                end
-                redis_rtb_hash.merge!(new_key => buying_list.join(","))
               end
             end
           end
         end
-      end
-      $redis_rtb.pipelined do
-        redis_rtb_hash.each do |key, val|
-          $redis_rtb.set(key, val)
-          $redis_rtb.expire(key, 2.weeks)
+
+        $redis_rtb.ltrim("users:visits", user_vals.count, -1) #TODO: temporary comment
+
+        $redis_rtb.pipelined do
+          redis_rtb_hash.each do |key, val|
+            $redis_rtb.set(key, val)
+            $redis_rtb.expire(key, 2.weeks)
+          end
         end
-      end
 
-      $redis_rtb.ltrim("users:visits", user_vals.count, -1)
-
-      length = length - 1001
-      start_point = start_point + 1001
-      p "Remaining Length - #{length}"
-    end while length > 0
-
-    # unless last_used_item_urls.blank?
-    #   $redis.pipelined do
-    #     $redis.lpush("last_accessed_item_urls", last_used_item_urls)
-    #     $redis.ltrim("last_accessed_item_urls", 0, 4999)
-    #
-    #     $redis.lpush("last_accessed_item_ids", last_used_item_ids)
-    #     $redis.ltrim("last_accessed_item_ids", 0, 4999)
-    #   end
-    # end
+        length = length - 1001
+        # start_point = start_point + 1001
+        p "Remaining Length - #{length}"
+      end while length > 0
+      $redis.set("buying_list_is_running", 0)
+    end
   end
 
-  # def self.check_if_already_exist_in_last_used_item_urls(user_id, url, item_ids, last_used_item_urls, last_used_item_ids)
-  #   url_for_check = "#{user_id}:#{url}"
-  #   item_id_for_check = "#{user_id}:#{item_ids}"
-  #   exists = false
-  #   if last_used_item_urls.include?(url_for_check)
-  #     exists = true
-  #   elsif last_used_item_ids.include?(item_id_for_check)
-  #     exists = true
-  #   end
-  #   last_used_item_urls << url_for_check
-  #   last_used_item_ids << item_id_for_check
-  #   last_used_item_urls.shift if last_used_item_urls.count > 5000
-  #   last_used_item_ids.shift if last_used_item_ids.count > 5000
-  #   return exists, last_used_item_ids, last_used_item_ids
-  # end
-
-  def self.check_if_already_exist_in_user_visits(user_id, url)
+  def self.check_if_already_exist_in_user_visits(source_categories, user_id, url)
     exists = false
     key = "users:last_visits:#{user_id}"
     visited_urls = $redis.lrange(key, 0, -1)
@@ -1529,10 +1531,10 @@ end
       begin
         old_host = Addressable::URI.parse(url).host.downcase
         host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
-        source_category = SourceCategory.where(:source => host).last
+        source_category = source_categories[host]
 
-        if !source_category.blank? && source_category.is_having_pagination && !source_category.pattern.blank?
-          pattern = source_category.pattern
+        if !source_category.blank? && source_category["is_having_pagination"] && !source_category["pattern"].blank?
+          pattern = source_category["pattern"]
           str1, str2 = pattern.split("<page>")
           exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]
           if exp_val.to_s.is_an_integer?
