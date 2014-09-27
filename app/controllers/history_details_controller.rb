@@ -125,7 +125,7 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
-      if ((vendor.id == 9874 || vendor.id == 9858 ) && (item_id == 22869 || item_id == 22869|| item_id ==22800 || item_id == 15404 || item_id == 15434 || item_id == 21986))
+      if ((vendor.id == 9874 || vendor.id == 9858 ) && (item_id == 22869 || item_id == 22988|| item_id ==22800 || item_id == 15404 || item_id == 15434 || item_id == 21986))
         url = url.gsub("offer_id=17","offer_id=21")
       end 
       redirect_to url
