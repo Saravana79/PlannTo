@@ -47,7 +47,7 @@ end
     term = param[:term]
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launched",
-                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on"]
+                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on","bangalore", "hyderabad", "chennai","mumbai","and","delhi","valid"]
     term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     term = term.gsub("-","")
     @items = Sunspot.search(search_type) do
