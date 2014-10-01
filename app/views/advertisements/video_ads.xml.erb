@@ -10,7 +10,7 @@
 	 <![CDATA[ ]]>
 	</Description>
 	<Impression>
-	  <![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=impression]]>
+	  <![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=impression]]>
 	</Impression>
 	<Creatives>
 	<% if 1==1 %>
@@ -19,39 +19,39 @@
 <Duration>00:00:11</Duration>
 <TrackingEvents>
 <Tracking event="start">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=view0]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view0]]>
 </Tracking>
 <Tracking event="firstQuartile">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=view25]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view25]]>
 </Tracking>
 <Tracking event="midpoint">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=view50]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view50]]>
 </Tracking>
 <Tracking event="thirdQuartile">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=view75]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view75]]>
 </Tracking>
 <Tracking event="complete">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=view100]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view100]]>
 </Tracking>
 <Tracking event="mute">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=mute]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=mute]]>
 </Tracking>
 <Tracking event="unmute">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=unmute]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=unmute]]>
 </Tracking>
 <Tracking event="pause">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=pause]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=pause]]>
 </Tracking>
 <Tracking event="resume">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=resume]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=resume]]>
 </Tracking>
 <Tracking event="fullscreen">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=fullscreen]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=fullscreen]]>
 </Tracking>
 </TrackingEvents>
 <VideoClicks>
 <ClickThrough>
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=clickthru&redirect=http%3A%2F%2Fliverail.com%2F]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=clickthru&redirect=http%3A%2F%2Fliverail.com%2F]]>
 </ClickThrough>
 </VideoClicks>
 <MediaFiles>
@@ -144,7 +144,7 @@ http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
 </TrackingEvents>
 <NonLinear id="1" width="400" height="150" scalable="false" maintainAspectRatio="false">
 <IFrameResource creativeType="iframe">
-<![CDATA[http://localhost:3000/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
+<![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
 </IFrameResource>
 <NonLinearClickThrough>
 <![CDATA[ http://google.com ]]>
@@ -161,40 +161,41 @@ http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
 </StaticResource>
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=companion]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion]]>
 </Tracking>
 </TrackingEvents>
 <CompanionClickThrough>
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
 </CompanionClickThrough>
 </Companion>
 <Companion width="300" height="250">
 <IFrameResource>
-      <![CDATA[http://localhost:3000/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
+      <![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
  </IFrameResource>
 <!--<StaticResource creativeType="image/jpeg">-->
 <!--<![CDATA[http://cdn.liverail.com/adasset/229/331/300x250.jpg]]>-->
 <!--</StaticResource>-->
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=companion_iframe]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion_iframe]]>
 </Tracking>
 </TrackingEvents>
 <CompanionClickThrough>
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
 </CompanionClickThrough>
 </Companion>
 <Companion width="728" height="90">
 <StaticResource creativeType="image/jpeg">
 <![CDATA[http://cdn.liverail.com/adasset4/1331/229/331/e325b87ef48ec343e4a5d807f094fc39.jpg]]>
+<!--<![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>-->
 </StaticResource>
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=companion]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion]]>
 </Tracking>
 </TrackingEvents>
 <CompanionClickThrough>
-<![CDATA[http://localhost:3000/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
 </CompanionClickThrough>
 </Companion>
 </CompanionAds>

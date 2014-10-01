@@ -75,7 +75,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ads
-
+    @domain = Rails.env == "production" ? "https://www.plannto.com" : "http://localhost:3000"
   end
 
   def video_ad_tracking
