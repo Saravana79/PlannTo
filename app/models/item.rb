@@ -1462,41 +1462,36 @@ end
 
                 proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
 
-                unless proc_item_ids.blank?
-                  buying_list = u_values["buyinglist"]
-                  buying_list = buying_list.to_s.split(",")
+                old_buying_list = u_values["buyinglist"]
+                buying_list = old_buying_list.to_s.split(",")
 
-                  if !buying_list.blank?
-                    have_to_del = []
+                if !buying_list.blank?
+                  have_to_del = []
 
-                    #remove items from buyinglist which detail is expired
-                    buying_list.each do |each_item|
-                      if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
-                        have_to_del << each_item
-                      end
+                  #remove items from buyinglist which detail is expired
+                  buying_list.each do |each_item|
+                    if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
+                      have_to_del << each_item
                     end
-
-                    buying_list = buying_list - have_to_del
-                    buying_list << proc_item_ids
-                    buying_list = buying_list.flatten.uniq
-                  else
-                    buying_list = proc_item_ids
                   end
 
-                  buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
-
-                  u_values["buyinglist"] = buying_list.join(",")
-
-                  $redis.pipelined do
-                    $redis.hmset(u_key, u_values.to_a.flatten)
-                    $redis.expire(u_key, 2.weeks)
-                  end
-                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => u_values["buyinglist"])
+                  buying_list = buying_list - have_to_del
+                  buying_list << proc_item_ids
+                  buying_list = buying_list.flatten.uniq
                 else
-                  $redis.pipelined do
-                    $redis.hmset(u_key, u_values.to_a.flatten)
-                    $redis.expire(u_key, 2.weeks)
-                  end
+                  buying_list = proc_item_ids
+                end
+
+                buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+
+                if !old_buying_list.blank? || !buying_list.blank?
+                  u_values["buyinglist"] = buying_list.join(",")
+                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => u_values["buyinglist"])
+                end
+
+                $redis.pipelined do
+                  $redis.hmset(u_key, u_values.flatten)
+                  $redis.expire(u_key, 2.weeks)
                 end
               end
             end
