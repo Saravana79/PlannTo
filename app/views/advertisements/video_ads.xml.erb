@@ -123,29 +123,18 @@ http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
 <Creative sequence="2" AdID="">
 <NonLinearAds>
 <TrackingEvents>
-<Tracking event="start">
-<![CDATA[http://ad.doubleclick.net/activity;src=1379578;met=1;v=1;pid=45922216;aid=222296909;ko=0;cid=35460632;rid=35478450;rv=2;timestamp=1496883;eid1=11;ecn1=1;etm1=0;]]>
-</Tracking>
-<Tracking event="midpoint">
-<![CDATA[http://ad.doubleclick.net/activity;src=1379578;met=1;v=1;pid=45922216;aid=222296909;ko=0;cid=35460632;rid=35478450;rv=2;timestamp=1496883;eid1=18;ecn1=1;etm1=0;]]>
-</Tracking>
-<Tracking event="complete">
-<![CDATA[http://ad.doubleclick.net/activity;src=1379578;met=1;v=1;pid=45922216;aid=222296909;ko=0;cid=35460632;rid=35478450;rv=2;timestamp=1496883;eid1=13;ecn1=1;etm1=0;]]>
-</Tracking>
-<Tracking event="mute">
-<![CDATA[http://ad.doubleclick.net/activity;src=1379578;met=1;v=1;pid=45922216;aid=222296909;ko=0;cid=35460632;rid=35478450;rv=2;timestamp=1496883;eid1=16;ecn1=1;etm1=0;]]>
-</Tracking>
-<Tracking event="pause">
-<![CDATA[http://ad.doubleclick.net/activity;src=1379578;met=1;v=1;pid=45922216;aid=222296909;ko=0;cid=35460632;rid=35478450;rv=2;timestamp=1496883;eid1=15;ecn1=1;etm1=0;]]>
-</Tracking>
-<Tracking event="fullscreen">
-<![CDATA[http://ad.doubleclick.net/activity;src=1379578;met=1;v=1;pid=45922216;aid=222296909;ko=0;cid=35460632;rid=35478450;rv=2;timestamp=1496883;eid1=19;ecn1=1;etm1=0;]]>
+<Tracking event="creativeView">
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=non_linear]]>
 </Tracking>
 </TrackingEvents>
-<NonLinear id="1" width="400" height="150" scalable="false" maintainAspectRatio="false">
-<IFrameResource creativeType="iframe">
-<![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
-</IFrameResource>
+<!--<NonLinear id="1" width="400" height="150" scalable="false" maintainAspectRatio="false">-->
+<NonLinear id="1" width="300" height="250" scalable="false" maintainAspectRatio="false">
+<!--<StaticResource creativeType="image/jpeg">-->
+<!--<![CDATA[http://s0.2mdn.net/1379578/PID_1244559_1281625520000_google.jpg]]>-->
+<!--</StaticResource>-->
+<IFrameResource>
+   <![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
+ </IFrameResource>
 <NonLinearClickThrough>
 <![CDATA[ http://google.com ]]>
 </NonLinearClickThrough>
@@ -161,7 +150,7 @@ http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
 </StaticResource>
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion_300_60]]>
 </Tracking>
 </TrackingEvents>
 <CompanionClickThrough>
@@ -170,7 +159,7 @@ http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
 </Companion>
 <Companion width="300" height="250">
 <IFrameResource>
-      <![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
+   <![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
  </IFrameResource>
 <!--<StaticResource creativeType="image/jpeg">-->
 <!--<![CDATA[http://cdn.liverail.com/adasset/229/331/300x250.jpg]]>-->
@@ -191,7 +180,7 @@ http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
 </StaticResource>
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion]]>
+<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion_728_90]]>
 </Tracking>
 </TrackingEvents>
 <CompanionClickThrough>
