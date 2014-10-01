@@ -1489,9 +1489,17 @@ end
                   redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => u_values["buyinglist"])
                 end
 
-                $redis.pipelined do
-                  $redis.hmset(u_key, u_values.flatten)
-                  $redis.expire(u_key, 2.weeks)
+                begin
+                  $redis.pipelined do
+                    $redis.hmset(u_key, u_values.flatten)
+                    $redis.expire(u_key, 2.weeks)
+                  end
+                rescue Exception => e
+                  p 9999999999999999999999
+                  p u_key
+                  p u_values
+                  p u_values.flatten
+                  raise e
                 end
               end
             end
