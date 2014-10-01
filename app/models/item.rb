@@ -1490,12 +1490,19 @@ end
                 end
 
                 begin
-                  $redis.pipelined do
-                    $redis.hmset(u_key, u_values.flatten)
-                    $redis.expire(u_key, 2.weeks)
+                  if u_values.blank?
+                    del_key = "users:buyinglist:#{user_id}"
+                    $redis.del(u_key)
+                    $redis_rtb.del(del_key)
+                    redis_rtb_hash.delete(del_key)
+                  else
+                    $redis.pipelined do
+                      $redis.hmset(u_key, u_values.flatten)
+                      $redis.expire(u_key, 2.weeks)
+                    end
                   end
                 rescue Exception => e
-                  p 9999999999999999999999
+                  p "Problems while hmset: Args:-"
                   p u_key
                   p u_values
                   p u_values.flatten
