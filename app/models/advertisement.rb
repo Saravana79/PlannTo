@@ -15,6 +15,7 @@ class Advertisement < ActiveRecord::Base
   belongs_to :content
   belongs_to :user
   belongs_to :vendor
+  has_one :ad_video_detail
 
   after_save :update_click_url_based_on_vendor
   after_save :update_redis_with_advertisement

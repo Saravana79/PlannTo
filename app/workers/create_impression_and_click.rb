@@ -6,6 +6,8 @@ class CreateImpressionAndClick
       AddImpression.create_new_record(obj_params)
     elsif class_name == "Click"
       Click.create_new_record(obj_params)
+    elsif class_name == "VideoImpression"
+      VideoImpression.create_new_record(obj_params)
     end
   end
 end

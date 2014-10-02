@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140920102724) do
+ActiveRecord::Schema.define(:version => 20141002110219) do
+
+  create_table "ad_video_details", :force => true do |t|
+    t.integer  "advertisement_id"
+    t.string   "flv"
+    t.string   "wmv"
+    t.string   "webm"
+    t.string   "total_time"
+    t.boolean  "skip"
+    t.string   "skip_time"
+    t.string   "linear_click_url"
+    t.string   "non_linear_img_url"
+    t.string   "non_linear_click_url"
+    t.string   "companion_type"
+    t.string   "companion_img_url"
+    t.string   "companion_click_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "add_impressions", :force => true do |t|
     t.string   "advertisement_type"
@@ -1259,8 +1277,28 @@ ActiveRecord::Schema.define(:version => 20140920102724) do
     t.text    "default_text"
   end
 
+  create_table "video_ad_events", :force => true do |t|
+    t.uuid     "video_impression_id"
+    t.string   "event_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "video_contents", :force => true do |t|
     t.string "youtube"
+  end
+
+  create_table "video_impressions", :force => true do |t|
+    t.integer  "advertisement_id"
+    t.string   "type"
+    t.string   "ref_url"
+    t.string   "ip_address"
+    t.string   "winning_price"
+    t.string   "sid"
+    t.string   "item_id"
+    t.datetime "impression_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "vote_counts", :force => true do |t|

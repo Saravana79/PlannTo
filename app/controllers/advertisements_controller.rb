@@ -75,11 +75,18 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ads
-    @domain = Rails.env == "production" ? "https://www.plannto.com" : "http://localhost:3000"
+    params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+    params[:size] ||= "300x250"
+    advertisement = Advertisement.where(:id => params[:ads_id]).last
+    @ad_video_detail = advertisement.ad_video_detail
+
+    @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
+    @companion_dynamic_url = "#{configatron.hostname}/advertisments/show_ads?item_id=#{params[:item_id]}&ads_id=#{params[:ads_id]}&size=#{params[:size]}&ref_url=#{params[:ref_url]}"
   end
 
   def video_ad_tracking
     p params
+    VideoAdEvent.create(:video_impression_id => params[:impression_id], :event_name => params[:metric])
     render :nothing => true
   end
 

@@ -1,195 +1,116 @@
 <!--<VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:noNamespaceSchemaLocation='vast.xsd'>-->
 <VAST version="3.0">
- <Ad>
-  <InLine>
-  	<AdSystem version="4.11.1-2">Plannto</AdSystem>
-  	<AdTitle>
-     <![CDATA[Plannto Ads]]>
-	</AdTitle>
-	<Description>
-	 <![CDATA[ ]]>
-	</Description>
-	<Impression>
-	  <![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=impression]]>
-	</Impression>
-	<Creatives>
-	<% if 1==1 %>
-	<Creative sequence="1" id="331">
-	<Linear>
-<Duration>00:00:11</Duration>
+<Ad>
+<InLine>
+<AdSystem version="4.11.1-2">Plannto</AdSystem>
+<AdTitle>
+ <![CDATA[Plannto Ads]]>
+</AdTitle>
+<Description>
+ <![CDATA[ ]]>
+</Description>
+<Impression>
+  <![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=all-impression&impression_id=<%= @impression_id %>]]>
+</Impression>
+<Creatives>
+
+<Creative sequence="1" id="331">
+<Linear <% if @ad_video_detail.skip == true %> skipoffset="<%= @ad_video_detail.skip_time %>" <% end %>>
+<Duration><%= @ad_video_detail.total_time %></Duration>
 <TrackingEvents>
 <Tracking event="start">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view0]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-start&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="firstQuartile">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view25]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-firstQuartile&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="midpoint">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view50]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-midpoint&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="thirdQuartile">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view75]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-thirdQuartile&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="complete">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=view100]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-complete&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="mute">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=mute]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-mute&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="unmute">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=unmute]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-unmute&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="pause">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=pause]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-pause&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="resume">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=resume]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-resume&impression_id=<%= @impression_id %>]]>
 </Tracking>
 <Tracking event="fullscreen">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=fullscreen]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-fullscreen&impression_id=<%= @impression_id %>]]>
+</Tracking>
+<% if @ad_video_detail.skip == true %>
+<Tracking event="skip">
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-skip&impression_id=<%= @impression_id %>]]>
+</Tracking>
+<% end %>
+<Tracking event="progress"  offset="00:00:10">
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-progress&impression_id=<%= @impression_id %>]]>
 </Tracking>
 </TrackingEvents>
 <VideoClicks>
 <ClickThrough>
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=clickthru&redirect=http%3A%2F%2Fliverail.com%2F]]>
+<![CDATA[<%= @ad_video_detail.linear_click_url %>]]>
 </ClickThrough>
 </VideoClicks>
 <MediaFiles>
 <MediaFile delivery="progressive" bitrate="256" width="480" height="352" type="video/x-flv">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/lo.flv
-]]>
+<![CDATA[<%= @ad_video_detail.flv %>]]>
 </MediaFile>
 <MediaFile delivery="progressive" bitrate="256" width="640" height="360" type="video/x-ms-wmv">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/lo.wmv
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="400" width="320" height="180" type="video/mp4">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/lo.mp4
-]]>
+<![CDATA[<%= @ad_video_detail.wmv %>]]>
 </MediaFile>
 <MediaFile delivery="progressive" bitrate="400" width="320" height="180" type="video/webm">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/lo.webm
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="512" width="480" height="352" type="video/x-flv">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/me.flv
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="512" width="640" height="360" type="video/x-ms-wmv">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/me.wmv
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="600" width="640" height="480" type="video/mp4">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/me.mp4
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="600" width="640" height="480" type="video/webm">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/me.webm
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="1024" width="480" height="352" type="video/mp4">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/hi.mp4
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="1024" width="480" height="352" type="video/webm">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/hi.webm
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="1024" width="480" height="352" type="video/x-flv">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/hi.flv
-]]>
-</MediaFile>
-<MediaFile delivery="progressive" bitrate="1024" width="640" height="360" type="video/x-ms-wmv">
-<![CDATA[
-http://cdn.liverail.com/adasset4/1331/229/331/hi.wmv
-]]>
+<![CDATA[<%= @ad_video_detail.webm %>]]>
 </MediaFile>
 </MediaFiles>
 </Linear>
 </Creative>
-<% end %>
 
-<Creative sequence="2" AdID="">
+<Creative sequence="1" AdID="">
 <NonLinearAds>
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=non_linear]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=non_linear-impression&impression_id=<%= @impression_id %>]]>
 </Tracking>
 </TrackingEvents>
-<!--<NonLinear id="1" width="400" height="150" scalable="false" maintainAspectRatio="false">-->
-<NonLinear id="1" width="300" height="250" scalable="false" maintainAspectRatio="false">
-<!--<StaticResource creativeType="image/jpeg">-->
-<!--<![CDATA[http://s0.2mdn.net/1379578/PID_1244559_1281625520000_google.jpg]]>-->
-<!--</StaticResource>-->
-<IFrameResource>
-   <![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
- </IFrameResource>
+<NonLinear id="1" width="480" height="90" scalable="false" maintainAspectRatio="false">
+<StaticResource creativeType="image/jpeg">
+<![CDATA[<%= @ad_video_detail.non_linear_img_url %>]]>
+</StaticResource>
 <NonLinearClickThrough>
-<![CDATA[ http://google.com ]]>
+<![CDATA[<%= @ad_video_detail.non_linear_click_url %>]]>
 </NonLinearClickThrough>
 <AdParameters/>
 </NonLinear>
 </NonLinearAds>
 </Creative>
-<Creative sequence="1" id="331">
+
+<Creative>
 <CompanionAds>
-<Companion width="300" height="60">
-<StaticResource creativeType="image/jpeg">
-<![CDATA[http://cdn.liverail.com/adasset/229/331/300x60.jpg]]>
-</StaticResource>
-<TrackingEvents>
-<Tracking event="creativeView">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion_300_60]]>
-</Tracking>
-</TrackingEvents>
-<CompanionClickThrough>
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
-</CompanionClickThrough>
-</Companion>
 <Companion width="300" height="250">
 <IFrameResource>
-   <![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>
- </IFrameResource>
-<!--<StaticResource creativeType="image/jpeg">-->
-<!--<![CDATA[http://cdn.liverail.com/adasset/229/331/300x250.jpg]]>-->
-<!--</StaticResource>-->
+<![CDATA[<%= @companion_dynamic_url %>]]>
+</IFrameResource>
 <TrackingEvents>
 <Tracking event="creativeView">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion_iframe]]>
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=companion-impression&impression_id=<%= @impression_id %>]]>
 </Tracking>
 </TrackingEvents>
-<CompanionClickThrough>
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
-</CompanionClickThrough>
-</Companion>
-<Companion width="728" height="90">
-<StaticResource creativeType="image/jpeg">
-<![CDATA[http://cdn.liverail.com/adasset4/1331/229/331/e325b87ef48ec343e4a5d807f094fc39.jpg]]>
-<!--<![CDATA[<%= @domain %>/advertisments/show_ads?item_id=5892&ads_id=&size=300*250&more_vendors=true&ad_as_widget=true&ref_url=file%3A%2F%2F%2Fhome%2Fsivakumar%2FDesktop%2Fshow_ads_optimized.html]]>-->
-</StaticResource>
-<TrackingEvents>
-<Tracking event="creativeView">
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=companion_728_90]]>
-</Tracking>
-</TrackingEvents>
-<CompanionClickThrough>
-<![CDATA[<%= @domain %>/advertisements/video_ad_tracking?metric=cclickthru&redirect=http%3A%2F%2Fwww.liverail.com]]>
-</CompanionClickThrough>
 </Companion>
 </CompanionAds>
 </Creative>
+
 </Creatives>
-  </InLine>
- </Ad>
+</InLine>
+</Ad>
 </VAST>
