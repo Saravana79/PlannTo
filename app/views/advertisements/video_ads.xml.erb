@@ -64,13 +64,13 @@
 </VideoClicks>
 <MediaFiles>
 <MediaFile delivery="progressive" bitrate="256" width="480" height="352" type="video/x-flv">
-<![CDATA[<%= @ad_video_detail.flv %>]]>
+<![CDATA[<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.flv %>]]>
 </MediaFile>
 <MediaFile delivery="progressive" bitrate="256" width="640" height="360" type="video/x-ms-wmv">
-<![CDATA[<%= @ad_video_detail.wmv %>]]>
+<![CDATA[<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.wmv %>]]>
 </MediaFile>
 <MediaFile delivery="progressive" bitrate="400" width="320" height="180" type="video/webm">
-<![CDATA[<%= @ad_video_detail.webm %>]]>
+<![CDATA[<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.webm %>]]>
 </MediaFile>
 </MediaFiles>
 </Linear>
@@ -85,7 +85,7 @@
 </TrackingEvents>
 <NonLinear id="1" width="480" height="90" scalable="false" maintainAspectRatio="false">
 <StaticResource creativeType="image/jpeg">
-<![CDATA[<%= @ad_video_detail.non_linear_img_url %>]]>
+<![CDATA[<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.non_linear_img_url %>]]>
 </StaticResource>
 <NonLinearClickThrough>
 <![CDATA[<%= @ad_video_detail.non_linear_click_url %>]]>
