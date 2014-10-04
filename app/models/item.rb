@@ -1565,7 +1565,8 @@ end
 
     $redis.pipelined do
       $redis.lpush(key, url) if exists == false
-      $redis.expire(key, 30.minutes)
+      # $redis.expire(key, 30.minutes) #TODO: enable this by EOD and remove the next line
+      $redis.expire(key, 5.hours)
     end
     exists
   end
