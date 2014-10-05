@@ -21,7 +21,7 @@ body {
 
 
 .advt-block { margin:0; padding:0;}
-.advt-728 { margin:0; padding:0; width:428px; height:60px; background:#fff; border:1px solid #F1F0F0;}
+.advt-728 { margin:0; padding:0; width:468px; height:60px; background:#fff; border:1px solid #F1F0F0;}
 
 .advt-728 .advt-box { margin:0; padding:0;}
 .advt-728 .advt-box .logo{ margin:0 auto; padding: 0; text-align:center; vertical-align:middle; float:left; width:80px; height:60px; display:block; border-right:1px solid #F1F0F0;}
@@ -41,7 +41,7 @@ body {
 
 .advt-728 .advt-box .product-container .text-desc{margin: 0;padding: 0;color: #222; font-size: 8px; height: 45px; text-align:center;font-family: Arial;}
 .advt-728 .advt-box .product-container .price-strike{margin: 0;padding: 0;color: #585858;font-size: 11px;text-decoration: line-through; text-align:center;}
-.advt-728 .advt-box .product-container .price{ margin: 6px 0 0 0; padding:0; color:#bf0000; font-size:14px; font-weight:bold;text-align:center;font-family: Arial monospace;width:148px;}
+.advt-728 .advt-box .product-container .price{ margin: 3px 0 0 0; padding:0; color:#bf0000; font-size:14px; font-weight:bold;text-align:center;font-family: Arial monospace;width:148px;}
 
 .advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
 .advt-728 .advt-box .btn .shop-now{ margin:0; padding:6px 5px; background:#F76300; color:#fff; font-size:10px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
@@ -57,7 +57,7 @@ body {
     /*padding:0px 0px 0 8px;*/
     position:relative;
     float:left;
-    margin-left: 25px;
+    margin-left: 65px;
     
 }
 .pager a {
