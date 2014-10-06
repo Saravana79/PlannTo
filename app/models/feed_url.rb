@@ -407,6 +407,7 @@ class FeedUrl < ActiveRecord::Base
   def check_and_update_mobile_site_feed_url(param, user, remote_ip)
     url = self.url
     host = Addressable::URI.parse(url).host.downcase
+    host = host.start_with?('www.') ? host[4..-1] : host
     source_category = SourceCategory.where(:source => host).last
     if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
       prefix = source_category.prefix
@@ -423,5 +424,26 @@ class FeedUrl < ActiveRecord::Base
         new_feed_url.update_attributes(:status => 1, :default_status => 6)
       end
     end
+  end
+
+  def check_and_update_sub_type
+    source_hash = $redis_rtb.get("sources_list_title_results")
+    unless source_hash.blank?
+      source_list = JSON.parse(source_hash)
+      host = Addressable::URI.parse(self.url).host.downcase
+      updated_host = host.start_with?('www.') ? host[4..-1] : host
+      source_details = source_list[updated_host]
+      if !source_details["title_check"].blank? && source_details["title_check"].to_s == "true"
+        p check_details = source_details["check_details"].to_s.split(",")
+        check_details = Hash[*check_details]
+        p title = self.title
+        check_details.each do |key, value|
+          if title.include?(key)
+            return value
+          end
+        end
+      end
+    end
+    return nil
   end
 end

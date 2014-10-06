@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141006101323) do
+ActiveRecord::Schema.define(:version => 20141006111753) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -1089,6 +1089,10 @@ ActiveRecord::Schema.define(:version => 20141006101323) do
     t.string   "prefix"
     t.boolean  "is_having_pagination", :default => false
     t.string   "pattern"
+    t.boolean  "title_check"
+    t.string   "check_details"
+    t.boolean  "generic_check"
+    t.string   "generic_details"
   end
 
   create_table "sourceitems", :force => true do |t|

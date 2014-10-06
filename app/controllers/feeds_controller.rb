@@ -229,7 +229,9 @@ class FeedsController < ApplicationController
         if !@feed_url.blank?
           @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
           @article.title = @feed_url.title
-          p @article.sub_type = @article.find_subtype(@article.title)
+          @article.sub_type = @article.find_subtype(@article.title)
+          sub_type = @feed_url.check_and_update_sub_type()
+          @article.sub_type = sub_type unless sub_type.blank?
           @article.description = @feed_url.summary
           @images = @feed_url.images.split(",")
           @article.thumbnail = @images.first if @images.count > 0
