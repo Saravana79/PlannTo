@@ -177,13 +177,12 @@ class FeedsController < ApplicationController
           param = { "feed_url_id" => feed_url.id, "default_item_id" => "", "submit_url" => "submit_url",
                     "article_content" => { "itemtype_id" => "", "type" => "ArticleContent", "thumbnail" => thumbnail, "title" => feed_url.title, "url" => feed_url.url,
                                            "sub_type" => category, "description" => feed_url.summary },
-                    "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product,
-                    "old_default_values"=>"#{old_category}-", "new_default_values"=>"#{category}-" }
+                    "share_from_home" => "", "detail" => "", "articles_item_id" => params[:articles_item_id], "external" => "true", "score" => "0", "relevance_product" => relevance_product }
 
           @through_rss = true
           Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
         end
-        @feed_urls.update_all(:status => 1)
+        @feed_urls.update_all(:status => 1, :default_status => 6)
       end
     rescue Exception => e
       @error = true

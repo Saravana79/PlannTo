@@ -8,7 +8,7 @@ class ArticleContentsController < ApplicationController
       param = params
       old_def_val = params[:old_default_values]
       new_def_val = params[:article_content][:sub_type].to_s + "-" + params[:articles_item_id].to_s
-      def_status = old_def_val == new_def_val
+      def_status = old_def_val == new_def_val ? 1 : 0
       feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
       feed_url.update_attributes!(:old_default_values => old_def_val, :new_default_values => new_def_val, :default_status => def_status)
       param = param.reject {|key| ["utf8", "authenticity_token", "commit", "action", "controller"].include?(key)}

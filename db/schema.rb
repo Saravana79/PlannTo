@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141002110219) do
+ActiveRecord::Schema.define(:version => 20141006101323) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -469,7 +469,7 @@ ActiveRecord::Schema.define(:version => 20141002110219) do
     t.string   "additional_details"
     t.string   "old_default_values"
     t.string   "new_default_values"
-    t.boolean  "default_status"
+    t.integer  "default_status"
     t.integer  "article_content_id"
     t.string   "article_category"
     t.string   "article_item_ids"

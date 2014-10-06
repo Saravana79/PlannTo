@@ -420,7 +420,7 @@ class FeedUrl < ActiveRecord::Base
         new_param.merge!(:feed_url_id => new_feed_url.id)
         new_param[:article_content].merge!(:url => new_feed_url.url)
         Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, new_param.to_json, user.blank? ? nil : user.id, remote_ip)
-        new_feed_url.update_attributes(:status => 1)
+        new_feed_url.update_attributes(:status => 1, :default_status => 6)
       end
     end
   end
