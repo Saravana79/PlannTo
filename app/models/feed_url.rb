@@ -426,7 +426,7 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def check_and_update_sub_type
+  def check_and_update_sub_type(article)
     source_hash = $redis_rtb.get("sources_list_title_results")
     unless source_hash.blank?
       source_list = JSON.parse(source_hash)
@@ -434,12 +434,18 @@ class FeedUrl < ActiveRecord::Base
       updated_host = host.start_with?('www.') ? host[4..-1] : host
       source_details = source_list[updated_host]
       if !source_details["title_check"].blank? && source_details["title_check"].to_s == "true"
-        p check_details = source_details["check_details"].to_s.split(",")
+        p check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split(">")}.flatten.map(&:strip)
         check_details = Hash[*check_details]
         p title = self.title
         check_details.each do |key, value|
           if title.include?(key)
-            return value
+            if value.blank?
+              changed_title = title.to_s.gsub(key, "")
+              return_val = article.find_subtype(changed_title)
+              return return_val
+            else
+              return value
+            end
           end
         end
       end
