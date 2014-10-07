@@ -434,7 +434,7 @@ class FeedUrl < ActiveRecord::Base
       updated_host = host.start_with?('www.') ? host[4..-1] : host
       source_details = source_list[updated_host]
       if !source_details["check_details"].blank?
-        check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split(">")}.flatten.map(&:strip)
+        check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
         check_details = Hash[*check_details]
         title = article.title
         check_details.each do |key, value|

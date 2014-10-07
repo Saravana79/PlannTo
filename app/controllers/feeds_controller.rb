@@ -225,6 +225,7 @@ class FeedsController < ApplicationController
 
       if @feed_url.status == 1 && !@article_content.blank?
         @already_shared = true
+        @shared_message = "Shared Automatically from the below url"
       else
         if !@feed_url.blank?
           @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)

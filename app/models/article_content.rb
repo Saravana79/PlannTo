@@ -359,12 +359,29 @@ class ArticleContent < Content
     if !source_category.blank?
       if !source_category.prefix.blank?
         prefix = source_category.prefix
-        processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
-        processed_url = url.gsub(old_host, "%#{processed_host}%")
+        splitted_prefix = prefix.to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
+        if (splitted_prefix.count % 2 == 0)
+          hash_details = Hash[*splitted_prefix]
+          hash_details.each do |key, val|
+            if url.include?(key)
+              processed_url = url.gsub(key, "%")
+              article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
+              unless article_content.blank?
+                article_content.sub_type = val
+                break
+              end
+            end
+          end
+          ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+        else
+          prefix = splitted_prefix.first
+          processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
+          processed_url = url.gsub(old_host, "%#{processed_host}%")
 
-        article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
-        # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
-        ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+          article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
+          # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
+          ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+        end
       end
 
       if !source_category.pattern.blank?
@@ -374,8 +391,8 @@ class ArticleContent < Content
         if exp_val.to_s.is_an_integer?
           patten_with_val = pattern.gsub("<page>", exp_val)
           patten_for_query = pattern.gsub("<page>", "%")
-          p url_for_query = url.gsub(patten_with_val, patten_for_query)
-          p article_content = @article_content = ArticleContent.where("url like ?", url_for_query).last
+          url_for_query = url.gsub(patten_with_val, patten_for_query)
+          article_content = @article_content = ArticleContent.where("url like ?", url_for_query).last
           ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
         end
       end

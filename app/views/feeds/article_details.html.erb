@@ -1,6 +1,10 @@
 <% if @already_shared == true %>
     <div class="detailed_vales" style="margin: 35px">
-      Product is already shared, Please find the link below: <br/> <br/>
+      <% if @shared_message.blank? %>
+        Product is already shared, Please find the link below: <br/> <br/>
+      <% else %>
+        <%= @shared_message %>: <br/> <br/>
+      <% end %>
 
       <a href="<%= content_path(@article_content.id) %>" target='_blank'> <%= @article_content.title %></a>
     </div>
