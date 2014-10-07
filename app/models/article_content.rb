@@ -324,7 +324,7 @@ class ArticleContent < Content
     old_host = Addressable::URI.parse(url).host.downcase
     host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
     source_category = SourceCategory.where(:source => host).last
-    if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
+    if !source_category.blank? && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
       processed_url = url.gsub(old_host, "%#{processed_host}%")
@@ -357,7 +357,7 @@ class ArticleContent < Content
     host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
     source_category = SourceCategory.where(:source => host).last
     if !source_category.blank?
-      if source_category.have_mobile_site && !source_category.prefix.blank?
+      if !source_category.prefix.blank?
         prefix = source_category.prefix
         processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
         processed_url = url.gsub(old_host, "%#{processed_host}%")
@@ -367,7 +367,7 @@ class ArticleContent < Content
         ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
       end
 
-      if source_category.is_having_pagination && !source_category.pattern.blank?
+      if !source_category.pattern.blank?
         pattern = source_category.pattern
         str1, str2 = pattern.split("<page>")
         exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]

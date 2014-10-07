@@ -1546,7 +1546,7 @@ end
         host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
         source_category = source_categories[host]
 
-        if !source_category.blank? && source_category["is_having_pagination"] && !source_category["pattern"].blank?
+        if !source_category.blank? && !source_category["pattern"].blank?
           pattern = source_category["pattern"]
           str1, str2 = pattern.split("<page>")
           exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]

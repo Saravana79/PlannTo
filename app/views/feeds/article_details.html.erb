@@ -217,7 +217,7 @@
                         '',
                 dataType:'json',
                 type: "get",
-                data: {term: '<%= @title_for_search %>', search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val()},
+                data: {term: "<%= @title_for_search %>", search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val()},
                 before:$('#share_spinner').show(),
                 after: $('#share_spinner').hide(),
                 success: function(data){

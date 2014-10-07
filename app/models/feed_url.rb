@@ -409,7 +409,7 @@ class FeedUrl < ActiveRecord::Base
     host = Addressable::URI.parse(url).host.downcase
     host = host.start_with?('www.') ? host[4..-1] : host
     source_category = SourceCategory.where(:source => host).last
-    if !source_category.blank? && source_category.have_mobile_site && !source_category.prefix.blank?
+    if !source_category.blank? && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
       processed_url = url.gsub(host, processed_host)
@@ -433,7 +433,7 @@ class FeedUrl < ActiveRecord::Base
       host = Addressable::URI.parse(self.url).host.downcase
       updated_host = host.start_with?('www.') ? host[4..-1] : host
       source_details = source_list[updated_host]
-      if !source_details["title_check"].blank? && source_details["title_check"].to_s == "true"
+      if !source_details["check_details"].blank?
         check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split(">")}.flatten.map(&:strip)
         check_details = Hash[*check_details]
         title = article.title

@@ -12,12 +12,12 @@ class SourceCategory < ActiveRecord::Base
 
     #update for title check
     title_results = {}
-    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| title_results.merge!({each_src["source"] => {"title_check" => each_src["title_check"], "check_details" => each_src["check_details"]}})}
+    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| title_results.merge!({each_src["source"] => {"check_details" => each_src["check_details"]}})}
     $redis_rtb.set("sources_list_title_results", title_results.to_json)
 
     #update for genric check
     generic_results = {}
-    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| generic_results.merge!({each_src["source"] => {"generic_check" => each_src["generic_check"], "generic_details" => each_src["generic_details"]}})}
+    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| generic_results.merge!({each_src["source"] => {"generic_details" => each_src["generic_details"]}})}
     $redis_rtb.set("sources_list_generic_results", generic_results.to_json)
   end
 
@@ -33,7 +33,7 @@ class SourceCategory < ActiveRecord::Base
 
   def self.get_source_category_with_paginations()
     source_categories = {}
-    SourceCategory.all.map {|f| source_categories.merge!({f.source => {"is_having_pagination" => f.is_having_pagination, "pattern" => f.pattern}})}
+    SourceCategory.all.map {|f| source_categories.merge!({f.source => {"pattern" => f.pattern}})}
     source_categories
   end
 end
