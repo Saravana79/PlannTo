@@ -233,9 +233,15 @@
                     $.each(data, function (index, value) {
                         if (value.selected_list == undefined)
                         {
+                            <% if current_user.id == 1 %>
+                             var score_val = ' ('+ value.score + ' )'
+                            <% else %>
+                             var score_val = ''
+                            <% end %>
+
                             sub_contain = $("<span class='option' style='display:inline-block'></span>")
                             $('<input />', { type: 'checkbox', class: "relevant_product", item_name: value.value, id: 'matched' + value.id, value: value.id, name: "relevance_product[]" }).appendTo(sub_contain);
-                            $('<label />', { 'for': 'matched' + value.id, text: value.value  + ' ('+ value.score + ' )' + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
+                            $('<label />', { 'for': 'matched' + value.id, text: value.value  + score_val  + " (" + value.type + ")", style: "padding-right:10px;" }).appendTo(sub_contain);
                             $(sub_contain).appendTo(container)
                         }
                         else
@@ -244,15 +250,27 @@
                             $.each(value.selected_list, function (inx, val) {
                                 if (inx == 0)
                                 {
+                                    <% if current_user.id == 1 %>
+                                    var sel_score_val = ' ('+ value.list_scores[0] + ' )'
+                                    <% else %>
+                                    var sel_score_val = ''
+                                    <% end %>
+
                                     var that = $("#matched"+val)
-                                    $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + ' ('+ value.list_scores[0] + ' )' + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+                                    $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + sel_score_val + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
                                     $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
                                     $(that).parent().hide();
                                 }
                                 else if ($("#article_content_sub_type").val() == "Comparisons")
                                 {
+                                    <% if current_user.id == 1 %>
+                                    var sel_score_val = ' ('+ value.list_scores[1] + ' )'
+                                    <% else %>
+                                    var sel_score_val = ''
+                                    <% end %>
+
                                     var that = $("#matched"+val)
-                                    $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + ' ('+ value.list_scores[1] + ' )'  + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
+                                    $("<li id='" + $(that).attr("id") + "'" + " class='taggingmain'><span><a class='txt_tagging'>" + $(that).attr("item_name") + sel_score_val  + "</a><a id= 'deleteTag' class='icon_close_tagging' href='#'></a></span></li>").appendTo($("#new_article_product_list"));
                                     $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
                                     $(that).parent().hide();
                                 }
