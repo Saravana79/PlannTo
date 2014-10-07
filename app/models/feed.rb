@@ -243,6 +243,10 @@ class Feed < ActiveRecord::Base
 
     images = images.join(',') rescue ""
 
+    if title_info.include?("|")
+      title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
+    end
+
     return title_info, meta_description, images, page_category
   end
 

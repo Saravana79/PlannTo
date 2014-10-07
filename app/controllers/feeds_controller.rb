@@ -228,7 +228,11 @@ class FeedsController < ApplicationController
       else
         if !@feed_url.blank?
           @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
-          @article.title = @feed_url.title
+          title_info = @feed_url.title
+          if title_info.include?("|")
+            title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
+          end
+          @article.title = title_info
           @article.sub_type = @article.find_subtype(@article.title)
           sub_type, @title_for_search = @feed_url.check_and_update_sub_type(@article)
           @article.sub_type = sub_type unless sub_type.blank?

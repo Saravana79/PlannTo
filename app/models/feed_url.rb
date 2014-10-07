@@ -434,9 +434,9 @@ class FeedUrl < ActiveRecord::Base
       updated_host = host.start_with?('www.') ? host[4..-1] : host
       source_details = source_list[updated_host]
       if !source_details["title_check"].blank? && source_details["title_check"].to_s == "true"
-        p check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split(">")}.flatten.map(&:strip)
+        check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split(">")}.flatten.map(&:strip)
         check_details = Hash[*check_details]
-        p title = self.title
+        title = article.title
         check_details.each do |key, value|
           if title.include?(key)
             if value.blank? || value == "empty"
@@ -451,6 +451,6 @@ class FeedUrl < ActiveRecord::Base
         end
       end
     end
-    return nil, self.title
+    return nil, article.title
   end
 end
