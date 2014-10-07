@@ -87,7 +87,7 @@ end
     # items_by_score = {}
     # @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
     all_items_by_score = {}
-    @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score)}
+    @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank?}
     items_by_score = all_items_by_score.select {|key,val| val.to_f > 0.5}
     sorted_hash = Hash[items_by_score.sort_by {|k,v| v}]
     selected_list = sorted_hash.keys.reverse.first(2)
