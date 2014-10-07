@@ -223,14 +223,14 @@ class FeedsController < ApplicationController
 
       @feed_url, @article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, current_user, request.remote_ip)
 
-      if @feed_url.status == 1
+      if @feed_url.status == 1 && !@article_content.blank?
         @already_shared = true
       else
         if !@feed_url.blank?
           @article = ArticleContent.new(:url => @feed_url.url, :created_by => current_user.id)
           @article.title = @feed_url.title
           @article.sub_type = @article.find_subtype(@article.title)
-          sub_type = @feed_url.check_and_update_sub_type(@article)
+          sub_type, @title_for_search = @feed_url.check_and_update_sub_type(@article)
           @article.sub_type = sub_type unless sub_type.blank?
           @article.description = @feed_url.summary
           @images = @feed_url.images.split(",")

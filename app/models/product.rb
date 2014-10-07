@@ -86,7 +86,8 @@ end
 
     items_by_score = {}
     @items.hits.map {|dd| items_by_score.merge!("#{dd.result.id}" => dd.score) if dd.score.to_f > 0.5}
-    selected_list = Hash[items_by_score.sort_by {|k,v| v}].keys.reverse.first(2)
+    sorted_hash = Hash[items_by_score.sort_by {|k,v| v}]
+    selected_list = sorted_hash.keys.reverse.first(2)
 
     if param[:ac_sub_type] == "Lists"
       selected_list = []
@@ -114,7 +115,13 @@ end
     results << new_results
     results.flatten!
     new_selected_list.uniq!
-    return results, new_selected_list
+
+    items_by_score.each {|key,val| items_by_score[key] = val.round(2)}
+    items_by_score.default = 0
+    results.each {|each_result| each_result.merge!(:score => items_by_score[each_result[:id]])}
+    list_scores = sorted_hash.select {|key,_| new_selected_list.include?(key)}.values.reverse.map {|each_val| each_val.round(2)}
+
+    return results, new_selected_list, list_scores
   end
 
   def self.get_results_from_items(items)
