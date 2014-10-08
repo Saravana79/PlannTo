@@ -138,27 +138,30 @@ end
     values = all_items_by_score.values
 
     first_key = 0
+    compare_val = 10
     keys.each_with_index do |each_key, index|
         if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type])
           if index == 0
             first_key = each_key
+            compare_val = 0.5
             next
           end
         elsif param[:ac_sub_type] == "Comparisons"
           if index <= 1
             first_key = each_key
+            compare_val = 0.3
             next
           end
         end
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
-            if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > 0.5)
+            if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
               auto_save = "true"
               break
             end
           end
         else
-          if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > 0.5)
+          if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
             auto_save = "true"
             break
           else
