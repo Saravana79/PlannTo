@@ -453,4 +453,45 @@ class FeedUrl < ActiveRecord::Base
     end
     return nil, article.title
   end
+
+  def auto_save_feed_urls
+    feed_url = self
+    article = ArticleContent.new(:url => feed_url.url, :created_by => 1)
+    title_info = feed_url.title
+    if title_info.include?("|")
+      title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
+    end
+    article.title = title_info
+    article.sub_type = article.find_subtype(article.title)
+    sub_type, title_for_search = feed_url.check_and_update_sub_type(article)
+    article.sub_type = sub_type unless sub_type.blank?
+    article.description = feed_url.summary
+    images = feed_url.images.split(",")
+    article.thumbnail = images.first if images.count > 0
+
+    article_content = article
+    article.sub_type = "Others" if article.sub_type.blank?
+
+    search_params = {}
+    search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)
+
+    results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(search_params)
+    auto_save = "false" if selected_list.blank?
+    auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count != 2
+
+    if auto_save == "true"
+      param = {}
+      article_item_ids = selected_list.join(",")
+      unless article_item_ids.blank?
+        param.merge!(:feed_url_id => feed_url.id, :default_item_id => "", :submit_url => "submit_url",
+                     :article_content => { :itemtype_id => article_content.itemtype_id, :type => article_content.type, :thumbnail => article_content.thumbnail,
+                                           :title => article_content.title, :url => url, :sub_type => article_content.sub_type, :description => article_content.description },
+                     :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0")
+
+        param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
+        Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, 1, "")
+        feed_url.update_attributes!(:status => 1, :default_status => 5) #TODO: auto save status as 5
+      end
+    end
+  end
 end

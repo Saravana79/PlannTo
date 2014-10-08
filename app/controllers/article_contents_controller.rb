@@ -11,7 +11,7 @@ class ArticleContentsController < ApplicationController
       def_status = old_def_val == new_def_val ? 1 : 0
       feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
       feed_url.update_attributes!(:old_default_values => old_def_val, :new_default_values => new_def_val, :default_status => def_status)
-      param = param.reject {|key| ["utf8", "authenticity_token", "commit", "action", "controller"].include?(key)}
+      param = param.reject {|key| ["utf8", "authenticity_token", "commit", "action", "controller", "old_default_values"].include?(key)}
       @through_rss = true
       Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, request.remote_ip)
       feed_url.update_attributes(:status => 1)

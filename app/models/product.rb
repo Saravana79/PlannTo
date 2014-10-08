@@ -101,9 +101,9 @@ end
     all_items_by_score = {}
     @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank?}
     items_by_score = all_items_by_score.select {|key,val| val.to_f > 0.5}
-    p sorted_hash = Hash[items_by_score.sort_by {|k,v| -v}]
+    sorted_hash = Hash[items_by_score.sort_by {|k,v| -v}]
     selected_list = sorted_hash.keys.first(2)
-    all_items_by_score.each {|key,val| all_items_by_score[key] = val.round(2)}
+    all_items_by_score.each {|key,val| all_items_by_score[key] = val.to_f.round(2)}
     all_items_by_score.default = 0
 
     if param[:ac_sub_type] == "Lists"
