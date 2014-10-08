@@ -143,14 +143,14 @@ class Feed < ActiveRecord::Base
     title_words = title.to_s.downcase #.split
 
     tips = ['tip ', 'trick', 'tips']
-    reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson','benchmark']
+    reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson','benchmark','drop test']
     comparisons = [' vs ','vs.','versus','comparison','competitor']
     how_to = ["tutorial", "guide", "how to",'update','wallpaper',' root',' reset','drivers','pc suite','manual','how-to']
     lists = ["top ", "best "]
     photos = ["gallery",'photos','picture']
     news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive','rumor']
-    specs = [' spec',' 3D','Price in India']
-    acces = [' case','Shells','covers','charger','accessor']
+    specs = [' spec',' 3d','price in india']
+    acces = [' case','shells','covers','charger','accessor']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
