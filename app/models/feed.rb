@@ -150,7 +150,7 @@ class Feed < ActiveRecord::Base
     photos = ["gallery",'photos','picture']
     news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive']
     specs = [' spec',' 3D','Bangalore, Hyderabad']
-    acces = [' case']
+    acces = [' case','Shells','covers','charger']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
