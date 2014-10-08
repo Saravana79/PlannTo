@@ -1,0 +1,88 @@
+<%= hidden_field_tag "articles_item_id" %>
+<div id="shareProduct">
+  <div class="title_header input-label float_lft">SourceCategory:</div>
+  <%= hidden_field_tag :source, :readonly => true %>
+  <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
+    <div style="clear:both;"></div>
+  <div style="clear:both;"></div>
+</div>
+
+<div class="form_load">
+
+</div>
+
+<script type="text/javascript">
+    $("document").ready(function()
+    {
+        $( ".auto_complete_field" ).autocomplete({
+            source:  function (request, response) {
+                $.ajax({
+                    url:"/search/autocomplete_source_items",
+                    data:{
+                        term:request.term,
+                        authenticity_token: window._token
+                    },
+                    type:"GET",
+                    dataType:"json",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return{
+                                id: item.id,
+                                value: item.value
+                            }
+                        }));
+                    }
+                });
+            },
+            open: function(event, ui) {
+                $(this).autocomplete("widget").css({
+                    "width": ($(this).width() + "px")
+                });
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                var selected_val = ui.item.id
+                $('#search_source').val(selected_val);
+                console.log(selected_val)
+                $.ajax({url: "/admin/source_categories/edit?source="+selected_val, success:function(result)
+                {
+                    $(".form_load").html(result)
+                }})
+            }
+        });
+
+        var selected_val = $("#search_source").val()
+
+        if (selected_val != "")
+        {
+            $(".auto_complete_field").val(selected_val)
+        }
+    })
+</script>
+
+<style type="text/css">
+    #search_source_item {
+        border-style: groove;
+        border-width: 2px;
+        font-size: 14px;
+        height: 25px;
+        margin-top: 5px;
+        width: 305px;
+    }
+
+    #shareProduct {
+        clear: both;
+        display: block;
+        margin: 35px 0 0 211px;
+        padding: 5px 5px 0 0;
+    }
+
+    .input-label {
+        font-size: 16px !important;
+        padding: 9px 0 0;
+    }
+
+    .form_load {
+        padding: 40px 0 0 187px;
+    }
+</style>

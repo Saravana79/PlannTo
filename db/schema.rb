@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141007085847) do
+ActiveRecord::Schema.define(:version => 20141008095651) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -1087,8 +1087,7 @@ ActiveRecord::Schema.define(:version => 20141007085847) do
     t.datetime "updated_at"
     t.string   "prefix"
     t.string   "pattern"
-    t.string   "check_details"
-    t.string   "generic_details"
+    t.text     "check_details"
   end
 
   create_table "sourceitems", :force => true do |t|

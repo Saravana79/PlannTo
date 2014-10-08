@@ -1,0 +1,80 @@
+<div class="main_form">
+  <span class="form_heading">Edit "<%=@source_category.source %>"</span>
+  <%= form_for(@source_category, :url => admin_source_category_path(@source_category)) do |f| %>
+    <% if @source_category.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+          <ul>
+            <% @source_category.errors.full_messages.each do |msg| %>
+                <li style="color: red"><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+
+    <div class="fields-div">
+      <div class="title_header float_lft">Source :</div>
+      <div class="float_lft"> <%= f.text_field :source %> </div>
+    </div>
+
+    <div class="fields-div">
+      <div class="title_header float_lft">Category :</div>
+      <div class="float_lft"> <%= f.select :categories, @categories, {:include_blank => true, :selected => @source_category.categories.to_s.split(",")}, :multiple => true %> </div>
+    </div>
+
+    <div class="fields-div">
+      <div class="title_header float_lft">Prefix :</div>
+      <div class="float_lft"> <%= f.text_field :prefix %> </div>
+    </div>
+
+    <div class="fields-div">
+      <div class="title_header float_lft">Pattern :</div>
+      <div class="float_lft"> <%= f.text_field :pattern %> </div>
+    </div>
+
+    <div class="fields-div">
+      <div class="title_header float_lft">Title Check :</div>
+      <div class="float_lft"> <%= f.text_area :check_details, :cols => 60, :rows => 8 %> </div>
+    </div>
+
+    <%= f.submit "Update", :class => "btn_submitanswer" %>
+  <% end %>
+</div>
+
+
+<style type="text/css">
+    .new_item label {  font-size: 14px;
+        line-height: 33px;}
+
+    .new_item {padding: 30px;}
+
+     .btn_submitanswer {
+         float: right;
+         margin-right: 400px;
+     }
+
+     .form_heading {
+         font-size: 14px;
+     }
+
+    .title_header.float_lft {
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .main_form .fields-div {
+        line-height: 40px;
+    }
+
+    .title_header {
+        width: 150px;
+        clear: both;
+        margin: 10px 10px 0 0;;
+    }
+
+    .fields-div input, .fields-div select {
+        width: 250px;
+    }
+</style>
