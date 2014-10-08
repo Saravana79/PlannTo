@@ -304,11 +304,14 @@ class SearchController < ApplicationController
   end
 
   def search_items_by_relavance
-    results, selected_list, list_scores = Product.get_search_items_by_relavance(params)
+    results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(params)
     results = results.select {|each_hsh| each_hsh unless each_hsh[:value].blank?}
     results = results.uniq
+    auto_save = "false" if selected_list.blank?
+    auto_save = "false" if params[:ac_sub_type] == "Comparisons" && selected_list.count != 2
+    p "auto save => #{auto_save}"
     list_scores = list_scores.fill(0, list_scores.count...selected_list.count)
-    results << {:selected_list => selected_list, :list_scores => list_scores}
+    results << {:selected_list => selected_list, :list_scores => list_scores, :auto_save => auto_save}
 
     render :json => results
   end

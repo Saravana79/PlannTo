@@ -35,6 +35,10 @@
             <span style="float:left;"><%= f.text_field :url , :style => "width:750px;"%> <%= link_to image_tag("/images/open-window.png",:style=>"width:15px;"), @article_content.url, :target => "_blank", :id => "open_window" %></span>
           </div>
 
+          <div class="status_check">
+            <span>Auto Save</span>
+            <!--<img src="/images/check.png"/>-->
+          </div>
           <div class="category" style="clear:both;">
             <span style="width:75px;float:left;" class="title_header"><label for="category" style="width:100px;">Category :</label></span>
             <span style="float:left;"><%= f.select :sub_type, @categories, {:selected => @article.sub_type } %></span>
@@ -175,6 +179,12 @@
             float: left;
         }
 
+        .status_check {
+            clear: both;
+            float: right;
+            margin: -29px 148px 0 0;
+            position: relative;
+        }
     </style>
 
 
@@ -277,6 +287,16 @@
 
                             });
                         }
+
+                        if (value.auto_save == "true")
+                        {
+                            $(".status_check").append("<img src='<%= configatron.root_image_path%>static/images/check.png'/>")
+                        }
+                        else if (value.auto_save == "false")
+                        {
+                            $(".status_check").append("<img src='<%= configatron.root_image_path%>static/images/close.png'/>")
+                        }
+
 
                     });
                 }

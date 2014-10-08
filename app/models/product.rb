@@ -40,6 +40,7 @@ end
 
 
   def self.get_search_items_by_relavance(param, itemtypes=nil)
+    auto_save = "false"
     unless param[:category].blank?
       itemtypes = param[:category].split(',')
     end
@@ -89,8 +90,10 @@ end
     all_items_by_score = {}
     @items.hits.map {|dd| all_items_by_score.merge!("#{dd.result.id}" => dd.score) unless dd.result.blank?}
     items_by_score = all_items_by_score.select {|key,val| val.to_f > 0.5}
-    sorted_hash = Hash[items_by_score.sort_by {|k,v| v}]
-    selected_list = sorted_hash.keys.reverse.first(2)
+    p sorted_hash = Hash[items_by_score.sort_by {|k,v| -v}]
+    selected_list = sorted_hash.keys.first(2)
+    all_items_by_score.each {|key,val| all_items_by_score[key] = val.round(2)}
+    all_items_by_score.default = 0
 
     if param[:ac_sub_type] == "Lists"
       selected_list = []
@@ -100,17 +103,23 @@ end
 
     groups = []
     new_selected_list = []
+    list_scores = {}
     selected_items = items.select {|each_item| selected_list.include?(each_item.id.to_s)}
     selected_items.each_with_index do |each_selected_item, index|
       group = each_selected_item.cargroup rescue nil
       unless group.blank?
         groups << group
         new_selected_list << group.id.to_s
+        list_scores.merge!("#{group.id}" => all_items_by_score["#{each_selected_item.id}"])
       else
         if ["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type])
-          new_selected_list << each_selected_item.id.to_s if (each_selected_item.is_a?(Product) || each_selected_item.is_a?(CarGroup))
+          if (each_selected_item.is_a?(Product) || each_selected_item.is_a?(CarGroup))
+            new_selected_list << each_selected_item.id.to_s
+            list_scores.merge!("#{each_selected_item.id}" => all_items_by_score["#{each_selected_item.id}"])
+          end
         else
           new_selected_list << each_selected_item.id.to_s
+          list_scores.merge!("#{each_selected_item.id}" => all_items_by_score["#{each_selected_item.id}"])
         end
       end
     end
@@ -119,12 +128,46 @@ end
     results.flatten!
     new_selected_list.uniq!
 
-    all_items_by_score.each {|key,val| all_items_by_score[key] = val.round(2)}
-    all_items_by_score.default = 0
     results.each {|each_result| each_result.merge!(:score => all_items_by_score[each_result[:id]])}
-    list_scores = sorted_hash.select {|key,_| new_selected_list.include?(key)}.values.reverse.map {|each_val| each_val.round(2)}
+    # list_scores = sorted_hash.select {|key,_| new_selected_list.include?(key)}.values.map {|each_val| each_val.round(2)}
 
-    return results, new_selected_list, list_scores
+    items_group = {}
+    @items.results.each {|each_item| items_group.merge!("#{each_item.id}" => "#{each_item.cargroup.id}") if (each_item.cargroup rescue nil)}
+
+    keys = all_items_by_score.keys
+    values = all_items_by_score.values
+
+    first_key = 0
+    keys.each_with_index do |each_key, index|
+        if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type])
+          if index == 0
+            first_key = each_key
+            next
+          end
+        elsif param[:ac_sub_type] == "Comparisons"
+          if index <= 1
+            first_key = each_key
+            next
+          end
+        end
+        if !items_group[first_key].blank? && !items_group[each_key].blank?
+          if items_group[first_key] != items_group[each_key]
+            if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > 0.5)
+              auto_save = "true"
+              break
+            end
+          end
+        else
+          if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > 0.5)
+            auto_save = "true"
+            break
+          else
+            break
+          end
+        end
+    end
+
+    return results, new_selected_list, list_scores.values, auto_save
   end
 
   def self.get_results_from_items(items)
