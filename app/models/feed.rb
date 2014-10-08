@@ -145,20 +145,17 @@ class Feed < ActiveRecord::Base
     tips = ['tip ', 'trick', 'tips']
     reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson','benchmark']
     comparisons = [' vs ','vs.','versus','comparison','competitor']
-    how_to = ["tutorial", "guide", "how to",'update','wallpaper',' root',' reset','drivers','pc suite']
+    how_to = ["tutorial", "guide", "how to",'update','wallpaper',' root',' reset','drivers','pc suite','manual','how-to']
     lists = ["top ", "best "]
     photos = ["gallery",'photos','picture']
     news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive','rumor']
-    specs = [' spec',' 3D']
+    specs = [' spec',' 3D','Price in India']
     acces = [' case','Shells','covers','charger','accessor']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
     # logger.info "how to"
-    tips.each do |tip|
-      return ArticleCategory::HOW_TO if title_words.scan(tip).size >0
-    end
-
+  
     
     reviews.each do |review|
       return ArticleCategory::REVIEWS if title_words.scan(review).size >0
@@ -170,6 +167,9 @@ class Feed < ActiveRecord::Base
 
     specs.each do |spec|
       return ArticleCategory::SPECS if title_words.scan(spec).size >0
+    end
+    tips.each do |tip|
+      return ArticleCategory::HOW_TO if title_words.scan(tip).size >0
     end
 
     acces.each do |each_access|
