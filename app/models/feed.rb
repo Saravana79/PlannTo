@@ -142,15 +142,15 @@ class Feed < ActiveRecord::Base
   def self.get_find_subtype(title)
     title_words = title.to_s.downcase #.split
 
-    tips = ['tip ', 'trick ', 'tips ']
+    tips = ['tip ', 'trick', 'tips']
     reviews = ['review', 'first impression', 'hands on', 'hands-on', 'first look', 'unboxing','handson','benchmark']
     comparisons = [' vs ','vs.','versus','comparison','competitor']
-    how_to = ["tutorial", "guide", "how to",'update','Wallpaper',' root',' reset']
+    how_to = ["tutorial", "guide", "how to",'update','wallpaper',' root',' reset','drivers','pc suite']
     lists = ["top ", "best "]
     photos = ["gallery",'photos','picture']
-    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive']
-    specs = [' spec',' 3D','price', 'Bangalore, Hyderabad']
-    acces = [' case']
+    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive','rumor']
+    specs = [' spec',' 3D']
+    acces = [' case','Shells','covers','charger','accessor']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end
@@ -172,22 +172,26 @@ class Feed < ActiveRecord::Base
       return ArticleCategory::SPECS if title_words.scan(spec).size >0
     end
 
+    acces.each do |each_access|
+      return ArticleCategory::ACCESSORIES if title_words.scan(each_access).size >0
+    end
+
+    photos.each do |images|
+      return ArticleCategory::PHOTO if title_words.scan(images).size >0
+    end
+  
+    
     lists.each do |list|
       return ArticleCategory::LIST if title_words.scan(list).size >0
     end
 
  
-    photos.each do |images|
-      return ArticleCategory::PHOTO if title_words.scan(images).size >0
-    end
-  
+    
     news.each do |each_news|
       return ArticleCategory::NEWS if title_words.scan(each_news).size >0
     end
 
-    acces.each do |each_access|
-      return ArticleCategory::ACCESSORIES if title_words.scan(each_access).size >0
-    end
+  
 
     return ""
   end
