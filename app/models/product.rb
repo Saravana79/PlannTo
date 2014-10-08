@@ -79,10 +79,21 @@ end
     end
 
     if categories.include?('Mobile')
-      app_items = ItemtypeTag.where("name = 'App'")
-      app_results = Product.get_results_from_items(app_items)
-      results << app_results
-      results.flatten!
+      ['App', 'WearableGadget'].each do |each_new_type|
+        app_items = ItemtypeTag.where("name = '#{each_new_type}'")
+        app_results = Product.get_results_from_items(app_items)
+        results << app_results
+        results = results.flatten
+      end
+    end
+
+    if categories.include?('Games')
+      ["Gaming Console"].each do |each_new_type|
+        app_items = ItemtypeTag.where("name = '#{each_new_type}'")
+        app_results = Product.get_results_from_items(app_items)
+        results << app_results
+        results = results.flatten
+      end
     end
 
     # items_by_score = {}
