@@ -437,18 +437,24 @@ class FeedUrl < ActiveRecord::Base
         check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
         check_details = Hash[*check_details]
         title = article.title
+        return_val = ""
+        changed_title = ""
         check_details.each do |key, value|
           if title.include?(key)
             if value.blank? || value == "empty"
               changed_title = title.to_s.gsub(key, "")
-              return_val = article.find_subtype(changed_title)
-              return return_val, changed_title
-            else
+              if return_val.blank?
+                return_val = article.find_subtype(changed_title)
+              end
+              # return return_val, changed_title
+            elsif return_val.blank?
               changed_title = title.to_s.gsub(key, "")
-              return value, changed_title
+              return_val = value
+              # return return_val, changed_title
             end
           end
         end
+        return return_val, changed_title
       end
     end
     return nil, article.title

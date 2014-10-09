@@ -51,7 +51,9 @@ end
                         "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on","bangalore", "hyderabad", "chennai","mumbai","and","delhi","valid"]
     term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     term = term.gsub("-","")
+    search_type_for_data = search_type.first if search_type.is_a?(Array)
     @items = Sunspot.search(search_type) do
+      data_accessor_for(search_type_for_data).include = [:cargroup]
       keywords term do
         minimum_match 1
       end
