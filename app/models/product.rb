@@ -90,9 +90,9 @@ end
     search_type = Product.search_type(itemtypes)
     term = param[:term]
 
-    removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launched",
-                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on","bangalore", "hyderabad", "chennai","mumbai","and","delhi","valid"]
-    term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+    removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
+                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on","access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile","tablet","car","bike"]
+   term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     term = term.gsub("-","")
     search_type_for_data = search_type.first if search_type.is_a?(Array)
     @items = Sunspot.search(search_type) do
