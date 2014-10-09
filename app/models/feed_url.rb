@@ -438,7 +438,7 @@ class FeedUrl < ActiveRecord::Base
         check_details = Hash[*check_details]
         title = article.title
         return_val = ""
-        changed_title = ""
+        changed_title = article.title
         check_details.each do |key, value|
           if title.include?(key)
             if value.blank? || value == "empty"

@@ -308,6 +308,7 @@ class SearchController < ApplicationController
     # results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(params)
     results = results.select {|each_hsh| each_hsh unless each_hsh[:value].blank?}
     results = results.uniq
+    selected_list = selected_list.uniq
     auto_save = "false" if selected_list.blank?
     auto_save = "false" if params[:ac_sub_type] == "Comparisons" && selected_list.count < 2
     p "auto save => #{auto_save}"

@@ -50,7 +50,7 @@ end
       split_title.each do |each_title|
         changed_param = param
         changed_param[:term] = each_title
-        results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(changed_param, itemtypes=nil, for_compare="true")
+        results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(changed_param, itemtypes, for_compare="true")
 
         f_results << results
         f_new_selected_list << selected_list
@@ -64,7 +64,7 @@ end
       ret_auto_save = f_auto_save.include?("false") ? "false" : "true"
       return f_results, f_new_selected_list, f_list_scores, ret_auto_save
     else
-      results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(param, itemtypes=nil)
+      results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(param, itemtypes)
       return results, selected_list, list_scores, auto_save
     end
   end
