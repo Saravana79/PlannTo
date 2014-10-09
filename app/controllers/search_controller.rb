@@ -309,7 +309,7 @@ class SearchController < ApplicationController
     results = results.select {|each_hsh| each_hsh unless each_hsh[:value].blank?}
     results = results.uniq
     auto_save = "false" if selected_list.blank?
-    auto_save = "false" if params[:ac_sub_type] == "Comparisons" && selected_list.count != 2
+    auto_save = "false" if params[:ac_sub_type] == "Comparisons" && selected_list.count < 2
     p "auto save => #{auto_save}"
     list_scores = list_scores.fill(0, list_scores.count...selected_list.count)
     results << {:selected_list => selected_list, :list_scores => list_scores, :auto_save => auto_save}

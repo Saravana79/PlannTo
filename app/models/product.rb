@@ -39,44 +39,31 @@ def manu
 end
 
   def self.call_search_items_by_relavance(param, itemtypes=nil)
-    f_auto_save = "false"
-    if param[:term].downcase.include?(" vs ")
+    if param[:term].downcase.include?("vs") && param[:ac_sub_type] == "Comparisons"
       f_results = []
       f_new_selected_list = []
       f_list_scores = []
       f_auto_save = []
 
       title = param[:term]
-      split_title = title.downcase.split(" vs ").map(&:strip)
+      split_title = title.downcase.split("vs").map(&:strip)
       split_title.each do |each_title|
         changed_param = param
         changed_param[:term] = each_title
         results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(changed_param, itemtypes=nil, for_compare="true")
 
-        p results
-        p selected_list
-        p list_scores
-        p auto_save
-
-        if auto_save == "true"
-          f_results << results
-          f_new_selected_list << selected_list
-          f_list_scores << list_scores
-          f_auto_save = "true"
-        else
-          f_auto_save = "false"
-          break
-        end
+        f_results << results
+        f_new_selected_list << selected_list
+        f_list_scores << list_scores
+        f_auto_save << auto_save
       end
 
       f_results = f_results.flatten.uniq
       f_new_selected_list = f_new_selected_list.flatten
       f_list_scores = f_list_scores.flatten
-      f_auto_save = f_auto_save
-      return f_results, f_new_selected_list, f_list_scores, f_auto_save if f_auto_save == "true"
-    end
-
-    if f_auto_save == "false"
+      ret_auto_save = f_auto_save.include?("false") ? "false" : "true"
+      return f_results, f_new_selected_list, f_list_scores, ret_auto_save
+    else
       results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(param, itemtypes=nil)
       return results, selected_list, list_scores, auto_save
     end
@@ -115,7 +102,7 @@ end
 
     item_names = {}
     items.each {|item| item_names.merge!("#{item.id}" => "#{item.name}")}
-    
+
     # Append suggestions based on category
     categories = []
 
