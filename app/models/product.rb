@@ -81,7 +81,7 @@ end
     end
 
     if categories.include?('Mobile')
-      ['App', 'WearableGadget'].each do |each_new_type|
+      ['App'].each do |each_new_type|
         app_items = ItemtypeTag.where("name = '#{each_new_type}'")
         app_results = Product.get_results_from_items(app_items)
         results << app_results
