@@ -38,8 +38,51 @@ def manu
     self.manufacturer
 end
 
+  def self.call_search_items_by_relavance(param, itemtypes=nil)
+    f_auto_save = "false"
+    if param[:term].downcase.include?(" vs ")
+      f_results = []
+      f_new_selected_list = []
+      f_list_scores = []
+      f_auto_save = []
 
-  def self.get_search_items_by_relavance(param, itemtypes=nil)
+      title = param[:term]
+      split_title = title.downcase.split(" vs ").map(&:strip)
+      split_title.each do |each_title|
+        changed_param = param
+        changed_param[:term] = each_title
+        results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(changed_param, itemtypes=nil, for_compare="true")
+
+        p results
+        p selected_list
+        p list_scores
+        p auto_save
+
+        if auto_save == "true"
+          f_results << results
+          f_new_selected_list << selected_list
+          f_list_scores << list_scores
+          f_auto_save = "true"
+        else
+          f_auto_save = "false"
+          break
+        end
+      end
+
+      f_results = f_results.flatten.uniq
+      f_new_selected_list = f_new_selected_list.flatten
+      f_list_scores = f_list_scores.flatten
+      f_auto_save = f_auto_save
+      return f_results, f_new_selected_list, f_list_scores, f_auto_save if f_auto_save == "true"
+    end
+
+    if f_auto_save == "false"
+      results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(param, itemtypes=nil)
+      return results, selected_list, list_scores, auto_save
+    end
+  end
+
+  def self.get_search_items_by_relavance(param, itemtypes=nil, for_compare="false")
     auto_save = "false"
     unless param[:category].blank?
       itemtypes = param[:category].split(',')
@@ -53,7 +96,6 @@ end
     term = term.gsub("-","")
     search_type_for_data = search_type.first if search_type.is_a?(Array)
     @items = Sunspot.search(search_type) do
-      data_accessor_for(search_type_for_data).include = [:cargroup]
       keywords term do
         minimum_match 1
       end
@@ -65,6 +107,15 @@ end
     items = @items.results
     results = Product.get_results_from_items(items)
 
+    ids = items.map(&:id).map(&:inspect).join(",")
+    query_car_groups = "SELECT `itemrelationships`.`item_id` as item_id, items.id as car_group_id, items.name as name FROM `items` INNER JOIN `itemrelationships` ON `items`.`id` = `itemrelationships`.`relateditem_id` WHERE `items`.`type` IN ('CarGroup') AND `itemrelationships`.`item_id` IN (#{ids})"
+    car_groups = ids.blank? ? [] : CarGroup.find_by_sql(query_car_groups)
+    car_groups_hash = {}
+    car_groups.each {|each_group| car_groups_hash.merge!("#{each_group.item_id}" => each_group.attributes.delete_if {|k,v| k == "item_id"})}
+
+    item_names = {}
+    items.each {|item| item_names.merge!("#{item.id}" => "#{item.name}")}
+    
     # Append suggestions based on category
     categories = []
 
@@ -110,7 +161,7 @@ end
 
     if param[:ac_sub_type] == "Lists"
       selected_list = []
-    elsif param[:ac_sub_type] != "Comparisons"
+    elsif for_compare == "true" || param[:ac_sub_type] != "Comparisons"
       selected_list = selected_list.first(1)
     end
 
@@ -145,7 +196,14 @@ end
     # list_scores = sorted_hash.select {|key,_| new_selected_list.include?(key)}.values.map {|each_val| each_val.round(2)}
 
     items_group = {}
-    @items.results.each {|each_item| items_group.merge!("#{each_item.id}" => "#{each_item.cargroup.id}") if (each_item.cargroup rescue nil)}
+    items_group_names = {}
+    @items.results.each do |each_item|
+      cargroup = car_groups_hash["#{each_item.id}"]
+      if !cargroup.blank?
+        items_group.merge!("#{each_item.id}" => "#{cargroup["car_group_id"]}")
+        items_group_names.merge!("#{cargroup["car_group_id"]}" => cargroup["name"])
+      end
+    end
 
     keys = all_items_by_score.keys
     values = all_items_by_score.values
@@ -156,11 +214,12 @@ end
         if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type])
           if index == 0
             first_key = each_key
-            compare_val = 0.5
+            compare_val = 0.4
             next
           end
         elsif param[:ac_sub_type] == "Comparisons"
-          if index <= 1
+          index_val =  for_compare == "true" ? 0 : 1
+          if index == index_val
             first_key = each_key
             compare_val = 0.3
             next
@@ -181,6 +240,33 @@ end
             break
           end
         end
+    end
+
+    if auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type]))
+      all_items_by_score.keys.each_with_index do |each_key, index|
+        if index == 0
+          first_key = each_key
+          next
+        end
+
+        if !items_group[first_key].blank? && !items_group[each_key].blank?
+          if items_group[first_key] != items_group[each_key]
+            if (term.include?(items_group_names[items_group[first_key]]) && !term.include?(items_group_names[items_group[each_key]]))
+              auto_save = "true"
+              break
+            end
+          end
+        else
+          first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
+          second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
+          if (term.to_s.downcase.include?(first_title.to_s.downcase) && !term.to_s.downcase.include?(second_title.to_s.downcase))
+            auto_save = "true"
+            break
+          else
+            break
+          end
+        end
+      end
     end
 
     return results, new_selected_list, list_scores.values, auto_save

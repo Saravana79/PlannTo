@@ -304,7 +304,8 @@ class SearchController < ApplicationController
   end
 
   def search_items_by_relavance
-    results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(params)
+    results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(params)
+    # results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(params)
     results = results.select {|each_hsh| each_hsh unless each_hsh[:value].blank?}
     results = results.uniq
     auto_save = "false" if selected_list.blank?

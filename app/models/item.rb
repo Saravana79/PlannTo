@@ -1408,6 +1408,7 @@ end
   def self.buying_list_process_in_redis
     if $redis.get("buying_list_is_running").to_i == 0
       $redis.set("buying_list_is_running", 1)
+      $redis.expire("buying_list_is_running", 30.minutes)
       length = $redis_rtb.llen("users:visits")
       base_item_ids = Item.get_base_items_from_config()
       source_categories = SourceCategory.get_source_category_with_paginations()
