@@ -179,7 +179,11 @@ class Feed < ActiveRecord::Base
     photos.each do |images|
       return ArticleCategory::PHOTO if title_words.scan(images).size >0
     end
-  
+    
+    news.each do |each_news|
+      return ArticleCategory::NEWS if title_words.scan(each_news).size >0
+    end
+
     
     lists.each do |list|
       return ArticleCategory::LIST if title_words.scan(list).size >0
@@ -187,10 +191,7 @@ class Feed < ActiveRecord::Base
 
  
     
-    news.each do |each_news|
-      return ArticleCategory::NEWS if title_words.scan(each_news).size >0
-    end
-
+ 
   
 
     return ""
