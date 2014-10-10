@@ -153,6 +153,7 @@ class ContentsController < ApplicationController
   end
 
   def feeds
+    params[:page] ||= 2
     if params[:item_type_id].is_a?  Array
        itemtype_id = params[:itemtype_id] 
      else
@@ -169,6 +170,7 @@ class ContentsController < ApplicationController
      filter_params["search_type"] = params[:search_type]
     if itemtype_id .present?
        if params[:search_type] == "Myfeeds" || params[:search_type] == "admin_feeds"
+         filter_params["sub_type"] = get_sub_type(params[:sub_type], [])
           @items,@item_types,@article_categories,@root_items  = Content.follow_items_contents(current_user,itemtype_id,'category')
            filter_params["content_ids"] = Content.follow_content_ids(current_user,filter_params["sub_type"]) if params[:search_type] == "Myfeeds"
           filter_params["root_items"] = @root_items if params[:search_type] == "Myfeeds"
@@ -536,7 +538,7 @@ end
     if sub_type =="All"
       if itemtype_id.empty?
         @ac = ArticleCategory.where("itemtype_id in (?)", 0).collect(&:name)
-        @ac.delete("Others")
+        # @ac.delete("Others")
         return @ac
       else
         @ac = ArticleCategory.where("itemtype_id in (?)", itemtype_id).collect(&:name).uniq

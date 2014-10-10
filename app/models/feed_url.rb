@@ -475,7 +475,6 @@ class FeedUrl < ActiveRecord::Base
     images = feed_url.images.split(",")
     article.thumbnail = images.first if images.count > 0
 
-    article_content = article
     article.sub_type = "Others" if article.sub_type.blank?
 
     if article.sub_type == "Others"
@@ -484,6 +483,7 @@ class FeedUrl < ActiveRecord::Base
       subtype_from_url = article.find_subtype(url_for_search)
       article.sub_type = subtype_from_url unless subtype_from_url.blank?
     end
+    article_content = article
 
     search_params = {}
     search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)

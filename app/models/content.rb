@@ -353,8 +353,8 @@ end
       @item_types = item_types.join(",") if !item_types.blank?
       @items,@root_items = Item.get_follows_item_ids_for_user_and_item_types(user,item_types).uniq
     end 
-    @article_categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
-     return @items.uniq.join(","),@item_types,@article_categories,@root_items
+    categories = ArticleCategory.by_itemtype_id(0).collect(&:name)
+    return @items.uniq.join(","),@item_types,categories,@root_items
    end
   
   def  remove_user_activities
