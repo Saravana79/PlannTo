@@ -206,6 +206,8 @@ class FeedsController < ApplicationController
     @productReviewRating = "new_product_review_rating"
 
 
+
+
     @images = []
     @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
 
@@ -244,7 +246,7 @@ class FeedsController < ApplicationController
 
         @article_content = @article
         @article.sub_type = "Others" if @article.sub_type.blank?
-
+        @host_without_www = Item.get_host_without_www(@article.url)
         if @article.sub_type == "Others"
           host = Addressable::URI.parse(@article.url).host
           url = @article.url.gsub(host, "")

@@ -372,7 +372,7 @@ class ArticleContent < Content
               end
             end
           end
-          ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+          feed_url = ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
         else
           prefix = splitted_prefix.first
           processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
@@ -380,7 +380,7 @@ class ArticleContent < Content
 
           article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
           # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
-          ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+          feed_url = ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
         end
       end
 
@@ -393,11 +393,11 @@ class ArticleContent < Content
           patten_for_query = pattern.gsub("<page>", "%")
           url_for_query = url.gsub(patten_with_val, patten_for_query)
           article_content = @article_content = ArticleContent.where("url like ?", url_for_query).last
-          ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
+          feed_url = ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
         end
       end
     end
-    return feed_url, article_content
+    return feed_url.reload, article_content
   end
 
   def self.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url=nil)
@@ -413,6 +413,7 @@ class ArticleContent < Content
     param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
     Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
     feed_url.update_attributes!(:status => 1, :default_status => 6) if !feed_url.blank?
+    feed_url
   end
 
 end

@@ -108,6 +108,9 @@
 
           <%= hidden_field_tag 'old_default_values', "" %>
           <%= hidden_field_tag 'new_default_values', "" %>
+          <%= hidden_field_tag 'actual_title', @feed_url.created_at < 1.month.ago ? @feed_url.title : "" %>
+          <%= hidden_field_tag 'domain', @host_without_www %>
+
 
           <div class="page_buttons" style="clear:both;margin-left:91px;margin-bottom:20px;float:left;">
             <%= f.submit "Save and Continue" ,:class=>"btn_submitanswer", :id => "save_and_continue" %>
@@ -231,7 +234,7 @@
                         '',
                 dataType:'json',
                 type: "get",
-                data: {term: "<%= @title_for_search %>", search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val()},
+                data: {term: "<%= @title_for_search %>", search_type: $("#new_article_type").val(), category: '<%= @feed_url.category %>', ac_sub_type: $("#article_content_sub_type").val(), actual_title: $("#actual_title").val(), domain: $("#domain").val()},
                 before:$('#share_spinner').show(),
                 after: $('#share_spinner').hide(),
                 success: function(data){
@@ -271,7 +274,7 @@
                                     $.addIdToField("articles_item_id", $(that).attr("id").replace("matched",""), false)
                                     $(that).parent().hide();
                                 }
-                                else if ($("#article_content_sub_type").val() == "Comparisons")
+                                else if ($("#actual_title").val() != "" || $("#article_content_sub_type").val() == "Comparisons")
                                 {
                                     <% if current_user.id == 1 %>
                                     var sel_score_val = ' ('+ value.list_scores[1] + ' )'

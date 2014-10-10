@@ -132,6 +132,7 @@ class FeedUrl < ActiveRecord::Base
           begin
             new_feed_url.save!
             feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
+            feed_url.auto_save_feed_urls if feed_url.status == 0
           rescue Exception => e
             p e
           end
@@ -215,6 +216,7 @@ class FeedUrl < ActiveRecord::Base
             begin
               new_feed_url.save!
               feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
+              feed_url.auto_save_feed_urls if feed_url.status == 0
             rescue Exception => e
               p e
             end
@@ -493,6 +495,15 @@ class FeedUrl < ActiveRecord::Base
     auto_save = "false" if selected_list.blank?
     auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count < 2
 
+    actual_title = feed_url.created_at < 1.month.ago ? feed_url.title : ""
+
+    if auto_save == "false" && !actual_title.blank?
+      host_without_www = Item.get_host_without_www(article.url)
+      selected_list = FeedUrl.get_selected_list_for_old_data(actual_title, host_without_www)
+      selected_list = selected_list.uniq
+      auto_save = "true" if !selected_list.blank?
+    end
+
     if auto_save == "true"
       param = {}
       article_item_ids = selected_list.join(",")
@@ -509,73 +520,8 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.auto_save_old_feed_urls
-    feed_urls = FeedUrl.where("status = 0 and created_at < '#{1.month.ago}'").last(3)
-    feed_urls.each do |feed_url|
-      begin
-        article = ArticleContent.new(:url => feed_url.url, :created_by => 1)
-        title_info = feed_url.title
-        if title_info.include?("|")
-          title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
-        end
-        article.title = title_info
-        article.sub_type = article.find_subtype(article.title)
-        sub_type, title_for_search = feed_url.check_and_update_sub_type(article)
-        article.sub_type = sub_type unless sub_type.blank?
-        article.description = feed_url.summary
-        images = feed_url.images.split(",")
-        article.thumbnail = images.first if images.count > 0
-
-        article.sub_type = "Others" if article.sub_type.blank?
-
-        if article.sub_type == "Others"
-          host = Addressable::URI.parse(article.url).host
-          url_for_search = article.url.gsub(host, "")
-          subtype_from_url = article.find_subtype(url_for_search)
-          article.sub_type = subtype_from_url unless subtype_from_url.blank?
-        end
-        article_content = article
-
-        search_params = {}
-        search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)
-
-        # results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(search_params)
-        selected_list = feed_url.get_selected_list_for_old_data()
-        selected_list = selected_list.uniq
-
-        auto_save = "false"
-        if selected_list.blank?
-          host_without_www = Item.get_host_without_www(article.url)
-          sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
-          categories = sources_list[host_without_www]
-          splt_categories = categories.split(",").map(&:strip)
-          selected_list = splt_categories.map {|d| Item.get_root_level_id(d)}
-        end
-
-        auto_save = "true" if !selected_list.blank?
-
-        if auto_save == "true"
-          param = {}
-          article_item_ids = selected_list.join(",")
-          unless article_item_ids.blank?
-            param.merge!(:feed_url_id => feed_url.id, :default_item_id => "", :submit_url => "submit_url",
-                         :article_content => { :itemtype_id => article_content.itemtype_id, :type => article_content.type, :thumbnail => article_content.thumbnail,
-                                               :title => article_content.title, :url => article.url, :sub_type => article_content.sub_type, :description => article_content.description },
-                         :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0")
-
-            param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
-            Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, 1, "")
-            feed_url.update_attributes!(:status => 1, :default_status => 5) #TODO: auto save status as 5
-          end
-        end
-      rescue Exception => e
-        p e.backtrace
-      end
-    end
-  end
-
-  def get_selected_list_for_old_data
-    title_for_check = self.title.to_s.downcase
+  def self.get_selected_list_for_old_data(title_for_check, host_without_www)
+    title_for_check = title_for_check.to_s.downcase
     return_val = ""
     matching_text = [["mobile", "phone"], ["tablet", "pad"], ["car"], ["bike"], ["apps", "app "], ["games", "game", "gaming"], ["camera", "dslr", "photography"]]
     mathing_category_ids = [configatron.root_level_mobile_id, configatron.root_level_tablet_id, configatron.root_level_car_id, configatron.root_level_bike_id, configatron.root_level_app_id, configatron.root_level_game_id, configatron.root_level_camera_id]
@@ -587,6 +533,12 @@ class FeedUrl < ActiveRecord::Base
           selected_values << mathing_category_ids[index]
         end
       end
+    end
+    if selected_values.blank?
+      sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+      categories = sources_list[host_without_www]
+      splt_categories = categories.split(",").map(&:strip)
+      selected_values = splt_categories.map {|d| Item.get_root_level_id(d)}
     end
     selected_values
   end
