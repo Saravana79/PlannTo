@@ -478,10 +478,17 @@ class FeedUrl < ActiveRecord::Base
     article_content = article
     article.sub_type = "Others" if article.sub_type.blank?
 
+    if article.sub_type == "Others"
+      host = Addressable::URI.parse(article.url).host
+      url = article.url.gsub(host, "")
+      subtype_from_url = article.find_subtype(url)
+      article.sub_type = subtype_from_url unless subtype_from_url.blank?
+    end
+
     search_params = {}
     search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)
 
-    results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(params)
+    results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(search_params)
     selected_list = selected_list.uniq
     auto_save = "false" if selected_list.blank?
     auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count < 2
