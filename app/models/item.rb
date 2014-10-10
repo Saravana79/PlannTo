@@ -1091,8 +1091,14 @@ end
        return configatron.root_level_bike_id
     when "Camera"
        return configatron.root_level_camera_id
-    end 
-   end 
+    when "Games"
+       return configatron.root_level_game_id
+    when "Apps"
+       return configatron.root_level_app_id
+    when "Console"
+       return configatron.root_level_gaming_console_id
+    end
+  end
    
   def self.select_option_list 
    [['Select Product','']] + Item.all.map{|i|[ i.name, i.id]}
