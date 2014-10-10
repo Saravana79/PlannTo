@@ -234,7 +234,9 @@ end
 
     keys_for_title_search = all_items_by_score.select {|key,val| val >= all_items_by_score[each_new_key]}.keys
 
-    if auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type]))
+    first_key_score = all_items_by_score[first_key]
+
+    if first_key_score.to_f > 0.4 && auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type]))
       keys_for_title_search.each_with_index do |each_key, index|
         if index == 0
           first_key = each_key
