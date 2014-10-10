@@ -79,8 +79,9 @@ end
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
                         "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on","access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile","tablet","car","bike"]
+    term = term.gsub("-","")
     term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
-    # term = term.gsub("-","")
+    # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     search_type_for_data = search_type.first if search_type.is_a?(Array)
     @items = Sunspot.search(search_type) do
       keywords term do
@@ -195,9 +196,11 @@ end
     keys = all_items_by_score.keys
     values = all_items_by_score.values
 
-    first_key = 0
+    first_key = ""
+    each_new_key = ""
     compare_val = 10
     keys.each_with_index do |each_key, index|
+      each_new_key = each_key
         if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type])
           if index == 0
             first_key = each_key
@@ -229,8 +232,10 @@ end
         end
     end
 
+    keys_for_title_search = all_items_by_score.select {|key,val| val >= all_items_by_score[each_new_key]}.keys
+
     if auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type]))
-      all_items_by_score.keys.each_with_index do |each_key, index|
+      keys_for_title_search.each_with_index do |each_key, index|
         if index == 0
           first_key = each_key
           next
@@ -239,18 +244,32 @@ end
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
             if (term.include?(items_group_names[items_group[first_key]].to_s.strip) && !term.include?(items_group_names[items_group[each_key]].to_s.strip))
-              auto_save = "true"
+              selected_key = term.include?(items_group_names[items_group[first_key]].to_s.strip) == true ? first_key : each_key
+              new_selected_list = [items_group[selected_key]]
+              if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
+                auto_save = "true"
+              else
+                (new_groups = []) << item = items.select {|each_item| each_item.id == selected_key.to_i}.last
+                results_keys = results.map {|x| x[:id]}
+                new_results = Product.get_results_from_items(new_groups.compact)
+                if !new_results.blank?
+                  auto_save = "true"
+                  results << new_results
+                  results.flatten!
+                end
+              end
               break
             end
           end
         else
           first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
           second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
-          if (term.to_s.downcase.include?(first_title.to_s.strip.downcase) && !term.to_s.downcase.include?(second_title.to_s.strip.downcase))
+          if ((!first_title.blank? && !second_title.blank?) && (term.to_s.downcase.include?(first_title.to_s.strip.downcase) || term.to_s.downcase.include?(second_title.to_s.strip.downcase)))
             auto_save = "true"
+            new_selected_list = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? [first_key] : [each_key]
             break
           else
-            break
+            # break
           end
         end
       end
