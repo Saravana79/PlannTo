@@ -238,7 +238,7 @@ end
 
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
-            if (term.include?(items_group_names[items_group[first_key]].to_s..strip) && !term.include?(items_group_names[items_group[each_key]].to_s.strip))
+            if (term.include?(items_group_names[items_group[first_key]].to_s.strip) && !term.include?(items_group_names[items_group[each_key]].to_s.strip))
               auto_save = "true"
               break
             end
