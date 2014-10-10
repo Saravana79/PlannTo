@@ -79,8 +79,8 @@ end
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
                         "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on","access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile","tablet","car","bike"]
-   term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
-    term = term.gsub("-","")
+    term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+    # term = term.gsub("-","")
     search_type_for_data = search_type.first if search_type.is_a?(Array)
     @items = Sunspot.search(search_type) do
       keywords term do
@@ -238,7 +238,7 @@ end
 
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
-            if (term.include?(items_group_names[items_group[first_key]]) && !term.include?(items_group_names[items_group[each_key]]))
+            if (term.include?(items_group_names[items_group[first_key]].to_s..strip) && !term.include?(items_group_names[items_group[each_key]].to_s.strip))
               auto_save = "true"
               break
             end
@@ -246,7 +246,7 @@ end
         else
           first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
           second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
-          if (term.to_s.downcase.include?(first_title.to_s.downcase) && !term.to_s.downcase.include?(second_title.to_s.downcase))
+          if (term.to_s.downcase.include?(first_title.to_s.strip.downcase) && !term.to_s.downcase.include?(second_title.to_s.strip.downcase))
             auto_save = "true"
             break
           else
