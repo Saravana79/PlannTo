@@ -241,6 +241,8 @@ end
           next
         end
 
+        results_keys = results.map {|x| x[:id]}
+
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
             if (term.include?(items_group_names[items_group[first_key]].to_s.strip) && !term.include?(items_group_names[items_group[each_key]].to_s.strip))
@@ -249,13 +251,16 @@ end
               if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
                 auto_save = "true"
               else
-                (new_groups = []) << item = items.select {|each_item| each_item.id == selected_key.to_i}.last
-                results_keys = results.map {|x| x[:id]}
-                new_results = Product.get_results_from_items(new_groups.compact)
-                if !new_results.blank?
-                  auto_save = "true"
-                  results << new_results
-                  results.flatten!
+                item = items.select {|each_item| each_item.id == selected_key.to_i}.last
+                item_car_group = item.cargroup rescue nil
+                if !item_car_group.blank?
+                  (new_groups = []) << item_car_group
+                  new_results = Product.get_results_from_items(new_groups.compact)
+                  if !new_results.blank?
+                    auto_save = "true"
+                    results << new_results
+                    results.flatten!
+                  end
                 end
               end
               break
@@ -265,13 +270,27 @@ end
           first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
           second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
           if ((!first_title.blank? && !second_title.blank?) && (term.to_s.downcase.include?(first_title.to_s.strip.downcase) || term.to_s.downcase.include?(second_title.to_s.strip.downcase)))
-            auto_save = "true"
-            new_selected_list = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? [first_key] : [each_key]
+            selected_key = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? first_key : each_key
+            new_selected_list = items_group[selected_key].blank? ? [selected_key] : [items_group[selected_key]]
+            if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
+              auto_save = "true"
+            else
+              item = items.select {|each_item| each_item.id == selected_key.to_i}.last
+              item_car_group = item.cargroup rescue nil
+              if !item_car_group.blank?
+                (new_groups = []) << item_car_group
+                new_results = Product.get_results_from_items(new_groups.compact)
+                if !new_results.blank?
+                  auto_save = "true"
+                  results << new_results
+                  results.flatten!
+                end
+              end
+            end
             break
-          else
-            # break
           end
         end
+
       end
     end
 

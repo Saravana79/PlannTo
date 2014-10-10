@@ -1543,8 +1543,7 @@ end
       exists = true
     else
       begin
-        old_host = Addressable::URI.parse(url).host.downcase
-        host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
+        host = Item.get_host_without_www(url)
         source_category = source_categories[host]
 
         if !source_category.blank? && !source_category["pattern"].blank?
@@ -1583,6 +1582,11 @@ end
       item_ids << configatron.send(root_level).to_s.split(",")
     end
     item_ids
+  end
+
+  def self.get_host_without_www(url)
+    old_host = Addressable::URI.parse(url).host.downcase
+    host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
   end
 
   private

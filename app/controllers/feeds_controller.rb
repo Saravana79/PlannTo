@@ -244,6 +244,14 @@ class FeedsController < ApplicationController
 
         @article_content = @article
         @article.sub_type = "Others" if @article.sub_type.blank?
+
+        if @article.sub_type == "Others"
+          host = Addressable::URI.parse(@article.url).host
+          url = @article.url.gsub(host, "")
+          subtype_from_url = @article.find_subtype(url)
+          @article.sub_type = subtype_from_url unless subtype_from_url.blank?
+        end
+
         params[:term] = @article.title
       end
 
