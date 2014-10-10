@@ -148,7 +148,7 @@ class Feed < ActiveRecord::Base
     how_to = ["tutorial", "guide", "how to",'update','wallpaper',' root',' reset','drivers','pc suite','manual','how-to']
     lists = ["top ", "best "]
     photos = ["gallery",'photos','picture']
-    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive','rumor']
+    news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leaks', ' Rs',' arrive','rumor','on sale','news']
     specs = [' spec',' 3d','price in india']
     acces = [' case','shells','covers','charger','accessor']
     how_to.each do |how|
