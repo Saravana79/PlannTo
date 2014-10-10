@@ -481,9 +481,10 @@ class FeedUrl < ActiveRecord::Base
     search_params = {}
     search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)
 
-    results, selected_list, list_scores, auto_save = Product.get_search_items_by_relavance(search_params)
+    results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(params)
+    selected_list = selected_list.uniq
     auto_save = "false" if selected_list.blank?
-    auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count != 2
+    auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count < 2
 
     if auto_save == "true"
       param = {}
