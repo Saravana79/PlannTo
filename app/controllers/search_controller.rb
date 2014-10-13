@@ -316,7 +316,7 @@ class SearchController < ApplicationController
     if auto_save == "false" && !params[:actual_title].blank?
       selected_list = FeedUrl.get_selected_list_for_old_data(params[:actual_title], params[:domain])
       if !selected_list.blank?
-        selected_list = selected_list.uniq
+        selected_list = selected_list.compact.uniq
         sel_items = Item.where(:id => selected_list)
         new_results = Product.get_results_from_items(sel_items)
         results << new_results

@@ -504,6 +504,13 @@ class FeedUrl < ActiveRecord::Base
       auto_save = "true" if !selected_list.blank?
     end
 
+    if auto_save == "true" && selected_list.blank?
+      old_count = selected_list.count
+      res_with_type = {}; results.each {|result| res_with_type.merge!(result[:id] => result[:type])}
+      selected_list.delete_if {|each_val| res_with_type[each_val] == "Manufacturer"}
+      auto_save = "false" if selected_list.count != old_count
+    end
+
     if auto_save == "true"
       param = {}
       article_item_ids = selected_list.join(",")

@@ -285,8 +285,8 @@ end
           end
         else
           p 2222222222222222222222222222222222222222222222222222
-          first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
-          second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
+          p first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
+          p second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
           if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title.to_s.strip.downcase) || term.include?(second_title.to_s.strip.downcase)))
             p 777777
             p selected_key = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? first_key : each_key
@@ -312,6 +312,7 @@ end
 
       end
     end
+    new_selected_list = new_selected_list.uniq
 
     return results, new_selected_list, list_scores.values, auto_save
   end
