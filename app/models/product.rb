@@ -219,6 +219,11 @@ end
           if items_group[first_key] != items_group[each_key]
             if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
               p 9999999999999999999999
+              p all_items_by_score
+              p all_items_by_score[first_key]
+              p all_items_by_score[each_key]
+              p first_key
+              p each_key
               auto_save = "true"
               break
             end
