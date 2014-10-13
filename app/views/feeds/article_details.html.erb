@@ -108,7 +108,7 @@
 
           <%= hidden_field_tag 'old_default_values', "" %>
           <%= hidden_field_tag 'new_default_values', "" %>
-          <%= hidden_field_tag 'actual_title', @feed_url.created_at < 1.month.ago ? @feed_url.title : "" %>
+          <%= hidden_field_tag 'actual_title', @actual_title %>
           <%= hidden_field_tag 'domain', @host_without_www %>
 
 

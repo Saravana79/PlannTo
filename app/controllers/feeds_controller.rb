@@ -210,6 +210,7 @@ class FeedsController < ApplicationController
 
     @images = []
     @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
+    @actual_title = @feed_url.created_at < 2.weeks.ago ? @feed_url.title : "" unless @feed_url.blank?
 
     @article_content = ArticleContent.find_by_url(@feed_url.url)
 
