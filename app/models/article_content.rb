@@ -397,7 +397,7 @@ class ArticleContent < Content
         end
       end
     end
-    return feed_url.reload, article_content
+    return feed_url, article_content
   end
 
   def self.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url=nil)
