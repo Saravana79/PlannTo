@@ -1097,7 +1097,7 @@ end
        return configatron.root_level_app_id
     when "Console"
        return configatron.root_level_gaming_console_id
-    when "Console"
+    when "Laptop"
        return configatron.root_level_laptop_id
     end
   end

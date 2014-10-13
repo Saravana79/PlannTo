@@ -500,11 +500,11 @@ class FeedUrl < ActiveRecord::Base
     if auto_save == "false" && !actual_title.blank?
       host_without_www = Item.get_host_without_www(article.url)
       selected_list = FeedUrl.get_selected_list_for_old_data(actual_title, host_without_www)
-      selected_list = selected_list.uniq
+      selected_list = selected_list.compact.uniq
       auto_save = "true" if !selected_list.blank?
     end
 
-    if auto_save == "true" && selected_list.blank?
+    if auto_save == "true" && !selected_list.blank?
       old_count = selected_list.count
       res_with_type = {}; results.each {|result| res_with_type.merge!(result[:id] => result[:type])}
       selected_list.delete_if {|each_val| res_with_type[each_val] == "Manufacturer"}
