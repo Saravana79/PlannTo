@@ -232,7 +232,11 @@ end
         end
     end
 
-    keys_for_title_search = all_items_by_score.select {|key,val| val >= all_items_by_score[each_new_key]}.keys
+    p 1111111111
+    p keys_for_title_search = all_items_by_score.select {|key,val| val >= all_items_by_score[each_new_key]}.keys
+    p items_group
+    p items_group_names
+    p first_key
 
     first_key_score = all_items_by_score[first_key]
 
@@ -250,7 +254,8 @@ end
             first_title = items_group_names[items_group[first_key]].to_s.strip
             second_title = items_group_names[items_group[each_key]].to_s.strip
             if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title) || term.include?(second_title)))
-              selected_key = term.include?(first_title) == true ? first_key : each_key
+              p 8888
+              p selected_key = term.include?(first_title) == true ? first_key : each_key
               new_selected_list = [items_group[selected_key]]
               if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
                 auto_save = "true"
@@ -274,7 +279,8 @@ end
           first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
           second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
           if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title.to_s.strip.downcase) || term.include?(second_title.to_s.strip.downcase)))
-            selected_key = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? first_key : each_key
+            p 777777
+            p selected_key = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? first_key : each_key
             new_selected_list = items_group[selected_key].blank? ? [selected_key] : [items_group[selected_key]]
             if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
               auto_save = "true"
