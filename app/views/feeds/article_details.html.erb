@@ -117,6 +117,7 @@
             <a href="javascript:void(0)" class="btn_submitanswer" id="cancel" accesskey="c">Cancel</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="invalid" accesskey="i">Mark as Invalid</a>
             <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="future" accesskey="f">Mark as Future</a>
+            <a href="javascript:void(0)" class="btn_submitanswer mark_as" id="default_save" accesskey="f">Default Save</a>
           </div>
 
           <a accesskey="n" />
@@ -197,15 +198,21 @@
         })
 
         $(".mark_as").click(function () {
-            var that = $(this)
+            var id_val = $(this).attr("id")
             var feed_url_id = "<%= @feed_url.id %>"
+            if (id_val == "default_save") {
+                var url = '/feeds/default_save'
+            }
+            else {
+                var url = '/feeds/change_status'
+            }
+
             $.ajax({
-                url: '/feeds/change_status',
+                url: url,
                 dataType: 'json',
-                data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
+                data: {feed_url_id: feed_url_id, mark_as: id_val},
                 success: function (data) {
                     $("#feed_display_" + data.feed_url_id).next().find('.feed_title').click()
-
                 }
             });
         })

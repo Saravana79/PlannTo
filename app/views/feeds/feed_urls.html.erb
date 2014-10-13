@@ -201,11 +201,18 @@
 
         $(".mark_as_button").live('click', function () {
             var that = $(this)
+            var id_val = that.attr("id")
             var feed_url_id = that.parent('.mark_as_list').next().find('.feed_title').attr('id')
+            if (id_val == "default_save") {
+                var url = '/feeds/default_save'
+            }
+            else {
+                var url = '/feeds/change_status'
+            }
             $.ajax({
-                url: '/feeds/change_status',
+                url: url,
                 dataType: 'json',
-                data: {feed_url_id: feed_url_id, mark_as: that.attr("id")},
+                data: {feed_url_id: feed_url_id, mark_as: id_val},
                 success: function (data) {
 
                     that.closest('.each_row').next('.display').hide()

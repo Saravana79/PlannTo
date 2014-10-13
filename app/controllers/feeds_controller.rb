@@ -298,6 +298,13 @@ class FeedsController < ApplicationController
     render :json => {:status => status, :feed_url_id => @feed_url.id}.to_json
   end
 
+  def default_save
+    @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
+    return_val = @feed_url.auto_save_feed_urls(true)
+    status = return_val == "true" ? 1 : 0
+    render :json => {:status => status, :feed_url_id => @feed_url.id}.to_json
+  end
+
   def change_category
     @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
     category = params[:category] ||= "Others"

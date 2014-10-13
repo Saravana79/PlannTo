@@ -462,7 +462,7 @@ class FeedUrl < ActiveRecord::Base
     return nil, article.title
   end
 
-  def auto_save_feed_urls
+  def auto_save_feed_urls(force_default_save=false)
     feed_url = self
     article = ArticleContent.new(:url => feed_url.url, :created_by => 1)
     title_info = feed_url.title
@@ -497,7 +497,8 @@ class FeedUrl < ActiveRecord::Base
 
     actual_title = feed_url.created_at < 2.weeks.ago ? feed_url.title : ""
 
-    if auto_save == "false" && !actual_title.blank?
+    if auto_save == "false" && (force_default_save || !actual_title.blank?)
+      actual_title = feed_url.title if actual_title.blank?
       host_without_www = Item.get_host_without_www(article.url)
       selected_list = FeedUrl.get_selected_list_for_old_data(actual_title, host_without_www)
       selected_list = selected_list.compact.uniq
@@ -525,6 +526,7 @@ class FeedUrl < ActiveRecord::Base
         feed_url.update_attributes!(:status => 1, :default_status => 5) #TODO: auto save status as 5
       end
     end
+    auto_save
   end
 
   def self.get_selected_list_for_old_data(title_for_check, host_without_www)
