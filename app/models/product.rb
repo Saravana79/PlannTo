@@ -218,6 +218,7 @@ end
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
             if ((all_items_by_score[first_key].to_f - all_items_by_score[each_key].to_f) > compare_val)
+              p 9999999999999999999999
               auto_save = "true"
               break
             end
@@ -237,6 +238,7 @@ end
     p items_group
     p items_group_names
     p first_key
+    p auto_save
 
     first_key_score = all_items_by_score[first_key]
 
@@ -251,8 +253,9 @@ end
         term = term.to_s.downcase
         if !items_group[first_key].blank? && !items_group[each_key].blank?
           if items_group[first_key] != items_group[each_key]
-            first_title = items_group_names[items_group[first_key]].to_s.strip
-            second_title = items_group_names[items_group[each_key]].to_s.strip
+            p 1111111111111111111111111111111111111111
+            p first_title = items_group_names[items_group[first_key]].to_s.strip
+            p second_title = items_group_names[items_group[each_key]].to_s.strip
             if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title) || term.include?(second_title)))
               p 8888
               p selected_key = term.include?(first_title) == true ? first_key : each_key
@@ -276,6 +279,7 @@ end
             end
           end
         else
+          p 2222222222222222222222222222222222222222222222222222
           first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
           second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
           if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title.to_s.strip.downcase) || term.include?(second_title.to_s.strip.downcase)))
