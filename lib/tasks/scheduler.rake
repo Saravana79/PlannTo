@@ -102,3 +102,9 @@ task :buying_list_process => :environment do
   time = Time.zone.now.utc
   Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc)
 end
+
+desc "Processing Automated FeedProcess"
+task :automated_feed_process => :environment do
+  time = Time.zone.now.utc
+  Resque.enqueue(AutomatedFeedProcess, "automated_feed_process", Time.zone.now.utc)
+end

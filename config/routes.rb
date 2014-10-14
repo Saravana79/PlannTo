@@ -416,6 +416,7 @@ resources :comments do
       get 'feed_urls_batch_update'
       get "article_details"
       post "change_status"
+      post "default_save"
       post "batch_update"
       post "change_category"
     end

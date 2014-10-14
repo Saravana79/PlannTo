@@ -551,4 +551,13 @@ class FeedUrl < ActiveRecord::Base
     end
     selected_values
   end
+
+  def self.automated_feed_process
+    feed_urls = FeedUrl.where("status = 0 and created_at < '#{2.weeks.ago.utc}' or created_at > '#{3.days.ago.utc}'")
+    begin
+      feed_urls.each {|feed_url| feed_url.auto_save_feed_urls}
+    rescue Exception => e
+      p e.backtrace
+    end
+  end
 end
