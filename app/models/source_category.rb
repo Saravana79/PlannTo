@@ -8,7 +8,7 @@ class SourceCategory < ActiveRecord::Base
 
     results = {}
     source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| results.merge!({each_src["source"] => {"categories" => each_src["categories"], "check_details" => each_src["check_details"], "site_status" => each_src["site_status"]}})}
-    $redis_rtb.set("sources_list_details", title_results.to_json)
+    $redis_rtb.set("sources_list_details", results.to_json)
   end
 
   def check_and_assign_sources_hash_to_cache_from_table()
