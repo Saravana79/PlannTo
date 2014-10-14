@@ -32,8 +32,8 @@ namespace :feed do
         source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
       end
 
-      # sources_list = Rails.cache.read("feed_url-sources-list")
-      sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+      # sources_list = Rails.cache.read("sources_list_details")
+      sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
       sources_list.default = "Others"
       category = sources_list[source]
 

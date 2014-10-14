@@ -142,6 +142,8 @@ class FeedsController < ApplicationController
         @feed_urls.update_all(:status => 2)
       elsif params[:commit] == "Mark As Invalid"
         @feed_urls.update_all(:status => 3)
+      elsif params[:commit] == "Default Save"
+        @feed_urls.each {|feed_url| feed_url.auto_save_feed_urls(force_default_save=true)}
       elsif params[:commit] == "Save"
         articles_item_id = params[:articles_item_id]
         @feed_urls.each_with_index do |feed_url, index|
@@ -191,7 +193,6 @@ class FeedsController < ApplicationController
 
   def article_details
     #for images
-
     @dwnld_url = "dwnld_url"
     @article_image = "article_image"
     @current_image_size = "current_image_size"
@@ -204,9 +205,6 @@ class FeedsController < ApplicationController
     @current_image_id = "current_image"
     @productReviewRatingField = "new_productReviewRatingField"
     @productReviewRating = "new_product_review_rating"
-
-
-
 
     @images = []
     @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
@@ -224,7 +222,13 @@ class FeedsController < ApplicationController
       @external = true
       @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
 
-      @feed_url, @article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, current_user, request.remote_ip)
+      @feed_url, @article_content, @invalid = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, current_user, request.remote_ip)
+
+      if @invalid == "true"
+        @shared_message = "FeedUrl is Invalid Based on domain name"
+        return
+      end
+
 
       if @feed_url.status == 1 && !@article_content.blank?
         @already_shared = true

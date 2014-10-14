@@ -20,6 +20,11 @@
     </div>
 
     <div class="fields-div">
+      <div class="title_header float_lft">Site Status :</div>
+      <div class="float_lft"> <%= f.select :site_status, [true, false], {:selected => @source_category.site_status } %> </div>
+    </div>
+
+    <div class="fields-div">
       <div class="title_header float_lft">Category :</div>
       <div class="float_lft"> <%= f.select :categories, @categories, {:include_blank => true, :selected => @source_category.categories.to_s.split(",")}, :multiple => true %> </div>
     </div>

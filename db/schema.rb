@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141008095651) do
+ActiveRecord::Schema.define(:version => 20141014101232) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -1088,6 +1088,7 @@ ActiveRecord::Schema.define(:version => 20141008095651) do
     t.string   "prefix"
     t.string   "pattern"
     t.text     "check_details"
+    t.boolean  "site_status",   :default => true
   end
 
   create_table "sourceitems", :force => true do |t|

@@ -352,11 +352,17 @@ class ArticleContent < Content
 
   def self.check_and_update_mobile_site_feed_urls_from_feed(feed_url, user, remote_ip, param_url='')
     url = feed_url.blank? ? param_url : feed_url.url
+    invalid = "false"
     article_content = nil
     old_host = Addressable::URI.parse(url).host.downcase
     host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
     source_category = SourceCategory.where(:source => host).last
     if !source_category.blank?
+      if source_category.site_status == false && !feed_url.blank?
+        feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
+        invalid = "true"
+        return feed_url, article_content, invalid
+      end
       if !source_category.prefix.blank?
         prefix = source_category.prefix
         splitted_prefix = prefix.to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
@@ -397,7 +403,7 @@ class ArticleContent < Content
         end
       end
     end
-    return feed_url, article_content
+    return feed_url, article_content, invalid
   end
 
   def self.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url=nil)

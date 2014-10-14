@@ -3,6 +3,10 @@ class FeedUrl < ActiveRecord::Base
 
   validates_uniqueness_of :url
 
+  VALID = 1
+  FUTURE = 2
+  INVALID = 3
+
   def self.update_by_missing_records(log, process_type, count, valid_urls, invalid_urls, missing_ad)
     invalid_urls = invalid_urls.delete_if { |x| (x.blank? || x == "nil") }
 
@@ -101,10 +105,10 @@ class FeedUrl < ActiveRecord::Base
             end
           end
 
-          # sources_list = Rails.cache.read("feed_url-sources-list")
-          sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+          # sources_list = Rails.cache.read("sources_list_details")
+          sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
           sources_list.default = "Others"
-          category = sources_list[source]
+          category = sources_list[source]["categories"] rescue ""
 
           # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
           # if check_exist_feed_url.blank?
@@ -183,10 +187,10 @@ class FeedUrl < ActiveRecord::Base
               source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
             end
 
-            # sources_list = Rails.cache.read("feed_url-sources-list")
-            sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
+            # sources_list = Rails.cache.read("sources_list_details")
+            sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
             sources_list.default = "Others"
-            category = sources_list[source]
+            category = sources_list[source]["categories"] rescue ""
 
             # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
             # if check_exist_feed_url.blank?
@@ -333,32 +337,6 @@ class FeedUrl < ActiveRecord::Base
     end while next_val != 0
   end
 
-  def self.check_and_assign_sources_hash_to_cache()
-    # sources_list = Rails.cache.read("feed_url-sources-list")
-    sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
-    sources_list.default = "Others"
-    if sources_list.blank?
-      sources = FeedUrl.find_by_sql("select distinct source from feed_urls").map(&:source).delete_if { |x| x.blank? }
-      result = {}
-
-      sources.each do |each_source|
-        feed_by_sources = FeedUrl.find_by_sql("select distinct category from feed_urls where `feed_urls`.`source` = '#{each_source}'")
-        category = "Others"
-        unless feed_by_sources.blank?
-          categories = feed_by_sources.map(&:category)
-          categories = categories.map { |each_cat| each_cat.split(',') }
-          categories = categories.flatten.uniq
-          categories = categories - ['Others'] if categories.count > 1
-          category = categories.join(',')
-        end
-        result.merge!("#{each_source}" => category)
-      end
-      result
-      # Rails.cache.write("feed_url-sources-list", result)
-      $redis_rtb.set("feed_url-sources-list", result.to_json)
-    end
-  end
-
   def self.check_and_assign_sources_hash_to_source_category_daily()
     sources_categories = SourceCategory.find_by_sql("select distinct source from source_categories")
 
@@ -429,7 +407,7 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def check_and_update_sub_type(article)
-    source_hash = $redis_rtb.get("sources_list_title_results")
+    source_hash = $redis_rtb.get("sources_list_details")
     unless source_hash.blank?
       source_list = JSON.parse(source_hash)
       host = Addressable::URI.parse(self.url).host.downcase
@@ -544,8 +522,8 @@ class FeedUrl < ActiveRecord::Base
       end
     end
     if selected_values.blank?
-      sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
-      categories = sources_list[host_without_www]
+      sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+      categories = sources_list[host_without_www]["categories"] rescue ""
       splt_categories = categories.split(",").map(&:strip)
       selected_values = splt_categories.map {|d| Item.get_root_level_id(d)}
     end
@@ -554,10 +532,19 @@ class FeedUrl < ActiveRecord::Base
 
   def self.automated_feed_process
     feed_urls = FeedUrl.where("status = 0 and created_at < '#{2.weeks.ago.utc}' or created_at > '#{3.days.ago.utc}'")
-    begin
-      feed_urls.each {|feed_url| feed_url.auto_save_feed_urls}
-    rescue Exception => e
-      p e.backtrace
+    sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+
+    feed_urls.each do |feed_url|
+      host = Item.get_host_without_www(feed_url.url)
+      if sources_list[host]["site_status"] == false
+        feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
+      else
+        begin
+          feed_url.auto_save_feed_urls
+        rescue Exception => e
+          p e.backtrace
+        end
+      end
     end
   end
 end

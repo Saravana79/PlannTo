@@ -5,35 +5,20 @@ class SourceCategory < ActiveRecord::Base
   def self.update_all_to_cache()
     results = {}
     source_categories = SourceCategory.all
-    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| results.merge!({each_src["source"] => each_src["categories"]})}
-    results.default = "Others"
-    $redis_rtb.set("feed_url-sources-list", results.to_json)
 
-    #update for title check
-    title_results = {}
-    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| title_results.merge!({each_src["source"] => {"check_details" => each_src["check_details"]}})}
-    $redis_rtb.set("sources_list_title_results", title_results.to_json)
+    results = {}
+    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| results.merge!({each_src["source"] => {"categories" => each_src["categories"], "check_details" => each_src["check_details"], "site_status" => each_src["site_status"]}})}
+    $redis_rtb.set("sources_list_details", title_results.to_json)
   end
 
   def check_and_assign_sources_hash_to_cache_from_table()
     begin
-      sources_list = JSON.parse($redis_rtb.get("feed_url-sources-list"))
-      sources_list.default = "Others"
+      sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
     rescue Exception => e
       sources_list = {}
     end
-    sources_list.merge!({self.source => self.categories})
-    $redis_rtb.set("feed_url-sources-list", sources_list.to_json)
-
-    #update for title check
-    begin
-      title_results = JSON.parse($redis_rtb.get("sources_list_title_results"))
-      title_results.default = "Others"
-    rescue Exception => e
-      title_results = {}
-    end
-    title_results.merge!({self.source => {"check_details" => self.check_details}})
-    $redis_rtb.set("sources_list_title_results", title_results.to_json)
+    sources_list.merge!({self.source => {"categories" => self.categories, "check_details" => self.check_details, "site_status" => self.site_status}})
+    $redis_rtb.set("sources_list_details", sources_list.to_json)
   end
 
   def self.get_source_category_with_paginations()
