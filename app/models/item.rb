@@ -251,7 +251,11 @@ class Item < ActiveRecord::Base
       if(imagetype == :medium)
         configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
       elsif (imagetype == :org)
-        configatron.root_image_url + type.downcase + '/org/' + "#{imageurl}"
+        if self.image.blank?
+          configatron.root_image_url + type.downcase + '/org/' + "#{imageurl}"
+        else
+          self.image.avatar
+        end
       else   
          configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
       end

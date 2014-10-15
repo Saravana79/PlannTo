@@ -260,12 +260,14 @@ end
         results_keys = results.map {|x| x[:id]}
         term = term.to_s.downcase
         if !items_group[first_key].blank? && !items_group[each_key].blank?
-          if items_group[first_key] != items_group[each_key]
+          each_key_pos = keys_for_title_search.index(each_key) + 1
+          check_res = keys_for_title_search.count <= each_key_pos
+          if ((items_group[first_key] != items_group[each_key]) || check_res)
             p 1111111111111111111111111111111111111111
             p first_title = items_group_names[items_group[first_key]].to_s.strip
             p second_title = items_group_names[items_group[each_key]].to_s.strip
             if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title) || term.include?(second_title)))
-              p 8888
+              p 66666666666666666666
               p selected_key = term.include?(first_title) == true ? first_key : each_key
               new_selected_list = [items_group[selected_key]]
               if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
@@ -287,11 +289,11 @@ end
             end
           end
         else
-          p 2222222222222222222222222222222222222222222222222222
+          p 33333333333333333333333333333333333333333333333
           p first_title = items_group[first_key].blank? ? item_names[first_key] : items_group_names[items_group[first_key]]
           p second_title = items_group[each_key].blank? ? item_names[each_key] : items_group_names[items_group[each_key]]
           if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title.to_s.strip.downcase) || term.include?(second_title.to_s.strip.downcase)))
-            p 777777
+            p 8888888888888888888888
             p selected_key = term.to_s.downcase.include?(first_title.to_s.strip.downcase) == true ? first_key : each_key
             new_selected_list = items_group[selected_key].blank? ? [selected_key] : [items_group[selected_key]]
             if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)

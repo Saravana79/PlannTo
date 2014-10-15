@@ -36,7 +36,7 @@ class FeedsController < ApplicationController
       begin
         title = eval(title)
       rescue Exception => e
-        title = title.to_s.gsub(' ', '%')
+        title = title.to_s.gsub(' ', '%').gsub("'", '%')
       end
     end
 
