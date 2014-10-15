@@ -120,6 +120,9 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
+    image = params[:upload_image]
+    p image
+
     @item_types = Itemtype.select("id,itemtype")
     itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
     klass = itemtype.itemtype.to_s.gsub(" ", "")
@@ -134,6 +137,13 @@ class ItemsController < ApplicationController
         if (!params[:item][:group_id].blank?)
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
         end
+
+        if !image.blank?
+          @image = @item.build_image
+          @image.avatar = image
+          @image.save!
+        end
+
         format.html { redirect_to new_item_path, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
@@ -149,6 +159,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @item_types = Itemtype.select("id,itemtype")
     @action = "/items/update/#{@item.id}"
+    p image = params[:upload_image]
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
@@ -165,6 +176,16 @@ class ItemsController < ApplicationController
           group.destroy unless group.blank?
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
         end
+
+        if !image.blank?
+          @item.image ? @item.image.destroy : ""
+          @image = @item.build_image
+          p @image
+          p image
+          @image.avatar = image
+          @image.save!
+        end
+
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
         format.json { head :ok }
       else

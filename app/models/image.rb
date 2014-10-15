@@ -3,7 +3,8 @@ class Image < ActiveRecord::Base
   has_attached_file :avatar,
       :storage => :s3,
       :s3_credentials => "#{Rails.root}/config/s3.yml",
-      :path => "images/advertisements/:imageable_id/:id/:filename",
+      :styles => lambda { |a| a.instance.set_styles },
+      :path => ":img_table_name/:imgeable_type/:style/:filename",
       :url  => ":s3_sg_url"
 
   def self.file_dimensions(image)
@@ -23,6 +24,14 @@ class Image < ActiveRecord::Base
       ""
     else
       configatron.root_image_path + self.avatar.path
+    end
+  end
+
+  def set_styles
+    if self.imageable_type == "Item"
+      { :medium => ["176x132", :jpeg], :small => ["40x30", :jpeg] }
+    else
+      {}
     end
   end
 end

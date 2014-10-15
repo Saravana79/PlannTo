@@ -61,11 +61,14 @@ class Advertisement < ActiveRecord::Base
 
   def build_images(image_array, ad_type=nil)
     image_array.each do |image|
-      image = self.images.build(image)
-      if ad_type != "flash" && Image.file_dimensions(image)
-        image.save
+      p image
+      new_image = self.images.build
+      new_image.avatar = image[:avatar]
+      new_image.ad_size = image[:ad_size]
+      if ad_type != "flash" && Image.file_dimensions(new_image)
+        new_image.save
       else
-        image.save
+        new_image.save
       end
     end
   end

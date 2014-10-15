@@ -4,6 +4,7 @@ class Item < ActiveRecord::Base
   validates :name, :itemtype_id, :imageurl, :presence => true
   attr_accessor :old_version_id
 
+  has_one :image, as: :imageable
   has_many :add_impressions
   has_many :impressions, :as=>:impressionable
   self.inheritance_column ='type'
