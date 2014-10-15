@@ -122,6 +122,7 @@ class ItemsController < ApplicationController
   def create
     image = params[:upload_image]
     p image
+    params[:item][:imageurl] = image.original_filename if !image.blank?
 
     @item_types = Itemtype.select("id,itemtype")
     itemtype = Itemtype.where("id = ?", params[:item][:itemtype_id]).first
@@ -147,6 +148,8 @@ class ItemsController < ApplicationController
         format.html { redirect_to new_item_path, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
+        @item.imageurl = '' if !image.blank?
+        @item.valid?
         format.html { render action: "new" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -180,8 +183,6 @@ class ItemsController < ApplicationController
         if !image.blank?
           @item.image ? @item.image.destroy : ""
           @image = @item.build_image
-          p @image
-          p image
           @image.avatar = image
           @image.save!
         end
