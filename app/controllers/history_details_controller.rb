@@ -130,8 +130,8 @@ class HistoryDetailsController < ApplicationController
       # end 
 
       #for flipkart support
-      if(vendor_id == 9861)
-          url = url.gsub("wwww.flipkart.com","dl.flipkart.com/dl")
+      if(vendor.id == 9861)
+          url = url.gsub("www.flipkart.com","dl.flipkart.com/dl")
       end
       redirect_to url
   end
