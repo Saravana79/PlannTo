@@ -9,7 +9,7 @@ class Admin::AdvertisementsController < ApplicationController
     params[:date] ||= Date.today
     @start_date, @end_date = params[:date].to_s.split("/")
     @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}/#{Date.today}"], ['Last month', "#{Date.today-1.month}/#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}/#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}/#{Date.today}"]]
-    @advertisements = Advertisement.where("status=1 #{@user_condition}").order('created_at desc').paginate(:per_page => 10, :page => params[:page])
+    @advertisements = Advertisement.where("#{@user_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date])
   end
 
@@ -162,6 +162,6 @@ class Admin::AdvertisementsController < ApplicationController
   private
 
   def make_user_condition
-    @user_condition = current_user.is_admin? ? "" : " AND user_id=#{current_user.id}"
+    @user_condition = current_user.is_admin? ? "" : " user_id=#{current_user.id} "
   end
 end
