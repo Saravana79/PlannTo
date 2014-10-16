@@ -351,7 +351,7 @@ class Advertisement < ActiveRecord::Base
         $redis.hset("advertisements:#{advertisement.id}", "status", "paused")
         old_hour = hour-1
         return if invalid_hours.include?(old_hour)
-        update_remaining_budget_to_spent(advertisement.id)
+        update_remaining_budget_to_spent(advertisement.id, time)
       end
       return
     end
@@ -367,12 +367,12 @@ class Advertisement < ActiveRecord::Base
         $redis.hset("advertisements:#{advertisement.id}", "status", "enabled")
         old_hour = hour-1
         return if invalid_hours.include?(old_hour)
-        update_remaining_budget_to_spent(advertisement.id)
+        update_remaining_budget_to_spent(advertisement.id, time)
       end
     end
   end
 
-  def self.update_remaining_budget_to_spent(advertisement_id)
+  def self.update_remaining_budget_to_spent(advertisement_id, time)
     prev_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{hour-1}"
     prev_spent = $redis.get(prev_spent_key).to_i
     spent = $redis.get("ad:spent:#{advertisement_id}").to_i
