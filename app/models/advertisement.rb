@@ -335,7 +335,7 @@ class Advertisement < ActiveRecord::Base
       end
 
       if return_val >= hourly_spent.to_i
-        $redis.hset("advertisements:#{advertisement_id}", "status", "paused")
+        $redis_rtb.hset("advertisements:#{advertisement_id}", "status", "paused")
       end
     end
   end
