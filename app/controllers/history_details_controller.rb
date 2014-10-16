@@ -128,6 +128,11 @@ class HistoryDetailsController < ApplicationController
       # if ((vendor.id == 9874 || vendor.id == 9858 ) && (item_id == 22988|| item_id ==22800 || item_id == 15404 || item_id == 15434 || item_id == 21986))
       #   url = url.gsub("offer_id=17","offer_id=21")
       # end 
+
+      #for flipkart support
+      if(vendor.id == 9861)
+          url = url.gsub("www.flipkart.com","dl.flipkart.com/dl")
+      end
       redirect_to url
   end
 
