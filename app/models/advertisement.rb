@@ -17,6 +17,7 @@ class Advertisement < ActiveRecord::Base
   belongs_to :vendor
   has_one :ad_video_detail
 
+  after_create :item_update_with_created_ad_item_ids
   after_save :update_click_url_based_on_vendor
   after_save :update_redis_with_advertisement
 
@@ -123,8 +124,14 @@ class Advertisement < ActiveRecord::Base
     Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites)
 
     # Enqueue ItemUpdate with created advertisement item_ids
+    # item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
+    # item_ids = item_ids_array.map(&:inspect).join(',')
+    # Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+  end
+
+  def item_update_with_created_ad_item_ids
     item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
-    p item_ids = item_ids_array.map(&:inspect).join(',')
+    item_ids = item_ids_array.map(&:inspect).join(',')
     Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
   end
 
@@ -335,7 +342,7 @@ class Advertisement < ActiveRecord::Base
       end
 
       if return_val >= hourly_spent.to_i
-        $redis_rtb.hset("advertisements:#{advertisement_id}", "status", "paused")
+        $redis_rtb.hset("advertisments:#{advertisement_id}", "status", "paused")
       end
     end
   end
@@ -348,7 +355,7 @@ class Advertisement < ActiveRecord::Base
     
     if invalid_hours.include?(hour)
       advertisements.each do |advertisement|
-        $redis.hset("advertisements:#{advertisement.id}", "status", "paused")
+        $redis.hset("advertisments:#{advertisement.id}", "status", "paused")
         old_hour = hour-1
         return if invalid_hours.include?(old_hour)
         update_remaining_budget_to_spent(advertisement.id, time)
@@ -364,7 +371,7 @@ class Advertisement < ActiveRecord::Base
       end
     else
       advertisements.each do |advertisement|
-        $redis.hset("advertisements:#{advertisement.id}", "status", "enabled")
+        $redis.hset("advertisments:#{advertisement.id}", "status", "enabled")
         old_hour = hour-1
         return if invalid_hours.include?(old_hour)
         update_remaining_budget_to_spent(advertisement.id, time)

@@ -100,7 +100,14 @@ class Admin::AdvertisementsController < ApplicationController
     params['advertisement_content'] = {}
     params['advertisement_content']['title'] = 'advertisement'
     if @advertisement.update_attributes(params[:advertisement])
-      @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) unless @content.blank?
+      old_item_ids_array = @advertisement.content.blank? ? [] : @advertisement.content.allitems.map(&:id)
+      unless @content.blank?
+        new_item_ids_array = params[:ad_item_id].to_s.split(",")
+        @content.update_with_items!(params['advertisement_content'], params[:ad_item_id])
+        item_ids_array = old_item_ids_array + new_item_ids_array
+        item_ids = item_ids_array.map(&:inspect).join(',')
+        Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+      end
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
       redirect_to admin_advertisements_path
     else

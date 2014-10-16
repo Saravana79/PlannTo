@@ -1176,15 +1176,15 @@ end
 
   def self.update_item_details_with_ad_ids(log, item_ids=nil, batch_size=2000)
 
-    custom_query = "1=1"
+    custom_query = " and 1=1 "
 
     unless item_ids.blank?
-      custom_query = "item_id in (#{item_ids})"
+      custom_query = " and icc.item_id in (#{item_ids}) "
     end
 
     query_to_get_advertisement_details = "select item_id,group_concat(distinct(a.id)) as advertisement_id,group_concat(icc.content_id) as content_id from item_contents_relations_cache icc
     inner join advertisements a on a.content_id = icc.content_id
-    where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) <= NOW() and date(a.end_date) >= NOW()
+    where icc.content_id in (select id from contents where type ='AdvertisementContent') and a.status = 1 and date(a.start_date) <= date(NOW()) and date(a.end_date) >= date(NOW()) #{custom_query}
     group by item_id"
 
     # adv_records = Item.find_by_sql(query_to_get_advertisement_details)
