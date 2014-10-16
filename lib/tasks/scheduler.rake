@@ -108,3 +108,8 @@ task :automated_feed_process => :environment do
   time = Time.zone.now.utc
   Resque.enqueue(AutomatedFeedProcess, "automated_feed_process", Time.zone.now.utc)
 end
+
+desc "Update hourly budget"
+task :update_hourly_budget => :environment do
+ Advertisement.check_and_update_hourly_budget()
+end

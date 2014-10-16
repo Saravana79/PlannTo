@@ -21,7 +21,7 @@
  <%@advertisements.each do |ad | %>
    <tr>
      <td><%= ad.name  %> </td>
-     <td><%= get_ad_status(ad.id)  %> </td>
+     <td><%= ad.status == 1 ? "Enable" : "Disable"  %> </td>
      <td> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
      <td> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
      <td><%= @extra_ad_details["#{ad.id}"]["impressions"]%></td>

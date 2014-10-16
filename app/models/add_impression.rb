@@ -50,6 +50,8 @@ class AddImpression < ActiveRecord::Base
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
    ai.save
+
+   # Advertisement.check_and_update_act_spent_budget_in_redis(ai.advertisement_id, obj_params[:winning_price_enc])
  end
 
   def self.get_winning_price_value(winning_price_enc)

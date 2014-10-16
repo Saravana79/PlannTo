@@ -101,12 +101,12 @@
     <div class="fields-div" style="clear:both;">
       <div class="title_header float_lft">Start Date :</div>
       <div>
-        <%= f.text_field :start_date %></div>
+        <%= f.text_field :start_date, :value => @advertisement.start_date ? @advertisement.start_date.strftime("%d-%m-%Y") : "" %></div>
     </div>
     <div class="fields-div">
       <div class="title_header float_lft">End Date :</div>
       <div>
-        <%= f.text_field :end_date %></div>
+        <%= f.text_field :end_date, :value => @advertisement.end_date ? @advertisement.end_date.strftime("%d-%m-%Y") : "" %></div>
     </div>
 
     <div class="fields-div" style="clear: both;">
@@ -191,7 +191,7 @@
       <div class="fields-div" style="clear:both;">
         <div class="title_header float_lft">Expiry Date :</div>
         <div>
-          <%= f.text_field :expiry_date %></div>
+          <%= f.text_field :expiry_date, :value => @advertisement.expiry_date ? @advertisement.expiry_date.strftime("%d-%m-%Y") : "" %></div>
       </div>
     </div>
 

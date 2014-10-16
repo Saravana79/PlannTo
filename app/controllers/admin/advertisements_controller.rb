@@ -24,7 +24,7 @@ class Admin::AdvertisementsController < ApplicationController
   def edit
     @advertisement = Advertisement.where("id=#{params[:id]} #{@user_condition}").first
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
-    @ad_status = $redis_rtb.hget("advertisments:#{@advertisement.id}", "enabled") == "true" ? "Enable" : "Disable"
+    @ad_status = @advertisement.status == 1 ? "Enable" : "Disable"
 
     @items = Item.where(:id => @advertisement.content.related_items.collect(&:item_id)) rescue []
     @exclusive_items = Item.where(:id => @advertisement.exclusive_item_ids.to_s.split(",")) rescue []
@@ -116,12 +116,14 @@ class Admin::AdvertisementsController < ApplicationController
 
   def change_ad_status
     status = params[:status]
+    advertisement = Advertisement.where(:id => params[:ad_id]).first
     if (["Enable","Disable"].include?(status))
-      ad_status = status == "Enable" ? "true" : "false"
-      $redis_rtb.hset("advertisments:#{params[:ad_id]}", "enabled", ad_status)
-      redirect_to edit_admin_advertisement_path(params[:ad_id])
+      ad_status = status == "Enable" ? 1 : 0
+      advertisement.update_attributes!(:status => ad_status)
+      # ad_status = status == "Enable" ? "enabled" : (status == "Disable" ? "disabled" : "paused")
+      # $redis_rtb.hset("advertisments:#{params[:ad_id]}", "status", ad_status)
+      redirect_to admin_advertisements_path
     elsif status == "Delete"
-      advertisement = Advertisement.where(:id => params[:ad_id]).first
       begin
         advertisement.destroy
       rescue

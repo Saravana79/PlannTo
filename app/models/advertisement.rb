@@ -107,14 +107,20 @@ class Advertisement < ActiveRecord::Base
 
     formatted_click_url = Advertisement.make_valid_url(click_url)
 
-    ad_status = false
+    ad_status = "disabled"
     if status.to_i == 1
       if ((!start_date.blank? && start_date.to_date <= Date.today) && (!end_date.blank? && end_date.to_date >= Date.today))
-        ad_status = true
+        ad_status = "enabled"
+      end
+
+      if budget_changed?
+        hour = Time.now.hour
+        new_budget = get_hourly_budget(0)
+        $redis.set("ad:spent:#{id}", new_budget*1000000)
       end
     end
 
-    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "enabled", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites)
+    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites)
 
     # Enqueue ItemUpdate with created advertisement item_ids
     item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
@@ -257,8 +263,12 @@ class Advertisement < ActiveRecord::Base
         itemsaccess = "offers"
       end
     end
-    @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                            plan_to_temp_user_id, ads_id, param[:wp], param[:sid]) if param[:is_test] != "true"
+
+    if param[:is_test] != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
+                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid])
+      Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param[:wp])
+    end
     return @impression_id
   end
 
@@ -307,6 +317,71 @@ class Advertisement < ActiveRecord::Base
       extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => winning_price, "ctr" => "#{ctr.round(2)} %"})
     end
     extra_details
+  end
+
+  def self.check_and_update_act_spent_budget_in_redis(advertisement_id, winning_price_enc)
+    p 333333333333333333333333333333333333
+    p advertisement_id
+    p winning_price_enc
+    if !advertisement_id.blank? && !winning_price_enc.blank?
+      p 8888888888
+      time = Time.now
+      p winning_price = AddImpression.get_winning_price_value(winning_price_enc).to_i
+      p act_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{time.hour}"
+
+      return_val,hourly_spent = $redis.pipelined do
+        $redis.incrby(act_spent_key, winning_price)
+        $redis.get("ad:spent:#{advertisement_id}")
+      end
+
+      if return_val >= hourly_spent.to_i
+        $redis.hset("advertisements:#{advertisement_id}", "status", "paused")
+      end
+    end
+  end
+
+  def self.check_and_update_hourly_budget
+    time = Time.zone.now
+    hour = time.hour
+    hours = [*0..23]; invalid_hours = [2, 3, 4, 5]; valid_hours = hours - invalid_hours
+    advertisements = Advertisement.where(:status => 1)
+    
+    if invalid_hours.include?(hour)
+      advertisements.each do |advertisement|
+        $redis.hset("advertisements:#{advertisement.id}", "status", "paused")
+        old_hour = hour-1
+        return if invalid_hours.include?(old_hour)
+        update_remaining_budget_to_spent(advertisement.id)
+      end
+      return
+    end
+
+    if hour == 0
+      advertisements.each do |advertisement|
+        key = "ad:spent:#{advertisement.id}"
+        spent = advertisement.get_hourly_budget(0).to_i
+        $redis.set(key, spent*1000000)
+      end
+    else
+      advertisements.each do |advertisement|
+        $redis.hset("advertisements:#{advertisement.id}", "status", "enabled")
+        old_hour = hour-1
+        return if invalid_hours.include?(old_hour)
+        update_remaining_budget_to_spent(advertisement.id)
+      end
+    end
+  end
+
+  def self.update_remaining_budget_to_spent(advertisement_id)
+    prev_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{hour-1}"
+    prev_spent = $redis.get(prev_spent_key).to_i
+    spent = $redis.get("ad:spent:#{advertisement_id}").to_i
+    if prev_spent < spent
+      remaining_amt = prev_spent- spent
+      v_hours = valid_hours.each {|each_val| each_val >= hour}
+      val_for_add = (remaining_amt/v_hours.count).to_i
+      $redis.set("ad:spent:#{advertisement_id}", spent+val_for_add)
+    end
   end
 
   private

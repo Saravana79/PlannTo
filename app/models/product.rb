@@ -264,8 +264,8 @@ end
           check_res = keys_for_title_search.count <= each_key_pos
           if ((items_group[first_key] != items_group[each_key]) || check_res)
             p 1111111111111111111111111111111111111111
-            p first_title = items_group_names[items_group[first_key]].to_s.strip
-            p second_title = items_group_names[items_group[each_key]].to_s.strip
+            p first_title = items_group_names[items_group[first_key]].to_s.strip.downcase
+            p second_title = items_group_names[items_group[each_key]].to_s.strip.downcase
             if ((!first_title.blank? && !second_title.blank?) && (term.include?(first_title) || term.include?(second_title)))
               p 66666666666666666666
               p selected_key = term.include?(first_title) == true ? first_key : each_key

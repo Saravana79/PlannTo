@@ -41,8 +41,12 @@ class AdvertisementsController < ApplicationController
       @item_details = Click.get_item_details_when_ad_not_as_widget(impression_type, @item_details, vendor_ids)
       @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
       @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
-      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
-                                                              cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid) if @is_test != "true"
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], ad_id, winning_price_enc, sid)
+        Advertisement.check_and_update_act_spent_budget_in_redis(ad_id, winning_price_enc)
+      end
+
       @item_details = @item_details.uniq(&:url)
       @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
       if (@suitable_ui_size == "300_600" && @item_details.count < 3)
@@ -135,7 +139,10 @@ class AdvertisementsController < ApplicationController
 
     @image = @ad.images.where(:ad_size => params[:size]).first
 
-    @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid) if @is_test != "true"
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid)
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
     @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
     @click_url = @click_url.gsub("&amp;", "&")
 
