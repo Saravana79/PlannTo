@@ -355,7 +355,7 @@ class Advertisement < ActiveRecord::Base
     
     if invalid_hours.include?(hour)
       advertisements.each do |advertisement|
-        $redis.hset("advertisments:#{advertisement.id}", "status", "paused")
+        $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "paused")
         old_hour = hour-1
         return if invalid_hours.include?(old_hour)
         update_remaining_budget_to_spent(advertisement.id, time)
@@ -371,7 +371,7 @@ class Advertisement < ActiveRecord::Base
       end
     else
       advertisements.each do |advertisement|
-        $redis.hset("advertisments:#{advertisement.id}", "status", "enabled")
+        $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "enabled")
         old_hour = hour-1
         return if invalid_hours.include?(old_hour)
         update_remaining_budget_to_spent(advertisement.id, time)

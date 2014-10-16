@@ -3,13 +3,16 @@ class VideoContent < ArticleContent
   acts_as_voteable
   
   def self.video_id(url)
-    uri = URI.parse(url)
-    cgiuri = CGI.parse(uri.query)
-    if cgiuri["v"]
-      cgiuri["v"].first
-    else
-      uri.path
-    end
+    regex = /youtube.com.*(?:\/|v=)([^&$]+)/
+    url.match(regex)[1]
+
+    # uri = URI.parse(url)
+    # cgiuri = CGI.parse(uri.query)
+    # if cgiuri["v"]
+    #   cgiuri["v"].first
+    # else
+    #   uri.path
+    # end
   end
   
   def self.CreateContent(url, user)
@@ -32,13 +35,15 @@ class VideoContent < ArticleContent
     @article.field1 =  score if score != ""
     @article.video = true
     url = @article.url
-    if url.include?("youtube.com/video")
-      video_id = url.split("/video/")[1].split('&')[0]
-    elsif url.split('v=')[1]
-      video_id = (url.split('v=')[1]).split('&')[0]
-    elsif url.split('/v/')
-      video_id = (url.split('v=')[1]).split('&')[0]
-    end
+
+    video_id = video_id(url)
+    # if url.include?("youtube.com/video")
+    #   video_id = url.split("/video/")[1].split('&')[0]
+    # elsif url.split('v=')[1]
+    #   video_id = (url.split('v=')[1]).split('&')[0]
+    # elsif url.split('/v/')
+    #   video_id = (url.split('v=')[1]).split('&')[0]
+    # end
     
     @article.field4 = video_id
     @article.ip_address = ip
@@ -54,11 +59,14 @@ class VideoContent < ArticleContent
     @article.update_attributes(val)
     @article.video = true
     url = @article.url
-    if url.split('v=')[1]
-      video_id = (url.split('v=')[1]).split('&')[0]
-    elsif url.split('/v/')
-      video_id = (url.split('v=')[1]).split('&')[0]
-    end
+
+    video_id = VideoContent.video_id(url)
+
+    # if url.split('v=')[1]
+    #   video_id = (url.split('v=')[1]).split('&')[0]
+    # elsif url.split('/v/')
+    #   video_id = (url.split('v=')[1]).split('&')[0]
+    # end
     @article.field4 = video_id
     @article.user=user
     @article.update_with_items!(val, ids)

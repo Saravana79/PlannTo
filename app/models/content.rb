@@ -470,7 +470,7 @@ end
       #$redis.HMSET("url:#{self.url}", "item_ids", item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
       # Resque.enqueue(UpdateRedis, "url:#{self.url}", "item_ids", relateditems.collect(&:id).join(","), "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0)
       # we can't target properly if relateditems count greater than 25
-      related_item_ids = relateditems.count < 25 ? relateditems.collect(&:id).join(",") : ""
+      related_item_ids = items.count < 15 ? relateditems.collect(&:id).join(",") : ""
       redis_key = "url:#{self.url}"
       redis_values = "item_ids", related_item_ids, "id", self.id, "article_type", self.sub_type, "itemtype", self.itemtype_id, "count", 0
       $redis_rtb.HMSET(redis_key, redis_values)

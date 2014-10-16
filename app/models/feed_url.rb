@@ -118,6 +118,11 @@ class FeedUrl < ActiveRecord::Base
 
           title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
+          url_for_save = missing_url
+          if url_for_save.include?("youtube.com")
+            url_for_save = url_for_save.gsub("watch?v=", "video/")
+          end
+
           if !page_category.blank?
             if !valid_categories.include?(page_category.downcase)
               status = 3
@@ -129,7 +134,7 @@ class FeedUrl < ActiveRecord::Base
           # title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.to_s.strip
 
-          new_feed_url = FeedUrl.new(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
+          new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
                                         status: status, source: source, summary: description, :images => images,
                                         :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
 
@@ -200,6 +205,11 @@ class FeedUrl < ActiveRecord::Base
 
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
+            url_for_save = missing_url
+            if url_for_save.include?("youtube.com")
+              url_for_save = url_for_save.gsub("watch?v=", "video/")
+            end
+
             if !page_category.blank?
               unless valid_categories.include?(page_category.downcase)
                 status = 3
@@ -213,7 +223,7 @@ class FeedUrl < ActiveRecord::Base
             # title = title.blank? ? "" : title.to_s.strip
             title = title.to_s.strip
 
-            new_feed_url = FeedUrl.new(feed_id: feed.id, url: missing_url, title: title.to_s.strip, category: category,
+            new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
                                           status: status, source: source, summary: description, :images => images,
                                           :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
 
@@ -454,6 +464,14 @@ class FeedUrl < ActiveRecord::Base
     article.description = feed_url.summary
     images = feed_url.images.split(",")
     article.thumbnail = images.first if images.count > 0
+
+    if article.url.include?("youtube.com")
+      article.url = article.url.gsub("watch?v=", "video/")
+      video_id = VideoContent.video_id(article.url)
+      article.field4 = video_id
+      article.video = true
+    end
+
 
     article.sub_type = "Others" if article.sub_type.blank?
 

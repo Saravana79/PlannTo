@@ -214,7 +214,7 @@ class FeedsController < ApplicationController
 
     unless @article_content.blank?
       @already_shared = true
-      @feed_url.update_attributes!(:status => 1)
+      @feed_url.update_attributes!(:status => 1) rescue ""
 
       @article_content.check_and_update_mobile_site_feed_urls_from_content(@feed_url, current_user, request.remote_ip)
     else

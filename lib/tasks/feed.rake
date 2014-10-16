@@ -43,11 +43,16 @@ namespace :feed do
 
         title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
 
+        url_for_save = each_record.hosted_site_url
+        if url_for_save.include?("youtube.com")
+          url_for_save = url_for_save.gsub("watch?v=", "video/")
+        end
+
         # remove characters after come with space + '- or |' symbols
         title = title.to_s.gsub(/\s(-|\|).+/, '')
         title = title.blank? ? "" : title.strip
 
-        @feed_url = FeedUrl.new(:url => each_record.hosted_site_url, :title => title.strip, :status => status, :source => source,
+        @feed_url = FeedUrl.new(:url => url_for_save, :title => title.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => @feed.id, :published_at => each_record.created_at, :priorities => @feed.priorities)
 
@@ -78,7 +83,13 @@ namespace :feed do
       count = count + 1
       begin
         title, description, images = Feed.get_feed_url_values(each_feed_url.url)
-        each_feed_url.update_attributes(:title => title.strip, :summary => description, :images => images)
+
+        url_for_save = each_feed_url.url
+        if url_for_save.include?("youtube.com")
+          url_for_save = url_for_save.gsub("watch?v=", "video/")
+        end
+
+        each_feed_url.update_attributes(:title => title.strip, :summary => description, :images => images, :url => url_for_save)
         puts "Updated #{count} of #{@feed_urls.count} feed_urls remaining #{@feed_urls.count - count} values \n"
       rescue Exception => e
         puts "Error while process FeedUrl"

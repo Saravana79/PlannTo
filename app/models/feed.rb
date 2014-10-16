@@ -59,11 +59,16 @@ class Feed < ActiveRecord::Base
 
           title, description, images = Feed.get_feed_url_values(each_entry.url)
 
+          url_for_save = each_entry.url
+          if url_for_save.include?("youtube.com")
+            url_for_save = url_for_save.gsub("watch?v=", "video/")
+          end
+
           # remove characters after come with space + '- or |' symbols
           title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.to_s.strip
 
-          new_feed_url = FeedUrl.new(feed_id: id, url: each_entry.url, title: title.to_s.strip, category: category,
+          new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
                          :published_at => each_entry.published, :priorities => priorities)
 
@@ -117,11 +122,16 @@ class Feed < ActiveRecord::Base
 
         title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
 
+        url_for_save = each_record.hosted_site_url
+        if url_for_save.include?("youtube.com")
+          url_for_save = url_for_save.gsub("watch?v=", "video/")
+        end
+
         # remove characters after come with space + '- or |' symbols
         title = title.to_s.gsub(/\s(-|\|).+/, '')
         title = title.blank? ? "" : title.to_s.strip
 
-        @feed_url = FeedUrl.new(:url => each_record.hosted_site_url, :title => title.to_s.strip, :status => status, :source => source,
+        @feed_url = FeedUrl.new(:url => url_for_save, :title => title.to_s.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
                                    :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count)
 

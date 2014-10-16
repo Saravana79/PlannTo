@@ -18,6 +18,7 @@ class ArticleContent < Content
 
   def self.CreateContent(url, user)
     @images=[]
+    url = url.gsub("watch?v=", "video/")
     if url.include? "youtube.com"
       @article=VideoContent.CreateContent(url, user)
       @images << @article.thumbnail if @article.thumbnail
@@ -189,7 +190,7 @@ class ArticleContent < Content
         end
       end
 
-      if param['article_content']['url']
+      if param['article_content']['title']
         if param['article_content']['title'].include?("|")
           param['article_content']['title'] = param['article_content']['title'].slice(0..(param['article_content']['title'].index('|'))).gsub(/\|/, "").strip
 
@@ -221,6 +222,14 @@ class ArticleContent < Content
             param['article_content']['thumbnail'] = ''
           end
           @article=ArticleContent.saveContent(param['article_content'] || param['article_create'], user, ids, remote_ip, score)
+
+          if @article.url.include?("youtube.com")
+            @article.url = @article.url.gsub("watch?v=", "video/")
+            video_id = VideoContent.video_id(@article.url)
+            @article.field4 = video_id
+            @article.video = true
+            @article.save!
+          end
 
           # Resque.enqueue(ContributorPoint, user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
           if param['submit_url'] == 'submit_url'
