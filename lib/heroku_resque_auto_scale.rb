@@ -32,7 +32,7 @@ module HerokuResqueAutoScale
   def after_perform_scale_down(*args)
     # Nothing fancy, just shut everything down if we have no pending jobs
     # and one working job (which is this job)
-    # Scaler.workers = 0 if Scaler.job_count.zero? && Scaler.working_job_count == 0
+    Scaler.set_workers(0) if Scaler.job_count.zero? && Scaler.working_job_count == 0
   end
 
   def after_enqueue_scale_workers(*args)
