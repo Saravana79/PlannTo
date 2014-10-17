@@ -30,6 +30,8 @@ module HerokuResqueAutoScale
   end
 
   def after_enqueue_scale_workers(*args)
+    p 8888888888888888888888888888888888888888
+    p "testing"
     [
         {
             :workers => 1, # This many workers
@@ -56,13 +58,14 @@ module HerokuResqueAutoScale
       # Otherwise if there were 70 jobs, it would get set to 1, then 2, then 3, etc
 
       # If we have a job count greater than or equal to the job limit for this scale info
-      if Scaler.job_count >= scale_info[:job_count]
-        # Set the number of workers unless they are already set to a level we want. Don't scale down here!
-        if Scaler.workers <= scale_info[:workers]
-          Scaler.set_workers(scale_info[:workers])
-        end
-        break # We've set or ensured that the worker count is high enough
-      end
+      # if Scaler.job_count >= scale_info[:job_count]
+      #   # Set the number of workers unless they are already set to a level we want. Don't scale down here!
+      #   if Scaler.workers <= scale_info[:workers]
+      #     Scaler.set_workers(scale_info[:workers])
+      #   end
+      #   break # We've set or ensured that the worker count is high enough
+      # end
+      break
     end
   end
 end
