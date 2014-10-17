@@ -101,6 +101,7 @@ GEM
       warden (~> 1.1.1)
     erubis (2.7.0)
     eventmachine (1.0.3)
+    excon (0.25.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
     facets (2.9.3)
@@ -134,6 +135,8 @@ GEM
       json_pure (~> 1.2.0)
       launchy (~> 0.3.2)
       rest-client (~> 1.2)
+    heroku-api (0.3.15)
+      excon (~> 0.25.1)
     highcharts-rails (3.0.10)
       railties (>= 3.1)
     highline (1.6.20)
@@ -364,6 +367,7 @@ DEPENDENCIES
   haml-rails
   hashie
   heroku
+  heroku-api
   highcharts-rails (~> 3.0.10)
   jquery-rails
   koala
