@@ -9,7 +9,7 @@ module HerokuResqueAutoScale
         @@heroku.info(ENV['HEROKU_APP'])[:workers].to_i
       end
 
-      def workers=(qty)
+      def set_workers(qty)
         @@heroku.ps_scale(ENV['HEROKU_APP'], :type => :worker, :qty => qty)
       end
 
@@ -59,7 +59,7 @@ module HerokuResqueAutoScale
       if Scaler.job_count >= scale_info[:job_count]
         # Set the number of workers unless they are already set to a level we want. Don't scale down here!
         if Scaler.workers <= scale_info[:workers]
-          Scaler.workers = scale_info[:workers]
+          Scaler.set_workers(scale_info[:workers])
         end
         break # We've set or ensured that the worker count is high enough
       end
