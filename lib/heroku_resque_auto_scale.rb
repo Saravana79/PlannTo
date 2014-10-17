@@ -29,7 +29,7 @@ module HerokuResqueAutoScale
     Scaler.workers = 0 if Scaler.job_count.zero? && Scaler.working_job_count == 0
   end
 
-  def after_enqueue_scale_up(*args)
+  def after_enqueue_scale_workers(*args)
     [
         {
             :workers => 1, # This many workers
