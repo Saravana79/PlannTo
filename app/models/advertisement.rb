@@ -25,6 +25,10 @@ class Advertisement < ActiveRecord::Base
 
   STATUS = ["","valid"]
 
+  HOURS = [*0..23]
+  INVALID_HOURS = [2, 3, 4, 5]
+  VALID_HOURS = HOURS - INVALID_HOURS
+
   #validate :file_dimensions
 
   def self.url_params_process(param)
@@ -198,11 +202,7 @@ class Advertisement < ActiveRecord::Base
   end
 
   def get_hourly_budget(hour)
-    hours = [*0..23]
-    invalid_hours = [2, 3, 4, 5]
-    valid_hours = hours - invalid_hours
-
-    if valid_hours.include?(hour)
+    if VALID_HOURS.include?(hour)
       hourly_budget = self.budget.to_f / 20
     else
       hourly_budget = 0
@@ -350,14 +350,13 @@ class Advertisement < ActiveRecord::Base
   def self.check_and_update_hourly_budget
     time = Time.zone.now
     hour = time.hour
-    hours = [*0..23]; invalid_hours = [2, 3, 4, 5]; valid_hours = hours - invalid_hours
     advertisements = Advertisement.where(:status => 1)
     
-    if invalid_hours.include?(hour)
+    if INVALID_HOURS.include?(hour)
       advertisements.each do |advertisement|
         $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "paused")
         old_hour = hour-1
-        return if invalid_hours.include?(old_hour)
+        return if INVALID_HOURS.include?(old_hour)
         update_remaining_budget_to_spent(advertisement.id, time)
       end
       return
@@ -373,19 +372,20 @@ class Advertisement < ActiveRecord::Base
       advertisements.each do |advertisement|
         $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "enabled")
         old_hour = hour-1
-        return if invalid_hours.include?(old_hour)
+        return if INVALID_HOURS.include?(old_hour)
         update_remaining_budget_to_spent(advertisement.id, time)
       end
     end
   end
 
   def self.update_remaining_budget_to_spent(advertisement_id, time)
+    hour = time.hour
     prev_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{hour-1}"
     prev_spent = $redis.get(prev_spent_key).to_i
     spent = $redis.get("ad:spent:#{advertisement_id}").to_i
     if prev_spent < spent
       remaining_amt = prev_spent- spent
-      v_hours = valid_hours.each {|each_val| each_val >= hour}
+      v_hours = VALID_HOURS.each {|each_val| each_val >= hour}
       val_for_add = (remaining_amt/v_hours.count).to_i
       $redis.set("ad:spent:#{advertisement_id}", spent+val_for_add)
     end
