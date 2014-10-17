@@ -7,6 +7,10 @@ class Image < ActiveRecord::Base
       :path => ":img_table_name/:imgeable_type/:style/:filename",
       :url  => ":s3_sg_url"
 
+
+  before_save :update_avatar_file_name
+  after_save :update_item_imageurl
+
   def self.file_dimensions(image)
     hieght_width = image.ad_size.split("x")
     dimensions = Paperclip::Geometry.from_file(image.avatar.queued_for_write[:original].path)
@@ -29,9 +33,25 @@ class Image < ActiveRecord::Base
 
   def set_styles
     if self.imageable_type == "Item"
-      { :medium => ["176x132", :jpeg], :small => ["40x30", :jpeg] }
+      { :original => ["100%", :jpeg], :medium => ["176x132", :jpeg], :small => ["40x30", :jpeg] }
     else
-      {}
+      { :original => ["100%", :jpeg] }
     end
+  end
+
+  private
+
+  def update_item_imageurl
+    if imageable_type == "Item"
+      item = imageable
+      item.imageurl = avatar_file_name
+      item.save!
+    end
+  end
+
+  def update_avatar_file_name
+    name = self.avatar_file_name.to_s.split(".")
+    name[1] = "jpeg"
+    self.avatar_file_name = name.join(".")
   end
 end
