@@ -5,11 +5,8 @@ module HerokuResqueAutoScale
     class << self
       @@heroku = Heroku::API.new(:username => ENV['HEROKU_USER'], :password => ENV['HEROKU_PASSWORD'])
       # @@heroku = Heroku::API.new(:username => "siva@plannto.com", :password => "sivaplannto")
-      p 111111111111
-      p @@heroku
 
       def workers
-        p 22222222222
         # @@heroku.info(ENV['HEROKU_APP'])[:workers].to_i
         response = @@heroku.get_ps("plannto").body
         response.select {|e| e["process"].include?("worker")}.count
@@ -30,14 +27,18 @@ module HerokuResqueAutoScale
   end
 
   def after_perform_scale_down(*args)
+    return if !$redis.get("auto_scaled_heroku_worker").blank?
     # Nothing fancy, just shut everything down if we have no pending jobs
     # and one working job (which is this job)
-    Scaler.set_workers(0) if Scaler.job_count.zero? && Scaler.working_job_count == 0
+    if Scaler.job_count.zero? && Scaler.working_job_count == 0
+      Scaler.set_workers(0)
+      $redis.set("auto_scaled_heroku_worker", "true")
+      $redis.expire("auto_scaled_heroku_worker", 30.minutes)
+    end
   end
 
   def after_enqueue_scale_workers(*args)
-    p 88888888888888888888888888888888888888
-    p "calling"
+    return if !$redis.get("auto_scaled_heroku_worker").blank?
 
     [
         {
@@ -63,14 +64,15 @@ module HerokuResqueAutoScale
     ].reverse_each do |scale_info|
       # Run backwards so it gets set to the highest value first
       # Otherwise if there were 70 jobs, it would get set to 1, then 2, then 3, etc
-
       # If we have a job count greater than or equal to the job limit for this scale info
       if Scaler.job_count >= scale_info[:job_count]
         # Set the number of workers unless they are already set to a level we want. Don't scale down here!
-        p scale_info[:workers]
-        p Scaler.workers
-        if Scaler.workers < scale_info[:workers]
+        if Scaler.workers != scale_info[:workers]
           Scaler.set_workers(scale_info[:workers])
+          $redis.pipelined do
+            $redis.set("auto_scaled_heroku_worker", "true")
+            $redis.expire("auto_scaled_heroku_worker", 30.minutes)
+          end
         end
         break # We've set or ensured that the worker count is high enough
       end
