@@ -27,14 +27,11 @@ module HerokuResqueAutoScale
   end
 
   def after_perform_scale_down(*args)
-    return if !$redis.get("auto_scaled_heroku_worker").blank?
+    # TODO:have to implement for become 0 worker
+    # return if !$redis.get("auto_scaled_heroku_worker").blank?
     # Nothing fancy, just shut everything down if we have no pending jobs
     # and one working job (which is this job)
-    if Scaler.job_count.zero? && Scaler.working_job_count == 0
-      Scaler.set_workers(0)
-      $redis.set("auto_scaled_heroku_worker", "true")
-      $redis.expire("auto_scaled_heroku_worker", 30.minutes)
-    end
+    # Scaler.set_workers(0) if Scaler.job_count.zero? && Scaler.working_job_count == 0
   end
 
   def after_enqueue_scale_workers(*args)
