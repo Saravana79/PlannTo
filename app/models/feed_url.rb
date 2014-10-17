@@ -360,7 +360,7 @@ class FeedUrl < ActiveRecord::Base
       category = "Others"
       unless feed_by_sources.blank?
         categories = feed_by_sources.map(&:category)
-        categories = categories.map { |each_cat| each_cat.split(',') }
+        categories = categories.map { |each_cat| each_cat.to_s.split(',') }
         categories = categories.flatten.uniq
         categories = categories - ['Others'] if categories.count > 1
         category = categories.join(',')

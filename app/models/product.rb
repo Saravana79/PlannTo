@@ -104,6 +104,7 @@ end
     item_names = {}
     items.each {|item| item_names.merge!("#{item.id}" => "#{item.name}")}
     item_names.each {|k,v| splt_val = v.split(" "); if splt_val.count > 2; splt_val.shift; item_names[k]=splt_val.join(" ");end}
+    item_names.each {|k,v| item_names[k] = v.to_s.split(/\W+/).join(' ')}
 
     # Append suggestions based on category
     categories = []
@@ -195,6 +196,7 @@ end
     end
 
     items_group_names.each {|k,v| splt_val = v.split(" "); if splt_val.count > 2; splt_val.shift; items_group_names[k]=splt_val.join(" ");end}
+    items_group_names.each {|k,v| items_group_names[k] = v.to_s.split(/\W+/).join(' ')}
 
     keys = all_items_by_score.keys
     values = all_items_by_score.values
