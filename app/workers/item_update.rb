@@ -1,4 +1,5 @@
 class ItemUpdate
+  extend HerokuResqueAutoScale
   @queue = :item_update_process
 
   def self.perform(method_name, actual_time, item_ids=nil)

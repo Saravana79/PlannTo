@@ -1,4 +1,5 @@
 class BuyingListProcess
+  extend HerokuResqueAutoScale
   @queue = :buying_list_process
 
   def self.perform(method_name, actual_time)

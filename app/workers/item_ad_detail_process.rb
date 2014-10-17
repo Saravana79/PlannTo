@@ -1,4 +1,5 @@
 class ItemAdDetailProcess
+  extend HerokuResqueAutoScale
   @queue = :item_ad_detail_process
 
   def self.perform(method_name, actual_time, batch_size)

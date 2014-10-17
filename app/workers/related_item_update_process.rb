@@ -3,6 +3,7 @@ Rake::Task.clear # necessary to avoid tasks being loaded several times in dev mo
 PlanNto::Application.load_tasks
 
 class RelatedItemUpdateProcess
+  extend HerokuResqueAutoScale
   @queue = :related_item_update_process
 
   def self.perform(actual_time)

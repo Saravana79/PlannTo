@@ -1,4 +1,5 @@
 class VotingPoint
+  extend HerokuResqueAutoScale
   @queue = :add_voting_points
 
   def self.perform(user_id, voteable_id, parent_type)

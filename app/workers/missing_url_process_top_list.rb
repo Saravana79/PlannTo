@@ -1,4 +1,5 @@
 class MissingUrlProcessTopList
+  extend HerokuResqueAutoScale
   @queue = :missing_record_process
 
   def self.perform(method_name, actual_time)

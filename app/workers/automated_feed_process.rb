@@ -1,4 +1,5 @@
 class AutomatedFeedProcess
+  extend HerokuResqueAutoScale
   @queue = :automated_feed_process
 
   def self.perform(method_name, actual_time)

@@ -1,4 +1,5 @@
 class RtbBudgetUpdateProcess
+  extend HerokuResqueAutoScale
   @queue = :rtb_budget_update_process
 
   def self.perform(method_name, actual_time)

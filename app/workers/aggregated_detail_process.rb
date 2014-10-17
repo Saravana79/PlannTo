@@ -1,4 +1,5 @@
 class AggregatedDetailProcess
+  extend HerokuResqueAutoScale
   @queue = :aggregated_detail_process
 
   def self.perform(actual_time)

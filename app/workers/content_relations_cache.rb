@@ -1,4 +1,5 @@
 class ContentRelationsCache
+  extend HerokuResqueAutoScale
   @queue = :update_content_relations
 
   def self.perform(content_id, items, update=false)

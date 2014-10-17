@@ -1,4 +1,5 @@
 class CleanUpRedisKeys
+  extend HerokuResqueAutoScale
   @queue = :clean_up_redis_keys
 
   def self.perform(method_name, actual_time)

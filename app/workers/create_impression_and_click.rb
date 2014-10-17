@@ -1,4 +1,5 @@
 class CreateImpressionAndClick
+  extend HerokuResqueAutoScale
   @queue = :create_impression_and_click
 
   def self.perform(class_name, obj_params)

@@ -1,4 +1,5 @@
 class AdvertisementProcess
+  extend HerokuResqueAutoScale
   @queue = :advertisement_process
 
   def self.perform(method_name, actual_time)

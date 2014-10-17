@@ -1,4 +1,5 @@
 class UpdateRedis
+  extend HerokuResqueAutoScale
   @queue = :update_redis
 
   def self.perform(redis_key, *redis_values)
