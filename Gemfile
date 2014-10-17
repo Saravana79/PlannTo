@@ -92,5 +92,4 @@ gem 'addressable', '~> 2.3.6'
 gem 'open_uri_redirections', '~> 0.1.4'
 
 # gem for auto scale up and down workers in heroku
-gem 'heroku'
 gem 'heroku-api'
