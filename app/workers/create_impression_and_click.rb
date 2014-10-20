@@ -1,5 +1,5 @@
 class CreateImpressionAndClick
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :create_impression_and_click
 
   def self.perform(class_name, obj_params)

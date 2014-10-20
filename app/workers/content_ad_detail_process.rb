@@ -1,5 +1,5 @@
 class ContentAdDetailProcess
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :content_ad_detail_process
 
   def self.perform(method_name, actual_time, batch_size, now_time)

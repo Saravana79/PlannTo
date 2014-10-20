@@ -1,5 +1,5 @@
 class AdvertisementProcess
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :advertisement_process
 
   def self.perform(method_name, actual_time)

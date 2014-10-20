@@ -1,5 +1,5 @@
 class AggregatedDetailProcess
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :aggregated_detail_process
 
   def self.perform(actual_time)

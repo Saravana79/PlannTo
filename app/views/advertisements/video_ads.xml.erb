@@ -13,6 +13,7 @@
 </Impression>
 <Creatives>
 
+<% if !@ad_video_detail.linear_click_url.blank? %>
 <Creative sequence="1" id="331">
 <Linear <% if @ad_video_detail.skip == true %> skipoffset="<%= @ad_video_detail.skip_time %>" <% end %>>
 <Duration><%= @ad_video_detail.total_time %></Duration>
@@ -74,7 +75,9 @@
 </MediaFiles>
 </Linear>
 </Creative>
+<% end %>
 
+<% if params[:non_linear] == "true" %>
 <Creative sequence="1" AdID="">
 <NonLinearAds>
 <TrackingEvents>
@@ -93,9 +96,29 @@
 </NonLinear>
 </NonLinearAds>
 </Creative>
+<% end %>
 
+<% if !@ad_video_detail.companion_type.blank? %>
 <Creative sequence="1" id="331">
 <CompanionAds>
+
+<% if @ad_video_detail.companion_type == "static" %>
+<Companion width="300" height="60">
+<StaticResource creativeType="image/jpeg">
+<![CDATA[<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.companion_img_url %>]]>
+</StaticResource>
+<TrackingEvents>
+<Tracking event="creativeView">
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=static-companion-impression&impression_id=<%= @impression_id %>]]>
+</Tracking>
+</TrackingEvents>
+<CompanionClickThrough>
+<![CDATA[<%= @ad_video_detail.companion_click_url %>]]>
+</CompanionClickThrough>
+</Companion>
+
+<% elsif @ad_video_detail.companion_type == "dynamic" %>
+
 <Companion width="300" height="250">
 <IFrameResource>
 <![CDATA[<%= @companion_dynamic_url %>]]>
@@ -106,8 +129,12 @@
 </Tracking>
 </TrackingEvents>
 </Companion>
+
+<% end %>
+
 </CompanionAds>
 </Creative>
+<% end %>
 
 </Creatives>
 </InLine>

@@ -1,5 +1,5 @@
 class ArticleContentProcess
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :article_content_process
 
   def self.perform(method_name, actual_time, param, user_id, remote_ip)

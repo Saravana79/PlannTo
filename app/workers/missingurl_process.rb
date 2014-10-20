@@ -1,5 +1,5 @@
 class MissingurlProcess
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :missing_record_process
 
   def self.perform(method_name, actual_time, force, process_type, count, valid_urls, invalid_urls, missing_ad)

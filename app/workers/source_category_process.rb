@@ -1,5 +1,5 @@
 class SourceCategoryProcess
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :process_source_categories
 
   def self.perform(method_name, actual_time)

@@ -80,8 +80,13 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ads
+    params[:linear] ||= "false" #TODO: Temporory disabled have to change true
+    params[:non_linear] ||= "false"
+    params[:companion] ||= "false"
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
     params[:size] ||= "300x250"
+    p 3333333333333333333333333333333333333333333333333333333
+    p params
     advertisement = Advertisement.where(:id => params[:ads_id]).last
     @ad_video_detail = advertisement.ad_video_detail
 

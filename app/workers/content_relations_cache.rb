@@ -1,5 +1,5 @@
 class ContentRelationsCache
-  extend HerokuResqueAutoScale
+  extend HerokuResqueAutoScale if Rails.env.production?
   @queue = :update_content_relations
 
   def self.perform(content_id, items, update=false)
