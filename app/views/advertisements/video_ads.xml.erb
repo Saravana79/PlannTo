@@ -104,7 +104,11 @@
 
 <% if @ad_video_detail.companion_type == "static" %>
 <Companion width="300" height="60">
-<StaticResource creativeType="image/jpeg">
+<% if @ad_video_detail.companion_img_url.to_s.include?(".swf") %>
+   <StaticResource creativeType="application/x-shockwave-flash">
+<% else %>
+   <StaticResource creativeType="image/jpeg">
+<% end %>
 <![CDATA[<%= configatron.root_image_path %>static/video_ads/<%= @ad_video_detail.companion_img_url %>]]>
 </StaticResource>
 <TrackingEvents>
@@ -119,7 +123,7 @@
 
 <% elsif @ad_video_detail.companion_type == "dynamic" %>
 
-<Companion width="300" height="250">
+<Companion width="300" height="60">
 <IFrameResource>
 <![CDATA[<%= @companion_dynamic_url %>]]>
 </IFrameResource>

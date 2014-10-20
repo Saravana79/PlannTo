@@ -84,7 +84,7 @@ class AdvertisementsController < ApplicationController
     params[:non_linear] ||= "false"
     params[:companion] ||= "false"
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-    params[:size] ||= "300x250"
+    params[:size] ||= "300x60"
     p 3333333333333333333333333333333333333333333333333333333
     p params
     advertisement = Advertisement.where(:id => params[:ads_id]).last
