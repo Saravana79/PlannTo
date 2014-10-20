@@ -71,6 +71,8 @@ class HistoryDetailsController < ApplicationController
         if !params[:ads_id].blank? && @item_detail.blank?
           @ad = Advertisement.where("id = ? and review_status='approved'", params[:ads_id]).first
           url = @ad.click_url
+
+          url = params[:red_url] if !params[:red_url].blank?
         else
           url = "#{@item_detail.url}"
         end

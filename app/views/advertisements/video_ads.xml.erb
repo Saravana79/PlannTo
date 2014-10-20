@@ -117,7 +117,7 @@
 </Tracking>
 </TrackingEvents>
 <CompanionClickThrough>
-<![CDATA[<%= @ad_video_detail.companion_click_url %>]]>
+<![CDATA[<%= configatron.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :red_url => @ad_video_detail.companion_click_url) %>]]>
 </CompanionClickThrough>
 </Companion>
 
