@@ -10,7 +10,8 @@
     <% if @ad.advertisement_type == "static" && @ad.id == 4 %>
       <%= link_to(image_tag("http://cdn1.plannto.com/static/images/amazon-01-mpu.jpg", :style => "height:240px;"), configatron.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
     <% elsif @ad.advertisement_type == "static" %>
-        <%= link_to(image_tag(@image.base_url), configatron.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
+        <%#= link_to(image_tag(@image.base_url), configatron.hostname + history_details_path(:ads_id => @ad.id, :iid => @impression_id, :ref_url => @ref_url), :id => "history_detail_link", :target=>"_blank")%>
+        <%= link_to(image_tag(@image.base_url), @ad.click_url, :id => "history_detail_link", :target=>"_blank")%>
     <% else %>
         <% ad_url = @ad.click_url %>
         <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
