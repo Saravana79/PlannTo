@@ -221,9 +221,9 @@ class ItemsController < ApplicationController
      
     
     unless @ids.blank? || params[:ids] == ""
-      related_item_ids = RelatedItem.where('item_id in (?)',@ids).order(:variance).limit(10).collect(&:related_item_id) 
-     @related_items = Item.where('id in (?) and id not in (?)' ,related_item_ids,  @ids).order("id desc")
-      @items = Item.includes([:attribute_values => :attribute],:item_rating).where("items.id in (?)", @ids)
+      related_item_ids = RelatedItem.where('item_id in (?)',p).order(:variance).limit(10).collect(&:related_item_id) 
+     @related_items = Item.where('id in (?) and id not in (?)' ,related_item_ids,  p).order("id desc")
+      @items = Item.includes([:attribute_values => :attribute],:item_rating).where("items.id in (?)", p)
 
       @item1 = @items[0] 
       session[:item_type] =  @item1.get_base_itemtype
@@ -232,7 +232,7 @@ class ItemsController < ApplicationController
        @attributes = @items.collect(&:attribute_values).flatten.uniq.collect{|av| av.attribute}.flatten.uniq.compact
        @attribute_ids = @attributes.collect(&:id)
       @ids[0] = "0" if @ids[0] == ""
-      content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{@ids.join(",")}) and contents.sub_type in ('Comparisons') group by content_id having count(*) > 1 limit 15").collect(&:content_id)
+      content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{p.join(",")}) and contents.sub_type in ('Comparisons') group by content_id having count(*) > 1 limit 15").collect(&:content_id)
       @contents = Content.where("id in (?)",content_ids).order("total_votes desc")
       @attribute_comparision_lists = AttributeComparisonList.find(:all,:conditions => ["itemtype_id = ?", @item1.itemtype_id], :order => "sort_order")
 
