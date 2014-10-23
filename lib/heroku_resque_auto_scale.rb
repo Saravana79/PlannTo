@@ -74,6 +74,6 @@ module HerokuResqueAutoScale
       #     break # We've set or ensured that the worker count is high enough
       #   end
       return
-    end
+   # end
   end
 end
