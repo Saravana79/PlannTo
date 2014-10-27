@@ -18,7 +18,7 @@ body {
 	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
 	-webkit-text-size-adjust: 100%;
 }
-.item_details{display: block;margin: 2px 5px 5px 4px;border: 1px solid rgba(158, 157, 157, 0.65098);border-radius: 10px;-webkit-box-shadow: #C7C7C7 1px 2px 3px 3px;box-shadow: #C7C7C7 1px 2px 3px 3px;height:527px;}
+.item_details{display: block;margin: 2px 5px 5px 4px;height:527px;}
 .advt-block { margin:0; padding:0;}
 .advt-120 { margin:0; padding:0; width:120px; height:600px; background:#fff; border:1px solid #F1F0F0;}
 .advt-120 .logo{ margin:0 5px; padding:10px 0;height:38px;}
@@ -54,6 +54,7 @@ body {
 	z-index:1000;
 	background:#fff;
 	padding:0 2px 10px 2px;
+	border-bottom: #F1F0F0 solid 1px;
 }
 .pager a {
 	margin: 0 2px;
