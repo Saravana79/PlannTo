@@ -348,7 +348,7 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.check_and_update_hourly_budget
-    time = Time.zone.now
+    time = Time.zone.now + 10.minutes
     hour = time.hour
     advertisements = Advertisement.where(:status => 1)
     
@@ -367,6 +367,7 @@ class Advertisement < ActiveRecord::Base
         key = "ad:spent:#{advertisement.id}"
         spent = advertisement.get_hourly_budget(0).to_i
         $redis.set(key, spent*1000000)
+        $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "enabled")
       end
     else
       advertisements.each do |advertisement|
@@ -384,7 +385,7 @@ class Advertisement < ActiveRecord::Base
     prev_spent = $redis.get(prev_spent_key).to_i
     spent = $redis.get("ad:spent:#{advertisement_id}").to_i
     if prev_spent < spent
-      remaining_amt = prev_spent- spent
+      remaining_amt = spent - prev_spent
       v_hours = VALID_HOURS.each {|each_val| each_val >= hour}
       val_for_add = (remaining_amt/v_hours.count).to_i
       $redis.set("ad:spent:#{advertisement_id}", spent+val_for_add)
