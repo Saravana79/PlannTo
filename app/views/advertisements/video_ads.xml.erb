@@ -59,7 +59,7 @@
 </TrackingEvents>
 <VideoClicks>
 <ClickThrough>
-<![CDATA[<%= @ad_video_detail.linear_click_url %>]]>
+<![CDATA[<%= configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url) %>]]>
 </ClickThrough>
 </VideoClicks>
 <MediaFiles>

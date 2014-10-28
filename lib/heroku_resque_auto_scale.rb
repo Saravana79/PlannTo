@@ -43,7 +43,6 @@ module HerokuResqueAutoScale
     end
 
     job_count = Scaler.job_count
-
     workers_count = Scaler.workers
 
     [

@@ -1503,7 +1503,8 @@ end
 
                 if !old_buying_list.blank? || !buying_list.blank?
                   u_values["buyinglist"] = buying_list.join(",")
-                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => u_values["buyinglist"])
+                  items_count = u_values.select {|k,_| k.include?("_c")}.count
+                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => {"item_ids" => u_values["buyinglist"], "count" => items_count})
                 end
 
                 begin
@@ -1534,7 +1535,7 @@ end
 
         $redis_rtb.pipelined do
           redis_rtb_hash.each do |key, val|
-            $redis_rtb.set(key, val)
+            $redis_rtb.hmset(key, "item_ids", val["item_ids"], "count", val["count"])
             $redis_rtb.expire(key, 2.weeks)
           end
         end
