@@ -113,3 +113,33 @@ desc "Update hourly budget"
 task :update_hourly_budget => :environment do
  Advertisement.check_and_update_hourly_budget()
 end
+
+desc "temporary rake task"
+task :update_buyinglist => :environment do
+  buying_lists = $redis_rtb.keys("users:buyinglist:*")
+
+  buying_lists = buying_lists[5250..buying_lists.count]
+
+  buying_lists.each do |buying_list|
+    p 111111111111111111111111111111111111
+    p buying_list
+    user_id = buying_list.split(":")[2]
+    key = "users:buyinglist:#{user_id}"
+    begin
+      item_ids = $redis_rtb.get(buying_list)
+      u_key = "u:ac:#{user_id}"
+      u_values = $redis.hgetall(u_key)
+      items_count = u_values.select {|k,_| k.include?("_c")}.count
+      $redis_rtb.del key
+      $redis_rtb.pipelined do
+        $redis_rtb.hmset(key, "item_ids", item_ids, "count", items_count)
+        $redis_rtb.expire(key, 2.weeks)
+      end
+    rescue Exception => e
+      p e
+      p "already shared check key => #{key}"
+      p 222222222222222222222222222222222222222
+    end
+    p 3333333333333333333333333333333333333333333
+  end
+end

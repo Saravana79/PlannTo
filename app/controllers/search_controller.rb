@@ -314,17 +314,21 @@ class SearchController < ApplicationController
     p "auto save => #{auto_save}"
 
     if auto_save == "false" && !params[:actual_title].blank?
-      selected_list = FeedUrl.get_selected_list_for_old_data(params[:actual_title], params[:domain])
-      selected_list = selected_list.compact.uniq
-      if !selected_list.blank?
-        selected_list = selected_list.compact.uniq
-        sel_items = Item.where(:id => selected_list)
-        new_results = Product.get_results_from_items(sel_items)
-        results << new_results
-        results.flatten!
-        results = results.uniq {|each_hash| each_hash[:id]}
+      if !selected_list.blank? && params[:ac_sub_type] == "Others"
         auto_save = "true"
-        p results
+      else
+        selected_list = FeedUrl.get_selected_list_for_old_data(params[:actual_title], params[:domain])
+        selected_list = selected_list.compact.uniq
+        if !selected_list.blank?
+          selected_list = selected_list.compact.uniq
+          sel_items = Item.where(:id => selected_list)
+          new_results = Product.get_results_from_items(sel_items)
+          results << new_results
+          results.flatten!
+          results = results.uniq {|each_hash| each_hash[:id]}
+          auto_save = "true"
+          p results
+        end
       end
     end
     list_scores = list_scores.fill(0, list_scores.count...selected_list.count)
