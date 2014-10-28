@@ -250,9 +250,16 @@ end
     p first_key
     p auto_save
 
+    # first_key = keys_for_title_search.first if first_key.blank?
+
     first_key_score = all_items_by_score[first_key]
 
+    # if param[:ac_sub_type] == "Others" && keys_for_title_search.count == 1 && term.to_s.strip == item_names[first_key]
+    #   auto_save = "true"
+    # end
+
     if first_key_score.to_f > 0.4 && auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type]))
+
       keys_for_title_search.each_with_index do |each_key, index|
         if index == 0
           first_key = each_key

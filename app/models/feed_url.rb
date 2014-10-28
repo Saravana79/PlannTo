@@ -430,17 +430,19 @@ class FeedUrl < ActiveRecord::Base
         return_val = ""
         changed_title = article.title
         check_details.each do |key, value|
-          if title.include?(key)
-            if value.blank? || value == "empty"
-              changed_title = title.to_s.gsub(key, "")
-              if return_val.blank?
-                return_val = article.find_subtype(changed_title)
+          if changed_title.include?(key)
+            if value.blank? || value == "empty" || value == "any"
+              if value == "any"
+                changed_title = changed_title.to_s.gsub(/#{key}.*/, "")
+              else
+                changed_title = changed_title.to_s.gsub(key, "")
               end
-              # return return_val, changed_title
+              return_val = article.find_subtype(changed_title) if return_val.blank?
             elsif return_val.blank?
-              changed_title = title.to_s.gsub(key, "")
+              changed_title = changed_title.to_s.gsub(key, "")
               return_val = value
-              # return return_val, changed_title
+            else
+              changed_title = changed_title.to_s.gsub(key, "")
             end
           end
         end
