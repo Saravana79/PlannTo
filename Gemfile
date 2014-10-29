@@ -63,6 +63,7 @@ gem 'redis', '~> 3.0.7'
 # Use unicorn as the web server
 # gem 'unicorn'
 gem 'resque', '~> 1.25.2', :require => 'resque/server'
+gem 'resque-retry', '~> 1.3.2'
 
 # Deploy with Capistrano
 # gem 'capistrano'
