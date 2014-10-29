@@ -23,8 +23,10 @@ has_one :manufacturer,
      return_val = type.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize
    end
 
-   return_val = return_val + ["WearableGadget".camelize.constantize] if type.include?("Mobile")
-   return_val = return_val + ["Console".camelize.constantize] if type.include?("Games")
+   if type != nil
+    return_val = return_val + ["WearableGadget".camelize.constantize] if type.include?("Mobile")
+    return_val = return_val + ["Console".camelize.constantize] if type.include?("Games")
+   end
 
    return return_val
  end
