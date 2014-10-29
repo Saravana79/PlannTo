@@ -1,5 +1,6 @@
 class CleanUpRedisKeys
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :clean_up_redis_keys
 
   def self.perform(method_name, actual_time)

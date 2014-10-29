@@ -1,5 +1,6 @@
 class ItemAdDetailProcess
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :item_ad_detail_process
 
   def self.perform(method_name, actual_time, batch_size)

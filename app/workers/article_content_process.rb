@@ -1,5 +1,7 @@
 class ArticleContentProcess
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
+
   @queue = :article_content_process
 
   def self.perform(method_name, actual_time, param, user_id, remote_ip)

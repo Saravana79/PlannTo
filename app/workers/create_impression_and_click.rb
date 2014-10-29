@@ -1,5 +1,6 @@
 class CreateImpressionAndClick
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :create_impression_and_click
 
   def self.perform(class_name, obj_params)

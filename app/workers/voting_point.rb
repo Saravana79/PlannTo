@@ -1,5 +1,6 @@
 class VotingPoint
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :add_voting_points
 
   def self.perform(user_id, voteable_id, parent_type)

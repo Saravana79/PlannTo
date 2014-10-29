@@ -1,5 +1,6 @@
 class ItemUpdate
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :item_update_process
 
   def self.perform(method_name, actual_time, item_ids=nil)

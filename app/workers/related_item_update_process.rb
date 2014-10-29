@@ -4,6 +4,7 @@ PlanNto::Application.load_tasks
 
 class RelatedItemUpdateProcess
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :related_item_update_process
 
   def self.perform(actual_time)

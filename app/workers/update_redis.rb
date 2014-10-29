@@ -1,5 +1,6 @@
 class UpdateRedis
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :update_redis
 
   def self.perform(redis_key, *redis_values)

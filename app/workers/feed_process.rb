@@ -1,5 +1,6 @@
 class FeedProcess
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :feed_process
 
   def self.perform(method_name, actual_time, feed_id=nil, priorities="false")

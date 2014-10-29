@@ -1,5 +1,6 @@
 class AdvertisementProcess
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :advertisement_process
 
   def self.perform(method_name, actual_time)

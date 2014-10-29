@@ -1,5 +1,6 @@
 class AggregatedDetailProcess
   extend HerokuResqueAutoScale if Rails.env.production?
+  extend Resque::Plugins::Retry
   @queue = :aggregated_detail_process
 
   def self.perform(actual_time)
