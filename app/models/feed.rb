@@ -213,6 +213,7 @@ class Feed < ActiveRecord::Base
 
   def self.get_feed_url_values(url)
     begin
+      url = url.to_s.gsub("/articleslider/","/articleshow/") if url.include?("gizmodo.in")
       uri = URI.parse(URI.encode(url.to_s.strip))
       doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
       title_info = doc.xpath('.//title').to_s.strip
