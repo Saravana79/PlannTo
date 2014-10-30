@@ -46,7 +46,7 @@
         </tr>
             <tr>
             <td class="label">Impression ID :</td>
-            <td class="input"><%= f.text_field :impression_id, :placeholder => "Enter Impression ID", :value => @order_history.impression_id.to_s %></td>
+            <td class="input"><%= f.text_field :impression_id, :placeholder => "Enter Impression ID", :value => @order_history.impression_id %></td>
             <td class="label">Product :</td>
             <td class="input"><div class="taggingdiv">
           <ul id="ad_product_list" class="tagging"></ul>
@@ -70,6 +70,7 @@
       <tr>
         <td class="label">Sid :</td>
         <td class="input"> <%= f.text_field :sid, :readonly => false, :value => @order_history.sid %></td>
+        <%= f.hidden_field :advertisement_id %>
       </tr>
     </table>
 
@@ -154,6 +155,7 @@
                     if ($("#order_history_publisher_id").val() == "")
                         $("#order_history_publisher_id").val(response.publisher_id)
                     $("#hosted_site_url_text_field").val(response.hosted_site_url)
+                    $("#order_history_advertisement_id").val(response.advertisement_id)
 
                 }
             }

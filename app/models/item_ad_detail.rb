@@ -15,6 +15,7 @@ class ItemAdDetail < ActiveRecord::Base
       items = Item.paginate_by_sql(query_to_get_price_and_vendor_ids, :page => page, :per_page => batch_size)
 
       items.each do |each_item|
+        p "Processing ItemAdDetail for #{each_item.item_id}"
         new_version_id = each_item.new_version_item_id
         # old_version_id = Item.old_version_item_id(each_item.item_id) # TODO: we can update manually to improve performance
 
@@ -52,6 +53,7 @@ class ItemAdDetail < ActiveRecord::Base
       impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
       impressions.each do |each_imp|
+        p "Processing ItemAdDetail Impressions for #{each_imp.item_id}"
         item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_imp.item_id)
         item_ad_detail.update_attributes(:impressions => each_imp.impression_count)
       end
@@ -68,6 +70,7 @@ class ItemAdDetail < ActiveRecord::Base
     @clicks = Click.find_by_sql(click_query)
 
     @clicks.each do |each_click|
+      p "Processing ItemAdDetail Clicks for #{each_click.item_id}"
       item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_click.item_id)
       item_ad_detail.update_attributes(:clicks => each_click.click_count)
     end
@@ -75,6 +78,7 @@ class ItemAdDetail < ActiveRecord::Base
     @orders = OrderHistory.find_by_sql(order_query)
 
     @orders.each do |each_order|
+      p "Processing ItemAdDetail Orders for #{each_order.item_id}"
       item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_order.item_id)
       item_ad_detail.update_attributes(:orders => each_order.count)
     end
@@ -93,6 +97,7 @@ class ItemAdDetail < ActiveRecord::Base
       items = ItemAdDetail.paginate_by_sql(query_to_get_clicks_and_impressions, :page => page, :per_page => batch_size)
 
       items.each do |each_item|
+        p "Processing ItemAdDetail ectr for #{each_item.item_id}"
         clicks_count = each_item.clicks.to_f
         impressions_count = each_item.impressions.to_f
         orders_count = each_item.orders.to_f

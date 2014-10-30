@@ -1,4 +1,5 @@
 class AggregatedDetail < ActiveRecord::Base
+  belongs_to :entity, :polymorphic => true
 
   def self.update_aggregated_detail(time, entity_type, batch_size=1000)
     entity_field = entity_type + "_id"

@@ -16,6 +16,7 @@ class Advertisement < ActiveRecord::Base
   belongs_to :user
   belongs_to :vendor
   has_one :ad_video_detail
+  has_many :aggregated_details, :as => :entity
 
   after_create :item_update_with_created_ad_item_ids
   after_save :update_click_url_based_on_vendor
@@ -300,7 +301,7 @@ class Advertisement < ActiveRecord::Base
     end
   end
 
-  def self.get_extra_details(advertisements, date)
+  def self.get_extra_details(advertisements, date, user)
     start_date, end_date = date.to_s.split("/")
     extra_details = {}
     advertisements.each do |each_ad|
@@ -321,7 +322,18 @@ class Advertisement < ActiveRecord::Base
       winning_price = winning_price + ((winning_price / commission)/100)
       winning_price = winning_price.to_f.round(2)
 
-      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => winning_price, "ctr" => "#{ctr.round(2)} %"})
+      if user.is_admin?
+        date_condition = "order_date >= '#{start_date}'"
+        date_condition = date_condition + " and order_date <= '#{end_date}'" unless end_date.blank?
+
+        query_for_get_revenue = "select sum(total_revenue) revenue from order_histories where advertisement_id = #{each_ad.id} and #{date_condition}"
+        order_history = OrderHistory.find_by_sql(query_for_get_revenue).first
+        total_revenue = order_history.revenue.to_f
+      else
+        total_revenue = 0
+      end
+
+      extra_details.merge!("#{each_ad.id}" => {"impressions" => aggrgated_detail.impressions_count, "clicks" => aggrgated_detail.clicks_count, "cost" => winning_price, "ctr" => "#{ctr.round(2)} %", "revenue" => total_revenue})
     end
     extra_details
   end

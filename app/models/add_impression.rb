@@ -20,6 +20,7 @@ class AddImpression < ActiveRecord::Base
 
    ai = AddImpression.new
    ai.id = obj_params[:imp_id]
+   p "Creating Impression - #{ai.id}"
    ai.impression_id = obj_params[:impression_id]
    ai.advertisement_type = obj_params[:type]
    ai.item_id = obj_params[:itemid]
@@ -115,7 +116,7 @@ class AddImpression < ActiveRecord::Base
     conf_sig = OpenSSL::HMAC.digest(digest, int_key, plaintext.join('')+ciphertext[0..15])
     if conf_sig[0..3]==sig
       j =plaintext.join("")
-      p j.unpack("H*").first.to_i(16).to_s(10)
+      j.unpack("H*").first.to_i(16).to_s(10)
     else
       p "Signature mismatch"
     end

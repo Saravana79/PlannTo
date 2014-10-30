@@ -15,6 +15,7 @@
   <th> Clicks</th>
   <th> CTR</th>
   <th> Cost</th>
+  <% if current_user.is_admin? %><th> Revenue</th> <% end %>
   <th> Products</th>
   <th colspan="3">Actions</th>
 </tr>
@@ -28,6 +29,7 @@
      <td><%= @extra_ad_details["#{ad.id}"]["clicks"]%></td>
      <td><%= @extra_ad_details["#{ad.id}"]["ctr"]%></td>
      <td><%= @extra_ad_details["#{ad.id}"]["cost"]%></td>
+     <% if current_user.is_admin? %><td> <%= @extra_ad_details["#{ad.id}"]["revenue"]%> </td> <% end %>
      <% collected_item_ids = ad.content.blank? ? "" : ad.content.related_items.collect(&:item_id).join(',') %>
      <td><% Item.where("id in ('#{collected_item_ids}')").each do |it| %>
      <%= it.name %>,&nbsp; <%end%></td>
