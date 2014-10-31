@@ -33,8 +33,10 @@ class ContentAdDetail < ActiveRecord::Base
     date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
 
     date_for_query = date_for_query - 1.month
+    date_for_query = date_for_query.strftime("%Y-%m-%d")
+    current_date = Time.now.strftime("%Y-%m-%d")
 
-    impression_query = "select hosted_site_url as url, count(*) as impression_count from add_impressions where impression_time >= '#{date_for_query}' group by hosted_site_url"
+    impression_query = "select hosted_site_url as url, count(*) as impression_count from add_impressions where impression_time >= '#{date_for_query}' and impression_time <= '#{current_date}' group by hosted_site_url"
     click_query = "select hosted_site_url as url,count(*) as click_count from clicks where timestamp >= '#{date_for_query}' group by hosted_site_url"
     order_query = "select hosted_site_url as url,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
 where ai.impression_time >= '#{date_for_query}' group by hosted_site_url order by count(*) desc"

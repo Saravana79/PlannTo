@@ -34,10 +34,12 @@ class SidAdDetail < ActiveRecord::Base
     date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
 
     date_for_query = date_for_query - 1.month
+    date_for_query = date_for_query.strftime("%Y-%m-%d")
+    current_date = Time.now.strftime("%Y-%m-%d")
 
     # select sid, count(*) as impression_count from add_impressions where impression_time >= "2014-07-20 00:00:00" and impression_time >= "2014-06-22 00:00:00" and sid is not null group by sid
-    impression_query = "select sid, count(*) as impression_count, avg(winning_price) as avg_winning_price from add_impressions where impression_time >= '2014-07-20' and impression_time >= '#{date_for_query}' and sid is not null group by sid having impression_count > 500"
-    click_query = "select sid,count(*) as click_count from clicks where timestamp >= '2014-07-20' and timestamp >= '#{date_for_query}' group by sid"
+    impression_query = "select sid, count(*) as impression_count, avg(winning_price) as avg_winning_price from add_impressions where impression_time >= '#{date_for_query}' and impression_time <= '#{current_date}' and sid is not null group by sid having impression_count > 500"
+    click_query = "select sid,count(*) as click_count from clicks where timestamp >= '#{date_for_query}' group by sid"
     order_query = "select sid,count(*) as count from add_impressions ai inner join  (select UNHEX(CONCAT(LEFT(impression_id, 8), MID(impression_id, 10, 4), MID(impression_id, 15, 4), MID(impression_id, 20, 4), RIGHT(impression_id, 12))) as id from order_histories  where  impression_id is not null) oh on oh.id = ai.id
 where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) desc"
 
