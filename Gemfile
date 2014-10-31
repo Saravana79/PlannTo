@@ -94,3 +94,7 @@ gem 'open_uri_redirections', '~> 0.1.4'
 
 # gem for auto scale up and down workers in heroku
 gem 'heroku-api'
+
+#mongodb connection
+gem "mongo"
+gem "bson_ext"

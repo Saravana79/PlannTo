@@ -74,6 +74,9 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt-ruby (3.0.1)
+    bson (1.10.2)
+    bson_ext (1.10.2)
+      bson (~> 1.10.2)
     builder (3.0.0)
     citier (0.1.15)
       rails_sql_views
@@ -176,6 +179,8 @@ GEM
       httmultiparty (>= 0.3.6)
       httparty (>= 0.4.3)
       multi_json (>= 1.0.3, < 1.4)
+    mongo (1.10.2)
+      bson (= 1.10.2)
     mono_logger (1.1.0)
     multi_json (1.3.6)
     multi_xml (0.5.1)
@@ -353,6 +358,7 @@ DEPENDENCIES
   acts_as_rateable
   addressable (~> 2.3.6)
   aws-sdk
+  bson_ext
   citier (~> 0.1.15)
   clockwork (~> 0.7.2)
   coffee-rails (~> 3.1.0)
@@ -373,6 +379,7 @@ DEPENDENCIES
   koala
   mailcatcher
   mogli
+  mongo
   mysql2
   nokogiri
   oauth
