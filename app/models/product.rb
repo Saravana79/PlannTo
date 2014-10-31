@@ -18,7 +18,7 @@ has_one :manufacturer,
  def self.search_type(type)
 
    if (type.blank? || type.include?("Others"))
-      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize]
+      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Lens".camelize.constantize,"Television".camelize.constantize]
    end
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize}
@@ -27,9 +27,10 @@ has_one :manufacturer,
    end
 
     
-   if type != nil
+   if !type.blank?
     return_val = return_val + ["WearableGadget".camelize.constantize] if type.include?("Mobile")
     return_val = return_val + ["Console".camelize.constantize] if type.include?("Games")
+    return_val = return_val + ["Lens".camelize.constantize] if type.include?("Camera")
    end
 
    return return_val
