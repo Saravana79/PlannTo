@@ -42,7 +42,7 @@ class ItemAdDetail < ActiveRecord::Base
 
     date_for_query = time.is_a?(Time) ? time.utc : time # converted to UTC
 
-    date_for_query = date_for_query - 2.month
+    date_for_query = date_for_query - 1.month
 
     impression_query = "select item_id, count(*) as impression_count from add_impressions where impression_time >= '#{date_for_query}' group by item_id"
     click_query = "select item_id,count(*) as click_count from clicks where timestamp >= '#{date_for_query}' group by item_id"
