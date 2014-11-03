@@ -16,5 +16,3 @@ AWS::S3::DEFAULT_HOST = "s3-ap-southeast-1.amazonaws.com" # if using sg buckets
 
 # Initialize the rails application
 PlanNto::Application.initialize!
-
-Rails.application.middleware.use( Oink::Middleware, :logger => Rails.logger )
