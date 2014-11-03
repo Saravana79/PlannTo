@@ -1434,7 +1434,7 @@ end
 
         user_vals.each do |each_user_val|
           t_length-=1
-          p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
+          # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
           unless each_user_val.blank?
             user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
             already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url)
