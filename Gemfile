@@ -98,3 +98,6 @@ gem 'heroku-api'
 #mongodb connection
 gem "mongo"
 gem "bson_ext"
+
+# gem for check memory usage
+gem 'oink', '~> 0.10.1'
