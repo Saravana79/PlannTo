@@ -240,7 +240,6 @@ class AdvertisementsController < ApplicationController
     # check and assign page type if ab_test is enabled
     enabled, alternatives = ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
     if enabled == "true"
-      p params[:size]
       alternatives = ab_test_details.blank? ? {} : eval(ab_test_details[1])
       if alternatives.include?(params[:size])
         types = alternatives["#{params[:size]}"]
