@@ -51,7 +51,8 @@ class AccountsController < ApplicationController
      if params[:follow] == "Followers" || params[:follow] == "Following"
       @follows,@users = Follow.get_followers_following(@user,params[:follow],params[:page],8)
     else 
-    @follow_types = Itemtype.get_followable_types(params[:follow])
+    # @follow_types = Itemtype.get_followable_types(params[:follow])
+    @follow_types = []
     @itemtypes =  Itemtype.where("itemtype in (?)", Item::ITEMTYPES).collect(&:id) if params[:follow] == 'Products'
     @itemtypes =  Itemtype.where("itemtype=?", params[:follow]).collect(&:id) if params[:follow] == 'Car' ||  params[:follow] == 'Mobile' || params[:follow] == 'Cycle' || params[:follow] == 'Camera' || params[:follow] == 'Tablet' || params[:follow] == 'Bike'
      if params[:follow].match("Preferences")
@@ -61,8 +62,10 @@ class AccountsController < ApplicationController
      buying_plans(@user)
      end
     @article_categories = ArticleCategory.by_itemtype_id(0).map { |e|[e.name, e.id]  } 
-    @followitems = Follow.for_follower(@user).where(:followable_type => @follow_types).paginate :page => params[:page],:per_page => 8
-    @follow_item = @followitems.group_by(&:followable_type)
+    # @followitems = Follow.for_follower(@user).where(:followable_type => @follow_types).paginate :page => params[:page],:per_page => 8
+    @followitems = []
+    # @follow_item = @followitems.group_by(&:followable_type)
+    @follow_item = []
     end
     respond_to do|format|      
       format.html {render :layout => "product"}

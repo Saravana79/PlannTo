@@ -46,6 +46,7 @@ class Follow < ActiveRecord::Base
   end
   
   def self.get_followers_following(user,type,page,per_page)
+    return [],[] #TODO: temporary comment
     if type == "Followers"
        @followers = Follow.follow_type(['Plannto', 'Facebook']).for_followable(user).paginate(:page => page, :per_page =>per_page)
        @users = User.where("id in (?)",@followers.collect{|i| i.follower_id})
