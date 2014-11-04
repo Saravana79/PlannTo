@@ -339,14 +339,10 @@ class Advertisement < ActiveRecord::Base
   end
 
   def self.check_and_update_act_spent_budget_in_redis(advertisement_id, winning_price_enc)
-    p 333333333333333333333333333333333333
-    p advertisement_id
-    p winning_price_enc
     if !advertisement_id.blank? && !winning_price_enc.blank?
-      p 8888888888
       time = Time.now
-      p winning_price = AddImpression.get_winning_price_value(winning_price_enc).to_i
-      p act_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{time.hour}"
+      winning_price = AddImpression.get_winning_price_value(winning_price_enc).to_i
+      act_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{time.hour}"
 
       return_val,hourly_spent = $redis.pipelined do
         $redis.incrby(act_spent_key, winning_price)

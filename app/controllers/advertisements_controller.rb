@@ -85,8 +85,6 @@ class AdvertisementsController < ApplicationController
     params[:companion] ||= "false"
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
     params[:size] ||= "300x60"
-    p 3333333333333333333333333333333333333333333333333333333
-    p params
     @advertisement = Advertisement.where(:id => params[:ads_id]).last
     @ad_video_detail = @advertisement.ad_video_detail
 
@@ -95,7 +93,6 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ad_tracking
-    p params
     VideoAdEvent.create(:video_impression_id => params[:impression_id], :event_name => params[:metric])
     render :nothing => true
   end
