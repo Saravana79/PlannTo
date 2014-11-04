@@ -283,7 +283,7 @@ class Item < ActiveRecord::Base
 
   def self.get_related_items(item, limit, includ=false)
     #unless includ
-      related_item_ids = RelatedItem.where(:item_id => item.id).order("variance desc").collect(&:related_item_id)
+      related_item_ids = RelatedItem.where(:item_id => item.id).order("variance desc").limit(10).collect(&:related_item_id)
     #else
     #  related_item_ids = item.itemrelationships.collect(&:relateditem_id)
     #end

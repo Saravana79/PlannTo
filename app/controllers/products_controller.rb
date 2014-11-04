@@ -35,11 +35,11 @@ class ProductsController < ApplicationController
 #  layout false, only: [:where_to_buy_items]
 
  def log_impression
-   @item = Item.find(params[:id])
-   @item.impressions.create(ip_address: request.remote_ip,user_id:(current_user.id rescue ''))
+   @item = Item.find(params[:id]) rescue nil
+   @item.impressions.create(ip_address: request.remote_ip,user_id:(current_user.id rescue '')) unless @item.blank?
  end
   def set_referer
-    @item = Item.find(params[:id])
+    @item = Item.find(params[:id]) rescue nil
     unless request.referer.nil?
       if request.referer.include?("google")   
         session[:product_warning_message] = "true"  
