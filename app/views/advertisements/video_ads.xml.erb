@@ -15,7 +15,7 @@
 
 <% if !@ad_video_detail.linear_click_url.blank? %>
 <Creative sequence="1" id="331">
-<Linear <% if @ad_video_detail.skip == true %> skipoffset="<%= @ad_video_detail.skip_time %>" <% end %>>
+<Linear>
 <Duration><%= @ad_video_detail.total_time %></Duration>
 <TrackingEvents>
 <Tracking event="start">
@@ -48,7 +48,7 @@
 <Tracking event="fullscreen">
 <![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-fullscreen&impression_id=<%= @impression_id %>]]>
 </Tracking>
-<% if @ad_video_detail.skip == true %>
+<% if @ad_video_detail.skip == true && 1 != 1 %>
 <Tracking event="skip">
 <![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-skip&impression_id=<%= @impression_id %>]]>
 </Tracking>
@@ -141,6 +141,26 @@
 <% end %>
 
 </Creatives>
+
+<% if @ad_video_detail.skip == true %>
+<Extensions>
+<Extension type="DFP">
+<SkippableAdType>Generic</SkippableAdType>
+<CustomTracking>
+<Tracking event="skip">
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-skip&impression_id=<%= @impression_id %>]]>
+</Tracking>
+<Tracking event="skipShown">
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-skip-shown&impression_id=<%= @impression_id %>]]>
+</Tracking>
+<Tracking event="engagedView">
+<![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-engaged_view&impression_id=<%= @impression_id %>]]>
+</Tracking>
+</CustomTracking>
+</Extension>
+</Extensions>
+<% end %>
+
 </InLine>
 </Ad>
 </VAST>
