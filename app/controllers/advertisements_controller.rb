@@ -5,7 +5,7 @@ class AdvertisementsController < ApplicationController
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => proc { |c| !request.format.json? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type") }, :expires_in => 2.hours, :if => proc { |s| !request.format.json? && params[:is_test] != "true" }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
-  after_filter :set_access_control_headers, :only => [:video_ads]
+  after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()

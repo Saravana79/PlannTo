@@ -1,4 +1,4 @@
-%w{custom_acts_as_follower authentication reputation ext/string addressable/uri resque-retry}.each { |each_val| require each_val }
+%w{custom_acts_as_follower authentication reputation ext/string addressable/uri resque-retry resque/failure/redis}.each { |each_val| require each_val }
 
 if Rails.env.production?
   ENV['HEROKU_USER'] = "siva@plannto.com"
@@ -8,3 +8,6 @@ if Rails.env.production?
 
   require "#{Rails.root}/lib/heroku_resque_auto_scale.rb"
 end
+
+Resque::Failure::MultipleWithRetrySuppression.classes = [Resque::Failure::Redis]
+Resque::Failure.backend = Resque::Failure::MultipleWithRetrySuppression
