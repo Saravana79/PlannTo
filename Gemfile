@@ -57,7 +57,7 @@ gem 'sunspot_rails', '~>1.3.1'
 gem 'sunspot_solr'
 gem 'acts_as_follower'
 gem 'acts-as-messageable'
-gem 'tinymce-rails'
+# gem 'tinymce-rails'
 gem 'redis', '~> 3.0.7'
 
 # Use unicorn as the web server
@@ -75,12 +75,12 @@ group :test do
   # Pretty printed test output
   gem 'turn', :require => false
 end 
-gem 'geocoder'
-gem 'progress_bar'
+# gem 'geocoder'
+# gem 'progress_bar'
 gem "feedzirra"
 
 # TO DO the daily jobs to queue
-gem "clockwork", "~> 0.7.2"
+# gem "clockwork", "~> 0.7.2"
 
 gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'

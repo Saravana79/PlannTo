@@ -1,8 +1,8 @@
-require 'clockwork'
-require File.expand_path('../../config/boot',        __FILE__)
-require File.expand_path('../../config/environment', __FILE__)
+# require 'clockwork'
+# require File.expand_path('../../config/boot',        __FILE__)
+# require File.expand_path('../../config/environment', __FILE__)
 
-module Clockwork
+# module Clockwork
 
   #handler do |job|
   #  puts "Running #{job}"
@@ -62,4 +62,4 @@ module Clockwork
   #   Resque.enqueue(MissingurlProcess, "update_by_missing_records", Time.zone.now)
   # end
 
-end
+# end
