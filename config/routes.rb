@@ -256,7 +256,19 @@ resources :comments do
   end   
   resources :cycles do
         resources :shares
-  end   
+  end
+  resources :lens do
+    resources :shares
+  end
+  resources :televisions do
+    resources :shares
+  end
+  resources :wearable_gadgets do
+    resources :shares
+  end
+  resources :consoles do
+    resources :shares
+  end
   resources :mobiles do 
     resources :reports
   end  
@@ -274,7 +286,19 @@ resources :comments do
   end  
   resources :cycles do
     resources :reports
-  end  
+  end
+  resources :lens do
+    resources :reports
+  end
+  resources :televisions do
+    resources :reports
+  end
+  resources :wearable_gadgets do
+    resources :reports
+  end
+  resources :consoles do
+    resources :reports
+  end
   resources :bike_groups
   resources :manufacturers
   resources :car_groups  
