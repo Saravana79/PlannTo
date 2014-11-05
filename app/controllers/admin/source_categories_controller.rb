@@ -8,7 +8,7 @@ class Admin::SourceCategoriesController < ApplicationController
 
   def edit
     @source_category = SourceCategory.where(:source => params[:source]).last
-    @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
+    @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Television", "Car", "Bike", "Cycle"]
     # render :js => "<%= escape_javascript(render :partial => 'admin/source_categories/edit').html_safe %>"
     render :partial => 'admin/source_categories/edit'
   end

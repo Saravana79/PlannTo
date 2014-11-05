@@ -1,5 +1,6 @@
 class ItemAdDetail < ActiveRecord::Base
   belongs_to :item
+  after_save :update_item_details_to_redis
 
   def self.update_ad_details_for_items(log, batch_size=2000)
     query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type, new_version_item_id from itemdetails id
@@ -121,6 +122,13 @@ class ItemAdDetail < ActiveRecord::Base
       end
       page += 1
     end while !items.empty?
+  end
+
+
+  private
+
+  def update_item_details_to_redis
+    $redis_rtb.HMSET("items:#{item_id}", "clicks", clicks, "ectr", ectr, "impressions", impressions, "orders", orders) if impressions.to_i > 500
   end
 
 end
