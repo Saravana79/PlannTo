@@ -1519,7 +1519,7 @@ end
                       $redis.expire(u_key, 2.weeks)
                     end
                   end
-                rescue Exception => e
+                rescue => e
                   p "Problems while hmset: Args:-"
                   p u_key
                   p u_values
@@ -1573,7 +1573,7 @@ end
             exists = true if results.count > 0
           end
         end
-      rescue Exception => e
+      rescue => e
         exists = true
         p "Error url => #{url}"
         p e

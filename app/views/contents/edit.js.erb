@@ -1,6 +1,6 @@
 <%if @content.is_article_content?%>
   <%unless @content.url.blank?%>
-    <%@article,@images = ArticleContent.CreateContent(@content.url,current_user)%>
+    <% @article,@images = ArticleContent.CreateContent(@content.url,current_user) %>
   <%end%>
 <%end%>
 //$("#contentEditView").dialog('destroy');

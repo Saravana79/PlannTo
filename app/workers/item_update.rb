@@ -15,7 +15,7 @@ class ItemUpdate
         updated_items = Item.send(method_name, log, item_ids)
       end
       log.debug "********** Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
-    #rescue Exception => e
+    #rescue => e
     #  log.debug "Have some problem while executing Item Update, please find the error below"
     #  log.debug e
     #  NotificationMailer.resque_process_failure(e, e.backtrace, log, "Item Update").deliver

@@ -32,7 +32,8 @@ class SharesController < ApplicationController
                        require 'nokogiri'
                        require 'open-uri'
                        begin
-                               doc = Nokogiri::HTML(open(url))
+                         uri = URI.parse(URI.encode(url.to_s.strip))
+                               doc = Nokogiri::HTML(open(uri))
                                @title_info = doc.xpath('.//title')
                             doc.xpath("//meta[@name='keywords']/@content").each do |attr|
                                @meta_keywords = attr.value

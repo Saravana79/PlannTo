@@ -12,7 +12,7 @@ class UpdateRedis
     log.debug "Hash value => #{redis_values}"
     #begin
     $redis_rtb.HMSET(redis_key, redis_values)
-    #rescue Exception => e
+    #rescue => e
     #  log.debug "Have some problem while executing redis update for #{updated_for}, please find the error below"
     #  log.debug e
     #  NotificationMailer.resque_process_failure(e, e.backtrace, log, "#{update_for} - Update Redis Process").deliver

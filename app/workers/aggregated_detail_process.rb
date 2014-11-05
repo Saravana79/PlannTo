@@ -26,7 +26,7 @@ class AggregatedDetailProcess
       AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement', 1000)
     end
 
-    #rescue Exception => e
+    #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
     #  log.debug e
     #  NotificationMailer.resque_process_failure(e, e.backtrace, log, "Advertisement Process").deliver

@@ -16,7 +16,7 @@ class RelatedItemUpdateProcess
       log.debug "********** Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
     Rake::Task["related_items_with_count"].invoke
     # system('rake related_items_with_count[true]')
-    #rescue Exception => e
+    #rescue => e
     #  log.debug "Have some problem while executing RelatedItem Update, please find the error below"
     #  log.debug e
     #  NotificationMailer.resque_process_failure(e, e.backtrace, log, "RelatedItem Update").deliver

@@ -23,7 +23,7 @@ has_one :manufacturer,
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue t.to_s.gsub(/\s+/,'').strip.camelize.constantize}
    else
-      return_val = type.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue type.to_s.gsub(/\s+/,'').strip.camelize.constantize
+      return_val = [*type.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize] rescue [*type.to_s.gsub(/\s+/,'').strip.camelize.constantize]
    end
 
     

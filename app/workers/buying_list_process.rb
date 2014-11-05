@@ -13,7 +13,7 @@ class BuyingListProcess
 
     Item.send(method_name)
 
-    #rescue Exception => e
+    #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
     #  log.debug e
     #  NotificationMailer.resque_process_failure(e, e.backtrace, log, "Advertisement Process").deliver

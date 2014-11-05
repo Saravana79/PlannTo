@@ -20,7 +20,7 @@ class MissingurlProcess
       FeedUrl.send(method_name, log, process_type, count, valid_urls, invalid_urls, missing_ad)
     end
 
-    #rescue Exception => e
+    #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
     #  log.debug e
     #  NotificationMailer.resque_process_failure(e, e.backtrace, log, "Advertisement Process").deliver

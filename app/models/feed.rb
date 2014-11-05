@@ -22,7 +22,7 @@ class Feed < ActiveRecord::Base
         elsif each_feed.process_type == "table"
           each_feed.table_process()
         end
-      rescue Exception => e
+      rescue => e
         puts e.backtrace
       end
     end
@@ -50,7 +50,7 @@ class Feed < ActiveRecord::Base
         if check_exist_feed_url.blank?
           begin
             source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.", "")
-          rescue Exception => e
+          rescue => e
             source = Addressable::URI.parse(each_entry.url).host.gsub("www.", "")
           end
           article_content = ArticleContent.find_by_url(each_entry.url)
@@ -76,7 +76,7 @@ class Feed < ActiveRecord::Base
             new_feed_url.save!
             feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
             feed_url.auto_save_feed_urls if feed_url.status == 0
-          rescue Exception => e
+          rescue => e
             p e
           end
         end
@@ -106,7 +106,7 @@ class Feed < ActiveRecord::Base
       else
         begin
           source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
-        rescue Exception => e
+        rescue => e
           source = Addressable::URI.parse(each_record.hosted_site_url).host.gsub("www.", "")
         end
       end
@@ -139,7 +139,7 @@ class Feed < ActiveRecord::Base
           @feed_url.save!
           feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, admin_user, nil)
           feed_url.auto_save_feed_urls if feed_url.status == 0
-        rescue Exception => e
+        rescue => e
           p e
         end
         

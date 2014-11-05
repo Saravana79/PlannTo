@@ -58,7 +58,7 @@ namespace :feed do
 
         begin
           @feed_url.save!
-        rescue Exception => e
+        rescue => e
           p e
         end
 
@@ -91,7 +91,7 @@ namespace :feed do
 
         each_feed_url.update_attributes(:title => title.strip, :summary => description, :images => images, :url => url_for_save)
         puts "Updated #{count} of #{@feed_urls.count} feed_urls remaining #{@feed_urls.count - count} values \n"
-      rescue Exception => e
+      rescue => e
         puts "Error while process FeedUrl"
         puts e
       end
