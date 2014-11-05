@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141014101232) do
+ActiveRecord::Schema.define(:version => 20141105104637) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -31,13 +31,14 @@ ActiveRecord::Schema.define(:version => 20141014101232) do
     t.datetime "updated_at"
   end
 
-  create_table "add_impressions", :force => true do |t|
+  create_table "add_impressions", :id => false, :force => true do |t|
+    t.uuid     "id",                                :null => false
     t.string   "advertisement_type"
     t.integer  "advertisement_id"
     t.integer  "impression_id"
     t.string   "item_id",            :limit => 100
     t.string   "hosted_site_url"
-    t.datetime "impression_time"
+    t.datetime "impression_time",                   :null => false
     t.integer  "publisher_id"
     t.integer  "user_id"
     t.string   "ip_address"
@@ -57,6 +58,12 @@ ActiveRecord::Schema.define(:version => 20141014101232) do
   add_index "add_impressions", ["item_id"], :name => "index_add_impressions_on_item_id"
   add_index "add_impressions", ["publisher_id"], :name => "publihserid"
   add_index "add_impressions", ["user_id"], :name => "index_add_impressions_on_user_id"
+
+  create_table "add_impressions_temp", :id => false, :force => true do |t|
+    t.integer  "id",                            :null => false
+    t.datetime "impression_time",               :null => false
+    t.string   "value",           :limit => 45
+  end
 
   create_table "advertisements", :force => true do |t|
     t.string   "name"
@@ -84,6 +91,7 @@ ActiveRecord::Schema.define(:version => 20141014101232) do
     t.float    "commission"
     t.string   "target_audience"
     t.string   "excluded_sites"
+    t.string   "miscellanous"
   end
 
   create_table "aggregated_details", :force => true do |t|
