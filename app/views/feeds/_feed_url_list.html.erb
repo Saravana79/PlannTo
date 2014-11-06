@@ -18,7 +18,7 @@
         <%= image_tag "/assets/invalid.png", :size => "16x16", :alt => "mark as invalid", :id => "invalid", :class => "mark_as_button", :title => "mark as invalid" %>
       </div>
       <div style="width:550px;float:left;">
-        <a href="#each_row_feed_display_<%= feed.id %>" class="feed_title" id="<%= feed.id %>">
+        <a href="javascript:void(0)" class="feed_title" id="<%= feed.id %>">
           <%= feed.title.blank? ? feed.url.to_s.truncate(95) : feed.title.to_s.truncate(95) %>
         </a>
       </div>
@@ -48,7 +48,7 @@
 <script type="text/javascript">
     $(function()
     {
-        <% if (@feed_urls.count < 25) %>
+        <% if (@feed_urls.all.count < 25) %>
           $(".jscroll-loading").hide()
         <% end %>
 

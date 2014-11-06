@@ -165,6 +165,7 @@ class ArticleContent < Content
                    and not(contains(.,'ads.') or contains(.,'ad.'))]]//@src").each do |attr|
       images << CGI.unescapeHTML(attr.value)
     end
+    images.compact.select {|image| image.length > 10}
     images
   end
 

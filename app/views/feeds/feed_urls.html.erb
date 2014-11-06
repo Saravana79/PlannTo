@@ -3,9 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
     <title>PlannTo - Add Feeds</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <link type="text/css" href="<%= configatron.root_image_path %>static/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <link type="text/css" href="<%= configatron.root_image_path %>static/stylesheets/plannto.css" rel="stylesheet"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="<%= configatron.root_image_path %>static/javascripts/jquery_ujs.js" type="text/javascript"></script>
     <script src="<%= configatron.root_image_path %>static/javascripts/jquery.jscroll.min.js" type="text/javascript"></script>
     <script src="<%= configatron.root_image_path %>static/javascripts/textTagger.js" type="text/javascript"></script>
@@ -159,7 +159,7 @@
     $("document").ready(function()
     {
 
-        if (<%= !@feed_urls.blank? && @feed_urls.count > 24 %>)
+        if (<%= !@feed_urls.blank? && @feed_urls.all.count > 24 %>)
         {
           $page_count = $(".pagination a.next_page").prev().text()
 
@@ -167,7 +167,7 @@
 //        $("#next-scroll-page").attr('href', href_val)
 
                 $('.jscroll').jscroll({
-            loadingHtml: '<img src="/assets/ajax-loader.gif" alt="Loading" /> Loading...',
+            loadingHtml: 'Loading...',
             padding: 20,
             nextSelector: '.jscroll-next a:last'
         });

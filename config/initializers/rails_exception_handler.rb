@@ -36,7 +36,7 @@ RailsExceptionHandler.configure do |config|
 
   config.store_exception_info do |storage,exception|
     if exception.class.to_s == "ActionController::RoutingError"
-      exit
+      # exit
     end
      storage[:class_name] =   exception.class.to_s
      storage[:message] =      exception.to_s
