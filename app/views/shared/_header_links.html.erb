@@ -144,34 +144,97 @@
 <% unless current_user.blank? %>
 
 <div class="Headerrightpart">
- <script type="text/javascript">
- $(document).ready(function(){
 
-    $.ajax({
-            type: "get",
-            dataType: "html",
-            url: "/current_user_info",
-            success: function(data) {
-                // $('#DirectMessage').html(data);
-                $(".Headerrightpart").html(data);
 
-              $('span.Usernamedp').hoverIntent(hoverdropdown,hoverdropdownreverse);
-              function hoverdropdown()
-              {
-              $('div.Useraccountinfo').css("display","block");
-              $('span.Usernamedp').attr("style","background: #FFFFFF url(../images/down-arrow.png) no-repeat right 13px;border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 3px;");
-              }
-              function hoverdropdownreverse()
-              {
-              $('div.Useraccountinfo').css("display","none");
-              $('span.Usernamedp').attr("style","padding:7px 16px 7px 4px; font-family:Arial, Helvetica, sans-serif; font-size:12px; display:block; float:left;color:#FFFFFF; background:url(../images/down-arrow.png) no-repeat right 13px; cursor:pointer;position:relative; z-index:90;");
-              }
-            }
-        })
+  <%if current_user %>
+<span>
+    <span class="Usrdropdown">
 
- })
+       <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" />
 
- </script>
+         <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
+           <div class="Useraccountinfo">
+             <%= link_to "Account Setting", accounts_path %>
+             <%= link_to "Profile",  "/" + "#{current_user.username}" %>
+             <%= link_to "My feeds", "/" %>
+
+             <%= link_to "Buying Plans","/" + "#{current_user.username}" + "?follow=Preferences" %>
+
+             <%if current_user && current_user.is_admin? %>
+
+                 <a href="/admin/feeds">All Feeds</a>
+
+                 <a href="/admin/users">All Users</a>
+                 <a href="/admin/follows">All Follows</a>
+                 <a href="/admin/buying_plans">All Buying Plans</a>
+
+                 </ul>
+
+
+                 </li>
+             <%end%>
+             <% if  current_user.is_a_vendor?(session[:vendor]) %>
+                 <%session[:vendor] = "true" %>
+                 <a href="/admin/buying_plans/search">Proposal Send</a>
+                 <a href="/admin/buying_plans/proposal_list">View Proposals</a>
+             <%end%>
+             <% if current_user.is_a_publisher?(session[:publisher]) %>
+                 <%session[:publisher] = "true" %>
+                 <a href="/admin/impression_reports">Impression Report</a>
+                 <!-- <a href="/admin/ad_reports">Advertisement Report</a> -->  <!-- TODO: have to implement in future -->
+             <%end%>
+             <%if current_user && current_user.is_admin? %>
+                 <a href="/admin/widget_reports">Widgets Report</a>
+             <% end %>
+             <% if current_user.is_a_advertiser?(session[:advertiser]) %>
+                 <% session[:advertiser] = "true" %>
+                 <a href="/admin/advertisements">View Advertisements</a>
+             <%end%>
+             <%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+           </div>
+         </span>
+
+    </span>
+   </span>
+
+  <%else%>
+      <div style="float:right;padding:20px 10px 0px 0px;">
+             <span style="color:white;">
+              <%= link_to "Sign In", "#", :class => "sign_in_popup",:style=> "color:white;font: 14px/21px 'PTSansRegular', sans-serif;" %> | <%= link_to "Sign Up", "#",:class => "sign_up_popup",:style=> "color:white;font: 14px/21px 'PTSansRegular', sans-serif;"%>
+
+            </span>
+      </div>
+
+      <script>
+          $(".sign_in_popup").click(function(e){
+              $("#Loginpoup #click_message").hide();
+              $('#Loginpoup').bPopup({
+                  closeClass:'Closebut',
+                  modalClose: false,
+                  position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+                  follow: [false, false] //x, y
+              });
+              e.preventDefault()
+          });
+      </script>
+
+      <script>
+          $(".sign_up_popup").click(function(){
+              $("#sign_up_dialog #click_message").hide();
+              $('#sign_up_dialog').bPopup({
+                  closeClass:'Closebut',
+                  modalClose: false,
+                  position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+                  follow: [false, false] //x, y
+              });
+          });
+
+      </script>
+
+
+  <%end%>
+
+
    </div>
   <%end%>
         <%if current_user.nil? %>
@@ -231,5 +294,23 @@
   function showLogout(){
     $('#logout_link').show();
   }
+
+ function hoverdropdown()
+ {
+     $('div.Useraccountinfo').css("display","block");
+     $('span.Usernamedp').attr("style","background: #FFFFFF url(../images/down-arrow.png) no-repeat right 13px;border:1px solid #528fae; border-bottom:1px solid #FFFFFF; color:#000000; padding:7px 15px 10px 3px;");
+ }
+ function hoverdropdownreverse()
+ {
+     $('div.Useraccountinfo').css("display","none");
+     $('span.Usernamedp').attr("style","padding:7px 16px 7px 4px; font-family:Arial, Helvetica, sans-serif; font-size:12px; display:block; float:left;color:#FFFFFF; background:url(../images/down-arrow.png) no-repeat right 13px; cursor:pointer;position:relative; z-index:90;");
+ }
+
+ $(document).ready(function(){
+
+     $('span.Usernamedp').hoverIntent(hoverdropdown,hoverdropdownreverse);
+
+ });
+
 
 </script>
