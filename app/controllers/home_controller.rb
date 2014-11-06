@@ -53,7 +53,7 @@ layout false, only: [:targeting]
 
  def current_user_info
   render partial: "shared/header_right_part"
-   
+
  end
  private
  

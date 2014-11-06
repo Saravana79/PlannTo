@@ -69,7 +69,7 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
               sid_ad_detail.update_attributes(:sample_url => sid_hash["url"], :domain => updated_host, :size => "#{sid_hash["imp"][0]["banner"]["w"]}x#{sid_hash["imp"][0]["banner"]["h"]}", :position => sid_hash["imp"][0]["banner"]["pos"])
             end
           end
-        rescue => e
+        rescue Exception => e
           p "skipped this spottag"
         end
       end

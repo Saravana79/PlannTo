@@ -342,7 +342,7 @@ end
       elsif(item.is_a? (ItemtypeTag))
         type = "Topics"
       else
-        type = item.type.humanize
+        type = item.type.to_s.humanize
       end
 
       # end

@@ -179,7 +179,7 @@ class Advertisement < ActiveRecord::Base
 
         begin
           response = RestClient.post create_url, :content_type => :json, :accept => :json
-        rescue => e
+        rescue Exception => e
           raise "#{advertisement.id} - #{e.response}"
         end
         puts "Response #{response.code}: Created New Account #{account_name}"
@@ -246,7 +246,7 @@ class Advertisement < ActiveRecord::Base
 
     begin
       response = RestClient.post url_budget, payload, :content_type => :json, :accept => :json
-    rescue => e
+    rescue Exception => e
       raise "#{account_name} - #{e.response}"
     end
 

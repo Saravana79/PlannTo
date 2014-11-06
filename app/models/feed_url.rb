@@ -100,7 +100,7 @@ class FeedUrl < ActiveRecord::Base
           else
             begin
               source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
-            rescue => e
+            rescue Exception => e
               source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
             end
           end
@@ -142,7 +142,7 @@ class FeedUrl < ActiveRecord::Base
             new_feed_url.save!
             feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
             feed_url.auto_save_feed_urls if feed_url.status == 0
-          rescue => e
+          rescue Exception => e
             p e
           end
 
@@ -231,7 +231,7 @@ class FeedUrl < ActiveRecord::Base
               new_feed_url.save!
               feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
               feed_url.auto_save_feed_urls if feed_url.status == 0
-            rescue => e
+            rescue Exception => e
               p e
             end
 
@@ -369,7 +369,7 @@ class FeedUrl < ActiveRecord::Base
         source_category = SourceCategory.new(:source => each_source.source, :categories => category)
         source_category.save!
         p source_category
-      rescue => e
+      rescue Exception => e
         puts "skip if exist already"
         p e
       end
@@ -565,7 +565,7 @@ class FeedUrl < ActiveRecord::Base
       else
         begin
           feed_url.auto_save_feed_urls
-        rescue => e
+        rescue Exception => e
           p e.backtrace
         end
       end

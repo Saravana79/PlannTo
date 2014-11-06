@@ -47,7 +47,7 @@ class SharesController < ApplicationController
                              @share.title = @title_info.to_s.gsub(%r{</?[^>]+?>}, '') if @title_info
                              @share.description = @meta_description if @meta_description
                              @share.thumbnail = @meta_image   if @meta_image
-                      rescue => e
+                      rescue Exception => e
                       end       
               end 
       end

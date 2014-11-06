@@ -249,15 +249,15 @@ class Item < ActiveRecord::Base
   def image_url(imagetype = :medium)
     if(!imageurl.blank?)
       if(imagetype == :medium)
-        configatron.root_image_url + type.downcase + '/medium/' + "#{imageurl}"
+        configatron.root_image_url + type.to_s.downcase + '/medium/' + "#{imageurl}"
       elsif (imagetype == :org)
         if self.image.blank?
-          configatron.root_image_url + type.downcase + '/org/' + "#{imageurl}"
+          configatron.root_image_url + type.to_s.downcase + '/org/' + "#{imageurl}"
         else
           self.image.avatar
         end
       else   
-         configatron.root_image_url + type.downcase + '/small/' + "#{imageurl}"
+         configatron.root_image_url + type.to_s.downcase + '/small/' + "#{imageurl}"
       end
    else
       baseitemtype = get_base_itemtype.downcase
@@ -938,7 +938,7 @@ end
    elsif (self.is_a? AttributeTag)
     "/groups/#{self.slug.to_s}"
    else
-    "/#{self.type.downcase.pluralize}/#{self.slug.to_s}"
+    "/#{self.type.to_s.downcase.pluralize}/#{self.slug.to_s}"
    end
 end
 
@@ -1519,7 +1519,7 @@ end
                       $redis.expire(u_key, 2.weeks)
                     end
                   end
-                rescue => e
+                rescue Exception => e
                   p "Problems while hmset: Args:-"
                   p u_key
                   p u_values
@@ -1573,7 +1573,7 @@ end
             exists = true if results.count > 0
           end
         end
-      rescue => e
+      rescue Exception => e
         exists = true
         p "Error url => #{url}"
         p e

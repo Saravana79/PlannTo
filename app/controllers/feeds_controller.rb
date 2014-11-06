@@ -35,7 +35,7 @@ class FeedsController < ApplicationController
       title = params[:search][:title]
       begin
         title = eval(title)
-      rescue => e
+      rescue Exception => e
         title = title.to_s.gsub(' ', '%').gsub("'", '%')
       end
     end
@@ -90,7 +90,7 @@ class FeedsController < ApplicationController
       title = params[:search][:title]
       begin
         title = eval(title)
-      rescue => e
+      rescue Exception => e
         title = title.to_s.gsub(' ', '%')
       end
     end
@@ -186,7 +186,7 @@ class FeedsController < ApplicationController
         end
         @feed_urls.update_all(:status => 1, :default_status => 6)
       end
-    rescue => e
+    rescue Exception => e
       @error = true
     end
   end

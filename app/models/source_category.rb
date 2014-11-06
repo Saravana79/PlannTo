@@ -14,7 +14,7 @@ class SourceCategory < ActiveRecord::Base
   def check_and_assign_sources_hash_to_cache_from_table()
     begin
       sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
-    rescue => e
+    rescue Exception => e
       sources_list = {}
     end
     sources_list.merge!({self.source => {"categories" => self.categories, "check_details" => self.check_details, "site_status" => self.site_status}})

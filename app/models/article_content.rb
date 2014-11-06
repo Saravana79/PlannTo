@@ -79,7 +79,7 @@ class ArticleContent < Content
         @article.sub_type = sub_type
         @article.description = @meta_description if @meta_description
         @article.thumbnail = @images.first if @images.count>0
-        # rescue => e
+        # rescue Exception => e
       end
     end
     [@article, @images, @rating_value]
@@ -146,7 +146,7 @@ class ArticleContent < Content
       facebook_count ? facebook_count.update_attributes(stats['link_stat']) : self.build_facebook_count(stats['link_stat'])
       facebook_count.save
     end
-    # rescue => e
+    # rescue Exception => e
     #   return false
     # end
   end
@@ -289,7 +289,7 @@ class ArticleContent < Content
 
       return "success"
 
-    rescue => e
+    rescue Exception => e
       feed_url = FeedUrl.where("id = ?", param['feed_url_id']).first
       feed_url.update_attributes(:status => 0)
       return e

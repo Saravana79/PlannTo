@@ -135,7 +135,7 @@ task :update_buyinglist => :environment do
         $redis_rtb.hmset(key, "item_ids", item_ids, "count", items_count)
         $redis_rtb.expire(key, 2.weeks)
       end
-    rescue => e
+    rescue Exception => e
       p e
       p "already shared check key => #{key}"
       p 222222222222222222222222222222222222222

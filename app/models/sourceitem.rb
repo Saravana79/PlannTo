@@ -16,7 +16,7 @@ class Sourceitem < ActiveRecord::Base
           count = count + 1
           source_item.update_attributes!(:suggestion_id => result[:id], :suggestion_name => result[:value])
         end
-      rescue => e
+      rescue Exception => e
         puts e.backtrace
       end
     end
