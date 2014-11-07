@@ -27,7 +27,7 @@ class Advertisement < ActiveRecord::Base
   STATUS = ["","valid"]
 
   HOURS = [*0..23]
-  INVALID_HOURS = [2, 3, 4, 5]
+  INVALID_HOURS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   VALID_HOURS = HOURS - INVALID_HOURS
 
   #validate :file_dimensions
