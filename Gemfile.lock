@@ -63,6 +63,9 @@ GEM
     acts_as_follower (0.1.1)
     acts_as_rateable (2.0.1)
     addressable (2.3.6)
+    amazon-ecs (2.2.5)
+      nokogiri (~> 1.4)
+      ruby-hmac (~> 0.3)
     ancestry (1.2.5)
       activerecord (>= 2.2.2)
     ansi (1.4.3)
@@ -282,6 +285,7 @@ GEM
       netrc (~> 0.7)
     rsolr (1.0.8)
       builder (>= 2.1.2)
+    ruby-hmac (0.4.0)
     rufus-scheduler (2.0.24)
       tzinfo (>= 0.3.22)
     sass (3.1.20)
@@ -361,6 +365,7 @@ DEPENDENCIES
   acts_as_follower
   acts_as_rateable
   addressable (~> 2.3.6)
+  amazon-ecs (~> 2.2.5)
   aws-sdk
   bson_ext
   citier (~> 0.1.15)
