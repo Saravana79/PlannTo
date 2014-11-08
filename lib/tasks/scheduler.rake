@@ -121,8 +121,6 @@ task :update_buyinglist => :environment do
   buying_lists = buying_lists[5250..buying_lists.count]
 
   buying_lists.each do |buying_list|
-    p 111111111111111111111111111111111111
-    p buying_list
     user_id = buying_list.split(":")[2]
     key = "users:buyinglist:#{user_id}"
     begin
@@ -136,10 +134,12 @@ task :update_buyinglist => :environment do
         $redis_rtb.expire(key, 2.weeks)
       end
     rescue Exception => e
-      p e
       p "already shared check key => #{key}"
-      p 222222222222222222222222222222222222222
     end
-    p 3333333333333333333333333333333333333333333
   end
+end
+
+desc "amazon price update process"
+task :amazon_price_update => :environment do
+  Resque.enqueue(AmazonPriceUpdateProcess, "amazon_price_update", Time.zone.now.utc)
 end

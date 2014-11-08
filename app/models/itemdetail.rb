@@ -1,4 +1,4 @@
-  class Itemdetail < ActiveRecord::Base
+class Itemdetail < ActiveRecord::Base
 
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
   belongs_to :item, :foreign_key => "itemid"
@@ -190,5 +190,47 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       end
 
     return where_to_buy_items, item, best_deals, impression_id
+  end
+
+  def self.amazon_price_update(actual_time)
+    time = actual_time.to_time
+    impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
+    query = "select distinct item_id from add_impressions where #{impression_date_condition}"
+
+    add_impressions = Item.find_by_sql(query)
+    item_ids = add_impressions.map(&:item_id)
+    item_ids = item_ids.map {|item_id| item_id.to_i}
+
+    splitted_array = item_ids.each_slice(30).to_a
+
+    splitted_array.each do |spl_item_ids|
+      item_details_query = "select * from itemdetails where site=9882 and itemid in (#{spl_item_ids.map(&:inspect).join(',')})"
+      item_details = Itemdetail.find_by_sql(item_details_query)
+
+      item_details.each do |item_detail|
+        begin
+          url = item_detail.url
+          asin = url[/.*\/dp\/(.*)/m,1]
+          asin = asin.split("/")[0]
+
+          res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
+          if res.is_valid_request?
+            item = res.first_item
+            unless item.blank?
+              offer_listing = item.get_element("Offers/Offer/OfferListing")
+              current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
+              saved_percentage = offer_listing.get("PercentageSaved")
+              availability_str = offer_listing.get_element("AvailabilityAttributes").get("AvailabilityType")
+              status = availability_str == "now" ? 1 : 2
+              mrp_price = current_price.to_f + saved_price.to_f
+              item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price)
+            end
+          end
+        rescue Exception => e
+          p "can't saved price details for #{item_detail.id}"
+        end
+      end
+    end
   end
 end
