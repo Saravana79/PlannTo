@@ -1,3 +1,5 @@
+require "amazon/ecs"
+
 module Amazon
   class Ecs
 
