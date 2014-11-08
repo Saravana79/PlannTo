@@ -103,4 +103,4 @@ gem "bson_ext"
 gem 'oink', '~> 0.10.1'
 
 #amazon
-gem 'amazon-ecs', '~> 2.2.5'
+# gem 'amazon-ecs', '~> 2.2.5'
