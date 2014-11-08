@@ -213,7 +213,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           asin = url[/.*\/dp\/(.*)/m,1]
           asin = asin.split("/")[0]
 
-          # res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
+          res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
           if res.is_valid_request?
             item = res.first_item
             unless item.blank?
