@@ -3,7 +3,7 @@ require "amazon/ecs"
 module Amazon
   class Ecs
 
-    SERVICE_URLS.merge!(:in => "http://webservices.amazon.in/onca/xml") # Added indian region
+    # SERVICE_URLS.merge!(:in => "http://webservices.amazon.in/onca/xml") # Added indian region
 
     # def self.other_operation(item_id, opts={})
     #   opts[:operation] = '[other valid operation supported by Product Advertising API]'
