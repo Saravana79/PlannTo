@@ -1,4 +1,4 @@
-%w{custom_acts_as_follower authentication reputation ext/string addressable/uri resque-retry resque/failure/redis}.each { |each_val| require each_val }
+%w{custom_acts_as_follower authentication reputation ext/string addressable/uri resque-retry resque/failure/redis amazon/ecs}.each { |each_val| require each_val }
 
 require "#{Rails.root}/lib/amazon/ecs"
 
