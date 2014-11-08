@@ -6,7 +6,7 @@
 #   options[:AWS_secret_key] = '78BS4LXxTZTbF9ZSETyG2t8q++2WmOEEuk3JDnxA'
 # end
 
-require "#{Rails.root}/lib/amazon/ecs"
+# require "#{Rails.root}/lib/amazon/ecs"
 
 if Rails.env.production?
   ENV['HEROKU_USER'] = "siva@plannto.com"
