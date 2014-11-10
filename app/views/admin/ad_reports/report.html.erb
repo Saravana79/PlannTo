@@ -2,7 +2,7 @@
   Advertisement Reports
 </h3>
 <br/>
-<%= form_for :impression, :url => admin_ad_report_view_ad_chart_path, :method => :get do |f| %>
+<%= form_for :impression, :url => admin_ad_reports_report_path(params[:id]), :method => :get do |f| %>
     <div>
 <span style="width:100px;display:block;float:left;padding-top:5px;">
 Select A date Range
@@ -52,11 +52,18 @@ To Date
 Select
 </span>
     <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-<%= text_field_tag :select, '', :style => "padding:2px;width:100px;" %>
+<%= select_tag(:select, options_for_select([["Impressions", "add_impressions"], ['Clicks', 'clicks']], params[:select])) %>
 </span>
       </div>
 
-    <%= hidden_field_tag "advertisement_id", params[:advertisement_id] %>
+    <div style="display:block;padding-top:10px;clear:both;">
+    <span style="width:100px;display:block;float:left;padding-top:5px;">
+Select By
+</span>
+    <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= select_tag(:select_by, options_for_select([["Hosted Url", "hosted_site_url"], ['Item', 'item_id']], params[:select_by])) %>
+</span>
+    </div>
 
     <div style="width:200px;padding-left:100px;display:block;clear:both;padding-top:20px;">
       <%= f.submit 'Generate Report', :class => "btn-link" %>
@@ -75,7 +82,18 @@ Select
 <br/><br/>
 
 <div id="report">
-  <%#= render "admin/ad_reports/report" %>
+  <table border="1" width="90%">
+    <tr>
+      <th> <%= params[:select_by].to_s.capitalize %> </th>
+      <th> <%= params[:select] == "add_impressions" ? "Impressions" : "Clicks" %> Count </th>
+    </tr>
+    <% @reports.each do | report | %>
+        <tr>
+          <td><%= report.send(params[:select_by]) %> </td>
+          <td><%= report.count %> </td>
+        </tr>
+    <%end%>
+  </table>
 </div>
 
 

@@ -401,10 +401,12 @@ class Advertisement < ActiveRecord::Base
   end
 
   def get_reports(param)
-    time = Time.now
-    impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
-    query = "select hosted_site_url, count(*) as impression_count from add_impressions where advertisement_id = #{self.advertisement_id} and #{impression_date_condition} group by hosted_site_url order by impression_count desc limit 100"
-    Advertisement.find_by_sql(query)
+    from_date = param[:from_date].to_date
+    end_date = param[:to_date].to_date
+    time_column = param[:select] == "add_impressions" ? "impression_time" : "timestamp"
+    impression_date_condition = "#{time_column} > '#{from_date.beginning_of_day.strftime('%F %T')}' and #{time_column} < '#{end_date.end_of_day.strftime('%F %T')}'"
+    p query = "select #{param[:select_by]}, count(*) as count from #{param[:select]} where advertisement_id = #{self.id} and #{impression_date_condition} group by #{param[:select_by]} order by count desc limit 100"
+    reports = Advertisement.find_by_sql(query)
   end
 
   private

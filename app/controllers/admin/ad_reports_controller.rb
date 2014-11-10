@@ -170,9 +170,13 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def report
-    @start_date = params[:from_date].blank? ? Time.zone.now : params[:from_date].to_date
-    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
-    advertisement = Advertisement.where(:user_id => current_user.id, :id => params[:id]).last
+    p current_user
+    params[:select] ||= "add_impressions"
+    params[:select_by] ||= "hosted_site_url"
+    @start_date = params[:from_date] = params[:from_date].blank? ? Time.zone.now : params[:from_date].to_date
+    @end_date = params[:to_date] = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+    user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
+    advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
     if !advertisement.blank?
       @reports = advertisement.get_reports(params)
     end
