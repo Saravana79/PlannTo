@@ -405,7 +405,13 @@ class Advertisement < ActiveRecord::Base
     end_date = param[:to_date].to_date
     time_column = param[:select] == "add_impressions" ? "impression_time" : "timestamp"
     impression_date_condition = "#{time_column} > '#{from_date.beginning_of_day.strftime('%F %T')}' and #{time_column} < '#{end_date.end_of_day.strftime('%F %T')}'"
-    p query = "select #{param[:select_by]}, count(*) as count from #{param[:select]} where advertisement_id = #{self.id} and #{impression_date_condition} group by #{param[:select_by]} order by count desc limit 100"
+    if param[:select_by] == "item_id"
+      select_condition = "select i.name, count(*) as count from #{param[:select]} join items i on i.id = add_impressions.item_id"
+    else
+      select_condition = "select hosted_site_url, count(*) as count from #{param[:select]}"
+    end
+
+    query = "#{select_condition} where advertisement_id = #{self.id} and #{impression_date_condition} group by #{param[:select_by]} order by count desc limit 100"
     reports = Advertisement.find_by_sql(query)
   end
 

@@ -1,6 +1,6 @@
 class Admin::AdReportsController < ApplicationController
-  before_filter :authenticate_admin_user!, :except => [:view_ad_chart]
-  before_filter :authenticate_user!, :only => [:view_ad_chart]
+  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report]
+  before_filter :authenticate_user!, :only => [:view_ad_chart, :report]
   layout "product"
 
   def index
@@ -170,7 +170,6 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def report
-    p current_user
     params[:select] ||= "add_impressions"
     params[:select_by] ||= "hosted_site_url"
     @start_date = params[:from_date] = params[:from_date].blank? ? Time.zone.now : params[:from_date].to_date
