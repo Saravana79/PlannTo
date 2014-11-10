@@ -403,16 +403,30 @@ class Advertisement < ActiveRecord::Base
   def get_reports(param)
     from_date = param[:from_date].to_date
     end_date = param[:to_date].to_date
-    time_column = param[:select] == "add_impressions" ? "impression_time" : "timestamp"
-    impression_date_condition = "#{time_column} > '#{from_date.beginning_of_day.strftime('%F %T')}' and #{time_column} < '#{end_date.end_of_day.strftime('%F %T')}'"
+    impression_date_condition = "impression_time > '#{from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{end_date.end_of_day.strftime('%F %T')}'"
+    click_date_condition = "timestamp > '#{from_date.beginning_of_day.strftime('%F %T')}' and timestamp < '#{end_date.end_of_day.strftime('%F %T')}'"
     if param[:select_by] == "item_id"
-      select_condition = "select i.name as item_id, count(*) as count from #{param[:select]} join items i on i.id = add_impressions.item_id"
+      query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions ai
+               where advertisement_id = #{self.id} and #{impression_date_condition} group by item_id ) a left outer join (select item_id, count(*) as clicks_count from
+               clicks where advertisement_id = #{self.id} and #{click_date_condition} group by item_id ) b on a.item_id= b.item_id inner join items i on i.id = a.item_id
+               order by impressions_count desc"
     else
-      select_condition = "select hosted_site_url, count(*) as count from #{param[:select]}"
+      query = "select a.hosted_site_url,impressions_count,clicks_count from (select  ai.hosted_site_url, count(*) as impressions_count from add_impressions ai
+               where advertisement_id = 1 and #{impression_date_condition} group by hosted_site_url ) a left outer join (select hosted_site_url, count(*) as
+               clicks_count from clicks where advertisement_id = 1 and #{click_date_condition} group by hosted_site_url ) b on a.hosted_site_url= b.hosted_site_url
+               order by impressions_count desc"
     end
 
-    query = "#{select_condition} where advertisement_id = #{self.id} and #{impression_date_condition} group by #{param[:select_by]} order by count desc limit 100"
     reports = Advertisement.find_by_sql(query)
+  end
+
+  def self.to_csv(reports)
+    CSV.generate do |csv|
+      csv << [params[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count"]
+      reports.each do |report|
+        csv << [*report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count]
+      end
+    end
   end
 
   private

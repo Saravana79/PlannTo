@@ -49,15 +49,6 @@ To Date
 
     <div style="display:block;padding-top:10px;clear:both;">
     <span style="width:100px;display:block;float:left;padding-top:5px;">
-Select
-</span>
-    <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-<%= select_tag(:select, options_for_select([["Impressions", "add_impressions"], ['Clicks', 'clicks']], params[:select])) %>
-</span>
-      </div>
-
-    <div style="display:block;padding-top:10px;clear:both;">
-    <span style="width:100px;display:block;float:left;padding-top:5px;">
 Select By
 </span>
     <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
@@ -80,17 +71,18 @@ Select By
 -->
 
 <br/><br/>
-
 <div id="report">
   <table border="1" width="90%">
     <tr>
-      <th> <%= params[:select_by].to_s.capitalize %> </th>
-      <th> <%= params[:select] == "add_impressions" ? "Impressions" : "Clicks" %> Count </th>
+      <th> <%= params[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url" %> </th>
+      <th> Impressions Count </th>
+      <th> Clicks Count </th>
     </tr>
     <% @reports.each do | report | %>
         <tr>
-          <td><%= report.send(params[:select_by]) %> </td>
-          <td><%= report.count %> </td>
+          <td><%= report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url") %> </td>
+          <td><%= report.impressions_count %> </td>
+          <td><%= report.clicks_count %> </td>
         </tr>
     <%end%>
   </table>

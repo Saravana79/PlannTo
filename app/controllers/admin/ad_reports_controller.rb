@@ -179,5 +179,10 @@ class Admin::AdReportsController < ApplicationController
     if !advertisement.blank?
       @reports = advertisement.get_reports(params)
     end
+
+    respond_to do |format|
+      format.html
+      format.csv { render text: Advertisement.to_csv(@reports)}
+    end
   end
 end
