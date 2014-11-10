@@ -182,7 +182,7 @@ class Admin::AdReportsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { render text: Advertisement.to_csv(@reports)}
+      format.csv { render text: Advertisement.to_csv(params, @reports)}
     end
   end
 end

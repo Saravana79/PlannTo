@@ -71,6 +71,10 @@ Select By
 -->
 
 <br/><br/>
+<% unless @reports.blank? %>
+  <%= link_to "Export CSV", admin_ad_reports_report_path(:format => "csv", :from_date => params[:from_date], :to_date => params[:to_date], :select_by => params[:select_by]), :class => "btn_submitanswer export_btn" %>
+<% end %>
+<br/><br/>
 <div id="report">
   <table border="1" width="90%">
     <tr>
@@ -156,6 +160,13 @@ Select By
         font-size: 24px;
         margin: 20px;
         text-align: center;
+    }
+
+    .export_btn {
+        float: right;
+        margin-right: 46px;
+        margin-top: -26px;
+        position: unset;
     }
 
 </style>

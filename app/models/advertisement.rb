@@ -420,9 +420,9 @@ class Advertisement < ActiveRecord::Base
     reports = Advertisement.find_by_sql(query)
   end
 
-  def self.to_csv(reports)
+  def self.to_csv(param, reports)
     CSV.generate do |csv|
-      csv << [params[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count"]
+      csv << [param[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count"]
       reports.each do |report|
         csv << [*report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count]
       end
