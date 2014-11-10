@@ -34,7 +34,7 @@ From Date
 <%= text_field_tag :from_date, @start_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
 </span>
       <script>
-          $("#from_date").datepicker({ dateFormat: 'dd-mm-yy' });
+          $("#from_date").datepicker({ minDate: -30, maxDate: "+0D", dateFormat: 'dd-mm-yy' });
       </script>
       <br/>
     </div>
@@ -70,7 +70,7 @@ Select By
     </div>
 <% end %>
 <script>
-    $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
+    $("#to_date").datepicker({ minDate: -30, maxDate: "+0D", dateFormat: 'dd-mm-yy' });
 </script>
 <div style="border-bottom: 1px solid lightgray;width: 100%;clear: both;padding-top: 10px;"></div><br/><br/>
 <!--
