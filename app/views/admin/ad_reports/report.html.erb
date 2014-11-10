@@ -81,12 +81,14 @@ Select By
       <th> <%= params[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url" %> </th>
       <th> Impressions Count </th>
       <th> Clicks Count </th>
+      <th> Ectr </th>
     </tr>
     <% @reports.each do | report | %>
         <tr>
           <td><%= report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url") %> </td>
           <td><%= report.impressions_count %> </td>
           <td><%= report.clicks_count %> </td>
+          <td><%= report.ectr %> </td>
         </tr>
     <%end%>
   </table>
