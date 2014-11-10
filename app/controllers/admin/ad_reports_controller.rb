@@ -172,8 +172,8 @@ class Admin::AdReportsController < ApplicationController
   def report
     params[:select] ||= "add_impressions"
     params[:select_by] ||= "hosted_site_url"
-    @start_date = params[:from_date] = params[:from_date].blank? ? Time.zone.now : params[:from_date].to_date
-    @end_date = params[:to_date] = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+    @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
+    @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
     user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
     advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
     if !advertisement.blank?
@@ -182,7 +182,7 @@ class Admin::AdReportsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { render text: Advertisement.to_csv(params, @reports)}
+      format.csv { send_data Advertisement.to_csv(params, @reports)}
     end
   end
 end

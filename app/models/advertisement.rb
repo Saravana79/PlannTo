@@ -424,7 +424,7 @@ class Advertisement < ActiveRecord::Base
     CSV.generate do |csv|
       csv << [param[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
       reports.each do |report|
-        csv << [*report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count, report.ectr.to_f.round(3)]
+        csv << [*report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count, report.ectr.to_f.round(4)]
       end
     end
   end
