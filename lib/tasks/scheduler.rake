@@ -29,9 +29,10 @@ task :item_ad_detail_process => :environment do
   Resque.enqueue(ItemAdDetailProcess, "update_ad_details_for_items", Time.zone.now, 1000)
 end
 
-task :aggregated_detail_process_scheduler => :environment do
+task :aggregated_detail_process_scheduler, [:only_ad] => :environment do |_, args|
+  args.with_defaults(:only_ad => "false")
   puts "Running Queeing Aggregated Process, at #{Time.zone.now}"
-  Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc)
+  Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc, args[:only_ad])
 end
 
 task :content_ad_detail_process => :environment do

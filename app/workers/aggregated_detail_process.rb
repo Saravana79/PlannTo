@@ -3,7 +3,7 @@ class AggregatedDetailProcess
   extend Resque::Plugins::Retry
   @queue = :aggregated_detail_process
 
-  def self.perform(actual_time)
+  def self.perform(actual_time, only_ad="true")
     log = Logger.new 'log/aggregated_detail_process.log'
     #begin
     log.debug "********** Start Processing aggregated detail **********"
@@ -13,10 +13,12 @@ class AggregatedDetailProcess
 
     before_hour = now_time - 1.hour
 
-    AggregatedDetail.update_aggregated_detail(now_time, 'publisher', 1000)
+    if only_ad == "false"
+      AggregatedDetail.update_aggregated_detail(now_time, 'publisher', 1000)
 
-    if (before_hour.day != now_time.day)
-      AggregatedDetail.update_aggregated_detail(before_hour, 'publisher', 1000)
+      if (before_hour.day != now_time.day)
+        AggregatedDetail.update_aggregated_detail(before_hour, 'publisher', 1000)
+      end
     end
 
     # Update for advertisement_id

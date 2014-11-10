@@ -400,6 +400,13 @@ class Advertisement < ActiveRecord::Base
     end
   end
 
+  def get_reports(param)
+    time = Time.now
+    impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
+    query = "select hosted_site_url, count(*) as impression_count from add_impressions where advertisement_id = #{self.advertisement_id} and #{impression_date_condition} group by hosted_site_url order by impression_count desc limit 100"
+    Advertisement.find_by_sql(query)
+  end
+
   private
 
   def file_dimensions

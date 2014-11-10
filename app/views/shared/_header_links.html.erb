@@ -155,10 +155,10 @@
          <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
            <div class="Useraccountinfo">
              <%= link_to "Account Setting", accounts_path %>
-             <%= link_to "Profile",  "/" + "#{current_user.username}" %>
-             <%= link_to "My feeds", "/" %>
+             <%#= link_to "Profile",  "/" + "#{current_user.username}" %>
+             <%#= link_to "My feeds", "/" %>
 
-             <%= link_to "Buying Plans","/" + "#{current_user.username}" + "?follow=Preferences" %>
+             <%#= link_to "Buying Plans","/" + "#{current_user.username}" + "?follow=Preferences" %>
 
              <%if current_user && current_user.is_admin? %>
 
@@ -186,7 +186,7 @@
              <%if current_user && current_user.is_admin? %>
                  <a href="/admin/widget_reports">Widgets Report</a>
              <% end %>
-             <% if current_user.is_a_advertiser?(session[:advertiser]) %>
+             <% if current_user.is_a_advertiser?(session[:advertiser]) || !current_user.is_a_publisher?(session[:publisher]) %>
                  <% session[:advertiser] = "true" %>
                  <a href="/admin/advertisements">View Advertisements</a>
              <%end%>

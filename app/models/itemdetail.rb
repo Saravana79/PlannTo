@@ -206,29 +206,58 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     splitted_array.each do |spl_item_ids|
       item_details_query = "select * from itemdetails where site=9882 and itemid in (#{spl_item_ids.map(&:inspect).join(',')})"
       item_details = Itemdetail.find_by_sql(item_details_query)
-
+      count = 0
       item_details.each do |item_detail|
         begin
+          p Time.now
           url = item_detail.url
           asin = url[/.*\/dp\/(.*)/m,1]
           asin = asin.split("/")[0]
+          p 1111111111
+          p asin
 
-          res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
+          res = Amazon::Ecs.item_lookup("B00B70KYOO", {:response_group => 'Offers', :country => 'in'})
+          p res.is_valid_request?
           if res.is_valid_request?
             item = res.first_item
             unless item.blank?
+              p 22222
               offer_listing = item.get_element("Offers/Offer/OfferListing")
-              current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
-              saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
-              saved_percentage = offer_listing.get("PercentageSaved")
-              availability_str = offer_listing.get_element("AvailabilityAttributes").get("AvailabilityType")
-              status = availability_str == "now" ? 1 : 2
-              mrp_price = current_price.to_f + saved_price.to_f
-              item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price)
+              if !offer_listing.blank?
+                p current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                p saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+                p saved_percentage = offer_listing.get("PercentageSaved") rescue 0
+                p availability_str = offer_listing.get("Availability")
+
+                status = case availability_str
+                           when /Usually dispatched.*/ || /Usually ships.*/
+                             1
+                           when /Not yet released/ || /Not yet published/
+                             3
+                           when /This item is not stocked or has been discontinued/
+                             4
+                           when /Out of Stock/
+                             2
+                           else
+                             4
+                         end
+
+                p mrp_price = current_price.to_f + saved_price.to_f
+                item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price)
+              else
+                item_detail.update_attributes!(:status => 2)
+              end
             end
           end
         rescue Exception => e
           p "can't saved price details for #{item_detail.id}"
+          p e.message
+        end
+        count+=1
+        if count == 2
+          p "ssllllllllllllllllllleeeeeeeeeeepppppppp"
+          sleep 1.5
+          count = 0
         end
       end
     end

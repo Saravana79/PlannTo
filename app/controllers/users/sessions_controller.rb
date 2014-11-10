@@ -24,11 +24,23 @@ class Users::SessionsController < Devise::SessionsController
     BuyingPlan.buying_plan_move_from_without_login_for_has_account(current_user,request.remote_ip)
     session[:buying_warning_message] = ''  
     sign_in(resource_name, resource)
-    if  session[:invitation].blank? 
-      respond_with resource, :location => after_sign_in_path_for(resource)
+    # if  session[:invitation].blank?
+    #   p 111
+    #   p resource
+    #   # p 222
+    #   # p current_uuser
+    #   # p 333
+    #   # p user
+    #   respond_with resource, :location => after_sign_in_path_for(resource)
+    # else
+    #   redirect_to "#{session[:invitation]}"
+    # end
+
+    if resource.is_a_publisher?(true)
+      redirect_to admin_impression_reports_path, :location => after_sign_in_path_for(resource)
     else
-      redirect_to "#{session[:invitation]}" 
-    end 
+      redirect_to admin_advertisements_path, :location => after_sign_in_path_for(resource)
+    end
         
     #else
    

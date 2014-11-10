@@ -25,7 +25,7 @@
                 <span>Password</span><span class="Forgotpassword" ><%= link_to "forgot password?",new_password_path(:user), :tabindex => "5" ,:style=>"font-family: Tahoma; font-size: 10px;"%></a></span>
                 <span class="Textinput">
                 <%= f.password_field :password,:size =>"27" , :tabindex => "2"%>
-               	
+
          </span>
             </div>
             
@@ -35,7 +35,10 @@
          <div><%= f.check_box :remember_me , :tabindex => "3"%> </div>
          </div>
         
-        <div class="Bluesubmit2" style="margin:5px 0px 0px 98px;"  ><%= f.submit "Sign In" , :tabindex => "4"%> </div>           
+        <div class="Bluesubmit2"  >
+          <%= f.submit "Sign In" , :tabindex => "4"%>
+          <%= link_to "Sign Up", new_user_registration_path, :class => "sign_up_btn" %>
+        </div>
     </div>
 <div class="Clearboth"></div>
 
@@ -46,6 +49,30 @@
 
 
 
+<style type="text/css">
+    .sign_up_btn {
+        background: -moz-linear-gradient(center top, #90cddb, #528d9c) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        border: medium none;
+        border-radius: 5px;
+        box-shadow: 1px 1px 1px #727272;
+        color: #fef4e9;
+        cursor: pointer;
+        display: inline-block;
+        float: left;
+        font-family: Trebuchet MS, Helvetica, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        outline: medium none;
+        padding: 2px 10px;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    }
 
-
-
+    .sign_up_btn {
+        clear: both;
+        float: left;
+        margin-left: 15px;
+        position: absolute;
+    }
+</style>

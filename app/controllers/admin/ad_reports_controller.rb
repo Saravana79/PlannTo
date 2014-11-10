@@ -1,5 +1,6 @@
 class Admin::AdReportsController < ApplicationController
-  before_filter :authenticate_admin_user!
+  before_filter :authenticate_admin_user!, :except => [:view_ad_chart]
+  before_filter :authenticate_user!, :only => [:view_ad_chart]
   layout "product"
 
   def index
@@ -166,5 +167,14 @@ class Admin::AdReportsController < ApplicationController
     vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
 
     @vendors =  VendorDetail.where(:item_id => vendor_ids)
+  end
+
+  def report
+    @start_date = params[:from_date].blank? ? Time.zone.now : params[:from_date].to_date
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+    advertisement = Advertisement.where(:user_id => current_user.id, :id => params[:id]).last
+    if !advertisement.blank?
+      @reports = advertisement.get_reports(params)
+    end
   end
 end

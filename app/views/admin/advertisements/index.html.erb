@@ -5,45 +5,53 @@
  <div class="show_date_range">
    <span>Date: <%= @start_date.to_date.strftime("%d %b %y") %><%= "  -  #{@end_date.to_date.strftime("%d %b %y")}" unless @end_date.blank? %></span>
  </div>
-<table border="1" width="90%">
-<tr>
-  <th> Name </th>
-  <th> Status </th>
-  <th> Start Date</th>
-  <th> End Date</th>
-  <th> Impr.</th>
-  <th> Clicks</th>
-  <th> CTR</th>
-  <th> Cost</th>
-  <% if current_user.is_admin? %><th> Revenue</th> <% end %>
-  <th> Products</th>
-  <th colspan="3">Actions</th>
-</tr>
- <%@advertisements.each do |ad | %>
-   <tr>
-     <td><%= ad.name  %> </td>
-     <td><%= ad.status == 1 ? "Enable" : "Disable"  %> </td>
-     <td> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
-     <td> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
-     <td><%= @extra_ad_details["#{ad.id}"]["impressions"]%></td>
-     <td><%= @extra_ad_details["#{ad.id}"]["clicks"]%></td>
-     <td><%= @extra_ad_details["#{ad.id}"]["ctr"]%></td>
-     <td><%= @extra_ad_details["#{ad.id}"]["cost"]%></td>
-     <% if current_user.is_admin? %><td> <%= @extra_ad_details["#{ad.id}"]["revenue"]%> </td> <% end %>
-     <% collected_item_ids = ad.content.blank? ? "" : ad.content.related_items.collect(&:item_id).join(',') %>
-     <td><% Item.where("id in ('#{collected_item_ids}')").each do |it| %>
-     <%= it.name %>,&nbsp; <%end%></td>
-     <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) + "#maincontainer" %> </td>
-     <td> <%= link_to "view chart", admin_ad_report_view_ad_chart_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
-     <% if current_user.is_admin? && ad.review_status.blank? || ad.review_status == "pending" %>
-         <td><%= link_to "Review", review_admin_advertisements_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
-     <% else %>
-           <td><%= ad.review_status.blank? ? "pending" : ad.review_status %></td>
-     <% end %>
-  </tr>
-<%end%>  
- </table>
- <%= will_paginate @advertisements %>
+
+<% if @advertisements.blank? %>
+   <div class="warning_message">
+     <span>There are no Campaigns Are Available, Please Click <b>Create New Campaign</b> to Create a New Campaign</span>
+   </div>
+<% else %>
+    <table border="1" width="90%">
+    <tr>
+      <th> Name </th>
+      <th> Status </th>
+      <% if current_user.is_admin? %>
+          <th> Start Date</th>
+          <th> End Date</th>
+      <% end %>
+      <th> Impr.</th>
+      <th> Clicks</th>
+      <th> CTR</th>
+      <th> Cost</th>
+      <% if current_user.is_admin? %><th> Revenue</th> <% end %>
+      <th colspan="4">Actions</th>
+    </tr>
+     <%@advertisements.each do |ad | %>
+       <tr>
+         <td><%= ad.name  %> </td>
+         <td><%= ad.status == 1 ? "Enable" : "Disable"  %> </td>
+         <% if current_user.is_admin? %>
+             <td> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
+             <td> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
+         <% end %>
+         <td><%= @extra_ad_details["#{ad.id}"]["impressions"]%></td>
+         <td><%= @extra_ad_details["#{ad.id}"]["clicks"]%></td>
+         <td><%= @extra_ad_details["#{ad.id}"]["ctr"]%></td>
+         <td><%= @extra_ad_details["#{ad.id}"]["cost"]%></td>
+         <% if current_user.is_admin? %><td> <%= @extra_ad_details["#{ad.id}"]["revenue"]%> </td> <% end %>
+         <td> <%= link_to "Edit",edit_admin_advertisement_path(ad) + "#maincontainer" %> </td>
+         <td> <%= link_to "view chart", admin_ad_report_view_ad_chart_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
+         <td> <%= link_to "view Reports", admin_ad_reports_report_path(ad.id), :target => "_blank" %> </td>
+         <% if current_user.is_admin? && (ad.review_status.blank? || ad.review_status == "pending") %>
+             <td><%= link_to "Review", review_admin_advertisements_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
+         <% else %>
+               <td><%= ad.review_status.blank? ? "pending" : ad.review_status %></td>
+         <% end %>
+      </tr>
+    <%end%>
+     </table>
+     <%= will_paginate @advertisements %>
+ <% end %>
 
 
 <style type="text/css">
@@ -73,6 +81,11 @@
     .show_date_range > span {
         font-size: 13px;
         margin: 0 0 0 18px;
+    }
+
+    .warning_message {
+        font-size: 17px;
+        margin: 100px;
     }
 </style>
 

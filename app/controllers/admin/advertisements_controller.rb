@@ -1,6 +1,7 @@
 class Admin::AdvertisementsController < ApplicationController
-  before_filter :authenticate_publisher_user!
-  skip_before_filter :authenticate_publisher_user!, :if => proc {|c| current_user && current_user.is_admin?}
+  # before_filter :authenticate_publisher_user!
+  # skip_before_filter :authenticate_publisher_user!, :if => proc {|c| current_user && current_user.is_admin?}
+  before_filter :authenticate_user!
   before_filter :make_user_condition
   include Admin::AdvertisementsHelper
   layout "product"
