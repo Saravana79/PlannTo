@@ -31,6 +31,8 @@ development:
   root_level_laptop_id: 15412
   root_level_gaming_console_id: 15431
   root_level_app_id: 15430
+  root_level_lens_id: 4126
+  root_level_television_id: 22649
   root_content_vote_count: 1
   top_content_ids: "12495,12688,12716,12580,12729,12621,12503,12554,12744,12599"
   top_all_item_ids: "2157,4963,4745,4651,4884,4099,4744,3978"
@@ -86,6 +88,8 @@ test:
   root_level_laptop_id: 15412
   root_level_gaming_console_id: 15431
   root_level_app_id: 15430
+  root_level_lens_id: 4126
+  root_level_television_id: 22649
   root_content_vote_count: 1
   top_content_ids: "1,2,3,4,5,6,7,8,9,10"
   top_all_item_ids: "5,6,7,8,9,10"
@@ -138,6 +142,8 @@ production:
   root_level_laptop_id: 15412
   root_level_gaming_console_id: 15431
   root_level_app_id: 15430
+  root_level_lens_id: 4126
+  root_level_television_id: 22649
   root_content_vote_count: 1
   top_content_ids: "1,2,3,4,5,6,7,8,9,10"
   top_all_item_ids: "2157,4963,4745,4651,4884,4099,4744,3978"

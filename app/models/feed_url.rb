@@ -534,8 +534,8 @@ class FeedUrl < ActiveRecord::Base
   def self.get_selected_list_for_old_data(title_for_check, host_without_www)
     title_for_check = title_for_check.to_s.downcase
     return_val = ""
-    matching_text = [["mobile", "phone"], ["tablet", "pad"], ["car"], ["bike"], ["apps", "app "], ["games", "game", "gaming"], ["camera", "dslr", "photography"], ["laptop", "ultratop", "notebook"]]
-    mathing_category_ids = [configatron.root_level_mobile_id, configatron.root_level_tablet_id, configatron.root_level_car_id, configatron.root_level_bike_id, configatron.root_level_app_id, configatron.root_level_game_id, configatron.root_level_camera_id, configatron.root_level_laptop_id]
+    matching_text = [["mobile", "phone"], ["tablet", "pad"], ["car"], ["bike"], ["apps", "app "], ["games", "game", "gaming"], ["camera", "dslr", "photography"], ["laptop", "ultratop", "notebook"], ['lens'], ['tv', 'television']]
+    mathing_category_ids = [configatron.root_level_mobile_id, configatron.root_level_tablet_id, configatron.root_level_car_id, configatron.root_level_bike_id, configatron.root_level_app_id, configatron.root_level_game_id, configatron.root_level_camera_id, configatron.root_level_laptop_id, configatron.root_level_lens_id, configatron.root_level_television_id]
 
     selected_values = []
     matching_text.each_with_index do |each_text_arr, index|
