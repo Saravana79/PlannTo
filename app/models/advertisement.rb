@@ -22,7 +22,7 @@ class Advertisement < ActiveRecord::Base
   after_save :update_click_url_based_on_vendor
   after_save :update_redis_with_advertisement
 
-  scope :get_ad_by_id, lambda { |id| where("id = ? and review_status='approved'", id) }
+  scope :get_ad_by_id, lambda { |id| where("id = ?", id) }
 
   STATUS = ["","valid"]
 
