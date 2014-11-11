@@ -400,7 +400,7 @@ class Advertisement < ActiveRecord::Base
     end
   end
 
-  def get_reports(param)
+  def get_reports(param, export)
     from_date = param[:from_date].to_date
     end_date = param[:to_date].to_date
     impression_date_condition = "impression_time > '#{from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{end_date.end_of_day.strftime('%F %T')}'"
@@ -417,7 +417,11 @@ class Advertisement < ActiveRecord::Base
                order by impressions_count desc"
     end
 
-    reports = Advertisement.paginate_by_sql(query, :page => param[:page], :per_page => 50)
+    if export
+      reports = Advertisement.find_by_sql(query)
+    else
+      reports = Advertisement.paginate_by_sql(query, :page => param[:page], :per_page => 50)
+    end
   end
 
   def self.to_csv(param, reports)

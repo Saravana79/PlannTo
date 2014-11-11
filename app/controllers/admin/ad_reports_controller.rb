@@ -176,7 +176,8 @@ class Admin::AdReportsController < ApplicationController
     user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
     advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
     if !advertisement.blank?
-      @reports = advertisement.get_reports(params)
+      export = request.format == "text/csv" ? true : false
+      @reports = advertisement.get_reports(params, export)
     end
 
     respond_to do |format|
