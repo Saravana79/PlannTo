@@ -417,14 +417,14 @@ class Advertisement < ActiveRecord::Base
                order by impressions_count desc"
     end
 
-    reports = Advertisement.find_by_sql(query)
+    reports = Advertisement.paginate_by_sql(query, :page => param[:page], :per_page => 50)
   end
 
   def self.to_csv(param, reports)
     CSV.generate do |csv|
       csv << [param[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
       reports.each do |report|
-        csv << [*report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count, report.ectr.to_f.round(4)]
+        csv << [*report.send(param[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count, report.ectr.to_f.round(4)]
       end
     end
   end

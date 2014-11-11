@@ -170,7 +170,6 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def report
-    params[:select] ||= "add_impressions"
     params[:select_by] ||= "hosted_site_url"
     @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
     @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
@@ -182,7 +181,11 @@ class Admin::AdReportsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { send_data Advertisement.to_csv(params, @reports)}
+      format.csv {
+        date = params[:from_date].to_date.strftime("%b_%d") + "_to_" + params[:to_date].to_date.strftime("%b_%d")
+        response.headers['Content-Disposition'] = 'attachment; filename="ad_report_' + date + '_' + params[:id] + '.csv"'
+        render :text => Advertisement.to_csv(params, @reports)
+      }
     end
   end
 end
