@@ -535,13 +535,13 @@ class FeedUrl < ActiveRecord::Base
     title_for_check = title_for_check.to_s.downcase
     return_val = ""
     matching_text = [["mobile", "phone"], ["tablet", "pad"], ["car"], ["bike"], ["apps", "app "], ["games", "game", "gaming"], ["camera", "dslr", "photography"], ["laptop", "ultratop", "notebook"], ['lens'], ['tv', 'television']]
-    mathing_category_ids = [configatron.root_level_mobile_id, configatron.root_level_tablet_id, configatron.root_level_car_id, configatron.root_level_bike_id, configatron.root_level_app_id, configatron.root_level_game_id, configatron.root_level_camera_id, configatron.root_level_laptop_id, configatron.root_level_lens_id, configatron.root_level_television_id]
+    matching_category_ids = [configatron.root_level_mobile_id, configatron.root_level_tablet_id, configatron.root_level_car_id, configatron.root_level_bike_id, configatron.root_level_app_id, configatron.root_level_game_id, configatron.root_level_camera_id, configatron.root_level_laptop_id, configatron.root_level_lens_id, configatron.root_level_television_id]
 
     selected_values = []
     matching_text.each_with_index do |each_text_arr, index|
       each_text_arr.each do |each_text|
         if title_for_check.include?(each_text)
-          selected_values << mathing_category_ids[index]
+          selected_values << matching_category_ids[index]
         end
       end
     end
