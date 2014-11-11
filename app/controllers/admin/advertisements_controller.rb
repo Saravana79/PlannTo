@@ -103,7 +103,7 @@ class Admin::AdvertisementsController < ApplicationController
     if @advertisement.update_attributes(params[:advertisement])
       old_item_ids_array = @advertisement.content.blank? ? [] : @advertisement.content.allitems.map(&:id)
       unless @content.blank?
-        new_item_ids_array = params[:ad_item_id].to_s.split(",")
+        new_item_ids_array = params[:ad_item_id].to_s.split(",").map(&:to_i)
         @content.update_with_items!(params['advertisement_content'], params[:ad_item_id])
         item_ids_array = old_item_ids_array + new_item_ids_array
         item_ids = item_ids_array.map(&:inspect).join(',')

@@ -46,7 +46,7 @@ To Date
 <%= text_field_tag :to_date, @end_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
 </span>
     </div>
-
+<% if current_user.is_admin? %>
     <div style="display:block;padding-top:10px;clear:both;">
     <span style="width:100px;display:block;float:left;padding-top:5px;">
 Select By
@@ -55,6 +55,8 @@ Select By
 <%= select_tag(:select_by, options_for_select([["Hosted Url", "hosted_site_url"], ['Item', 'item_id']], params[:select_by])) %>
 </span>
     </div>
+
+<% end %>
 
     <div style="width:200px;padding-left:100px;display:block;clear:both;padding-top:20px;">
       <%= f.submit 'Generate Report', :class => "btn-link" %>

@@ -170,7 +170,7 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def report
-    params[:select_by] ||= "hosted_site_url"
+    params[:select_by] ||= "item_id"
     @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
     @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
     user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"

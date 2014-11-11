@@ -173,11 +173,11 @@
 
                  </li>
              <%end%>
-             <% if  current_user.is_a_vendor?(session[:vendor]) %>
-                 <%session[:vendor] = "true" %>
-                 <a href="/admin/buying_plans/search">Proposal Send</a>
-                 <a href="/admin/buying_plans/proposal_list">View Proposals</a>
-             <%end%>
+             <!--<%# if  current_user.is_a_vendor?(session[:vendor]) %>-->
+                 <!--<%#session[:vendor] = "true" %>-->
+                 <!--<a href="/admin/buying_plans/search">Proposal Send</a>-->
+                 <!--<a href="/admin/buying_plans/proposal_list">View Proposals</a>-->
+             <!--<%#end%>-->
              <% if current_user.is_a_publisher?(session[:publisher]) %>
                  <%session[:publisher] = "true" %>
                  <a href="/admin/impression_reports">Impression Report</a>
@@ -280,8 +280,8 @@
     <a href="#">Home</a>-->
 </div>
 </div>
-    <!--<%=raw navigation_sub_menu(params[:search_type])%>-->
-    <%= render "/layouts/navigation" %>
+    <!--<%#=raw navigation_sub_menu(params[:search_type])%>-->
+    <%#= render "/layouts/navigation" %>
 
 
 

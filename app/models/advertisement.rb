@@ -126,7 +126,9 @@ class Advertisement < ActiveRecord::Base
       end
     end
 
-    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites)
+    supported_sizes = self.images.map(&:ad_size).uniq.join(",")
+
+    Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites, "supported_sizes", supported_sizes)
 
     # Enqueue ItemUpdate with created advertisement item_ids
     # item_ids_array = self.content.blank? ? [] : self.content.allitems.map(&:id)
@@ -412,8 +414,8 @@ class Advertisement < ActiveRecord::Base
                order by impressions_count desc"
     else
       query = "select a.hosted_site_url,impressions_count,clicks_count, (clicks_count/impressions_count) as ectr from (select  ai.hosted_site_url, count(*) as impressions_count from add_impressions ai
-               where advertisement_id = 1 and #{impression_date_condition} group by hosted_site_url ) a left outer join (select hosted_site_url, count(*) as
-               clicks_count from clicks where advertisement_id = 1 and #{click_date_condition} group by hosted_site_url ) b on a.hosted_site_url= b.hosted_site_url
+               where advertisement_id = #{self.id} and #{impression_date_condition} group by hosted_site_url ) a left outer join (select hosted_site_url, count(*) as
+               clicks_count from clicks where advertisement_id = #{self.id} and #{click_date_condition} group by hosted_site_url ) b on a.hosted_site_url= b.hosted_site_url
                order by impressions_count desc"
     end
 

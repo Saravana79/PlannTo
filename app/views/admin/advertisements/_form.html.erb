@@ -35,7 +35,7 @@
       <div>
         <%= f.radio_button :advertisement_type, 'static', :class => "ad_type", :checked => true %>Static
         <%= f.radio_button :advertisement_type, 'dynamic', :class => "ad_type" %>Dynamic
-        <% if current_user.is_admin? %>
+        <% if current_user.is_admin? || 1==1 %>
             <%= f.radio_button :advertisement_type, 'dynamicpc', :class => "ad_type" %>Dynamic Best Price
             <!-- <%#= f.radio_button :advertisement_type, 'plannto', :class => "ad_type" %>Plannto -->
             <%= f.radio_button :advertisement_type, 'flash', :class => "ad_type" %>Flash
@@ -48,6 +48,7 @@
       <div>
         <%= f.radio_button :template_type, 'type_1', :class => "template_type", :checked => true %>Type 1
         <%= f.radio_button :template_type, 'type_2', :class => "template_type" %>Type 2
+        <%= f.radio_button :template_type, 'type_3', :class => "template_type" %>Type 3
       </div>
     </div>
 
