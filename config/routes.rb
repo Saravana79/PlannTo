@@ -450,6 +450,7 @@ resources :comments do
   match "/delete_ad_image/:id" => "advertisements#delete_ad_image", :as => "delete_ad_image", :via => [:delete]
   match "advertisements/test_ads" => "advertisements#test_ads"
   match "advertisements/demo" => "advertisements#demo"
+  match "advertisements/vendor_demo" => "advertisements#vendor_demo"
   match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"
   match "advertisements/ad_via_iframe" => "advertisements#ad_via_iframe"
   match "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"

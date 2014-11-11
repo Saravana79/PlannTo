@@ -11,7 +11,11 @@ class AdvertisementsController < ApplicationController
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
     @sid = sid = params[:sid] ||= ""
 
-    @ad_template_type = "type_2" if @suitable_ui_size == "120"
+    # TODO: hot coded values, have to change in feature
+    if @suitable_ui_size == "120"
+      @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
+    end
+
     @ad_template_type = params[:page_type] unless params[:page_type].blank?
 
     return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid) if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
@@ -56,7 +60,9 @@ class AdvertisementsController < ApplicationController
         @item_details = old_item_details + @item_details
         @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
       end
-      @ad_template_type = "type_1" if @suitable_ui_size == "300_600"
+      if @suitable_ui_size == "300_600"
+        @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
+      end
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
       @click_url = @click_url.gsub("&amp;", "&")
     end
@@ -193,6 +199,15 @@ class AdvertisementsController < ApplicationController
     params[:ads_id] ||= 5
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"
+    render :layout => false
+  end
+
+  def vendor_demo
+    params[:ref_url] ||= ""
+    params[:ads_id] ||= 21
+    params[:more_vendors] ||= false
+    params[:is_test] ||= "true"
+    params[:item_id] ||= "13789,9955,9921,15452,16559"
     render :layout => false
   end
 

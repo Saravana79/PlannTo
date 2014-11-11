@@ -75,7 +75,7 @@ body {
 }
 .pager a.selected {
 	text-decoration: none;
-	background:#cc0000;
+	background:#c00;
 	color:#fff;
 }
 

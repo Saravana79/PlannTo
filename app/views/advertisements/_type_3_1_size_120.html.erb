@@ -1,0 +1,61 @@
+<div class="advt-block">
+  <div class="advt-120">
+    <% if @item_details.count != 0 %>
+        <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a>
+  <div id="pager2" class="pager">
+          <% [*1..@item_details.count].each do |each_loop| %>
+              <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+          <% end %>
+        </div>
+
+        </div>
+      
+        <% @item_details.each_with_index do |item_detail, indx| %>
+            <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id]) %>
+            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+            <div class="item_details" id="item_detail_<%= indx + 1 %>">
+              <div class="advt-box">
+                <div class="product-container">
+                  <a href="<%= shop_now_url %>" target="_blank" class="">
+                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
+                     <p class="price"><%= prettify(item_detail) %></p>
+                  </a>
+
+
+                  <div class="product-img">
+                    <a href="<%= shop_now_url %>" target="_blank">
+                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100, 100).html_safe %>
+                      <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
+                    </a>
+                  </div>
+                  
+
+                  <p class="btn">
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
+                      Now</a>
+                  </p>
+                </div>
+                <div class="product-extra-desc"><p>
+                  <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 45, shop_now_url) %>
+                </p></div>
+              </div>
+              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+            </div>
+        <% end %>
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-120 -->
+</div><!-- end of advt-block -->
+
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+    a {color: inherit;}
+    .product-container a {text-decoration: none !important;}
+</style>
