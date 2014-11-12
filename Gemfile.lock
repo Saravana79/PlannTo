@@ -345,6 +345,7 @@ GEM
     warden (1.1.1)
       rack (>= 1.0)
     will_paginate (3.0.3)
+    xml-simple (1.1.4)
     yamler (0.1.0)
     youtube_it (2.1.7)
       builder
@@ -420,4 +421,5 @@ DEPENDENCIES
   uglifier
   uuidtools
   will_paginate
+  xml-simple (~> 1.1.4)
   youtube_it

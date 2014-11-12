@@ -104,3 +104,6 @@ gem 'oink', '~> 0.10.1'
 
 #amazon
 gem 'amazon-ecs', '~> 2.2.5'
+
+
+gem 'xml-simple', '~> 1.1.4'

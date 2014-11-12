@@ -93,3 +93,24 @@ csv_details.each_with_index do |csv_detail, index|
     item_relationship.update_attributes(:relateditem_id => related_item.id, :relationtype => "CarGroup")
   end
 end
+
+
+## Item loads from mysmartprice
+
+require 'xmlsimple'
+
+url = "http://www.mysmartprice.com/store_data/msp_master.xml"
+xml_data = Net::HTTP.get_response(URI.parse(url)).body
+data = XmlSimple.xml_in(xml_data)
+items = data["channel"][0]["item"]
+
+items.each do |item|
+  title = item["title"][0]
+  product_type = item["product_type"][0].to_s.split(">")[1].to_s.strip
+  url = item["link"][0]
+
+  itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13}
+
+  source_item = Sourceitem.find_or_initialize_by_url(url)
+  source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_hash[product_type], :created_by => "System", :verified => false)
+end
