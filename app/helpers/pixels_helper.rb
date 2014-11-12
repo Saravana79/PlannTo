@@ -1,0 +1,2 @@
+module PixelsHelper
+end

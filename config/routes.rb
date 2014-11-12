@@ -447,6 +447,13 @@ resources :comments do
     end
   end
 
+
+  resources :pixels do
+    collection do
+      get "pixel_matching"
+    end
+  end
+
   match "/delete_ad_image/:id" => "advertisements#delete_ad_image", :as => "delete_ad_image", :via => [:delete]
   match "advertisements/test_ads" => "advertisements#test_ads"
   match "advertisements/demo" => "advertisements#demo"

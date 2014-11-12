@@ -135,6 +135,7 @@ class AdvertisementsController < ApplicationController
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
+
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
     winning_price_enc = params[:wp]
@@ -284,6 +285,12 @@ class AdvertisementsController < ApplicationController
             item_id = val.split("=")[1].gsub("#", "")
           end
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
+
+          if CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id])
+            #remove 1x1 pixel image
+            cache = cache.gsub("<img src=\"http://cm.g.doubleclick.net/pixel?google_nid=1234&google_cm\" />", "")
+          end
+
           cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
           cache.match "sid=#{params[:sid]}\""
           cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")

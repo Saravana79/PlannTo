@@ -295,6 +295,19 @@ class Advertisement < ActiveRecord::Base
     url_params
   end
 
+  def self.make_url_params_for_cookie_matching(param)
+    url_params = "Params = "
+    param = param.reject {|s| ["controller", "action", "google_gid", "ref_url", "source"].include?(s.to_s)}
+    keys = param.keys
+    values = param.values
+
+    [*0...keys.count].each do |each_val|
+      url_params = url_params + "#{keys[each_val].to_s}-#{values[each_val].to_s};"
+    end
+
+    url_params
+  end
+
   def self.assign_url_and_item_access(ref_url, request_referer)
     if (ref_url && ref_url != "" && ref_url != 'undefined')
       return ref_url, "ref_url"

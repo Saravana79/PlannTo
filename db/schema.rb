@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141112062952) do
+ActiveRecord::Schema.define(:version => 20141112094031) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -404,6 +404,14 @@ ActiveRecord::Schema.define(:version => 20141112062952) do
   end
 
   add_index "contents_guides", ["content_id", "guide_id"], :name => "Content_id"
+
+  create_table "cookie_matches", :force => true do |t|
+    t.string   "plannto_user_id"
+    t.string   "google_user_id"
+    t.string   "match_source"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "dealer_locators", :force => true do |t|
     t.integer  "item_id"
@@ -1172,6 +1180,15 @@ ActiveRecord::Schema.define(:version => 20141112062952) do
   create_table "topic_itemtype_relations", :force => true do |t|
     t.integer  "item_id"
     t.integer  "itemtype_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_access_details", :force => true do |t|
+    t.string   "plannto_user_id"
+    t.string   "ref_url"
+    t.string   "source"
+    t.string   "additional_details"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
