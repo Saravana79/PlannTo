@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141105104637) do
+ActiveRecord::Schema.define(:version => 20141112062952) do
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20141105104637) do
     t.string   "target_audience"
     t.string   "excluded_sites"
     t.string   "miscellanous"
+    t.string   "schedule_details"
   end
 
   create_table "aggregated_details", :force => true do |t|

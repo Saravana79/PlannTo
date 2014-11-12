@@ -18,7 +18,7 @@ class Admin::AdvertisementsController < ApplicationController
     user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
     @vendor = Vendor.find_by_id(vendor_id)
-    @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25)
+    @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25, :schedule_details => [*0..23].join(","))
     @advertisements = [@advertisement]
   end
 

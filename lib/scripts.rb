@@ -65,3 +65,31 @@ csv_details.each_with_index do |csv_detail, index|
     item_relationship.update_attributes(:relateditem_id => related_item.id, :relationtype => "CarGroup")
   end
 end
+
+## Create product by Car and update group
+
+csv_details = CSV.read("/home/sivakumar/car.csv")
+itemtype = "Car"
+itemtype_id = Itemtype.find_by_itemtype(itemtype.camelize).id
+
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+  p csv_detail
+  name = csv_detail[0]
+  related_item_name = csv_detail[1]
+  image_name = csv_detail[2]
+  item = itemtype.camelize.constantize.find_or_initialize_by_name(name)
+  item.itemtype_id = itemtype_id
+  item.status = 1
+  item.imageurl = image_name
+  item.save!(:validate => false)
+
+  if !related_item_name.blank?
+    item_relationship = Itemrelationship.find_or_initialize_by_item_id(item.id)
+    related_item = CarGroup.find_or_initialize_by_name(related_item_name)
+    if related_item.new_record?
+      related_item.update_attributes(:itemtype_id => 5, :status => 1)
+    end
+    item_relationship.update_attributes(:relateditem_id => related_item.id, :relationtype => "CarGroup")
+  end
+end

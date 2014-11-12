@@ -15,6 +15,7 @@
       <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
       <li class="active" id="default"> <a href="javascript:void(0)">Default</a> </li>
       <li class="" id="offers"> <a href="javascript:void(0)" >Offers</a> </li>
+      <li class="" id="schedule_details"> <a href="javascript:void(0)" >Schedule Details</a> </li>
       <li class="" id="add_details"> <a href="javascript:void(0)" >Add Details</a> </li>
     </ul>
 
@@ -257,6 +258,14 @@
       </div>
     </div>
 
+    <div class="div_values schedule_details" style="display: none;">
+      <h3> Schedule Details </h3>
+      <div class="fields-div">
+        <div class="title_header float_lft">Valid Hours :</div>
+        <div>
+          <%= f.text_field :schedule_details %></div>
+      </div>
+    </div>
 
       <div class="submit_button">
         <%= f.submit button_val, :class => 'btn_submitanswer', :id => "publishanswer" %>
@@ -668,6 +677,10 @@
     }
 
     a { outline: none; }
+
+    #advertisement_schedule_details {
+        width: 322px;
+    }
 </style>
 
 <% unless @advertisement.new_record? %>
