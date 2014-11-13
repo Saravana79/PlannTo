@@ -28,9 +28,9 @@
           <th colspan="2">Actions</th>
         </tr>
         <%@advertisements.each do |ad | %>
-            <tr>
+            <tr id="<%= ad.id %>" class="ad_row">
               <td><%= ad.name  %> </td>
-              <td><%= ad.status == 1 ? "Enable" : "Disable"  %> </td>
+              <td><%= ad.status == 1 ? "Active" : "Inactive"  %> </td>
               <% if current_user.is_admin? %>
                   <td> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
                   <td> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
@@ -41,12 +41,10 @@
               <td><%= @extra_ad_details["#{ad.id}"]["cost"]%></td>
               <% if current_user.is_admin? %><td> <%= @extra_ad_details["#{ad.id}"]["revenue"]%> </td> <% end %>
               <!--<td> <%#= link_to "Edit",edit_admin_advertisement_path(ad) + "#maincontainer" %> </td>-->
-              <td> <%= link_to(image_tag("#{configatron.root_image_path}static/images/chart1.jpeg", :size => "20x20"), admin_ad_report_view_ad_chart_path(:advertisement_id => ad.id), :target => "_blank") %> </td>
-              <td> <%= link_to(image_tag("#{configatron.root_image_path}static/images/report.jpeg", :size => "20x20"), admin_ad_reports_report_path(ad.id), :target => "_blank") %> </td>
+              <td> <%= link_to(image_tag("#{configatron.root_image_path}static/images/chart1.jpeg", :size => "25x25"), admin_ad_report_view_ad_chart_path(:advertisement_id => ad.id), :target => "_blank") %> </td>
+              <td> <%= link_to(image_tag("#{configatron.root_image_path}static/images/report.jpeg", :size => "25x25"), admin_ad_reports_report_path(ad.id), :target => "_blank") %> </td>
               <% if current_user.is_admin? %>
                   <td><%= link_to "Review", review_admin_advertisements_path(:advertisement_id => ad.id), :target => "_blank" %> </td>
-              <% else %>
-                  <td><%= ad.review_status.blank? ? "pending" : ad.review_status %></td>
               <% end %>
             </tr>
         <%end%>
@@ -93,6 +91,10 @@
     .maincontainerCss {
        width: auto !important;
     }
+
+    .ad_row:hover {
+        cursor: pointer !important;
+    }
 </style>
 
 <script type="application/javascript">
@@ -103,6 +105,12 @@
           var date = $(this).val()
           console.log($(this).val())
             window.location.href = "/admin/advertisements?date="+ date
+        })
+
+        $(".ad_row").click(function()
+        {
+            var id = $(this).attr("id")
+            window.location.href = "/admin/advertisements/" + id + "/edit"
         })
     });
 </script>
@@ -211,7 +219,7 @@
         box-shadow: 0 1px 2px #d1d1d1;
     }
     table th {
-        padding:21px 25px 22px 25px;
+        padding:10px 10px 10px 10px;
         border-top:1px solid #fafafa;
         border-bottom:1px solid #e0e0e0;
 
@@ -243,7 +251,7 @@
         border-left: 0;
     }
     table tr td {
-        padding:18px;
+        padding:10px;
         border-top: 1px solid #ffffff;
         border-bottom:1px solid #e0e0e0;
         border-left: 1px solid #e0e0e0;
