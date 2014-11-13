@@ -292,22 +292,22 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
             item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false)
             image = item_detail.Image
           else
-            item_detail.update_attributes!(:price => price, status => 1, :last_verified_date => Time.now)
+            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
             image = item_detail.Image
           end
+          filename = image_url.split("/").last
           if image.blank? && !image_url.blank?
             p "image----------------------------"
             image = item_detail.build_image
             tempfile = open(image_url)
             avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
-            filename = image_url.split("/").last
             avatar.original_filename = filename
             image.avatar = avatar
             image.save
           end
         end
       rescue Exception => e
-        p "-------------------- There was a problem while processing itemdetail item #{url} -----------------"
+        p "-------------------- There was a problem while processing itemdetail item #{url} => #{e.message}-----------------"
       end
       p "--- End Process #{url} ---"
     end
