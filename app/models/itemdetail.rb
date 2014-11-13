@@ -300,9 +300,23 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           if image.blank? && !image_url.blank? && !filename.blank?
             p "image----------------------------"
             image = item_detail.build_image
-            tempfile = open(image_url)
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+            # tempfile = open(image_url)
+            # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+            # avatar.original_filename = filename
+
+            safe_thumbnail_url = URI.encode(URI.decode(image_url))
+            extname = File.extname(safe_thumbnail_url).delete("%")
+            basename = File.basename(safe_thumbnail_url, extname).delete("%")
+            file = Tempfile.new([basename, extname])
+            file.binmode
+            open(URI.parse(safe_thumbnail_url)) do |data|
+              file.write data.read
+            end
+            file.rewind
+
+            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
             avatar.original_filename = filename
+
             image.avatar = avatar
             image.save
           end
