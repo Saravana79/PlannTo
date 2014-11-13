@@ -296,6 +296,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
             image = item_detail.Image
             item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :Image => filename)
           end
+          p filename
           if image.blank? && !image_url.blank? && !filename.blank?
             p "image----------------------------"
             image = item_detail.build_image
