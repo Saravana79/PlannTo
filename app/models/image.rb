@@ -4,7 +4,7 @@ class Image < ActiveRecord::Base
       :storage => :s3,
       :s3_credentials => "#{Rails.root}/config/s3.yml",
       :styles => lambda { |a| a.instance.set_styles },
-      :path => ":img_table_name/:imgeable_type/:style/:filename",
+      :path => ":image_prefix_path/:style/:filename",
       :url  => ":s3_sg_url",
       :convert_options => { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
 
@@ -33,7 +33,7 @@ class Image < ActiveRecord::Base
   end
 
   def set_styles
-    if self.imageable_type == "Item"
+    if self.imageable_type == "Item" || self.imageable_type == "Itemdetail"
       { :original => ["100%", :jpeg], :medium => ["176x132>", :jpeg], :small => ["40x30>", :jpeg] }
     else
       { :original => ["100%", :jpeg] }
@@ -41,7 +41,7 @@ class Image < ActiveRecord::Base
   end
 
   def set_convert_options
-    if self.imageable_type == "Item"
+    if self.imageable_type == "Item" || self.imageable_type == "Itemdetail"
       { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
     else
       {}

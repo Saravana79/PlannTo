@@ -144,3 +144,8 @@ desc "amazon price update process"
 task :amazon_price_update => :environment do
   Resque.enqueue(AmazonPriceUpdateProcess, "amazon_price_update", Time.zone.now.utc)
 end
+
+desc "Update Itemdetail from MySmartPrice"
+task :update_item_details_from_vendors => :environment do
+  Resque.enqueue(UpdateItemDetailsFromVendors, "update_from_vendors", Time.zone.now.utc)
+end
