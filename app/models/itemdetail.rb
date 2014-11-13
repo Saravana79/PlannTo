@@ -282,21 +282,21 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         price = item["price"][0]
         image_url = item["image_link"][0]
         itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13}
-
+        filename = image_url.split("/").last
+        filename = filename == "noimage.jpg" ? nil : filename
         source_item = Sourceitem.find_or_initialize_by_url(url)
         if source_item.new_record?
           source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_hash[product_type], :created_by => "System", :verified => false)
         elsif source_item.verified && !source_item.matchitemid.blank?
           item_detail = Itemdetail.find_or_initialize_by_url(url)
           if item_detail.new_record?
-            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false)
-            image = item_detail.Image
+            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :Image => filename)
+            image = nil
           else
-            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
             image = item_detail.Image
+            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :Image => filename)
           end
-          filename = image_url.split("/").last
-          if image.blank? && !image_url.blank?
+          if image.blank? && !image_url.blank? && !filename.blank?
             p "image----------------------------"
             image = item_detail.build_image
             tempfile = open(image_url)
