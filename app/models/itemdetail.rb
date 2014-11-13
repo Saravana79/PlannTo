@@ -271,7 +271,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     xml_data = Net::HTTP.get_response(URI.parse(url)).body
     data = XmlSimple.xml_in(xml_data)
     items = data["channel"][0]["item"]
-    item_details = ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 26351")
+    #item_details = ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 26351")
 
     items.each do |item|
       begin
