@@ -90,7 +90,7 @@ Select By
           <td><%= report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url") %> </td>
           <td><%= report.impressions_count %> </td>
           <td><%= report.clicks_count %> </td>
-          <td><%= report.ectr %> </td>
+          <td><%= get_ectr(report.clicks_count, report.impressions_count) %> </td>
         </tr>
     <%end%>
   </table>
