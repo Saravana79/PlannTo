@@ -28,18 +28,18 @@
           <th colspan="2">Actions</th>
         </tr>
         <%@advertisements.each do |ad | %>
-            <tr id="<%= ad.id %>" class="ad_row">
-              <td><%= ad.name  %> </td>
-              <td><%= ad.status == 1 ? "Active" : "Inactive"  %> </td>
+            <tr>
+              <td id="<%= ad.id %>" class="ad_row"><%= ad.name  %> </td>
+              <td id="<%= ad.id %>" class="ad_row"><%= ad.status == 1 ? "Active" : "Inactive"  %> </td>
               <% if current_user.is_admin? %>
-                  <td> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
-                  <td> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
+                  <td id="<%= ad.id %>" class="ad_row"> <%= ad.start_date.strftime("%d-%m-%Y") unless ad.start_date.blank? %></td>
+                  <td id="<%= ad.id %>" class="ad_row"> <%= ad.end_date.strftime("%d-%m-%Y") unless ad.end_date.blank? %></td>
               <% end %>
-              <td><%= @extra_ad_details["#{ad.id}"]["impressions"]%></td>
-              <td><%= @extra_ad_details["#{ad.id}"]["clicks"]%></td>
-              <td><%= @extra_ad_details["#{ad.id}"]["ctr"]%></td>
-              <td><%= @extra_ad_details["#{ad.id}"]["cost"]%></td>
-              <% if current_user.is_admin? %><td> <%= @extra_ad_details["#{ad.id}"]["revenue"]%> </td> <% end %>
+              <td id="<%= ad.id %>" class="ad_row"><%= @extra_ad_details["#{ad.id}"]["impressions"]%></td>
+              <td id="<%= ad.id %>" class="ad_row"><%= @extra_ad_details["#{ad.id}"]["clicks"]%></td>
+              <td id="<%= ad.id %>" class="ad_row"><%= @extra_ad_details["#{ad.id}"]["ctr"]%></td>
+              <td id="<%= ad.id %>" class="ad_row"><%= @extra_ad_details["#{ad.id}"]["cost"]%></td>
+              <% if current_user.is_admin? %><td id="<%= ad.id %>" class="ad_row"> <%= @extra_ad_details["#{ad.id}"]["revenue"]%> </td> <% end %>
               <!--<td> <%#= link_to "Edit",edit_admin_advertisement_path(ad) + "#maincontainer" %> </td>-->
               <td> <%= link_to(image_tag("#{configatron.root_image_path}static/images/chart1.jpeg", :size => "25x25"), admin_ad_report_view_ad_chart_path(:advertisement_id => ad.id), :target => "_blank") %> </td>
               <td> <%= link_to(image_tag("#{configatron.root_image_path}static/images/report.jpeg", :size => "25x25"), admin_ad_reports_report_path(ad.id), :target => "_blank") %> </td>
@@ -109,6 +109,7 @@
 
         $(".ad_row").click(function()
         {
+            console.log($(this).attr("class"))
             var id = $(this).attr("id")
             window.location.href = "/admin/advertisements/" + id + "/edit"
         })
