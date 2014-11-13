@@ -5,7 +5,8 @@ class Image < ActiveRecord::Base
       :s3_credentials => "#{Rails.root}/config/s3.yml",
       :styles => lambda { |a| a.instance.set_styles },
       :path => ":img_table_name/:imgeable_type/:style/:filename",
-      :url  => ":s3_sg_url"
+      :url  => ":s3_sg_url",
+      :convert_options => { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
 
 
   before_save :update_avatar_file_name
@@ -33,9 +34,17 @@ class Image < ActiveRecord::Base
 
   def set_styles
     if self.imageable_type == "Item"
-      { :original => ["100%", :jpeg], :medium => ["176x132", :jpeg], :small => ["40x30", :jpeg] }
+      { :original => ["100%", :jpeg], :medium => ["176x132>", :jpeg], :small => ["40x30>", :jpeg] }
     else
       { :original => ["100%", :jpeg] }
+    end
+  end
+
+  def set_convert_options
+    if self.imageable_type == "Item"
+      { :medium => "-gravity center -extent 176x132", :small => "-gravity center -extent 40x30"}
+    else
+      {}
     end
   end
 
@@ -51,7 +60,8 @@ class Image < ActiveRecord::Base
 
   def update_avatar_file_name
     name = self.avatar_file_name.to_s.split(".")
-    name[1] = "jpeg"
-    self.avatar_file_name = name.join(".")
+    name = name[0...name.size-1]
+    name = name.join(".") + ".jpeg"
+    self.avatar_file_name = name
   end
 end
