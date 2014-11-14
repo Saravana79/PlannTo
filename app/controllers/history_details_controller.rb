@@ -50,6 +50,7 @@ class HistoryDetailsController < ApplicationController
           url = @ad.click_url
         else
             url = "#{@item_detail.url}"
+            url = url.strip
         end
 
         item_id = @item_detail.blank? ? "" : @item_detail.item_id
@@ -75,6 +76,7 @@ class HistoryDetailsController < ApplicationController
           url = params[:red_url] if !params[:red_url].blank?
         else
           url = "#{@item_detail.url}"
+          url = url.strip
         end
 
         item_id = @item_detail.blank? ? "" : @item_detail.itemid
