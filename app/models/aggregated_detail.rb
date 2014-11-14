@@ -22,8 +22,10 @@ class AggregatedDetail < ActiveRecord::Base
 
       impressions.each do |each_imp|
         winning_price = each_imp.winning_price
-        commission = each_imp.commission.blank? ? 1 : each_imp.commission.to_f
-        winning_price = winning_price + (winning_price * (commission/100))
+        if entity_type == "advertisement"
+          commission = each_imp.commission.blank? ? 1 : each_imp.commission.to_f
+          winning_price = winning_price.to_f + (winning_price * (commission/100))
+        end
         aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
         aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
       end
