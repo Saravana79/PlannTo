@@ -337,5 +337,8 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     end
 
     ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 26351 and last_verified_date < '#{1.day.ago}'")
+
+    # Update item details for item
+    Resque.enqueue(ItemUpdate, "update_item_details", Time.zone.now)
   end
 end
