@@ -124,7 +124,7 @@ class Admin::AdReportsController < ApplicationController
     @impressions = @result_array.map {|each_array| each_array[1]}
     @clicks = @result_array.map {|each_array| each_array[2]}
     @winning_price = @result_array.map {|each_array| ("%.2f" % each_array[3].to_f).to_f}
-    @winning_price = @winning_price.map {|each_win| @advertisement.commission.blank? ? each_win : each_win+each_win/@advertisement.commission.to_f/100}
+    @winning_price = @winning_price.map {|each_win| @advertisement.commission.blank? ? each_win : each_win+(each_win/(@advertisement.commission.to_f/100))}
 
 
 
