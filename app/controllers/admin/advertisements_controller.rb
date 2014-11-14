@@ -23,7 +23,7 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def edit
-    @advertisement = Advertisement.where("id=#{params[:id]} #{@user_condition}").first
+    @advertisement = Advertisement.where("id=#{params[:id]} and #{@user_condition}").first
     @vendor = Vendor.find_by_id(@advertisement.vendor_id)
     @ad_status = @advertisement.status == 1 ? "Enable" : "Disable"
 
