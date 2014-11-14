@@ -163,6 +163,6 @@ class Admin::AdvertisementsController < ApplicationController
   private
 
   def make_user_condition
-    @user_condition = current_user.is_admin? ? "" : " user_id=#{current_user.id} "
+    @user_condition = current_user.is_admin? ? "1=1" : " user_id=#{current_user.id} "
   end
 end

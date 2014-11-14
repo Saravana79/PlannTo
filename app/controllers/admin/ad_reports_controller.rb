@@ -63,7 +63,7 @@ class Admin::AdReportsController < ApplicationController
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
     @clicks = @result_array.map {|each_array| each_array[2]}
-    @winning_price = @result_array.map {|each_array| ("%.2f" % each_array[3].to_f).to_f}
+    @winning_price = @result_array.map {|each_array| each_array[3].to_f.round(2)}
 
     condition = ""
     unless params[:search].blank?
