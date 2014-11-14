@@ -271,7 +271,6 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     xml_data = Net::HTTP.get_response(URI.parse(url)).body
     data = XmlSimple.xml_in(xml_data)
     items = data["channel"][0]["item"]
-    item_details = ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 26351")
 
     items.each do |item|
       begin
@@ -284,17 +283,25 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13}
         filename = image_url.split("/").last
         filename = filename == "noimage.jpg" ? nil : filename
+
+        unless filename.blank?
+          name = filename.to_s.split(".")
+          name = name[0...name.size-1]
+          name = name.join(".") + ".jpeg"
+          filename = name
+        end
+
         source_item = Sourceitem.find_or_initialize_by_url(url)
         if source_item.new_record?
           source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_hash[product_type], :created_by => "System", :verified => false)
         elsif source_item.verified && !source_item.matchitemid.blank?
           item_detail = Itemdetail.find_or_initialize_by_url(url)
           if item_detail.new_record?
-            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :Image => filename)
+            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false)
             image = nil
           else
             image = item_detail.Image
-            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :Image => filename)
+            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
           end
           p filename
           if image.blank? && !image_url.blank? && !filename.blank?
@@ -318,7 +325,9 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
             avatar.original_filename = filename
 
             image.avatar = avatar
-            image.save
+            if image.save
+              item_detail.update_attributes(:Image => filename)
+            end
           end
         end
       rescue Exception => e
@@ -326,5 +335,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       end
       p "--- End Process #{url} ---"
     end
+
+    ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 26351 and last_verified_date < '#{1.day.ago}'")
   end
 end
