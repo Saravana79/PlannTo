@@ -332,10 +332,7 @@ class Advertisement < ActiveRecord::Base
         ctr = (aggrgated_detail.clicks_count.to_f / aggrgated_detail.impressions_count.to_f) * 100 rescue 0.0
       end
 
-      winning_price = aggrgated_detail.winning_price.to_f
-      commission = each_ad.commission.blank? ? 25 : each_ad.commission.to_f
-      winning_price = winning_price + ((winning_price * (commission/100)))
-      winning_price = winning_price.to_f.round(2)
+      winning_price = aggrgated_detail.winning_price.to_f.round(2)
 
       if user.is_admin?
         date_condition = "order_date >= '#{start_date}'"

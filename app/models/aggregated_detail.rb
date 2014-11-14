@@ -12,7 +12,7 @@ class AggregatedDetail < ActiveRecord::Base
       impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
       click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
     elsif entity_type == "advertisement"
-      impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions where #{impression_date_condition} and advertisement_type='advertisement' group by advertisement_id"
+      impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price, a.commission from add_impressions ai inner join advertisements a on ai.advertisement_id = a.id where #{impression_date_condition} and ai.advertisement_type='advertisement' group by advertisement_id"
       click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
     end
 
@@ -21,8 +21,11 @@ class AggregatedDetail < ActiveRecord::Base
       impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
 
       impressions.each do |each_imp|
+        winning_price = each_imp.winning_price
+        commission = each_imp.commission.blank? ? 1 : each_imp.commission.to_f
+        winning_price = winning_price + (winning_price * (commission/100))
         aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
-        aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => each_imp.winning_price)
+        aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
       end
       page += 1
     end while !impressions.empty?
