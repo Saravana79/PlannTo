@@ -334,7 +334,7 @@ class Advertisement < ActiveRecord::Base
 
       winning_price = aggrgated_detail.winning_price.to_f
       commission = each_ad.commission.blank? ? 25 : each_ad.commission.to_f
-      winning_price = winning_price + ((winning_price / (commission/100)))
+      winning_price = winning_price + ((winning_price * (commission/100)))
       winning_price = winning_price.to_f.round(2)
 
       if user.is_admin?
