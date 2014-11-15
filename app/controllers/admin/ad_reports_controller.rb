@@ -203,15 +203,16 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def generate_report
-    p param_to_gen_rep = params.slice(*["from_date", "to_date", "select_by"])
+    param_to_gen_rep = params.slice(*["from_date", "to_date", "select_by"])
     ad_report = AdReport.generate_report(params, current_user, @advertisement)
     Resque.enqueue(GenerateReport, 'generate_report_for_ads', ad_report.id, Time.now)
     redirect_to admin_ad_reports_report_path(params[:id])
   end
 
   def download
-    data = open(params[:download_url])
-    send_data data.read, :type => data.content_type, :x_sendfile => true
+    # data = open(params[:download_url])
+    # send_data data.read, :type => data.content_type, :x_sendfile => true
+    send_file params[:download_url], :x_sendfile => true
   end
 
   private

@@ -15,7 +15,7 @@ class PixelsController < ApplicationController
 
     $redis_rtb.pipelined do
       $redis_rtb.set("cm:#{params[:google_gid]}", cookies[:plan_to_temp_user_id])
-      $reids_rtb.expire("cm:#{params[:google_gid]}", 2.weeks)
+      $redis_rtb.expire("cm:#{params[:google_gid]}", 2.weeks)
     end
 
     redirect_to "http://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}"

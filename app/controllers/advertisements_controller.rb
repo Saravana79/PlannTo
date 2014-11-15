@@ -286,7 +286,7 @@ class AdvertisementsController < ApplicationController
             item_id = val.split("=")[1].gsub("#", "")
           end
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
-          
+
           if cache.match(/<img src=\"http:\/\/cm.g.doubleclick.net.*/).blank?
             if (params[:t].to_i == 1 && !CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id]))
               cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixels?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />\n</head>")
