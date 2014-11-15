@@ -440,32 +440,34 @@ class Advertisement < ActiveRecord::Base
 
     impression_date_condition = "impression_time > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
     click_date_condition = "timestamp > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and timestamp < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
-    if param["select_by"] == "item_id"
+    if ad_report.report_type == "item_id"
       query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions ai
-               where advertisement_id = #{self.id} and #{impression_date_condition} group by item_id ) a left outer join (select item_id, count(*) as clicks_count from
-               clicks where advertisement_id = #{self.id} and #{click_date_condition} group by item_id ) b on a.item_id= b.item_id inner join items i on i.id = a.item_id
+               where advertisement_id = #{ad_report.advertisement_id} and #{impression_date_condition} group by item_id ) a left outer join (select item_id, count(*) as clicks_count from
+               clicks where advertisement_id = #{ad_report.advertisement_id} and #{click_date_condition} group by item_id ) b on a.item_id= b.item_id inner join items i on i.id = a.item_id
                order by impressions_count desc"
     else
       query = "select a.hosted_site_url,impressions_count,clicks_count from (select  ai.hosted_site_url, count(*) as impressions_count from add_impressions ai
-               where advertisement_id = #{self.id} and #{impression_date_condition} group by hosted_site_url ) a left outer join (select hosted_site_url, count(*) as
-               clicks_count from clicks where advertisement_id = #{self.id} and #{click_date_condition} group by hosted_site_url ) b on a.hosted_site_url= b.hosted_site_url
+               where advertisement_id = #{ad_report.advertisement_id} and #{impression_date_condition} group by hosted_site_url ) a left outer join (select hosted_site_url, count(*) as
+               clicks_count from clicks where advertisement_id = #{ad_report.advertisement_id} and #{click_date_condition} group by hosted_site_url ) b on a.hosted_site_url= b.hosted_site_url
                order by impressions_count desc"
     end
 
     reports = Advertisement.find_by_sql(query)
 
     return_val = CSV.generate do |csv|
-      csv << [param[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
+      csv << [ad_report.report_type == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
       reports.each do |report|
         ectr = ((report.clicks_count.to_f/report.impressions_count.to_f)*100).round(3)
         csv << [*report.send(ad_report.report_type), report.impressions_count, report.clicks_count, ectr]
       end
     end
 
-    filename = "report_#{from_date.strftime}_to_#{from_date.strftime}_#{ad_report.id}.csv"
+    filename = ad_report.filename
 
     object = $s3_object.objects["reports/#{filename}"]
     object.write(return_val)
+
+    ad_report.upadate_attributes(:status => "ready")
   end
 
   def self.to_csv(param, reports)

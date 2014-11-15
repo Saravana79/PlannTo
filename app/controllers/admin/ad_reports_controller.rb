@@ -209,6 +209,11 @@ class Admin::AdReportsController < ApplicationController
     redirect_to admin_ad_reports_report_path(params[:id])
   end
 
+  def download
+    data = open(params[:download_url])
+    send_data data.read, :type => data.content_type, :x_sendfile => true
+  end
+
   private
 
   def get_advertisement

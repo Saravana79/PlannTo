@@ -4,7 +4,6 @@ class GenerateReport
   @queue = :generate_report_process
 
   def self.perform(method_name, ad_report_id, actual_time)
-    p param
     log = Logger.new 'log/generate_report_process.log'
     #begin
     log.debug "********** Start Processing generate_report_process **********"

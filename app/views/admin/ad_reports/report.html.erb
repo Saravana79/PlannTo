@@ -89,7 +89,7 @@ Select By
           <td><%= report.from_date %> </td>
           <td><%= report.to_date %> </td>
           <td><%= report.report_type == "item_id" ? "By Item" : "By Hosted Site Url" %> </td>
-          <td><%= report.status %> </td>
+          <td><%= report.status == "ready" ? link_to("Download", report.filepath, :target => "_blank") : report.status %> </td>
         </tr>
     <%end%>
   </table>
