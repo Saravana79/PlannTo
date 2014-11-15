@@ -17,6 +17,7 @@ class Advertisement < ActiveRecord::Base
   belongs_to :vendor
   has_one :ad_video_detail
   has_many :aggregated_details, :as => :entity
+  has_many :ad_reports
 
   after_create :item_update_with_created_ad_item_ids
   after_save :update_click_url_based_on_vendor
@@ -434,12 +435,12 @@ class Advertisement < ActiveRecord::Base
     end
   end
 
-  def get_reports(param, export)
-    from_date = param[:from_date].to_date
-    end_date = param[:to_date].to_date
-    impression_date_condition = "impression_time > '#{from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{end_date.end_of_day.strftime('%F %T')}'"
-    click_date_condition = "timestamp > '#{from_date.beginning_of_day.strftime('%F %T')}' and timestamp < '#{end_date.end_of_day.strftime('%F %T')}'"
-    if param[:select_by] == "item_id"
+  def self.generate_report_for_ads(ad_report_id)
+    ad_report = AdReport.where(:id => ad_report_id).first
+
+    impression_date_condition = "impression_time > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
+    click_date_condition = "timestamp > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and timestamp < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
+    if param["select_by"] == "item_id"
       query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions ai
                where advertisement_id = #{self.id} and #{impression_date_condition} group by item_id ) a left outer join (select item_id, count(*) as clicks_count from
                clicks where advertisement_id = #{self.id} and #{click_date_condition} group by item_id ) b on a.item_id= b.item_id inner join items i on i.id = a.item_id
@@ -451,11 +452,20 @@ class Advertisement < ActiveRecord::Base
                order by impressions_count desc"
     end
 
-    if export
-      reports = Advertisement.find_by_sql(query)
-    else
-      reports = Advertisement.paginate_by_sql(query, :page => param[:page], :per_page => 50)
+    reports = Advertisement.find_by_sql(query)
+
+    return_val = CSV.generate do |csv|
+      csv << [param[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
+      reports.each do |report|
+        ectr = ((report.clicks_count.to_f/report.impressions_count.to_f)*100).round(3)
+        csv << [*report.send(ad_report.report_type), report.impressions_count, report.clicks_count, ectr]
+      end
     end
+
+    filename = "report_#{from_date.strftime}_to_#{from_date.strftime}_#{ad_report.id}.csv"
+
+    object = $s3_object.objects["reports/#{filename}"]
+    object.write(return_val)
   end
 
   def self.to_csv(param, reports)
@@ -465,6 +475,10 @@ class Advertisement < ActiveRecord::Base
         csv << [*report.send(param[:select_by] == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count, report.ectr.to_f.round(4)]
       end
     end
+  end
+
+  def my_reports(user)
+    ad_reports.where(:reported_by => user.id)
   end
 
   private

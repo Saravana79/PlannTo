@@ -1,6 +1,7 @@
 class Admin::AdReportsController < ApplicationController
-  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report]
-  before_filter :authenticate_user!, :only => [:view_ad_chart, :report]
+  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report]
+  before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report]
+  before_filter :get_advertisement, :only => [:view_ad_chart, :report, :generate_report]
   layout "product"
 
   def index
@@ -166,25 +167,52 @@ class Admin::AdReportsController < ApplicationController
     @vendors =  VendorDetail.where(:item_id => vendor_ids)
   end
 
+  # def report
+  #   params[:select_by] ||= "item_id"
+  #   @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
+  #   @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
+  #   user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
+  #   advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
+  #   @reports ||= []
+  #   if !advertisement.blank?
+  #     export = request.format == "text/csv" ? true : false
+  #     @reports = advertisement.get_reports(params, export)
+  #   end
+  #
+  #   respond_to do |format|
+  #     format.html
+  #     format.csv {
+  #       date = params[:from_date].to_date.strftime("%b_%d") + "_to_" + params[:to_date].to_date.strftime("%b_%d")
+  #       response.headers['Content-Disposition'] = 'attachment; filename="ad_report_' + date + '_' + params[:id] + '.csv"'
+  #       render :text => Advertisement.to_csv(params, @reports)
+  #     }
+  #   end
+  # end
+
   def report
     params[:select_by] ||= "item_id"
     @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
     @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
-    user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
-    advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
-    @reports ||= 0
-    if !advertisement.blank?
-      export = request.format == "text/csv" ? true : false
-      @reports = advertisement.get_reports(params, export)
-    end
+    @reports ||= []
 
-    respond_to do |format|
-      format.html
-      format.csv {
-        date = params[:from_date].to_date.strftime("%b_%d") + "_to_" + params[:to_date].to_date.strftime("%b_%d")
-        response.headers['Content-Disposition'] = 'attachment; filename="ad_report_' + date + '_' + params[:id] + '.csv"'
-        render :text => Advertisement.to_csv(params, @reports)
-      }
+    if !@advertisement.blank?
+      @ad_reports = @advertisement.my_reports(current_user).paginate(:page => params[:page], :per_page => 10)
+    else
+      redirect_to root_path
     end
+  end
+
+  def generate_report
+    p param_to_gen_rep = params.slice(*["from_date", "to_date", "select_by"])
+    ad_report = AdReport.generate_report(params, current_user, @advertisement)
+    Resque.enqueue(GenerateReport, 'generate_report_for_ads', ad_report.id, Time.now)
+    redirect_to admin_ad_reports_report_path(params[:id])
+  end
+
+  private
+
+  def get_advertisement
+    user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
+    @advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
   end
 end

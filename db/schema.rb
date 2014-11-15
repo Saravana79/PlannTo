@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141112094031) do
+ActiveRecord::Schema.define(:version => 20141114133315) do
+
+  create_table "ad_reports", :force => true do |t|
+    t.integer  "advertisement_id"
+    t.string   "report_type"
+    t.date     "report_date"
+    t.date     "from_date"
+    t.date     "to_date"
+    t.string   "filename"
+    t.string   "status"
+    t.integer  "reported_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "ad_video_details", :force => true do |t|
     t.integer  "advertisement_id"

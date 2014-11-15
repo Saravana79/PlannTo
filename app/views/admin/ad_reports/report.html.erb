@@ -2,13 +2,14 @@
   Advertisement Reports
 </h3>
 <br/>
-<%= form_for :impression, :url => admin_ad_reports_report_path(params[:id]), :method => :get do |f| %>
+<%= form_for :impression, :url => admin_ad_reports_generate_path, :method => :post do |f| %>
+    <%= hidden_field_tag :id, params[:id] %>
     <div>
 <span style="width:100px;display:block;float:left;padding-top:5px;">
 Select A date Range
 </span>
 <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-	<%= select_tag(:date_from_dropdown, options_for_select([["Select a date Range", 0], ['Yesterday', 1], ['Last Week', 7], ['Last month', 30]])) %>
+	<%= select_tag(:date_from_dropdown, options_for_select([["Select a date Range", 0],['Yesterday', 1], ['Last Week', 7], ['Last month', 30], ['Last 3 months', 90], ['Last 6 Months', 180]])) %>
 </span>
 
       <script>
@@ -34,7 +35,7 @@ From Date
 <%= text_field_tag :from_date, @start_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
 </span>
       <script>
-          $("#from_date").datepicker({ minDate: -30, maxDate: "+0D", dateFormat: 'dd-mm-yy' });
+          $("#from_date").datepicker({ dateFormat: 'dd-mm-yy' });
       </script>
       <br/>
     </div>
@@ -63,7 +64,7 @@ Select By
     </div>
 <% end %>
 <script>
-    $("#to_date").datepicker({ minDate: -30, maxDate: "+0D", dateFormat: 'dd-mm-yy' });
+    $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
 </script>
 <div style="border-bottom: 1px solid lightgray;width: 100%;clear: both;padding-top: 10px;"></div><br/><br/>
 <!--
@@ -73,28 +74,26 @@ Select By
 -->
 
 <br/><br/>
-<% unless @reports.blank? %>
-  <%= link_to "Export CSV", admin_ad_reports_report_path(:format => "csv", :from_date => params[:from_date], :to_date => params[:to_date], :select_by => params[:select_by]), :class => "btn_submitanswer export_btn" %>
-<% end %>
-<br/><br/>
 <div id="report">
   <table border="1" width="90%">
     <tr>
-      <th> <%= params[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url" %> </th>
-      <th> Impressions Count </th>
-      <th> Clicks Count </th>
-      <th> Ectr </th>
+      <th> Generate Date </th>
+      <th> Start Date </th>
+      <th> End Date </th>
+      <th> Report Type </th>
+      <th> Status </th>
     </tr>
-    <% @reports.each do | report | %>
+    <% @ad_reports.each do | report | %>
         <tr>
-          <td><%= report.send(params[:select_by] == "item_id" ? "name" : "hosted_site_url") %> </td>
-          <td><%= report.impressions_count %> </td>
-          <td><%= report.clicks_count %> </td>
-          <td><%= get_ectr(report.clicks_count, report.impressions_count) %> </td>
+          <td><%= report.report_date %> </td>
+          <td><%= report.from_date %> </td>
+          <td><%= report.to_date %> </td>
+          <td><%= report.report_type == "item_id" ? "By Item" : "By Hosted Site Url" %> </td>
+          <td><%= report.status %> </td>
         </tr>
     <%end%>
   </table>
-  <%= will_paginate @reports %>
+  <%= will_paginate @ad_reports %>
 </div>
 
 

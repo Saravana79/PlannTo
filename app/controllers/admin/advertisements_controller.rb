@@ -32,7 +32,7 @@ class Admin::AdvertisementsController < ApplicationController
   end
 
   def show
-    @advertisement = Advertisement.where("id=#{params[:id]} #{@user_condition}").first
+    @advertisement = Advertisement.where("id=#{params[:id]} and #{@user_condition}").first
   end
 
   def create
