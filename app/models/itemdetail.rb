@@ -266,21 +266,26 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
   end
 
 
-  def self.update_from_vendors(time)
+  def self.update_from_vendors(time=Time.now)
     url = "http://www.mysmartprice.com/store_data/msp_master.xml"
-    xml_data = Net::HTTP.get_response(URI.parse(url)).body
-    data = XmlSimple.xml_in(xml_data)
-    items = data["channel"][0]["item"]
+    # xml_data = Net::HTTP.get_response(URI.parse(url)).body
+    # data = XmlSimple.xml_in(xml_data)
+    # items = data["channel"][0]["item"]
 
-    items.each do |item|
+    doc = Nokogiri::XML(open(url))
+    node = doc.elements.first
+
+    node.xpath("//item").each do |item|
       begin
         p "--- Started Process #{url} ---"
-        title = item["title"][0]
-        product_type = item["product_type"][0].to_s.split(">")[1].to_s.strip
-        url = item["link"][0]
-        price = item["price"][0]
-        image_url = item["image_link"][0]
-        itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13}
+        title = item.at_xpath("title").content rescue ""
+        product_type = item.at_xpath("g:product_type").content rescue ""
+        product_type = product_type.to_s.split(">")[1].to_s.strip
+        url = item.at_xpath("link").content rescue ""
+        price = item.at_xpath("g:price").content rescue ""
+        image_url = item.at_xpath("g:image_link").content rescue ""
+
+        itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13, "lenses" => 20, "digital-camera" => 12, "digital-slr-camera" => 12}
         filename = image_url.split("/").last
         filename = filename == "noimage.jpg" ? nil : filename
 
@@ -291,9 +296,15 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           filename = name
         end
 
+        itemtype_id = itemtype_hash[product_type]
+
+        if itemtype_id.blank?
+          next
+        end
+
         source_item = Sourceitem.find_or_initialize_by_url(url)
         if source_item.new_record?
-          source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_hash[product_type], :created_by => "System", :verified => false)
+          source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
         elsif source_item.verified && !source_item.matchitemid.blank?
           item_detail = Itemdetail.find_or_initialize_by_url(url)
           if item_detail.new_record?
