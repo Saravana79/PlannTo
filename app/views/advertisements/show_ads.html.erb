@@ -4,6 +4,9 @@
   <title>Advt <%= @suitable_ui_size %></title>
   <link href="<%= configatron.root_image_path %>static/stylesheets/ads/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+  <% if (params[:t].to_i == 1 && !CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id])) %>
+  <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>" />
+  <% end %>
 </head>
 <body>
 

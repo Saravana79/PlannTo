@@ -312,7 +312,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
             image = nil
           else
             image = item_detail.Image
-            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now)
+            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false)
           end
           p filename
           if image.blank? && !image_url.blank? && !filename.blank?

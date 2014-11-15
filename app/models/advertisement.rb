@@ -467,7 +467,7 @@ class Advertisement < ActiveRecord::Base
     object = $s3_object.objects["reports/#{filename}"]
     object.write(return_val)
 
-    ad_report.upadate_attributes(:status => "ready")
+    ad_report.update_attributes(:status => "ready")
   end
 
   def self.to_csv(param, reports)

@@ -241,11 +241,12 @@ class AdvertisementsController < ApplicationController
   def create_impression_before_show_ads
     params[:more_vendors] ||= "false"
     params[:ads_id] ||= ""
-    params[:ref_url] ||= ""
+    params[:ref_url] ||= request.referer rescue ""
     params[:item_id] ||= ""
     params[:page_type] ||= ""
     params[:size] ||= ""
     params[:click_url] ||= ""
+    params[:t] ||= 0
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
@@ -285,10 +286,18 @@ class AdvertisementsController < ApplicationController
             item_id = val.split("=")[1].gsub("#", "")
           end
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
-
-          if CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id])
-            #remove 1x1 pixel image
-            cache = cache.gsub("<img src=\"http://cm.g.doubleclick.net/pixel?google_nid=1234&google_cm\" />", "")
+          
+          if cache.match(/<img src=\"http:\/\/cm.g.doubleclick.net.*/).blank?
+            if (params[:t].to_i == 1 && !CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id]))
+              cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixels?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />\n</head>")
+            end
+          else
+            if (params[:t].to_i == 1 && !CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id]))
+              cache = cache.gsub(/<img src=\"http:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixels?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />")
+            else
+              #remove 1x1 pixel image
+              cache = cache.gsub(/<img src=\"http:\/\/cm.g.doubleclick.net.*/, "")
+            end
           end
 
           cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")

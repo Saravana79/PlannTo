@@ -1,7 +1,7 @@
 class Admin::AdReportsController < ApplicationController
   before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report]
   before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report]
-  before_filter :get_advertisement, :only => [:view_ad_chart, :report, :generate_report]
+  before_filter :get_advertisement, :only => [:report, :generate_report]
   layout "product"
 
   def index
