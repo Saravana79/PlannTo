@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141114133315) do
+ActiveRecord::Schema.define(:version => 20141117065634) do
 
   create_table "ad_reports", :force => true do |t|
     t.integer  "advertisement_id"
@@ -737,6 +737,7 @@ ActiveRecord::Schema.define(:version => 20141114133315) do
     t.integer  "itemexternalurl_id"
     t.string   "Image"
     t.decimal  "mrpprice",                                  :precision => 10, :scale => 0
+    t.string   "additional_details"
   end
 
   add_index "itemdetails", ["itemexternalurl_id"], :name => "itemexternalurl_ids"

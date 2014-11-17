@@ -9,13 +9,19 @@ class CookieMatch < ActiveRecord::Base
   end
 
   def self.enqueue_cookie_matching(param, plannto_user_id)
-    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"]}
+    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => "google"}
+    Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+  end
+
+  def self.enqueue_pixel_matching(param, plannto_user_id)
+    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
     Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
   end
 
   def self.process_cookie_matching(param)
+    param["source"] ||= "google"
     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(param["plannto_user_id"])
-    cookie_match.update_attributes(:google_user_id => param["google_gid"], :match_source => "google")
+    cookie_match.update_attributes(:google_user_id => param["google_gid"], :match_source => param["source"])
 
     $redis_rtb.pipelined do
       $redis_rtb.set("cm:#{param['google_gid']}", param["plannto_user_id"])
@@ -23,7 +29,7 @@ class CookieMatch < ActiveRecord::Base
     end
 
     if !param["ref_url"].blank?
-      user_access_detail = UserAccessDetail.create(:plannto_user_id => param["plan_to_temp_user_id"], :ref_url => param["ref_url"], :source => "google")
+      user_access_detail = UserAccessDetail.create(:plannto_user_id => param["plan_to_temp_user_id"], :ref_url => param["ref_url"], :source => param["source"])
     end
   end
 end

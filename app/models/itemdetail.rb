@@ -278,6 +278,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     node.xpath("//item").each do |item|
       begin
         p "--- Started Process #{url} ---"
+        id = item.at_xpath("g:id").content rescue ""
         title = item.at_xpath("title").content rescue ""
         product_type = item.at_xpath("g:product_type").content rescue ""
         product_type = product_type.to_s.split(">")[1].to_s.strip
@@ -308,11 +309,11 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         elsif source_item.verified && !source_item.matchitemid.blank?
           item_detail = Itemdetail.find_or_initialize_by_url(url)
           if item_detail.new_record?
-            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false)
+            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.id, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
             image = nil
           else
             image = item_detail.Image
-            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false)
+            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
           end
           p filename
           if image.blank? && !image_url.blank? && !filename.blank?
