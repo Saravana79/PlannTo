@@ -11,7 +11,7 @@ class ProductsController < ApplicationController
     else
       params.slice("price_full_details", "path", "sort_disable", "item_ids")
     end
-  }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)

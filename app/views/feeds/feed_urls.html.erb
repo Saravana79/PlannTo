@@ -6,6 +6,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <link type="text/css" href="<%= configatron.root_image_path %>static/javascripts/jquery-ui-1.8.14.custom/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <link type="text/css" href="<%= configatron.root_image_path %>static/stylesheets/plannto.css" rel="stylesheet"/>
+    <link type="text/css" href="<%= configatron.root_image_path %>static/stylesheets/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
     <script src="<%= configatron.root_image_path %>static/javascripts/jquery_ujs.js" type="text/javascript"></script>
     <script src="<%= configatron.root_image_path %>static/javascripts/jquery.jscroll.min.js" type="text/javascript"></script>
     <script src="<%= configatron.root_image_path %>static/javascripts/textTagger.js" type="text/javascript"></script>
@@ -26,8 +27,15 @@
         <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
         Title: <%= search_form.text_field :title, :size => 60, :value => params[:search][:title] %>
 
-        <%= search_form.submit "Filter" %>
-        <%= search_form.submit "Clear" %>
+        <div style="padding-top: 9px; text-align: center;">
+          From Date: <%= search_form.text_field :from_date, :style => "padding:2px;width:100px;", :value => params[:search][:from_date].blank? ? "" : params[:search][:from_date].to_date.strftime("%d-%m-%Y"), :class => "search_date_field" %>
+          To Date: <%= search_form.text_field :to_date, :style => "padding:2px;width:100px;", :value => params[:search][:to_date].blank? ? "" : params[:search][:to_date].to_date.strftime("%d-%m-%Y"), :class => "search_date_field" %>
+        </div>
+
+        <div style="padding-top: 9px; text-align: center;">
+          <%= search_form.submit "Filter" %>
+          <%= search_form.submit "Clear" %>
+        </div>
       <% end %>
     </div>
 
@@ -95,7 +103,7 @@
           margin: -8px;
           position: relative;
           right: -18px;
-          width: 92%;
+          width: 85%;
       }
 
       .go_back {
@@ -117,10 +125,9 @@
           color: #a52a2a;
           float: right;
           font-size: 14px;
-          left: 124px;
+          left: -68px;
           margin: -8px;
           position: relative;
-          top: 21px;
       }
 
       #loading_div {
@@ -353,6 +360,9 @@
             if (val == "")
               $("#search_source").val("")
         })
+
+        //datepicker
+        $(".search_date_field").datepicker({ dateFormat: 'dd-mm-yy' });
     })
 
     // For chrome and Chromium

@@ -48,6 +48,8 @@ class FeedsController < ApplicationController
       condition = condition + " and category like '%#{params[:search][:category]}%'" unless params[:search][:category].blank?
       condition = condition + " and status = #{params[:search][:status]}" unless params[:search][:status].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
+      condition = condition + " and created_at > '#{params[:search][:from_date].to_time}'" unless params[:search][:from_date].blank?
+      condition = condition + " and created_at < '#{params[:search][:to_date].to_time}'" unless params[:search][:to_date].blank?
       condition = condition + " and title like '%#{title}%'" unless title.blank?
     end
 
