@@ -440,7 +440,7 @@ class Advertisement < ActiveRecord::Base
 
     impression_date_condition = "impression_time > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
     click_date_condition = "timestamp > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and timestamp < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
-    
+
     if ad_report.report_type == "item_id"
       query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions ai
                where advertisement_id = #{ad_report.advertisement_id} and #{impression_date_condition} group by item_id ) a left outer join (select item_id, count(*) as clicks_count from
