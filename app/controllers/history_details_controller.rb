@@ -127,7 +127,7 @@ class HistoryDetailsController < ApplicationController
         end
         url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
 
-        add_detail = @item_detail.blank? ? "" : @item_detail.additional_details
+        add_detail = @item_detail.blank? ? "" : @item_detail.additional_details.to_s
         url= url.gsub(/\{add}/, add_detail)
       end
     end
