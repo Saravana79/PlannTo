@@ -26,7 +26,7 @@ class Bike < Product
     
     string :status
     string :manufacturer, :multiple => true do |product|
-      product.manufacturer.name
+      product.manufacturer.name rescue nil
     end
     float :rating  do |item|
       item.rating
