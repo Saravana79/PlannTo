@@ -458,7 +458,7 @@ class Advertisement < ActiveRecord::Base
       csv << [ad_report.report_type == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
       reports.each do |report|
         ectr = ((report.clicks_count.to_f/report.impressions_count.to_f)*100).round(3)
-        csv << [*report.send(ad_report.report_type), report.impressions_count, report.clicks_count, ectr]
+        csv << [*report.send(ad_report.report_type == "item_id" ? "name" : "hosted_site_url"), report.impressions_count, report.clicks_count, ectr]
       end
     end
 
@@ -466,6 +466,7 @@ class Advertisement < ActiveRecord::Base
 
     object = $s3_object.objects["reports/#{filename}"]
     object.write(return_val)
+    object.acl = :public_read
 
     ad_report.update_attributes(:status => "ready")
   end
