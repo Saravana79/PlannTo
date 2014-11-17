@@ -94,6 +94,24 @@ csv_details.each_with_index do |csv_detail, index|
   end
 end
 
+## Create product by Bike
+
+csv_details = CSV.read("/home/sivakumar/Newbikes.csv")
+itemtype = "Bike"
+itemtype_id = Itemtype.find_by_itemtype(itemtype.camelize).id
+
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+  p csv_detail
+  name = csv_detail[0]
+  image_name = csv_detail[1]
+  item = itemtype.camelize.constantize.find_or_initialize_by_name(name)
+  item.itemtype_id = itemtype_id
+  item.status = 1
+  item.imageurl = image_name
+  item.save!(:validate => false)
+end
+
 
 ## Item loads from mysmartprice
 

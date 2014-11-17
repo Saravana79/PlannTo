@@ -52,6 +52,7 @@
 <style type="text/css">
     .sign_up_btn {
         background: -moz-linear-gradient(center top, #90cddb, #528d9c) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        background: -webkit-gradient(linear, left top, left bottom, from(#90cddb), to(#528d9c));
         border: medium none;
         border-radius: 5px;
         box-shadow: 1px 1px 1px #727272;
@@ -74,5 +75,9 @@
         float: left;
         margin-left: 15px;
         position: absolute;
+    }
+
+    .sign_up_btn:hover {
+        background: -webkit-gradient(linear, left top, left bottom, from(#90cddb), to(#366774));
     }
 </style>
