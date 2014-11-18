@@ -54,16 +54,16 @@ class AddImpression < ActiveRecord::Base
 
    #buying list update
 
-   # if ai.advertisement_type != "advertisement"
-   #   article_content = ArticleContent.where(:url => ai.hosted_site_url).last
-   #
-   #   unless article_content.blank?
-   #     user_id = ai.temp_user_id
-   #     type = article_content.sub_type
-   #     item_ids = article_content.item_ids.join(",") rescue ""
-   #     UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids)
-   #   end
-   # end
+   if ai.advertisement_type != "advertisement"
+     article_content = ArticleContent.where(:url => ai.hosted_site_url).last
+
+     unless article_content.blank?
+       user_id = ai.temp_user_id
+       type = article_content.sub_type
+       item_ids = article_content.item_ids.join(",") rescue ""
+       UserAccessDetail.update_buying_list(user_id, ai.hosted_site_url, type, item_ids)
+     end
+   end
 
    # Advertisement.check_and_update_act_spent_budget_in_redis(ai.advertisement_id, obj_params[:winning_price_enc])
  end
