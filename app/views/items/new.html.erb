@@ -1,6 +1,8 @@
 <div class="alert-notice">
-  <% unless flash[:notice].blank? %>
-      <%= flash[:notice] %>
+  <% if !flash[:notice].blank? %>
+      <span class="notice"><%= flash[:notice] %></span>
+  <% elsif !flash[:alert].blank? %>
+      <span class="alert"><%= flash[:alert] %></span>
   <% end %>
 </div>
 <br/>

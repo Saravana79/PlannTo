@@ -1,3 +1,13 @@
+<div class="alert-notice">
+  <% if !flash[:notice].blank? %>
+      <span class="notice"><%= flash[:notice] %></span>
+  <% elsif !flash[:alert].blank? %>
+      <span class="alert"><%= flash[:alert] %></span>
+  <% end %>
+</div>
+<br/>
+<br/>
+
 <%= hidden_field_tag "articles_item_id" %>
 <div id="shareProduct">
   <div class="title_header input-label float_lft">Select Product to Update:</div>
@@ -57,5 +67,25 @@
   .input-label {
       font-size: 16px !important;
       padding: 9px 0 0;
+  }
+
+  .alert-notice .notice {
+      background-color: darkseagreen;
+      color: green;
+      font-size: 15px;
+      height: 28px;
+      padding: 19px 0 0 401px;
+      position: absolute;
+      width: 58%;
+  }
+
+  .alert-notice .alert {
+      background-color: peachpuff;
+      color: red;
+      font-size: 15px;
+      height: 28px;
+      padding: 19px 0 0 401px;
+      position: absolute;
+      width: 58%;
   }
 </style>

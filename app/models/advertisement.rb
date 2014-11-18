@@ -204,8 +204,8 @@ class Advertisement < ActiveRecord::Base
   end
 
   def get_hourly_budget(hour)
-    schedule_valid_hours = self.schedule_details.to_s.split(",")
-    valid_hours = schedule_valid_hours.blank? ? HOURS : schedule_valid_hours.map(&:to_i)
+    scheduled_valid_hours = self.schedule_details.to_s.split(",")
+    valid_hours = scheduled_valid_hours.blank? ? HOURS : scheduled_valid_hours.map(&:to_i)
     if valid_hours.include?(hour)
       hourly_budget = self.budget.to_f / valid_hours.count
     else
@@ -364,6 +364,9 @@ class Advertisement < ActiveRecord::Base
 
       if return_val >= hourly_spent.to_i
         $redis_rtb.hset("advertisments:#{advertisement_id}", "status", "paused")
+        time_usage = (time.min.to_f/60)*100
+        param = {"advertisement_id" => advertisement_id, "spent_date" => time.to_date, "hour" => time.hour, "time_usage" => time_usage}
+        Resque.enqueue(AdHourlySpentDetailProcess, "create_ad_houly_spent_detail", param)
       end
     end
   end
@@ -384,11 +387,13 @@ class Advertisement < ActiveRecord::Base
     # end
 
     advertisements.each do |advertisement|
-      schedule_valid_hours = advertisement.schedule_details.to_s.split(",")
-      valid_hours = schedule_valid_hours.blank? ? HOURS : schedule_valid_hours.map(&:to_i)
+      scheduled_valid_hours = advertisement.schedule_details.to_s.split(",")
+      valid_hours = scheduled_valid_hours.blank? ? HOURS : scheduled_valid_hours.map(&:to_i)
       invalid_hours = HOURS - valid_hours
       if invalid_hours.include?(hour)
         $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "paused")
+        advertisement
+        # AdHourlySpentDetail.create(:advertisement_id => advertisement.id, :spent_date => time.to_date, :hour => hour, :time_usage => 0, :price_usage => 0)
         # old_hour = hour-1
         # next if invalid_hours.include?(old_hour)
         # update_remaining_budget_to_spent(advertisement.id, time, valid_hours)
@@ -404,8 +409,8 @@ class Advertisement < ActiveRecord::Base
       end
     else
       advertisements.each do |advertisement|
-        schedule_valid_hours = advertisement.schedule_details.to_s.split(",")
-        valid_hours = schedule_valid_hours.blank? ? HOURS : schedule_valid_hours.map(&:to_i)
+        scheduled_valid_hours = advertisement.schedule_details.to_s.split(",")
+        valid_hours = scheduled_valid_hours.blank? ? HOURS : scheduled_valid_hours.map(&:to_i)
         # invalid_hours = HOURS - valid_hours
 
         if valid_hours.include?(hour)
@@ -426,6 +431,13 @@ class Advertisement < ActiveRecord::Base
       prev_spent_key = "ad:act_hourly_spent:#{time.strftime("%b-%d")}:#{advertisement_id}:#{prev_valid_hour}"
       prev_spent = $redis.get(prev_spent_key).to_i
       spent = $redis.get("ad:spent:#{advertisement_id}").to_i
+
+      # create ad hourly spent detail
+      price_usage = (prev_spent.to_f/spent)*100
+      ad_hourly_spent_detail = AdHourlySpentDetail.find_or_initialize_by_advertisement_id_and_spent_date_and_hour(advertisement_id, time.to_date, hour)
+      time_usage = ad_hourly_spent_detail.time_usage.to_i == 0 ? 100 : ad_hourly_spent_detail.time_usage
+      ad_hourly_spent_detail.update_attributes(:time_usage => time_usage, :price_usage => price_usage)
+
       if prev_spent < spent
         remaining_amt = spent - prev_spent
         v_hours = valid_hours.each {|each_val| each_val >= hour}

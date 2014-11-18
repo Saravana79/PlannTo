@@ -555,6 +555,7 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.automated_feed_process
+    SourceCategory.update_all_to_cache()
     feed_urls = FeedUrl.where("status = 0 and (created_at < '#{2.weeks.ago.utc}' and created_at > '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
     sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
 

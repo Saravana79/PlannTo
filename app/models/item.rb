@@ -2,6 +2,7 @@ require 'json'
 class Item < ActiveRecord::Base
 
   validates :name, :itemtype_id, :imageurl, :presence => true, :if => proc {|item| item.type != "CarGroup"}
+  validates_uniqueness_of :name
   attr_accessor :old_version_id
 
   has_one :image, as: :imageable

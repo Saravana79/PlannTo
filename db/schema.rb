@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141117065634) do
+ActiveRecord::Schema.define(:version => 20141117124509) do
+
+  create_table "ad_hourly_spent_details", :force => true do |t|
+    t.integer  "advertisement_id"
+    t.date     "spent_date"
+    t.integer  "hour"
+    t.integer  "time_usage",       :default => 0
+    t.integer  "price_usage",      :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "ad_reports", :force => true do |t|
     t.integer  "advertisement_id"
