@@ -87,7 +87,7 @@ class UserAccessDetail < ActiveRecord::Base
           u_values["buyinglist"] = buying_list.join(",")
           items_hash = u_values.select {|k,_| k.include?("_c")}
           items_count = items_hash.count
-          all_item_ids = Hash[items_hash.sort_by {|k,v| v}.reverse].map {|k,v| k.gsub("_c","")}.compact
+          all_item_ids = Hash[items_hash.sort_by {|k,v| v.to_i}.reverse].map {|k,v| k.gsub("_c","")}.compact
           all_item_ids = all_item_ids.join(",")
           redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids})
         # end
