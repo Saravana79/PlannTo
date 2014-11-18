@@ -199,6 +199,15 @@ class Advertisement < ActiveRecord::Base
     end
   end
 
+  def self.update_ad_1_budget_per_hour
+    account_name = "PlannToAccount_1"
+
+    # effective_budget = get_effective_budget_using_summary(account_name)
+    budget_now = 5000 * 1000000
+    payload = {"USD/1M" => budget_now}.to_json
+    post_budget(account_name, payload)
+  end
+
   def self.find_by_start_and_end_date(date)
     Advertisement.where("status = ? and start_date <= ? and end_date >= ?", 1, date, date)
   end

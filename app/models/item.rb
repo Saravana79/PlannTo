@@ -1547,9 +1547,9 @@ end
     end
   end
 
-  def self.check_if_already_exist_in_user_visits(source_categories, user_id, url)
+  def self.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits")
     exists = false
-    key = "users:last_visits:#{user_id}"
+    key = "#{url_prefix}:#{user_id}"
     visited_urls = $redis.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
@@ -1594,7 +1594,7 @@ end
     root_levels.each do |root_level|
       item_ids << configatron.send(root_level).to_s.split(",")
     end
-    item_ids
+    item_ids.flatten
   end
 
   def self.get_host_without_www(url)

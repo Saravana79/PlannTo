@@ -56,6 +56,11 @@ task :rtb_budget_update_process => :environment do
   Resque.enqueue(RtbBudgetUpdateProcess, "update_rtb_budget", Time.zone.now)
 end
 
+task :rtb_budget_update_for_ad_1 => :environment do
+  puts "Running RTB Budget Update Process, at #{Time.zone.now}"
+  Advertisement.update_ad_1_budget_per_hour()
+end
+
 desc "sid ad detail process, Update impressions, clicks and orders"
 task :sid_ad_detail_process => :environment do
   puts "Running SidAdDetail process, at #{Time.zone.now}"
