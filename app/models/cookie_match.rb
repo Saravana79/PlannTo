@@ -21,11 +21,11 @@ class CookieMatch < ActiveRecord::Base
   def self.process_cookie_matching(param)
     param["source"] ||= "google"
     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(param["plannto_user_id"])
-    cookie_match.update_attributes(:google_user_id => param["google_gid"], :match_source => param["source"])
+    cookie_match.update_attributes(:google_user_id => param["google_id"], :match_source => param["source"])
 
     $redis_rtb.pipelined do
-      $redis_rtb.set("cm:#{param['google_gid']}", param["plannto_user_id"])
-      $redis_rtb.expire("cm:#{param['google_gid']}", 2.weeks)
+      $redis_rtb.set("cm:#{param['google_id']}", param["plannto_user_id"])
+      $redis_rtb.expire("cm:#{param['google_id']}", 2.weeks)
     end
 
     if !param["ref_url"].blank?
