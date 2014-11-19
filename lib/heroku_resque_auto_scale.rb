@@ -63,7 +63,7 @@ module HerokuResqueAutoScale
             :job_count => 1000
         },
         {
-            :workers => 5,
+            :workers => 7,
             :job_count => 5000
         }
     ].reverse_each do |scale_info|
