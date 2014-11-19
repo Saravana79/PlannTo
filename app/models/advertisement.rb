@@ -503,7 +503,7 @@ class Advertisement < ActiveRecord::Base
   end
 
   def my_reports(user)
-    ad_reports.where(:reported_by => user.id)
+    ad_reports.where(:reported_by => user.id).order("created_at desc")
   end
 
   private
