@@ -303,44 +303,47 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           next
         end
 
-        source_item = Sourceitem.find_or_initialize_by_url(url)
-        if source_item.new_record?
-          source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
-        elsif source_item.verified && !source_item.matchitemid.blank?
-          item_detail = Itemdetail.find_or_initialize_by_url(url)
-          if item_detail.new_record?
-            item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
-            image = nil
-          else
-            image = item_detail.Image
-            item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
-          end
-          if image.blank? && !image_url.blank? && !filename.blank?
-            p "image----------------------------"
-            image = item_detail.build_image
-            # tempfile = open(image_url)
-            # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
-            # avatar.original_filename = filename
-
-            safe_thumbnail_url = URI.encode(URI.decode(image_url))
-            extname = File.extname(safe_thumbnail_url).delete("%")
-            basename = File.basename(safe_thumbnail_url, extname).delete("%")
-            file = Tempfile.new([basename, extname])
-            file.binmode
-            open(URI.parse(safe_thumbnail_url)) do |data|
-              file.write data.read
-            end
-            file.rewind
-
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
-            avatar.original_filename = filename
-
-            image.avatar = avatar
-            if image.save
-              item_detail.update_attributes(:Image => filename)
-            end
+        have_to_create_image = false
+        @item_detail = Itemdetail.find_or_initialize_by_url(url)
+        if !@item_detail.new_record?
+          have_to_create_image = @item_detail.Image.blank? ? true : false
+          @item_detail.update_attributes!(:price => price, :status => 1, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
+        else
+          source_item = Sourceitem.find_or_initialize_by_url(url)
+          if source_item.new_record?
+            source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+          elsif source_item.verified && !source_item.matchitemid.blank?
+            @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => 1, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
+            have_to_create_image = true
           end
         end
+
+        if have_to_create_image && !image_url.blank? && !filename.blank?
+          p "image----------------------------"
+          @image = @item_detail.build_image
+          # tempfile = open(image_url)
+          # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          # avatar.original_filename = filename
+
+          safe_thumbnail_url = URI.encode(URI.decode(image_url))
+          extname = File.extname(safe_thumbnail_url).delete("%")
+          basename = File.basename(safe_thumbnail_url, extname).delete("%")
+          file = Tempfile.new([basename, extname])
+          file.binmode
+          open(URI.parse(safe_thumbnail_url)) do |data|
+            file.write data.read
+          end
+          file.rewind
+
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar.original_filename = filename
+
+          @image.avatar = avatar
+          if @image.save
+            @item_detail.update_attributes(:Image => filename)
+          end
+        end
+
       rescue Exception => e
         p "-------------------- There was a problem while processing itemdetail item #{url} => #{e.message}-----------------"
       end

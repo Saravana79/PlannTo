@@ -137,6 +137,7 @@ class AdvertisementsController < ApplicationController
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
     winning_price_enc = params[:wp]
     return impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc
@@ -278,6 +279,7 @@ class AdvertisementsController < ApplicationController
         valid_html = cache.match(/plannto-advertisement main_div/).blank? ? false : true
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
           impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
           item_id = params[:item_ids]
           matched_val = cache.match(/present_item_id=.*#/)
@@ -286,17 +288,38 @@ class AdvertisementsController < ApplicationController
             item_id = val.split("=")[1].gsub("#", "")
           end
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, impression_type, item_id, params[:ads_id], true) if params[:is_test] != "true"
-
-          if cache.match(/<img src=\"http:\/\/cm.g.doubleclick.net.*/).blank?
-            if (params[:t].to_i == 1 && !CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id]))
-              cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixels?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />\n</head>")
-            end
-          else
-            if (params[:t].to_i == 1 && !CookieMatch.check_cookie_user_exists?(cookies[:plan_to_temp_user_id]))
-              cache = cache.gsub(/<img src=\"http:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixels?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />")
+          
+          if !cache.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
+            if (params[:t].to_i == 1)
+              if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+              else
+                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />")
+              end
             else
               #remove 1x1 pixel image
-              cache = cache.gsub(/<img src=\"http:\/\/cm.g.doubleclick.net.*/, "")
+              cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
+              cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
+            end
+          elsif !cache.match(/<img src=\"https:\/\/www.plannto.com.*/).blank?
+            if (params[:t].to_i == 1)
+              if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+              else
+                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />")
+              end
+            else
+              #remove 1x1 pixel image
+              cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "")
+              cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "")
+            end
+          else
+            if (params[:t].to_i == 1)
+              if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+                cache = cache.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />\n</head>")
+              else
+                cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />\n</head>")
+              end
             end
           end
 
