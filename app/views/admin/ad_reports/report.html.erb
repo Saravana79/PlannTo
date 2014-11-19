@@ -53,7 +53,7 @@ To Date
 Select By
 </span>
     <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-<%= select_tag(:select_by, options_for_select([["Hosted Url", "hosted_site_url"], ['Item', 'item_id']], params[:select_by])) %>
+<%= select_tag(:select_by, options_for_select(@select_types, params[:select_by])) %>
 </span>
     </div>
 

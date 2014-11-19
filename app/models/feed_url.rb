@@ -560,15 +560,15 @@ class FeedUrl < ActiveRecord::Base
     sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
 
     feed_urls.each do |feed_url|
-      host = Item.get_host_without_www(feed_url.url)
-      if sources_list[host]["site_status"] == false
-        feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
-      else
-        begin
-          feed_url.auto_save_feed_urls
-        rescue Exception => e
-          p e.backtrace
+      begin
+        host = Item.get_host_without_www(feed_url.url)
+        if sources_list[host]["site_status"] == false
+          feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
+        else
+            feed_url.auto_save_feed_urls
         end
+      rescue Exception => e
+        p e.backtrace
       end
     end
   end

@@ -29,7 +29,7 @@ class CookieMatch < ActiveRecord::Base
     end
 
     if !param["ref_url"].blank?
-      user_access_detail = UserAccessDetail.create(:plannto_user_id => param["plan_to_temp_user_id"], :ref_url => param["ref_url"], :source => param["source"])
+      user_access_detail = UserAccessDetail.create(:plannto_user_id => param["plannto_user_id"], :ref_url => param["ref_url"], :source => param["source"])
     end
   end
 

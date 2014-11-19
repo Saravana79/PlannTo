@@ -194,6 +194,7 @@ class Admin::AdReportsController < ApplicationController
     @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
     @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
     @reports ||= []
+    @select_types = [['Item', 'item_id'],["Hosted Url", "hosted_site_url"]]
 
     if !@advertisement.blank?
       @ad_reports = @advertisement.my_reports(current_user).paginate(:page => params[:page], :per_page => 10)
@@ -203,6 +204,7 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def generate_report
+    params[:select_by] ||= "item_id"
     param_to_gen_rep = params.slice(*["from_date", "to_date", "select_by"])
     ad_report = AdReport.generate_report(params, current_user, @advertisement)
     Resque.enqueue(GenerateReport, 'generate_report_for_ads', ad_report.id, Time.now)
