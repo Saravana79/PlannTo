@@ -34,79 +34,84 @@ class CookieMatch < ActiveRecord::Base
   end
 
   def self.bulk_process_cookie_matching()
-    length = $redis.llen("resque:queue:cookie_matching_process")
-    count = length
+    if $redis.get("bulk_process_cookie_matching_is_running").to_i == 0
+      $redis.set("bulk_process_cookie_matching_is_running", 1)
+      $redis.expire("bulk_process_cookie_matching_is_running", 30.minutes)
+      length = $redis.llen("resque:queue:cookie_matching_process")
+      count = length
 
-    source_categories = JSON.parse($redis.get("source_categories_pattern"))
-    source_categories.default = {"pattern" => ""}
+      source_categories = JSON.parse($redis.get("source_categories_pattern"))
+      source_categories.default = {"pattern" => ""}
 
-    begin
-      cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 500)
-      cookies_arr = []
-      user_access_details = []
+      begin
+        cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 500)
+        cookies_arr = []
+        user_access_details = []
 
-      cookie_details.each do |cookie_detail|
-        count -= 1
-        begin
-          cookie_detail = JSON.parse(cookie_detail)["args"][1]
-          cookie_detail["source"] ||= "google"
-          ref_url = cookie_detail.delete("ref_url")
-          cookies_arr << cookie_detail
-          if !ref_url.blank?
-            param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"]}
-            user_access_details << param
+        cookie_details.each do |cookie_detail|
+          count -= 1
+          begin
+            cookie_detail = JSON.parse(cookie_detail)["args"][1]
+            cookie_detail["source"] ||= "google"
+            ref_url = cookie_detail.delete("ref_url")
+            cookies_arr << cookie_detail
+            if !ref_url.blank?
+              param = {"plannto_user_id" => cookie_detail["plannto_user_id"], "ref_url" => ref_url, "source" => cookie_detail["source"]}
+              user_access_details << param
+            end
+          rescue Exception => e
+            p "There was problem while running cookie_match => #{e.backtrace}"
           end
-        rescue Exception => e
-          p "There was problem while running cookie_match => #{e.backtrace}"
+          p "Remaining CookieMatch Count - #{count}"
         end
-        p "Remaining CookieMatch Count - #{count}"
-      end
 
-      # ActiveRecord::Base.transaction do
-      #   cookies_arr.each do |cookie_detail|
-      #     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
-      #     cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
-      #   end
-      # end
+        # ActiveRecord::Base.transaction do
+        #   cookies_arr.each do |cookie_detail|
+        #     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
+        #     cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
+        #   end
+        # end
 
-      cookies_arr.each do |cookie_detail|
-        cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
-        cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
-      end
-
-
-      $redis_rtb.pipelined do
         cookies_arr.each do |cookie_detail|
-          $redis_rtb.set("cm:#{cookie_detail['google_id']}", cookie_detail["plannto_user_id"])
-          $redis_rtb.expire("cm:#{cookie_detail['google_id']}", 2.weeks)
+          cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
+          cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
         end
-      end
 
-      user_access_details_count = user_access_details.count
-      user_access_details.each do |user_access_detail|
-        user_access_details_count-=1
-        user_access_detail = UserAccessDetail.create(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
-        #user_access_detail.update_buying_list_in_redis(source_categories)
 
-        article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+        $redis_rtb.pipelined do
+          cookies_arr.each do |cookie_detail|
+            $redis_rtb.set("cm:#{cookie_detail['google_id']}", cookie_detail["plannto_user_id"])
+            $redis_rtb.expire("cm:#{cookie_detail['google_id']}", 2.weeks)
+          end
+        end
+
+        user_access_details_count = user_access_details.count
+        user_access_details.each do |user_access_detail|
+          user_access_details_count-=1
+          user_access_detail = UserAccessDetail.create(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+          #user_access_detail.update_buying_list_in_redis(source_categories)
+
+          article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{user_access_detail.ref_url}' group by ac.id").last
 
-        unless article_content.blank?
-          user_id = user_access_detail.plannto_user_id
-          type = article_content.sub_type
-          item_ids = article_content.all_item_ids.to_s rescue ""
-          UserAccessDetail.update_buying_list(user_id, user_access_detail.ref_url, type, item_ids, source_categories)
+          unless article_content.blank?
+            user_id = user_access_detail.plannto_user_id
+            type = article_content.sub_type
+            item_ids = article_content.all_item_ids.to_s rescue ""
+            UserAccessDetail.update_buying_list(user_id, user_access_detail.ref_url, type, item_ids, source_categories)
+          end
+          p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end
-        p "Remaining UserAccessDetail Count - #{user_access_details_count}"
-      end
 
-      # UserAccessDetail.create(user_access_details)
+        # UserAccessDetail.create(user_access_details)
 
-      $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
-      length = length - cookie_details.count
-      p "*********************************** Remaining CookieMatch Length - #{length} **********************************"
-    end while length > 0
+        $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
+        length = length - cookie_details.count
+        p "*********************************** Remaining CookieMatch Length - #{length} **********************************"
+      end while length > 0
+      $redis.set("bulk_process_cookie_matching_is_running", 0)
+    end
   end
 
 end

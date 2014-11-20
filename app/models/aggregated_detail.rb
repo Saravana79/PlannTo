@@ -2,47 +2,52 @@ class AggregatedDetail < ActiveRecord::Base
   belongs_to :entity, :polymorphic => true
 
   def self.update_aggregated_detail(time, entity_type, batch_size=1000)
-    entity_field = entity_type + "_id"
-    # time = time.is_a?(Time) ? time.utc : time # converted to UTC
+    if $redis.get("update_aggregated_detail_is_running").to_i == 0
+      $redis.set("update_aggregated_detail_is_running", 1)
+      $redis.expire("update_aggregated_detail_is_running", 30.minutes)
 
-    impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
-    click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
+      entity_field = entity_type + "_id"
+      # time = time.is_a?(Time) ? time.utc : time # converted to UTC
 
-    if entity_type == "publisher"
-      impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
-      click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
-    elsif entity_type == "advertisement"
-      impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price, a.commission from add_impressions ai inner join advertisements a on ai.advertisement_id = a.id where #{impression_date_condition} and ai.advertisement_type='advertisement' group by advertisement_id"
-      click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
-    end
+      impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
+      click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
 
-    page = 1
-    begin
-      impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
+      if entity_type == "publisher"
+        impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
+        click_query = "select publisher_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} group by publisher_id"
+      elsif entity_type == "advertisement"
+        impression_query = "select advertisement_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price, a.commission from add_impressions ai inner join advertisements a on ai.advertisement_id = a.id where #{impression_date_condition} and ai.advertisement_type='advertisement' group by advertisement_id"
+        click_query = "select advertisement_id as entity_id,count(*) as click_count from clicks where #{click_date_condition} and advertisement_id is NOT NULL group by advertisement_id"
+      end
 
-      impressions.each do |each_imp|
-        winning_price = each_imp.winning_price
-        if entity_type == "advertisement"
-          commission = each_imp.commission.blank? ? 1 : each_imp.commission.to_f
-          winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
+      page = 1
+      begin
+        impressions = AddImpression.paginate_by_sql(impression_query, :page => page, :per_page => batch_size)
+
+        impressions.each do |each_imp|
+          winning_price = each_imp.winning_price
+          if entity_type == "advertisement"
+            commission = each_imp.commission.blank? ? 1 : each_imp.commission.to_f
+            winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
+          end
+          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
         end
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_imp.entity_id, :date => time.to_date, :entity_type => entity_type)
-        aggregated_detail.update_attributes(:impressions_count => each_imp.impression_count, :winning_price => winning_price)
-      end
-      page += 1
-    end while !impressions.empty?
+        page += 1
+      end while !impressions.empty?
 
-    page = 1
-    begin
-      clicks = Click.paginate_by_sql(click_query, :page => page, :per_page => batch_size)
+      page = 1
+      begin
+        clicks = Click.paginate_by_sql(click_query, :page => page, :per_page => batch_size)
 
-      clicks.each do |each_click|
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_click.entity_id, :date => time.to_date, :entity_type => entity_type)
-        aggregated_detail.update_attributes(:clicks_count => each_click.click_count)
-      end
-      page += 1
-    end while !clicks.empty?
-
+        clicks.each do |each_click|
+          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => each_click.entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail.update_attributes(:clicks_count => each_click.click_count)
+        end
+        page += 1
+      end while !clicks.empty?
+      $redis.set("update_aggregated_detail_is_running", 0)
+    end
   end
 
   def self.get_counts(date1, date2, publisher_id)
