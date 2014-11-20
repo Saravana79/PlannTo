@@ -40,7 +40,7 @@ class CookieMatch < ActiveRecord::Base
     source_categories.default = {"pattern" => ""}
 
     begin
-      cookie_details = cookie_details
+      cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 1000)
       cookies_arr = []
       user_access_details = []
 
