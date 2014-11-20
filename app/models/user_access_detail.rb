@@ -1,6 +1,6 @@
 class UserAccessDetail < ActiveRecord::Base
 
-  after_save :update_buying_list_in_redis
+  # after_save :update_buying_list_in_redis
 
   def update_buying_list_in_redis(source_categories=nil)
     article_content = ArticleContent.where(:url => ref_url).last

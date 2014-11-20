@@ -35,6 +35,7 @@ class CookieMatch < ActiveRecord::Base
 
   def self.bulk_process_cookie_matching()
     length = $redis.llen("resque:queue:cookie_matching_process")
+    count = length
 
     source_categories = JSON.parse($redis.get("source_categories_pattern"))
     source_categories.default = {"pattern" => ""}
@@ -45,6 +46,7 @@ class CookieMatch < ActiveRecord::Base
       user_access_details = []
 
       cookie_details.each do |cookie_detail|
+        count -= 1
         begin
           cookie_detail = JSON.parse(cookie_detail)["args"][1]
           cookie_detail["source"] ||= "google"
@@ -57,13 +59,19 @@ class CookieMatch < ActiveRecord::Base
         rescue Exception => e
           p "There was problem while running cookie_match => #{e.backtrace}"
         end
+        p "Remaining CookieMatch Count - #{count}"
       end
 
-      ActiveRecord::Base.transaction do
-        cookies_arr.each do |cookie_detail|
-          cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
-          cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
-        end
+      # ActiveRecord::Base.transaction do
+      #   cookies_arr.each do |cookie_detail|
+      #     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
+      #     cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
+      #   end
+      # end
+
+      cookies_arr.each do |cookie_detail|
+        cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
+        cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
       end
 
       cookies_arr.each do |cookie_detail|
@@ -73,11 +81,16 @@ class CookieMatch < ActiveRecord::Base
         end
       end
 
-      UserAccessDetail.create(user_access_details)
+      user_access_details.each do |user_access_detail|
+        user_access_detail = UserAccessDetail.create(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+        user_access_detail.update_buying_list_in_redis(source_categories)
+      end
+
+      # UserAccessDetail.create(user_access_details)
 
       $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
       length = length - cookie_details.count
-      p "Remaining CookieMatch Length - #{length}"
+      p "*********************************** Remaining CookieMatch Length - #{length} **********************************"
     end while length > 0
   end
 
