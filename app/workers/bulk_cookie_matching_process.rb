@@ -8,7 +8,7 @@ class BulkCookieMatchingProcess
     #begin
     log.debug "********** Start Processing CookieMatch **********"
     log.debug "********** CookieMatch Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
-    advertisements = CookieMatch.send("bulk_process_cookie_matching")
+    CookieMatch.send("bulk_process_cookie_matching")
     log.debug "********** CookieMatch Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
     #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
