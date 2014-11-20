@@ -32,6 +32,17 @@ class Click < ActiveRecord::Base
       click.updated_at = obj_params[:time]
       click.save!
       Click.redis_push(last_click_details)
+      push_to_redis(click.temp_user_id, click.advertisement_id) if (!click.temp_user_id.blank? && !click.advertisement_id.blank?)
+    end
+  end
+
+  def self.push_to_redis(user_id, advertisement_id)
+    $redis_rtb.pipelined do
+      $redis_rtb.incrby("pu:#{user_id}:#{advertisement_id}:clicks:count",1)
+      $redis_rtb.expire("pu:#{user_id}:#{advertisement_id}:clicks:count",2.weeks)
+
+      $redis_rtb.incrby("pu:#{user_id}:#{advertisement_id}:clicks:#{Date.today.day}",1)
+      $redis_rtb.expire("pu:#{user_id}:#{advertisement_id}:clicks:#{Date.today.day}",1.day)
     end
   end
 

@@ -63,10 +63,22 @@ class AddImpression < ActiveRecord::Base
        item_ids = article_content.item_ids.join(",") rescue ""
        UserAccessDetail.update_buying_list(user_id, ai.hosted_site_url, type, item_ids)
      end
+   elsif ai.advertisement_type == "advertisement"
+     push_to_redis(ai.temp_user_id, ai.advertisement_id) if (!ai.temp_user_id.blank? && !ai.advertisement_id.blank?)
    end
 
    # Advertisement.check_and_update_act_spent_budget_in_redis(ai.advertisement_id, obj_params[:winning_price_enc])
  end
+
+  def self.push_to_redis(user_id, advertisement_id)
+    $redis_rtb.pipelined do
+      $redis_rtb.incrby("pu:#{user_id}:#{advertisement_id}:count",1)
+      $redis_rtb.expire("pu:#{user_id}:#{advertisement_id}:count",2.weeks)
+
+      $redis_rtb.incrby("pu:#{user_id}:#{advertisement_id}:#{Date.today.day}",1)
+      $redis_rtb.expire("pu:#{user_id}:#{advertisement_id}:#{Date.today.day}",1.day)
+    end
+  end
 
   def self.get_winning_price_value(winning_price_enc)
     google_adx_encryption_key = "\x03\x79\x03\xfc\x28\x1a\x68\x3c\x2b\x91\x84\xfe\x97\xc1\x67\xdc\x14\xa8\x08\xf4\xbe\x9e\x72\x76\x11\xd2\x5c\xf8\x4c\x0e\x6b\xf1"

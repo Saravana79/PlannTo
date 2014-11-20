@@ -41,7 +41,7 @@ class CookieMatch < ActiveRecord::Base
     source_categories.default = {"pattern" => ""}
 
     begin
-      cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 1000)
+      cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 500)
       cookies_arr = []
       user_access_details = []
 
@@ -74,16 +74,31 @@ class CookieMatch < ActiveRecord::Base
         cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
       end
 
-      cookies_arr.each do |cookie_detail|
-        $redis_rtb.pipelined do
+
+      $redis_rtb.pipelined do
+        cookies_arr.each do |cookie_detail|
           $redis_rtb.set("cm:#{cookie_detail['google_id']}", cookie_detail["plannto_user_id"])
           $redis_rtb.expire("cm:#{cookie_detail['google_id']}", 2.weeks)
         end
       end
 
+      user_access_details_count = user_access_details.count
       user_access_details.each do |user_access_detail|
+        user_access_details_count-=1
         user_access_detail = UserAccessDetail.create(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
-        user_access_detail.update_buying_list_in_redis(source_categories)
+        #user_access_detail.update_buying_list_in_redis(source_categories)
+
+        article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+inner join item_contents_relations_cache icc on icc.content_id = ac.id
+where url = '#{user_access_detail.ref_url}' group by ac.id").last
+
+        unless article_content.blank?
+          user_id = user_access_detail.plannto_user_id
+          type = article_content.sub_type
+          item_ids = article_content.all_item_ids.to_s rescue ""
+          UserAccessDetail.update_buying_list(user_id, user_access_detail.ref_url, type, item_ids, source_categories)
+        end
+        p "Remaining UserAccessDetail Count - #{user_access_details_count}"
       end
 
       # UserAccessDetail.create(user_access_details)

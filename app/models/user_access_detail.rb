@@ -38,6 +38,8 @@ class UserAccessDetail < ActiveRecord::Base
         u_key = "u:ac:plannto:#{user_id}"
         u_values = $redis.hgetall(u_key)
 
+        add_fad = u_values.blank? ? true : false
+
         # Remove expired items from user details
         u_values.each do |key,val|
           if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
@@ -87,9 +89,11 @@ class UserAccessDetail < ActiveRecord::Base
           u_values["buyinglist"] = buying_list.join(",")
           items_hash = u_values.select {|k,_| k.include?("_c")}
           items_count = items_hash.count
-          all_item_ids = Hash[items_hash.sort_by {|k,v| v.to_i}.reverse].map {|k,v| k.gsub("_c","")}.compact
+          all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
           all_item_ids = all_item_ids.join(",")
-          redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids})
+          temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
+          temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
+          redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
         # end
 
         begin
@@ -116,7 +120,8 @@ class UserAccessDetail < ActiveRecord::Base
 
     $redis_rtb.pipelined do
       redis_rtb_hash.each do |key, val|
-        $redis_rtb.hmset(key, "item_ids", val["item_ids"], "count", val["count"], "all_item_ids", val["all_item_ids"])
+        $redis_rtb.hmset(key, val.flatten)
+        $redis_rtb.hincrby(key, "ap_c", 1)
         $redis_rtb.expire(key, 2.weeks)
       end
     end
