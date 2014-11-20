@@ -33,13 +33,49 @@ class CookieMatch < ActiveRecord::Base
     end
   end
 
+  def self.bulk_process_cookie_matching()
+    length = $redis.llen("resque:queue:cookie_matching_process")
+    count = length
+
+    source_categories = JSON.parse($redis.get("source_categories_pattern"))
+    source_categories.default = ""
+
+    begin
+      cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 1000)
+
+      cookie_details.each do |cookie_detail|
+        count-=1
+        p cookie_detail = JSON.parse(cookie_detail)["args"][1]
+        cookie_detail["source"] ||= "google"
+        cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
+        cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
+
+        $redis_rtb.pipelined do
+          $redis_rtb.set("cm:#{cookie_detail['google_id']}", cookie_detail["plannto_user_id"])
+          $redis_rtb.expire("cm:#{cookie_detail['google_id']}", 2.weeks)
+        end
+
+        if !cookie_detail["ref_url"].blank?
+          user_access_detail = UserAccessDetail.create(:plannto_user_id => cookie_detail["plannto_user_id"], :ref_url => cookie_detail["ref_url"], :source => cookie_detail["source"])
+
+          user_access_detail.update_buying_list_in_redis(source_categories)
+        end
+        p "Remaining Length - #{count}"
+      end
+
+      $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
+      length = length - cookie_details.count
+      p "Remaining Length - #{length}"
+    end while length > 0
+  end
+
   def self.buying_list_process_in_redis
     if $redis.get("buying_list_from_cookie_is_running").to_i == 0
       $redis.set("buying_list_from_cookie_is_running", 1)
       $redis.expire("buying_list_from_cookie_is_running", 30.minutes)
       length = $redis_rtb.llen("users:visits")
       base_item_ids = Item.get_base_items_from_config()
-      source_categories = SourceCategory.get_source_category_with_paginations()
+      # source_categories = SourceCategory.get_source_category_with_paginations()
       t_length = length
       # start_point = 0
 
@@ -52,7 +88,7 @@ class CookieMatch < ActiveRecord::Base
           # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
           unless each_user_val.blank?
             user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-            already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url)
+            already_exist = Item.check_if_already_exist_in_user_visits(source_categories=nil, user_id, url)
             ranking = 0
 
             if already_exist == false

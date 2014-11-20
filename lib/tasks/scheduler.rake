@@ -154,3 +154,8 @@ desc "Update Itemdetail from MySmartPrice"
 task :update_item_details_from_vendors => :environment do
   Resque.enqueue(UpdateItemDetailsFromVendors, "update_from_vendors", Time.zone.now.utc)
 end
+
+desc "Update bulk cookie matching"
+task :bulk_cookie_matching_process => :environment do
+  Resque.enqueue(BulkCookieMatchingProcess)
+end

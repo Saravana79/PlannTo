@@ -1,22 +1,22 @@
 class UserAccessDetail < ActiveRecord::Base
 
-  after_save :update_buying_list_in_redis
+  # after_save :update_buying_list_in_redis
 
-  def update_buying_list_in_redis
+  def update_buying_list_in_redis(source_categories=nil)
     article_content = ArticleContent.where(:url => ref_url).last
 
     unless article_content.blank?
       user_id = plannto_user_id
       type = article_content.sub_type
       item_ids = article_content.item_ids.join(",") rescue ""
-      UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids)
+      UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories)
     end
   end
 
-  def self.update_buying_list(user_id, url, type, item_ids)
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil)
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     base_item_ids = Item.get_base_items_from_config()
-    source_categories = SourceCategory.get_source_category_with_paginations()
+    # source_categories = SourceCategory.get_source_category_with_paginations()
     redis_rtb_hash = {}
 
     already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")

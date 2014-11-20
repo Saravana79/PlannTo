@@ -1423,7 +1423,10 @@ end
       $redis.expire("buying_list_is_running", 30.minutes)
       length = $redis_rtb.llen("users:visits")
       base_item_ids = Item.get_base_items_from_config()
-      source_categories = SourceCategory.get_source_category_with_paginations()
+
+      source_categories = JSON.parse($redis.get("source_categories_pattern"))
+      source_categories.default = ""
+
       t_length = length
       # start_point = 0
 
@@ -1557,6 +1560,12 @@ end
     else
       begin
         host = Item.get_host_without_www(url)
+
+        if source_categories.blank?
+          source_categories = JSON.parse($redis.get("source_categories_pattern"))
+          source_categories.default = ""
+        end
+
         source_category = source_categories[host]
 
         if !source_category.blank? && !source_category["pattern"].blank?

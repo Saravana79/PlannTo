@@ -4,11 +4,12 @@ class SourceCategory < ActiveRecord::Base
 
   def self.update_all_to_cache()
     results = {}
-    source_categories = SourceCategory.all
+    @source_categories = SourceCategory.all
 
     results = {}
-    source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| results.merge!({each_src["source"] => {"categories" => each_src["categories"], "check_details" => each_src["check_details"], "site_status" => each_src["site_status"]}})}
+    @source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| results.merge!({each_src["source"] => {"categories" => each_src["categories"], "check_details" => each_src["check_details"], "site_status" => each_src["site_status"]}})}
     $redis_rtb.set("sources_list_details", results.to_json)
+    get_source_category_with_paginations()
   end
 
   def check_and_assign_sources_hash_to_cache_from_table()
@@ -23,7 +24,7 @@ class SourceCategory < ActiveRecord::Base
 
   def self.get_source_category_with_paginations()
     source_categories = {}
-    SourceCategory.all.map {|f| source_categories.merge!({f.source => {"pattern" => f.pattern}})}
-    source_categories
+    @source_categories.map {|f| source_categories.merge!({f.source => {"pattern" => f.pattern}}) if !f.pattern.blank?}
+    $redis.set("source_categories_pattern", source_categories.to_json)
   end
 end
