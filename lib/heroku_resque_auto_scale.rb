@@ -51,19 +51,19 @@ module HerokuResqueAutoScale
 
     [
         {
-            :workers => 1, # This many workers
-            :job_count => 3 # For this many jobs or more, until the next level
-        },
-        {
-            :workers => 2,
-            :job_count => 3
+            :workers => 2, # This many workers
+            :job_count => 1 # For this many jobs or more, until the next level
         },
         {
             :workers => 3,
-            :job_count => 100
+            :job_count => 3
         },
         {
             :workers => 4,
+            :job_count => 100
+        },
+        {
+            :workers => 5,
             :job_count => 1000
         },
         {
