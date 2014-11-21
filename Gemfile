@@ -107,3 +107,6 @@ gem 'amazon-ecs', '~> 2.2.5'
 
 
 gem 'xml-simple', '~> 1.1.4'
+
+#bulk import active record
+gem 'activerecord-import', '~> 0.3.1'

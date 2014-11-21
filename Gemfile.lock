@@ -44,6 +44,8 @@ GEM
       activesupport (= 3.1.1)
       arel (~> 2.2.1)
       tzinfo (~> 0.3.29)
+    activerecord-import (0.3.1)
+      activerecord (~> 3.0)
     activeresource (3.1.1)
       activemodel (= 3.1.1)
       activesupport (= 3.1.1)
@@ -359,6 +361,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-import (~> 0.3.1)
   activeuuid
   acts-as-messageable
   acts-as-taggable-on (~> 2.2.1)

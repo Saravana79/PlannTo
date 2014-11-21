@@ -44,7 +44,7 @@ class CookieMatch < ActiveRecord::Base
       source_categories.default = {"pattern" => ""}
 
       begin
-        cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 500)
+        cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 2000)
         cookies_arr = []
         user_access_details = []
 
@@ -72,9 +72,17 @@ class CookieMatch < ActiveRecord::Base
         #   end
         # end
 
+        imported_values = []
         cookies_arr.each do |cookie_detail|
-          cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail["plannto_user_id"])
-          cookie_match.update_attributes(:google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
+          cookie_match = CookieMatch.new(:plannto_user_id => cookie_detail["plannto_user_id"], :google_user_id => cookie_detail["google_id"], :match_source => cookie_detail["source"])
+          imported_values << cookie_match
+        end
+
+        result = CookieMatch.import(imported_values)
+
+        result.failed_instances.each do |cookie_detail|
+          cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
+          cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
         end
 
 
