@@ -5,8 +5,8 @@ class VideoImpression < ActiveRecord::Base
   def self.create_new_record(obj_params)
     unless obj_params.is_a?(Hash)
       obj_params = JSON.parse(obj_params)
-      obj_params = obj_params.symbolize_keys
     end
+    obj_params = obj_params.symbolize_keys
 
     vi = VideoImpression.new
     vi.id = obj_params[:video_impression_id]

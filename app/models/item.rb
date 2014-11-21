@@ -1505,7 +1505,7 @@ end
 
                 buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
-                if !old_buying_list.blank? || !buying_list.blank?
+                # if !old_buying_list.blank? || !buying_list.blank?
                   items_hash = u_values.select {|k,_| k.include?("_c")}
                   items_count = items_hash.count
                   all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
@@ -1513,7 +1513,7 @@ end
                   temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
                   temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
                   redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => temp_store)
-                end
+                # end
 
                 begin
                   if u_values.blank?

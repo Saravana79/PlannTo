@@ -506,6 +506,49 @@ class Advertisement < ActiveRecord::Base
     ad_reports.where(:reported_by => user.id).order("created_at desc")
   end
 
+  def self.bulk_process_impression_and_click()
+    if $redis.get("bulk_process_add_impression_is_running").to_i == 0
+      $redis.set("bulk_process_add_impression_is_running", 1)
+      $redis.expire("bulk_process_add_impression_is_running", 30.minutes)
+      length = $redis.llen("resque:queue:create_impression_and_click")
+      count = length
+
+      begin
+        add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 500)
+        cookies_arr = []
+        user_access_details = []
+
+        add_impressions.each do |each_rec|
+          count -= 1
+          begin
+            each_rec_arr = JSON.parse(each_rec)["args"]
+            each_rec_class = each_rec_arr[0]
+            each_rec_detail = each_rec_arr[1]
+
+            if each_rec_class == "AddImpression"
+              AddImpression.create_new_record(each_rec_detail)
+            elsif each_rec_class == "Click"
+              Click.create_new_record(each_rec_detail)
+            elsif each_rec_class == "VideoImpression"
+              VideoImpression.create_new_record(each_rec_detail)
+            end
+          rescue Exception => e
+            p "There was problem while running impressions process => #{e.backtrace}"
+          end
+          p "Remaining click_or_impressions Count - #{count}"
+        end
+
+        # UserAccessDetail.create(user_access_details)
+
+        $redis.ltrim("resque:queue:create_impression_and_click", add_impressions.count, -1)
+        length = length - add_impressions.count
+        p "*********************************** Remaining CookieMatch Length - #{length} **********************************"
+      end while length > 0
+      $redis.set("bulk_process_add_impression_is_running", 0)
+      Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc, "true")
+    end
+  end
+
   private
 
   def file_dimensions

@@ -15,8 +15,8 @@ class AddImpression < ActiveRecord::Base
  def self.create_new_record(obj_params)
    unless obj_params.is_a?(Hash)
      obj_params = JSON.parse(obj_params)
-     obj_params = obj_params.symbolize_keys
    end
+   obj_params = obj_params.symbolize_keys
 
    ai = AddImpression.new
    ai.id = obj_params[:imp_id]
@@ -55,12 +55,14 @@ class AddImpression < ActiveRecord::Base
    #buying list update
 
    if ai.advertisement_type != "advertisement"
-     article_content = ArticleContent.where(:url => ai.hosted_site_url).last
+     article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+inner join item_contents_relations_cache icc on icc.content_id = ac.id
+where url = '#{ai.hosted_site_url}' group by ac.id").last
 
      unless article_content.blank?
        user_id = ai.temp_user_id
        type = article_content.sub_type
-       item_ids = article_content.item_ids.join(",") rescue ""
+       item_ids = article_content.all_item_ids.to_s rescue ""
        UserAccessDetail.update_buying_list(user_id, ai.hosted_site_url, type, item_ids)
      end
    elsif ai.advertisement_type == "advertisement"

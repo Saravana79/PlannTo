@@ -159,3 +159,8 @@ desc "Update bulk cookie matching"
 task :bulk_cookie_matching_process => :environment do
   Resque.enqueue(BulkCookieMatchingProcess)
 end
+
+desc "Update bulk Impression and Click"
+task :bulk_impressions_and_clicks_process => :environment do
+  Resque.enqueue(BulkCreateImpressionAndClick)
+end

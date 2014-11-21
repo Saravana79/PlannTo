@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
 #   end
 #     },:expires_in => 2.hour
   layout "product"
-  before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
+  before_filter :authenticate_user!, :except => [:index, :compare]
 
   include FollowMethods
 #before_filter :authenticate_user!
@@ -254,7 +254,7 @@ class ItemsController < ApplicationController
         @ids[0] = "0" if @ids[0] == ""
         content_ids = ItemContentsRelationsCache.find_by_sql("select content_id, count(*) from item_contents_relations_cache INNER JOIN contents ON item_contents_relations_cache.content_id = contents.id where item_id in (#{p.join(",")}) and contents.sub_type in ('Comparisons') group by content_id having count(*) > 1 limit 15").collect(&:content_id)
         @contents = Content.where("id in (?)",content_ids).order("total_votes desc")
-        @attribute_comparision_lists = AttributeComparisonList.find(:all,:conditions => ["itemtype_id = ?", @item1.itemtype_id], :order => "sort_order")
+        @attribute_comparision_lists = AttributeComparisonList.where(:itemtype_id => @item1.itemtype_id).order("sort_order")
 
       else
 

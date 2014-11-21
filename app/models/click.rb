@@ -4,7 +4,9 @@ class Click < ActiveRecord::Base
   belongs_to :add_impression, :foreign_key => "impression_id"
 
   def self.create_new_record(obj_params)
-    obj_params = JSON.parse(obj_params)
+    unless obj_params.is_a?(Hash)
+      obj_params = JSON.parse(obj_params)
+    end
     obj_params = obj_params.symbolize_keys
 
     last_click_details = "#{obj_params[:url]}-#{obj_params[:request_referer]}-#{obj_params[:remote_ip]}"

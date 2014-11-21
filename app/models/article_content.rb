@@ -172,7 +172,7 @@ class ArticleContent < Content
   def self.create_article_content(param, user_id, remote_ip)
 
     begin
-      user = User.find_by_id(user_id)
+      user = user_id.blank? ? nil : User.find_by_id(user_id)
 
       @through_rss = false
 
@@ -253,18 +253,18 @@ class ArticleContent < Content
           #  @article.rate_it(param[:article_content][:field1],1) unless param[:article_content][:field1].nil?
           #  end
           # Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-          UserActivity.save_user_activity(user, @article.id, "created", @article.sub_type, @article.id, remote_ip) if @article.id!=nil
-          content_id = @article.id
-          if user.total_points < 10
-            @article.update_attribute('status', Content::SENT_APPROVAL)
-            @display = 'false'
-          elsif @article.url!=nil
-            Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-          else
-            Point.add_point_system(user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-          end
-          @facebook_post = param['facebook_post']
-          Follow.content_follow(@article, user) if @article.id!=nil
+          # UserActivity.save_user_activity(user, @article.id, "created", @article.sub_type, @article.id, remote_ip) if @article.id!=nil
+          # content_id = @article.id
+          # if user.total_points < 10
+          #   @article.update_attribute('status', Content::SENT_APPROVAL)
+          #   @display = 'false'
+          # elsif @article.url!=nil
+          #   Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
+          # else
+          #   Point.add_point_system(user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
+          # end
+          # @facebook_post = param['facebook_post']
+          # Follow.content_follow(@article, user) if @article.id!=nil
           # @article,@images = ArticleContent.CreateContent(@article.url,user) unless @article.url.blank?
           if param['article_content']['url'] && @article.id!=nil
             url = param['article_content']['url']
@@ -275,8 +275,7 @@ class ArticleContent < Content
           end
 
           if (@article.id != nil && !param['feed_url_id'].blank?)
-            feed_url = FeedUrl.where("id = ?", param['feed_url_id']).first
-            feed_url.update_attributes(:status => 1, :article_content_id => @article.id)
+            ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 1, article_content_id = #{@article.id}, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
           end
         else
           @tag = 'false'
@@ -284,15 +283,14 @@ class ArticleContent < Content
         end
       end
 
-      unless (@article.nil?)
-        @article.update_facebook_stats
-      end
+      # unless (@article.nil?)
+      #   @article.update_facebook_stats
+      # end
 
       return "success"
 
     rescue Exception => e
-      feed_url = FeedUrl.where("id = ?", param['feed_url_id']).first
-      feed_url.update_attributes(:status => 0)
+      ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 0, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
       return e
     end
   end

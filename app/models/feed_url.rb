@@ -452,7 +452,7 @@ class FeedUrl < ActiveRecord::Base
     return nil, article.title
   end
 
-  def auto_save_feed_urls(force_default_save=false)
+  def auto_save_feed_urls(force_default_save=false,priority=1)
     feed_url = self
     article = ArticleContent.new(:url => feed_url.url, :created_by => 1)
     title_info = feed_url.title
@@ -524,7 +524,11 @@ class FeedUrl < ActiveRecord::Base
                      :share_from_home => "", :detail => "", :articles_item_id => article_item_ids, :external => "true", :score => "0")
 
         param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
-        Resque.enqueue(ArticleContentProcessAuto, "create_article_content", Time.zone.now, param.to_json, 1, "")
+        if priority.to_i == 0
+          Resque.enqueue(ArticleContentProcessAuto, "create_article_content", Time.zone.now, param.to_json, 1, "")
+        else
+          Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, 1, "")
+        end
         feed_url.update_attributes!(:status => 1, :default_status => 5) #TODO: auto save status as 5
       end
     end
@@ -565,7 +569,7 @@ class FeedUrl < ActiveRecord::Base
         if sources_list[host]["site_status"] == false
           feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
         else
-            feed_url.auto_save_feed_urls
+            feed_url.auto_save_feed_urls(false,0)
         end
       rescue Exception => e
         p e.backtrace
