@@ -531,7 +531,7 @@ class Advertisement < ActiveRecord::Base
               impression_import << impression
             elsif each_rec_class == "Click"
               click = Click.create_new_record(each_rec_detail)
-              clicks_import << click
+              clicks_import << click unless click.blank?
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
               video_imp_import << video_imp

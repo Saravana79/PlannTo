@@ -97,19 +97,19 @@ class CookieMatch < ActiveRecord::Base
         user_access_details_import = []
         user_access_details.each do |user_access_detail|
           user_access_details_count-=1
-          user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
-          user_access_details_import << user_access_detail
+          new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+          user_access_details_import << new_user_access_detail
           #user_access_detail.update_buying_list_in_redis(source_categories)
 
           article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
-where url = '#{user_access_detail.ref_url}' group by ac.id").last
+where url = '#{new_user_access_detail.ref_url}' group by ac.id").last
 
           unless article_content.blank?
-            user_id = user_access_detail.plannto_user_id
+            user_id = new_user_access_detail.plannto_user_id
             type = article_content.sub_type
             item_ids = article_content.all_item_ids.to_s rescue ""
-            UserAccessDetail.update_buying_list(user_id, user_access_detail.ref_url, type, item_ids, source_categories)
+            UserAccessDetail.update_buying_list(user_id, new_user_access_detail.ref_url, type, item_ids, source_categories)
           end
           p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end

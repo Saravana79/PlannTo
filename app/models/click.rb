@@ -12,7 +12,7 @@ class Click < ActiveRecord::Base
     last_click_details = "#{obj_params[:url]}-#{obj_params[:request_referer]}-#{obj_params[:remote_ip]}"
 
     last_20_clicks = $redis_rtb.lrange("ads_last_20_clicks", 0, 19)
-
+    click = nil
     unless last_20_clicks.include?(last_click_details)
       click = Click.new
       click.impression_id = obj_params[:impression_id]
