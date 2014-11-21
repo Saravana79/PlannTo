@@ -1126,6 +1126,7 @@ end
     page = 1
     begin
       p_v_records = Item.paginate_by_sql(query_to_get_price_and_vendor_ids, :page => page, :per_page => batch_size)
+      redis_values_arr = []
 
       p_v_records.each do |each_rec|
         redis_key = "items:#{each_rec.item_id}"
@@ -1145,9 +1146,15 @@ end
         log.debug "\n"
 
         # redis_values = val_hash.flatten
-
-        $redis_rtb.HMSET(redis_key, redis_values)
+        redis_values_arr << [redis_key, redis_values]
       end
+
+      $redis_rtb.pipelined do
+        redis_values_arr.each do |arr_val|
+          $redis_rtb.HMSET(arr_val[0], arr_val[1])
+        end
+      end
+
       page += 1
     end while !p_v_records.empty?
 

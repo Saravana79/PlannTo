@@ -514,7 +514,7 @@ class Advertisement < ActiveRecord::Base
       count = length
 
       begin
-        add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 500)
+        add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
 
         impression_import = []
         clicks_import = []
