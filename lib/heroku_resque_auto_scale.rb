@@ -17,7 +17,11 @@ module HerokuResqueAutoScale
       end
 
       def job_count
-        Resque.info[:pending].to_i
+        rescue_count = Resque.info[:pending].to_i
+        impression_count = $redis.llen("resque:queue:create_impression_and_click")
+        cookie_match_count = $redis.llen("resque:queue:cookie_matching_process")
+        count = rescue_count - impression_count - cookie_match_count
+        count < 0 ? 1 : count
       end
 
       def working_job_count
