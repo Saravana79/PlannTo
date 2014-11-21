@@ -8,7 +8,7 @@ class BulkCreateImpressionAndClick
     #begin
     log.debug "********** Start Processing BulkCreateImpressionAndClick **********"
     log.debug "********** BulkCreateImpressionAndClick Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
-    Advertisement.send("bulk_process_cookie_matching")
+    Advertisement.send("bulk_process_impression_and_click")
     log.debug "********** BulkCreateImpressionAndClick Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
     #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
