@@ -36,7 +36,7 @@ class CookieMatch < ActiveRecord::Base
   def self.bulk_process_cookie_matching()
     if $redis.get("bulk_process_cookie_matching_is_running").to_i == 0
       $redis.set("bulk_process_cookie_matching_is_running", 1)
-      $redis.expire("bulk_process_cookie_matching_is_running", 30.minutes)
+      $redis.expire("bulk_process_cookie_matching_is_running", 20.minutes)
       length = $redis.llen("resque:queue:cookie_matching_process")
       count = length
 

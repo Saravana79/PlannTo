@@ -509,7 +509,7 @@ class Advertisement < ActiveRecord::Base
   def self.bulk_process_impression_and_click()
     if $redis.get("bulk_process_add_impression_is_running").to_i == 0
       $redis.set("bulk_process_add_impression_is_running", 1)
-      $redis.expire("bulk_process_add_impression_is_running", 30.minutes)
+      $redis.expire("bulk_process_add_impression_is_running", 20.minutes)
       length = $redis.llen("resque:queue:create_impression_and_click")
       count = length
 
