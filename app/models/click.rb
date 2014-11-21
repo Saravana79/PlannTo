@@ -32,10 +32,10 @@ class Click < ActiveRecord::Base
       click.sid = obj_params[:sid]
       click.created_at = obj_params[:time]
       click.updated_at = obj_params[:time]
-      click.save!
       Click.redis_push(last_click_details)
       push_to_redis(click.temp_user_id, click.advertisement_id) if (!click.temp_user_id.blank? && !click.advertisement_id.blank?)
     end
+    return click
   end
 
   def self.push_to_redis(user_id, advertisement_id)

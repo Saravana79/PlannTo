@@ -50,7 +50,6 @@ class AddImpression < ActiveRecord::Base
    ai.sid = obj_params[:sid]
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
-   ai.save
 
    #buying list update
 
@@ -69,7 +68,7 @@ where url = '#{ai.hosted_site_url}' group by ac.id").last
      push_to_redis(ai.temp_user_id, ai.advertisement_id) if (!ai.temp_user_id.blank? && !ai.advertisement_id.blank?)
    end
 
-   # Advertisement.check_and_update_act_spent_budget_in_redis(ai.advertisement_id, obj_params[:winning_price_enc])
+   return ai
  end
 
   def self.push_to_redis(user_id, advertisement_id)

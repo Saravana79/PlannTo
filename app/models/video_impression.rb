@@ -26,7 +26,7 @@ class VideoImpression < ActiveRecord::Base
     vi.sid = obj_params[:sid]
     vi.created_at = obj_params[:time]
     vi.updated_at = obj_params[:time]
-    vi.save!
+    return vi
   end
   
   def self.add_video_impression_to_resque(param, remote_ip)

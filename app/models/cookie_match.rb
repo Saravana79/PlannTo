@@ -36,7 +36,7 @@ class CookieMatch < ActiveRecord::Base
   def self.bulk_process_cookie_matching()
     if $redis.get("bulk_process_cookie_matching_is_running").to_i == 0
       $redis.set("bulk_process_cookie_matching_is_running", 1)
-      $redis.expire("bulk_process_cookie_matching_is_running", 20.minutes)
+      $redis.expire("bulk_process_cookie_matching_is_running", 30.minutes)
       length = $redis.llen("resque:queue:cookie_matching_process")
       count = length
 
@@ -44,7 +44,7 @@ class CookieMatch < ActiveRecord::Base
       source_categories.default = {"pattern" => ""}
 
       begin
-        cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 2000)
+        cookie_details = $redis.lrange("resque:queue:cookie_matching_process", 0, 3000)
         cookies_arr = []
         user_access_details = []
 
@@ -94,9 +94,11 @@ class CookieMatch < ActiveRecord::Base
         end
 
         user_access_details_count = user_access_details.count
+        user_access_details_import = []
         user_access_details.each do |user_access_detail|
           user_access_details_count-=1
-          user_access_detail = UserAccessDetail.create(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+          user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+          user_access_details_import << user_access_detail
           #user_access_detail.update_buying_list_in_redis(source_categories)
 
           article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
@@ -112,7 +114,7 @@ where url = '#{user_access_detail.ref_url}' group by ac.id").last
           p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end
 
-        # UserAccessDetail.create(user_access_details)
+        UserAccessDetail.import(user_access_details_import)
 
         $redis.ltrim("resque:queue:cookie_matching_process", cookie_details.count, -1)
         length = length - cookie_details.count
