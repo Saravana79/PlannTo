@@ -21,7 +21,7 @@ module HerokuResqueAutoScale
         impression_count = $redis.llen("resque:queue:create_impression_and_click")
         cookie_match_count = $redis.llen("resque:queue:cookie_matching_process")
         count = rescue_count - impression_count - cookie_match_count
-        count < 0 ? 1 : count
+        count < 0 ? 2 : count
       end
 
       def working_job_count
@@ -52,11 +52,11 @@ module HerokuResqueAutoScale
     [
         {
             :workers => 1, # This many workers
-            :job_count => 1 # For this many jobs or more, until the next level
+            :job_count => 3 # For this many jobs or more, until the next level
         },
         {
             :workers => 2,
-            :job_count => 5
+            :job_count => 3
         },
         {
             :workers => 3,
