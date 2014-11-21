@@ -154,3 +154,23 @@ items.each do |item|
     end
   end
 end
+
+
+## Create product by TV
+
+csv_details = CSV.read("/home/sivakumar/Change in name_TV_21.csv")
+itemtype = "Television"
+itemtype_id = Itemtype.find_by_itemtype(itemtype.camelize).id
+
+csv_details.each_with_index do |csv_detail, index|
+  p csv_detail
+  id = csv_detail[0]
+  name = csv_detail[1]
+  new_name = csv_detail[2]
+  item = itemtype.camelize.constantize.find_by_id(id)
+  if !item.blank?
+    item.itemtype_id = itemtype_id
+    item.name = new_name
+    item.save!(:validate => false)
+  end
+end

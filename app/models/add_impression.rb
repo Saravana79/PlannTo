@@ -64,8 +64,6 @@ where url = '#{ai.hosted_site_url}' group by ac.id").last
        item_ids = article_content.all_item_ids.to_s rescue ""
        UserAccessDetail.update_buying_list(user_id, ai.hosted_site_url, type, item_ids)
      end
-   elsif ai.advertisement_type == "advertisement"
-     push_to_redis(ai.temp_user_id, ai.advertisement_id) if (!ai.temp_user_id.blank? && !ai.advertisement_id.blank?)
    end
 
    return ai

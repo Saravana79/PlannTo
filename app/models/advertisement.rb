@@ -539,12 +539,26 @@ class Advertisement < ActiveRecord::Base
           rescue Exception => e
             p "There was problem while running impressions process => #{e.backtrace}"
           end
-
-          AddImpression.import(impression_import)
-          Click.import(clicks_import)
-          VideoImpression.import(video_imp_import)
           p "Remaining click_or_impressions Count - #{count}"
         end
+
+        # Impression Process
+        AddImpression.import(impression_import)
+
+        $redis_rtb.pipelined do
+          impression_import.each do |each_impression|
+            if (each_impression.advertisement_type == "advertisement" && !each_impression.temp_user_id.blank? && !each_impression.advertisement_id.blank?)
+              $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",1)
+              $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",2.weeks)
+
+              $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1)
+              $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1.day)
+            end
+          end
+        end
+
+        Click.import(clicks_import)
+        VideoImpression.import(video_imp_import)
 
         $redis.ltrim("resque:queue:create_impression_and_click", add_impressions.count, -1)
         length = length - add_impressions.count
