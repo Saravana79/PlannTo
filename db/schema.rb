@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141117124509) do
+ActiveRecord::Schema.define(:version => 20141122110019) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -34,6 +34,12 @@ ActiveRecord::Schema.define(:version => 20141117124509) do
     t.integer  "reported_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "ad_statistics", :force => true do |t|
+    t.date    "event_date"
+    t.string  "event_type"
+    t.integer "count"
   end
 
   create_table "ad_video_details", :force => true do |t|
@@ -301,7 +307,7 @@ ActiveRecord::Schema.define(:version => 20141117124509) do
     t.string   "sid"
   end
 
-  add_index "clicks", ["advertisement_id"], :name => "index_clicks_on_advertisement_id"
+  add_index "clicks", ["timestamp"], :name => "timestamp"
 
   create_table "comments", :force => true do |t|
     t.string   "title",            :limit => 50, :default => ""
@@ -1151,7 +1157,7 @@ ActiveRecord::Schema.define(:version => 20141117124509) do
   end
 
   add_index "sourceitems", ["matchitemid"], :name => "matchitemid_itemid"
-  add_index "sourceitems", ["url"], :name => "url", :length => {"url"=>333}
+  add_index "sourceitems", ["url"], :name => "url", :length => {"url"=>255}
 
   create_table "sourceitems1", :force => true do |t|
     t.string   "name",          :limit => 100, :null => false

@@ -9,7 +9,8 @@ class CookieMatch < ActiveRecord::Base
   end
 
   def self.enqueue_cookie_matching(param, plannto_user_id)
-    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => "google"}
+    param["source"] ||= "google"
+    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => param["ref_url"], "source" => param["source"]}
     Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
   end
 
@@ -36,8 +37,10 @@ class CookieMatch < ActiveRecord::Base
   def self.bulk_process_cookie_matching()
     if $redis.get("bulk_process_cookie_matching_is_running").to_i == 0
       $redis.set("bulk_process_cookie_matching_is_running", 1)
-      $redis.expire("bulk_process_cookie_matching_is_running", 30.minutes)
       length = $redis.llen("resque:queue:cookie_matching_process")
+      expire_time = length/100000
+      expire_time = expire_time.to_i == 0 ? 30.minutes : expire_time.to_i.hour
+      $redis.expire("bulk_process_cookie_matching_is_running", expire_time)
       count = length
 
       source_categories = JSON.parse($redis.get("source_categories_pattern"))

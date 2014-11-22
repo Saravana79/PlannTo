@@ -164,3 +164,8 @@ desc "Update bulk Impression and Click"
 task :bulk_impressions_and_clicks_process => :environment do
   Resque.enqueue(BulkCreateImpressionAndClick)
 end
+
+desc "AdStatisticProcess Update Daily "
+task :ad_statistic_process_update => :environment do
+  Resque.enqueue(AdStatisticProcessDaily, "process_ad_statistic")
+end

@@ -1,0 +1,8 @@
+var pixel = {
+    pixel_src:"<%= @img_src.html_safe %>",
+    parse: function(a){
+        var plannto_pixel_img = new Image();
+        plannto_pixel_img.onload = function() {};
+        plannto_pixel_img.src = pixel.pixel_src
+    }
+}
