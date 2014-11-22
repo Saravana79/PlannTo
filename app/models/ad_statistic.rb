@@ -34,7 +34,7 @@ class AdStatistic < ActiveRecord::Base
   end
 
   def self.get_redis_keys(day)
-    redis_keys = ["adengine:impressions:#{day}", "adengine:impressions:badspot:#{day}", "adengine:impressions:biddablebuyerimpression:#{day}", "adengine:impressions:missingad:#{day}", "adengine:impressions:ownerimpression:#{day}", "adengine:impressions:missingurl:#{day}", "adengine:impressions:anonymous:#{day}", "adengine:impressions:missingbidsduetouser:#{day}", "adengine:impressions:missingduetohighcpm:#{day}"]
+    redis_keys = ["adengine:impressions:#{day}", "adengine:impressions:badspot:#{day}", "adengine:impressions:biddablebuyerimpression:#{day}", "adengine:impressions:missingad:#{day}", "adengine:impressions:ownerimpression:#{day}", "adengine:impressions:missingurl:#{day}", "adengine:impressions:anonymous:#{day}", "adengine:impressions:missingbidsduetouser:#{day}", "adengine:impressions:missingduetohighcpm:#{day}", "adengine:impressions:possibleremarketing:#{day}"]
 
     [*1..10].each do |each_num|
       redis_keys << "adengine:impressions:BidForUserImpressionCount#{each_num}:#{day}"

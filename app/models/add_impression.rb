@@ -3,6 +3,8 @@ class AddImpression < ActiveRecord::Base
   require 'facets/string/xor'
   require 'openssl'
 
+  attr_accessor :t, :r
+
   include ActiveUUID::UUID
   self.primary_key = "id"
   
@@ -50,6 +52,9 @@ class AddImpression < ActiveRecord::Base
    ai.sid = obj_params[:sid]
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
+
+   ai.t = obj_params[:t].to_i
+   ai.r = obj_params[:r].to_i
 
    #buying list update
 
@@ -263,10 +268,10 @@ where url = '#{ai.hosted_site_url}' group by ac.id").last
    end
  end
 
-  def self.add_impression_to_resque(impression_type, item_id, request_referer, user_id, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil)
+  def self.add_impression_to_resque(impression_type, item_id, request_referer, user_id, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil, t=nil, r=nil)
     impression_id = SecureRandom.uuid
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now, :user => nil, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
-                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => nil, :winning_price_enc => winning_price_enc, :sid => sid}.to_json
+                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => nil, :winning_price_enc => winning_price_enc, :sid => sid, :t => t, :r => r}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
     # AddImpression.create_new_record(impression_params)
     return impression_id

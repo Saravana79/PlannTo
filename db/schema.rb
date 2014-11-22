@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141122110019) do
+ActiveRecord::Schema.define(:version => 20141122134030) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -619,6 +619,14 @@ ActiveRecord::Schema.define(:version => 20141122110019) do
     t.string   "ad_size"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "impression_details", :force => true do |t|
+    t.uuid    "impression_id"
+    t.integer "tagging"
+    t.integer "retargeting"
+    t.integer "pre_appearance_count"
+    t.string  "additional_details"
   end
 
   create_table "impression_missings", :force => true do |t|

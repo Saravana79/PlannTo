@@ -286,7 +286,7 @@ class Advertisement < ActiveRecord::Base
 
     if param[:is_test] != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid])
+                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r])
       Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param[:wp])
     end
     return @impression_id
@@ -517,6 +517,7 @@ class Advertisement < ActiveRecord::Base
         add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
 
         impression_import = []
+        ad_impressions_list = []
         clicks_import = []
         video_imp_import = []
         add_impressions.each do |each_rec|
@@ -529,6 +530,9 @@ class Advertisement < ActiveRecord::Base
             if each_rec_class == "AddImpression"
               impression = AddImpression.create_new_record(each_rec_detail)
               impression_import << impression
+              if impression.advertisement_type == "advertisement"
+                ad_impressions_list << impression
+              end
             elsif each_rec_class == "Click"
               click = Click.create_new_record(each_rec_detail)
               clicks_import << click unless click.blank?
@@ -544,6 +548,22 @@ class Advertisement < ActiveRecord::Base
 
         # Impression Process
         AddImpression.import(impression_import)
+
+        ad_impressions_list_values = $redis_rtb.pipelined do
+          ad_impressions_list.each do |each_impression|
+            $redis_rtb.get("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}")
+          end
+        end
+
+        impression_details = []
+        ad_impressions_list.each_with_index do |imp, index|
+          appearance_count = ad_impressions_list_values[index].to_i
+          if (imp.t == 1 || imp.r == 1 || appearance_count > 0)
+            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count)
+          end
+        end
+
+        ImpressionDetail.import(impression_details)
 
         $redis_rtb.pipelined do
           impression_import.each do |each_impression|
