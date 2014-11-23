@@ -198,7 +198,7 @@ class AdvertisementsController < ApplicationController
 
   def demo
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-    params[:ads_id] ||= 5
+    params[:ads_id] ||= 3
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"
     render :layout => false
@@ -206,7 +206,7 @@ class AdvertisementsController < ApplicationController
 
   def vendor_demo
     params[:ref_url] ||= ""
-    params[:ads_id] ||= 21
+    params[:ads_id] ||= 3
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"
     params[:item_id] ||= "13789,9955,9921,15452,16559"
