@@ -10,7 +10,7 @@ class PixelsController < ApplicationController
   end
 
   def pixel_matching
-    CookieMatch.enqueue_pixel_matching(params, cookies[:plan_to_temp_user_id])
+    #CookieMatch.enqueue_pixel_matching(params, cookies[:plan_to_temp_user_id])
     redirect_to "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}"
   end
 
