@@ -67,7 +67,7 @@ where url = '#{ai.hosted_site_url}' group by ac.id").last
        user_id = ai.temp_user_id
        type = article_content.sub_type
        item_ids = article_content.all_item_ids.to_s rescue ""
-       UserAccessDetail.update_buying_list(user_id, ai.hosted_site_url, type, item_ids)
+       UserAccessDetail.update_buying_list(user_id, ai.hosted_site_url, type, item_ids, nil, "google")
      end
    end
 

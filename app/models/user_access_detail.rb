@@ -9,11 +9,11 @@ class UserAccessDetail < ActiveRecord::Base
       user_id = plannto_user_id
       type = article_content.sub_type
       item_ids = article_content.item_ids.join(",") rescue ""
-      UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories)
+      UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, source)
     end
   end
 
-  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil)
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil, source="google")
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     base_item_ids = Item.get_base_items_from_config()
     # source_categories = SourceCategory.get_source_category_with_paginations()
@@ -87,11 +87,16 @@ class UserAccessDetail < ActiveRecord::Base
 
         # if !old_buying_list.blank? || !buying_list.blank?
           u_values["buyinglist"] = buying_list.join(",")
+          existing_source = u_values["source"].to_s
+          existing_source = existing_source.split(",").compact
+          existing_source << source
+          new_source = existing_source.uniq
+          u_values["source"] = new_source.join(",")
           items_hash = u_values.select {|k,_| k.include?("_c")}
           items_count = items_hash.count
           all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
           all_item_ids = all_item_ids.join(",")
-          temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
+          temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s, "source" => new_source.join(",")}
           temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
           redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
         # end

@@ -15,8 +15,13 @@ class CookieMatch < ActiveRecord::Base
   end
 
   def self.enqueue_pixel_matching(param, plannto_user_id)
-    valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
-    Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+    u_key = "u:ac:plannto:#{plannto_user_id}"
+    u_values = $redis.hgetall(u_key)
+
+    if !u_values.blank?
+      valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
+      Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+    end
   end
 
   def self.process_cookie_matching(param)
@@ -112,7 +117,7 @@ where url = '#{new_user_access_detail.ref_url}' group by ac.id").last
             user_id = new_user_access_detail.plannto_user_id
             type = article_content.sub_type
             item_ids = article_content.all_item_ids.to_s rescue ""
-            UserAccessDetail.update_buying_list(user_id, new_user_access_detail.ref_url, type, item_ids, source_categories)
+            UserAccessDetail.update_buying_list(user_id, new_user_access_detail.ref_url, type, item_ids, source_categories, new_user_access_detail.source)
           end
           p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end
