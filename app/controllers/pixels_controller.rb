@@ -11,7 +11,7 @@ class PixelsController < ApplicationController
 
   def pixel_matching
     CookieMatch.enqueue_pixel_matching(params, cookies[:plan_to_temp_user_id])
-    redirect_to "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}"
+    redirect_to "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_push=#{params[:google_push]}&google_ula=8326120"
   end
 
   def vendor_page
@@ -19,9 +19,9 @@ class PixelsController < ApplicationController
     @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
     ref_url = request.referer
     if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-      @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url} width=1px height=1px"
+      @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
     else
-      @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url} width=1px height=1px"
+      @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120"
     end
 
     respond_to do |format|

@@ -294,7 +294,7 @@ class AdvertisementsController < ApplicationController
               if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
                 cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' width=1px height=1px />")
               else
-                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' width=1px height=1px />")
+                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120' width=1px height=1px />")
               end
             else
               #remove 1x1 pixel image
@@ -306,7 +306,7 @@ class AdvertisementsController < ApplicationController
               if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
                 cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' width=1px height=1px />")
               else
-                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' width=1px height=1px />")
+                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120' width=1px height=1px />")
               end
             else
               #remove 1x1 pixel image
@@ -318,7 +318,7 @@ class AdvertisementsController < ApplicationController
               if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
                 cache = cache.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' width=1px height=1px />\n</head>")
               else
-                cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' width=1px height=1px />\n</head>")
+                cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}&google_ula=8326120' width=1px height=1px />\n</head>")
               end
             end
           end

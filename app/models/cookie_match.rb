@@ -15,7 +15,7 @@ class CookieMatch < ActiveRecord::Base
   end
 
   def self.enqueue_pixel_matching(param, plannto_user_id)
-    u_key = "u:ac:plannto:#{plannto_user_id}"
+    u_key = "u:ac:#{param["google_gid"]}"
     u_values = $redis.hgetall(u_key)
 
     if !u_values.blank?
