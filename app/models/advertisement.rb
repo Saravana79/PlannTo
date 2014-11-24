@@ -577,7 +577,17 @@ class Advertisement < ActiveRecord::Base
           end
         end
 
+        clicks_details = []
+        clicks_import.each do |each_click|
+          if !each_click.t.blank? || !each_click.r.blank? || each_click.ic.to_i >0
+            click_detail = ClickDetail.new(:tagging => each_click.t, :retargeting => each_click.r, :pre_appearance_count => each_click.ic)
+            clicks_details << click_detail
+          end
+        end
+
         Click.import(clicks_import)
+        ClickDetail.import(clicks_details)
+
         VideoImpression.import(video_imp_import)
 
         $redis.ltrim("resque:queue:create_impression_and_click", add_impressions.count, -1)

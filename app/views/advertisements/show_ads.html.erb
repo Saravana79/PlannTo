@@ -7,9 +7,9 @@
 
   <% if (params[:t].to_i == 1) %>
     <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
-        <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" />
+        <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" width=1px height=1px />
     <% else %>
-        <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>" />
+        <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>" width=1px height=1px />
     <% end %>
   <% end %>
 </head>

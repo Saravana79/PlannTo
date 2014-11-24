@@ -38,7 +38,7 @@
                     
 
                     <p class="btn">
-                      <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id]) %>
+                      <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                       <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
                       <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
                         Now</a>

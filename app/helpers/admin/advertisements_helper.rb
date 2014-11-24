@@ -80,12 +80,12 @@ module Admin::AdvertisementsHelper
     return status, displaycount, activate_tab
   end
 
-  def get_ad_url(item_detail_id, impression_id, ref_url, sid, ads_id)
+  def get_ad_url(item_detail_id, impression_id, ref_url, sid, ads_id, param={})
     ad_url = ""
     if @is_test == "true"
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :is_test => 'true')
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true')
     else
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url)
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic])
     end
     ad_url
   end

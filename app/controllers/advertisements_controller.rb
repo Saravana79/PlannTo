@@ -247,7 +247,7 @@ class AdvertisementsController < ApplicationController
     params[:page_type] ||= ""
     params[:size] ||= ""
     params[:click_url] ||= ""
-    params[:t] ||= 0
+
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
@@ -292,9 +292,9 @@ class AdvertisementsController < ApplicationController
           if !cache.match(/<img src=\"https:\/\/cm.g.doubleclick.net.*/).blank?
             if (params[:t].to_i == 1)
               if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' width=1px height=1px />")
               else
-                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />")
+                cache = cache.gsub(/<img src=\"https:\/\/cm.g.doubleclick.net.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' width=1px height=1px />")
               end
             else
               #remove 1x1 pixel image
@@ -304,9 +304,9 @@ class AdvertisementsController < ApplicationController
           elsif !cache.match(/<img src=\"https:\/\/www.plannto.com.*/).blank?
             if (params[:t].to_i == 1)
               if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />")
+                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' width=1px height=1px />")
               else
-                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />")
+                cache = cache.gsub(/<img src=\"https:\/\/www.plannto.com.*/, "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' width=1px height=1px />")
               end
             else
               #remove 1x1 pixel image
@@ -316,9 +316,9 @@ class AdvertisementsController < ApplicationController
           else
             if (params[:t].to_i == 1)
               if  !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-                cache = cache.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' />\n</head>")
+                cache = cache.gsub("</head>", "<img src='https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=google&ref_url=#{params[:ref_url]}' width=1px height=1px />\n</head>")
               else
-                cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' />\n</head>")
+                cache = cache.gsub("</head>", "<img src='https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=#{params[:ref_url]}' width=1px height=1px />\n</head>")
               end
             end
           end
