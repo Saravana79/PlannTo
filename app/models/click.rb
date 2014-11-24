@@ -34,14 +34,16 @@ class Click < ActiveRecord::Base
       click.sid = obj_params[:sid]
       click.created_at = obj_params[:time]
       click.updated_at = obj_params[:time]
+
+
+      # extra params
+      click.t = obj_params[:t]
+      click.r = obj_params[:r]
+      click.ic = obj_params[:ic]
+
       Click.redis_push(last_click_details)
       push_to_redis(click.temp_user_id, click.advertisement_id) if (!click.temp_user_id.blank? && !click.advertisement_id.blank?)
     end
-
-    # extra params
-    click.t = obj_params[:t]
-    click.r = obj_params[:r]
-    click.ic = obj_params[:ic]
 
     return click
   end
