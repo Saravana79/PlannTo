@@ -579,11 +579,15 @@ class Advertisement < ActiveRecord::Base
 
         clicks_details = []
         clicks_import.each do |each_click|
-          if !each_click.t.blank? || !each_click.r.blank? || each_click.ic.to_i >0
-            clicks_import = clicks_import - [each_click]
-            each_click.save!
-            click_detail = ClickDetail.new(:click_id => each_click.reload.id, :tagging => each_click.t, :retargeting => each_click.r, :pre_appearance_count => each_click.ic)
-            clicks_details << click_detail
+          begin
+            if !each_click.t.blank? || !each_click.r.blank? || each_click.ic.to_i >0
+              clicks_import = clicks_import - [each_click]
+              each_click.save!
+              click_detail = ClickDetail.new(:click_id => each_click.reload.id, :tagging => each_click.t, :retargeting => each_click.r, :pre_appearance_count => each_click.ic)
+              clicks_details << click_detail
+            end
+          rescue Exception => e
+            p "Problem while creating click detail"
           end
         end
 
