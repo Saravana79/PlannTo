@@ -51,7 +51,7 @@ class CookieMatch < ActiveRecord::Base
       $redis.expire("bulk_process_cookie_matching_is_running", expire_time)
       count = length
 
-      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/"]
+      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/out/sendtostore.php?top_category=", "http://coupons.mysmartprice.com/", "http://www.mysmartprice.com/m/custom_list.php?", "http://www.mysmartprice.com/deals/", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/", "/pricelist/"]
       existing_pattern = ["mspid=<pattern_val>", "-msp=<pattern_val>", "-mst=<pattern_val>-other"]
 
       source_categories = JSON.parse($redis.get("source_categories_pattern"))
@@ -102,9 +102,9 @@ class CookieMatch < ActiveRecord::Base
         end
 
         $redis_rtb.pipelined do
-          cookies_arr.each do |cookie_detail|
-            $redis_rtb.set("cm:#{cookie_detail['google_id']}", cookie_detail["plannto_user_id"])
-            $redis_rtb.expire("cm:#{cookie_detail['google_id']}", 2.weeks)
+          imported_values.each do |cookie_detail|
+            $redis_rtb.set("cm:#{cookie_detail.google_user_id}", cookie_detail.plannto_user_id)
+            $redis_rtb.expire("cm:#{cookie_detail.google_user_id}", 2.weeks)
           end
         end
 
