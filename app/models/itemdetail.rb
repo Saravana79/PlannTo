@@ -308,14 +308,14 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         @item_detail = Itemdetail.find_or_initialize_by_url(url)
         if !@item_detail.new_record?
           have_to_create_image = @item_detail.Image.blank? ? true : false
-          status = top_product_ids.include?(id.to_i) ? 1 : 6
+          status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
           @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
         else
           source_item = Sourceitem.find_or_initialize_by_url(url)
           if source_item.new_record?
             source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
           elsif source_item.verified && !source_item.matchitemid.blank?
-            status = top_product_ids.include?(id.to_i) ? 1 : 6
+            status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
             @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
             have_to_create_image = true
           end
