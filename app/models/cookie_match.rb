@@ -51,7 +51,7 @@ class CookieMatch < ActiveRecord::Base
       $redis.expire("bulk_process_cookie_matching_is_running", expire_time)
       count = length
 
-      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/out/sendtostore.php?top_category=", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/", "/pricelist/", "http://coupons.mysmartprice.com/", "http://www.mysmartprice.com/m/custom_list.php?", "http://www.mysmartprice.com/deals/", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/out/sendtostore.php?dealid=", "http://www.mysmartprice.com/care/"]
+      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/out/sendtostore.php?top_category=", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/", "/pricelist/", "http://coupons.mysmartprice.com/", "http://www.mysmartprice.com/m/custom_list.php?", "http://www.mysmartprice.com/deals/", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/out/sendtostore.php?dealid=", "http://www.mysmartprice.com/care/", "http://www.mysmartprice.com/m/search.php"]
       existing_pattern = ["mspid=<pattern_val>", "-msp=<pattern_val>", "-mst<pattern_val>-other"]
 
       source_categories = JSON.parse($redis.get("source_categories_pattern"))
@@ -96,6 +96,7 @@ class CookieMatch < ActiveRecord::Base
 
         result = CookieMatch.import(imported_values)
 
+        #TODO: have to delete duplicate records 
         # result.failed_instances.each do |cookie_detail|
         #   cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
         #   cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
@@ -124,7 +125,8 @@ class CookieMatch < ActiveRecord::Base
 
           msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
           if !msp_id.blank?
-            item_detail = Itemdetail.where(:additional_details => msp_id).last
+            site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
+            item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").last
 
             unless item_detail.blank?
               user_id = new_user_access_detail.plannto_user_id
