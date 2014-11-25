@@ -112,12 +112,22 @@ class CookieMatch < ActiveRecord::Base
           article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{new_user_access_detail.ref_url}' group by ac.id").last
+          ref_url = new_user_access_detail.ref_url
+          if new_user_access_detail.source == "mysmartprice" && article_content.blank?
+            new_ref_url = ref_url.gsub(/-other$/, '')
+            if new_ref_url != ref_url
+              ref_url = new_ref_url
+              article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+inner join item_contents_relations_cache icc on icc.content_id = ac.id
+where url = '#{ref_url}' group by ac.id").last
+            end
+          end
 
           unless article_content.blank?
             user_id = new_user_access_detail.plannto_user_id
             type = article_content.sub_type
             item_ids = article_content.all_item_ids.to_s rescue ""
-            UserAccessDetail.update_buying_list(user_id, new_user_access_detail.ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+            UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
           end
           p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end
