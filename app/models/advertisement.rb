@@ -520,6 +520,7 @@ class Advertisement < ActiveRecord::Base
         ad_impressions_list = []
         clicks_import = []
         video_imp_import = []
+        non_ad_impressions_list = []
         add_impressions.each do |each_rec|
           count -= 1
           begin
@@ -532,6 +533,8 @@ class Advertisement < ActiveRecord::Base
               impression_import << impression
               if impression.advertisement_type == "advertisement"
                 ad_impressions_list << impression
+              elsif impression.advertisement_type != "advertisement"
+                non_ad_impressions_list << impression
               end
             elsif each_rec_class == "Click"
               click = Click.create_new_record(each_rec_detail)
@@ -574,6 +577,33 @@ class Advertisement < ActiveRecord::Base
               $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1)
               $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1.day)
             end
+          end
+        end
+
+
+        #buying list update for non ad impressions
+
+        redis_rtb_hash = {}
+        non_ad_impressions_list.each do |impression|
+          article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+inner join item_contents_relations_cache icc on icc.content_id = ac.id
+where url = '#{impression.hosted_site_url}' group by ac.id").last
+
+          unless article_content.blank?
+            user_id = impression.temp_user_id
+            type = article_content.sub_type
+            item_ids = article_content.all_item_ids.to_s rescue ""
+            redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "google")
+            redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+          end
+        end
+
+        # Redis Rtb update
+        $redis_rtb.pipelined do
+          redis_rtb_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
+            $redis_rtb.hincrby(key, "ap_c", 1)
+            $redis_rtb.expire(key, 2.weeks)
           end
         end
 

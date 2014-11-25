@@ -51,8 +51,8 @@ class CookieMatch < ActiveRecord::Base
       $redis.expire("bulk_process_cookie_matching_is_running", expire_time)
       count = length
 
-      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/out/sendtostore.php?top_category=", "http://coupons.mysmartprice.com/", "http://www.mysmartprice.com/m/custom_list.php?", "http://www.mysmartprice.com/deals/", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/", "/pricelist/"]
-      existing_pattern = ["mspid=<pattern_val>", "-msp=<pattern_val>", "-mst=<pattern_val>-other"]
+      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/out/sendtostore.php?top_category=", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/", "/pricelist/", "http://coupons.mysmartprice.com/", "http://www.mysmartprice.com/m/custom_list.php?", "http://www.mysmartprice.com/deals/", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/out/sendtostore.php?dealid=", "http://www.mysmartprice.com/care/"]
+      existing_pattern = ["mspid=<pattern_val>", "-msp=<pattern_val>", "-mst<pattern_val>-other"]
 
       source_categories = JSON.parse($redis.get("source_categories_pattern"))
       source_categories.default = {"pattern" => ""}
@@ -96,10 +96,10 @@ class CookieMatch < ActiveRecord::Base
 
         result = CookieMatch.import(imported_values)
 
-        result.failed_instances.each do |cookie_detail|
-          cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
-          cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
-        end
+        # result.failed_instances.each do |cookie_detail|
+        #   cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
+        #   cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
+        # end
 
         $redis_rtb.pipelined do
           imported_values.each do |cookie_detail|
@@ -110,12 +110,13 @@ class CookieMatch < ActiveRecord::Base
 
         user_access_details_count = user_access_details.count
         user_access_details_import = []
+        redis_rtb_hash = {}
         user_access_details.each do |user_access_detail|
           p "Remaining UserAccessDetail Count - #{user_access_details_count}"
           user_access_details_count-=1
           new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
           ref_url = new_user_access_detail.ref_url.to_s
-          including_skip_val = !skip_urls.select {|each_url| ref_url.include?(each_url)}.blank? rescue false
+          including_skip_val = skip_urls.any? { |word| ref_url.include?(word) }
 
           next if including_skip_val
 
@@ -134,28 +135,30 @@ class CookieMatch < ActiveRecord::Base
               end
 
               item_ids = item_detail.itemid.to_s rescue ""
-              UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+              redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
             end
           else
             article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{ref_url}' group by ac.id").last
-            if new_user_access_detail.source == "mysmartprice" && article_content.blank?
-              new_ref_url = ref_url.gsub(/-other$/, '')
-              if new_ref_url != ref_url
-                ref_url = new_ref_url
-                article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
-inner join item_contents_relations_cache icc on icc.content_id = ac.id
-where url = '#{ref_url}' group by ac.id").last
-              end
-            end
 
             unless article_content.blank?
               user_id = new_user_access_detail.plannto_user_id
               type = article_content.sub_type
               item_ids = article_content.all_item_ids.to_s rescue ""
-              UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+              redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
             end
+          end
+        end
+
+        # Redis Rtb update
+        $redis_rtb.pipelined do
+          redis_rtb_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
+            $redis_rtb.hincrby(key, "ap_c", 1)
+            $redis_rtb.expire(key, 2.weeks)
           end
         end
 
@@ -171,7 +174,7 @@ where url = '#{ref_url}' group by ac.id").last
 
   def self.get_mspid_from_existing_pattern(existing_pattern, ref_url)
     existing_pattern.each do |pattern|
-      msp_id = FeedUrl.get_value_from_pattern(ref_url, "mspid=<pattern_val>")
+      msp_id = FeedUrl.get_value_from_pattern(ref_url, pattern)
       return msp_id if !msp_id.blank? && msp_id.to_s.is_an_integer?
     end
     return nil

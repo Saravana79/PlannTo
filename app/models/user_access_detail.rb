@@ -109,13 +109,14 @@ class UserAccessDetail < ActiveRecord::Base
       end
     end
 
-    $redis_rtb.pipelined do
-      redis_rtb_hash.each do |key, val|
-        $redis_rtb.hmset(key, val.flatten)
-        $redis_rtb.hincrby(key, "ap_c", 1)
-        $redis_rtb.expire(key, 2.weeks)
-      end
-    end
+    # $redis_rtb.pipelined do
+    #   redis_rtb_hash.each do |key, val|
+    #     $redis_rtb.hmset(key, val.flatten)
+    #     $redis_rtb.hincrby(key, "ap_c", 1)
+    #     $redis_rtb.expire(key, 2.weeks)
+    #   end
+    # end
+    redis_rtb_hash
   end
 
   def self.get_buying_list_above(above_val, u_values, buying_list_key, base_item_ids)
