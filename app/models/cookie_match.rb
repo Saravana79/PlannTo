@@ -92,13 +92,14 @@ class CookieMatch < ActiveRecord::Base
           imported_values << cookie_match
         end
 
+        imported_values = imported_values.reverse.uniq(&:plannto_user_id)
+
         result = CookieMatch.import(imported_values)
 
         result.failed_instances.each do |cookie_detail|
           cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
           cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
         end
-
 
         $redis_rtb.pipelined do
           cookies_arr.each do |cookie_detail|
@@ -110,6 +111,7 @@ class CookieMatch < ActiveRecord::Base
         user_access_details_count = user_access_details.count
         user_access_details_import = []
         user_access_details.each do |user_access_detail|
+          p "Remaining UserAccessDetail Count - #{user_access_details_count}"
           user_access_details_count-=1
           new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
           ref_url = new_user_access_detail.ref_url.to_s
@@ -119,7 +121,7 @@ class CookieMatch < ActiveRecord::Base
 
           user_access_details_import << new_user_access_detail
 
-          msp_id = get_mspid_from_existing_pattern(existing_pattern, ref_url)
+          msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
           if !msp_id.blank?
             item_detail = Itemdetail.where(:additional_details => msp_id).last
 
@@ -155,8 +157,6 @@ where url = '#{ref_url}' group by ac.id").last
               UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
             end
           end
-
-          p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end
 
         UserAccessDetail.import(user_access_details_import)

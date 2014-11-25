@@ -64,10 +64,10 @@ class UserAccessDetail < ActiveRecord::Base
         end
 
         # Above 30 Ranking
-        buying_list = get_buying_list_above(30, u_values, "buyinglist")
+        buying_list = get_buying_list_above(30, u_values, "buyinglist", base_item_ids)
 
         # Above 30 Ranking
-        buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20")
+        buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20", base_item_ids)
 
 
         # if !old_buying_list.blank? || !buying_list.blank?
@@ -118,7 +118,7 @@ class UserAccessDetail < ActiveRecord::Base
     end
   end
 
-  def self.get_buying_list_above(above_val, u_values, buying_list_key)
+  def self.get_buying_list_above(above_val, u_values, buying_list_key, base_item_ids)
     proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > above_val; key.gsub("_c",""); end}.compact
 
     old_buying_list = u_values[buying_list_key]
