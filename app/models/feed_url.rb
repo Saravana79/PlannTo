@@ -576,4 +576,11 @@ class FeedUrl < ActiveRecord::Base
       end
     end
   end
+
+  def self.get_value_from_pattern(str, pattern, pattern_val="<pattern_val>")
+    str1, str2 = pattern.split(pattern_val)
+    str1 = Regexp.escape(str1.to_s)
+    str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
+    str[/#{str1}(.*?)#{str2}/m,1]
+  end
 end

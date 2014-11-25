@@ -30,6 +30,8 @@ class UserAccessDetail < ActiveRecord::Base
           ranking = 5
         when "Lists", "Others"
           ranking = 2
+        when "Vendor"
+          ranking = 15
       end
 
       item_ids = item_ids.to_s.split(",")
@@ -61,32 +63,16 @@ class UserAccessDetail < ActiveRecord::Base
           end
         end
 
-        proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
+        # Above 30 Ranking
+        buying_list = get_buying_list_above(30, u_values, "buyinglist")
 
-        old_buying_list = u_values["buyinglist"]
-        buying_list = old_buying_list.to_s.split(",")
+        # Above 30 Ranking
+        buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20")
 
-        if !buying_list.blank?
-          have_to_del = []
-
-          #remove items from buyinglist which detail is expired
-          buying_list.each do |each_item|
-            if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
-              have_to_del << each_item
-            end
-          end
-
-          buying_list = buying_list - have_to_del
-          buying_list << proc_item_ids
-          buying_list = buying_list.flatten.uniq
-        else
-          buying_list = proc_item_ids
-        end
-
-        buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
         # if !old_buying_list.blank? || !buying_list.blank?
           u_values["buyinglist"] = buying_list.join(",")
+          u_values["buyinglist_20"] = buying_list_20.join(",")
           existing_source = u_values["source"].to_s
           existing_source = existing_source.split(",").compact
           existing_source << source
@@ -96,7 +82,7 @@ class UserAccessDetail < ActiveRecord::Base
           items_count = items_hash.count
           all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
           all_item_ids = all_item_ids.join(",")
-          temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s, "source" => new_source.join(",")}
+          temp_store = {"item_ids" => u_values["buyinglist"], "item_ids_20" => u_values["buyinglist_20"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s, "source" => new_source.join(",")}
           temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
           redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
         # end
@@ -118,7 +104,7 @@ class UserAccessDetail < ActiveRecord::Base
           p u_key
           p u_values
           p u_values.flatten
-          raise e
+          p e
         end
       end
     end
@@ -130,5 +116,32 @@ class UserAccessDetail < ActiveRecord::Base
         $redis_rtb.expire(key, 2.weeks)
       end
     end
+  end
+
+  def self.get_buying_list_above(above_val, u_values, buying_list_key)
+    proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > above_val; key.gsub("_c",""); end}.compact
+
+    old_buying_list = u_values[buying_list_key]
+    buying_list = old_buying_list.to_s.split(",")
+
+    if !buying_list.blank?
+      have_to_del = []
+
+      #remove items from buyinglist which detail is expired
+      buying_list.each do |each_item|
+        if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < above_val
+          have_to_del << each_item
+        end
+      end
+
+      buying_list = buying_list - have_to_del
+      buying_list << proc_item_ids
+      buying_list = buying_list.flatten.uniq
+    else
+      buying_list = proc_item_ids
+    end
+
+    buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+    buying_list
   end
 end

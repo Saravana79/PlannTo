@@ -51,6 +51,9 @@ class CookieMatch < ActiveRecord::Base
       $redis.expire("bulk_process_cookie_matching_is_running", expire_time)
       count = length
 
+      skip_urls = ["http://www.mysmartprice.com/msp/search/search.php?category=", "http://www.mysmartprice.com/men/", "http://www.mysmartprice.com/kids/", "http://www.mysmartprice.com/out/sendtostore.php?html5=1", "http://www.mysmartprice.com/accessories/", "http://www.mysmartprice.com/appliance/"]
+      existing_pattern = ["mspid=<pattern_val>", "-msp=<pattern_val>", "-mst=<pattern_val>-other"]
+
       source_categories = JSON.parse($redis.get("source_categories_pattern"))
       source_categories.default = {"pattern" => ""}
 
@@ -109,29 +112,50 @@ class CookieMatch < ActiveRecord::Base
         user_access_details.each do |user_access_detail|
           user_access_details_count-=1
           new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
-          user_access_details_import << new_user_access_detail
-          #user_access_detail.update_buying_list_in_redis(source_categories)
+          ref_url = new_user_access_detail.ref_url.to_s
+          including_skip_val = !skip_urls.select {|each_url| ref_url.include?(each_url)}.blank? rescue false
 
-          article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
-inner join item_contents_relations_cache icc on icc.content_id = ac.id
-where url = '#{new_user_access_detail.ref_url}' group by ac.id").last
-          ref_url = new_user_access_detail.ref_url
-          if new_user_access_detail.source == "mysmartprice" && article_content.blank?
-            new_ref_url = ref_url.gsub(/-other$/, '')
-            if new_ref_url != ref_url
-              ref_url = new_ref_url
-              article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+          next if including_skip_val
+
+          user_access_details_import << new_user_access_detail
+
+          msp_id = get_mspid_from_existing_pattern(existing_pattern, ref_url)
+          if !msp_id.blank?
+            item_detail = Itemdetail.where(:additional_details => msp_id).last
+
+            unless item_detail.blank?
+              user_id = new_user_access_detail.plannto_user_id
+              type = "Vendor"
+
+              if ref_url.include?("/m/single.php") || ref_url.include?("/m/single_techspec.php")
+                type = "Spec"
+              end
+
+              item_ids = item_detail.itemid.to_s rescue ""
+              UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+            end
+          else
+            article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{ref_url}' group by ac.id").last
+            if new_user_access_detail.source == "mysmartprice" && article_content.blank?
+              new_ref_url = ref_url.gsub(/-other$/, '')
+              if new_ref_url != ref_url
+                ref_url = new_ref_url
+                article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+inner join item_contents_relations_cache icc on icc.content_id = ac.id
+where url = '#{ref_url}' group by ac.id").last
+              end
+            end
+
+            unless article_content.blank?
+              user_id = new_user_access_detail.plannto_user_id
+              type = article_content.sub_type
+              item_ids = article_content.all_item_ids.to_s rescue ""
+              UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
             end
           end
 
-          unless article_content.blank?
-            user_id = new_user_access_detail.plannto_user_id
-            type = article_content.sub_type
-            item_ids = article_content.all_item_ids.to_s rescue ""
-            UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
-          end
           p "Remaining UserAccessDetail Count - #{user_access_details_count}"
         end
 
@@ -143,6 +167,14 @@ where url = '#{ref_url}' group by ac.id").last
       end while length > 0
       $redis.set("bulk_process_cookie_matching_is_running", 0)
     end
+  end
+
+  def self.get_mspid_from_existing_pattern(existing_pattern, ref_url)
+    existing_pattern.each do |pattern|
+      msp_id = FeedUrl.get_value_from_pattern(ref_url, "mspid=<pattern_val>")
+      return msp_id if !msp_id.blank? && msp_id.to_s.is_an_integer?
+    end
+    return nil
   end
 
 end
