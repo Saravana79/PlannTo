@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141124104742) do
+ActiveRecord::Schema.define(:version => 20141125074205) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -289,7 +289,7 @@ ActiveRecord::Schema.define(:version => 20141124104742) do
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
 
   create_table "click_details", :force => true do |t|
-    t.uuid    "click_id"
+    t.integer "click_id"
     t.integer "tagging"
     t.integer "retargeting"
     t.integer "pre_appearance_count"
