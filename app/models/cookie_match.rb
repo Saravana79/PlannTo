@@ -96,7 +96,7 @@ class CookieMatch < ActiveRecord::Base
 
         result = CookieMatch.import(imported_values)
 
-        #TODO: have to delete duplicate records 
+        #TODO: have to delete duplicate records
         # result.failed_instances.each do |cookie_detail|
         #   cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(cookie_detail.plannto_user_id)
         #   cookie_match.update_attributes(:google_user_id => cookie_detail.google_user_id, :match_source => cookie_detail.match_source)
@@ -113,45 +113,50 @@ class CookieMatch < ActiveRecord::Base
         user_access_details_import = []
         redis_rtb_hash = {}
         user_access_details.each do |user_access_detail|
-          p "Remaining UserAccessDetail Count - #{user_access_details_count}"
-          user_access_details_count-=1
-          new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
-          ref_url = new_user_access_detail.ref_url.to_s
-          including_skip_val = skip_urls.any? { |word| ref_url.include?(word) }
 
-          next if including_skip_val
+          begin
+            p "Remaining UserAccessDetail Count - #{user_access_details_count}"
+            user_access_details_count-=1
+            new_user_access_detail = UserAccessDetail.new(:plannto_user_id => user_access_detail["plannto_user_id"], :ref_url => user_access_detail["ref_url"], :source => user_access_detail["source"])
+            ref_url = new_user_access_detail.ref_url.to_s
+            including_skip_val = skip_urls.any? { |word| ref_url.include?(word) }
 
-          user_access_details_import << new_user_access_detail
+            next if including_skip_val
 
-          msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
-          if !msp_id.blank?
-            site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
-            item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").last
+            user_access_details_import << new_user_access_detail
 
-            unless item_detail.blank?
-              user_id = new_user_access_detail.plannto_user_id
-              type = "Vendor"
+            msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
+            if !msp_id.blank?
+              site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
+              item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").last
 
-              if ref_url.include?("/m/single.php") || ref_url.include?("/m/single_techspec.php")
-                type = "Spec"
+              unless item_detail.blank?
+                user_id = new_user_access_detail.plannto_user_id
+                type = "Vendor"
+
+                if ref_url.include?("/m/single.php") || ref_url.include?("/m/single_techspec.php")
+                  type = "Spec"
+                end
+
+                item_ids = item_detail.itemid.to_s rescue ""
+                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+                redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
               end
-
-              item_ids = item_detail.itemid.to_s rescue ""
-              redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
-              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
-            end
-          else
-            article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+            else
+              article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{ref_url}' group by ac.id").last
 
-            unless article_content.blank?
-              user_id = new_user_access_detail.plannto_user_id
-              type = article_content.sub_type
-              item_ids = article_content.all_item_ids.to_s rescue ""
-              redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
-              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+              unless article_content.blank?
+                user_id = new_user_access_detail.plannto_user_id
+                type = article_content.sub_type
+                item_ids = article_content.all_item_ids.to_s rescue ""
+                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+                redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+              end
             end
+          rescue Exception => e
+            p "There was problem in UserAccssDetail => #{e}"
           end
         end
 
