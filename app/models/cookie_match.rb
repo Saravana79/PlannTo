@@ -17,11 +17,14 @@ class CookieMatch < ActiveRecord::Base
   def self.enqueue_pixel_matching(param, plannto_user_id)
     u_key = "u:ac:#{param["google_gid"]}"
     u_values = $redis.hgetall(u_key)
+    google_ula = ""
 
     if !u_values.blank?
       valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
+      google_ula = "&google_ula=8326120"
     end
+    google_ula
   end
 
   def self.process_cookie_matching(param)
