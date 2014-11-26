@@ -1,8 +1,8 @@
 production:
   solr:
-    hostname: localhost
-    port: 8983
-    log_level: WARNING
+    hostname: index.websolr.com
+    port: 80
+    path: /solr/be892ddc4fb
 
 development:
   solr:
