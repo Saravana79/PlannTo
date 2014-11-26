@@ -9,10 +9,10 @@ class Cycle < Product
     text :name , :boost => 2.0,  :as => :name_ac do |item|
       tempName = item.name.gsub("-","")
       if (!item.alternative_name.nil?)
-        tempName = tempName + " " +item.alternative_name.gsub("-", "")
+        tempName = tempName + " " +item.alternative_name.to_s.gsub("-", "")
       end
       if (!item.hidden_alternative_name.nil?)
-        tempName =tempName + " " + item.hidden_alternative_name.gsub("-", "")
+        tempName =tempName + " " + item.hidden_alternative_name.to_s.gsub("-", "")
       end
       tempName
     end     
@@ -20,7 +20,7 @@ class Cycle < Product
        
      
     text :nameformlt do |item|
-      item.name.gsub("-", "")
+      item.name.to_s.gsub("-", "")
     end 
 
     string :status

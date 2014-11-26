@@ -16,14 +16,14 @@ class Manufacturer < Item
     end 
     
     string :alternative_name do |item|
-      item.alternative_name.gsub("-", "") rescue ''
+      item.alternative_name.to_s.gsub("-", "") rescue ''
     end  
     
     string :hidden_alternative_name do |item|
-      item.hidden_alternative_name.gsub("-", "") rescue ''
+      item.hidden_alternative_name.to_s.gsub("-", "") rescue ''
     end
     string :name do |item|
-      item.name.gsub("-", "")
+      item.name.to_s.gsub("-", "")
     end
     string :status
     integer :orderbyid  do |item|

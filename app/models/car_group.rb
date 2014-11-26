@@ -11,19 +11,19 @@ searchable :auto_index => true, :auto_remove => true  do
     end 
     
     string :alternative_name do |item|
-      item.alternative_name.gsub("-", "") rescue ""
+      item.alternative_name.to_s.to_s.gsub("-", "") rescue ""
     end  
     
     string :hidden_alternative_name do |item|
-      item.hidden_alternative_name.gsub("-", "") rescue ""
+      item.hidden_alternative_name.to_s.to_s.gsub("-", "") rescue ""
     end
     
    string :name do |item|
-      item.name.gsub("-", "")
+      item.name.to_s.to_s.gsub("-", "")
    end 
   string :status
   integer :orderbyid  do |item|
-      item.itemtype.orderby
+      item.itemtype.orderby rescue ""
     end
   date :launch_date do |item|
      item.created_at
