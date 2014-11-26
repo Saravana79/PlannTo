@@ -34,6 +34,8 @@ class PixelsController < ApplicationController
   private
 
   def generate_cookie_if_not_exist
-    cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now} if cookies[:plan_to_temp_user_id].blank?
+    if cookies[:plan_to_temp_user_id].blank? && cookies[:plannto_optout].blank?
+      cookies[:plan_to_temp_user_id] = {value: SecureRandom.hex(20), expires: 1.year.from_now}
+    end
   end
 end

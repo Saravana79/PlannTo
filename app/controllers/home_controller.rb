@@ -39,7 +39,23 @@ layout false, only: [:targeting]
   end
   
   def opt_out_submit
-    cookies.delete :plan_to_temp_user_id unless cookies[:plan_to_temp_user_id].blank?
+    unless cookies[:plan_to_temp_user_id].blank?
+      user_id = cookies[:plan_to_temp_user_id]
+
+      #delete form buyinglist plannto
+      u_key = "u:ac:plannto:#{user_id}"
+      del_key = "users:buyinglist:plannto:#{user_id}"
+      $redis.del(u_key)
+      $redis_rtb.del(del_key)
+
+      #delete from buyinglist
+      u_key = "u:ac:#{user_id}"
+      del_key = "users:buyinglist:#{user_id}"
+      $redis.del(u_key)
+      $redis_rtb.del(del_key)
+
+      cookies.delete :plan_to_temp_user_id
+    end
     cookies[:plannto_optout] = { value: "true", expires: 1.year.from_now } if cookies[:plannto_optout].blank?
     @static_page ="true"
   end
