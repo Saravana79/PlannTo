@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
@@ -22,7 +22,8 @@ class AdvertisementsController < ApplicationController
 
     p_item_ids = item_ids = []
     p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
-    @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request)
+    sort_disable = params[:r].to_i == 1 ? "true" : "false"
+    @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
 
     return show_plannto_ads() if !@ad.blank? && @ad.advertisement_type == "plannto"
 
@@ -247,6 +248,7 @@ class AdvertisementsController < ApplicationController
     params[:page_type] ||= ""
     params[:size] ||= ""
     params[:click_url] ||= ""
+    params[:r] ||= ""
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
@@ -265,9 +267,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r"))
     end
 
     cache_params = CGI::unescape(cache_params)
