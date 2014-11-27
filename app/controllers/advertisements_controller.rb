@@ -238,6 +238,11 @@ class AdvertisementsController < ApplicationController
     redirect_to "/advertisements/ab_test"
   end
 
+  def check_user_details
+    params[:ad_id] ||= 23
+    @details = Advertisement.find_user_details(params[:type], params[:user_id], params[:ad_id]) unless params[:user_id].blank?
+  end
+
  private
 
   def create_impression_before_show_ads

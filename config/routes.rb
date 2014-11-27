@@ -462,6 +462,8 @@ resources :comments do
   match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"
   match "advertisements/ad_via_iframe" => "advertisements#ad_via_iframe"
   match "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"
+  match "advertisments/check_user_details" => "advertisements#check_user_details", :as => "check_user_details"
+  match "advertisments/get_user_details" => "advertisements#get_user_details", :as => "get_user_details", :via => [:post]
   match "advertisements/ab_test" => "advertisements#ab_test", :as => "advertisement_ab_test"
   match "advertisements/create_ab_settings" => "advertisements#create_ab_settings", :as => "create_ab_settings", :via => [:post]
   match "advertisements/video_ad_tracking" => "advertisements#video_ad_tracking", :as => "video_ad_tracking", :via => [:get]

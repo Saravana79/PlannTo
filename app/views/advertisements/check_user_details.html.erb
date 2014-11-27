@@ -1,0 +1,49 @@
+<div class="main_page">
+  <%= form_tag "check_user_details", {:method => "get"} do %>
+    User Type: <%= select_tag :type, options_for_select(["google", "plannto"]) %>
+    User ID: <%= text_field_tag :user_id %>
+    Ads ID: <%= text_field_tag :ad_id %>
+      <%= submit_tag "Go" %>
+  <% end %>
+</div>
+
+<div class="results">
+  <% if !@details.blank? %>
+      <div style="padding: 30px;">
+
+        <% @details.each do |key, val| %>
+            <h3><%= key %></h3>
+
+            <div class="1_inner_values">
+              <% if val.is_a?(Hash) %>
+                  <table border="1">
+                    <th>Key</th>
+                    <th>Value</th>
+                    <tbody>
+                    <% val.each do |k,v| %>
+                        <tr>
+                          <td><%= k %></td>
+                          <td><%= v %></td>
+                        </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+              <% elsif val.is_a?(Array) %>
+                  <% val.each do |v| %>
+                      <%= v %>
+                  <% end %>
+              <% else %>
+                  <%= val %>
+              <% end %>
+            </div>
+        <% end %>
+
+      </div>
+  <% end %>
+</div>
+
+<style type="text/css">
+  .main_page {
+      padding: 20px;
+  }
+</style>

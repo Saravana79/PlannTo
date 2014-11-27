@@ -635,6 +635,46 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     end
   end
 
+  def self.find_user_details(type, user_id, ad_id=23)
+    result = {}
+    if type == "plannto"
+      redis_results = $redis.pipelined do
+        $redis.hgetall("u:ac:plannto:#{user_id}")
+        $redis.lrange("users:last_visits:plannto:#{user_id}", 0, -1)
+      end
+      redis_rtb_results = $redis_rtb.pipelined do
+        $redis_rtb.hgetall("users:buyinglist:plannto:#{user_id}")
+        $redis_rtb.get("pu:#{user_id}:#{ad_id}:count")
+        $redis_rtb.get("pu:#{user_id}:#{ad_id}:#{Date.today.day}")
+        $redis_rtb.get("pu:#{user_id}:#{ad_id}:clicks:count")
+        $redis_rtb.get("pu:#{user_id}:#{ad_id}:clicks:#{Date.today.day}")
+      end
+      result.merge!("u:ac:plannto:#{user_id}" => redis_results[0], "users:last_visits:plannto:#{user_id}" => redis_results[1], "users:buyinglist:plannto:#{user_id}" => redis_rtb_results[0],
+                    "pu:#{user_id}:#{ad_id}:count" => redis_rtb_results[1], "pu:#{user_id}:#{ad_id}:#{Date.today.day}" => redis_rtb_results[2], "pu:#{user_id}:#{ad_id}:clicks:count" => redis_rtb_results[3],
+                    "pu:#{user_id}:#{ad_id}:clicks:#{Date.today.day}" => redis_rtb_results[4])
+    elsif type == "google"
+      user_id = $redis_rtb.get("cm:#{user_id}")
+      if !user_id.blank?
+        redis_results = $redis.pipelined do
+          $redis.hgetall("u:ac:#{user_id}")
+          $redis.lrange("users:last_visits:#{user_id}", 0, -1)
+        end
+        redis_rtb_results = $redis_rtb.pipelined do
+          $redis_rtb.hgetall("users:buyinglist:#{user_id}")
+          $redis_rtb.get("pu:#{user_id}:#{ad_id}:count")
+          $redis_rtb.get("pu:#{user_id}:#{ad_id}:#{Date.today.day}")
+          $redis_rtb.get("pu:#{user_id}:#{ad_id}:clicks:count")
+          $redis_rtb.get("pu:#{user_id}:#{ad_id}:clicks:#{Date.today.day}")
+        end
+        result.merge!("u:ac:#{user_id}" => redis_results[0], "users:last_visits:#{user_id}" => redis_results[1], "users:buyinglist:#{user_id}" => redis_rtb_results[0],
+                      "pu:#{user_id}:#{ad_id}:count" => redis_rtb_results[1], "pu:#{user_id}:#{ad_id}:#{Date.today.day}" => redis_rtb_results[2], "pu:#{user_id}:#{ad_id}:clicks:count" => redis_rtb_results[3],
+                      "pu:#{user_id}:#{ad_id}:clicks:#{Date.today.day}" => redis_rtb_results[4])
+      end
+    end
+
+    result
+  end
+
   private
 
   def file_dimensions
