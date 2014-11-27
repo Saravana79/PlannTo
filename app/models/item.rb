@@ -1161,6 +1161,19 @@ end
     log.debug "********** Completed Updating price and vendor_id for Items **********"
     log.debug "\n"
 
+
+    # set null for pc_vendor_id and related_item_ids
+    query_to_set_null = "select distinct itemid from itemdetails where last_verified_date < '#{1.day.ago}' and status not in (1) and iserror != 1 and site in (9861,9882,9874,26351) and itemid not in (select itemid from itemdetails where last_verified_date < '#{1.day.ago}' and status  in (1) and iserror != 1 and site in (9861,9882,9874,26351)) order by itemid desc"
+
+    items = Item.find_by_sql(query_to_set_null)
+    item_ids = items.map(&:itemid)
+
+    $redis_rtb.pipelined do
+      item_ids.each do |item_id|
+        $redis_rtb.hmset("items:#{item_id}", "vendor_id", nil, "pc_vendor_id", nil)
+      end
+    end
+
     update_item_details_with_ad_ids(log, nil, batch_size)
   end
 
