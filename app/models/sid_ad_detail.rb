@@ -162,13 +162,13 @@ where ai.impression_time >= '#{date_for_query}' group by sid order by count(*) d
           if ectr_val >= 10
             final_ectr = 1.25
           elsif ectr_val >= 6 && ectr_val < 10
-            final_ectr = 1
+            final_ectr = 1.1
           elsif ectr_val >= 3 && ectr_val < 6
-            final_ectr = 0.75
+            final_ectr = 0.85
           elsif ectr_val >= 1 && ectr_val < 3
-            final_ectr = 0.50
+            final_ectr = 0.70
           elsif ectr_val < 1
-            final_ectr = 0.0
+            final_ectr = 0.2
           end
           $redis_rtb.HMSET(spottag_key, "ectr", final_ectr)
         end
