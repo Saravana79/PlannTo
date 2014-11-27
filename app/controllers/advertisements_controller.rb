@@ -240,7 +240,13 @@ class AdvertisementsController < ApplicationController
 
   def check_user_details
     params[:ad_id] = 23 if params[:ad_id].blank?
-    @details = Advertisement.find_user_details(params[:type], params[:user_id], params[:ad_id]) unless params[:user_id].blank?
+    unless params[:user_id].blank?
+      begin
+        @details = Advertisement.find_user_details(params[:type], params[:user_id], params[:ad_id])
+      rescue Exception => e
+        @details = {}
+      end
+    end
   end
 
  private

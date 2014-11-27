@@ -10,40 +10,52 @@
 <div class="results">
   <% if !@details.blank? %>
       <div style="padding: 30px;">
+        <% @details.each_slice(1).each_with_index do |value, index| %>
+            <div class="align_<%= index % 2 %>">
+              <% value.each do |key, val| %>
+                  <h3><%= key %></h3>
 
-        <% @details.each do |key, val| %>
-            <h3><%= key %></h3>
-
-            <div class="1_inner_values">
-              <% if val.is_a?(Hash) %>
-                  <table border="1">
-                    <th>Key</th>
-                    <th>Value</th>
-                    <tbody>
-                    <% val.each do |k,v| %>
-                        <tr>
-                          <td><%= k %></td>
-                          <td><%= v %></td>
-                        </tr>
+                  <div class="1_inner_values">
+                    <% if val.is_a?(Hash) %>
+                        <table border="1">
+                          <th>Key</th>
+                          <th>Value</th>
+                          <tbody>
+                          <% val.each do |k,v| %>
+                              <tr>
+                                <td><%= k %></td>
+                                <td><%= v %></td>
+                              </tr>
+                          <% end %>
+                          </tbody>
+                        </table>
+                    <% elsif val.is_a?(Array) %>
+                        <% val.each do |v| %>
+                            <%= v %>
+                        <% end %>
+                    <% else %>
+                        <%= val %>
                     <% end %>
-                    </tbody>
-                  </table>
-              <% elsif val.is_a?(Array) %>
-                  <% val.each do |v| %>
-                      <%= v %>
-                  <% end %>
-              <% else %>
-                  <%= val %>
+                  </div>
               <% end %>
             </div>
         <% end %>
-
       </div>
   <% end %>
 </div>
 
+<div style="clear: both;"></div>
+
 <style type="text/css">
-  .main_page {
-      padding: 20px;
+
+  .align_0 {
+      float: left;
+      width: 45%;
+  }
+
+  .align_1 {
+      float: left;
+      padding: 0 0 47px 43px;
+      width: 50%;
   }
 </style>

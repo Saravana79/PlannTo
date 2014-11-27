@@ -637,41 +637,39 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
   def self.find_user_details(type, user_id, ad_id=23)
     result = {}
+
     if type == "plannto"
-      redis_results = $redis.pipelined do
-        $redis.hgetall("u:ac:plannto:#{user_id}")
-        $redis.lrange("users:last_visits:plannto:#{user_id}", 0, -1)
-      end
-      redis_rtb_results = $redis_rtb.pipelined do
-        $redis_rtb.hgetall("users:buyinglist:plannto:#{user_id}")
-        $redis_rtb.get("pu:#{user_id}:#{ad_id}:count")
-        $redis_rtb.get("pu:#{user_id}:#{ad_id}:#{Date.today.day}")
-        $redis_rtb.get("pu:#{user_id}:#{ad_id}:clicks:count")
-        $redis_rtb.get("pu:#{user_id}:#{ad_id}:clicks:#{Date.today.day}")
-      end
-      result.merge!("u:ac:plannto:#{user_id}" => redis_results[0], "users:last_visits:plannto:#{user_id}" => redis_results[1], "users:buyinglist:plannto:#{user_id}" => redis_rtb_results[0],
-                    "pu:#{user_id}:#{ad_id}:count" => redis_rtb_results[1], "pu:#{user_id}:#{ad_id}:#{Date.today.day}" => redis_rtb_results[2], "pu:#{user_id}:#{ad_id}:clicks:count" => redis_rtb_results[3],
-                    "pu:#{user_id}:#{ad_id}:clicks:#{Date.today.day}" => redis_rtb_results[4])
+      cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
+      plannto_user_id = user_id
+      user_id = cookie_match.google_user_id
     elsif type == "google"
       plannto_user_id = $redis_rtb.get("cm:#{user_id}")
-
-      redis_results = $redis.pipelined do
-        $redis.hgetall("u:ac:#{user_id}")
-        $redis.lrange("users:last_visits:#{user_id}", 0, -1)
-      end
-      redis_rtb_results = $redis_rtb.pipelined do
-        $redis_rtb.hgetall("users:buyinglist:#{user_id}")
-        $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:count")
-        $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:#{Date.today.day}")
-        $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:clicks:count")
-        $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:clicks:#{Date.today.day}")
-      end
-      result.merge!("u:ac:#{user_id}" => redis_results[0], "users:last_visits:#{user_id}" => redis_results[1], "users:buyinglist:#{user_id}" => redis_rtb_results[0],
-                    "pu:#{plannto_user_id}:#{ad_id}:count" => redis_rtb_results[1], "pu:#{plannto_user_id}:#{ad_id}:#{Date.today.day}" => redis_rtb_results[2], "pu:#{plannto_user_id}:#{ad_id}:clicks:count" => redis_rtb_results[3],
-                    "pu:#{plannto_user_id}:#{ad_id}:clicks:#{Date.today.day}" => redis_rtb_results[4])
     end
 
-    result = {"u:ac:plannto:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf"=>{"22440_c"=>"35", "22440_la"=>"2014-11-25", "buyinglist"=>"22440", "buyinglist_20"=>"22440,18076", "source"=>"google,mysmartprice", "18076_c"=>"25", "18076_la"=>"2014-11-25", "13792_c"=>"10", "13792_la"=>"2014-11-25"}, "users:last_visits:plannto:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf"=>[], "users:buyinglist:plannto:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf"=>{"item_ids"=>"22440", "item_ids_20"=>"22440,18076", "count"=>"3", "all_item_ids"=>"22440,18076,13792", "lad"=>"2014-11-25", "source"=>"google,mysmartprice", "fad"=>"2014-11-25", "ap_c"=>"5"}, "pu:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf:23:count"=>"6", "pu:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf:23:27"=>"2", "pu:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf:23:clicks:count"=>"1", "pu:c0eb59078c0a2dfe26d6fa28706dcddc5decb1bf:23:clicks:27"=>"1"}
+    # plannto
+    redis_results = $redis.pipelined do
+      $redis.hgetall("u:ac:plannto:#{plannto_user_id}")
+      $redis.hgetall("u:ac:#{user_id}")
+      $redis.lrange("users:last_visits:plannto:#{plannto_user_id}", 0, -1)
+      $redis.lrange("users:last_visits:#{user_id}", 0, -1)
+    end
+
+    redis_rtb_results = $redis_rtb.hgetall("users:buyinglist:plannto:#{plannto_user_id}")
+    redis_rtb_results_1 = $redis_rtb.hgetall("users:buyinglist:#{user_id}")
+
+    result.merge!("u:ac:plannto:#{plannto_user_id}" => redis_results[0], "u:ac:#{user_id}" => redis_results[1], "users:last_visits:plannto:#{plannto_user_id}" => redis_results[2],
+                  "users:last_visits:#{user_id}" => redis_results[3], "users:buyinglist:plannto:#{plannto_user_id}" => redis_rtb_results, "users:buyinglist:#{user_id}" => redis_rtb_results_1)
+
+    redis_rtb_pu = $redis_rtb.pipelined do
+      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:count")
+      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:#{Date.today.day}")
+      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:clicks:count")
+      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:clicks:#{Date.today.day}")
+    end
+
+    result.merge!("pu:#{plannto_user_id}:#{ad_id}:count" => redis_rtb_pu[0], "pu:#{plannto_user_id}:#{ad_id}:#{Date.today.day}" => redis_rtb_pu[1], "pu:#{plannto_user_id}:#{ad_id}:clicks:count" => redis_rtb_pu[2],
+                  "pu:#{plannto_user_id}:#{ad_id}:clicks:#{Date.today.day}" => redis_rtb_pu[3])
+    result
   end
 
   private
