@@ -1116,7 +1116,7 @@ end
     # query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type from
     #                                     itemdetails id inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
 
-    query_to_get_price_and_vendor_ids = "select type, itemid as item_id, min(price) as price, group_concat(site order by price) as vendor_id, group_concat(price order by price) as pricestring from (select itemid, site, min(price)  as price, type from itemdetails id inner join items i on id.itemid=i.id where id.status in (1) and iserror != 1 and site in (9861,9882,9874,26351) and id.itemid in (select itemid from itemdetails where last_verified_date < '#{1.day.ago}') group by itemid,site ) a group by itemid"
+    query_to_get_price_and_vendor_ids = "select type, itemid as item_id, min(price) as price, group_concat(site order by price) as vendor_id, group_concat(price order by price) as pricestring from (select itemid, site, min(price)  as price, type from itemdetails id inner join items i on id.itemid=i.id where id.status in (1) and iserror != 1 and site in (9861,9882,9874,26351) and id.itemid in (select itemid from itemdetails where last_verified_date > '#{1.day.ago}') group by itemid,site ) a group by itemid"
     # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
     log.debug "********** Started Updating Price and Vendor_id for Items **********"
@@ -1163,7 +1163,7 @@ end
 
 
     # set null for pc_vendor_id and related_item_ids
-    query_to_set_null = "select distinct itemid from itemdetails where last_verified_date < '#{1.day.ago}' and status not in (1) and iserror != 1 and site in (9861,9882,9874,26351) and itemid not in (select itemid from itemdetails where last_verified_date < '#{1.day.ago}' and status  in (1) and iserror != 1 and site in (9861,9882,9874,26351)) order by itemid desc"
+    query_to_set_null = "select distinct itemid from itemdetails where last_verified_date > '#{1.day.ago}' and status not in (1) and iserror != 1 and site in (9861,9882,9874,26351) and itemid not in (select itemid from itemdetails where last_verified_date > '#{1.day.ago}' and status  in (1) and iserror != 1 and site in (9861,9882,9874,26351)) order by itemid desc"
 
     items = Item.find_by_sql(query_to_set_null)
     item_ids = items.map(&:itemid)
