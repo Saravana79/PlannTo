@@ -641,7 +641,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     if type == "plannto"
       cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
       plannto_user_id = user_id
-      user_id = cookie_match.google_user_id
+      user_id = cookie_match.google_user_id rescue "no_google_id_match"
     elsif type == "google"
       plannto_user_id = $redis_rtb.get("cm:#{user_id}")
     end
