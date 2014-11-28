@@ -1577,7 +1577,7 @@ end
                         redis_rtb_hash.delete(del_key)
                         buying_list_del_keys << del_key
                       else
-                        redis_hash.merge!(u_key, u_values)
+                        redis_hash.merge!(u_key => u_values)
                       end
                     rescue Exception => e
                       p "Problems while hmset: Args:-"
