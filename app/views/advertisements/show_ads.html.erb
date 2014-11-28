@@ -200,6 +200,24 @@
 //            }
 //        })
 
+        // All place clickable
+
+        $(".plannto-advertisement.main_div").click(function(a)
+        {
+            var ids_list = []
+            ids_list.push(a.target.id)
+            ids_list.push(a.target.parentNode.id)
+            ids_list.push(a.target.parentNode.parentNode.id)
+            var present = $.inArray("pager2", ids_list)
+            if (present < 0)
+            {
+                var shop_now_url = $(".item_details.active").find(".shop-now").attr('href')
+                console.log(shop_now_url)
+                window.open(shop_now_url, "_blank")
+                return false;
+            }
+        });
+
     });
 
     function set_logo_url(that, class_name)
