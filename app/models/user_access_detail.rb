@@ -19,7 +19,7 @@ class UserAccessDetail < ActiveRecord::Base
     # source_categories = SourceCategory.get_source_category_with_paginations()
     redis_rtb_hash = {}
 
-    already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
+    already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto", nil)
     ranking = 0
 
     if already_exist == false

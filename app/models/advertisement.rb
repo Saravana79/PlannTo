@@ -593,7 +593,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
             user_id = impression.temp_user_id
             type = article_content.sub_type
             item_ids = article_content.all_item_ids.to_s rescue ""
-            redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "google")
+            redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto")
             redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
           end
         end

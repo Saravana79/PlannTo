@@ -1481,6 +1481,7 @@ end
 
 
         user_vals.each_with_index do |each_user_val, index|
+          p "Processing: #{each_user_val}"
           begin
             t_length-=1
             # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
@@ -1587,7 +1588,7 @@ end
 
             end
           rescue Exception => e
-            p "Error While Processing => #{e}"
+            p "Error While Processing => #{e.backtrace}"
           end
         end
 
@@ -1603,7 +1604,7 @@ end
 
         length = length - user_vals.count
         # start_point = start_point + 1001
-        p "Remaining Length - #{length}"
+        p "------------------------------- Remaining Length - #{length} -------------------------------"
       end while length > 0
       $redis.set("buying_list_is_running", 0)
     end
@@ -1650,7 +1651,7 @@ end
     $redis.pipelined do
       $redis.lpush(key, url) if exists == false
       # $redis.expire(key, 30.minutes) #TODO: enable this by EOD and remove the next line
-      $redis.expire(key, 5.hours)
+      $redis.expire(key, 24.hours)
     end
     exists
   end
