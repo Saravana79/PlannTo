@@ -1455,9 +1455,11 @@ end
       begin
         user_vals = $redis_rtb.lrange("users:visits", 0, 2000)
         redis_rtb_hash = {}
+        redis_hash = {}
 
         u_key_list = []
         visited_urls_list = []
+        buying_list_del_keys = []
         user_vals.each do |each_user_val|
           user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
           u_key = "u:ac:#{user_id}"
@@ -1566,14 +1568,10 @@ end
                     begin
                       if u_values.blank?
                         del_key = "users:buyinglist:#{user_id}"
-                        $redis.del(u_key)
-                        $redis_rtb.del(del_key)
                         redis_rtb_hash.delete(del_key)
+                        buying_list_del_keys << del_key
                       else
-                        $redis.pipelined do
-                          $redis.hmset(u_key, u_values.flatten)
-                          $redis.expire(u_key, 2.weeks)
-                        end
+                        redis_hash.merge!(u_key, u_values)
                       end
                     rescue Exception => e
                       p "Problems while hmset: Args:-"
@@ -1593,6 +1591,25 @@ end
         end
 
         $redis_rtb.ltrim("users:visits", user_vals.count, -1) #TODO: temporary comment
+
+        $redis.pipelined do
+          buying_list_del_keys.each do |del_key|
+            $redis.del(u_key)
+          end
+        end
+
+        $redis_rtb.pipelined do
+          buying_list_del_keys.each do |del_key|
+            $redis_rtb.del(u_key)
+          end
+        end
+
+        $redis.pipelined do
+          redis_hash.each do |u_key,u_values|
+            $redis.hmset(u_key, u_values.flatten)
+            $redis.expire(u_key, 2.weeks)
+          end
+        end
 
         $redis_rtb.pipelined do
           redis_rtb_hash.each do |key, val|
