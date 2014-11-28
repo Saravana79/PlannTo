@@ -635,7 +635,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     end
   end
 
-  def self.find_user_details(type, user_id, ad_id=23)
+  def self.find_user_details(type, user_id)
     result = {}
 
     if type == "plannto"
@@ -661,14 +661,21 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
                   "users:last_visits:#{user_id}" => redis_results[3], "users:buyinglist:plannto:#{plannto_user_id}" => redis_rtb_results, "users:buyinglist:#{user_id}" => redis_rtb_results_1)
 
     redis_rtb_pu = $redis_rtb.pipelined do
-      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:count")
-      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:#{Date.today.day}")
-      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:clicks:count")
-      $redis_rtb.get("pu:#{plannto_user_id}:#{ad_id}:clicks:#{Date.today.day}")
+      [23,32,21,5,3,1,10].each do |each_ad|
+        $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:count")
+        $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:#{Date.today.day}")
+        $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:clicks:count")
+        $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:clicks:#{Date.today.day}")
+      end
     end
 
-    result.merge!("pu:#{plannto_user_id}:#{ad_id}:count" => redis_rtb_pu[0], "pu:#{plannto_user_id}:#{ad_id}:#{Date.today.day}" => redis_rtb_pu[1], "pu:#{plannto_user_id}:#{ad_id}:clicks:count" => redis_rtb_pu[2],
-                  "pu:#{plannto_user_id}:#{ad_id}:clicks:#{Date.today.day}" => redis_rtb_pu[3])
+    start_val = 4
+    [23,32,21,5,3,1,10].each do |each_ad|
+      result.merge!("pu:#{plannto_user_id}:#{each_ad}:count" => redis_rtb_pu[start_val-4], "pu:#{plannto_user_id}:#{each_ad}:#{Date.today.day}" => redis_rtb_pu[start_val-3], "pu:#{plannto_user_id}:#{each_ad}:clicks:count" => redis_rtb_pu[start_val-2],
+                      "pu:#{plannto_user_id}:#{each_ad}:clicks:#{Date.today.day}" => redis_rtb_pu[start_val-1])
+      start_val+=4
+    end
+
     result
   end
 
