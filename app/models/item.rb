@@ -1457,31 +1457,6 @@ end
         redis_rtb_hash = {}
         redis_hash = {}
 
-        u_key_list = []
-        visited_urls_list = []
-        buying_list_del_keys = []
-        user_vals.each do |each_user_val|
-          user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-          u_key = "u:ac:#{user_id}"
-          u_key_list << u_key
-
-          visited_url_key = "users:last_visits:#{user_id}"
-          visited_urls_list << visited_url_key
-        end
-
-        u_key_values = $redis.pipelined do
-          u_key_list.each do |u_key|
-            $redis.hgetall(u_key)
-          end
-        end
-
-        visited_urls_values = $redis.pipelined do
-          visited_urls_list.each do |key|
-            $redis.lrange(key, 0, -1)
-          end
-        end
-
-
         user_vals.each_with_index do |each_user_val, index|
           p "Processing: #{each_user_val}"
           begin
@@ -1490,7 +1465,7 @@ end
             unless each_user_val.blank?
               user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
               if !user_id.blank? && !item_ids.blank? && !url.blank?
-                already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits", visited_urls_values[index])
+                already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
                 ranking = 0
 
                 if already_exist == false
@@ -1506,7 +1481,7 @@ end
                   item_ids = item_ids.to_s.split(",")
                   if item_ids.count < 10
                     u_key = "u:ac:#{user_id}"
-                    u_values = u_key_values[index]
+                    u_values = $redis.hgetall(u_key)
 
                     add_fad = u_values.blank? ? true : false
 
@@ -1633,10 +1608,10 @@ end
     end
   end
 
-  def self.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits", visited_urls=nil)
+  def self.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits")
     exists = false
     key = "#{url_prefix}:#{user_id}"
-    visited_urls = $redis.lrange(key, 0, -1) if visited_urls.nil?
+    visited_urls = $redis.lrange(key, 0, -1)
 
     if visited_urls.include?(url)
       exists = true
