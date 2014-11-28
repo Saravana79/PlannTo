@@ -1457,6 +1457,7 @@ end
         redis_rtb_hash = {}
         redis_hash = {}
 
+        buying_list_del_keys = []
         user_vals.each_with_index do |each_user_val, index|
           p "Processing: #{each_user_val}"
           begin
