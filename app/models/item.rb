@@ -1555,12 +1555,18 @@ end
 
                     buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
+                    #buying soon check
+                    top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com"]
+                    host = Item.get_host_without_www(url)
+                    bs = top_sites.include?(host)
+
                     # if !old_buying_list.blank? || !buying_list.blank?
                     items_hash = u_values.select {|k,_| k.include?("_c")}
                     items_count = items_hash.count
                     all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
                     all_item_ids = all_item_ids.join(",")
                     temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
+                    temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
                     temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
                     redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => temp_store)
                     # end
@@ -1684,8 +1690,13 @@ end
   end
 
   def self.get_host_without_www(url)
-    old_host = Addressable::URI.parse(url).host.downcase
-    host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
+    begin
+      old_host = Addressable::URI.parse(url).host.downcase
+      host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
+    rescue Exception => e
+      host = ""
+    end
+    host
   end
 
   private

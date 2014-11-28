@@ -70,6 +70,11 @@ class UserAccessDetail < ActiveRecord::Base
         buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20", base_item_ids)
 
 
+        #buying soon check
+        top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com"]
+        host = Item.get_host_without_www(url)
+        bs = top_sites.include?(host)
+
         # if !old_buying_list.blank? || !buying_list.blank?
           u_values["buyinglist"] = buying_list.join(",")
           u_values["buyinglist_20"] = buying_list_20.join(",")
@@ -83,6 +88,7 @@ class UserAccessDetail < ActiveRecord::Base
           all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
           all_item_ids = all_item_ids.join(",")
           temp_store = {"item_ids" => u_values["buyinglist"], "item_ids_20" => u_values["buyinglist_20"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s, "source" => new_source.join(",")}
+          temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
           temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
           redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
         # end
