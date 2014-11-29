@@ -1189,6 +1189,7 @@ end
       hash_val = Hash[hash_val.sort_by {|_,v| v}]
       price = hash_val.values[0] * 1.02
     end
+    hash_val.delete("26351")
     pc_vendor_id = hash_val.select {|k, v| v <= price }.keys
     pc_vendor_id = pc_vendor_id.join(",")
   end
