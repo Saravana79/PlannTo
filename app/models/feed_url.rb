@@ -79,85 +79,89 @@ class FeedUrl < ActiveRecord::Base
     missingurl_keys = [] if missingurl_keys.blank?
     t_count = missingurl_keys.count
     missingurl_keys.each do |each_url_key|
-      logger.info "#{counting} - #{t_count}"
-      p "#{counting} - #{t_count}"
-      counting = counting + 1
-      each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
-      missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
+      begin
+        logger.info "#{counting} - #{t_count}"
+        p "#{counting} - #{t_count}"
+        counting = counting + 1
+        each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
+        missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
 
-      greater_count = greater_count + 1
-      logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-      p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-      if feed_url_id.blank?
-        missing_url = each_url_key.split("missingurl:")[1]
+        greater_count = greater_count + 1
+        logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
+        p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
+        if feed_url_id.blank?
+          missing_url = each_url_key.split("missingurl:")[1]
 
-        check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-        if check_exist_feed_url.blank?
-          source = ""
-          if (missing_url =~ URI::regexp).blank?
+          check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+          if check_exist_feed_url.blank?
             source = ""
-            status = 3
-          else
-            begin
-              source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
-            rescue Exception => e
-              source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
-            end
-          end
-
-          # sources_list = Rails.cache.read("sources_list_details")
-          sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
-          sources_list.default = "Others"
-          category = sources_list[source]["categories"] rescue ""
-
-          # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-          # if check_exist_feed_url.blank?
-          article_content = ArticleContent.find_by_url(missing_url)
-          status = 0
-          status = 1 unless article_content.blank?
-
-          title, description, images, page_category = Feed.get_feed_url_values(missing_url)
-
-          url_for_save = missing_url
-          if url_for_save.include?("youtube.com")
-            url_for_save = url_for_save.gsub("watch?v=", "video/")
-          end
-
-          if !page_category.blank?
-            if !valid_categories.include?(page_category.downcase)
+            if (missing_url =~ URI::regexp).blank?
+              source = ""
               status = 3
-            elsif page_category.downcase == 'science & technology'
-              category = "Mobile,Tablet,Camera,Laptop"
+            else
+              begin
+                source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+              rescue Exception => e
+                source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
+              end
             end
+
+            # sources_list = Rails.cache.read("sources_list_details")
+            sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+            sources_list.default = "Others"
+            category = sources_list[source]["categories"] rescue ""
+
+            # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+            # if check_exist_feed_url.blank?
+            article_content = ArticleContent.find_by_url(missing_url)
+            status = 0
+            status = 1 unless article_content.blank?
+
+            title, description, images, page_category = Feed.get_feed_url_values(missing_url)
+
+            url_for_save = missing_url
+            if url_for_save.include?("youtube.com")
+              url_for_save = url_for_save.gsub("watch?v=", "video/")
+            end
+
+            if !page_category.blank?
+              if !valid_categories.include?(page_category.downcase)
+                status = 3
+              elsif page_category.downcase == 'science & technology'
+                category = "Mobile,Tablet,Camera,Laptop"
+              end
+            end
+            # remove characters after come with space + '- or |' symbols
+            # title = title.to_s.gsub(/\s(-|\|).+/, '')
+            title = title.blank? ? "" : title.to_s.strip
+
+            new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
+                                       status: status, source: source, summary: description, :images => images,
+                                       :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+
+            begin
+              new_feed_url.save!
+              feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
+              feed_url.auto_save_feed_urls if feed_url.status == 0
+            rescue Exception => e
+              p e
+            end
+
+            $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
+          else
+            ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+            $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
           end
-          # remove characters after come with space + '- or |' symbols
-          # title = title.to_s.gsub(/\s(-|\|).+/, '')
-          title = title.blank? ? "" : title.to_s.strip
-
-          new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
-                                        status: status, source: source, summary: description, :images => images,
-                                        :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
-
-          begin
-            new_feed_url.save!
-            feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
-            feed_url.auto_save_feed_urls if feed_url.status == 0
-          rescue Exception => e
-            p e
-          end
-
-          $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
         else
-          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
-          $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
+          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+          $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
         end
-      else
-        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
-        $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
-      end
 
-      mem_key = each_url_key.gsub("missingurl:", "")
-      $redis_rtb.srem("missingurl-toplist", mem_key) if Rails.env == "production"
+        mem_key = each_url_key.gsub("missingurl:", "")
+        $redis_rtb.srem("missingurl-toplist", mem_key) if Rails.env == "production"
+      rescue Exception => e
+        p "Error while process missing url => #{each_url_key}"
+      end
     end
   end
 
