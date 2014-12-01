@@ -1183,13 +1183,13 @@ end
     vendor_ids = each_rec.vendor_id.split(',')
     pricestring = each_rec.pricestring.split(',').map(&:to_f)
     hash_val = Hash[vendor_ids.zip(pricestring)]
+    hash_val.delete("26351")
     is_price_non_zero = hash_val.values.map {|each_val| each_val > 0}
     if is_price_non_zero.include?(true)
       hash_val = hash_val.delete_if {|_,v| v == 0.0}
       hash_val = Hash[hash_val.sort_by {|_,v| v}]
       price = hash_val.values[0] * 1.02
     end
-    hash_val.delete("26351")
     pc_vendor_id = hash_val.select {|k, v| v <= price }.keys
     pc_vendor_id = pc_vendor_id.join(",")
   end
