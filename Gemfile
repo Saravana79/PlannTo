@@ -95,9 +95,9 @@ gem 'open_uri_redirections', '~> 0.1.4'
 # gem for auto scale up and down workers in heroku
 gem 'heroku-api'
 
-#mongodb connection
-gem "mongo"
-gem "bson_ext"
+# Connection for mongodb
+gem 'mongoid'
+gem 'bson_ext'
 
 # gem for check memory usage
 gem 'oink', '~> 0.10.1'
