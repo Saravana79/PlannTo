@@ -79,15 +79,15 @@ test:
         max_retries: 1
         retry_interval: 0
 production:
- sessions:
-   default:
-     # The standard MongoDB connection URI allows for easy
-     # replica set connection setup.
-     # Use environment variables or a config file to keep your
-     # credentials safe.
-     uri: 'mongodb://heroku_app4176992:2q253r5a1e74dj1kfpifpbk4di@ds037990.mongolab.com:37990/heroku_app4176992'
+  sessions:
+    default:
+      # The standard MongoDB connection URI allows for easy
+      # replica set connection setup.
+      # Use environment variables or a config file to keep your
+      # credentials safe.
+      uri: 'mongodb://heroku_app4176992:2q253r5a1e74dj1kfpifpbk4di@ds037990.mongolab.com:37990/heroku_app4176992'
 
-     options:
+      options:
        # The default consistency is :eventual, which reads from
        #secondaries when possible.
        # Strong forces reads to primary.

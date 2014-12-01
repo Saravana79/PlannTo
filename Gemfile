@@ -96,6 +96,7 @@ gem 'open_uri_redirections', '~> 0.1.4'
 gem 'heroku-api'
 
 # Connection for mongodb
+gem 'mongo'
 gem 'mongoid'
 gem 'bson_ext'
 

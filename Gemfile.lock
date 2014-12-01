@@ -185,6 +185,8 @@ GEM
       httmultiparty (>= 0.3.6)
       httparty (>= 0.4.3)
       multi_json (>= 1.0.3, < 1.4)
+    mongo (1.10.2)
+      bson (= 1.10.2)
     mongoid (3.0.23)
       activemodel (~> 3.1)
       moped (~> 1.2)
@@ -397,6 +399,7 @@ DEPENDENCIES
   koala
   mailcatcher
   mogli
+  mongo
   mongoid
   mysql2
   nokogiri
