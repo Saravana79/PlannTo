@@ -282,7 +282,7 @@ module ApplicationHelper
   def truncate_without_dot(str, size)
     # result_str = truncated_str.gsub(/\s(\S*\.)$/, '')
 
-    skip_values = ["rs."]
+    skip_values = ["rs.","2."]
     result_str = str.to_s.strip
     if result_str.length > size
       truncated_str = result_str.to_s[0...size]
