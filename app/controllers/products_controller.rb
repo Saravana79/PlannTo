@@ -267,11 +267,17 @@ class ProductsController < ApplicationController
    end
 
   def where_to_buy_items_vendor
+    params[:item_ids] = "27752" if params[:item_ids].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items = Item.get_items_from_amazon("lipstick")
     # p @items = Mobile.last(2)
     # @displaycount = 4
+
+    @item, @items, @search_url = Item.get_item_items_from_amazon(params[:item_ids])
+    @parent = @item.parent
+    p @item
+    p @items
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -285,8 +291,8 @@ class ProductsController < ApplicationController
 
       @where_to_buy_items = []
 
-      @item = @items.first
-      @item = @items.select {|each_item| each_item.id == item_ids.first}.first if !item_ids.first.blank?
+      # @item = @items.first
+      # @item = @items.select {|each_item| each_item.id == item_ids.first}.first if !item_ids.first.blank?
 
       if @is_test != "true"
         @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,

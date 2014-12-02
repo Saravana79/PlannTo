@@ -407,19 +407,19 @@
                               <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
                               <li class="active">
 
-                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function('Lipstick', this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= @item.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
                                                     <span style="float:left;">
                                                   </span><span style="float:left;">
-                                                    <%= "Lipstick".to_s.truncate(30) %>
+                                                    <%= @item.name.to_s.truncate(30) %>
                                                 </span></a>
 
                               </li>
                               <li class="">
 
-                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function('Lipstick Tool', this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= @parent.blank? ? "" : @parent.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
                                                     <span style="float:left;">
                                                   </span><span style="float:left;">
-                                                    <%= "Lipstick Tool".to_s.truncate(30) %>
+                                                    <%= @parent.blank? ? "" : @parent.name.to_s.truncate(30) %>
                                                 </span></a>
 
                               </li>
@@ -466,7 +466,7 @@
                 </tr>
             <% end %>
 
-            <% if count > @displaycount %>
+            <% if count > @displaycount || 1==1 %>
                 <tr id="plannto_footertr">
                   <%if @moredetails == "true"
                       @wrapper="2"
@@ -475,13 +475,11 @@
                     end
                   %>
                   <td  id="plannto_footertd" colspan="<%=@wrapper%>">
-                                    <span id="plannto_footerspan">
-                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%><%= @test_condition %>" id="plannto_footera" target="_blank">View prices from more retailers</a>
-                                    </span>
+
                   </td>
                   <td id="plannto_incol3" width="15%">
                                     <span >
-                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%><%= @test_condition %>" id="plannto_go_button" target="_blank"><%= @gotext%></a>
+                                      <a href="<%= @search_url %>" id="plannto_go_button" target="_blank">View More</a>
                                     </span>
                   </td>
                 </tr>
