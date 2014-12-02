@@ -1,6 +1,6 @@
 <div class="advt-block">
   <div class="advt-300">
-    <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt="" width="124px" height="20px"></a>
+    <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt="" ></a>
     </div>
     <% if @item_details.count != 0 %>
         <div class="list_carousel">
@@ -45,11 +45,11 @@
                 </li>
             <% end %>
           </ul>
-          <div class="clearfix"></div>
+         <!-- <div class="clearfix"></div>
           <a id="prev3" class="prev" href="#">&lt;</a>
           <a id="next3" class="next" href="#">&gt;</a>
 
-        </div>
+        </div>-->
     <% else %>
         No Product Found
     <% end %>
