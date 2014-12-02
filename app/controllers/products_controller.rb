@@ -315,6 +315,10 @@ class ProductsController < ApplicationController
     # render :layout => false
   end
 
+  def vendor_widget
+    render :layout => false
+  end
+
   def prepare_response_json
     defatetime = Time.now.to_i
     html = html = render_to_string(:layout => false)

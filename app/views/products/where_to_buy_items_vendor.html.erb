@@ -405,36 +405,25 @@
                         <% if @activate_tab %>
                             <ul id="plmenu" class="plnav plnav-tabs">
                               <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
-                              <% @items.each_with_index do |each_item, index| %>
-                                  <% if index < @show_count %>
-                                      <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
+                              <li class="active">
 
-                                        <a href="javascript:void(0)" onclick="PlannTo.onclick_function('<%= each_item.id %>', this, <%= @moredetails %>, '<%= @ref_url %>')">
-                                                    <span style="float:left;"><img  src="<%=each_item.small_image_url %>" alt="<%=each_item.name%>"  onerror="this.error=null;this.src='<%=each_item.small_image_url %>';" style="margin-right: 8px;height: 26px;"/>
+                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function('Lipstick', this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                                    <span style="float:left;">
                                                   </span><span style="float:left;">
-                                                    <%= each_item.name.to_s.truncate(30) %>
+                                                    <%= "Lipstick".to_s.truncate(30) %>
                                                 </span></a>
 
-                                      </li>
-                                  <% end %>
-                              <% end %>
-                              <% if @items.count > @show_count %>
-                                  <li class="pldropdown"><a href="javascript:void(0)">More <b class="plcaret"></b></a>
-                                    <ul class="plsub-menu pldropdown-menu">
-                                      <% @items.each_with_index do |each_item, index| %>
-                                          <% next if index == 0 %>
-                                          <% if index >= @show_count %>
-                                              <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
-                                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function('<%= each_item.id %>', this, <%= @moredetails %>, '<%= @ref_url %>')"><%= each_item.name.to_s.truncate(30) %></a>
-                                              </li>
-                                          <% end %>
-                                      <% end %>
-                                    </ul>
-                                  </li>
-                              <% end %>
+                              </li>
+                              <li class="">
+
+                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function('Lipstick Tool', this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                                    <span style="float:left;">
+                                                  </span><span style="float:left;">
+                                                    <%= "Lipstick Tool".to_s.truncate(30) %>
+                                                </span></a>
+
+                              </li>
                             </ul>
-                        <% else %>
-                            <%=select_tag "w_t_b_items", options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
                         <%end%>
                     <%end%>
                   </td>
@@ -462,53 +451,18 @@
 
         <tr style="border:0px;background:white;">
           <td style="padding:0px;">
-
-            <%unless @moredetails == "true"  %>
-                <table style="width:100%;float:right;">
-                  <tbody style="border:0px;">
-                  <tr id="plannto_inheadertr" style="">
-                    <td id="plannto_inheadercol1" width="35%">Seller</td>
-                    <td id="plannto_inheadercol2"  width="35%">Price</td>
-                    <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
-                  </tr>
-            <%else%>
-
-                <table style="width:30%;float:left;border:0px;margin:0px;border:0px;">
-                  <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
-                    <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.image_url %>';"/></div><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= @item.name %> </div>
-                  </td></tr></tbody></table>
-                <table style="width:59%;float:right;border:0px;border-collapse: collapse;margin:0px;padding:0px;">
-                  <tbody style="border:0px;">
-                  <tr id="plannto_inheadertr" style="border-top:0px;">
-                    <td id="plannto_inheadercol1" width="20%">Seller</td>
-                    <td id="plannto_inheadercol2"  width="20%">Price</td>
-                    <!-- <td id="plannto_inheadercol2"  width="25%">Shipping Time</td> -->
-                    <td width="15%" id="plannto_inheadercol2" >Buy Now</td>
-                  </tr>
-            <%end%>
+            <table style="width:100%;float:right;border:0px;border-collapse: collapse;margin:0px;padding:0px;">
+              <tbody style="border:0px;">
             <%count = 0%>
-            <% if (!@publisher.nil? && @publisher.id == 5) %>
-                <% @gotext = "Buy Now" %>
-            <%else%>
-                <% @gotext = "Go" %>
-            <% end %>
 
-
-            <% @where_to_buy_items.each do |items| %>
+            <% @items.each do |item| %>
                 <tr id="plannto_intr">
-                  <%items.each_with_index do |item, index|%>
-                      <%if display_item_details(item) || 1==1 %>
-                          <%if index == 0%>
-                              <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" alt="Amazon"  style="width:85px;border:0;padding:0;"/> </td>
-                              <td id="plannto_incol2" width="20%"> <%= @item.price %> </td>
-                              <!--
-                                              <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
-                              <!--  <td id="plannto_incol2" width="25%" style="font-weight:normal;"><%#=display_shipping_detail(item)%></td> -->
-                              <!--<td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%#=item.item_details_id%>&iid=<%#=@impression_id%><%#= @test_condition %>" id="plannto_go_button" target="_blank"><%#= @gotext%></a> </td>-->
-                              <td width="15%" id="plannto_incol3"><a href="<%= @item.click_url %>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
-                          <%end%>
-                      <%end%>
-                  <%end%>
+                  <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
+                    <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';"/>
+                  </td>
+                  <td><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= item.name %> </div></td>
+                  <td id="plannto_incol2" width="20%"> <%= item.price %> </td>
+                  <td width="15%" id="plannto_incol3"><a href="<%= item.click_url %>" id="plannto_go_button" target="_blank">Go</a> </td>
                 </tr>
             <% end %>
 

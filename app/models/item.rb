@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   #cache_records :store => :local, :key => "items",:request_cache => true
   FOLLOWTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "CarGroup", "Topic"]
   TOPIC_FOLLOWTYPES = ["Topic","AttributeTag"]
-  ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
+  ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic", "Parent"]
   belongs_to :itemtype
   has_one :item_rating
   has_one :vendor_detail
@@ -1687,7 +1687,7 @@ end
       item.id = each_item.get("ASIN")
       item.name = each_item.get_element("ItemAttributes").get("Title")
       item.price = each_item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice")
-      item.image_url = each_item.get("MediumImage/URL")
+      item.image_url = each_item.get("SmallImage/URL")
       item.small_image_url = each_item.get("ImageSets/ImageSet/SwatchImage/URL")
       item.click_url = each_item.get("DetailPageURL")
       items << item
