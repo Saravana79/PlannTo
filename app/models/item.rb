@@ -1533,7 +1533,7 @@ end
                     buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
                     #buying soon check
-                    top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com"]
+                    top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com","91mobiles.com","buyt.in"]
                     host = Item.get_host_without_www(url)
                     bs = top_sites.include?(host)
 

@@ -1,0 +1,52 @@
+<div class='report_form'>
+  <%= form_for :impression, :url => admin_more_reports_path, :method => :get do |f| %>
+    <div style="display:block;padding-top:10px;clear:both;">
+        <span class="field_name">
+            Select Option for Report:
+        </span>
+        <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+            <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID'], params[:type])) %>
+        </span>
+    </div>
+    <%= f.submit "Generate Report", :class => "btn-link report_btn" %>
+  <% end %>
+</div>
+
+
+<br />
+
+<h2> Report </h2>
+
+<br/>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="header_compare"  > <%= params[:type] %> </th>
+    <th class="header_compare"  > Total Impressions </th>
+  </tr>
+  <% @results.each do |each_hash| %>
+  <tr>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["_id"] %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["count"] %> </td>
+  </tr>
+  <% end %>
+</table>
+
+<br/><br/>
+
+<style type="text/css">
+  .field_name {
+      display: block;
+      float: left;
+      font-size: 14px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 10px;
+  }
+
+    .report_btn
+    {
+        margin-left: 40px;
+        margin-top: 4px;
+    }
+</style>

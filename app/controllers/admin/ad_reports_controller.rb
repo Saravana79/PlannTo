@@ -41,6 +41,62 @@ class Admin::AdReportsController < ApplicationController
     @clicks = @click_result_array.map {|each_array| each_array[1]}
   end
 
+  def m_widget_reports
+    @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+    @search_path = admin_m_widget_reports_path
+
+    @publishers = Publisher.all
+    params[:publisher_id] ||= Publisher.first.id
+
+    @publisher = Publisher.find_by_id(params[:publisher_id])
+    @vendors = Vendor.all
+
+    params[:vendor_id] ||= nil
+
+    imp_report_results, click_report_results = AggregatedDetail.chart_data_widgets_from_mongo(params[:publisher_id], @start_date, @end_date)
+
+    new_imp_results = {}
+    imp_report_results.each {|each_row| new_imp_results.merge!("#{each_row['_id']['year']}-#{each_row['_id']['month']}" => {"winning_price" => each_row["winning_price"], "count" => each_row["count"]})}
+    # new_imp_results = Hash[new_imp_results.sort]
+    @x_values = new_imp_results.keys
+    @impressions = new_imp_results.values.map{|each_val| each_val['count']}
+    @winning_price = new_imp_results.values.map{|each_val| ("%.2f" % each_val['winning_price'].to_f).to_f}
+
+    new_click_results = {}
+    click_report_results.each {|each_row| new_click_results.merge!("#{each_row['_id']['year']}-#{each_row['_id']['month']}" => {"count" => each_row["count"]})}
+    @clicks = new_click_results.values.map{|each_val| each_val['count']}
+
+    condition = ""
+    unless params[:search].blank?
+      condition = condition + " and vendor_ids = #{params[:search][:vendor_id]}" unless params[:search][:vendor_id].blank?
+      condition = condition + " and order_status = '#{params[:search][:order_status]}'" unless params[:search][:order_status].blank?
+      condition = condition + " and payment_status = '#{params[:search][:payment_status]}'" unless params[:search][:payment_status].blank?
+    end
+
+    if params[:commit] == "Clear"
+      condition = ""
+      params[:search] = {}
+    elsif params[:commit] != "Filter"
+      params[:search] ||= {}
+    end
+
+    @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @publisher.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
+    vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
+
+    @impressionscount = @impressions.sum
+    @clickscount = @clicks.sum
+    @total_orders = @order_histories.count
+    @total_revenue = @order_histories.map(&:total_revenue).compact.inject(:+) rescue 0
+
+    @vendors =  VendorDetail.where(:item_id => vendor_ids)
+  end
+
+  def more_reports
+    option_type = params[:type] ||= "Item"
+    @results = AdImpression.get_results_from_mongo(option_type)
+  end
+
   def widget_reports
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date

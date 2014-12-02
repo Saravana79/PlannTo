@@ -51,6 +51,10 @@ module PlanNto
       html_tag
     }
 
+    config.generators do |g|
+      g.orm :active_record
+    end
+
     config.middleware.use Oink::Middleware, :logger => Hodel3000CompliantLogger.new(STDOUT)
 
   end
