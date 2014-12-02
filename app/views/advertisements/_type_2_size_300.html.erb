@@ -28,7 +28,7 @@
                             <h3><%= item_detail.ItemName %></h3>
 
                             <p class="product-desc">
-                              <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
+                              <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
                             </p>
 
                             <p class="price"><%= prettify(item_detail) %></p>
@@ -58,3 +58,9 @@
   <!-- end of advt-300 -->
 </div>
 <!-- end of advt-block -->
+
+<style type="text/css">
+    .shop-now {
+        margin: 26px 0 0 !important;
+    }
+</style>
