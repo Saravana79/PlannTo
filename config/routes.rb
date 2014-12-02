@@ -271,6 +271,9 @@ resources :comments do
   resources :consoles do
     resources :shares
   end
+  resources :beauties do
+    resources :shares
+  end
   resources :mobiles do 
     resources :reports
   end  
@@ -299,6 +302,9 @@ resources :comments do
     resources :reports
   end
   resources :consoles do
+    resources :reports
+  end
+  resources :beauties do
     resources :reports
   end
   resources :bike_groups
