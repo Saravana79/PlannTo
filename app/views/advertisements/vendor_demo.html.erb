@@ -25,6 +25,7 @@
 <div class="advertisements">
   <h1>Contextual Ads Demo</h1>
   <div class="ad_list">
+    <% if params[:page_type] == "type_1" %>
     <div class="row">
       <div class="ad_728_90">
         <span>728x90</span>
@@ -53,6 +54,26 @@
       </div>
     </div>
   </div>
+
+  <% else %>
+  <div class="row">
+    <div class="ad_300_250">
+      <span>300x250</span>
+      <iframe id="plannto_ad_frame_300" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*250&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=type_2"; %>" width="300px" height="250px" style="border: medium none;;"></iframe>
+    </div>
+  </div>
+  <div class="row">
+    <div class="row">
+      <div class="ad_728_90">
+        <span>728x90</span>
+        <iframe id="plannto_ad_frame_728" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=728*90&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=type_2"; %>" width="728px" height="90px" style="border: medium none;;"></iframe>
+      </div>
+    <div class="ad_120_600">
+      <span>120x600</span>
+      <iframe id="plannto_ad_frame_120" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=120*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=type_1"; %>" width="120px" height="600px" style="border: medium none;;"></iframe>
+    </div>
+  </div>
+  <% end %>
 </div>
 
 </body>
