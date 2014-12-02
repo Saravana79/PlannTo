@@ -1,0 +1,575 @@
+<% if (!@where_to_buy_items.empty?) or (!@best_deals.nil?) %>
+
+    <%if @path =="wheretobuymain" %>
+
+        <style type="text/css">
+            /*Initialize*/
+            ul#plmenu, ul#plmenu ul.plsub-menu {
+                padding: 0;
+                margin: 0;
+            }
+
+            ul#plmenu li, ul#plmenu ul.plsub-menu li {
+                list-style-type: none;
+                display: inline-block;
+                margin: -1px!important;
+                padding:0px;
+            }
+            ul#plmenu ul.plsub-menu li {
+                width:250px;
+            }
+
+            /*Link Appearance*/
+            /*ul#plmenu li a, ul#plmenu li ul.sub-menu li a {*/
+            /*text-decoration: none;*/
+            /*color: #fff;*/
+            /*background: #666;*/
+            /*padding: 5px;*/
+            /*display: inline-block;*/
+            /*}*/
+
+            /*Make the parent of sub-menu relative*/
+            ul#plmenu li {
+                position: relative;
+            }
+
+            /*sub menu*/
+            ul#plmenu li ul.plsub-menu {
+                display: none;
+                position: absolute;
+                right: 0;
+                width: 250px;
+            }
+
+            ul#plmenu li:hover ul.plsub-menu {
+                display: block;
+            }
+
+            /*twitter bootstrap css*/
+
+            .plcaret {
+                display: inline-block;
+                width: 0;
+                height: 0;
+                margin-left: 2px;
+                vertical-align: middle;
+                border-top: 4px solid;
+                border-right: 4px solid transparent;
+                border-left: 4px solid transparent;
+            }
+            .pldropdown {
+                position: relative;
+                float:right!important;
+                text-align: right;
+            }
+            .pldropdown-toggle:focus {
+                outline: 0;
+            }
+            .pldropdown-menu {
+                position: absolute!important;
+                top: 100%!important;
+                right: -1px!important;
+                z-index: 1000;
+                display: none;
+                float: right!important;
+                min-width: 160px!important;
+                padding: 5px 0;
+                margin: 2px 0 0;
+                font-size: 14px;
+                list-style: none;
+                background-color: #fff;
+                background-clip: padding-box;
+                border: 1px solid #ccc;
+                border: 1px solid rgba(0, 0, 0, .15);
+                border-radius: 4px;
+                -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+            }
+
+            .pldropdown-menu > li > a {
+                display: block;
+                padding: 3px 20px;
+                clear: both;
+                font-weight: normal;
+                line-height: 1.42857143;
+                /*color: #333;*/
+                white-space: nowrap;
+            }
+            .pldropdown-menu > li > a:hover,
+            .pldropdown-menu > li > a:focus {
+                color: #262626;
+                text-decoration: none;
+                background-color: #f5f5f5;
+            }
+            .pldropdown-menu > .active > a,
+            .pldropdown-menu > .active > a:hover,
+            .pldropdown-menu > .active > a:focus {
+                color: #fff;
+                text-decoration: none;
+                background-color: #428bca;
+                outline: 0;
+            }
+            .pldropdown-menu > .disabled > a,
+            .pldropdown-menu > .disabled > a:hover,
+            .pldropdown-menu > .disabled > a:focus {
+                color: #999;
+            }
+            .pldropdown-menu > .disabled > a:hover,
+            .pldropdown-menu > .disabled > a:focus {
+                text-decoration: none;
+                cursor: not-allowed;
+                background-color: transparent;
+                background-image: none;
+                filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+            }
+
+            .plnav {
+                padding-left: 0;
+                margin-bottom: 0;
+                list-style: none;
+            }
+            .plnav > li {
+                position: relative;
+                display: block;
+            }
+            .plnav > li > a {
+                position: relative;
+                display: block;
+                padding: 10px 15px;
+            }
+            .plnav > li > a:hover,
+            .plnav > li > a:focus {
+                text-decoration: none;
+                background-color: #eee;
+            }
+            .plnav > li.disabled > a {
+                color: #999;
+            }
+            .plnav > li.disabled > a:hover,
+            .plnav > li.disabled > a:focus {
+                color: #999;
+                text-decoration: none;
+                cursor: not-allowed;
+                background-color: transparent;
+            }
+            .plnav .open > a,
+            .plnav .open > a:hover,
+            .plnav .open > a:focus {
+                background-color: #eee;
+                border-color: #428bca;
+            }
+            .plnav .plnav-divider {
+                height: 1px;
+                margin: 9px 0;
+                overflow: hidden;
+                background-color: #e5e5e5;
+            }
+            .plnav > li > a > img {
+                max-width: none;
+            }
+
+            .plnav-pills > li {
+                float: left;
+            }
+            .plnav-pills > li > a {
+                border-radius: 4px;
+            }
+            .plnav-pills > li + li {
+                margin-left: 2px;
+            }
+            .plnav-pills > li.active > a,
+            .plnav-pills > li.active > a:hover,
+            .plnav-pills > li.active > a:focus {
+                color: #fff;
+                background-color: #428bca;
+            }
+
+            .plnav-tabs,
+            .plnav-pills {
+                *zoom: 1;
+            }
+
+            .plnav-tabs:before,
+            .plnav-pills:before,
+            .plnav-tabs:after,
+            .plnav-pills:after {
+                display: table;
+                line-height: 0;
+                content: "";
+            }
+
+            .plnav-tabs:after,
+            .plnav-pills:after {
+                clear: both;
+            }
+
+            .plnav-tabs > li,
+            .plnav-pills > li {
+                float: left;
+                min-width: 120px;
+            }
+
+            .plnav-tabs > li > a,
+            .plnav-pills > li > a {
+                padding-right: 12px;
+                padding-left: 12px;
+                margin-right: 2px;
+                line-height: 14px;
+            }
+
+            .plnav-tabs {
+                border-bottom: 1px solid #ddd;
+            }
+
+            .plnav-tabs > li {
+                margin-bottom: -1px;
+            }
+
+            .plnav-tabs > li > a {
+                color:#428BCA!important;
+                padding-top: 10px;
+                padding-bottom: 5px;
+                line-height: 20px;
+                border: 1px solid transparent;
+                -webkit-border-radius: 4px 4px 0 0;
+                -moz-border-radius: 4px 4px 0 0;
+                border-radius: 4px 4px 0 0;
+                height:23px;
+                font-size: 13px;
+            }
+
+            .plnav-tabs > li > a:hover,
+            .plnav-tabs > li > a:focus {
+                border-color: #eeeeee #eeeeee #dddddd;
+            }
+
+            .plnav-tabs > .active > a,
+            .plnav-tabs > .active > a:hover,
+            .plnav-tabs > .active > a:focus {
+                color: #555!important;
+                cursor: default;
+                background-color: #ffffff;
+                border: 1px solid #ddd;
+                border-bottom-color: transparent;
+            }
+
+            .plnav-pills > li > a {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                margin-top: 2px;
+                margin-bottom: 2px;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+            }
+
+            .plnav-pills > .active > a,
+            .plnav-pills > .active > a:hover,
+            .plnav-pills > .active > a:focus {
+                color: #ffffff;
+                background-color: #0088cc;
+            }
+
+            a {
+                color: #428BCA;
+                text-decoration: none;
+            }
+            #plannto_headertd {padding: 5px 0px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;background:white;border:0px;}
+            #plannto_table{border:0px;font-family: Arial;border-collapse: collapse;}
+            #plannto_poweredby{font-size:9px;font-weight:bold;color: darkgray;padding-right: 1px;}
+            #plannto_logo{padding: 2px;font-size:12px;font-weight:bold;color:darkgray;}
+            #plannto_logo:hover{text-decoration: underline;cursor:pointer;}
+            #plannto_logo1{color: #129FBD;}
+            #plannto_insidediv{padding:3px 5px 5px 5px;background: #EEE;}
+            #plannto_intable{background: #FFF;border-collapse:collapse;border:0;margin:0px;}
+            #plannto_intr{border-bottom: 1px solid #EEE;height: 40px;background:white;border-top: 0px;}
+            #plannto_intd{font-weight: 700;font-size:12px;color:black;padding:10px 5px 10px 0px;;vertical-align:middle;background:white;float:none;display:table-cell;border:0px;}
+            .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-weight: 700;font-size:12px;font-family: inherit;}
+            #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;float:none;border:0px;}
+            #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;float:none;display:table-cell;border:0px;}
+            #plannto_incol3{padding:0px 10px 0px 0px ;text-align:center;vertical-align:middle;background:white;border:0px;}
+            #plannto_go_button{margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
+            #plannto_footertd{padding-right:10px;vertical-align:middle;height:40px;background: white;padding:0px;float:none;display:table-cell;border:0px;}
+            #plannto_footertr{background:white;}
+            #plannto_footerspan{float:left;padding-left:20px}
+            #plannto_footera{font-weight:bold;font-size:13px;text-decoration: underline;color:#535353;}
+            #plannto_inheadertr{border-bottom: 1px solid #EEE;height: 35px;background:#FAFAFA;}
+            #plannto_inheadercol1{padding: 0px 0px 0px 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;float:none;background:white;border:0px;}
+            #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;padding:0px;float:none;display:table-cell;background:white;border:0px;}
+
+            .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
+            .shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #12c1e6!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #12c1e6;}
+            .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
+            .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:50%;text-align: center;}
+            .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}
+            #prodname{font-size: 15px;}
+
+            /* for igyaan*/
+            <% if (!@publisher.nil? && @publisher.id == 5) %>
+            /* for igyaan*/
+            #plannto_table{border:0px;font-family:'PT Sans', sans-serif;}
+            #plannto_headertd {padding: 5px 0px 0px 0px;margin:0px;font-size:13px;color:#07ABE2;font-family: 'PT Sans', sans-serif;font-weight: 300;}
+            #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;}
+            #plannto_inheadercol1{padding-left: 25px;font-weight:bold;font-size:13px;text-align:left;vertical-align:middle;background:#FAFAFA;font-family: Arvo, serif;}
+            #plannto_inheadercol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:#FAFAFA;font-family: Arvo, serif;}
+            #prodname{font-family: "Arvo", serif;color: #4C4A4A;line-height: 1.61;font-size: 1.07143rem;text-transform: uppercase;font-weight: normal;}
+            .plannto_selector{padding: 3px 12px;border: 1px solid #CCC;width: 100%;border-radius: 2px;font-size:14px;font-family:  'Roboto Slab',sans-serif;font-weight:500;margin-top:5px;}
+            .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px; display:inline-block; margin:0; text-align:center;font-family: Arvo, serif; font-weight: 500;}
+            #plannto_insidediv{padding:2px 0px 0px 0px;background: #EEE;}
+            .plnav-tabs > li > a {
+                padding-top: 10px;
+                padding-bottom: 5px;
+                line-height: 20px;
+                border: 1px solid transparent;
+                -webkit-border-radius: 4px 4px 0 0;
+                -moz-border-radius: 4px 4px 0 0;
+                border-radius: 4px 4px 0 0;
+                height:40px;
+                font-size: 13px;
+            }
+            <% end %>
+            <% if (!@publisher.nil? && @publisher.id == 16) %>
+            #plannto_headertd {padding: 5px 0px 0px 0px;margin:0px;font-size:14px;font-weight:bold;color: #129FBD;background:#F7F9FA;border:0px;}
+
+            <% end %>
+            a { outline: none; }
+        </style>
+
+        <!-- /* for igyaan*/ -->
+        <% if (!@publisher.nil? && @publisher.id == 5) %>
+            <hr class="separator  separator--subsection">
+        <%end%>
+        <table width="100%"  id="plannto_table" >
+          <tbody style="border:0px;">
+          <tr style="border:0px;background:white;">
+            <td id="plannto_headertd">
+
+              <ul class="shadetabs">
+                <% unless @show_price == "false" %>
+                    <li class="selected">
+
+                      <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
+                    </li>
+                <%end%>
+                <%if @show_offer != "false" %>
+                    <li class="unselected">
+
+                      <a href="javascript:void(0)" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a>
+                    </li>
+                <%end%>
+              </ul>
+
+              <!--<span>Best Prices</span>-->
+
+              <%if @moredetails == "true" %>
+                  <!--
+
+                  <div style="float:right;">
+                      <span id="plannto_poweredby">Powered By</span>
+                      <span id="plannto_logo">Plann<font id="plannto_logo1">To</font></span>
+                  </div>
+                -->
+              <%else%>
+
+              <%end%>
+
+            </td>
+          </tr>
+          <tr style="border:0px;">
+            <td style="padding:0;margin:0;border:0px;" id="tabreplacement">
+              <!-- main where to buy check ends here. -->
+    <%end%>
+
+
+    <%if @show_price != "false" %>
+        <%if @path !="onchange"%>
+
+            <div id="plannto_insidediv">
+              <table id="plannto_intable" width="100%">
+                <thead style="border:0px;display:table-header-group;">
+                <tr id="plannto_intr" style="border:0px">
+                  <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
+                    <%if @items.size == 1%>
+                        <div style="width:100%;border-bottom: 1px solid #EEE;display: block;">
+                                 <span style="float:left;padding-left: 10px;padding-top: 5px;">
+
+                                 <img  src="<%=@item.small_image_url%>" alt="<%=@item.name%>"  onerror="this.error=null;this.src='<%=@item.small_image_url%>';" style="width:60px;"/>
+
+                                </span>
+                                 <span style="padding-left:5px;padding-top:15px;float:left;" id="prodname">
+                                   <%=@item.get_name%>
+                                </span>
+                          <br clear="all" />
+                        </div>
+                    <%else%>
+                        <% if @activate_tab %>
+                            <ul id="plmenu" class="plnav plnav-tabs">
+                              <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
+                              <% @items.each_with_index do |each_item, index| %>
+                                  <% if index < @show_count %>
+                                      <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
+
+                                        <a href="javascript:void(0)" onclick="PlannTo.onclick_function('<%= each_item.id %>', this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                                    <span style="float:left;"><img  src="<%=each_item.small_image_url %>" alt="<%=each_item.name%>"  onerror="this.error=null;this.src='<%=each_item.small_image_url %>';" style="margin-right: 8px;height: 26px;"/>
+                                                  </span><span style="float:left;">
+                                                    <%= each_item.name.to_s.truncate(30) %>
+                                                </span></a>
+
+                                      </li>
+                                  <% end %>
+                              <% end %>
+                              <% if @items.count > @show_count %>
+                                  <li class="pldropdown"><a href="javascript:void(0)">More <b class="plcaret"></b></a>
+                                    <ul class="plsub-menu pldropdown-menu">
+                                      <% @items.each_with_index do |each_item, index| %>
+                                          <% next if index == 0 %>
+                                          <% if index >= @show_count %>
+                                              <li class="<%= @item.id == each_item.id ? 'active' : '' %>">
+                                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function('<%= each_item.id %>', this, <%= @moredetails %>, '<%= @ref_url %>')"><%= each_item.name.to_s.truncate(30) %></a>
+                                              </li>
+                                          <% end %>
+                                      <% end %>
+                                    </ul>
+                                  </li>
+                              <% end %>
+                            </ul>
+                        <% else %>
+                            <%=select_tag "w_t_b_items", options_for_select(@items.map{|i|[i.name,i.id]}),:onchange=>"PlannTo.onchange_function(this," + @moredetails+ ")",:class=>"plannto_selector" %>
+                        <%end%>
+                    <%end%>
+                  </td>
+                </tr>
+                </thead>
+                <tbody style="border:0px;" id="where_to_buy_items_onchange">
+        <%end%>
+        <% if @activate_tab && @items.size != 1 && 1 != 1%>
+            <tr >
+              <td colspan="5" id="">
+
+                <div style="width:100%;">
+		 <span style="float:left;padding-left: 10px;padding-top: 5px;">
+
+		 <img src="<%= @item.image_url(:medium) %>" alt="<%= @item.name %>" onerror="this.error=null;this.src='<%= @item.base_item_image_url(:medium) %>';" style="width:60px;"/>
+
+		</span>
+		 <span style="padding-left:5px;padding-top:15px;float:left;" id="prodname">
+		   <%= @item.get_name %>
+		</span>
+                </div>
+              </td>
+            </tr>
+        <% end %>
+
+        <tr style="border:0px;background:white;">
+          <td style="padding:0px;">
+
+            <%unless @moredetails == "true"  %>
+                <table style="width:100%;float:right;">
+                  <tbody style="border:0px;">
+                  <tr id="plannto_inheadertr" style="">
+                    <td id="plannto_inheadercol1" width="35%">Seller</td>
+                    <td id="plannto_inheadercol2"  width="35%">Price</td>
+                    <td width="30%" id="plannto_inheadercol2" >Buy Now</td>
+                  </tr>
+            <%else%>
+
+                <table style="width:30%;float:left;border:0px;margin:0px;border:0px;">
+                  <tbody style="border:0px;"><tr style="border:0px;background:white;"><td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
+                    <div style="padding-top: 25px;"><img src="<%= @item.image_url %>" onerror="this.error=null;this.src='<%= @item.image_url %>';"/></div><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= @item.name %> </div>
+                  </td></tr></tbody></table>
+                <table style="width:59%;float:right;border:0px;border-collapse: collapse;margin:0px;padding:0px;">
+                  <tbody style="border:0px;">
+                  <tr id="plannto_inheadertr" style="border-top:0px;">
+                    <td id="plannto_inheadercol1" width="20%">Seller</td>
+                    <td id="plannto_inheadercol2"  width="20%">Price</td>
+                    <!-- <td id="plannto_inheadercol2"  width="25%">Shipping Time</td> -->
+                    <td width="15%" id="plannto_inheadercol2" >Buy Now</td>
+                  </tr>
+            <%end%>
+            <%count = 0%>
+            <% if (!@publisher.nil? && @publisher.id == 5) %>
+                <% @gotext = "Buy Now" %>
+            <%else%>
+                <% @gotext = "Go" %>
+            <% end %>
+
+
+            <% @where_to_buy_items.each do |items| %>
+                <tr id="plannto_intr">
+                  <%items.each_with_index do |item, index|%>
+                      <%if display_item_details(item) || 1==1 %>
+                          <%if index == 0%>
+                              <td id="plannto_incol1" width="20%"> <img class="imagevendor" src="http://cdn1.plannto.com/items/vendor/medium/amazon.jpeg" alt="Amazon"  style="width:85px;border:0;padding:0;"/> </td>
+                              <td id="plannto_incol2" width="20%"> <%= @item.price %> </td>
+                              <!--
+                                              <td id="plannto_incol2" width="20%"><%#=display_availability_detail(item)%></td> -->
+                              <!--  <td id="plannto_incol2" width="25%" style="font-weight:normal;"><%#=display_shipping_detail(item)%></td> -->
+                              <!--<td width="15%" id="plannto_incol3"><a href="http://www.plannto.com/history_details?detail_id=<%#=item.item_details_id%>&iid=<%#=@impression_id%><%#= @test_condition %>" id="plannto_go_button" target="_blank"><%#= @gotext%></a> </td>-->
+                              <td width="15%" id="plannto_incol3"><a href="<%= @item.click_url %>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
+                          <%end%>
+                      <%end%>
+                  <%end%>
+                </tr>
+            <% end %>
+
+            <% if count > @displaycount %>
+                <tr id="plannto_footertr">
+                  <%if @moredetails == "true"
+                      @wrapper="2"
+                    else
+                      @wrapper="2"
+                    end
+                  %>
+                  <td  id="plannto_footertd" colspan="<%=@wrapper%>">
+                                    <span id="plannto_footerspan">
+                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%><%= @test_condition %>" id="plannto_footera" target="_blank">View prices from more retailers</a>
+                                    </span>
+                  </td>
+                  <td id="plannto_incol3" width="15%">
+                                    <span >
+                                      <a href="http://www.plannto.com/external_page?item_id=<%=@item.id%>&iid=<%=@impression_id%><%= @test_condition %>" id="plannto_go_button" target="_blank"><%= @gotext%></a>
+                                    </span>
+                  </td>
+                </tr>
+            <% end %>
+            <%if @path!="onchange"%>
+                </tbody>
+                </table>
+                <div>
+            <%end%>
+
+    <%else%>
+        <!-- else for only showing offers -->
+        <%= render "products/product_offers_details" %>
+    <%end%>
+    <%if @path=="wheretobuymain"%>
+
+        </td>
+        </tr>
+        </div>
+        </tbody>
+        </table>
+        </td>
+        </tr>
+
+
+
+
+        </tbody>
+        </table>
+
+
+        <!-- /* for igyaan*/ -->
+        <% if (!@publisher.nil? && @publisher.id == 5) %>
+            <hr class="separator  separator--subsection">
+        <%end%>
+        <!--
+<div style="float:right;background:white;">
+   <span id="plannto_poweredby">Powered By</span>
+   <span id="plannto_logo"><a href="http://www.plannto.com" style="font:inherit;color:inherit;text-decoration:inherit;">PlannTo.com</a></span>
+</div>
+-->
+    <%end%>
+    <%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
+
+<% end %>

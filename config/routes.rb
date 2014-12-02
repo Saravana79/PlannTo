@@ -71,6 +71,7 @@ namespace :admin do
   match "/get_class_names",:to => "contents#get_class_names"
   match "/external_page",:to => "products#external_page"
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
+  match "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
   match "/product_offers",:to => "products#product_offers"
   match "/product_autocomplete",:to => "products#product_autocomplete"
   match "/get_item_for_widget",:to => "products#get_item_for_widget"

@@ -51,7 +51,7 @@ class Mobile < Product
       item.rating
     end
     integer :orderbyid  do |item|
-      item.itemtype.orderby
+      item.itemtype.orderby rescue ""
     end
     dynamic_float :features do |car|
       car.attribute_values.inject({}) do |hash,attribute_value|

@@ -1676,6 +1676,26 @@ end
     host
   end
 
+  def self.get_items_from_amazon(keyword)
+    res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
+    items = []
+    loop_items = res.items.first(5)
+    loop_items.each_with_index do |each_item, index|
+      p each_item
+      item = OpenStruct.new
+      # item.id = 1000 + index
+      item.id = each_item.get("ASIN")
+      item.name = each_item.get_element("ItemAttributes").get("Title")
+      item.price = each_item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice")
+      item.image_url = each_item.get("MediumImage/URL")
+      item.small_image_url = each_item.get("ImageSets/ImageSet/SwatchImage/URL")
+      item.click_url = each_item.get("DetailPageURL")
+      items << item
+    end
+    p items
+    items
+  end
+
   private
 
   def create_item_ad_detail
