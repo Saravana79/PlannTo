@@ -462,7 +462,7 @@
                   <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
                     <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height="50px"  style="margin:5px;"/>
                   </td>
-                  <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name %> </div></td>
+                  <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(90) %> </div></td>
                   <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price %> </td>
                   <td width="15%" id="plannto_incol3">
                     <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"), 
