@@ -1,14 +1,16 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
+class Beauty < Product
 
-class Mobile < Product
-#  has_many :itemrelationships, :foreign_key => :item_id
-#  has_many :relatedcars,
-#    :through => :itemrelationships, :include => :cargroup
-  acts_as_taggable
-  #  acts_as_taggable_on :product
-  acts_as_commentable
-  
+  has_one :itemrelationship, :foreign_key => :item_id
+
+  has_one :parent,
+          :through => :itemrelationship
+#        :conditions => {'relationtype' => 'Manufacturer'}
+#        :class_name => 'Manufacturer',
+#        :source => :manufacturer
+#   has_one :parent, :through => :itemrelationship, :source => :parent
+
+  # has_many :compares, :as => :comparable
+  #
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 2.0,  :as => :name_ac do |item|
       tempName = item.name.gsub("-","")
@@ -19,11 +21,11 @@ class Mobile < Product
         tempName =tempName + " " + item.hidden_alternative_name.to_s.gsub("-", "")
       end
       tempName
-    end 
-         
+    end
+
     text :nameformlt do |item|
       item.name.to_s.gsub("-", "")
-    end 
+    end
 
     string :status
 
@@ -32,21 +34,21 @@ class Mobile < Product
     end
     time :created_at
     float :rating_search_result do |item|
-     if !(item.item_rating.nil?)
-       unless item.item_rating.average_rating.to_i == 0 or item.item_rating.average_rating.nil? or item.item_rating.average_rating.blank?
+      if !(item.item_rating.nil?)
+        unless item.item_rating.average_rating.to_i == 0 or item.item_rating.average_rating.nil? or item.item_rating.average_rating.blank?
           item.item_rating.final_rating
         end
-     end
-   end
+      end
+    end
     date :launch_date do |item|
-     valuetemp = item.attribute_values.where(:attribute_id => 8).first.value rescue ""
-     if (valuetemp.nil? or valuetemp == ""  rescue true)
-       item.created_at
-     else
-         (Date.parse(valuetemp) rescue item.created_at)
-     end
-    end  
-      
+      valuetemp = item.attribute_values.where(:attribute_id => 8).first.value rescue ""
+      if (valuetemp.nil? or valuetemp == ""  rescue true)
+        item.created_at
+      else
+        (Date.parse(valuetemp) rescue item.created_at)
+      end
+    end
+
     float :rating  do |item|
       item.rating
     end
@@ -83,18 +85,4 @@ class Mobile < Product
     end
 
   end
-
-  def plan_to_buy
-    "Plan to buy"
-  end
-
-  def own_a_item
-    "I Own it"
-  end
-
-  def follow_this_item
-    "Follow This Car"
-  end
-
-  
 end

@@ -207,6 +207,7 @@ class AdvertisementsController < ApplicationController
 
   def vendor_demo
     params[:ref_url] ||= ""
+    params[:page_type] ||= "type_1"
     params[:ads_id] ||= 3
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"

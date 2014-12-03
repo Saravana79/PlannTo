@@ -18,7 +18,7 @@ has_one :manufacturer,
  def self.search_type(type)
 
    if (type.blank? || type.include?("Others"))
-      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Lens".camelize.constantize,"Television".camelize.constantize]
+      return [ "ItemtypeTag".camelize.constantize, "AttributeTag".camelize.constantize,"Topic".camelize.constantize,"Manufacturer".camelize.constantize, "CarGroup".camelize.constantize,"Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Game".camelize.constantize,"Console".camelize.constantize,"WearableGadget".camelize.constantize,"Laptop".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize,"Tablet".camelize.constantize,"Hotel".camelize.constantize,"City".camelize.constantize,"Lens".camelize.constantize,"Television".camelize.constantize, "Beauty".camelize.constantize]
    end
    if type.is_a?(Array)
      return_val = type.collect{|t| t.to_s.gsub(/\s+/,'').strip.camelize.singularize.constantize rescue t.to_s.gsub(/\s+/,'').strip.camelize.constantize}
@@ -38,7 +38,7 @@ has_one :manufacturer,
 
 def self.follow_search_type(type)
   if  type == "owner" || type == "buyer"
-     return ["Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize] 
+     return ["Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
   elsif  type == "follower"
     return ["AttributeTag".camelize.constantize,"Topic".camelize.constantize]
   elsif  type == "profile_follower"

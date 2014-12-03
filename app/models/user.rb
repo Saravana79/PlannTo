@@ -219,8 +219,7 @@ class User < ActiveRecord::Base
 
   def get_follow_items(item_type)
     begin
-      # (follows.group_by(&:follow_type)[item_type]).map(&:followable_id).join(",")
-      ""
+      (follows.group_by(&:follow_type)[item_type]).map(&:followable_id).join(",")
     rescue
       nil
     end

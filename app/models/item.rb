@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   #cache_records :store => :local, :key => "items",:request_cache => true
   FOLLOWTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "CarGroup", "Topic"]
   TOPIC_FOLLOWTYPES = ["Topic","AttributeTag"]
-  ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic"]
+  ITEMTYPES = ["Car","Mobile","Cycle","Tablet","Bike","Camera","Manufacturer", "Car Group", "Topic", "Parent"]
   belongs_to :itemtype
   has_one :item_rating
   has_one :vendor_detail
@@ -1533,7 +1533,7 @@ end
                     buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
 
                     #buying soon check
-                    top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com"]
+                    top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com","91mobiles.com","buyt.in"]
                     host = Item.get_host_without_www(url)
                     bs = top_sites.include?(host)
 
@@ -1674,6 +1674,35 @@ end
       host = ""
     end
     host
+  end
+
+  def self.get_items_from_amazon(keyword)
+    res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
+    items = []
+    loop_items = res.items.first(5)
+    loop_items.each_with_index do |each_item, index|
+      p each_item
+      item = OpenStruct.new
+      # item.id = 1000 + index
+      item.id = each_item.get("ASIN")
+      item.name = each_item.get_element("ItemAttributes").get("Title")
+      item.price = each_item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue nil
+      item.image_url = each_item.get("SmallImage/URL")
+      item.small_image_url = each_item.get("ImageSets/ImageSet/SwatchImage/URL")
+      item.click_url = each_item.get("DetailPageURL")
+      items << item
+    end
+    search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content
+    p items
+    return items, search_url
+  end
+
+  def self.get_item_items_from_amazon(item_ids)
+    first_id = item_ids.to_s.split(",").first
+    item = Item.where(:id => first_id).last
+    keyword = item.blank? ? "lipstick" : item.name
+    items, search_url = Item.get_items_from_amazon(keyword)
+    return item, items, search_url
   end
 
   private

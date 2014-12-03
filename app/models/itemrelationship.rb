@@ -19,6 +19,7 @@ class Itemrelationship < ActiveRecord::Base
   belongs_to :related_city, :class_name => 'City', :foreign_key => :relateditem_id
 
 
+  belongs_to :parent, :foreign_key => :relateditem_id, :class_name => "Beauty"
 end
 
 #  belongs_to :item

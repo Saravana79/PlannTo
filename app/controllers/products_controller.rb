@@ -264,6 +264,65 @@ class ProductsController < ApplicationController
     @ref_url = url
     jsonp = prepare_response_json()
     render :text => jsonp, :content_type => "text/javascript"
+   end
+
+  def where_to_buy_items_vendor
+    params[:item_ids] = "27752" if params[:item_ids].blank?
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+    @items = Item.get_items_from_amazon("lipstick")
+    # p @items = Mobile.last(2)
+    # @displaycount = 4
+
+    @item, @items, @search_url = Item.get_item_items_from_amazon(params[:item_ids])
+    @parent = @item.parent
+    p @item
+    p @items
+
+    # include pre order status if we show more details.
+    unless @items.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      # Check have to activate tabs for publisher or not
+      @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+
+      # Update Items if there is only one item
+      # @items = @items
+
+      @where_to_buy_items = []
+
+      # @item = @items.first
+      # @item = @items.select {|each_item| each_item.id == item_ids.first}.first if !item_ids.first.blank?
+
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      @show_count = Item.get_show_item_count(@items)
+
+      responses = []
+      @where_to_buy_items = [@items]
+      @where_to_buy_items.each do |items|
+        items.each_with_index do |item, index|
+          if index == 0
+            responses << {image_url: item.image_url, display_price: 100, history_detail: "/history_details?detail_id=#{item.id}"}
+          end
+        end
+      end
+    else
+      @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl="")
+    end
+    @ref_url = url
+    jsonp = prepare_response_json()
+    render :text => jsonp, :content_type => "text/javascript"
+    # render :layout => false
+  end
+
+  def vendor_widget
+    render :layout => false
   end
 
   def prepare_response_json
