@@ -414,15 +414,17 @@
                                                 </span></a>
 
                               </li>
-                              <li class="">
+                              <% @extra_items.each do |each_item| %>
+                                  <li class="">
 
-                                <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= @parent.blank? ? "" : @parent.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                    <a href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
                                                     <span style="float:left;">
                                                   </span><span style="float:left;">
-                                                    <%= @parent.blank? ? "" : @parent.name.to_s.truncate(30) %>
+                                                    <%= each_item.name.to_s.truncate(30) %>
                                                 </span></a>
 
-                              </li>
+                                  </li>
+                              <% end %>
                             </ul>
                         <%end%>
                     <%end%>

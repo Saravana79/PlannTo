@@ -1697,12 +1697,65 @@ end
     return items, search_url
   end
 
-  def self.get_item_items_from_amazon(item_ids)
-    first_id = item_ids.to_s.split(",").first
-    item = Item.where(:id => first_id).last
-    keyword = item.blank? ? "lipstick" : item.name
+  def self.get_item_items_from_amazon(items, item_ids)
+    item_id = item_ids.to_s.split(",").first
+    if items.count == 1
+      item = items.first
+      extra_items = [item.parent].compact
+    else
+      if item_id.blank?
+        item = items.first
+      else
+        item = items.select {|each_item| each_item.id == item_id.to_i}.first
+      end
+      extra_items = items - [item]
+      extra_items = extra_items.first(2)
+    end
+    keyword = item.name.to_s
     items, search_url = Item.get_items_from_amazon(keyword)
-    return item, items, search_url
+    return item, items, search_url, extra_items
+  end
+
+
+  def self.get_items_from_url(url, item_ids)
+    @items = []
+    if !item_ids.blank?
+      p item_id = item_ids.to_s.split(",").first
+      @items = Item.where(:id => item_id)
+    else
+      unless url.nil?
+        tempurl = url;
+        if url.include?("?")
+          tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+        end
+        if url.include?("#")
+          tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
+        end
+        @articles = ArticleContent.where(url: tempurl)
+
+        if @articles.empty? || @articles.nil?
+          #for pagination in publisher website. removing /2/
+          tempstr = tempurl.split(//).last(3).join
+          matchobj = tempstr.match(/^\/\d{1}\/$/)
+          unless matchobj.nil?
+            tempurlpage = tempurl[0..(tempurl.length-3)]
+            @articles = ArticleContent.where(url: tempurlpage)
+          end
+        end
+
+        unless @articles.empty?
+          @items = @articles[0].allitems.select{|a| a.is_a? Product}
+          article_items_ids = @items.map(&:id)
+          new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+
+          if !new_items.blank?
+            @items = new_items
+          end
+        end
+      end
+    end
+    @items
+    # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
   end
 
   private
