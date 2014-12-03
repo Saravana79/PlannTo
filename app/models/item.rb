@@ -1701,7 +1701,7 @@ end
     item_id = item_ids.to_s.split(",").first
     if items.count == 1
       item = items.first
-      extra_items = [item.parent].compact
+      extra_items = item.blank? ? [] : [item.parent].compact rescue []
     else
       if item_id.blank?
         item = items.first
