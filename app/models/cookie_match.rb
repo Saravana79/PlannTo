@@ -125,6 +125,8 @@ class CookieMatch < ActiveRecord::Base
 
             user_access_details_import << new_user_access_detail
 
+            next if new_user_access_detail.source == "housing"
+
             msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
             if !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""

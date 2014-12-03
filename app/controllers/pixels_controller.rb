@@ -22,7 +22,8 @@ class PixelsController < ApplicationController
     if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
       @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
     else
-      @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120&google_ula=8365600"
+      google_ula_vendor = params[:source] == "mysmartprice" ? "&google_ula=8365600" : "&google_ula=8423560"
+      @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}"
     end
 
     respond_to do |format|
