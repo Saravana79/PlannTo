@@ -288,7 +288,7 @@
             #plannto_incol1{padding: 0px 0px 0px 15px;text-align:left;vertical-align:middle;background:white;float:none;border:0px;}
             #plannto_incol2{font-weight:bold;font-size:13px;text-align:center;vertical-align:middle;min-width:80px;color:black;background:white;padding:0px;float:none;display:table-cell;border:0px;}
             #plannto_incol3{padding:0px 10px 0px 0px ;text-align:center;vertical-align:middle;background:white;border:0px;}
-            #plannto_go_button{margin: 0; background: #12C1E6;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
+            #plannto_go_button{margin: 0; background: #EA92DB;  color: #FFF!important;  padding: 5px 8px;  border: 0;  font-size: 12px;font-weight: bold; text-decoration: none;}
             #plannto_footertd{padding-right:10px;vertical-align:middle;height:40px;background: white;padding:0px;float:none;display:table-cell;border:0px;}
             #plannto_footertr{background:white;}
             #plannto_footerspan{float:left;padding-left:20px}
@@ -300,8 +300,8 @@
             .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
             .shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #12c1e6!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #12c1e6;}
             .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
-            .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:50%;text-align: center;}
-            .shadetabs li.selected a{ color:#12c1e6!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}
+            .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; border-bottom:3px solid #EEE;background: #EEE !important; list-style-type: none!important;width:100%;text-align: center;}
+            .shadetabs li.selected a{ color:black!important;text-decoration: none; font-size:14px; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center;}
             #prodname{font-size: 15px;}
 
             /* for igyaan*/
@@ -348,14 +348,14 @@
                 <% unless @show_price == "false" %>
                     <li class="selected">
 
-                      <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Prices</a>
+                      <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Top Products from Amazon</a>
                     </li>
                 <%end%>
                 <%if @show_offer != "false" %>
-                    <li class="unselected">
+              <!--      <li class="unselected">
 
                       <a href="javascript:void(0)" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a>
-                    </li>
+                    </li> -->
                 <%end%>
               </ul>
 
@@ -460,20 +460,23 @@
             <% @items.each do |item| %>
                 <tr id="plannto_intr">
                   <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
-                    <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';"/>
+                    <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height="50px"  style="margin:5px;"/>
                   </td>
-                  <td><div style="font-size:15px;font-weight:bold;padding: 12px 0px;"> <%= item.name %> </div></td>
-                  <td id="plannto_incol2" width="20%"> <%= item.price %> </td>
-                  <td width="15%" id="plannto_incol3"><a href="<%= item.click_url %>" id="plannto_go_button" target="_blank">Go</a> </td>
+                  <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name %> </div></td>
+                  <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price %> </td>
+                  <td width="15%" id="plannto_incol3">
+                    <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"), 
+                    item.click_url, :target => "_blank" %>
+                     </td>
                 </tr>
             <% end %>
 
             <% if count > @displaycount || 1==1 %>
                 <tr id="plannto_footertr">
                   <%if @moredetails == "true"
-                      @wrapper="2"
+                      @wrapper="3"
                     else
-                      @wrapper="2"
+                      @wrapper="3"
                     end
                   %>
                   <td  id="plannto_footertd" colspan="<%=@wrapper%>">
