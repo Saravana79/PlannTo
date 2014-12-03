@@ -1,16 +1,12 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
-#ruby '1.9.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 gem 'mysql2'
-gem 'uuidtools'
-
-gem "configatron", "~> 2.8.4"   # deprecated
-#gem 'recursive_open_struct'
-
+gem 'uuidtools' 
+gem "configatron", "~> 2.8.4"
 gem 'dalli'
 gem 'fb_graph'
 gem "oauth"
@@ -31,7 +27,7 @@ gem  "haml"
 gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
 gem 'rails_exception_handler', "~> 2"
 gem 'aws-sdk'
-gem 'record-cache',:git => 'https://github.com/orslumen/record-cache.git'
+gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'
 #gem 'execjs'
 gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
@@ -48,7 +44,7 @@ gem 'citier', '~>0.1.15'
 gem 'rails_sql_views' , :git=> 'https://github.com/morgz/rails_sql_views.git'
 gem 'paperclip'
 gem 'jquery-rails'
-gem 'acts-as-taggable-on', '~>2.2.1'
+gem 'acts-as-taggable-on', '~>2.1.1'
 gem 'acts_as_rateable'
 gem 'remotipart', '~> 1.0'
 gem 'acts_as_commentable'
@@ -75,10 +71,10 @@ gem 'resque-retry', '~> 1.3.2'
 group :test do
   # Pretty printed test output
   gem 'turn', :require => false
-end 
+end
 gem 'geocoder'
 gem 'progress_bar'
-gem "feedzirra"
+gem "feedzirra", '~> 0.1.3'
 
 # TO DO the daily jobs to queue
 gem "clockwork", "~> 0.7.2"
