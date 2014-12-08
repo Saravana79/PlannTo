@@ -688,11 +688,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
   def self.update_include_exclude_products_from_vendors()
-    loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 6}, "tablets" => {:node => 1375458031, :page_count => 2}, "cameras" => {:node => 1389175031, :page_count => 3}}
+    loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 10}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 5}}
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
-      item_ids = get_matching_item_ids(each_val[:page_count], each_val[:node])
+      item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
       ad_item_id << item_ids
     end
     ad_item_id = ad_item_id.flatten
@@ -717,7 +717,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
 
-  def get_matching_item_ids(page_count, node)
+  def self.get_matching_item_ids(page_count, node)
     ad_item_id = []
     [*1..page_count].each do |each_page|
       res = Amazon::Ecs.item_search("", {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => node, :sort => "salesrank", :item_page => each_page})
