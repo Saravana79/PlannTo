@@ -123,7 +123,6 @@
       $("#item_itemtype_id").on("change", function()
       {
           var type = $("#item_itemtype_id :selected").text()
-          console.log(type)
           if (type == "Beauty")
           {
            $(".parent_div").show()
@@ -135,6 +134,12 @@
               $("#parent_id_serach").val("")
           }
       })
+
+      var type = $("#item_itemtype_id :selected").text()
+      if (type == "Beauty")
+      {
+          $(".parent_div").show()
+      }
 
 
   })
