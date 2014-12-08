@@ -30,6 +30,12 @@
     <%= f.hidden_field :group_id, :id => "group" %>
     <%= text_field_tag :group_serach, "", :class => "auto_complete_field" %> <br />
 
+    <div class="parent_div" style="display: none;">
+      <label for="group_id">Parent :</label>
+      <%= hidden_field_tag :parent_id, "", :id => "parent" %>
+      <%= text_field_tag :parent_id_serach, "", :class => "auto_complete_field" %> <br />
+    </div>
+
     <label for="status">Status :</label>
     <%= f.radio_button :status, '1', :checked => @item.status == "1" %>
     <%= label :status_1, 'Available' %>
@@ -79,6 +85,8 @@
                 var type = "manufacturer"
               else if ($required_id == "group")
                 var type = "car_group"
+              else if ($required_id == "parent")
+                  var type = "beauty"
               else
                 var type = $("#item_itemtype_id :selected").text()
 
@@ -111,5 +119,23 @@
               $('#'+$required_id).val(ui.item.id);
           }
       });
+
+      $("#item_itemtype_id").on("change", function()
+      {
+          var type = $("#item_itemtype_id :selected").text()
+          console.log(type)
+          if (type == "Beauty")
+          {
+           $(".parent_div").show()
+          }
+          else
+          {
+              $(".parent_div").hide()
+              $("#parent").val("")
+              $("#parent_id_serach").val("")
+          }
+      })
+
+
   })
 </script>

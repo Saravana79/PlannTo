@@ -147,6 +147,9 @@ class ItemsController < ApplicationController
         if (!params[:item][:group_id].blank?)
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
         end
+        if (!params[:parent_id].blank?)
+          Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:parent_id], :relationtype => "Parent")
+        end
 
         if !image.blank?
           @image = @item.build_image
@@ -185,9 +188,14 @@ class ItemsController < ApplicationController
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:manufacturer_id], :relationtype => "Manufacturer")
         end
         if (!params[:item][:group_id].blank?)
-          group = Itemrelationship.create(:item_id => @item.id, :relationtype => "CarGroup").last
+          group = Itemrelationship.where(:item_id => @item.id, :relationtype => "CarGroup").last
           group.destroy unless group.blank?
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
+        end
+        if (!params[:parent_id].blank?)
+          group = Itemrelationship.where(:item_id => @item.id, :relationtype => "Parent").last
+          group.destroy unless group.blank?
+          Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:parent_id], :relationtype => "Parent")
         end
 
         if !image.blank?
