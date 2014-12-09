@@ -688,7 +688,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
   def self.update_include_exclude_products_from_vendors()
-    loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 10}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 5}}
+    loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 10}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 5}, "laptops" => {:node => 1375424031, :page_count => 3}, "lenses" => {:node => 1389197031, :page_count => 20}}
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
