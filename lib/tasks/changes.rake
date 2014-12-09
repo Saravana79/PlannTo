@@ -11,7 +11,7 @@ namespace :plannto do
 
   desc 'set created by for contents'
   #sample task  rake plannto:update_votes_for_contents[10,13,'Reviews', 5]
-task :update_votes_for_contents, :start_id, :end_id, :sub_type, :votes, :needs => :environment do |t, args|
+task :update_votes_for_contents, [:start_id, :end_id, :sub_type, :votes, :needs] => :environment do |t, args|
   
   contents = Content.where("id BETWEEN ? AND ?", args[:start_id], args[:end_id])
   user_ids = configatron.content_creator_user_ids.split(",")
@@ -33,7 +33,7 @@ task :update_votes_for_contents, :start_id, :end_id, :sub_type, :votes, :needs =
 end
   #sample task  rake plannto:update_created_by_for_contents[10,13]
   desc 'set created by for contents'
-task :update_created_by_for_contents, :start_id, :end_id, :needs => :environment do |t, args|
+task :update_created_by_for_contents, [:start_id, :end_id, :needs] => :environment do |t, args|
   
   contents = Content.where("id BETWEEN ? AND ?", args[:start_id], args[:end_id])
   user_ids = configatron.content_creator_user_ids.split(",")
