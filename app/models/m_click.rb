@@ -17,5 +17,11 @@ class MClick
   field :advertisement_id, type: Integer
   field :sid, type: String
 
+  #click details
+  field :tagging, type: Integer
+  field :retargeting, type: Integer
+  field :pre_appearance_count, type: Integer
+  field :additional_details, type: String
+
   belongs_to :ad_impression
 end

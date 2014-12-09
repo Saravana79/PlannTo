@@ -392,7 +392,7 @@ class Advertisement < ActiveRecord::Base
     time = Time.zone.now + 10.minutes
     hour = time.hour
     advertisements = Advertisement.where(:status => 1)
-    
+
     # if INVALID_HOURS.include?(hour)
     #   advertisements.each do |advertisement|
     #     $redis_rtb.hset("advertisments:#{advertisement.id}", "status", "paused")
@@ -525,8 +525,10 @@ class Advertisement < ActiveRecord::Base
         add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
 
         impression_import = []
+        impression_import_mongo = []
         ad_impressions_list = []
         clicks_import = []
+        clicks_import_mongo = []
         video_imp_import = []
         non_ad_impressions_list = []
         add_impressions.each do |each_rec|
@@ -539,6 +541,11 @@ class Advertisement < ActiveRecord::Base
             if each_rec_class == "AddImpression"
               impression = AddImpression.create_new_record(each_rec_detail)
               impression_import << impression
+              #mongo array
+              impression_mongo = impression.attributes
+              impression_mongo["_id"] = impression_mongo["id"].to_s
+              impression_mongo.delete("id")
+              impression_import_mongo << impression_mongo
               if impression.advertisement_type == "advertisement"
                 ad_impressions_list << impression
               elsif impression.advertisement_type != "advertisement"
@@ -546,7 +553,16 @@ class Advertisement < ActiveRecord::Base
               end
             elsif each_rec_class == "Click"
               click = Click.create_new_record(each_rec_detail)
-              clicks_import << click unless click.blank?
+              unless click.blank?
+                clicks_import << click
+                click_mongo = click.attributes
+                click_mongo["tagging"] = click.t.to_i
+                click_mongo["retargeting"] = click.r.to_i
+                click_mongo["pre_appearance_count"] = click.ic.to_i
+                click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                click_mongo.delete("impression_id")
+                clicks_import_mongo << click_mongo
+              end
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
               video_imp_import << video_imp
@@ -559,6 +575,9 @@ class Advertisement < ActiveRecord::Base
 
         # Impression Process
         AddImpression.import(impression_import)
+
+        #push to mongo
+        AdImpression.collection.insert(impression_import_mongo)
 
         ad_impressions_list_values = $redis_rtb.pipelined do
           ad_impressions_list.each do |each_impression|
@@ -632,6 +651,9 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         Click.import(clicks_import)
         ClickDetail.import(clicks_details)
 
+        #push to mongo
+        MClick.collection.insert(clicks_import_mongo)
+
         VideoImpression.import(video_imp_import)
 
         $redis.ltrim("resque:queue:create_impression_and_click", add_impressions.count, -1)
@@ -680,7 +702,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     start_val = 4
     [23,32,21,5,3,1,10].each do |each_ad|
       result.merge!("pu:#{plannto_user_id}:#{each_ad}:count" => redis_rtb_pu[start_val-4], "pu:#{plannto_user_id}:#{each_ad}:#{Date.today.day}" => redis_rtb_pu[start_val-3], "pu:#{plannto_user_id}:#{each_ad}:clicks:count" => redis_rtb_pu[start_val-2],
-                      "pu:#{plannto_user_id}:#{each_ad}:clicks:#{Date.today.day}" => redis_rtb_pu[start_val-1])
+                    "pu:#{plannto_user_id}:#{each_ad}:clicks:#{Date.today.day}" => redis_rtb_pu[start_val-1])
       start_val+=4
     end
 
