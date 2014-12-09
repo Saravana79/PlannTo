@@ -225,6 +225,11 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def amazon_widget
+    params[:ref_url] ||= "http://www.wiseshe.com/2014/12/11-must-have-nude-lipstick-shades-for-indian-skin-tones.html"
+    render :layout => false
+  end
+
   def search_widget_via_iframe
     render :layout => false
   end

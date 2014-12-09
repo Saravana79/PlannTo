@@ -1700,7 +1700,6 @@ end
     items = []
     loop_items = res.items.first(5)
     loop_items.each_with_index do |each_item, index|
-      p each_item
       item = OpenStruct.new
       # item.id = 1000 + index
       item.id = each_item.get("ASIN")
