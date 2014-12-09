@@ -4,7 +4,7 @@ if Rails.env.production?
   ENV['HEROKU_USER'] = "siva@plannto.com"
   ENV['HEROKU_PASSWORD'] = "sivaplannto"
   ENV["HEROKU_APP"] = "plannto"
-  ENV["MONGOLAB_URI"] = "mongodb://heroku_app4176992:2q253r5a1e74dj1kfpifpbk4di@ds037990.mongolab.com:37990/heroku_app4176992"
+  # ENV["MONGOLAB_URI"] = "mongodb://heroku_app32111901:fdtkm30k97nh3phn51utncongs@ds063140.mongolab.com:63140/heroku_app32111901"
 
   require "#{Rails.root}/lib/heroku_resque_auto_scale.rb"
 end
