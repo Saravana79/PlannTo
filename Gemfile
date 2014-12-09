@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
+ruby '1.9.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -27,7 +28,7 @@ gem  "haml"
 gem 'tinymce-rails-imageupload', '~> 3.5.6.3'
 gem 'rails_exception_handler', "~> 2"
 gem 'aws-sdk'
-gem 'record-cache',:git => 'git://github.com/orslumen/record-cache.git'
+# gem 'record-cache'
 #gem 'execjs'
 gem 'therubyracer'
 #gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
@@ -79,7 +80,7 @@ gem "feedzirra", '~> 0.1.3'
 # TO DO the daily jobs to queue
 gem "clockwork", "~> 0.7.2"
 
-gem 'mailcatcher'
+# gem 'mailcatcher'
 #gem 'exception_notification', '3.0.1'
 gem 'highcharts-rails', '~> 3.0.10'
 gem 'activeuuid'
