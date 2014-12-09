@@ -174,3 +174,22 @@ csv_details.each_with_index do |csv_detail, index|
     item.save!(:validate => false)
   end
 end
+
+
+## Beauty Products Creations
+csv_details = CSV.read("/home/sivakumar/Desktop/new_beauty_products.csv")
+
+csv_details.each do |each_rec|
+  prev_item = nil
+  each_rec.each do |item_name|
+    next if item_name.blank?
+    item = Beauty.find_or_initialize_by_name(item_name)
+    item.update_attributes!(:imageurl => "#{item_name}.jpeg", :itemtype_id => 27, :status => 1)
+
+    if !prev_item.blank?
+      relation = Itemrelationship.find_or_initialize_by_item_id_and_relationtype(item.id, "Parent")
+      relation.update_attributes(:relateditem_id => prev_item.id)
+    end
+    prev_item = item
+  end
+end

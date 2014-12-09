@@ -1712,7 +1712,6 @@ end
       items << item
     end
     search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content
-    p items
     return items, search_url
   end
 
@@ -1739,7 +1738,7 @@ end
   def self.get_items_from_url(url, item_ids)
     @items = []
     if !item_ids.blank?
-      p item_id = item_ids.to_s.split(",").first
+      item_id = item_ids.to_s.split(",").first
       @items = Item.where(:id => item_id)
     else
       unless url.nil?
@@ -1773,7 +1772,7 @@ end
         end
       end
     end
-    @items
+    return @items, tempurl
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
   end
 

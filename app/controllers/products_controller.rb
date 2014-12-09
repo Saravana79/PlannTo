@@ -271,7 +271,8 @@ class ProductsController < ApplicationController
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
-    @items = Item.get_items_from_url(url, params[:item_ids])
+    @items, tempurl = Item.get_items_from_url(url, params[:item_ids])
+    url =  tempurl
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -284,7 +285,7 @@ class ProductsController < ApplicationController
       @where_to_buy_items = []
 
       if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+        @impression_id = AddImpression.add_impression_to_resque("fashion", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                                 cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
 
@@ -302,7 +303,7 @@ class ProductsController < ApplicationController
     else
       @where_to_buy_items =[]
       itemsaccess = "none"
-      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl="")
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
     end
     @ref_url = url
     jsonp = prepare_response_json()

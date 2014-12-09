@@ -1,6 +1,6 @@
 class ImpressionMissing < ActiveRecord::Base
-  def self.create_or_update_impression_missing(tempurl)
-    impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(tempurl, "PriceComparison")
+  def self.create_or_update_impression_missing(tempurl, type="PriceComparison")
+    impression = ImpressionMissing.find_or_create_by_hosted_site_url_and_req_type(tempurl, type)
     if impression.new_record?
       impression.update_attributes(created_time: Time.zone.now, updated_time: Time.zone.now)
     else

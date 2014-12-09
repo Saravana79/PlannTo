@@ -387,7 +387,7 @@
             <div id="plannto_insidediv">
               <table id="plannto_intable" width="100%">
                 <thead style="border:0px;display:table-header-group;">
-                <tr id="plannto_intr" style="border:0px">
+                <tr id="plannto_intr" class="plannto_intr" style="border:0px">
                   <td colspan="5" id="plannto_intd" style="background:white;border:0px;">
                     <%if @items.size == 1%>
                         <div style="width:100%;border-bottom: 1px solid #EEE;display: block;">
@@ -458,15 +458,15 @@
             <%count = 0%>
 
             <% @items.each do |item| %>
-                <tr id="plannto_intr">
+                <tr id="plannto_intr" class="plannto_intr">
                   <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
                     <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height="50px"  style="margin:5px;"/>
                   </td>
                   <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(90) %> </div></td>
-                  <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price %> </td>
-                  <td width="15%" id="plannto_incol3">
-                    <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"), 
-                    item.click_url, :target => "_blank" %>
+                  <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price.blank? ? "Not Available" : item.price %> </td>
+                  <td width="15%" id="plannto_incol3" class="plannto_incol3">
+                    <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
+                                "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
                      </td>
                 </tr>
             <% end %>
