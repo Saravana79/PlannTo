@@ -1,54 +1,69 @@
+<% @sliced_item_details = @item_details.each_slice(02) %>
+
 <div class="advt-block">
   <div class="advt-160-600">
-    <% if @item_details.count != 0 %>
-        <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a>
-  <div id="pager2" class="pager">
-          <% [*1..@item_details.count].each do |each_loop| %>
+    <% if @sliced_item_details.count != 0 %>
+         <!--<div class="planntoadlogo">
+           <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
+         </div>-->
+        <div class="logo"><a href="javascript:void(0)"><img src="<%= @vendor_image_url %>" alt="" width="100px" height="32px"></a></div>
+        <div id="pager2" class="pager">
+          <% if @item_details.count > 2 %>
+          <% [*1..@sliced_item_details.count].each do |each_loop| %>
               <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
           <% end %>
+          <% end %>
         </div>
+        <div class="advt-box">
+          <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
+              <div class="item_details" id="item_detail_<%= indx + 1 %>">
+                <% if sliced_item_detail.count > 1 %>
+              <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
+                    <div class="product-container" >
+                    <h3 class="product-title" title="<%=item_detail.ItemName%>"><%= item_detail.ItemName.to_s.truncate(46) %></h3>
+                    <p class="price"><%= prettify(item_detail) %></p>
+                    <div class="product-img">
+                      <a href="javascript:void(0)">
+                        <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 140,105).html_safe %>
+                        <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
+                      </a>
+                    </div>
+                    
 
-        </div>
-      
-        <% @item_details.each_with_index do |item_detail, indx| %>
-            <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
-            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+                    <!--
+                    <p class="product-desc">
+                      <%#= truncate_without_dot(get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text']), 45) %>
+                    </p> -->
+                    <!--<p class="price-strike">Rs. 40, 000</p>-->
+                    
 
-            <div class="item_details" id="item_detail_<%= indx + 1 %>">
-              <div class="advt-box">
-                <div class="product-container">
-                  <a href="<%= shop_now_url %>" target="_blank" class="">
-                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
-                     <p class="price"><%= prettify(item_detail) %></p>
-                  </a>
-
-
-                  <div class="product-img">
-                    <a href="<%= shop_now_url %>" target="_blank">
-                      <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100, 100).html_safe %>
-                      <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
-                    </a>
+                    <p class="btn">
+                      <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+                      <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+                      <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
+                        Now</a>
+                    </p>
                   </div>
-                  
-
-                  <p class="btn">
-                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                      Now</a>
-                  </p>
-                </div>
-                <div class="product-extra-desc"><p>
-                  <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 45, shop_now_url) %>
-                </p></div>
+              <% end %>
+              <div class="product-extra-desc">
+                <p>
+                  <%= raw get_offer_for_ad(@ad, sliced_item_detail.first, @vendor_ad_details[sliced_item_detail.first.site.to_i]['default_text'], 50, nil) %>
+                </p>
               </div>
-              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
-            </div>
-        <% end %>
+                <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                <% else %>
+                    <%= render :partial => '/advertisements/get_120_page_content.html.erb', :locals => {:item_detail => sliced_item_detail.first, :indx => indx} %>
+                    <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                <% end %>
+              </div>
+          <% end %>
+        </div>
     <% else %>
         No Product Found
     <% end %>
 
   </div>
-  <!-- end of advt-160-600 -->
+  <!-- end of advt-120 -->
 </div><!-- end of advt-block -->
 
 
@@ -56,6 +71,20 @@
     .pager a {
         margin: 0px !important;
     }
-    a {color: inherit;}
-    .product-container a {text-decoration: none !important;}
+    .advt-120 .logo {
+        padding: 5px 0 !important;
+    }
+
+
+    .advt-120 .advt-box .product-container {
+        height: 234px;
+    }
+    .main_div {
+        text-align: center;
+    }
+
+    .advt-120 .advt-box .product-extra-desc {
+        padding: 4px !important;
+    }
+
 </style>

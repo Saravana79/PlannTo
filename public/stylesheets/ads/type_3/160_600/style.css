@@ -38,7 +38,7 @@ body {
 .advt-160-600 .advt-box .product-container .price{ margin:5px 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;font-family: Arial monospace}
 .advt-160-600 .advt-box .product-container .btn{ margin:15px 0px 0px 0px; padding:0; text-align:center;}
 /*.advt-160-600 .advt-box .product-container .btn .shop-now{ margin:0 0 0 15px; padding:0; background:url(../images/shop-now-btn.png) no-repeat left top; width:105px; height:28px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0; font-family:'pt_sansregular', Arial, Helvetica, sans-serif;}*/
-.advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px; background:#e47911; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold;  text-align:center;}
+.advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px; background:#c00; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold;  text-align:center;}
 
 
 
@@ -66,7 +66,7 @@ body {
 }
 .pager a.selected {
 	text-decoration: none;
-	background:#e47911;
+	background:#c00;
 	color:#fff;
 }
 
