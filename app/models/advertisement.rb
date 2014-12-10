@@ -763,6 +763,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
   def self.update_include_exclude_products_from_vendors()
+    update_include_exclude_products_from_amazon()
+    update_include_exclude_products_from_flipkart()
+  end
+
+  def self.update_include_exclude_products_from_amazon()
     loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 10}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 5}, "laptops" => {:node => 1375424031, :page_count => 3}, "lenses" => {:node => 1389197031, :page_count => 20}}
 
     ad_item_id = []
@@ -775,21 +780,63 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
     ad_item_id = ad_item_id.join(",")
 
-    advertisement = Advertisement.find(12)
-    content = advertisement.content
+    advertisement = Advertisement.where(:id => 12).last
+    if !advertisement.blank?
+      content = advertisement.content
 
-    old_item_ids_array = content.blank? ? [] : content.allitems.map(&:id)
-    unless content.blank?
-      new_item_ids_array = ad_item_id.split(",")
-      content.update_with_items!({}, ad_item_id)
-      item_ids_array = old_item_ids_array + new_item_ids_array
-      item_ids = item_ids_array.map(&:inspect).join(',')
-      Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+      old_item_ids_array = content.blank? ? [] : content.allitems.map(&:id)
+      unless content.blank?
+        new_item_ids_array = ad_item_id.split(",")
+        content.update_with_items!({}, ad_item_id)
+        item_ids_array = old_item_ids_array + new_item_ids_array
+        item_ids = item_ids_array.map(&:inspect).join(',')
+        Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+      end
     end
 
-    exc_advertisement = Advertisement.find(3)
+    exc_advertisement = Advertisement.where(:id => 3).last
 
-    exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id)
+    exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id) unless exc_advertisement.blank?
+  end
+
+  def self.update_include_exclude_products_from_flipkart()
+    loop_hash = {"mobiles" => {"sid" => "tyy,4io", "count" => 100}, "tablets" => {"sid" => "tyy,hry", "count" => 40}, "cameras" => {"sid" => "jek,p31", "count" => 60}, "laptops" => {"sid" => "6bo,b5g", "count" => 40}, "camera-accessories/lenses" => {"sid" => "jek,6l2,e9y", "count" => 20}}
+    ad_item_id = []
+
+    loop_hash.each do |key,value|
+      count = value["count"]
+      loop_count = count/20
+      start_point = 1
+      [*1..loop_count.round].each do |page_start|
+        page_url = "http://www.flipkart.com/#{key}/pr?sid=#{value["sid"]}&sort=popularity&start=#{start_point}&ajax=true"
+        item_ids = Advertisement.get_matching_item_ids_from_flipkart(page_url)
+        ad_item_id << item_ids
+        start_point+=20
+      end
+    end
+    ad_item_id = ad_item_id.flatten
+    ad_item_id.delete(0)
+    ad_item_id = ad_item_id.uniq
+
+    ad_item_id = ad_item_id.join(",")
+
+    advertisement = Advertisement.where(:id => 10).last
+    if !advertisement.blank?
+      content = advertisement.content
+
+      old_item_ids_array = content.blank? ? [] : content.allitems.map(&:id)
+      unless content.blank?
+        new_item_ids_array = ad_item_id.split(",")
+        content.update_with_items!({}, ad_item_id)
+        item_ids_array = old_item_ids_array + new_item_ids_array
+        item_ids = item_ids_array.map(&:inspect).join(',')
+        Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+      end
+    end
+
+    exc_advertisement = Advertisement.where(:id => 1).last
+
+    exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id) unless exc_advertisement.blank?
   end
 
 
@@ -812,6 +859,26 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
           item_id = item_detail.itemid
           ad_item_id << item_id unless item_id.blank?
         end
+      end
+    end
+    ad_item_id
+  end
+
+  def self.get_matching_item_ids_from_flipkart(page_url)
+    doc = Nokogiri::HTML(open(page_url))
+
+    ad_item_id = []
+    doc.css("a.fk-display-block").each do |each_link|
+      url = each_link.attributes["href"].value
+      url = url.to_s.split("&")[0]
+      unless url.include?("flipkart.com")
+        url = "http://www.flipkart.com#{url}"
+      end
+      p url
+      item_detail = Itemdetail.where(:url => url).last
+      if !item_detail.blank?
+        item_id = item_detail.itemid
+        ad_item_id << item_id unless item_id.blank?
       end
     end
     ad_item_id

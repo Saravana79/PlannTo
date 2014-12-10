@@ -173,3 +173,8 @@ desc "AdStatisticProcess Update Daily "
 task :ad_statistic_process_update => :environment do
   Resque.enqueue(AdStatisticProcessDaily, "process_ad_statistic")
 end
+
+desc "Popular vendor products Update Daily "
+task :popular_vendor_products_update_daily => :environment do
+  Resque.enqueue(PopularVendorProductsUpdate, "update_include_exclude_products_from_vendors")
+end
