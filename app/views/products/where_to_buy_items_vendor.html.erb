@@ -458,6 +458,22 @@
               <%count = 0%>
 
               <% if params[:page_type] == "type_1" %>
+                  <tr id="plannto_intr" class="plannto_intr">
+                    <% @items.first(4).each do |item| %>
+                        <td style="padding: 0px 10px;text-align:center;border:0px;background:white;margin:0px;width: 25%;">
+                          <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height=""  style="margin:5px;max-height: 150px;"/>
+                          <div style="font-size: 12px;font-weight: bold;padding: 2px 0px;color: #676767;">
+                            <%= item.name.to_s.truncate(48) %>
+                          </div>
+                          <div id="plannto_incol2" style="text-align:center;width:200px;padding:4px;color: brown;">
+                            <%= item.price.blank? ? "Not Available" : item.price %>
+                          </div>
+                          <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
+                                      "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
+                        </td>
+                    <% end %>
+                  </tr>
+              <% else %>
                   <% @items.each do |item| %>
                       <tr id="plannto_intr" class="plannto_intr">
                         <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
@@ -471,22 +487,6 @@
                         </td>
                       </tr>
                   <% end %>
-              <% else %>
-                  <tr id="plannto_intr" class="plannto_intr">
-                  <% @items.first(4).each do |item| %>
-                        <td style="padding: 0px 10px;text-align:center;border:0px;background:white;margin:0px;width: 34%;">
-                          <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height=""  style="margin:5px;max-height: 150px;"/>
-                          <div style="font-size: 12px;font-weight: bold;padding: 2px 0px;color: #676767;">
-                            <%= item.name.to_s.truncate(48) %>
-                          </div>
-                          <div id="plannto_incol2" style="text-align:center;width:200px;padding:4px;color: brown;">
-                            <%= item.price.blank? ? "Not Available" : item.price %>
-                          </div>
-                          <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
-                                      "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
-                        </td>
-                  <% end %>
-                  </tr>
               <% end %>
 
 

@@ -3,7 +3,7 @@ class AddImpression < ActiveRecord::Base
   require 'facets/string/xor'
   require 'openssl'
 
-  attr_accessor :t, :r
+  attr_accessor :t, :r, :device
 
   include ActiveUUID::UUID
   self.primary_key = "id"

@@ -1686,6 +1686,7 @@ end
   end
 
   def self.get_host_without_www(url)
+    url = url.to_s
     begin
       old_host = Addressable::URI.parse(url).host.downcase
       host = old_host.start_with?('www.') ? old_host[4..-1] : old_host

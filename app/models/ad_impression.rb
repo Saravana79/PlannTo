@@ -21,6 +21,11 @@ class AdImpression
   field :tagging, type: Integer
   field :retargeting, type: Integer
   field :pre_appearance_count, type: Integer
+  field :device, type: String
+  field :size, type: String
+  field :domain, type: String
+  field :design_type, type: String
+
 
   has_one :m_click
 

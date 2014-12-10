@@ -141,7 +141,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
         var show_details = moredetails;
         var element_id = PlannTo.jQuery(obj).parent().parent().parent().parent().next().children()
         parentDiv = PlannTo.jQuery(obj).parent().parent().parent().parent().parent().parent().parent().attr('id');
-        url = "http://"+domain + "/product_offers.js" + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + "offer" +"&ref_url="+pathname+"&doc_title-"+doc_title+"&is_test="+is_test+"&callback=?";
+        url = "http://"+domain + "/product_offers.js" + "?item_ids="+item_ids+"&price_full_details="+show_details+ "&path=" + "offer" +"&ref_url="+pathname+"&doc_title-"+doc_title+"&is_test="+is_test+"&page_type="+page_type+"&callback=?";
           jQuery.getJSON(url, function (data) {            
             element_id.html(data.html);            
             jQuery(jQuery("#"+parentDiv).children().children().children().children().children().children()[0]).removeClass();
@@ -162,7 +162,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
     {
             var doc_title =  PlannTo.jQuery(document).title;
            
-          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&callback=?"
+          url = "http://"+domain + SubPath + "?item_ids="+item_ids+"&price_full_details="+show_details+"&show_offer="+show_offer+"&show_price="+show_price+ "&path=" + path + "&ref_url="+pathname+"&doc_title-"+doc_title+"&sort_disable="+sort_disable+"&is_test="+is_test+"&page_type="+page_type+"&callback=?"
 
             jQuery.getJSON(url, function (data) {
 
@@ -209,6 +209,7 @@ function main() {
         var ads = getParam(url,"advertisement");
         var element_id = getParam(url,"element_id");
         is_test = getParam(url,"is_test");
+        page_type = getParam(url,"page_type");
         if (ads == "")
         {
           if(element_id == undefined || element_id == "")

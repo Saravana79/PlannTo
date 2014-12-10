@@ -326,6 +326,18 @@ class Advertisement < ActiveRecord::Base
     url_params
   end
 
+  def self.reverse_make_url_params(url_params)
+    url_params = url_params.to_s.gsub("Params = ", "")
+
+    new_array = []
+
+    url_params = url_params.split(";")
+    url_params.each {|each_pair| new_array << each_pair.split("-")}
+
+    param_hash = Hash[new_array]
+    param_hash
+  end
+
   def self.assign_url_and_item_access(ref_url, request_referer)
     if (ref_url && ref_url != "" && ref_url != 'undefined')
       return ref_url, "ref_url"
@@ -540,12 +552,23 @@ class Advertisement < ActiveRecord::Base
 
             if each_rec_class == "AddImpression"
               impression = AddImpression.create_new_record(each_rec_detail)
+
+              url_params = Advertisement.reverse_make_url_params(impression.params)
+              impression.device = url_params["device"]
               impression_import << impression
-              #mongo array
+
+              # Impression mongo
               impression_mongo = impression.attributes
               impression_mongo["_id"] = impression_mongo["id"].to_s
               impression_mongo.delete("id")
+              impression_mongo["tagging"] = impression.t.to_i
+              impression_mongo["retargeting"] = impression.r.to_i
+              impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
+              impression_mongo["device"] = url_params["device"]
+              impression_mongo["size"] = url_params["size"]
+              impression_mongo["design_type"] = url_params["page_type"]
               impression_import_mongo << impression_mongo
+
               if impression.advertisement_type == "advertisement"
                 ad_impressions_list << impression
               elsif impression.advertisement_type != "advertisement"
@@ -604,11 +627,21 @@ class Advertisement < ActiveRecord::Base
         ad_impressions_list.each_with_index do |imp, index|
           appearance_count = ad_impressions_list_values[index].to_i
           if (imp.t == 1 || imp.r == 1 || appearance_count > 0)
+            # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
             impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count)
           end
         end
 
         ImpressionDetail.import(impression_details)
+
+
+        impression_details.each do |each_imp_det|
+          ad_imp = AdImpression.find(each_imp_det.impression_id.to_s)
+          unless ad_imp.blank?
+            ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count)
+          end
+        end
+
 
         $redis_rtb.pipelined do
           impression_import.each do |each_impression|
