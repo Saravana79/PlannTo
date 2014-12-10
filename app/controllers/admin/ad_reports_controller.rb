@@ -93,8 +93,10 @@ class Admin::AdReportsController < ApplicationController
   end
 
   def more_reports
-    option_type = params[:type] ||= "Item"
-    @results = AdImpression.get_results_from_mongo(option_type)
+    params[:type] ||= "Item"
+    params[:ad_id] ||= "All"
+    @advertisements = ["All"] + Advertisement.all.map(&:id)
+    @results = AdImpression.get_results_from_mongo(params)
   end
 
   def widget_reports

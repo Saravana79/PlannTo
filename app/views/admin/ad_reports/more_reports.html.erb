@@ -1,14 +1,12 @@
 <div class='report_form'>
   <%= form_for :impression, :url => admin_more_reports_path, :method => :get do |f| %>
     <div style="display:block;padding-top:10px;clear:both;">
-        <span class="field_name">
-            Select Option for Report:
-        </span>
-        <span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
-            <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID'], params[:type])) %>
-        </span>
+      Type:
+      <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID'], params[:type])) %>
+      Advertisement ID:
+      <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
+      <%= f.submit "Generate Report", :class => "btn-link report_btn" %>
     </div>
-    <%= f.submit "Generate Report", :class => "btn-link report_btn" %>
   <% end %>
 </div>
 
@@ -48,5 +46,10 @@
     {
         margin-left: 40px;
         margin-top: 4px;
+    }
+    .report_form {
+        color: #a52a2a;
+        font-size: 14px;
+        text-align: center;
     }
 </style>

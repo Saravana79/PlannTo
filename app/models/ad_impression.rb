@@ -30,15 +30,27 @@ class AdImpression
   has_one :m_click
 
 
-  def self.get_results_from_mongo(option_type)
-    option = "item_id"
-    option = option_type == "Sid" ? "sid" : option_type == "Temp User ID" ? "temp_user_id" : "item_id"
-    project = {"$project" =>  { "#{option}" => 1}}
+  def self.get_results_from_mongo(param)
+    option = case param[:type]
+     when "Sid"
+        "sid"
+     when "Temp User ID"
+       "temp_user_id"
+     else
+       "item_id"
+     end
+    #project = {"$project" =>  { "#{option}" => 1}}
+
+
+    match = {"$match" => {"advertisement_type" => "advertisement"}}
+    if param[:ad_id] != "All"
+      match["$match"].merge!("advertisement_id" => param[:ad_id].to_i)
+    end
     group =  { "$group" => { "_id" => "$#{option}", "count" => { "$sum" => 1 } } }
     sort = {"$sort" => {"count" => -1}}
     limit = {"$limit" => 100}
 
     # items_by_count = AdImpression.collection.aggregate([project,group,sort,limit])
-    items_by_count = AdImpression.collection.aggregate([group,sort,limit])
+    items_by_count = AdImpression.collection.aggregate([match,group,sort,limit])
   end
 end
