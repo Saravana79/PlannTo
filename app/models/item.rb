@@ -1695,7 +1695,7 @@ end
     host
   end
 
-  def self.get_items_from_amazon(keyword)
+  def self.get_items_from_amazon(keyword, page_type)
     res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
     items = []
     loop_items = res.items.first(5)
@@ -1705,7 +1705,11 @@ end
       item.id = each_item.get("ASIN")
       item.name = each_item.get_element("ItemAttributes").get("Title")
       item.price = each_item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue nil
-      item.image_url = each_item.get("SmallImage/URL")
+      if page_type == "type_1"
+        item.image_url = each_item.get("SmallImage/URL")
+      else
+        item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
+      end
       item.small_image_url = each_item.get("ImageSets/ImageSet/SwatchImage/URL")
       item.click_url = each_item.get("DetailPageURL")
       items << item
@@ -1714,7 +1718,7 @@ end
     return items, search_url
   end
 
-  def self.get_item_items_from_amazon(items, item_ids)
+  def self.get_item_items_from_amazon(items, item_ids, page_type)
     item_id = item_ids.to_s.split(",").first
     if items.count == 1
       item = items.first
@@ -1729,7 +1733,7 @@ end
       extra_items = extra_items.first(2)
     end
     keyword = item.name.to_s
-    items, search_url = Item.get_items_from_amazon(keyword)
+    items, search_url = Item.get_items_from_amazon(keyword, page_type)
     return item, items, search_url, extra_items
   end
 

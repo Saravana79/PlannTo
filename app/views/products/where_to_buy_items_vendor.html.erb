@@ -352,7 +352,7 @@
                     </li>
                 <%end%>
                 <%if @show_offer != "false" %>
-              <!--      <li class="unselected">
+                    <!--      <li class="unselected">
 
                       <a href="javascript:void(0)" id="product_offers" onclick="<%= "PlannTo.offertabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Best Offers</a>
                     </li> -->
@@ -455,45 +455,65 @@
           <td style="padding:0px;">
             <table style="width:100%;float:right;border:0px;border-collapse: collapse;margin:0px;padding:0px;">
               <tbody style="border:0px;">
-            <%count = 0%>
+              <%count = 0%>
 
-            <% @items.each do |item| %>
-                <tr id="plannto_intr" class="plannto_intr">
-                  <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
-                    <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height="50px"  style="margin:5px;"/>
-                  </td>
-                  <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(90) %> </div></td>
-                  <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price.blank? ? "Not Available" : item.price %> </td>
-                  <td width="15%" id="plannto_incol3" class="plannto_incol3">
-                    <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
-                                "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
-                     </td>
-                </tr>
-            <% end %>
+              <% if params[:page_type] == "type_1" %>
+                  <% @items.each do |item| %>
+                      <tr id="plannto_intr" class="plannto_intr">
+                        <td style="padding: 0px;text-align:center;border:0px;background:white;margin:0px;">
+                          <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height="50px"  style="margin:5px;"/>
+                        </td>
+                        <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(48) %> </div></td>
+                        <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price.blank? ? "Not Available" : item.price %> </td>
+                        <td width="15%" id="plannto_incol3" class="plannto_incol3">
+                          <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
+                                      "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
+                        </td>
+                      </tr>
+                  <% end %>
+              <% else %>
+                  <tr id="plannto_intr" class="plannto_intr">
+                  <% @items.first(4).each do |item| %>
+                        <td style="padding: 0px 10px;text-align:center;border:0px;background:white;margin:0px;width: 34%;">
+                          <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height=""  style="margin:5px;max-height: 150px;"/>
+                          <div style="font-size: 12px;font-weight: bold;padding: 2px 0px;color: #676767;">
+                            <%= item.name.to_s.truncate(48) %>
+                          </div>
+                          <div id="plannto_incol2" style="text-align:center;width:200px;padding:4px;color: brown;">
+                            <%= item.price.blank? ? "Not Available" : item.price %>
+                          </div>
+                          <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
+                                      "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
+                        </td>
+                  <% end %>
+                  </tr>
+              <% end %>
 
-            <% if count > @displaycount || 1==1 %>
-                <tr id="plannto_footertr">
-                  <%if @moredetails == "true"
-                      @wrapper="3"
-                    else
-                      @wrapper="3"
-                    end
-                  %>
-                  <td  id="plannto_footertd" colspan="<%=@wrapper%>">
 
-                  </td>
-                  <td id="plannto_incol3" width="15%">
+
+              <% if count > @displaycount || 1==1 %>
+                  <tr id="plannto_footertr">
+                    <%if @moredetails == "true"
+                        @wrapper="3"
+                      else
+                        @wrapper="3"
+                      end
+                    %>
+                    <td  id="plannto_footertd" colspan="2">
+
+                    </td>
+                    <td id="plannto_incol3" colspan="2" style="text-align: right;">
                                     <span >
-                                      <a href="<%= @search_url %>" id="plannto_go_button" target="_blank">View More</a>
+                                      <a href="<%= @search_url %>" id="plannto_go_button" target="_blank">View More <%= @item.name.to_s.pluralize %></a>
                                     </span>
-                  </td>
-                </tr>
-            <% end %>
-            <%if @path!="onchange"%>
-                </tbody>
-                </table>
-                <div>
-            <%end%>
+                    </td>
+                  </tr>
+              <% end %>
+              <%if @path!="onchange"%>
+                  </tbody>
+                  </table>
+                  <div>
+              <%end%>
 
     <%else%>
         <!-- else for only showing offers -->

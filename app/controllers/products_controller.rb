@@ -268,6 +268,7 @@ class ProductsController < ApplicationController
 
   def where_to_buy_items_vendor
     # params[:item_ids] = "13874" if params[:item_ids].blank?
+    params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
@@ -276,7 +277,7 @@ class ProductsController < ApplicationController
 
     # include pre order status if we show more details.
     unless @items.blank?
-      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids])
+      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type])
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       @publisher = Publisher.getpublisherfromdomain(url)
       # Check have to activate tabs for publisher or not
