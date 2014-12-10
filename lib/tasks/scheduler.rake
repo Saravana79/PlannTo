@@ -157,12 +157,16 @@ end
 
 desc "Update bulk cookie matching"
 task :bulk_cookie_matching_process => :environment do
-  Resque.enqueue(BulkCookieMatchingProcess)
+  if $redis.llen("resque:queue:bulk_cookie_matching_process") < 1
+    Resque.enqueue(BulkCookieMatchingProcess)
+  end
 end
 
 desc "Update bulk Impression and Click"
 task :bulk_impressions_and_clicks_process => :environment do
-  Resque.enqueue(BulkCreateImpressionAndClick)
+  if $redis.llen("resque:queue:bulk_create_impression_and_click") < 1
+    Resque.enqueue(BulkCreateImpressionAndClick)
+  end
 end
 
 desc "AdStatisticProcess Update Daily "

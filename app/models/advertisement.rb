@@ -577,7 +577,22 @@ class Advertisement < ActiveRecord::Base
         AddImpression.import(impression_import)
 
         #push to mongo
-        AdImpression.collection.insert(impression_import_mongo)
+        # AdImpression.collection.insert(impression_import_mongo, { ordered: false })
+
+        #TODO: Temp Fix
+        begin
+          #process bulk insert for mongo collection impression
+          AdImpression.collection.insert(impression_import_mongo, { ordered: false })
+        rescue Exception => e
+          #process temp fix
+          impression_import_mongo.each do |each_loop|
+            begin
+              AdImpression.collection.insert(each_loop)
+            rescue Exception => e
+              p e
+            end
+          end
+        end
 
         ad_impressions_list_values = $redis_rtb.pipelined do
           ad_impressions_list.each do |each_impression|
@@ -652,7 +667,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         ClickDetail.import(clicks_details)
 
         #push to mongo
-        MClick.collection.insert(clicks_import_mongo)
+        begin
+          MClick.collection.insert(clicks_import_mongo)
+        rescue Exception => e
+          p e
+          p "Error While processing click"
+        end
 
         VideoImpression.import(video_imp_import)
 
