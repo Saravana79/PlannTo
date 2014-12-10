@@ -5,8 +5,8 @@
     </div>
   -->
     <div class="logo">
-      <div style="float:left;width:110px;">
-        <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="">
+      <div style="float:left;width:90px;margin-top:2px;">
+        <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="" width="90px">
         </a>
       </div>
       <div class="list_carousel">
@@ -23,7 +23,7 @@
 
     <% if @item_details.count != 0 %>
         <div class="divshadow">
-          <ul id="foo3" height="190px;">
+          <ul id="foo3" height="160px;">
             <% @item_details.each_with_index do |item_detail, indx| %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
@@ -31,16 +31,18 @@
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <div class="advt-box">
                     <div class="product-container">
+                      <div style="padding: 2px 5px;">
+                         <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3></a>
+                      </div>
                       <div class="product-img-left">
                         <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 132, '').html_safe %>
+                          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 88, '').html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3>
-
                           <p class="price"><%= prettify(item_detail) %></p>
                         </a>
 
@@ -51,15 +53,12 @@
 
                       </div>
                     </div>
-                    <div class="product-txt-desc">
-                      <p>
-                        <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
-                      </p>
-                    </div>
+                    
                   </div>
-                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
-                </li>
+                   <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+               
+                  </li>
+
             <% end %>
           </ul>
           </div>
@@ -73,7 +72,7 @@
     <% end %>
 
   </div>
-  <!-- end of advt-200-200 -->
+  <!-- end of advt-250-250 -->
 </div>
 <!-- end of advt-block -->
 
