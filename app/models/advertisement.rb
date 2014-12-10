@@ -762,7 +762,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     result
   end
 
-  def self.update_include_exclude_products_from_vendors()
+  def self.update_include_exclude_products_from_vendors
+    update_include_exclude_products_from_amazon()
+    update_include_exclude_products_from_flipkart()
+  end
+
+  def self.update_include_exclude_products_from_amazon()
     loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 10}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 5}, "laptops" => {:node => 1375424031, :page_count => 3}, "lenses" => {:node => 1389197031, :page_count => 20}}
 
     ad_item_id = []
@@ -790,6 +795,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     exc_advertisement = Advertisement.find(3)
 
     exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id)
+  end
+
+  def self.update_include_exclude_products_from_flipkart()
+
   end
 
 
