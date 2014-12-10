@@ -30,11 +30,11 @@ body {
 .advt-728 .advt-box { margin:0; padding:0;}
 
 
-.advt-728 .advt-box .product-container{ margin:0; padding:5px 8px; float:left; width:238px; height:86px;  border-left: #CCC solid 1px;border-right: #CCC solid 1px; }
+.advt-728 .advt-box .product-container{ margin:0; padding:5px 8px; float:left; width:300px; height:86px;  border-left: #CCC solid 1px;border-right: #CCC solid 1px; }
 .advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-728 .advt-box .product-container:after { clear:both;}
 
-.advt-728 .advt-box .product-container h3{ margin:0 auto; padding:0; font-size:12px; color:#222; font-weight:bold;float:left; width:120px;padding-bottom:4px;}
+.advt-728 .advt-box .product-container h3{ margin:0 auto; padding:0; font-size:13px; color:#222; font-weight:bold;float:left; width:160px;padding-bottom:2px;}
 .advt-728 .advt-box .product-container .product-img{ margin:0 5px 0 0; padding:0;text-align:center;width:92px; float:left;}
 .advt-728 .advt-box .product-container .product-img img { margin:0 auto; text-align:center; }
 
@@ -42,9 +42,9 @@ body {
 
 .advt-728 .advt-box .product-container .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px; text-align:center;}
 .advt-728 .advt-box .product-container .price-strike{margin: 0;padding: 0;color: #585858;font-size: 11px;text-decoration: line-through; text-align:center;}
-.advt-728 .advt-box .product-container .price{ margin: 10px 0 0 0; padding:0; color:#b12704; font-size:12px; font-weight:bold;}
+.advt-728 .advt-box .product-container .price{ margin: 2px 0 0 0; padding:0; color:#b12704; font-size:13px; font-weight:bold;width:120px;float:left;}
 
-.advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
+.advt-728 .advt-box .btn{ margin:0 auto; padding:3px 0 0 0; text-align:center;float:right;}
 .advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 10px; background:#e47911; color:#fff; font-size:12px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold; -webkit-border-radius: 4px; border-radius: 4px; float:left;}
 
 

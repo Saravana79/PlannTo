@@ -1,11 +1,11 @@
 <div class="advt-block">
-  <div class="advt-200-200">
+  <div class="advt-250-250">
     <!--<div class="planntoadlogo">
       <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
     </div>
   -->
     <div class="logo">
-      <div style="float:left;width:110px;">
+      <div style="float:left;width:100px;margin-top:2px;">
         <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url="" %>" alt="">
         </a>
       </div>
@@ -31,16 +31,18 @@
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <div class="advt-box">
                     <div class="product-container">
+                      <div style="padding: 2px 10px;">
+                         <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3></a>
+                      </div>
                       <div class="product-img-left">
                         <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 132, '').html_safe %>
+                          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 112, '').html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3>
-
                           <p class="price"><%= prettify(item_detail) %></p>
                         </a>
 
@@ -73,7 +75,7 @@
     <% end %>
 
   </div>
-  <!-- end of advt-200-200 -->
+  <!-- end of advt-250-250 -->
 </div>
 <!-- end of advt-block -->
 

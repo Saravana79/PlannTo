@@ -1389,7 +1389,7 @@ end
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size)
 
     if ad_template_type == "type_4"
-      if ["300", "120", "728"].include?(suitable_ui_size)
+      if ["300", "120", "728","336_280"].include?(suitable_ui_size)
         item_details = item_details.first(12)
         sliced_item_details = item_details.each_slice(2)
       elsif suitable_ui_size == "300_600"
@@ -1707,9 +1707,9 @@ end
       item.name = each_item.get_element("ItemAttributes").get("Title")
       item.price = each_item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue nil
       if page_type == "type_1"
-        item.image_url = each_item.get("SmallImage/URL")
+         item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
       else
-        item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
+       item.image_url = each_item.get("SmallImage/URL")
       end
       item.small_image_url = each_item.get("ImageSets/ImageSet/SwatchImage/URL")
       item.click_url = each_item.get("DetailPageURL")
