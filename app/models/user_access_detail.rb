@@ -102,7 +102,7 @@ class UserAccessDetail < ActiveRecord::Base
           else
             $redis.pipelined do
               $redis.hmset(u_key, u_values.flatten)
-              $redis.expire(u_key, 2.weeks)
+              $redis.expire(u_key, 3.weeks)
             end
           end
         rescue Exception => e
@@ -150,5 +150,33 @@ class UserAccessDetail < ActiveRecord::Base
 
     buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
     buying_list
+  end
+
+  def self.update_buying_list_only_housing(user_ids)
+    redis_rtb_hash = {}
+    source = "housing"
+
+    user_ids.each do |user_id|
+      u_key = "u:ac:plannto:#{user_id}"
+      u_values = $redis.hgetall(u_key)
+
+      existing_source = u_values["source"].to_s
+      existing_source = existing_source.split(",").compact
+      existing_source << source
+      new_source = existing_source.uniq
+      u_values["source"] = new_source.join(",")
+
+      temp_store = {"source" => new_source.join(",")}
+
+      redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
+    end
+
+    # Redis Rtb update
+    $redis_rtb.pipelined do
+      redis_rtb_hash.each do |key, val|
+        $redis_rtb.hmset(key, val.flatten)
+        $redis_rtb.expire(key, 3.weeks)
+      end
+    end
   end
 end

@@ -113,6 +113,7 @@ class CookieMatch < ActiveRecord::Base
         user_access_details_import = []
         redis_rtb_hash = {}
         user_access_details.each do |user_access_detail|
+          housing_user_access_details_user_ids = []
 
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
@@ -125,7 +126,10 @@ class CookieMatch < ActiveRecord::Base
 
             user_access_details_import << new_user_access_detail
 
-            next if new_user_access_detail.source == "housing"
+            if new_user_access_detail.source == "housing"
+              housing_user_access_details_user_ids << new_user_access_detail.plannto_user_id
+              next
+            end
 
             msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
             if !msp_id.blank?
@@ -170,6 +174,8 @@ where url = '#{ref_url}' group by ac.id").last
             $redis_rtb.expire(key, 2.weeks)
           end
         end
+
+        UserAccessDetail.update_buying_list_only_housing(housing_user_access_details_user_ids)
 
         UserAccessDetail.import(user_access_details_import)
 
