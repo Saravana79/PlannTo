@@ -35,25 +35,9 @@
                     </p>
                     </div>
               <% end %>
-              <div class="product-extra-desc">
-                <p>
-                  <% if !@ad.blank? && !@ad.offer.blank? %>
-                      <% default_text = @ad.offer %>
-                  <% elsif !sliced_item_detail.first.offer.blank? %>
-                     <% default_text = sliced_item_detail.first.offer %>
-                  <% elsif !sliced_item_detail.last.offer.blank? %>
-                      <% default_text = sliced_item_detail.last.offer %>
-                  <% else %>
-                      <% default_text = @vendor_ad_details[sliced_item_detail.last.site.to_i]['default_text'] %>
-                  <% end %>
-
-                  <%= truncate_without_dot(default_text.to_s, 65) %>
-                </p>
               </div>
-              </div>
-                  <div class="product-txt-desc">
+                  <div class="product-txt-desc" style="padding:2px;text-align: center;">
                     <p>
-                      <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
                        <%= raw get_offer_for_ad(@ad, @sliced_item_details.first.first, @vendor_ad_details[@sliced_item_details.first.first.site.to_i]['default_text'], 50, "") %>
                     </p>
                   </div>
