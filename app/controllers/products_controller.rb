@@ -2,6 +2,7 @@ require "securerandom"
 
 class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
+  before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
@@ -12,6 +13,16 @@ class ProductsController < ApplicationController
       params.slice("price_full_details", "path", "sort_disable", "item_ids")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
+
+  caches_action :where_to_buy_items_vendor, :cache_path => proc {|c|
+     if (params[:item_ids].blank? && !params[:ref_url].blank?)
+       params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url")
+     elsif !params[:item_ids].blank?
+       params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable")
+     end
+   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
 
   caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)
@@ -588,6 +599,50 @@ class ProductsController < ApplicationController
             item_id = val.split("=")[1].gsub("#", "")
           end
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "pricecomparision", item_id, nil)
+
+          cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
+        end
+        return render :text => cache.html_safe
+        ## Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
+
+
+  def create_impression_before_widgets_vendor
+    params[:price_full_details] ||= "true"
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+    params[:request_referer] ||= request.referer
+    params[:request_referer] ||= ""
+    params[:ref_url] ||= ""
+    params[:item_ids] ||= ""
+    params[:path] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:sort_disable] ||= "false"
+
+    if (params[:item_ids].blank? && !params[:ref_url].blank?)
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url"))
+    elsif !params[:item_ids].blank?
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable"))
+    end
+    cache_params = CGI::unescape(cache_params)
+
+    cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}.js"
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        valid_html = cache.match(/table/).blank? ? false : true
+        cache = reset_json_callback(cache, params[:callback])
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          item_id = params[:item_ids]
+          matched_val = cache.match(/present_item_id=.*#/)
+          unless matched_val.blank?
+            val = matched_val[0]
+            item_id = val.split("=")[1].gsub("#", "")
+          end
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
