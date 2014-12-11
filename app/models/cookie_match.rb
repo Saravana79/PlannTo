@@ -112,9 +112,8 @@ class CookieMatch < ActiveRecord::Base
         user_access_details_count = user_access_details.count
         user_access_details_import = []
         redis_rtb_hash = {}
+        housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
-          housing_user_access_details_user_ids = []
-
           begin
             p "Remaining UserAccessDetail Count - #{user_access_details_count}"
             user_access_details_count-=1
