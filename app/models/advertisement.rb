@@ -302,7 +302,7 @@ class Advertisement < ActiveRecord::Base
 
   def self.make_url_params(param)
     url_params = "Params = "
-    param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_"].include?(s.to_s)}
+    param = param.reject {|s| ["controller", "action", "ref_url", "callback", "format", "_", "click_url"].include?(s.to_s)}
     keys = param.keys
     values = param.values
 
@@ -557,20 +557,21 @@ class Advertisement < ActiveRecord::Base
               impression.device = url_params["device"]
               impression_import << impression
 
-              # Impression mongo
-              impression_mongo = impression.attributes
-              impression_mongo["_id"] = impression_mongo["id"].to_s
-              impression_mongo.delete("id")
-              impression_mongo["tagging"] = impression.t.to_i
-              impression_mongo["retargeting"] = impression.r.to_i
-              impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = url_params["device"]
-              impression_mongo["size"] = url_params["size"]
-              impression_mongo["design_type"] = url_params["page_type"]
-              impression_import_mongo << impression_mongo
-
               if impression.advertisement_type == "advertisement"
                 ad_impressions_list << impression
+
+                # Impression mongo
+                impression_mongo = impression.attributes
+                impression_mongo["_id"] = impression_mongo["id"].to_s
+                impression_mongo.delete("id")
+                impression_mongo["tagging"] = impression.t.to_i
+                impression_mongo["retargeting"] = impression.r.to_i
+                impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
+                impression_mongo["device"] = url_params["device"]
+                impression_mongo["size"] = url_params["size"]
+                impression_mongo["design_type"] = url_params["page_type"]
+                impression_import_mongo << impression_mongo
+
               elsif impression.advertisement_type != "advertisement"
                 non_ad_impressions_list << impression
               end
@@ -578,13 +579,16 @@ class Advertisement < ActiveRecord::Base
               click = Click.create_new_record(each_rec_detail)
               unless click.blank?
                 clicks_import << click
-                click_mongo = click.attributes
-                click_mongo["tagging"] = click.t.to_i
-                click_mongo["retargeting"] = click.r.to_i
-                click_mongo["pre_appearance_count"] = click.ic.to_i
-                click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
-                click_mongo.delete("impression_id")
-                clicks_import_mongo << click_mongo
+
+                if !click.advertisement_id.blank?
+                  click_mongo = click.attributes
+                  click_mongo["tagging"] = click.t.to_i
+                  click_mongo["retargeting"] = click.r.to_i
+                  click_mongo["pre_appearance_count"] = click.ic.to_i
+                  click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                  click_mongo.delete("impression_id")
+                  clicks_import_mongo << click_mongo
+                end
               end
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
@@ -636,10 +640,8 @@ class Advertisement < ActiveRecord::Base
 
 
         impression_details.each do |each_imp_det|
-          ad_imp = AdImpression.find(each_imp_det.impression_id.to_s)
-          unless ad_imp.blank?
-            ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count)
-          end
+          ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).last
+          ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
         end
 
 

@@ -1,6 +1,6 @@
 class MClick
   include Mongoid::Document
-  include Mongoid::Timestamps
+  include Mongoid::Timestamps::Created
 
   field :ad_impression_id, type: String
   field :click_url, type: String
