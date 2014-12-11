@@ -22,7 +22,7 @@ body {
 .advt-block { margin:0; padding:0;}
 .advt-300 { margin:0; padding:0; width:300px; height:250px; background:#fff; border:2px solid #ddd;}
 
-.advt-300 .logo{ margin:0 5px; padding:4px 0;}
+.advt-300 .logo{ margin:0 5px; padding:1px 0;}
 
 .advt-box { margin:0; padding:0;}
 
@@ -32,7 +32,7 @@ body {
 .advt-box .product-container .product-img-left{ margin:0 7px 0 0; padding:0; float:left;}
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center; border:#CCC solid 0px;}
 .advt-box .product-container .product-txt-right{ margin:0; padding:0; float:left; width:158px;}
-.advt-box .product-container h3{ margin:0 0 5px 0;padding:0; font-size:14px; color:#222; font-weight:bold;font-family: Arial, Helvetica, sans-serif;}
+.advt-box .product-container h3{ margin:0 0 5px 0;padding:0; font-size:13px; color:#222; font-weight:bold;font-family: Arial, Helvetica, sans-serif;}
 .advt-box .product-container .price{ margin:0; padding:2px 0; color:#b12704; font-size:13px; font-weight:bold; float:left; width:100%;}
 .advt-box .product-container .btn{ margin:0; padding:0;float:right;}
 /*.advt-box .product-container .btn .shop-now{ margin:0; padding:0; background:url(../images/shop-now-btn.png) no-repeat left top; width:78px; height:19px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0;}*/

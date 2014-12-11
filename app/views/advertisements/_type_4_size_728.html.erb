@@ -51,6 +51,12 @@
                 </p>
               </div>
               </div>
+                  <div class="product-txt-desc">
+                    <p>
+                      <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
+                       <%= raw get_offer_for_ad(@ad, @sliced_item_details.first.first, @vendor_ad_details[@sliced_item_details.first.first.site.to_i]['default_text'], 50, "") %>
+                    </p>
+                  </div>
               <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.last.site.to_i]['imageurl'] %>" alt="" style="display: none;">
             </div>
         <% end %>

@@ -22,7 +22,7 @@ body {
 .advt-block { margin:0; padding:0;}
 .advt-728 { margin:0; padding:0; width:728px; height:90px; background:#fff; border:2px solid #dddddd;}
 
-.advt-728 .logo-wrapper{ margin:0 auto; padding: 0;float:left; width:124px; height:75px; position: relative;}
+.advt-728 .logo-wrapper{ margin:0 auto; padding: 0;float:left; width:122px; height:75px; position: relative;}
 .advt-728 .logo{ margin:0; padding:17px 12px; text-align:center;}
 .advt-728 .logo img{ margin:0; padding:0; float:left;}
 
@@ -30,11 +30,11 @@ body {
 .advt-728 .advt-box { margin:0; padding:0;}
 
 
-.advt-728 .advt-box .product-container{ margin:0; padding:5px 8px; float:left; width:300px; height:86px;  border-left: #CCC solid 1px;border-right: #CCC solid 1px; }
+.advt-728 .advt-box .product-container{ margin:0; padding:5px 3px; float:left; width:265px; height:86px;  border-left: #CCC solid 1px;border-right: #CCC solid 1px; }
 .advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-728 .advt-box .product-container:after { clear:both;}
 
-.advt-728 .advt-box .product-container h3{ margin:0 auto; padding:0; font-size:13px; color:#222; font-weight:bold;float:left; width:160px;padding-bottom:2px;}
+.advt-728 .advt-box .product-container h3{ margin:0 auto; padding:0; font-size:12px; color:#222; font-weight:bold;float:left; width:150px;padding-bottom:2px;}
 .advt-728 .advt-box .product-container .product-img{ margin:0 5px 0 0; padding:0;text-align:center;width:92px; float:left;}
 .advt-728 .advt-box .product-container .product-img img { margin:0 auto; text-align:center; }
 
