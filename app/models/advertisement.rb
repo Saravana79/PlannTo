@@ -845,7 +845,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   def self.get_matching_item_ids(page_count, node)
     ad_item_id = []
     [*1..page_count].each do |each_page|
-      res = Amazon::Ecs.item_search("", {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => node, :sort => "salesrank", :item_page => each_page})
+      res = Amazon::Ecs.item_search("", {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => node, :item_page => each_page})
 
       items = res.items
       items.each do |each_item|

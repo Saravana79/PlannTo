@@ -1703,7 +1703,7 @@ end
   end
 
   def self.get_items_from_amazon(keyword, page_type)
-    res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031, :sort => "salesrank"})
+    res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031})
     items = []
     loop_items = res.items.first(5)
     loop_items.each_with_index do |each_item, index|
