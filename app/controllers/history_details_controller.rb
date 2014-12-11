@@ -48,6 +48,16 @@ class HistoryDetailsController < ApplicationController
       click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
                        :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => nil, :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic]}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
+    elsif params[:only_layout] == "true"
+      item_id = nil
+      @impression_id = params[:iid].present? ? params[:iid] : "0"
+      url = params[:ref_url]
+      ref_url = params[:ref_url]
+
+      click_params =  {:url => url, :request_referer => ref_url, :time => Time.zone.now, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
+                       :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic]}.to_json
+      Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
+      return render :nothing => true
     else
 
       type = params[:type].present? ? params[:type] : ""

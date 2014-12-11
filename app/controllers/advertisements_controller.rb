@@ -18,7 +18,11 @@ class AdvertisementsController < ApplicationController
 
     @ad_template_type = params[:page_type] unless params[:page_type].blank?
 
-    return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid) if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
+    if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
+      return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+    elsif @ad.id == 24
+      return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+    end
 
     p_item_ids = item_ids = []
     p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
@@ -135,6 +139,7 @@ class AdvertisementsController < ApplicationController
     @iframe_width, @iframe_height = params[:size].split("x")
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    @ref_url = url
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
@@ -162,6 +167,28 @@ class AdvertisementsController < ApplicationController
         return render :json => {:success => true, :html => render_to_string("advertisements/show_static_ads.html.erb", :layout => false)}, :callback => params[:callback]
       }
       format.html { return render "show_static_ads.html.erb", :layout => false }
+    end
+  end
+
+  def show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+    # static ad process
+    params[:only_layout] = "true"
+    @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r])
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
+    @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+    @click_url = @click_url.gsub("&amp;", "&")
+    @size = params[:size].to_s
+    @random = Random.rand(10 ** 10).to_s.rjust(10,'0')
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_ad_layout.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "show_ad_layout.html.erb", :layout => false }
     end
   end
 

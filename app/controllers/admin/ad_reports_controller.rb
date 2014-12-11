@@ -97,6 +97,8 @@ class Admin::AdReportsController < ApplicationController
     params[:ad_id] ||= "All"
     @advertisements = ["All"] + Advertisement.all.map(&:id)
     @results = AdImpression.get_results_from_mongo(params)
+    render :layout => false
+
   end
 
   def widget_reports
