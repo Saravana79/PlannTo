@@ -1,6 +1,6 @@
 class MClick
   include Mongoid::Document
-  include Mongoid::Timestamps::Created
+  # include Mongoid::Timestamps::Created
 
   field :ad_impression_id, type: String
   field :click_url, type: String
@@ -8,12 +8,12 @@ class MClick
   field :timestamp, type: DateTime
   field :item_id, type: Integer
   field :user_id, type: Integer
-  field :ipaddress, type: String
+  # field :ipaddress, type: String
   field :publisher_id, type: Integer
   field :vendor_id, type: Integer
   field :source_type, type: String
   field :temp_user_id, type: String
-  field :old_impression_id, type: Integer
+  # field :old_impression_id, type: Integer
   field :advertisement_id, type: Integer
   field :sid, type: String
 

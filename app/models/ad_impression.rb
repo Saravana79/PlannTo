@@ -1,6 +1,6 @@
 class AdImpression
   include Mongoid::Document
-  include Mongoid::Timestamps::Created
+  # include Mongoid::Timestamps::Created
 
   field :advertisement_type, type: String
   field :advertisement_id, type: Integer
@@ -10,9 +10,9 @@ class AdImpression
   field :impression_time, type: DateTime
   field :publisher_id, type: Integer
   field :user_id, type: Integer
-  field :ip_address, type: String
-  field :itemsaccess, type: String
-  field :params, type: String
+  # field :ip_address, type: String
+  # field :itemsaccess, type: String
+  # field :params, type: String
   field :temp_user_id, type: String
   field :sid, type: String
   field :winning_price, type: Float
