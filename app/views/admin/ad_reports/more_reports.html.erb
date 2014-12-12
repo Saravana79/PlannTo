@@ -1,8 +1,49 @@
 <div class='report_form'>
   <%= form_for :impression, :url => admin_more_reports_path, :method => :get do |f| %>
     <div style="display:block;padding-top:10px;clear:both;">
+      <span style="width:100px;display:block;float:left;padding-top:5px;">
+Select A date Range
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+
+	<%= select_tag(:date_from_dropdown, options_for_select([["Select a date Range", 0], ['Yesterday', 1], ['Last Week', 7], ['Last month', 30], ['Last 3 months', 90], ['Last 6 Months', 180]])) %>
+</span>
+
+      <script>
+          $("#date_from_dropdown").live("change", function () {
+              days = $(this).val();
+              var date = new Date();
+              date.setDate(date.getDate() - days);
+              var from_date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+              $("#from_date").val(from_date);
+              date = new Date();
+              // date.setDate(date.getDate() - 1);
+              var to_date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+              $("#to_date").val(to_date);
+          });
+      </script>
+      <br/>
+      <br/>
+      <br/>
+	<span style="width:100px;display:block;float:left;padding-top:5px;">
+From Date
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= text_field_tag :from_date, @start_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
+</span>
+      <br/>
+    </div>
+      <div style="display:block;padding-top:10px;clear:both;">
+<span style="width:100px;display:block;float:left;padding-top:5px;">
+To Date
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= text_field_tag :to_date, @end_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
+</span>
+      </div>
+
       Type:
-      <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID'], params[:type])) %>
+      <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count"], params[:type])) %>
       Advertisement ID:
       <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
       <%= f.submit "Generate Report", :class => "btn-link report_btn" %>
@@ -21,16 +62,24 @@
   <tr>
     <th class="header_compare"  > <%= params[:type] %> </th>
     <th class="header_compare"  > Total Impressions </th>
+    <th class="header_compare"  > Total Clicks </th>
   </tr>
   <% @results.each do |each_hash| %>
   <tr>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["_id"] %> </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["count"] %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["imp_count"] %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["click_count"] %> </td>
   </tr>
   <% end %>
 </table>
 
 <br/><br/>
+
+
+  <script>
+      $("#from_date").datepicker({ dateFormat: 'dd-mm-yy' });
+      $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
+  </script>
 
 <style type="text/css">
     .report_form {

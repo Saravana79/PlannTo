@@ -95,10 +95,10 @@ class Admin::AdReportsController < ApplicationController
   def more_reports
     params[:type] ||= "Item"
     params[:ad_id] ||= "All"
+    @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
+    @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
     @advertisements = ["All"] + Advertisement.all.map(&:id)
-    @results = AdImpression.get_results_from_mongo(params)
-    render :layout => false
-
+    @results = AdImpression.get_results_from_mongo(params, @start_date, @end_date)
   end
 
   def widget_reports

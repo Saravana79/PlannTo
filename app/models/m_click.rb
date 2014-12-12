@@ -2,7 +2,7 @@ class MClick
   include Mongoid::Document
   # include Mongoid::Timestamps::Created
 
-  field :ad_impression_id, type: String
+  # field :ad_impression_id, type: String
   field :click_url, type: String
   field :hosted_site_url, type: String
   field :timestamp, type: DateTime
@@ -23,5 +23,6 @@ class MClick
   field :pre_appearance_count, type: Integer
   field :additional_details, type: String
 
-  belongs_to :ad_impression
+  # belongs_to :ad_impression
+  embedded_in :ad_impression
 end

@@ -701,13 +701,23 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         Click.import(clicks_import)
         ClickDetail.import(clicks_details)
 
-        #push to mongo
-        begin
-          MClick.collection.insert(clicks_import_mongo)
-        rescue Exception => e
-          p e
-          p "Error While processing click"
+
+        clicks_import_mongo.each do |each_click_mongo|
+          ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).last
+          unless ad_impression_mon.blank?
+            each_click_mongo.delete("ad_impression_id")
+            ad_impression_mon.m_click = each_click_mongo
+            ad_impression_mon.save
+          end
         end
+
+        #push to mongo
+        # begin
+        #   MClick.collection.insert(clicks_import_mongo)
+        # rescue Exception => e
+        #   p e
+        #   p "Error While processing click"
+        # end
 
         VideoImpression.import(video_imp_import)
 
