@@ -1,52 +1,53 @@
 <% ad_url = get_ad_url(nil, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
-<% shop_now_url = CGI.escape(shop_now_url) %>
+<% shop_now_url = CGI.escape(CGI.escape(shop_now_url)) %>
+<% shop_now_url = "INSERT_ENCODED_CLICKURL_HERE" %>
 <% case params[:size].to_s %>
   <% when "728x90" %>
-    <iframe id='a981e99c' name='a981e99c' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=9&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='728' height='90'>
-      <a href='http://adserver.housing.com/www/delivery/ck.php?n=a3a91cad&amp;cb=<%= @random %>' target='_blank'><img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=9&amp;cb=<%= @random %>&amp;n=a3a91cad&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+    <iframe id='a981e99c' name='a981e99c' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=9&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='728' height='90'>
+      <a href='http://adserver.housing.com/www/delivery/ck.php?n=a3a91cad&amp;cb=<%= @random %>' target='_blank'><img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=9&amp;cb=<%= @random %>&amp;n=a3a91cad&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "120x600" %>
-    <iframe id='a698fa7d' name='a698fa7d' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=10&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='120' height='600'>
+    <iframe id='a698fa7d' name='a698fa7d' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=10&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='120' height='600'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=afd33dde&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=10&amp;cb=<%= @random %>&amp;n=afd33dde&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=10&amp;cb=<%= @random %>&amp;n=afd33dde&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "160x600" %>
-    <iframe id='a20db014' name='a20db014' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=11&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='160' height='600'>
+    <iframe id='a20db014' name='a20db014' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=11&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='160' height='600'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=ace5796c&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=11&amp;cb=<%= @random %>&amp;n=ace5796c&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=11&amp;cb=<%= @random %>&amp;n=ace5796c&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "200*200" %>
-    <iframe id='a0978040' name='a0978040' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=12&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='200' height='200'>
+    <iframe id='a0978040' name='a0978040' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=12&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='200' height='200'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=af66f0fc&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=12&amp;cb=<%= @random %>&amp;n=af66f0fc&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=12&amp;cb=<%= @random %>&amp;n=af66f0fc&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "250x250" %>
-    <iframe id='aeee4758' name='aeee4758' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=13&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='250' height='250'>
+    <iframe id='aeee4758' name='aeee4758' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=13&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='250' height='250'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=acb17463&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=13&amp;cb=<%= @random %>&amp;n=acb17463&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=13&amp;cb=<%= @random %>&amp;n=acb17463&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "300x250" %>
-    <iframe id='a7b75dea' name='a7b75dea' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=14&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='300' height='250'>
+    <iframe id='a7b75dea' name='a7b75dea' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=14&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='300' height='250'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=ad61607c&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=14&amp;cb=<%= @random %>&amp;n=ad61607c&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=14&amp;cb=<%= @random %>&amp;n=ad61607c&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "336x280" %>
-    <iframe id='a6479b68' name='a6479b68' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=15&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='336' height='280'>
+    <iframe id='a6479b68' name='a6479b68' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=15&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='336' height='280'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=af5354ca&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=15&amp;cb=<%= @random %>&amp;n=af5354ca&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=15&amp;cb=<%= @random %>&amp;n=af5354ca&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
   <% when "468x60" %>
-    <iframe id='a358216f' name='a358216f' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=16&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0="<%= shop_now_url %>"' frameborder='0' scrolling='no' width='468' height='60'>
+    <iframe id='a358216f' name='a358216f' src='http://adserver.housing.com/www/delivery/afr.php?zoneid=16&amp;target=_blank&amp;cb=<%= @random %>&amp;ct0=<%= shop_now_url %>' frameborder='0' scrolling='no' width='468' height='60'>
       <a href='http://adserver.housing.com/www/delivery/ck.php?n=a14e9fdf&amp;cb=<%= @random %>' target='_blank'>
-        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=16&amp;cb=<%= @random %>&amp;n=a14e9fdf&amp;ct0="<%= shop_now_url %>"' border='0' alt='' />
+        <img src='http://adserver.housing.com/www/delivery/avw.php?zoneid=16&amp;cb=<%= @random %>&amp;n=a14e9fdf&amp;ct0=<%= shop_now_url %>' border='0' alt='' />
       </a>
     </iframe>
 <% end %>
