@@ -584,11 +584,13 @@ def populate_pro_con
       content_item_relations = ContentItemRelation.where("content_id = ?", self.id)
       content_item_relations.destroy_all
       items.split(",").each_with_index do |id, index|
-        item = Item.find(id)
-        self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
-        rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
-        item_type_ids << get_itemtype(item)
-        rel.save!
+        item = Item.find_by_id(id)
+        unless item.blank?
+          self.update_attribute(:itemtype_id, get_itemtype(item)) if index == 0
+          rel= ContentItemRelation.new(:item => item, :content => self, :itemtype => item.type)
+          item_type_ids << get_itemtype(item)
+          rel.save!
+        end
       end
 
       ContentItemtypeRelation.delete_all(["content_id = ?", self.id])
