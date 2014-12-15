@@ -211,10 +211,15 @@
             var present = $.inArray("pager2", ids_list)
             if (present < 0)
             {
-                var x = a.target
-                var d = $(x).closest(".advt-box")
-
-                var shop_now_url = d.find(".shop-now").attr('href')
+                <% if ["728", "120", "160_600"].include?(@suitable_ui_size) %>
+                    var x = a.target
+                    var d = $(x).closest(".product-container")
+                    var shop_now_url = d.find(".shop-now").attr('href')
+                <% else %>
+                    var x = a.target
+                    var d = $(x).closest(".advt-box")
+                    var shop_now_url = d.find(".shop-now").attr('href')
+                <% end %>
 
                 if (shop_now_url == undefined)
                 {
