@@ -54,7 +54,7 @@ class AdImpression
     #project = {"$project" =>  { "#{option}" => 1}}
 
 
-    match = {"$match" => {"advertisement_type" => "advertisement", "impression_time" => {"$gte" => start_date, "$lte" => end_date}}}
+    match = {"$match" => {"impression_time" => {"$gte" => start_date, "$lte" => end_date}}}
     #project = {"$project" =>  { "m_click" => 1, "sid" => 1, "impression_time" => 1, "advertisement_type" => 1, "item_id" => 1, "temp_user_id" => 1, "device" => 1, "size" => 1, "domain" => 1, "design_type" => 1, "pre_appearance_count" => 1}}
 
     if param[:ad_id] != "All"
@@ -65,7 +65,7 @@ class AdImpression
     group =  { "$group" => { "_id" => "$#{option}", "imp_count" => { "$sum" => 1 }, "click_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_click._id", 1 ] }, 1, 0 ] } } }}
     # items_by_count = AdImpression.collection.aggregate([project,match,group])
 
-    sort = {"$sort" => {"imp_count" => -1}}
+    sort = {"$sort" => {param[:report_sort_by] => -1}}
     limit = {"$limit" => 100}
 
     items_by_count = AdImpression.collection.aggregate([match,group,sort,limit])

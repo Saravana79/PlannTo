@@ -49,6 +49,19 @@ To Date
       <%= f.submit "Generate Report", :class => "btn-link report_btn" %>
     </div>
   <% end %>
+
+
+  <div class="sorting">
+    <form>
+      <label>Sort by:&nbsp;</label>
+          <span id="sort_filter">
+            <select name="report_sort_by" id="report_sort_by" class="order_by_type">
+              <option value="imp_count" <%= params[:report_sort_by] == "imp_count" ? "selected=selected" : "" %>>Impressions</option>
+              <option value="click_count" <%= params[:report_sort_by] == "click_count" ? "selected=selected" : "" %>>Clicks</option>
+            </select>
+          </span>
+    </form>
+  </div>
 </div>
 
 
@@ -63,12 +76,18 @@ To Date
     <th class="header_compare"  > <%= params[:type] %> </th>
     <th class="header_compare"  > Total Impressions </th>
     <th class="header_compare"  > Total Clicks </th>
+    <th class="header_compare"  > CTR </th>
   </tr>
   <% @results.each do |each_hash| %>
   <tr>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["_id"] %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+      <%= get_if_item(each_hash["_id"]) %>
+    </td>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["imp_count"] %> </td>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["click_count"] %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+      <%= "#{get_ectr(each_hash["click_count"].to_i, each_hash["imp_count"].to_i)}" + " %" %>
+    </td>
   </tr>
   <% end %>
 </table>
@@ -86,6 +105,12 @@ To Date
         color: #a52a2a;
         font-size: 14px;
         text-align: center;
+    }
+
+    .sorting {
+        float: right;
+        margin: -98px 103px 0 0;
+        position: relative;
     }
 </style>
 
@@ -260,3 +285,18 @@ To Date
     }
 
 </style>
+
+
+<script type="application/javascript">
+    //order by change
+
+    $(function()
+    {
+        $(".order_by_type").change(function()
+        {
+            var params_str = $(".report_form form").serialize()
+            var sort_and_order_by = "report_sort_by="+$("#report_sort_by").val()
+            window.location.href='/admin/more_reports?'+params_str+'&'+sort_and_order_by
+        })
+    })
+</script>

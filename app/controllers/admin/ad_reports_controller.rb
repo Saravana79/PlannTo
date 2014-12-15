@@ -95,10 +95,15 @@ class Admin::AdReportsController < ApplicationController
   def more_reports
     params[:type] ||= "Item"
     params[:ad_id] ||= "All"
+    params[:report_sort_by] ||= "imp_count"
     @start_date = params[:from_date].blank? ? Date.today.beginning_of_day : params[:from_date].to_date.beginning_of_day
     @end_date = params[:to_date].blank? ? Date.today.end_of_day : params[:to_date].to_date.end_of_day
     @advertisements = ["All"] + Advertisement.all.map(&:id)
     @results = AdImpression.get_results_from_mongo(params, @start_date, @end_date)
+    if params[:type] == "Item"
+      item_ids = @results.map {|each_row| each_row["_id"]}.compact.map(&:to_i)
+      @items = Item.where(:id => item_ids)
+    end
   end
 
   def widget_reports
