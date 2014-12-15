@@ -39,7 +39,7 @@
                       </div>
                   <% end %>
                   <div class="product-txt-desc" style="border-top: 1px solid #D9D9D9;text-align: center;">
-                    <p>
+                    <p style="font-size: 12px;font-weight: 600;padding-top: 3px;">
                       <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
                       <%= raw get_offer_for_ad(@ad, @sliced_item_details.first.first, @vendor_ad_details[@sliced_item_details.first.first.site.to_i]['default_text'], 50, "") %>
                     </p>

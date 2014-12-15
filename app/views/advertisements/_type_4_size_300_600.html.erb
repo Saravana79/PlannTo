@@ -54,7 +54,7 @@
                   </div>
                   <% end %>
                   <div class="product-txt-desc">
-                    <p>
+                    <p style="font-size: 12px;font-weight: 600;">
                       <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
                       <%= raw get_offer_for_ad(@ad, item_detail.first, @vendor_ad_details[item_detail.first.site.to_i]['default_text'], 90, "") %>
                     </p>
