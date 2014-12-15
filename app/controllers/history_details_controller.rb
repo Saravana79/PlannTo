@@ -19,9 +19,14 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
+    if !params[:ads_id].blank?
+      @ad = Advertisement.where("id = ?", params[:ads_id]).first
+    end
+
     req_url = params[:ref_url].blank? ? req_url : params[:ref_url]
 
     publisher = Publisher.getpublisherfromdomain(req_url)
+    vendor = nil
 
 
     if params[:id].present?
@@ -128,23 +133,29 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
-
     unless vendor.nil?
       if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
         url = vendor.vendor_detail.params.gsub(/\{url}/, url)
-        unless publisher.nil?
-          pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id).first
-        end
-        if !pv.nil?
-          url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
-          url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+
+        if !@ad.blank? && !@ad.affiliate_id.blank? && !@ad.track_id.blank?
+          url = url.gsub(/\{affid}/, @ad.affiliate_id) unless @ad.affiliate_id.blank?
+          url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id
         else
-          pv = PublisherVendor.where(:publisher_id => 0, :vendor_id => vendor.id).first
+          unless publisher.nil?
+            pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id).first
+          end
           if !pv.nil?
             url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
             url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+          else
+            pv = PublisherVendor.where(:publisher_id => 0, :vendor_id => vendor.id).first
+            if !pv.nil?
+              url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
+              url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+            end
           end
         end
+
         url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
 
         add_detail = @item_detail.blank? ? "" : @item_detail.additional_details.to_s

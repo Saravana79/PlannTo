@@ -8,9 +8,13 @@ class Admin::AdvertisementsController < ApplicationController
 
   def index
     params[:date] ||= Date.today
+    params[:ad_status] ||= 1
+
+    filter_condition = "status = #{params[:ad_status]}"
+
     @start_date, @end_date = params[:date].to_s.split("/")
     @collections_for_dropdown = [["Today", Date.today], ['Yesterday', Date.yesterday], ['Last Week', "#{Date.today-1.week}/#{Date.today}"], ['Last month', "#{Date.today-1.month}/#{Date.today}"], ['Last 3 months', "#{Date.today-3.months}/#{Date.today}"], ['Last 6 Months', "#{Date.today-6.months}/#{Date.today}"]]
-    @advertisements = Advertisement.where("#{@user_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
+    @advertisements = Advertisement.where("#{@user_condition} and #{filter_condition}").order('created_at desc').paginate(:per_page => 15, :page => params[:page])
     @extra_ad_details = Advertisement.get_extra_details(@advertisements, params[:date], current_user)
   end
 

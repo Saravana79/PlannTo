@@ -2,6 +2,14 @@
  <%=link_to "Create New Campaign",new_admin_advertisement_path + "#maincontainer", :class=>"btn btn-primary new_ad", :style=>'background:#16c3d7;' %>
  <%= select_tag(:date_from_dropdown, options_for_select(@collections_for_dropdown, params[:date]), :class => "styled-select") %>
 
+<div class='report_form'>
+  <%= form_for :impression, :url => admin_advertisements_path, :method => :get do |f| %>
+      Status:
+      <%= select_tag(:ad_status, options_for_select([['Active', 1], ['Inactive', 0]], params[:ad_status])) %>
+      <%= f.submit "Filter", :class => "btn-link report_btn" %>
+  <% end %>
+</div>
+
  <div class="show_date_range">
    <span>Date: <%= @start_date.to_date.strftime("%d %b %y") %><%= "  -  #{@end_date.to_date.strftime("%d %b %y")}" unless @end_date.blank? %></span>
  </div>
@@ -94,6 +102,12 @@
 
     .ad_row:hover {
         cursor: pointer !important;
+    }
+
+    .report_form {
+        float: right;
+        margin: 22px 5px 0 0;
+        position: relative;
     }
 </style>
 
