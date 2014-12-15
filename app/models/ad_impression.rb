@@ -23,10 +23,13 @@ class AdImpression
   field :size, type: String
   field :domain, type: String
   field :design_type, type: String
+  field :viewablility, type: String
 
 
   # has_one :m_click
   embeds_one :m_click
+
+  index({ impression_time: 1 })
 
 
   def self.get_results_from_mongo(param, start_date, end_date)
