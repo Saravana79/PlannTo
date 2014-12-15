@@ -19,6 +19,8 @@ class Advertisement < ActiveRecord::Base
   has_many :aggregated_details, :as => :entity
   has_many :ad_reports
 
+  before_save :convert_device_to_string
+
   after_create :item_update_with_created_ad_item_ids
   after_save :update_click_url_based_on_vendor
   after_save :update_redis_with_advertisement
@@ -905,6 +907,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     logger.info "===========================================#{dimensions.width} +++++++++++++++#{dimensions.height}"
     if dimensions.width.to_i.to_s != hieght_width[0] || dimensions.height.to_i.to_s != hieght_width[1]
       errors.add :file, "Width must be #{hieght_width[0]}px and height must be #{hieght_width[1]}px"
+    end
+  end
+
+  def convert_device_to_string
+    if !self.device.blank? && self.device.is_a?(Array)
+      self.device = self.device.join(",")
     end
   end
 

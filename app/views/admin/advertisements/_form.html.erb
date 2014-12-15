@@ -44,6 +44,17 @@
       </div>
     </div>
 
+    <div class="fields-div">
+        <div class="title_header float_lft">Device :</div>
+        <div>
+          <%= label_tag "PC" %>
+          <%= check_box_tag "advertisement[device][]", "pc", @advertisement.device.to_s.split(",").include?("pc"), {:style => "width: 0 !important;"} %>
+          <%= label_tag "Mobile" %>
+          <%= check_box_tag "advertisement[device][]", "mobile", @advertisement.device.to_s.split(",").include?("mobile"), {:style => "width: 0 !important;"} %>
+          <%#= f.check_box :device, {}, ["pc", "mobile"]%>
+        </div>
+    </div>
+
     <div class="fields-div dynamic_details additional_details">
       <div class="title_header float_lft">Template Type :</div>
       <div>

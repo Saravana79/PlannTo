@@ -22,7 +22,7 @@ class Admin::AdvertisementsController < ApplicationController
     user_relation = UserRelationship.where(:user_id => current_user.id, :relationship_type => "Vendor").first
     vendor_id = user_relation.blank? ? "" : user_relation.relationship_id
     @vendor = Vendor.find_by_id(vendor_id)
-    @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25, :schedule_details => [*0..23].join(","))
+    @advertisement = Advertisement.new(:user_id => current_user.id, :vendor_id => vendor_id, :commission => 25, :schedule_details => [*0..23].join(","), :device => "pc,mobile")
     @advertisements = [@advertisement]
   end
 
@@ -78,6 +78,7 @@ class Admin::AdvertisementsController < ApplicationController
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
       redirect_to admin_advertisements_path
     else
+      @advertisement.device = @advertisement.device.to_a.join(",")
       @items = Item.where(:id => @content.related_items.collect(&:item_id)) rescue []
       @exclusive_items = Item.where(:id => params[:advertisement][:exclusive_item_ids].to_s.split(",")) rescue []
       render :new
@@ -116,6 +117,7 @@ class Admin::AdvertisementsController < ApplicationController
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
       redirect_to admin_advertisements_path
     else
+      @advertisement.device = @advertisement.device.to_a.join(",")
       render :edit
     end
   end

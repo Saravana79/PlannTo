@@ -137,7 +137,7 @@ class HistoryDetailsController < ApplicationController
       if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
         url = vendor.vendor_detail.params.gsub(/\{url}/, url)
 
-        if !@ad.blank? && !@ad.affiliate_id.blank? && !@ad.track_id.blank?
+        if !@ad.blank? && (!@ad.affiliate_id.blank? || !@ad.track_id.blank?)
           url = url.gsub(/\{affid}/, @ad.affiliate_id) unless @ad.affiliate_id.blank?
           url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id
         else

@@ -638,7 +638,6 @@ ActiveRecord::Schema.define(:version => 20141215093154) do
     t.integer "retargeting"
     t.integer "pre_appearance_count"
     t.string  "additional_details"
-    t.string  "device"
   end
 
   create_table "impression_missings", :force => true do |t|
