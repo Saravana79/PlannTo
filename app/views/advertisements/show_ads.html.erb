@@ -211,8 +211,16 @@
             var present = $.inArray("pager2", ids_list)
             if (present < 0)
             {
-                var shop_now_url = $(".item_details.active").find(".shop-now").attr('href')
-                console.log(shop_now_url)
+                var x = a.target
+                var d = $(x).closest(".advt-box")
+
+                var shop_now_url = d.find(".shop-now").attr('href')
+
+                if (shop_now_url == undefined)
+                {
+                    var shop_now_url = $(".item_details.active").find(".shop-now").attr('href')
+                }
+
                 window.open(shop_now_url, "_blank")
                 return false;
             }
