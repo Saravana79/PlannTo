@@ -780,7 +780,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
   def self.update_include_exclude_products_from_amazon()
-   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 12}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 8}, "laptops" => {:node => 1375424031, :page_count => 4}, "lenses" => {:node => 1389197031, :page_count => 6}}
+   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 12}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 10}, "laptops" => {:node => 1375424031, :page_count => 5}, "lenses" => {:node => 1389197031, :page_count => 6}}
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
@@ -792,7 +792,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
     ad_item_id = ad_item_id.join(",")
 
-    advertisement = Advertisement.where(:id => 12).last
+    advertisement = Advertisement.where(:id => 25).last
     if !advertisement.blank?
       content = advertisement.content
 
@@ -806,7 +806,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
       end
     end
 
-    exc_advertisement = Advertisement.where(:id => 3).last
+    exc_advertisement = Advertisement.where(:id => 26).last
 
     exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id) unless exc_advertisement.blank?
   end
