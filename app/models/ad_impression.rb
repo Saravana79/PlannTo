@@ -23,7 +23,7 @@ class AdImpression
   field :size, type: String
   field :domain, type: String
   field :design_type, type: String
-  field :viewablility, type: String
+  field :viewablility, type: Integer
 
 
   # has_one :m_click
@@ -33,8 +33,8 @@ class AdImpression
 
 
   def self.get_results_from_mongo(param, start_date, end_date)
-    start_date = start_date.to_time
-    end_date = end_date.to_time
+    start_date = start_date
+    end_date = end_date
     option = case param[:type]
      when "Sid"
         "sid"
