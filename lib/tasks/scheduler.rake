@@ -155,6 +155,11 @@ task :update_item_details_from_vendors => :environment do
   Resque.enqueue(UpdateItemDetailsFromVendors, "update_from_vendors", Time.zone.now.utc)
 end
 
+desc "Update Itemdetail from Flipkart"
+task :update_item_details_from_vendors_flipkart => :environment do
+  Resque.enqueue(UpdateItemDetailsFromVendorsFlipkart, "update_from_vendors_flipkart", Time.zone.now.utc)
+end
+
 desc "Update bulk cookie matching"
 task :bulk_cookie_matching_process => :environment do
   if $redis.llen("resque:queue:bulk_cookie_matching_process") < 1
