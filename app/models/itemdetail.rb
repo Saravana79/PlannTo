@@ -358,4 +358,97 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     # Update item details for item
     Resque.enqueue(ItemUpdate, "update_item_details", Time.zone.now)
   end
+
+  def self.update_from_vendors_flipkart(time=Time.now)
+    url = "http://www.mysmartprice.com/store_data/msp_master.xml"
+    top_product_ids = [3888,4339,3595,4060,4090,3889,4416,4790,4376,4848,4342,4352,4734,3325,4127,3936,4207,4208,4985,4415,4649,2678,4091,3114,3437,4939,3633,4361,4233,4239,4513,3608,4081,4483,4490,4728,4959,5004,3714,3216,3447,3626,4509,4520,3293,3536,4021,4630,2892,4428,4450,4597,5052,3028,3939,3996,4039,4093,4108,4378,4726,4747,2377,3581,4867,2635,2899,2902,3439,3605,3728,4136,4327,4571,4624,1128,2956,3734,4292,4804,2439,2914,3705,4018,4056,4269,4518,4644,4716,4774,4788,4928,5030,1779,3069,3700,3938,3952,4055,4135,4534,4588,3022,3048,3076,3104,3508,3673,3736,3899,3941,4022,4040,4062,4067,4238,4245,4271,4382,4393,4408,4417,3083,3324,3435,3436,3543,3578,3824,3904,4070,4084,4092,4123,4216,4254,4340,4421,4422,4432,4467,4561,4589,4638,4653,4662,4725,4784,4923,4952,1364,2397,2433,2958,3068,3327,3463,3551,3768,3770,3825,3835,3887,4014,4133,4168,4185,4341,4418,4554,4563,4682,4745,4805,4811,4845,4853,4860,4882,4891,5024,5121,2083,2238,2256,2385,2430,2432,2615,2724,2815,2825,2858,2860,2907,2927,2999,3049,3050,3088,3113,3128,3181,3206,3208,3210,3246,3292,3320,3330,3337,3371,3379,3383,3396,3400,3401,3454,3607,3667,3672,3694,3706,3716,3723,3753,3767,3851,3895,3900,3905,3929,3942,3977,3994,4004,4006,4027,4073,4077,4088,4098,4121,4148,4160,4177,4217,4224,4231,4234,4241,4252,4280,4283,4294,4311,4385,4388,4391,4429,4436,4461,4463,4470,4473,4484,4497,4498,4504,4516,4522,4532,4533,4575,4591,4657,4722,4736,4767,4786,4789,4812,4831,4832,4847,4854,4890,4909,4915,4925,4949,4979,5033,5115,5146]
+    # xml_data = Net::HTTP.get_response(URI.parse(url)).body
+    # data = XmlSimple.xml_in(xml_data)
+    # items = data["channel"][0]["item"]
+
+    doc = Nokogiri::XML(open(url))
+    node = doc.elements.first
+
+    node.xpath("//item").each do |item|
+      begin
+        p "--- Started Process #{url} ---"
+        id = item.at_xpath("g:id").content rescue ""
+        title = item.at_xpath("title").content rescue ""
+        product_type = item.at_xpath("g:product_type").content rescue ""
+        product_type = product_type.to_s.split(">")[1].to_s.strip
+        url = item.at_xpath("link").content rescue ""
+        price = item.at_xpath("g:price").content rescue ""
+        image_url = item.at_xpath("g:image_link").content rescue ""
+
+        itemtype_hash = {"mobile" => 6, "laptops" => 23, "tablet" => 13, "lenses" => 20, "digital-camera" => 12, "digital-slr-camera" => 12}
+        filename = image_url.split("/").last
+        filename = filename == "noimage.jpg" ? nil : filename
+
+        unless filename.blank?
+          name = filename.to_s.split(".")
+          name = name[0...name.size-1]
+          name = name.join(".") + ".jpeg"
+          filename = name
+        end
+
+        itemtype_id = itemtype_hash[product_type]
+
+        if itemtype_id.blank?
+          next
+        end
+
+        have_to_create_image = false
+        @item_detail = Itemdetail.find_or_initialize_by_url(url)
+        if !@item_detail.new_record?
+          have_to_create_image = @item_detail.Image.blank? ? true : false
+          status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
+          @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
+        else
+          source_item = Sourceitem.find_or_initialize_by_url(url)
+          if source_item.new_record?
+            source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+          elsif source_item.verified && !source_item.matchitemid.blank?
+            status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
+            @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
+            have_to_create_image = true
+          end
+        end
+
+        if have_to_create_image && !image_url.blank? && !filename.blank?
+          p "image----------------------------"
+          @image = @item_detail.build_image
+          # tempfile = open(image_url)
+          # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          # avatar.original_filename = filename
+
+          safe_thumbnail_url = URI.encode(URI.decode(image_url))
+          extname = File.extname(safe_thumbnail_url).delete("%")
+          basename = File.basename(safe_thumbnail_url, extname).delete("%")
+          file = Tempfile.new([basename, extname])
+          file.binmode
+          open(URI.parse(safe_thumbnail_url)) do |data|
+            file.write data.read
+          end
+          file.rewind
+
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar.original_filename = filename
+
+          @image.avatar = avatar
+          if @image.save
+            @item_detail.update_attributes(:Image => filename)
+          end
+        end
+
+      rescue Exception => e
+        p "-------------------- There was a problem while processing itemdetail item #{url} => #{e.message}-----------------"
+      end
+      p "--- End Process #{url} ---"
+    end
+
+    ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 26351 and last_verified_date < '#{1.day.ago}'")
+
+    # Update item details for item
+    Resque.enqueue(ItemUpdate, "update_item_details", Time.zone.now)
+  end
 end

@@ -166,7 +166,7 @@ class UserAccessDetail < ActiveRecord::Base
       new_source = existing_source.uniq
       u_values["source"] = new_source.join(",")
 
-      temp_store = {"source" => new_source.join(",")}
+      temp_store = {"source" => new_source.join(","), "housinglad" => Date.today.to_s}
 
       redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
     end

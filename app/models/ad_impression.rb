@@ -23,7 +23,7 @@ class AdImpression
   field :size, type: String
   field :domain, type: String
   field :design_type, type: String
-  field :viewablility, type: Integer
+  field :viewability, type: Integer
 
 
   # has_one :m_click
@@ -48,6 +48,8 @@ class AdImpression
        "domain"
      when "Pre Appearance Count"
        "pre_appearance_count"
+     when "Viewability"
+       "viewability"
      else
        "item_id"
      end
