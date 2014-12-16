@@ -112,7 +112,7 @@ class Feed < ActiveRecord::Base
       end
 
       # sources_list = Rails.cache.read("sources_list_details")
-      sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+      sources_list = JSON.parse($redis.get("sources_list_details"))
       sources_list.default = "Others"
       category = sources_list[source]["categories"]
 

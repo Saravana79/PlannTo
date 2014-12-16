@@ -385,8 +385,8 @@ class SearchController < ApplicationController
   end
 
    def autocomplete_source_items
-     feed_urls = FeedUrl.find_by_sql("select distinct source from feed_urls")
-     sources = feed_urls.map(&:source)
+     source_categories = SourceCategory.find_by_sql("select source from source_categories")
+     sources = source_categories.map(&:source)
 
      searched_sources = sources.grep(/^#{params[:term]}/)
      results = searched_sources.map {|x| {:id => x, :value => x, :type => "Source", :imgsrc => ""}}

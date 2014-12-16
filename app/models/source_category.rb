@@ -8,18 +8,18 @@ class SourceCategory < ActiveRecord::Base
 
     results = {}
     @source_categories.map {|each_feed_url|  each_feed_url.attributes}.select {|each_src| results.merge!({each_src["source"] => {"categories" => each_src["categories"], "check_details" => each_src["check_details"], "site_status" => each_src["site_status"]}})}
-    $redis_rtb.set("sources_list_details", results.to_json)
+    $redis.set("sources_list_details", results.to_json)
     get_source_category_with_paginations()
   end
 
   def check_and_assign_sources_hash_to_cache_from_table()
     begin
-      sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+      sources_list = JSON.parse($redis.get("sources_list_details"))
     rescue Exception => e
       sources_list = {}
     end
     sources_list.merge!({self.source => {"categories" => self.categories, "check_details" => self.check_details, "site_status" => self.site_status}})
-    $redis_rtb.set("sources_list_details", sources_list.to_json)
+    $redis.set("sources_list_details", sources_list.to_json)
   end
 
   def self.get_source_category_with_paginations()

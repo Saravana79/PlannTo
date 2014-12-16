@@ -107,7 +107,7 @@ class FeedUrl < ActiveRecord::Base
             end
 
             # sources_list = Rails.cache.read("sources_list_details")
-            sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+            sources_list = JSON.parse($redis.get("sources_list_details"))
             sources_list.default = "Others"
             category = sources_list[source]["categories"] rescue ""
 
@@ -197,7 +197,7 @@ class FeedUrl < ActiveRecord::Base
             end
 
             # sources_list = Rails.cache.read("sources_list_details")
-            sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+            sources_list = JSON.parse($redis.get("sources_list_details"))
             sources_list.default = "Others"
             category = sources_list[source]["categories"] rescue ""
 
@@ -421,7 +421,7 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def check_and_update_sub_type(article)
-    source_hash = $redis_rtb.get("sources_list_details")
+    source_hash = $redis.get("sources_list_details")
     unless source_hash.blank?
       source_list = JSON.parse(source_hash)
       host = Addressable::URI.parse(self.url).host.downcase
@@ -554,7 +554,7 @@ class FeedUrl < ActiveRecord::Base
       end
     end
     if selected_values.blank?
-      sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+      sources_list = JSON.parse($redis.get("sources_list_details"))
       categories = sources_list[host_without_www]["categories"] rescue ""
       splt_categories = categories.split(",").map(&:strip)
       selected_values = splt_categories.map {|d| Item.get_root_level_id(d)}
@@ -565,7 +565,7 @@ class FeedUrl < ActiveRecord::Base
   def self.automated_feed_process
     SourceCategory.update_all_to_cache()
     feed_urls = FeedUrl.where("status = 0 and (created_at < '#{2.weeks.ago.utc}' and created_at > '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
-    sources_list = JSON.parse($redis_rtb.get("sources_list_details"))
+    sources_list = JSON.parse($redis.get("sources_list_details"))
 
     feed_urls.each do |feed_url|
       begin
