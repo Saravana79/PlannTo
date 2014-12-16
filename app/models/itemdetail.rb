@@ -404,6 +404,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           url = item_info.at_xpath("productUrl").content rescue ""
           url = url.gsub(/&affid.*/, "")  #remove affiliate id
           url = url.gsub("dl.", "www.").gsub("/dl/", "/")
+          p "--- Processing url #{url} ---"
           price = item_info.at_xpath("sellingPrice//amount").content rescue ""
           image_url = item_info.at_xpath("imageUrls//entry//value").content rescue ""
           status = item_info.at_xpath("inStock").content rescue ""
