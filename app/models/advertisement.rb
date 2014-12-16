@@ -572,7 +572,7 @@ class Advertisement < ActiveRecord::Base
                 impression_mongo["device"] = url_params["device"]
                 impression_mongo["size"] = url_params["size"]
                 impression_mongo["design_type"] = url_params["page_type"]
-                impression_mongo["viewablility"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+                impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
                 impression_import_mongo << impression_mongo
 
               elsif impression.advertisement_type != "advertisement"
