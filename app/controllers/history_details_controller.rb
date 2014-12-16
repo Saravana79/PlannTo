@@ -139,7 +139,7 @@ class HistoryDetailsController < ApplicationController
 
         if !@ad.blank? && (!@ad.affiliate_id.blank? || !@ad.track_id.blank?)
           url = url.gsub(/\{affid}/, @ad.affiliate_id) unless @ad.affiliate_id.blank?
-          url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id
+          url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id.blank?
         else
           unless publisher.nil?
             pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id).first
