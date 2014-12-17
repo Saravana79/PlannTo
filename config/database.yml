@@ -11,15 +11,9 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: planntouser
+  database: plannto_development
   username: root
   password: root
-#  adapter: mysql2
-#  encoding: utf8
-#  host: planntonew.cmsyjd0smtse.us-east-1.rds.amazonaws.com
-#  database: planntouser
-#  username: planntomain
-#  password: Ayappa2524
   #socket: /tmp/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
