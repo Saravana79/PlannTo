@@ -185,6 +185,8 @@
              <%end%>
              <%if current_user && current_user.is_admin? %>
                  <a href="/admin/widget_reports">Widgets Report</a>
+                 <%= link_to "AB Test", advertisement_ab_test_path %>
+                 <%= link_to "Ads More Reports", admin_more_reports_path %>
              <% end %>
              <% if current_user.is_a_advertiser?(session[:advertiser]) || !current_user.is_a_publisher?(session[:publisher]) %>
                  <% session[:advertiser] = "true" %>

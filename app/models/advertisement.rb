@@ -899,6 +899,36 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     ad_item_id
   end
 
+  def self.get_alternative_list
+    url = "#{Rails.root}/public/stylesheets/ads"
+    types = Dir.foreach(url).to_a
+    types.delete(".")
+    types.delete("..")
+    types = types.sort
+
+    default_size = {"120" => "120x600", "127" => "127x100", "300" => "300x250", "468" => "468x60", "728" => "728x90"}
+    sizes = []
+
+    types.each do |type|
+      new_url = url+"/"+type
+      existing_sizes = Dir.foreach(new_url).to_a
+      existing_sizes.delete(".")
+      existing_sizes.delete("..")
+      existing_sizes.each do |size|
+        split_size = size.split("_")
+        rel_size = split_size.count == 1 ? default_size[size] : split_size.join("x")
+        sizes << rel_size
+      end
+    end
+
+    sizes = sizes.compact.uniq
+    sizes = sizes.sort
+
+    alternative_list = []
+    sizes.each {|each_size| alternative_list << [each_size, types]}
+    alternative_list
+  end
+
   private
 
   def file_dimensions

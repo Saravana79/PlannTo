@@ -5,6 +5,8 @@
         Enabled: <%= f.select("enabled", options_for_select(["true","false"], "#{@ab_test_details.enabled}"), {}, {:class => "field"}) %>
         <br />
         Alternatives:
+        <br />
+        <span style="color: #ff4921;"> Please select only 2 types per size: </span>
         <ul>
           <% @alternative_list.each do |role| %>
               <li><%= role[0] %>:

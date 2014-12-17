@@ -267,7 +267,8 @@ class AdvertisementsController < ApplicationController
   end
 
   def ab_test
-    @alternative_list = [['300*250', ["type_1","type_2"]], ["120*600", ["type_1","type_2"]], ["728*90", ["type_1","type_2"]], ["300*600", ["type_1","type_2"]]]
+    # @alternative_list = [['300*250', ["type_1","type_2"]], ["120*600", ["type_1","type_2"]], ["728*90", ["type_1","type_2"]], ["300*600", ["type_1","type_2"]]]
+    @alternative_list = Advertisement.get_alternative_list()
     ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
     @ab_test_details = Struct.new(:enabled, :alternatives).new(ab_test_details[0], ab_test_details[1])
     @alternatives = []

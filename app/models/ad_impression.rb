@@ -50,6 +50,8 @@ class AdImpression
        "pre_appearance_count"
      when "Viewability"
        "viewability"
+     when "Retargeting"
+       "retargeting"
      else
        "item_id"
      end
