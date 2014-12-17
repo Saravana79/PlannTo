@@ -32,6 +32,12 @@ class PixelsController < ApplicationController
     end
   end
 
+  def un_matching_cookie
+    user_id = cookies[:plan_to_temp_user_id]
+    CookieMatch.un_match_cookie(user_id) unless user_id.blank?
+    render :nothing => true
+  end
+
   private
 
   def generate_cookie_if_not_exist

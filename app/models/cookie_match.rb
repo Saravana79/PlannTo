@@ -194,4 +194,39 @@ where url = '#{ref_url}' group by ac.id").last
     return nil
   end
 
+  def self.un_match_cookie(user_id)
+    u_key = "u:ac:plannto:#{user_id}"
+    u_values = $redis.hgetall(u_key)
+
+    if !u_values.blank?
+      existing_source = u_values["source"].to_s
+      existing_source = existing_source.split(",").compact
+      existing_source.delete("housing")
+      new_source = existing_source.uniq
+      u_values["source"] = new_source.join(",")
+
+      $redis.pipelined do
+        $redis.hmset(u_key, u_values.flatten)
+        $redis.expire(u_key, 3.weeks)
+      end
+    end
+
+    key = "users:buyinglist:plannto:#{user_id}"
+    rtb_values = $redis_rtb.hgetall(key)
+
+    if !rtb_values.blank?
+      existing_source = rtb_values["source"].to_s
+      existing_source = existing_source.split(",").compact
+      existing_source.delete("housing")
+      new_source = existing_source.uniq
+      rtb_values["source"] = new_source.join(",")
+      rtb_values.delete("housinglad")
+
+      $redis_rtb.pipelined do
+        $redis_rtb.hmset(key, rtb_values.flatten)
+        $redis_rtb.expire(key, 3.weeks)
+      end
+    end
+  end
+
 end

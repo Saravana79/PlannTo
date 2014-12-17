@@ -169,6 +169,11 @@ class UserAccessDetail < ActiveRecord::Base
       temp_store = {"source" => new_source.join(","), "housinglad" => Date.today.to_s}
 
       redis_rtb_hash.merge!("users:buyinglist:plannto:#{user_id}" => temp_store)
+
+      $redis.pipelined do
+        $redis.hmset(u_key, u_values.flatten)
+        $redis.expire(u_key, 3.weeks)
+      end
     end
 
     # Redis Rtb update

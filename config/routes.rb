@@ -462,6 +462,7 @@ resources :comments do
   resources :pixels do
     collection do
       get "pixel_matching"
+      get "un_matching_cookie"
     end
   end
 
