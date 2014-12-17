@@ -133,39 +133,45 @@ class HistoryDetailsController < ApplicationController
       end
     end
 
-    unless vendor.nil?
-      if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
-        url = vendor.vendor_detail.params.gsub(/\{url}/, url)
+    #TODO: temporary fix for flipkart
 
-        if !@ad.blank? && (!@ad.affiliate_id.blank? || !@ad.track_id.blank?)
-          url = url.gsub(/\{affid}/, @ad.affiliate_id) unless @ad.affiliate_id.blank?
-          url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id.blank?
-        else
-          unless publisher.nil?
-            pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id).first
-          end
-          if !pv.nil?
-            url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
-            url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+    # if !@ad.blank? && (@ad.id == 1 || @ad.id == 10)
+    #   url = url + "&cmpid=content_plannto_contextual"
+    # else
+      unless vendor.nil?
+        if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
+          url = vendor.vendor_detail.params.gsub(/\{url}/, url)
+
+          if !@ad.blank? && (!@ad.affiliate_id.blank? || !@ad.track_id.blank?)
+            url = url.gsub(/\{affid}/, @ad.affiliate_id) unless @ad.affiliate_id.blank?
+            url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id.blank?
           else
-            pv = PublisherVendor.where(:publisher_id => 0, :vendor_id => vendor.id).first
+            unless publisher.nil?
+              pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id).first
+            end
             if !pv.nil?
               url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
               url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+            else
+              pv = PublisherVendor.where(:publisher_id => 0, :vendor_id => vendor.id).first
+              if !pv.nil?
+                url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
+                url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+              end
             end
           end
+
+          url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
+
+          add_detail = @item_detail.blank? ? "" : @item_detail.additional_details.to_s
+          url= url.gsub(/\{add}/, add_detail) #pass additional_details
+
+          ad_id = params[:ads_id].blank? ? "" : params[:ads_id]
+          url= url.gsub(/\{ad_id}/, ad_id)
         end
-
-        url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
-
-        add_detail = @item_detail.blank? ? "" : @item_detail.additional_details.to_s
-        url= url.gsub(/\{add}/, add_detail) #pass additional_details
-
-        ad_id = params[:ads_id].blank? ? "" : params[:ads_id]
-        url= url.gsub(/\{ad_id}/, ad_id)
       end
-    end
-    url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
+      url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
+    # end  #TODO: temporary fix for flipkart end
       # if ((vendor.id == 9874 || vendor.id == 9858 ) && (item_id == 22988|| item_id ==22800 || item_id == 15404 || item_id == 15434 || item_id == 21986))
       #   url = url.gsub("offer_id=17","offer_id=21")
       # end 

@@ -2,7 +2,9 @@
   <h1 class="center_heading">Ab Test Settings</h1>
   <div class="ab_test_form">
     <%= form_for "ab_test", :url => {action: "create_ab_settings"} do |f| %>
-        Enabled: <%= f.select("enabled", options_for_select(["true","false"], "#{@ab_test_details.enabled}"), {}, {:class => "field"}) %>
+        Advertisement: <%= select_tag("ads_id", options_for_select(@advertisements, params['ads_id']), {:class => "field"}) %>
+        <br />
+        Enabled: <%= f.select("enabled", options_for_select(["true","false"], "#{@ab_test_details['enabled']}"), {}, {:class => "field"}) %>
         <br />
         Alternatives:
         <br />
@@ -49,4 +51,21 @@
       height: 175px;
       width: 200px;
   }
+  #ads_id {
+      margin-left: 5% !important;
+      width: 65px;
+  }
 </style>
+
+
+<script type="application/javascript">
+  $(function()
+  {
+      $("#ads_id").on("change", function()
+      {
+        var val = $(this).val()
+          console.log(val)
+          window.location.href = "/advertisements/ab_test?ads_id="+val
+      })
+  })
+</script>

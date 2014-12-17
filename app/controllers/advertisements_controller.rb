@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
   after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
@@ -267,18 +267,22 @@ class AdvertisementsController < ApplicationController
   end
 
   def ab_test
+    params[:ads_id] ||= 0
     # @alternative_list = [['300*250', ["type_1","type_2"]], ["120*600", ["type_1","type_2"]], ["728*90", ["type_1","type_2"]], ["300*600", ["type_1","type_2"]]]
     @alternative_list = Advertisement.get_alternative_list()
-    ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
-    @ab_test_details = Struct.new(:enabled, :alternatives).new(ab_test_details[0], ab_test_details[1])
+    @advertisements = [0] + Advertisement.all.map(&:id)
+    key = "ab_test_#{params[:ads_id]}"
+    @ab_test_details = $redis.hgetall(key)
     @alternatives = []
-    alternatives = ab_test_details[1].blank? ? [] : eval(ab_test_details[1]).map {|k,v| v.each {|e| @alternatives << "#{k}:#{e}"}}
+    alternatives = @ab_test_details["alternatives"].blank? ? [] : eval(@ab_test_details["alternatives"]).map {|k,v| v.each {|e| @alternatives << "#{k}:#{e}"}}
   end
 
   def create_ab_settings
+    params[:ads_id] ||= 0
     alternatives = params[:alternatives].blank? ? [] : params[:alternatives].delete_if {|_,val| val.count < 2}
     alternatives = {} if params[:ab_test][:enabled] == "false"
-    $redis_rtb.hmset("ab_test", "enabled", params[:ab_test][:enabled], "alternatives",  alternatives)
+    key = "ab_test_#{params[:ads_id]}"
+    $redis.hmset(key, "enabled", params[:ab_test][:enabled], "alternatives",  alternatives)
     Rails.cache.clear
     redirect_to "/advertisements/ab_test"
   end
@@ -311,12 +315,14 @@ class AdvertisementsController < ApplicationController
 
     params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
-    enabled, alternatives = ab_test_details = $redis_rtb.hmget("ab_test", "enabled", "alternatives")
-    if enabled == "true"
-      alternatives = ab_test_details.blank? ? {} : eval(ab_test_details[1])
+    ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
+    if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
+      alternatives = ab_test_details.blank? ? {} : eval(ab_test_details["alternatives"])
+      p alternatives
+      p params[:size]
       if alternatives.include?(params[:size])
         types = alternatives["#{params[:size]}"]
-        random_val = Random.rand(1..10)
+        p random_val = Random.rand(1..10)
         params[:page_type] = random_val <= 5 ? types[0] : types[1]
       end
     end
