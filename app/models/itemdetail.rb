@@ -390,14 +390,21 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
 
   def self.process_flipkart_items(url, itemtype_id=nil)
     next_url = url
+    total_item_count = 0
+    page_count = 0
     begin
-      p "--- Started Process #{next_url} ---"
-      response = RestClient.get(next_url, {'Fk-Affiliate-Id' => 'Saravanapl', 'Fk-Affiliate-Token' => '3c7efaaa5dfb4dbeb65dac26138aa155'})
+      page_count += 1
+      now_url = next_url
+      p "--- Started Process #{now_url} ---"
+      response = RestClient.get(now_url, {'Fk-Affiliate-Id' => 'Saravanapl', 'Fk-Affiliate-Token' => '3c7efaaa5dfb4dbeb65dac26138aa155'})
       doc = Nokogiri::XML(response.body)
       node = doc.elements.first
       next_url = node.at_xpath("//nextUrl").content rescue ""
+      item_count = 0
       node.xpath("//products//productInfoList").each do |item|
         begin
+          item_count += 1
+          total_item_count += 1
           id = item.at_xpath("productBaseInfo//productIdentifier//productId").content rescue ""
           item_info = item.at_xpath("productBaseInfo//productAttributes")
           title = item_info.at_xpath("title").content rescue ""
@@ -473,7 +480,8 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           p "-------------------- There was a problem while processing itemdetail item #{url} => #{e.message}-----------------"
         end
       end
-      p "--- End Process ---"
+      p "*************************************************************************** End Process url => #{now_url} : page_count => #{page_count} : count #{item_count} : total item count => #{total_item_count} ***************************************************************************"
+      sleep(1.seconds)
     end while !next_url.blank?
   end
 end
