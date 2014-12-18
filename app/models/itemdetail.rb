@@ -215,8 +215,6 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           url = item_detail.url
           asin = url[/.*\/dp\/(.*)/m,1]
           asin = asin.split("/")[0]
-          p 1111111111
-          p asin
 
           # res = Amazon::Ecs.item_lookup("B00B70KYOO", {:response_group => 'Offers', :country => 'in'})
           res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
@@ -224,13 +222,16 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           if res.is_valid_request?
             item = res.first_item
             unless item.blank?
-              p 22222
               offer_listing = item.get_element("Offers/Offer/OfferListing")
               if !offer_listing.blank?
-                p current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
-                p saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
-                p saved_percentage = offer_listing.get("PercentageSaved") rescue 0
-                p availability_str = offer_listing.get("Availability")
+                begin
+                  current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                rescue Exception => e
+                  current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                end
+                saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+                saved_percentage = offer_listing.get("PercentageSaved") rescue 0
+                availability_str = offer_listing.get("Availability")
 
                 status = case availability_str
                            when /Usually dispatched.*/ || /Usually ships.*/

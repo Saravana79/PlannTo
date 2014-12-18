@@ -875,7 +875,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
             #price update
             offer_listing = each_item.get_element("Offers/Offer/OfferListing")
             if !offer_listing.blank?
-              current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              begin
+                current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              rescue Exception => e
+                current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              end
               availability_str = offer_listing.get("Availability")
 
               status = case availability_str
