@@ -351,6 +351,12 @@ class Advertisement < ActiveRecord::Base
   def self.get_extra_details(advertisements, date, user)
     start_date, end_date = date.to_s.split("/")
     extra_details = {}
+
+  if(user.id == 335)
+      @start_date = "18-12-2014"
+      @end_date = "19-12-2014"
+    end
+
     advertisements.each do |each_ad|
       if end_date.blank?
         query = "SELECT `aggregated_details`.* FROM `aggregated_details` WHERE (entity_type = 'advertisement' and entity_id = #{each_ad.id} and date = '#{start_date}')"

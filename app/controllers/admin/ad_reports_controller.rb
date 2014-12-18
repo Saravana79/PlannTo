@@ -7,6 +7,11 @@ class Admin::AdReportsController < ApplicationController
   def index
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date]
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date]
+
+    if(current_user.id == 335)
+      @start_date = "18-12-2014".to_date
+      @end_date = "19-12-2014".to_date
+    end
     # reports by advertisements
     @advertisements = Advertisement.all
     click_report = Click.find_by_sql("select count(*) as clicks_count, ad.id from clicks c join add_impressions i on c.impression_id=i.id join advertisements ad
@@ -170,6 +175,12 @@ class Admin::AdReportsController < ApplicationController
   def view_ad_chart
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+
+    if(current_user.id == 335)
+      @start_date = "18-12-2014".to_date
+      @end_date = "19-12-2014".to_date
+    end
+
     @search_path = admin_ad_report_view_ad_chart_path
     @advertisement = Advertisement.where(:id => params[:advertisement_id]).first
 
