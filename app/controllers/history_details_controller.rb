@@ -135,9 +135,9 @@ class HistoryDetailsController < ApplicationController
 
     #TODO: temporary fix for flipkart
 
-    # if !@ad.blank? && (@ad.id == 1 || @ad.id == 10)
-    #   url = url + "&cmpid=content_plannto_contextual"
-    # else
+    if !@ad.blank? && (@ad.id == 1 || @ad.id == 10)
+      url = url + "&cmpid=content_plannto_contextual"
+     else
       unless vendor.nil?
         if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
           url = vendor.vendor_detail.params.gsub(/\{url}/, url)
@@ -171,7 +171,7 @@ class HistoryDetailsController < ApplicationController
         end
       end
       url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
-    # end  #TODO: temporary fix for flipkart end
+     end  #TODO: temporary fix for flipkart end
       # if ((vendor.id == 9874 || vendor.id == 9858 ) && (item_id == 22988|| item_id ==22800 || item_id == 15404 || item_id == 15434 || item_id == 21986))
       #   url = url.gsub("offer_id=17","offer_id=21")
       # end 
