@@ -28,6 +28,7 @@ class AdImpression
 
   # has_one :m_click
   embeds_one :m_click
+  embeds_many :m_order_histories
 
   index({ impression_time: 1 })
 
@@ -66,7 +67,14 @@ class AdImpression
     end
     # group =  { "$group" => { "_id" => "$#{option}", "count" => { "$sum" => 1 } } }
 
-    group =  { "$group" => { "_id" => "$#{option}", "imp_count" => { "$sum" => 1 }, "click_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_click._id", 1 ] }, 1, 0 ] } } }}
+    group =  { "$group" => { "_id" => "$#{option}", "imp_count" => { "$sum" => 1 },
+                             "click_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_click._id", 1 ] }, 1, 0 ] } },
+                             "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
+                             # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
+                             # "orders_sum" => { "$sum" => "$m_order_histories.total_revenue" }
+                             "orders_sum" => { "$push" => "$m_order_histories.total_revenue" }
+                           }
+             }
     # items_by_count = AdImpression.collection.aggregate([project,match,group])
 
     sort = {"$sort" => {param[:report_sort_by] => -1}}

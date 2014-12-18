@@ -218,7 +218,8 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           p 1111111111
           p asin
 
-          res = Amazon::Ecs.item_lookup("B00B70KYOO", {:response_group => 'Offers', :country => 'in'})
+          # res = Amazon::Ecs.item_lookup("B00B70KYOO", {:response_group => 'Offers', :country => 'in'})
+          res = Amazon::Ecs.item_lookup(asin, {:response_group => 'Offers', :country => 'in'})
           p res.is_valid_request?
           if res.is_valid_request?
             item = res.first_item
@@ -226,7 +227,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
               p 22222
               offer_listing = item.get_element("Offers/Offer/OfferListing")
               if !offer_listing.blank?
-                p current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                p current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
                 p saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
                 p saved_percentage = offer_listing.get("PercentageSaved") rescue 0
                 p availability_str = offer_listing.get("Availability")

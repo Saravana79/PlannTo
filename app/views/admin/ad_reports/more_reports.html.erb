@@ -58,6 +58,7 @@ To Date
             <select name="report_sort_by" id="report_sort_by" class="order_by_type">
               <option value="imp_count" <%= params[:report_sort_by] == "imp_count" ? "selected=selected" : "" %>>Impressions</option>
               <option value="click_count" <%= params[:report_sort_by] == "click_count" ? "selected=selected" : "" %>>Clicks</option>
+              <option value="orders_count" <%= params[:report_sort_by] == "orders_count" ? "selected=selected" : "" %>>Orders</option>
             </select>
           </span>
     </form>
@@ -77,6 +78,8 @@ To Date
     <th class="header_compare"  > Total Impressions </th>
     <th class="header_compare"  > Total Clicks </th>
     <th class="header_compare"  > CTR </th>
+    <th class="header_compare"  > Total Orders </th>
+    <th class="header_compare"  > Total Revenue </th>
   </tr>
   <% @results.each do |each_hash| %>
   <tr>
@@ -88,6 +91,8 @@ To Date
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
       <%= "#{get_ectr(each_hash["click_count"].to_i, each_hash["imp_count"].to_i)}" + " %" %>
     </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_count"] %> </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_sum"].flatten.compact.sum %> </td>
   </tr>
   <% end %>
 </table>

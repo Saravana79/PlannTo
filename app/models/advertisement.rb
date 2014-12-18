@@ -871,6 +871,34 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         end
         item_detail = Itemdetail.where(:url => url).last
         if !item_detail.blank?
+          begin
+            #price update
+            offer_listing = each_item.get_element("Offers/Offer/OfferListing")
+            if !offer_listing.blank?
+              current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              availability_str = offer_listing.get("Availability")
+
+              status = case availability_str
+                         when /Usually dispatched.*/ || /Usually ships.*/
+                           1
+                         when /Not yet released/ || /Not yet published/
+                           3
+                         when /This item is not stocked or has been discontinued/
+                           4
+                         when /Out of Stock/
+                           2
+                         else
+                           4
+                       end
+
+              item_detail.update_attributes!(:price => current_price, :status => status)
+            else
+              item_detail.update_attributes!(:status => 2)
+            end
+          rescue Exception => e
+            p "Error while updating itemdetail => #{item_detail.id} price"
+          end
+
           item_id = item_detail.itemid
           ad_item_id << item_id unless item_id.blank?
         end
