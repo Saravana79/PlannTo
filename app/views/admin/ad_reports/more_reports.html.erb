@@ -43,7 +43,7 @@ To Date
       </div>
 
       Type:
-      <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Design Type"], params[:type])) %>
+      <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type"], params[:type])) %>
       Advertisement ID:
       <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
       <%= f.submit "Generate Report", :class => "btn-link report_btn" %>

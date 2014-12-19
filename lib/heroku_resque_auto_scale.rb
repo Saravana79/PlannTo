@@ -49,25 +49,27 @@ module HerokuResqueAutoScale
     job_count = Scaler.job_count
     workers_count = Scaler.workers
 
+    min_worker = $redis.get("resque_min_worker_count").to_i
+
     [
         {
-            :workers => 3, # This many workers
+            :workers => min_worker, # This many workers
             :job_count => 1 # For this many jobs or more, until the next level
         },
         {
-            :workers => 4,
+            :workers => min_worker+1,
             :job_count => 3
         },
         {
-            :workers => 5,
+            :workers => min_worker+2,
             :job_count => 100
         },
         {
-            :workers => 6,
+            :workers => min_worker+3,
             :job_count => 1000
         },
         {
-            :workers => 7,
+            :workers => min_worker+4,
             :job_count => 5000
         }
     ].reverse_each do |scale_info|
