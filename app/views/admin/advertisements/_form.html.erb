@@ -79,11 +79,19 @@
 
     <div class="fields-div">
       <div class="title_header float_lft"></div>
-      <div class="float_lft"> <ul id="ad_product_list" class="tagging"></ul> </div>
+      <div class="float_lft">
+        <ul id="ad_product_list" class="tagging"></ul>
+        <%= link_to("more... #{image_tag("#{configatron.root_image_path}static/images/open-window.png", :class => "", :width => "15px;")}".html_safe, "javascript:void(0)", :class => "select_button_for_list_ad_products") %>
+      </div>
     </div>
 
     <div class="fields-div" id="reviewProducts">
-      <ul id="ad_product_list" class="tagging"></ul>
+
+      <div id="ad_product_list_div" style="display:none;">
+        <a href="#" class="Closebut">&nbsp;</a>
+        <ul id="ad_product_list_ul" class="tagging" style=""></ul>
+      </div>
+
       <div class="title_header float_lft">Product :</div>
       <div class="taggingdiv">
         <div class="float_lft " id="displayTagBox">
@@ -315,15 +323,16 @@
 
         var settings = {has_parent: true, close: true, addButton: false, url: "/search/autocomplete_items", editMode: false, multiple: true,
             hidden_field: "#ad_item_id"};
+
         <%unless @items.nil? %>
         <% @items.each do |item| %>
 
-        $.addTag("ad_product", "ad_product_list", settings, "<%= item.name %>", "<%= item.id %>", false);
+        $.addTag("ad_product", "ad_product_list_ul", settings, "<%= item.name %>", "<%= item.id %>", false);
         $.addIdToField(settings.hidden_field, "<%= item.id %>", true);
         //$("#article_create_product_list li:first span a.icon_close_tagging").remove();
         <%end%>
         <%end%>
-        $.textTagger("#ad_product", "#ad_product_list", settings);
+        $.textTagger("#ad_product", "#ad_product_list_ul", settings);
 //ends
         <%end%>
 
@@ -400,6 +409,17 @@
             $("#list_of_products").html("")
 
             $('#related_product_list').bPopup({
+                closeClass:'Closebut',
+                modalClose: false,
+                position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
+                follow: [false, false] //x, y
+            });
+
+        })
+
+        $(".select_button_for_list_ad_products").live("click", function()
+        {
+            $('#ad_product_list_div').bPopup({
                 closeClass:'Closebut',
                 modalClose: false,
                 position: [(screen.width / 2) - (270/2), $(window).scrollTop() + 150],
@@ -529,6 +549,17 @@
         top: 10% !important;
         width: 600px;
         height:500px;
+    }
+
+    #ad_product_list_div {
+        background: none repeat scroll 0 0 #f9f9f9;
+        left: 30% !important;
+        top: 10% !important;
+        width: 600px;
+        height:1000px;
+        padding: 20px;
+        height: 500px;
+        overflow: auto;
     }
 
     .populate_btn {
@@ -693,6 +724,14 @@
     #advertisement_schedule_details {
         width: 322px;
     }
+
+    #ad_product_list_div a.Closebut {
+        right: -4px;
+        top: -4px;
+    }
+    .select_button_for_list_ad_products {
+        float:left;
+    }
 </style>
 
 <% unless @advertisement.new_record? %>
@@ -715,7 +754,42 @@
               console.log(previous_val)
               $("#ad_status").val(previous_val)
           }
-      })
+      });
   });
 </script>
 <% end %>
+
+
+<script type="application/javascript">
+  $(function()
+  {
+      ad_to_product_list()
+      var initial_count = $("#ad_product_list_ul li").length
+
+      $(".ui-menu-item").live("click", function()
+      {
+          var new_count = $("#ad_product_list_ul li").length
+          console.log("test")
+          console.log(new_count)
+          console.log(initial_count)
+          if (new_count != initial_count)
+          {
+              var li_values = $("#ad_product_list_ul li")
+              $("#ad_product_list").append(li_values[new_count-1])
+              console.log(initial_count)
+          }
+      })
+
+      function ad_to_product_list()
+      {
+          var li_values = $("#ad_product_list_ul li")
+          var length = li_values.length
+          $.each([1,2,3,4,5], function(inx,val)
+          {
+              length = length - 1
+              console.log(length)
+              $("#ad_product_list").append(li_values[length])
+          });
+      }
+  })
+</script>
