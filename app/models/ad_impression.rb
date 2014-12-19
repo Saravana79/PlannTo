@@ -53,6 +53,8 @@ class AdImpression
        "viewability"
      when "Retargeting"
        "retargeting"
+     when "Design Type"
+       "design_type"
      else
        "item_id"
      end
