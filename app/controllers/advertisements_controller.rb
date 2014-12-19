@@ -18,9 +18,9 @@ class AdvertisementsController < ApplicationController
 
     @ad_template_type = params[:page_type] unless params[:page_type].blank?
 
-    params[:page_type] = @ad_template_type
-
-    url_params = Advertisement.make_url_params(params)
+    # params[:page_type] = @ad_template_type
+    #
+    # url_params = Advertisement.make_url_params(params)
 
     if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
       return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
