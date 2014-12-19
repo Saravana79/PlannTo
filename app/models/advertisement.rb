@@ -354,7 +354,7 @@ class Advertisement < ActiveRecord::Base
 
   if(user.id == 335)
       start_date = "18-12-2014".to_date
-      end_date = "19-12-2014".to_date
+      end_date = "20-12-2014".to_date
     end
 
     advertisements.each do |each_ad|

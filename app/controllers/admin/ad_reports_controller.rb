@@ -10,7 +10,7 @@ class Admin::AdReportsController < ApplicationController
 
     if(current_user.id == 335)
       @start_date = "18-12-2014".to_date
-      @end_date = "19-12-2014".to_date
+      @end_date = "20-12-2014".to_date
     end
     # reports by advertisements
     @advertisements = Advertisement.all
@@ -178,7 +178,7 @@ class Admin::AdReportsController < ApplicationController
 
     if(current_user.id == 335)
       @start_date = "18-12-2014".to_date
-      @end_date = "19-12-2014".to_date
+      @end_date = "20-12-2014".to_date
     end
 
     @search_path = admin_ad_report_view_ad_chart_path
