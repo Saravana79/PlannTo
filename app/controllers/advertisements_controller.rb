@@ -16,6 +16,10 @@ class AdvertisementsController < ApplicationController
       @ad_template_type = ad_id == 21 ? "type_3" : "type_2"
     end
 
+    params[:page_type] ||= @ad_template_type
+
+    url_params = Advertisement.make_url_params(params)
+
     @ad_template_type = params[:page_type] unless params[:page_type].blank?
 
     if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
@@ -142,9 +146,9 @@ class AdvertisementsController < ApplicationController
     @ref_url = url
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
     @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
     winning_price_enc = params[:wp]
     return impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc
   end
