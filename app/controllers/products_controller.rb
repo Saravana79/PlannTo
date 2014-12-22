@@ -571,7 +571,7 @@ class ProductsController < ApplicationController
     params[:price_full_details] ||= "true"
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     params[:request_referer] ||= request.referer
-    #params[:request_referer] ||= ""
+    params[:request_referer] ||= ""
     params[:ref_url] ||= ""
     params[:path] ||= ""
     params[:sort_disable] ||= "false"
@@ -624,6 +624,8 @@ class ProductsController < ApplicationController
 
     if (params[:item_ids].blank? && !params[:ref_url].blank?)
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url"))
+    elsif (params[:item_ids].blank? && params[:ref_url].blank?)
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer"))
     elsif !params[:item_ids].blank?
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable"))
     end
