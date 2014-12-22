@@ -571,7 +571,7 @@ class ProductsController < ApplicationController
     params[:price_full_details] ||= "true"
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     params[:request_referer] ||= request.referer
-    params[:request_referer] ||= ""
+    #params[:request_referer] ||= ""
     params[:ref_url] ||= ""
     params[:path] ||= ""
     params[:sort_disable] ||= "false"
