@@ -18,6 +18,8 @@ class ProductsController < ApplicationController
   caches_action :where_to_buy_items_vendor, :cache_path => proc {|c|
      if (params[:item_ids].blank? && !params[:ref_url].blank?)
        params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url")
+     elsif (params[:item_ids].blank? && params[:ref_url].blank?)
+      params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer")
      elsif !params[:item_ids].blank?
        params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable")
      end
