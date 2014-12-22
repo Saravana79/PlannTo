@@ -321,8 +321,8 @@ class ProductsController < ApplicationController
     end
     @ref_url = url
     jsonp = prepare_response_json()
-    headers["Content-Type"] = "text/javascript; charset=utf-8"
-    render :text => jsonp, :content_type => "text/javascript"
+    headers["Content-Type"] = "application/javascript; charset=utf-8"
+    render :text => jsonp, :content_type => "application/javascript"
     # render :layout => false
   end
 
