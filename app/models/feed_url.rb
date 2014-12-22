@@ -392,10 +392,10 @@ class FeedUrl < ActiveRecord::Base
     remove_missing_keys("missingad:*")
 
     #clean spottags:*
-    remove_missing_keys("spottags:*")
+    # remove_missing_keys("spottags:*")
 
     #start sid_ad_detail_process
-    Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
+    # Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
   end
 
   def check_and_update_mobile_site_feed_url(param, user, remote_ip)
