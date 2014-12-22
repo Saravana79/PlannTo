@@ -109,3 +109,5 @@ gem 'xml-simple', '~> 1.1.4'
 
 #bulk import active record
 gem 'activerecord-import', '~> 0.3.1'
+
+gem 'net-http-digest_auth'

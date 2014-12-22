@@ -7,6 +7,101 @@ class OrderHistory < ActiveRecord::Base
   belongs_to :advertisement
   after_save :create_record_in_m_order_history
 
+  def self.update_order_histories_from_reports
+    [Date.today - 1.day, Date.today].each do |date|
+      begin
+        OrderHistory.update_orders_from_amazon(date)
+      rescue Exception => e
+        p "Error while processing date => #{date}"
+      end
+    end
+  end
+
+  def self.update_orders_from_amazon(date)
+    users = [["pla04", "cyn04"]]
+    users.each do |user|
+      filename = OrderHistory.generate_filename(user, date)
+      url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
+      xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
+
+      doc = Nokogiri::XML.parse(xml_response)
+      node = doc.elements.first
+      items_node = node.at_xpath("//Items")
+      items_node.xpath("Item").each do |item|
+        # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
+        impression_id = item.attributes["SubTag"].content
+        revenue = item.attributes["Earnings"].content rescue 0
+        price = item.attributes["Price"].content rescue 0
+
+        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(date.to_time, impression_id, revenue)
+        order_history.vendor_ids = 9882
+        order_history.no_of_orders = 1
+        order_history.order_status = "Validated"
+        order_history.payment_status = "Validated"
+        order_history.impression_id = impression_id
+
+        impression = AddImpression.where(:id => impression_id).last
+        unless impression.blank?
+          order_history.item_id = impression.item_id
+          product = impression.item
+          order_history.item_name = product.name unless product.blank?
+          order_history.sid = impression.sid
+          order_history.advertisement_id = impression.advertisement_id
+          order_history.publisher_id = impression.publisher_id
+        end
+        order_history.save!
+      end
+    end
+  end
+
+  def self.generate_filename(user, date)
+    date_int = date.strftime("%Y%m%d")
+    filename = "#{user[0]}-21-earnings-report-#{date_int}.xml.gz"
+  end
+
+  #url => "https://assoc-datafeeds-eu.amazon.com/datafeed/listReports"
+  #username => "pla04"
+  #password => "cyn04"
+  def self.get_order_details_from_amazon(url, username, password )
+    # require 'uri'
+    # require 'net/http'
+    # require 'net/http/digest_auth'
+
+    digest_auth = Net::HTTP::DigestAuth.new
+
+    uri = URI.parse(url)
+    uri.user = username
+    uri.password = password
+
+    h = Net::HTTP.new uri.host, uri.port
+    h.use_ssl = true
+    h.ssl_version = :TLSv1
+
+    req = Net::HTTP::Get.new uri.request_uri
+
+    res = h.request req
+    # res is a 401 response with a WWW-Authenticate header
+
+    auth = digest_auth.auth_header uri, res['www-authenticate'], 'GET'
+
+    # create a new request with the Authorization header
+    req = Net::HTTP::Get.new uri.request_uri
+    req.add_field 'Authorization', auth
+
+    # re-issue request with Authorization
+    res = h.request req
+
+    if res.kind_of?(Net::HTTPFound)
+      location = res["location"]
+      response = RestClient.get(location)
+      #extract gz file
+      xml_response = ActiveSupport::Gzip.decompress(response)
+      xml_response
+    else
+      res.body
+    end
+  end
+
   private
 
   def create_record_in_m_order_history
