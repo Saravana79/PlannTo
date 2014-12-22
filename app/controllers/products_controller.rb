@@ -611,7 +611,7 @@ class ProductsController < ApplicationController
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
-        return render :text => cache.html_safe
+        return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)
       end
     end
@@ -657,7 +657,7 @@ class ProductsController < ApplicationController
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
-        return render :text => cache.html_safe
+        return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)
       end
     end
