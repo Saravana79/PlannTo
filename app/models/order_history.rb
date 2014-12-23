@@ -35,10 +35,10 @@ class OrderHistory < ActiveRecord::Base
 
         order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(date.to_time, impression_id, revenue)
         order_history.vendor_ids = 9882
+        order_history.product_price = price
         order_history.no_of_orders = 1
         order_history.order_status = "Validated"
         order_history.payment_status = "Validated"
-        order_history.impression_id = impression_id
 
         impression = AddImpression.where(:id => impression_id).last
         unless impression.blank?
@@ -99,6 +99,39 @@ class OrderHistory < ActiveRecord::Base
       xml_response
     else
       res.body
+    end
+  end
+
+  def self.update_orders_from_flipkart(url)
+    csv_details = CSV.read(url)
+
+    csv_details.each_with_index do |csv_detail, index|
+      next if index == 0
+
+      order_history = OrderHistory.find_or_initialize_by_order_item_id(csv_detail[0])
+      order_history.order_date = csv_detail[10].to_time
+      order_history.impression_id = csv_detail[13]
+      order_history.total_revenue = csv_detail[8]
+      order_history.vendor_ids = 9861
+      order_history.product_price = csv_detail[6]
+      order_history.no_of_orders = 1
+      order_history.order_status = "Validated"
+      order_history.payment_status = "Validated"
+
+      impression = csv_detail[13].blank? ? nil : AddImpression.where(:id => csv_detail[13]).last
+
+      unless impression.blank?
+        order_history.item_id = impression.item_id
+        product = impression.item
+        order_history.item_name = product.name unless product.blank?
+        order_history.sid = impression.sid
+        order_history.advertisement_id = impression.advertisement_id
+        order_history.publisher_id = impression.publisher_id
+      else
+        order_history.item_name = csv_detail[1]
+      end
+      order_history.item_name = csv_detail[1] if order_history.item_name.blank?
+      order_history.save!
     end
   end
 

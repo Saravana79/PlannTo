@@ -24,7 +24,7 @@ class AdvertisementsController < ApplicationController
 
     if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
       return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
-    elsif @ad.id == 24
+    elsif !@ad.blank? && @ad.id == 24
       return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
     end
 
@@ -39,7 +39,7 @@ class AdvertisementsController < ApplicationController
     publisher = Publisher.getpublisherfromdomain(url)
     vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
 
-    item_ids = @items.map(&:id)
+    item_ids = @items.blank? ? [] : @items.map(&:id)
     @item = @items.first
 
     @item_details = Itemdetail.get_item_details_by_item_ids_count(item_ids, vendor_ids, @items, @publisher, status, params[:more_vendors], p_item_ids)

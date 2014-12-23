@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141222104929) do
+ActiveRecord::Schema.define(:version => 20141223064921) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -909,7 +909,7 @@ ActiveRecord::Schema.define(:version => 20141222104929) do
     t.string   "item_name"
     t.string   "product_price"
     t.string   "impression_id"
-    t.integer  "old_impression_id"
+    t.integer  "order_item_id"
     t.datetime "payment_date"
     t.integer  "payment_report_id"
     t.string   "sid"

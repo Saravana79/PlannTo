@@ -297,7 +297,12 @@ class Item < ActiveRecord::Base
       items = Item.where(:id => items[0..4].collect(&:id)).includes(:item_rating,:attribute_values)
     else
       # items = Item.where(:id => related_item_ids,:itemtype_id => item.itemtype.id).includes(:item_rating,:attribute_values).order("id desc").limit(limit+2)
-      items = Item.find(related_item_ids, :order => "field(id, #{related_item_ids.map(&:inspect).join(',')})")
+      #items = Item.find(related_item_ids, :order => "field(id, #{related_item_ids.map(&:inspect).join(',')})")
+
+      items = Item.where(:id => related_item_ids)
+      items = related_item_ids.collect {|id| items.detect {|x| x.id == id}}
+      items.compact!
+
       items = items.select {|each_item| each_item.itemtype_id == item.itemtype_id}
       unless(item.group_id.nil?)
         items = items.select {|a| (a.group_id.nil? or a.group_id != item.group_id) }
@@ -1337,7 +1342,10 @@ end
     unless (item_ids.blank?)
       new_item_access = "ItemId"
       if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
-        @items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
+        #@items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
+        @items = Item.where(:id => item_ids)
+        @items = item_ids.collect {|id| @items.detect {|x| x.id == id}}
+        @items.compact!
       else
         @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
         @items = Item.where(:id => item_ids) if @items.blank?

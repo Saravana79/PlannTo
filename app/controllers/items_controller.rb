@@ -282,8 +282,9 @@ class ItemsController < ApplicationController
     def find_item
       begin
         @item = Item.find(params[:id])
-      rescue
+      rescue :Exception => e
         @item = nil
+        p e
       end
     end
 
