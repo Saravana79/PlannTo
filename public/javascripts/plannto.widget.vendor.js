@@ -176,10 +176,7 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
                       jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
                       /*jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");*/
                       tr = jQuery("#" + parentdivid +" table tr:eq(9)");
-                      if(tr.children()[0].colSpan ==3)
-                      {                
-                          tr.children()[0].colSpan =2                
-                      }
+                     
                       //tr.children()[0].children().innerText = "View more";
                     }
                 if(show_price.toString() == "false")

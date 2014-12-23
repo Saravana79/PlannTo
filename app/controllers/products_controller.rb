@@ -18,6 +18,8 @@ class ProductsController < ApplicationController
   caches_action :where_to_buy_items_vendor, :cache_path => proc {|c|
      if (params[:item_ids].blank? && !params[:ref_url].blank?)
        params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url")
+     elsif (params[:item_ids].blank? && params[:ref_url].blank?)
+      params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer")
      elsif !params[:item_ids].blank?
        params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable")
      end
@@ -319,7 +321,14 @@ class ProductsController < ApplicationController
     end
     @ref_url = url
     jsonp = prepare_response_json()
-    render :text => jsonp, :content_type => "text/javascript"
+
+
+
+    headers["Content-Type"] = "text/javascript; charset=utf-8"
+    respond_to do |format|
+      format.js { render :text => jsonp, :content_type => "text/javascript" }
+    end
+      
     # render :layout => false
   end
 
@@ -602,7 +611,7 @@ class ProductsController < ApplicationController
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
-        return render :text => cache.html_safe
+        return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)
       end
     end
@@ -622,6 +631,8 @@ class ProductsController < ApplicationController
 
     if (params[:item_ids].blank? && !params[:ref_url].blank?)
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url"))
+    elsif (params[:item_ids].blank? && params[:ref_url].blank?)
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer"))
     elsif !params[:item_ids].blank?
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable"))
     end
@@ -646,7 +657,7 @@ class ProductsController < ApplicationController
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
-        return render :text => cache.html_safe
+        return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)
       end
     end
