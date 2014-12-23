@@ -591,9 +591,6 @@ class Advertisement < ActiveRecord::Base
 
                 if !click.advertisement_id.blank?
                   click_mongo = click.attributes
-                  click_mongo["tagging"] = click.t.to_i
-                  click_mongo["retargeting"] = click.r.to_i
-                  click_mongo["pre_appearance_count"] = click.ic.to_i
                   click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
                   click_mongo.delete("impression_id")
                   clicks_import_mongo << click_mongo
@@ -716,9 +713,9 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
           unless ad_impression_mon.blank?
             each_click_mongo.delete("ad_impression_id")
 
-            m_clicks_count = ad_impression_mon.m_clicks.where(:ad_impression_id => each_click_mongo["ad_impression_id"], :timestamp => each_click_mongo["timestamp"]).count
+            m_clicks_count = ad_impression_mon.m_clicks.where(:timestamp => each_click_mongo["timestamp"]).count
             if m_clicks_count.count == 0
-              ad_impression_mon.m_clicks << MClick.new(each_click_mongo)
+              ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
               ad_impression_mon.save
             end
           end

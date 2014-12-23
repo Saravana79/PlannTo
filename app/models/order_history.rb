@@ -113,7 +113,9 @@ class OrderHistory < ActiveRecord::Base
       end
 
       order_history = OrderHistory.find_or_initialize_by_order_item_id(csv_detail[headers.index("AffiliateOrderItemId")])
-      order_history.order_date = csv_detail[headers.index("OrderDate")].to_time
+      time = csv_detail[headers.index("OrderDate")].to_time
+      time = time + 5.30.hours if time.is_a?(Time)
+      order_history.order_date = time
       order_history.impression_id = csv_detail[headers.index("AffExtParam2")]
       order_history.total_revenue = csv_detail[headers.index("TentativeCommission")]
       order_history.vendor_ids = 9861
