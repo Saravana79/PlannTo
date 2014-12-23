@@ -565,21 +565,21 @@ class Advertisement < ActiveRecord::Base
               impression.device = url_params["device"]
               impression_import << impression
 
+              # Impression mongo
+              impression_mongo = impression.attributes
+              impression_mongo["_id"] = impression_mongo["id"].to_s
+              impression_mongo.delete("id")
+              impression_mongo["tagging"] = impression.t.to_i
+              impression_mongo["retargeting"] = impression.r.to_i
+              impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
+              impression_mongo["device"] = url_params["device"]
+              impression_mongo["size"] = url_params["size"]
+              impression_mongo["design_type"] = url_params["page_type"]
+              impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+              impression_import_mongo << impression_mongo
+
               if impression.advertisement_type == "advertisement"
                 ad_impressions_list << impression
-
-                # Impression mongo
-                impression_mongo = impression.attributes
-                impression_mongo["_id"] = impression_mongo["id"].to_s
-                impression_mongo.delete("id")
-                impression_mongo["tagging"] = impression.t.to_i
-                impression_mongo["retargeting"] = impression.r.to_i
-                impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-                impression_mongo["device"] = url_params["device"]
-                impression_mongo["size"] = url_params["size"]
-                impression_mongo["design_type"] = url_params["page_type"]
-                impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
-                impression_import_mongo << impression_mongo
 
               elsif impression.advertisement_type != "advertisement"
                 non_ad_impressions_list << impression
@@ -589,12 +589,17 @@ class Advertisement < ActiveRecord::Base
               unless click.blank?
                 clicks_import << click
 
-                if !click.advertisement_id.blank?
-                  click_mongo = click.attributes
-                  click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
-                  click_mongo.delete("impression_id")
-                  clicks_import_mongo << click_mongo
-                end
+                # if !click.advertisement_id.blank?
+                #   click_mongo = click.attributes
+                #   click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                #   click_mongo.delete("impression_id")
+                #   clicks_import_mongo << click_mongo
+                # end
+
+                click_mongo = click.attributes
+                click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                click_mongo.delete("impression_id")
+                clicks_import_mongo << click_mongo
               end
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
