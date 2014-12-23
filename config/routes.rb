@@ -5,7 +5,11 @@ namespace :admin do
   resources :users
   # resources :impression_reports
   resources :click_reports
-  resources :order_histories
+  resources :order_histories do
+    collection do
+      post "import"
+    end
+  end
   resources :advertisements do
     collection do
       get "change_ad_status"

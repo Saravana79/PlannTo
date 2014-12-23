@@ -1,3 +1,13 @@
+<div class="alert-notice">
+  <% if !flash[:notice].blank? %>
+      <span class="notice"><%= flash[:notice] %></span>
+  <% elsif !flash[:alert].blank? %>
+      <span class="alert"><%= flash[:alert] %></span>
+  <% end %>
+</div>
+<br/>
+<br/>
+
 <div class="order_history_form">
   <%= render :partial => "form" %>
 </div>
@@ -12,3 +22,26 @@
     <%= render "report" %>
   </div>
 
+
+
+<style type="text/css">
+    .alert-notice .notice {
+        background-color: darkseagreen;
+        color: green;
+        font-size: 15px;
+        height: 28px;
+        padding: 19px 0 0 401px;
+        position: absolute;
+        width: 58%;
+    }
+
+    .alert-notice .alert {
+        background-color: peachpuff;
+        color: red;
+        font-size: 15px;
+        height: 28px;
+        padding: 19px 0 0 401px;
+        position: absolute;
+        width: 58%;
+    }
+</style>

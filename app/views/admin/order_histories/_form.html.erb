@@ -87,6 +87,12 @@
 
 <% end %>
 
+<h3 style="text-align: center; font-size: 15px;">OR</h3>
+
+<%= form_tag import_admin_order_histories_path, multipart: true, :style => "text-align:center;" do %>
+    <span style="font-size: 12px;"> Select Flipkart Report</span> ('csv' only):  <%= file_field_tag :file %>
+    <%= submit_tag "Import CSV", :class => "import_button" %>
+<% end %>
 
 
 <script>
@@ -254,5 +260,12 @@
     }
     #hosted_site_url_text_field {
         width: 500px;
+    }
+
+    .import_button {
+        background: url("../images/btn_bg.png") repeat-x scroll center top #ea5e30;
+        border: 1px none;
+        color: white;
+        font: bold 11px/21px Tahoma,Arial,Helvetica,sans-serif;
     }
 </style>

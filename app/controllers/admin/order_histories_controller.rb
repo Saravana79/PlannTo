@@ -143,4 +143,25 @@ class Admin::OrderHistoriesController < ApplicationController
     end
     redirect_to admin_orders_path
   end
+
+  def import
+    file = params[:file]
+    if !file.blank?
+      file_new = file.tempfile
+
+      if file.content_type == "text/csv"
+        begin
+          OrderHistory.update_orders_from_flipkart(file_new.path)
+          flash[:notice] = "File Successfully Processed"
+        rescue Exception => e
+          flash[:alert] = "File not valid"
+        end
+      else
+        flash[:alert] = "File Format Not Supported"
+      end
+    else
+      flash[:alert] = "Please select file"
+    end
+    redirect_to admin_orders_path
+  end
 end
