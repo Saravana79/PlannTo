@@ -27,7 +27,8 @@ class AdImpression
 
 
   # has_one :m_click
-  embeds_one :m_click
+  # embeds_many :m_clicks
+  embeds_many :m_clicks
   embeds_many :m_order_histories
 
   index({ impression_time: 1 })

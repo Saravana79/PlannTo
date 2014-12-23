@@ -117,20 +117,16 @@ class OrderHistory < ActiveRecord::Base
       order_history.no_of_orders = 1
       order_history.order_status = "Validated"
       order_history.payment_status = "Validated"
+      order_history.item_name = csv_detail[1]
 
       impression = csv_detail[13].blank? ? nil : AddImpression.where(:id => csv_detail[13]).last
 
       unless impression.blank?
         order_history.item_id = impression.item_id
-        product = impression.item
-        order_history.item_name = product.name unless product.blank?
         order_history.sid = impression.sid
         order_history.advertisement_id = impression.advertisement_id
         order_history.publisher_id = impression.publisher_id
-      else
-        order_history.item_name = csv_detail[1]
       end
-      order_history.item_name = csv_detail[1] if order_history.item_name.blank?
       order_history.save!
     end
   end

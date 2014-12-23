@@ -715,8 +715,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
           ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).last
           unless ad_impression_mon.blank?
             each_click_mongo.delete("ad_impression_id")
-            ad_impression_mon.m_click = each_click_mongo
-            ad_impression_mon.save
+
+            m_clicks_count = ad_impression_mon.m_clicks.where(:ad_impression_id => each_click_mongo["ad_impression_id"], :timestamp => each_click_mongo["timestamp"]).count
+            if m_clicks_count.count == 0
+              ad_impression_mon.m_clicks << MClick.new(each_click_mongo)
+              ad_impression_mon.save
+            end
           end
         end
 
@@ -985,3 +989,4 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
 end
+
