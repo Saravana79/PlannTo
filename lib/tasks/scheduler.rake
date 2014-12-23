@@ -183,3 +183,9 @@ desc "Popular vendor products Update Daily "
 task :popular_vendor_products_update_daily => :environment do
   Resque.enqueue(PopularVendorProductsUpdate, "update_include_exclude_products_from_vendors")
 end
+
+
+desc "Orders update from amazon"
+task :orders_update_from_amazon_daily => :environment do
+  Resque.enqueue(OrderUpdateFromAmazon, "update_order_histories_from_reports", Time.zone.now.utc)
+end
