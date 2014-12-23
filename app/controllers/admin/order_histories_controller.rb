@@ -147,15 +147,15 @@ class Admin::OrderHistoriesController < ApplicationController
   def import
     file = params[:file]
     if !file.blank?
-      file_new = file.tempfile
+      # file_new = file.tempfile
 
       if file.content_type == "text/csv"
-        begin
-          OrderHistory.update_orders_from_flipkart(file_new.path)
-          flash[:notice] = "File Successfully Processed"
-        rescue Exception => e
-          flash[:alert] = "File not valid"
-        end
+        # begin
+          OrderHistory.update_orders_from_flipkart(file.path)
+          # flash[:notice] = "File Successfully Processed"
+        # rescue Exception => e
+        #   flash[:alert] = "File not valid"
+        # end
       else
         flash[:alert] = "File Format Not Supported"
       end
