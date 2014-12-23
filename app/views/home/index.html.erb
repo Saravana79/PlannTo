@@ -616,7 +616,7 @@ $(document).ready(function(){
                             <div class="comparison-div">
 
                                 <div class="prd-div">
-                                    <%items = Item.find(configatron.homepagecompareitems1.split(",")) %>
+                                    <%items = Item.where(:id => configatron.homepagecompareitems1.split(",")) %>
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>">
                                         <div class="compare-prd">
                                             <p class="title"><%=items[0].name%></p>
@@ -632,7 +632,7 @@ $(document).ready(function(){
                                     </a>
                                 </div>
                                         <div class="prd-div">
-                                    <%items = Item.find(configatron.homepagecompareitems2.split(",")) %>
+                                    <%items = Item.where(:id => configatron.homepagecompareitems2.split(",")) %>
 
                                         <a href="/items/compare?ids=<%=items.collect(&:id).join(',')%>" >
                                         <div class="compare-prd">

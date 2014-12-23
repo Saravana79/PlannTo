@@ -71,7 +71,7 @@ class AdImpression
     # group =  { "$group" => { "_id" => "$#{option}", "count" => { "$sum" => 1 } } }
 
     group =  { "$group" => { "_id" => "$#{option}", "imp_count" => { "$sum" => 1 },
-                             "click_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_click._id", 1 ] }, 1, 0 ] } },
+                             "click_count" => { "$sum" => { "$size" => { "$ifNull" => [ "$m_clicks", [] ] } } },
                              "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
                              # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
                              # "orders_sum" => { "$sum" => "$m_order_histories.total_revenue" }

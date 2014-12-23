@@ -646,8 +646,12 @@ class Advertisement < ActiveRecord::Base
 
 
         impression_details.each do |each_imp_det|
-          ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).last
-          ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
+          begin
+            ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).last
+            ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
+          rescue Exception => e
+            p "Error while update pre appearance count"
+          end
         end
 
 
@@ -714,9 +718,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
             each_click_mongo.delete("ad_impression_id")
 
             m_clicks_count = ad_impression_mon.m_clicks.where(:timestamp => each_click_mongo["timestamp"]).count
-            if m_clicks_count.count == 0
-              ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
-              ad_impression_mon.save
+            if m_clicks_count == 0
+              begin
+                ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
+              rescue Exception => e
+                p "Error while push m_click"
+              end
             end
           end
         end
