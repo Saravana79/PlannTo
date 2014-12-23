@@ -65,6 +65,10 @@ class AdImpression
     match = {"$match" => {"impression_time" => {"$gte" => start_date, "$lte" => end_date}}}
     #project = {"$project" =>  { "m_click" => 1, "sid" => 1, "impression_time" => 1, "advertisement_type" => 1, "item_id" => 1, "temp_user_id" => 1, "device" => 1, "size" => 1, "domain" => 1, "design_type" => 1, "pre_appearance_count" => 1}}
 
+    if param[:ad_type] != "All"
+      match["$match"].merge!("advertisement_type" => param[:ad_type])
+    end
+
     if param[:ad_id] != "All"
       match["$match"].merge!("advertisement_id" => param[:ad_id].to_i)
     end

@@ -104,6 +104,7 @@ class Admin::AdReportsController < ApplicationController
     @start_date = params[:from_date].blank? ? Date.today.beginning_of_day : params[:from_date].to_date.beginning_of_day
     @end_date = params[:to_date].blank? ? Date.today.end_of_day : params[:to_date].to_date.end_of_day
     @advertisements = ["All"] + Advertisement.all.map(&:id)
+    @ad_types = ["All"] + ["advertisement", "pricecomparision", "advertisement_widget", "fashion"]
     @results = AdImpression.get_results_from_mongo(params, @start_date, @end_date)
     if params[:type] == "Item"
       item_ids = @results.map {|each_row| each_row["_id"]}.compact.map(&:to_i)

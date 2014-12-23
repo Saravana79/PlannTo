@@ -1,5 +1,6 @@
 <div class='report_form'>
   <%= form_for :impression, :url => admin_more_reports_path, :method => :get do |f| %>
+   <div class="dates">
     <div style="display:block;padding-top:10px;clear:both;">
       <span style="width:100px;display:block;float:left;padding-top:5px;">
 Select A date Range
@@ -42,11 +43,17 @@ To Date
 </span>
       </div>
 
-      Type:
-      <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type"], params[:type])) %>
-      Advertisement ID:
-      <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
-      <%= f.submit "Generate Report", :class => "btn-link report_btn" %>
+      </div>
+
+      <div class="select_options">
+        Ad Type:
+        <%= select_tag(:ad_type, options_for_select(@ad_types, params[:ad_type])) %>
+        Report Type:
+        <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type"], params[:type])) %>
+        Advertisement ID:
+        <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
+      </div>
+      <%= f.submit "Generate Report", :class => "btn-link report_btn generate_btn" %>
   <% end %>
 </div>
 
@@ -114,7 +121,17 @@ To Date
 
     .sorting {
         float: right;
-        margin: -98px 103px 0 0;
+        margin: -143px 98px 0 0;
+        position: relative;
+    }
+
+    .select_options {
+        padding-left: 220px;
+        position: absolute;
+    }
+
+    .generate_btn {
+        margin-top: 39px;
         position: relative;
     }
 </style>
