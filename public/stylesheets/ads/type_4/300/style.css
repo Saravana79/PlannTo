@@ -67,7 +67,7 @@ body {
 }
 .list_carousel li {
 	width: 296px;
-	height: 246px;
+	height: 210px;
 	padding: 0;
 	margin: 0;
 	display: block;
@@ -100,7 +100,7 @@ body {
 }
 .pager {
 	float:right;
-	left:165px;
+	left:150px;
 	position:absolute;
 	top:3px;
 	z-index:1000;
