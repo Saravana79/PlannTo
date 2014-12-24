@@ -50,6 +50,26 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
+  def self.update_aggregated_detail_from_mongo(time, entity_type="advertisement", batch_size=1000)
+    entity_field = entity_type + "_id"
+
+    match = {"$match" => {"impression_time" => {"$gte" => time.beginning_of_day.utc, "$lte" => time.end_of_day.utc}}}
+
+    match["$match"].merge!("advertisement_type" => "advertisement") #for advertisement
+
+    group =  { "$group" => { "_id" => "$#{entity_field}",
+                             "imp_count" => { "$sum" => 1 },
+                             "winning_price_sum" => { "$sum" => "$winning_price" },
+                             "click_count" => { "$sum" => { "$size" => { "$ifNull" => [ "$m_clicks", [] ] } } }
+    }
+    }
+    sort = {"$sort" => {"_id" => 1}}
+
+    items_by_id = AdImpression.collection.aggregate([match,group,sort])
+    items_by_id.collect{|item| item["winning_price_sum"] = (item["winning_price_sum"].to_f/1000000).round(2) }
+    items_by_id
+  end
+
   def self.get_counts(date1, date2, publisher_id)
     query = "SELECT sum(impressions_count) as impressions_count, sum(clicks_count) as clicks_count FROM aggregated_details WHERE entity_type='publisher' and entity_id= #{publisher_id} and date BETWEEN '#{date1}' and '#{date2}' group by entity_id"
     results = find_by_sql(query)

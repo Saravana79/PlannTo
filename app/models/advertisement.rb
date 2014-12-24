@@ -487,8 +487,8 @@ class Advertisement < ActiveRecord::Base
   def self.generate_report_for_ads(ad_report_id)
     ad_report = AdReport.where(:id => ad_report_id).first
 
-    impression_date_condition = "impression_time > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and impression_time < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
-    click_date_condition = "timestamp > '#{ad_report.from_date.beginning_of_day.strftime('%F %T')}' and timestamp < '#{ad_report.to_date.end_of_day.strftime('%F %T')}'"
+    impression_date_condition = "impression_time > '#{ad_report.from_date.beginning_of_day.utc.strftime('%F %T')}' and impression_time < '#{ad_report.to_date.end_of_day.utc.strftime('%F %T')}'"
+    click_date_condition = "timestamp > '#{ad_report.from_date.beginning_of_day.utc.strftime('%F %T')}' and timestamp < '#{ad_report.to_date.end_of_day.utc.strftime('%F %T')}'"
 
     if ad_report.report_type == "item_id"
       query = "select a.item_id,i.name,impressions_count,clicks_count from (select  ai.item_id, count(*) as impressions_count from add_impressions ai
@@ -569,6 +569,12 @@ class Advertisement < ActiveRecord::Base
               impression_mongo = impression.attributes
               impression_mongo["_id"] = impression_mongo["id"].to_s
               impression_mongo.delete("id")
+
+              #time fixes
+              impression_mongo["impression_time"] = impression.impression_time.utc if impression.impression_time.is_a?(Time)
+              impression_mongo["created_at"] = impression.created_at.utc if impression.created_at.is_a?(Time)
+              impression_mongo["updated_at"] = impression.updated_at.utc if impression.updated_at.is_a?(Time)
+
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
