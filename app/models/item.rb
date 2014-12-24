@@ -1666,7 +1666,8 @@ end
         if !source_category.blank? && !source_category["pattern"].blank?
           pattern = source_category["pattern"]
           str1, str2 = pattern.split("<page>")
-          exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{Regexp.escape(str2.to_s)}/m, 1]
+          str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
+          exp_val = url[/.*#{Regexp.escape(str1.to_s)}(.*?)#{str2}/m, 1]
           if exp_val.to_s.is_an_integer?
             patten_with_val = pattern.gsub("<page>", exp_val)
             patten_for_query = pattern.gsub("<page>", ".*")
