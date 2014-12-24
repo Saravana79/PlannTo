@@ -9,8 +9,8 @@ class AggregatedDetail < ActiveRecord::Base
       entity_field = entity_type + "_id"
       # time = time.is_a?(Time) ? time.utc : time # converted to UTC
 
-      impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"
-      click_date_condition = "timestamp > '#{time.beginning_of_day.strftime('%F %T')}' and timestamp < '#{time.end_of_day.strftime('%F %T')}'"
+      impression_date_condition = "impression_time > '#{time.beginning_of_day.utc.strftime('%F %T')}' and impression_time < '#{time.end_of_day.utc.strftime('%F %T')}'"
+      click_date_condition = "timestamp > '#{time.beginning_of_day.utc.strftime('%F %T')}' and timestamp < '#{time.end_of_day.utc.strftime('%F %T')}'"
 
       if entity_type == "publisher"
         impression_query = "select publisher_id as entity_id,count(*) as impression_count, sum(winning_price)/1000000 as winning_price from add_impressions where #{impression_date_condition} group by publisher_id"
