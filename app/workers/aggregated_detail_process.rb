@@ -10,6 +10,7 @@ class AggregatedDetailProcess
     log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
 
     now_time = actual_time.to_time
+    now_time = now_time.localtime
 
     before_hour = now_time - 1.hour
 

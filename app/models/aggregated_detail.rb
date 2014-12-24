@@ -2,6 +2,7 @@ class AggregatedDetail < ActiveRecord::Base
   belongs_to :entity, :polymorphic => true
 
   def self.update_aggregated_detail(time, entity_type, batch_size=1000)
+    time = time.localtime
     if $redis.get("update_aggregated_detail_is_running").to_i == 0
       $redis.set("update_aggregated_detail_is_running", 1)
       $redis.expire("update_aggregated_detail_is_running", 30.minutes)
@@ -51,6 +52,7 @@ class AggregatedDetail < ActiveRecord::Base
   end
 
   def self.update_aggregated_detail_from_mongo(time, entity_type="advertisement", batch_size=1000)
+    time = time.localtime
     entity_field = entity_type + "_id"
 
     match = {"$match" => {"impression_time" => {"$gte" => time.beginning_of_day.utc, "$lte" => time.end_of_day.utc}}}
