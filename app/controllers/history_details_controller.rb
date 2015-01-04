@@ -48,6 +48,9 @@ class HistoryDetailsController < ApplicationController
     elsif !params[:red_url].blank?
       item_id = params[:item_id]
       @impression_id = params[:iid].present? ? params[:iid] : "0"
+      if(publisher.blank? || publisher.nil?)
+        publisher = Publisher.where(:publisher_url => 'wiseshe.com').first 
+      end 
       url = params[:red_url]
       url =  url.gsub("tag=pla04-21","tag=wwwwiseshecom-21&ascsubtag=" + @impression_id)
 
