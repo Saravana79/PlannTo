@@ -479,7 +479,7 @@
                           </div>
                           <div id="plannto_incol2" style="text-align:center;width:200px;padding:7px;color: #E65E7B;">
                                   <ul>
-                                      <li class='price_class <%= item.price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
+                                      <li class='price_class <%= item.sale_price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
                                       <li class='sale_price'><%= item.sale_price.blank? ? "" : item.sale_price %></li>
                                   </ul>
                           </div>
@@ -500,7 +500,7 @@
                         <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(48) %> </div></td>
                         <td id="plannto_incol2" width="20%" style="font-size:12px;">
                             <ul>
-                                <li class='price_class <%= item.price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
+                                <li class='price_class <%= item.sale_price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
                                 <li class='sale_price'><%= item.sale_price.blank? ? "" : item.sale_price %></li>
                             </ul>
                         </td>
