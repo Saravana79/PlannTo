@@ -48,6 +48,7 @@ class Feed < ActiveRecord::Base
       latest_feeds.each do |each_entry|
         check_exist_feed_url = FeedUrl.where(:url => each_entry.url).first
         if check_exist_feed_url.blank?
+          source = ""
           begin
             source = URI.parse(URI.encode(URI.decode(each_entry.url))).host.gsub("www.", "")
           rescue Exception => e
@@ -67,6 +68,10 @@ class Feed < ActiveRecord::Base
           # remove characters after come with space + '- or |' symbols
           title = title.to_s.gsub(/\s(-|\|).+/, '')
           title = title.blank? ? "" : title.to_s.strip
+
+          sources_list = JSON.parse($redis.get("sources_list_details"))
+          sources_list.default = "Others"
+          category = sources_list[source]["categories"]
 
           new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
