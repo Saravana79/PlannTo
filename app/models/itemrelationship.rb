@@ -18,6 +18,9 @@ class Itemrelationship < ActiveRecord::Base
   belongs_to :hotels, :class_name => 'Hotel', :foreign_key => :item_id
   belongs_to :related_city, :class_name => 'City', :foreign_key => :relateditem_id
 
+  belongs_to :places, :class_name => 'Place', :foreign_key => :item_id
+  belongs_to :rel_city, :class_name => 'City', :foreign_key => :relateditem_id
+
 
   belongs_to :parent, :foreign_key => :relateditem_id, :class_name => "Beauty"
 end

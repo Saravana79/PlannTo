@@ -2,8 +2,11 @@ class City < Item
   has_one :itemrelationship, :foreign_key => :item_id
   has_one :related_state, :through => :itemrelationship
 
+  # has_many :itemrelationships, :foreign_key => :relateditem_id
+  # has_many :hotels, :through => :itemrelationships
+
   has_many :itemrelationships, :foreign_key => :relateditem_id
-  has_many :hotels, :through => :itemrelationships
+  has_many :places, :through => :itemrelationships
 
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 2.0,  :as => :name_ac do |item|
