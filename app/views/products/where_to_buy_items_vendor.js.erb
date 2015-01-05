@@ -337,7 +337,11 @@
 
            .strike_price {
         text-decoration: line-through;
+                color: #555;
+                font-size: 11px;
             }
+            .sale_price {list-style: outside none none;}
+            .price_class { list-style: outside none none; }
         </style>
 
         <!-- /* for igyaan*/ -->
@@ -474,8 +478,10 @@
                             <%= item.name.to_s.truncate(58) %>
                           </div>
                           <div id="plannto_incol2" style="text-align:center;width:200px;padding:7px;color: #E65E7B;">
-                            <span class='strike_price'><%= item.price.blank? ? "" : item.price %> </span>
-                            <%= item.sale_price.blank? ? "" : item.sale_price %>
+                                  <ul>
+                                      <li class='price_class <%= item.price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
+                                      <li class='sale_price'><%= item.sale_price.blank? ? "" : item.sale_price %></li>
+                                  </ul>
                           </div>
                           <div style="clear:both;">
                           <span style ="height: 20px!important;background-color:#E65E7B;padding:4px 10px;font-weight:600;color:white;font-size:12px;" >Buy Now</span>
@@ -493,8 +499,10 @@
                         </td>
                         <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(48) %> </div></td>
                         <td id="plannto_incol2" width="20%" style="font-size:12px;">
-                            <span class='strike_price'><%= item.price.blank? ? "" : item.price %> </span>
-                            <%= item.sale_price.blank? ? "" : item.sale_price %>
+                            <ul>
+                                <li class='price_class <%= item.price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
+                                <li class='sale_price'><%= item.sale_price.blank? ? "" : item.sale_price %></li>
+                            </ul>
                         </td>
                         <td width="15%" id="plannto_incol3" class="plannto_incol3">
                           <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),

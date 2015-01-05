@@ -1713,14 +1713,24 @@ end
     host
   end
 
-  def self.get_items_from_amazon(keyword, page_type)
+  def self.get_items_from_amazon(keyword, page_type, excluded_items=[])
     res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031})
     items = []
-    loop_items = res.items.first(5)
+    if excluded_items.blank?
+      loop_items = res.items.first(5)
+    else
+      loop_items = res.items
+    end
+
     loop_items.each_with_index do |each_item, index|
       item = OpenStruct.new
       # item.id = 1000 + index
       item.id = each_item.get("ASIN")
+
+      if excluded_items.include?(item.id)
+        next
+      end
+
       item.name = each_item.get_element("ItemAttributes").get("Title")
       item.sale_price = each_item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue nil
       item.price = each_item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue nil
@@ -1803,7 +1813,8 @@ end
   end
 
   def self.get_best_seller_beauty_items_from_amazon(page_type)
-    items, search_url = Item.get_items_from_amazon("", page_type)
+    excluded_items = []
+    items, search_url = Item.get_items_from_amazon("", page_type, excluded_items)
     item = Item.where(:id => 28902).last
     extra_items = []
 
