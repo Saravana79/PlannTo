@@ -288,9 +288,14 @@ class ProductsController < ApplicationController
     @items, tempurl = Item.get_items_from_url(url, params[:item_ids])
     url =  tempurl
 
+    if !@items.blank?
+      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type])
+    else
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type])
+    end
+
     # include pre order status if we show more details.
     unless @items.blank?
-      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type])
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       @publisher = Publisher.getpublisherfromdomain(url)
       # Check have to activate tabs for publisher or not

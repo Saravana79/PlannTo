@@ -1722,6 +1722,7 @@ end
       # item.id = 1000 + index
       item.id = each_item.get("ASIN")
       item.name = each_item.get_element("ItemAttributes").get("Title")
+      item.sale_price = each_item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue nil
       item.price = each_item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue nil
       if page_type == "type_1"
          item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
@@ -1751,7 +1752,9 @@ end
       extra_items = extra_items.first(2)
     end
     keyword = item.name.to_s
+
     items, search_url = Item.get_items_from_amazon(keyword, page_type)
+
     return item, items, search_url, extra_items
   end
 
@@ -1782,7 +1785,7 @@ end
           end
         end
 
-        unless @articles.empty?
+        if !@articles.blank?
           @items = @articles[0].allitems.select{|a| a.is_a? Product}
           article_items_ids = @items.map(&:id)
           new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
@@ -1790,11 +1793,21 @@ end
           if !new_items.blank?
             @items = new_items
           end
+        else
+          nil
         end
       end
     end
     return @items, tempurl
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
+  end
+
+  def self.get_best_seller_beauty_items_from_amazon(page_type)
+    items, search_url = Item.get_items_from_amazon("", page_type)
+    item = Item.where(:id => 28902).last
+    extra_items = []
+
+    return item, items, search_url, extra_items
   end
 
   private

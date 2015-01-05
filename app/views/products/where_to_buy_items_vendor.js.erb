@@ -334,6 +334,10 @@
 
             <% end %>
             a { outline: none; }
+
+           .strike_price {
+        text-decoration: line-through;
+            }
         </style>
 
         <!-- /* for igyaan*/ -->
@@ -349,7 +353,7 @@
                 <% unless @show_price == "false" %>
                     <li class="selected">
 
-                      <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Top Products from Amazon</a>
+                      <a href="javascript:void(0)" id="where_to_buy_items_a" onclick="<%= "PlannTo.wheretobuytabclick(this," + @moredetails+ ",'" + @items.map(&:id).join(",") + "')"%>">Recommended Products For You</a>
                     </li>
                 <%end%>
                 <%if @show_offer != "false" %>
@@ -470,7 +474,8 @@
                             <%= item.name.to_s.truncate(58) %>
                           </div>
                           <div id="plannto_incol2" style="text-align:center;width:200px;padding:7px;color: #E65E7B;">
-                            <%= item.price.blank? ? "" : item.price %>
+                            <span class='strike_price'><%= item.price.blank? ? "" : item.price %> </span>
+                            <%= item.sale_price.blank? ? "" : item.sale_price %>
                           </div>
                           <div style="clear:both;">
                           <span style ="height: 20px!important;background-color:#E65E7B;padding:4px 10px;font-weight:600;color:white;font-size:12px;" >Buy Now</span>
@@ -487,7 +492,10 @@
                           <img src="<%= item.image_url %>" onerror="this.error=null;this.src='<%= item.image_url %>';" height="50px"  style="margin:5px;"/>
                         </td>
                         <td><div style="font-size:12px;font-weight:normal;padding: 12px 0px;color:black;"> <%= item.name.to_s.truncate(48) %> </div></td>
-                        <td id="plannto_incol2" width="20%" style="font-size:12px;"> <%= item.price.blank? ? "Not Available" : item.price %> </td>
+                        <td id="plannto_incol2" width="20%" style="font-size:12px;">
+                            <span class='strike_price'><%= item.price.blank? ? "" : item.price %> </span>
+                            <%= item.sale_price.blank? ? "" : item.sale_price %>
+                        </td>
                         <td width="15%" id="plannto_incol3" class="plannto_incol3">
                           <%= link_to image_tag("#{configatron.root_image_path}static/images/amazonbuynow.jpeg", :height => "20px"),
                                       "#{configatron.hostname}/history_details?item_id=#{@item.id}&red_url=#{item.click_url}&iid=#{@impression_id}#{@test_condition}", :target => "_blank" %>
