@@ -683,16 +683,20 @@ class Advertisement < ActiveRecord::Base
 
         redis_rtb_hash = {}
         non_ad_impressions_list.each do |impression|
-          article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+          begin
+            article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{impression.hosted_site_url}' group by ac.id").last
 
-          unless article_content.blank?
-            user_id = impression.temp_user_id
-            type = article_content.sub_type
-            item_ids = article_content.all_item_ids.to_s rescue ""
-            redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto")
-            redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+            unless article_content.blank?
+              user_id = impression.temp_user_id
+              type = article_content.sub_type
+              item_ids = article_content.all_item_ids.to_s rescue ""
+              redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto")
+              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+            end
+          rescue Exception => e
+            p "Error invalid url errors => #{impression.hosted_site_url}"
           end
         end
 
