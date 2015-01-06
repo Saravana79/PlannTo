@@ -416,7 +416,7 @@
                               <span style="float: left;">&nbsp;&nbsp;&nbsp;</span>
                               <li class="active" style="text-align:center;">
 
-                                <a style="-webkit-box-sizing: content-box; box-sizing: content-box;" href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= @item.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                <a style="-webkit-box-sizing: content-box; box-sizing: content-box;" href="javascript:void(0)" onclick="PlannTo.onclick_function('<%= @item.id %>', this, <%= @moredetails %>, '<%= @ref_url %>')">
                                                     <span style="float:left;">
                                                   </span><span style="">
                                                     <%= @item.name.to_s.truncate(30) %>
@@ -426,7 +426,7 @@
                               <% @extra_items.each do |each_item| %>
                                   <li class="" style="text-align:center;">
 
-                                    <a style="-webkit-box-sizing: content-box; box-sizing: content-box;" href="javascript:void(0)" onclick="PlannTo.onclick_function(<%= each_item.id %>, this, <%= @moredetails %>, '<%= @ref_url %>')">
+                                    <a style="-webkit-box-sizing: content-box; box-sizing: content-box;" href="javascript:void(0)" onclick="PlannTo.onclick_function('<%= each_item.id %>', this, <%= @moredetails %>, '<%= @ref_url %>')">
                                                     <span style="float:left;">
                                                   </span><span style="">
                                                     <%= each_item.name.to_s.truncate(30) %>
