@@ -1,7 +1,7 @@
 class ArticleContent < Content
   acts_as_citier
 
-  #validates :url, :presence => true
+  validates :url, :presence => true
   belongs_to :article_category
   has_many :content_photos, :foreign_key => 'content_id'
   accepts_nested_attributes_for :content_photos, :allow_destroy => true
