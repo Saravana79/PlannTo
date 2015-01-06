@@ -1763,19 +1763,31 @@ end
       else
         item = products.select {|each_item| each_item.id == item_id.to_i}.first
       end
-      extra_items = products - [item]
-      extra_items = extra_items.first(2)
 
       #Decide keyword combination
       if manufacturer.blank?
         keyword = item.name.to_s
         items, search_url = Item.get_items_from_amazon(keyword, page_type)
+        extra_items = items - [item]
+        extra_items = extra_items.first(2)
       else
         keyword = "#{manufacturer.name} #{item.name}"
         items, search_url = Item.get_items_from_amazon(keyword, page_type)
         if items.blank?
-          keyword = item.name.to_s
-          items, search_url = Item.get_items_from_amazon(keyword, page_type)
+          items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type)
+          extra_items = products - [item]
+          extra_items = extra_items.first(2)
+        else
+          if items.count < 4
+            added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type)
+            items = items + added_items
+            items = items.flatten.first(4)
+          end
+          combine_item = OpenStruct.new(item.attributes)
+          combine_item.name = keyword
+          item = combine_item
+          extra_items = products
+          extra_items = extra_items.first(2)
         end
       end
     end
