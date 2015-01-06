@@ -1752,18 +1752,33 @@ end
     if items.count == 1
       item = items.first
       extra_items = item.blank? ? [] : [item.parent].compact rescue []
+      keyword = item.name.to_s
+      items, search_url = Item.get_items_from_amazon(keyword, page_type)
     else
-      if item_id.blank?
-        item = items.first
-      else
-        item = items.select {|each_item| each_item.id == item_id.to_i}.first
-      end
-      extra_items = items - [item]
-      extra_items = extra_items.first(2)
-    end
-    keyword = item.name.to_s
+      manufacturer = items.select {|a| a.is_a?(Manufacturer)}.last
+      products = items.select {|a| a.is_a?(Product)}
 
-    items, search_url = Item.get_items_from_amazon(keyword, page_type)
+      if item_id.blank?
+        item = products.first
+      else
+        item = products.select {|each_item| each_item.id == item_id.to_i}.first
+      end
+      extra_items = products - [item]
+      extra_items = extra_items.first(2)
+
+      #Decide keyword combination
+      if manufacturer.blank?
+        keyword = item.name.to_s
+        items, search_url = Item.get_items_from_amazon(keyword, page_type)
+      else
+        keyword = "#{manufacturer.name} #{item.name}"
+        items, search_url = Item.get_items_from_amazon(keyword, page_type)
+        if items.blank?
+          keyword = item.name.to_s
+          items, search_url = Item.get_items_from_amazon(keyword, page_type)
+        end
+      end
+    end
 
     return item, items, search_url, extra_items
   end
@@ -1796,7 +1811,9 @@ end
         end
 
         if !@articles.blank?
-          @items = @articles[0].allitems.select{|a| a.is_a? Product}
+          # @items = @articles[0].allitems.select{|a| a.is_a? Product}
+          @items = @articles[0].allitems
+
           article_items_ids = @items.map(&:id)
           new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
 

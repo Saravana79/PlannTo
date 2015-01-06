@@ -12,7 +12,7 @@ class OrderHistory < ActiveRecord::Base
       begin
         OrderHistory.update_orders_from_amazon(date)
       rescue Exception => e
-        p "Error while processing date => #{date}"
+        p e.backtrace
       end
     end
   end
