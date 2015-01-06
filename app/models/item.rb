@@ -1816,7 +1816,7 @@ end
     # $redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K"])
     excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
     items, search_url = Item.get_items_from_amazon("", page_type, excluded_items)
-    item = Item.where(:id => 28902).last
+    item = Item.where(:id => 27731).last
     extra_items = []
 
     return item, items, search_url, extra_items
