@@ -1785,6 +1785,7 @@ end
           end
           combine_item = OpenStruct.new(item.attributes)
           combine_item.name = keyword
+          combine_item.id = ""
           item = combine_item
           extra_items = products
           extra_items = extra_items.first(2)
