@@ -477,7 +477,7 @@
                           <div style="font-size: 11px;font-weight: bold;padding: 2px 0px;color:#3A3A3A;min-height:50px!important;line-height:1.5;">
                             <%= item.name.to_s.truncate(58) %>
                           </div>
-                          <div id="plannto_incol2" style="text-align:center;width:200px;padding:7px;color: #E65E7B;">
+                          <div id="plannto_incol2" style="text-align:center;width:200px;padding:7px;color: #E65E7B;height:60px;">
                                   <ul>
                                       <li class='price_class <%= item.sale_price.blank? ? "" : "strike_price" %>'><%= item.price.blank? ? "" : item.price %> </li>
                                       <li class='sale_price'><%= item.sale_price.blank? ? "" : item.sale_price %></li>
@@ -522,10 +522,8 @@
                         @wrapper="3"
                       end
                     %>
-                    <td  id="plannto_footertd" colspan="2">
-
-                    </td>
-                    <td id="plannto_incol3" colspan="2" style="text-align: right;">
+     
+                    <td id="plannto_incol3" colspan="4" style="text-align: right;height:40px;">
                                     <span >
                                       <a href="<%= @search_url %>" id="plannto_go_button" target="_blank">View more <%= @item.name.to_s.pluralize %></a>
                                     </span>
