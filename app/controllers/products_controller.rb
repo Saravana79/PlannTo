@@ -292,6 +292,7 @@ class ProductsController < ApplicationController
       @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type])
     else
       @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type])
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
     end
 
     # include pre order status if we show more details.
