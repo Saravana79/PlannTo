@@ -111,3 +111,5 @@ gem 'xml-simple', '~> 1.1.4'
 gem 'activerecord-import', '~> 0.3.1'
 
 gem 'net-http-digest_auth'
+
+gem 'api_cache'

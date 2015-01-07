@@ -64,6 +64,7 @@ GEM
     ancestry (1.2.5)
       activerecord (>= 2.2.2)
     ansi (1.4.3)
+    api_cache (0.3.0)
     arel (2.2.3)
     attr_required (0.0.5)
     aws-sdk (1.6.3)
@@ -350,6 +351,7 @@ DEPENDENCIES
   acts_as_rateable
   addressable (~> 2.3.6)
   amazon-ecs (~> 2.2.5)
+  api_cache
   aws-sdk
   bson_ext
   citier (~> 0.1.15)
