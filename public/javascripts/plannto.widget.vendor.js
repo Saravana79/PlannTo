@@ -171,17 +171,20 @@ PlannTo.onchange_function = function onchange_function(obj,moredetails)
                  jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[1]).addClass("unselected");
                  jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).removeClass();
                  jQuery(jQuery("#"+parentdivid).children().children().children().children().children().children()[0]).addClass("selected");
-                if(show_details.toString() == "true" && jQuery("#"+ parentdivid).width() < 300)
+                if(show_details.toString() == "true" && jQuery(window).width() < 500)
                     {
+                        jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
+
                         jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
-                        /*jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");*/
-                        tr = jQuery("#" + parentdivid +" table tr:eq(9)");
-                        if(tr.children()[0].colSpan ==3)
-                        {
-                            tr.children()[0].colSpan =2
-                        }
-                        //tr.children()[0].children().innerText = "View more";
+                        jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
                     }
+                else if (show_details.toString() == "true" && jQuery(window).width() < 700)
+                {
+                    jQuery("#" + parentdivid).css("width", jQuery(window).width() - 30)
+
+                    jQuery("#" + parentdivid +" table tr td:nth-child(3)").css("display","none");
+                    //jQuery("#" + parentdivid +" table tr td:nth-child(4)").css("display","none");
+                }
                 if(show_price.toString() == "false")
                 {
                     jQuery(".navigate_offer").live("click", function(e){
