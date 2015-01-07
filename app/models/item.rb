@@ -1766,10 +1766,11 @@ end
 
       #Decide keyword combination
       if manufacturer.blank?
-        keyword = item.name.to_s
-        items, search_url = Item.get_items_from_amazon(keyword, page_type)
         extra_items = items - [item]
         extra_items = extra_items.first(2)
+        
+        keyword = item.name.to_s
+        items, search_url = Item.get_items_from_amazon(keyword, page_type)
       else
         keyword = "#{manufacturer.name} #{item.name}"
         items, search_url = Item.get_items_from_amazon(keyword, page_type)
