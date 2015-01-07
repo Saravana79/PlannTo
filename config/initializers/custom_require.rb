@@ -7,6 +7,8 @@ if Rails.env.production?
   ENV["MONGOLAB_URI"] = "mongodb://planntonew:planntonew@ds063780-a0.mongolab.com:63780,ds063780-a1.mongolab.com:63780/heroku_app4176992"
 
   require "#{Rails.root}/lib/heroku_resque_auto_scale.rb"
+
+  APICache.store = APICache::DalliStore.new(Dalli::Client.new(ENV["MEMCACHIER_SERVERS"].split(","), {:username => ENV["MEMCACHIER_USERNAME"], :password => ENV["MEMCACHIER_PASSWORD"]}))
 end
 
 Resque::Failure::MultipleWithRetrySuppression.classes = [Resque::Failure::Redis]
