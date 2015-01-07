@@ -58,7 +58,7 @@ class Feed < ActiveRecord::Base
           status = 0
           status = 1 unless article_content.blank?
 
-          title, description, images = Feed.get_feed_url_values(each_entry.url)
+          title, description, images, page_category = Feed.get_feed_url_values(each_entry.url)
 
           url_for_save = each_entry.url
           if url_for_save.include?("youtube.com")
@@ -75,7 +75,7 @@ class Feed < ActiveRecord::Base
 
           new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
-                         :published_at => each_entry.published, :priorities => priorities)
+                         :published_at => each_entry.published, :priorities => priorities, :addtional_details => page_category)
 
           begin
             new_feed_url.save!
@@ -125,7 +125,7 @@ class Feed < ActiveRecord::Base
 
       if check_exist_feed_url.blank?
 
-        title, description, images = Feed.get_feed_url_values(each_record.hosted_site_url)
+        title, description, images, page_category = Feed.get_feed_url_values(each_record.hosted_site_url)
 
         url_for_save = each_record.hosted_site_url
         if url_for_save.include?("youtube.com")
@@ -138,7 +138,7 @@ class Feed < ActiveRecord::Base
 
         @feed_url = FeedUrl.new(:url => url_for_save, :title => title.to_s.strip, :status => status, :source => source,
                                    :category => category, :summary => description, :images => images,
-                                   :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count)
+                                   :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count, :additional_details => page_category)
 
         begin
           @feed_url.save!
@@ -268,6 +268,13 @@ class Feed < ActiveRecord::Base
 
     if title_info.include?("|")
       title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
+    end
+
+    category_list = doc.at(".entry-categories")
+
+    if !category_list.blank? && url.include?("wiseshe.com")
+      cat_list = category_list.elements.map {|a| a.content} rescue []
+      page_category = cat_list.join(",")
     end
 
     return title_info, meta_description, images, page_category
