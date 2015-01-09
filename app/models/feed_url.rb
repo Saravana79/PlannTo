@@ -429,7 +429,7 @@ class FeedUrl < ActiveRecord::Base
       source_list = JSON.parse(source_hash)
       if source_list.blank?
         new_title = get_term_from_feed_url(updated_host)
-        return_title = new_title.blank? ? article.title : new_title
+        return_title = new_title.to_s.strip.blank? ? article.title : new_title
         return nil, return_title
       end
       source_details = source_list[updated_host]
@@ -457,13 +457,13 @@ class FeedUrl < ActiveRecord::Base
           end
         end
         new_title = get_term_from_feed_url(updated_host)
-        changed_title = new_title.blank? ? article.title : new_title
+        changed_title = new_title.to_s.strip.blank? ? article.title : new_title
         return return_val, changed_title
       end
     end
 
     new_title = get_term_from_feed_url(updated_host)
-    return_title = new_title.blank? ? article.title : new_title
+    return_title = new_title.to_s.strip.blank? ? article.title : new_title
     return nil, return_title
   end
 

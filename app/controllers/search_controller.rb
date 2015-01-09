@@ -313,6 +313,15 @@ class SearchController < ApplicationController
     auto_save = "false" if params[:ac_sub_type] == "Comparisons" && selected_list.count < 2
     p "auto save => #{auto_save}"
 
+
+    #select manufacturer for wiseshe.com
+    if params[:domain] == "wiseshe.com"
+      manufacturers = results.map {|a| a[:type] == "Manufacturer"}
+      sel_list = manufacturers.collect {|a| a[:score] > 0.5 ? a[:id] : ""}
+      selected_list << sel_list.compact
+      selected_list = selected_list.uniq
+    end
+
     if auto_save == "false" && !params[:actual_title].blank?
       if !selected_list.blank? && params[:ac_sub_type] == "Others"
         auto_save = "true"
