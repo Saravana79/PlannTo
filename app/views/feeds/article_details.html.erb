@@ -29,7 +29,7 @@
           <div class="title" style="clear:both;">
             <span style="width:75px;float:left;" class="title_header"><label for="" >Title :</label></span>
             <span style="float:left;" >
-            <%= f.text_field :title , :style => "width:750px;"%>
+            <%= f.text_field :title , :style => "width:750px;", :value => "#{@article_content.title.to_s} (#{@feed_url.additional_details.to_s})" %>
           </span>
           </div>
           <div class="url" style="clear:both;">
