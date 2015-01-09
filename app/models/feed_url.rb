@@ -421,11 +421,17 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def check_and_update_sub_type(article)
+    host = Addressable::URI.parse(self.url).host.downcase
+    updated_host = host.start_with?('www.') ? host[4..-1] : host
+
     source_hash = $redis.get("sources_list_details")
-    unless source_hash.blank?
+    if !source_hash.blank?
       source_list = JSON.parse(source_hash)
-      host = Addressable::URI.parse(self.url).host.downcase
-      updated_host = host.start_with?('www.') ? host[4..-1] : host
+      if source_list.blank?
+        new_title = get_term_from_feed_url(updated_host)
+        return_title = new_title.blank? ? article.title : new_title
+        return nil, return_title
+      end
       source_details = source_list[updated_host]
       if !source_details.blank? && !source_details["check_details"].blank?
         check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
@@ -450,10 +456,26 @@ class FeedUrl < ActiveRecord::Base
             end
           end
         end
+        new_title = get_term_from_feed_url(updated_host)
+        changed_title = new_title.blank? ? article.title : new_title
         return return_val, changed_title
       end
     end
-    return nil, article.title
+
+    new_title = get_term_from_feed_url(updated_host)
+    return_title = new_title.blank? ? article.title : new_title
+    return nil, return_title
+  end
+
+  def get_term_from_feed_url(updated_host)
+    changed_title = ""
+    if (updated_host == "wiseshe.com")
+      title_info = self.additional_details
+      if !title_info.blank?
+        changed_title = title_info.to_s.gsub(",", " ")
+      end
+    end
+    changed_title
   end
 
   def auto_save_feed_urls(force_default_save=false,priority=1)
