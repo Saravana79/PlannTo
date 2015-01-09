@@ -99,7 +99,6 @@ end
       keywords term do
         minimum_match 1
       end
-      with :status,[1,2,3]
       order_by :score,:desc
       order_by :orderbyid , :asc
       paginate(:page => 1, :per_page => 5)

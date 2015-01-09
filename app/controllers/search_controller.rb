@@ -317,7 +317,7 @@ class SearchController < ApplicationController
     #select manufacturer for wiseshe.com
     if params[:domain] == "wiseshe.com"
       manufacturers = results.select {|a| a[:type] == "Manufacturer"}
-      sel_list = manufacturers.collect {|a| a[:score] > 0.5 ? a[:id] : ""}
+      sel_list = manufacturers.collect {|a| a[:score].to_f > 0.5 ? a[:id] : nil}
       selected_list << sel_list.compact
       selected_list = selected_list.flatten.uniq
     end
