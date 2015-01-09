@@ -75,7 +75,7 @@ class Feed < ActiveRecord::Base
 
           new_feed_url = FeedUrl.new(feed_id: id, url: url_for_save, title: title.to_s.strip, category: category,
                          status: status, source: source, summary: description, :images => images,
-                         :published_at => each_entry.published, :priorities => priorities, :addtional_details => page_category)
+                         :published_at => each_entry.published, :priorities => priorities, :additional_details => page_category)
 
           begin
             new_feed_url.save!
