@@ -319,7 +319,7 @@ class SearchController < ApplicationController
       manufacturers = results.select {|a| a[:type] == "Manufacturer"}
       sel_list = manufacturers.collect {|a| a[:score] > 0.5 ? a[:id] : ""}
       selected_list << sel_list.compact
-      selected_list = selected_list.uniq
+      selected_list = selected_list.flatten.uniq
     end
 
     if auto_save == "false" && !params[:actual_title].blank?

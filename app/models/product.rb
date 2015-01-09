@@ -179,7 +179,7 @@ end
         new_selected_list << group.id.to_s
         list_scores.merge!("#{group.id}" => all_items_by_score["#{each_selected_item.id}"])
       else
-        if ["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type])
+        if (["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type]) && param[:domain] != "wiseshe.com")
           if (each_selected_item.is_a?(Product) || each_selected_item.is_a?(CarGroup))
             new_selected_list << each_selected_item.id.to_s
             list_scores.merge!("#{each_selected_item.id}" => all_items_by_score["#{each_selected_item.id}"])
