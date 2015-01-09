@@ -85,6 +85,10 @@ end
     auto_save = "false"
     unless param[:category].blank?
       itemtypes = param[:category].split(',')
+      if itemtypes.include?("Beauty")
+        itemtypes << ["Color", "Manufacturer"]
+        itemtypes = itemtypes.flatten
+      end
     end
     search_type = Product.search_type(itemtypes)
     term = param[:term]
@@ -178,7 +182,8 @@ end
         new_selected_list << group.id.to_s
         list_scores.merge!("#{group.id}" => all_items_by_score["#{each_selected_item.id}"])
       else
-        if (["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type]) && param[:domain] != "wiseshe.com")
+        search_type_arr = search_type.is_a?(Array) ? search_type : [search_type].compact
+        if (["Reviews", "Comparisons", "Spec"].include?(param[:ac_sub_type]) && search_type.include?(Beauty))
           if (each_selected_item.is_a?(Product) || each_selected_item.is_a?(CarGroup))
             new_selected_list << each_selected_item.id.to_s
             list_scores.merge!("#{each_selected_item.id}" => all_items_by_score["#{each_selected_item.id}"])
