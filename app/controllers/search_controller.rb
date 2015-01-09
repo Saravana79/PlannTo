@@ -315,10 +315,15 @@ class SearchController < ApplicationController
 
 
     #select manufacturer for wiseshe.com
-    if params[:domain] == "wiseshe.com"
+    if params[:category] == "Beauty"
       manufacturers = results.select {|a| a[:type] == "Manufacturer"}
       sel_list = manufacturers.collect {|a| a[:score].to_f > 0.5 ? a[:id] : nil}
+
+      colors = results.select {|a| a[:type] == "Color"}
+      sel_clr_list = colors.collect {|a| a[:score].to_f > 0.5 ? a[:id] : nil}
+
       selected_list << sel_list.compact
+      selected_list << sel_clr_list.compact
       selected_list = selected_list.flatten.uniq
     end
 
@@ -344,7 +349,12 @@ class SearchController < ApplicationController
     p selected_list
     p list_scores
 
-    results << {:selected_list => selected_list, :list_scores => list_scores, :auto_save => auto_save}
+    beauty_process = "false"
+    if params[:category] == "Beauty"
+      beauty_process = "true"
+    end
+
+    results << {:selected_list => selected_list, :list_scores => list_scores, :auto_save => auto_save, :beauty_process => beauty_process}
 
     render :json => results
   end

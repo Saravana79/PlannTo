@@ -270,7 +270,7 @@
                         {
                             console.log(value.list_scores[0])
                             $.each(value.selected_list, function (inx, val) {
-                                if (inx == 0)
+                                if (inx == 0 || value.beauty_process == "true")
                                 {
                                     <% if current_user.id == 1 %>
                                     var sel_score_val = ' ('+ value.list_scores[0] + ' )'
