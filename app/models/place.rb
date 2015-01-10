@@ -68,7 +68,7 @@ class Place < Item
   end
 
   def latitude
-    lat = self.attribute_values.where(:attribute_id => 1).last
+    lat = self.attribute_values.where(:attribute_id => 415).last
     if lat.blank?
       nil
     else
@@ -77,7 +77,7 @@ class Place < Item
   end
 
   def longitude
-    lat = self.attribute_values.where(:attribute_id => 2).last
+    lat = self.attribute_values.where(:attribute_id => 416).last
     if lat.blank?
       nil
     else
