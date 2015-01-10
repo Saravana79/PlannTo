@@ -1,17 +1,14 @@
 class Place < Item
-  has_one :itemrelationship, :foreign_key => :relateditem_id
-  has_one :rel_city, :through => :itemrelationship
+  has_one :itemrelationship, :foreign_key => :item_id
+  has_one :related_city, :through => :itemrelationship
 
   # has_many :hotel_vendor_details, :foreign_key => :item_id
 
   searchable :auto_index => true, :auto_remove => true  do
     text :name , :boost => 2.0,  :as => :name_ac do |item|
       tempName = item.name.gsub("-","")
-      if (!item.alternative_name.nil?)
-        tempName = tempName + " " +item.alternative_name.to_s.gsub("-", "")
-      end
-      if (!item.hidden_alternative_name.nil?)
-        tempName =tempName + " " + item.hidden_alternative_name.to_s.gsub("-", "")
+      if (!item.related_city.blank?)
+        tempName = tempName + " " + item.related_city.to_s.gsub("-", "")
       end
       tempName
     end
@@ -59,6 +56,33 @@ class Place < Item
       end
     end
 
+    location(:location) do |place|
+
+      latitude = place.latitude
+      longitude = place.longitude
+      if !latitude.blank? && !longitude.blank?
+        Sunspot::Util::Coordinates.new(latitude, longitude)
+      end
+    end
+
+  end
+
+  def latitude
+    lat = self.attribute_values.where(:attribute_id => 1).last
+    if lat.blank?
+      nil
+    else
+      lat.value.to_d
+    end
+  end
+
+  def longitude
+    lat = self.attribute_values.where(:attribute_id => 2).last
+    if lat.blank?
+      nil
+    else
+      lat.value.to_d
+    end
   end
 
 end
