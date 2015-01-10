@@ -14,6 +14,7 @@ task :advertisement_process => :environment do
   Resque.enqueue(AdvertisementProcess, "calculate_ecpm", Time.zone.now.utc)
 end
 
+
 task :related_item_process => :environment do
   puts "Running Redis Update for RelatedItem, at #{Time.zone.now}"
   Resque.enqueue(RelatedItemUpdateProcess, Time.zone.now)
