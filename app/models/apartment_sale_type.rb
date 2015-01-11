@@ -1,0 +1,3 @@
+class ApartmentSaleType < Item
+
+end
