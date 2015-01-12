@@ -119,6 +119,14 @@ class FeedUrl < ActiveRecord::Base
 
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
+            if missing_url.include?("propertywala.com")
+              begin
+                page_category = FeedUrl.get_additional_details_for_housing(missing_url)
+              rescue Exception => e
+                p "error message"
+              end
+            end
+
             url_for_save = missing_url
             if url_for_save.include?("youtube.com")
               url_for_save = url_for_save.gsub("watch?v=", "video/")
@@ -208,6 +216,14 @@ class FeedUrl < ActiveRecord::Base
             status = 1 unless article_content.blank?
 
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
+
+            if missing_url.include?("propertywala.com")
+              begin
+                page_category = FeedUrl.get_additional_details_for_housing(missing_url)
+              rescue Exception => e
+                p "error message"
+              end
+            end
 
             url_for_save = missing_url
             if url_for_save.include?("youtube.com")
@@ -608,5 +624,86 @@ class FeedUrl < ActiveRecord::Base
     str1 = Regexp.escape(str1.to_s)
     str2 = str2.blank? ? "$" : Regexp.escape(str2.to_s)
     str[/.*#{str1}(.*?)#{str2}/m,1]
+  end
+
+  def self.get_additional_details_for_housing(url)
+    add_details = ""
+
+    type = url.gsub("http://", "").split("/")
+
+    if type.count == 5
+      apartment_type_str = type[2]
+      apartment_type_str = apartment_type_str.gsub("_", " ").gsub("-", " ").gsub("type", "")
+      ap_type = apartment_type_str
+
+      apartment_sale_type_str = type[3]
+      apartment_sale_type_str = apartment_sale_type_str.gsub("_", " ").gsub("-", " ").gsub("for", "")
+      ap_sale_type = apartment_sale_type_str
+
+      location = type[4]
+      location = location.gsub("_", " ").gsub("-", " ").gsub("location", "")
+
+      add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
+    elsif type.count == 4
+      apartment_type_str = type[2]
+      apartment_type_str = apartment_type_str.gsub("_", " ").gsub("-", " ").gsub("type", "")
+      ap_type = apartment_type_str
+
+      location = type[3]
+      location = location.gsub("_", " ").gsub("-", " ").gsub("location", "")
+
+      ap_sale_type = "sale"
+
+      add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
+    elsif type.count == 2
+
+      second_str = type[1]
+
+      uri = URI.parse(URI.encode(url.to_s.strip))
+      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      if second_str.match(/P\d+/).blank?
+        project_details = doc.at("#projectDetails ul").elements
+
+        ap_type = ""
+        location = ""
+        project_details.each do |detail|
+          content = detail.content
+          if content.include?("Properties")
+            ap_type = content.split(":")[1].strip
+          end
+        end
+        ap_sale_type = "sale"
+
+        location = doc.at("#projectDetails h4")
+        if !location.blank?
+          location = location.content.to_s
+          location = location.split(",").last(2)
+          location = location.join(",").strip
+        end
+        add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
+      else
+        lat = doc.xpath("//meta[@property='og:latitude']//@content").first.value
+        long = doc.xpath("//meta[@property='og:longitude']//@content").first.value
+
+        location = ""
+        if !lat.blank? && !long.blank?
+          g_value = Geocoder.search([lat, long])
+          address = g_value.first.address
+          location = address
+        end
+
+        # header_menu = doc.at("#breadcrumb").content.gsub("\r\n", "").strip.split("»")
+        header_menu = doc.at("#breadcrumb").content.gsub("\r\n", "").strip
+        split_header_menu = header_menu.split
+        header_menu_val = header_menu.split(split_header_menu[1])
+        ap_type = header_menu_val.last(2).first.strip
+
+        ap_sale_type = ap_type
+        add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
+      end
+    end
+
+    add_details
   end
 end

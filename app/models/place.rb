@@ -205,6 +205,7 @@ class Place < Item
     place_details.each do |place_detail|
       if !place_detail[10].blank? && !place_detail[11].blank?
         p place_detail
+        logger.info place_detail
         place_reference_id = place_detail[0]
         place_name =  place_detail[2]
 
