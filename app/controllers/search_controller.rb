@@ -377,7 +377,7 @@ class SearchController < ApplicationController
      p list_scores
 
      beauty_process = "false"
-     if params[:category].to_s.split(",").include?("Beauty")
+     if params[:category].to_s.split(",").include?("Beauty") || params[:category].to_s.split(",").include?("ApartmentType")
        beauty_process = "true"
      end
 
