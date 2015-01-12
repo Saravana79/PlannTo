@@ -197,7 +197,7 @@ class Place < Item
 
     #create places
     # place_details = CSV.read("#{base_path}/IN/IN.txt", { :col_sep => "\t" })
-    url = "#{base_path}/IN/IN.txt"
+    url = "#{base_path}/IN/IN_new.txt"
     place_details = Place.read_csv_from_aws(url)
 
     place_details = place_details.uniq {|detail| "#{detail[2]}-#{detail[10]}-#{detail[11]}"}
