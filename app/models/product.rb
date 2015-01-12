@@ -101,7 +101,7 @@ end
         apartment_type_name = "Land"
       elsif ap_type.to_s.downcase.match(/apartment/)
         apartment_type_name = "Apartment"
-      elsif ap_type.to_s.downcase.match(/individual house/)
+      elsif ap_type.to_s.downcase.match(/individual house/) || ap_type.to_s.downcase.match(/independent house/)
         apartment_type_name = "Individual House"
       end
       if !apartment_type_name.blank?
