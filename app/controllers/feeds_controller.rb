@@ -245,6 +245,7 @@ class FeedsController < ApplicationController
           @article.title = title_info
           @article.sub_type = @article.find_subtype(@article.title)
           sub_type, @title_for_search = @feed_url.check_and_update_sub_type(@article)
+          @title_for_search = @title_for_search.to_s.gsub("\r\n", "").gsub("\t", "")
           @article.sub_type = sub_type unless sub_type.blank?
           @article.description = @feed_url.summary
           @images = @feed_url.images.split(",")
@@ -285,6 +286,8 @@ class FeedsController < ApplicationController
 
       #@results = Product.get_search_items_by_relavance(params)
     end
+
+    @search_path = !@feed_url.blank? && @feed_url.category.to_s.split(",").include?("ApartmentType") ? '/search/search_items_by_relavance_housing' : '/search/search_items_by_relavance'
 
     respond_to do |format|
       format.html { render :layout => false }

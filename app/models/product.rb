@@ -81,6 +81,61 @@ end
     end
   end
 
+  def self.call_search_items_by_relavance_housing(param, itemtypes=nil)
+    final_results = []
+    selected_list = []
+    list_scores = []
+    term = param[:term].to_s
+
+    spl_term = term.split(";")
+
+    ap_type = spl_term[0].to_s.split("-")[1].to_s.strip
+
+    ap_sale_type = spl_term[1].to_s.split("-")[1].to_s.strip
+
+    location = spl_term[2].to_s.split("-")[1].to_s.strip
+
+    apartment_type_name = ""
+    if !ap_type.blank?
+      if apartment_type_str.to_s.downcase.match(/land/)
+        apartment_type_name = "Land"
+      elsif ap_type.to_s.downcase.match(/apartment/)
+        apartment_type_name = "Apartment"
+      elsif ap_type.to_s.downcase.match(/individual house/)
+        apartment_type_name = "Individual House"
+      end
+      if !apartment_type_name.blank?
+        apartment_type = ApartmentType.where(:name => apartment_type_name).last
+        if !apartment_type.blank?
+          final_results << {:id => apartment_type.id, :value => apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
+          selected_list << apartment_type.id
+        end
+      end
+    end
+
+    apartment_sale_type_name = ""
+    if !ap_sale_type.blank?
+      if ap_sale_type.to_s.downcase.match(/sale/)
+        apartment_sale_type_name = "For Sale"
+      elsif ap_sale_type.to_s.downcase.match(/rent/)
+        apartment_sale_type_name = "For Rent"
+      elsif ap_sale_type.to_s.downcase.match(/lease/)
+        apartment_sale_type_name = "For Lease"
+      end
+      if !apartment_sale_type_name.blank?
+        apartment_sale_type = ApartmentSaleType.where(:name => apartment_sale_type_name).last
+        if !apartment_sale_type.blank?
+          final_results << {:id => apartment_sale_type.id, :value => apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
+          selected_list << apartment_sale_type.id
+        end
+      end
+    end
+
+    auto_save = false
+
+    return final_results, selected_list, list_scores, auto_save
+  end
+
   def self.get_search_items_by_relavance(param, itemtypes=nil, for_compare="false")
     auto_save = "false"
     unless param[:category].blank?

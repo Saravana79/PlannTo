@@ -197,7 +197,7 @@ class Place < Item
 
     #create places
     # place_details = CSV.read("#{base_path}/IN/IN.txt", { :col_sep => "\t" })
-    url = "#{base_path}/IN/IN_new.txt"
+    url = "#{base_path}/IN/IN_new_1.txt"
     place_details = Place.read_csv_from_aws(url)
 
     place_details = place_details.uniq {|detail| "#{detail[2]}-#{detail[10]}-#{detail[11]}"}
@@ -205,7 +205,7 @@ class Place < Item
     place_details.each do |place_detail|
       if !place_detail[10].blank? && !place_detail[11].blank?
         p place_detail
-        logger.info place_detail
+        # logger.info place_detail
         place_reference_id = place_detail[0]
         place_name =  place_detail[2]
 
@@ -221,20 +221,28 @@ class Place < Item
           place_code_val = place_detail[7]
 
           # create or update latitude
-          s_c_lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(latitude.id, existing_item.id)
-          s_c_lat.update_attributes(:value => latitude_val)
+          if !latitude_val.blank?
+            s_c_lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(latitude.id, existing_item.id)
+            s_c_lat.update_attributes(:value => latitude_val)
+          end
 
           # create or update longitude
-          s_c_lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(longitude.id, existing_item.id)
-          s_c_lat.update_attributes(:value => longitude_val)
+          if !longitude_val.blank?
+            s_c_lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(longitude.id, existing_item.id)
+            s_c_lat.update_attributes(:value => longitude_val)
+          end
 
           # create or update place code series
-          s_c_place_series = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_series.id, existing_item.id)
-          s_c_place_series.update_attributes(:value => place_series_val)
+          if !place_series_val.blank?
+            s_c_place_series = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_series.id, existing_item.id)
+            s_c_place_series.update_attributes(:value => place_series_val)
+          end
 
           # create or update place code
-          s_c_place_code = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_code.id, existing_item.id)
-          s_c_place_code.update_attributes(:value => place_code_val)
+          if !place_code_val.blank?
+            s_c_place_code = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_code.id, existing_item.id)
+            s_c_place_code.update_attributes(:value => place_code_val)
+          end
 
           next
         end
@@ -257,24 +265,34 @@ class Place < Item
 
         if place.save(:validate => false)
           # create or update reference_id
-          ref = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(reference.id, place.id)
-          ref.update_attributes(:value => place_reference_id)
+          if !place_reference_id.blank?
+            ref = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(reference.id, place.id)
+            ref.update_attributes(:value => place_reference_id)
+          end
 
           # create or update latitude
-          lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(latitude.id, place.id)
-          lat.update_attributes(:value => latitude_val)
+          if !latitude_val.blank?
+            lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(latitude.id, place.id)
+            lat.update_attributes(:value => latitude_val)
+          end
 
           # create or update longitude
-          lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(longitude.id, place.id)
-          lat.update_attributes(:value => longitude_val)
+          if !longitude_val.blank?
+            lat = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(longitude.id, place.id)
+            lat.update_attributes(:value => longitude_val)
+          end
 
           # create or update place code series
-          s_c_place_series = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_series.id, place.id)
-          s_c_place_series.update_attributes(:value => place_series_val)
+          if !place_series_val.blank?
+            s_c_place_series = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_series.id, place.id)
+            s_c_place_series.update_attributes(:value => place_series_val)
+          end
 
           # create or update place code
-          s_c_place_code = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_code.id, place.id)
-          s_c_place_code.update_attributes(:value => place_code_val)
+          if !place_code_val.blank?
+            s_c_place_code = AttributeValue.find_or_initialize_by_attribute_id_and_item_id(place_code.id, place.id)
+            s_c_place_code.update_attributes(:value => place_code_val)
+          end
 
           #create relationship with city
           begin

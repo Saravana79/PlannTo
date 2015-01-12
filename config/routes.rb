@@ -138,6 +138,7 @@ namespace :admin do
       get :search_items
       get :autocomplete_source_items
       get :search_items_by_relavance
+      get :search_items_by_relavance_housing
     end
   end
   match ':search_type/related-items/:car_id' => 'related_items#index'

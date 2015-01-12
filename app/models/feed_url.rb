@@ -119,7 +119,7 @@ class FeedUrl < ActiveRecord::Base
 
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
-            if missing_url.include?("propertywala.com")
+            if category.to_s.split(",").include?("ApartmentType")
               begin
                 page_category = FeedUrl.get_additional_details_for_housing(missing_url)
               rescue Exception => e
@@ -217,7 +217,7 @@ class FeedUrl < ActiveRecord::Base
 
             title, description, images, page_category = Feed.get_feed_url_values(missing_url)
 
-            if missing_url.include?("propertywala.com")
+            if category.to_s.split(",").include?("ApartmentType")
               begin
                 page_category = FeedUrl.get_additional_details_for_housing(missing_url)
               rescue Exception => e
@@ -485,9 +485,16 @@ class FeedUrl < ActiveRecord::Base
 
   def get_term_from_feed_url(updated_host)
     changed_title = ""
+    category_list = self.category.to_s.split(",")
     if (updated_host == "wiseshe.com")
       title_info = self.additional_details
       if !title_info.blank?
+        changed_title = title_info.to_s.gsub(",", " ")
+      end
+    elsif category_list.include?("ApartmentType")
+      title_info = self.additional_details.to_s
+      if !title_info.blank?
+        p title_info
         changed_title = title_info.to_s.gsub(",", " ")
       end
     end
@@ -688,9 +695,23 @@ class FeedUrl < ActiveRecord::Base
 
         location = ""
         if !lat.blank? && !long.blank?
-          g_value = Geocoder.search([lat, long])
-          address = g_value.first.address
-          location = address
+          begin
+            g_value = Geocoder.search([lat, long])
+            address = g_value.first
+
+            component_values = g_value.first.address_components
+            result_str = ""
+
+            component_values.each do |c_value|
+              if c_value["types"].include?("sublocality_level_2")
+                result_str = result_str + c_value["long_name"].to_s
+              end
+            end
+            result_str = result_str + "," + address.city.to_s
+            location = result_str
+          rescue Exception => e
+            p "Error while getting address from lat and long"
+          end
         end
 
         # header_menu = doc.at("#breadcrumb").content.gsub("\r\n", "").strip.split("»")
