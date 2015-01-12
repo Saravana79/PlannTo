@@ -149,11 +149,11 @@ end
     end
 
     items = @items.results
-    results = Product.get_results_from_items(items.first(1))
-    final_results << results.first
+    results = Product.get_results_from_items(items)
+    final_results << results
 
-    final_results = final_results.compact
-
+    final_results = final_results.flatten
+    selected_list << results.first["id"] if !results.first.blank?
 
     auto_save = false
 
