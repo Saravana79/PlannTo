@@ -153,7 +153,7 @@ end
     final_results << results
 
     final_results = final_results.flatten
-    selected_list << results.first["id"] if !results.first.blank?
+    selected_list << results.first[:id] if !results.first.blank?
 
     auto_save = false
 
