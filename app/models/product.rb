@@ -131,6 +131,30 @@ end
       end
     end
 
+    location = location.gsub("-"," ").gsub("_", " ")
+
+    removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
+                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
+                        "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
+                        "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch"]
+    location = location.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+
+    @items = Sunspot.search([Place]) do
+      keywords location do
+        minimum_match 1
+      end
+      order_by :score,:desc
+      order_by :orderbyid , :asc
+      paginate(:page => 1, :per_page => 5)
+    end
+
+    items = @items.results
+    results = Product.get_results_from_items(items.first(1))
+    final_results << results.first
+
+    final_results = final_results.compact
+
+
     auto_save = false
 
     return final_results, selected_list, list_scores, auto_save
