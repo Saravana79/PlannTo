@@ -97,7 +97,7 @@ end
 
     apartment_type_name = ""
     if !ap_type.blank?
-      if apartment_type_str.to_s.downcase.match(/land/)
+      if ap_type.to_s.downcase.match(/land/)
         apartment_type_name = "Land"
       elsif ap_type.to_s.downcase.match(/apartment/)
         apartment_type_name = "Apartment"
