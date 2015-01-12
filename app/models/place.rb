@@ -238,8 +238,11 @@ class Place < Item
           next
         end
 
-        #place = Place.find_or_initialize_by_name(place_name) #TODO: Create duplicate if city is different
-        place = Place.new(:name => place_name)
+        place = Place.find_or_initialize_by_name(place_name) #TODO: Create duplicate if city is different
+
+        next if !place.new_record?
+
+        # place = Place.new(:name => place_name)
         place.itemtype_id = place_itemtype.id
         state_code_val = place_detail[10]
         city_code_val = place_detail[11]
