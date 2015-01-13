@@ -640,6 +640,10 @@ class FeedUrl < ActiveRecord::Base
       add_details = FeedUrl.get_additional_details_for_propertywala(url)
     elsif url.include?("gharabari.com")
       add_details = FeedUrl.get_additional_details_for_gharabari(url)
+    elsif url.include?("harshasagar.com")
+      add_details = FeedUrl.get_additional_details_for_harshasagar(url)
+    elsif url.include?("indianrealestateboard.com")
+      add_details = FeedUrl.get_additional_details_for_indianrealestateboard(url)
     end
     add_details
   end
@@ -760,6 +764,64 @@ class FeedUrl < ActiveRecord::Base
     rescue Exception => e
       p "Error Messages"
     end
+    add_details
+  end
+
+  def self.get_additional_details_for_harshasagar(url)
+    add_details = ""
+    begin
+      type = url.gsub("http://", "").split("/")
+      ap_sale_type = ""
+      ap_type = ""
+      location = ""
+
+      uri = URI.parse(URI.encode(url.to_s.strip))
+      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      property_header = doc.at(".title-container span.tags.tax")
+      elements = property_header.elements
+
+      set_ap_type = false
+      location = ""
+      elements.each do |element|
+        if element.name == "a"
+          if set_ap_type == false
+            ap_type = element.content
+            set_ap_type = true
+          else
+            location = location.to_s + " " + element.content.to_s
+          end
+        end
+      end
+
+      add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
+    rescue Exception => e
+      p "Error Messages"
+    end
+    add_details
+  end
+
+  def self.get_additional_details_for_indianrealestateboard(url)
+    add_details = ""
+    # begin
+      type = url.gsub("http://", "").split("/")
+      ap_sale_type = ""
+      ap_type = ""
+      location = ""
+
+      uri = URI.parse(URI.encode(url.to_s.strip))
+      doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+      header_menu = doc.at("#breadcrumb ul")
+      elements = header_menu.elements
+      element_values = elements[elements.count-2..elements.count-1]
+      ap_type = element_values.first.content
+      location = element_values.last.content
+
+      add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
+    # rescue Exception => e
+    #   p "Error Messages"
+    # end
     add_details
   end
 end

@@ -287,7 +287,7 @@ class SearchController < ApplicationController
       image_url = item.image_url(:small) rescue ""
       url = item.get_url() rescue ""
       f_name = item.get_name
-      
+
       if item.is_a?(Place)
         name = item.name.to_s
         city_name = "(#{item.related_city.name.to_s})" rescue ""
