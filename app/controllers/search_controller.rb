@@ -373,8 +373,6 @@ class SearchController < ApplicationController
        results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(params)
      end
      list_scores = list_scores.fill(0, list_scores.count...selected_list.count)
-     p selected_list
-     p list_scores
 
      beauty_process = "false"
      if params[:category].to_s.split(",").include?("Beauty") || params[:category].to_s.split(",").include?("ApartmentType")

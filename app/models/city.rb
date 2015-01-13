@@ -26,6 +26,10 @@ class City < Item
 
     string :status
 
+    date :launch_date do |item|
+      item.created_at
+    end
+
     time :created_at
 
     float :rating  do |item|

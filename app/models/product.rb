@@ -149,7 +149,17 @@ end
     end
 
     items = @items.results
-    results = Product.get_results_from_items(items)
+    results = []
+
+    items.each do |item|
+      url = item.get_url()
+      image_url = item.image_url(:small)
+      name = item.name.to_s
+      city_name = "(#{item.related_city.name.to_s})" rescue ""
+      f_name = "#{name} #{city_name}"
+      results << {:id => item.id.to_s, :value => f_name, :imgsrc =>image_url, :type => "Place", :url => url }
+    end
+
     final_results << results
 
     final_results = final_results.flatten
