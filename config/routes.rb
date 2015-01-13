@@ -279,6 +279,18 @@ resources :comments do
   resources :beauties do
     resources :shares
   end
+  resources :countries do
+    resources :shares
+  end
+  resources :states do
+    resources :shares
+  end
+  resources :cities do
+    resources :shares
+  end
+  resources :places do
+    resources :shares
+  end
   resources :mobiles do 
     resources :reports
   end  
@@ -310,6 +322,18 @@ resources :comments do
     resources :reports
   end
   resources :beauties do
+    resources :reports
+  end
+  resources :countries do
+    resources :reports
+  end
+  resources :states do
+    resources :reports
+  end
+  resources :cities do
+    resources :reports
+  end
+  resources :places do
     resources :reports
   end
   resources :bike_groups
