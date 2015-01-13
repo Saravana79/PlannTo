@@ -636,6 +636,16 @@ class FeedUrl < ActiveRecord::Base
   def self.get_additional_details_for_housing(url)
     add_details = ""
 
+    if url.include?("propertywala.com")
+      add_details = FeedUrl.get_additional_details_for_propertywala(url)
+    elsif url.include?("gharabari.com")
+      add_details = FeedUrl.get_additional_details_for_gharabari(url)
+    end
+    add_details
+  end
+
+  def self.get_additional_details_for_propertywala(url)
+    add_details = ""
     type = url.gsub("http://", "").split("/")
 
     if type.count >= 5
@@ -726,5 +736,25 @@ class FeedUrl < ActiveRecord::Base
     end
 
     add_details
+  end
+
+  def self.get_additional_details_for_gharabari(url)
+    add_details = ""
+    type = url.gsub("http://", "").split("/")
+
+    uri = URI.parse(URI.encode(url.to_s.strip))
+    doc = Nokogiri::HTML(open(uri, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+
+    property_header = doc.at("#MainContent_rep_SearchProperty_hyplink_PropertyHeader_0")
+    property_header_val = property_header.content
+
+    splt_val = property_header_val.split("for")
+    ap_type = splt_val[0]
+
+    splt_val_2 = splt_val[1].to_s.split("in")
+    ap_sale_type = splt_val_2[0]
+
+    location = splt_val_2[1]
+    add_details = "ap_type-#{ap_type};ap_sale_type-#{ap_sale_type};location-#{location}"
   end
 end
