@@ -286,8 +286,16 @@ class SearchController < ApplicationController
      if  item.is_a?(Item)
       image_url = item.image_url(:small) rescue ""
       url = item.get_url() rescue ""
+      f_name = item.get_name
+      
+      if item.is_a?(Place)
+        name = item.name.to_s
+        city_name = "(#{item.related_city.name.to_s})" rescue ""
+        f_name = "#{name} #{city_name}"
+      end
+
       # image_url = item.image_url
-      {:id => item.id, :value => item.get_name, :imgsrc =>image_url, :type => type, :url => url }
+      {:id => item.id, :value => f_name, :imgsrc =>image_url, :type => type, :url => url }
        
     else
       image_url = item.content_photos.first.photo.url(:thumb) rescue "/images/prodcut_reivew.png"
