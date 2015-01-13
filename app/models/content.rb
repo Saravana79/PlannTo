@@ -413,6 +413,8 @@ end
       #logger.info item.itemrelationships.collect(&:relateditem_id)
       #car_group_item_ids = item.itemrelationships.collect(&:relateditem_id)
       manufacturer_and_cargroup_item_ids << item.id
+      elsif item.type == "Place"
+       item_ids << item.related_city.id unless  item.related_city.nil?
       elsif item.type == "ItemtypeTag"
         itemtype_id << Itemtype.where("itemtype = ? ", item.name.singularize).first.try(:id)
       end
