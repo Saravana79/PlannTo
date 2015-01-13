@@ -18,6 +18,12 @@
     <label for="itemtype_id">ItemType :</label>
     <%= f.collection_select :itemtype_id, @item_types, :id, :itemtype, {:selected => @item.itemtype_id} %> <br />
 
+    <div class="city_div" style="display: none;">
+      <label for="group_id">City :</label>
+      <%= hidden_field_tag :city_id, "", :id => "city" %>
+      <%= text_field_tag :city_id_serach, "", :class => "auto_complete_field" %> <br />
+    </div>
+
     <label for="imageurl">Image Name<span style="color: red">*</span> :</label>
     <%= f.text_field :imageurl, :value => @item.imageurl %> <br />
 
@@ -87,6 +93,8 @@
                 var type = "car_group"
               else if ($required_id == "parent")
                   var type = "beauty"
+              else if ($required_id == "city")
+                  var type = "City"
               else
                 var type = $("#item_itemtype_id :selected").text()
 
@@ -126,6 +134,10 @@
           if (type == "Beauty")
           {
            $(".parent_div").show()
+          }
+          else if (type == "Place")
+          {
+              $(".city_div").show()
           }
           else
           {

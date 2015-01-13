@@ -151,6 +151,14 @@ class ItemsController < ApplicationController
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:parent_id], :relationtype => "Parent")
         end
 
+        if !params[:city_id].blank?
+          cities = params[:city_id].to_s.split(",")
+          cities.each do |city_id|
+            relation = Itemrelationship.find_or_initialize_by_item_id_and_relationtype(@item.id, "Place")
+            relation.update_attributes(:relateditem_id => city_id)
+          end
+        end
+
         if !image.blank?
           @image = @item.build_image
           @image.avatar = image
