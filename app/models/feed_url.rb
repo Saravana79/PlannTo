@@ -638,7 +638,7 @@ class FeedUrl < ActiveRecord::Base
 
     type = url.gsub("http://", "").split("/")
 
-    if type.count == 5
+    if type.count >= 5
       apartment_type_str = type[2]
       apartment_type_str = apartment_type_str.gsub("_", " ").gsub("-", " ").gsub("type", "")
       ap_type = apartment_type_str
