@@ -95,7 +95,14 @@ end
 
     location = spl_term[2].to_s.split("-")[1].to_s.strip
 
+    apartment_types = ApartmentType.where(:name => ["Land", "Apartment"])
+
+    apartment_types.each do |each_apartment_type|
+      final_results << {:id => each_apartment_type.id, :value => each_apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
+    end
+
     apartment_type_name = ""
+
     if !ap_type.blank?
       if ap_type.to_s.downcase.match(/land/)
         apartment_type_name = "Land"
@@ -104,13 +111,24 @@ end
       elsif ap_type.to_s.downcase.match(/individual house/) || ap_type.to_s.downcase.match(/house/)
         apartment_type_name = "Individual House"
       end
+
       if !apartment_type_name.blank?
-        apartment_type = ApartmentType.where(:name => apartment_type_name).last
-        if !apartment_type.blank?
-          final_results << {:id => apartment_type.id, :value => apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
-          selected_list << apartment_type.id
+        names = final_results.map {|result| result[:value]}
+
+        if !names.include?(apartment_type_name)
+          apartment_type = ApartmentType.where(:name => apartment_type_name).last
+          if !apartment_type.blank?
+            final_results << {:id => apartment_type.id, :value => apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
+            selected_list << apartment_type.id
+          end
         end
       end
+    end
+
+    apartment_sale_types = ApartmentSaleType.where(:name => "For Sale")
+
+    apartment_sale_types.each do |each_apartment_sale_type|
+      final_results << {:id => each_apartment_sale_type.id, :value => each_apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
     end
 
     apartment_sale_type_name = ""
@@ -122,11 +140,16 @@ end
       elsif ap_sale_type.to_s.downcase.match(/lease/)
         apartment_sale_type_name = "For Lease"
       end
+
       if !apartment_sale_type_name.blank?
-        apartment_sale_type = ApartmentSaleType.where(:name => apartment_sale_type_name).last
-        if !apartment_sale_type.blank?
-          final_results << {:id => apartment_sale_type.id, :value => apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
-          selected_list << apartment_sale_type.id
+        names = final_results.map {|result| result[:value]}
+
+        if !names.include?(apartment_sale_type_name)
+          apartment_sale_type = ApartmentSaleType.where(:name => apartment_sale_type_name).last
+          if !apartment_sale_type.blank?
+            final_results << {:id => apartment_sale_type.id, :value => apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
+            selected_list << apartment_sale_type.id
+          end
         end
       end
     end

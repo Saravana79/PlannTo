@@ -377,7 +377,7 @@ class SearchController < ApplicationController
      auto_save = "false" if selected_list.blank?
      p "auto save => #{auto_save}"
 
-     if auto_save == "false" && !params[:actual_title].blank?
+     if auto_save == "false" && !params[:actual_title].blank? && results.blank?
        results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(params)
      end
      list_scores = list_scores.fill(0, list_scores.count...selected_list.count)
