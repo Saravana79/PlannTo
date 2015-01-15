@@ -403,8 +403,8 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       node = doc.elements.first
       next_url = node.at_xpath("//nextUrl").content rescue ""
       item_count = 0
-      node.xpath("//products//productInfoList").each do |item|
-        begin
+      begin
+        node.xpath("//products//productInfoList").each do |item|
           item_count += 1
           total_item_count += 1
           id = item.at_xpath("productBaseInfo//productIdentifier//productId").content rescue ""
@@ -477,10 +477,9 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
               @item_detail.update_attributes(:Image => filename)
             end
           end
-
-        rescue Exception => e
-          p "-------------------- There was a problem while processing itemdetail item #{url} => #{e.message}-----------------"
         end
+      rescue Exception => e
+        p "-------------------- There was a problem while processing itemdetail item #{url} => #{e.message}-----------------"
       end
       p "*************************************************************************** End Process url => #{now_url} : page_count => #{page_count} : count #{item_count} : total item count => #{total_item_count} ***************************************************************************"
       sleep(1.seconds)
