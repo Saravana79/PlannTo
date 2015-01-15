@@ -76,7 +76,11 @@ class Admin::AdvertisementsController < ApplicationController
       @advertisement.user_id = current_user.id
     end
 
-    @advertisement.review_status = "pending"
+    if !current_user.blank? && current_user.is_admin?
+      @advertisement.review_status = "approved"
+    else
+      @advertisement.review_status = "pending"
+    end
 
     if @advertisement.save
       @advertisement.build_images(image_array, @advertisement.advertisement_type) if @advertisement.advertisement_type == "static" || @advertisement.advertisement_type == "flash"
