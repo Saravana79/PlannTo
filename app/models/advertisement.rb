@@ -647,9 +647,9 @@ class Advertisement < ActiveRecord::Base
         impression_details = []
         ad_impressions_list.each_with_index do |imp, index|
           appearance_count = ad_impressions_list_values[index].to_i
-          if (imp.t == 1 || imp.r == 1 || appearance_count > 0)
+          if (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank?)
             # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
-            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count)
+            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a)
           end
         end
 
@@ -712,10 +712,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         clicks_details = []
         clicks_import.each do |each_click|
           begin
-            if !each_click.t.blank? || !each_click.r.blank? || each_click.ic.to_i >0
+            if !each_click.t.blank? || !each_click.r.blank? || each_click.ic.to_i >0 || !each_click.a.blank?
               clicks_import = clicks_import - [each_click]
               each_click.save!
-              click_detail = ClickDetail.new(:click_id => each_click.id, :tagging => each_click.t, :retargeting => each_click.r, :pre_appearance_count => each_click.ic)
+              click_detail = ClickDetail.new(:click_id => each_click.id, :tagging => each_click.t, :retargeting => each_click.r, :pre_appearance_count => each_click.ic, :additional_details => each_click.a)
               clicks_details << click_detail
             end
           rescue Exception => e

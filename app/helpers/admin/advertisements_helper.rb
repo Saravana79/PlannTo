@@ -86,9 +86,9 @@ module Admin::AdvertisementsHelper
     param[:only_layout] ||= "false"
     ad_url = ""
     if @is_test == "true"
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout])
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a])
     else
-      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout])
+      ad_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a])
     end
     ad_url
   end
@@ -98,9 +98,9 @@ module Admin::AdvertisementsHelper
     param[:only_layout] ||= "false"
     ad_url = ""
     if @is_test == "true"
-      ad_url = configatron.hostname + history_details_path(:iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout])
+      ad_url = configatron.hostname + history_details_path(:iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a])
     else
-      ad_url = configatron.hostname + history_details_path(:iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout])
+      ad_url = configatron.hostname + history_details_path(:iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a])
     end
     ad_url
   end
