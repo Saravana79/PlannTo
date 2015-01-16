@@ -153,14 +153,12 @@ class Advertisement < ActiveRecord::Base
 
   def self.make_valid_url(click_url)
     click_url = click_url.to_s
-    if click_url.include?("www.")
-      exp = click_url.split("www.")
-      click_url = "http://www." + exp[1].to_s
-    elsif click_url.include?("http://")
-      exp = click_url.split("http://")
-      click_url = "http://www." + exp[1].to_s
+    if click_url.include?("http://") || click_url.include?("https://")
+      click_url = click_url
+    elsif !click_url.blank?
+      click_url = "http://" + click_url
     else
-      click_url = click_url.blank? ? "" : "http://www." + click_url
+      click_url = ""
     end
   end
 
