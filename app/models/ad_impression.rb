@@ -24,6 +24,7 @@ class AdImpression
   field :domain, type: String
   field :design_type, type: String
   field :viewability, type: Integer
+  field :additional_details, type: String
 
 
   # has_one :m_click
