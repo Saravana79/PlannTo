@@ -816,9 +816,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
-      item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
-      ad_item_id << item_ids
-      sleep(2)
+      begin
+        item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
+        ad_item_id << item_ids
+        sleep(2)
+      rescue Exception => e
+        p "Error while amazon api call"
+      end
     end
     ad_item_id = ad_item_id.flatten
 
