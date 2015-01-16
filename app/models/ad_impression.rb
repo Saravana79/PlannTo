@@ -56,6 +56,8 @@ class AdImpression
        "retargeting"
      when "Design Type"
        "design_type"
+     when "Additional Details"
+       "additional_details"
      else
        "item_id"
      end
