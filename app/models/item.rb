@@ -1806,45 +1806,32 @@ end
     @items = []
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
-      @items = Item.where(:id => item_id)
-    else
-      unless url.nil?
-        tempurl = url;
-        if url.include?("?")
-          tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
-        end
-        if url.include?("#")
-          tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
-        end
-        @articles = ArticleContent.where(url: tempurl)
-
-        if @articles.empty? || @articles.nil?
-          #for pagination in publisher website. removing /2/
-          tempstr = tempurl.split(//).last(3).join
-          matchobj = tempstr.match(/^\/\d{1}\/$/)
-          unless matchobj.nil?
-            tempurlpage = tempurl[0..(tempurl.length-3)]
-            @articles = ArticleContent.where(url: tempurlpage)
-          end
-        end
-
-        if !@articles.blank?
-          # @items = @articles[0].allitems.select{|a| a.is_a? Product}
-          @items = @articles[0].allitems
-
-          article_items_ids = @items.map(&:id)
-          new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
-
-          if !new_items.blank?
-            @items = new_items
-          end
-        else
-          nil
-        end
-      end
+      @items = Item.get_amazon_item_from_item_id(item_id)
     end
     return @items, tempurl
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
+  end
+
+  def self.get_amazon_item_from_item_id(item_id="")
+    if item_id.blank?
+      return ""
+    end
+
+    res = APICache.get(item_id.to_s.gsub(" ", ""), :timeout => 5.hours) do
+      Amazon::Ecs.item_lookup(item_id, {:response_group => 'Offers', :country => 'in'})
+    end
+
+    item = res.items.first
+    sale_price = ""
+
+    if !item.blank?
+      sale_price = item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+      if sale_price.blank?
+        sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+      end
+      sale_price = sale_price.gsub("INR ", "")
+    end
+    sale_price
   end
 
   def self.get_best_seller_beauty_items_from_amazon(page_type)
