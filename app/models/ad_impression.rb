@@ -24,6 +24,7 @@ class AdImpression
   field :domain, type: String
   field :design_type, type: String
   field :viewability, type: Integer
+  field :additional_details, type: String
 
 
   # has_one :m_click
@@ -56,6 +57,8 @@ class AdImpression
        "retargeting"
      when "Design Type"
        "design_type"
+     when "Additional Details"
+       "additional_details"
      else
        "item_id"
      end

@@ -153,14 +153,12 @@ class Advertisement < ActiveRecord::Base
 
   def self.make_valid_url(click_url)
     click_url = click_url.to_s
-    if click_url.include?("www.")
-      exp = click_url.split("www.")
-      click_url = "http://www." + exp[1].to_s
-    elsif click_url.include?("http://")
-      exp = click_url.split("http://")
-      click_url = "http://www." + exp[1].to_s
+    if click_url.include?("http://") || click_url.include?("https://")
+      click_url = click_url
+    elsif !click_url.blank?
+      click_url = "http://" + click_url
     else
-      click_url = click_url.blank? ? "" : "http://www." + click_url
+      click_url = ""
     end
   end
 
@@ -582,6 +580,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["size"] = url_params["size"]
               impression_mongo["design_type"] = url_params["page_type"]
               impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+              impression_mongo["additional_details"] = impression.a
               impression_import_mongo << impression_mongo
 
               if impression.advertisement_type == "advertisement"
@@ -816,9 +815,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
-      item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
-      ad_item_id << item_ids
-      sleep(2)
+      begin
+        item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
+        ad_item_id << item_ids
+        sleep(2)
+      rescue Exception => e
+        p "Error while amazon api call"
+      end
     end
     ad_item_id = ad_item_id.flatten
 
