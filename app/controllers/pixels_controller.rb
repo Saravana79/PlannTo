@@ -27,11 +27,12 @@ class PixelsController < ApplicationController
     # end
 
     @img_src = ""
+    render :nothing => true
 
-    respond_to do |format|
-      format.js
-      format.html { render :json => {} }
-    end
+    # respond_to do |format|
+    #   format.js
+    #   format.html { render :json => {} }
+    # end
   end
 
   def un_matching_cookie
