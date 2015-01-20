@@ -191,6 +191,12 @@ task :orders_update_from_amazon_daily => :environment do
   Resque.enqueue(OrderUpdateFromAmazon, "update_order_histories_from_reports", Time.zone.now.utc)
 end
 
+desc "Remove mongodb values 1 month old"
+task :remove_mongodb_values => :environment do
+  delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 1.month.ago}})
+  p "Removed #{delete_count} records"
+end
+
 desc "City State and Place process"
 task :city_state_and_place_process => :environment do
   Place.city_state_place_process()
