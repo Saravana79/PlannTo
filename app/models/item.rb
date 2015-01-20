@@ -1806,7 +1806,42 @@ end
     @items = []
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
-      @items = Item.get_amazon_item_from_item_id(item_id)
+      @items = Item.where(:id => item_id)
+    else
+      unless url.nil?
+        tempurl = url;
+        if url.include?("?")
+          tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+        end
+        if url.include?("#")
+          tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
+        end
+        @articles = ArticleContent.where(url: tempurl)
+
+        if @articles.empty? || @articles.nil?
+          #for pagination in publisher website. removing /2/
+          tempstr = tempurl.split(//).last(3).join
+          matchobj = tempstr.match(/^\/\d{1}\/$/)
+          unless matchobj.nil?
+            tempurlpage = tempurl[0..(tempurl.length-3)]
+            @articles = ArticleContent.where(url: tempurlpage)
+          end
+        end
+
+        if !@articles.blank?
+          # @items = @articles[0].allitems.select{|a| a.is_a? Product}
+          @items = @articles[0].allitems
+
+          article_items_ids = @items.map(&:id)
+          new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+
+          if !new_items.blank?
+            @items = new_items
+          end
+        else
+          nil
+        end
+      end
     end
     return @items, tempurl
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
