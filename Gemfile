@@ -99,7 +99,7 @@ gem 'mongoid'
 gem 'bson_ext'
 
 # gem for check memory usage
-# gem 'oink', '~> 0.10.1'
+gem 'oink', '~> 0.10.1'
 
 #amazon
 gem 'amazon-ecs', '~> 2.2.5'
