@@ -61,6 +61,8 @@ class AdImpression
        "$additional_details"
      when "Hourly"
        {"$hour" => "$impression_time" }
+     when "Advertisement"
+       "$advertisement_id"
      else
        "item_id"
      end
@@ -84,7 +86,8 @@ class AdImpression
                              "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
                              # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
                              # "orders_sum" => { "$sum" => "$m_order_histories.total_revenue" }
-                             "orders_sum" => { "$push" => "$m_order_histories.total_revenue" }
+                             "orders_sum" => { "$push" => "$m_order_histories.total_revenue" },
+                             "winning_price" => {"$sum" => "$winning_price"}
                            }
              }
     # items_by_count = AdImpression.collection.aggregate([project,match,group])
@@ -93,6 +96,26 @@ class AdImpression
     limit = {"$limit" => 100}
 
     items_by_count = AdImpression.collection.aggregate([match,group,sort,limit])
+
+    if option == "$advertisement_id"
+      ads = Advertisement.select("id,commission")
+      ad_detail_hash = {}
+
+      ads.each do |adv|
+        ad_detail_hash.merge!("#{adv.id}" => adv.commission.to_f.round(2))
+      end
+
+      items_by_count.each do |each_rep|
+        winning_price = each_rep["winning_price"].to_f
+        commission = ad_detail_hash[each_rep["_id"].to_s]
+
+        if !commission.blank?
+          p winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
+        end
+        each_rep["winning_price"] = winning_price
+      end
+    end
+    items_by_count
     # items_by_count = AdImpression.collection.aggregate([match,project,group,sort,limit])
   end
 end

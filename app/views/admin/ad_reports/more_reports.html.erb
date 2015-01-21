@@ -49,7 +49,7 @@ To Date
         Ad Type:
         <%= select_tag(:ad_type, options_for_select(@ad_types, params[:ad_type])) %>
         Report Type:
-        <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type", "Additional Details", "Hourly"].sort, params[:type])) %>
+        <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type", "Additional Details", "Hourly", "Advertisement"].sort, params[:type])) %>
         Advertisement ID:
         <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
       </div>
@@ -85,6 +85,7 @@ To Date
     <th class="header_compare"  > Total Impressions </th>
     <th class="header_compare"  > Total Clicks </th>
     <th class="header_compare"  > CTR </th>
+    <th class="header_compare"  > Cost </th>
     <th class="header_compare"  > Total Orders </th>
     <th class="header_compare"  > Total Revenue </th>
   </tr>
@@ -98,6 +99,7 @@ To Date
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
       <%= "#{get_ectr(each_hash["click_count"].to_i, each_hash["imp_count"].to_i)}" + " %" %>
     </td>
+    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["winning_price"] %> </td>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_count"] %> </td>
     <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_sum"].flatten.compact.sum %> </td>
   </tr>
