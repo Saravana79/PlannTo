@@ -49,7 +49,7 @@ To Date
         Ad Type:
         <%= select_tag(:ad_type, options_for_select(@ad_types, params[:ad_type])) %>
         Report Type:
-        <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type", "Additional Details"], params[:type])) %>
+        <%= select_tag(:type, options_for_select(['Item', 'Sid', 'Temp User ID', "Device", "Size", "Domain", "Pre Appearance Count", "Viewability", "Retargeting", "Design Type", "Additional Details", "Hourly"], params[:type])) %>
         Advertisement ID:
         <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
       </div>

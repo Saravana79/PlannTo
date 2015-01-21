@@ -40,25 +40,27 @@ class AdImpression
     end_date = end_date
     option = case param[:type]
      when "Sid"
-        "sid"
+        "$sid"
      when "Temp User ID"
-       "temp_user_id"
+       "$temp_user_id"
      when "Device"
-       "device"
+       "$device"
      when "Size"
-       "size"
+       "$size"
      when "Domain"
-       "domain"
+       "$domain"
      when "Pre Appearance Count"
-       "pre_appearance_count"
+       "$pre_appearance_count"
      when "Viewability"
-       "viewability"
+       "$viewability"
      when "Retargeting"
-       "retargeting"
+       "$retargeting"
      when "Design Type"
-       "design_type"
+       "$design_type"
      when "Additional Details"
-       "additional_details"
+       "$additional_details"
+     when "Hourly"
+       {"$hour" => "$impression_time" }
      else
        "item_id"
      end
@@ -77,7 +79,7 @@ class AdImpression
     end
     # group =  { "$group" => { "_id" => "$#{option}", "count" => { "$sum" => 1 } } }
 
-    group =  { "$group" => { "_id" => "$#{option}", "imp_count" => { "$sum" => 1 },
+    group =  { "$group" => { "_id" => option, "imp_count" => { "$sum" => 1 },
                              "click_count" => { "$sum" => { "$size" => { "$ifNull" => [ "$m_clicks", [] ] } } },
                              "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
                              # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
