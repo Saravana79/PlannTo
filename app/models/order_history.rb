@@ -40,7 +40,7 @@ class OrderHistory < ActiveRecord::Base
         order_history.order_status = "Validated"
         order_history.payment_status = "Validated"
 
-        impression = AddImpression.where(:id => impression_id).last
+        impression = AddImpression.where(:id => impression_id).first
         unless impression.blank?
           order_history.item_id = impression.item_id
           product = impression.item
@@ -125,7 +125,7 @@ class OrderHistory < ActiveRecord::Base
       order_history.payment_status = "Validated"
       order_history.item_name = csv_detail[headers.index("Title")]
 
-      impression = csv_detail[headers.index("AffExtParam2")].blank? ? nil : AddImpression.where(:id => csv_detail[headers.index("AffExtParam2")]).last
+      impression = csv_detail[headers.index("AffExtParam2")].blank? ? nil : AddImpression.where(:id => csv_detail[headers.index("AffExtParam2")]).first
 
       unless impression.blank?
         order_history.item_id = impression.item_id
@@ -141,9 +141,9 @@ class OrderHistory < ActiveRecord::Base
 
   def create_record_in_m_order_history
     imp_id = self.impression_id
-    imp = AdImpression.where(:_id => imp_id).last
+    imp = AdImpression.where(:_id => imp_id).first
     unless imp.blank?
-      m_order_history = imp.m_order_histories.where(:order_history_id => self.id).last
+      m_order_history = imp.m_order_histories.where(:order_history_id => self.id).first
       unless m_order_history.blank?
         m_order_history.total_revenue = self.total_revenue
         m_order_history.save

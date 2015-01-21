@@ -133,7 +133,7 @@ class CookieMatch < ActiveRecord::Base
             msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
             if !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
-              item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").last
+              item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").first
 
               unless item_detail.blank?
                 user_id = new_user_access_detail.plannto_user_id
@@ -150,7 +150,7 @@ class CookieMatch < ActiveRecord::Base
             else
               article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
-where url = '#{ref_url}' group by ac.id").last
+where url = '#{ref_url}' group by ac.id").first
 
               unless article_content.blank?
                 user_id = new_user_access_detail.plannto_user_id

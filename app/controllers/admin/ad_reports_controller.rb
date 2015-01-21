@@ -249,7 +249,7 @@ class Admin::AdReportsController < ApplicationController
   #   @start_date = params[:from_date] = params[:from_date].blank? ? Date.today : params[:from_date].to_date
   #   @end_date = params[:to_date] = params[:to_date].blank? ? Date.today : params[:to_date].to_date
   #   user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
-  #   advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
+  #   advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").first
   #   @reports ||= []
   #   if !advertisement.blank?
   #     export = request.format == "text/csv" ? true : false
@@ -298,6 +298,6 @@ class Admin::AdReportsController < ApplicationController
 
   def get_advertisement
     user_condition = current_user.is_admin? ? "1=1" : "user_id = #{current_user.id}"
-    @advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").last
+    @advertisement = Advertisement.find_by_sql("select * from advertisements where id = #{params[:id]} and #{user_condition}").first
   end
 end

@@ -107,10 +107,10 @@ class Item < ActiveRecord::Base
      item_attribute1= []
      attribute_value1 = []
      self.related_cars.each do |item|  
-       item_attribute =  item.item_attributes.select{|a| a.name == item_type}.last
+       item_attribute =  item.item_attributes.select{|a| a.name == item_type}.first
        item_attribute1 <<   item_attribute 
        if item_attribute
-         attribute_value =  item_attribute.attribute_values.where(:item_id => item.id).last
+         attribute_value =  item_attribute.attribute_values.where(:item_id => item.id).first
          attribute_value1 << attribute_value
        if !attribute_value.blank?  
            prices << attribute_value.value.to_i  if attribute_value.value.to_i > 0
@@ -152,7 +152,7 @@ class Item < ActiveRecord::Base
   
   
   def get_launch_date
-    date = Date.parse(self.attribute_values.select{|a| a.attribute_id == 8}.last.value) rescue ""
+    date = Date.parse(self.attribute_values.select{|a| a.attribute_id == 8}.first.value) rescue ""
     return date if date == ""
     day = date.day  rescue ''
     if day == '' 
@@ -168,8 +168,8 @@ class Item < ActiveRecord::Base
   
   def get_price_info(item_type,displaycomment = true,buy_items_size=0 )
     price = "0"; 
-    #item_attribute = item_attributes.select{|a| a.name == item_type}.last
-    price_attribute = self.attribute_values.select{|a| a.attribute_id == 1}.last
+    #item_attribute = item_attributes.select{|a| a.name == item_type}.first
+    price_attribute = self.attribute_values.select{|a| a.attribute_id == 1}.first
       if (status == "1" || status == "3")
         if price_attribute
           attribute_value = price_attribute.value
@@ -335,7 +335,7 @@ class Item < ActiveRecord::Base
   def self.get_cached(id)
     #begin
     #  Rails.cache.fetch('item:'+ id.to_s) do
-    #    where(:id => id).includes(:item_attributes).last
+    #    where(:id => id).includes(:item_attributes).first
     #  end
     #rescue
       where(:id => id).includes(:item_attributes)
@@ -1241,7 +1241,7 @@ end
   end
 
   def self.old_version_item_id(item_id=nil)
-    old_version_item = Item.where(:new_version_item_id => item_id).last
+    old_version_item = Item.where(:new_version_item_id => item_id).first
     old_version_item.blank? ? nil : old_version_item.id
   end
 
@@ -1300,7 +1300,7 @@ end
     where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
 
     if where_to_buy_items.blank?
-      new_version_item_by_current_item = item.new_version_item_id.blank? ? nil : Item.where(:id => item.new_version_item_id).last
+      new_version_item_by_current_item = item.new_version_item_id.blank? ? nil : Item.where(:id => item.new_version_item_id).first
 
       unless new_version_item_by_current_item.blank?
         new_where_to_buy_items, new_tempitems, new_item = Item.process_and_get_where_to_buy_items([new_version_item_by_current_item], publisher, status)
@@ -1311,14 +1311,14 @@ end
         current_item_ad_detail = item.item_ad_detail
 
         unless current_item_ad_detail.blank?
-          new_version_item_by_current_item_ad_detail = current_item_ad_detail.new_version_id.blank? ? nil : Item.where(:id => current_item_ad_detail.new_version_id).last
+          new_version_item_by_current_item_ad_detail = current_item_ad_detail.new_version_id.blank? ? nil : Item.where(:id => current_item_ad_detail.new_version_id).first
           unless new_version_item_by_current_item_ad_detail.blank?
             new_where_to_buy_items, new_tempitems, new_item = Item.process_and_get_where_to_buy_items([new_version_item_by_current_item_ad_detail], publisher, status)
             unless new_where_to_buy_items.blank?
               ret_items = [new_version_item_by_current_item_ad_detail]
             end
           else
-            old_version_item_by_current_item_ad_detail = current_item_ad_detail.old_version_id.blank? ? nil : Item.where(:id => current_item_ad_detail.old_version_id).last
+            old_version_item_by_current_item_ad_detail = current_item_ad_detail.old_version_id.blank? ? nil : Item.where(:id => current_item_ad_detail.old_version_id).first
             unless old_version_item_by_current_item_ad_detail.blank?
               new_where_to_buy_items, new_tempitems, new_item = Item.process_and_get_where_to_buy_items([old_version_item_by_current_item_ad_detail], publisher, status)
               unless new_where_to_buy_items.blank?
@@ -1759,7 +1759,7 @@ end
       keyword = item.name.to_s
       items, search_url = Item.get_items_from_amazon(keyword, page_type)
     else
-      manufacturer = items.select {|a| a.is_a?(Manufacturer)}.last
+      manufacturer = items.select {|a| a.is_a?(Manufacturer)}.first
       products = items.select {|a| a.is_a?(Product)}
 
       if item_id.blank?
@@ -1873,7 +1873,7 @@ end
     # $redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K"])
     excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
     items, search_url = Item.get_items_from_amazon("", page_type, excluded_items)
-    item = Item.where(:id => 27731).last
+    item = Item.where(:id => 27731).first
     extra_items = []
 
     return item, items, search_url, extra_items
@@ -1882,7 +1882,7 @@ end
   private
 
   def create_item_ad_detail
-    old_item = Item.where(:id => self.old_version_id).last
+    old_item = Item.where(:id => self.old_version_id).first
 
     unless old_item.blank?
       old_item.update_attributes!(:new_version_item_id => self.id)

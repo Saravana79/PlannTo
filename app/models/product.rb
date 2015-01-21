@@ -116,7 +116,7 @@ end
         names = final_results.map {|result| result[:value]}
 
         if !names.include?(apartment_type_name)
-          apartment_type = ApartmentType.where(:name => apartment_type_name).last
+          apartment_type = ApartmentType.where(:name => apartment_type_name).first
           if !apartment_type.blank?
             final_results << {:id => apartment_type.id, :value => apartment_type.name, :imgsrc =>"", :type => "ApartmentType", :url => "" }
             selected_list << apartment_type.id
@@ -145,7 +145,7 @@ end
         names = final_results.map {|result| result[:value]}
 
         if !names.include?(apartment_sale_type_name)
-          apartment_sale_type = ApartmentSaleType.where(:name => apartment_sale_type_name).last
+          apartment_sale_type = ApartmentSaleType.where(:name => apartment_sale_type_name).first
           if !apartment_sale_type.blank?
             final_results << {:id => apartment_sale_type.id, :value => apartment_sale_type.name, :imgsrc =>"", :type => "ApartmentSaleType", :url => "" }
             selected_list << apartment_sale_type.id
@@ -425,7 +425,7 @@ end
             if !new_selected_list.blank? && results_keys.include?(new_selected_list.first)
               auto_save = "true"
             else
-              item = items.select {|each_item| each_item.id == selected_key.to_i}.last
+              item = items.select {|each_item| each_item.id == selected_key.to_i}.first
               item_car_group = item.cargroup rescue nil
               if !item_car_group.blank?
                 (new_groups = []) << item_car_group

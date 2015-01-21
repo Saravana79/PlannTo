@@ -63,7 +63,7 @@ class BuyingPlan < ActiveRecord::Base
   
   def self.owned_item(itemtype,user)
    item_ids =  Follow.where('follower_id =? and follow_type =? and followable_type=?',user.id,"owner",itemtype).collect(&:followable_id)
-   @items = Item.where("id in(?)",item_ids.last)
+   @items = Item.where("id in(?)",item_ids.first)
   end
   
   def self.recommended_items(answers)

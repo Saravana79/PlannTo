@@ -21,7 +21,7 @@ class PixelsController < ApplicationController
     if params[:source] == "housing"
       ref_url = request.referer
 
-      # @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
+      # @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
       # if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
       #   @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
       # else

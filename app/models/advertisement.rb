@@ -657,7 +657,7 @@ class Advertisement < ActiveRecord::Base
 
         impression_details.each do |each_imp_det|
           begin
-            ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).last
+            ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).first
             ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
           rescue Exception => e
             p "Error while update pre appearance count"
@@ -685,7 +685,7 @@ class Advertisement < ActiveRecord::Base
           begin
             article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
-where url = '#{impression.hosted_site_url}' group by ac.id").last
+where url = '#{impression.hosted_site_url}' group by ac.id").first
 
             unless article_content.blank?
               user_id = impression.temp_user_id
@@ -727,7 +727,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
 
         clicks_import_mongo.each do |each_click_mongo|
-          ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).last
+          ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
           unless ad_impression_mon.blank?
             each_click_mongo.delete("ad_impression_id")
 
@@ -765,7 +765,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
     result = {}
 
     if type == "plannto"
-      cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
+      cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).first
       plannto_user_id = user_id
       user_id = cookie_match.google_user_id rescue "no_google_id_match"
     elsif type == "google"
@@ -811,7 +811,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
   end
 
   def self.update_include_exclude_products_from_amazon()
-   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 12}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 10}, "laptops" => {:node => 1375424031, :page_count => 5}, "lenses" => {:node => 1389197031, :page_count => 6}}
+   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 12}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 10}, "laptops" => {:node => 1375424031, :page_count => 5}, "lenses" => {:node => 1389197031, :page_count => 6}, "televisions" => {:node => 1389396031, :page_count => 5}}
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
@@ -835,7 +835,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
     ad_item_id = ad_item_id.join(",")
 
-    advertisement = Advertisement.where(:id => 25).last
+    advertisement = Advertisement.where(:id => 25).first
     if !advertisement.blank?
       content = advertisement.content
 
@@ -849,7 +849,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
       end
     end
 
-    exc_advertisement = Advertisement.where(:id => 26).last
+    exc_advertisement = Advertisement.where(:id => 26).first
 
     exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id) unless exc_advertisement.blank?
   end
@@ -875,7 +875,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
 
     ad_item_id = ad_item_id.join(",")
 
-    advertisement = Advertisement.where(:id => 10).last
+    advertisement = Advertisement.where(:id => 10).first
     if !advertisement.blank?
       content = advertisement.content
 
@@ -889,7 +889,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
       end
     end
 
-    exc_advertisement = Advertisement.where(:id => 1).last
+    exc_advertisement = Advertisement.where(:id => 1).first
 
     exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id) unless exc_advertisement.blank?
   end
@@ -909,7 +909,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         rescue Exception => e
           url = url.split("%3F")[0]
         end
-        item_detail = Itemdetail.where(:url => url).last
+        item_detail = Itemdetail.where(:url => url).first
         if !item_detail.blank?
           begin
             #price update
@@ -962,7 +962,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").last
         url = "http://www.flipkart.com#{url}"
       end
       p url
-      item_detail = Itemdetail.where(:url => url).last
+      item_detail = Itemdetail.where(:url => url).first
       if !item_detail.blank?
         item_id = item_detail.itemid
         ad_item_id << item_id unless item_id.blank?

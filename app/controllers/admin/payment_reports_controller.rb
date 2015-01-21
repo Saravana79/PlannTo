@@ -12,7 +12,7 @@ class Admin::PaymentReportsController < ApplicationController
       params[:publisher_id] ||= Publisher.first.id
       @publisher = Publisher.find_by_id(params[:publisher_id])
     else
-      user_relationship = UserRelationship.where(:user_id => current_user.id,:relationship_type => "Publisher").last
+      user_relationship = UserRelationship.where(:user_id => current_user.id,:relationship_type => "Publisher").first
       @publisher = Publisher.find_by_id(user_relationship.relationship_id) unless user_relationship.blank?
     end
 

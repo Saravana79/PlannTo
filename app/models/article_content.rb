@@ -332,14 +332,14 @@ class ArticleContent < Content
     url = feed_url.blank? ? self.url : feed_url.url
     old_host = Addressable::URI.parse(url).host.downcase
     host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
-    source_category = SourceCategory.where(:source => host).last
+    source_category = SourceCategory.where(:source => host).first
     if !source_category.blank? && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
       processed_url = url.gsub(old_host, "%#{processed_host}%")
 
-      # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0).last
-      new_feed_url = FeedUrl.where("url like ? and status = 0", processed_url).last
+      # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0).first
+      new_feed_url = FeedUrl.where("url like ? and status = 0", processed_url).first
 
       unless new_feed_url.blank?
         param = {}
@@ -365,7 +365,7 @@ class ArticleContent < Content
     article_content = nil
     old_host = Addressable::URI.parse(url).host.downcase
     host = old_host.start_with?('www.') ? old_host[4..-1] : old_host
-    source_category = SourceCategory.where(:source => host).last
+    source_category = SourceCategory.where(:source => host).first
     if !source_category.blank?
       if source_category.site_status == false && !feed_url.blank?
         feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
@@ -380,7 +380,7 @@ class ArticleContent < Content
           hash_details.each do |key, val|
             if url.include?(key)
               processed_url = url.gsub(key, "%")
-              article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
+              article_content = @article_content = ArticleContent.where("url like ?", processed_url).first
               unless article_content.blank?
                 article_content.sub_type = val
                 break
@@ -393,7 +393,7 @@ class ArticleContent < Content
           processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host
           processed_url = url.gsub(old_host, "%#{processed_host}%")
 
-          article_content = @article_content = ArticleContent.where("url like ?", processed_url).last
+          article_content = @article_content = ArticleContent.where("url like ?", processed_url).first
           # new_feed_url = FeedUrl.where(:url => processed_url, :status => 0)
           feed_url = ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
         end
@@ -408,7 +408,7 @@ class ArticleContent < Content
           patten_with_val = pattern.gsub("<page>", exp_val)
           patten_for_query = pattern.gsub("<page>", "%")
           url_for_query = url.gsub(patten_with_val, patten_for_query)
-          article_content = @article_content = ArticleContent.where("url like ?", url_for_query).last
+          article_content = @article_content = ArticleContent.where("url like ?", url_for_query).first
           feed_url = ArticleContent.create_article_params_and_put_in_resque(article_content, url, user, remote_ip, feed_url) unless article_content.blank?
         end
       end

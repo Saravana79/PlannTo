@@ -79,7 +79,7 @@ class ItemsController < ApplicationController
   def show
     @user = User.last
     @user.follow_type = 'Buyer'
-    @item = Item.where(:slug => params[:id]).includes(:item_attributes).last
+    @item = Item.where(:slug => params[:id]).includes(:item_attributes).first
     unless @item.blank?
       @review = Review.new
       @review.pros.build
@@ -191,17 +191,17 @@ class ItemsController < ApplicationController
         @item.type = item_type.itemtype
         @item.save!
         if (!params[:manufacturer_id].blank?)
-          manufacturer = Itemrelationship.where(:item_id => @item.id, :relationtype => "Manufacturer").last
+          manufacturer = Itemrelationship.where(:item_id => @item.id, :relationtype => "Manufacturer").first
           manufacturer.destroy unless manufacturer.blank?
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:manufacturer_id], :relationtype => "Manufacturer")
         end
         if (!params[:item][:group_id].blank?)
-          group = Itemrelationship.where(:item_id => @item.id, :relationtype => "CarGroup").last
+          group = Itemrelationship.where(:item_id => @item.id, :relationtype => "CarGroup").first
           group.destroy unless group.blank?
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:item][:group_id], :relationtype => "CarGroup")
         end
         if (!params[:parent_id].blank?)
-          group = Itemrelationship.where(:item_id => @item.id, :relationtype => "Parent").last
+          group = Itemrelationship.where(:item_id => @item.id, :relationtype => "Parent").first
           group.destroy unless group.blank?
           Itemrelationship.create(:item_id => @item.id, :relateditem_id => params[:parent_id], :relationtype => "Parent")
         end

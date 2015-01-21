@@ -100,7 +100,7 @@ class AdvertisementsController < ApplicationController
     params[:companion] ||= "false"
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
     params[:size] ||= "300x60"
-    @advertisement = Advertisement.where(:id => params[:ads_id]).last
+    @advertisement = Advertisement.where(:id => params[:ads_id]).first
     @ad_video_detail = @advertisement.ad_video_detail
 
     @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
@@ -146,7 +146,7 @@ class AdvertisementsController < ApplicationController
     @ref_url = url
     @ad = Advertisement.get_ad_by_id(params[:ads_id]).first
 
-    @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
+    @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
     vendor_ids, ad_id, @ad_template_type = assign_ad_and_vendor_id(@ad, @vendor_ids)
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     winning_price_enc = params[:wp]
@@ -350,7 +350,7 @@ class AdvertisementsController < ApplicationController
         valid_html = cache.match(/plannto-advertisement main_div/).blank? ? false : true
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
-          @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).last
+          @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
           impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
           item_id = params[:item_ids]
           matched_val = cache.match(/present_item_id=.*#/)

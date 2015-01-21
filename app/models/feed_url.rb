@@ -71,7 +71,7 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["science & technology"])
-    feed = Feed.where("process_type = 'missingurl'").last
+    feed = Feed.where("process_type = 'missingurl'").first
     admin_user = User.where(:is_admin => true).first
 
     counting = 1
@@ -174,7 +174,7 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.process_missing_url(missingurl_keys, count, valid_categories=["gaming", "science & technology"], process_category="recent")
-    feed = Feed.where("process_type = 'missingurl'").last
+    feed = Feed.where("process_type = 'missingurl'").first
     admin_user = User.where(:is_admin => true).first
 
     counting = 1
@@ -418,7 +418,7 @@ class FeedUrl < ActiveRecord::Base
     url = self.url
     host = Addressable::URI.parse(url).host.downcase
     host = host.start_with?('www.') ? host[4..-1] : host
-    source_category = SourceCategory.where(:source => host).last
+    source_category = SourceCategory.where(:source => host).first
     if !source_category.blank? && !source_category.prefix.blank?
       prefix = source_category.prefix
       processed_host = host.include?(prefix) ? host.gsub(prefix, '') : prefix+host

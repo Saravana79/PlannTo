@@ -163,7 +163,7 @@ class Content < ActiveRecord::Base
         end
      end
      unless photos_ids.blank?
-       id = photos_ids.last
+       id = photos_ids.first
        photo = ContentPhoto.find(id)
        photo.update_attribute('content_id',article.id)
        thumb = photo.photo.url(:thumb)
