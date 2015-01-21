@@ -23,10 +23,16 @@ class AggregatedDetailProcess
     end
 
     # Update for advertisement_id
-    AggregatedDetail.update_aggregated_detail(now_time, 'advertisement', 1000)
+    # AggregatedDetail.update_aggregated_detail(now_time, 'advertisement', 1000)
+
+    #mongo report
+    AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'advertisement', 1000)
 
     if (before_hour.day != now_time.day)
-      AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement', 1000)
+      #AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement', 1000)
+
+      #mongo report
+      AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'advertisement', 1000)
     end
 
     #rescue => e

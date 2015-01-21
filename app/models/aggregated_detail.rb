@@ -51,6 +51,33 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
+  def self.update_aggregated_details_from_mongo_reports(time,entity_type="advertisement", batch_size=1000)
+    time = time.localtime
+    param = {}
+    param[:type] = "Advertisement"
+    param[:ad_type] = "advertisement"
+    param[:ad_id] = "All"
+    param[:report_sort_by] = "imp_count"
+    start_date = Date.today.beginning_of_day
+    end_date = Date.today.end_of_day
+
+    results = AdImpression.get_results_from_mongo(param, start_date, end_date)
+
+    results.each do |each_result|
+      begin
+        entity_id = each_result["_id"]
+        if entity_id.blank?
+          next
+        end
+        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => Date.today, :entity_type => entity_type)
+        aggregated_detail.update_attributes(:impressions_count => each_result["imp_count"], :clicks_count => each_result["click_count"], :winning_price => each_result["winning_price"])
+      rescue Exception => e
+        p "Error While updating aggregated detail"
+      end
+    end
+
+  end
+
   def self.update_aggregated_detail_from_mongo(time, entity_type="advertisement", batch_size=1000)
     time = time.localtime
     entity_field = entity_type + "_id"
