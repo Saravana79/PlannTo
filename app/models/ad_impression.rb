@@ -107,12 +107,13 @@ class AdImpression
 
       items_by_count.each do |each_rep|
         winning_price = each_rep["winning_price"].to_f
+        winning_price = winning_price/1000000
         commission = ad_detail_hash[each_rep["_id"].to_s]
 
-        if !commission.blank?
-          p winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
-        end
-        each_rep["winning_price"] = winning_price
+        commission = commission.blank? ? 1 : commission.to_f
+        winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
+
+        each_rep["winning_price"] = winning_price.to_f.round(2)
       end
     end
     items_by_count
