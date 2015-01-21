@@ -493,6 +493,7 @@ resources :comments do
     collection do
       get "pixel_matching"
       get "un_matching_cookie"
+      get 'vendor_page'
     end
   end
 
