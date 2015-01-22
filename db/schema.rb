@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141223064921) do
+ActiveRecord::Schema.define(:version => 20150122131448) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -103,14 +103,14 @@ ActiveRecord::Schema.define(:version => 20141223064921) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.integer  "content_id"
-    t.integer  "status",                                            :default => 1
+    t.integer  "status",                                                :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "click_url"
     t.integer  "user_id"
     t.integer  "vendor_id"
-    t.decimal  "ecpm",               :precision => 10, :scale => 0
-    t.decimal  "ectr",               :precision => 10, :scale => 0
+    t.decimal  "ecpm",                   :precision => 10, :scale => 0
+    t.decimal  "ectr",                   :precision => 10, :scale => 0
     t.string   "template_type"
     t.string   "offer"
     t.string   "offer_url"
@@ -125,6 +125,8 @@ ActiveRecord::Schema.define(:version => 20141223064921) do
     t.string   "device"
     t.string   "affiliate_id"
     t.string   "track_id"
+    t.text     "man_exclusive_item_ids"
+    t.text     "man_included_item_ids"
   end
 
   create_table "aggregated_details", :force => true do |t|

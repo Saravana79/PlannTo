@@ -18,7 +18,7 @@ class OrderHistory < ActiveRecord::Base
   end
 
   def self.update_orders_from_amazon(date)
-    users = [["pla04", "cyn04"]]
+    users = [["pla04", "cyn04"], ["interactive", "vagrenpgvir", "interactiv0e4"]]
     users.each do |user|
       filename = OrderHistory.generate_filename(user, date)
       url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
@@ -56,7 +56,9 @@ class OrderHistory < ActiveRecord::Base
 
   def self.generate_filename(user, date)
     date_int = date.strftime("%Y%m%d")
-    filename = "#{user[0]}-21-earnings-report-#{date_int}.xml.gz"
+    prefix_val = user[0]
+    prefix_val = user[2].to_s if !user[2].to_s.blank?
+    filename = "#{prefix_val}-21-earnings-report-#{date_int}.xml.gz"
   end
 
   #url => "https://assoc-datafeeds-eu.amazon.com/datafeed/listReports"
