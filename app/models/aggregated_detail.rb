@@ -51,10 +51,10 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
-  def self.update_aggregated_details_from_mongo_reports(time,entity_type="advertisement", batch_size=1000)
+  def self.update_aggregated_details_from_mongo_reports(time,entity_type="advertisement", type="Advertisement")
     time = time.localtime
     param = {}
-    param[:type] = "Advertisement"
+    param[:type] = type
     param[:ad_type] = "advertisement"
     param[:ad_id] = "All"
     param[:report_sort_by] = "imp_count"

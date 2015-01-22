@@ -63,6 +63,8 @@ class AdImpression
        {"$hour" => "$impression_time" }
      when "Advertisement"
        "$advertisement_id"
+     when "Publisher"
+       "$publisher_id"
      else
        "item_id"
      end
@@ -112,6 +114,13 @@ class AdImpression
 
         commission = commission.blank? ? 1 : commission.to_f
         winning_price = winning_price.to_f + (winning_price.to_f * (commission/100))
+
+        each_rep["winning_price"] = winning_price.to_f.round(2)
+      end
+    elsif option == "#publisher_id"
+      items_by_count.each do |each_rep|
+        winning_price = each_rep["winning_price"].to_f
+        winning_price = winning_price/1000000
 
         each_rep["winning_price"] = winning_price.to_f.round(2)
       end

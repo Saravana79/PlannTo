@@ -114,7 +114,7 @@ class FeedsController < ApplicationController
       condition = condition == intial_condition ? "status = 0" : condition
     end
 
-    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50)
+    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50, :total_entries => 5000)
     @new_categories = ["Others"]
     @categories = ArticleCategory.get_by_itemtype(0).map {|x| x[0]}
     @new_categories = (@new_categories << @categories).flatten
