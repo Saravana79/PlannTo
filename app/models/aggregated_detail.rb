@@ -58,8 +58,8 @@ class AggregatedDetail < ActiveRecord::Base
     param[:ad_type] = "advertisement"
     param[:ad_id] = "All"
     param[:report_sort_by] = "imp_count"
-    start_date = Date.today.beginning_of_day
-    end_date = Date.today.end_of_day
+    start_date = time.beginning_of_day
+    end_date = time.end_of_day
 
     results = AdImpression.get_results_from_mongo(param, start_date, end_date)
 
@@ -69,7 +69,7 @@ class AggregatedDetail < ActiveRecord::Base
         if entity_id.blank?
           next
         end
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => Date.today, :entity_type => entity_type)
+        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
         aggregated_detail.update_attributes(:impressions_count => each_result["imp_count"], :clicks_count => each_result["click_count"], :winning_price => each_result["winning_price"])
       rescue Exception => e
         p "Error While updating aggregated detail"
