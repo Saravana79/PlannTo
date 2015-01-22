@@ -58,8 +58,8 @@ class AggregatedDetail < ActiveRecord::Base
     param[:ad_type] = "advertisement"
     param[:ad_id] = "All"
     param[:report_sort_by] = "imp_count"
-    start_date = time.beginning_of_day
-    end_date = time.end_of_day
+    start_date = time.to_date.beginning_of_day
+    end_date = time.to_date.end_of_day
 
     results = AdImpression.get_results_from_mongo(param, start_date, end_date)
 
