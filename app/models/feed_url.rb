@@ -69,7 +69,7 @@ class FeedUrl < ActiveRecord::Base
   def self.missing_url_process_top_list
     if $redis.get("process_missing_url_top_list_is_running").to_i == 0
       $redis.set("process_missing_url_top_list_is_running", 1)
-      $redis.expire("process_missing_url_top_list_is_running", 30.minutes)
+      $redis.expire("process_missing_url_top_list_is_running", 100.minutes)
       get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
       $redis.set("process_missing_url_top_list_is_running", 0)
     end

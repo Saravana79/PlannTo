@@ -806,8 +806,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   end
 
   def self.update_include_exclude_products_from_vendors()
-    update_include_exclude_products_from_amazon()
-    update_include_exclude_products_from_flipkart()
+    if $redis.get("process_popular_vendor_products_update_is_running").to_i == 0
+      $redis.set("process_popular_vendor_products_update_is_running", 1)
+      $redis.expire("process_popular_vendor_products_update_is_running", 30.minutes)
+      update_include_exclude_products_from_amazon()
+      update_include_exclude_products_from_flipkart()
+      $redis.set("process_popular_vendor_products_update_is_running", 0)
+    end
   end
 
   def self.update_include_exclude_products_from_amazon()
