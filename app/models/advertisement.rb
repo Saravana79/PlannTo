@@ -811,7 +811,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   end
 
   def self.update_include_exclude_products_from_amazon()
-   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 12}, "tablets" => {:node => 1375458031, :page_count => 3}, "cameras" => {:node => 1389175031, :page_count => 10}, "laptops" => {:node => 1375424031, :page_count => 5}, "lenses" => {:node => 1389197031, :page_count => 6}, "televisions" => {:node => 1389396031, :page_count => 5}}
+   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 16}, "tablets" => {:node => 1375458031, :page_count => 10}, "cameras" => {:node => 1389175031, :page_count => 12}, "laptops" => {:node => 1375424031, :page_count => 12}, "lenses" => {:node => 1389197031, :page_count => 6}, "televisions" => {:node => 1389396031, :page_count => 8}}
 
     ad_item_id = []
     loop_hash.values.each do |each_val|
