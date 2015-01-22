@@ -117,7 +117,7 @@ class AdImpression
 
         each_rep["winning_price"] = winning_price.to_f.round(2)
       end
-    elsif option == "#publisher_id"
+    elsif option == "$publisher_id"
       items_by_count.each do |each_rep|
         winning_price = each_rep["winning_price"].to_f
         winning_price = winning_price/1000000
