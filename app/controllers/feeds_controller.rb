@@ -61,7 +61,7 @@ class FeedsController < ApplicationController
       condition = condition == intial_condition ? "created_at < '#{params[:page_loaded_time]}' and status = 0" : condition
     end
 
-    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25)
+    @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
     @categories = ["Mobile", "Tablet", "Camera", "Games", "Laptop", "Car", "Bike", "Cycle"]
 
     #Assign sources to memcache
