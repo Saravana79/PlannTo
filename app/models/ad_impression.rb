@@ -66,7 +66,7 @@ class AdImpression
      when "Publisher"
        "$publisher_id"
      else
-       "item_id"
+       "$item_id"
      end
     #project = {"$project" =>  { "#{option}" => 1}}
 
