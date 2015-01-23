@@ -18,17 +18,12 @@ class PixelsController < ApplicationController
 
   def vendor_page
     params[:source] ||= "google"
-    if params[:source] == "housing"
-      ref_url = request.referer
+    ref_url = request.referer
 
-      # @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
-      # if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
-      #   @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
-      # else
-      #   google_ula_vendor = params[:source] == "mysmartprice" ? "&google_ula=8365600" : "&google_ula=8423560"
-      #   @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}"
-      # end
-
+    @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
+    if !@cookie_match.blank? && !@cookie_match.google_user_id.blank?
+      @img_src = "https://www.plannto.com/pixels?google_gid=#{@cookie_match.google_user_id}&source=#{params[:source]}&ref_url=#{ref_url}"
+    else
       google_ula_vendor = case params[:source]
                             when "mysmartprice"
                               "&google_ula=8365600"
@@ -39,13 +34,11 @@ class PixelsController < ApplicationController
                           end
 
       @img_src = "https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&source=#{params[:source]}&ref_url=#{ref_url}&google_ula=8326120#{google_ula_vendor}"
+    end
 
-      respond_to do |format|
-        format.js
-        format.html { render :json => {} }
-      end
-    else
-      render :nothing => true
+    respond_to do |format|
+      format.js
+      format.html { render :json => {} }
     end
   end
 
