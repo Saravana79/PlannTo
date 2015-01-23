@@ -103,6 +103,30 @@
       </div>
     </div>
 
+      <div class="fields-div" id="man_included_products">
+
+        <div class="title_header float_lft">Manual Included Product :</div>
+        <div class="taggingdiv">
+          <ul id="man_included_product_list" class="tagging"></ul>
+          <div class="float_lft " id="displayTagBox">
+            <input placeholder="Start Typing for suggestions.." type="text" value="" id="man_included_product"/>
+            <%= f.hidden_field 'man_included_item_ids', :id => "man_included_item_ids" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="fields-div" id="man_excluded_products">
+
+        <div class="title_header float_lft">Manual Excluded Product :</div>
+        <div class="taggingdiv">
+          <ul id="man_excluded_product_list" class="tagging"></ul>
+          <div class="float_lft " id="displayTagBox">
+            <input placeholder="Start Typing for suggestions.." type="text" value="" id="man_excluded_product"/>
+            <%= f.hidden_field 'man_exclusive_item_ids', :id => "man_exclusive_item_ids" %>
+          </div>
+        </div>
+      </div>
+
     <div class="fields-div" id="reviewProducts">
 
       <div class="title_header float_lft">Excluded Product :</div>
@@ -354,6 +378,24 @@
         <%end%>
 
         $.textTagger("exclusive_product", "exclusive_product_list", new_settings);
+
+        var new_settings_man_include = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: true,
+            hidden_field: "man_included_item_ids"
+        };
+
+        $.textTagger("man_included_product", "man_included_product_list", new_settings_man_include);
+
+        var new_settings_man_execlude = {
+            close: true, addButton: false,
+            url: "/search/autocomplete_items",
+            editMode: false, multiple: true,
+            hidden_field: "man_exclusive_item_ids"
+        };
+
+        $.textTagger("man_excluded_product", "man_excluded_product_list", new_settings_man_execlude);
 
         $("#add_another_file").live("click", function () {
             a = $(".file-div").clone();
