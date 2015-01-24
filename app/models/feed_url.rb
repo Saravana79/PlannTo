@@ -75,7 +75,7 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["science & technology"])
+  def self.process_missing_url_top_list(missingurl_keys, count=0, valid_categories=["science & technology","Autos & Vehicles","Science & Tech"])
     feed = Feed.where("process_type = 'missingurl'").first
     admin_user = User.where(:is_admin => true).first
 
