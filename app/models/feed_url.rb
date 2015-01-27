@@ -829,4 +829,14 @@ class FeedUrl < ActiveRecord::Base
     # end
     add_details
   end
+
+  def self.get_updated_url(url)
+    if url.include?("youtube.com")
+      video_id = VideoContent.video_id(url)
+      url = url.gsub(/watch.*/, "video/#{video_id}")
+    else
+      url
+    end
+    url
+  end
 end

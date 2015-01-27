@@ -271,16 +271,18 @@ class ArticleContentsController < ApplicationController
     if current_user
       #@article,@images = ArticleContent.CreateContent("http://www.plannto.com/contents/12959",current_user)
       #params[:url] = "http://support.google.com/webmasters/bin/answer.py?hl=en&answer=1466"
-      @previous_content = ArticleContent.where(:url => params[:url]).first
+      url = params[:url]
+      url = FeedUrl.get_updated_url(url)
+      @previous_content = ArticleContent.where(:url => url).first
       if params['url'] && !@previous_content.blank?
         @duplicate_url = 'true'
         @previous_content.check_and_update_mobile_site_feed_urls_from_content(nil, current_user, request.remote_ip)
       else
-        feed_url, @previous_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(nil, current_user, request.remote_ip, params['url'])
+        feed_url, @previous_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(nil, current_user, request.remote_ip, url)
         if !@previous_content.blank?
           @duplicate_url = 'true'
         else
-          @article, @images = ArticleContent.CreateContent(params[:url], current_user)
+          @article, @images = ArticleContent.CreateContent(url, current_user)
           @article_content= @article
           @external = params[:external]
         end
