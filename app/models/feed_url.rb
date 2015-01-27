@@ -834,6 +834,7 @@ class FeedUrl < ActiveRecord::Base
     if url.include?("youtube.com")
       video_id = VideoContent.video_id(url)
       url = url.gsub(/watch.*/, "video/#{video_id}")
+      url = url.gsub("https://", "http://")
     else
       url
     end
