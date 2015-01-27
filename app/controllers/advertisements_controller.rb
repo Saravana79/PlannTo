@@ -105,13 +105,14 @@ class AdvertisementsController < ApplicationController
 
     @skippable = @ad_video_detail.skip
     @skippable_time = @ad_video_detail.skip_time
+    @total_video_time = @ad_video_detail.total_time
 
     if !params[:vskip].blank?
       @skippable = params[:vskip] == "BLOCK_SKIPPABLE" ? false : true
     end
 
     if !params[:vdur].blank?
-      @skippable_time = params[:vdur] if params[:vdur] < @skippable_time
+      @total_video_time = params[:vdur] if params[:vdur] < @total_video_time
     end
 
     @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)

@@ -16,7 +16,7 @@
 <% if !@ad_video_detail.linear_click_url.blank? %>
 <Creative sequence="1" id="331">
 <Linear <% if @skippable == true %> skipoffset="<%= @skippable_time %>" <% end %>>
-<Duration><%= @ad_video_detail.total_time %></Duration>
+<Duration><%= @total_video_time %></Duration>
 <TrackingEvents>
 <Tracking event="start">
 <![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-start&impression_id=<%= @impression_id %>]]>
