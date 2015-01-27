@@ -15,7 +15,7 @@
 
 <% if !@ad_video_detail.linear_click_url.blank? %>
 <Creative sequence="1" id="331">
-<Linear>
+<Linear <% if @skippable == true %> skipoffset="<%= @skippable_time %>" <% end %>>
 <Duration><%= @ad_video_detail.total_time %></Duration>
 <TrackingEvents>
 <Tracking event="start">
@@ -48,7 +48,7 @@
 <Tracking event="fullscreen">
 <![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-fullscreen&impression_id=<%= @impression_id %>]]>
 </Tracking>
-<% if @ad_video_detail.skip == true && 1 != 1 %>
+<% if @skippable == true %>
 <Tracking event="skip">
 <![CDATA[<%= configatron.hostname %>/advertisements/video_ad_tracking?metric=linear-skip&impression_id=<%= @impression_id %>]]>
 </Tracking>
@@ -77,7 +77,7 @@
 </Creative>
 <% end %>
 
-<% if params[:non_linear] == "true" %>
+<% if !@ad_video_detail.non_linear_click_url.blank? %>
 <Creative sequence="1" AdID="">
 <NonLinearAds>
 <TrackingEvents>
@@ -98,7 +98,7 @@
 </Creative>
 <% end %>
 
-<% if !@ad_video_detail.companion_type.blank? %>
+<% if @show_companion == "true" && !@ad_video_detail.companion_type.blank? %>
 <Creative sequence="1" id="331">
 <CompanionAds>
 
@@ -142,7 +142,7 @@
 
 </Creatives>
 
-<% if @ad_video_detail.skip == true %>
+<% if @skippable == true %>
 <Extensions>
 <Extension type="DFP">
 <SkippableAdType>Generic</SkippableAdType>

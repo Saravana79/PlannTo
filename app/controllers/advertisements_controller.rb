@@ -95,13 +95,24 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ads
-    params[:linear] ||= "false" #TODO: Temporory disabled have to change true
-    params[:non_linear] ||= "false"
-    params[:companion] ||= "false"
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-    params[:size] ||= "300x60"
+    params[:type] ||= "VideoImpression"
+
+    @show_companion = params[:size] == "0x0" ? "false" : "true"
+
     @advertisement = Advertisement.where(:id => params[:ads_id]).first
     @ad_video_detail = @advertisement.ad_video_detail
+
+    @skippable = @ad_video_detail.skip
+    @skippable_time = @ad_video_detail.skip_time
+
+    if !params[:vskip].blank?
+      @skippable = params[:vskip] == "BLOCK_SKIPPABLE" ? false : true
+    end
+
+    if !params[:vdur].blank?
+      @skippable_time = params[:vdur] if params[:vdur] < @skippable_time
+    end
 
     @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
     @companion_dynamic_url = "#{configatron.hostname}/advertisments/show_ads?item_id=#{params[:item_id]}&ads_id=#{params[:ads_id]}&size=#{params[:size]}&ref_url=#{params[:ref_url]}"

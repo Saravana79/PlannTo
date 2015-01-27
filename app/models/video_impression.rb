@@ -31,7 +31,7 @@ class VideoImpression < ActiveRecord::Base
   
   def self.add_video_impression_to_resque(param, remote_ip)
     impression_id = SecureRandom.uuid
-    impression_params = {:video_impression_id => impression_id, :type => param[:type], :ref_url => param[:ref_url], :item_id => param[:item_id], :time => Time.zone.now.utc, :remote_ip => remote_ip, :advertisement_id => param[:ads_id], :winning_price => param[:winning_price_enc], :sid => param[:sid]}.to_json
+    impression_params = {:video_impression_id => impression_id, :type => param[:type], :ref_url => param[:ref_url], :item_id => param[:item_id], :time => Time.zone.now.utc, :remote_ip => remote_ip, :advertisement_id => param[:ads_id], :winning_price => param[:wp], :sid => param[:sid], :a => a}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'VideoImpression', impression_params)
     # AddImpression.create_new_record(impression_params)
     return impression_id
