@@ -338,7 +338,7 @@ end
     compare_val = 10
     keys.each_with_index do |each_key, index|
       each_new_key = each_key
-        if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type])
+        if ["Reviews", "HowTo/Guide", "News", "Photo", "Spec", "Resale"].include?(param[:ac_sub_type])
           if index == 0
             first_key = each_key
             compare_val = 0.4
@@ -379,7 +379,7 @@ end
     #   auto_save = "true"
     # end
 
-    if first_key_score.to_f > 0.4 && auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec"].include?(param[:ac_sub_type]))
+    if first_key_score.to_f > 0.4 && auto_save == "false" && (for_compare == "true" || ["Reviews", "HowTo/Guide", "News", "Photo", "Spec", "Resale"].include?(param[:ac_sub_type]))
 
       keys_for_title_search.each_with_index do |each_key, index|
         if index == 0
