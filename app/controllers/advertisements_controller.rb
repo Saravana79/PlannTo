@@ -100,6 +100,8 @@ class AdvertisementsController < ApplicationController
 
     @show_companion = params[:size] == "0x0" ? "false" : "true"
 
+    @width, @height = params[:size].to_s.split("x")
+
     @advertisement = Advertisement.where(:id => params[:ads_id]).first
     @ad_video_detail = @advertisement.ad_video_detail
 
