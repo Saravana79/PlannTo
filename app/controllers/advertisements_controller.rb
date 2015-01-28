@@ -118,7 +118,7 @@ class AdvertisementsController < ApplicationController
     end
 
     @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
-    item_detail_id = Advertisement.get_video_click_url(params[:item_id], @impression_id, params[:ref_url], params[:sid], params[:ads_id])
+    item_detail_id = Advertisement.get_video_click_url(params[:item_id])
     if item_detail_id.blank?
       @video_click_url = configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url)
     else
