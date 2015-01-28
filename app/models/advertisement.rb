@@ -1015,6 +1015,17 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     alternative_list
   end
 
+  def self.get_video_click_url(item_ids, imp_id, ref_url, sid, ads_id)
+    item_detail_id = nil
+    item_ids = item_ids.split(",")
+    item_details = find_by_sql("SELECT * FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')}) and itemdetails.isError =0 and itemdetails.status in (1,3) and site = 9882")
+    item_detail = item_details.last
+    if !item_detail.blank?
+      item_detail_id = item_detail.id
+    end
+    item_detail_id
+  end
+
   private
 
   def file_dimensions

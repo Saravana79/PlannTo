@@ -13,7 +13,7 @@
 </Impression>
 <Creatives>
 
-<% if !@ad_video_detail.linear_click_url.blank? %>
+<% if !@video_click_url.blank? %>
 <Creative sequence="1" id="331">
 <Linear <% if @skippable == true %> skipoffset="<%= @skippable_time %>" <% end %>>
 <Duration><%= @total_video_time %></Duration>
@@ -59,7 +59,7 @@
 </TrackingEvents>
 <VideoClicks>
 <ClickThrough>
-<![CDATA[<%= configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url) %>]]>
+<![CDATA[<%= @video_click_url %>]]>
 </ClickThrough>
 </VideoClicks>
 <MediaFiles>

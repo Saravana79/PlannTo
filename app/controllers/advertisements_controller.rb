@@ -107,7 +107,7 @@ class AdvertisementsController < ApplicationController
 
     @skippable = @ad_video_detail.skip
     @skippable_time = @ad_video_detail.skip_time
-    @total_video_time = @ad_video_detail.total_time
+    @total_video_time = @ad_video_detail.total_time.to_s
 
     if !params[:vskip].blank?
       @skippable = params[:vskip] == "BLOCK_SKIPPABLE" ? false : true
@@ -118,6 +118,12 @@ class AdvertisementsController < ApplicationController
     end
 
     @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
+    item_detail_id = Advertisement.get_video_click_url(params[:item_id], @impression_id, params[:ref_url], params[:sid], params[:ads_id])
+    if item_detail_id.blank?
+      @video_click_url = configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url)
+    else
+      @video_click_url = get_ad_url(item_detail_id, @impression_id, params[:ref_url], params[:sid], params[:ads_id])
+    end
     @companion_dynamic_url = "#{configatron.hostname}/advertisments/show_ads?item_id=#{params[:item_id]}&ads_id=#{params[:ads_id]}&size=#{params[:size]}&ref_url=#{params[:ref_url]}"
   end
 
