@@ -143,7 +143,7 @@ class Advertisement < ActiveRecord::Base
       total_time = ad_video_detail.total_time
       skip = ad_video_detail.skip
 
-      Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm.to_i, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites, "supported_sizes", supported_sizes, "skip" => skip, "total_time" => total_time)
+      Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm.to_i, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites, "supported_sizes", supported_sizes, "skip", skip, "total_time", total_time)
     else
       Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm.to_i, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites, "supported_sizes", supported_sizes)
     end
