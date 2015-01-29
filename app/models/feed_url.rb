@@ -585,6 +585,13 @@ class FeedUrl < ActiveRecord::Base
         end
         feed_url.update_attributes!(:status => 1, :default_status => 5) #TODO: auto save status as 5
       end
+    else
+      title = feed_url.title
+      result = results[0]
+      score = result.blank? ? 0 : result[:score]
+      title_score = title.split(" ").count / 3 * 0.1
+      total_score = score + title_score
+      feed_url.update_attributes(:score => total_score) if total_score > 0
     end
     auto_save
   end
@@ -840,4 +847,13 @@ class FeedUrl < ActiveRecord::Base
     end
     url
   end
+
+  def self.auto_save_or_update_score_feed_urls
+    feed_urls = FeedUrl.where("status = 0 and score is null")
+
+    feed_urls.each do |feed_url|
+      feed_url.auto_save_feed_urls
+    end
+  end
+
 end

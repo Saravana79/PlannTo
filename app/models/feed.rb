@@ -29,6 +29,7 @@ class Feed < ActiveRecord::Base
 
     created_feed_urls = FeedUrl.count - feed_url_count
     puts "************************************* Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created *************************************"
+    FeedUrl.auto_save_or_update_score_feed_urls #update score or auto save
     created_feed_urls
   end
 

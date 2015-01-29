@@ -47,6 +47,7 @@
             <select name="feed_urls_sort_by" id="feed_urls_sort_by" class="order_by_category">
               <option value="published_at" <%= params[:feed_urls_sort_by] == "published_at" ? "selected=selected" : "" %>>Published Date</option>
               <option value="missing_count" <%= params[:feed_urls_sort_by] == "missing_count" ? "selected=selected" : "" %>>Missing Count</option>
+              <option value="score" <%= params[:feed_urls_sort_by] == "score" ? "selected=selected" : "" %>>Score</option>
             </select>
           </span>
 
