@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150129093143) do
+ActiveRecord::Schema.define(:version => 20150129132149) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -292,6 +292,16 @@ ActiveRecord::Schema.define(:version => 20150129093143) do
   end
 
   add_index "buying_plans", ["uuid"], :name => "index_buying_plans_on_uuid"
+
+  create_table "category_item_details", :force => true do |t|
+    t.string   "item_type"
+    t.string   "category"
+    t.string   "sub_category"
+    t.text     "text"
+    t.text     "link"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "click_details", :force => true do |t|
     t.integer "click_id"
