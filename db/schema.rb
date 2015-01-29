@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150122131448) do
+ActiveRecord::Schema.define(:version => 20150129065904) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -640,6 +640,8 @@ ActiveRecord::Schema.define(:version => 20150122131448) do
     t.integer "retargeting"
     t.integer "pre_appearance_count"
     t.string  "additional_details"
+    t.boolean "video",                :default => false
+    t.uuid    "video_impression_id"
   end
 
   create_table "impression_missings", :force => true do |t|

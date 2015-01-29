@@ -3,7 +3,7 @@ class AddImpression < ActiveRecord::Base
   require 'facets/string/xor'
   require 'openssl'
 
-  attr_accessor :t, :r, :device, :a
+  attr_accessor :t, :r, :device, :a, :video, :video_impression_id
 
   include ActiveUUID::UUID
   self.primary_key = "id"
@@ -56,6 +56,9 @@ class AddImpression < ActiveRecord::Base
    ai.t = obj_params[:t].to_i
    ai.r = obj_params[:r].to_i
    ai.a = obj_params[:a].to_s
+   ai.device = obj_params[:device].to_s
+   ai.video = obj_params[:video].to_s
+   ai.video_impression_id = obj_params[:video_impression_id].to_s
 
    return ai
  end
@@ -254,10 +257,10 @@ class AddImpression < ActiveRecord::Base
    end
  end
 
-  def self.add_impression_to_resque(impression_type, item_id, request_referer, user_id, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil, t=nil, r=nil, a=nil)
+  def self.add_impression_to_resque(impression_type, item_id, request_referer, user_id, remote_ip, impressionid, itemsaccess, url_params, plan_to_temp_user_id, ad_id, winning_price_enc, sid=nil, t=nil, r=nil, a=nil, video=false, video_impression_id=nil)
     impression_id = SecureRandom.uuid
     impression_params = {:imp_id => impression_id, :type => impression_type, :itemid => item_id, :request_referer => request_referer, :time => Time.zone.now.utc, :user => nil, :remote_ip => remote_ip, :impression_id => impressionid, :itemaccess => itemsaccess,
-                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => nil, :winning_price_enc => winning_price_enc, :sid => sid, :t => t, :r => r, :a => a}.to_json
+                         :params => url_params, :temp_user_id => plan_to_temp_user_id, :ad_id => ad_id, :winning_price => nil, :winning_price_enc => winning_price_enc, :sid => sid, :t => t, :r => r, :a => a, :video => video, :video_impression_id => video_impression_id}.to_json
     Resque.enqueue(CreateImpressionAndClick, 'AddImpression', impression_params)
     # AddImpression.create_new_record(impression_params)
     return impression_id

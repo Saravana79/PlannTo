@@ -141,6 +141,8 @@ class Advertisement < ActiveRecord::Base
 
     if !ad_video_detail.blank?
       total_time = ad_video_detail.total_time
+      total_time = total_time.to_s.split(":")[2].to_i
+      total_time = total_time * 1000
       skip = ad_video_detail.skip
 
       Resque.enqueue(UpdateRedis, "advertisments:#{id}", "type", advertisement_type, "vendor_id", vendor_id, "ecpm", ecpm.to_i, "dailybudget", budget, "click_url", formatted_click_url, "status", ad_status, "exclusive_item_ids", exclusive_item_ids, "excluded_sites", excluded_sites, "supported_sizes", supported_sizes, "skip", skip, "total_time", total_time)
@@ -303,7 +305,7 @@ class Advertisement < ActiveRecord::Base
 
     if param[:is_test] != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,
-                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r])
+                                                              plan_to_temp_user_id, ads_id, param[:wp], param[:sid], param[:t], param[:r], param[:a], param[:video], param[:video_impression_id])
       Advertisement.check_and_update_act_spent_budget_in_redis(ads_id,param[:wp])
     end
     return @impression_id
@@ -655,9 +657,9 @@ class Advertisement < ActiveRecord::Base
         impression_details = []
         ad_impressions_list.each_with_index do |imp, index|
           appearance_count = ad_impressions_list_values[index].to_i
-          if (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank?)
+          if (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || !imp.video.blank? || !imp.video_impression_id.blank?)
             # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
-            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a)
+            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id)
           end
         end
 
