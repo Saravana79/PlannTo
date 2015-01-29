@@ -3,37 +3,44 @@ class ItemAdDetail < ActiveRecord::Base
   after_save :update_item_details_to_redis
 
   def self.update_ad_details_for_items(log, batch_size=2000)
-    query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type, new_version_item_id from itemdetails id
+    if $redis.get("ad_details_for_items_is_running").to_i == 0
+      $redis.set("ad_details_for_items_is_running", 1)
+      $redis.expire("ad_details_for_items_is_running", 50.minutes)
+
+      query_to_get_price_and_vendor_ids = "select itemid as item_id,min(price) price,group_concat(distinct(site)) as vendor_id, i.itemtype_id as item_type, i.type as type, new_version_item_id from itemdetails id
              inner join items i on i.id = id.itemid where id.status in (1,3) and site in (9861,9882,9874,9880) group by itemid"
-    # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
+      # p_v_records = Item.find_by_sql(query_to_get_price_and_vendor_ids)
 
-    log.debug "********** Started Updating ItemAdDetail for Items **********"
-    # log.debug "********** Found #{p_v_records.count} items for update price and vendor_ids **********"
-    log.debug "\n"
+      log.debug "********** Started Updating ItemAdDetail for Items **********"
+      # log.debug "********** Found #{p_v_records.count} items for update price and vendor_ids **********"
+      log.debug "\n"
 
-    page = 1
-    begin
-      items = Item.paginate_by_sql(query_to_get_price_and_vendor_ids, :page => page, :per_page => batch_size)
+      page = 1
+      begin
+        items = Item.paginate_by_sql(query_to_get_price_and_vendor_ids, :page => page, :per_page => batch_size)
 
-      items.each do |each_item|
-        p "Processing ItemAdDetail for #{each_item.item_id}"
-        new_version_id = each_item.new_version_item_id
-        # old_version_id = Item.old_version_item_id(each_item.item_id) # TODO: we can update manually to improve performance
+        items.each do |each_item|
+          p "Processing ItemAdDetail for #{each_item.item_id}"
+          new_version_id = each_item.new_version_item_id
+          # old_version_id = Item.old_version_item_id(each_item.item_id) # TODO: we can update manually to improve performance
 
-        related_item_ids = RelatedItem.where('item_id = ?', each_item.item_id).order('variance desc').limit(10).collect(&:related_item_id)
-        related_item_ids = related_item_ids.map(&:inspect).join(',')
+          related_item_ids = RelatedItem.where('item_id = ?', each_item.item_id).order('variance desc').limit(10).collect(&:related_item_id)
+          related_item_ids = related_item_ids.map(&:inspect).join(',')
 
-        item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_item.item_id)
-        # item_ad_detail.update_attributes(:new_version_id => new_version_id, :old_version_id => old_version_id, :related_item_ids => related_item_ids)
-        item_ad_detail.update_attributes(:new_version_id => new_version_id, :related_item_ids => related_item_ids)
-      end
-      page += 1
-    end while !items.empty?
+          item_ad_detail = ItemAdDetail.find_or_initialize_by_item_id(:item_id => each_item.item_id)
+          # item_ad_detail.update_attributes(:new_version_id => new_version_id, :old_version_id => old_version_id, :related_item_ids => related_item_ids)
+          item_ad_detail.update_attributes(:new_version_id => new_version_id, :related_item_ids => related_item_ids)
+        end
+        page += 1
+      end while !items.empty?
 
-    log.debug "********** Completed Updating ItemAdDetail for Items **********"
-    log.debug "\n"
+      log.debug "********** Completed Updating ItemAdDetail for Items **********"
+      log.debug "\n"
 
-    update_clicks_and_impressions_for_ad_details(log, batch_size, Time.now)
+      update_clicks_and_impressions_for_ad_details(log, batch_size, Time.now)
+
+      $redis.set("ad_details_for_items_is_running", 0)
+    end
   end
 
   def self.update_clicks_and_impressions_for_ad_details(log, batch_size=2000, time)
