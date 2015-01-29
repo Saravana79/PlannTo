@@ -849,17 +849,24 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.auto_save_or_update_score_feed_urls
-    query = "SELECT `feed_urls`.* FROM `feed_urls` WHERE (status = 0 and score is null)"
-    page = 1
-    begin
-      feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
+    if $redis.get("auto_save_or_update_score_is_running").to_i == 0
+      $redis.set("auto_save_or_update_score_is_running", 1)
+      $redis.expire("auto_save_or_update_score_is_running", 50.minutes)
 
-      feed_urls.each do |feed_url|
-        feed_url.auto_save_feed_urls
-      end
+      query = "SELECT `feed_urls`.* FROM `feed_urls` WHERE (status = 0 and score is null)"
+      page = 1
+      begin
+        feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
 
-      page += 1
-    end while !feed_urls.empty?
+        feed_urls.each do |feed_url|
+          feed_url.auto_save_feed_urls
+        end
+
+        page += 1
+      end while !feed_urls.empty?
+
+      $redis.set("auto_save_or_update_score_is_running", 0)
+    end
   end
 
 end
