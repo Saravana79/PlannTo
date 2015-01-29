@@ -849,11 +849,17 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.auto_save_or_update_score_feed_urls
-    feed_urls = FeedUrl.where("status = 0 and score is null")
+    query = "SELECT `feed_urls`.* FROM `feed_urls` WHERE (status = 0 and score is null)"
+    page = 1
+    begin
+      feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
 
-    feed_urls.each do |feed_url|
-      feed_url.auto_save_feed_urls
-    end
+      feed_urls.each do |feed_url|
+        feed_url.auto_save_feed_urls
+      end
+
+      page += 1
+    end while !feed_urls.empty?
   end
 
 end

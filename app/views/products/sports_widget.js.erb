@@ -1,0 +1,26 @@
+<% if params[:page_type] == "type_1" %>
+<h4 style="text-align:center">
+    <strong>
+      <%= link_to @category_item_detail.text, @click_url, :target => "_blank" %>
+    </strong>
+</h4>
+<% else %>
+<h4 style="text-align:center">
+  <strong>
+    <%= link_to "#{image_tag(@category_item_detail.image_url)} #{@category_item_detail.title} @ Just Rs #{@category_item_detail.sale_price} - BUY NOW!".html_safe, @click_url, :target => "_blank" %>
+  </strong>
+</h4>
+<% end %>
+
+<style type="text/css">
+a {
+    color: #e34b18;
+    text-decoration: none;
+}
+
+a { outline: none; }
+
+h4, .h4 {
+    font-size: 19px;
+}
+</style>

@@ -1879,6 +1879,62 @@ end
     return item, items, search_url, extra_items
   end
 
+  def self.get_amazon_product_text_link(url, type="type_1")
+    sub_category = ""
+
+    if !url.scan(/cricket/).blank?
+      sub_category = "cricket"
+    elsif url.scan(/football/).blank?
+      sub_category = "football"
+    else
+      sub_category = "general"
+    end
+
+    sub_category = "cricket" if type == "type_2" #TODO: hot fixes
+
+    if type == "type_1"
+      type_val = "text links"
+    else
+      type_val = "product links"
+    end
+
+    offset = rand(CategoryItemDetail.where("sub_category = '#{sub_category}' and item_type = '#{type_val}'").count)
+    if offset == 0
+      offset = rand(CategoryItemDetail.where("sub_category = '#{sub_category}' and item_type = '#{type_val}'").count)
+    end
+    rand_record = CategoryItemDetail.where("sub_category = '#{sub_category}' and item_type = '#{type_val}'").first(:offset => offset)
+
+    rand_record
+  end
+
+  def self.get_amazon_product_text_link_from_item_id(url, type="type_1")
+
+    category_item = Item.get_amazon_product_text_link(url, type)
+
+    asin = category_item.text
+    category_item_detail = OpenStruct.new
+
+    res = APICache.get(asin.to_s.gsub(" ", ""), :timeout => 5.hours) do
+      Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
+    end
+
+    item = res.items.first
+    sale_price = ""
+
+    if !item.blank?
+      category_item_detail.title = item.get_element("ItemAttributes").get("Title").to_s
+      sale_price = item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+      if sale_price.blank?
+        sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+      end
+      category_item_detail.image_url = item.get("ImageSets/ImageSet/SwatchImage/URL")
+      category_item_detail.link = item.get("DetailPageURL")
+    end
+
+    category_item_detail.sale_price = sale_price
+    category_item_detail
+  end
+
   private
 
   def create_item_ad_detail

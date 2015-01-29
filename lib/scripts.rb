@@ -193,3 +193,40 @@ csv_details.each do |each_rec|
     prev_item = item
   end
 end
+
+
+##Category Item detail for text links
+
+csv_details = CSV.read("/home/sivakumar/Desktop/sports.csv", { :col_sep => "\t" })
+
+category_item_details = []
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  category, sub_category, text, link = csv_detail
+
+  next if category.blank?
+
+  sub_category = "general" if sub_category.blank?
+  category_item_detail = CategoryItemDetail.new(:item_type => "text links", :category => category.to_s.downcase, :sub_category => sub_category.to_s.downcase, :text => text, :link => link)
+  category_item_details << category_item_detail
+end
+
+results = CategoryItemDetail.import(category_item_details)
+
+
+##Category Item detail for product links
+
+csv_details = CSV.read("/home/sivakumar/Desktop/sports_cwc.csv", { :col_sep => "\t" })
+
+category_item_details = []
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  asin = csv_detail[0]
+
+  category_item_detail = CategoryItemDetail.new(:item_type => "product links", :category => "sports", :sub_category => "cricket", :text => asin, :link => nil)
+  category_item_details << category_item_detail
+end
+
+results = CategoryItemDetail.import(category_item_details)
