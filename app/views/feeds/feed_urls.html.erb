@@ -24,8 +24,9 @@
         Status: <%= search_form.select :status, [0,1,2,3], {:include_blank => true, :selected => params[:search][:status]} %>
         Source: <%#= search_form.select :source, @sources, {:include_blank => true, :selected => params[:search][:source]} %>
         <%= search_form.hidden_field :source, :readonly => true, :value => params[:search][:source] %>
-        <input style="margin-top:5px;width:250px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
+        <input style="margin-top:5px;width:150px" placeholder="Start Typing for suggestions.." type="text" value="" class="auto_complete_field" id="search_source_item">
         Title: <%= search_form.text_field :title, :size => 60, :value => params[:search][:title] %>
+        Score (>): <%= search_form.text_field :score, :value => params[:search][:score], :style => "width:56px" %>
 
         <div style="padding-top: 9px; text-align: center;">
           From Date: <%= search_form.text_field :from_date, :style => "padding:2px;width:100px;", :value => params[:search][:from_date].blank? ? "" : params[:search][:from_date].to_date.strftime("%d-%m-%Y"), :class => "search_date_field" %>

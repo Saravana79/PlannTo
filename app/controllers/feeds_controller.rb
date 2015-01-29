@@ -51,6 +51,7 @@ class FeedsController < ApplicationController
       condition = condition + " and created_at > '#{params[:search][:from_date].to_time}'" unless params[:search][:from_date].blank?
       condition = condition + " and created_at < '#{params[:search][:to_date].to_time}'" unless params[:search][:to_date].blank?
       condition = condition + " and title like '%#{title}%'" unless title.blank?
+      condition = condition + " and score > #{params[:search][:score]}" unless params[:search][:score].blank?
     end
 
     if params[:commit] == "Clear"

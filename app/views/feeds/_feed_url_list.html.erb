@@ -19,7 +19,7 @@
       </div>
       <div style="width:550px;float:left;">
         <a href="javascript:void(0)" class="feed_title" id="<%= feed.id %>">
-          <%= feed.title.blank? ? feed.url.to_s.truncate(95) : feed.title.to_s.truncate(95) %>
+          <%= feed.title.blank? ? feed.url.to_s.truncate(95) : "#{feed.title.to_s.truncate(95)} - (#{feed.score})" %>
         </a>
       </div>
      <div style="width:120px;float:left;"><%= feed.source.blank? ? "-- blank -- " : feed.source %></div>

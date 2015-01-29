@@ -522,9 +522,9 @@ ActiveRecord::Schema.define(:version => 20150129093143) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "published_at"
-    t.string   "images",                                            :default => ""
-    t.integer  "priorities",                                        :default => 3
-    t.integer  "missing_count",                                     :default => 0
+    t.string   "images",                                           :default => ""
+    t.integer  "priorities",                                       :default => 3
+    t.integer  "missing_count",                                    :default => 0
     t.string   "additional_details"
     t.string   "old_default_values"
     t.string   "new_default_values"
@@ -532,7 +532,7 @@ ActiveRecord::Schema.define(:version => 20150129093143) do
     t.integer  "article_content_id"
     t.string   "article_category"
     t.string   "article_item_ids"
-    t.decimal  "score",              :precision => 10, :scale => 0
+    t.decimal  "score",              :precision => 8, :scale => 2
   end
 
   create_table "feeds", :force => true do |t|
