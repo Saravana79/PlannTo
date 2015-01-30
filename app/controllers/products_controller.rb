@@ -402,6 +402,7 @@ class ProductsController < ApplicationController
 
     @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type])
     if @category_item_detail.item_type == "product links"
+      @category_item_detail_id = @category_item_detail.id
       @category_item_detail = Item.get_amazon_product_product_text_link_from_item_id(@category_item_detail.text, params[:page_type])
     end
 
@@ -416,11 +417,11 @@ class ProductsController < ApplicationController
       @where_to_buy_items = []
 
       if @is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", params[:item_ids], url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+        @impression_id = AddImpression.add_impression_to_resque("amazon_sports_widget", @category_item_detail_id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
                                                                 cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
 
-      @click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_url => @category_item_detail.link)
+      @click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @category_item_detail.link, :item_id => @category_item_detail_id)
 
       # @show_count = Item.get_show_item_count(@items)
 
