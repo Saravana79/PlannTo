@@ -1,12 +1,27 @@
 <% if params[:page_type] == "type_1" %>
+<% if !@category_item_detail.id.blank? %>
 <div style="padding:10px;text-align:center;margin:0 auto;">
-<h4 style="text-align:center;font-size: 19px;">
-    <strong>
-      <%= link_to @category_item_detail.text, @click_url, :target => "_blank" %>
-    </strong>
-</h4>
-<div>
+    <h4 style="text-align:center;font-size: 19px;">
+        <strong>
+        <%= link_to @category_item_detail.text, @click_url, :target => "_blank" %>
+        </strong>
+    </h4>
 </div>
+<% else %>
+<div style="text-align:center;margin:0 auto;width:600px">
+    <div>
+        <a href="<%=@click_url%>" target="_blank">
+
+            <div style="float:left;padding:10px;max-width:450px;">
+                <div style=""><span style="font-size:16px;font-weight:600;"><%=@category_item_detail.title%></span></div>
+                <div style="padding-top:3px;"><span>@ Just </span><span style="padding-left:2px;font-size:16px;font-weight:600;"><%=@category_item_detail.sale_price %> - Buy Now!</span><div>
+                </div>
+                </a>
+            </div>
+            <br clear="both"/>
+        </div>
+    </div>
+<% end %>
 <% else %>
 
 		<div style="text-align:center;margin:0 auto;width:600px">

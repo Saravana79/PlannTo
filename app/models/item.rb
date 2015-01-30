@@ -1914,15 +1914,17 @@ end
 
     if type == "type_1"
       type_val = "text links"
+      item_type_condition = "1=1"
     else
       type_val = "product links"
+      item_type_condition = "item_type = '#{type_val}'"
     end
 
-    offset = rand(CategoryItemDetail.where("item_type = '#{type_val}' #{sub_category_condition}").count)
+    offset = rand(CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count)
     if offset == 0
-      offset = rand(CategoryItemDetail.where("item_type = '#{type_val}' #{sub_category_condition}").count)
+      offset = rand(CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count)
     end
-    rand_record = CategoryItemDetail.where("item_type = '#{type_val}' #{sub_category_condition}").first(:offset => offset)
+    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").first(:offset => offset)
 
     rand_record
   end
@@ -1932,6 +1934,10 @@ end
     category_item = Item.get_amazon_product_text_link(url, type)
 
     asin = category_item.text
+    category_item_detail = Item.get_amazon_product_link_from_asin(asin)
+  end
+
+  def self.get_amazon_product_link_from_asin(asin)
     category_item_detail = OpenStruct.new
 
     res = APICache.get(asin.to_s.gsub(" ", ""), :timeout => 5.hours) do
@@ -1955,6 +1961,10 @@ end
 
     category_item_detail.sale_price = sale_price
     category_item_detail
+  end
+
+  def self.get_amazon_product_product_text_link_from_item_id(asin, page_type)
+    category_item_detail = Item.get_amazon_product_link_from_asin(asin)
   end
 
   private

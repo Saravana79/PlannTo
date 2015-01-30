@@ -393,6 +393,9 @@ class ProductsController < ApplicationController
 
     if params[:page_type] == "type_1"
       @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type])
+      if @category_item_detail.item_type == "product links"
+        @category_item_detail = Item.get_amazon_product_product_text_link_from_item_id(@category_item_detail.text, params[:page_type])
+      end
     else
       @category_item_detail = Item.get_amazon_product_text_link_from_item_id(url, params[:page_type])
     end
