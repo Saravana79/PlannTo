@@ -1884,7 +1884,7 @@ end
 
     if !url.scan(/cricket/).blank?
       sub_category = "cricket"
-    elsif url.scan(/football/).blank?
+    elsif !url.scan(/football/).blank?
       sub_category = "football"
     else
       sub_category = "general"
