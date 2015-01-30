@@ -60,11 +60,19 @@ class HistoryDetailsController < ApplicationController
     elsif !params[:red_sports_url].blank?
       item_id = params[:item_id]
       @impression_id = params[:iid].present? ? params[:iid] : "0"
-      if(publisher.blank? || publisher.nil?)
-        #publisher = Publisher.where(:publisher_url => 'wiseshe.com').first
-        publisher = nil
-      end
       url = params[:red_sports_url]
+
+      if !publisher.blank?
+        publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id).first
+
+        if url.include?("tag")
+          url = URI.unescape(url)
+          tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+          url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
+        else
+          url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
+        end
+      end
 
       click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
                        :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => nil, :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a]}.to_json
