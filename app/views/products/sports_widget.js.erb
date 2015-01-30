@@ -1,15 +1,29 @@
 <% if params[:page_type] == "type_1" %>
-<h4 style="text-align:center">
+<div style="padding:10px;text-align:center;margin:0 auto;">
+<h4 style="text-align:center;font-size: 19px;">
     <strong>
       <%= link_to @category_item_detail.text, @click_url, :target => "_blank" %>
     </strong>
 </h4>
+<div>
+</div>
 <% else %>
-<h4 style="text-align:center">
-  <strong>
-    <%= link_to "#{image_tag(@category_item_detail.image_url)} #{@category_item_detail.title} @ Just Rs #{@category_item_detail.sale_price} - BUY NOW!".html_safe, @click_url, :target => "_blank" %>
-  </strong>
-</h4>
+
+		<div style="text-align:center;margin:0 auto;width:600px">
+			<div>
+					<a href="<%=@click_url%>" target="_blank">	
+
+				<div style="float:left; "><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
+
+				<div style="float:left;padding:10px;max-width:450px;">
+					<div style=""><span style="font-size:16px;font-weight:600;"><%=@category_item_detail.title%></span></div>
+					<div style="padding-top:3px;"><span>@ Just </span><span style="padding-left:2px;font-size:16px;font-weight:600;"><%=@category_item_detail.sale_price %> - Buy Now!</span><div>
+				</div>
+					</a>
+				</div>
+				<br clear="both"/>
+		</div>
+    <%#= link_to "#{image_tag(@category_item_detail.image_url)}  #{@category_item_detail.sale_price} - BUY NOW!".html_safe, @click_url, :target => "_blank" %>
 <% end %>
 
 <style type="text/css">
@@ -20,7 +34,4 @@ a {
 
 a { outline: none; }
 
-h4, .h4 {
-    font-size: 19px;
-}
 </style>
