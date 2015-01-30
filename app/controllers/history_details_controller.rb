@@ -65,12 +65,14 @@ class HistoryDetailsController < ApplicationController
       if !publisher.blank?
         publisher_vendor = PublisherVendor.where(:publisher_id => publisher.id).first
 
-        if url.include?("tag")
-          url = URI.unescape(url)
-          tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-          url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
-        else
-          url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
+        unless publisher_vendor.blank?
+          if url.include?("tag")
+            url = URI.unescape(url)
+            tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+            url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
+          else
+            url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
+          end
         end
       end
 
