@@ -1884,27 +1884,32 @@ end
 
     if !url.to_s.downcase.scan(/cricket/).blank?
       sub_category = "cricket"
+      sub_categories = ["cricket", "general"]
     elsif !url.to_s.downcase.scan(/arsenal/).blank?
       sub_category = "arsenal"
+      sub_categories = ["arsenal", "general"]
     elsif !url.to_s.downcase.scan(/united/).blank?
       sub_category = "united"
+      sub_categories = ["united", "general"]
     elsif !url.to_s.downcase.scan(/chelsea/).blank?
       sub_category = "chelsea"
+      sub_categories = ["chelsea", "general"]
     elsif !url.to_s.downcase.scan(/liverpool/).blank?
       sub_category = "liverpool"
+      sub_categories = ["liverpool", "general"]
     elsif !url.to_s.downcase.scan(/football/).blank?
       sub_category = "football"
+      sub_categories = ['arsenal','chelsea','liverpool','united','football', "general"]
     else
       sub_category = "general"
     end
 
     sub_category = "cricket" if type == "type_2" #TODO: hot fixes
-    sub_category_condition = ""
-    
-    if sub_category == "football"
-      sub_category_condition = "and sub_category in ('arsenal','chelsea','liverpool','united','football')"
-    elsif sub_category != "general"
-      sub_category_condition = "and sub_category = '#{sub_category}'"
+
+    sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
+
+    if (sub_category == "general" || type == "type_2")
+      sub_category_condition = ""
     end
 
     if type == "type_1"
