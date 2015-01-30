@@ -798,7 +798,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   "users:last_visits:#{user_id}" => redis_results[3], "users:buyinglist:plannto:#{plannto_user_id}" => redis_rtb_results, "users:buyinglist:#{user_id}" => redis_rtb_results_1)
 
     redis_rtb_pu = $redis_rtb.pipelined do
-      [23,32,21,5,3,1,10].each do |each_ad|
+      [21,25,26,22].each do |each_ad|
         $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:count")
         $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:#{Date.today.day}")
         $redis_rtb.get("pu:#{plannto_user_id}:#{each_ad}:clicks:count")
