@@ -1882,9 +1882,17 @@ end
   def self.get_amazon_product_text_link(url, type="type_1")
     sub_category = ""
 
-    if !url.scan(/cricket/).blank?
+    if !url.to_s.downcase.scan(/cricket/).blank?
       sub_category = "cricket"
-    elsif !url.scan(/football/).blank?
+    elsif !url.to_s.downcase.scan(/arsenal/).blank?
+      sub_category = "arsenal"
+    elsif !url.to_s.downcase.scan(/united/).blank?
+      sub_category = "united"
+    elsif !url.to_s.downcase.scan(/chelsea/).blank?
+      sub_category = "chelsea"
+    elsif !url.to_s.downcase.scan(/liverpool/).blank?
+      sub_category = "liverpool"
+    elsif !url.to_s.downcase.scan(/football/).blank?
       sub_category = "football"
     else
       sub_category = "general"
@@ -1892,8 +1900,10 @@ end
 
     sub_category = "cricket" if type == "type_2" #TODO: hot fixes
     sub_category_condition = ""
-
-    if !sub_category.blank? && sub_category != "general"
+    
+    if sub_category == "football"
+      sub_category_condition = "and sub_category in ('arsenal','chelsea','liverpool','united','football')"
+    elsif sub_category != "general"
       sub_category_condition = "and sub_category = '#{sub_category}'"
     end
 
