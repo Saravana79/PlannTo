@@ -11,7 +11,7 @@ class FeedProcessOrUpdateScore
     log.debug "********** Feed Process Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
     FeedUrl.send("auto_save_or_update_score_feed_urls")
 
-    log.debug "********** Feed Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} - #{created_feed_urls} feed_urls created **********"
+    log.debug "********** Feed Process Completed at - #{Time.zone.now.strftime('%b %d,%Y %r')} **********"
     #rescue => e
     #  log.debug "Have some problem while executing feed process, please find the error below"
     #  log.debug e
