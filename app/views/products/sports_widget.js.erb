@@ -13,31 +13,46 @@
         <a href="<%=@click_url%>" target="_blank">
 
             <div style="float:left;padding:10px;max-width:450px;">
-                <div style=""><span style="font-size:16px;font-weight:600;"><%=@category_item_detail.title%></span></div>
-                <div style="padding-top:3px;"><span>@ Just </span><span style="padding-left:2px;font-size:16px;font-weight:600;"><%=@category_item_detail.sale_price %> - Buy Now!</span><div>
+                <div style="">
+                    <span style="font-size:16px;font-weight:600;">
+                      <%=@category_item_detail.title%>
+                    </span>
                 </div>
-                </a>
+                <div style="padding-top:3px;">
+                    <span>@ Just </span>
+                    <span style="padding-left:2px;font-size:16px;font-weight:600;"><%=@category_item_detail.sale_price %> - Buy Now!</span>
+                </div>
             </div>
-            <br clear="both"/>
+        </a>
+        <br clear="both"/>
         </div>
     </div>
 <% end %>
 <% else %>
+<% if !@category_item_detail.id.blank? %>
+<div style="padding:10px;text-align:center;margin:0 auto;">
+<h4 style="text-align:center;font-size: 19px;">
+    <strong>
+    <%= link_to @category_item_detail.text, @click_url, :target => "_blank" %>
+    </strong>
+</h4>
+</div>
+<% else %>
+<div style="text-align:center;margin:0 auto;width:140px;height:200px;">
+    <div>
+        <a href="<%=@click_url%>" target="_blank">
 
-		<div style="text-align:center;margin:0 auto;width:600px">
-			<div>
-					<a href="<%=@click_url%>" target="_blank">	
+            <div class="type_2_image" style="float:left; "><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
 
-				<div style="float:left; "><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
-
-				<div style="float:left;padding:10px;max-width:450px;">
-					<div style=""><span style="font-size:16px;font-weight:600;"><%=@category_item_detail.title%></span></div>
-					<div style="padding-top:3px;"><span>@ Just </span><span style="padding-left:2px;font-size:16px;font-weight:600;"><%=@category_item_detail.sale_price %> - Buy Now!</span><div>
-				</div>
-					</a>
-				</div>
-				<br clear="both"/>
-		</div>
+            <div class="type_2_description" style="float:left;padding:10px;max-width:450px;">
+                <div style=""><span style="font-size:11px;font-weight:bolder;"><%=@category_item_detail.title%></span></div>
+                <div style="padding-top:3px;"><span style="padding-left:2px;font-size:14px;font-weight:600;"><%=@category_item_detail.sale_price %> Shop now!</span></div>
+            </div>
+        </a>
+    </div>
+    <br clear="both"/>
+</div>
+<% end %>
     <%#= link_to "#{image_tag(@category_item_detail.image_url)}  #{@category_item_detail.sale_price} - BUY NOW!".html_safe, @click_url, :target => "_blank" %>
 <% end %>
 
@@ -49,4 +64,11 @@ a {
 
 a { outline: none; }
 
+.type_2_image {
+  padding-left: 32%;
+        }
+.type_2_description {
+        padding: 3px;
+
+        }
 </style>
