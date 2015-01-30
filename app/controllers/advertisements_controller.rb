@@ -284,6 +284,12 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def amazon_sports_widget
+    params[:page_type] ||= "type_1"
+    params[:ref_url] ||= "http://www.sportskeeda.com/cricket/england-odi-captain-eoin-morgan-set-to-play-in-2015-ipl-season"
+    render :layout => false
+  end
+
   def search_widget_via_iframe
     render :layout => false
   end

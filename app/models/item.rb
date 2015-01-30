@@ -1884,13 +1884,18 @@ end
 
     if !url.scan(/cricket/).blank?
       sub_category = "cricket"
-    elsif url.scan(/football/).blank?
+    elsif !url.scan(/football/).blank?
       sub_category = "football"
     else
       sub_category = "general"
     end
 
     sub_category = "cricket" if type == "type_2" #TODO: hot fixes
+    sub_category_condition = ""
+
+    if !sub_category.blank? && sub_category != "general"
+      sub_category_condition = "and sub_category = '#{sub_category}'"
+    end
 
     if type == "type_1"
       type_val = "text links"
@@ -1898,11 +1903,11 @@ end
       type_val = "product links"
     end
 
-    offset = rand(CategoryItemDetail.where("sub_category = '#{sub_category}' and item_type = '#{type_val}'").count)
+    offset = rand(CategoryItemDetail.where("item_type = '#{type_val}' #{sub_category_condition}").count)
     if offset == 0
-      offset = rand(CategoryItemDetail.where("sub_category = '#{sub_category}' and item_type = '#{type_val}'").count)
+      offset = rand(CategoryItemDetail.where("item_type = '#{type_val}' #{sub_category_condition}").count)
     end
-    rand_record = CategoryItemDetail.where("sub_category = '#{sub_category}' and item_type = '#{type_val}'").first(:offset => offset)
+    rand_record = CategoryItemDetail.where("item_type = '#{type_val}' #{sub_category_condition}").first(:offset => offset)
 
     rand_record
   end

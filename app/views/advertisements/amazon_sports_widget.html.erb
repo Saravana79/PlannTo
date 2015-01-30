@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>Amazon widget demo</title>
+<link href='http://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet' type='text/css'>
+        <style>
+        html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                }
+
+        table {
+        border-collapse: collapse;
+                border-spacing: 0;
+                }
+
+        .ad > span {
+        font-size: 14px;
+                }
+        </style>
+    </head>
+    <body style="padding:30px;height: 100%;">
+
+        <div class="advertisements">
+            <h1>Amazon Widget Demo</h1>
+            <div class="demo_form row">
+                <div class="search_form">
+                <%= form_for :search, :url => "/advertisements/amazon_sports_widget", :html => {:method => 'get'} do |search_form| %>
+                    <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 728px;" %>
+                    <div class="radio_button" style="padding: 5px 0px 7px;">
+                      <%= search_form.radio_button :page_type,"type_1", :name => "page_type", :checked => params[:page_type] == "type_1" ? "checked" : "" %>
+                      <%= search_form.label :page_type, 'Type 1', :name => "page_type" %>
+
+                      <%= search_form.radio_button :page_type,"type_2", :name => "page_type", :checked => params[:page_type] == "type_2" ? "checked" : "" %>
+                      <%= search_form.label :page_type, 'Type 2', :name => "page_type" %>
+                    </div>
+                    <%= search_form.submit "Go" %>
+                <% end %>
+                </div>
+            </div>
+        </div>
+
+        <div  id="where_to_buy_items" style="width:680px;">
+
+        </div>
+
+        <script async src="<%= configatron.hostname %>/javascripts/plannto.sports.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>"></script>
+
+        <br/>
+        <br/>
+    </body>
+</html>
+
+<style type="text/css">
+.advertisements h1 {
+text-align: center;
+        }
+
+body {
+        border: 1px solid rgba(158, 157, 157, 0.65);
+        border-radius: 10px;
+        box-shadow: 2px 2px 3px 3px #e0e0e0;
+        margin: 0 7px 7px;
+        }
+
+.demo_form {
+padding-bottom: 20px;
+        padding-top: 20px;
+        text-align: center;
+        }
+
+#where_to_buy_items {
+padding-left: 328px;
+        }
+</style>
