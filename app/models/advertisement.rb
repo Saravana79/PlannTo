@@ -807,7 +807,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     end
 
     start_val = 4
-    [23,32,21,5,3,1,10].each do |each_ad|
+    [21,25,26,22].each do |each_ad|
       result.merge!("pu:#{plannto_user_id}:#{each_ad}:count" => redis_rtb_pu[start_val-4], "pu:#{plannto_user_id}:#{each_ad}:#{Date.today.day}" => redis_rtb_pu[start_val-3], "pu:#{plannto_user_id}:#{each_ad}:clicks:count" => redis_rtb_pu[start_val-2],
                     "pu:#{plannto_user_id}:#{each_ad}:clicks:#{Date.today.day}" => redis_rtb_pu[start_val-1])
       start_val+=4
