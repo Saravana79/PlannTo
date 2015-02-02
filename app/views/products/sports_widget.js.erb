@@ -42,10 +42,10 @@
     <div>
         <a href="<%=@click_url%>" target="_blank">
 
-            <div class="type_2_image" style="text-align:center;"><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
+            <div class="type_2_image" style="text-align:center;min-height:80px;"><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
 
             <div class="type_2_description" style="padding:3px;">
-                <div style=""><span style="font-size:11px;max-height:22px;color:black;"><%=@category_item_detail.title.to_s.truncate(50)%></span></div>
+                <div style="height:22px;"><span style="font-size:11px;max-height:22px;color:black;"><%=@category_item_detail.title.to_s.truncate(50)%></span></div>
                 <div style="padding-top:4px;"><span style="padding-left:2px;font-size:13px;font-weight:600;"><%=@category_item_detail.sale_price %></span></div>
             </div>
 
