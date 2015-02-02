@@ -506,7 +506,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       end
 
       page += 1
-    end while !impressions.empty?
+    end while !item_details.empty?
 
     item_details_flipkart_query = "select * from itemdetails where site=9861 and additional_details is null"
 
@@ -531,7 +531,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       end
 
       page += 1
-    end while !impressions.empty?
+    end while !item_details.blank?
   end
 
 end

@@ -2,7 +2,10 @@
   <div class="advt-728">
     <div class="advt-box">
                 <div class="logo">
-                  <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" width="58px" alt=""></a>
+                  <a class="vendor_image" href="javascript:void(0)" target="_blank">
+                    <% img_src = @vendor_ad_details[@item_details.first.site.to_i]['imageurl'] rescue @vendor_image_url %>
+                    <img class="vendor_image_src" src="<%= img_src %>" width="58px" alt="">
+                  </a>
                  <div id="pager2" class="pager">
                           <% if @item_details.count > 1 %>
                           <% [*1..@item_details.count].each do |each_loop| %>
@@ -52,7 +55,6 @@
 
                
               </div>
-              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
             </div>
         <% end %>
 
