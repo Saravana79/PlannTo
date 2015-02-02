@@ -1879,8 +1879,9 @@ end
     return item, items, search_url, extra_items
   end
 
-  def self.get_amazon_product_text_link(url, type="type_1")
+  def self.get_amazon_product_text_link(url, type="type_1", category_item_detail_id=nil)
     sub_category = ""
+    sub_categories = []
 
     if !url.to_s.downcase.scan(/cricket/).blank?
       sub_category = "cricket"
@@ -1922,10 +1923,20 @@ end
 
     #item_type_condition = "1=1"
 
-    offset = rand(CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count)
-    if offset == 0
-      offset = rand(CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count)
+    if category_item_detail_id.blank?
+      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count
+
+      #store record count to redis
+      $redis.set("sports_widget:#{url}:#{type}", category_item_details_count)
+
+      offset = rand(category_item_details_count)
+      if offset == 0
+        offset = rand(category_item_details_count)
+      end
+    else
+      offset = category_item_detail_id.to_i
     end
+
     rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").first(:offset => offset)
 
     rand_record

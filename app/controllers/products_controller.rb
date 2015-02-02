@@ -3,6 +3,7 @@ require "securerandom"
 class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
+  before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
@@ -25,6 +26,14 @@ class ProductsController < ApplicationController
      end
    }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
+  caches_action :sports_widget, :cache_path => proc {|c|
+    if (!params[:ref_url].blank?)
+      params.slice("category_item_detail_id", "ref_url", "page_type")
+    elsif !params[:item_ids].blank?
+      params.slice("item_ids", "category_item_detail_id", "page_type")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
 
   caches_action :show,  :cache_path => Proc.new { |c|
     if(current_user)
@@ -36,11 +45,11 @@ class ProductsController < ApplicationController
 #  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
-  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items]
+  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget]
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget]
   layout 'product'
   include FollowMethods
   include ItemsHelper
@@ -400,9 +409,10 @@ class ProductsController < ApplicationController
     #   @category_item_detail = Item.get_amazon_product_text_link_from_item_id(url, params[:page_type])
     # end
 
-    @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type])
+    @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type], params[:category_item_detail_id])
     if @category_item_detail.item_type == "product links"
       @category_item_detail_id = @category_item_detail.id
+      params[:category_item_detail_id] = @category_item_detail_id
       @category_item_detail = Item.get_amazon_product_product_text_link_from_item_id(@category_item_detail.text, params[:page_type])
     end
 
@@ -769,6 +779,60 @@ class ProductsController < ApplicationController
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
 
           cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
+        end
+        return render :text => cache.html_safe, :content_type => "text/javascript"
+        ## Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
+
+  def create_impression_before_sports_widget
+    params[:price_full_details] ||= "true"
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+    params[:request_referer] ||= request.referer
+    params[:request_referer] ||= ""
+    params[:ref_url] ||= ""
+    params[:item_ids] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:category_item_detail_id] ||= ""
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+
+    #Get dynamic id from url
+    records_count = $redis.get("sports_widget:#{url}:#{params[:page_type]}")
+
+    if !records_count.blank?
+      records_count = records_count.to_i
+      offset = rand(records_count)
+      if offset == 0
+        offset = rand(records_count)
+      end
+      params[:category_item_detail_id] = offset
+    end
+
+    cache_params = ""
+    if (!params[:ref_url].blank?)
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "ref_url", "page_type"))
+    elsif !params[:item_ids].blank?
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type"))
+    end
+    cache_params = CGI::unescape(cache_params)
+
+    cache_key = "views/#{host_name}/sports_widget.js?#{cache_params}.js"
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        valid_html = cache.match(/_blank/).blank? ? false : true
+        cache = reset_json_callback(cache, params[:callback])
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          item_id = params[:item_ids]
+          ## have to implement to store the category_item_details
+          category_item_detail_id = FeedUrl.get_value_from_pattern(cache, "item_id=<item_id>&amp;", "<item_id>")
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "amazon_sports_widget", category_item_detail_id, nil)
+
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
+          cache = cache.gsub(old_iid, @impression_id)
         end
         return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)
