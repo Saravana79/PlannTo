@@ -485,4 +485,53 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       sleep(1.seconds)
     end while !next_url.blank?
   end
+
+  def self.update_item_details_product_id(batch_size=1000)
+    item_details_amazon_query = "select * from itemdetails where site=9882 and additional_details is null"
+
+    page = 1
+    begin
+      item_details = Itemdetail.paginate_by_sql(item_details_amazon_query, :page => page, :per_page => batch_size)
+
+      item_details.each do |item_detail|
+        begin
+          url = item_detail.url
+          asin = url[/.*\/dp\/(.*)/m,1]
+          asin = asin.split("/")[0]
+
+          item_detail.update_attributes(:additional_details => asin) if !asin.blank?
+        rescue Exception => e
+          p "error"
+        end
+      end
+
+      page += 1
+    end while !impressions.empty?
+
+    item_details_flipkart_query = "select * from itemdetails where site=9861 and additional_details is null"
+
+    page = 1
+    begin
+      item_details = Itemdetail.paginate_by_sql(item_details_flipkart_query, :page => page, :per_page => batch_size)
+
+      uncategory_records = []
+      item_details.each do |item_detail|
+        begin
+          url = item_detail.url
+          pid = FeedUrl.get_value_from_pattern(url.to_s, "pid=<pid>", "<pid>")
+          if !pid.blank?
+            p pid = pid.split("&")[0]
+            item_detail.update_attributes(:additional_details => pid)
+          else
+            uncategory_records << item_detail
+          end
+        rescue Exception => e
+          p "error"
+        end
+      end
+
+      page += 1
+    end while !impressions.empty?
+  end
+
 end
