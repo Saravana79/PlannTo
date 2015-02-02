@@ -312,6 +312,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           @item_detail = Itemdetail.find_or_initialize_by_url(url)
         else
           @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
+          @item_detail = Itemdetail.find_or_initialize_by_url(url) if @item_detail.blank?
         end
 
         if !@item_detail.new_record?
@@ -448,6 +449,7 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
             @item_detail = Itemdetail.find_or_initialize_by_url(url)
           else
             @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
+            @item_detail = Itemdetail.find_or_initialize_by_url(url) if @item_detail.blank?
           end
           if !@item_detail.new_record?
             have_to_create_image = @item_detail.Image.blank? ? true : false

@@ -932,6 +932,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           item_detail = Itemdetail.where(:url => url).first
         else
           item_detail = Itemdetail.where(:additional_details => id).first
+          item_detail = Itemdetail.where(:url => url).first if item_detail.blank?
         end
 
         if !item_detail.blank?
@@ -992,6 +993,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         item_detail = Itemdetail.where(:url => url).first
       else
         item_detail = Itemdetail.where(:additional_details => id).first
+        item_detail = Itemdetail.where(:url => url).first if item_detail.blank?
       end
 
       if !item_detail.blank?
