@@ -24,7 +24,7 @@ body {
 .advt-728 { margin:0; padding:0; width:300px; height:60px; background:#fff; border:1px solid #F1F0F0;}
 
 .advt-728 .advt-box { margin:0; padding:0;}
-.advt-728 .advt-box .logo{ margin:0 auto; padding: 0; text-align:center; vertical-align:middle; float:left; width:60px; height:60px; display:block; border-right:1px solid #F1F0F0;}
+.advt-728 .advt-box .logo{ margin:8px 0px 10px 0px; padding: 0; text-align:center; vertical-align:middle; float:left; width:60px; height:60px; display:block; border-right:1px solid #F1F0F0;}
 .advt-728 .advt-box .logo img{ margin:0 auto; text-align:center; vertical-align:middle;   }
 .advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 0px;}
     
