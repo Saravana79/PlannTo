@@ -1908,19 +1908,19 @@ end
 
     sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
 
-    if (sub_category == "general")
+    if (sub_category == "general" || type == "type_2")
       sub_category_condition = ""
     end
 
-    # if type == "type_1"
+    if type == "type_1"
     #   type_val = "text links"
-    #   item_type_condition = "1=1"
-    # else
-    #   type_val = "product links"
-    #   item_type_condition = "item_type = '#{type_val}'"
-    # end
+       item_type_condition = "1=1"
+     else
+       type_val = "product links"
+       item_type_condition = "item_type = '#{type_val}'"
+     end
 
-    item_type_condition = "1=1"
+    #item_type_condition = "1=1"
 
     offset = rand(CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count)
     if offset == 0
@@ -1957,7 +1957,7 @@ end
       end
       category_item_detail.image_url = item.get("ImageSets/ImageSet/SwatchImage/URL")
       #temporary solution to replace image  SL30 to SL50
-      category_item_detail.image_url = category_item_detail.image_url.gsub("SL30","SL50");
+      category_item_detail.image_url = category_item_detail.image_url.gsub("SL30","SL80");
       category_item_detail.link = item.get("DetailPageURL")
     end
 

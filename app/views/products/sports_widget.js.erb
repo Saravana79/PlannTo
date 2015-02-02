@@ -38,15 +38,22 @@
 </h4>
 </div>
 <% else %>
-<div style="text-align:center;margin:0 auto;width:140px;height:200px;">
+<div style="text-align:center;margin:0 auto;width:140px;height:150px;border:1px solid #CCC">
     <div>
         <a href="<%=@click_url%>" target="_blank">
 
-            <div class="type_2_image" style="float:left; "><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
+            <div class="type_2_image" style="text-align:center;"><img src="<%=@category_item_detail.image_url%>" style=""></img></div>
 
-            <div class="type_2_description" style="float:left;padding:10px;max-width:450px;">
-                <div style=""><span style="font-size:11px;font-weight:bolder;"><%=@category_item_detail.title%></span></div>
-                <div style="padding-top:3px;"><span style="padding-left:2px;font-size:14px;font-weight:600;"><%=@category_item_detail.sale_price %> Shop now!</span></div>
+            <div class="type_2_description" style="padding:3px;">
+                <div style=""><span style="font-size:11px;max-height:22px;color:black;"><%=@category_item_detail.title.to_s.truncate(50)%></span></div>
+                <div style="padding-top:4px;"><span style="padding-left:2px;font-size:13px;font-weight:600;"><%=@category_item_detail.sale_price %></span></div>
+            </div>
+
+            <div>
+                <img src="<%=configatron.root_image_path%>static/images/amazon.png" style="width: 25px;float: left;background: #525252;">
+                <span style="width: 115px;background: orange;display: block;height: 25px;float: left;"> 
+                    <div style="margin: 5px;color: white;">Show Now</div>
+                </span>
             </div>
         </a>
     </div>
@@ -64,9 +71,6 @@ a {
 
 a { outline: none; }
 
-.type_2_image {
-  padding-left: 32%;
-        }
 .type_2_description {
         padding: 3px;
 
