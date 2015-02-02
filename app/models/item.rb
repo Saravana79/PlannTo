@@ -1408,6 +1408,9 @@ end
       elsif suitable_ui_size == "468"
         item_details = item_details.first(4)
         sliced_item_details = []
+     elsif suitable_ui_size == "300_60"
+        item_details = item_details.first(3)
+        sliced_item_details = []
       elsif suitable_ui_size == "200_200"
         item_details = item_details.first(4)
         sliced_item_details = []
@@ -1426,6 +1429,9 @@ end
         sliced_item_details = item_details.each_slice(2)
       elsif suitable_ui_size == "468"
         item_details = item_details.first(4)
+        sliced_item_details = []
+      elsif suitable_ui_size == "300_60"
+        item_details = item_details.first(3)
         sliced_item_details = []
       elsif suitable_ui_size == "200_200"
         item_details = item_details.first(4)
