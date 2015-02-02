@@ -281,7 +281,8 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     node.xpath("//item").each do |item|
       begin
         p "--- Started Process #{url} ---"
-        id = item.at_xpath("g:id").content rescue ""
+        id = item.at_xpath("g:id").content rescue nil
+        id = id.to_s.downcase rescue nil
         title = item.at_xpath("title").content rescue ""
         product_type = item.at_xpath("g:product_type").content rescue ""
         product_type = product_type.to_s.split(">")[1].to_s.strip
@@ -307,7 +308,12 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         end
 
         have_to_create_image = false
-        @item_detail = Itemdetail.find_or_initialize_by_url(url)
+        if id.blank?
+          @item_detail = Itemdetail.find_or_initialize_by_url(url)
+        else
+          @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
+        end
+
         if !@item_detail.new_record?
           have_to_create_image = @item_detail.Image.blank? ? true : false
           status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
@@ -407,7 +413,8 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
         node.xpath("//products//productInfoList").each do |item|
           item_count += 1
           total_item_count += 1
-          id = item.at_xpath("productBaseInfo//productIdentifier//productId").content rescue ""
+          id = item.at_xpath("productBaseInfo//productIdentifier//productId").content rescue nil
+          id = id.to_s.downcase rescue nil
           item_info = item.at_xpath("productBaseInfo//productAttributes")
           title = item_info.at_xpath("title").content rescue ""
           url = item_info.at_xpath("productUrl").content rescue ""
@@ -437,7 +444,11 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
           end
 
           have_to_create_image = false
-          @item_detail = Itemdetail.find_or_initialize_by_url(url)
+          if id.blank?
+            @item_detail = Itemdetail.find_or_initialize_by_url(url)
+          else
+            @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
+          end
           if !@item_detail.new_record?
             have_to_create_image = @item_detail.Image.blank? ? true : false
             @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
@@ -496,10 +507,9 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       item_details.each do |item_detail|
         begin
           url = item_detail.url
-          asin = url[/.*\/dp\/(.*)/m,1]
-          asin = asin.split("/")[0]
+          product_id = Itemdetail.get_vendor_product_id(url.to_s)
 
-          item_detail.update_attributes(:additional_details => asin) if !asin.blank?
+          item_detail.update_attributes(:additional_details => product_id) if !product_id.blank?
         rescue Exception => e
           p "error"
         end
@@ -518,13 +528,9 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
       item_details.each do |item_detail|
         begin
           url = item_detail.url
-          pid = FeedUrl.get_value_from_pattern(url.to_s, "pid=<pid>", "<pid>")
-          if !pid.blank?
-            p pid = pid.split("&")[0]
-            item_detail.update_attributes(:additional_details => pid)
-          else
-            uncategory_records << item_detail
-          end
+          product_id = Itemdetail.get_vendor_product_id(url.to_s)
+
+          item_detail.update_attributes(:additional_details => product_id) if !product_id.blank?
         rescue Exception => e
           p "error"
         end
@@ -532,6 +538,48 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
 
       page += 1
     end while !item_details.blank?
+
+    item_details_snapdeal_query = "select * from itemdetails where site=9874 and additional_details is null"
+
+    page = 1
+    begin
+      item_details = Itemdetail.paginate_by_sql(item_details_snapdeal_query, :page => page, :per_page => batch_size)
+
+      uncategory_records = []
+      item_details.each do |item_detail|
+        begin
+          url = item_detail.url
+          product_id = Itemdetail.get_vendor_product_id(url.to_s)
+
+          item_detail.update_attributes(:additional_details => product_id) if !product_id.blank?
+        rescue Exception => e
+          p "error"
+        end
+      end
+
+      page += 1
+    end while !item_details.blank?
+  end
+
+  def self.get_vendor_product_id(url)
+    if url.include?("amazon.in")
+      asin = url[/.*\/dp\/(.*)/m,1]
+      asin = asin.split("/")[0]
+      asin.to_s.downcase
+    elsif url.include?("flipkart.com")
+      pid = FeedUrl.get_value_from_pattern(url.to_s, "pid=<pid>", "<pid>")
+      pid = pid.split("&")[0] if !pid.blank?
+      pid.to_s.downcase
+    elsif url.include?("snapdeal.com")
+      pid = FeedUrl.get_value_from_pattern(url.to_s, "/<pid>", "<pid>")
+      if !pid.blank?
+        pid = pid.split("&")[0]
+        pid = nil if !pid.match(/\D/).blank?
+        pid
+      end
+    else
+      nil
+    end
   end
 
 end

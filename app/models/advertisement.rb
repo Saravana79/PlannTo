@@ -927,7 +927,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         rescue Exception => e
           url = url.split("%3F")[0]
         end
-        item_detail = Itemdetail.where(:url => url).first
+        id = each_item.get("ASIN").to_s.downcase rescue nil
+        if id.blank?
+          item_detail = Itemdetail.where(:url => url).first
+        else
+          item_detail = Itemdetail.where(:additional_details => id).first
+        end
+
         if !item_detail.blank?
           begin
             #price update
@@ -979,8 +985,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       unless url.include?("flipkart.com")
         url = "http://www.flipkart.com#{url}"
       end
-      p url
-      item_detail = Itemdetail.where(:url => url).first
+
+      id = Itemdetail.get_vendor_product_id(url.to_s)
+
+      if id.blank?
+        item_detail = Itemdetail.where(:url => url).first
+      else
+        item_detail = Itemdetail.where(:additional_details => id).first
+      end
+
       if !item_detail.blank?
         item_id = item_detail.itemid
         ad_item_id << item_id unless item_id.blank?
