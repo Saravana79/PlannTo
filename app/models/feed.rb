@@ -271,7 +271,7 @@ class Feed < ActiveRecord::Base
       title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
     end
 
-    category_list = doc.at(".entry-categories")
+    category_list = doc.at(".entry-categories") rescue ""
 
     if !category_list.blank? && url.include?("wiseshe.com")
       cat_list = category_list.elements.map {|a| a.content} rescue []
