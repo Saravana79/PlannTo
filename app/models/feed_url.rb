@@ -111,7 +111,11 @@ class FeedUrl < ActiveRecord::Base
 
       p each_url_key
       logger.info each_url_key if Rails.env == "production"
-      FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user)
+      begin
+        FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user)
+      rescue Exception => e
+        p "Error while processing missingurl process top list"
+      end
     end
 
     valid_missing_url_keys.each do |each_url_key|
@@ -228,7 +232,12 @@ class FeedUrl < ActiveRecord::Base
       missingurl_count = redis_value["count"]
       feed_url_id = redis_value["feed_url_id"]
       each_url_key = valid_missing_url_keys[index]
-      FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category)
+
+      begin
+        FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category)
+      rescue Exception => e
+        p "Error while processing missingurl process"
+      end
     end
 
   end
