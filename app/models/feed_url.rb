@@ -83,98 +83,132 @@ class FeedUrl < ActiveRecord::Base
     greater_count = 1
     missingurl_keys = [] if missingurl_keys.blank?
     t_count = missingurl_keys.count
+
+
+    sources_list = JSON.parse($redis.get("sources_list_details"))
+    sources_list.default = "Others"
+
+    valid_missing_url_keys = []
     missingurl_keys.each do |each_url_key|
+      # logger.info "#{counting} - #{t_count}"
+      p "#{counting} - #{t_count}"
+      counting = counting + 1
+      each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
+      valid_missing_url_keys << each_url_key
+      # missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
+    end
+
+    results = $redis_rtb.pipelined do
+      valid_missing_url_keys.each do |key|
+        $redis_rtb.hgetall(key)
+      end
+    end
+
+    results.each_with_index do |redis_value, index|
+      missingurl_count = redis_value["count"]
+      feed_url_id = redis_value["feed_url_id"]
+      each_url_key = valid_missing_url_keys[index]
+
+      p each_url_key
+      logger.info each_url_key if Rails.env == "production"
       begin
-        logger.info "#{counting} - #{t_count}"
-        p "#{counting} - #{t_count}"
-        counting = counting + 1
-        each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
-        missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
+        FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user)
+      rescue Exception => e
+        p "Error while processing missingurl process top list"
+      end
+    end
 
-        greater_count = greater_count + 1
-        logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-        p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-        if feed_url_id.blank?
-          missing_url = each_url_key.split("missingurl:")[1]
+    mem_keys = []
+    valid_missing_url_keys.each do |each_url_key|
+      begin
+        mem_key = each_url_key.gsub("missingurl:", "")
+        mem_keys << mem_key
+      rescue Exception => e
+        p "Error in the Url"
+      end
+    end
+    if Rails.env == "production"
+      $redis_rtb.pipelined do
+        mem_keys.each do |key|
+          $redis_rtb.srem("missingurl-toplist", key)
+        end
+      end
+    end
+  end
 
-          check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-          if check_exist_feed_url.blank?
-            source = ""
-            if (missing_url =~ URI::regexp).blank?
-              source = ""
-              status = 3
-            else
-              begin
-                source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
-              rescue Exception => e
-                source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
-              end
-            end
+  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user)
+    if feed_url_id.blank?
+      missing_url = each_url_key.split("missingurl:")[1]
 
-            # sources_list = Rails.cache.read("sources_list_details")
-            sources_list = JSON.parse($redis.get("sources_list_details"))
-            sources_list.default = "Others"
-            category = sources_list[source]["categories"] rescue ""
-
-            # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-            # if check_exist_feed_url.blank?
-            article_content = ArticleContent.find_by_url(missing_url)
-            status = 0
-            status = 1 unless article_content.blank?
-
-            title, description, images, page_category = Feed.get_feed_url_values(missing_url)
-
-            if category.to_s.split(",").include?("ApartmentType")
-              begin
-                page_category = FeedUrl.get_additional_details_for_housing(missing_url)
-              rescue Exception => e
-                p "error message"
-              end
-            end
-
-            url_for_save = missing_url
-            if url_for_save.include?("youtube.com")
-              url_for_save = url_for_save.gsub("watch?v=", "video/")
-            end
-
-            if !page_category.blank?
-              if !valid_categories.include?(page_category.downcase)
-                status = 3
-              elsif page_category.downcase == 'science & technology'
-                category = "Mobile,Tablet,Camera,Laptop"
-              end
-            end
-            # remove characters after come with space + '- or |' symbols
-            # title = title.to_s.gsub(/\s(-|\|).+/, '')
-            title = title.blank? ? "" : title.to_s.strip
-
-            new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
-                                       status: status, source: source, summary: description, :images => images,
-                                       :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
-
-            begin
-              new_feed_url.save!
-              feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
-              feed_url.auto_save_feed_urls if feed_url.status == 0
-            rescue Exception => e
-              p e
-            end
-
-            $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
-          else
-            ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
-            $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
-          end
+      check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+      if check_exist_feed_url.blank?
+        source = ""
+        if (missing_url =~ URI::regexp).blank?
+          source = ""
+          status = 3
         else
-          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
-          $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
+          begin
+            source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+          rescue Exception => e
+            source = Addressable::URI.parse(missing_url).host.gsub("www.", "")
+          end
         end
 
-        mem_key = each_url_key.gsub("missingurl:", "")
-        $redis_rtb.srem("missingurl-toplist", mem_key) if Rails.env == "production"
-      rescue Exception => e
-        p "Error while process missing url => #{each_url_key}"
+        # sources_list = Rails.cache.read("sources_list_details")
+        category = sources_list[source]["categories"] rescue ""
+
+        # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+        # if check_exist_feed_url.blank?
+        article_content = ArticleContent.find_by_url(missing_url)
+        status = 0
+        status = 1 unless article_content.blank?
+
+        title, description, images, page_category = Feed.get_feed_url_values(missing_url)
+
+        if category.to_s.split(",").include?("ApartmentType")
+          begin
+            page_category = FeedUrl.get_additional_details_for_housing(missing_url)
+          rescue Exception => e
+            p "error message"
+          end
+        end
+
+        url_for_save = missing_url
+        if url_for_save.include?("youtube.com")
+          url_for_save = url_for_save.gsub("watch?v=", "video/")
+        end
+
+        if !page_category.blank?
+          if !valid_categories.include?(page_category.downcase)
+            status = 3
+          elsif page_category.downcase == 'science & technology'
+            category = "Mobile,Tablet,Camera,Laptop"
+          end
+        end
+        # remove characters after come with space + '- or |' symbols
+        # title = title.to_s.gsub(/\s(-|\|).+/, '')
+        title = title.blank? ? "" : title.to_s.strip
+
+        new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
+                                   status: status, source: source, summary: description, :images => images,
+                                   :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+
+        begin
+          new_feed_url.save!
+          feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
+          feed_url.auto_save_feed_urls if feed_url.status == 0
+          
+          $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
+        rescue Exception => e
+          p e
+        end
+      else
+        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+        $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
       end
+    else
+      ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+      $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
     end
   end
 
@@ -186,95 +220,121 @@ class FeedUrl < ActiveRecord::Base
     greater_count = 1
     missingurl_keys = [] if missingurl_keys.blank?
     t_count = missingurl_keys.count
+
+    sources_list = JSON.parse($redis.get("sources_list_details"))
+    sources_list.default = "Others"
+
+    valid_missing_url_keys = []
     missingurl_keys.each do |each_url_key|
-      logger.info "#{counting} - #{t_count}"
+      # logger.info "#{counting} - #{t_count}"
       p "#{counting} - #{t_count}"
       counting = counting + 1
       each_url_key = "missingurl:#{each_url_key}" unless each_url_key.include?("missingurl")
-      missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
-      if missingurl_count.to_i > count.to_i
-        greater_count = greater_count + 1
-        logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-        p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
-        if feed_url_id.blank?
-          missing_url = each_url_key.split("missingurl:")[1]
+      valid_missing_url_keys << each_url_key
+      # missingurl_count, feed_url_id = $redis_rtb.hmget(each_url_key, 'count', 'feed_url_id')
+    end
 
-          check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-          if check_exist_feed_url.blank?
-            source = ""
-            if (missing_url =~ URI::regexp).blank?
-              source = ""
-              status = 3
-            else
-              source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
-            end
-
-            # sources_list = Rails.cache.read("sources_list_details")
-            sources_list = JSON.parse($redis.get("sources_list_details"))
-            sources_list.default = "Others"
-            category = sources_list[source]["categories"] rescue ""
-
-            # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
-            # if check_exist_feed_url.blank?
-            article_content = ArticleContent.find_by_url(missing_url)
-            status = 0
-            status = 1 unless article_content.blank?
-
-            title, description, images, page_category = Feed.get_feed_url_values(missing_url)
-
-            if category.to_s.split(",").include?("ApartmentType")
-              begin
-                page_category = FeedUrl.get_additional_details_for_housing(missing_url)
-              rescue Exception => e
-                p "error message"
-              end
-            end
-
-            url_for_save = missing_url
-            if url_for_save.include?("youtube.com")
-              url_for_save = url_for_save.gsub("watch?v=", "video/")
-            end
-
-            if !page_category.blank?
-              unless valid_categories.include?(page_category.downcase)
-                status = 3
-                if page_category.downcase == 'science & technology'
-                  category = "Mobile,Tablet,Camera,Laptop"
-                end
-              end
-            end
-            # remove characters after come with space + '- or |' symbols
-            # title = title.to_s.gsub(/\s(-|\|).+/, '') #TODO: check and add it later
-            # title = title.blank? ? "" : title.to_s.strip
-            title = title.to_s.strip
-
-            new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
-                                          status: status, source: source, summary: description, :images => images,
-                                          :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
-
-            begin
-              new_feed_url.save!
-              feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
-              feed_url.auto_save_feed_urls if feed_url.status == 0
-            rescue Exception => e
-              p e
-            end
-
-            $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
-          else
-            ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
-            $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
-          end
-        else
-          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
-          $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
-        end
-
-        # remove key from redis
-        # $redis_rtb.del(each_url_key) if Rails.env == "production"
-      elsif process_category == "all" && missingurl_count.to_i == 0
-        $redis_rtb.del(each_url_key) if Rails.env == "production"
+    results = $redis_rtb.pipelined do
+      valid_missing_url_keys.each do |key|
+        $redis_rtb.hgetall(key)
       end
+    end
+
+    results.each_with_index do |redis_value, index|
+      missingurl_count = redis_value["count"]
+      feed_url_id = redis_value["feed_url_id"]
+      each_url_key = valid_missing_url_keys[index]
+
+      begin
+        FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category)
+      rescue Exception => e
+        p "Error while processing missingurl process"
+      end
+    end
+
+  end
+
+  def self.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category)
+    if missingurl_count.to_i > count.to_i
+      # greater_count = greater_count + 1
+      # logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
+      # p "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
+      if feed_url_id.blank?
+        missing_url = each_url_key.split("missingurl:")[1]
+
+        check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+        if check_exist_feed_url.blank?
+          source = ""
+          if (missing_url =~ URI::regexp).blank?
+            source = ""
+            status = 3
+          else
+            source = URI.parse(URI.encode(URI.decode(missing_url))).host.gsub("www.", "")
+          end
+
+          # sources_list = Rails.cache.read("sources_list_details")
+          category = sources_list[source]["categories"] rescue ""
+
+          # check_exist_feed_url = FeedUrl.where(:url => missing_url).first
+          # if check_exist_feed_url.blank?
+          article_content = ArticleContent.find_by_url(missing_url)
+          status = 0
+          status = 1 unless article_content.blank?
+
+          title, description, images, page_category = Feed.get_feed_url_values(missing_url)
+
+          if category.to_s.split(",").include?("ApartmentType")
+            begin
+              page_category = FeedUrl.get_additional_details_for_housing(missing_url)
+            rescue Exception => e
+              p "error message"
+            end
+          end
+
+          url_for_save = missing_url
+          if url_for_save.include?("youtube.com")
+            url_for_save = url_for_save.gsub("watch?v=", "video/")
+          end
+
+          if !page_category.blank?
+            unless valid_categories.include?(page_category.downcase)
+              status = 3
+              if page_category.downcase == 'science & technology'
+                category = "Mobile,Tablet,Camera,Laptop"
+              end
+            end
+          end
+          # remove characters after come with space + '- or |' symbols
+          # title = title.to_s.gsub(/\s(-|\|).+/, '') #TODO: check and add it later
+          # title = title.blank? ? "" : title.to_s.strip
+          title = title.to_s.strip
+
+          new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
+                                     status: status, source: source, summary: description, :images => images,
+                                     :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+
+          begin
+            new_feed_url.save!
+            feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
+            feed_url.auto_save_feed_urls if feed_url.status == 0
+          rescue Exception => e
+            p e
+          end
+
+          $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
+        else
+          ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{check_exist_feed_url.id}")
+          $redis_rtb.hmset(each_url_key, "feed_url_id", check_exist_feed_url.id, "count", 0) if Rails.env == "production"
+        end
+      else
+        ActiveRecord::Base.connection.execute("update feed_urls set missing_count=missing_count+#{missingurl_count.to_i} where id=#{feed_url_id}")
+        $redis_rtb.hmset(each_url_key, "count", 0) if Rails.env == "production"
+      end
+
+      # remove key from redis
+      # $redis_rtb.del(each_url_key) if Rails.env == "production"
+    elsif process_category == "all" && missingurl_count.to_i == 0
+      $redis_rtb.del(each_url_key) if Rails.env == "production"
     end
   end
 

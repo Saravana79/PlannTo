@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150129132149) do
+ActiveRecord::Schema.define(:version => 20150203140606) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20150129132149) do
     t.string   "companion_click_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "mp4"
   end
 
   create_table "add_impressions", :id => false, :force => true do |t|
