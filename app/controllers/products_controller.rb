@@ -431,7 +431,7 @@ class ProductsController < ApplicationController
                                                                 cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
 
-      @click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @category_item_detail.link, :item_id => @category_item_detail_id)
+      @click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => @category_item_detail.link, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
 
       # @show_count = Item.get_show_item_count(@items)
 
@@ -480,6 +480,7 @@ class ProductsController < ApplicationController
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
     return url_params, url, itemsaccess, item_ids
   end
 
@@ -796,6 +797,7 @@ class ProductsController < ApplicationController
     params[:page_type] ||= "type_1"
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
 
     #Get dynamic id from url
     records_count = $redis.get("sports_widget:#{url}:#{params[:page_type]}")
