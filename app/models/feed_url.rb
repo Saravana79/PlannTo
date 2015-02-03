@@ -118,9 +118,21 @@ class FeedUrl < ActiveRecord::Base
       end
     end
 
+    mem_keys = []
     valid_missing_url_keys.each do |each_url_key|
-      mem_key = each_url_key.gsub("missingurl:", "")
-      $redis_rtb.srem("missingurl-toplist", mem_key) if Rails.env == "production"
+      begin
+        mem_key = each_url_key.gsub("missingurl:", "")
+        mem_keys << mem_key
+      rescue Exception => e
+        p "Error in the Url"
+      end
+    end
+    if Rails.env == "production"
+      $redis_rtb.pipelined do
+        mem_keys.each do |key|
+          $redis_rtb.srem("missingurl-toplist", key)
+        end
+      end
     end
   end
 
