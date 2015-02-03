@@ -850,26 +850,31 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       end
     end
     ad_item_id = ad_item_id.flatten
-
     ad_item_id = ad_item_id.join(",")
 
-    advertisement = Advertisement.where(:id => 25).first
-    if !advertisement.blank?
-      content = advertisement.content
-
-      old_item_ids_array = content.blank? ? [] : content.allitems.map(&:id)
-      unless content.blank?
-        new_item_ids_array = ad_item_id.split(",")
-        content.update_with_items!({}, ad_item_id)
-        item_ids_array = old_item_ids_array + new_item_ids_array
-        item_ids = item_ids_array.map(&:inspect).join(',')
-        Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
-      end
-    end
+    Advertisement.update_top_product_item_ids([25, 35], ad_item_id)
 
     exc_advertisement = Advertisement.where(:id => 26).first
 
     exc_advertisement.update_attributes!(:exclusive_item_ids => ad_item_id) unless exc_advertisement.blank?
+  end
+
+  def self.update_top_product_item_ids(ad_ids, ad_item_id)
+    ad_ids.each do |advertisement_id|
+      advertisement = Advertisement.where(:id => advertisement_id).first
+      if !advertisement.blank?
+        content = advertisement.content
+
+        old_item_ids_array = content.blank? ? [] : content.allitems.map(&:id)
+        unless content.blank?
+          new_item_ids_array = ad_item_id.split(",")
+          content.update_with_items!({}, ad_item_id)
+          item_ids_array = old_item_ids_array + new_item_ids_array
+          item_ids = item_ids_array.map(&:inspect).join(',')
+          Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+        end
+      end
+    end
   end
 
   def self.update_include_exclude_products_from_flipkart()

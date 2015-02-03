@@ -20,36 +20,40 @@ class OrderHistory < ActiveRecord::Base
   def self.update_orders_from_amazon(date)
     users = [["pla04", "cyn04"], ["interactive", "vagrenpgvir", "interactiv0e4"]]
     users.each do |user|
-      filename = OrderHistory.generate_filename(user, date)
-      url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
-      xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
+      begin
+        filename = OrderHistory.generate_filename(user, date)
+        url = "https://assoc-datafeeds-eu.amazon.com/datafeed/getReport?filename=#{filename}"
+        xml_response = OrderHistory.get_order_details_from_amazon(url, user[0], user[1])
 
-      doc = Nokogiri::XML.parse(xml_response)
-      node = doc.elements.first
-      items_node = node.at_xpath("//Items")
-      items_node.xpath("Item").each do |item|
-        # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
-        impression_id = item.attributes["SubTag"].content
-        revenue = item.attributes["Earnings"].content rescue 0
-        price = item.attributes["Price"].content rescue 0
+        doc = Nokogiri::XML.parse(xml_response)
+        node = doc.elements.first
+        items_node = node.at_xpath("//Items")
+        items_node.xpath("Item").each do |item|
+          # order_history = OrderHistory.new(:order_date => date, :no_of_orders => 1, :vendor_ids => 9882, :order_status => "Validated", :payment_status => "Validated")
+          impression_id = item.attributes["SubTag"].content
+          revenue = item.attributes["Earnings"].content rescue 0
+          price = item.attributes["Price"].content rescue 0
 
-        order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(date.to_time, impression_id, revenue)
-        order_history.vendor_ids = 9882
-        order_history.product_price = price
-        order_history.no_of_orders = 1
-        order_history.order_status = "Validated"
-        order_history.payment_status = "Validated"
+          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(date.to_time, impression_id, revenue)
+          order_history.vendor_ids = 9882
+          order_history.product_price = price
+          order_history.no_of_orders = 1
+          order_history.order_status = "Validated"
+          order_history.payment_status = "Validated"
 
-        impression = AddImpression.where(:id => impression_id).first
-        unless impression.blank?
-          order_history.item_id = impression.item_id
-          product = impression.item
-          order_history.item_name = product.name unless product.blank?
-          order_history.sid = impression.sid
-          order_history.advertisement_id = impression.advertisement_id
-          order_history.publisher_id = impression.publisher_id
+          impression = AddImpression.where(:id => impression_id).first
+          unless impression.blank?
+            order_history.item_id = impression.item_id
+            product = impression.item
+            order_history.item_name = product.name unless product.blank?
+            order_history.sid = impression.sid
+            order_history.advertisement_id = impression.advertisement_id
+            order_history.publisher_id = impression.publisher_id
+          end
+          order_history.save!
         end
-        order_history.save!
+      rescue Exception => e
+        p "Error in order update"
       end
     end
   end
