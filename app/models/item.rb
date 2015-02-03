@@ -1915,7 +1915,7 @@ end
 
     sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
 
-    if (sub_category == "general" || type == "type_2")
+    if (sub_category == "general")
       sub_category_condition = ""
     end
 
