@@ -439,7 +439,9 @@ class AdvertisementsController < ApplicationController
     end
     headers['Access-Control-Allow-Origin'] = headerdetails
     headers['Access-Control-Request-Method'] = headerdetails
-    # headers["Access-Control-Allow-Credentials"] = "true"
+    if (headerdetails != "*" && (headerdetails.include? "youtube.com"))
+       headers["Access-Control-Allow-Credentials"] = "true"
+    end
   end
 
 end
