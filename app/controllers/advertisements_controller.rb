@@ -431,9 +431,17 @@ class AdvertisementsController < ApplicationController
   end
 
   def set_access_control_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Request-Method'] = '*'
-    # headers["Access-Control-Allow-Credentials"] = "true"
+
+    uri = URI.parse(request.referer) rescue ""
+    headerdetails = "*"
+    if (uri != "")
+     headerdetails = uri.scheme+ "://" + uri.host
+    end
+    headers['Access-Control-Allow-Origin'] = headerdetails
+    headers['Access-Control-Request-Method'] = headerdetails
+    if (headerdetails != "*" && (headerdetails.include? "youtube.com"))
+       headers["Access-Control-Allow-Credentials"] = "true"
+    end
   end
 
 end
