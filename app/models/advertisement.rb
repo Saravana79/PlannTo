@@ -983,6 +983,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
           item_id = item_detail.itemid
           ad_item_id << item_id unless item_id.blank?
+        else
+          p "Not Included"
+          p id
+          p url
         end
       end
     end
