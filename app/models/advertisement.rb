@@ -701,7 +701,7 @@ class Advertisement < ActiveRecord::Base
         impression_details = []
         ad_impressions_list.each_with_index do |imp, index|
           appearance_count = ad_impressions_list_values[index].to_i
-          if (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.video_impression_id.blank?)
+          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true"))
             # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
             impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id)
           end

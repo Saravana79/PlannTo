@@ -102,9 +102,9 @@ class AdvertisementsController < ApplicationController
 
     params[:ref_url] = url
     params[:itemsaccess] = itemsaccess
-    params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
 
     params[:url_params] = url_params
 
