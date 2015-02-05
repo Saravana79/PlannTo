@@ -152,7 +152,7 @@ class Admin::AdReportsController < ApplicationController
       params[:search] ||= {}
     end
 
-    @order_histories = OrderHistory.where("publisher_id=? and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @publisher.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
+    @order_histories = OrderHistory.where("publisher_id=? and advertisement_id is null and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @publisher.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
     vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
 
     @impressionscount = @impressions.sum
