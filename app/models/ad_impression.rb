@@ -25,12 +25,14 @@ class AdImpression
   field :design_type, type: String
   field :viewability, type: Integer
   field :additional_details, type: String
+  field :video_impression_id, type: String
 
 
   # has_one :m_click
   # embeds_many :m_clicks
   embeds_many :m_clicks
   embeds_many :m_order_histories
+  embeds_many :m_companion_impressions
 
   index({ impression_time: 1 })
 

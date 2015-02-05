@@ -3,7 +3,7 @@ class Click < ActiveRecord::Base
   belongs_to :user
   belongs_to :add_impression, :foreign_key => "impression_id"
 
-  attr_accessor :t, :r, :ic, :a
+  attr_accessor :t, :r, :ic, :a, :video_impression_id
 
   def self.create_new_record(obj_params)
     unless obj_params.is_a?(Hash)
@@ -41,6 +41,7 @@ class Click < ActiveRecord::Base
       click.r = obj_params[:r]
       click.ic = obj_params[:ic]
       click.a = obj_params[:a]
+      click.video_impression_id = obj_params[:video_impression_id].to_s
 
       Click.redis_push(last_click_details)
       push_to_redis(click.temp_user_id, click.advertisement_id) if (!click.temp_user_id.blank? && !click.advertisement_id.blank?)

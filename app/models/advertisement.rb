@@ -557,6 +557,7 @@ class Advertisement < ActiveRecord::Base
 
         impression_import = []
         impression_import_mongo = []
+        video_impression_import_mongo = []
         ad_impressions_list = []
         clicks_import = []
         clicks_import_mongo = []
@@ -593,8 +594,14 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["size"] = url_params["size"]
               impression_mongo["design_type"] = url_params["page_type"]
               impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+              impression_mongo["video_impression_id"] = impression.video_impression_id
               impression_mongo["additional_details"] = impression.a
-              impression_import_mongo << impression_mongo
+
+              if impression.video_impression_id.blank?
+                impression_import_mongo << impression_mongo
+              else
+                video_impression_import_mongo << impression_mongo
+              end
 
               if impression.advertisement_type == "advertisement"
                 ad_impressions_list << impression
@@ -616,12 +623,39 @@ class Advertisement < ActiveRecord::Base
 
                 click_mongo = click.attributes
                 click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                click_mongo["video_impression_id"] = click_mongo["video_impression_id"].to_s
                 click_mongo.delete("impression_id")
                 clicks_import_mongo << click_mongo
               end
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
               video_imp_import << video_imp
+
+              impression = video_imp
+
+              url_params = Advertisement.reverse_make_url_params(impression.params)
+              impression.device = url_params["device"]
+
+              # Impression mongo
+              impression_mongo = impression.attributes
+              impression_mongo["_id"] = impression_mongo["id"].to_s
+              impression_mongo.delete("id")
+
+              #time fixes
+              impression_mongo["impression_time"] = impression.impression_time.utc if impression.impression_time.is_a?(Time)
+              impression_mongo["created_at"] = impression.created_at.utc if impression.created_at.is_a?(Time)
+              impression_mongo["updated_at"] = impression.updated_at.utc if impression.updated_at.is_a?(Time)
+
+              impression_mongo["tagging"] = impression.t.to_i
+              impression_mongo["retargeting"] = impression.r.to_i
+              impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
+              impression_mongo["device"] = url_params["device"]
+              impression_mongo["size"] = url_params["size"]
+              impression_mongo["design_type"] = url_params["page_type"]
+              impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+              impression_mongo["additional_details"] = impression.a
+              impression_import_mongo << impression_mongo
+
             end
           rescue Exception => e
             p "There was problem while running impressions process => #{e.backtrace}"
@@ -647,6 +681,14 @@ class Advertisement < ActiveRecord::Base
             rescue Exception => e
               p e
             end
+          end
+        end
+
+        video_impression_import_mongo.each do |each_comp_imp|
+          vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
+
+          unless vid_imp.blank?
+            vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
           end
         end
 
@@ -680,7 +722,7 @@ class Advertisement < ActiveRecord::Base
 
         $redis_rtb.pipelined do
           impression_import.each do |each_impression|
-            if (each_impression.advertisement_type == "advertisement" && !each_impression.temp_user_id.blank? && !each_impression.advertisement_id.blank?)
+            if (each_impression.advertisement_type == "advertisement" && !each_impression.temp_user_id.blank? && !each_impression.advertisement_id.blank? && each_impression.video_impression_id.blank?)
               $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",1)
               $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",2.weeks)
 
@@ -740,14 +782,31 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
 
         clicks_import_mongo.each do |each_click_mongo|
-          ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
-          unless ad_impression_mon.blank?
-            each_click_mongo.delete("ad_impression_id")
 
-            m_clicks_count = ad_impression_mon.m_clicks.where(:timestamp => each_click_mongo["timestamp"]).count
-            if m_clicks_count == 0
+          if each_click_mongo["video_impression_id"].blank?
+            ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
+            unless ad_impression_mon.blank?
+              each_click_mongo.delete("ad_impression_id")
+
+              m_clicks_count = ad_impression_mon.m_clicks.where(:timestamp => each_click_mongo["timestamp"]).count
+              if m_clicks_count == 0
+                begin
+                  ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
+                rescue Exception => e
+                  p "Error while push m_click"
+                end
+              end
+            end
+          else
+            ad_impression_mon = AdImpression.where(:_id => each_click_mongo["video_impression_id"]).first
+            unless ad_impression_mon.blank?
+              click_imp = {:timestamp => each_click_mongo["timestamp"]}
+              if each_click_mongo["video_impression_id"] != each_click_mongo["ad_impression_id"]
+                click_imp.merge!({:video_impression_id => each_click_mongo["ad_impression_id"]})
+              end
+
               begin
-                ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
+                ad_impression_mon.m_clicks << MClick.new(click_imp)
               rescue Exception => e
                 p "Error while push m_click"
               end
@@ -764,6 +823,18 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         # end
 
         VideoImpression.import(video_imp_import)
+
+        $redis_rtb.pipelined do
+          video_imp_import.each do |each_impression|
+            if (each_impression.advertisement_type == "video_advertisement" && !each_impression.temp_user_id.blank? && !each_impression.advertisement_id.blank?)
+              $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",1)
+              $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",2.weeks)
+
+              $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1)
+              $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1.day)
+            end
+          end
+        end
 
         $redis.ltrim("resque:queue:create_impression_and_click", add_impressions.count, -1)
         length = length - add_impressions.count
@@ -868,6 +939,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   end
 
   def self.update_top_product_item_ids(ad_ids, ad_item_id)
+    all_item_ids = []
     ad_ids.each do |advertisement_id|
       advertisement = Advertisement.where(:id => advertisement_id).first
       if !advertisement.blank?
@@ -878,11 +950,14 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           new_item_ids_array = ad_item_id.split(",")
           content.update_with_items!({}, ad_item_id)
           item_ids_array = old_item_ids_array + new_item_ids_array
-          item_ids = item_ids_array.map(&:inspect).join(',')
-          Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
+          item_ids = item_ids_array
+          all_item_ids << item_ids
         end
       end
     end
+    all_item_ids = all_item_ids.flatten.uniq
+    item_ids = all_item_ids.map(&:inspect).join(',')
+    Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
   end
 
   def self.update_include_exclude_products_from_flipkart()

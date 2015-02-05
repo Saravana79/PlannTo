@@ -96,7 +96,17 @@ class AdvertisementsController < ApplicationController
 
   def video_ads
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-    params[:type] ||= "VideoImpression"
+    params[:type] ||= "video_advertisement"
+
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+
+    params[:ref_url] = url
+    params[:itemsaccess] = itemsaccess
+    params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
+
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+
+    params[:url_params] = url_params
 
     @show_companion = params[:size] == "0x0" ? "false" : "true"
 
@@ -120,7 +130,7 @@ class AdvertisementsController < ApplicationController
     @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
     item_detail_id = Advertisement.get_video_click_url(params[:item_id])
     if item_detail_id.blank?
-      @video_click_url = configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url)
+      @video_click_url = configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url, :video_impression_id => @impression_id)
     else
       @video_click_url = get_ad_url(item_detail_id, @impression_id, params[:ref_url], params[:sid], params[:ads_id])
     end

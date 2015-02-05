@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150203140606) do
+ActiveRecord::Schema.define(:version => 20150205075736) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -1381,8 +1381,8 @@ ActiveRecord::Schema.define(:version => 20150203140606) do
 
   create_table "video_impressions", :force => true do |t|
     t.integer  "advertisement_id"
-    t.string   "type"
-    t.string   "ref_url"
+    t.string   "advertisement_type"
+    t.string   "hosted_site_url"
     t.string   "ip_address"
     t.string   "winning_price"
     t.string   "sid"
@@ -1390,6 +1390,11 @@ ActiveRecord::Schema.define(:version => 20150203140606) do
     t.datetime "impression_time"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "publisher_id"
+    t.integer  "user_id"
+    t.string   "itemsaccess"
+    t.string   "params"
+    t.string   "temp_user_id"
   end
 
   create_table "vote_counts", :force => true do |t|
