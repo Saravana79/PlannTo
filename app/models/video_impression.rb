@@ -2,6 +2,8 @@ class VideoImpression < ActiveRecord::Base
   include ActiveUUID::UUID
   self.primary_key = "id"
 
+  attr_accessor :t, :r, :device, :a, :video
+
   def self.create_new_record(obj_params)
     unless obj_params.is_a?(Hash)
       obj_params = JSON.parse(obj_params)
@@ -36,6 +38,13 @@ class VideoImpression < ActiveRecord::Base
     rescue
       vi.winning_price = nil
     end
+
+    vi.t = obj_params[:t].to_i
+    vi.r = obj_params[:r].to_i
+    vi.a = obj_params[:a].to_s
+    vi.device = obj_params[:device].to_s
+    vi.video = obj_params[:video].to_s
+
     vi.sid = obj_params[:sid]
     vi.created_at = obj_params[:time]
     vi.updated_at = obj_params[:time]
