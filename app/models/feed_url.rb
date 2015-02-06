@@ -517,11 +517,11 @@ class FeedUrl < ActiveRecord::Base
       if !source_details.blank? && !source_details["check_details"].blank?
         check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
         check_details = Hash[*check_details]
-        title = article.title
+        title = article.title.to_s.downcase
         return_val = ""
-        changed_title = article.title
+        changed_title = article.title.to_s.downcase
         check_details.each do |key, value|
-          if changed_title.include?(key)
+          if changed_title.include?(key.to_s.downcase)
             if value.blank? || value == "empty" || value == "any"
               if value == "any"
                 changed_title = changed_title.to_s.gsub(/#{key}.*/, "")

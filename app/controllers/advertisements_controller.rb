@@ -4,7 +4,11 @@ class AdvertisementsController < ApplicationController
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads]
+
+  before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
+  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads]
   after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
@@ -127,12 +131,13 @@ class AdvertisementsController < ApplicationController
       @total_video_time = params[:vdur] if params[:vdur] < @total_video_time
     end
 
-    @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
+    @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip) if params[:is_test] != "true"
     item_detail_id = Advertisement.get_video_click_url(params[:item_id])
     if item_detail_id.blank?
       @video_click_url = configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url, :video_impression_id => @impression_id)
     else
-      @video_click_url = get_ad_url(item_detail_id, @impression_id, params[:ref_url], params[:sid], params[:ads_id])
+      params[:video_impression_id] = @impression_id
+      @video_click_url = get_ad_url(item_detail_id, @impression_id, params[:ref_url], params[:sid], params[:ads_id], params)
     end
     @companion_dynamic_url = "#{configatron.hostname}/advertisments/show_ads?item_id=#{params[:item_id]}&ads_id=#{params[:ads_id]}&size=#{params[:size]}&ref_url=#{params[:ref_url]}&device=#{params[:device]}&sid=#{params[:sid]}&t=#{params[:t]}&r=#{params[:r]}&a=#{params[:a]}&video=true&video_impression_id=#{@impression_id}"
   end
@@ -433,6 +438,64 @@ class AdvertisementsController < ApplicationController
           cache = cache.gsub(/iid=.{36}/, "iid=#{@impression_id}")
           cache.match "sid=#{params[:sid]}\""
           cache = cache.gsub(/sid=\S*\"/, "sid=#{params[:sid]}\"")
+        end
+        return render :text => cache.html_safe
+        # Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
+
+
+  def create_impression_before_show_video_ads()
+    params[:more_vendors] ||= "false"
+    params[:ads_id] ||= ""
+    params[:ref_url] ||= request.referer rescue ""
+    params[:item_id] ||= ""
+    params[:page_type] ||= ""
+    params[:size] ||= ""
+    params[:click_url] ||= ""
+    params[:r] ||= ""
+    params[:a] ||= ""
+
+    # params[:protocol_type] ||= ""
+    params[:protocol_type] = request.protocol
+
+    params[:size] = params[:size].to_s.gsub("*", "x")
+    # check and assign page type if ab_test is enabled
+    # ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
+    # if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
+    #   alternatives = ab_test_details.blank? ? {} : eval(ab_test_details["alternatives"])
+    #   p alternatives
+    #   p params[:size]
+    #   if alternatives.include?(params[:size])
+    #     types = alternatives["#{params[:size]}"]
+    #     p random_val = Random.rand(1..10)
+    #     params[:page_type] = random_val <= 5 ? types[0] : types[1]
+    #   end
+    # end
+
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+
+    # cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r"))
+    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id"))
+
+    cache_params = CGI::unescape(cache_params)
+    p cache_key = "views/#{host_name}/advertisements/video_ads.xml?#{cache_params}.xml"
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        valid_html = cache.match(/VAST/).blank? ? false : true
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          params[:url_params] = url_params
+          params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
+          params[:type] = "video_advertisement"
+
+          @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
+
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
+          cache = cache.gsub(old_iid, @impression_id)
         end
         return render :text => cache.html_safe
         # Rails.cache.write(cache_key, cache)
