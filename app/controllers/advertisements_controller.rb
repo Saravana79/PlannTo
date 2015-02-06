@@ -6,7 +6,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
-  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads]
   after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
@@ -456,6 +456,8 @@ class AdvertisementsController < ApplicationController
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
+    format = request.format.to_s.split("/")[1]
+    params[:format] = format
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
@@ -477,10 +479,10 @@ class AdvertisementsController < ApplicationController
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
 
     # cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r"))
-    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id"))
+    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id", "format"))
 
     cache_params = CGI::unescape(cache_params)
-    p cache_key = "views/#{host_name}/advertisements/video_ads.xml?#{cache_params}.xml"
+    cache_key = "views/#{host_name}/advertisements/video_ads?#{cache_params}.xml"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -497,14 +499,13 @@ class AdvertisementsController < ApplicationController
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
         end
-        return render :text => cache.html_safe
+        return render :xml => cache.html_safe
         # Rails.cache.write(cache_key, cache)
       end
     end
   end
 
   def set_access_control_headers
-
     uri = URI.parse(request.referer) rescue ""
     headerdetails = "*"
     if (uri != "")
