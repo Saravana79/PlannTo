@@ -1056,8 +1056,12 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             p "Error while updating itemdetail => #{item_detail.id} price"
           end
 
-          item_id = item_detail.itemid
-          ad_item_id << item_id unless item_id.blank?
+          item = item_detail.item
+          if !item.blank?
+            update_all_amazon_itemdetails_of_item(item, item_detail)
+            item_id = item_detail.itemid
+            ad_item_id << item_id
+          end
         else
           p "Not Included"
           p id
@@ -1066,6 +1070,60 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       end
     end
     ad_item_id
+  end
+
+  def self.update_all_amazon_itemdetails_of_item(item, item_detail)
+    item_details = item.itemdetails.where(:site => item_detail.site)
+    item_details = item_details - [item_detail]
+    item_details.each do |each_item_detail|
+      begin
+        asin = each_item_detail.additional_details
+        next if asin.blank?
+
+        res = APICache.get(asin.to_s.gsub(" ", ""), :timeout => 5.hours) do
+          Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
+        end
+
+        each_item = res.items.first
+
+        if !each_item.blank?
+          begin
+            #price update
+            offer_listing = each_item.get_element("Offers/Offer/OfferListing")
+            if !offer_listing.blank?
+              begin
+                current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              rescue Exception => e
+                current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              end
+              availability_str = offer_listing.get("Availability")
+
+              status = case availability_str
+                         when /Usually dispatched.*/ || /Usually ships.*/
+                           1
+                         when /Not yet released/ || /Not yet published/
+                           3
+                         when /This item is not stocked or has been discontinued/
+                           4
+                         when /Out of Stock/
+                           2
+                         else
+                           4
+                       end
+
+              each_item_detail.update_attributes!(:price => current_price, :status => status)
+            else
+              each_item_detail.update_attributes!(:status => 2)
+            end
+          rescue Exception => e
+            p "Error while updating itemdetail => #{item_detail.id} price"
+          end
+        end
+      rescue Exception => e
+        p "Error processing itemdetails"
+      end
+      sleep(2)
+    end
   end
 
   def self.get_matching_item_ids_from_flipkart(page_url)
