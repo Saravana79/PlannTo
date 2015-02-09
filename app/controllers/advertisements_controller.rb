@@ -500,6 +500,7 @@ class AdvertisementsController < ApplicationController
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
         end
+        set_access_control_headers()
         return render :xml => cache.html_safe
         # Rails.cache.write(cache_key, cache)
       end
