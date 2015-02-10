@@ -345,7 +345,18 @@ class Advertisement < ActiveRecord::Base
     new_array = []
 
     url_params = url_params.split(";")
-    url_params.each {|each_pair| new_array << each_pair.split("-")}
+    # url_params.each {|each_pair| new_array << each_pair.split("-")}
+    url_params.each do |each_pair|
+      hash_val = each_pair.split("-")
+      if hash_val.count == 2
+        new_array << hash_val
+      else
+        hash_key = hash_val[0]
+        hash_val = hash_val - [hash_key]
+        hash_val = hash_val.join("-")
+        new_array << [hash_key, hash_val]
+      end
+    end
 
     param_hash = Hash[new_array]
     param_hash
@@ -687,7 +698,7 @@ class Advertisement < ActiveRecord::Base
         video_impression_import_mongo.each do |each_comp_imp|
           vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
 
-          unless vid_imp.blank?
+          if !vid_imp.blank?
             vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
           end
         end
