@@ -634,7 +634,7 @@ class Advertisement < ActiveRecord::Base
 
                 click_mongo = click.attributes
                 click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
-                click_mongo["video_impression_id"] = click_mongo["video_impression_id"].to_s
+                click_mongo["video_impression_id"] = click.video_impression_id
                 click_mongo.delete("impression_id")
                 clicks_import_mongo << click_mongo
               end
@@ -696,10 +696,16 @@ class Advertisement < ActiveRecord::Base
         end
 
         video_impression_import_mongo.each do |each_comp_imp|
-          vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
+          begin
+            vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
 
-          if !vid_imp.blank?
-            vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
+            if !vid_imp.blank?
+              vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
+            else
+              MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
+            end
+          rescue Exception => e
+            p "rescue while comp mongodb insert"
           end
         end
 

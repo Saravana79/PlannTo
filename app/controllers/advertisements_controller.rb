@@ -351,13 +351,15 @@ class AdvertisementsController < ApplicationController
   def create_impression_before_show_ads
     params[:more_vendors] ||= "false"
     params[:ads_id] ||= ""
-    params[:ref_url] ||= request.referer rescue ""
     params[:item_id] ||= ""
     params[:page_type] ||= ""
     params[:size] ||= ""
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
+
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
