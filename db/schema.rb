@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150205075736) do
+ActiveRecord::Schema.define(:version => 20150210083905) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(:version => 20150205075736) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "mp4"
+    t.string   "video_details"
   end
 
   create_table "add_impressions", :id => false, :force => true do |t|

@@ -115,9 +115,13 @@ class AdvertisementsController < ApplicationController
     @advertisement = Advertisement.where(:id => params[:ads_id]).first
     @ad_video_detail = @advertisement.ad_video_detail
 
-    @skippable = @ad_video_detail.skip
-    @skippable_time = @ad_video_detail.skip_time
-    @total_video_time = @ad_video_detail.total_time.to_s
+    if !@ad_video_detail.blank?
+      @skippable = @ad_video_detail.skip
+      @skippable_time = @ad_video_detail.skip_time
+      @total_video_time = @ad_video_detail.total_time.to_s
+
+      @flv_details, @wmv_details, @webm_details, @mp4_details = @ad_video_detail.video_details.to_s.split(">>").map {|x| x.split(",")}
+    end
 
     if !params[:vskip].blank?
       @skippable = params[:vskip] == "BLOCK_SKIPPABLE" ? false : true
