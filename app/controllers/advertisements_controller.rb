@@ -100,7 +100,9 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ads
-    params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+   # params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+    params[:ref_url] ||= ""
+    params[:ref_url] =  params[:ref_url].gsub("http://", "") 
     params[:type] ||= "video_advertisement"
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
