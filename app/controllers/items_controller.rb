@@ -281,6 +281,19 @@ class ItemsController < ApplicationController
       end
     end
 
+  def remove_duplicate_item
+    if !params[:item_ids].blank? && params[:item_ids].to_s.split(",").count != 2
+      flash[:alert] = "Invalid Item count"
+    elsif params[:item_ids].to_s.split(",").count == 2
+      begin
+        Item.process_and_move_duplicate_item_details(params[:item_ids])
+        flash[:notice] = "Successfully Deleted Duplicate Item"
+      rescue Exception => e
+        flash[:alert] = "Error while deleting duplicate item"
+      end
+    end
+  end
+
     def update_page
 
     end

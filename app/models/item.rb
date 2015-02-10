@@ -47,6 +47,7 @@ class Item < ActiveRecord::Base
 
   has_many :item_pro_cons
   has_one :item_ad_detail
+  has_many :itemexternalurls, :foreign_key => 'ItemID'
 
   after_save :create_item_ad_detail
   after_save :update_redis_with_item
@@ -1984,6 +1985,62 @@ end
 
   def self.get_amazon_product_product_text_link_from_item_id(asin, page_type)
     category_item_detail = Item.get_amazon_product_link_from_asin(asin)
+  end
+
+  def self.process_and_move_duplicate_item_details(item_ids)
+    org_item, dup_item = item_ids.to_s.split(",")
+
+    org_item = Item.where(:id => org_item).first
+    dup_item = Item.where(:id => dup_item).first
+
+    if !org_item.blank? && !dup_item.blank?
+      # Update item content relational cache
+      contents = dup_item.contents
+
+      new_items = []
+      contents.each do |content|
+        old_item_ids_array = content.allitems.map(&:id)
+        all_item_ids = old_item_ids_array - [dup_item.id]
+        all_item_ids << org_item.id
+
+        all_item_ids_join = all_item_ids.join(",")
+        content.update_with_items!({}, all_item_ids_join)
+        new_items << all_item_ids
+      end
+      new_items = new_items.flatten.uniq.join(",")
+      Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, new_items)
+
+
+      #update source items
+      source_items = Sourceitem.where(:matchitemid => dup_item.id)
+
+      source_items.each do |source_item|
+        source_item.update_attributes(:matchitemid => org_item.id)
+      end
+
+      #update item_details
+      item_details = Itemdetail.where(:itemid => dup_item.id)
+
+      item_details.each do |item_detail|
+        item_detail.update_attributes(:itemid => org_item.id)
+      end
+
+      #update related items
+      item_relationships = Itemrelationship.where(:item_id => dup_item.id)
+
+      item_relationships.each do |item_relationship|
+        item_relationship.update_attributes(:item_id => org_item.id)
+      end
+
+      #update itemexternalurls
+      itemexternalurls = Itemexternalurl.where(:ItemID => dup_item.id)
+
+      itemexternalurls.each do |itemexternalurl|
+        itemexternalurl.update_attributes(:ItemID => org_item.id)
+      end
+
+      dup_item.destroy
+    end
   end
 
   private

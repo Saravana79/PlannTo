@@ -367,6 +367,7 @@ resources :comments do
     collection do
       get :compare
       get :update_page
+      get :remove_duplicate_item
     end
     member do
       get 'follow_item_type'
