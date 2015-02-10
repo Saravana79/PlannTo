@@ -103,11 +103,6 @@ class AdvertisementsController < ApplicationController
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
     params[:type] ||= "video_advertisement"
 
-    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
-
-    params[:ref_url] = url
-    params[:itemsaccess] = itemsaccess
-
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
 
@@ -509,7 +504,7 @@ class AdvertisementsController < ApplicationController
           old_ref_url = FeedUrl.get_value_from_pattern(cache, "ref_url=<ref_url>&amp;", "<ref_url>")
           cache = cache.gsub(old_ref_url, url) if !old_ref_url.blank?
         end
-        set_access_control_headers()
+        # set_access_control_headers()
         return render :xml => cache.html_safe
         # Rails.cache.write(cache_key, cache)
       end
