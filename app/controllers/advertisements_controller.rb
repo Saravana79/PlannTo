@@ -6,10 +6,11 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
-  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format", "protocol_type") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
+  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads]
-  after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
+  #after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
   def show_ads
     #TODO: everything is clickable is only updated for type1 have to update for type2
     impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
@@ -101,6 +102,11 @@ class AdvertisementsController < ApplicationController
   def video_ads
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
     params[:type] ||= "video_advertisement"
+
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+
+    params[:ref_url] = url
+    params[:itemsaccess] = itemsaccess
 
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
@@ -503,6 +509,7 @@ class AdvertisementsController < ApplicationController
           old_ref_url = FeedUrl.get_value_from_pattern(cache, "ref_url=<ref_url>&amp;", "<ref_url>")
           cache = cache.gsub(old_ref_url, url) if !old_ref_url.blank?
         end
+        set_access_control_headers()
         return render :xml => cache.html_safe
         # Rails.cache.write(cache_key, cache)
       end
