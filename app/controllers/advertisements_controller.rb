@@ -6,7 +6,7 @@ class AdvertisementsController < ApplicationController
   caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
-  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+  caches_action :video_ads, :cache_path => proc {|c| params.slice("item_id", "ads_id", "size", "format", "protocol_type") }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
   skip_before_filter :cache_follow_items, :store_session_url, :only => [:show_ads, :video_ads]
   after_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
@@ -102,11 +102,6 @@ class AdvertisementsController < ApplicationController
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
     params[:type] ||= "video_advertisement"
 
-    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
-
-    params[:ref_url] = url
-    params[:itemsaccess] = itemsaccess
-
     url_params = set_cookie_for_temp_user_and_url_params_process(params)
     params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
 
@@ -137,7 +132,8 @@ class AdvertisementsController < ApplicationController
       @video_click_url = configatron.hostname + history_details_path(:ads_id => @advertisement.id, :iid => @impression_id, :red_url => @ad_video_detail.linear_click_url, :video_impression_id => @impression_id)
     else
       params[:video_impression_id] = @impression_id
-      @video_click_url = get_ad_url(item_detail_id, @impression_id, params[:ref_url], params[:sid], params[:ads_id], params)
+      # @video_click_url = get_ad_url(item_detail_id, @impression_id, params[:ref_url], params[:sid], params[:ads_id], params)
+      @video_click_url = configatron.hostname + history_details_path(:detail_id => item_detail_id, :ads_id => @advertisement.id, :iid => @impression_id, :ref_url => params[:ref_url], :video_impression_id => @impression_id)
     end
     @companion_dynamic_url = "#{configatron.hostname}/advertisments/show_ads?item_id=#{params[:item_id]}&ads_id=#{params[:ads_id]}&size=#{params[:size]}&ref_url=#{params[:ref_url]}&device=#{params[:device]}&sid=#{params[:sid]}&t=#{params[:t]}&r=#{params[:r]}&a=#{params[:a]}&video=true&video_impression_id=#{@impression_id}"
   end
@@ -449,7 +445,6 @@ class AdvertisementsController < ApplicationController
   def create_impression_before_show_video_ads()
     params[:more_vendors] ||= "false"
     params[:ads_id] ||= ""
-    params[:ref_url] ||= request.referer rescue ""
     params[:item_id] ||= ""
     params[:page_type] ||= ""
     params[:size] ||= ""
@@ -463,6 +458,12 @@ class AdvertisementsController < ApplicationController
     params[:protocol_type] = request.protocol
 
     params[:size] = params[:size].to_s.gsub("*", "x")
+
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+
+    params[:ref_url] = url
+    params[:itemsaccess] = itemsaccess
+
     # check and assign page type if ab_test is enabled
     # ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
     # if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
@@ -479,7 +480,7 @@ class AdvertisementsController < ApplicationController
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
 
     # cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r"))
-    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id", "format"))
+    cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "item_id", "format", "protocol_type"))
 
     cache_params = CGI::unescape(cache_params)
     cache_key = "views/#{host_name}/advertisements/video_ads?#{cache_params}.xml"
@@ -498,6 +499,9 @@ class AdvertisementsController < ApplicationController
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
+
+          old_ref_url = FeedUrl.get_value_from_pattern(cache, "ref_url=<ref_url>&amp;", "<ref_url>")
+          cache = cache.gsub(old_ref_url, url) if !old_ref_url.blank?
         end
         return render :xml => cache.html_safe
         # Rails.cache.write(cache_key, cache)
