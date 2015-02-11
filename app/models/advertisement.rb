@@ -568,7 +568,7 @@ class Advertisement < ActiveRecord::Base
 
         impression_import = []
         impression_import_mongo = []
-        video_impression_import_mongo = []
+        video_comp_impression_import_mongo = []
         ad_impressions_list = []
         clicks_import = []
         clicks_import_mongo = []
@@ -611,7 +611,7 @@ class Advertisement < ActiveRecord::Base
               if impression.video_impression_id.blank?
                 impression_import_mongo << impression_mongo
               else
-                video_impression_import_mongo << impression_mongo
+                video_comp_impression_import_mongo << impression_mongo
               end
 
               if impression.advertisement_type == "advertisement"
@@ -680,20 +680,6 @@ class Advertisement < ActiveRecord::Base
         #push to mongo
         # AdImpression.collection.insert(impression_import_mongo, { ordered: false })
 
-        video_impression_import_mongo.each do |each_comp_imp|
-          begin
-            vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
-
-            if !vid_imp.blank?
-              vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
-            else
-              MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
-            end
-          rescue Exception => e
-            p "rescue while comp mongodb insert"
-          end
-        end
-
         #TODO: Temp Fix
         begin
           #process bulk insert for mongo collection impression
@@ -706,6 +692,20 @@ class Advertisement < ActiveRecord::Base
             rescue Exception => e
               p e
             end
+          end
+        end
+
+        video_comp_impression_import_mongo.each do |each_comp_imp|
+          begin
+            vid_imp = AdImpression.where("_id" => each_comp_imp["video_impression_id"]).first
+
+            if !vid_imp.blank?
+              vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
+            else
+              MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
+            end
+          rescue Exception => e
+            p "rescue while comp mongodb insert"
           end
         end
 
