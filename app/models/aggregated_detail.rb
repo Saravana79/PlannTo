@@ -55,7 +55,8 @@ class AggregatedDetail < ActiveRecord::Base
     time = time.localtime
     param = {}
     param[:type] = type
-    param[:ad_type] = "advertisement"
+    # param[:ad_type] = "advertisement"
+    param[:ad_type] = "All"
     param[:ad_id] = "All"
     param[:report_sort_by] = "imp_count"
     start_date = time.to_date.beginning_of_day

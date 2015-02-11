@@ -101,12 +101,6 @@ class AdvertisementsController < ApplicationController
 
   def video_ads
     params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
-    params[:type] ||= "video_advertisement"
-
-    url_params = set_cookie_for_temp_user_and_url_params_process(params)
-    params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
-
-    params[:url_params] = url_params
 
     @show_companion = params[:size] == "0x0" ? "false" : "true"
 
@@ -458,6 +452,7 @@ class AdvertisementsController < ApplicationController
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
+    params[:type] = "video_advertisement"
     format = request.format.to_s.split("/")[1]
     params[:format] = format
 
@@ -470,6 +465,10 @@ class AdvertisementsController < ApplicationController
 
     params[:ref_url] = url
     params[:itemsaccess] = itemsaccess
+
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    params[:url_params] = url_params
+    params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
 
     # check and assign page type if ab_test is enabled
     # ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
@@ -497,11 +496,6 @@ class AdvertisementsController < ApplicationController
       unless cache.blank?
         valid_html = cache.match(/VAST/).blank? ? false : true
         if valid_html
-          url_params = set_cookie_for_temp_user_and_url_params_process(params)
-          params[:url_params] = url_params
-          params[:plan_to_temp_user_id] = cookies[:plan_to_temp_user_id]
-          params[:type] = "video_advertisement"
-
           @impression_id = VideoImpression.add_video_impression_to_resque(params, request.remote_ip)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
