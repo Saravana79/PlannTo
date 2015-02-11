@@ -680,6 +680,20 @@ class Advertisement < ActiveRecord::Base
         #push to mongo
         # AdImpression.collection.insert(impression_import_mongo, { ordered: false })
 
+        video_impression_import_mongo.each do |each_comp_imp|
+          begin
+            vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
+
+            if !vid_imp.blank?
+              vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
+            else
+              MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
+            end
+          rescue Exception => e
+            p "rescue while comp mongodb insert"
+          end
+        end
+
         #TODO: Temp Fix
         begin
           #process bulk insert for mongo collection impression
@@ -692,20 +706,6 @@ class Advertisement < ActiveRecord::Base
             rescue Exception => e
               p e
             end
-          end
-        end
-
-        video_impression_import_mongo.each do |each_comp_imp|
-          begin
-            vid_imp = AdImpression.where("_id" => each_comp_imp["_id"]).first
-
-            if !vid_imp.blank?
-              vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
-            else
-              MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
-            end
-          rescue Exception => e
-            p "rescue while comp mongodb insert"
           end
         end
 
@@ -857,6 +857,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         length = length - add_impressions.count
         p "*********************************** Remaining ImpressionAndClick Length - #{length} **********************************"
       end while length > 0
+
+      # companion_impressions = MCompanionImpression.all
       $redis.set("bulk_process_add_impression_is_running", 0)
       Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc, "true")
     end
