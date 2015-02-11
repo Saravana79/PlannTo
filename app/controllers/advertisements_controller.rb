@@ -463,6 +463,8 @@ class AdvertisementsController < ApplicationController
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
 
+    url = url.gsub(/(http|https):\/\//, '')
+
     params[:ref_url] = url
     params[:itemsaccess] = itemsaccess
 
