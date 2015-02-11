@@ -100,7 +100,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def video_ads
-    params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
+    #params[:ref_url] ||= "http://gadgetstouse.com/full-reviews/gionee-elife-e6-review/11205"
 
     @show_companion = params[:size] == "0x0" ? "false" : "true"
 
