@@ -113,3 +113,5 @@ gem 'activerecord-import', '~> 0.3.1'
 gem 'net-http-digest_auth'
 
 gem 'api_cache'
+
+gem 'streamio-ffmpeg'
