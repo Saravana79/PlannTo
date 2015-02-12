@@ -1743,8 +1743,8 @@ end
       end
 
       item.name = each_item.get_element("ItemAttributes").get("Title")
-      item.sale_price = each_item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue nil
-      item.price = each_item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue nil
+      item.sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue nil
+      item.price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue nil
       if page_type == "type_1"
          item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
       else
@@ -1890,48 +1890,61 @@ end
     sub_category = ""
     sub_categories = []
 
-    if !url.to_s.downcase.scan(/cricket/).blank?
-      sub_category = "cricket"
-      sub_categories = ["cricket", "general"]
-    elsif !url.to_s.downcase.scan(/arsenal/).blank?
-      sub_category = "arsenal"
-      sub_categories = ["arsenal", "general"]
-    elsif !url.to_s.downcase.scan(/united/).blank?
-      sub_category = "united"
-      sub_categories = ["united", "general"]
-    elsif !url.to_s.downcase.scan(/chelsea/).blank?
-      sub_category = "chelsea"
-      sub_categories = ["chelsea", "general"]
-    elsif !url.to_s.downcase.scan(/liverpool/).blank?
-      sub_category = "liverpool"
-      sub_categories = ["liverpool", "general"]
-    elsif !url.to_s.downcase.scan(/football/).blank?
-      sub_category = "football"
-      sub_categories = ['arsenal','chelsea','liverpool','united','football', "general"]
+    if url.include?("sify.com")
+      if url.to_s.downcase.scan(/cricket/).blank?
+        sub_category = "cricket"
+        sub_categories = ["cricket", "general"]
+      else
+        sub_categories = ["All"]
+      end
+      sub_category_condition = ""
     else
-      sub_category = "general"
+      if !url.to_s.downcase.scan(/cricket/).blank?
+        sub_category = "cricket"
+        sub_categories = ["cricket", "general"]
+      elsif !url.to_s.downcase.scan(/arsenal/).blank?
+        sub_category = "arsenal"
+        sub_categories = ["arsenal", "general"]
+      elsif !url.to_s.downcase.scan(/united/).blank?
+        sub_category = "united"
+        sub_categories = ["united", "general"]
+      elsif !url.to_s.downcase.scan(/chelsea/).blank?
+        sub_category = "chelsea"
+        sub_categories = ["chelsea", "general"]
+      elsif !url.to_s.downcase.scan(/liverpool/).blank?
+        sub_category = "liverpool"
+        sub_categories = ["liverpool", "general"]
+      elsif !url.to_s.downcase.scan(/football/).blank?
+        sub_category = "football"
+        sub_categories = ['arsenal','chelsea','liverpool','united','football', "general"]
+      else
+        sub_category = "general"
+      end
+
+      sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
+
+      if (sub_category == "general")
+        sub_category_condition = ""
+      end
     end
 
     # sub_category = "cricket" if type == "type_2" #TODO: hot fixes
 
-    sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
-
-    if (sub_category == "general")
-      sub_category_condition = ""
+    if type == "type_3"
+      # type_val = "text links"
+      item_type_condition = "item_type = 'keyword links'"
+    elsif type == "type_1"
+      # type_val = "text links"
+      item_type_condition = "1=1"
+    else
+      type_val = "product links"
+      item_type_condition = "item_type = '#{type_val}'"
     end
-
-    if type == "type_1"
-    #   type_val = "text links"
-       item_type_condition = "1=1"
-     else
-       type_val = "product links"
-       item_type_condition = "item_type = '#{type_val}'"
-     end
 
     #item_type_condition = "1=1"
 
     if category_item_detail_id.blank?
-      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").count
+      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").count
 
       #store record count to redis
       $redis.set("sports_widget:#{url}:#{type}", category_item_details_count)
@@ -1944,7 +1957,7 @@ end
       offset = category_item_detail_id.to_i
     end
 
-    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition}").first(:offset => offset)
+    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").first(:offset => offset)
 
     rand_record
   end
@@ -2041,6 +2054,35 @@ end
 
       dup_item.destroy
     end
+  end
+
+  def self.get_amazon_products_from_keyword(keyword)
+    res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
+    end
+
+    items = []
+    loop_items = res.items.first(3)
+
+    loop_items.each_with_index do |each_item, index|
+      item = OpenStruct.new
+
+      item.title = each_item.get_element("ItemAttributes").get("Title")
+
+      sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+      if sale_price.blank?
+        sale_price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+      end
+      item.sale_price = sale_price.gsub("INR", "Rs")
+
+      item.percentage_saved = each_item.get_element("Offers/Offer/OfferListing").get("PercentageSaved") rescue ""
+
+
+      item.click_url = each_item.get("DetailPageURL")
+      items << item
+    end
+
+    return items
   end
 
   private

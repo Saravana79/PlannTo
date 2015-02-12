@@ -230,3 +230,23 @@ csv_details.each_with_index do |csv_detail, index|
 end
 
 results = CategoryItemDetail.import(category_item_details)
+
+
+## For Sify
+
+csv_details = CSV.read("/home/sivakumar/Desktop/searches.csv", { :col_sep => "\t" })
+
+category_item_details = []
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  sub_category = csv_detail[1]
+  keyword = csv_detail[2]
+
+  next if keyword.blank?
+
+  category_item_detail = CategoryItemDetail.new(:item_type => "keyword links", :category => "general", :sub_category => sub_category, :text => keyword, :link => nil)
+  category_item_details << category_item_detail
+end
+
+results = CategoryItemDetail.import(category_item_details)

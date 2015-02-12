@@ -28,7 +28,7 @@
         </div>
     </div>
 <% end %>
-<% else %>
+<% elsif params[:page_type] == "type_2" %>
 <% if !@category_item_detail.id.blank? %>
 <div style="padding:10px;text-align:center;margin:0 auto;">
 <h4 style="text-align:center;font-size: 19px;">
@@ -60,7 +60,39 @@
     <br clear="both"/>
 </div>
 <% end %>
-    <%#= link_to "#{image_tag(@category_item_detail.image_url)}  #{@category_item_detail.sale_price} - BUY NOW!".html_safe, @click_url, :target => "_blank" %>
+<% else params[:page_type] == "type_3" %>
+
+   <% @category_item_details.each_with_index do |category_item_detail, index| %>
+        <% index = index + 1 %>
+        <div style="margin:0 auto;" class="slider" id="<%= index %>">
+        <div>
+            <a href="<%= category_item_detail.click_url %>" target="_blank">
+
+                <div style="float:left;ont: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;">
+                    <div style="">
+                        <span style="font-size:14px;font-weight:bold;">
+                            <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(50) %> @ Just <%= category_item_detail.sale_price %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
+                        </span>
+                    </div>
+<!--                    <div style="padding-top:3px;">
+                        <span>@ Just </span>
+                        <span style="padding-left:2px;font-size:14px;font-weight:bold;"><%#= category_item_detail.sale_price %> - (10% OFF)</span>
+                    </div> -->
+                </div>
+            </a>
+            <br clear="both"/>
+        </div>
+        </div>
+   <% end %>
+
+    <script type = "text/javascript" charset = "utf-8" >
+      PlannTo.jQuery(document).ready(function()
+      {
+              PlannTo.jQuery(".slider").hide()
+              PlannTo.jQuery("#1").show()
+      })
+  </script>
+
 <% end %>
 
 <style type="text/css">

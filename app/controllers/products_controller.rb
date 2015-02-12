@@ -398,7 +398,6 @@ class ProductsController < ApplicationController
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
-    @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
     # if params[:page_type] == "type_1"
     #   @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type])
@@ -414,6 +413,11 @@ class ProductsController < ApplicationController
       @category_item_detail_id = @category_item_detail.id
       params[:category_item_detail_id] = @category_item_detail_id
       @category_item_detail = Item.get_amazon_product_product_text_link_from_item_id(@category_item_detail.text, params[:page_type])
+    elsif @category_item_detail.item_type == "keyword links"
+      p @category_item_detail.text
+      @category_item_detail_id = @category_item_detail.id
+      params[:category_item_detail_id] = @category_item_detail_id
+      p @category_item_details = Item.get_amazon_products_from_keyword(@category_item_detail.text)
     end
 
     # include pre order status if we show more details.
@@ -791,7 +795,6 @@ class ProductsController < ApplicationController
     params[:price_full_details] ||= "true"
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     params[:request_referer] ||= request.referer
-    params[:request_referer] ||= ""
     params[:ref_url] ||= ""
     params[:item_ids] ||= ""
     params[:page_type] ||= "type_1"
