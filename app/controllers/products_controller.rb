@@ -414,10 +414,9 @@ class ProductsController < ApplicationController
       params[:category_item_detail_id] = @category_item_detail_id
       @category_item_detail = Item.get_amazon_product_product_text_link_from_item_id(@category_item_detail.text, params[:page_type])
     elsif @category_item_detail.item_type == "keyword links"
-      p @category_item_detail.text
       @category_item_detail_id = @category_item_detail.id
       params[:category_item_detail_id] = @category_item_detail_id
-      p @category_item_details = Item.get_amazon_products_from_keyword(@category_item_detail.text)
+      @category_item_details = Item.get_amazon_products_from_keyword(@category_item_detail.text)
     end
 
     # include pre order status if we show more details.

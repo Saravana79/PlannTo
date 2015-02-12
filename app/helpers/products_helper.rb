@@ -57,5 +57,9 @@ module ProductsHelper
     else
       params_word
     end
+    end
+
+  def get_general_click_url(url)
+    click_url = configatron.hostname + history_details_path(:ads_id => nil, :iid => @impression_id, :red_sports_url => url, :item_id => @category_item_detail_id, :ref_url => params[:ref_url])
   end
 end

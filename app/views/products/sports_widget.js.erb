@@ -62,11 +62,12 @@
 <% end %>
 <% else params[:page_type] == "type_3" %>
 
+<span style="float: left; padding: 8px 0px 0px; color: lightsalmon; cursor: pointer;" class="left"> &lt;&lt; </span>
    <% @category_item_details.each_with_index do |category_item_detail, index| %>
         <% index = index + 1 %>
-        <div style="margin:0 auto;" class="slider" id="<%= index %>">
+        <div style="margin: 0 32px;" class="slider" id="<%= index %>">
         <div>
-            <a href="<%= category_item_detail.click_url %>" target="_blank">
+            <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank">
 
                 <div style="float:left;ont: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;">
                     <div style="">
@@ -84,13 +85,41 @@
         </div>
         </div>
    <% end %>
+  <span class="right" style="float: right; margin: -28px 0px 0px; color: lightsalmon; cursor: pointer;"> &gt;&gt; </span>
 
     <script type = "text/javascript" charset = "utf-8" >
       PlannTo.jQuery(document).ready(function()
       {
               PlannTo.jQuery(".slider").hide()
               PlannTo.jQuery("#1").show()
-      })
+              PlannTo.jQuery("#1").addClass("active")
+      });
+
+    PlannTo.jQuery(".left").click(function()
+    {
+      var active_div = PlannTo.jQuery(".active")
+      var prev_div = PlannTo.jQuery(active_div).prev()
+            if (PlannTo.jQuery(prev_div).attr("class") != "left")
+            {
+              PlannTo.jQuery(".slider").hide()
+            PlannTo.jQuery(prev_div).show()
+            PlannTo.jQuery(".slider").removeClass("active")
+            PlannTo.jQuery(prev_div).addClass("active")
+            }
+    });
+
+    PlannTo.jQuery(".right").click(function()
+    {
+            var active_div = PlannTo.jQuery(".active")
+            var next_div = PlannTo.jQuery(active_div).next()
+            if (PlannTo.jQuery(next_div).attr("class") != "right")
+            {
+            PlannTo.jQuery(".slider").hide()
+            PlannTo.jQuery(next_div).show()
+            PlannTo.jQuery(".slider").removeClass("active")
+            PlannTo.jQuery(next_div).addClass("active")
+            }
+    });
   </script>
 
 <% end %>
