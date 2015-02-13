@@ -69,10 +69,10 @@
         <div>
             <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank">
 
-                <div style="float:left;ont: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;">
+                <div style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;width:100%;text-align:center;">
                     <div style="">
                         <span style="font-size:14px;font-weight:bold;">
-                            <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(50) %> @ Just <%= category_item_detail.sale_price %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
+                            <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(40) %> @ Just <%= category_item_detail.sale_price %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
                         </span>
                     </div>
 <!--                    <div style="padding-top:3px;">
