@@ -97,6 +97,14 @@
               PlannTo.jQuery(".slider").hide()
               PlannTo.jQuery("#1").show()
               PlannTo.jQuery("#1").addClass("active")
+
+              var active_div = PlannTo.jQuery(".active")
+              var next_div = PlannTo.jQuery(active_div).next()
+
+              if (active_div.length == 0 || PlannTo.jQuery(next_div).attr("class") == "right")
+              {
+                PlannTo.jQuery(".right").hide();
+              }
       });
 
     PlannTo.jQuery(".left").click(function()
@@ -116,6 +124,12 @@
     {
             var active_div = PlannTo.jQuery(".active")
             var next_div = PlannTo.jQuery(active_div).next()
+
+            if (PlannTo.jQuery(next_div).next().attr("class") == "right")
+            {
+            PlannTo.jQuery(".right").hide();
+            }
+
             if (PlannTo.jQuery(next_div).attr("class") != "right")
             {
             PlannTo.jQuery(".slider").hide()

@@ -1935,7 +1935,7 @@ end
       item_type_condition = "item_type = 'keyword links'"
     elsif type == "type_1"
       # type_val = "text links"
-      item_type_condition = "1=1"
+      item_type_condition = "item_type = 'text links' or item_type ='product links'"
     else
       type_val = "product links"
       item_type_condition = "item_type = '#{type_val}'"
