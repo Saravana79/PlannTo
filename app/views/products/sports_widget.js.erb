@@ -80,7 +80,7 @@
                                <%unless index == 3%>
                                 
                             
-                                         <span class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;"> &gt;&gt; </span>
+                                         <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;"> &gt;&gt; </span>
                             <%end%>
                           </a>
                         </span>
@@ -154,6 +154,10 @@
 a {
     color: #e34b18;
     text-decoration: none;
+}
+
+#rightarrow:hover {
+color: #D70707 !important;
 }
 
 a { outline: none; }
