@@ -68,25 +68,32 @@
         <% index = index + 1 %>
         <span style="float:left;margin: 0 6px;" class="slider" id="<%= index %>">
         <div>
-            <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank">
+            
 
                 <div style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;font-weight: bold;width:100%;text-align:center;">
                     <div style="">
                         <span style="font-size:14px;font-weight:bold;">
-                            <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(40) %> @ Just <%= category_item_detail.sale_price %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
+                         <span >  
+                        <span style="float:left;" >
+                         <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank" style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;width:100%;text-align:center;">
+                             <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(40) %> @ Just <%= category_item_detail.sale_price %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
+                               <%unless index == 3%>
+                                
+                            
+                                         <span class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;"> &gt;&gt; </span>
+                            <%end%>
+                          </a>
+                        </span>
+                          
+                          </span>
+           
                         </span>
                     </div>
-<!--                    <div style="padding-top:3px;">
-                        <span>@ Just </span>
-                        <span style="padding-left:2px;font-size:14px;font-weight:bold;"><%#= category_item_detail.sale_price %> - (10% OFF)</span>
-                    </div> -->
                 </div>
-            </a>
             <br clear="both"/>
         </div>
         </span>
    <% end %>
-  <span class="right" style="float: left; font-size:15px;font-weight:600; color: lightsalmon; cursor: pointer;"> &gt;&gt; </span>
   </div>
       <br clear="both"/>
         </div>
@@ -137,6 +144,7 @@
             PlannTo.jQuery(".slider").removeClass("active")
             PlannTo.jQuery(next_div).addClass("active")
             }
+            event.preventDefault();
     });
   </script>
 
