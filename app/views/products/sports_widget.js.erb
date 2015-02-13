@@ -127,7 +127,7 @@
             }
     });
 
-    PlannTo.jQuery(".right").click(function()
+    PlannTo.jQuery(".right").click(function(event)
     {
             var active_div = PlannTo.jQuery(".active")
             var next_div = PlannTo.jQuery(active_div).next()
@@ -145,6 +145,7 @@
             PlannTo.jQuery(next_div).addClass("active")
             }
             event.preventDefault();
+            return false;
     });
   </script>
 
