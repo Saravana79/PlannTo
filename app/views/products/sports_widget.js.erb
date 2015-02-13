@@ -61,11 +61,12 @@
 </div>
 <% end %>
 <% else params[:page_type] == "type_3" %>
-
-<span style="float: left; padding: 8px 0px 0px; color: lightsalmon; cursor: pointer;" class="left"> &lt;&lt; </span>
+<div style="width: 100%;text-align: center;display: block;">
+<div style="display: inline-block;">
+<span style="float: left; padding: 8px 0px 0px; color: lightsalmon; cursor: pointer;display:none;" class="left"> &lt;&lt; </span>
    <% @category_item_details.each_with_index do |category_item_detail, index| %>
         <% index = index + 1 %>
-        <div style="margin: 0 32px;" class="slider" id="<%= index %>">
+        <span style="float:left;margin: 0 6px;" class="slider" id="<%= index %>">
         <div>
             <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank">
 
@@ -83,10 +84,13 @@
             </a>
             <br clear="both"/>
         </div>
-        </div>
+        </span>
    <% end %>
-  <span class="right" style="float: right; margin: -28px 0px 0px; color: lightsalmon; cursor: pointer;"> &gt;&gt; </span>
-
+  <span class="right" style="float: left; font-size:15px;font-weight:600; color: lightsalmon; cursor: pointer;"> &gt;&gt; </span>
+  </div>
+      <br clear="both"/>
+        </div>
+        
     <script type = "text/javascript" charset = "utf-8" >
       PlannTo.jQuery(document).ready(function()
       {
