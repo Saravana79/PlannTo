@@ -75,7 +75,7 @@
                         <span style="font-size:14px;font-weight:bold;">
                          <span >  
                         <span style="float:left;" >
-                         <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank" style="float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;width:100%;text-align:center;">
+                         <a href="<%= get_general_click_url(category_item_detail.click_url) %>" target="_blank" style="text-decoration: none;outline:none;float:left;font: 400 14px Arial,Helvetica,sans-serif; color: #f90 !important; font-size: 14px;width:100%;text-align:center;">
                              <b style="color: #000;">Discover:</b> <%= category_item_detail.title.to_s.truncate(45) %> <%= category_item_detail.sale_price.blank? ? "" : "@ Just #{category_item_detail.sale_price}" %> <%= category_item_detail.percentage_saved.blank? ? "" : "(#{category_item_detail.percentage_saved}% OFF)" %>
                                <%unless index == 3%>
                                 
@@ -152,16 +152,13 @@
 <% end %>
 
 <style type="text/css">
-a {
-    color: #e34b18;
-    text-decoration: none;
-}
+
+    
 
 #rightarrow:hover {
 color: #D70707 !important;
 }
 
-a { outline: none; }
 
 .type_2_description {
         padding: 3px;
