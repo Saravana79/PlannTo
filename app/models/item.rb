@@ -1888,16 +1888,34 @@ end
 
   def self.get_amazon_product_text_link(url, type="type_1", category_item_detail_id=nil)
     sub_category = ""
+    order_condition = ""
+    limit_condition = nil
     sub_categories = []
 
     if url.include?("sify.com")
-      if url.to_s.downcase.scan(/cricket/).blank?
-        sub_category = "cricket"
-        sub_categories = ["cricket", "general"]
+      if !url.to_s.downcase.scan(/movies/).blank?
+        sub_category = "sports"
+        sub_categories = ["beauty", "dvd", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "grocery", "shoes", "watches", "electronics", "aps"]
+      elsif !url.to_s.downcase.scan(/news/).blank? || !url.to_s.downcase.scan(/sports/).blank?
+        sub_category = "news"
+        sub_categories = ["products", "specialty-aps", "luggage", "apparel", "hpc", "shoes", "watches", "electronics", "aps"]
+      elsif !url.to_s.downcase.scan(/finance/).blank?
+        sub_category = "finance"
+        sub_categories = ["office-products", "specialty-aps", "luggage", "sporting", "apparel", "hpc", "shoes", "watches", "electronics", "aps"]
       else
         sub_categories = ["All"]
       end
-      sub_category_condition = ""
+
+      sub_category_condition = sub_categories.include?("All") ? "" : "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
+      order_condition = "rank desc"
+      limit_condition = 10
+    elsif url.include?("bawarchi.com")
+      sub_category = "sports"
+      sub_categories = ["beauty", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "toys", "grocery", "shoes", "watches", "electronics", "aps"]
+      order_condition = "rank desc"
+      limit_condition = 10
+
+      sub_category_condition = "and category in (#{sub_categories.map(&:inspect).join(",")})"
     else
       if !url.to_s.downcase.scan(/cricket/).blank?
         sub_category = "cricket"
@@ -1944,7 +1962,7 @@ end
     #item_type_condition = "1=1"
 
     if category_item_detail_id.blank?
-      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").count
+      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).count
 
       #store record count to redis
       $redis.set("sports_widget:#{url}:#{type}", category_item_details_count)
@@ -1957,7 +1975,7 @@ end
       offset = category_item_detail_id.to_i
     end
 
-    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").first(:offset => offset)
+    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).first(:offset => offset)
 
     rand_record
   end

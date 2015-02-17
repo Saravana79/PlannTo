@@ -407,13 +407,14 @@ class ProductsController < ApplicationController
     # else
     #   @category_item_detail = Item.get_amazon_product_text_link_from_item_id(url, params[:page_type])
     # end
+    @category_item_details = []
 
     @category_item_detail = Item.get_amazon_product_text_link(url, params[:page_type], params[:category_item_detail_id])
-    if @category_item_detail.item_type == "product links"
+    if !@category_item_detail.blank? && @category_item_detail.item_type == "product links"
       @category_item_detail_id = @category_item_detail.id
       params[:category_item_detail_id] = @category_item_detail_id
       @category_item_detail = Item.get_amazon_product_product_text_link_from_item_id(@category_item_detail.text, params[:page_type])
-    elsif @category_item_detail.item_type == "keyword links"
+    elsif !@category_item_detail.blank? && @category_item_detail.item_type == "keyword links"
       @category_item_detail_id = @category_item_detail.id
       params[:category_item_detail_id] = @category_item_detail_id
       @category_item_details = Item.get_amazon_products_from_keyword(@category_item_detail.text)
