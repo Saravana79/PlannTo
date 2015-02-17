@@ -212,6 +212,7 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (>= 0.0.2)
       mime-types
+    phantomjs (1.9.7.1)
     polyglot (0.3.3)
     pr_geohash (1.0.0)
     progress_bar (1.0.3)
@@ -389,6 +390,7 @@ DEPENDENCIES
   omniauth-oauth2
   open_uri_redirections (~> 0.1.4)
   paperclip
+  phantomjs (~> 1.9.7.1)
   progress_bar
   rails (= 3.1.1)
   rails_exception_handler (~> 2)

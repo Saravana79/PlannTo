@@ -114,4 +114,8 @@ gem 'net-http-digest_auth'
 
 gem 'api_cache'
 
+#gem for generate video from frames
 gem 'streamio-ffmpeg'
+
+#gem for animation work in videos
+gem 'phantomjs', '~> 1.9.7.1'
