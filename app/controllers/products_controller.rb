@@ -417,8 +417,16 @@ class ProductsController < ApplicationController
     elsif !@category_item_detail.blank? && @category_item_detail.item_type == "keyword links"
       @category_item_detail_id = @category_item_detail.id
       params[:category_item_detail_id] = @category_item_detail_id
-      @category_item_details = Item.get_amazon_products_from_keyword(@category_item_detail.text)
-    end
+      begin
+        @category_item_details = Item.get_amazon_products_from_keyword(@category_item_detail.text)
+      rescue Exception => e
+        @category_item_details << OpenStruct.new(:title => "ihave ia1310 Boss 10000mAH Power Bank (Gold)", :sale_price => "Rs 1,308.00", :percentage_saved => nil, :click_url => "http://www.amazon.in/ihave-ia1310-Boss-10000mAH-Power/dp/B00N9OVW0G%3FSubscriptionId%3DAKIAJWDCN4DJWNL2FK5A%26tag%3Dpla04-21%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00N9OVW0G")
+      end
+
+      if @category_item_details.blank?
+        @category_item_details << OpenStruct.new(:title => "ihave ia1310 Boss 10000mAH Power Bank (Gold)", :sale_price => "Rs 1,308.00", :percentage_saved => nil, :click_url => "http://www.amazon.in/ihave-ia1310-Boss-10000mAH-Power/dp/B00N9OVW0G%3FSubscriptionId%3DAKIAJWDCN4DJWNL2FK5A%26tag%3Dpla04-21%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00N9OVW0G")
+      end
+     end
 
     # include pre order status if we show more details.
     unless @category_item_detail.blank?
