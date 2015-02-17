@@ -1984,6 +1984,7 @@ end
     else
       rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).first(:offset => offset)
     end
+    
     rand_record
   end
 
