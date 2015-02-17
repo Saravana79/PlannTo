@@ -805,9 +805,11 @@ class ProductsController < ApplicationController
     params[:ref_url] = url
 
     #Get dynamic id from url
-    records_count = $redis.get("sports_widget:#{url}:#{params[:page_type]}")
 
-    if !records_count.blank?
+    records_count = $redis.get("sports_widget:#{url}:#{params[:page_type]}")
+    p "printing  - " + "sports_widget:#{url}:#{params[:page_type]}" + " - " + records_count
+  
+    if ((!records_count.blank?))
       records_count = records_count.to_i
       offset = rand(records_count)
       if offset == 0
