@@ -1889,6 +1889,7 @@ end
   def self.get_amazon_product_text_link(url, type="type_1", category_item_detail_id=nil)
     sub_category = ""
     order_condition = ""
+    sub_category_condition = ""
     limit_condition = nil
     sub_categories = []
 
@@ -1896,7 +1897,10 @@ end
       if !url.to_s.downcase.scan(/movies/).blank?
         sub_category = "sports"
         sub_categories = ["beauty", "dvd", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "grocery", "shoes", "watches", "electronics", "aps"]
-      elsif !url.to_s.downcase.scan(/news/).blank? || !url.to_s.downcase.scan(/sports/).blank?
+      elsif !url.to_s.downcase.scan(/news/).blank?
+        sub_category = "news"
+        sub_categories = ["products", "specialty-aps", "luggage", "apparel", "hpc", "shoes", "watches", "electronics", "aps"]
+      elsif !url.to_s.downcase.scan(/sports/).blank?
         sub_category = "news"
         sub_categories = ["products", "specialty-aps", "luggage", "apparel", "hpc", "shoes", "watches", "electronics", "aps"]
       elsif !url.to_s.downcase.scan(/finance/).blank?
@@ -1915,7 +1919,7 @@ end
       order_condition = "rank desc"
       limit_condition = nil
 
-      sub_category_condition = "and category in (#{sub_categories.map(&:inspect).join(",")})"
+      sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
     else
       if !url.to_s.downcase.scan(/cricket/).blank?
         sub_category = "cricket"
@@ -1948,15 +1952,14 @@ end
 
     # sub_category = "cricket" if type == "type_2" #TODO: hot fixes
 
-    if type == "type_3"
+    if type == "type_2"
       # type_val = "text links"
-      item_type_condition = "item_type = 'keyword links'"
+      item_type_condition = "item_type = 'product links'"
     elsif type == "type_1"
       # type_val = "text links"
-      item_type_condition = "item_type = 'text links' or item_type ='product links'"
+      item_type_condition = "item_type = 'text links' or item_type = 'product links'"
     else
-      type_val = "product links"
-      item_type_condition = "item_type = '#{type_val}'"
+      item_type_condition = "item_type = 'keyword links'"
     end
 
     #item_type_condition = "1=1"
@@ -1984,7 +1987,7 @@ end
     else
       rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).first(:offset => offset)
     end
-    
+
     rand_record
   end
 
@@ -2083,29 +2086,42 @@ end
   end
 
   def self.get_amazon_products_from_keyword(keyword)
-    res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
-      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
-    end
-
     items = []
-    loop_items = res.items.first(3)
-
-    loop_items.each_with_index do |each_item, index|
-      item = OpenStruct.new
-
-      item.title = each_item.get_element("ItemAttributes").get("Title")
-
-      sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
-      if sale_price.blank?
-        sale_price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+    begin
+      res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+        Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
-      item.sale_price = sale_price.gsub("INR", "Rs")
 
-      item.percentage_saved = each_item.get_element("Offers/Offer/OfferListing").get("PercentageSaved") rescue ""
+      loop_items = res.items.first(3)
+
+      loop_items.each_with_index do |each_item, index|
+        item = OpenStruct.new
+
+        item.title = each_item.get_element("ItemAttributes").get("Title")
+
+        sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+        if sale_price.blank?
+          sale_price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+        end
+        item.sale_price = sale_price.gsub("INR", "Rs")
+
+        item.percentage_saved = each_item.get_element("Offers/Offer/OfferListing").get("PercentageSaved") rescue ""
 
 
-      item.click_url = each_item.get("DetailPageURL")
-      items << item
+        item.click_url = each_item.get("DetailPageURL")
+        items << item
+      end
+
+      if items.blank?
+        sports_values = $redis.hgetall("sports_widget_default_value")
+        items << OpenStruct.new(:title => sports_values["title"], :sale_price => sports_valuesp["sale_price"], :percentage_saved => sports_values["percentage_saved"], :click_url => sports_values["click_url"])
+      else
+        first_item = items.first
+        $redis.hmset("sports_widget_default_value", "title", first_item.title, "sale_price", first_item.sale_price, "percentage_saved", first_item.percentage_saved, "click_url", first_item.click_url)
+      end
+    rescue Exception => e
+      sports_values = $redis.hgetall("sports_widget_default_value")
+      items << OpenStruct.new(:title => sports_values["title"], :sale_price => sports_valuesp["sale_price"], :percentage_saved => sports_values["percentage_saved"], :click_url => sports_values["click_url"])
     end
 
     return items
