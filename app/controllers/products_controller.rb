@@ -807,7 +807,9 @@ class ProductsController < ApplicationController
     #Get dynamic id from url
 
     records_count = $redis.get("sports_widget1:#{url}:#{params[:page_type]}")
-    p "printing  - " + "sports_widget1:#{url}:#{params[:page_type]}" + " - " + records_count
+    if(records_count != nil)
+      p "printing  - " + "sports_widget1:#{url}:#{params[:page_type]}" + " - " + records_count
+    end
   
     if ((!records_count.blank?))
       records_count = records_count.to_i
