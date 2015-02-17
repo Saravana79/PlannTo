@@ -1908,12 +1908,12 @@ end
 
       sub_category_condition = sub_categories.include?("All") ? "" : "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
       order_condition = "rank desc"
-      limit_condition = 10
+      limit_condition = nil
     elsif url.include?("bawarchi.com")
       sub_category = "sports"
       sub_categories = ["beauty", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "toys", "grocery", "shoes", "watches", "electronics", "aps"]
       order_condition = "rank desc"
-      limit_condition = 10
+      limit_condition = nil
 
       sub_category_condition = "and category in (#{sub_categories.map(&:inspect).join(",")})"
     else
@@ -1962,7 +1962,11 @@ end
     #item_type_condition = "1=1"
 
     if category_item_detail_id.blank?
-      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).count
+      if limit_condition.blank?
+        category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).count
+      else
+        category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).count
+      end
 
       #store record count to redis
       $redis.set("sports_widget:#{url}:#{type}", category_item_details_count)
@@ -1975,7 +1979,11 @@ end
       offset = category_item_detail_id.to_i
     end
 
-    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).first(:offset => offset)
+    if limit_condition.blank?
+      rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).first(:offset => offset)
+    else
+      rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).limit(limit_condition).first(:offset => offset)
+    end
 
     rand_record
   end
