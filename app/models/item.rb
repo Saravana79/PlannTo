@@ -1972,7 +1972,10 @@ end
       end
 
       #store record count to redis
-      $redis.set("sports_widget:#{url}:#{type}", category_item_details_count)
+      $redis.set("sports_widget1:#{url}:#{type}", category_item_details_count)
+
+      expire_time = 300.minutes
+      $redis.expire("sports_widget1:#{url}:#{type}", expire_time)
 
       offset = rand(category_item_details_count)
       if offset == 0
