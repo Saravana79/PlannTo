@@ -28,7 +28,7 @@ class ProductsController < ApplicationController
 
   caches_action :sports_widget, :cache_path => proc {|c|
     if (!params[:ref_url].blank?)
-      params.slice("category_item_detail_id", "ref_url", "page_type")
+      params.slice("category_item_detail_id", "category_type", "page_type")
     elsif !params[:item_ids].blank?
       params.slice("item_ids", "category_item_detail_id", "page_type")
     end
@@ -808,12 +808,14 @@ class ProductsController < ApplicationController
 
     sub_category, sub_category_condition = Item.get_sub_category_and_condition_from_url(url)
 
+    params[:category_type] = sub_category
+
     records_count = $redis.get("sports_widget1:#{sub_category}:#{params[:page_type]}")
     if(records_count != nil)
       p "printing  - " + "sports_widget1:#{sub_category}:#{params[:page_type]}" + " - " + records_count
     end
   
-    if ((!records_count.blank?))
+    if (!records_count.blank?)
       records_count = records_count.to_i
       offset = rand(records_count)
       if offset == 0
@@ -824,7 +826,7 @@ class ProductsController < ApplicationController
 
     cache_params = ""
     if (!params[:ref_url].blank?)
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "ref_url", "page_type"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("category_item_detail_id", "category_type", "page_type"))
     elsif !params[:item_ids].blank?
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "category_item_detail_id", "page_type"))
     end
