@@ -10,18 +10,18 @@ var PlannTo = (function(window,undefined) {
     var PlannTo ={};
     var SubPath="/sports_widget.js"
 //for production
-    var domain = "www.plannto.com";
+  var domain = "www.plannto.com";
 //for development
 //var domain = "localhost:3000";
 // Localize jQuery variable
     var jQuery;
 
     /******** Load jQuery if not present *********/
-    if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.7.1') {
+    if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.11.1') {
         var script_tag = document.createElement('script');
         script_tag.setAttribute("type","text/javascript");
         script_tag.setAttribute("src",
-            "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
+            "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
         if (script_tag.readyState) {
             script_tag.onreadystatechange = function () { // For old versions of IE
                 if (this.readyState == 'complete' || this.readyState == 'loaded') {

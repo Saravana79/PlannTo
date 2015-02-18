@@ -2093,7 +2093,7 @@ end
         Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
 
-      loop_items = res.items.first(3)
+      loop_items = res.items.first(1)
 
       loop_items.each_with_index do |each_item, index|
         item = OpenStruct.new
