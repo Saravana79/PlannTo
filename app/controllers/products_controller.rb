@@ -299,6 +299,10 @@ class ProductsController < ApplicationController
 
     if !@items.blank?
       @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type])
+
+      if @items.blank?
+        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type])
+      end
     else
       @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type])
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")

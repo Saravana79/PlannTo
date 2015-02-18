@@ -1722,7 +1722,7 @@ end
 
   def self.get_items_from_amazon(keyword, page_type, excluded_items=[])
 
-    res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+    res = APICache.get(keyword.to_s, :timeout => 5.hours) do
       Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031})
     end
 
@@ -1811,47 +1811,87 @@ end
 
   def self.get_items_from_url(url, item_ids)
     @items = []
+    tempurl = url
     if !item_ids.blank?
       item_id = item_ids.to_s.split(",").first
       @items = Item.where(:id => item_id)
     else
       unless url.nil?
-        tempurl = url;
-        if url.include?("?")
-          tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
-        end
-        if url.include?("#")
-          tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
-        end
-        @articles = ArticleContent.where(url: tempurl)
+        @articles, tempurl = Item.get_articles_from_url(url)
 
-        if @articles.empty? || @articles.nil?
-          #for pagination in publisher website. removing /2/
-          tempstr = tempurl.split(//).last(3).join
-          matchobj = tempstr.match(/^\/\d{1}\/$/)
-          unless matchobj.nil?
-            tempurlpage = tempurl[0..(tempurl.length-3)]
-            @articles = ArticleContent.where(url: tempurlpage)
-          end
-        end
-
-        if !@articles.blank?
-          # @items = @articles[0].allitems.select{|a| a.is_a? Product}
-          @items = @articles[0].allitems
-
-          article_items_ids = @items.map(&:id)
-          new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
-
-          if !new_items.blank?
-            @items = new_items
+        if (url.include?("stylecraze.com") || url.include?("fashionlady.in"))
+          article = @articles.first
+          if article.blank?
+            @items = Item.get_items_from_fashion_url(url)
+            @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+          else
+            keyword = article.field2
+            if !keyword.blank?
+              @items << OpenStruct.new(:name => keyword)
+            else
+              @items = Item.get_items_from_fashion_url(url)
+            end
           end
         else
-          nil
+          if !@articles.blank?
+            # @items = @articles[0].allitems.select{|a| a.is_a? Product}
+
+            if !@items.blank?
+              @items = @articles[0].allitems
+
+              article_items_ids = @items.map(&:id)
+              new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+
+              if !new_items.blank?
+                @items = new_items
+              end
+            end
+          else
+            nil
+          end
         end
       end
     end
     return @items, tempurl
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
+  end
+
+  def self.get_items_from_fashion_url(url)
+    term = url.to_s.split("/").last
+
+    removed_keywords = ["difference", "between", "of", "and", "is", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
+                        "innovative", "style", "store", "preserve", "way", "rs", "you", "are"]
+    term = term.gsub("-"," ")
+    term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.downcase) || x.length < 2)}.join(' ')
+    @items << OpenStruct.new(:name => term) if !term.blank?
+
+    if @items.blank?
+      keyword = ""
+      @items << OpenStruct.new(:name => "")
+    end
+    @items
+  end
+
+  def self.get_articles_from_url(url)
+    tempurl = url;
+    if url.include?("?")
+      tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+    end
+    if url.include?("#")
+      tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
+    end
+    @articles = ArticleContent.where(url: tempurl)
+
+    if @articles.empty? || @articles.nil?
+      #for pagination in publisher website. removing /2/
+      tempstr = tempurl.split(//).last(3).join
+      matchobj = tempstr.match(/^\/\d{1}\/$/)
+      unless matchobj.nil?
+        tempurlpage = tempurl[0..(tempurl.length-3)]
+        @articles = ArticleContent.where(url: tempurlpage)
+      end
+    end
+    return @articles, tempurl
   end
 
   def self.get_amazon_item_from_item_id(item_id="")
@@ -2089,7 +2129,7 @@ end
   def self.get_amazon_products_from_keyword(keyword)
     items = []
     begin
-      res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+      res = APICache.get(keyword.to_s, :timeout => 5.hours) do
         Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
 

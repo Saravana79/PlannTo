@@ -91,6 +91,13 @@
             <div id="<%=@productReviewRatingField%>" class="thereisnosuchclass"></div>
           </div>
 
+          <% if  !@feed_url.blank? || @feed_url.category == "Beauty" %>
+              <div class="search_text" style="clear:both;padding-top: 11px;">
+                <span style="width:75px;float:left;" class="title_header"><label for="search_text">Search Text :</label></span>
+                <span style="float:left;"> <%= f.text_field :field2 ,:style=>"width:300px;"%> </span>
+              </div>
+          <% end %>
+
 
           <div style="padding:5px 5px 0px 0px;clear:both;display:block;" id="shareProduct">
             <div class="title_header float_lft">Product :</div>
