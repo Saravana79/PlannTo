@@ -1887,10 +1887,52 @@ end
   end
 
   def self.get_amazon_product_text_link(url, type="type_1", category_item_detail_id=nil)
-    sub_category = ""
     # order_condition = ""
-    sub_category_condition = ""
     sub_categories = []
+
+   sub_category, sub_category_condition = Item.get_sub_category_and_condition_from_url(url)
+
+    # sub_category = "cricket" if type == "type_2" #TODO: hot fixes
+
+    if type == "type_2"
+      # type_val = "text links"
+      item_type_condition = "item_type = 'product links'"
+    elsif type == "type_1"
+      # type_val = "text links"
+      item_type_condition = "item_type = 'text links' or item_type = 'product links'"
+    else
+      item_type_condition = "item_type = 'keyword links'"
+    end
+
+    #item_type_condition = "1=1"
+
+    if category_item_detail_id.blank?
+      # category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).count
+      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").count
+
+      #store record count to redis
+
+      $redis.set("sports_widget1:#{sub_category}:#{type}", category_item_details_count)
+
+      expire_time = 300.minutes
+      $redis.expire("sports_widget1:#{sub_category}:#{type}", expire_time)
+
+      offset = rand(category_item_details_count)
+      if offset == 0
+        offset = rand(category_item_details_count)
+      end
+    else
+      offset = category_item_detail_id.to_i
+    end
+
+    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").first(:offset => offset)
+
+    rand_record
+  end
+
+  def self.get_sub_category_and_condition_from_url(url)
+    sub_category = ""
+    sub_category_condition = ""
 
     if url.include?("sify.com")
       if !url.to_s.downcase.scan(/movies/).blank?
@@ -1947,43 +1989,7 @@ end
         sub_category_condition = ""
       end
     end
-
-    # sub_category = "cricket" if type == "type_2" #TODO: hot fixes
-
-    if type == "type_2"
-      # type_val = "text links"
-      item_type_condition = "item_type = 'product links'"
-    elsif type == "type_1"
-      # type_val = "text links"
-      item_type_condition = "item_type = 'text links' or item_type = 'product links'"
-    else
-      item_type_condition = "item_type = 'keyword links'"
-    end
-
-    #item_type_condition = "1=1"
-
-    if category_item_detail_id.blank?
-      # category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").order(order_condition).count
-      category_item_details_count = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").count
-
-      #store record count to redis
-
-      $redis.set("sports_widget1:#{url}:#{type}", category_item_details_count)
-
-      expire_time = 300.minutes
-      $redis.expire("sports_widget1:#{url}:#{type}", expire_time)
-
-      offset = rand(category_item_details_count)
-      if offset == 0
-        offset = rand(category_item_details_count)
-      end
-    else
-      offset = category_item_detail_id.to_i
-    end
-
-    rand_record = CategoryItemDetail.where("#{item_type_condition} #{sub_category_condition} and status=true").first(:offset => offset)
-
-    rand_record
+    return sub_category, sub_category_condition
   end
 
   def self.get_amazon_product_text_link_from_item_id(url, type="type_1")
@@ -2109,14 +2115,14 @@ end
 
       if items.blank?
         sports_values = $redis.hgetall("sports_widget_default_value")
-        items << OpenStruct.new(:title => sports_values["title"], :sale_price => sports_valuesp["sale_price"], :percentage_saved => sports_values["percentage_saved"], :click_url => sports_values["click_url"])
+        items << OpenStruct.new(:title => sports_values["title"], :sale_price => sports_values["sale_price"], :percentage_saved => sports_values["percentage_saved"], :click_url => sports_values["click_url"])
       else
         first_item = items.first
         $redis.hmset("sports_widget_default_value", "title", first_item.title, "sale_price", first_item.sale_price, "percentage_saved", first_item.percentage_saved, "click_url", first_item.click_url)
       end
     rescue Exception => e
       sports_values = $redis.hgetall("sports_widget_default_value")
-      items << OpenStruct.new(:title => sports_values["title"], :sale_price => sports_valuesp["sale_price"], :percentage_saved => sports_values["percentage_saved"], :click_url => sports_values["click_url"])
+      items << OpenStruct.new(:title => sports_values["title"], :sale_price => sports_values["sale_price"], :percentage_saved => sports_values["percentage_saved"], :click_url => sports_values["click_url"])
     end
 
     return items
