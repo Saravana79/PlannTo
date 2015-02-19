@@ -518,4 +518,6 @@ resources :comments do
 
   match "/admin/source_categories/edit" => "admin/source_categories#edit", :as => "edit_admin_source_category", :via => [:get]
 
+  match "/reports/article_reports" => "reports#article_reports", :via => [:get]
+
 end
