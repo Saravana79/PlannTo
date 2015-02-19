@@ -14,7 +14,7 @@ class ArticleContentsController < ApplicationController
       param = param.reject {|key| ["utf8", "authenticity_token", "commit", "action", "controller", "old_default_values"].include?(key)}
       @through_rss = true
       Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, request.remote_ip)
-      feed_url.update_attributes(:status => 1)
+      feed_url.update_attributes(:status => 1, :created_type => "manual", :created_by => current_user.id)
 
       feed_url.check_and_update_mobile_site_feed_url(param, current_user, request.remote_ip)
     else
@@ -66,6 +66,7 @@ class ArticleContentsController < ApplicationController
             params[:article_content][:thumbnail] = ''
           end
           @article=ArticleContent.saveContent(params[:article_content] || params[:article_create], current_user, ids, request.remote_ip, score)
+          # @article.created_type = "manual"
 
           # Resque.enqueue(ContributorPoint, current_user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
           if params[:submit_url] == 'submit_url'
@@ -326,6 +327,7 @@ class ArticleContentsController < ApplicationController
   def bmark_create
     ids = params[:articles_item_id]
     @article=ArticleContent.saveContent(params[:article_content], current_user, ids) unless ids.empty?
+    # @article.created_type = "manual"
     Follow.content_follow(@article, current_user) if @article
     flash[:notice]= "Article uploaded"
 

@@ -82,7 +82,7 @@ class Feed < ActiveRecord::Base
           begin
             new_feed_url.save!
             feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
-            feed_url.auto_save_feed_urls if feed_url.status == 0
+            feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
           rescue Exception => e
             p e
           end
@@ -146,7 +146,7 @@ class Feed < ActiveRecord::Base
         begin
           @feed_url.save!
           feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, admin_user, nil)
-          feed_url.auto_save_feed_urls if feed_url.status == 0
+          feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
         rescue Exception => e
           p e
         end

@@ -24,6 +24,7 @@ class ArticleContent < Content
       @images << @article.thumbnail if @article.thumbnail
     else
       @article = ArticleContent.new(:url => url, :created_by => user.id)
+      # @article.created_type = "manual"
       require 'nokogiri'
       require 'open-uri'
       begin
@@ -224,6 +225,7 @@ class ArticleContent < Content
             param['article_content']['thumbnail'] = ''
           end
           @article=ArticleContent.saveContent(param['article_content'] || param['article_create'], user, ids, remote_ip, score)
+          # @article.created_type = "manual"
 
           if @article.url.include?("youtube.com")
             @article.url = @article.url.gsub("watch?v=", "video/")
@@ -353,7 +355,7 @@ class ArticleContent < Content
 
         param.merge!(:score => self.field1) if self.sub_type == ArticleCategory::REVIEWS
         Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
-        new_feed_url.update_attributes!(:status => 1, :default_status => 6)
+        new_feed_url.update_attributes!(:status => 1, :default_status => 6, :created_by => user.blank? ? 1 : user.id, :created_type => "auto")
       end
     end
     new_feed_url
@@ -428,8 +430,12 @@ class ArticleContent < Content
 
     param.merge!(:score => article_content.field1) if article_content.sub_type == ArticleCategory::REVIEWS
     Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, user.blank? ? nil : user.id, remote_ip)
-    feed_url.update_attributes!(:status => 1, :default_status => 6) if !feed_url.blank?
+    feed_url.update_attributes!(:status => 1, :default_status => 6, :created_by => user.blank? ? 1 : user.id, :created_type => "auto") if !feed_url.blank?
     feed_url
+  end
+
+  def self.reports_from_article_content(start_date, end_date)
+
   end
 
 end

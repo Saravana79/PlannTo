@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150216112458) do
+ActiveRecord::Schema.define(:version => 20150219151826) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -547,6 +547,8 @@ ActiveRecord::Schema.define(:version => 20150216112458) do
     t.string   "article_category"
     t.string   "article_item_ids"
     t.decimal  "score",              :precision => 8, :scale => 2
+    t.integer  "created_by"
+    t.string   "created_type"
   end
 
   create_table "feeds", :force => true do |t|

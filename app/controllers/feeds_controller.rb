@@ -146,7 +146,7 @@ class FeedsController < ApplicationController
       elsif params[:commit] == "Mark As Invalid"
         @feed_urls.update_all(:status => 3)
       elsif params[:commit] == "Default Save"
-        @feed_urls.each {|feed_url| feed_url.auto_save_feed_urls(force_default_save=true)}
+        @feed_urls.each {|feed_url| feed_url.auto_save_feed_urls(force_default_save=true, 0, "batch")}
       elsif params[:commit] == "Save"
         articles_item_id = params[:articles_item_id]
         @feed_urls.each_with_index do |feed_url, index|
@@ -310,7 +310,7 @@ class FeedsController < ApplicationController
 
   def default_save
     @feed_url = FeedUrl.where("id = ?", params[:feed_url_id]).first
-    return_val = @feed_url.auto_save_feed_urls(true)
+    return_val = @feed_url.auto_save_feed_urls(true, 0, "manual")
     status = return_val == "true" ? 1 : 0
     render :json => {:status => status, :feed_url_id => @feed_url.id}.to_json
   end

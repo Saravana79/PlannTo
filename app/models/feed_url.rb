@@ -196,7 +196,7 @@ class FeedUrl < ActiveRecord::Base
         begin
           new_feed_url.save!
           feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
-          feed_url.auto_save_feed_urls if feed_url.status == 0
+          feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
           
           $redis_rtb.hmset(each_url_key, "feed_url_id", new_feed_url.id, "count", 0) if Rails.env == "production"
         rescue Exception => e
@@ -316,7 +316,7 @@ class FeedUrl < ActiveRecord::Base
           begin
             new_feed_url.save!
             feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(new_feed_url, admin_user, nil)
-            feed_url.auto_save_feed_urls if feed_url.status == 0
+            feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
           rescue Exception => e
             p e
           end
@@ -496,7 +496,7 @@ class FeedUrl < ActiveRecord::Base
         new_param.merge!(:feed_url_id => new_feed_url.id)
         new_param[:article_content].merge!(:url => new_feed_url.url)
         Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, new_param.to_json, user.blank? ? nil : user.id, remote_ip)
-        new_feed_url.update_attributes(:status => 1, :default_status => 6)
+        new_feed_url.update_attributes(:status => 1, :default_status => 6, :created_by => user.blank? ? 1 : user.id, :created_type => "auto")
       end
     end
   end
@@ -566,9 +566,10 @@ class FeedUrl < ActiveRecord::Base
     changed_title
   end
 
-  def auto_save_feed_urls(force_default_save=false,priority=1)
+  def auto_save_feed_urls(force_default_save=false,priority=1, created_type="auto")
     feed_url = self
     article = ArticleContent.new(:url => feed_url.url, :created_by => 1)
+    # article.created_type = created_type
     title_info = feed_url.title
     if title_info.include?("|")
       title_info = title_info.to_s.slice(0..(title_info.index('|'))).gsub(/\|/, "").strip
@@ -643,7 +644,7 @@ class FeedUrl < ActiveRecord::Base
         else
           Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, 1, "")
         end
-        feed_url.update_attributes!(:status => 1, :default_status => 5) #TODO: auto save status as 5
+        feed_url.update_attributes!(:status => 1, :default_status => 5, :created_type => created_type, :created_by => 1) #TODO: auto save status as 5
       end
     else
       title = feed_url.title
@@ -681,7 +682,7 @@ class FeedUrl < ActiveRecord::Base
 
   def self.automated_feed_process
     SourceCategory.update_all_to_cache()
-    feed_urls = FeedUrl.where("status = 0 and (created_at < '#{2.weeks.ago.utc}' and created_at > '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
+    feed_urls = FeedUrl.where("status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
     sources_list = JSON.parse($redis.get("sources_list_details"))
 
     feed_urls.each do |feed_url|
@@ -690,7 +691,7 @@ class FeedUrl < ActiveRecord::Base
         if sources_list[host]["site_status"] == false
           feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
         else
-            feed_url.auto_save_feed_urls(false,0)
+            feed_url.auto_save_feed_urls(false,0, "auto")
         end
       rescue Exception => e
         p e.backtrace
@@ -919,7 +920,7 @@ class FeedUrl < ActiveRecord::Base
         feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
 
         feed_urls.each do |feed_url|
-          feed_url.auto_save_feed_urls
+          feed_url.auto_save_feed_urls(false,0,"auto")
         end
 
         page += 1

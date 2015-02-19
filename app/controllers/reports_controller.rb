@@ -18,6 +18,15 @@ class ReportsController < ApplicationController
    @report.save
  end
 
+ def article_reports
+   @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
+   @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
+
+   @results = ArticleContent.reports_from_article_content(@start_date, @end_date)
+
+   render :layout => "product"
+ end
+
   private
 
   def find_reportable_object
