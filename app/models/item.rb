@@ -1821,39 +1821,42 @@ end
 
         if (url.include?("stylecraze.com") || url.include?("fashionlady.in"))
           article = @articles.first
-          if article.blank?
-            @items = Item.get_items_from_fashion_url(url)
-            @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
-          else
+          if !article.blank?
             keyword = article.field2
             if !keyword.blank?
               @items << OpenStruct.new(:name => keyword)
             else
-              @items = Item.get_items_from_fashion_url(url)
+              @items = Item.get_items_from_articles(@articles)
+              if @items.blank?
+                @items = Item.get_items_from_fashion_url(url)
+              end
             end
+          else
+            @items = Item.get_items_from_fashion_url(url)
+            @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
           end
         else
           if !@articles.blank?
             # @items = @articles[0].allitems.select{|a| a.is_a? Product}
-
-            if !@items.blank?
-              @items = @articles[0].allitems
-
-              article_items_ids = @items.map(&:id)
-              new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
-
-              if !new_items.blank?
-                @items = new_items
-              end
-            end
-          else
-            nil
+            @items = Item.get_items_from_articles(@articles)
           end
         end
       end
     end
     return @items, tempurl
     # Beauty.where(:id => [13874,13722,13723,13724]) #TODO: dev check
+  end
+
+  def self.get_items_from_articles(articles)
+    @items = articles[0].allitems
+
+    article_items_ids = @items.map(&:id)
+    new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+
+    if !new_items.blank?
+      @items = new_items
+    end
+    @items
   end
 
   def self.get_items_from_fashion_url(url)
