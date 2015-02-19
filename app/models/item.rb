@@ -1721,8 +1721,7 @@ end
   end
 
   def self.get_items_from_amazon(keyword, page_type, excluded_items=[])
-
-    res = APICache.get(keyword.to_s, :timeout => 5.hours) do
+    res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
       Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031})
     end
 
@@ -2132,7 +2131,7 @@ end
   def self.get_amazon_products_from_keyword(keyword)
     items = []
     begin
-      res = APICache.get(keyword.to_s, :timeout => 5.hours) do
+      res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
         Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
 
