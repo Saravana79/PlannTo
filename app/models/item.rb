@@ -1862,8 +1862,10 @@ end
     splitted_url = url.split("/")
     term = splitted_url[3..splitted_url.count].join(" ")
 
-    removed_keywords = ["difference", "between", "of", "and", "is", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
-                        "innovative", "style", "store", "preserve", "way", "rs", "you", "are"]
+    removed_keywords = ["difference", "between", "of ", "and ", "is ", "the", "how", "to ", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
+                        "innovative", "style", "store", "preserve", "way", "rs ", "you", "are ","simple","choose","right","for ","does", "gorgeous", "amazing", "benefit", "health","things", "should", "their", "unforgettable", "stylish","home",
+                        "get","goddess","look","with","uses","available", "india", "job ","remedies ", "most", "expensive", "product","lose","weight", "help","reason","larger","each","season","treat ","every","guide","need","know","side effects",
+                        "prevent","exercise","sick","delicious","apply","perfectly"]
     term = term.gsub("-"," ")
     term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.downcase) || x.length < 2)}.join(' ')
     term = term.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
