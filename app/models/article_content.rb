@@ -435,7 +435,10 @@ class ArticleContent < Content
   end
 
   def self.reports_from_article_content(start_date, end_date)
+    start_date = start_date.beginning_of_day.utc
+    end_date = end_date.end_of_day.utc
 
+    results = feed_urls = FeedUrl.where("updated_at >= '#{start_date}' and updated_at <= '#{end_date}' and created_type is not null").group(:created_type, :created_by).select("count(*) as count, created_type, created_by")
   end
 
 end

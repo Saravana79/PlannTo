@@ -1862,12 +1862,12 @@ end
     splitted_url = url.split("/")
     term = splitted_url[3..splitted_url.count].join(" ")
 
-    removed_keywords = ["difference", "between", "of ", "and ", "is ", "the", "how", "to ", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
+    removed_keywords = ["difference", "between", "of", "and ", "is", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
                         "innovative", "style", "store", "preserve", "way", "rs ", "you", "are ","simple","choose","right","for ","does", "gorgeous", "amazing", "benefit", "health","things", "should", "their", "unforgettable", "stylish","home",
                         "get","goddess","look","with","uses","available", "india", "job ","remedies ", "most", "expensive", "product","lose","weight", "help","reason","larger","each","season","treat ","every","guide","need","know","side effects",
-                        "prevent","exercise","sick","delicious","apply","perfectly"]
+                        "prevent","exercise","sick","delicious","apply","perfectly", "and"]
     term = term.gsub("-"," ")
-    term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.downcase) || x.length < 2)}.join(' ')
+    term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
     term = term.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
 
     @items << OpenStruct.new(:name => term) if !term.blank?
@@ -1877,6 +1877,14 @@ end
       @items << OpenStruct.new(:name => "")
     end
     @items
+  end
+
+  def self.remove_last_letter_as_s(word)
+    l_letter = word.last
+    if l_letter == "s"
+      word = word[0...word.length-1]
+    end
+    word
   end
 
   def self.get_articles_from_url(url)

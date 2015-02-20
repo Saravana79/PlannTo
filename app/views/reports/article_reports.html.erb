@@ -69,7 +69,28 @@ To Date
 <br /><br />
 
 <div id="report" >
-  <%#= render "admin/order_histories/report" %>
+  <table border="0" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+      <th class="header_compare" width="80px"> Created By </th>
+      <th class="header_compare" width="80px"> Created Type </th>
+      <th class="header_compare" width="80px"> Count </th>
+
+    </tr>
+    <% @results.each do |result | %>
+        <tr>
+          <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;">
+            <%= result.created_by %>
+          </td>
+          <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;">
+            <%= result.created_type %>
+          </td>
+          <td class="bdb_gray1" width="80px" style="text-align:center;border-bottom: 1px solid #808080;">
+            <%= result.count %>
+          </td>
+        </tr>
+    <%end%>
+
+  </table>
 </div>
 
 
