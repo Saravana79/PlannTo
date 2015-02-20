@@ -85,7 +85,7 @@ production:
       # replica set connection setup.
       # Use environment variables or a config file to keep your
       # credentials safe.
-      uri: 'mongodb://planntonew:planntonew@ds063780-a0.mongolab.com:63780,ds063780-a1.mongolab.com:63780/heroku_app4176992'
+      uri: 'mongodb://planntonew:planntonew@ds047531-a0.mongolab.com:47531,ds047531-a1.mongolab.com:47531/planntonew'
 
       options:
        # The default consistency is :eventual, which reads from
