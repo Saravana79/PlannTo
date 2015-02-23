@@ -187,7 +187,7 @@ class FeedsController < ApplicationController
           @through_rss = true
           Resque.enqueue(ArticleContentProcess, "create_article_content", Time.zone.now, param.to_json, current_user.id, remote_ip)
         end
-        @feed_urls.update_all(:status => 1, :default_status => 6)
+        @feed_urls.update_all(:status => 1, :default_status => 6,:created_by => current_user.id, :created_type => "Batch")
       end
     rescue Exception => e
       @error = true
