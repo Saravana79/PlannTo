@@ -5,7 +5,7 @@
             .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
             .shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #E65E7B!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #D2D2D2;}
             .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
-            .shadetabs li.selected{float:left; position: relative;padding:0px!important; margin:0px; text-align:center; background: #FF6 !important; list-style-type: none!important;width:100%;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
+            .shadetabs li.selected{padding:0px!important; margin:0px; text-align:center; background: #FF6 !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
             .shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
 
             .product-container{ margin:0; padding:5px 0; float:left;width:50%;border-bottom:1px solid #E5E5E5;}
@@ -27,8 +27,9 @@
              .btn { margin:0 auto; padding:5px 0 0 0;}
              .btn .shop-now{ margin:0; padding:3px 10px; background:#F76300; color:#fff; font-size:13px; text-transform:none; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
 
-             #container {max-height:267px;overflow:hidden;border-left:1px solid #E5E5E5;border-right:1px solid #E5E5E5;}
-
+             #container {border-left:1px solid #E5E5E5;border-right:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;}
+             .bottompan{display: block;text-align: right;padding: 5px 10px;text-decoration:none;}
+              #productdiv {max-height:242px;overflow:hidden;}
              a { outline: none; }
 
            .strike_price {text-decoration: line-through;color: #555;
@@ -44,7 +45,7 @@
                       <a href="javascript:void(0)" id="where_to_buy_items_a" >Recommended Products For You</a>
                     </li>
             </div>  
-            <div>
+            <div id="productdiv">
                   <% @items.first(4).each do |item| %>
                 <div class="product-container">
                       <div class="product-img">
@@ -78,6 +79,11 @@
                   <% end %>
 
             </div>
+            <div class="bottompan"> 
+                  <span >
+                                      <a href="<%= @search_url %>" id="plannto_go_button" target="_blank" style="text-decoration:none;color: #428BCA!important;">View more</a>
+                                    </span>
+              </div>  
           </div>  
 
 <% end %>
