@@ -1722,14 +1722,16 @@ end
 
   def self.get_items_from_amazon(keyword, page_type, excluded_items=[])
     res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
-      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031})
+      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => 1355016031, :sort => 'salesrank'})
     end
 
     items = []
     if excluded_items.blank?
-      loop_items = res.items.first(5)
+      loop_items = res.items
+      loop_items = loop_items.sample(2)
     else
       loop_items = res.items
+      loop_items = loop_items.sample(2)
     end
 
     loop_items.each_with_index do |each_item, index|
@@ -1870,7 +1872,22 @@ end
     term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
     term = term.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
 
+    @items = []
     @items << OpenStruct.new(:name => term) if !term.blank?
+
+    if @items.blank?
+      feed_url = FeedUrl.where(:url => url).first
+      if !feed_url.blank? && !feed_url.additional_details.blank?
+        term = feed_url.additional_details.to_s.split(",").last
+        if !term.blank?
+          removed_keywords = ["idea", "solution", "design", "secret", "tip", "problem"]
+          term = term.gsub("-"," ")
+          term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
+
+          @items << OpenStruct.new(:name => term)
+        end
+      end
+    end
 
     if @items.blank?
       keyword = ""
