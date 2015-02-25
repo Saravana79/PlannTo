@@ -73,7 +73,7 @@ class HistoryDetailsController < ApplicationController
         publisher = Publisher.where(:publisher_url => 'wiseshe.com').first 
       end 
       url = params[:red_url]
-      url =  url.gsub("tag=pla04-21","tag=wwwwiseshecom-21&ascsubtag=" + @impression_id)
+      url =  url.gsub("tag=pla04-21","tag=style05-21&ascsubtag=" + @impression_id)
 
       click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
                        :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
