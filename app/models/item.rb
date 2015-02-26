@@ -1731,15 +1731,16 @@ end
       loop_items = loop_items.sample(2)
     else
       loop_items = res.items
-      loop_items = loop_items.sample(2)
+      loop_items = loop_items.sample(4)
     end
 
     loop_items.each_with_index do |each_item, index|
       item = OpenStruct.new
       # item.id = 1000 + index
       item.id = each_item.get("ASIN")
-
+      p item.id
       if excluded_items.include?(item.id)
+        p "true"
         next
       end
 
@@ -1950,9 +1951,9 @@ end
   end
 
   def self.get_best_seller_beauty_items_from_amazon(page_type)
-    # $redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K"])
+    $redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
     excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
-    items, search_url = Item.get_items_from_amazon("", page_type, excluded_items)
+    items, search_url = Item.get_items_from_amazon("women beauty", page_type, excluded_items)
     item = Item.where(:id => 27731).first
     extra_items = []
 
