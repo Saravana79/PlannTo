@@ -1731,7 +1731,7 @@ end
       loop_items = loop_items.sample(2)
     else
       loop_items = res.items
-      loop_items = loop_items.sample(4)
+      loop_items = loop_items.sample(2)
     end
 
     loop_items.each_with_index do |each_item, index|
@@ -1951,7 +1951,7 @@ end
   end
 
   def self.get_best_seller_beauty_items_from_amazon(page_type)
-    $redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
+    #$redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
     excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
     keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
     keyword = keywords.sample(1)[0]
