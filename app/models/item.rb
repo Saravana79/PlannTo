@@ -1953,7 +1953,10 @@ end
   def self.get_best_seller_beauty_items_from_amazon(page_type)
     $redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
     excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
-    items, search_url = Item.get_items_from_amazon("women beauty", page_type, excluded_items)
+    keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
+    keyword = keywords.sample(1)[0]
+    p keyword + " - sample keyword"
+    items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items)
     item = Item.where(:id => 27731).first
     extra_items = []
 
