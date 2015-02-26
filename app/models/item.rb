@@ -1791,10 +1791,10 @@ end
           extra_items = products - [item]
           extra_items = extra_items.first(2)
         else
-          if items.count < 4
+          if items.count < 2
             added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type)
             items = items + added_items
-            items = items.flatten.first(4)
+            items = items.flatten.first(2)
           end
           combine_item = OpenStruct.new(item.attributes)
           combine_item.name = keyword
