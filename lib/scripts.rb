@@ -276,11 +276,11 @@ def process_category_lists(category_list)
   article_urls = []
 
   get_article_urls(url, article_urls)
-
+  
   [*2..count].each do |page_no|
-    url = "http://www.stylecraze.com/articles/make-up/" + "page/#{page_no}"
-    p "url => #{url}"
-    get_article_urls(url, article_urls)
+    tempurl = url + "page/#{page_no}"
+    p "url => #{tempurl}"
+    get_article_urls(tempurl, article_urls)
   end
 
   p article_urls.count
@@ -333,7 +333,7 @@ def process_url_to_feed_url(article_urls, sources_list)
 end
 
 
-category_lists = [{:url => "http://www.stylecraze.com/articles/make-up/", :page_count => 105}, {:url => "http://www.stylecraze.com/articles/hair/", :page_count => 63}, {:url => "http://www.stylecraze.com/articles/skin/", :page_count => 101}]
+category_lists = [ {:url => "http://www.stylecraze.com/articles/hair/", :page_count => 63}, {:url => "http://www.stylecraze.com/articles/skin/", :page_count => 101}]
 
 category_lists.each do |category_list|
   process_category_lists(category_list)
