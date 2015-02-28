@@ -1769,7 +1769,8 @@ end
       items, search_url = Item.get_items_from_amazon(keyword, page_type)
     else
       manufacturer = items.select {|a| a.is_a?(Manufacturer)}.first
-      products = items.select {|a| a.is_a?(Product)}
+      color = items.select {|a| a.is_a?(Color)}.first
+      products = items.select {|a| a.is_a?(Product) && !a.is_a?(Color)}
 
       if item_id.blank?
         item = products.first
@@ -1778,13 +1779,44 @@ end
       end
 
       #Decide keyword combination
-      if manufacturer.blank?
-        extra_items = items - [item]
-        extra_items = extra_items.first(2)
-        
-        keyword = item.name.to_s
+      if !manufacturer.blank? && !color.blank?
+        keyword = "#{color.name} #{manufacturer.name} #{item.name}"
         items, search_url = Item.get_items_from_amazon(keyword, page_type)
-      else
+
+        if items.blank?
+          keyword = "#{manufacturer.name} #{item.name}"
+          items, search_url = Item.get_items_from_amazon(keyword, page_type)
+          if items.blank?
+            items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type)
+            extra_items = products - [item]
+            extra_items = extra_items.first(2)
+          else
+            if items.count < 2
+              added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type)
+              items = items + added_items
+              items = items.flatten.first(2)
+            end
+            combine_item = OpenStruct.new(item.attributes)
+            combine_item.name = keyword
+            combine_item.id = ""
+            item = combine_item
+            extra_items = products
+            extra_items = extra_items.first(2)
+          end
+        else
+          if items.count < 2
+            added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type)
+            items = items + added_items
+            items = items.flatten.first(2)
+          end
+          combine_item = OpenStruct.new(item.attributes)
+          combine_item.name = keyword
+          combine_item.id = ""
+          item = combine_item
+          extra_items = products
+          extra_items = extra_items.first(2)
+        end
+      elsif !manufacturer.blank?
         keyword = "#{manufacturer.name} #{item.name}"
         items, search_url = Item.get_items_from_amazon(keyword, page_type)
         if items.blank?
@@ -1804,6 +1836,12 @@ end
           extra_items = products
           extra_items = extra_items.first(2)
         end
+      else
+        extra_items = items - [item]
+        extra_items = extra_items.first(2)
+        
+        keyword = item.name.to_s
+        items, search_url = Item.get_items_from_amazon(keyword, page_type)
       end
     end
 
@@ -1876,24 +1914,6 @@ end
     @items = []
     @items << OpenStruct.new(:name => term) if !term.blank?
 
-    if @items.blank?
-      feed_url = FeedUrl.where(:url => url).first
-      if !feed_url.blank? && !feed_url.additional_details.blank?
-        term = feed_url.additional_details.to_s.split(",").last
-        if !term.blank?
-          removed_keywords = ["idea", "solution", "design", "secret", "tip", "problem"]
-          term = term.gsub("-"," ")
-          term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
-
-          @items << OpenStruct.new(:name => term)
-        end
-      end
-    end
-
-    if @items.blank?
-      keyword = ""
-      @items << OpenStruct.new(:name => "")
-    end
     p @items
     @items
   end
@@ -1950,15 +1970,39 @@ end
     sale_price
   end
 
-  def self.get_best_seller_beauty_items_from_amazon(page_type)
+  def self.get_best_seller_beauty_items_from_amazon(page_type, url=nil)
     #$redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
-    excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
-    keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
-    keyword = keywords.sample(1)[0]
-    p keyword + " - sample keyword"
-    items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items)
-    item = Item.where(:id => 27731).first
+
+    items = []
+    item = nil
+    search_url = ""
     extra_items = []
+
+    if !url.blank? #@items.blank?
+      feed_url = FeedUrl.where(:url => url).first
+      if !feed_url.blank? && !feed_url.additional_details.blank?
+        term = feed_url.additional_details.to_s.split(",").last
+        if !term.blank?
+          removed_keywords = ["idea", "solution", "design", "secret", "tip", "problem"]
+          term = term.gsub("-"," ")
+          term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
+
+          items << OpenStruct.new(:name => term)
+
+          item, items, search_url, extra_items = Item.get_item_items_from_amazon(items, "", page_type)
+        end
+      end
+    end
+
+    if items.blank?
+      excluded_items = $redis.lrange("excluded_beauty_items", 0,-1)
+      keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
+      keyword = keywords.sample(1)[0]
+      p keyword + " - sample keyword"
+      items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items)
+      item = Item.where(:id => 27731).first
+      extra_items = []
+    end
 
     return item, items, search_url, extra_items
   end
