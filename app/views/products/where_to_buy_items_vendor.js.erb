@@ -95,5 +95,11 @@
 
 <% end %>
 
-
-  
+<script type="text/javascript">
+    PlannTo.jQuery(".product-container").click(function()
+    {
+        var shop_now = PlannTo.jQuery(this).find(".shop-now")
+        console.log(shop_now)
+        window.open(shop_now.attr("href"))
+    })
+</script>
