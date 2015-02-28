@@ -56,8 +56,8 @@
                   <% @items.first(2).each do |item| %>
                 <div class="product-container">
                       <div class="product-img">
-                         <a href="<%= configatron.hostname%>/history_details?item_id=<%=@item.id%>&red_url=<%=item.click_url%>&iid=<%=@impression_id%>" target = "_blank" >  
-                    
+                         <a href="<%= configatron.hostname%>/history_details?item_id=<%=@item.id%>&red_url=<%=item.click_url%>&iid=<%=@impression_id%>" target = "_blank" rel= "nofollow" >
+
                           <img src="<%= item.image_url %>" alt="" id="item_details">
                              </a> 
                     
@@ -74,7 +74,7 @@
                    
 
                         <p class="btn">
-                          <a class="shop-now" href="<%= configatron.hostname%>/history_details?item_id=<%=@item.id%>&red_url=<%=item.click_url%>&iid=<%=@impression_id%>" target = "_blank">Shop
+                          <a class="shop-now" href="<%= configatron.hostname%>/history_details?item_id=<%=@item.id%>&red_url=<%=item.click_url%>&iid=<%=@impression_id%>" target = "_blank" rel="nofollow">Shop
                             Now</a>
                         </p>
                         </a>
@@ -88,7 +88,7 @@
             </div>
             <div class="bottompan"> 
                   <span >
-                                      <a href="<%= @search_url %>" id="plannto_go_button" target="_blank" style="text-decoration:none;color: #428BCA!important;">View more</a>
+                                      <a href="<%= @search_url %>" id="plannto_go_button" target="_blank" style="text-decoration:none;color: #428BCA!important;" rel="nofollow">View more</a>
                                     </span>
               </div>  
           </div>  
@@ -99,7 +99,7 @@
     PlannTo.jQuery(".product-container").click(function()
     {
         var shop_now = PlannTo.jQuery(this).find(".shop-now")
-        console.log(shop_now)
         window.open(shop_now.attr("href"))
+        return false;
     })
 </script>
