@@ -18,11 +18,11 @@ class ProductsController < ApplicationController
 
   caches_action :where_to_buy_items_vendor, :cache_path => proc {|c|
      if (params[:item_ids].blank? && !params[:ref_url].blank?)
-       params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url")
+       params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url", "geo")
      elsif (params[:item_ids].blank? && params[:ref_url].blank?)
-      params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer")
+      params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer", "geo")
      elsif !params[:item_ids].blank?
-       params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable")
+       params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable", "geo")
      end
    }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -298,13 +298,13 @@ class ProductsController < ApplicationController
     url =  tempurl
 
     if !@items.blank?
-      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type])
+      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
 
       if @items.blank?
-        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url)
+        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       end
     else
-      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url)
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
     end
 
@@ -731,7 +731,7 @@ class ProductsController < ApplicationController
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        valid_html = cache.match(/table/).blank? ? false : true
+        valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
@@ -762,22 +762,23 @@ class ProductsController < ApplicationController
     params[:path] ||= ""
     params[:page_type] ||= "type_1"
     params[:sort_disable] ||= "false"
+    params[:geo] ||= "in"
 
     if (params[:item_ids].blank? && !params[:ref_url].blank?)
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "ref_url", "geo"))
     elsif (params[:item_ids].blank? && params[:ref_url].blank?)
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("page_type", "path", "price_full_details", "sort_disable", "request_referer", "geo"))
     elsif !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "path", "price_full_details", "sort_disable", "geo"))
     end
     cache_params = CGI::unescape(cache_params)
 
-    cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}.js"
+    p cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}.js"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        valid_html = cache.match(/table/).blank? ? false : true
+        valid_html = cache.match(/_blank/).blank? ? false : true
         cache = reset_json_callback(cache, params[:callback])
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)

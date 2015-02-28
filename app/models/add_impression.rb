@@ -3,7 +3,7 @@ class AddImpression < ActiveRecord::Base
   require 'facets/string/xor'
   require 'openssl'
 
-  attr_accessor :t, :r, :device, :a, :video, :video_impression_id
+  attr_accessor :t, :r, :device, :a, :video, :video_impression_id, :geo
 
   include ActiveUUID::UUID
   self.primary_key = "id"
@@ -59,6 +59,7 @@ class AddImpression < ActiveRecord::Base
    ai.device = obj_params[:device].to_s
    ai.video = obj_params[:video].to_s
    ai.video_impression_id = obj_params[:video_impression_id].to_s
+   ai.geo = obj_params[:geo]
 
    return ai
  end

@@ -26,6 +26,7 @@ class AdImpression
   field :viewability, type: Integer
   field :additional_details, type: String
   field :video_impression_id, type: String
+  field :geo, type: String
 
 
   # has_one :m_click
