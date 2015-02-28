@@ -290,6 +290,7 @@ class AdvertisementsController < ApplicationController
 
   def amazon_widget
     params[:page_type] ||= "type_1"
+    params[:geo] ||= "in"
     params[:ref_url] ||= "http://www.wiseshe.com/2014/11/loreal-paris-colour-riche-lipstick-in-divine-wine-review-swatches.html"
     render :layout => false
   end

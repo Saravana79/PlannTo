@@ -29,7 +29,8 @@
   <div class="demo_form row">
     <div class="search_form">
       <%= form_for :search, :url => "/advertisements/amazon_widget", :html => {:method => 'get'} do |search_form| %>
-          <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
+          Url : <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
+          Geo : <%= select_tag :geo, options_for_select(["in", "us"], params[:geo]) %>
           <%= search_form.submit "Go" %>
       <% end %>
     </div>
@@ -40,7 +41,7 @@
 
 </div>
 
-<script async src="<%= configatron.hostname %>/javascripts/plannto.widget.vendor.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>"></script>
+<script async src="<%= configatron.hostname %>/javascripts/plannto.widget.vendor.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=<%= params[:page_type] %>&geo=<%= params[:geo] %>"></script>
 
 <br/>
 <br/>

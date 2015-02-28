@@ -1841,7 +1841,7 @@ end
       else
         extra_items = items - [item]
         extra_items = extra_items.first(2)
-        
+
         keyword = item.name.to_s
         items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
       end
@@ -2001,7 +2001,7 @@ end
       keywords = ["lipstick","women beauty","women perfumes","hair straightener","hair dryer","makeup kit","nail polish","oriflame","lakme","oriflame","shampoo","loreal","lip balm","eye shadow","lip gloss","kajal"]
       keyword = keywords.sample(1)[0]
       p keyword + " - sample keyword"
-      items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items)
+      items, search_url = Item.get_items_from_amazon(keyword, page_type, excluded_items, geo)
       item = Item.where(:id => 27731).first
       extra_items = []
     end
