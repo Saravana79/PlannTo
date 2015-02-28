@@ -1,7 +1,7 @@
 class MissingUrlProcessTopList
   extend HerokuResqueAutoScale if Rails.env.production?
   extend Resque::Plugins::Retry
-  @queue = :missing_record_process
+  @queue = :missing_url_process_top_list
 
   def self.perform(method_name, actual_time)
     log = Logger.new 'log/missing_record_process.log'
