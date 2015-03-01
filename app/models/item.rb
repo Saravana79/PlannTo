@@ -1724,7 +1724,7 @@ end
     browse_node = geo == "us" ? 3760911 : 1355016031
     api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}"
     res = APICache.get(api_keyword, :timeout => 5.hours) do
-      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => 'salesrank'})
+      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => 'relevancerank'})
     end
 
     items = []
