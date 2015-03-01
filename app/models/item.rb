@@ -1905,11 +1905,12 @@ end
     splitted_url = url.split("/")
     term = splitted_url[3..splitted_url.count].join(" ")
 
-    removed_keywords = ["difference", "between", "of", "and ", "is", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
+   removed_keywords = ["difference", "between", "of", "and ", "is", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
                         "innovative", "style", "store", "preserve", "way", "rs ", "you", "are","simple","choose","right","for","does", "gorgeous", "amazing", "benefit", "health","things", "should", "their", "unforgettable", "stylish","home",
                         "get","goddess","look","with","uses","available", "india", "job ","remedies", "most", "expensive", "product","lose","weight", "help","reason","larger","each","season","treat","every","guide","need","know","side","effects",
-                        "prevent","exercise","sick","delicious","apply","perfectly", "and","step","get","tutorial","picture","detailed","article","surprising","prepare","indian","in","best","using","at","everything","from","natural","your","basic","wear","diy","kiss","woes","good","bye","homemade","wearing","avoid","while","mistake"]
-    term = term.gsub("-"," ")
+                        "prevent","exercise","sick","delicious","apply","perfectly", "and","step","get","tutorial","picture","detailed","article","surprising","prepare","indian","in","best","using","at","everything","from","natural","your","basic",
+                        "wear","diy","kiss","woes","good","bye","homemade","wearing","avoid","while","mistake","wonderful","hide","make","sure"]
+     term = term.gsub("-"," ")
     term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
     term = term.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
 
