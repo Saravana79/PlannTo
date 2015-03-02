@@ -1,6 +1,6 @@
 class Admin::AdReportsController < ApplicationController
-  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report]
-  before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report]
+  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report, :widget_reports]
+  before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report, :widget_reports]
   before_filter :get_advertisement, :only => [:report, :generate_report]
   layout "product"
 
@@ -118,11 +118,20 @@ class Admin::AdReportsController < ApplicationController
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date
     @search_path = admin_widget_reports_path
 
-    @publishers = Publisher.all
-    params[:publisher_id] ||= Publisher.first.id
+    if current_user.is_admin?
+      @publishers = Publisher.all
+      params[:publisher_id] ||= Publisher.first.id
 
-    @publisher = Publisher.find_by_id(params[:publisher_id])
-    @vendors = Vendor.all
+      @publisher = Publisher.find_by_id(params[:publisher_id])
+      @vendors = Vendor.all
+    else
+      params[:publisher_id] = nil
+      @publisher = current_user.publisher
+      if !@publisher.blank?
+        params[:publisher_id] = @publisher.id
+        @vendors = Vendor.where(:id => @publisher.vendor_ids)
+      end
+    end
 
     params[:vendor_id] ||= nil
 
@@ -131,7 +140,7 @@ class Admin::AdReportsController < ApplicationController
     # types = ad_types - ['advertisement']
 
     # imp_report_results = AddImpression.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)   #TODO: have to remove method definition also
-    imp_report_results = AggregatedDetail.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types)
+    imp_report_results = AggregatedDetail.chart_data_widgets(params[:publisher_id], @start_date, @end_date, types) rescue []
     @result_array = imp_report_results.map {|result| result.values}
     @x_values = @result_array.map {|each_array| each_array[0]}
     @impressions = @result_array.map {|each_array| each_array[1]}
@@ -152,7 +161,7 @@ class Admin::AdReportsController < ApplicationController
       params[:search] ||= {}
     end
 
-    @order_histories = OrderHistory.where("publisher_id=? and advertisement_id is null and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @publisher.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page])
+    @order_histories = OrderHistory.where("publisher_id=? and advertisement_id is null and DATE(order_date) >=? and DATE(order_date) <=? #{condition}", @publisher.id,@start_date.to_date,@end_date.to_date).order('order_date desc').paginate(:per_page => 20,:page => params[:page]) rescue []
     vendor_ids = OrderHistory.select("distinct vendor_ids").map(&:vendor_ids)
 
     @impressionscount = @impressions.sum

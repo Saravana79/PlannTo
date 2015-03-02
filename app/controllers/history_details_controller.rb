@@ -76,11 +76,17 @@ class HistoryDetailsController < ApplicationController
 
         unless publisher_vendor.blank?
           if url.include?("tag")
-            url = URI.unescape(url)
-            if url.include?("%")
-              url = URI.unescape(url)
-            end
+            # url = URI.unescape(url)
+            # if url.include?("%")
+            #   url = URI.unescape(url)
+            # end
             tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+
+            if tag_val.blank?
+              url = URI.unescape(url)
+              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+            end
+
             url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
           else
             url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
@@ -104,11 +110,16 @@ class HistoryDetailsController < ApplicationController
 
         unless publisher_vendor.blank?
           if url.include?("tag")
-            url = URI.unescape(url)
-            if url.include?("%")
-              url = URI.unescape(url)
-            end
+            # url = URI.unescape(url)
+            # if url.include?("%")
+            #   url = URI.unescape(url)
+            # end
             tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+
+            if tag_val.blank?
+              url = URI.unescape(url)
+              tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+            end
             url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
           else
             url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"

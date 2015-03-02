@@ -100,6 +100,15 @@ class User < ActiveRecord::Base
       return true
     end    
   end
+
+  def publisher
+    publisher = nil
+    relationship = UserRelationship.where(:user_id => self.id,:relationship_type => "Publisher").first
+    if !relationship.blank?
+      publisher = Publisher.where(:id => relationship.relationship_id).first
+    end
+    publisher
+  end
   
   def is_a_advertiser?(advertiser)
     if advertiser == "true"

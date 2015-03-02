@@ -308,6 +308,8 @@ class ProductsController < ApplicationController
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
     end
 
+    @search_url = CGI.escape(@search_url)
+
     # include pre order status if we show more details.
     unless @items.blank?
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
