@@ -9,12 +9,15 @@
             .shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
 
             .product-container{ margin:0; padding:5px 0; float:left;border-bottom:1px solid #E5E5E5;}
+            .planntocarosel{ width: 30px;float: right;padding: 30px 3px 0 0px;height: 98px;border-bottom: 1px solid #E5E5E5;}
+           .planntocarosel a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) -25px 0; right: 0;float: left;height: 50px;width:30px;}
+          .bottompan{display:none;text-align: right;padding: 5px 10px;text-decoration:none;font-size:14px;}
            
         
             <%if @items.size == 1%>
             .product-container{width:100%}
             <%else%>
-            .product-container{width:47%}
+            .product-container{width:46%}
             <%end%>
 
             @media (max-width: 550px) {
@@ -31,13 +34,10 @@
            .product-container .product-text .product-price {min-height:32px;}
            .product-container .product-text .product-price .strike{list-style: outside none none;margin: 5px 0px;padding: 0;color: #585858;font-size: 12px;text-decoration: line-through; }
            .product-container .product-text .product-price .price{list-style: outside none none; margin: 5px 0px; padding:0; color:#bf0000; font-size:14px; font-weight:bold;font-family: Arial monospace;}
-           .planntocarosel{ width: 30px;float: right;padding: 30px 10 0 0px;height: 98px;border-bottom: 1px solid #E5E5E5;}
-           .planntocarosel a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) -25px 0; right: 0;float: left;height: 50px;width:30px;}
              .btn { margin:0 auto; padding:5px 0 0 0;}
              .btn .shop-now{ margin:0; padding:3px 10px; background:#E47911; color:#fff; font-size:13px; text-transform:none; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
 
              #container {border-left:1px solid #E5E5E5;border-right:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;}
-             .bottompan{display: none;text-align: right;padding: 5px 10px;text-decoration:none;font-size:14px;}
               #productdiv {max-height:260px;overflow:hidden;}
              a { outline: none; }
 
