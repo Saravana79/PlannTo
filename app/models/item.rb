@@ -1721,10 +1721,20 @@ end
   end
 
   def self.get_items_from_amazon(keyword, page_type, excluded_items=[], geo="in")
-    browse_node = geo == "us" ? 3760911 : 1355016031
+    if geo == "us"
+      browse_node = 3760911
+      sort = 'relevancerank'
+    elsif geo == "uk"
+      browse_node = 117332031
+      sort = 'salesrank'
+    else
+      browse_node = 1355016031
+      sort = 'relevancerank'
+    end
+
     api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}"
     res = APICache.get(api_keyword, :timeout => 5.hours) do
-      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => 'relevancerank'})
+      Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => sort})
     end
 
     items = []
@@ -1758,7 +1768,7 @@ end
       item.click_url = each_item.get("DetailPageURL")
       items << item
     end
-    search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content
+    search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content rescue nil
     return items, search_url
   end
 

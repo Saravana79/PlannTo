@@ -30,7 +30,7 @@
     <div class="search_form">
       <%= form_for :search, :url => "/advertisements/amazon_widget", :html => {:method => 'get'} do |search_form| %>
           Url : <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
-          Geo : <%= select_tag :geo, options_for_select(["in", "us"], params[:geo]) %>
+          Geo : <%= select_tag :geo, options_for_select(["in", "us", "uk"], params[:geo]) %>
           <%= search_form.submit "Go" %>
       <% end %>
     </div>
