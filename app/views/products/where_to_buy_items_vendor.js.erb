@@ -63,7 +63,7 @@
                     
                         </div>
                       <div class="product-text">
-                          <p class="product-title"><%= item.name.to_s.truncate(58) %></p>
+                          <p class="product-title"><%= item.name.to_s.truncate(48) %></p>
                           <div class="product-price">
                                   <ul>
                                       <li class=' <%= item.sale_price.blank? ? "price" : "strike" %>'><%= item.price.blank? ? "" : item.price %> </li>
