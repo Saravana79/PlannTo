@@ -1089,7 +1089,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           p id
           p url
           if ["saree", "salwar_suit", "women_top"].include?(each_key)
-            id = each_item.get("ASIN") rescue ""
+            id = each_item.get("ASIN").to_s.downcase rescue ""
             name = each_item.get_element("ItemAttributes").get("Title") rescue ""
             offer_listing = each_item.get_element("Offers/Offer/OfferListing")
             current_price = nil
