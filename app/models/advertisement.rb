@@ -928,19 +928,20 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   end
 
   def self.update_include_exclude_products_from_amazon()
-   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 16}, "tablets" => {:node => 1375458031, :page_count => 10}, "cameras" => {:node => 1389175031, :page_count => 12}, "laptops" => {:node => 1375424031, :page_count => 12}, "lenses" => {:node => 1389197031, :page_count => 6}, "televisions" => {:node => 1389396031, :page_count => 8}, "video_games" => {:node => 4069183031, :page_count => 10}}
+   loop_hash = {"mobiles" => {:node => 1389432031, :page_count => 16}, "tablets" => {:node => 1375458031, :page_count => 10}, "cameras" => {:node => 1389175031, :page_count => 12}, "laptops" => {:node => 1375424031, :page_count => 12}, "lenses" => {:node => 1389197031, :page_count => 6}, "televisions" => {:node => 1389396031, :page_count => 8}, "video_games" => {:node => 4069183031, :page_count => 10},
+               "saree" => {:node => 1968256031, :page_count => 10}, "salwar_suit" => {:node => 3723380031, :page_count => 9}, "women_top" => {:node => 1968543031, :page_count => 8} }
 
     ad_item_id = []
-    loop_hash.values.each do |each_val|
+    loop_hash.each do |each_key, each_val|
       begin
-        item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
+        item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node], each_key)
         ad_item_id << item_ids
         sleep(2)
       rescue Exception => e
         p "Error while amazon api call"
         begin
           sleep(5)
-          item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node])
+          item_ids = Advertisement.get_matching_item_ids(each_val[:page_count], each_val[:node], each_key)
           ad_item_id << item_ids
           sleep(2)
         rescue Exception => e
@@ -1021,7 +1022,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   end
 
 
-  def self.get_matching_item_ids(page_count, node)
+  def self.get_matching_item_ids(page_count, node, each_key=nil)
     ad_item_id = []
     [*1..page_count].each do |each_page|
       res = Amazon::Ecs.item_search("", {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => node, :item_page => each_page})
@@ -1086,6 +1087,38 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           p "Not Included"
           p id
           p url
+          if ["saree", "salwar_suit", "women_top"].include?(each_key)
+            id = each_item.get("ASIN") rescue ""
+            name = each_item.get_element("ItemAttributes").get("Title") rescue ""
+            offer_listing = each_item.get_element("Offers/Offer/OfferListing")
+            current_price = nil
+            status = 1
+            if !offer_listing.blank?
+              begin
+                current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              rescue Exception => e
+                current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+              end
+              availability_str = offer_listing.get("Availability")
+
+              status = case availability_str
+                         when /Usually dispatched.*/ || /Usually ships.*/
+                           1
+                         when /Not yet released/ || /Not yet published/
+                           3
+                         when /This item is not stocked or has been discontinued/
+                           4
+                         when /Out of Stock/
+                           2
+                         else
+                           4
+                       end
+            end
+
+            item = Item.where(:name => each_key.camelize).first
+            item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id )
+            item_detail.save!
+          end
         end
       end
     end

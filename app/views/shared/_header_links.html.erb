@@ -183,8 +183,8 @@
                  <a href="/admin/impression_reports">Impression Report</a>
                  <!-- <a href="/admin/ad_reports">Advertisement Report</a> -->  <!-- TODO: have to implement in future -->
              <%end%>
+             <a href="/admin/widget_reports">Widgets Report</a>
              <%if current_user && current_user.is_admin? %>
-                 <a href="/admin/widget_reports">Widgets Report</a>
                  <%= link_to "AB Test", advertisement_ab_test_path %>
                  <%= link_to "Ads More Reports", admin_more_reports_path %>
              <% end %>
