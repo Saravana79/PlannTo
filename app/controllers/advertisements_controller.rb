@@ -212,12 +212,12 @@ class AdvertisementsController < ApplicationController
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
-    @vendor = Vendor.where(:name => "amazon").first
+    @vendor = Vendor.where(:name => "Amazon").first
     vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
 
-    @current_vendor = @vendor_ad_details[vendor_ids]
+    @current_vendor = @vendor_ad_details[@vendor.id]
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
