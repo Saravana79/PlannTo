@@ -912,7 +912,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   def self.update_include_exclude_products_from_vendors()
     if $redis.get("process_popular_vendor_products_update_is_running").to_i == 0
       $redis.set("process_popular_vendor_products_update_is_running", 1)
-      $redis.expire("process_popular_vendor_products_update_is_running", 50.minutes)
+      $redis.expire("process_popular_vendor_products_update_is_running", 90.minutes)
       update_include_exclude_products_from_amazon()
       $redis.set("process_popular_vendor_products_update_is_running", 0)
     end
@@ -1088,37 +1088,81 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           p "Not Included"
           p id
           p url
-          if ["saree", "salwar_suit", "women_top"].include?(each_key)
-            id = each_item.get("ASIN").to_s.downcase rescue ""
-            name = each_item.get_element("ItemAttributes").get("Title") rescue ""
-            offer_listing = each_item.get_element("Offers/Offer/OfferListing")
-            current_price = nil
-            status = 1
-            if !offer_listing.blank?
-              begin
-                current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
-              rescue Exception => e
-                current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+
+          begin
+            if ["saree", "salwar_suit", "women_top"].include?(each_key)
+              id = each_item.get("ASIN").to_s.downcase rescue ""
+              name = each_item.get_element("ItemAttributes").get("Title") rescue ""
+              offer_listing = each_item.get_element("Offers/Offer/OfferListing")
+              current_price = nil
+              status = 1
+              image_url = each_item.get("LargeImage/URL") rescue nil
+              if !offer_listing.blank?
+                begin
+                  current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                rescue Exception => e
+                  current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                end
+                availability_str = offer_listing.get("Availability")
+
+                status = case availability_str
+                           when /Usually dispatched.*/ || /Usually ships.*/
+                             1
+                           when /Not yet released/ || /Not yet published/
+                             3
+                           when /This item is not stocked or has been discontinued/
+                             4
+                           when /Out of Stock/
+                             2
+                           else
+                             4
+                         end
               end
-              availability_str = offer_listing.get("Availability")
 
-              status = case availability_str
-                         when /Usually dispatched.*/ || /Usually ships.*/
-                           1
-                         when /Not yet released/ || /Not yet published/
-                           3
-                         when /This item is not stocked or has been discontinued/
-                           4
-                         when /Out of Stock/
-                           2
-                         else
-                           4
-                       end
+              item = Item.where(:name => each_key.camelize).first
+              item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882" )
+              item_detail.save!
+
+              next if !item_detail.image.blank?
+
+              filename = image_url.to_s.split("/").last
+              filename = filename == "noimage.jpg" ? nil : filename
+
+              unless filename.blank?
+                name = filename.to_s.split(".")
+                name = name[0...name.size-1]
+                name = name.join(".") + ".jpeg"
+                filename = name
+              end
+
+              if !item_detail.blank? && !image_url.blank? && !filename.blank?
+                p "image----------------------------"
+                @image = item_detail.build_image
+# tempfile = open(image_url)
+# avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+# avatar.original_filename = filename
+
+                safe_thumbnail_url = URI.encode(URI.decode(image_url))
+                extname = File.extname(safe_thumbnail_url).delete("%")
+                basename = File.basename(safe_thumbnail_url, extname).delete("%")
+                file = Tempfile.new([basename, extname])
+                file.binmode
+                open(URI.parse(safe_thumbnail_url)) do |data|
+                  file.write data.read
+                end
+                file.rewind
+
+                avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+                avatar.original_filename = filename
+
+                @image.avatar = avatar
+                if @image.save
+                  item_detail.update_attributes(:Image => filename)
+                end
+              end
             end
-
-            item = Item.where(:name => each_key.camelize).first
-            item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id )
-            item_detail.save!
+          rescue Exception => e
+            p "Error while creating itemdetail"
           end
         end
       end

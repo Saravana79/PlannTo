@@ -27,7 +27,9 @@ class AdvertisementsController < ApplicationController
     #
     # url_params = Advertisement.make_url_params(params)
 
-    if !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
+    if !@ad.blank? && @ad.advertisement_type == "fashion"
+      return fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
+    elsif !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
       return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
     elsif !@ad.blank? && @ad.id == 24
       return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
@@ -203,6 +205,39 @@ class AdvertisementsController < ApplicationController
         return render :json => {:success => true, :html => render_to_string("advertisements/show_static_ads.html.erb", :layout => false)}, :callback => params[:callback]
       }
       format.html { return render "show_static_ads.html.erb", :layout => false }
+    end
+  end
+
+  def fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_id, vendor_ids)
+    # static ad process
+    @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+
+    @vendor = Vendor.where(:name => "amazon").first
+    vendor_ids = [@vendor.id]
+    @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+    @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
+
+    @current_vendor = @vendor_ad_details[vendor_ids]
+    @current_vendor = {} if @current_vendor.blank?
+    item_ids = item_id.to_s.split(",")
+
+    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids)
+
+    p @item
+    p @item_details
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
+    end
+
+    @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
+    @click_url = @click_url.gsub("&amp;", "&")
+
+    respond_to do |format|
+      format.json {
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+      }
+      format.html { return render "show_fashion_ads.html.erb", :layout => false }
     end
   end
 

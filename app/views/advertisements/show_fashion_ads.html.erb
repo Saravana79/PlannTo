@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Advt <%= @suitable_ui_size %></title>
+  <link href="<%= configatron.root_image_path %>static/stylesheets/ads/fashion/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+
+  <% if (params[:t].to_i == 1) %>
+      <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
+          <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" />
+      <% else %>
+          <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>&google_ula=8326120&google_ula=8365600" />
+      <% end %>
+  <% end %>
+</head>
+<body>
+
+<div class="plannto-advertisement main_div" style="cursor:pointer;">
+  <%= render :partial => "/advertisements/fashion/#{@ad_template_type}_size_#{@suitable_ui_size}.html.erb" %>
+</div>
+<%= hidden_field_tag :present_item_id, @item.blank? ? "" : @item.id, :id => "present_item_id=#{@item.blank? ? "" : @item.id}#" %>
+</body>
+</html>
+
+<style type="text/css">
+    .main_div {
+        width: <%= @iframe_width %>px !important;
+        height: <%= @iframe_height %>px !important;
+        overflow: hidden;
+    }
+
+    h3.product-title {word-break: break-all;}
+
+    .product-txt-desc p a {text-decoration: none;}
+
+    a#offer_ad {
+        color:#222 !important;
+        font-family: Arial !important;
+        font-size: 10px !important;
+        margin: 0;
+        padding: 0;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    a#offer_ad:hover
+    {
+        color: #009CC4 !important;
+
+    }
+
+    li {
+        list-style: outside none none
+    }
+
+    .divshadow {
+        width: 284px;
+        height: 243px;
+    }
+</style>
+
+
+<script type="application/javascript">
+    $(document).ready(function()
+    {
+        $(".slider_plannto").hide()
+        $("#1").show()
+        $("#1").addClass("active")
+        $(".left").hide();
+
+        var active_div = $(".active")
+        var next_div = $(active_div).next()
+
+        if (active_div.length == 0 || $(next_div).attr("class") == "right")
+        {
+            $(".right").hide();
+            $(".left").hide();
+        }
+    });
+
+    $(".left").click(function()
+    {
+        var active_div = $(".active")
+        var prev_div = $(active_div).prev()
+
+        if ($(prev_div).next().attr("class") == "right")
+        {
+            $(".right").hide();
+        }
+        else
+        {
+            $(".right").show()
+        }
+
+        if ($(prev_div).prev().attr("class") == "left")
+        {
+            $(".left").hide();
+        }
+
+        if ($(prev_div).attr("class") != "left")
+        {
+            $(".slider_plannto").hide()
+            $(prev_div).show()
+            $(".slider_plannto").removeClass("active")
+            $(prev_div).addClass("active")
+        }
+    });
+
+    $(".right").click(function(event)
+    {
+        var active_div = $(".active")
+        var next_div = $(active_div).next()
+
+        if ($(next_div).next().attr("class") == "right")
+        {
+            $(".right").hide();
+        }
+
+        if ($(next_div).prev().attr("class") != "left")
+        {
+            $(".left").show();
+        }
+
+        if ($(next_div).attr("class") != "right")
+        {
+            $(".slider_plannto").hide()
+            $(next_div).show()
+            $(".slider_plannto").removeClass("active")
+            $(next_div).addClass("active")
+        }
+        event.preventDefault();
+        return false;
+    });
+</script>

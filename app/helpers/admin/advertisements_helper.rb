@@ -19,16 +19,16 @@ module Admin::AdvertisementsHelper
     return_val
   end
 
-  def get_image_tag(item_detail, vendor_name='', default_src='', width, height)
+  def get_image_tag(item_detail, vendor_name='', default_src='', width=100, height=100, format='medium')
     return_url = ''
     img_id = ''
     next_src = ''
     if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
-      return_url = configatron.root_image_path + 'vendors/' + vendor_name + '/medium/' + item_detail.Image.to_s
-      next_src = configatron.root_image_url + item_detail.type.downcase + '/medium/' + item_detail.imageurl.to_s
+      return_url = configatron.root_image_path + 'vendors/' + vendor_name + "/#{format}/" + item_detail.Image.to_s
+      next_src = configatron.root_image_url + item_detail.type.downcase + "/#{format}/" + item_detail.imageurl.to_s
       img_id = "item_details"
     else
-      return_url = configatron.root_image_url + item_detail.type.downcase + '/medium/' + item_detail.imageurl.to_s
+      return_url = configatron.root_image_url + item_detail.type.downcase + "/#{format}/" + item_detail.imageurl.to_s
       next_src = ''
       img_id = 'item'
     end

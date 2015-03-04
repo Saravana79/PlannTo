@@ -2262,6 +2262,28 @@ end
     return items
   end
 
+  def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids)
+    item = Item.where(:id => item_ids.split(",")).first
+    itemdetails = []
+    if !item.blank?
+      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
+      itemdetails = itemdetails.sample(3)
+    else
+      sample_int = [*1..100].sample
+      if sample_int < 26
+        item_name = "Saree"
+      elsif sample_int < 46
+        item_name = "SalwarSuit"
+      else
+        item_name = "WomenTop"
+      end
+      item = Item.where(:name => item_name).first
+      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
+      itemdetails = itemdetails.sample(3)
+    end
+    return item, itemdetails
+  end
+
   private
 
   def create_item_ad_detail

@@ -584,4 +584,15 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
     end
   end
 
+  def get_vendor_name
+    return_val = nil
+    begin
+      vendor_id = self.site
+      vendor = Vendor.where(:id => vendor_id).first
+      return_val = vendor.name
+    rescue Exception => e
+      p "Error while getting vendor name"
+    end
+  end
+
 end
