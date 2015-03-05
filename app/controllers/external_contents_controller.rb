@@ -18,6 +18,8 @@ class ExternalContentsController < ApplicationController
     # @related_contents = results.results
     @related_contents = []
 
+    redirect_to @content.url
+
   end
 
 end
