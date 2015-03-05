@@ -33,6 +33,8 @@ module Admin::AdvertisementsHelper
       img_id = 'item'
     end
 
+    # return_url = "http://planntodev.s3.amazonaws.com/vendors/amazon/original/51kyV5FnlmL.jpeg"
+
     if height == 0
       height =''
     end

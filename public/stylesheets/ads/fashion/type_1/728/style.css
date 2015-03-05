@@ -1,0 +1,78 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+*, *:before, *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+body {
+	background:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	color: #222;
+	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+	-webkit-text-size-adjust: 100%;
+}
+
+
+.advt-block { margin:0; padding:0;}
+.advt-728 { margin:0; padding:0; width:728px; height:90px; background:#fff; border:1px solid #F1F0F0;}
+
+.advt-728 .advt-box { margin:0; padding:0;}
+.advt-728 .advt-box .logo{ margin:0 auto; padding: 0; text-align:center; vertical-align:middle; float:left; width:130px; height:88px; display:block; border-right:1px solid #F1F0F0;}
+.advt-728 .advt-box .logo img{ margin:0 auto; text-align:center; vertical-align:middle;   }
+.advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 20px;display: block; }
+    
+
+.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:340px; }
+.advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
+.advt-728 .advt-box .product-container:after { clear:both;}
+
+.advt-728 .advt-box .product-container h3{ margin:0 auto; padding:0; font-size:14px; color:#222; font-weight:bold; text-align:center; float:left; width:200px; font-family:Arial;word-break:break-word;}
+.advt-728 .advt-box .product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:110px; float:left;}
+.advt-728 .advt-box .product-container .product-img img { margin:0 auto; text-align:center; }
+
+.advt-728 .advt-box .product-desc { margin:0; padding:5px; font-size:14px; font-weight:bold; color:#0085b6; text-align:center;  width:120px; float:left;font-weight: normal;}
+
+.advt-728 .advt-box .product-container .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px; text-align:center;font-family: Arial;}
+.advt-728 .advt-box .product-container .price-strike{margin: 0;padding: 0;color: #585858;font-size: 11px;text-decoration: line-through; text-align:center;}
+.advt-728 .advt-box .product-container .price{ margin: 10px 0 0 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;width:200px;}
+
+.advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
+.advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 10px; background:#F76300; color:#fff; font-size:16px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
+
+.right-div { float:right;  padding:8px 10px 10px 0;}
+
+
+/* Sliding gallery */
+
+.pager {
+	z-index:1000;
+    background:#fff;
+    padding:0px 0px 0 8px;
+    position:relative;
+    float:left;
+    
+}
+.pager a {
+	margin: 0 2px;
+	text-decoration: none;
+	padding:2px 4px;
+	background:#ccc;
+	color:#222;
+	font-size:11px;
+	font-family: Arial monospace;
+}
+.pager a.selected {
+	text-decoration: none;
+	background:#6ebfd6;
+}
+
+a { outline: none; }
+
+/* end Sliding gallery */

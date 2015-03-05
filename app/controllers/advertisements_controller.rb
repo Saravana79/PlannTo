@@ -212,6 +212,8 @@ class AdvertisementsController < ApplicationController
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
+    @ad_template_type = "type_1" #TODO: only accept type 1
+
     @vendor = Vendor.where(:name => "Amazon").first
     vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
@@ -222,6 +224,7 @@ class AdvertisementsController < ApplicationController
     item_ids = item_id.to_s.split(",")
 
     @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids)
+    @sliced_item_details = @item_details.each_slice(2)
 
     p @item
     p @item_details
