@@ -8,29 +8,38 @@
             .shadetabs li.selected{padding:0px!important; margin:0px; text-align:center; background: #FF6 !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
             .shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
 
-            .product-container{ margin:0; padding:5px 0; float:left;border-bottom:1px solid #E5E5E5;cursor:pointer;}
-            .planntocarosel-right{ width: 24px;float: right;padding: 30px 3px 0 0px;height: 111px;border-bottom: 1px solid #E5E5E5;}
+            .product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;height:129px;}
+            .planntocarosel-right{ width: 32px;float: right;}
            .planntocarosel-right a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) -25px 0; right: 0;float: left;height: 50px;width:30px;}
 
-            .planntocarosel-left{ width: 24px;float: left;padding: 30px 3px 0 0px;height: 111px;border-bottom: 1px solid #E5E5E5;}
+            .planntocarosel-left{ width: 32px;float: left;}
             .planntocarosel-left a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) 5px 0; right: 0;float: left;height: 50px;width:30px;}
-          .bottompan{display:none;text-align: right;padding: 5px 10px;text-decoration:none;font-size:14px;}
+          .bottompan{border-top:1px solid #E5E5E5;display:block;text-align: right;padding: 5px 10px;text-decoration:none;font-size:14px;}
 
 
             <%if @items.size == 1%>
-            .product-container{width:100%}
+            .product-container{width:100%;}
+            .product-container-top{width:80%;float:left;border-bottom:1px solid #E5E5E5;}
+            .planntocarosel-left{padding: 107px 3px 0 0px;}
+            .planntocarosel-right{padding: 107px 3px 0 0px;}
             <%else%>
-            .product-container{width:46%}
+            .product-container{width:50%}
+            .product-container-top{width:86%;float:left;}
+            .planntocarosel-left{padding: 35px 3px 0 0px;}
+            .planntocarosel-right{padding: 35px 3px 0 0px;}
             <%end%>
 
             @media (max-width: 550px) {
-               .product-container{width:100%;}
-               .bottompan{display:block;}
+               .product-container{width:100%;border-bottom:1px solid #E5E5E5;}
+             .product-container-top{width:80%;float:left;border-bottom:1px solid #E5E5E5;}
+            .planntocarosel-left{padding: 100px 3px 0 0px;height: 157px;}
+            .planntocarosel-right{padding: 100px 3px 0 0px;height: 157px;}
+               
             }
 
            .product-container h3{ margin:0 auto; padding:0; font-size:13px; color:#222; font-weight:normal;   font-family:Arial;word-break:break-word;}
-           .product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:45%; float:left;}
-           .product-container .product-img img { margin:0 auto; text-align:center; max-width:120px; }
+           .product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:45%; float:left;min-height:110px;}
+           .product-container .product-img img { margin:0 auto; text-align:center; max-width:120px;max-height:110px; }
            .product-container .product-text {width:55%;float:left;}
            .product-container .product-text .product-title{height:32px;overflow:hidden;font-size:14px;padding:5px 0px;}
            .product-container .product-text .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px;font-family: Arial;height:32px;}
@@ -105,7 +114,7 @@
             </div>
             <div class="bottompan">
                   <span >
-                                     <a href="<%= configatron.hostname%>/history_details?item_id=&geo=<%= params[:geo] %>&red_url=<%= @search_url%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank" style="text-decoration:none;color: #428BCA!important;" rel="nofollow">View more</a>
+                                     <a href="<%= configatron.hostname%>/history_details?item_id=&geo=<%= params[:geo] %>&red_url=<%= @search_url%>&iid=<%=@impression_id%>" id="plannto_go_button" target="_blank" style="text-decoration:none;color: #428BCA!important;" rel="nofollow">View All</a>
                     </span>
               </div>
           </div>
