@@ -1740,10 +1740,10 @@ end
     items = []
     if excluded_items.blank?
       loop_items = res.items
-      loop_items = loop_items.sample(2)
+      loop_items = loop_items.sample(8)
     else
       loop_items = res.items
-      loop_items = loop_items.sample(2)
+      loop_items = loop_items.sample(8)
     end
 
     loop_items.each_with_index do |each_item, index|
@@ -1801,32 +1801,32 @@ end
           if items.blank?
             items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
             extra_items = products - [item]
-            extra_items = extra_items.first(2)
+            extra_items = extra_items.first(8)
           else
-            if items.count < 2
+            if items.count < 8
               added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
               items = items + added_items
-              items = items.flatten.first(2)
+              items = items.flatten.first(8)
             end
             combine_item = OpenStruct.new(item.attributes)
             combine_item.name = keyword
             combine_item.id = ""
             item = combine_item
             extra_items = products
-            extra_items = extra_items.first(2)
+            extra_items = extra_items.first(8)
           end
         else
-          if items.count < 2
+          if items.count < 8
             added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
             items = items + added_items
-            items = items.flatten.first(2)
+            items = items.flatten.first(8)
           end
           combine_item = OpenStruct.new(item.attributes)
           combine_item.name = keyword
           combine_item.id = ""
           item = combine_item
           extra_items = products
-          extra_items = extra_items.first(2)
+          extra_items = extra_items.first(8)
         end
       elsif !manufacturer.blank?
         keyword = "#{manufacturer.name} #{item.name}"
@@ -1834,23 +1834,23 @@ end
         if items.blank?
           items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
           extra_items = products - [item]
-          extra_items = extra_items.first(2)
+          extra_items = extra_items.first(8)
         else
-          if items.count < 2
+          if items.count < 8
             added_items, search_url = Item.get_items_from_amazon(item.name.to_s, page_type, [], geo)
             items = items + added_items
-            items = items.flatten.first(2)
+            items = items.flatten.first(8)
           end
           combine_item = OpenStruct.new(item.attributes)
           combine_item.name = keyword
           combine_item.id = ""
           item = combine_item
           extra_items = products
-          extra_items = extra_items.first(2)
+          extra_items = extra_items.first(8)
         end
       else
         extra_items = items - [item]
-        extra_items = extra_items.first(2)
+        extra_items = extra_items.first(8)
 
         keyword = item.name.to_s
         items, search_url = Item.get_items_from_amazon(keyword, page_type, [], geo)
