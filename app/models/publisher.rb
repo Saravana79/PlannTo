@@ -5,6 +5,6 @@ class Publisher < ActiveRecord::Base
 		domain = host.start_with?('www.') ? host[4..-1] : host
 		domain = domain.start_with?('blog.') ? domain[5..-1] : domain
 		#publisher = Publisher.where(:publisher_url => "sportskeeda.com").first
-		publisher = Publisher.where(domain).first
+		publisher = Publisher.where(:publisher_url =>  domain).first
 	end
 end
