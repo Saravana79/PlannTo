@@ -26,7 +26,7 @@ body {
 
 .advt-box { margin:0; padding:0;}
 
-.advt-box .product-container{ margin:0px 0 0 0; padding:0px;height:203px;width: 295px;}
+.advt-box .product-container{ margin:0px 0 0 0; padding:0px;height:243px;width: 295px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
 .advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:132px;float:left;}
@@ -83,20 +83,23 @@ body {
 }
 .prev {
 	float: left;
-	background:url(/assets/ads/prev-arrow.png) no-repeat left top;
-	width:21px; height:22px;
-	text-indent:-99999px;
-	position:absolute;
-	top:125px;
+	background: url(/images/det-arrow.png) 0 0 no-repeat;
+	width: 26px;
+	height: 25px;
+	text-indent: -99999px;
+	position: absolute;
+	left: 2px;
+	top: 110px;
 }
 .next {
-	float: right;
-	background:url(/assets/ads/next-arrow.png) no-repeat right top;
-	width:21px; height:22px;
-	text-indent:-99999px;
-	position:absolute;
-	left:270px;
-	top:125px;
+float: right;
+background: url(/images/det-arrow.png) -26px 0 no-repeat;
+width: 26px;
+height: 25px;
+text-indent: -99999px;
+position: absolute;
+left: 270px;
+top: 110px;
 }
 .pager {
 	float:right;
