@@ -49,6 +49,8 @@
 
                         </div>
                       </div>
+                    </div>
+                  </div>
 
                 </li>
                 </span>
@@ -104,20 +106,18 @@
 </style>
 
 <script type="application/javascript">
-    $(document).ready(function()
-    {
+    $(document).ready(function () {
         $(".slider_plannto").hide()
         $("#1").show()
         $("#1").addClass("active")
     });
 
-    $(".thumbnails").click(function()
-    {
+    $(".thumbnails").click(function () {
         $(".slider_plannto").hide()
         var current_id = $(this).attr("id")
         var id = current_id.replace("thumbnail_", "")
-        $("#"+id).show()
+        $("#" + id).show()
         $(".slider_plannto").removeClass("active")
-        $("#"+id).addClass("active")
+        $("#" + id).addClass("active")
     })
 </script>
