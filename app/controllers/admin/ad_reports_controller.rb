@@ -128,7 +128,7 @@ class Admin::AdReportsController < ApplicationController
       @publishers = current_user.publishers
       params[:publisher_id] ||= @publishers.first.id
 
-      @publisher = @publishers.select {|publisher| publisher.id == params[:publisher_id]}.first
+      @publisher = @publishers.select {|publisher| publisher.id == params[:publisher_id].to_i}.first
 
       if @publisher.blank?
         @publisher = current_user.publisher
