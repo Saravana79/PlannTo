@@ -125,8 +125,15 @@ class Admin::AdReportsController < ApplicationController
       @publisher = Publisher.find_by_id(params[:publisher_id])
       @vendors = Vendor.all
     else
-      params[:publisher_id] = nil
-      @publisher = current_user.publisher
+      @publishers = current_user.publishers
+      params[:publisher_id] ||= @publishers.first.id
+
+      @publisher = @publishers.select {|publisher| publisher.id == params[:publisher_id]}.first
+
+      if @publisher.blank?
+        @publisher = current_user.publisher
+      end
+
       if !@publisher.blank?
         params[:publisher_id] = @publisher.id
         @vendors = Vendor.where(:id => @publisher.vendor_ids)

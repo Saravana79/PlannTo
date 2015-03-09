@@ -109,6 +109,16 @@ class User < ActiveRecord::Base
     end
     publisher
   end
+
+  def publishers
+    publishers = []
+    relationships = UserRelationship.where(:user_id => self.id,:relationship_type => "Publisher")
+    relationships_ids = relationships.map(&:relationship_id)
+    if !relationships_ids.blank?
+      publishers = Publisher.where(:id => relationships_ids)
+    end
+    publishers
+  end
   
   def is_a_advertiser?(advertiser)
     if advertiser == "true"
