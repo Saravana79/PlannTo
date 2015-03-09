@@ -4,7 +4,7 @@
   <title>Advt <%= @suitable_ui_size %></title>
   <link href="<%= configatron.root_image_path %>static/stylesheets/ads/fashion/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
   <link href="/stylesheets/ads/fashion/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
-  <%#= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
+  <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 
   <% if (params[:t].to_i == 1) %>
       <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
@@ -61,44 +61,46 @@
 </style>
 
 
+<% if @suitable_ui_size != "300_600" %>
+
 <script type="application/javascript">
     $(document).ready(function()
     {
         $(".slider_plannto").hide()
         $("#1").show()
         $("#1").addClass("active")
-        $(".left").hide();
+        $(".prev").css("opacity", 0.2);
 
         var active_div = $(".active")
         var next_div = $(active_div).next()
 
-        if (active_div.length == 0 || $(next_div).attr("class") == "right")
+        if (active_div.length == 0 || $(next_div).attr("class") == "next")
         {
-            $(".right").hide();
-            $(".left").hide();
+            $(".next").css("opacity", 0.2);
+            $(".prev").css("opacity", 0.2);
         }
     });
 
-    $(".left").click(function()
+    $(".prev").click(function()
     {
         var active_div = $(".active")
         var prev_div = $(active_div).prev()
 
-        if ($(prev_div).next().attr("class") == "right")
+        if ($(prev_div).next().attr("class") == "next")
         {
-            $(".right").hide();
+            $(".next").css("opacity", 0.2);
         }
         else
         {
-            $(".right").show()
+            $(".next").css("opacity", 1)
         }
 
-        if ($(prev_div).prev().attr("class") == "left")
+        if ($(prev_div).prev().attr("class") == "prev")
         {
-            $(".left").hide();
+            $(".prev").css("opacity", 0.2);
         }
 
-        if ($(prev_div).attr("class") != "left")
+        if ($(prev_div).attr("class") != "prev")
         {
             $(".slider_plannto").hide()
             $(prev_div).show()
@@ -107,22 +109,22 @@
         }
     });
 
-    $(".right").click(function(event)
+    $(".next").click(function(event)
     {
         var active_div = $(".active")
         var next_div = $(active_div).next()
 
-        if ($(next_div).next().attr("class") == "right")
+        if ($(next_div).next().attr("class") == "next")
         {
-            $(".right").hide();
+            $(".next").css("opacity", 0.2);
         }
 
-        if ($(next_div).prev().attr("class") != "left")
+        if ($(next_div).prev().attr("class") != "prev")
         {
-            $(".left").show();
+            $(".prev").css("opacity", 1);
         }
 
-        if ($(next_div).attr("class") != "right")
+        if ($(next_div).attr("class") != "next")
         {
             $(".slider_plannto").hide()
             $(next_div).show()
@@ -133,3 +135,5 @@
         return false;
     });
 </script>
+
+<% end %>
