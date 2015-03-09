@@ -7,7 +7,6 @@
     <% if @item_details.count != 0 %>
         <div class="">
           <ul id="foo3" height="190px;">
-            <span id="leftarrow" class="left" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> << </span>
             <% @item_details.each_with_index do |item_detail, indx| %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
@@ -41,7 +40,8 @@
                 </li>
                 </span>
             <% end %>
-            <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+            <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
+            <a id="rightarrow" class="next" href="#" style="display: block;">&gt;</a>
           </ul>
         </div>
         <div class="clearfix"></div>
@@ -78,7 +78,5 @@
 
     }
 
-    .foo3, .slider_plannto {
-        height: 198px !important;
-    }
+
 </style>

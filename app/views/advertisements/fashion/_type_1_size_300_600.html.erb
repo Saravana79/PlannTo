@@ -5,9 +5,9 @@
     </div>
   -->
     <% if @item_details.count != 0 %>
+
         <div class="">
-          <ul id="foo3" height="190px;">
-            <span id="leftarrow" class="left" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> << </span>
+          <ul id="foo3" height="">
             <% @item_details.each_with_index do |item_detail, indx| %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
@@ -15,35 +15,57 @@
                 <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <div class="advt-box">
+                    
                     <div class="product-container">
-                      <div class="product-img-top" style="float:left;">
+                       <div style="margin-bottom:10px;width:100%;float:left">
+                            <span style="float:left">  
+                            <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="80px">
+                          </span>
+                           <span style="float:right"> 
+
+                            <p class="btn">
+                              <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
+                                Now</a>
+                            </p>
+                          </span>
+                     </div>
+                      <div class="product-img-top" >
                         <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , 245, "original").html_safe %>
+                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"280" , "", "original").html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
-                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="80px">
-
-                        <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="price"><%= prettify(item_detail) %></p>
-                        </a>
-
-                        <p class="btn">
-                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                            Now</a>
-                        </p>
-
-                      </div>
+                           <div style="text-align:center;margin-top:10px;">
+                          <a href="<%= shop_now_url %>" target="_blank" class="">
+                            <p class="product-txt-desc"><%= item_detail.ItemName.to_s.truncate(62) %></p>
+                          </a>
+                          <div style="text-align:center;margin-top:2px;">
+                          <a href="<%= shop_now_url %>" target="_blank" class="">
+                            <p class="price"><%= prettify(item_detail) %></p>
+                          </a>
+                          </div>
+                         
                     </div>
                   </div>
                   
                 </li>
                 </span>
             <% end %>
-            <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+ 
           </ul>
         </div>
+                <div>
+  <% @item_details.each_with_index do |item_detail, indx| %>
+<div class="" style="float:left;padding:3px;border:1px solid #BABABA;">
+                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"60" , 
+
+                        "", "medium").html_safe %>
+                          <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                       </div>
+  <%end%>
+
+         </div> 
         <div class="clearfix"></div>
         <!--<a id="prev3" class="prev" href="#">&lt;</a>
         <a id="next3" class="next" href="#">&gt;</a>
@@ -78,7 +100,5 @@
 
     }
 
-    .foo3, .slider_plannto {
-        height: 198px !important;
-    }
+    
 </style>
