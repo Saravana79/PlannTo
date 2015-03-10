@@ -2267,7 +2267,7 @@ end
     itemdetails = []
     if !item.blank?
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails = itemdetails.sample(3)
+      itemdetails = itemdetails.sample(6)
     else
       sample_int = [*1..100].sample
       if sample_int < 26
@@ -2279,7 +2279,7 @@ end
       end
       item = Item.where(:name => item_name).first
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails = itemdetails.sample(3)
+      itemdetails = itemdetails.sample(6)
     end
     return item, itemdetails
   end

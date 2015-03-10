@@ -57,6 +57,9 @@ development:
   ectr_default_value: 0.02
   enabled_ab_test: true #remove cache using following command in rails console, Rails.cache.clear
   ab_test_alternatives: "type_1,type_2"
+  fashion_auto_scroll_time: 10000 # 10 sec
+  fashion_auto_scroll: "true"
+  fashion_auto_scroll_count: "infinity" # one or infinity
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -107,6 +110,9 @@ test:
   ectr_default_value: 0.02
   enabled_ab_test: true #remove cache using following command in rails console, Rails.cache.clear
   ab_test_alternatives: "type_1,type_2"
+  fashion_auto_scroll_time: 10000 # 10 sec
+  fashion_auto_scroll: "true"
+  fashion_auto_scroll_count: "infinity" # one or infinity
  
 production:
   root_image_url: "http://cdn1.plannto.com/items/"
@@ -168,3 +174,6 @@ production:
   ectr_default_value: 0.02
   enabled_ab_test: true #remove cache using following command in rails console, Rails.cache.clear#remove cache using following command in rails console, Rails.cache.clear#remove cache using following command in rails console, Rails.cache.clear
   ab_test_alternatives: "type_1,type_2"
+  fashion_auto_scroll_time: 10000 # 10 sec
+  fashion_auto_scroll: "true"
+  fashion_auto_scroll_count: "infinity" # one or infinity
