@@ -45,8 +45,24 @@ class Itemdetail < ActiveRecord::Base
     if (more_vendors == "true" || p_item_ids.count > 1)
       @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
     else
-      @item_details = @item_details.is_a?(Hash) ? @item_details.values.flatten : @item_details.flatten
+      group_ids = Itemdetail.get_group_ids_from_item_ids(item_ids)
+
+      if @item_details.is_a?(Hash)
+        @item_details = Itemdetail.get_sort_by_group(@item_details, group_ids)
+      else
+        @item_details = @item_details.flatten
+      end
     end
+    @item_details
+  end
+
+  def self.get_group_ids_from_item_ids(item_ids)
+    group_ids = {}
+    items = Item.find_by_sql("select id, group_id from items where id in (#{item_ids.map(&:inspect).join(', ')}) group by id")
+    items.each do |each_item|
+      group_ids.merge!(each_item.id => each_item.group_id)
+    end
+    group_ids
   end
 
   def vendor_name
@@ -60,10 +76,10 @@ class Itemdetail < ActiveRecord::Base
   end
   
   def self.display_item_details(item)
-if ((item.status ==1 || item.status ==3)  && !item.IsError?)
-    return true
+    if ((item.status ==1 || item.status ==3)  && !item.IsError?)
+      return true
     else
-    return false
+      return false
     end
   end
   
@@ -141,6 +157,25 @@ if ((item.status ==1 || item.status ==3)  && !item.IsError?)
             return_val << item_detail unless item_detail.blank?
           end
         end
+      end
+    end
+
+    return_val
+  end
+
+  def self.get_sort_by_group(item_details, group_ids)
+    item_details = item_details.values.flatten
+    item_details_hash = item_details.group_by {|each_val| group_ids[each_val.itemid]}
+
+    return_val = []
+
+    item_keys = item_details_hash.keys
+    max_count = item_details_hash.map {|_, s| s.count}.flatten.max
+
+    [*0...max_count].each do |each_val|
+      item_keys.each do |group_id|
+        item_detail = item_details_hash[group_id][each_val]
+        return_val << item_detail unless item_detail.blank?
       end
     end
 

@@ -44,7 +44,9 @@ class AdvertisementsController < ApplicationController
 
     status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
     publisher = Publisher.getpublisherfromdomain(url)
-    vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
+
+    #TODO: temp commented no one is using now
+    # vendor_ids = Vendor.get_vendor_ids_by_publisher(publisher, vendor_ids) if params[:more_vendors] == "true"
 
     item_ids = @items.blank? ? [] : @items.map(&:id)
     @item = @items.first
@@ -170,7 +172,9 @@ class AdvertisementsController < ApplicationController
     params[:more_vendors] ||= "false"
     @ad_template_type ||= "type_1"
     impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-    @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856, 72329] : []
+    #TODO: temp commentted no one is using now
+    # @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856, 72329] : []
+    @vendor_ids = []
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)

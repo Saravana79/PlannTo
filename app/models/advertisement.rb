@@ -1128,6 +1128,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               filename = image_url.to_s.split("/").last
               filename = filename == "noimage.jpg" ? nil : filename
 
+              filename = URI.unescape(filename).gsub("+", "")
+
               unless filename.blank?
                 name = filename.to_s.split(".")
                 name = name[0...name.size-1]
