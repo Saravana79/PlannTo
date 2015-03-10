@@ -387,7 +387,7 @@ class AdvertisementsController < ApplicationController
     params[:ref_url] ||= ""
     params[:page_type] ||= "type_5"
     params[:ads_id] ||= 41
-    params[:more_vendors] ||= "true"
+    params[:more_vendors] ||= "false"
     params[:is_test] ||= "true"
     params[:item_id] ||= "581,582,583,584,585,586"
     render :layout => false

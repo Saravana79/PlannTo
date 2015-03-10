@@ -42,7 +42,7 @@ class Itemdetail < ActiveRecord::Base
       # @item_details = Itemdetail.get_item_details(item_ids.first, vendor_ids).group_by { |each_rec| each_rec.itemid }
     end
 
-    if (more_vendors == "true" || p_item_ids.count > 1)
+    if (more_vendors == "true" || vendor_ids.count > 1)
       @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
     else
       group_ids = Itemdetail.get_group_ids_from_item_ids(item_ids)
