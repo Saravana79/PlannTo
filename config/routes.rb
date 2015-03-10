@@ -504,6 +504,7 @@ resources :comments do
   match "advertisements/demo" => "advertisements#demo"
   match "advertisements/vendor_demo" => "advertisements#vendor_demo"
   match "advertisements/amazon_demo" => "advertisements#amazon_demo"
+  match "advertisements/carwale_demo" => "advertisements#carwale_demo"
   match "advertisements/amazon_widget" => "advertisements#amazon_widget"
   match "advertisements/amazon_sports_widget" => "advertisements#amazon_sports_widget"
   match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"

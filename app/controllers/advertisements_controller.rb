@@ -170,7 +170,7 @@ class AdvertisementsController < ApplicationController
     params[:more_vendors] ||= "false"
     @ad_template_type ||= "type_1"
     impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
-    @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856] : []
+    @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856, 72329] : []
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
@@ -376,6 +376,16 @@ class AdvertisementsController < ApplicationController
         @details = {}
       end
     end
+    render :layout => false
+  end
+
+  def carwale_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_5"
+    params[:ads_id] ||= 41
+    params[:more_vendors] ||= "true"
+    params[:is_test] ||= "true"
+    params[:item_id] ||= "581,582,583,584,585,586"
     render :layout => false
   end
 
