@@ -12,12 +12,17 @@
                 <div class="product-container">
                   <div style="float:left;width:200px;">
                   <a href="<%= shop_now_url %>" target="_blank" class="">
-                    <div style="float:left;">
+                    <div style="text-align:center;">
                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(57) %></h3>
                   </div>
-                    <div style="float:left;">
-                      <p class="price"><%= prettify(item_detail) %></p>
-                    </div>
+                  <br clear="both" />
+                      <div style="text-align:center;margin-top:5px;">
+                              <span style="font-size: 11px;color: #000;">Starting at - </span>
+                              <span class="price"><%= prettifyforcarprice(item_detail) %></span>
+                          </div>
+                          <div style="padding: 10px 0px;color: #000;font-size: 12px;text-align:center;">
+                              <span>EMI: <%= prettifyforcaremi(item_detail) %></span><span>*</span> 
+                          </div>
                   </a>
                   </div>  
                   <div class="product-img">
@@ -38,8 +43,7 @@
 
                 <div class="right-div">
                   <p class="btn">
-                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                      Now</a>
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Check On-Road Price</a>
                   </p>
                 </div>
               </div>

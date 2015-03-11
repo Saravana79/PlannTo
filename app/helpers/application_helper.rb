@@ -313,4 +313,12 @@ module ApplicationHelper
     end
   end
 
+   def prettifyforcarprice(item_detail)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.price)
+   end
+
+   def prettifyforcaremi(item_detail)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.cashback)
+   end
+
 end

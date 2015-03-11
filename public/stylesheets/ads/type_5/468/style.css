@@ -44,7 +44,7 @@ body {
 .advt-728 .advt-box .product-container .price{ margin: 3px 0 0 0; padding:0; color:#bf0000; font-size:13px; font-weight:bold;text-align:center;font-family: Arial monospace;width:148px;}
 
 .advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
-.advt-728 .advt-box .btn .shop-now{ margin:0; padding:6px 5px; background:#F76300; color:#fff; font-size:10px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
+.advt-728 .advt-box .btn .shop-now{ margin:0; padding:4px 3px; background:#D70000; color:#fff; font-size:10px;  border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
 
 .right-div { float:right;  padding:8px 10px 10px 0;}
 

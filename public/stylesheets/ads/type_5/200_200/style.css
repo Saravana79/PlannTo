@@ -22,20 +22,20 @@ body {
 
 .advt-block { margin:0; padding:0;}
 .advt-200-200 { margin:0; padding:0; width:200px; height:200px; background:#fff; border:1px solid #BEBEBE;}
-.advt-200-200 .logo{ margin:0 5px; padding:5px 0; border-bottom:0px solid #F1F0F0;}
+.advt-200-200 .logo{ margin:0 5px; padding:5px 0; border-bottom:1px solid #F1F0F0;}
 
 .advt-box { margin:0; padding:0;}
 
-.advt-box .product-container{ margin:5px 0 0 0; padding:5px;height:140px;}
+.advt-box .product-container{ margin:5px 0 0 0; padding:5px 0px;height:140px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
 .advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:88px;float:left;}
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;}
-.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:75px;}
+.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:85px;}
 .advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:14px; color:#222; font-weight:800; font-family: Arial;word-break:break-word;min-height: 40px;}
-.advt-box .product-container .price{ margin:0; padding:10px 0 10px 0; color:#bf0000; font-size:13px; font-weight:bold;font-family: Arial monospace;}
-.advt-box .product-container .btn{ margin:10px 0px; }
-.advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:60px; height:24px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 2px 2px;color: #FFF;font-weight: bold;font-family: Arial;font-size:12px;text-transform: uppercase;}
+.advt-box .product-container .price{ margin:0; padding:6px 0 1px 0; color:#bf0000; font-size:13px; font-weight:bold;font-family: Arial monospace;}
+.advt-box .product-container .btn{ margin:2px 0px; }
+.advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #D70000;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:11px;}
 
 .advt-box .product-txt-desc { margin:0; padding:5px 10px;text-align: center;min-height: 34px;}
 .advt-box .product-txt-desc p{ margin:0; padding:0; font-size:11px; color:#222;font-family: Arial;}
@@ -116,7 +116,7 @@ body {
 }
 .pager a.selected {
 	text-decoration: none;
-	background:#F76300;
+	background:#D70000;
 	color:white;
 }
 .timer {

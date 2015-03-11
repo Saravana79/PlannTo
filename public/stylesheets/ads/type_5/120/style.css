@@ -21,23 +21,23 @@ body {
 
 .advt-block { margin:0; padding:0;text-align: center;}
 .advt-120 { margin:0; padding:0; width:120px; height:600px; background:#fff; border:1px solid #F1F0F0;}
-.advt-120 .logo{ margin:0 0px; padding:10px 0; border-bottom:1px solid #F1F0F0;}
+.advt-120 .logo{ margin:0 0px; }
 
-.advt-120 .advt-box { margin:0; padding:0;}
+.advt-120 .advt-box { margin:0; padding:0;border-top:1px solid #F1F0F0;}
 
-.advt-120 .advt-box .product-container{ margin:5px 0 0 0; padding:5px;height: 420px;}
+.advt-120 .advt-box .product-container{ margin:5px 0 0 0; padding:0px;height: 232px;border-bottom: 1px solid #F1F0F0;}
 .advt-120 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-120 .advt-box .product-container:after { clear:both;}
-.advt-120 .advt-box .product-container .product-img{ margin:0; padding:30px 0; width:112px;}
+.advt-120 .advt-box .product-container .product-img{ margin:0; padding:5px 0; width:112px;}
 .advt-120 .advt-box .product-container .product-img img { margin:0 auto; text-align:center;width:112px;}
 
 
-.advt-120 .advt-box .product-container h3{ margin:15px 0; padding:0; font-size:15px; color:#222; font-weight:bold; height:60px; text-align:center;font-family: Arial;word-break:break-word;}
+.advt-120 .advt-box .product-container h3{ margin:5px 0; padding:0; font-size:15px; color:#222; font-weight:bold; height:60px; text-align:center;font-family: Arial;word-break:break-word;}
 
 .advt-120 .advt-box .product-container .price-strike{margin:10px 0;padding: 0;color: #585858;font-size: 14px;text-decoration: line-through; text-align:center;}
-.advt-120 .advt-box .product-container .price{ margin:10px 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;}
+.advt-120 .advt-box .product-container .price{ margin:5px 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;}
 .advt-120 .advt-box .product-container .btn{ margin:0; padding:0;}
-.advt-120 .advt-box .product-container .btn .shop-now{  cursor:pointer;  border:0;margin:15px 0px; padding:5px 5px; background:#F76300; color:#fff; font-size:16px; text-transform:uppercase; }
+.advt-120 .advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:141px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #D70000;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:10px;text-decoration: none;}
 
 .advt-120 .advt-box .product-desc { margin:0; padding:5px; font-size:12px; font-weight:bold; color:#0085b6; text-align:center;font-family: Arial;}
 .advt-120 .advt-box .product-extra-desc { margin:5px 0 0 0; padding:0 5px 5px 5px; font-size:11px; color:#222;}
@@ -49,7 +49,7 @@ body {
 .pager {
 	z-index:1000;
 	background:#fff;
-	padding:10px 2px 0 2px;
+	padding:0px 2px 4px 2px;
 }
 .pager a {
 	margin: 0 2px;

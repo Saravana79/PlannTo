@@ -29,7 +29,7 @@ body {
 .advt-728 .advt-box .logo a{vertical-align: middle;padding-top: 20px;display: block; }
     
 
-.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:470px; }
+.advt-728 .advt-box .product-container{ margin:0; padding:0px 0; float:left; width:460px; }
 .advt-728 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-728 .advt-box .product-container:after { clear:both;}
 
@@ -39,14 +39,14 @@ body {
 
 .advt-728 .advt-box .product-desc { margin:0; padding:5px; font-size:14px; font-weight:bold; color:#0085b6; text-align:center;  width:120px; float:left;font-weight: normal;}
 
-.advt-728 .advt-box .product-container .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px; text-align:center;font-family: Arial;}
+.advt-728 .advt-box .product-container .text-desc{margin: 0;padding: 5px 0px 0px 0px;color: #222; font-size: 11px; text-align:center;font-family: Arial;}
 .advt-728 .advt-box .product-container .price-strike{margin: 0;padding: 0;color: #585858;font-size: 11px;text-decoration: line-through; text-align:center;}
 .advt-728 .advt-box .product-container .price{ margin: 10px 0 0 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;width:200px;}
 
 .advt-728 .advt-box .btn{ margin:0 auto; padding:5px 0 0 0; text-align:center;}
-.advt-728 .advt-box .btn .shop-now{ margin:0; padding:3px 10px; background:#F76300; color:#fff; font-size:16px; text-transform:uppercase; border:0; cursor:pointer;  text-decoration:none; font-weight:bold; text-align:center;}
+.advt-box .btn .shop-now{ margin:0; padding:0;  height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #D70000;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:12px;  text-decoration: none}
 
-.right-div { float:right;  padding:8px 10px 10px 0;}
+.right-div { float:right;  padding:8px 2px 10px 0;}
 
 
 /* Sliding gallery */
