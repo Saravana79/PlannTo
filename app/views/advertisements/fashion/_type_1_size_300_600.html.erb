@@ -13,7 +13,7 @@
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
                 <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
-                <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                <li class="item_details1" id="item_detail_<%= indx + 1 %>">
                   <div class="advt-box">
 
                     <div class="product-container">
@@ -60,11 +60,18 @@
         </div>
         <div class="thumbnail_images">
           <% @item_details.each_with_index do |item_detail, indx| %>
-              <div id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="float:left;padding:3px;border:1px solid #BABABA;">
-                <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "60", "", "medium").html_safe %>
+            <% if indx == 5 %>
+              <span id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="padding:4px 3px;border:1px solid #BABABA;float:left;border-right:0px;">
+                <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "40", "", "medium").html_safe %>
+              </span>
+            <%else%>
+              <span id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="padding:4px 4px;border:1px solid #BABABA;float:left;">
+                <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "40", "", "medium").html_safe %>
+
+              </span>
+            <%end%>
                 <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
-              </div>
-          <% end %>
+             <%end%> 
         </div>
         <div class="clearfix"></div>
         <!--<a id="prev3" class="prev" href="#">&lt;</a>
@@ -110,6 +117,8 @@
         $(".slider_plannto").hide()
         $("#1").show()
         $("#1").addClass("active")
+        $("#thumbnail_1").addClass("thumbnailactive")
+      
     });
 
     $(".thumbnails").click(function () {
@@ -119,5 +128,7 @@
         $("#" + id).show()
         $(".slider_plannto").removeClass("active")
         $("#" + id).addClass("active")
+        $(".thumbnails").removeClass("thumbnailactive")
+        $("#" + current_id).addClass("thumbnailactive") 
     })
 </script>

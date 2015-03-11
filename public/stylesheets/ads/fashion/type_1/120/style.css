@@ -37,7 +37,7 @@ body {
 .advt-120 .advt-box .product-container .price-strike{margin:10px 0;padding: 0;color: #585858;font-size: 14px;text-decoration: line-through; text-align:center;}
 .advt-120 .advt-box .product-container .price{ margin:10px 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;text-align:center;font-family: Arial monospace;}
 .advt-120 .advt-box .product-container .btn{ margin:0; padding:0;}
-.advt-120 .advt-box .product-container .btn .shop-now{  cursor:pointer;  border:0;margin:15px 0px; padding:5px 5px; background:#F76300; color:#fff; font-size:16px; text-transform:uppercase; }
+.advt-120 .advt-box .product-container .btn .shop-now{  margin:0; padding:5px 5px;  cursor:pointer;  text-indent:-99999px; border:0;color: #151515;font-weight: bold;font-family: Arial;font-size:14px;text-transform: uppercase;background: white;border: 1px solid #808080; }
 
 .advt-120 .advt-box .product-desc { margin:0; padding:5px; font-size:12px; font-weight:bold; color:#0085b6; text-align:center;font-family: Arial;}
 .advt-120 .advt-box .product-extra-desc { margin:5px 0 0 0; padding:0 5px 5px 5px; font-size:11px; color:#222;}

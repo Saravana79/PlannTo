@@ -7,7 +7,7 @@
     <% if @item_details.count != 0 %>
         <div class="">
           <ul id="foo3" height="190px;">
-            <span id="leftarrow" class="left" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> << </span>
+            <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
             <% @item_details.each_with_index do |item_detail, indx| %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
@@ -18,13 +18,16 @@
                     <div class="product-container">
                       <div class="product-img-top" style="float:left;">
                         <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , 245, "original").html_safe %>
+                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , 275, "original").html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
                         <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="80px">
-
+                       <div style="padding: 5px 0px;text-transform: capitalize;">
+                         <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3></a>
+                      </div>
                         <a href="<%= shop_now_url %>" target="_blank" class="">
                           <p class="price"><%= prettify(item_detail) %></p>
                         </a>
@@ -41,7 +44,7 @@
                 </li>
                 </span>
             <% end %>
-            <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+            <a id="rightarrow" class="next" href="#" style="display: block;">&gt;</a>
           </ul>
         </div>
         <div class="clearfix"></div>
@@ -66,7 +69,7 @@
     .product-container a {text-decoration: none !important;}
 
     .advt-box .product-container h3 {
-        font-size: 14px !important;
+        font-size: 10px !important;
     }
 
     #rightarrow:hover {
@@ -78,7 +81,5 @@
 
     }
 
-    .foo3, .slider_plannto {
-        height: 198px !important;
-    }
+
 </style>

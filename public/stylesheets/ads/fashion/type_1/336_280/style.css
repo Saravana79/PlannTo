@@ -21,22 +21,22 @@ body {
 
 
 .advt-block { margin:0; padding:0;}
-.advt-336-280 { margin:0; padding:0; width:336px; height:280px; background:#fff; border:1px solid #BEBEBE;}
-.advt-336-280 .logo{ margin:0 5px; padding:5px 0; border-bottom:0px solid #F1F0F0;}
+.advt-300 { margin:0; padding:0; width:336px; height:280px; background:#fff; border:1px solid #BEBEBE;}
+.advt-300 .logo{ margin:0 5px; padding:5px 0; border-bottom:0px solid #F1F0F0;}
 
 .advt-box { margin:0; padding:0;}
 
-.advt-box .product-container{ margin:15px 0 0 0; padding:5px;height:170px;}
+.advt-box .product-container{ margin:0px 0 0 0; padding:0px;height:278px;width: 335px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
-.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:152px;float:left;}
+.advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:132px;float:left;}
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;}
-.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:right; width:145px;}
+.advt-box .product-container .product-txt-right{ margin-right:5px;padding:0; float:right; width:120px;text-align: right;}
 .advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:15px; color:#222; font-weight:800; font-family: Arial;word-break:break-word;min-height: 40px;}
-.advt-box .product-container .price{ margin:0; padding:10px 0 10px 0; color:#bf0000; font-size:16px; font-weight:bold;font-family: Arial monospace;}
-.advt-box .product-container .btn{ margin:20px 0px; }
-.advt-box .product-container .btn .shop-now{ margin:0; padding:0; width:105px; height:28px; cursor:pointer;  text-indent:-99999px; border:0;background: #F76300;padding: 5px 5px;color: #FFF;font-weight: bold;font-family: Arial;font-size:15px;text-transform: uppercase;}
-
+.advt-box .product-container .price{ margin-top:90px; padding:10px 0 10px 0; color:#bf0000; font-size:15px; font-weight:bold;font-family: Arial monospace;}
+.advt-box .product-container .btn{ margin:10px 0px; }
+.advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px;  cursor:pointer;  text-indent:-99999px; border:0;color: #151515;font-weight: bold;font-family: Arial;font-size:14px;text-transform: uppercase;background: white;border: 1px solid #808080;}
+.ad_img_tag{max-width: 210px;}
 .advt-box .product-txt-desc { margin:0; padding:5px 10px;text-align: center;min-height: 34px;}
 .advt-box .product-txt-desc p{ margin:0; padding:0; font-size:11px; color:#222;font-family: Arial;}
 .divshadow{margin: 0px 7px 7px 7px;border: 1px solid rgba(158, 157, 157, 0.65);border-radius: 10px 10px 10px 10px;-moz-box-shadow: 2px 2px 3px 3px #E0E0E0;-webkit-box-shadow: 2px 2px 3px 3px #E0E0E0;box-shadow: 2px 2px 3px 3px #E0E0E0;}
@@ -83,20 +83,23 @@ body {
 }
 .prev {
 	float: left;
-	background:url(/assets/ads/prev-arrow.png) no-repeat left top;
-	width:21px; height:22px;
-	text-indent:-99999px;
-	position:absolute;
-	top:125px;
+	background: url(/images/det-arrow.png) 0 0 no-repeat;
+	width: 26px;
+	height: 25px;
+	text-indent: -99999px;
+	position: absolute;
+	left: 2px;
+	top: 122px;
 }
 .next {
-	float: right;
-	background:url(/assets/ads/next-arrow.png) no-repeat right top;
-	width:21px; height:22px;
-	text-indent:-99999px;
-	position:absolute;
-	left:270px;
-	top:125px;
+float: right;
+background: url(/images/det-arrow.png) -26px 0 no-repeat;
+width: 26px;
+height: 25px;
+text-indent: -99999px;
+position: absolute;
+left: 300px;
+top: 122px;
 }
 .pager {
 	float:right;
