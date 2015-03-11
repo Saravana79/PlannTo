@@ -1128,7 +1128,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               filename = image_url.to_s.split("/").last
               filename = filename == "noimage.jpg" ? nil : filename
 
-              filename = URI.unescape(filename).gsub("+", "")
+              filename = filename.gsub("%", "_")
 
               unless filename.blank?
                 name = filename.to_s.split(".")
@@ -1140,13 +1140,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               if !item_detail.blank? && !image_url.blank? && !filename.blank?
                 p "image----------------------------"
                 @image = item_detail.build_image
-# tempfile = open(image_url)
-# avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
-# avatar.original_filename = filename
+                # tempfile = open(image_url)
+                # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+                # avatar.original_filename = filename
 
                 safe_thumbnail_url = URI.encode(URI.decode(image_url))
                 extname = File.extname(safe_thumbnail_url).delete("%")
+
                 basename = File.basename(safe_thumbnail_url, extname).delete("%")
+
                 file = Tempfile.new([basename, extname])
                 file.binmode
                 open(URI.parse(safe_thumbnail_url)) do |data|
