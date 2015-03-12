@@ -1297,6 +1297,15 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     item_detail_id
   end
 
+  def self.get_item_id_and_random_id(ads_id, item_id)
+    ad = Advertisement.where(:id => ads_id).first
+    if !ad.blank? && ad.advertisement_type == "fashion"
+      item_id, random_id = Item.get_item_id_and_random_id(item_id, ad)
+    else
+      return "", ""
+    end
+  end
+
   private
 
   def file_dimensions

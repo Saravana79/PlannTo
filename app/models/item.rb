@@ -1478,6 +1478,12 @@ end
     return item_ids
   end
 
+  def self.get_item_ids_for_300_600()
+    items = Item.find_by_sql("select * from item_ad_details  order by impressions desc limit 10")
+    item_ids = items.map(&:id) - [0]
+    return item_ids
+  end
+
   def self.buying_list_process_in_redis
     if $redis.get("buying_list_is_running").to_i == 0
       length = $redis_rtb.llen("users:visits")
@@ -2282,6 +2288,29 @@ end
       itemdetails = itemdetails.sample(6)
     end
     return item, itemdetails
+  end
+
+  def self.get_item_id_and_random_id(item_ids, ad)
+    item = Item.where(:id => item_ids.to_s.split(",")).first
+    vendor_ids = [ad.vendor_id]
+    itemdetails = []
+    if !item.blank?
+      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
+      itemdetails_ids = itemdetails.sample(6).map(&:id).sort.join(",")
+    else
+      sample_int = [*1..100].sample
+      if sample_int < 26
+        item_name = "Saree"
+      elsif sample_int < 46
+        item_name = "SalwarSuit"
+      else
+        item_name = "WomenTop"
+      end
+      item = Item.where(:name => item_name).first
+      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
+      itemdetails_ids = itemdetails.sample(6).map(&:id).sort.join(",")
+    end
+    return item.id, itemdetails_ids
   end
 
   private

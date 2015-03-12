@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r", "fashion_ids") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r", "fashion_ids") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
@@ -73,6 +73,12 @@ class AdvertisementsController < ApplicationController
       @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items, @suitable_ui_size)
       if (@suitable_ui_size == "300_600" && @item_details.count < 3)
         old_item_details = @item_details
+
+        # if @ad_template_type == "type_5"
+        #   new_item_ids = Item.get_carwale_item_ids_for_300_600()
+        # else
+        #   new_item_ids = Item.get_item_ids_for_300_600()
+        # end
         new_item_ids = Item.get_item_ids_for_300_600()
         @item_details = Itemdetail.get_item_details_by_item_ids_count(new_item_ids, vendor_ids, @items=[], @publisher, status, params[:more_vendors], p_item_ids)
         @item_details = old_item_details + @item_details
@@ -218,12 +224,12 @@ class AdvertisementsController < ApplicationController
 
     @ad_template_type = "type_1" #TODO: only accept type 1
 
-    @vendor = Vendor.where(:name => "Amazon").first
-    vendor_ids = [@vendor.id]
+    # @vendor = Vendor.where(:name => "Amazon").first
+    # vendor_ids = [@vendor.id]
     @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
 
-    @current_vendor = @vendor_ad_details[@vendor.id]
+    @current_vendor = @vendor_ad_details[@ad.vendor_id]
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
@@ -404,12 +410,20 @@ class AdvertisementsController < ApplicationController
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
+    params[:fashion_ids] ||= ""
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
 
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
+
+    if params[:item_id].blank? || params[:fashion_ids].blank?
+      item_id, random_ids = Advertisement.get_item_id_and_random_id(params[:ads_id], params[:item_id])
+
+      params[:item_id] = item_id
+      params[:fashion_ids] = random_ids
+    end
 
     params[:size] = params[:size].to_s.gsub("*", "x")
     # check and assign page type if ab_test is enabled
@@ -427,9 +441,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r", "fashion_ids"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r", "fashion_ids"))
     end
 
     cache_params = CGI::unescape(cache_params)
@@ -438,7 +452,7 @@ class AdvertisementsController < ApplicationController
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
-        valid_html = cache.match(/plannto-advertisement main_div/).blank? ? false : true
+        valid_html = cache.match(/_blank/).blank? ? false : true
         if valid_html
           url_params = set_cookie_for_temp_user_and_url_params_process(params)
           @cookie_match = CookieMatch.find_user(cookies[:plan_to_temp_user_id]).first
