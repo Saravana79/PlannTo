@@ -8,6 +8,7 @@ class PopularVendorProductsUpdate
     log.debug "********** Start Processing PopularVendorProductsUpdate **********"
 
     Resque.enqueue(PopularVendorFlipkartProductUpdate)
+    Resque.enqueue(PopularVendorFashionProductUpdate)
 
     Advertisement.send(method_name)
 
