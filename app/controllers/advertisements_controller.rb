@@ -84,7 +84,7 @@ class AdvertisementsController < ApplicationController
         @item_details = old_item_details + @item_details
         @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, @items=[], @suitable_ui_size)
       end
-      if @suitable_ui_size == "300_600" && params[:page_type] != "type_4"
+      if @suitable_ui_size == "300_600" && params[:page_type] == "type_2"
         @ad_template_type = ad_id == 21 ? "type_3" : "type_1"
       end
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""

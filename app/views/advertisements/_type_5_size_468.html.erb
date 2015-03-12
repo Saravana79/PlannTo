@@ -15,9 +15,10 @@
                     <div style="float:left;">
                     <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(36) %></h3>
                   </div>
-                    <div style="float:left;">
-                      <p class="price"><%= prettify(item_detail) %></p>
-                    </div>
+                  <div>
+                              <span style="font-size: 11px;color: #000;">Starting at - </span>
+                              <span class="price"><%= prettifyforcarprice(item_detail) %></span>
+                          </div>
                   </a>
                   </div>  
                   <div class="product-img">
@@ -40,8 +41,7 @@
 
                 <div class="right-div">
                   <p class="btn">
-                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                      Now</a>
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Check On-Road Price</a>
                   </p>
                 </div>
               </div>

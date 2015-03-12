@@ -31,14 +31,14 @@ body {
 .advt-160-600 .advt-box .product-container .product-img{ margin:0;}
 .advt-160-600 .advt-box .product-container .product-img img { margin:2px 0px; text-align:center;}
 .advt-box .product-container .product-txt-right{ padding:0; text-align: center;}
-.ad_img_tag {max-height: 208px;}
-.advt-160-600 .advt-box .product-container h3{ margin:0; padding:0px 5px; font-size:14px; color:#222; font-weight:bold;font-family: Arial;word-break:break-word;min-height: 40px;}
+.ad_img_tag {max-height: 204px;}
+.advt-160-600 .advt-box .product-container h3{ margin:0; padding:0px 2px; font-size:11px; color:#222; font-weight:bold;font-family: Arial;word-break:break-word;min-height: 40px;}
 
 .advt-160-600 .advt-box .product-container .price-strike{margin:5px 0;padding: 0;color: #585858;font-size: 18px;text-decoration: line-through; text-align:center;}
-.advt-160-600 .advt-box .product-container .price{ margin:5px 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;font-family: Arial monospace}
-.advt-160-600 .advt-box .product-container .btn{ margin:15px 0px 0px 0px; padding:0; text-align:center;}
+.advt-160-600 .advt-box .product-container .price{ margin:2px 0; padding:0; color:#bf0000; font-size:15px; font-weight:bold;font-family: Arial monospace}
+.advt-160-600 .advt-box .product-container .btn{ margin:4px 0px 0px 0px; padding:0; text-align:center;}
 /*.advt-160-600 .advt-box .product-container .btn .shop-now{ margin:0 0 0 15px; padding:0; background:url(../images/shop-now-btn.png) no-repeat left top; width:105px; height:28px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0; font-family:'pt_sansregular', Arial, Helvetica, sans-serif;}*/
-.advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px; background:#F76300; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold;  text-align:center;}
+.advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px; background:white; color:black; font-size:11px;  border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold;  text-align:center;border: 1px solid #808080; }
 
 
 
