@@ -16,9 +16,10 @@
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
                   <div class="advt-box">
                     <div class="product-container">
-                      <div class="product-img-top" style="float:left;">
+                      <div class="product-img-top" style="float:left;float:left;white-space:nowrap;height:245px;width:193px">
                         <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , 245, "original").html_safe %>
+                           <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
