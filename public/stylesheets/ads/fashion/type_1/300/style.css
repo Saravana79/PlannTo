@@ -26,7 +26,7 @@ body {
 
 .advt-box { margin:0; padding:0;}
 
-.advt-box .product-container{ margin:0px 0 0 0; padding:0px;height:243px;width: 298px;}
+.advt-box .product-container{ margin:0px 0 0 0; padding:0px;height:250px;width: 298px;}
 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-box .product-container:after { clear:both;}
 .advt-box .product-container .product-img-left{ margin:0 5px 0 0; padding:0; float:left; width:132px;float:left;}
