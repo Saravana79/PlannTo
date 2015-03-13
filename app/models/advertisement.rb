@@ -912,7 +912,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   def self.update_include_exclude_products_from_vendors()
     if $redis.get("process_popular_vendor_products_update_is_running").to_i == 0
       $redis.set("process_popular_vendor_products_update_is_running", 1)
-      $redis.expire("process_popular_vendor_products_update_is_running", 50.minutes)
+      $redis.expire("process_popular_vendor_products_update_is_running", 90.minutes)
       update_include_exclude_products_from_amazon()
       $redis.set("process_popular_vendor_products_update_is_running", 0)
     end
@@ -967,6 +967,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           p "Error while amazon api call"
         end
       end
+
+      ActiveRecord::Base.connection.execute("update itemdetails set status = 2 where site = 9882 and last_verified_date < '#{1.day.ago}'")
 
       $redis.set("popular_vendor_fashion_product_update_is_running", 0)
     end
@@ -1245,9 +1247,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                                4
                            end
 
-                  item_detail.update_attributes!(:price => current_price, :status => status)
-                else
-                  item_detail.update_attributes!(:status => 2)
+                  item_detail.update_attributes!(:price => current_price, :status => status, :last_verified_date => Time.now)
                 end
               rescue Exception => e
                 p "Error while updating itemdetail => #{item_detail.id} price"
@@ -1294,7 +1294,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                 end
 
                 item = Item.where(:name => each_key.camelize).first
-                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882" )
+                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882" , :last_verified_date => Time.now)
                 item_detail.save!
 
                 next if !item_detail.image.blank?
@@ -1474,10 +1474,6 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       item_detail_id = item_detail.id
     end
     item_detail_id
-  end
-
-  def self.get_item_id_and_random_id(ad, item_id)
-    item_id, random_id = Item.get_item_id_and_random_id(item_id, ad)
   end
 
   private
