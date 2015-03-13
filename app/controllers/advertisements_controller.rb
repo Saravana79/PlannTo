@@ -235,9 +235,7 @@ class AdvertisementsController < ApplicationController
 
     @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids)
     @sliced_item_details = @item_details.each_slice(2)
-
-    p @item
-    p @item_details
+    
     if @is_test != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
       Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
@@ -419,10 +417,13 @@ class AdvertisementsController < ApplicationController
     params[:protocol_type] = request.protocol
 
     if params[:item_id].blank? || params[:fashion_ids].blank?
-      item_id, random_ids = Advertisement.get_item_id_and_random_id(params[:ads_id], params[:item_id])
+      ad = Advertisement.where(:id => params[:ads_id]).first
+      if !ad.blank? && ad.advertisement_type == "fashion"
+        item_id, random_ids = Advertisement.get_item_id_and_random_id(ad, params[:item_id])
 
-      params[:item_id] = item_id
-      params[:fashion_ids] = random_ids
+        params[:item_id] = item_id
+        params[:fashion_ids] = random_ids
+      end
     end
 
     params[:size] = params[:size].to_s.gsub("*", "x")
@@ -430,11 +431,9 @@ class AdvertisementsController < ApplicationController
     ab_test_details = $redis.hgetall("ab_test_#{params[:ads_id]}")
     if !ab_test_details.blank? && ab_test_details["enabled"] == "true"
       alternatives = ab_test_details.blank? ? {} : eval(ab_test_details["alternatives"])
-      p alternatives
-      p params[:size]
       if alternatives.include?(params[:size])
         types = alternatives["#{params[:size]}"]
-        p random_val = Random.rand(1..10)
+        random_val = Random.rand(1..10)
         params[:page_type] = random_val <= 5 ? types[0] : types[1]
       end
     end

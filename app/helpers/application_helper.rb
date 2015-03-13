@@ -307,18 +307,18 @@ module ApplicationHelper
   def prettify(item_detail)
     pre_order_val = item_detail.status == 3 ? "Pre-Order" : ""
     if(!item_detail.cashback.nil? && item_detail.cashback != 0.0)
-      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" %(item_detail.price - item_detail.cashback))
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" %(item_detail.price.to_f - item_detail.cashback.to_f))
     else
-      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" % item_detail.price)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" % item_detail.price.to_f)
     end
   end
 
    def prettifyforcarprice(item_detail)
-      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.price)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.price.to_f)
    end
 
    def prettifyforcaremi(item_detail)
-      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.cashback)
+      price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.cashback.to_f)
    end
 
 end
