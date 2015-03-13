@@ -912,7 +912,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   def self.update_include_exclude_products_from_vendors()
     if $redis.get("process_popular_vendor_products_update_is_running").to_i == 0
       $redis.set("process_popular_vendor_products_update_is_running", 1)
-      $redis.expire("process_popular_vendor_products_update_is_running", 90.minutes)
+      $redis.expire("process_popular_vendor_products_update_is_running", 50.minutes)
       update_include_exclude_products_from_amazon()
       $redis.set("process_popular_vendor_products_update_is_running", 0)
     end
@@ -950,15 +950,25 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   end
 
   def self.update_fashion_item_details_from_amazon()
-    loop_hash = {"saree" => {:node => 1968256031, :page_count => 10}, "salwar_suit" => {:node => 3723380031, :page_count => 9}, "women_top" => {:node => 1968543031, :page_count => 8}}
+    if $redis.get("popular_vendor_fashion_product_update_is_running").to_i == 0
+      $redis.set("popular_vendor_fashion_product_update_is_running", 1)
+      $redis.expire("popular_vendor_fashion_product_update_is_running", 50.minutes)
+
+      loop_hash = {"saree" => {:node => 1968256031, :page_count => 10}, "salwar_suit" => {:node => 3723380031, :page_count => 10}, "women_top" => {:node => 1968543031, :page_count => 8},
+                   "dress_material" => {:node => 3723377031, :page_count => 10}, "kurta" => {:node => 1968255031, :page_count => 8}, "underwear" => {:node => 1968457031, :page_count => 2},
+                   "legging" => {:node => 1968456031, :page_count => 2}, "dress" => {:node => 1968445031, :page_count => 8}, "handbag" => {:node => 1983346031, :page_count => 10},
+                   "shoe" => {:node => 1983578031, :page_count => 10}}
 
 
-    loop_hash.each do |each_key, each_val|
-      begin
-        Advertisement.update_price_and_status_for_fashion_items(each_val[:page_count], each_val[:node], each_key)
-      rescue Exception => e
-        p "Error while amazon api call"
+      loop_hash.each do |each_key, each_val|
+        begin
+          Advertisement.update_price_and_status_for_fashion_items(each_val[:page_count], each_val[:node], each_key)
+        rescue Exception => e
+          p "Error while amazon api call"
+        end
       end
+
+      $redis.set("popular_vendor_fashion_product_update_is_running", 0)
     end
   end
 

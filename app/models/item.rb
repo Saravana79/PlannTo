@@ -2275,14 +2275,8 @@ end
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails = itemdetails.sample(6)
     else
-      sample_int = [*1..100].sample
-      if sample_int < 26
-        item_name = "Saree"
-      elsif sample_int < 46
-        item_name = "SalwarSuit"
-      else
-        item_name = "WomenTop"
-      end
+      item_name = Item.get_fashion_item_name_random()
+
       item = Item.where(:name => item_name).first
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails = itemdetails.sample(6)
@@ -2298,19 +2292,41 @@ end
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails_ids = itemdetails.sample(6).map(&:id).sort.join(",")
     else
-      sample_int = [*1..100].sample
-      if sample_int < 26
-        item_name = "Saree"
-      elsif sample_int < 46
-        item_name = "SalwarSuit"
-      else
-        item_name = "WomenTop"
-      end
+      item_name = Item.get_fashion_item_name_random()
+
       item = Item.where(:name => item_name).first
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails_ids = itemdetails.sample(6).map(&:id).sort.join(",")
     end
     return item.id, itemdetails_ids
+  end
+
+  def self.get_fashion_item_name_random()
+    sample_int = [*1..100].sample
+    if sample_int < 15
+      item_name = "Saree"
+    elsif sample_int < 30
+      item_name = "SalwarSuit"
+    elsif sample_int < 40
+      item_name = "WomenTop"
+    elsif sample_int < 52
+      item_name = "DressMaterial"
+    elsif sample_int < 62
+      item_name = "Kurta"
+    elsif sample_int < 66
+      item_name = "Sunglass"
+    elsif sample_int < 70
+      item_name = "Underwear"
+    elsif sample_int < 74
+      item_name = "Legging"
+    elsif sample_int < 82
+      item_name = "Dress"
+    elsif sample_int < 90
+      item_name = "Handbag"
+    elsif sample_int < 100
+      item_name = "Shoe"
+    end
+    item_name
   end
 
   private
