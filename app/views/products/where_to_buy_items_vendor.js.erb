@@ -29,7 +29,7 @@
             .planntocarosel-right{padding: 35px 3px 0 0px;}
             <%end%>
 
-            @media (max-width: 550px) {
+            @media (max-width: 600px) {
                .product-container{width:100%;border-bottom:1px solid #E5E5E5;}
              .product-container-top{width:76%;float:left;border-bottom:1px solid #E5E5E5;}
             .planntocarosel-left{padding: 100px 3px 0 0px;height: 157px;}
@@ -41,7 +41,7 @@
            .product-container .product-img{ margin:0 auto; padding:0;text-align:center; width:45%; float:left;min-height:110px;}
            .product-container .product-img img { margin:0 auto; text-align:center; max-width:120px;max-height:110px; }
            .product-container .product-text {width:55%;float:left;}
-           .product-container .product-text .product-title{height:32px;overflow:hidden;font-size:14px;padding:5px 0px;}
+           .product-container .product-text .product-title{height:38px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;}
            .product-container .product-text .text-desc{margin: 0;padding: 0;color: #222; font-size: 11px;font-family: Arial;height:32px;}
            .product-container .product-text .product-price {min-height:32px;}
            .product-container .product-text .product-price .strike{list-style: outside none none;margin: 5px 0px;padding: 0;color: #585858;font-size: 12px;text-decoration: line-through; }
@@ -86,7 +86,7 @@
                                     <div class="product-text">
                                         <p class="product-title"><%= item.name.to_s.truncate(48) %></p>
                                         <div class="product-price">
-                                            <ul>
+                                            <ul style="margin:0px;">
                                                 <li class=' <%= item.sale_price.blank? ? "price" : "strike" %>'><%= item.price.blank? ? "" : item.price %> </li>
                                                 <li class='price'><%= item.sale_price.blank? ? "" : item.sale_price %></li>
                                             </ul>
