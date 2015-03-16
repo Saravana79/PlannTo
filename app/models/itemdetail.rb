@@ -45,7 +45,7 @@ class Itemdetail < ActiveRecord::Base
     if (more_vendors == "true" || vendor_ids.count > 1)
       @item_details = @item_details.blank? ? [] : Itemdetail.get_sort_by_vendor(@item_details, vendor_ids).flatten.uniq(&:url)
     else
-      group_ids = Itemdetail.get_group_ids_from_item_ids(item_ids)
+      group_ids = Itemdetail.get_group_ids_from_item_ids(item_ids) rescue {}
 
       if @item_details.is_a?(Hash)
         @item_details = Itemdetail.get_sort_by_group(@item_details, group_ids)
@@ -172,7 +172,7 @@ class Itemdetail < ActiveRecord::Base
     item_keys = item_details_hash.keys
     max_count = item_details_hash.map {|_, s| s.count}.flatten.max
 
-    [*0...max_count].each do |each_val|
+    [*0...max_count.to_i].each do |each_val|
       item_keys.each do |group_id|
         item_detail = item_details_hash[group_id][each_val]
         return_val << item_detail unless item_detail.blank?

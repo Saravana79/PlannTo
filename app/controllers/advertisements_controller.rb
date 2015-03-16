@@ -397,6 +397,16 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def fashion_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:ads_id] ||= 40
+    params[:more_vendors] ||= "false"
+    params[:is_test] ||= "true"
+    params[:item_id] ||= ""
+    render :layout => false
+  end
+
  private
 
   def create_impression_before_show_ads
