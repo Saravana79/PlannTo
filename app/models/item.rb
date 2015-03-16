@@ -2284,7 +2284,7 @@ end
     return item, itemdetails
   end
 
-  def self.get_item_id_and_random_id(item_ids, ad)
+  def self.get_item_id_and_random_id(ad,item_ids)
     item = Item.where(:id => item_ids.to_s.split(",")).first
     vendor_ids = [ad.vendor_id]
     itemdetails = []
