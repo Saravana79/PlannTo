@@ -466,6 +466,10 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.clean_up_redis_keys
+    # $redis_rtb.del($redis_rtb.keys("missingurl:*"))
+    # $redis_rtb.del($redis_rtb.keys("missingad:*"))
+    # $redis_rtb.del($redis_rtb.keys("spottags:*"))
+
     #clean missingurl:*
     remove_missing_keys("missingurl:*") #TOODO: commented
 
@@ -474,7 +478,7 @@ class FeedUrl < ActiveRecord::Base
 
     #clean spottags:*
     remove_missing_keys("spottags:*")
-
+    #
     #start sid_ad_detail_process
     # Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
   end

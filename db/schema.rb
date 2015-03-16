@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150228163025) do
+ActiveRecord::Schema.define(:version => 20150316081412) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -547,8 +547,6 @@ ActiveRecord::Schema.define(:version => 20150228163025) do
     t.string   "article_category"
     t.string   "article_item_ids"
     t.decimal  "score",              :precision => 8, :scale => 2
-    t.integer  "created_by"
-    t.string   "created_type"
   end
 
   create_table "feeds", :force => true do |t|
@@ -660,6 +658,7 @@ ActiveRecord::Schema.define(:version => 20150228163025) do
     t.boolean "video",                :default => false
     t.uuid    "video_impression_id"
     t.string  "geo"
+    t.string  "device"
   end
 
   create_table "impression_missings", :force => true do |t|

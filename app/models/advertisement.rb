@@ -585,7 +585,6 @@ class Advertisement < ActiveRecord::Base
               impression = AddImpression.create_new_record(each_rec_detail)
 
               url_params = Advertisement.reverse_make_url_params(impression.params)
-              impression.device = url_params["device"]
               impression_import << impression
 
               # Impression mongo
@@ -601,7 +600,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = url_params["device"]
+              impression_mongo["device"] = impression.device
               impression_mongo["size"] = url_params["size"]
               impression_mongo["design_type"] = url_params["page_type"]
               impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
@@ -661,7 +660,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = url_params["device"]
+              impression_mongo["device"] = impression.device
               impression_mongo["size"] = url_params["size"]
               impression_mongo["design_type"] = url_params["page_type"]
               impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
@@ -719,9 +718,9 @@ class Advertisement < ActiveRecord::Base
         impression_details = []
         ad_impressions_list.each_with_index do |imp, index|
           appearance_count = ad_impressions_list_values[index].to_i
-          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank?))
+          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank? || !imp.device.blank?))
             # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
-            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo)
+            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo, :device => imp.device)
           end
         end
 
