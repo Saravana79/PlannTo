@@ -8,7 +8,7 @@
             .shadetabs li.selected{padding:0px!important; margin:0px; text-align:center; background: #FF6 !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
             .shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
 
-            .product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;height:129px;}
+            .product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;height:139px;}
             .planntocarosel-right{ width: 32px;float: right;}
            .planntocarosel-right a{ background: no-repeat url(http://z-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif) -25px 0; right: 0;float: left;height: 50px;width:30px;}
 
@@ -84,7 +84,7 @@
 
                                     </div>
                                     <div class="product-text">
-                                        <p class="product-title"><%= item.name.to_s.truncate(48) %></p>
+                                        <p class="product-title" style="height:38px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(48) %></p>
                                         <div class="product-price">
                                             <ul style="margin:0px;">
                                                 <li class=' <%= item.sale_price.blank? ? "price" : "strike" %>'><%= item.price.blank? ? "" : item.price %> </li>
