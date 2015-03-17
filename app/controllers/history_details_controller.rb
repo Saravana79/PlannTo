@@ -216,7 +216,8 @@ class HistoryDetailsController < ApplicationController
     #  url = url + "&cmpid=content_plannto_contextual"
     # else
       unless vendor.nil?
-        if !vendor.vendor_detail.params.nil? || !vendor.vendor_detail.params.blank?
+        vendor_detail = vendor.vendor_detail
+        if !vendor_detail.blank? && !vendor_detail.params.blank?
           url = vendor.vendor_detail.params.gsub(/\{url}/, url)
 
           if !@ad.blank? && (!@ad.affiliate_id.blank? || !@ad.track_id.blank?)

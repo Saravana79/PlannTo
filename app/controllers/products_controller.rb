@@ -400,6 +400,50 @@ class ProductsController < ApplicationController
     # render :layout => false
   end
 
+  def price_text_vendor_details
+    # params[:item_ids] = "13874" if params[:item_ids].blank?
+    params[:page_type] ||= "type_1" if params[:page_type].blank?
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+    tempurl = url
+
+    @itemdetail = Item.get_price_text_from_url(url)
+
+    # include pre order status if we show more details.
+    unless @itemdetail.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      # @publisher = Publisher.getpublisherfromdomain(url)
+      @publisher = nil
+      # Check have to activate tabs for publisher or not
+      @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+
+      @where_to_buy_items = []
+
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("price_text_widget", params[:item_ids], url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      # @show_count = Item.get_show_item_count(@items)
+
+      responses = []
+      @where_to_buy_items = []
+    else
+      @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "price_text_widget")
+    end
+    @ref_url = url
+    jsonp = prepare_response_json()
+
+    headers["Content-Type"] = "text/javascript; charset=utf-8"
+    respond_to do |format|
+      format.js { render :text => jsonp, :content_type => "text/javascript" }
+    end
+
+    # render :layout => false
+  end
+
   def sports_widget
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?

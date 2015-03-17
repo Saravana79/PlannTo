@@ -77,6 +77,7 @@ namespace :admin do
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
   match "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
   match "/price_vendor_details",:to => "products#price_vendor_details"
+  match "/price_text_vendor_details",:to => "products#price_text_vendor_details"
   match "/sports_widget",:to => "products#sports_widget"
   match "/vendor_widget",:to => "products#vendor_widget"
   match "/product_offers",:to => "products#product_offers"

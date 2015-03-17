@@ -1,0 +1,17 @@
+<% if !@itemdetail.blank? %>
+    <div id="planntowidget1">
+      <a style="color:#4A4A4A;font-weight:500;" target="_blank" href="<%= configatron.hostname%>/history_details?detail_id=<%= @itemdetail.id %>&iid=<%=@impression_id%>">
+        Price: <span style="font-family:arial;color:#4A4A4A;font-weight:500;"><span class="rupee">R<span>s.</span></span><%= @itemdetail.price.to_f.round(2) %></span> Buy Now
+      </a>
+    </div>
+
+    <style type="text/css">
+        * {
+            margin: 0;
+            outline: 0 none;
+            padding: 0;
+        }
+
+        a {text-decoration: none;}
+    </style>
+<% end %>
