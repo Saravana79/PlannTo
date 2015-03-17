@@ -32,7 +32,9 @@
                       <div class="product-img-top" style="white-space:nowrap;">
                         <a href="<%= shop_now_url %>" target="_blank">
                           <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
-                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "289", "", "original").html_safe %>
+                           <span style="display: inline-block;width: 289px;text-align: center;"> 
+                          <%= get_image_tag(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium), "", "", "original").html_safe %>
+                        </span>
                           <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
