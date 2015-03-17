@@ -2333,9 +2333,9 @@ end
       item_name = "Kurta"
     elsif sample_int < 66
       item_name = "Sunglass"
-    elsif sample_int < 70
+    elsif sample_int < 68
       item_name = "Underwear"
-    elsif sample_int < 74
+    elsif sample_int < 72
       item_name = "Legging"
     elsif sample_int < 82
       item_name = "Dress"

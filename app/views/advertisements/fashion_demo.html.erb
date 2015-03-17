@@ -22,7 +22,7 @@
   </style>
 </head>
 <body>
-<div class="advertisements">
+<div class="advertisements" style="center:align;width:900px;">
   <h1>Contextual Ads Demo</h1>
   <div class="demo_form row">
     <div class="search_form">
@@ -33,7 +33,8 @@
       <% end %>
     </div>
   </div>
-  <div class="ad_list">
+  <div class="ad_list" >
+    <div style ="float:left" />
     <div class="row">
       <div class="ad_300_250">
         <span>300x250</span>
@@ -42,18 +43,9 @@
 
       <br clear="both"/>
     </div>
-
-    <div class="row" style="clear: both; padding-top: 44px;">
-      <div class="ad_300_600">
-        <span>300x600</span>
-        <iframe id="plannto_ad_frame_300_600" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=#{params[:page_type]}"; %>" width="300px" height="600px" style="border: medium none;;"></iframe>
-      </div>
-
-      <br clear="both"/>
-    </div>
-
-    <br clear="both"/>
-    <div class="row" style="clear: both; padding-top: 44px;">
+  </div>
+  <div style="float:right"/>
+        <div class="row" style="clear: both; ">
       <div class="ad_336_280">
         <span>336x280</span>
         <iframe id="plannto_ad_frame_336_280" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=336*280&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=#{params[:page_type]}"; %>" width="336px" height="280px" style="border: medium none;;"></iframe>
@@ -61,15 +53,27 @@
 
       <br clear="both"/>
     </div>
+</div>
 
-    <br clear="both"/>
+ <div style="float:left"/>
     <div class="row" style="clear: both; padding-top: 44px;">
+      <div class="ad_300_600">
+        <span>300x600</span>
+        <iframe id="plannto_ad_frame_300_600" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=300*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=#{params[:page_type]}"; %>" width="300px" height="600px" style="border: medium none;;"></iframe>
+      </div>
+
+    
+    </div>
+</div>
+
+ <div style="float:right"/>
+    <div class="row" style="clear: both;">
       <div class="ad_160_600">
         <span>160x600</span>
         <iframe id="plannto_ad_frame_160_600" src="<%= "#{configatron.hostname}/advertisments/show_ads?item_id="+"#{params[:item_id]}"+"&ads_id="+"#{params[:ads_id]}"+"&size=160*600&more_vendors="+"#{params[:more_vendors]}"+"&ref_url="+"#{params[:ref_url]}"+"&ad_as_widget=true&is_test=#{params[:is_test]}&page_type=#{params[:page_type]}"; %>" width="160px" height="600px" style="border: medium none;;"></iframe>
       </div>
     </div>
-
+</div>
     <br clear="both"/>
 
   </div>
