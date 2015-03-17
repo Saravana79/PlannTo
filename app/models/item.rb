@@ -2268,12 +2268,16 @@ end
     return items
   end
 
-  def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids)
+  def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, fashion_id)
     item = Item.where(:id => item_ids.split(",")).first
     itemdetails = []
     if !item.blank?
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails = itemdetails.sample(6)
+      if !fashion_id.blank?
+        itemdetails = Item.get_itemdetails_using_fashion_id(itemdetails, fashion_id)
+      else
+        itemdetails = itemdetails.sample(6)
+      end
     else
       item_name = Item.get_fashion_item_name_random()
 
@@ -2284,21 +2288,35 @@ end
     return item, itemdetails
   end
 
+  def self.get_itemdetails_using_fashion_id(itemdetails, fashion_id)
+    fashion_id = fashion_id.to_i
+    if (itemdetails.count - 5) >= fashion_id
+      itemdetails = itemdetails[fashion_id-1...fashion_id+6]
+    else
+      existing_count = itemdetails.count - fashion_id
+      itemdetails = itemdetails[fashion_id-1...fashion_id+existing_count]
+      remaining_count = itemdetails.count
+      remaining_items = itemdetails[*0...remaining_count]
+      itemdetails = itemdetails + remaining_items
+    end
+    itemdetails
+  end
+
   def self.get_item_id_and_random_id(ad,item_ids)
     item = Item.where(:id => item_ids.to_s.split(",")).first
     vendor_ids = [ad.vendor_id]
     itemdetails = []
     if !item.blank?
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails_ids = itemdetails.sample(6).map(&:id).sort.join(",")
+      itemdetails_rand_id = [*1..itemdetails.count].sample
     else
       item_name = Item.get_fashion_item_name_random()
 
       item = Item.where(:name => item_name).first
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails_ids = itemdetails.sample(6).map(&:id).sort.join(",")
+      itemdetails_rand_id = [*1..itemdetails.count].sample
     end
-    return item.id, itemdetails_ids
+    return item.id, itemdetails_rand_id
   end
 
   def self.get_fashion_item_name_random()

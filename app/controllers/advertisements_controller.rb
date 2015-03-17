@@ -3,7 +3,7 @@ class AdvertisementsController < ApplicationController
   layout "product"
 
   before_filter :create_impression_before_show_ads, :only => [:show_ads], :if => lambda { request.format.html? }
-  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r", "fashion_ids") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r", "fashion_ids") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
+  caches_action :show_ads, :cache_path => proc {|c|  params[:item_id].blank? ? params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r", "fashion_id") : params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r", "fashion_id") }, :expires_in => 2.hours, :if => lambda { request.format.html? && params[:is_test] != "true" }
 
   before_filter :create_impression_before_show_video_ads, :only => [:video_ads]
   before_filter :set_access_control_headers, :only => [:video_ads, :video_ad_tracking]
@@ -233,7 +233,7 @@ class AdvertisementsController < ApplicationController
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 
-    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids)
+    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
     @sliced_item_details = @item_details.each_slice(2)
     
     if @is_test != "true"
@@ -418,7 +418,7 @@ class AdvertisementsController < ApplicationController
     params[:click_url] ||= ""
     params[:r] ||= ""
     params[:a] ||= ""
-    params[:fashion_ids] ||= ""
+    params[:fashion_id] ||= ""
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
@@ -426,13 +426,13 @@ class AdvertisementsController < ApplicationController
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
-    if params[:item_id].blank? || params[:fashion_ids].blank?
+    if params[:item_id].blank? || params[:fashion_id].blank?
       ad = Advertisement.where(:id => params[:ads_id]).first
       if !ad.blank? && ad.advertisement_type == "fashion"
-        item_id, random_ids = Item.get_item_id_and_random_id(ad, params[:item_id])
+        item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
 
         params[:item_id] = item_id
-        params[:fashion_ids] = random_ids
+        params[:fashion_id] = random_id
       end
     end
 
@@ -450,9 +450,9 @@ class AdvertisementsController < ApplicationController
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     if params[:item_id].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r", "fashion_ids"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ads_id", "size", "more_vendors", "ref_url", "page_type", "click_url", "protocol_type", "r", "fashion_id"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r", "fashion_ids"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_id", "ads_id", "size", "more_vendors", "page_type", "click_url", "protocol_type", "r", "fashion_id"))
     end
 
     cache_params = CGI::unescape(cache_params)
