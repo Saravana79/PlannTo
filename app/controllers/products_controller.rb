@@ -353,6 +353,45 @@ class ProductsController < ApplicationController
     # render :layout => false
   end
 
+  def where_to_buy_items_vendor_indiatoday
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+    @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+
+    # include pre order status if we show more details.
+    unless @items.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      # Check have to activate tabs for publisher or not
+      @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+
+      # Update Items if there is only one item
+      @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
+
+      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+                                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
+      p @where_to_buy_items.first
+      @show_count = Item.get_show_item_count(@items)
+
+      responses = []
+      @where_to_buy_items.group_by(&:site).each do |site, items|
+        items.each_with_index do |item, index|
+          display_item_details(item)
+          if index == 0
+            responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
+          end
+        end
+      end
+    else
+      @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
+    end
+    @ref_url = url
+    jsonp = prepare_response_json()
+    render :text => jsonp, :content_type => "text/javascript"
+  end
+
   def price_vendor_details
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?

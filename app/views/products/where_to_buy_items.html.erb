@@ -502,7 +502,7 @@
                                  <%if display_item_details(item)%>
                                      <%if index == 0%>
                                          <td id="plannto_incol1" width="35%"> <img class="imagevendor" src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item.image_url%>" alt="<%=item.vendor_name%>"  style="width:75px;border:0;padding:0;"/> </td>
-                                         <td id="plannto_incol2"  width="35%"> <%=display_price_detail(item)%> </td>
+                                         <td id="plannto_incol2"  width="35%"> <%= display_price_detail(item)%> </td>
                                          <td width="30%" id="plannto_incol3" ><a href="http://www.plannto.com/history_details?detail_id=<%=item.item_details_id%>&iid=<%=@impression_id%><%= @test_condition %>" id="plannto_go_button" target="_blank"><%= @gotext%></a> </td>
                                      <%end%>
                                  <%end%>

@@ -76,6 +76,7 @@ namespace :admin do
   match "/external_page",:to => "products#external_page"
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
   match "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
+  match "/where_to_buy_items_vendor_indiatoday",:to => "products#where_to_buy_items_vendor_indiatoday"
   match "/price_vendor_details",:to => "products#price_vendor_details"
   match "/price_text_vendor_details",:to => "products#price_text_vendor_details"
   match "/sports_widget",:to => "products#sports_widget"
