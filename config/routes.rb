@@ -78,6 +78,7 @@ namespace :admin do
   match "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
   match "/where_to_buy_items_vendor_indiatoday",:to => "products#where_to_buy_items_vendor_indiatoday"
   match "/price_vendor_details",:to => "products#price_vendor_details"
+  match "/get_price_from_vendor",:to => "products#get_price_from_vendor"
   match "/price_text_vendor_details",:to => "products#price_text_vendor_details"
   match "/sports_widget",:to => "products#sports_widget"
   match "/vendor_widget",:to => "products#vendor_widget"

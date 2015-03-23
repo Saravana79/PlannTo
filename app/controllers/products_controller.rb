@@ -439,6 +439,16 @@ class ProductsController < ApplicationController
     # render :layout => false
   end
 
+  def get_price_from_vendor
+    @price_text = Item.get_amazon_item_from_item_id(params[:item_id]) rescue ""
+
+    headers["Content-Type"] = "text/javascript; charset=utf-8"
+    respond_to do |format|
+      format.js { render :text => @price_text, :content_type => "text/javascript" }
+      format.html { render :text => @price_text }
+    end
+  end
+
   def price_text_vendor_details
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
