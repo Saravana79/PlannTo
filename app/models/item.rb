@@ -970,7 +970,7 @@ end
       count = configatron.popular_count.to_i - 1
       item_ids =  ids[0.."#{count}".to_i] #5 items display
     end
-     @items = Item.find(ids)
+     @items = Item.where(:id => item_ids)
      #item_ids.map{|id| @items << Item.find(id) rescue ""}
      return @items
   end

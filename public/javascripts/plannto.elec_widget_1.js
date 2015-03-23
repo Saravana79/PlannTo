@@ -8,11 +8,11 @@ if(scriptCount == undefined)
 var PlannTo = (function(window,undefined) {
 
 var PlannTo ={};
-var SubPath="/where_to_buy_items_vendor_indiatoday.js"
+var SubPath="/elec_widget_1.js"
 //for production
-var domain = "www.plannto.com";
+//var domain = "www.plannto.com";
 //for development
-//var domain = "localhost:3000";
+var domain = "localhost:3000";
 // Localize jQuery variable
 var jQuery; 
 
@@ -80,7 +80,7 @@ var count = 0;
     element = scripts[i];
     src = element.src;
       
-      if (src.indexOf(domain+"/javascripts/plannto.widget.vendor_indiatoday.js") != -1)
+      if (src.indexOf(domain+"/javascripts/plannto.elec_widget_1.js") != -1)
       {
         if (count >= scriptCount)
           {

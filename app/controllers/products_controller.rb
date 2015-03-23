@@ -353,7 +353,7 @@ class ProductsController < ApplicationController
     # render :layout => false
   end
 
-  def where_to_buy_items_vendor_indiatoday
+  def elec_widget_1
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
@@ -370,7 +370,6 @@ class ProductsController < ApplicationController
 
       @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
                                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
-      p @where_to_buy_items.first
       @show_count = Item.get_show_item_count(@items)
 
       responses = []
@@ -383,10 +382,19 @@ class ProductsController < ApplicationController
         end
       end
     else
-      @where_to_buy_items =[]
+      p @items = Item.popular_items("Mobile", 5)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      itemaccess = "popular_items"
+      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+                                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
+    end
+
+    if @where_to_buy_items.blank?
       itemsaccess = "none"
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
+
     @ref_url = url
     jsonp = prepare_response_json()
     render :text => jsonp, :content_type => "text/javascript"

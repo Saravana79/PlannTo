@@ -196,7 +196,7 @@ class Itemdetail < ActiveRecord::Base
         items = items - tempitems
 
         # for activate_tab users
-        if (items.blank? && where_to_buy_items.blank?)
+        if (items.blank? && where_to_buy_items.blank? && !main_item.blank?)
           item = main_item
           items = Item.where(:id => item.new_version_item_id)
           where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
@@ -217,7 +217,7 @@ class Itemdetail < ActiveRecord::Base
           itemsaccess = "emptyitems"
         end
         if is_test != "true"
-          impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.id, url, user, remote_ip, nil, itemsaccess, url_params,
+          impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.blank? ? nil : item.id, url, user, remote_ip, nil, itemsaccess, url_params,
                                                                   plan_to_temp_user_id, nil, winning_price_enc, nil)
         end
       else
