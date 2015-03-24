@@ -163,6 +163,25 @@ class Itemdetail < ActiveRecord::Base
     return_val
   end
 
+  def self.get_sort_by_item(item_details)
+    item_details = item_details.group_by {|val| val.itemid}
+    return_val = []
+
+    item_keys = item_details.keys
+    max_count = item_details.map {|_, x| x.count}.flatten.max
+    p max_count
+
+    [*0...max_count].each do |each_val|
+      item_keys.each do |each_item|
+        unless item_details[each_item.to_i][each_val].blank?
+          return_val << item_details[each_item.to_i][each_val]
+        end
+      end
+    end
+
+    return_val
+  end
+
   def self.get_sort_by_group(item_details, group_ids)
     item_details = item_details.values.flatten
     item_details_hash = item_details.group_by {|each_val| group_ids[each_val.itemid]}
@@ -229,7 +248,7 @@ class Itemdetail < ActiveRecord::Base
     return where_to_buy_items, item, best_deals, impression_id
   end
 
-  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id, is_test, winning_price_enc)
+  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, old_where_to_buy_items=[])
     country = ""
     tempitems = []
     impression_id = ""
@@ -259,21 +278,15 @@ class Itemdetail < ActiveRecord::Base
           end
         end
       end
-
-      if (where_to_buy_items.empty?)
-        itemsaccess = "emptyitems"
-      end
-      if is_test != "true"
-        impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.blank? ? nil : item.id, url, user, remote_ip, nil, itemsaccess, url_params,
-                                                               plan_to_temp_user_id, nil, winning_price_enc, nil)
-      end
-    else
-      where_to_buy_items = []
-      item, best_deals, impression_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
-      itemsaccess = "offers"
     end
 
-    return where_to_buy_items, item, best_deals, impression_id
+    if !old_where_to_buy_items.blank?
+      where_to_buy_items = old_where_to_buy_items + where_to_buy_items
+    end
+
+    where_to_buy_items = Itemdetail.get_sort_by_item(where_to_buy_items) if !where_to_buy_items.blank?
+
+    return where_to_buy_items
   end
 
   def self.amazon_price_update(actual_time)

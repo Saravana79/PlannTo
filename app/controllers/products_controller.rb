@@ -357,6 +357,7 @@ class ProductsController < ApplicationController
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+    @where_to_buy_items = []
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -364,40 +365,42 @@ class ProductsController < ApplicationController
       @publisher = Publisher.getpublisherfromdomain(url)
       # Check have to activate tabs for publisher or not
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+      @item = @items.first
+
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status)
 
       # Update Items if there is only one item
-      @items = Item.get_related_items_if_one_item(@items, @publisher, status) if @items.count == 1
+      if @where_to_buy_items.count < 6
+        itemsaccess = "related_items"
+        items = Item.get_related_items_if_one_item(@items, @publisher, status)
 
-      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
-                                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
-      @show_count = Item.get_show_item_count(@items)
+        related_items = items - @items
+        @item = items.first if @item.blank?
 
-      @where_to_buy_items = @where_to_buy_items.first(8)
-
-      responses = []
-      @where_to_buy_items.group_by(&:site).each do |site, items|
-        items.each_with_index do |item, index|
-          display_item_details(item)
-          if index == 0
-            responses << {image_url: item.image_url, display_price: display_price_detail(item), history_detail: "/history_details?detail_id=#{item.item_details_id}"}
-          end
-        end
+        @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items)
       end
     end
 
     if @where_to_buy_items.blank?
       @items = Item.where(:id => configatron.amazon_top_mobiles.to_s.split(","))
+      @items = Item.where(:id => 42067)
+      @item = @items.first
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
-      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
-                                                                                                  itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
-      @where_to_buy_items = @where_to_buy_items.first(8)
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status)
     end
+
+    @where_to_buy_items = @where_to_buy_items.first(6)
 
     if @where_to_buy_items.blank?
       itemsaccess = "none"
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
+    else
+      if is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                               cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
     end
 
     @ref_url = url

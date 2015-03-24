@@ -1306,8 +1306,6 @@ end
       end
       @where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
 
-      break if @where_to_buy_items.flatten.count >= 8
-
       if(@where_to_buy_items.empty?)
         @tempitems << @item
       end
