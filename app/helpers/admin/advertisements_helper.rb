@@ -24,11 +24,15 @@ module Admin::AdvertisementsHelper
     img_id = ''
     next_src = ''
     if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
+      type = item_detail.type.downcase rescue item_detail.item.type.downcase
+      image_url = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
       return_url = configatron.root_image_path + 'vendors/' + vendor_name + "/#{format}/" + item_detail.Image.to_s
-      next_src = configatron.root_image_url + item_detail.type.downcase + "/#{format}/" + item_detail.imageurl.to_s
+      next_src = configatron.root_image_url + type + "/#{format}/" + image_url
       img_id = "item_details"
     else
-      return_url = configatron.root_image_url + item_detail.type.downcase + "/#{format}/" + item_detail.imageurl.to_s
+      type = item_detail.type.downcase rescue item_detail.item.type.downcase
+      image_url = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
+      return_url = configatron.root_image_url + type + "/#{format}/" + image_url
       next_src = ''
       img_id = 'item'
     end
