@@ -229,6 +229,53 @@ class Itemdetail < ActiveRecord::Base
     return where_to_buy_items, item, best_deals, impression_id
   end
 
+  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, url, user, remote_ip, itemsaccess, url_params, plan_to_temp_user_id, is_test, winning_price_enc)
+    country = ""
+    tempitems = []
+    impression_id = ""
+    if (!publisher.nil? && publisher.id == 9 && country != "India")
+      where_to_buy_items = []
+      item = items[0]
+      itemsaccess = "othercountry"
+    elsif show_price != "false"
+      where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+      main_item = item
+      items = items - tempitems
+
+      # for activate_tab users
+      if (items.blank? && where_to_buy_items.blank? && !main_item.blank?)
+        item = main_item
+        items = Item.where(:id => item.new_version_item_id)
+        where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+
+        items = items - tempitems
+
+        if (items.blank? && where_to_buy_items.blank?)
+          item_ad_detail = main_item.item_ad_detail
+          unless item_ad_detail.blank?
+            items = Item.where(:id => item_ad_detail.old_version_id)
+            where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+            items = items - tempitems
+          end
+        end
+      end
+
+      if (where_to_buy_items.empty?)
+        itemsaccess = "emptyitems"
+      end
+      if is_test != "true"
+        impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.blank? ? nil : item.id, url, user, remote_ip, nil, itemsaccess, url_params,
+                                                               plan_to_temp_user_id, nil, winning_price_enc, nil)
+      end
+    else
+      where_to_buy_items = []
+      item, best_deals, impression_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
+      itemsaccess = "offers"
+    end
+
+    return where_to_buy_items, item, best_deals, impression_id
+  end
+
   def self.amazon_price_update(actual_time)
     time = actual_time.to_time
     impression_date_condition = "impression_time > '#{time.beginning_of_day.strftime('%F %T')}' and impression_time < '#{time.end_of_day.strftime('%F %T')}'"

@@ -357,6 +357,7 @@ class ProductsController < ApplicationController
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
+    p @items
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -366,11 +367,13 @@ class ProductsController < ApplicationController
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
 
       # Update Items if there is only one item
-      @items = Item.get_related_items_if_one_item(@items, @publisher, status) if (@activate_tab && @items.count == 1 && params[:sort_disable] != "true")
+      @items = Item.get_related_items_if_one_item(@items, @publisher, status) if @items.count == 1
 
-      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
                                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
       @show_count = Item.get_show_item_count(@items)
+
+      @where_to_buy_items = @where_to_buy_items.first(6)
 
       responses = []
       @where_to_buy_items.group_by(&:site).each do |site, items|
@@ -381,13 +384,16 @@ class ProductsController < ApplicationController
           end
         end
       end
-    else
-      p @items = Item.popular_items("Mobile", 5)
+    end
+
+    if @where_to_buy_items.blank?
+      @items = Item.where(:id => configatron.amazon_top_mobiles.to_s.split(","))
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
-      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
+      @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
                                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
+      @where_to_buy_items = @where_to_buy_items.first(6)
     end
 
     if @where_to_buy_items.blank?
@@ -464,13 +470,12 @@ class ProductsController < ApplicationController
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     tempurl = url
 
-    @itemdetail = Item.get_price_text_from_url(url)
+    @publisher = Publisher.getpublisherfromdomain(url)
+    @itemdetail = Item.get_price_text_from_url(url, @publisher)
 
     # include pre order status if we show more details.
     unless @itemdetail.blank?
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
-      # @publisher = Publisher.getpublisherfromdomain(url)
-      @publisher = nil
       # Check have to activate tabs for publisher or not
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
 

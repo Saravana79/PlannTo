@@ -1280,6 +1280,41 @@ end
     return @where_to_buy_items, @tempitems, @item
   end
 
+  def self.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+    @tempitems = []
+    @where_to_buy_items = []
+    items.each do |item|
+      @item = item
+      unless publisher.blank?
+        unless publisher.vendor_ids.blank?
+          vendor_ids = publisher.vendor_ids ? publisher.vendor_ids.split(",") : []
+          exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+          where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site in(?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+          where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
+          where_to_buy_items2 = []
+        else
+          exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
+          where_to_buy_items1 = []
+          where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site not in(?) && itemdetails.status in (?)  and itemdetails.isError =?', exclude_vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+        end
+      else
+        where_to_buy_items1 = []
+        where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('itemdetails.status in (?)  and itemdetails.isError =?',status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
+
+      end
+      @where_to_buy_items << where_to_buy_items1 + where_to_buy_items2
+
+      break if @where_to_buy_items.flatten.count >= 6
+
+      if(@where_to_buy_items.empty?)
+        @tempitems << @item
+      end
+    end
+    @where_to_buy_items = @where_to_buy_items.flatten
+
+    return @where_to_buy_items, @tempitems, @item
+  end
+
   def self.get_show_item_count(items)
     return_val = 2
     items_count = items.count
@@ -1359,7 +1394,7 @@ end
         @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
       else
         unless url.nil?
-          tempurl = url;
+          tempurl = url
           if url.include?("?")
             tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
           end
@@ -2347,7 +2382,7 @@ end
     item_name
   end
 
-  def self.get_price_text_from_url(url)
+  def self.get_price_text_from_url(url, publisher)
     @items = []
     @itemdetail = nil
     unless url.nil?
@@ -2383,7 +2418,11 @@ end
 
     if !@items.blank?
       item = @items.first
-      @itemdetail = item.itemdetails.first
+      if !publisher.blank? && !publisher.vendor_ids.blank?
+        @itemdetail = item.itemdetails.where(:site => publisher.vendor_ids.to_s.split(",")).first
+      else
+        @itemdetail = item.itemdetails.first
+      end
     end
     @itemdetail
   end
