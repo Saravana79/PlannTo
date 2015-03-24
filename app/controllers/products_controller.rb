@@ -381,13 +381,13 @@ class ProductsController < ApplicationController
       end
     end
 
-    if @where_to_buy_items.blank?
+    if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < 6)
       @items = Item.where(:id => configatron.amazon_top_mobiles.to_s.split(","))
       @item = @items.first
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status)
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items)
     end
 
     @where_to_buy_items = @where_to_buy_items.first(6)
