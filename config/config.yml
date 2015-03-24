@@ -8,7 +8,7 @@ development:
   popular_cars: "3,5,7,9,11"
   popular_bikes: "3,5,7,9,11"
   popular_cycles: "3,5,7,9,11"
-  popular_mobiles: "3,5,7,9,11"
+  popular_mobiles: "1790,4057,1880,3712,4211,1865,3385,1449,1078"
   popular_tablets: "3,5,7,9,11"
   popular_cameras: "3,5,7,9,11"
   popular_topics: "3997,3996,3995"
@@ -60,6 +60,7 @@ development:
   fashion_auto_scroll_time: 4000 # 10 sec
   fashion_auto_scroll: "true"
   fashion_auto_scroll_count: "infinity" # one or infinity
+  amazon_top_mobiles: "18093,5527,27976,9950,27976,19673,9952"
 
 test:
   root_image_url: "http://s3-ap-southeast-1.amazonaws.com/planntonew/items/"
@@ -113,6 +114,7 @@ test:
   fashion_auto_scroll_time: 10000 # 10 sec
   fashion_auto_scroll: "true"
   fashion_auto_scroll_count: "infinity" # one or infinity
+  amazon_top_mobiles: "18093,5527,27976,9950,27976,19673,9952"
  
 production:
   root_image_url: "http://cdn1.plannto.com/items/"
@@ -177,3 +179,4 @@ production:
   fashion_auto_scroll_time: 4000 # 10 sec
   fashion_auto_scroll: "true"
   fashion_auto_scroll_count: "infinity" # one or infinity
+  amazon_top_mobiles: "18093,5527,27976,9950,27976,19673,9952"

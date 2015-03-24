@@ -305,6 +305,7 @@ class Itemdetail < ActiveRecord::Base
             item = res.first_item
             unless item.blank?
               offer_listing = item.get_element("Offers/Offer/OfferListing")
+              offer_summary = each_item.get_element("OfferSummary")
               if !offer_listing.blank?
                 begin
                   current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
@@ -315,21 +316,45 @@ class Itemdetail < ActiveRecord::Base
                 saved_percentage = offer_listing.get("PercentageSaved") rescue 0
                 availability_str = offer_listing.get("Availability")
 
-                status = case availability_str
-                           when /Usually dispatched.*/ || /Usually ships.*/
-                             1
-                           when /Not yet released/ || /Not yet published/
-                             3
-                           when /This item is not stocked or has been discontinued/
-                             4
-                           when /Out of Stock/
-                             2
-                           else
-                             4
-                         end
+                if availability_str.blank? && !offer_summary.blank?
+                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue "" if current_price.blank?
 
-                p mrp_price = current_price.to_f + saved_price.to_f
-                item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price)
+                  total_new = offer_summary.get("TotalNew").to_i
+
+                  if total_new > 0
+                    status = 1
+                  else
+                    status = 0
+                  end
+                else
+                  status = case availability_str
+                             when /Usually dispatched.*/ || /Usually ships.*/
+                               1
+                             when /Not yet released/ || /Not yet published/
+                               3
+                             when /This item is not stocked or has been discontinued/
+                               4
+                             when /Out of Stock/
+                               2
+                             else
+                               4
+                           end
+                end
+
+                mrp_price = current_price.to_f + saved_price.to_f
+                item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price, :last_verified_date => Time.now)
+              elsif !offer_summary.blank?
+                current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
+
+                total_new = offer_summary.get("TotalNew").to_i
+
+                if total_new > 0
+                  status = 1
+                else
+                  status = 0
+                end
+
+                item_detail.update_attributes!(:price => current_price, :status => status, :last_verified_date => Time.now)
               else
                 item_detail.update_attributes!(:status => 2)
               end
