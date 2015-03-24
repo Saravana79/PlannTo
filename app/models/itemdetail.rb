@@ -169,7 +169,6 @@ class Itemdetail < ActiveRecord::Base
 
     item_keys = item_details.keys
     max_count = item_details.map {|_, x| x.count}.flatten.max
-    p max_count
 
     [*0...max_count].each do |each_val|
       item_keys.each do |each_item|

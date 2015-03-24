@@ -2134,7 +2134,7 @@ end
       sub_categories = ["beauty", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "toys", "grocery", "shoes", "watches", "electronics", "aps"]
       order_condition = "rank desc"
 
-      sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
+      sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})" if !sub_categories.blank?
     else
       if !url.to_s.downcase.scan(/cricket/).blank?
         sub_category = "sports_cricket"
@@ -2158,7 +2158,7 @@ end
         sub_category = "sports_general"
       end
 
-      sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
+      sub_category_condition = "and sub_category in (#{sub_categories.map(&:inspect).join(",")})" if !sub_categories.blank?
 
       if (sub_category == "sports_general")
         sub_category_condition = ""

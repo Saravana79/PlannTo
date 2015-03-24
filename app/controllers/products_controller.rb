@@ -383,7 +383,6 @@ class ProductsController < ApplicationController
 
     if @where_to_buy_items.blank?
       @items = Item.where(:id => configatron.amazon_top_mobiles.to_s.split(","))
-      @items = Item.where(:id => 42067)
       @item = @items.first
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
@@ -397,8 +396,8 @@ class ProductsController < ApplicationController
       itemsaccess = "none"
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     else
-      if is_test != "true"
-        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+      if params[:is_test] != "true"
+        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
     end
