@@ -77,7 +77,7 @@ a { outline: none; }
                 <% itemdetails.each do |item_detail| %>
                     <div class="product-container">
                         <div class="product-img">
-                            <a href="<%= configatron.hostname%>/history_details?item_id=<%= item_detail.id %>&iid=<%= @impression_id %>" target = "_blank" rel= "nofollow" >
+                            <a href="<%= configatron.hostname%>/history_details?detail_id=<%= item_detail.id %>&iid=<%= @impression_id %>" target = "_blank" rel= "nofollow" >
 
                                 <img src="<%= configatron.root_image_url + 'vendor' + '/medium/' + item_detail.image_url%>" alt="" id="item_details">
                                 </a>
@@ -94,7 +94,7 @@ a { outline: none; }
 
 
                                 <p class="btn">
-                                    <a class="shop-now" href="<%= configatron.hostname%>/history_details?item_id=<%= item_detail.id %>&iid=<%=@impression_id%>" target = "_blank" rel="nofollow">Shop
+                                    <a class="shop-now" href="<%= configatron.hostname%>/history_details?detail_id=<%= item_detail.id %>&iid=<%=@impression_id%>" target = "_blank" rel="nofollow">Shop
                                     Now</a>
                                 </p>
                             </a>

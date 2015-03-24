@@ -357,7 +357,6 @@ class ProductsController < ApplicationController
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
-    p @items
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -373,7 +372,7 @@ class ProductsController < ApplicationController
                                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
       @show_count = Item.get_show_item_count(@items)
 
-      @where_to_buy_items = @where_to_buy_items.first(6)
+      @where_to_buy_items = @where_to_buy_items.first(8)
 
       responses = []
       @where_to_buy_items.group_by(&:site).each do |site, items|
@@ -393,7 +392,7 @@ class ProductsController < ApplicationController
       itemaccess = "popular_items"
       @where_to_buy_items, @item, @best_deals, @impression_id = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, url, current_user, request.remote_ip,
                                                                                                   itemsaccess, url_params, cookies[:plan_to_temp_user_id], @is_test, nil)
-      @where_to_buy_items = @where_to_buy_items.first(6)
+      @where_to_buy_items = @where_to_buy_items.first(8)
     end
 
     if @where_to_buy_items.blank?
