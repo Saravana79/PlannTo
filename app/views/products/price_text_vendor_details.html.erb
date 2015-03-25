@@ -1,17 +1,32 @@
 <% if !@itemdetail.blank? %>
-    <div id="planntowidget1">
-      <a style="color:#4A4A4A;font-weight:500;" target="_blank" href="<%= configatron.hostname%>/history_details?detail_id=<%= @itemdetail.id %>&iid=<%=@impression_id%>">
-        Price: <span style="font-family:arial;color:#4A4A4A;font-weight:500;"><span class="rupee">R<span>s.</span></span><%= @itemdetail.price.to_f.round(2) %></span> Buy Now
-      </a>
-    </div>
 
-    <style type="text/css">
-        * {
-            margin: 0;
-            outline: 0 none;
-            padding: 0;
-        }
+    <% if params[:page_type] == "type_1" %>
+        <div id="planntowidget1">
+          <a style="color:#4A4A4A;font-weight:500;" target="_blank" href="<%= configatron.hostname%>/history_details?detail_id=<%= @itemdetail.id %>&iid=<%=@impression_id%>">
+            Price: <span style="font-family:arial;color:#4A4A4A;font-weight:500;"><span class="rupee">R<span>s.</span></span><%= @itemdetail.price.to_f.round(2) %></span> Buy Now
+          </a>
+        </div>
 
-        a {text-decoration: none;}
-    </style>
+        <style type="text/css">
+            * {
+                margin: 0;
+                outline: 0 none;
+                padding: 0;
+            }
+
+            a {text-decoration: none;}
+        </style>
+    <% elsif params[:page_type] == "type_2" %>
+        <span class="verdict-tag">
+          <a style="cursor: pointer;color: #00F7FF;">PRICE:
+            <span style="font-family: Arial;background: none;" class="tag">
+              <span class="rupee">R<span>s.
+              </span>
+            </span>57,000</span>
+            <p style="text-align: right;padding-top: 10px;color: #00F7FF;font-size: 13px;">
+              Buy Now
+            </p>
+          </a>
+        </span>
+    <% end %>
 <% end %>
