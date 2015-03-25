@@ -37,6 +37,9 @@
   </div>
 </div>
 
+<br />
+<br />
+
 <% if params[:type] == "elec_widget" %>
 <div id="where_to_buy_items" style="width:610px;">
 </div>
@@ -51,6 +54,14 @@
 </div>
 <script async src="<%= configatron.hostname %>/javascripts/plannto.price_text.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items1&is_test=&page_type=type_1"></script>
 
+    <br />
+    <br />
+    <br />
+
+    <div id="where_to_buy_items">
+    </div>
+    <script async src="<%= configatron.hostname %>/javascripts/plannto.price_text.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&is_test=&page_type=type_2"></script>
+
     <% end %>
 
 <br/>
@@ -58,6 +69,7 @@
 <br/>
 </body>
 </html>
+
 
 <style type="text/css">
     .advertisements h1 {
