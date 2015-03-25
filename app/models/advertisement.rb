@@ -1598,6 +1598,49 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     item_detail_id
   end
 
+  def self.get_mysmartprice_matching_item_ids(page_count, url)
+    total_ids = []
+    [*1..page_count].each do |current_count|
+      urls = []
+      acutual_url = url
+      if current_count !=  1
+        acutual_url = url.gsub("pricelist/", "pricelist/pages/").gsub(".html", "-#{current_count}.html")
+      end
+
+      doc = Nokogiri::HTML(open(acutual_url))
+
+      doc.css(".msplistitem .imgcont").each do |each_item|
+        each_url = each_item.attributes["href"].value
+        urls << each_url
+      end
+
+      items = Item.find_by_sql("SELECT a.id from items AS a INNER JOIN itemdetails ON itemdetails.itemid = a.id where itemdetails.url in (#{urls.map(&:inspect).join(',')})")
+
+      item_ids = items.map(&:id)
+      total_ids << item_ids
+    end
+    total_ids = total_ids.flatten
+  end
+
+  def self.update_top_item_ids_from_mysmartprice()
+    loop_hash = {:mobiles => {:url => "http://www.mysmartprice.com/mobile/pricelist/mobile-price-list-in-india.html", :page_count => 6}, :tablets => {:url => "http://www.mysmartprice.com/mobile/pricelist/tablet-price-list-in-india.html", :page_count => 2}}
+
+    total_item_ids = []
+
+    loop_hash.each do |each_key, each_val|
+      # begin
+        item_ids = Advertisement.get_mysmartprice_matching_item_ids(each_val[:page_count], each_val[:url])
+        total_item_ids << item_ids
+      # rescue Exception => e
+      #   p "Error while amazon api call"
+      # end
+    end
+    total_item_ids = total_item_ids.flatten
+
+    total_item_ids = total_item_ids.join(",")
+    $redis.set("mysmartprice_top_products", total_item_ids)
+  end
+
   private
 
   def file_dimensions

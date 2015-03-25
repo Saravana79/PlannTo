@@ -156,6 +156,11 @@ task :update_item_details_from_vendors => :environment do
   Resque.enqueue(UpdateItemDetailsFromVendors, "update_from_vendors", Time.zone.now.utc)
 end
 
+desc "Update top item ids from MySmartPrice"
+task :update_top_mysmartprice_item_ids => :environment do
+  Resque.enqueue(UpdateTopMysmartpriceItemIds, "update_top_item_ids_from_mysmartprice", Time.zone.now.utc)
+end
+
 desc "Update Itemdetail from Flipkart"
 task :update_item_details_from_vendors_flipkart => :environment do
   Resque.enqueue(UpdateItemDetailsFromVendorsFlipkart, "update_from_vendors_flipkart", Time.zone.now.utc)
