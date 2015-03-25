@@ -4,6 +4,8 @@ class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
   before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
+  before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
+  before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
   # caches_action :where_to_buy_items, :cache_path => @where_to_buy_items_cahce proc {|c|  params[:item_ids].blank? ? params.slice("price_full_details", "path", "sort_disable", "ref_url") : params.slice("price_full_details", "path", "sort_disable", "item_ids") }, :expires_in => 2.hours, :if => proc { |s| params[:is_test] != "true" }
   caches_action :where_to_buy_items, :cache_path => proc {|c|
     if (params[:item_ids].blank? && params[:ref_url].blank?)
@@ -12,6 +14,22 @@ class ProductsController < ApplicationController
       params.slice("price_full_details", "path", "sort_disable", "ref_url")
     else
       params.slice("price_full_details", "path", "sort_disable", "item_ids")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
+  caches_action :elec_widget_1, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids")
+    else
+      params.slice("ref_url")
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
+  caches_action :price_text_vendor_details, :cache_path => proc {|c|
+    if !params[:item_ids].blank?
+      params.slice("item_ids", "page_type")
+    else
+      params.slice("ref_url", "page_type")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -961,6 +979,84 @@ class ProductsController < ApplicationController
           @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "amazon_sports_widget", category_item_detail_id, nil)
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&amp;", "<iid>")
+          cache = cache.gsub(old_iid, @impression_id)
+        end
+        return render :text => cache.html_safe, :content_type => "text/javascript"
+        ## Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
+
+  def create_impression_before_elec_widget
+    params[:price_full_details] ||= "true"
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+    params[:request_referer] ||= request.referer
+    params[:ref_url] ||= ""
+    params[:item_ids] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:category_item_detail_id] ||= ""
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
+
+    cache_params = ""
+    if !params[:item_ids].blank?
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids"))
+    else
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url"))
+    end
+    cache_params = CGI::unescape(cache_params)
+
+    cache_key = "views/#{host_name}/elec_widget_1.js?#{cache_params}.js"
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        valid_html = cache.match(/_blank/).blank? ? false : true
+        cache = reset_json_callback(cache, params[:callback])
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
+
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
+          cache = cache.gsub(old_iid, @impression_id)
+        end
+        return render :text => cache.html_safe, :content_type => "text/javascript"
+        ## Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
+
+  def create_impression_before_price_text_vendor_details
+    params[:price_full_details] ||= "true"
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+    params[:request_referer] ||= request.referer
+    params[:ref_url] ||= ""
+    params[:item_ids] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:category_item_detail_id] ||= ""
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
+
+    cache_params = ""
+    if !params[:item_ids].blank?
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type"))
+    else
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type"))
+    end
+    cache_params = CGI::unescape(cache_params)
+
+    cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}.js"
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        valid_html = cache.match(/_blank/).blank? ? false : true
+        cache = reset_json_callback(cache, params[:callback])
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "elec_widget_1", params[:item_ids], nil)
+
+          old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
         end
         return render :text => cache.html_safe, :content_type => "text/javascript"
