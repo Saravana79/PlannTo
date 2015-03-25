@@ -18,14 +18,12 @@
         </style>
     <% elsif params[:page_type] == "type_2" %>
         <span class="verdict-tag">
-          <a href="<%= configatron.hostname%>/history_details?detail_id=<%= @itemdetail.id %>&iid=<%=@impression_id%>" target="_blank" style="cursor: pointer;color: #00F7FF;">PRICE:
+          <a href="<%= configatron.hostname%>/history_details?detail_id=<%= @itemdetail.id %>&iid=<%=@impression_id%>" target="_blank" style="cursor: pointer;">BUY NOW
             <span style="font-family: Arial;background: none;" class="tag">
               <span class="rupee">R<span>s.
               </span>
             </span><%= @itemdetail.price.to_f.round(2) %></span>
-            <p style="text-align: right;padding-top: 10px;color: #00F7FF;font-size: 13px;">
-              Buy Now
-            </p>
+           
           </a>
         </span>
     <% end %>
