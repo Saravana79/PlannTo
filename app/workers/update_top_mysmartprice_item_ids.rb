@@ -11,7 +11,7 @@ class UpdateTopMysmartpriceItemIds
 
     now_time = actual_time.to_time
 
-    Advertisement.send(method_name, now_time)
+    Advertisement.send(method_name)
 
     #rescue => e
     #  log.debug "Have some problem while executing calculate ecpm, please find the error below"
