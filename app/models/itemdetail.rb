@@ -393,6 +393,11 @@ class Itemdetail < ActiveRecord::Base
     top_product_ids = $redis.get("mysmartprice_top_products")
     top_product_ids = top_product_ids.to_s.split(",")
     top_product_ids = top_product_ids.map(&:to_i)
+
+    exclued_item_ids = [12345678] #only integer, add exclued item - additional_details
+
+    top_product_ids = top_product_ids - exclued_item_ids
+
     # xml_data = Net::HTTP.get_response(URI.parse(url)).body
     # data = XmlSimple.xml_in(xml_data)
     # items = data["channel"][0]["item"]
