@@ -559,7 +559,8 @@ class Advertisement < ActiveRecord::Base
   def self.bulk_process_impression_and_click()
     if $redis.get("bulk_process_add_impression_is_running").to_i == 0
       $redis.set("bulk_process_add_impression_is_running", 1)
-      $redis.expire("bulk_process_add_impression_is_running", 30.minutes)
+      mins = $redis.llen("resque:queue:create_impression_and_click").to_i / 1000 rescue 30
+      $redis.expire("bulk_process_add_impression_is_running", mins)
       length = $redis.llen("resque:queue:create_impression_and_click")
       count = length
 
@@ -1614,9 +1615,9 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         urls << each_url
       end
 
-      items = Item.find_by_sql("SELECT a.id from items AS a INNER JOIN itemdetails ON itemdetails.itemid = a.id where itemdetails.url in (#{urls.map(&:inspect).join(',')})")
+      items = Itemdetail.find_by_sql("SELECT additional_details from itemdetails where url in (#{urls.map(&:inspect).join(',')})")
 
-      item_ids = items.map(&:id)
+      item_ids = items.map(&:additional_details)
       total_ids << item_ids
     end
     total_ids = total_ids.flatten
