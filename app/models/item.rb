@@ -2427,6 +2427,20 @@ end
     @itemdetail
   end
 
+  def self.get_item_from_name_in_search(term, search_type=Car)
+    @items = Sunspot.search(search_type) do
+      keywords term do
+        minimum_match 1
+      end
+      with :status, [1,2,3]
+      order_by :score,:desc
+      order_by :orderbyid , :asc
+      paginate(:page => 1, :per_page => 5)
+    end
+
+    item = @items.results.first
+  end
+
   private
 
   def create_item_ad_detail

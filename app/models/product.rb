@@ -36,19 +36,19 @@ has_one :manufacturer,
    return return_val
  end
 
-def self.follow_search_type(type)
-  if  type == "owner" || type == "buyer"
-     return ["Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
-  elsif  type == "follower"
-    return ["AttributeTag".camelize.constantize,"Topic".camelize.constantize]
-  elsif  type == "profile_follower"
-     return ["Car".camelize.constantize,"AttributeTag".camelize.constantize,"Topic".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
-    end      
-end
+  def self.follow_search_type(type)
+    if  type == "owner" || type == "buyer"
+       return ["Mobile".camelize.constantize, "Tablet".camelize.constantize, "Car".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
+    elsif  type == "follower"
+      return ["AttributeTag".camelize.constantize,"Topic".camelize.constantize]
+    elsif  type == "profile_follower"
+       return ["Car".camelize.constantize,"AttributeTag".camelize.constantize,"Topic".camelize.constantize, "Tablet".camelize.constantize, "Mobile".camelize.constantize, "Camera".camelize.constantize,"Bike".camelize.constantize,"Cycle".camelize.constantize]
+      end
+  end
 
-def manu
-    self.manufacturer
-end
+  def manu
+      self.manufacturer
+  end
 
   def self.call_search_items_by_relavance(param, itemtypes=nil)
     if param[:term].downcase.include?("vs") && param[:ac_sub_type] == "Comparisons"
