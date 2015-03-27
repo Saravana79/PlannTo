@@ -432,6 +432,13 @@ class FeedUrl < ActiveRecord::Base
     end while next_val != 0
   end
 
+  def self.remove_missing_keys_new_way(match)
+    begin
+      $redis_rtb.del($redis_rtb.keys(match)[0..100000])
+      key_count = $redis_rtb.keys(match).count
+    end while key_count > 20000
+  end
+
   def self.check_and_assign_sources_hash_to_source_category_daily()
     sources_categories = SourceCategory.find_by_sql("select distinct source from source_categories")
 
@@ -470,14 +477,18 @@ class FeedUrl < ActiveRecord::Base
     # $redis_rtb.del($redis_rtb.keys("missingad:*"))
     # $redis_rtb.del($redis_rtb.keys("spottags:*"))
 
+    remove_missing_keys_new_way("missingurl:*")
+    remove_missing_keys_new_way("missingad:*")
+    remove_missing_keys_new_way("spottags:*")
+
     #clean missingurl:*
-    remove_missing_keys("missingurl:*") #TOODO: commented
+    # remove_missing_keys("missingurl:*") #TOODO: commented
 
     #clean missingad:*
-    remove_missing_keys("missingad:*")
+    # remove_missing_keys("missingad:*")
 
     #clean spottags:*
-    remove_missing_keys("spottags:*")
+    # remove_missing_keys("spottags:*")
     #
     #start sid_ad_detail_process
     # Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)
