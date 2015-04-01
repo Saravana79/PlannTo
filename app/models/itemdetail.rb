@@ -394,7 +394,7 @@ class Itemdetail < ActiveRecord::Base
     top_product_ids = top_product_ids.to_s.split(",")
     top_product_ids = top_product_ids.map(&:to_i)
 
-    exclued_item_ids = [12345678] #only integer, add exclued item - additional_details
+    exclued_item_ids = [28712] #only integer, add exclued item - additional_details
 
     top_product_ids = top_product_ids - exclued_item_ids
 
