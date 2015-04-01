@@ -10,9 +10,11 @@ class AggregatedDetailProcess
     log.debug "********** Actual Time to Start #{actual_time.to_time.strftime('%b %d,%Y %r')} **********"
 
     now_time = actual_time.to_time
-    now_time = now_time.localtime
+    now_time = now_time.utc
 
     before_hour = now_time - 1.hour
+    before_3_hour = now_time - 3.hour
+    before_5_hour = now_time - 5.hour
 
     if only_ad == "false"
       #AggregatedDetail.update_aggregated_detail(now_time, 'publisher', 1000)
@@ -20,7 +22,7 @@ class AggregatedDetailProcess
       #from mongo report
       AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'publisher', "Publisher")
 
-      if (before_hour.day != now_time.day)
+      if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
         AggregatedDetail.update_aggregated_details_from_mongo_reports(before_hour, 'publisher', "Publisher")
       end
     end
@@ -31,7 +33,7 @@ class AggregatedDetailProcess
     #mongo report
     AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'advertisement', "Advertisement")
 
-    if (before_hour.day != now_time.day)
+    if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
       #AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement', 1000)
 
       #mongo report
