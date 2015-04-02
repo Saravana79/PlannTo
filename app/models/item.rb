@@ -1380,7 +1380,7 @@ end
       if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
         #@items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
         @items = Item.where(:id => item_ids)
-        @items = item_ids.collect {|id| @items.detect {|x| x.id == id}}
+        @items = item_ids.collect {|id| @items.detect {|x| x.id == id.to_i}}
         @items.compact!
       else
         @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")

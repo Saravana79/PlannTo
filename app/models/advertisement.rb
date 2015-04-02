@@ -806,13 +806,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             unless ad_impression_mon.blank?
               each_click_mongo.delete("ad_impression_id")
 
-              m_clicks_count = ad_impression_mon.m_clicks.where(:timestamp => each_click_mongo["timestamp"]).count
-              if m_clicks_count == 0
-                begin
-                  ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
-                rescue Exception => e
-                  p "Error while push m_click"
-                end
+              begin
+                ad_impression_mon.m_clicks << MClick.new(:timestamp => each_click_mongo["timestamp"])
+              rescue Exception => e
+                p "Error while push m_click"
               end
             end
           else
