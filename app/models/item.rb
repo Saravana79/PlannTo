@@ -2329,10 +2329,11 @@ end
       itemdetails = itemdetails[fashion_id-1...fashion_id+6]
     else
       existing_count = itemdetails.count - fashion_id
-      itemdetails = itemdetails[fashion_id-1...fashion_id+existing_count]
-      remaining_count = itemdetails.count
+      new_itemdetails = itemdetails[fashion_id-1...fashion_id+existing_count]
+      remaining_count = 6 - new_itemdetails.count
       remaining_items = itemdetails[*0...remaining_count]
-      itemdetails = itemdetails.to_a + remaining_items.to_a
+      remaining_items = [remaining_items].compact if !remaining_items.is_a?(Array)
+      itemdetails = new_itemdetails.to_a + remaining_items.to_a
     end
     itemdetails
   end
