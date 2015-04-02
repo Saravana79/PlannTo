@@ -2330,12 +2330,13 @@ end
     else
       existing_count = itemdetails.count - fashion_id
       new_itemdetails = itemdetails[fashion_id-1...fashion_id+existing_count]
+      new_itemdetails = [new_itemdetails].compact if !new_itemdetails.is_a?(Array)
       remaining_count = 6 - new_itemdetails.count
-      remaining_items = itemdetails[*0...remaining_count]
+      remaining_items = remaining_count == 0 ? [] : itemdetails[0...remaining_count]
       remaining_items = [remaining_items].compact if !remaining_items.is_a?(Array)
       itemdetails = new_itemdetails.to_a + remaining_items.to_a
     end
-    itemdetails
+    itemdetails.uniq
   end
 
   def self.get_item_id_and_random_id(ad,item_ids)
