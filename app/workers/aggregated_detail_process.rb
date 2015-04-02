@@ -23,7 +23,7 @@ class AggregatedDetailProcess
       AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'publisher', "Publisher")
 
       if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
-        AggregatedDetail.update_aggregated_details_from_mongo_reports(before_hour, 'publisher', "Publisher")
+        AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time.yesterday, 'publisher', "Publisher")
       end
     end
 
@@ -37,7 +37,7 @@ class AggregatedDetailProcess
       #AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement', 1000)
 
       #mongo report
-      AggregatedDetail.update_aggregated_details_from_mongo_reports(before_hour, 'advertisement', "Advertisement")
+      AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time.yesterday, 'advertisement', "Advertisement")
     end
 
     #rescue => e
