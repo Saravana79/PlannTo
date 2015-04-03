@@ -2109,7 +2109,7 @@ end
     sub_category = ""
     sub_category_condition = ""
 
-    if url.include?("sify.com")
+    if url.to_s.include?("sify.com")
       if !url.to_s.downcase.scan(/movies/).blank?
         sub_category = "sify_movies"
         sub_categories = ["beauty", "dvd", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "grocery", "shoes", "watches", "electronics", "aps"]
@@ -2129,7 +2129,7 @@ end
 
       sub_category_condition = sub_categories.include?("All") ? "" : "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
       # order_condition = "rank desc"
-    elsif url.include?("bawarchi.com")
+    elsif url.to_s.include?("bawarchi.com")
       sub_category = "bawarchi_bawarchi"
       sub_categories = ["beauty", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "toys", "grocery", "shoes", "watches", "electronics", "aps"]
       order_condition = "rank desc"
