@@ -221,20 +221,20 @@ class HistoryDetailsController < ApplicationController
           url = vendor.vendor_detail.params.gsub(/\{url}/, url)
 
           if !@ad.blank? && (!@ad.affiliate_id.blank? || !@ad.track_id.blank?)
-            url = url.gsub(/\{affid}/, @ad.affiliate_id) unless @ad.affiliate_id.blank?
-            url= url.gsub(/\{trackid}/, @ad.track_id) unless @ad.track_id.blank?
+            url = url.gsub(/\{affid}/, @ad.affiliate_id.to_s) #unless @ad.affiliate_id.blank?
+            url= url.gsub(/\{trackid}/, @ad.track_id.to_s) #unless @ad.track_id.blank?
           else
             unless publisher.nil?
               pv = PublisherVendor.where(:vendor_id => vendor.id, :publisher_id => publisher.id, :geo => params[:geo]).first
             end
             if !pv.nil?
-              url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
-              url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+              url = url.gsub(/\{affid}/, pv.affliateid.to_s) #unless pv.affliateid.nil?
+              url= url.gsub(/\{trackid}/, pv.trackid.to_s) #unless pv.trackid.nil?
             else
               pv = PublisherVendor.where(:publisher_id => 0, :vendor_id => vendor.id, :geo => params[:geo]).first
               if !pv.nil?
-                url = url.gsub(/\{affid}/, pv.affliateid) unless pv.affliateid.nil?
-                url= url.gsub(/\{trackid}/, pv.trackid) unless pv.trackid.nil?
+                url = url.gsub(/\{affid}/, pv.affliateid.to_s) #unless pv.affliateid.nil?
+                url= url.gsub(/\{trackid}/, pv.trackid.to_s) #unless pv.trackid.nil?
               end
             end
           end
@@ -245,7 +245,7 @@ class HistoryDetailsController < ApplicationController
           url= url.gsub(/\{add}/, add_detail) #pass additional_details
 
           ad_id = params[:ads_id].blank? ? "" : params[:ads_id]
-          url= url.gsub(/\{ad_id}/, ad_id)
+          url= url.gsub(/\{ad_id}/, ad_id.to_s)
         end
       end
       url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
