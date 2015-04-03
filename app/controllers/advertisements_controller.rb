@@ -180,7 +180,7 @@ class AdvertisementsController < ApplicationController
     impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
     #TODO: temp commentted no one is using now
     # @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856, 72329] : []
-    @vendor_ids = []
+    @vendor_ids = params[:vendor_ids].to_s.split(",")
     @ref_url = params[:ref_url] ||= ""
     @iframe_width, @iframe_height = params[:size].split("x")
     @suitable_ui_size = Advertisement.process_size(@iframe_width, @iframe_height)
@@ -425,6 +425,7 @@ class AdvertisementsController < ApplicationController
     params[:r] ||= ""
     params[:a] ||= ""
     params[:fashion_id] ||= ""
+    params[:vendor_ids] ||= ""
 
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url

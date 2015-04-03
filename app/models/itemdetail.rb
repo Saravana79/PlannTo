@@ -152,8 +152,8 @@ class Itemdetail < ActiveRecord::Base
     [*0...max_count].each do |each_val|
       item_keys.each do |each_item|
         vendor_orders.each do |each_vendor|
-          unless exp_result[each_item.to_i][each_vendor].blank?
-            item_detail = exp_result[each_item][each_vendor][each_val]
+          unless exp_result[each_item.to_i][each_vendor.to_i].blank?
+            item_detail = exp_result[each_item][each_vendor.to_i][each_val]
             return_val << item_detail unless item_detail.blank?
           end
         end
