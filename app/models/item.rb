@@ -2320,6 +2320,7 @@ end
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails = itemdetails.sample(6)
     end
+    itemdetails = itemdetails.first(6)
     return item, itemdetails
   end
 
