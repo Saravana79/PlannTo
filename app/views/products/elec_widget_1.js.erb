@@ -1,1 +1,20 @@
 <%= render "#{params[:page_type]}_elec_widget_1" %>
+
+<script type="text/javascript">
+PlannTo.jQuery(document).ready(function()
+  {
+          PlannTo.jQuery(".ad_img_tag").on("error", function()
+          {
+              var img_id = PlannTo.jQuery(this).attr('id')
+              if (img_id == "item_details") {
+                  PlannTo.jQuery(this).attr('id', 'item')
+                  PlannTo.jQuery(this).attr("src", PlannTo.jQuery(this).attr('next_src'))
+              }
+              else if (img_id == "item")
+              {
+                  PlannTo.jQuery(this).attr('id', 'default_image')
+                  PlannTo.jQuery(this).attr("src", PlannTo.jQuery(this).attr('default_src'))
+              }
+          });
+          })
+</script>

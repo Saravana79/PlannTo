@@ -1006,10 +1006,6 @@ class ProductsController < ApplicationController
     params[:ref_url] = url
     params[:vendor_ids] ||= ""
 
-    if !params[:vendor_ids].blank?
-      params[:page_type] = "type_2"
-    end
-
     cache_params = ""
     if !params[:item_ids].blank?
       cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids"))
