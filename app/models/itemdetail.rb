@@ -247,7 +247,7 @@ class Itemdetail < ActiveRecord::Base
     return where_to_buy_items, item, best_deals, impression_id
   end
 
-  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, old_where_to_buy_items=[])
+  def self.get_where_to_buy_items_using_vendor(publisher, items, show_price, status, old_where_to_buy_items=[], vendor_ids=[])
     country = ""
     tempitems = []
     impression_id = ""
@@ -256,7 +256,7 @@ class Itemdetail < ActiveRecord::Base
       item = items[0]
       itemsaccess = "othercountry"
     elsif show_price != "false"
-      where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+      where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids)
       main_item = item
       items = items - tempitems
 
@@ -264,7 +264,7 @@ class Itemdetail < ActiveRecord::Base
       if (items.blank? && where_to_buy_items.blank? && !main_item.blank?)
         item = main_item
         items = Item.where(:id => item.new_version_item_id)
-        where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+        where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids)
 
         items = items - tempitems
 
@@ -272,7 +272,7 @@ class Itemdetail < ActiveRecord::Base
           item_ad_detail = main_item.item_ad_detail
           unless item_ad_detail.blank?
             items = Item.where(:id => item_ad_detail.old_version_id)
-            where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+            where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids)
             items = items - tempitems
           end
         end
@@ -283,7 +283,12 @@ class Itemdetail < ActiveRecord::Base
       where_to_buy_items = old_where_to_buy_items + where_to_buy_items
     end
 
-    where_to_buy_items = Itemdetail.get_sort_by_item(where_to_buy_items) if !where_to_buy_items.blank?
+    if !vendor_ids.blank?
+      item_details = where_to_buy_items.group_by {|item_detail| item_detail.itemid }
+      where_to_buy_items = Itemdetail.get_sort_by_vendor(item_details, vendor_ids)
+    elsif !where_to_buy_items.blank?
+      where_to_buy_items = Itemdetail.get_sort_by_item(where_to_buy_items)
+    end
 
     return where_to_buy_items
   end
@@ -716,7 +721,8 @@ class Itemdetail < ActiveRecord::Base
     begin
       vendor_id = self.site
       vendor = Vendor.where(:id => vendor_id).first
-      return_val = vendor.name
+      vendor_name = vendor.vendor_detail.name rescue ""
+      return_val = vendor_name
     rescue Exception => e
       p "Error while getting vendor name"
     end

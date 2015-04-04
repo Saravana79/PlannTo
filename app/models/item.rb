@@ -1280,14 +1280,14 @@ end
     return @where_to_buy_items, @tempitems, @item
   end
 
-  def self.process_and_get_where_to_buy_items_using_vendor(items, publisher, status)
+  def self.process_and_get_where_to_buy_items_using_vendor(items, publisher, status, vendor_ids=[])
     @tempitems = []
     @where_to_buy_items = []
     items.each do |item|
       @item = item
-      if !publisher.blank?
+      if !publisher.blank? && vendor_ids.blank?
         if !publisher.vendor_ids.blank?
-          vendor_ids = publisher.vendor_ids ? publisher.vendor_ids.split(",") : []
+          vendor_ids = publisher.vendor_ids.split(",")
           exclude_vendor_ids = publisher.exclude_vendor_ids ? publisher.exclude_vendor_ids.split(",")  : ""
           where_to_buy_itemstemp = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
           where_to_buy_items1 = where_to_buy_itemstemp.select{|a| vendor_ids.include? a.site}.sort_by{|i| [vendor_ids.index(i.site.to_s),i.status,(i.price - (i.cashback.nil? ?  0 : i.cashback))]}
@@ -1299,7 +1299,7 @@ end
           where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in(?) && itemdetails.status in (?)  and itemdetails.isError =?', vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
         end
       else
-        vendor_ids = ["9882"]
+        vendor_ids = vendor_ids.blank? ? ["9882"] : vendor_ids
         where_to_buy_items1 = []
         where_to_buy_items2 = @item.itemdetails.includes(:vendor).where('site in (?) && itemdetails.status in (?)  and itemdetails.isError =?',vendor_ids,status,0).order('itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else itemdetails.cashback end) asc')
 
@@ -1311,6 +1311,11 @@ end
       end
     end
     @where_to_buy_items = @where_to_buy_items.flatten
+
+    if !vendor_ids.blank?
+      item_details = @where_to_buy_items.group_by {|item_detail| item_detail.itemid }
+      @where_to_buy_items = Itemdetail.get_sort_by_vendor(item_details, vendor_ids)
+    end
 
     return @where_to_buy_items, @tempitems, @item
   end

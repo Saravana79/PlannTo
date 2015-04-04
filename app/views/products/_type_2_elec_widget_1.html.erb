@@ -1,0 +1,45 @@
+<div id="planntobuy">
+  <% @where_to_buy_items.each do |item_detail| %>
+      <div style="padding: 10px 0px;">
+        <span style="float: left;padding-right: 10px;">
+          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
+        </span>
+        <span style="font-size: 13px;float: left;padding-right: 15px;">
+            <div style="font-size: 13px;font-weight: 600;color: #5A5A5A;">
+              <%= item_detail.ItemName.to_s.truncate(24) %>
+            </div>
+            <div style="font-family: arial;font-size: 12px;color: #BF0000;font-weight: 600;margin-top: 5px;">
+              <%= display_price_detail(item_detail) %>
+            </div>
+        </span>
+        <span style="float: right;margin-top: 10px;">
+            <p class="btn">
+              <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #F76300;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= item_detail.id %>">
+                Go
+              </a>
+            </p>
+        </span>
+        <br clear="all">
+      </div>
+  <% end %>
+</div>
+
+
+<script type="text/javascript">
+    PlannTo.jQuery(document).ready(function()
+  {
+      PlannTo.jQuery(".ad_img_tag").on("error", function()
+      {
+          var img_id = PlannTo.jQuery(this).attr('id')
+          if (img_id == "item_details") {
+              PlannTo.jQuery(this).attr('id', 'item')
+              PlannTo.jQuery(this).attr("src", PlannTo.jQuery(this).attr('next_src'))
+          }
+          else if (img_id == "item")
+          {
+              PlannTo.jQuery(this).attr('id', 'default_image')
+              PlannTo.jQuery(this).attr("src", PlannTo.jQuery(this).attr('default_src'))
+          }
+      });
+  })
+</script>

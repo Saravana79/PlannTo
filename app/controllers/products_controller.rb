@@ -376,6 +376,8 @@ class ProductsController < ApplicationController
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
     @where_to_buy_items = []
+    vendor_ids = params[:vendor_ids].to_s.split(",")
+    show_count = params[:page_type] == "type_1" ? 6 : 4
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -385,30 +387,30 @@ class ProductsController < ApplicationController
       @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
       @item = @items.first
 
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status)
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, [], vendor_ids)
 
       # Update Items if there is only one item
-      if @where_to_buy_items.count < 6
+      if @where_to_buy_items.count < show_count
         itemsaccess = "related_items"
         items = Item.get_related_items_if_one_item(@items, @publisher, status)
 
         related_items = items - @items
         @item = items.first if @item.blank?
 
-        @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items)
+        @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, related_items, @show_price, status, @where_to_buy_items, vendor_ids)
       end
     end
 
-    if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < 6)
+    if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
       @items = Item.where(:id => configatron.amazon_top_mobiles.to_s.split(","))
       @item = @items.first
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
-      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items)
+      @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items, vendor_ids)
     end
 
-    @where_to_buy_items = @where_to_buy_items.first(6)
+    @where_to_buy_items = @where_to_buy_items.first(show_count)
 
     if @where_to_buy_items.blank?
       itemsaccess = "none"
@@ -418,6 +420,10 @@ class ProductsController < ApplicationController
         @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
+    end
+
+    if !vendor_ids.blank?
+      @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
     end
 
     @ref_url = url
@@ -994,9 +1000,15 @@ class ProductsController < ApplicationController
     params[:ref_url] ||= ""
     params[:item_ids] ||= ""
     params[:page_type] ||= "type_1"
+    params[:page_type] = "type_1" if params[:page_type].blank?
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
+    params[:vendor_ids] ||= ""
+
+    if !params[:vendor_ids].blank?
+      params[:page_type] = "type_2"
+    end
 
     cache_params = ""
     if !params[:item_ids].blank?
