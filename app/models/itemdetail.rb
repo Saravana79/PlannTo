@@ -149,6 +149,8 @@ class Itemdetail < ActiveRecord::Base
 
     vendor_orders = vendor_ids
 
+    return [] if max_count == 0 || max_count.blank?
+
     [*0...max_count].each do |each_val|
       item_keys.each do |each_item|
         vendor_orders.each do |each_vendor|

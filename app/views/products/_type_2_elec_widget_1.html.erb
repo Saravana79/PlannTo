@@ -2,7 +2,7 @@
   <% @where_to_buy_items.each do |item_detail| %>
       <div style="padding: 10px 0px;">
         <span style="float: left;padding-right: 10px;">
-          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
+          <%= get_image_tag_for_elec_widget_1(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
         </span>
         <span style="font-size: 13px;float: left;padding-right: 15px;">
             <div style="font-size: 13px;font-weight: 600;color: #5A5A5A;">

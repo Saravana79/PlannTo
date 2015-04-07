@@ -33,10 +33,11 @@ class Image < ActiveRecord::Base
   end
 
   def set_styles
-    if self.imageable_type == "Item" || self.imageable_type == "Itemdetail"
-      { :original => ["100%", :jpeg], :medium => ["176x132>", :jpeg], :small => ["40x30>", :jpeg] }
+    format = self.avatar_content_type.include?("gif") ? :gif : :jpeg
+    if ((self.imageable_type == "Item" || self.imageable_type == "Itemdetail"))
+      { :original => ["100%", format], :medium => ["176x132>", format], :small => ["40x30>", format] }
     else
-      { :original => ["100%", :jpeg] }
+      { :original => ["100%", format] }
     end
   end
 
@@ -63,9 +64,11 @@ class Image < ActiveRecord::Base
   end
 
   def update_avatar_file_name
-    name = self.avatar_file_name.to_s.split(".")
-    name = name[0...name.size-1]
-    name = name.join(".") + ".jpeg"
-    self.avatar_file_name = name
+    if !self.avatar_content_type.include?("gif")
+      name = self.avatar_file_name.to_s.split(".")
+      name = name[0...name.size-1]
+      name = name.join(".") + ".jpeg"
+      self.avatar_file_name = name
+    end
   end
 end
