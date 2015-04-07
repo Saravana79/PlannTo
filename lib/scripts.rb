@@ -338,3 +338,60 @@ category_lists = [ {:url => "http://www.stylecraze.com/articles/hair/", :page_co
 category_lists.each do |category_list|
   process_category_lists(category_list)
 end
+
+
+
+# Junglee products update to Sourceitem
+
+csv_details = CSV.read("/home/sivakumar/Desktop/jungle_products.csv", { :col_sep => "\t" })
+false_items = []
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  itemtype_name = csv_detail[1].split("/").last.downcase
+  itemtype_hash = {"mobiles" => 6, "laptops" => 23, "tablets" => 13, "netbooks" => 23}
+
+  itemtype_id = itemtype_hash[itemtype_name]
+  name = csv_detail[3]
+  url = csv_detail[7]
+  urlsource = "Junglee"
+  status = 1
+  verified = false
+
+  s = Sourceitem.new(:name => name, :url => url, :urlsource => urlsource, :status => status, :verified => verified, :itemtype_id => itemtype_id, :created_by => "System")
+
+  false_items << s if s.valid?
+end
+
+Sourceitem.import(false_items)
+
+
+# Junglee products update to Sourceitem
+
+csv_details = CSV.read(open("http://cdn1.plannto.com/test_folder/junglee_1.csv"))
+valid_items = []
+itemtype_hash = {"/Categories/Cameras & Accessories/Digital Cameras" => 12, "/Categories/Cameras & Accessories/Digital Cameras" => 12, "/Categories/Cameras & Accessories/Digital Cameras/Digital SLRs" => 12, "/Categories/Cameras & Accessories/Digital Cameras/Compact System Cameras" => 12, "/Categories/Cameras & Accessories/Digital Cameras/Point & Shoot Digital Cameras" => 12, "/Categories/Cameras & Accessories/Digital Cameras/Digital SLR Camera Bundles" => 12, "/Categories/Mobile Phones & Accessories/Mobile Phones" => 6}
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  # itemtype_name = csv_detail[1].split("/").last.downcase
+  # itemtype_hash = {"mobiles" => 6, "laptops" => 23, "tablets" => 13, "netbooks" => 23}
+
+  category = csv_detail[1]
+  itemtype_id = itemtype_hash[category]
+  name = csv_detail[3]
+  url = csv_detail[7]
+  urlsource = "Junglee"
+  status = 1
+  verified = false
+
+  source_item = Sourceitem.where(:url => url, :itemtype_id => itemtype_id, :urlsource => urlsource)
+  if source_item.blank?
+    s = Sourceitem.new(:name => name, :url => url, :urlsource => urlsource, :status => status, :verified => verified, :itemtype_id => itemtype_id, :created_by => "System")
+
+    valid_items << s if s.valid?
+  end
+
+end
+
+Sourceitem.import(valid_items)
