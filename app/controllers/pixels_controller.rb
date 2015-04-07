@@ -3,6 +3,7 @@ class PixelsController < ApplicationController
   skip_before_filter :cache_follow_items, :store_session_url
   before_filter :generate_cookie_if_not_exist
 
+  # cookie matching
   def index
     if !params[:google_gid].blank? && params[:google_error].blank?
       CookieMatch.enqueue_cookie_matching(params, cookies[:plan_to_temp_user_id])

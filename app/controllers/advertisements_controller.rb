@@ -27,16 +27,17 @@ class AdvertisementsController < ApplicationController
     #
     # url_params = Advertisement.make_url_params(params)
 
+    p_item_ids = item_ids = []
+    p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
+
     if !@ad.blank? && @ad.advertisement_type == "fashion"
       return fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
     elsif !@ad.blank? && (@ad.advertisement_type == "static" || @ad.advertisement_type == "flash")
-      return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+      return static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
     elsif !@ad.blank? && @ad.id == 24
-      return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+      return show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids)
     end
 
-    p_item_ids = item_ids = []
-    p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
     @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
 
@@ -195,7 +196,7 @@ class AdvertisementsController < ApplicationController
     return impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc
   end
 
-  def static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+  def static_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids=[])
     # static ad process
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
@@ -204,7 +205,7 @@ class AdvertisementsController < ApplicationController
     @image = @ad.images.first if @image.blank?
 
     if @is_test != "true"
-      @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
       Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
     end
     @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
@@ -237,7 +238,7 @@ class AdvertisementsController < ApplicationController
     @sliced_item_details = @item_details.each_slice(2)
     
     if @is_test != "true"
-      @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
       Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
     end
 
@@ -252,13 +253,13 @@ class AdvertisementsController < ApplicationController
     end
   end
 
-  def show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid)
+  def show_ad_layout(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, item_ids=[])
     # static ad process
     params[:only_layout] = "true"
     @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
 
     if @is_test != "true"
-      @impression_id = AddImpression.add_impression_to_resque(impression_type, nil, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
+      @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
       Advertisement.check_and_update_act_spent_budget_in_redis(@ad.id, winning_price_enc)
     end
     @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
