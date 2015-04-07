@@ -46,34 +46,10 @@ module Admin::AdvertisementsHelper
     "<img src='#{return_url}' alt='' default_src='#{default_src}' id='#{img_id}' class='ad_img_tag' next_src='#{next_src}' width='#{width}px' height='#{height}px'>"
   end
 
-  def get_image_tag_for_elec_widget_1(item_detail, vendor_name='', default_src='', width=100, height=100, format='medium')
-    return_url = ''
-    img_id = ''
-    next_src = ''
-    if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
-      type = item_detail.type.downcase rescue item_detail.item.type.downcase
-      imageurl = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
-      image_url = item_detail.image_url.to_s rescue ""
-      return_url = configatron.root_image_path + 'vendors/' + vendor_name + "/#{format}/" + item_detail.Image.to_s
-      default_src = configatron.root_image_url + type + "/#{format}/" + imageurl
-      next_src = configatron.root_image_url + "vendor" + "/#{format}/" + image_url
-      img_id = "item_details"
-    else
-      type = item_detail.type.downcase rescue item_detail.item.type.downcase
-      imageurl = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
-      image_url = item_detail.image_url.to_s rescue ""
-      return_url = configatron.root_image_url + "vendor" + "/#{format}/" + image_url
-      next_src = configatron.root_image_url + type + "/#{format}/" + imageurl
-      img_id = 'item'
-    end
-
-    # return_url = "http://planntodev.s3.amazonaws.com/vendors/amazon/original/51kyV5FnlmL.jpeg"
-
-    if height == 0
-      height =''
-    end
-
-    "<img src='#{return_url}' alt='' default_src='#{default_src}' id='#{img_id}' class='ad_img_tag' next_src='#{next_src}' width='#{width}px' height='#{height}px'>"
+  def get_vendor_image(item_detail)
+    image_url = item_detail.image_url.to_s rescue "default_vendor.jpeg"
+    image_url = "default_vendor.jpeg" if image_url.blank?
+    src = configatron.root_image_url + "vendor" + "/medium/" + image_url
   end
 
   def assign_url_and_item_access(ref_url, request_referer)
