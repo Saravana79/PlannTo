@@ -378,6 +378,7 @@ class ProductsController < ApplicationController
     @where_to_buy_items = []
     vendor_ids = params[:vendor_ids].to_s.split(",")
     show_count = params[:page_type] == "type_1" ? 6 : 4
+    @multiple_vendors = false
 
     # include pre order status if we show more details.
     unless @items.blank?
@@ -424,6 +425,7 @@ class ProductsController < ApplicationController
 
     if !vendor_ids.blank?
       @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
+      @multiple_vendors = true if vendor_ids.count > 1
     end
 
     @ref_url = url
