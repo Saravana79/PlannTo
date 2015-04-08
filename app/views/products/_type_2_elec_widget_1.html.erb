@@ -1,16 +1,12 @@
 <div id="planntobuy">
   <% @where_to_buy_items.each do |item_detail| %>
       <div style="padding: 0px 0px;">
-       <% if @multiple_vendors == true %>
-          <span style="float: left;padding-right: 10px;">
-            <img width="50px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
-          </span>
-        <% end %>
+   
         <span style="float: left;padding-right: 10px;">
-          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
+          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 60, 0, "medium").html_safe %>
         </span>
         <span style="font-size: 14px;float: left;padding-right: 15px;">
-            <div style="font-size: 13px;font-weight: 600;color: #5A5A5A;" id="nametext">
+            <div style="font-size: 14px;font-weight: 600;color: #5A5A5A;" id="nametext">
               <%= item_detail.ItemName.to_s.truncate(124) %>
             </div>
             <div style="font-family: arial;font-size: 12px;color: #BF0000;font-weight: 600;margin-top: 8px;line-height:1px;">
@@ -25,9 +21,11 @@
               </a>
             </p>
         </span>
+        <% if @multiple_vendors == true %>
          <span style="float: right;padding: 8px;margin-right: 30px;">
           <img width="70px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
         </span>
+         <% end %>
         <br clear="all">
       </div>
   <% end %>
