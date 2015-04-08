@@ -1,26 +1,28 @@
 <div id="planntobuy">
   <% @where_to_buy_items.each do |item_detail| %>
-      <div style="padding: 10px 0px;">
+      <div style="padding: 0px 0px;">
+       
         <span style="float: left;padding-right: 10px;">
-          <img width="50px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
+          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 60, 0, "medium").html_safe %>
         </span>
-        <span style="float: left;padding-right: 10px;">
-          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:small), 50, 0, "medium").html_safe %>
-        </span>
-        <span style="font-size: 13px;float: left;padding-right: 15px;">
-            <div style="font-size: 13px;font-weight: 600;color: #5A5A5A;">
-              <%= item_detail.ItemName.to_s.truncate(24) %>
+        <span style="font-size: 14px;float: left;padding-right: 15px;">
+            <div style="font-size: 13px;font-weight: 600;color: #5A5A5A;" id="nametext">
+              <%= item_detail.ItemName.to_s.truncate(124) %>
             </div>
-            <div style="font-family: arial;font-size: 12px;color: #BF0000;font-weight: 600;margin-top: 5px;">
+            <div style="font-family: arial;font-size: 12px;color: #BF0000;font-weight: 600;margin-top: 8px;line-height:1px;">
               <%= display_price_detail(item_detail) %>
             </div>
         </span>
-        <span style="float: right;margin-top: 10px;">
+        
+        <span style="float: right;">
             <p class="btn">
               <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #F76300;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= item_detail.id %>">
-                Go
+                Buy Now
               </a>
             </p>
+        </span>
+         <span style="float: right;padding: 8px;margin-right: 30px;">
+          <img width="70px" height="px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(item_detail) %>">
         </span>
         <br clear="all">
       </div>
