@@ -25,12 +25,12 @@
                       </div>
                       <div class="product-txt-right">
                         <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="100px">
-                       <div style="padding: 5px 0px;text-transform: capitalize;">
+                       <div style="padding: 5px 0px;text-transform: capitalize;height:60px;">
                          <a href="<%= shop_now_url %>" target="_blank" class="">
                           <h3><%= item_detail.ItemName.to_s.truncate(52) %></h3></a>
                       </div>
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="price"><%= prettify(item_detail) %></p>
+                          <p class="price" style="margin-top:60px;"><%= prettify(item_detail) %></p>
                         </a>
 
                         <p class="btn">
