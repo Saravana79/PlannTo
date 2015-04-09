@@ -24,7 +24,7 @@
                         </a>
                       </div>
                       <div class="product-txt-right">
-                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="80px">
+                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="100px">
                        <div style="padding: 5px 0px;text-transform: capitalize;">
                          <a href="<%= shop_now_url %>" target="_blank" class="">
                           <h3><%= item_detail.ItemName.to_s.truncate(52) %></h3></a>
@@ -71,6 +71,7 @@
 
     .advt-box .product-container h3 {
         font-size: 10px !important;
+        font-family: Arial !important;
     }
 
     #rightarrow:hover {
