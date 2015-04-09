@@ -2079,7 +2079,7 @@ end
       item_type_condition = "item_type = 'product links'"
     elsif type == "type_1"
       # type_val = "text links"
-      item_type_condition = "item_type = 'text links' or item_type = 'product links'"
+      item_type_condition = "(item_type = 'text links' or item_type = 'product links')"
     else
       item_type_condition = "item_type = 'keyword links'"
     end
@@ -2134,6 +2134,10 @@ end
 
       sub_category_condition = sub_categories.include?("All") ? "" : "and sub_category in (#{sub_categories.map(&:inspect).join(",")})"
       # order_condition = "rank desc"
+    elsif url.to_s.include?("pinkvilla.com")
+      sub_category = "fashion_pv"
+      sub_categories = ["apparel","bags","jewellery"]
+      sub_category_condition = "and category in ('fashion') and sub_category in (#{sub_categories.map(&:inspect).join(",")})" if !sub_categories.blank?
     elsif url.to_s.include?("bawarchi.com")
       sub_category = "bawarchi_bawarchi"
       sub_categories = ["beauty", "specialty-aps", "apparel", "baby", "jewelry", "kitchen", "toys", "grocery", "shoes", "watches", "electronics", "aps"]
