@@ -601,7 +601,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = impression.device
+              impression_mongo["device"] = url_params["device"]
               impression_mongo["size"] = url_params["size"]
               impression_mongo["design_type"] = url_params["page_type"]
               impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
@@ -661,7 +661,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = impression.device
+              impression_mongo["device"] = url_params["device"]
               impression_mongo["size"] = url_params["size"]
               impression_mongo["design_type"] = url_params["page_type"]
               impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i

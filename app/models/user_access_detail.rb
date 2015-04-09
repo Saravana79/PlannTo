@@ -13,7 +13,7 @@ class UserAccessDetail < ActiveRecord::Base
     end
   end
 
-  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil, source="google", m_item_type=nil)
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil, source="google", itemtype_id=nil)
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     base_item_ids = Item.get_base_items_from_config()
     # source_categories = SourceCategory.get_source_category_with_paginations()
@@ -47,6 +47,25 @@ class UserAccessDetail < ActiveRecord::Base
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
           plannto_user_detail.google_user_id = cookie_match.google_user_id
           plannto_user_detail.save!
+        end
+
+
+        #plannto user details
+        m_item_type = nil
+
+        if !itemtype_id.blank?
+          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+          if m_item_type.blank?
+            plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
+            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+          else
+            list_of_urls = m_item_type.list_of_urls
+            list_of_urls = list_of_urls.to_a
+            list_of_urls << url
+            list_of_urls.uniq!
+            m_item_type.list_of_urls = list_of_urls
+            m_item_type.save!
+          end
         end
 
         add_fad = u_values.blank? ? true : false

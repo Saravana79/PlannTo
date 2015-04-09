@@ -526,4 +526,6 @@ resources :comments do
 
   match "/reports/article_reports" => "reports#article_reports", :via => [:get]
 
+  resources :plannto_user_details
+
 end
