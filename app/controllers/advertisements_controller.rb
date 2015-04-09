@@ -28,7 +28,7 @@ class AdvertisementsController < ApplicationController
     # url_params = Advertisement.make_url_params(params)
 
     p_item_ids = item_ids = []
-    p_item_ids = item_ids = params[:item_id].split(",") unless params[:item_id].blank?
+    p_item_ids = item_ids = params[:item_id].to_s.split(",") unless params[:item_id].blank?
 
     if !@ad.blank? && @ad.advertisement_type == "fashion"
       return fashion_ad_process(impression_type, url, itemsaccess, url_params, winning_price_enc, sid, params[:item_id], vendor_ids)
