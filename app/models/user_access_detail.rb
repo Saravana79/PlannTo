@@ -13,7 +13,7 @@ class UserAccessDetail < ActiveRecord::Base
     end
   end
 
-  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil, source="google")
+  def self.update_buying_list(user_id, url, type, item_ids,source_categories=nil, source="google", m_item_type=nil)
     # user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
     base_item_ids = Item.get_base_items_from_config()
     # source_categories = SourceCategory.get_source_category_with_paginations()
@@ -39,6 +39,15 @@ class UserAccessDetail < ActiveRecord::Base
 
         u_key = "u:ac:plannto:#{user_id}"
         u_values = $redis.hgetall(u_key)
+
+        plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).last
+
+        if plannto_user_detail.blank?
+          plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => user_id)
+          cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
+          plannto_user_detail.google_user_id = cookie_match.google_user_id
+          plannto_user_detail.save!
+        end
 
         add_fad = u_values.blank? ? true : false
 
@@ -66,7 +75,7 @@ class UserAccessDetail < ActiveRecord::Base
         # Above 30 Ranking
         buying_list = get_buying_list_above(30, u_values, "buyinglist", base_item_ids)
 
-        # Above 30 Ranking
+        # Above 20 Ranking
         buying_list_20 = get_buying_list_above(20, u_values, "buyinglist_20", base_item_ids)
 
 
@@ -86,6 +95,37 @@ class UserAccessDetail < ActiveRecord::Base
           items_hash = u_values.select {|k,_| k.include?("_c")}
           items_count = items_hash.count
           all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
+
+          #plannto user details
+          p m_item_type
+
+          if !m_item_type.blank?
+            existing_item_ids = m_item_type.m_items.map(&:item_id)
+            all_item_ids = all_item_ids.map(&:to_i)
+
+            common_item_ids = all_item_ids & existing_item_ids
+
+            new_item_ids = all_item_ids - common_item_ids
+            removed_item_ids = existing_item_ids - common_item_ids
+
+            if !removed_item_ids.blank?
+              removed_item_ids.each do |item_id|
+                exp_item = m_item_type.m_items.where(:item_id => item_id).last
+                exp_item.destroy
+              end
+            end
+
+            if !new_item_ids.blank?
+              new_item_ids.each do |item_id|
+                lad = u_values["#{item_id}_la"].to_date
+                ranking = u_values["#{item_id}_c"]
+                m_item_type.m_items << MItem.new(:item_id => item_id, :lad => lad, :ranking => ranking)
+              end
+            end
+
+          end
+
+
           all_item_ids = all_item_ids.join(",")
           temp_store = {"item_ids" => u_values["buyinglist"], "item_ids_20" => u_values["buyinglist_20"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s, "source" => new_source.join(",")}
           temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs

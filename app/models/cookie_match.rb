@@ -143,20 +143,58 @@ class CookieMatch < ActiveRecord::Base
                   type = "Spec"
                 end
 
+                #plannto user details
+                itemtype_id = item_detail.itemtype_id
+
+                if !itemtype_id.blank?
+                  m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itmetype_id).last
+                  if m_item_type.blank?
+                    plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [ref_url])
+                    m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itmetype_id).last
+                  else
+                    list_of_urls = m_item_type.list_of_urls
+                    list_of_urls = list_of_urls.to_a
+                    list_of_urls << ref_url
+                    list_of_urls.uniq!
+                    m_item_type.list_of_urls = list_of_urls
+                    m_item_type.save!
+                  end
+                end
+
                 item_ids = item_detail.itemid.to_s rescue ""
-                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, m_item_type)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
               end
             else
-              article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+              article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id, itemtype_id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{ref_url}' group by ac.id").first
 
               unless article_content.blank?
+                #TODO: have to continue from here
                 user_id = new_user_access_detail.plannto_user_id
                 type = article_content.sub_type
                 item_ids = article_content.all_item_ids.to_s rescue ""
-                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source)
+
+                #plannto user details
+                itemtype_id = article_content.itemtype_id
+
+                if !itemtype_id.blank?
+                  m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itmetype_id).last
+                  if m_item_type.blank?
+                    plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [ref_url])
+                    m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itmetype_id).last
+                  else
+                    list_of_urls = m_item_type.list_of_urls
+                    list_of_urls = list_of_urls.to_a
+                    list_of_urls << ref_url
+                    list_of_urls.uniq!
+                    m_item_type.list_of_urls = list_of_urls
+                    m_item_type.save!
+                  end
+                end
+
+                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, m_item_type)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
               end
             end
