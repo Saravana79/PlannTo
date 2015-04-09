@@ -730,4 +730,8 @@ class Itemdetail < ActiveRecord::Base
     end
   end
 
+  def itemtype_id
+    self.item.itemtype_id rescue ""
+  end
+
 end
