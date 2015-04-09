@@ -3,7 +3,10 @@
 <div style="padding:10px;text-align:center;margin:0 auto;">
     <h4 style="text-align:center;  font: 400 16px Arial,Helvetica,sans-serif;color: #FFA500;text-decoration: none;">
         <strong>
-        <%= link_to @category_item_detail.text, @click_url, :target => "_blank",:style => "font: 400 16px Arial,Helvetica,sans-serif;color: #FFA500;text-decoration: none;" %>
+          <a href="<%=@click_url%>" target="_blank" style="font: 400 16px Arial,Helvetica,sans-serif;color: #FFA500;text-decoration: none;">
+            <span><%= @category_item_detail.text%></span>
+            <span style="color: #000;font-style: italic;">Shop Now</span>
+          </a>
         </strong>
     </h4>
 </div>
