@@ -7,7 +7,7 @@
     <% if @item_details.count != 0 %>
         <div class="">
           <ul id="foo3">
-            <div style="text-align: center;border-bottom: 1px solid #F1F0F0;">
+            <div style="text-align: center;border-bottom: 1px solid #F1F0F0;height:40px;">
               <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:2px;" width="">
             </div>
             <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
@@ -21,7 +21,7 @@
 
                       <li class="item_details1" id="item_detail_<%= indx + 1 + next_indx %>">
                         <div class="advt-box">
-                          <div class="product-container">
+                          <div class="product-container" style="max-height:279px;">
                             <div class="product-img-top" style="float:left;white-space:nowrap;height:202px;">
                                <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
                                <span style="display: inline-block;width: 152px;text-align: center;"> 
