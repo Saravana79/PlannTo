@@ -54,10 +54,10 @@ class UserAccessDetail < ActiveRecord::Base
         m_item_type = nil
 
         if !itemtype_id.blank?
-          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itmetype_id).last
+          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
           if m_item_type.blank?
             plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
-            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itmetype_id).last
+            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
           else
             list_of_urls = m_item_type.list_of_urls
             list_of_urls = list_of_urls.to_a
