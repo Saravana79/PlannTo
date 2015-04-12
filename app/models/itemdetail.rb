@@ -718,6 +718,132 @@ class Itemdetail < ActiveRecord::Base
     end
   end
 
+  def self.update_itemdetails_from_auto()
+    car_item_type = Itemtype.where(:itemtype => "CarAccessory").last
+    if car_item_type.blank?
+      car_item_type = Itemtype.new({"itemtype"=>"CarAccessory", "description"=>"Car Accessories", "created_by"=>1, "updated_by"=>nil, "creator_ip"=>nil, "updater_ip"=>nil, "orderby"=>1})
+      car_item_type.save!
+    end
+
+    bike_item_type = Itemtype.where(:itemtype => "MotorbikeAccessory").last
+    if bike_item_type.blank?
+      bike_item_type = Itemtype.new({"itemtype"=>"MotorbikeAccessory", "description"=>"Motorbike Accessories", "created_by"=>1, "updated_by"=>nil, "creator_ip"=>nil, "updater_ip"=>nil, "orderby"=>1})
+      bike_item_type.save!
+    end
+
+    # xml_url = "/home/sivakumar/skype/in_auto_all"
+    
+    xml_url = "http://cdn1.plannto.com/test_folder/in_auto_all"
+    doc = Nokogiri::XML(open(xml_url))
+    node = doc.elements.first
+    vendor_id = "9882"
+
+    node.xpath("//item_data").each do |each_item|
+      begin
+        item_basic_data = each_item.at_xpath("item_basic_data")
+        asin = item_basic_data.at_xpath("item_unique_id").content rescue ""
+        item_name = item_basic_data.at_xpath("item_name").content rescue ""
+        item_name = CGI.unescapeHTML item_name
+        description = item_basic_data.at_xpath("item_short_desc").content rescue ""
+        url = item_basic_data.at_xpath("item_page_url").content rescue ""
+        url = CGI.unescapeHTML url
+        url = url.gsub(/\/ref.*/, "")
+        image_url = item_basic_data.at_xpath("item_image_url_large").content rescue ""
+        price = item_basic_data.at_xpath("item_price").content rescue ""
+
+        category = each_item.at_xpath("merch_cat_list//merch_cat_path").content rescue ""
+        categories = category.to_s.split("/")
+        item_type = categories[2].to_s.downcase
+        itemtype = case item_type
+                     when /car/
+                       car_item_type
+                     when /bike/
+                       bike_item_type
+                   end
+        itemname = categories.last.to_s.downcase
+        next if itemtype.blank? || itemname.blank?
+
+        item = Item.where(:itemtype_id => itemtype.id, :name => itemname).last
+        if item.blank?
+          item = Item.new(:itemtype_id => itemtype.id, :name => itemname, :status => 1, :imageurl => "#{itemname}.jpeg")
+          item.type = itemtype.itemtype
+          item.save!
+        end
+
+
+        availability_str = item_basic_data.at_xpath("item_inventory").content rescue ""
+        status = case availability_str.to_s
+                   when /Usually dispatched.*/ || /Usually ships.*/
+                     1
+                   when /Not yet released/ || /Not yet published/
+                     3
+                   when /This item is not stocked or has been discontinued/
+                     4
+                   when /Out of Stock/
+                     2
+                   else
+                     4
+                 end
+
+        if asin.blank?
+          item_detail = Itemdetail.where(:url => url).first
+        else
+          item_detail = Itemdetail.where(:additional_details => asin).first
+          item_detail = Itemdetail.where(:url => url).first if item_detail.blank?
+        end
+
+        if item_detail.blank?
+          item_detail = Itemdetail.new(:itemid => item.id, :ItemName => item_name, :url => url, :price => price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => asin, :site => "9882", :description => description )
+          item_detail.save!
+        end
+
+        next if !item_detail.image.blank?
+
+        filename = image_url.to_s.split("/").last
+        filename = filename == "noimage.jpg" ? nil : filename
+
+        filename = filename.gsub("%", "_")
+
+        unless filename.blank?
+          name = filename.to_s.split(".")
+          name = name[0...name.size-1]
+          name = name.join(".") + ".jpeg"
+          filename = name
+        end
+
+        if !item_detail.blank? && !image_url.blank? && !filename.blank?
+          p "image----------------------------"
+          @image = item_detail.build_image
+          # tempfile = open(image_url)
+          # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          # avatar.original_filename = filename
+
+          safe_thumbnail_url = URI.encode(URI.decode(image_url))
+          extname = File.extname(safe_thumbnail_url).delete("%")
+
+          basename = File.basename(safe_thumbnail_url, extname).delete("%")
+
+          file = Tempfile.new([basename, extname])
+          file.binmode
+          open(URI.parse(safe_thumbnail_url)) do |data|
+            file.write data.read
+          end
+          file.rewind
+
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar.original_filename = filename
+
+          @image.avatar = avatar
+          if @image.save
+            item_detail.update_attributes(:Image => filename)
+          end
+        end
+      rescue Exception => e
+        p "Error While processing => #{e.message}"
+      end
+    end
+  end
+
   def get_vendor_name
     return_val = nil
     begin

@@ -206,3 +206,8 @@ desc "City State and Place process"
 task :city_state_and_place_process => :environment do
   Place.city_state_place_process()
 end
+
+desc "Updating Itemdetails from auto"
+task :update_itemdetails_from_auto => :environment do
+  Itemdetail.update_itemdetails_from_auto()
+end
