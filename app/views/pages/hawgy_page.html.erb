@@ -35,8 +35,8 @@
       <div class="sidebar-box-contents">
         <ul class="sidebar-category-list">
           <% val.each do |each_key, each_val| %>
-              <li class="sidebar-category sidebar-category-level-0 selected icon-arrow-right nocount">
-                <a href="<%= configatron.hostname %>/pages/hawgy_page?<%= each_val.to_query("item_type") %>"><%= each_key %></a> <span class="count nocount">(410)</span>
+              <li class="sidebar-category sidebar-category-level-0 icon-arrow-right nocount">
+                <a href="<%= configatron.hostname %>/pages/hawgy_page?item_type=<%= each_val %>"><%= each_key %></a> <span class="count nocount">(410)</span>
               </li>
           <% end %>
         </ul>
@@ -52,6 +52,25 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
+        $(".sidebar-category").first().addClass("selected")
+        $(".category-title-overlay").text($(".sidebar-category.selected a").text())
+        $(".sidebar-category a").click(function()
+        {
+            $(".sidebar-category").removeClass("selected")
+            $(this).parent().addClass("selected")
+            var params = $(this).attr("href").split("?")[1]
+            var this_item_type = params.split("=")[1]
+
+            $(".category-title-overlay").text($(this).text())
+
+            $.get("",{page: 1, item_type: this_item_type},null,"script").success(function() {
+
+            })
+            return false
+        })
+
+        item_type = "<%= params[:item_type] %>"
         $('div.pagination a').live('click', function(){
             var page = $(this).text()
             var current = $('em.current').text();
@@ -75,7 +94,9 @@
             };
             var target = document.getElementById('spinner');
 //            var spinner = new Spinner(opts).spin(target);
-            $.get("",{page: page},null,"script").success(function() {
+            console.log(item_type)
+            console.log(123)
+            $.get("",{page: page, item_type: item_type},null,"script").success(function() {
 //                spinner.stop();
             })
             return false;

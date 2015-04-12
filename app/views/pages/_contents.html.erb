@@ -15,13 +15,13 @@
       <% @item_details.each do |item_detail| %>
           <div class="productlisting-box ">
             <div class="productlisting-image">
-              <a href="http://www.hawgy.com/evs-sports-sweat-beanie-black-one-size-fits-most/">
+              <a href="<%= item_detail.url %>" target="_blank">
                 <%= get_image_tag(item_detail, "Amazon", @item.base_item_image_url(:medium), 132, '').html_safe %>
               </a>
             </div>
 
             <h3 class="productlisting-title">
-              <a href="http://www.hawgy.com/evs-sports-sweat-beanie-black-one-size-fits-most/">
+              <a href="<%= item_detail.url %>" target="_blank">
                 <%= item_detail.ItemName.to_s.truncate(50) %>
               </a></h3>
 
@@ -45,3 +45,12 @@
 
   </div>
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function()
+  {
+      item_type = "<%= params[:item_type] %>"
+
+      $(".category-title-overlay").text($(".sidebar-category.selected a").text())
+  })
+</script>
