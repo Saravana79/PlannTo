@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150409135431) do
+ActiveRecord::Schema.define(:version => 20150412131206) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -795,6 +795,7 @@ ActiveRecord::Schema.define(:version => 20150409135431) do
     t.decimal  "mrpprice",                                  :precision => 10, :scale => 0
     t.string   "additional_details"
     t.string   "description"
+    t.string   "category"
   end
 
   add_index "itemdetails", ["itemexternalurl_id"], :name => "itemexternalurl_ids"

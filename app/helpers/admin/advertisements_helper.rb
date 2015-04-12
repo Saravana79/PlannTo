@@ -14,7 +14,7 @@ module Admin::AdvertisementsHelper
     if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
       return_val = configatron.root_image_path + 'vendors/' + vendor_name + '/medium/' + item_detail.Image.to_s
     else
-      return_val = configatron.root_image_url + item_detail.type.downcase + '/medium/' + item_detail.imageurl.to_s
+      return_val = configatron.root_image_url + item_detail.type.to_s.downcase + '/medium/' + item_detail.imageurl.to_s
     end
     return_val
   end
@@ -24,13 +24,13 @@ module Admin::AdvertisementsHelper
     img_id = ''
     next_src = ''
     if !item_detail.blank? && !item_detail.Image.blank? && !vendor_name.blank?
-      type = item_detail.type.downcase rescue item_detail.item.type.downcase
+      type = item_detail.type.to_s.downcase rescue item_detail.item.type.to_s.downcase
       image_url = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
       return_url = configatron.root_image_path + 'vendors/' + vendor_name + "/#{format}/" + item_detail.Image.to_s
       next_src = configatron.root_image_url + type + "/#{format}/" + image_url
       img_id = "item_details"
     else
-      type = item_detail.type.downcase rescue item_detail.item.type.downcase
+      type = item_detail.type.to_s.downcase rescue item_detail.item.type.to_s.downcase
       image_url = item_detail.imageurl.to_s rescue item_detail.item.imageurl.to_s
       return_url = configatron.root_image_url + type + "/#{format}/" + image_url
       next_src = ''
@@ -42,7 +42,7 @@ module Admin::AdvertisementsHelper
     if height == 0
       height =''
     end
-
+    # return_url = "http://ecx.images-amazon.com/images/I/51QAjlrdk7L.01_SL500_.jpg" #TODO: for testing
     "<img src='#{return_url}' alt='' default_src='#{default_src}' id='#{img_id}' class='ad_img_tag' next_src='#{next_src}' width='#{width}px' height='#{height}px'>"
   end
 

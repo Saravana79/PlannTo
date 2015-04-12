@@ -1,0 +1,47 @@
+<div class="content-box">
+  <div style="background-image:url('');min-height: 67px !important;" class="content-box-header category-header">
+    <h1 id="categoryproducts-title" class="heading content-box-title"><span class="category-title-overlay">Helmets</span>
+    </h1>
+  </div>
+
+  <div class="content-box-contents">
+    <div id="categoryproducts-text-main" class="page-text-main"></div>
+
+    <div class="clearall"></div>
+
+
+    <div id="categoryproducts-productlisting" class="productlisting">
+
+      <% @item_details.each do |item_detail| %>
+          <div class="productlisting-box ">
+            <div class="productlisting-image">
+              <a href="http://www.hawgy.com/evs-sports-sweat-beanie-black-one-size-fits-most/">
+                <%= get_image_tag(item_detail, "Amazon", @item.base_item_image_url(:medium), 132, '').html_safe %>
+              </a>
+            </div>
+
+            <h3 class="productlisting-title">
+              <a href="http://www.hawgy.com/evs-sports-sweat-beanie-black-one-size-fits-most/">
+                <%= item_detail.ItemName.to_s.truncate(50) %>
+              </a></h3>
+
+	<span class="productlisting-price-details">
+					<span class="productlisting-notreduced product-notreduced product-price productlisting-price">only</span>
+
+					<span class="product-price-current productlisting-price-current product-price productlisting-price">
+                      <%= prettify(item_detail) %>
+					</span>
+			</span>
+
+            <div class="clearall"></div>
+
+          </div>
+      <% end %>
+    </div>
+
+    <div id="categoryproducts-text-secondary" class="page-text-secondary"></div>
+
+    <%= will_paginate @item_details , :page_links => true %>
+
+  </div>
+</div>

@@ -528,4 +528,6 @@ resources :comments do
 
   resources :plannto_user_details
 
+  match "/pages/hawgy_page" => "pages#hawgy_page", :via => [:get]
+
 end

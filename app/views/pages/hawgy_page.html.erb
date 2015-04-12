@@ -1,0 +1,98 @@
+<link rel="stylesheet" type="text/css" href="http://www.hawgy.com/templates/base/styles/core.css">
+<link rel="stylesheet" type="text/css" href="http://www.hawgy.com/templates/xko-serenity/styles/style.css">
+<link rel="stylesheet" type="text/css" href="http://www.hawgy.com/templates/xko-serenity/styles/colorbox.css">
+<link rel="stylesheet" type="text/css" href="http://www.hawgy.com/templates/xko-serenity/styles/anythingslider.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if (gte IE 6)&(lte IE 8)]>
+<script type="text/javascript"
+        src="http://www.hawgy.com/templates/xko-serenity/scripts/selectivizr-min.js"></script><![endif]-->
+
+<div id="content-categoryproducts" class="content">
+
+<div id="content-main-categoryproducts" class="content-main">
+  <%= render :partial => "contents" %>
+</div>
+
+<div id="content-sidebar-categoryproducts" class="content-sidebar">
+<div class="sidebar-box sidebar-box-search">
+  <div class="sidebar-box-contents">
+    <form method="post" action="http://www.hawgy.com/search/" id="sidebar-search-form">
+      <input type="text" placeholder="Search..." value="" name="keywords" id="sidebar-search-keywords">
+      <input type="submit" value="Search" class="button button-sidebar button-sidebar-search button-sidebar-search-submit">
+    </form>
+  </div>
+</div>
+
+<div class="sidebar-box sidebar-box-categories">
+
+  <% @categories.each do |k, val| %>
+      <div class="sidebar-box-header">
+        <h4><%= k %></h4>
+      </div>
+
+      <div class="sidebar-box-contents">
+        <ul class="sidebar-category-list">
+          <% val.each do |each_key, each_val| %>
+              <li class="sidebar-category sidebar-category-level-0 selected icon-arrow-right nocount">
+                <a href="<%= configatron.hostname %>/pages/hawgy_page?<%= each_val.to_query("item_type") %>"><%= each_key %></a> <span class="count nocount">(410)</span>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+  <% end %>
+</div>
+
+
+</div>
+
+<div class="clearall"></div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('div.pagination a').live('click', function(){
+            var page = $(this).text()
+            var current = $('em.current').text();
+            if (page == "← Previous"){
+                page = parseInt(current) -1
+            }
+            else if (page == "Next →"){
+                page = parseInt(current) + 1
+            }
+
+            var opts = {
+                lines: 12, // The number of lines to draw
+                length: 5, // The length of each line
+                width: 4, // The line thickness
+                radius: 5, // The radius of the inner circle
+                color: '#2EFE9A', // #rgb or #rrggbb
+                speed: 1, // Rounds per second
+                trail: 50, // Afterglow percentage
+                shadow: true, // Whether to render a shadow
+                hwaccel: false // Whether to use hardware acceleration
+            };
+            var target = document.getElementById('spinner');
+//            var spinner = new Spinner(opts).spin(target);
+            $.get("",{page: page},null,"script").success(function() {
+//                spinner.stop();
+            })
+            return false;
+        })
+    });
+
+    $(".ad_img_tag").on("error", function()
+    {
+        var img_id = $(this).attr('id')
+        if (img_id == "item_details") {
+            $(this).attr('id', 'item')
+            $(this).attr("src", $(this).attr('next_src'))
+        }
+        else if (img_id == "item")
+        {
+            $(this).attr('id', 'default_image')
+            $(this).attr("src", $(this).attr('default_src'))
+        }
+    });
+</script>

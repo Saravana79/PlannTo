@@ -724,15 +724,26 @@ class Itemdetail < ActiveRecord::Base
       car_item_type = Itemtype.new({"itemtype"=>"CarAccessory", "description"=>"Car Accessories", "created_by"=>1, "updated_by"=>nil, "creator_ip"=>nil, "updater_ip"=>nil, "orderby"=>1})
       car_item_type.save!
     end
+    car_item_type_tag = ItemtypeTag.where(:name => "CarAccessory").last
+    if car_item_type_tag.blank?
+      car_item_type_tag = ItemtypeTag.new(:name => "CarAccessory", :itemtype_id => 17, :imageurl => "car_accessory.jpeg", :created_by => 1, :status => 1)
+      car_item_type_tag.save!
+    end
 
     bike_item_type = Itemtype.where(:itemtype => "MotorbikeAccessory").last
     if bike_item_type.blank?
       bike_item_type = Itemtype.new({"itemtype"=>"MotorbikeAccessory", "description"=>"Motorbike Accessories", "created_by"=>1, "updated_by"=>nil, "creator_ip"=>nil, "updater_ip"=>nil, "orderby"=>1})
       bike_item_type.save!
     end
+    bike_item_type_tag = ItemtypeTag.where(:name => "MotorbikeAccessory").last
+    if bike_item_type_tag.blank?
+      bike_item_type_tag = ItemtypeTag.new(:name => "MotorbikeAccessory", :itemtype_id => 17, :imageurl => "motorbike_accessory.jpeg", :created_by => 1, :status => 1)
+      bike_item_type_tag.save!
+    end
 
     # xml_url = "/home/sivakumar/skype/in_auto_all"
-    
+    # xml_url = "/home/sivakumar/skype/temp_in_auto_all.xml"
+
     xml_url = "http://cdn1.plannto.com/test_folder/in_auto_all"
     doc = Nokogiri::XML(open(xml_url))
     node = doc.elements.first
@@ -754,21 +765,25 @@ class Itemdetail < ActiveRecord::Base
         category = each_item.at_xpath("merch_cat_list//merch_cat_path").content rescue ""
         categories = category.to_s.split("/")
         item_type = categories[2].to_s.downcase
-        itemtype = case item_type
-                     when /car/
-                       car_item_type
-                     when /bike/
-                       bike_item_type
-                   end
-        itemname = categories.last.to_s.downcase
-        next if itemtype.blank? || itemname.blank?
-
-        item = Item.where(:itemtype_id => itemtype.id, :name => itemname).last
-        if item.blank?
-          item = Item.new(:itemtype_id => itemtype.id, :name => itemname, :status => 1, :imageurl => "#{itemname}.jpeg")
-          item.type = itemtype.itemtype
-          item.save!
+        p item_type
+        case item_type
+         when /car/
+            itemtype_now = car_item_type
+            itemtype_tag = car_item_type_tag
+         when /bike/
+           itemtype_now = bike_item_type
+           itemtype_tag = bike_item_type_tag
         end
+        itemname = categories.last.to_s.downcase
+        p itemtype_tag
+        next if itemtype_tag.blank? || itemname.blank?
+
+        # item = Item.where(:itemtype_id => itemtype.id, :name => itemname).last
+        # if item.blank?
+        #   item = Item.new(:itemtype_id => itemtype.id, :name => itemname, :status => 1, :imageurl => "#{itemname}.jpeg")
+        #   item.type = itemtype.itemtype
+        #   item.save!
+        # end
 
 
         availability_str = item_basic_data.at_xpath("item_inventory").content rescue ""
@@ -793,8 +808,10 @@ class Itemdetail < ActiveRecord::Base
         end
 
         if item_detail.blank?
-          item_detail = Itemdetail.new(:itemid => item.id, :ItemName => item_name, :url => url, :price => price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => asin, :site => "9882", :description => description )
+          item_detail = Itemdetail.new(:itemid => itemtype_tag.id, :ItemName => item_name, :url => url, :price => price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => asin, :site => "9882", :description => description, :category => category)
           item_detail.save!
+        else
+          item_detail.update_attributes!(:itemid => itemtype_tag.id, :ItemName => item_name, :price => price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => asin, :site => "9882", :description => description, :category => category)
         end
 
         next if !item_detail.image.blank?
@@ -858,6 +875,15 @@ class Itemdetail < ActiveRecord::Base
 
   def itemtype_id
     self.item.itemtype_id rescue ""
+  end
+
+  def self.get_auto_categories
+    # car_item_type = Itemtype.where(:itemtype => "CarAccessory").last
+    # bike_item_type = Itemtype.where(:itemtype => "MotorbikeAccessory").last
+    # car_item_type_items = Item.where(:itemtype_id => car_item_type.id).select("distinct name").map(&:name)
+    # bike_item_type_items = Item.where(:itemtype_id => bike_item_type.id).select("distinct name").map(&:name)
+    # return {car_item_type.itemtype => car_item_type_items, bike_item_type.itemtype => bike_item_type_items}
+    return {"Car" => {"Car Care Exterior (Shampoos, Polishes, Waxes)" => "Paint & Exterior Care", "Car Care Interior (Dashboard & Trim care, Cleaners)" => "Interior Care", "Car Parts (Filters, Bulbs, wiper blades)" => "Car Parts", "Car Electronics (Audio, GPS, Chargers)" => "Car Electronics", "Car Accessories (Covers, Mats, Freshners)"=> "Car Accessories"}, "Bike" => {"Helmets (Flip-up, Full face, Open face)" => "Helmets", "Gloves" => "Gloves", "Jackets" => "Jackets", "Head & Face Covers" => "Head & Face Covers", "Motor Oils (Engine Oil, Addictives)" => "Engine Oils for Motorbikes", "Bike Parts (Fenders, Cowls, Deflectors)" => "Motorbike Accessories & Parts"}}
   end
 
 end

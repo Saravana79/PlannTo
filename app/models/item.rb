@@ -275,11 +275,11 @@ class Item < ActiveRecord::Base
   def base_item_image_url(imagetype = :medium)
         
       if(imagetype == :medium)
-        configatron.root_image_url + self.type.downcase + '/medium/default_' + self.type.downcase + ".jpeg"
+        configatron.root_image_url + self.type.to_s.downcase + '/medium/default_' + self.type.to_s.downcase + ".jpeg"
       elsif (imagetype == :org)
-        configatron.root_image_url + self.type.downcase + '/org/default_' + self.type.downcase + ".jpeg"
+        configatron.root_image_url + self.type.to_s.downcase + '/org/default_' + self.type.to_s.downcase + ".jpeg"
       else   
-         configatron.root_image_url + self.type.downcase + '/small/default_' + self.type.downcase + ".jpeg"
+         configatron.root_image_url + self.type.to_s.downcase + '/small/default_' + self.type.to_s.downcase + ".jpeg"
       end
   end
 
