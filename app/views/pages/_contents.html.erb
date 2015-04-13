@@ -1,5 +1,15 @@
 <div class="content-box">
-  <div style="background-image:url('');min-height: 67px !important;" class="content-box-header category-header">
+  <div class="sidebar-box sidebar-box-search">
+  <div class="sidebar-box-contents">
+    <form method="post" action="<%= configatron.hostname %>/pages/estore_search" id="sidebar-search-form">
+      <input type="text" placeholder="Search..." value="" name="keywords" id="sidebar-search-keywords">
+      <input type="submit" value="Search" class="button button-sidebar button-sidebar-search button-sidebar-search-submit">
+    </form>
+  </div>
+  </div>
+
+
+  <div style="" class="content-box-header category-header">
     <h1 id="categoryproducts-title" class="heading content-box-title"><span class="category-title-overlay">Helmets</span>
     </h1>
   </div>
@@ -42,7 +52,7 @@
           </div>
       <% end %>
     </div>
-
+    <br clear="both" />
     <div id="categoryproducts-text-secondary" class="page-text-secondary"></div>
 
     <% if @search  == true %>
