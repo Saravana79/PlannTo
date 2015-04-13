@@ -16,7 +16,11 @@
           <div class="productlisting-box ">
             <div class="productlisting-image">
               <a href="<%= item_detail.url %>" target="_blank">
-                <%= get_image_tag(item_detail, "Amazon", @item.base_item_image_url(:medium), 132, '').html_safe %>
+                <% if @search == true %>
+                    <img width="132px" height="px" class="ad_img_tag" id="item_details" alt="" src="<%= item_detail.image_url %>">
+                <% else %>
+                    <%= get_image_tag(item_detail, "Amazon", @item.base_item_image_url(:medium), 132, '').html_safe %>
+                <% end %>
               </a>
             </div>
 
@@ -41,7 +45,11 @@
 
     <div id="categoryproducts-text-secondary" class="page-text-secondary"></div>
 
-    <%= will_paginate @item_details , :page_links => true %>
+    <% if @search  == true %>
+        <%= link_to "More Items...", @more_items, :target => "_blank", :class => "more_items", :style => "color:black;" %>
+    <% else %>
+        <%= will_paginate @item_details , :page_links => true %>
+    <% end %>
 
   </div>
 </div>

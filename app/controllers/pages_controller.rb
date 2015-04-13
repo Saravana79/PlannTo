@@ -10,6 +10,12 @@ class PagesController < ApplicationController
     @item = ItemtypeTag.where(:name => "CarAccessory").last
     item_type = CGI.unescape_html(item_type)
     @item_details = Itemdetail.where("category like '%#{item_type}%'").paginate(:page => params[:page], :per_page => 12)
+    @search = false
     render :layout => false
+  end
+
+  def estore_search
+    @item_details, @more_items = Item.get_amazon_products_from_keyword_for_estore(params[:keywords].to_s)
+    @search = true
   end
 end

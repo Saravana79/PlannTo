@@ -2312,6 +2312,43 @@ end
     return items
   end
 
+  def self.get_amazon_products_from_keyword_for_estore(keyword)
+    items = []
+    search_url = ""
+    begin
+      res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+        Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
+      end
+
+      loop_items = res.items.first(12)
+
+      loop_items.each_with_index do |each_item, index|
+        item = OpenStruct.new
+
+        item.ItemName = each_item.get_element("ItemAttributes").get("Title")
+
+        sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+        if sale_price.blank?
+          sale_price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+        end
+        item.price = sale_price.gsub("INR ", "")
+        item.image_url = each_item.get("ImageSets/ImageSet/MediumImage/URL") rescue ""
+
+        item.percentage_saved = each_item.get_element("Offers/Offer/OfferListing").get("PercentageSaved") rescue ""
+
+
+        item.url = each_item.get("DetailPageURL")
+        items << item
+      end
+
+      search_url = res.doc.at_xpath("ItemSearchResponse/Items/MoreSearchResultsUrl").content rescue "http://amazon.in"
+    rescue Exception => e
+      p "Error While getting errors => #{e.message}"
+    end
+
+    return items, search_url
+  end
+
   def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, fashion_id)
     item = Item.where(:id => item_ids.split(",")).first
     itemdetails = []
