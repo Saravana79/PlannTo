@@ -33,7 +33,7 @@
 					<span class="productlisting-notreduced product-notreduced product-price productlisting-price">only</span>
 
 					<span class="product-price-current productlisting-price-current product-price productlisting-price">
-                      <%= prettify(item_detail) %>
+                      <%= @search == true ? item_detail.price : prettify(item_detail) %>
 					</span>
 			</span>
 

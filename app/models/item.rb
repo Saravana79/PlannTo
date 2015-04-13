@@ -2024,7 +2024,7 @@ end
       if sale_price.blank?
         sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
       end
-      sale_price = sale_price.gsub("INR ", "")
+      sale_price = sale_price.gsub("INR", "Rs")
     end
     sale_price
   end
