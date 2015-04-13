@@ -94,5 +94,13 @@
           return false;
 
       });
+
+      $(".productlisting-box").click(function(e)
+      {
+          var href = $(this).find(".productlisting-image a").attr("href")
+          window.open(href, "_blank")
+          return false;
+          e.preventDefault;
+      })
   })
 </script>
