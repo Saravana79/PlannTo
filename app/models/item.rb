@@ -2024,7 +2024,7 @@ end
       if sale_price.blank?
         sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
       end
-      sale_price = sale_price.gsub("INR", "Rs")
+      sale_price = sale_price.gsub("INR ", "")
     end
     sale_price
   end
@@ -2331,7 +2331,7 @@ end
         if sale_price.blank?
           sale_price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue ""
         end
-        item.price = sale_price.gsub("INR ", "")
+        item.price = sale_price.gsub("INR", "Rs")
         item.image_url = each_item.get("ImageSets/ImageSet/MediumImage/URL") rescue ""
 
         item.percentage_saved = each_item.get_element("Offers/Offer/OfferListing").get("PercentageSaved") rescue ""

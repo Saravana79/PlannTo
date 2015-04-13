@@ -10,7 +10,13 @@
 
 
   <div style="" class="content-box-header category-header">
-    <h1 id="categoryproducts-title" class="heading content-box-title"><span class="category-title-overlay">Helmets</span>
+    <h1 id="categoryproducts-title" class="heading content-box-title"><span class="category-title-overlay">
+      <% if @search == true %>
+        <%= @search_header %>
+      <% else %>
+        Helmets
+      <% end %>
+    </span>
     </h1>
   </div>
 
@@ -69,6 +75,24 @@
   {
       item_type = "<%= params[:item_type] %>"
 
-      $(".category-title-overlay").text($(".sidebar-category.selected a").text())
+      <% if @search == true %>
+      $(".sidebar-category.selected").removeClass("selected")
+      <% else %>
+        $(".category-title-overlay").text($(".sidebar-category.selected a").text())
+      <% end %>
+
+      $("form#sidebar-search-form").submit(function() {
+
+          var data = $('form#sidebar-search-form').serialize();
+
+          var url = $(this).attr("action");
+
+          $.post(url ,data, function(result){
+              ""
+          });
+
+          return false;
+
+      });
   })
 </script>

@@ -575,20 +575,6 @@ input[type="submit"]::-moz-focus-inner { padding-top: 1px; }
             })
             return false;
         })
-
-        $("form#sidebar-search-form").submit(function() {
-
-            var data = $('form#sidebar-search-form').serialize();
-
-            var url = $(this).attr("action");
-
-            $.post(url ,data, function(result){
-              ""
-            });
-
-            return false;
-
-        });
     });
 
     $(".ad_img_tag").on("error", function()

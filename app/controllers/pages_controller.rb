@@ -17,5 +17,6 @@ class PagesController < ApplicationController
   def estore_search
     @item_details, @more_items = Item.get_amazon_products_from_keyword_for_estore(params[:keywords].to_s)
     @search = true
+    @search_header = "Search Results for (#{params[:keywords].to_s})"
   end
 end
