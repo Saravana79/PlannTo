@@ -2350,7 +2350,7 @@ end
   end
 
   def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, fashion_id)
-    item = Item.where(:id => item_ids.split(",")).first
+    item = item_ids.blank? ? nil : Item.where(:id => item_ids.split(",")).first
     itemdetails = []
     if !item.blank?
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
@@ -2387,16 +2387,16 @@ end
   end
 
   def self.get_item_id_and_random_id(ad,item_ids)
-    item = Item.where(:id => item_ids.to_s.split(",")).first
+    item = item_ids.blank? ? nil : Item.where(:id => item_ids.to_s.split(",")).first
     vendor_ids = [ad.vendor_id]
     itemdetails = []
     if !item.blank?
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails_rand_id = [*1..itemdetails.count].sample
     else
-      item_name = Item.get_fashion_item_name_random()
+      item_name, item_id = Item.get_fashion_item_name_random()
 
-      item = Item.where(:name => item_name).first
+      item = Item.where(:id => item_id).first
       itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
       itemdetails_rand_id = [*1..itemdetails.count].sample
     end
@@ -2407,28 +2407,37 @@ end
     sample_int = [*1..100].sample
     if sample_int < 15
       item_name = "Saree"
+      item_id = 72274
     elsif sample_int < 30
       item_name = "SalwarSuit"
+      item_id = 72275
     elsif sample_int < 40
       item_name = "WomenTop"
+      item_id = 72276
     elsif sample_int < 52
       item_name = "DressMaterial"
+      item_id = 72346
     elsif sample_int < 70 #TODO: Added +8 temp
       item_name = "Kurta"
+      item_id = 72347
     elsif sample_int < 74
       item_name = "Sunglass"
+      item_id = 72348
     # elsif sample_int < 74
     #   item_name = "Underwear"
     # elsif sample_int < 74
     #   item_name = "Legging"
     elsif sample_int < 82
       item_name = "Dress"
+      item_id = 72351
     elsif sample_int < 90
       item_name = "Handbag"
+      item_id = 72352
     elsif sample_int < 100
       item_name = "Shoe"
+      item_id = 72353
     end
-    item_name
+    return item_name, item_id
   end
 
   def self.get_price_text_from_url(url, publisher)

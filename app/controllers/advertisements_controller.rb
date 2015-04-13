@@ -439,6 +439,10 @@ class AdvertisementsController < ApplicationController
       if !ad.blank? && ad.advertisement_type == "fashion"
         item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
 
+        if random_id.blank?
+          item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
+        end
+
         params[:item_id] = item_id
         params[:fashion_id] = random_id
       end
