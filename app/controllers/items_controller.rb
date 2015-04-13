@@ -282,7 +282,7 @@ class ItemsController < ApplicationController
     end
 
   def remove_duplicate_item
-    if !params[:item_ids].blank? && params[:item_ids].to_s.split(",").count != 2
+    if !params[:item_ids].blank? && params[:item_ids].to_s.split(",").count < 2
       flash[:alert] = "Invalid Item count"
     elsif params[:item_ids].to_s.split(",").count == 2
       begin
@@ -290,6 +290,19 @@ class ItemsController < ApplicationController
         flash[:notice] = "Successfully Deleted Duplicate Item"
       rescue Exception => e
         flash[:alert] = "Error while deleting duplicate item"
+      end
+    elsif params[:item_ids].to_s.split(",").count >= 2
+      begin
+        item_ids = params[:item_ids].to_s.split(",")
+        first_id = item_ids.first
+        duplicate_ids = item_ids - [first_id]
+        duplicate_ids.each do |each_duplicate_id|
+          Item.process_and_move_duplicate_item_details("#{first_id},#{each_duplicate_id}")
+        end
+
+        flash[:notice] = "Successfully Deleted Duplicate Items"
+      rescue Exception => e
+        flash[:alert] = "Error while deleting duplicate items"
       end
     end
   end
