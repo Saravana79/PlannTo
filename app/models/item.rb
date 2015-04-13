@@ -2397,7 +2397,10 @@ end
       if itemdetails_count.blank?
         itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count rescue nil
 
-        $redis.set("itemdetails_count:#{item_id}", itemdetails_count) if !itemdetails_count.blank?
+        if !itemdetails_count.blank?
+          $redis.set("itemdetails_count:#{item_id}", itemdetails_count)
+          $redis.expire("itemdetails_count:#{item_id}", 3.hours)
+        end
       end
 
       itemdetails_count = itemdetails_count.to_i
@@ -2413,7 +2416,10 @@ end
         # item = Item.where(:id => item_id).first
         itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count
 
-        $redis.set("itemdetails_count:#{item_id}", itemdetails_count) if !itemdetails_count.blank?
+        if !itemdetails_count.blank?
+          $redis.set("itemdetails_count:#{item_id}", itemdetails_count)
+          $redis.expire("itemdetails_count:#{item_id}", 3.hours)
+        end
       end
 
       itemdetails_count = itemdetails_count.to_i
