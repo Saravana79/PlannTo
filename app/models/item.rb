@@ -2388,19 +2388,38 @@ end
 
   def self.get_item_id_and_random_id(ad,item_ids)
     item = item_ids.blank? ? nil : Item.where(:id => item_ids.to_s.split(",")).first
+    item_id = item.blank? ? nil : item.id
     vendor_ids = [ad.vendor_id]
     itemdetails = []
-    if !item.blank?
-      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails_rand_id = [*1..itemdetails.count].sample
+    if !item_id.blank?
+      itemdetails_count = $redis.get("itemdetails_count:#{item_id}")
+
+      if itemdetails_count.blank?
+        itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count rescue nil
+
+        $redis.set("itemdetails_count:#{item_id}", itemdetails_count) if !itemdetails_count.blank?
+      end
+
+      itemdetails_count = itemdetails_count.to_i
+
+      itemdetails_rand_id = [*1..itemdetails_count].sample
     else
       item_name, item_id = Item.get_fashion_item_name_random()
+      # item = Item.where(:name => item_name).first
 
-      item = Item.where(:id => item_id).first
-      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      itemdetails_rand_id = [*1..itemdetails.count].sample
+      itemdetails_count = $redis.get("itemdetails_count:#{item_id}")
+
+      if itemdetails_count.blank?
+        # item = Item.where(:id => item_id).first
+        itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count
+
+        $redis.set("itemdetails_count:#{item_id}", itemdetails_count) if !itemdetails_count.blank?
+      end
+
+      itemdetails_count = itemdetails_count.to_i
+      itemdetails_rand_id = itemdetails_count == 0 ? "" : [*1..itemdetails_count].sample
     end
-    return item.id, itemdetails_rand_id
+    return item_id, itemdetails_rand_id
   end
 
   def self.get_fashion_item_name_random()

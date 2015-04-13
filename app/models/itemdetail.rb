@@ -24,6 +24,16 @@ class Itemdetail < ActiveRecord::Base
                  itemdetails.cashback end) asc")
   end
 
+  def self.get_item_details_count_by_item_ids(item_ids, vendor_ids)
+    # status_condition = vendor_ids.count > 1 ? " and itemdetails.status in (1,3,2)" : ""
+    status_condition = " and itemdetails.status in (1,3)"
+    # vendor_id = sanitize(vendor_id)
+
+
+    find_by_sql("SELECT count(*) as count FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
+                 and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')})")
+  end
+
   def self.get_item_detail_with_lowest_price(item_id)
     # item_id = sanitize(item_id)
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id = #{item_id}
