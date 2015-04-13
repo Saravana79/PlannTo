@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
 
-  def hawgy_page
+  def estore_plugin
     @item_details = []
     # if params[:item_type].blank?
     #   @categories = Itemdetail.get_auto_categories()

@@ -528,6 +528,7 @@ resources :comments do
 
   resources :plannto_user_details
 
-  match "/pages/hawgy_page" => "pages#hawgy_page", :via => [:get]
+  match "/pages/estore_plugin" => "pages#estore_plugin", :via => [:get]
+  match "/pages/estore_search" => "pages#estore_search", :via => [:get]
 
 end
