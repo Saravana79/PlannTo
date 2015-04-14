@@ -404,6 +404,16 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def gaadi_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:ads_id] ||= 45
+    params[:more_vendors] ||= "false"
+    params[:is_test] ||= "true"
+    params[:item_id] ||= "581,582,583,584,585,586"
+    render :layout => false
+  end
+
   def fashion_demo
     params[:ref_url] ||= ""
     params[:page_type] ||= "type_1"
