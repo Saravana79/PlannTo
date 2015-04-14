@@ -313,6 +313,18 @@ module ApplicationHelper
     end
   end
 
+  def prettify_mrpprice(item_detail)
+    pre_order_val = item_detail.status == 3 ? "Pre-Order" : ""
+
+    if pre_order_val == ""
+      price = item_detail.mrpprice.blank? ? "" : number_to_indian_currency("%.2f" % item_detail.mrpprice.to_f)
+    else
+      price = ""
+    end
+
+    price
+  end
+
    def prettifyforcarprice(item_detail)
       price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.price.to_f)
    end

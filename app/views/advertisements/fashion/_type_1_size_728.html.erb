@@ -14,7 +14,8 @@
                             <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="92px" height="70px"> -->
                           </a>
                         </div>
-                        <p class="price"><%= prettify(item_detail) %></p>
+                        <p class="mrpprice" style="text-decoration: line-through;margin-top: 90px;color: #555 !important"><%= prettify_mrpprice(item_detail) %></p>
+                        <p class="price" style="margin-top: 0px; !important!"><%= prettify(item_detail) %></p>
 
                         <p class="btn">
                           <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>

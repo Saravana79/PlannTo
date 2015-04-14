@@ -30,7 +30,7 @@ class Itemdetail < ActiveRecord::Base
     # vendor_id = sanitize(vendor_id)
 
 
-    find_by_sql("SELECT count(*) as count FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
+    find_by_sql("SELECT count(*) as count FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.to_a.map(&:inspect).join(', ')})
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')})")
   end
 

@@ -30,7 +30,8 @@
                           <h3><%= item_detail.ItemName.to_s.truncate(52) %></h3></a>
                       </div>
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="price" style="margin-top:60px;"><%= prettify(item_detail) %></p>
+                          <p class="mrpprice" style="text-decoration: line-through;margin-top: 60px;color: #555 !important"><%= prettify_mrpprice(item_detail) %></p>
+                          <p class="price" style="margin-top: 0px; !important!"><%= prettify(item_detail) %></p>
                         </a>
 
                         <p class="btn">
