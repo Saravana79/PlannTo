@@ -2214,6 +2214,23 @@ end
     category_item_detail = Item.get_amazon_product_link_from_asin(asin)
   end
 
+  def self.remove_duplicate_items_process(item_ids)
+    begin
+      item_ids = item_ids.to_s.split(",")
+      first_id = item_ids.first
+      duplicate_ids = item_ids - [first_id]
+      duplicate_ids.each do |each_duplicate_id|
+        begin
+          Item.process_and_move_duplicate_item_details("#{first_id},#{each_duplicate_id}")
+        rescue Exception => e
+          p "Error for items => #{each_duplicate_id}"
+        end
+      end
+    rescue Exception => e
+      p "There was the error while processing duplicate items"
+    end
+  end
+
   def self.process_and_move_duplicate_item_details(item_ids)
     org_item, dup_item = item_ids.to_s.split(",")
 
