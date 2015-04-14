@@ -2460,9 +2460,12 @@ end
     elsif sample_int < 52
       item_name = "DressMaterial"
       item_id = 72346
-    elsif sample_int < 70 #TODO: Added +8 temp
+    elsif sample_int < 62
       item_name = "Kurta"
       item_id = 72347
+    elsif sample_int < 70
+      item_name = "Watch"
+      item_id = 73288
     elsif sample_int < 74
       item_name = "Sunglass"
       item_id = 72348

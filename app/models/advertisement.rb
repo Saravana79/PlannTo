@@ -954,7 +954,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       loop_hash = {"saree" => {:node => 1968256031, :page_count => 10}, "salwar_suit" => {:node => 3723380031, :page_count => 10}, "women_top" => {:node => 1968543031, :page_count => 8},
                    "dress_material" => {:node => 3723377031, :page_count => 10}, "kurta" => {:node => 1968255031, :page_count => 8}, "underwear" => {:node => 1968457031, :page_count => 2},
                    "legging" => {:node => 1968456031, :page_count => 2}, "dress" => {:node => 1968445031, :page_count => 8}, "handbag" => {:node => 1983346031, :page_count => 10},
-                   "sunglass" => {:node => 1968401031, :page_count => 3}, "shoe" => {:node => 1983578031, :page_count => 10}}
+                   "sunglass" => {:node => 1968401031, :page_count => 3}, "shoe" => {:node => 1983578031, :page_count => 10}, "watch" => {:node => 1350387031, :page_count => 3}}
 
 
       loop_hash.each do |each_key, each_val|
@@ -1278,6 +1278,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   rescue Exception => e
                     current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
                   end
+                  saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+                  saved_percentage = offer_listing.get("PercentageSaved") rescue 0
                   availability_str = offer_listing.get("Availability")
 
                   if availability_str.blank? && !offer_summary.blank?
@@ -1305,7 +1307,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                              end
                   end
 
-                  item_detail.update_attributes!(:price => current_price, :status => status, :last_verified_date => Time.now)
+                  mrp_price = current_price.to_f + saved_price.to_f
+                  item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price, :last_verified_date => Time.now)
                 elsif !offer_summary.blank?
                   current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
 
@@ -1350,6 +1353,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   rescue Exception => e
                     current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
                   end
+                  saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+                  saved_percentage = offer_listing.get("PercentageSaved") rescue 0
                   availability_str = offer_listing.get("Availability")
 
                   if availability_str.blank? && !offer_summary.blank?
@@ -1388,8 +1393,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
                   end
                 end
 
+                mrp_price = current_price.to_f + saved_price.to_f
+
                 item = Item.where(:name => each_key.camelize).first
-                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882" , :last_verified_date => Time.now)
+                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :savepercentage => saved_percentage, :mrpprice => mrp_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "9882" , :last_verified_date => Time.now)
                 item_detail.save!
 
                 next if !item_detail.image.blank?
