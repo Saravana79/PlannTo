@@ -406,7 +406,7 @@ class AdvertisementsController < ApplicationController
 
   def gaadi_demo
     params[:ref_url] ||= ""
-    params[:page_type] ||= "type_1"
+    params[:page_type] ||= "type_5"
     params[:ads_id] ||= 45
     params[:more_vendors] ||= "false"
     params[:is_test] ||= "true"

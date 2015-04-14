@@ -2229,8 +2229,9 @@ end
         old_item_ids_array = content.allitems.map(&:id)
         all_item_ids = old_item_ids_array - [dup_item.id]
         all_item_ids << org_item.id
+        all_item_ids = all_item_ids.flatten.map(&:to_i).uniq
 
-        all_item_ids_join = all_item_ids.join(",")
+        all_item_ids_join = all_item_ids.map(&:to_i).uniq.join(",")
         content.update_with_items!({}, all_item_ids_join)
         new_items << all_item_ids
       end
