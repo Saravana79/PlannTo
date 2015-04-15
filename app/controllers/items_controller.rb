@@ -286,14 +286,16 @@ class ItemsController < ApplicationController
       flash[:alert] = "Invalid Item count"
     elsif params[:item_ids].to_s.split(",").count == 2
       begin
-        Item.process_and_move_duplicate_item_details(params[:item_ids])
-        flash[:notice] = "Successfully Deleted Duplicate Item"
+        Resque.enqueue(RemoveDuplicateItems, 'remove_duplicate_items_process', params[:item_ids].to_s)
+        # Item.process_and_move_duplicate_item_details(params[:item_ids])
+        # flash[:notice] = "Successfully Deleted Duplicate Item"
+        flash[:notice] = "Your Process was Enqueued"
       rescue Exception => e
         flash[:alert] = "Error while deleting duplicate item"
       end
     elsif params[:item_ids].to_s.split(",").count >= 2
       Resque.enqueue(RemoveDuplicateItems, 'remove_duplicate_items_process', params[:item_ids].to_s)
-      flash[:alert] = "Your Process was Enqueued"
+      flash[:notice] = "Your Process was Enqueued"
     end
   end
 
