@@ -144,6 +144,16 @@
     <div class="float_lft"> <%= f.text_field :excluded_sites %> </div>
     </div>
 
+    <div class="fields-div">
+      <div class="title_header float_lft">Having Related Items :</div>
+      <div class="float_lft"> <%= f.select :having_related_items, options_for_select([true, false], @advertisement.having_related_items) %> </div>
+    </div>
+
+    <div class="fields-div related_item_ids">
+      <div class="title_header float_lft">Related Item Ids :</div>
+      <div class="float_lft"> <%= f.text_field :related_item_ids %> </div>
+    </div>
+
     <div class="fields-div" style="clear:both;">
       <div class="title_header float_lft">Start Date :</div>
       <div>
@@ -809,6 +819,18 @@
       ad_to_product_list()
       var initial_count = $("#ad_product_list_ul li").length
 
+      var changed_val = $("#advertisement_having_related_items").val()
+
+      if (changed_val == "true")
+      {
+          $(".related_item_ids").show()
+      }
+      else
+      {
+          $(".related_item_ids").hide()
+          $("#advertisement_related_item_ids").val("")
+      }
+
       $(".ui-menu-item").live("click", function()
       {
           var new_count = $("#ad_product_list_ul li").length
@@ -830,9 +852,23 @@
           $.each([1,2,3,4,5], function(inx,val)
           {
               length = length - 1
-              console.log(length)
               $("#ad_product_list").append(li_values[length])
           });
       }
+
+      $("#advertisement_having_related_items").change(function()
+      {
+          var changed_val = $(this).val()
+
+          if (changed_val == "true")
+          {
+              $(".related_item_ids").show()
+          }
+          else
+          {
+              $(".related_item_ids").hide()
+              $("#advertisement_related_item_ids").val("")
+          }
+      })
   })
 </script>

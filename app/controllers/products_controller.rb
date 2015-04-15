@@ -911,7 +911,7 @@ class ProductsController < ApplicationController
     end
     cache_params = CGI::unescape(cache_params)
 
-    p cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}.js"
+    cache_key = "views/#{host_name}/where_to_buy_items_vendor.js?#{cache_params}.js"
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
@@ -946,6 +946,7 @@ class ProductsController < ApplicationController
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
+    params[:ref_url] ||= ""
 
     #Get dynamic id from url
 
@@ -1009,6 +1010,7 @@ class ProductsController < ApplicationController
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
+    params[:ref_url] ||= ""
     params[:vendor_ids] ||= ""
 
     cache_params = ""
@@ -1049,6 +1051,7 @@ class ProductsController < ApplicationController
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
+    params[:ref_url] ||= ""
 
     cache_params = ""
     if !params[:item_ids].blank?
@@ -1059,6 +1062,8 @@ class ProductsController < ApplicationController
     cache_params = CGI::unescape(cache_params)
 
     cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}.js"
+
+    p cache_key
 
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
