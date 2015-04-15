@@ -403,12 +403,15 @@ class ProductsController < ApplicationController
     end
 
     if @where_to_buy_items.blank? || (!@where_to_buy_items.blank? && @where_to_buy_items.count < show_count)
-      @items = Item.where(:id => configatron.amazon_top_mobiles.to_s.split(","))
+      item_ids = configatron.amazon_top_mobiles.to_s.split(",")
+      first_six_items = item_ids.shuffle.first(6)
+      @items = Item.where(:id => first_six_items)
       @item = @items.first
       @publisher = Publisher.getpublisherfromdomain(url)
       status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
       itemaccess = "popular_items"
       @where_to_buy_items = Itemdetail.get_where_to_buy_items_using_vendor(@publisher, @items, @show_price, status, @where_to_buy_items, vendor_ids)
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     end
 
     @where_to_buy_items = @where_to_buy_items.first(show_count)
