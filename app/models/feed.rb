@@ -275,18 +275,18 @@ class Feed < ActiveRecord::Base
 
     category_list = doc.at(".entry-categories") rescue ""
 
-    if url.include?("stylecraze.com")
-      page_category_details = []
-      breadcrumbs = doc.at("#breadcrumbs")
+    # if url.include?("stylecraze.com")
+    #   page_category_details = []
+    #   breadcrumbs = doc.at("#breadcrumbs")
 
-      breadcrumbs.elements.xpath("span").each do |breadcurmb|
-        page_category_details << breadcurmb.elements.first.content rescue nil
-      end
-      page_category = page_category_details.compact.last(2).join(",")
-    elsif !category_list.blank? && url.include?("wiseshe.com")
-        cat_list = category_list.elements.map {|a| a.content} rescue []
-        page_category = cat_list.join(",")
-    end
+    #   breadcrumbs.elements.xpath("span").each do |breadcurmb|
+    #     page_category_details << breadcurmb.elements.first.content rescue nil
+    #   end
+    #   page_category = page_category_details.compact.last(2).join(",")
+    # elsif !category_list.blank? && url.include?("wiseshe.com")
+    #     cat_list = category_list.elements.map {|a| a.content} rescue []
+    #     page_category = cat_list.join(",")
+    # end
 
     return title_info, meta_description, images, page_category
   end
