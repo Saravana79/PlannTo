@@ -62,7 +62,7 @@ a { outline: none; }
         <div>
             <ul class="shadetabs">
                 <li class="selected">
-                    <a href="javascript:void(0)" id="where_to_buy_items_a" >Recommended Products For You</a>
+                    <a href="javascript:void(0)" id="where_to_buy_items_a" >Recommended Products For You from Amazon.in</a>
                 </li>
             </div>
             <div id="productdiv">
@@ -127,10 +127,10 @@ PlannTo.jQuery(document).ready(function()
 {
     PlannTo.jQuery(".product-container-top").hide()
     PlannTo.jQuery("#1").show()
-    PlannTo.jQuery("#1").addClass("active")
+    PlannTo.jQuery("#1").addClass("activeplannto")
     PlannTo.jQuery(".planntocarosel-left").css("opacity", 0.2);
 
-    var active_div = PlannTo.jQuery(".active")
+    var active_div = PlannTo.jQuery(".activeplannto")
     var next_div = PlannTo.jQuery(active_div).next()
 
     if (active_div.length == 0 || PlannTo.jQuery(next_div).attr("class") == "planntocarosel-right")
@@ -142,7 +142,7 @@ PlannTo.jQuery(document).ready(function()
 
 PlannTo.jQuery(".planntocarosel-left").click(function(event)
 {
-    var active_div = PlannTo.jQuery(".active")
+    var active_div = PlannTo.jQuery(".activeplannto")
     var prev_div = PlannTo.jQuery(active_div).prev()
 
     if (PlannTo.jQuery(prev_div).next().attr("class") == "planntocarosel-right")
@@ -163,8 +163,8 @@ PlannTo.jQuery(".planntocarosel-left").click(function(event)
     {
         PlannTo.jQuery(".product-container-top").hide()
         PlannTo.jQuery(prev_div).show()
-        PlannTo.jQuery(".product-container-top").removeClass("active")
-        PlannTo.jQuery(prev_div).addClass("active")
+        PlannTo.jQuery(".product-container-top").removeClass("activeplannto")
+        PlannTo.jQuery(prev_div).addClass("activeplannto")
     }
     event.preventDefault();
     return false;
@@ -172,7 +172,7 @@ PlannTo.jQuery(".planntocarosel-left").click(function(event)
 
 PlannTo.jQuery(".planntocarosel-right").click(function(event)
 {
-    var active_div = PlannTo.jQuery(".active")
+    var active_div = PlannTo.jQuery(".activeplannto")
     var next_div = PlannTo.jQuery(active_div).next()
 
     if (PlannTo.jQuery(next_div).next().attr("class") == "planntocarosel-right")
@@ -189,8 +189,8 @@ PlannTo.jQuery(".planntocarosel-right").click(function(event)
     {
         PlannTo.jQuery(".product-container-top").hide()
         PlannTo.jQuery(next_div).show()
-        PlannTo.jQuery(".product-container-top").removeClass("active")
-        PlannTo.jQuery(next_div).addClass("active")
+        PlannTo.jQuery(".product-container-top").removeClass("activeplannto")
+        PlannTo.jQuery(next_div).addClass("activeplannto")
     }
     event.preventDefault();
     return false;
