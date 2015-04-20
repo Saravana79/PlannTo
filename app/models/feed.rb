@@ -93,7 +93,7 @@ class Feed < ActiveRecord::Base
   end
 
   def table_process()
-    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 5)
+    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 0)
     admin_user = User.where(:is_admin => true).first
 
     sources_list = JSON.parse($redis.get("sources_list_details"))
@@ -275,18 +275,18 @@ class Feed < ActiveRecord::Base
 
     category_list = doc.at(".entry-categories") rescue ""
 
-    if url.include?("stylecraze.com")
-      page_category_details = []
-      breadcrumbs = doc.at("#breadcrumbs")
+    # if url.include?("stylecraze.com")
+    #   page_category_details = []
+    #   breadcrumbs = doc.at("#breadcrumbs")
 
-      breadcrumbs.elements.xpath("span").each do |breadcurmb|
-        page_category_details << breadcurmb.elements.first.content rescue nil
-      end
-      page_category = page_category_details.compact.last(2).join(",")
-    elsif !category_list.blank? && url.include?("wiseshe.com")
-        cat_list = category_list.elements.map {|a| a.content} rescue []
-        page_category = cat_list.join(",")
-    end
+    #   breadcrumbs.elements.xpath("span").each do |breadcurmb|
+    #     page_category_details << breadcurmb.elements.first.content rescue nil
+    #   end
+    #   page_category = page_category_details.compact.last(2).join(",")
+    # elsif !category_list.blank? && url.include?("wiseshe.com")
+    #     cat_list = category_list.elements.map {|a| a.content} rescue []
+    #     page_category = cat_list.join(",")
+    # end
 
     return title_info, meta_description, images, page_category
   end
