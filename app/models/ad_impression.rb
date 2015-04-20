@@ -27,6 +27,7 @@ class AdImpression
   field :additional_details, type: String
   field :video_impression_id, type: String
   field :geo, type: String
+  field :is_rii, type: Boolean #is_related_item_impression
 
 
   # has_one :m_click

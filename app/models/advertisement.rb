@@ -608,6 +608,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["video_impression_id"] = impression.video_impression_id
               impression_mongo["additional_details"] = impression.a
               impression_mongo["geo"] = impression.geo
+              impression_mongo["is_rii"] = impression.having_related_items
 
               if impression.video_impression_id.blank?
                 impression_import_mongo << impression_mongo
@@ -719,9 +720,9 @@ class Advertisement < ActiveRecord::Base
         impression_details = []
         ad_impressions_list.each_with_index do |imp, index|
           appearance_count = ad_impressions_list_values[index].to_i
-          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank? || !imp.device.blank?))
+          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank? || !imp.device.blank? || !imp.having_related_items.blank?))
             # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
-            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo, :device => imp.device)
+            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo, :device => imp.device, :having_related_items => imp.having_related_items)
           end
         end
 
@@ -1644,6 +1645,23 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
     total_item_ids = total_item_ids.join(",")
     $redis.set("mysmartprice_top_products", total_item_ids)
+  end
+
+  def get_item_ids_from_ads(url)
+    original_ids = []
+
+    article_content = self.content
+
+    if !article_content.blank?
+      items = article_content.allitems
+      article_items_ids = items.map(&:id)
+
+      related_item_ids = self.related_item_ids.to_s.split(",").map(&:to_i)
+
+      original_ids = article_items_ids - related_item_ids
+    end
+
+    return original_ids
   end
 
   private

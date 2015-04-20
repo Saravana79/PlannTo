@@ -1435,6 +1435,65 @@ end
 
   end
 
+  def self.get_items_by_item_ids_with_related_items(item_ids, url, itemsaccess, request, for_widget=false, sort_disable='false')
+    new_item_access = itemsaccess
+    tempurl = url
+    @items = []
+    unless (item_ids.blank?)
+      new_item_access = "ItemId"
+      if ((for_widget == true && sort_disable == "true") || (for_widget == false && sort_disable == "true"))
+        #@items = Item.find(item_ids, :order => "field(id, #{item_ids.map(&:inspect).join(',')})")
+        @items = Item.where(:id => item_ids)
+        @items = item_ids.collect {|id| @items.detect {|x| x.id == id.to_i}}
+        @items.compact!
+      else
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+        @items = Item.where(:id => item_ids) if @items.blank?
+      end
+      url = url.blank? ? request.referer : url
+    else
+      unless $redis.get("#{url}ad_or_widget_item_ids").blank?
+        # @items = Item.where("id in (?)", $redis.get("#{url}ad_or_widget_item_ids").split(","))
+        redis_item_ids = $redis.get("#{url}ad_or_widget_item_ids").split(",")
+        @items = Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{redis_item_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+      else
+        unless url.nil?
+          tempurl = url
+          if url.include?("?")
+            tempurl = url.slice(0..(url.index('?'))).gsub(/\?/, "").strip
+          end
+          if url.include?("#")
+            tempurl = url.slice(0..(url.index('#'))).gsub(/\#/, "").strip
+          end
+          @articles = ArticleContent.where(url: tempurl)
+
+          if @articles.empty? || @articles.nil?
+            #for pagination in publisher website. removing /2/
+            tempstr = tempurl.split(//).last(3).join
+            matchobj = tempstr.match(/^\/\d{1}\/$/)
+            unless matchobj.nil?
+              tempurlpage = tempurl[0..(tempurl.length-3)]
+              @articles = ArticleContent.where(url: tempurlpage)
+            end
+          end
+
+          unless @articles.empty?
+            @items = @articles[0].allitems.select{|a| a.is_a? Product}
+            article_items_ids = @items.map(&:id)
+            new_items = article_items_ids.blank? ? nil : Item.find_by_sql("select items.* from items join item_ad_details i on i.item_id = items.id where items.id in (#{article_items_ids.map(&:inspect).join(',')}) order by case when impressions < 1000 then #{configatron.ectr_default_value} else i.ectr end DESC limit 15")
+
+            if !new_items.blank?
+              @items = new_items
+            end
+            $redis.set("#{url}ad_or_widget_item_ids", @items.collect(&:id).join(",")) unless @items.blank?
+          end
+        end
+      end
+    end
+    return @items, new_item_access, url, tempurl
+
+  end
+
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size)
 
     if ad_template_type == "type_4"

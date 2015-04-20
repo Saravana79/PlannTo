@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150412131206) do
+ActiveRecord::Schema.define(:version => 20150417124933) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -129,6 +129,8 @@ ActiveRecord::Schema.define(:version => 20150412131206) do
     t.string   "track_id"
     t.text     "man_exclusive_item_ids"
     t.text     "man_included_item_ids"
+    t.boolean  "having_related_items",                                  :default => false
+    t.text     "related_item_ids"
   end
 
   create_table "aggregated_details", :force => true do |t|
@@ -659,6 +661,7 @@ ActiveRecord::Schema.define(:version => 20150412131206) do
     t.uuid    "video_impression_id"
     t.string  "geo"
     t.string  "device"
+    t.boolean "having_related_items", :default => false
   end
 
   create_table "impression_missings", :force => true do |t|

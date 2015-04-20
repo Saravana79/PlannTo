@@ -66,7 +66,15 @@ class Admin::AdvertisementsController < ApplicationController
       @content = AdvertisementContent.find(params[:content_id]);
       params['advertisement_content'] = {}
       params['advertisement_content']['title'] = 'advertisement'
-      @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) unless @content.blank?
+      if @advertisement.having_related_items == true
+        item_ids_for_content = params[:ad_item_id].to_s.split(",").map(&:to_i) + @advertisement.related_item_ids.to_s.split(",").map(&:to_i)
+        item_ids_for_content = item_ids_for_content.uniq
+        item_ids_for_content = item_ids_for_content.map(&:inspect).join(",")
+        @content.update_with_items!(params['advertisement_content'], item_ids_for_content) unless @content.blank?
+      else
+        @content.update_with_items!(params['advertisement_content'], params[:ad_item_id]) unless @content.blank?
+      end
+
       @advertisement.content_id = @content.id
       @advertisement.user_id = current_user.id
     else
@@ -106,7 +114,6 @@ class Admin::AdvertisementsController < ApplicationController
       end
     end
 
-
     params[:advertisement][:template_type] = "" if params[:advertisement][:advertisement_type] == "static"
 
     @advertisement = Advertisement.find(params[:id])
@@ -116,9 +123,16 @@ class Admin::AdvertisementsController < ApplicationController
     if @advertisement.update_attributes(params[:advertisement])
       old_item_ids_array = @advertisement.content.blank? ? [] : @advertisement.content.allitems.map(&:id)
       unless @content.blank?
-        new_item_ids_array = params[:ad_item_id].to_s.split(",").map(&:to_i)
-        @content.update_with_items!(params['advertisement_content'], params[:ad_item_id])
+        new_item_ids_array = params[:ad_item_id].to_s.split(",").map(&:to_i) + @advertisement.related_item_ids.to_s.split(",").map(&:to_i)
+        if @advertisement.having_related_items == true
+          item_ids_for_content = params[:ad_item_id].to_s.split(",") + @advertisement.related_item_ids.to_s.split(",")
+          item_ids_for_content = item_ids_for_content.join(",")
+          @content.update_with_items!(params['advertisement_content'], item_ids_for_content)
+        else
+          @content.update_with_items!(params['advertisement_content'], params[:ad_item_id])
+        end
         item_ids_array = old_item_ids_array + new_item_ids_array
+        item_ids_array = item_ids_array.uniq
         item_ids = item_ids_array.map(&:inspect).join(',')
         Resque.enqueue(ItemUpdate, "update_item_details_with_ad_ids", Time.zone.now, item_ids)
       end

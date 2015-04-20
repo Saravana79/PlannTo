@@ -39,7 +39,14 @@ class AdvertisementsController < ApplicationController
     end
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
-    @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
+
+    if !@ad.blank? && @ad.having_related_items == true
+      itemsaccess = "advertisement"
+      original_ids = @ad.get_item_ids_from_ads(url)
+      @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
+    else
+      @items, itemsaccess, url = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, false, sort_disable)
+    end
 
     return show_plannto_ads() if !@ad.blank? && @ad.advertisement_type == "plannto"
 
