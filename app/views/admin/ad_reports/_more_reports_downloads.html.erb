@@ -1,0 +1,26 @@
+<br/><br/>
+<div id="report">
+  <table border="1" width="90%">
+    <tr>
+      <th> Generate Date </th>
+      <th> Start Date </th>
+      <th> End Date </th>
+      <th> Ad Type </th>
+      <th> Report Type </th>
+      <th> Ad IDs </th>
+      <th> Status </th>
+    </tr>
+    <% @more_reports.each do | report | %>
+        <tr>
+          <td><%= report.report_date %> </td>
+          <td><%= report.from_date %> </td>
+          <td><%= report.to_date %> </td>
+          <td><%= report.ad_type %> </td>
+          <td><%= report.report_type %> </td>
+          <td><%= report.ad_ids %> </td>
+          <td><%= report.status == "ready" ? link_to("Download", report.filepath, :target => "_blank") : report.status %> </td>
+        </tr>
+    <%end%>
+  </table>
+  <%= will_paginate @more_reports %>
+</div>

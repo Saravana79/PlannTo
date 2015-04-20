@@ -9,6 +9,13 @@ class AdReport < ActiveRecord::Base
     ad_report
   end
 
+  def self.generate_more_report(param, user)
+    ad_report = AdReport.new
+    ad_report.update_attributes!(:from_date => param[:from_date], :to_date => param[:to_date], :report_type => param[:type], :status => "processing", :report_date => Time.now, :reported_by => user.id,
+                                 :ad_type => param[:ad_type], :ad_ids => param[:ad_id])
+    ad_report
+  end
+
   def filename
     "report_#{self.id}_#{self.from_date.strftime('%d_%b_%Y')}_to_#{self.to_date.strftime('%d_%b_%Y')}.csv".downcase
   end

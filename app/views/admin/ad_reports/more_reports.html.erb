@@ -57,9 +57,9 @@ To Date
   <% end %>
 </div>
 
-
   <div class="sorting">
-    <form>
+    <%= link_to "View Downloads" , "?show_downloads=true", :style => "float: left; margin: 4px 25px 0px 0px;", :class => "btn_submitanswer" %>
+    <form style="float:left;">
       <label>Sort by:&nbsp;</label>
           <span id="sort_filter">
             <select name="report_sort_by" id="report_sort_by" class="order_by_type">
@@ -73,38 +73,48 @@ To Date
 </div>
 
 
-<br />
+<% if params[:show_downloads] == "true" %>
+    <br />
 
-<h2 style="margin-left: 10%;"> Report </h2>
+    <h2 style="margin-left: 10%;"> More Reports </h2>
 
-<br/>
+    <br/>
+    <%= render :partial => "admin/ad_reports/more_reports_downloads" %>
+<% else %>
+    <br />
 
-<table border="0" width="80%" cellspacing="0" cellpadding="0">
-  <tr>
-    <th class="header_compare"  > <%= params[:type] %> </th>
-    <th class="header_compare"  > Total Impressions </th>
-    <th class="header_compare"  > Total Clicks </th>
-    <th class="header_compare"  > CTR </th>
-    <th class="header_compare"  > Cost </th>
-    <th class="header_compare"  > Total Orders </th>
-    <th class="header_compare"  > Total Revenue </th>
-  </tr>
-  <% @results.each do |each_hash| %>
-  <tr>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
-      <%= get_if_item(each_hash["_id"]) %>
-    </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["imp_count"] %> </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["click_count"] %> </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
-      <%= "#{get_ectr(each_hash["click_count"].to_i, each_hash["imp_count"].to_i)}" + " %" %>
-    </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["winning_price"] %> </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_count"] %> </td>
-    <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_sum"].flatten.compact.sum %> </td>
-  </tr>
-  <% end %>
-</table>
+    <h2 style="margin-left: 10%;"> Report </h2>
+
+    <br/>
+
+    <table border="0" width="80%" cellspacing="0" cellpadding="0">
+      <tr>
+        <th class="header_compare"  > <%= params[:type] %> </th>
+        <th class="header_compare"  > Total Impressions </th>
+        <th class="header_compare"  > Total Clicks </th>
+        <th class="header_compare"  > CTR </th>
+        <th class="header_compare"  > Cost </th>
+        <th class="header_compare"  > Total Orders </th>
+        <th class="header_compare"  > Total Revenue </th>
+      </tr>
+      <% @results.each do |each_hash| %>
+          <tr>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= get_if_item(each_hash["_id"]) %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["imp_count"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["click_count"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= "#{get_ectr(each_hash["click_count"].to_i, each_hash["imp_count"].to_i)}" + " %" %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["winning_price"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_count"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["orders_sum"].flatten.compact.sum %> </td>
+          </tr>
+      <% end %>
+    </table>
+<% end %>
+
 
 <br/><br/>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150417124933) do
+ActiveRecord::Schema.define(:version => 20150420071302) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(:version => 20150417124933) do
     t.integer  "reported_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ad_type"
+    t.string   "ad_ids"
   end
 
   create_table "ad_statistics", :force => true do |t|

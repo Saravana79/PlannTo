@@ -102,14 +102,28 @@ class Admin::AdReportsController < ApplicationController
     params[:ad_type] ||= "advertisement"
     params[:ad_id] ||= "All"
     params[:report_sort_by] ||= "imp_count"
+    params[:show_downloads] ||= "false"
+
     @start_date = params[:from_date].blank? ? Date.today.beginning_of_day : params[:from_date].to_date.beginning_of_day
     @end_date = params[:to_date].blank? ? Date.today.end_of_day : params[:to_date].to_date.end_of_day
-    @advertisements = ["All"] + Advertisement.all.map(&:id)
     @ad_types = ["All"] + ["advertisement", "pricecomparision", "advertisement_widget", "fashion"]
-    @results = AdImpression.get_results_from_mongo(params, @start_date, @end_date)
-    if params[:type] == "Item"
-      item_ids = @results.map {|each_row| each_row["_id"]}.compact.map(&:to_i)
-      @items = Item.where(:id => item_ids)
+    @advertisements = ["All"] + Advertisement.all.map(&:id)
+
+    if (params[:show_downloads] == "true" || (!params[:from_date].blank? && params[:from_date].to_date != Date.today))
+      if !params[:start_date].blank? && !params[:to_date].blank?
+        ad_report = AdReport.generate_more_report(params, current_user)
+        Resque.enqueue(GenerateReport, 'generate_more_reports', ad_report.id, Time.now)
+      end
+      params[:show_downloads] = "true"
+
+      @more_reports = AdReport.where("advertisement_id is null").paginate(:per_page => 20,:page => params[:page])
+    else
+      @results = AdImpression.get_results_from_mongo(params, @start_date, @end_date)
+
+      if params[:type] == "Item"
+        item_ids = @results.map {|each_row| each_row["_id"]}.compact.map(&:to_i)
+        @items = Item.where(:id => item_ids)
+      end
     end
   end
 

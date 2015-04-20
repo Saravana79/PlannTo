@@ -543,6 +543,47 @@ class Advertisement < ActiveRecord::Base
     ad_report.update_attributes(:status => "ready")
   end
 
+  def self.generate_more_reports(ad_report_id)
+    ad_report = AdReport.where(:id => ad_report_id).first
+
+    param = ad_report.attributes.symbolize_keys.slice(*[:from_date, :to_date, :ad_type])
+    param[:type] = ad_report.report_type
+    param[:ad_id] = ad_report.ad_ids
+    param[:report_sort_by] = "imp_count"
+
+    start_date = ad_report.from_date.blank? ? Date.today.beginning_of_day : ad_report.from_date.to_date.beginning_of_day
+    end_date = ad_report.to_date.blank? ? Date.today.end_of_day : ad_report.to_date.to_date.end_of_day
+    # advertisements = ["All"] + Advertisement.all.map(&:id)
+    results = AdImpression.get_results_from_mongo(param, start_date, end_date)
+
+    return_val = CSV.generate do |csv|
+      csv << ["#{ad_report.report_type}", "Total Impressions", "Total Clicks", "CTR", "Cost", "Total Orders", "Total Revenue"]
+      results.each do |report|
+        item_ids = results.map {|each_row| each_row["_id"]}.compact.map(&:to_i)
+        items = Item.where(:id => item_ids)
+        if ad_report.report_type == "Item"
+          item = items.select {|item| item.id == report["_id"].to_i}.last
+          item_id = item.blank? ? report["_id"].to_s : item.name.to_s
+        else
+          item_id = report["_id"].to_i
+        end
+
+        ectr = ((report["click_count"].to_f/report["imp_count"].to_f)*100).round(2).to_s + " %"
+
+        p [*item_id, report["imp_count"], report["click_count"], ectr, report["winning_price"], report["orders_count"], report["orders_sum"].flatten.compact.sum]
+        csv << [*item_id, report["imp_count"], report["click_count"], ectr, report["winning_price"], report["orders_count"], report["orders_sum"].flatten.compact.sum]
+      end
+    end
+
+    filename = ad_report.filename
+
+    object = $s3_object.objects["reports/#{filename}"]
+    object.write(return_val)
+    object.acl = :public_read
+
+    ad_report.update_attributes(:status => "ready")
+  end
+
   def self.to_csv(param, reports)
     CSV.generate do |csv|
       csv << [param[:select_by] == "item_id" ? "Item Name" : "Hosted Site Url", "Impressions Count", "Clicks Count", "ectr"]
