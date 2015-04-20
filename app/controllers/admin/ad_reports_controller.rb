@@ -110,7 +110,7 @@ class Admin::AdReportsController < ApplicationController
     @advertisements = ["All"] + Advertisement.all.map(&:id)
 
     if (params[:show_downloads] == "true" || (!params[:from_date].blank? && params[:from_date].to_date != Date.today))
-      if !params[:start_date].blank? && !params[:to_date].blank?
+      if !params[:from_date].blank? && !params[:to_date].blank?
         ad_report = AdReport.generate_more_report(params, current_user)
         Resque.enqueue(GenerateReport, 'generate_more_reports', ad_report.id, Time.now)
       end
