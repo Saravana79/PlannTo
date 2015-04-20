@@ -67,6 +67,7 @@ class UserAccessDetail < ActiveRecord::Base
             m_item_type.save!
           end
         end
+        plannto_user_detail.save!
 
         add_fad = u_values.blank? ? true : false
 

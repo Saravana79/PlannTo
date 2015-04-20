@@ -69,6 +69,8 @@ class AdImpression
        "$advertisement_id"
      when "Publisher"
        "$publisher_id"
+     when "Is Related Item Impression"
+       "$is_rii"
      else
        "$item_id"
      end
