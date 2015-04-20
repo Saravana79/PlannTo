@@ -2,7 +2,7 @@ class Feed < ActiveRecord::Base
   validates :category, :presence => true
   validates :url, :presence => true, :if => Proc.new { |f| f.process_type != "table" }
   has_many :feed_urls
-  after_save :start_process_feeds
+  after_create :start_process_feeds
 
   def self.process_feeds(feed_ids=[])
     puts "************************************************* Process Started at - #{Time.zone.now.strftime('%b %d,%Y %r')} *************************************************"
