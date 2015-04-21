@@ -33,7 +33,7 @@ body {
 .advt-box .product-container .product-img-left img { margin:0 auto; text-align:center;}
 .advt-box .product-container .product-txt-right{ margin-right:5px;padding:0; float:right; width:120px;text-align: right;}
 .advt-box .product-container h3{ margin:0; padding:0 0 0 0; font-size:15px; color:#222; font-weight:600; font-family: Arial;word-break:break-word;min-height: 40px;}
-.advt-box .product-container .price{ margin-top:90px; padding:10px 0 10px 0; color:#E47911; font-size:15px; font-weight:bold;font-family: Arial;}
+.advt-box .product-container .price{ margin-top:90px; padding:5px 0 10px 0; color:#E47911; font-size:15px; font-weight:bold;font-family: Arial;}
 .advt-box .product-container .btn{ margin:10px 0px; }
 .advt-box .product-container .btn .shop-now{ margin:0; padding:5px 5px;  cursor:pointer;  text-indent:-99999px; border:0;color: #151515;font-weight: bold;font-family: Arial;font-size:14px;text-transform: uppercase;background: white;border: 1px solid #808080;}
 .ad_img_tag{max-width: 210px;max-height: 274px;vertical-align: middle;height:auto;width:auto;}
