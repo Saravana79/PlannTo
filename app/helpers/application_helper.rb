@@ -314,9 +314,8 @@ module ApplicationHelper
   end
 
   def prettify_mrpprice(item_detail)
-    pre_order_val = item_detail.status == 3 ? "Pre-Order" : ""
-
-    if pre_order_val == ""
+   
+    if item_detail.mrpprice != item_detail.price
       price = item_detail.mrpprice.blank? ? "" : number_to_indian_currency("%.2f" % item_detail.mrpprice.to_f)
     else
       price = ""
