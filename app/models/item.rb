@@ -1220,6 +1220,7 @@ end
     log.debug "\n"
 
     page = 1
+    processed_item_ids = []
     begin
       adv_records = Item.paginate_by_sql(query_to_get_advertisement_details, :page => page, :per_page => 2000)
       adv_records.each do |each_rec|
@@ -1233,7 +1234,18 @@ end
         $redis_rtb.HMSET(redis_key, redis_values)
       end
       page += 1
+      processed_item_ids << adv_records.map(&:item_id)
     end while !adv_records.empty?
+
+    if !item_ids.blank?
+      processed_item_ids = processed_item_ids.flatten.map(&:to_i)
+      item_ids = item_ids.to_s.split(",").map(&:to_i)
+      rem_item_ids = item_ids - processed_item_ids
+
+      rem_item_ids.each do |each_item_id|
+        $redis_rtb.HMSET("items:#{each_item_id}", [:advertisement_id, ""])
+      end
+    end
 
     log.debug "********** Completed Updating advertisement_id for Items **********"
     log.debug "\n"
