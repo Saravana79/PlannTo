@@ -1838,7 +1838,7 @@ end
     end
 
     api_keyword = keyword.to_s.gsub(" ", "") + "-#{geo}"
-    res = APICache.get(api_keyword, :timeout => 5.hours) do
+    res = APICache.get(api_keyword, :cache => 5.hours) do
       Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => geo, :browse_node => browse_node, :sort => sort})
     end
 
@@ -2071,7 +2071,7 @@ end
       return ""
     end
 
-    res = APICache.get(item_id.to_s.gsub(" ", ""), :timeout => 5.hours) do
+    res = APICache.get(item_id.to_s.gsub(" ", ""), :cache => 5.hours) do
       Amazon::Ecs.item_lookup(item_id, {:response_group => 'Offers', :country => 'in'})
     end
 
@@ -2246,7 +2246,7 @@ end
   def self.get_amazon_product_link_from_asin(asin)
     category_item_detail = OpenStruct.new
 
-    res = APICache.get(asin.to_s.gsub(" ", ""), :timeout => 5.hours) do
+    res = APICache.get(asin.to_s.gsub(" ", ""), :cache => 5.hours) do
       Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
     end
 
@@ -2350,7 +2350,7 @@ end
   def self.get_amazon_products_from_keyword(keyword)
     items = []
     begin
-      res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+      res = APICache.get(keyword.to_s.gsub(" ", ""), :cache => 5.hours) do
         Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
 
@@ -2393,7 +2393,7 @@ end
     items = []
     search_url = ""
     begin
-      res = APICache.get(keyword.to_s.gsub(" ", ""), :timeout => 5.hours) do
+      res = APICache.get(keyword.to_s.gsub(" ", ""), :cache => 5.hours) do
         Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "All"})
       end
 

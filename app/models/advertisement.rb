@@ -986,7 +986,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
   def self.update_include_exclude_products_from_vendors()
     if $redis.get("process_popular_vendor_products_update_is_running").to_i == 0
       $redis.set("process_popular_vendor_products_update_is_running", 1)
-      $redis.expire("process_popular_vendor_products_update_is_running", 90.minutes)
+      $redis.expire("process_popular_vendor_products_update_is_running", 50.minutes)
       update_include_exclude_products_from_amazon()
       $redis.set("process_popular_vendor_products_update_is_running", 0)
     end
@@ -1060,7 +1060,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           new_item_ids_array = ad_item_id.split(",").map(&:to_i)
           content.update_with_items!({}, ad_item_id)
           item_ids_array = old_item_ids_array + new_item_ids_array
-          item_ids_array = item_ids_array.uniq
+          item_ids_array = item_ids_array.flatten.map(&:to_i).uniq
           item_ids = item_ids_array
           all_item_ids << item_ids
         end
@@ -1541,7 +1541,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         asin = each_item_detail.additional_details
         next if asin.blank?
 
-        res = APICache.get(asin.to_s.gsub(" ", ""), :timeout => 5.hours) do
+        res = APICache.get(asin.to_s.gsub(" ", ""), :cache => 5.hours) do
           Amazon::Ecs.item_lookup(asin, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in'})
         end
 
