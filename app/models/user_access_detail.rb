@@ -45,7 +45,7 @@ class UserAccessDetail < ActiveRecord::Base
         if plannto_user_detail.blank?
           plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => user_id)
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
-          plannto_user_detail.google_user_id = cookie_match.google_user_id
+          plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
           plannto_user_detail.save!
         end
 

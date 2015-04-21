@@ -43,6 +43,8 @@ class OrderHistory < ActiveRecord::Base
 
           impression = AddImpression.where(:id => impression_id).first
           unless impression.blank?
+            PlanntoUserDetail.update_plannto_user_detail(impression)
+
             order_history.item_id = impression.item_id
             product = impression.item
             order_history.item_name = product.name unless product.blank?
@@ -134,6 +136,8 @@ class OrderHistory < ActiveRecord::Base
       impression = csv_detail[headers.index("AffExtParam2")].blank? ? nil : AddImpression.where(:id => csv_detail[headers.index("AffExtParam2")]).first
 
       unless impression.blank?
+        PlanntoUserDetail.update_plannto_user_detail(impression)
+
         order_history.item_id = impression.item_id
         order_history.sid = impression.sid
         order_history.advertisement_id = impression.advertisement_id
