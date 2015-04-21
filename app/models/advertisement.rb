@@ -1057,9 +1057,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
         old_item_ids_array = content.blank? ? [] : content.allitems.map(&:id)
         unless content.blank?
-          new_item_ids_array = ad_item_id.split(",")
+          new_item_ids_array = ad_item_id.split(",").map(&:to_i)
           content.update_with_items!({}, ad_item_id)
           item_ids_array = old_item_ids_array + new_item_ids_array
+          item_ids_array = item_ids_array.uniq
           item_ids = item_ids_array
           all_item_ids << item_ids
         end
