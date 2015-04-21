@@ -1,4 +1,4 @@
-class Sunglass < Product
+class Underwear < Product
 
   has_one :itemrelationship, :foreign_key => :item_id
 
