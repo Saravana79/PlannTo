@@ -315,10 +315,10 @@ module ApplicationHelper
 
   def prettify_mrpprice(item_detail)
    
-    if item_detail.mrpprice != item_detail.price
-      price = item_detail.mrpprice.blank? ? "" : number_to_indian_currency("%.2f" % item_detail.mrpprice.to_f)
-    else
-      price = ""
+    price = item_detail.mrpprice.blank? ? "" : number_to_indian_currency("%.2f" % item_detail.mrpprice.to_f)
+
+    if price == number_to_indian_currency("%.2f" % item_detail.price.to_f)
+      price =""
     end
 
     price
