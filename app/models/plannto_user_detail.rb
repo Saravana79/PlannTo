@@ -14,6 +14,7 @@ class PlanntoUserDetail
   embeds_many :m_item_types
   # embeds_many :m_items
 
+  index({ plannto_user_id: 1 })
 
   def self.update_plannto_user_detail(impression)
     # plannto user details

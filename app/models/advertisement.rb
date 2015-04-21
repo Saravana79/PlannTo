@@ -649,7 +649,7 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["video_impression_id"] = impression.video_impression_id
               impression_mongo["additional_details"] = impression.a
               impression_mongo["geo"] = impression.geo
-              impression_mongo["is_rii"] = impression.having_related_items
+              impression_mongo["is_rii"] = impression.having_related_items if !impression.having_related_items.blank?
 
               if impression.video_impression_id.blank?
                 impression_import_mongo << impression_mongo
@@ -772,6 +772,7 @@ class Advertisement < ActiveRecord::Base
         ImpressionDetail.import(impression_details)
 
 
+        p "ImpressionDetail count #{impression_details.count}"
         impression_details.each do |each_imp_det|
           begin
             ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).first
@@ -780,6 +781,8 @@ class Advertisement < ActiveRecord::Base
             p "Error while update pre appearance count"
           end
         end
+
+        p "Completed Impression Detail Update Process"
 
 
         $redis_rtb.pipelined do
@@ -796,6 +799,8 @@ class Advertisement < ActiveRecord::Base
 
 
         #buying list update for non ad impressions
+
+        p "Started buying list update for non ad impressions"
 
         redis_rtb_hash = {}
         non_ad_impressions_list.each do |impression|
@@ -824,6 +829,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             $redis_rtb.expire(key, 2.weeks)
           end
         end
+
+        p "Completed buying list update for non ad impressions"
+
+        p "Started Click Detail Process"
 
         clicks_details = []
         clicks_import.each do |each_click|
@@ -905,6 +914,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             end
           end
         end
+
+        p "Completed Click Detail Process"
 
         #push to mongo
         # begin
