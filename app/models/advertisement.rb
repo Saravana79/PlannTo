@@ -772,17 +772,17 @@ class Advertisement < ActiveRecord::Base
         ImpressionDetail.import(impression_details)
 
 
-        p "ImpressionDetail count #{impression_details.count}"
-        impression_details.each do |each_imp_det|
-          begin
-            ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).first
-            ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
-          rescue Exception => e
-            p "Error while update pre appearance count"
-          end
-        end
-
-        p "Completed Impression Detail Update Process"
+        # p "ImpressionDetail count #{impression_details.count} - #{Time.now}"
+        # impression_details.each do |each_imp_det|
+        #   begin
+        #     ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).first
+        #     ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
+        #   rescue Exception => e
+        #     p "Error while update pre appearance count"
+        #   end
+        # end
+        #
+        # p "Completed Impression Detail Update Process -  #{Time.now}"
 
 
         $redis_rtb.pipelined do
