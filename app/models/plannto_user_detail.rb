@@ -14,6 +14,45 @@ class PlanntoUserDetail
   embeds_many :m_item_types
   # embeds_many :m_items
 
+
+  def self.update_plannto_user_detail(impression)
+    # plannto user details
+    if !impression.temp_user_id.blank?
+      plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => impression.temp_user_id).first
+
+      if plannto_user_detail.blank?
+        plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => impression.temp_user_id)
+        cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).select(:google_user_id).last
+        plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
+        plannto_user_detail.save!
+      end
+    end
+
+    itemtype_id = nil
+    #plannto user details
+    if !impression.item_id.blank?
+      itemtype = Item.where(:id => impression.item_id).select(:itemtype_id).first
+      itemtype_id = itemtype.itemtype_id rescue ""
+    end
+
+    if !itemtype_id.blank?
+      m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+      if m_item_type.blank?
+        plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+      end
+
+      order_item_ids = m_item_type.order_item_ids
+      order_item_ids = order_item_ids.blank? ? [impression.item_id.to_i] : (order_item_ids + [impression.item_id.to_i])
+      order_item_ids = order_item_ids.map(&:to_i).compact.uniq
+      m_item_type.order_item_ids = order_item_ids
+      m_item_type.last_order_date = Date.today
+      m_item_type.save!
+    end
+
+    plannto_user_detail.save!
+  end
+
   private
 
   def update_last_accessed_date

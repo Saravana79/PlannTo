@@ -678,6 +678,8 @@ class Advertisement < ActiveRecord::Base
                 click_mongo = click.attributes
                 click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
                 click_mongo["video_impression_id"] = click.video_impression_id
+                click_mongo["temp_user_id"] = click.temp_user_id
+                click_mongo["item_id"] = click.item_id
                 click_mongo.delete("impression_id")
                 clicks_import_mongo << click_mongo
               end
@@ -840,8 +842,41 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         Click.import(clicks_import)
         ClickDetail.import(clicks_details)
 
-
         clicks_import_mongo.each do |each_click_mongo|
+          if !each_click_mongo["temp_user_id"].blank?
+            plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).first
+
+            if plannto_user_detail.blank?
+              plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
+              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).select(:google_user_id).last
+              plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
+              plannto_user_detail.save!
+            end
+          end
+
+          itemtype_id = nil
+          #plannto user details
+          if !each_click_mongo["item_id"].blank?
+            itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
+            itemtype_id = itemtype.itemtype_id rescue ""
+          end
+
+          if !itemtype_id.blank?
+            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            if m_item_type.blank?
+              plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            end
+
+            click_item_ids = m_item_type.click_item_ids
+            click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
+            click_item_ids = click_item_ids.map(&:to_i).compact.uniq
+            m_item_type.click_item_ids = click_item_ids
+            m_item_type.last_click_date = Date.today
+            m_item_type.save!
+          end
+
+          plannto_user_detail.save!
 
           if each_click_mongo["video_impression_id"].blank?
             ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
