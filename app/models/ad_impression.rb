@@ -136,6 +136,10 @@ class AdImpression
   end
 
   def self.remove_old_mongodb_values()
-    delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 1.month.ago}})
+    delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 2.weeks.ago}})
+    p delete_count
+
+    delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 1.day.ago}, "advertisement_id" => {"$eq" => nil} })
+    p delete_count
   end
 end
