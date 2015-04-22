@@ -52,6 +52,7 @@ class AggregatedDetail < ActiveRecord::Base
   end
 
   def self.update_aggregated_details_from_mongo_reports(time,entity_type="advertisement", type="Advertisement")
+    return # TODO: Temp fixes
     time = time.localtime
     param = {}
     param[:type] = type
