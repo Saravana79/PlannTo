@@ -134,4 +134,8 @@ class AdImpression
     items_by_count
     # items_by_count = AdImpression.collection.aggregate([match,project,group,sort,limit])
   end
+
+  def self.remove_old_mongodb_values()
+    delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 1.month.ago}})
+  end
 end

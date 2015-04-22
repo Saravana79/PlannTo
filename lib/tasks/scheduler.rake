@@ -198,8 +198,7 @@ end
 
 desc "Remove mongodb values 1 month old"
 task :remove_mongodb_values => :environment do
-  delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 1.month.ago}})
-  p "Removed #{delete_count} records"
+  Resque.enqueue(RemoveOldMongodbValue, "remove_old_mongodb_values")
 end
 
 desc "City State and Place process"
