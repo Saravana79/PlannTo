@@ -651,10 +651,12 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["geo"] = impression.geo
               impression_mongo["is_rii"] = impression.having_related_items if !impression.having_related_items.blank?
 
-              if impression.video_impression_id.blank?
-                impression_import_mongo << impression_mongo
-              else
-                video_comp_impression_import_mongo << impression_mongo
+              if !impression.advertisement_id.blank?
+                if impression.video_impression_id.blank?
+                  impression_import_mongo << impression_mongo
+                else
+                  video_comp_impression_import_mongo << impression_mongo
+                end
               end
 
               if impression.advertisement_type == "advertisement" || impression.advertisement_type == "fashion"
@@ -681,7 +683,7 @@ class Advertisement < ActiveRecord::Base
                 click_mongo["temp_user_id"] = click.temp_user_id
                 click_mongo["item_id"] = click.item_id
                 click_mongo.delete("impression_id")
-                clicks_import_mongo << click_mongo
+                clicks_import_mongo << click_mongo if !click.advertisement_id.blank?
               end
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
