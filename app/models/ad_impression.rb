@@ -1,5 +1,6 @@
 class AdImpression
   include Mongoid::Document
+  # include Mongoid::Attributes::Dynamic
   # include Mongoid::Timestamps::Created
 
   field :advertisement_type, type: String
@@ -29,6 +30,11 @@ class AdImpression
   field :geo, type: String
   field :is_rii, type: Boolean #is_related_item_impression
 
+  field :hours, type: Array
+  [*0..23].each do |each_hour|
+    field "hour_#{each_hour}".to_sym, type: Integer
+  end
+
 
   # has_one :m_click
   # embeds_many :m_clicks
@@ -37,6 +43,8 @@ class AdImpression
   embeds_many :m_companion_impressions
 
   index({ impression_time: 1 })
+
+  before_validation :custom_field_to_datatype
 
 
   def self.get_results_from_mongo(param, start_date, end_date)
@@ -141,5 +149,18 @@ class AdImpression
 
     delete_count = AdImpression.delete_all(conditions: {"impression_time" => {"$lte" => 1.day.ago}, "advertisement_id" => {"$eq" => nil} })
     p delete_count
+  end
+
+  private
+  def custom_field_to_datatype
+    # self.category.product_attributes.each do |pr_at|
+    #   name = pr_at.name.to_sym
+    #   if pr_at.type == 'boolean'
+    #     self[name] = self[name].to_bool
+    #   elsif pr_at.type == 'integer'
+    #     self[name] = self[name].to_i
+    #   end
+    # end
+    self[:hours] = self[:hours].to_a
   end
 end

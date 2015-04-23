@@ -9,3 +9,10 @@ task :aggregated_detail_process_all => :environment do
     AggregatedDetail.update_aggregated_detail(date, 'sid')
   end
 end
+
+desc 'update aggregated detail force => date => "date/month/year"'
+task :aggregated_detail_process_force, [:date] => :environment do |_, args|
+  args.with_defaults(:date => Time.now)
+  time = args[:date].to_time rescue Time.now
+  AggregatedDetail.update_aggregated_details_from_mongo_reports(time, 'advertisement', "Advertisement", true)
+end

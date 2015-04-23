@@ -51,9 +51,11 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
-  def self.update_aggregated_details_from_mongo_reports(time,entity_type="advertisement", type="Advertisement")
-    return # TODO: Temp fixes
+  def self.update_aggregated_details_from_mongo_reports(time,entity_type="advertisement", type="Advertisement", force=false )
+    return if force == false # TODO: Temp fixes
+    time  = time.to_time
     time = time.localtime
+    p time
     param = {}
     param[:type] = type
     # param[:ad_type] = "advertisement"
@@ -77,7 +79,6 @@ class AggregatedDetail < ActiveRecord::Base
         p "Error While updating aggregated detail"
       end
     end
-
   end
 
   def self.update_aggregated_detail_from_mongo(time, entity_type="advertisement", batch_size=1000)
