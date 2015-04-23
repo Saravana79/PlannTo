@@ -551,6 +551,8 @@ ActiveRecord::Schema.define(:version => 20150420071302) do
     t.string   "article_category"
     t.string   "article_item_ids"
     t.decimal  "score",              :precision => 8, :scale => 2
+    t.integer  "created_by"
+    t.string   "created_type"
   end
 
   create_table "feeds", :force => true do |t|
@@ -936,7 +938,7 @@ ActiveRecord::Schema.define(:version => 20150420071302) do
     t.integer  "item_id"
     t.string   "item_name"
     t.string   "product_price"
-    t.string   "impression_id"
+    t.uuid     "impression_id"
     t.integer  "order_item_id"
     t.datetime "payment_date"
     t.integer  "payment_report_id"
