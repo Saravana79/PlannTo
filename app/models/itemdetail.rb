@@ -405,8 +405,11 @@ class Itemdetail < ActiveRecord::Base
 
 
   def self.update_from_vendors(time=Time.now)
+    return if $redis.get("update_itemdetails_from_vendors_is_running").to_i == 0
+    $redis.set("update_itemdetails_from_vendors_is_running", 1)
+    $redis.expire("update_itemdetails_from_vendors_is_running", 40.minutes)
+    
     url = "http://www.mysmartprice.com/store_data/msp_master.xml"
-
     top_product_ids = $redis.get("mysmartprice_top_products")
     top_product_ids = top_product_ids.to_s.split(",")
     top_product_ids = top_product_ids.map(&:to_i)
@@ -510,6 +513,7 @@ class Itemdetail < ActiveRecord::Base
 
     # Update item details for item
     Resque.enqueue(ItemUpdate, "update_item_details", Time.zone.now)
+    $redis.set("update_itemdetails_from_vendors_is_running", 0)
   end
 
   def self.update_from_vendors_flipkart(time=Time.now)
