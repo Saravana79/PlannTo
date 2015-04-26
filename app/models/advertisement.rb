@@ -867,32 +867,36 @@ class Advertisement < ActiveRecord::Base
         end
 
 
-        # AggregatedImpression
-        ads_hash.each do |key, val|
-          agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"]).last
+        begin
+          # AggregatedImpression
+          ads_hash.each do |key, val|
+            agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"]).last
 
-          if agg_imp.blank?
-            agg_imp = AggregatedImpression.new(val)
-            agg_imp.save!
-          else
-            agg_imp.hours = Advertisemenet.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
-            agg_imp.device = Advertisemenet.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
-            agg_imp.ret = Advertisemenet.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
-            agg_imp.rii = Advertisemenet.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
-            agg_imp.save!
+            if agg_imp.blank?
+              agg_imp = AggregatedImpression.new(val)
+              agg_imp.save!
+            else
+              agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
+              agg_imp.device = Advertisement.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
+              agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
+              agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
+              agg_imp.save!
+            end
           end
-        end
 
-        publisher_hash.each do |key, val|
-          agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => nil, :for_pub => true).last
+          publisher_hash.each do |key, val|
+            agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => nil, :for_pub => true).last
 
-          if agg_imp.blank?
-            agg_imp = AggregatedImpression.new(val)
-            agg_imp.save!
-          else
-            agg_imp.publishers = Advertisement.combine_hash(agg_imp.publishers, val["publishers"]) if !val["publishers"].blank?
-            agg_imp.save!
+            if agg_imp.blank?
+              agg_imp = AggregatedImpression.new(val)
+              agg_imp.save!
+            else
+              agg_imp.publishers = Advertisement.combine_hash(agg_imp.publishers, val["publishers"]) if !val["publishers"].blank?
+              agg_imp.save!
+            end
           end
+        rescue Exception => e
+          p "fixes for => #{e.backtrace}"
         end
 
         # Impression Process
