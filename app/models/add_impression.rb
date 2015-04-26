@@ -36,18 +36,25 @@ class AddImpression < ActiveRecord::Base
    ai.itemsaccess = obj_params[:itemsaccess]
    ai.params = obj_params[:params]
    publisher = Publisher.getpublisherfromdomain(obj_params[:request_referer])
-   unless publisher.nil?
+   if !publisher.blank?
      ai.publisher_id = publisher.id
+   else
+     ai.publisher_id = obj_params[:publisher]
    end
 
    # save advertisement id
-   ai.advertisement_id = obj_params[:ad_id]
+   if obj_params[:ad_id].blank?
+     ad_id = obj_params[:advertisement_id]
+   else
+     ad_id = obj_params[:ad_id]
+   end
+   ai.advertisement_id = ad_id
    # ai.winning_price_enc = obj_params[:winning_price_enc] # removed from db
    begin
-     winning_price = obj_params[:winning_price_enc].blank? ? nil : get_winning_price_value(obj_params[:winning_price_enc])
-     ai.winning_price = winning_price
+     winning_price = obj_params[:winning_price_enc].blank? ? 0.0 : get_winning_price_value(obj_params[:winning_price_enc])
+     ai.winning_price = winning_price.to_f
    rescue
-     ai.winning_price = obj_params[:winning_price]
+     ai.winning_price = 0.0
    end
    ai.sid = obj_params[:sid]
    ai.created_at = obj_params[:time]
@@ -60,7 +67,7 @@ class AddImpression < ActiveRecord::Base
    ai.video = obj_params[:video].to_s
    ai.video_impression_id = obj_params[:video_impression_id].to_s
    ai.geo = obj_params[:geo]
-   ai.having_related_items = ai.advertisement.having_related_items rescue ""
+   ai.having_related_items = ai.advertisement.having_related_items rescue false
 
    return ai
  end
@@ -269,4 +276,3 @@ class AddImpression < ActiveRecord::Base
   end
 
 end
-

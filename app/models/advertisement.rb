@@ -616,6 +616,8 @@ class Advertisement < ActiveRecord::Base
         clicks_import_mongo = []
         video_imp_import = []
         non_ad_impressions_list = []
+        ads_hash = {}
+        publisher_hash = {}
         add_impressions.each do |each_rec|
           count -= 1
           begin
@@ -649,13 +651,80 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["video_impression_id"] = impression.video_impression_id
               impression_mongo["additional_details"] = impression.a
               impression_mongo["geo"] = impression.geo
-              impression_mongo["is_rii"] = impression.having_related_items if !impression.having_related_items.blank?
+              impression_mongo["is_rii"] = impression.having_related_items
+
+              time = impression.impression_time.utc rescue Time.now
+              date = time.to_date rescue ""
+              hour = time.hour rescue ""
 
               if !impression.advertisement_id.blank?
                 if impression.video_impression_id.blank?
                   impression_import_mongo << impression_mongo
                 else
                   video_comp_impression_import_mongo << impression_mongo
+                end
+
+                # For AggregatedImpression
+                device_name = impression_mongo["device"]
+                is_rii = impression_mongo["is_rii"]
+                ret = impression.r.to_i == 1
+
+                current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_hash.blank?
+                  ads_hash["#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s)
+                current_hash["hours"] = {} if current_hash["hours"].blank?
+                curr_hour = current_hash["hours"]["#{hour}"]
+                if curr_hour.blank?
+                  current_hash["hours"].merge!({"#{hour}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_hour.merge!({"imp" => curr_hour["imp"].to_i + 1, "costs" => curr_hour["costs"].to_f + impression.winning_price.to_f})
+                end
+
+                current_hash["device"] = {} if current_hash["device"].blank?
+                curr_device = current_hash["device"]["#{device_name}"]
+                if curr_device.blank?
+                  current_hash["device"].merge!({"#{device_name}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_device.merge!({"imp" => curr_device["imp"].to_i + 1, "costs" => curr_device["costs"].to_f + impression.winning_price.to_f})
+                end
+
+                current_hash["rii"] = {} if current_hash["rii"].blank?
+                curr_rii = current_hash["rii"]["#{is_rii}"]
+                if curr_rii.blank?
+                  current_hash["rii"].merge!({"#{is_rii}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_rii.merge!({"imp" => curr_rii["imp"].to_i + 1, "costs" => curr_rii["costs"].to_f + impression.winning_price.to_f})
+                end
+
+                current_hash["ret"] = {} if current_hash["ret"].blank?
+                curr_ret = current_hash["ret"]["#{ret}"]
+                if curr_ret.blank?
+                  current_hash["ret"].merge!({"#{ret}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + impression.winning_price.to_f})
+                end
+              else
+                current_hash = publisher_hash["publisher_#{date}"]
+
+                if current_hash.blank?
+                  publisher_hash["publisher_#{date}"] = {}
+                  current_hash = publisher_hash["publisher_#{date}"]
+                end
+
+                current_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
+
+                current_hash["publishers"] = {} if current_hash["publishers"].blank?
+                curr_publisher = current_hash["publishers"]["#{impression.publisher_id.to_s}"]
+
+                if curr_publisher.blank?
+                  current_hash["publishers"].merge!("#{impression.publisher_id.to_s}" => {"imp" => 1})
+                else
+                  curr_publisher.merge!("imp"=> curr_publisher["imp"].to_i + 1)
                 end
               end
 
@@ -684,6 +753,82 @@ class Advertisement < ActiveRecord::Base
                 click_mongo["item_id"] = click.item_id
                 click_mongo.delete("impression_id")
                 clicks_import_mongo << click_mongo if !click.advertisement_id.blank?
+
+                time = click.timestamp.utc rescue Time.now
+                date = time.to_date rescue ""
+                hour = time.hour rescue ""
+
+                if !click.advertisement_id.blank?
+                  # device_name = impression_mongo["device"]
+                  # is_rii = impression_mongo["is_rii"]
+                  ret = click.r.to_i == 1
+                  click_impression = AddImpression.where(:id => click.impression_id).last
+
+                  current_hash = ads_hash["#{date}_#{click.advertisement_id.to_s}"]
+                  if current_hash.blank?
+                    ads_hash["#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_hash = ads_hash["#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s)
+
+                  current_hash["hours"] = {} if current_hash["hours"].blank?
+                  curr_hour = current_hash["hours"]["#{hour}"]
+                  if curr_hour.blank?
+                    current_hash["hours"].merge!({"#{hour}" => {"clicks" => 1}})
+                  else
+                    curr_hour.merge!({"clicks" => curr_hour["clicks"].to_i + 1})
+                  end
+
+                  if !click_impression.blank?
+                    url_params = Advertisement.reverse_make_url_params(click_impression.params) rescue {}
+
+                    device_name = url_params["device"]
+                    is_rii = click_impression.having_related_items
+
+                    current_hash["device"] = {} if current_hash["device"].blank?
+                    curr_device = current_hash["device"]["#{device_name}"]
+                    if curr_device.blank?
+                      current_hash["device"].merge!({"#{device_name}" => {"clicks" => 1}})
+                    else
+                      curr_device.merge!({"clicks" => curr_device["clicks"].to_i + 1})
+                    end
+
+                    current_hash["rii"] = {} if current_hash["rii"].blank?
+                    curr_rii = current_hash["rii"]["#{is_rii}"]
+                    if curr_rii.blank?
+                      current_hash["rii"].merge!({"#{is_rii}" => {"clicks" => 1}})
+                    else
+                      curr_rii.merge!({"clicks" => curr_rii["clicks"].to_i + 1})
+                    end
+                  end
+
+                  current_hash["ret"] = {} if current_hash["ret"].blank?
+                  curr_ret = current_hash["ret"]["#{ret}"]
+                  if curr_ret.blank?
+                    current_hash["ret"].merge!({"#{ret}" => {"clicks" => 1}})
+                  else
+                    curr_ret.merge!({"clicks" => curr_ret["clicks"].to_i + 1})
+                  end
+                else
+                  current_pub_hash = publisher_hash["publisher_#{date}"]
+
+                  if current_pub_hash.blank?
+                    publisher_hash["publisher_#{date}"] = {}
+                    current_pub_hash = publisher_hash["publisher_#{date}"]
+                  end
+
+                  current_pub_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
+
+                  current_pub_hash["publishers"] = {} if current_pub_hash["publishers"].blank?
+                  curr_publisher = current_pub_hash["publishers"]["#{click.publisher_id.to_s}"]
+
+                  if curr_publisher.blank?
+                    current_pub_hash["publishers"].merge!("#{click.publisher_id.to_s}" => {"clicks" => 1})
+                  else
+                    curr_publisher.merge!("clicks"=> curr_publisher["clicks"].to_i + 1)
+                  end
+                end
               end
             elsif each_rec_class == "VideoImpression"
               video_imp = VideoImpression.create_new_record(each_rec_detail)
@@ -719,6 +864,35 @@ class Advertisement < ActiveRecord::Base
             p "There was problem while running impressions process => #{e.backtrace}"
           end
           p "Remaining click_or_impressions Count - #{count}"
+        end
+
+
+        # AggregatedImpression
+        ads_hash.each do |key, val|
+          agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"]).last
+
+          if agg_imp.blank?
+            agg_imp = AggregatedImpression.new(val)
+            agg_imp.save!
+          else
+            agg_imp.hours = Advertisemenet.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
+            agg_imp.device = Advertisemenet.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
+            agg_imp.ret = Advertisemenet.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
+            agg_imp.rii = Advertisemenet.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
+            agg_imp.save!
+          end
+        end
+
+        publisher_hash.each do |key, val|
+          agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => nil, :for_pub => true).last
+
+          if agg_imp.blank?
+            agg_imp = AggregatedImpression.new(val)
+            agg_imp.save!
+          else
+            agg_imp.publishers = Advertisement.combine_hash(agg_imp.publishers, val["publishers"]) if !val["publishers"].blank?
+            agg_imp.save!
+          end
         end
 
         # Impression Process
@@ -950,6 +1124,451 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       $redis.set("bulk_process_add_impression_is_running", 0)
       Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc, "true")
     end
+  end
+
+  def self.future_bulk_process_impression_and_click()
+    if $redis.get("bulk_process_add_impression_is_running").to_i == 0
+      $redis.set("bulk_process_add_impression_is_running", 1)
+      mins = $redis.llen("resque:queue:create_impression_and_click").to_i / 1000 rescue 30
+      $redis.expire("bulk_process_add_impression_is_running", mins.minutes)
+      length = $redis.llen("resque:queue:create_impression_and_click")
+      count = length
+
+      begin
+        add_impressions = $redis.lrange("resque:queue:create_impression_and_click", 0, 1000)
+
+        impression_import = []
+        impression_import_mongo = []
+        # video_comp_impression_import_mongo = []
+        ad_impressions_list = []
+        clicks_import = []
+        clicks_import_mongo = []
+        # video_imp_import = []
+        non_ad_impressions_list = []
+        ads_hash = {}
+        publisher_hash = {}
+        add_impressions.each do |each_rec|
+          count -= 1
+          begin
+            each_rec_arr = JSON.parse(each_rec)["args"]
+            each_rec_class = each_rec_arr[0]
+            each_rec_detail = each_rec_arr[1]
+
+            if each_rec_class == "AddImpression"
+              impression = AddImpression.create_new_record(each_rec_detail)
+
+              url_params = Advertisement.reverse_make_url_params(impression.params)
+              impression_import << impression
+
+              # Impression mongo
+              impression_mongo = impression.attributes
+              #time fixes
+              impression_mongo["impression_time"] = impression.impression_time.utc if impression.impression_time.is_a?(Time)
+              impression_mongo["retargeting"] = impression.r.to_i
+              impression_mongo["device"] = url_params["device"]
+              impression_mongo["is_rii"] = impression.having_related_items
+
+              time = impression.impression_time.utc rescue Time.now
+              date = time.to_date rescue ""
+              hour = time.hour rescue ""
+
+              if !impression.advertisement_id.blank?
+                device_name = impression_mongo["device"]
+                is_rii = impression_mongo["is_rii"]
+                ret = impression.r.to_i == 1
+
+                current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_hash.blank?
+                  ads_hash["#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s)
+                current_hash["hours"] = {} if current_hash["hours"].blank?
+                curr_hour = current_hash["hours"]["#{hour}"]
+                if curr_hour.blank?
+                  current_hash["hours"].merge!({"#{hour}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_hour.merge!({"imp" => curr_hour["imp"].to_i + 1, "costs" => curr_hour["costs"].to_f + impression.winning_price.to_f})
+                end
+
+                current_hash["device"] = {} if current_hash["device"].blank?
+                curr_device = current_hash["device"]["#{device_name}"]
+                if curr_device.blank?
+                  current_hash["device"].merge!({"#{device_name}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_device.merge!({"imp" => curr_device["imp"].to_i + 1, "costs" => curr_device["costs"].to_f + impression.winning_price.to_f})
+                end
+
+                current_hash["rii"] = {} if current_hash["rii"].blank?
+                curr_rii = current_hash["rii"]["#{is_rii}"]
+                if curr_rii.blank?
+                  current_hash["rii"].merge!({"#{is_rii}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_rii.merge!({"imp" => curr_rii["imp"].to_i + 1, "costs" => curr_rii["costs"].to_f + impression.winning_price.to_f})
+                end
+
+                current_hash["ret"] = {} if current_hash["ret"].blank?
+                curr_ret = current_hash["ret"]["#{ret}"]
+                if curr_ret.blank?
+                  current_hash["ret"].merge!({"#{ret}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                else
+                  curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + impression.winning_price.to_f})
+                end
+              else
+                current_hash = publisher_hash["publisher_#{date}"]
+
+                if current_hash.blank?
+                  publisher_hash["publisher_#{date}"] = {}
+                  current_hash = publisher_hash["publisher_#{date}"]
+                end
+
+                current_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
+
+                current_hash["publishers"] = {} if current_hash["publishers"].blank?
+                curr_publisher = current_hash["publishers"]["#{impression.publisher_id.to_s}"]
+
+                if curr_publisher.blank?
+                  current_hash["publishers"].merge!("#{impression.publisher_id.to_s}" => {"imp" => 1})
+                else
+                  curr_publisher.merge!("imp"=> curr_publisher["imp"].to_i + 1)
+                end
+              end
+
+              if impression.advertisement_type == "advertisement" || impression.advertisement_type == "fashion"
+                ad_impressions_list << impression
+              elsif impression.advertisement_type != "advertisement"
+                non_ad_impressions_list << impression
+              end
+            elsif each_rec_class == "Click"
+              click = Click.create_new_record(each_rec_detail)
+              unless click.blank?
+                clicks_import << click
+
+                # if !click.advertisement_id.blank?
+                #   click_mongo = click.attributes
+                #   click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                #   click_mongo.delete("impression_id")
+                #   clicks_import_mongo << click_mongo
+                # end
+
+                click_mongo = click.attributes
+                click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
+                click_mongo["video_impression_id"] = click.video_impression_id
+                click_mongo["temp_user_id"] = click.temp_user_id
+                click_mongo["item_id"] = click.item_id
+                click_mongo.delete("impression_id")
+                clicks_import_mongo << click_mongo if !click.advertisement_id.blank?
+
+                time = click.timestamp.utc rescue Time.now
+                date = time.to_date rescue ""
+                hour = time.hour rescue ""
+
+                if !click.advertisement_id.blank?
+                  # device_name = impression_mongo["device"]
+                  # is_rii = impression_mongo["is_rii"]
+                  ret = click.r.to_i == 1
+                  click_impression = AddImpression.where(:id => click.impression_id).last
+
+                  current_hash = ads_hash["#{date}_#{click.advertisement_id.to_s}"]
+                  if current_hash.blank?
+                    ads_hash["#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_hash = ads_hash["#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s)
+
+                  current_hash["hours"] = {} if current_hash["hours"].blank?
+                  curr_hour = current_hash["hours"]["#{hour}"]
+                  if curr_hour.blank?
+                    current_hash["hours"].merge!({"#{hour}" => {"clicks" => 1}})
+                  else
+                    curr_hour.merge!({"clicks" => curr_hour["clicks"].to_i + 1})
+                  end
+
+                  if !click_impression.blank?
+                    url_params = Advertisement.reverse_make_url_params(click_impression.params) rescue {}
+
+                    device_name = url_params["device"]
+                    is_rii = click_impression.having_related_items
+
+                    current_hash["device"] = {} if current_hash["device"].blank?
+                    curr_device = current_hash["device"]["#{device_name}"]
+                    if curr_device.blank?
+                      current_hash["device"].merge!({"#{device_name}" => {"clicks" => 1}})
+                    else
+                      curr_device.merge!({"clicks" => curr_device["clicks"].to_i + 1})
+                    end
+
+                    current_hash["rii"] = {} if current_hash["rii"].blank?
+                    curr_rii = current_hash["rii"]["#{is_rii}"]
+                    if curr_rii.blank?
+                      current_hash["rii"].merge!({"#{is_rii}" => {"clicks" => 1}})
+                    else
+                      curr_rii.merge!({"clicks" => curr_rii["clicks"].to_i + 1})
+                    end
+                  end
+
+                  current_hash["ret"] = {} if current_hash["ret"].blank?
+                  curr_ret = current_hash["ret"]["#{ret}"]
+                  if curr_ret.blank?
+                    current_hash["ret"].merge!({"#{ret}" => {"clicks" => 1}})
+                  else
+                    curr_ret.merge!({"clicks" => curr_ret["clicks"].to_i + 1})
+                  end
+                else
+                  current_pub_hash = publisher_hash["publisher_#{date}"]
+
+                  if current_pub_hash.blank?
+                    publisher_hash["publisher_#{date}"] = {}
+                    current_pub_hash = publisher_hash["publisher_#{date}"]
+                  end
+
+                  current_pub_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
+
+                  current_pub_hash["publishers"] = {} if current_pub_hash["publishers"].blank?
+                  curr_publisher = current_pub_hash["publishers"]["#{click.publisher_id.to_s}"]
+
+                  if curr_publisher.blank?
+                    current_pub_hash["publishers"].merge!("#{click.publisher_id.to_s}" => {"clicks" => 1})
+                  else
+                    curr_publisher.merge!("clicks"=> curr_publisher["clicks"].to_i + 1)
+                  end
+                end
+              end
+            end
+          rescue Exception => e
+            p "There was problem while running impressions process => #{e.backtrace}"
+          end
+          p "Remaining click_or_impressions Count - #{count}"
+        end
+
+        ads_hash.each do |key, val|
+          agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"]).last
+
+          if agg_imp.blank?
+            agg_imp = AggregatedImpression.new(val)
+            agg_imp.save!
+          else
+            agg_imp.hours = Advertisemenet.combine_hash(agg_imp.hours, val["hours"]) if !val["hours"].blank?
+            agg_imp.device = Advertisemenet.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
+            agg_imp.ret = Advertisemenet.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
+            agg_imp.rii = Advertisemenet.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
+            agg_imp.save!
+          end
+        end
+
+        publisher_hash.each do |key, val|
+          agg_imp = AggregatedImpression.where(:agg_date => val["agg_date"], :ad_id => nil, :for_pub => true).last
+
+          if agg_imp.blank?
+            agg_imp = AggregatedImpression.new(val)
+            agg_imp.save!
+          else
+            agg_imp.publishers = Advertisement.combine_hash(agg_imp.publishers, val["publishers"]) if !val["publishers"].blank?
+            agg_imp.save!
+          end
+        end
+
+        # Impression Process
+        AddImpression.import(impression_import)
+
+        # video_comp_impression_import_mongo.each do |each_comp_imp|
+        #   begin
+        #     vid_imp = AdImpression.where("_id" => each_comp_imp["video_impression_id"]).first
+        #
+        #     if !vid_imp.blank?
+        #       vid_imp.m_companion_impressions << MCompanionImpression.new(:timestamp => each_comp_imp["timestamp"])
+        #     else
+        #       MCompanionImpression.collection.insert(:timestamp => each_comp_imp["timestamp"], :_id => each_comp_imp["_id"], :video_impression_id => each_comp_imp["video_impression_id"])
+        #     end
+        #   rescue Exception => e
+        #     p "rescue while comp mongodb insert"
+        #   end
+        # end
+
+        ad_impressions_list_values = $redis_rtb.pipelined do
+          ad_impressions_list.each do |each_impression|
+            $redis_rtb.get("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}")
+          end
+        end
+
+        impression_details = []
+        ad_impressions_list.each_with_index do |imp, index|
+          appearance_count = ad_impressions_list_values[index].to_i
+          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank? || !imp.device.blank? || !imp.having_related_items.blank?))
+            # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
+            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo, :device => imp.device, :having_related_items => imp.having_related_items)
+          end
+        end
+
+        ImpressionDetail.import(impression_details)
+
+
+        # p "ImpressionDetail count #{impression_details.count} - #{Time.now}"
+        # impression_details.each do |each_imp_det|
+        #   begin
+        #     ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).first
+        #     ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
+        #   rescue Exception => e
+        #     p "Error while update pre appearance count"
+        #   end
+        # end
+        #
+        # p "Completed Impression Detail Update Process -  #{Time.now}"
+
+
+        $redis_rtb.pipelined do
+          impression_import.each do |each_impression|
+            if (each_impression.advertisement_type == "advertisement" && !each_impression.temp_user_id.blank? && !each_impression.advertisement_id.blank? && each_impression.video_impression_id.blank?)
+              $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",1)
+              $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",2.weeks)
+
+              $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1)
+              $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1.day)
+            end
+          end
+        end
+
+
+        #buying list update for non ad impressions
+
+        p "Started buying list update for non ad impressions"
+
+        redis_rtb_hash = {}
+        non_ad_impressions_list.each do |impression|
+          begin
+            article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+inner join item_contents_relations_cache icc on icc.content_id = ac.id
+where url = '#{impression.hosted_site_url}' group by ac.id").first
+
+            unless article_content.blank?
+              user_id = impression.temp_user_id
+              type = article_content.sub_type
+              item_ids = article_content.all_item_ids.to_s rescue ""
+              redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto")
+              redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+            end
+          rescue Exception => e
+            p "Error invalid url errors => #{impression.hosted_site_url}"
+          end
+        end
+
+        # Redis Rtb update
+        $redis_rtb.pipelined do
+          redis_rtb_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
+            $redis_rtb.hincrby(key, "ap_c", 1)
+            $redis_rtb.expire(key, 2.weeks)
+          end
+        end
+
+        p "Completed buying list update for non ad impressions"
+
+        p "Started Click Detail Process"
+
+        clicks_details = []
+        clicks_import.each do |each_click|
+          begin
+            if !each_click.t.blank? || !each_click.r.blank? || each_click.ic.to_i >0 || !each_click.a.blank?
+              clicks_import = clicks_import - [each_click]
+              each_click.save!
+              click_detail = ClickDetail.new(:click_id => each_click.id, :tagging => each_click.t, :retargeting => each_click.r, :pre_appearance_count => each_click.ic, :additional_details => each_click.a)
+              clicks_details << click_detail
+            end
+          rescue Exception => e
+            p "Problem while creating click detail"
+          end
+        end
+
+        Click.import(clicks_import)
+        ClickDetail.import(clicks_details)
+
+        clicks_import_mongo.each do |each_click_mongo|
+          if !each_click_mongo["temp_user_id"].blank?
+            plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).first
+
+            if plannto_user_detail.blank?
+              plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
+              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).select(:google_user_id).last
+              plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
+              plannto_user_detail.save!
+            end
+          end
+
+          itemtype_id = nil
+          #plannto user details
+          if !each_click_mongo["item_id"].blank?
+            itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
+            itemtype_id = itemtype.itemtype_id rescue ""
+          end
+
+          if !itemtype_id.blank?
+            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            if m_item_type.blank?
+              plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            end
+
+            click_item_ids = m_item_type.click_item_ids
+            click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
+            click_item_ids = click_item_ids.map(&:to_i).compact.uniq
+            m_item_type.click_item_ids = click_item_ids
+            m_item_type.last_click_date = Date.today
+            m_item_type.save!
+          end
+
+          plannto_user_detail.save!
+        end
+
+        p "Completed Click Detail Process"
+
+        #push to mongo
+        # begin
+        #   MClick.collection.insert(clicks_import_mongo)
+        # rescue Exception => e
+        #   p e
+        #   p "Error While processing click"
+        # end
+
+        # VideoImpression.import(video_imp_import)
+        #
+        # $redis_rtb.pipelined do
+        #   video_imp_import.each do |each_impression|
+        #     if (each_impression.advertisement_type == "video_advertisement" && !each_impression.temp_user_id.blank? && !each_impression.advertisement_id.blank?)
+        #       $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",1)
+        #       $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:count",2.weeks)
+        #
+        #       $redis_rtb.incrby("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1)
+        #       $redis_rtb.expire("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}",1.day)
+        #     end
+        #   end
+        # end
+
+        $redis.ltrim("resque:queue:create_impression_and_click", add_impressions.count, -1)
+        length = length - add_impressions.count
+        p "*********************************** Remaining ImpressionAndClick Length - #{length} **********************************"
+      end while length > 0
+
+      # companion_impressions = MCompanionImpression.all
+      $redis.set("bulk_process_add_impression_is_running", 0)
+      Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc, "true")
+    end
+  end
+
+  def self.combine_hash(old_hash, new_hash)
+    old_hash = {} if old_hash.blank?
+    new_hash.each do |each_key, each_val|
+      if old_hash[each_key].blank?
+        old_hash[each_key] = each_val
+      else
+        each_val.each do |e_key, e_val|
+          old_hash[each_key][e_key] = old_hash[each_key][e_key].to_i + e_val.to_i
+        end
+      end
+    end
+    old_hash
   end
 
   def self.find_user_details(type, user_id)
