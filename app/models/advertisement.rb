@@ -619,13 +619,6 @@ class Advertisement < ActiveRecord::Base
         ads_hash = {}
         publisher_hash = {}
 
-
-        #woc => without commission
-        #wc => with commission
-        # ai.winning_price_woc = ai.winning_price/1000000
-        # ai.winning_price_wc = ai.winning_price/1000000
-        #
-
         ads = Advertisement.select("id,commission")
         ad_detail_hash = {}
 
@@ -917,8 +910,8 @@ class Advertisement < ActiveRecord::Base
 
               agg_imp.total_imp = agg_imp.total_imp.to_i + val["total_imp"].to_i
               agg_imp.total_clicks = agg_imp.total_clicks.to_i + val["total_clicks"].to_i
-              agg_imp.total_costs = agg_imp.total_costs.to_f + val["total_costs"].to_f
-              agg_imp.total_costs_wc = agg_imp.total_costs_wc.to_f + val["total_costs_wc"].to_f
+              agg_imp.total_costs = (agg_imp.total_costs.to_f + val["total_costs"].to_f).to_f.round(2)
+              agg_imp.total_costs_wc = (agg_imp.total_costs_wc.to_f + val["total_costs_wc"].to_f).to_f.round(2)
 
               agg_imp.save!
             end
