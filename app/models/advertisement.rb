@@ -618,6 +618,21 @@ class Advertisement < ActiveRecord::Base
         non_ad_impressions_list = []
         ads_hash = {}
         publisher_hash = {}
+
+
+        #woc => without commission
+        #wc => with commission
+        # ai.winning_price_woc = ai.winning_price/1000000
+        # ai.winning_price_wc = ai.winning_price/1000000
+        #
+
+        ads = Advertisement.select("id,commission")
+        ad_detail_hash = {}
+
+        ads.each do |adv|
+          ad_detail_hash.merge!("#{adv.id}" => adv.commission.to_f.round(2))
+        end
+
         add_impressions.each do |each_rec|
           count -= 1
           begin
@@ -658,6 +673,18 @@ class Advertisement < ActiveRecord::Base
               hour = time.hour rescue ""
 
               if !impression.advertisement_id.blank?
+                winning_price = impression.winning_price.to_f/1000000 rescue 0.0
+                begin
+                  commission = ad_detail_hash[impression.advertisement_id.to_s]
+
+                  commission = commission.blank? ? 1 : commission.to_f
+                  winning_price_com = winning_price.to_f + (winning_price.to_f * (commission/100))
+
+                  winning_price_com = winning_price_com.to_f.round(2)
+                rescue Exception => e
+                  winning_price_com = 0.0
+                end
+
                 if impression.video_impression_id.blank?
                   impression_import_mongo << impression_mongo
                 else
@@ -665,7 +692,7 @@ class Advertisement < ActiveRecord::Base
                 end
 
                 # For AggregatedImpression
-                device_name = impression_mongo["device"]
+                device_name = impression.device
                 is_rii = impression_mongo["is_rii"]
                 ret = impression.r.to_i == 1
 
@@ -677,36 +704,39 @@ class Advertisement < ActiveRecord::Base
                 end
 
                 current_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s)
+
+                current_hash.merge!({"total_imp" => current_hash["total_imp"].to_i + 1, "total_costs" => current_hash["total_costs"].to_f + winning_price.to_f, "total_costs_wc" => current_hash["total_costs_wc"].to_f + winning_price_com})
+
                 current_hash["hours"] = {} if current_hash["hours"].blank?
                 curr_hour = current_hash["hours"]["#{hour}"]
                 if curr_hour.blank?
-                  current_hash["hours"].merge!({"#{hour}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                  current_hash["hours"].merge!({"#{hour}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
-                  curr_hour.merge!({"imp" => curr_hour["imp"].to_i + 1, "costs" => curr_hour["costs"].to_f + impression.winning_price.to_f})
+                  curr_hour.merge!({"imp" => curr_hour["imp"].to_i + 1, "costs" => curr_hour["costs"].to_f + winning_price.to_f})
                 end
 
                 current_hash["device"] = {} if current_hash["device"].blank?
                 curr_device = current_hash["device"]["#{device_name}"]
                 if curr_device.blank?
-                  current_hash["device"].merge!({"#{device_name}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                  current_hash["device"].merge!({"#{device_name}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
-                  curr_device.merge!({"imp" => curr_device["imp"].to_i + 1, "costs" => curr_device["costs"].to_f + impression.winning_price.to_f})
+                  curr_device.merge!({"imp" => curr_device["imp"].to_i + 1, "costs" => curr_device["costs"].to_f + winning_price.to_f})
                 end
 
                 current_hash["rii"] = {} if current_hash["rii"].blank?
                 curr_rii = current_hash["rii"]["#{is_rii}"]
                 if curr_rii.blank?
-                  current_hash["rii"].merge!({"#{is_rii}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                  current_hash["rii"].merge!({"#{is_rii}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
-                  curr_rii.merge!({"imp" => curr_rii["imp"].to_i + 1, "costs" => curr_rii["costs"].to_f + impression.winning_price.to_f})
+                  curr_rii.merge!({"imp" => curr_rii["imp"].to_i + 1, "costs" => curr_rii["costs"].to_f + winning_price.to_f})
                 end
 
                 current_hash["ret"] = {} if current_hash["ret"].blank?
                 curr_ret = current_hash["ret"]["#{ret}"]
                 if curr_ret.blank?
-                  current_hash["ret"].merge!({"#{ret}" => {"imp" => 1, "costs" => impression.winning_price.to_f}})
+                  current_hash["ret"].merge!({"#{ret}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
-                  curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + impression.winning_price.to_f})
+                  curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + winning_price.to_f})
                 end
               else
                 current_hash = publisher_hash["publisher_#{date}"]
@@ -717,6 +747,8 @@ class Advertisement < ActiveRecord::Base
                 end
 
                 current_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
+
+                current_hash.merge!({"total_imp" => current_hash["total_imp"].to_i + 1})
 
                 current_hash["publishers"] = {} if current_hash["publishers"].blank?
                 curr_publisher = current_hash["publishers"]["#{impression.publisher_id.to_s}"]
@@ -771,6 +803,7 @@ class Advertisement < ActiveRecord::Base
                   end
 
                   current_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s)
+                  current_hash.merge!({"total_clicks" => current_hash["total_clicks"].to_i + 1})
 
                   current_hash["hours"] = {} if current_hash["hours"].blank?
                   curr_hour = current_hash["hours"]["#{hour}"]
@@ -819,6 +852,7 @@ class Advertisement < ActiveRecord::Base
                   end
 
                   current_pub_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
+                  current_hash.merge!({"total_clicks" => current_hash["total_clicks"].to_i + 1})
 
                   current_pub_hash["publishers"] = {} if current_pub_hash["publishers"].blank?
                   curr_publisher = current_pub_hash["publishers"]["#{click.publisher_id.to_s}"]
@@ -880,6 +914,12 @@ class Advertisement < ActiveRecord::Base
               agg_imp.device = Advertisement.combine_hash(agg_imp.device, val["device"]) if !val["device"].blank?
               agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, val["ret"]) if !val["ret"].blank?
               agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, val["rii"]) if !val["rii"].blank?
+
+              agg_imp.total_imp = agg_imp.total_imp.to_i + val["total_imp"].to_i
+              agg_imp.total_clicks = agg_imp.total_clicks.to_i + val["total_clicks"].to_i
+              agg_imp.total_costs = agg_imp.total_costs.to_f + val["total_costs"].to_f
+              agg_imp.total_costs_wc = agg_imp.total_costs_wc.to_f + val["total_costs_wc"].to_f
+
               agg_imp.save!
             end
           end
@@ -892,6 +932,8 @@ class Advertisement < ActiveRecord::Base
               agg_imp.save!
             else
               agg_imp.publishers = Advertisement.combine_hash(agg_imp.publishers, val["publishers"]) if !val["publishers"].blank?
+              agg_imp.total_imp = agg_imp.total_imp.to_i + val["total_imp"].to_i
+              agg_imp.total_clicks = agg_imp.total_clicks.to_i + val["total_clicks"].to_i
               agg_imp.save!
             end
           end
@@ -1130,6 +1172,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     end
   end
 
+=begin
   def self.future_bulk_process_impression_and_click()
     if $redis.get("bulk_process_add_impression_is_running").to_i == 0
       $redis.set("bulk_process_add_impression_is_running", 1)
@@ -1560,6 +1603,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       Resque.enqueue(AggregatedDetailProcess, Time.zone.now.utc, "true")
     end
   end
+=end
 
   def self.combine_hash(old_hash, new_hash)
     old_hash = {} if old_hash.blank?

@@ -56,6 +56,7 @@ class AddImpression < ActiveRecord::Base
    rescue
      ai.winning_price = 0.0
    end
+
    ai.sid = obj_params[:sid]
    ai.created_at = obj_params[:time]
    ai.updated_at = obj_params[:time]
@@ -63,7 +64,8 @@ class AddImpression < ActiveRecord::Base
    ai.t = obj_params[:t].to_i
    ai.r = obj_params[:r].to_i
    ai.a = obj_params[:a].to_s
-   ai.device = obj_params[:device].to_s
+   url_params = Advertisement.reverse_make_url_params(impression.params)
+   ai.device = url_params[:device].to_s
    ai.video = obj_params[:video].to_s
    ai.video_impression_id = obj_params[:video_impression_id].to_s
    ai.geo = obj_params[:geo]
