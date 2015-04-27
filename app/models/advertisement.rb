@@ -705,7 +705,7 @@ class Advertisement < ActiveRecord::Base
 
                 current_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s)
 
-                current_hash.merge!({"total_imp" => current_hash["total_imp"].to_i + 1, "total_costs" => current_hash["total_costs"].to_f + winning_price.to_f, "total_costs_wc" => current_hash["total_costs_wc"].to_f + winning_price_com})
+                current_hash.merge!("total_imp" => current_hash["total_imp"].to_i + 1, "total_costs" => current_hash["total_costs"].to_f + winning_price.to_f, "total_costs_wc" => current_hash["total_costs_wc"].to_f + winning_price_com)
 
                 current_hash["hours"] = {} if current_hash["hours"].blank?
                 curr_hour = current_hash["hours"]["#{hour}"]
@@ -748,7 +748,7 @@ class Advertisement < ActiveRecord::Base
 
                 current_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
 
-                current_hash.merge!({"total_imp" => current_hash["total_imp"].to_i + 1})
+                current_hash.merge!("total_imp" => current_hash["total_imp"].to_i + 1)
 
                 current_hash["publishers"] = {} if current_hash["publishers"].blank?
                 curr_publisher = current_hash["publishers"]["#{impression.publisher_id.to_s}"]
