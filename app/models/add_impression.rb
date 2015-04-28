@@ -65,6 +65,7 @@ class AddImpression < ActiveRecord::Base
    ai.r = obj_params[:r].to_i
    ai.a = obj_params[:a].to_s
    url_params = Advertisement.reverse_make_url_params(ai.params)
+   url_params.symbolize_keys!
    ai.device = url_params[:device].to_s
    ai.video = obj_params[:video].to_s
    ai.video_impression_id = obj_params[:video_impression_id].to_s

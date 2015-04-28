@@ -5,6 +5,8 @@ class Click < ActiveRecord::Base
 
   attr_accessor :t, :r, :ic, :a, :video_impression_id
 
+  belongs_to :advertisement
+
   def self.create_new_record(obj_params)
     unless obj_params.is_a?(Hash)
       obj_params = JSON.parse(obj_params)

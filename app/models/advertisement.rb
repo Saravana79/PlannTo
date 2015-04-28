@@ -11,6 +11,7 @@ class Advertisement < ActiveRecord::Base
 
   has_many :images, as: :imageable, :dependent => :destroy
   has_many :add_impressions
+  has_many :clicks
   has_many :order_histories
   belongs_to :content
   belongs_to :user
@@ -637,6 +638,7 @@ class Advertisement < ActiveRecord::Base
               impression = AddImpression.create_new_record(each_rec_detail)
 
               url_params = Advertisement.reverse_make_url_params(impression.params)
+              url_params.symbolize_keys!
               impression_import << impression
 
               # Impression mongo
@@ -652,10 +654,10 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = url_params["device"]
-              impression_mongo["size"] = url_params["size"]
-              impression_mongo["design_type"] = url_params["page_type"]
-              impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+              impression_mongo["device"] = url_params[:device]
+              impression_mongo["size"] = url_params[:size]
+              impression_mongo["design_type"] = url_params[:page_type]
+              impression_mongo["viewability"] = url_params[:v].blank? ? 101 : url_params[:v].to_i
               impression_mongo["video_impression_id"] = impression.video_impression_id
               impression_mongo["additional_details"] = impression.a
               impression_mongo["geo"] = impression.geo
@@ -685,8 +687,8 @@ class Advertisement < ActiveRecord::Base
                 end
 
                 # For AggregatedImpression
-                device_name = impression.device
-                is_rii = impression_mongo["is_rii"]
+                device_name = impression.device.to_s
+                is_rii = impression_mongo["is_rii"].to_s
                 ret = impression.r.to_i == 1
 
                 current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
@@ -788,6 +790,7 @@ class Advertisement < ActiveRecord::Base
                   # is_rii = impression_mongo["is_rii"]
                   ret = click.r.to_i == 1
                   click_impression = AddImpression.where(:id => click.impression_id).last
+                  is_rii = click.advertisement.having_related_items rescue false
 
                   current_hash = ads_hash["#{date}_#{click.advertisement_id.to_s}"]
                   if current_hash.blank?
@@ -808,9 +811,9 @@ class Advertisement < ActiveRecord::Base
 
                   if !click_impression.blank?
                     url_params = Advertisement.reverse_make_url_params(click_impression.params) rescue {}
+                    url_params.symbolize_keys!
 
-                    device_name = url_params["device"]
-                    is_rii = click_impression.having_related_items
+                    device_name = url_params[:device]
 
                     current_hash["device"] = {} if current_hash["device"].blank?
                     curr_device = current_hash["device"]["#{device_name}"]
@@ -819,14 +822,14 @@ class Advertisement < ActiveRecord::Base
                     else
                       curr_device.merge!({"clicks" => curr_device["clicks"].to_i + 1})
                     end
+                  end
 
-                    current_hash["rii"] = {} if current_hash["rii"].blank?
-                    curr_rii = current_hash["rii"]["#{is_rii}"]
-                    if curr_rii.blank?
-                      current_hash["rii"].merge!({"#{is_rii}" => {"clicks" => 1}})
-                    else
-                      curr_rii.merge!({"clicks" => curr_rii["clicks"].to_i + 1})
-                    end
+                  current_hash["rii"] = {} if current_hash["rii"].blank?
+                  curr_rii = current_hash["rii"]["#{is_rii}"]
+                  if curr_rii.blank?
+                    current_hash["rii"].merge!({"#{is_rii}" => {"clicks" => 1}})
+                  else
+                    curr_rii.merge!({"clicks" => curr_rii["clicks"].to_i + 1})
                   end
 
                   current_hash["ret"] = {} if current_hash["ret"].blank?
@@ -864,7 +867,8 @@ class Advertisement < ActiveRecord::Base
               impression = video_imp
 
               url_params = Advertisement.reverse_make_url_params(impression.params)
-              impression.device = url_params["device"]
+              url_params.symbolize_keys!
+              impression.device = url_params[:device]
 
               # Impression mongo
               impression_mongo = impression.attributes
@@ -879,10 +883,10 @@ class Advertisement < ActiveRecord::Base
               impression_mongo["tagging"] = impression.t.to_i
               impression_mongo["retargeting"] = impression.r.to_i
               impression_mongo["domain"] = Item.get_host_without_www(impression.hosted_site_url)
-              impression_mongo["device"] = url_params["device"]
-              impression_mongo["size"] = url_params["size"]
-              impression_mongo["design_type"] = url_params["page_type"]
-              impression_mongo["viewability"] = url_params["v"].blank? ? 101 : url_params["v"].to_i
+              impression_mongo["device"] = url_params[:device]
+              impression_mongo["size"] = url_params[:size]
+              impression_mongo["design_type"] = url_params[:page_type]
+              impression_mongo["viewability"] = url_params[:v].blank? ? 101 : url_params[:v].to_i
               impression_mongo["additional_details"] = impression.a
               impression_import_mongo << impression_mongo
 
