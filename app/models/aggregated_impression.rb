@@ -92,7 +92,7 @@ class AggregatedImpression
           final_hash[key] = {} if final_hash[key].blank?
           final_hash[key]["total_imp"] = val["imp"].to_i
           final_hash[key]["total_clicks"] = val["clicks"].to_i
-          final_hash[key]["total_costs"] = val["costs"].to_i
+          final_hash[key]["total_costs"] = val["costs"].to_f.round(2)
         end
       end
 

@@ -785,12 +785,26 @@ class Advertisement < ActiveRecord::Base
                 time = click.timestamp.utc rescue Time.now
                 date = time.to_date rescue ""
                 hour = time.hour rescue ""
+                publisher_id = click.publisher_id.to_s
+
+                click_impression = AddImpression.where(:id => click.impression_id).last
+
+                if click_impression.blank?
+                  click_impression = impression_import.select {|each_imp| each_imp.id.to_s == click.impression_id.to_s}.last
+                end
+
+                if !click_impression.blank?
+                  time = click_impression.impression_time.utc rescue Time.now
+                  date = time.to_date rescue ""
+                  hour = time.hour rescue ""
+                  publisher_id = click_impression.publisher_id.to_s if !click_impression.publisher_id.blank?
+                end
+
 
                 if !click.advertisement_id.blank?
                   # device_name = impression_mongo["device"]
                   # is_rii = impression_mongo["is_rii"]
                   ret_val = click.r.to_i == 1
-                  click_impression = AddImpression.where(:id => click.impression_id).last
                   is_rii = click.advertisement.having_related_items rescue false
 
                   current_hash = ads_hash["#{date}_#{click.advertisement_id.to_s}"]
@@ -808,10 +822,6 @@ class Advertisement < ActiveRecord::Base
                     current_hash["hours"].merge!({"#{hour}" => {"clicks" => 1}})
                   else
                     curr_hour.merge!({"clicks" => curr_hour["clicks"].to_i + 1})
-                  end
-
-                  if click_impression.blank?
-                    click_impression = impression_import.select {|each_imp| each_imp.id.to_s == click.impression_id.to_s}.last
                   end
 
                   if !click_impression.blank?
@@ -853,13 +863,13 @@ class Advertisement < ActiveRecord::Base
                   end
 
                   current_pub_hash.merge!("agg_date" => "#{date}", "ad_id" => "", "for_pub" => true)
-                  current_hash.merge!({"total_clicks" => current_hash["total_clicks"].to_i + 1})
+                  current_pub_hash.merge!({"total_clicks" => current_pub_hash["total_clicks"].to_i + 1})
 
                   current_pub_hash["publishers"] = {} if current_pub_hash["publishers"].blank?
-                  curr_publisher = current_pub_hash["publishers"]["#{click.publisher_id.to_s}"]
+                  curr_publisher = current_pub_hash["publishers"]["#{publisher_id.to_s}"]
 
                   if curr_publisher.blank?
-                    current_pub_hash["publishers"].merge!("#{click.publisher_id.to_s}" => {"clicks" => 1})
+                    current_pub_hash["publishers"].merge!("#{publisher_id.to_s}" => {"clicks" => 1})
                   else
                     curr_publisher.merge!("clicks"=> curr_publisher["clicks"].to_i + 1)
                   end
