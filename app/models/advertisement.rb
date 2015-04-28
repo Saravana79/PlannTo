@@ -669,6 +669,7 @@ class Advertisement < ActiveRecord::Base
 
               if !impression.advertisement_id.blank?
                 winning_price = impression.winning_price.to_f/1000000 rescue 0.0
+                winning_price = winning_price.to_f.round(2)
                 begin
                   commission = ad_detail_hash[impression.advertisement_id.to_s]
 
@@ -807,6 +808,10 @@ class Advertisement < ActiveRecord::Base
                     current_hash["hours"].merge!({"#{hour}" => {"clicks" => 1}})
                   else
                     curr_hour.merge!({"clicks" => curr_hour["clicks"].to_i + 1})
+                  end
+
+                  if click_impression.blank?
+                    click_impression = impression_import.select {|each_imp| each_imp.id.to_s == click.impression_id.to_s}.last
                   end
 
                   if !click_impression.blank?
