@@ -127,6 +127,21 @@ class Admin::AdReportsController < ApplicationController
     end
   end
 
+  def more_reports_agg
+    params[:type] ||= "Advertisement"
+    params[:ad_type] ||= "advertisement"
+    params[:ad_id] ||= "All"
+    params[:report_sort_by] ||= "imp_count"
+    params[:show_downloads] ||= "false"
+
+    @start_date = params[:from_date].blank? ? Date.today.beginning_of_day : params[:from_date].to_date.beginning_of_day
+    @end_date = params[:to_date].blank? ? Date.today.end_of_day : params[:to_date].to_date.end_of_day
+    @ad_types = ["advertisement", "non advertisement"]
+    @advertisements = ["All"] + Advertisement.all.map(&:id)
+
+    @results = AggregatedImpression.get_results_from_agg_impression(params, @start_date, @end_date)
+  end
+
   def widget_reports
     @start_date = params[:from_date].blank? ? 1.week.ago : params[:from_date].to_date
     @end_date = params[:to_date].blank? ? Time.zone.now : params[:to_date].to_date

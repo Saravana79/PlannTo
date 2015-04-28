@@ -150,7 +150,7 @@
 <span>
     <span class="Usrdropdown">
 
-       <img src="<%=  current_user.get_photo%>" alt="User Name" title="<%=  current_user.name%>" />
+       <img src="<%=  current_user.get_photo %>" alt="User Name" title="<%=  current_user.name rescue '' %>" />
 
          <span class="Usernamedp"><a href="#"><%=  current_user.name%></a>
            <div class="Useraccountinfo">

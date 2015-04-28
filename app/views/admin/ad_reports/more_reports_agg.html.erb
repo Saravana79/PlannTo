@@ -1,0 +1,330 @@
+<div class='report_form'>
+  <%= form_for :impression, :url => admin_more_reports_agg_path, :method => :get do |f| %>
+   <div class="dates">
+    <div style="display:block;padding-top:10px;clear:both;">
+      <span style="width:100px;display:block;float:left;padding-top:5px;">
+Select A date Range
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+
+	<%= select_tag(:date_from_dropdown, options_for_select([["Select a date Range", 0], ['Yesterday', 1], ['Last Week', 7], ['Last month', 30], ['Last 3 months', 90], ['Last 6 Months', 180]])) %>
+</span>
+
+      <script>
+          $("#date_from_dropdown").live("change", function () {
+              days = $(this).val();
+              var date = new Date();
+              date.setDate(date.getDate() - days);
+              var from_date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+              $("#from_date").val(from_date);
+              date = new Date();
+              // date.setDate(date.getDate() - 1);
+              var to_date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+              $("#to_date").val(to_date);
+          });
+      </script>
+      <br/>
+      <br/>
+      <br/>
+	<span style="width:100px;display:block;float:left;padding-top:5px;">
+From Date
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= text_field_tag :from_date, @start_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
+</span>
+      <br/>
+    </div>
+      <div style="display:block;padding-top:10px;clear:both;">
+<span style="width:100px;display:block;float:left;padding-top:5px;">
+To Date
+</span>
+<span style="width: 100px;display: block;float: left;height: 20px;text-align: center;padding-top: 5px;">
+<%= text_field_tag :to_date, @end_date.to_date.strftime("%d-%m-%Y"), :style => "padding:2px;width:100px;" %>
+</span>
+      </div>
+
+      </div>
+
+      <div class="select_options">
+        Ad Type:
+        <%= select_tag(:ad_type, options_for_select(@ad_types, params[:ad_type])) %>
+        Report Type:
+        <%= select_tag(:type, options_for_select(["Device", "Retargeting", "Hourly", "Advertisement", "Publisher", "Is Related Item Impression"].sort, params[:type])) %>
+        Advertisement ID:
+        <%= select_tag(:ad_id, options_for_select(@advertisements, params[:ad_id])) %>
+      </div>
+      <%= f.submit "Generate Report", :class => "btn-link report_btn generate_btn" %>
+  <% end %>
+</div>
+</div>
+
+<br />
+
+<h2 style="margin-left: 10%;"> Report </h2>
+
+<br/>
+
+<table border="0" width="80%" cellspacing="0" cellpadding="0">
+  <tr>
+    <th class="header_compare"  > <%= params[:type] %> </th>
+    <th class="header_compare"  > Total Impressions </th>
+    <th class="header_compare"  > Total Clicks </th>
+    <th class="header_compare"  > CTR </th>
+    <th class="header_compare"  > Cost </th>
+    <% if params[:type] == "Advertisement" %>
+        <th class="header_compare"  > Total Cost With Comm </th>
+        <th class="header_compare"  > Total Orders </th>
+    <% end %>
+  </tr>
+  <% if params[:type] == "Advertisement" %>
+     <% @results.each do |each_hash| %>
+          <tr>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= each_hash["_id"] %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_imp"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_clicks"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= "#{get_ectr(each_hash["total_clicks"].to_i, each_hash["total_imp"].to_i)}" + " %" %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs_wc"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_orders"] %> </td>
+          </tr>
+     <% end %>
+  <% else %>
+     <% @results.each do |each_key, each_hash| %>
+          <tr>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= each_key %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_imp"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_clicks"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
+              <%= "#{get_ectr(each_hash["total_clicks"].to_i, each_hash["total_imp"].to_i)}" + " %" %>
+            </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs"] %> </td>
+          </tr>
+     <% end %>
+  <% end %>
+</table>
+
+
+<br/><br/>
+
+
+  <script>
+      $("#from_date").datepicker({ dateFormat: 'dd-mm-yy' });
+      $("#to_date").datepicker({ dateFormat: 'dd-mm-yy' });
+  </script>
+
+<style type="text/css">
+    .report_form {
+        color: #a52a2a;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .sorting {
+        float: right;
+        margin: -143px 98px 0 0;
+        position: relative;
+    }
+
+    .select_options {
+        padding-left: 220px;
+        position: absolute;
+    }
+
+    .generate_btn {
+        margin-top: 39px;
+        position: relative;
+    }
+</style>
+
+<style type="text/css">
+
+    /*
+    This was made by João Sardinha
+    Visit me at http://johnsardine.com/
+
+    The table style doesnt contain images, it contains gradients for browsers who support them as well as round corners and drop shadows.
+
+    It has been tested in all major browsers.
+
+    This table style is based on Simple Little Table By Orman Clark,
+    you can download a PSD version of this at his website, PremiumPixels.
+    http://www.premiumpixels.com/simple-little-table-psd/
+
+    PLEASE CONTINUE READING AS THIS CONTAINS IMPORTANT NOTES
+
+    */
+
+    /*
+    Im reseting this style for optimal view using Eric Meyer's CSS Reset - http://meyerweb.com/eric/tools/css/reset/
+    ------------------------------------------------------------------ */
+    body, html  { height: 100%; }
+    html, body, div, span, applet, object, iframe,
+        /*h1, h2, h3, h4, h5, h6,*/ p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, font, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+    }
+    body { line-height: 1; }
+    ol, ul { list-style: none; }
+    blockquote, q { quotes: none; }
+    blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+    :focus { outline: 0; }
+    del { text-decoration: line-through; }
+    table {border-spacing: 0; } /* IMPORTANT, I REMOVED border-collapse: collapse; FROM THIS LINE IN ORDER TO MAKE THE OUTER BORDER RADIUS WORK */
+
+    /*------------------------------------------------------------------ */
+
+    /*This is not important*/
+
+    /*a:link {*/
+    /*color: #666;*/
+    /*font-weight: bold;*/
+    /*text-decoration:none;*/
+    /*}*/
+    /*a:visited {*/
+    /*color: #666;*/
+    /*font-weight:bold;*/
+    /*text-decoration:none;*/
+    /*}*/
+    /*a:active,*/
+    /*a:hover {*/
+    /*color: #bd5a35;*/
+    /*text-decoration:underline;*/
+    /*}*/
+
+
+    /*
+    Table Style - This is what you want
+    ------------------------------------------------------------------ */
+    table a:link {
+        color: #666;
+        font-weight: bold;
+        text-decoration:none;
+    }
+    table a:visited {
+        color: #999999;
+        font-weight:bold;
+        text-decoration:none;
+    }
+    table a:active,
+    table a:hover {
+        color: #bd5a35;
+        text-decoration:underline;
+    }
+    table {
+        font-family:Arial, Helvetica, sans-serif;
+        color:#666;
+        font-size:12px;
+        text-shadow: 1px 1px 0px #fff;
+        background:#eaebec;
+        /*margin:20px;*/
+        border:#ccc 1px solid;
+
+        -moz-border-radius:3px;
+        -webkit-border-radius:3px;
+        border-radius:3px;
+
+        -moz-box-shadow: 0 1px 2px #d1d1d1;
+        -webkit-box-shadow: 0 1px 2px #d1d1d1;
+        box-shadow: 0 1px 2px #d1d1d1;
+        margin-left: 10%;
+    }
+    table th {
+        padding:10px 10px 10px 10px;
+        border-top:1px solid #fafafa;
+        border-bottom:1px solid #e0e0e0;
+
+        background: #ededed;
+        background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+        background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+    }
+    table th:first-child{
+        text-align: left;
+        padding-left:20px;
+    }
+    table tr:first-child th:first-child{
+        -moz-border-radius-topleft:3px;
+        -webkit-border-top-left-radius:3px;
+        border-top-left-radius:3px;
+    }
+    table tr:first-child th:last-child{
+        -moz-border-radius-topright:3px;
+        -webkit-border-top-right-radius:3px;
+        border-top-right-radius:3px;
+    }
+    table tr{
+        text-align: center;
+        padding-left:20px;
+    }
+    table tr td:first-child{
+        text-align: left;
+        padding-left:20px;
+        border-left: 0;
+    }
+    table tr td {
+        padding:10px;
+        border-top: 1px solid #ffffff;
+        border-bottom:1px solid #e0e0e0;
+        border-left: 1px solid #e0e0e0;
+
+        background: #fafafa;
+        background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+        background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
+    }
+    table tr.even td{
+        background: #f6f6f6;
+        background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+        background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+    }
+    table tr:last-child td{
+        border-bottom:0;
+    }
+    table tr:last-child td:first-child{
+        -moz-border-radius-bottomleft:3px;
+        -webkit-border-bottom-left-radius:3px;
+        border-bottom-left-radius:3px;
+    }
+    table tr:last-child td:last-child{
+        -moz-border-radius-bottomright:3px;
+        -webkit-border-bottom-right-radius:3px;
+        border-bottom-right-radius:3px;
+    }
+    table tr:hover td{
+        background: #f2f2f2;
+        background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+        background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
+    }
+
+</style>
+
+
+<script type="application/javascript">
+    //order by change
+
+    $(function()
+    {
+        $(".order_by_type").change(function()
+        {
+            var params_str = $(".report_form form").serialize()
+            var sort_and_order_by = "report_sort_by="+$("#report_sort_by").val()
+            window.location.href='/admin/more_reports?'+params_str+'&'+sort_and_order_by
+        })
+    })
+</script>
