@@ -6,6 +6,7 @@ class OrderHistory < ActiveRecord::Base
   belongs_to :payment_report
   belongs_to :advertisement
   after_save :create_record_in_m_order_history
+  after_create :update_orders_in_aggregated_impression
 
   def self.update_order_histories_from_reports
     [Date.today - 1.day, Date.today].each do |date|
@@ -159,6 +160,102 @@ class OrderHistory < ActiveRecord::Base
         m_order_history.save
       else
         imp.m_order_histories << MOrderHistory.new(:order_history_id => self.id, :total_revenue => self.total_revenue)
+      end
+    end
+  end
+
+  def update_orders_in_aggregated_impression
+    # Update AggregatedImpression
+    impression = AddImpression.where(:id => self.impression_id).last
+
+    if !impression.blank?
+      time = impression.impression_time.to_time.utc rescue Time.now
+      date = time.to_date rescue ""
+      hour = time.hour rescue ""
+      if !impression.advertisement_id.blank?
+        is_rii = self.advertisement.having_related_items rescue false
+        url_params = Advertisement.reverse_make_url_params(impression.params)
+        url_params.symbolize_keys!
+        device_name = url_params[:device].to_s
+        ret_val = url_params[:r].to_i == 1
+
+        agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
+        if agg_imp.blank?
+          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1)
+          agg_imp.save!
+        else
+          agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+          agg_imp.save!
+        end
+
+        hours = agg_imp.hours.blank? ? {} : agg_imp.hours
+        if hours["#{hour}"].blank?
+          hours.merge!({"#{hour}" => {"orders" => 1}})
+        else
+          hours["#{hour}"].merge!({"orders" => hours["#{hour}"]["orders"].to_i + 1})
+        end
+
+        device = agg_imp.device.blank? ? {} : agg_imp.device
+        if device["#{device_name}"].blank?
+          device.merge!({"#{device_name}" => {"orders" => 1}})
+        else
+          device["#{device_name}"].merge!({"orders" => device["#{device_name}"]["orders"].to_i + 1})
+        end
+
+        rii = agg_imp.rii.blank? ? {} : agg_imp.rii
+        if rii["#{is_rii}"].blank?
+          rii.merge!({"#{is_rii}" => {"orders" => 1}})
+        else
+          rii["#{is_rii}"].merge!({"orders" => rii["#{is_rii}"]["orders"].to_i + 1})
+        end
+
+        ret = agg_imp.ret.blank? ? {} : agg_imp.ret
+        if ret["#{ret_val}"].blank?
+          ret.merge!({"#{ret_val}" => {"orders" => 1}})
+        else
+          ret["#{ret_val}"].merge!({"orders" => ret["#{ret_val}"]["orders"].to_i + 1})
+        end
+
+        agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, hours)
+        agg_imp.device = Advertisement.combine_hash(agg_imp.device, device)
+        agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, ret)
+        agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, rii)
+        agg_imp.save!
+      else
+        agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
+        if agg_imp.blank?
+          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true)
+          agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+          agg_imp.save
+        else
+          agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+          agg_imp.save
+        end
+      end
+    elsif !self.advertisement_id.blank?
+      time = self.order_date.to_time.utc rescue Time.now
+      date = time.to_date rescue ""
+
+      agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
+      if agg_imp.blank?
+        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1)
+        agg_imp.save!
+      else
+        agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+        agg_imp.save!
+      end
+    else
+      time = self.order_date.to_time.utc rescue Time.now
+      date = time.to_date rescue ""
+
+      agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
+      if agg_imp.blank?
+        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true)
+        agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+        agg_imp.save
+      else
+        agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+        agg_imp.save
       end
     end
   end

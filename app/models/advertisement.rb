@@ -689,7 +689,7 @@ class Advertisement < ActiveRecord::Base
                 # For AggregatedImpression
                 device_name = impression.device.to_s
                 is_rii = impression_mongo["is_rii"].to_s
-                ret = impression.r.to_i == 1
+                ret_val = impression.r.to_i == 1
 
                 current_hash = ads_hash["#{date}_#{impression.advertisement_id.to_s}"]
 
@@ -727,9 +727,9 @@ class Advertisement < ActiveRecord::Base
                 end
 
                 current_hash["ret"] = {} if current_hash["ret"].blank?
-                curr_ret = current_hash["ret"]["#{ret}"]
+                curr_ret = current_hash["ret"]["#{ret_val}"]
                 if curr_ret.blank?
-                  current_hash["ret"].merge!({"#{ret}" => {"imp" => 1, "costs" => winning_price.to_f}})
+                  current_hash["ret"].merge!({"#{ret_val}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
                   curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + winning_price.to_f})
                 end
@@ -788,7 +788,7 @@ class Advertisement < ActiveRecord::Base
                 if !click.advertisement_id.blank?
                   # device_name = impression_mongo["device"]
                   # is_rii = impression_mongo["is_rii"]
-                  ret = click.r.to_i == 1
+                  ret_val = click.r.to_i == 1
                   click_impression = AddImpression.where(:id => click.impression_id).last
                   is_rii = click.advertisement.having_related_items rescue false
 
@@ -833,9 +833,9 @@ class Advertisement < ActiveRecord::Base
                   end
 
                   current_hash["ret"] = {} if current_hash["ret"].blank?
-                  curr_ret = current_hash["ret"]["#{ret}"]
+                  curr_ret = current_hash["ret"]["#{ret_val}"]
                   if curr_ret.blank?
-                    current_hash["ret"].merge!({"#{ret}" => {"clicks" => 1}})
+                    current_hash["ret"].merge!({"#{ret_val}" => {"clicks" => 1}})
                   else
                     curr_ret.merge!({"clicks" => curr_ret["clicks"].to_i + 1})
                   end
