@@ -73,8 +73,8 @@ To Date
     <th class="header_compare"  > Cost </th>
     <% if params[:type] == "Advertisement" %>
         <th class="header_compare"  > Total Cost With Comm </th>
-        <th class="header_compare"  > Total Orders </th>
     <% end %>
+    <th class="header_compare"  > Total Orders </th>
   </tr>
   <% if params[:type] == "Advertisement" %>
      <% @results.each do |each_hash| %>
@@ -104,6 +104,7 @@ To Date
               <%= "#{get_ectr(each_hash["total_clicks"].to_i, each_hash["total_imp"].to_i)}" + " %" %>
             </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_orders"] %> </td>
           </tr>
      <% end %>
   <% end %>
