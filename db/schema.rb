@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150420071302) do
+ActiveRecord::Schema.define(:version => 20150430123707) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -471,6 +471,7 @@ ActiveRecord::Schema.define(:version => 20150420071302) do
     t.string   "match_source"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "google_mapped"
   end
 
   create_table "dealer_locators", :force => true do |t|

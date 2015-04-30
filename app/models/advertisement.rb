@@ -667,6 +667,16 @@ class Advertisement < ActiveRecord::Base
               date = time.to_date rescue ""
               hour = time.hour rescue ""
 
+              if !impression.temp_user_id.blank? && !url_params[:gid].blank?
+                cookie_match = CookieMatch.where(:google_user_id => url_params[:gid]).last
+                if cookie_match.blank?
+                  cookie_match = CookieMatch.new(:google_user_id => url_params[:gid], :plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
+                  cookie_match.save!
+                else
+                  cookie_match.update_attributes!(:plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
+                end
+              end
+
               if !impression.advertisement_id.blank?
                 winning_price = impression.winning_price.to_f/1000000 rescue 0.0
                 winning_price = winning_price.to_f.round(2)
