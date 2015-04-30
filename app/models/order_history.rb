@@ -216,10 +216,14 @@ class OrderHistory < ActiveRecord::Base
           ret["#{ret_val}"].merge!({"orders" => ret["#{ret_val}"]["orders"].to_i + 1})
         end
 
-        agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, hours)
-        agg_imp.device = Advertisement.combine_hash(agg_imp.device, device)
-        agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, ret)
-        agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, rii)
+        # agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, hours)
+        # agg_imp.device = Advertisement.combine_hash(agg_imp.device, device)
+        # agg_imp.ret = Advertisement.combine_hash(agg_imp.ret, ret)
+        # agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, rii)
+        agg_imp.hours = hours
+        agg_imp.device = device
+        agg_imp.ret = ret
+        agg_imp.rii = rii
         agg_imp.save!
       else
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
