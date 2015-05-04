@@ -169,7 +169,7 @@ class OrderHistory < ActiveRecord::Base
     impression = AddImpression.where(:id => self.impression_id).last
 
     if !impression.blank?
-      time = impression.impression_time.to_time.utc rescue Time.now
+      time = self.order_date.to_time.utc rescue Time.now
       date = time.to_date rescue ""
       hour = time.hour rescue ""
       if !impression.advertisement_id.blank?
@@ -228,12 +228,11 @@ class OrderHistory < ActiveRecord::Base
       else
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
         if agg_imp.blank?
-          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true)
-          agg_imp.total_orders = agg_imp.total_orders.to_i + 1
-          agg_imp.save
+          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true, :total_orders => 1)
+          agg_imp.save!
         else
           agg_imp.total_orders = agg_imp.total_orders.to_i + 1
-          agg_imp.save
+          agg_imp.save!
         end
       end
     elsif !self.advertisement_id.blank?
@@ -254,12 +253,11 @@ class OrderHistory < ActiveRecord::Base
 
       agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
       if agg_imp.blank?
-        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true)
-        agg_imp.total_orders = agg_imp.total_orders.to_i + 1
-        agg_imp.save
+        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true, :total_orders => 1)
+        agg_imp.save!
       else
         agg_imp.total_orders = agg_imp.total_orders.to_i + 1
-        agg_imp.save
+        agg_imp.save!
       end
     end
   end
