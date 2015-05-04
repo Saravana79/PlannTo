@@ -294,16 +294,16 @@ class Advertisement < ActiveRecord::Base
     param[:ref_url] ||= ""
     url, itemsaccess = assign_url_and_item_access(param[:ref_url], request_referer)
 
-    if advertisement != true
-      @publisher = Publisher.getpublisherfromdomain(url)
-      if !@publisher.blank? && @publisher.id == 9
-        itemsaccess = "othercountry"
-      elsif param[:show_price] != "false"
-        itemsaccess = itemsaccess
-      else
-        itemsaccess = "offers"
-      end
-    end
+    # if advertisement != true
+    #   @publisher = Publisher.getpublisherfromdomain(url)
+    #   if !@publisher.blank? && @publisher.id == 9
+    #     itemsaccess = "othercountry"
+    #   elsif param[:show_price] != "false"
+    #     itemsaccess = itemsaccess
+    #   else
+    #     itemsaccess = "offers"
+    #   end
+    # end
 
     if param[:is_test] != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids, url, user_id, remote_ip, nil, itemsaccess, url_params,

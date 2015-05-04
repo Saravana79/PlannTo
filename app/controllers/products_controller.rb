@@ -1003,7 +1003,6 @@ class ProductsController < ApplicationController
     params[:price_full_details] ||= "true"
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     params[:request_referer] ||= request.referer
-    params[:ref_url] ||= ""
     params[:item_ids] ||= "" if params[:item_ids].blank?
     params[:page_type] ||= "type_1"
     params[:page_type] = "type_1" if params[:page_type].blank?
