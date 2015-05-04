@@ -1004,13 +1004,13 @@ class ProductsController < ApplicationController
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
     params[:request_referer] ||= request.referer
     params[:ref_url] ||= ""
-    params[:item_ids] ||= ""
+    params[:item_ids] ||= "" if params[:item_ids].blank?
     params[:page_type] ||= "type_1"
     params[:page_type] = "type_1" if params[:page_type].blank?
     params[:category_item_detail_id] ||= ""
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
-    params[:ref_url] ||= ""
+    params[:ref_url] = "" if params[:ref_url].blank?
     params[:vendor_ids] ||= ""
 
     cache_params = ""

@@ -53,7 +53,7 @@ module Admin::AdvertisementsHelper
   end
 
   def assign_url_and_item_access(ref_url, request_referer)
-    if (ref_url && ref_url != "" && ref_url != 'undefined')
+    if !ref_url.blank? && ref_url != 'undefined'
       return ref_url, "ref_url"
     else
       return request_referer, "referer"

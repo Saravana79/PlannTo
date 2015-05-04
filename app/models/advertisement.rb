@@ -294,9 +294,8 @@ class Advertisement < ActiveRecord::Base
     param[:ref_url] ||= ""
     url, itemsaccess = assign_url_and_item_access(param[:ref_url], request_referer)
 
-    @publisher = Publisher.getpublisherfromdomain(url)
-
     if advertisement != true
+      @publisher = Publisher.getpublisherfromdomain(url)
       if !@publisher.blank? && @publisher.id == 9
         itemsaccess = "othercountry"
       elsif param[:show_price] != "false"
