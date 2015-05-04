@@ -34,15 +34,16 @@ class OrderHistory < ActiveRecord::Base
           impression_id = item.attributes["SubTag"].content
           revenue = item.attributes["Earnings"].content rescue 0
           price = item.attributes["Price"].content rescue 0
+          impression = AddImpression.where(:id => impression_id).first
+          time = impression.blank? ? date.to_time: impression.impression_time.to_time rescue Time.now
 
-          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(date.to_time, impression_id, revenue)
+          order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
           order_history.vendor_ids = 9882
           order_history.product_price = price
           order_history.no_of_orders = 1
           order_history.order_status = "Validated"
           order_history.payment_status = "Validated"
 
-          impression = AddImpression.where(:id => impression_id).first
           unless impression.blank?
             PlanntoUserDetail.update_plannto_user_detail(impression)
 
@@ -169,7 +170,7 @@ class OrderHistory < ActiveRecord::Base
     impression = AddImpression.where(:id => self.impression_id).last
 
     if !impression.blank?
-      time = self.order_date.to_time.utc rescue Time.now
+      time = impression.impression_time.to_time.utc rescue Time.now
       date = time.to_date rescue ""
       hour = time.hour rescue ""
       if !impression.advertisement_id.blank?
