@@ -2038,6 +2038,11 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => node, :item_page => each_page})
 
         items = res.items
+
+        if ["external_hard_disk", "power_banks"].include?(each_key)
+          items = items.first(5)
+        end
+
         items.each do |each_item|
           begin
             url = each_item.get("DetailPageURL")
