@@ -30,7 +30,7 @@ class CookieMatch < ActiveRecord::Base
   def self.process_cookie_matching(param)
     param["source"] ||= "google"
     cookie_match = CookieMatch.find_or_initialize_by_plannto_user_id(param["plannto_user_id"])
-    cookie_match.update_attributes(:google_user_id => param["google_id"], :match_source => param["source"], :google_mapped => true0)
+    cookie_match.update_attributes(:google_user_id => param["google_id"], :match_source => param["source"], :google_mapped => true)
 
     $redis_rtb.pipelined do
       $redis_rtb.set("cm:#{param['google_id']}", param["plannto_user_id"])

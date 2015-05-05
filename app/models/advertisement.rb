@@ -674,6 +674,12 @@ class Advertisement < ActiveRecord::Base
                 else
                   cookie_match.update_attributes!(:plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
                 end
+
+                $redis_rtb.pipelined do
+                  $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
+                  $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
+                end
+
               end
 
               if !impression.advertisement_id.blank?
