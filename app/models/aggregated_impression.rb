@@ -90,10 +90,10 @@ class AggregatedImpression
       result_hash.each do |each_hash|
         each_hash.each do |key, val|
           final_hash[key] = {} if final_hash[key].blank?
-          final_hash[key]["total_imp"] = val["imp"].to_i
-          final_hash[key]["total_clicks"] = val["clicks"].to_i
-          final_hash[key]["total_orders"] = val["orders"].to_i
-          final_hash[key]["total_costs"] = val["costs"].to_f.round(2)
+          final_hash[key]["total_imp"] = final_hash[key]["total_imp"].to_i + val["imp"].to_i
+          final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
+          final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
+          final_hash[key]["total_costs"] = (final_hash[key]["total_costs"].to_f + val["costs"].to_f).round(2)
         end
       end
 
