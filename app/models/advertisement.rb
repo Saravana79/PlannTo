@@ -626,6 +626,8 @@ class Advertisement < ActiveRecord::Base
           ad_detail_hash.merge!("#{adv.id}" => adv.commission.to_f.round(2))
         end
 
+        imported_values = []
+
         add_impressions.each do |each_rec|
           count -= 1
           begin
@@ -667,19 +669,8 @@ class Advertisement < ActiveRecord::Base
               hour = time.hour rescue ""
 
               if !impression.temp_user_id.blank? && !url_params[:gid].blank?
-                cookie_match = CookieMatch.where(:google_user_id => url_params[:gid]).last
-                if cookie_match.blank?
-                  cookie_match = CookieMatch.new(:google_user_id => url_params[:gid], :plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
-                  cookie_match.save!
-                else
-                  cookie_match.update_attributes!(:plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
-                end
-
-                $redis_rtb.pipelined do
-                  $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-                  $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
-                end
-
+                cookie_match = CookieMatch.new(:plannto_user_id => impression.temp_user_id, :google_user_id => url_params[:gid], :match_source => "add_impression", :google_mapped => false)
+                imported_values << cookie_match
               end
 
               if !impression.advertisement_id.blank?
@@ -927,6 +918,16 @@ class Advertisement < ActiveRecord::Base
           p "Remaining click_or_impressions Count - #{count}"
         end
 
+        imported_values = imported_values.reverse.uniq(&:plannto_user_id)
+
+        result = CookieMatch.import(imported_values)
+
+        $redis_rtb.pipelined do
+          imported_values.each do |cookie_detail|
+            $redis_rtb.set("cm:#{cookie_detail.google_user_id}", cookie_detail.plannto_user_id)
+            $redis_rtb.expire("cm:#{cookie_detail.google_user_id}", 2.weeks)
+          end
+        end
 
         begin
           # AggregatedImpression
