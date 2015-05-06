@@ -97,9 +97,9 @@ To Date
           <tr>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;">
               <% if params[:type] == "Hourly" %>
-                <%= each_key.to_i + 5 %>
+                <%= (each_key.to_i + 5) % 24 %>
               <% else %>
-                <% each_key %>
+                <%= each_key %>
               <% end %>
             </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_imp"] %> </td>
@@ -137,8 +137,8 @@ To Date
     }
 
     .select_options {
-        padding-left: 220px;
-        position: absolute;
+        /*padding-left: 220px;*/
+        /*position: absolute;*/
     }
 
     .generate_btn {
