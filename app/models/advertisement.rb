@@ -1051,7 +1051,7 @@ class Advertisement < ActiveRecord::Base
             agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
 
             if agg_imp.blank?
-              agg_imp = AggregatedImpression.new(val)
+              agg_imp = AggregatedImpressionByType.new(val)
               agg_imp.save!
             else
               agg_imp.agg_coll = Advertisement.combine_hash(agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
@@ -1063,7 +1063,7 @@ class Advertisement < ActiveRecord::Base
             agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
 
             if agg_imp.blank?
-              agg_imp = AggregatedImpression.new(val)
+              agg_imp = AggregatedImpressionByType.new(val)
               agg_imp.save!
             else
               agg_imp.agg_coll = Advertisement.combine_hash(agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
