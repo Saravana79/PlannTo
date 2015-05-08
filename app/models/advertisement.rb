@@ -618,6 +618,8 @@ class Advertisement < ActiveRecord::Base
         non_ad_impressions_list = []
         ads_hash = {}
         publisher_hash = {}
+        items_hash = {}
+        domains_hash = {}
 
         ads = Advertisement.select("id,commission")
         ad_detail_hash = {}
@@ -740,6 +742,44 @@ class Advertisement < ActiveRecord::Base
                 else
                   curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + winning_price.to_f})
                 end
+
+                #Items hash
+                current_item_hash = items_hash["item_#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_item_hash.blank?
+                  items_hash["item_#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_item_hash = items_hash["item_#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_item_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s, "agg_type" => "Item")
+
+                current_item_hash["agg_coll"] = {} if current_item_hash["agg_coll"].blank?
+                curr_item = current_item_hash["agg_coll"]["#{impression.item_id.to_s}"]
+
+                if curr_item.blank?
+                  current_item_hash["agg_coll"].merge!("#{impression.item_id.to_s}" => {"imp" => 1})
+                else
+                  curr_item.merge!("imp"=> curr_item["imp"].to_i + 1)
+                end
+
+                #Domains hash
+                current_domain_hash = domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_domain_hash.blank?
+                  domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_domain_hash = domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_domain_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s, "agg_type" => "Domain")
+
+                current_domain_hash["agg_coll"] = {} if current_domain_hash["agg_coll"].blank?
+                curr_domain = current_domain_hash["agg_coll"]["#{impression_mongo["domain"].to_s}"]
+
+                if curr_domain.blank?
+                  current_domain_hash["agg_coll"].merge!("#{impression_mongo["domain"].to_s}" => {"imp" => 1})
+                else
+                  curr_domain.merge!("imp"=> curr_domain["imp"].to_i + 1)
+                end
               else
                 current_hash = publisher_hash["publisher_#{date}"]
 
@@ -860,6 +900,46 @@ class Advertisement < ActiveRecord::Base
                   else
                     curr_ret.merge!({"clicks" => curr_ret["clicks"].to_i + 1})
                   end
+
+                  #Items hash
+                  current_item_hash = items_hash["item_#{date}_#{click.advertisement_id.to_s}"]
+
+                  if current_item_hash.blank?
+                    items_hash["item_#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_item_hash = items_hash["item_#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_item_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s, "agg_type" => "Item")
+
+                  current_item_hash["agg_coll"] = {} if current_item_hash["agg_coll"].blank?
+                  curr_item = current_item_hash["agg_coll"]["#{click.item_id.to_s}"]
+
+                  if curr_item.blank?
+                    current_item_hash["agg_coll"].merge!("#{click.item_id.to_s}" => {"clicks" => 1})
+                  else
+                    curr_item.merge!("clicks"=> curr_item["clicks"].to_i + 1)
+                  end
+
+                  #Domains hash
+                  domain = Item.get_host_without_www(click.hosted_site_url)
+                  current_domain_hash = domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"]
+
+                  if current_domain_hash.blank?
+                    domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_domain_hash = domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_domain_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s, "agg_type" => "Domain")
+
+                  current_domain_hash["agg_coll"] = {} if current_domain_hash["agg_coll"].blank?
+                  curr_domain = current_domain_hash["agg_coll"]["#{domain.to_s}"]
+
+                  if curr_domain.blank?
+                    current_domain_hash["agg_coll"].merge!("#{domain.to_s}" => {"clicks" => 1})
+                  else
+                    curr_domain.merge!("clicks"=> curr_domain["clicks"].to_i + 1)
+                  end
+
                 else
                   current_pub_hash = publisher_hash["publisher_#{date}"]
 
@@ -914,6 +994,7 @@ class Advertisement < ActiveRecord::Base
             end
           rescue Exception => e
             p "There was problem while running impressions process => #{e.backtrace}"
+            p e
           end
           p "Remaining click_or_impressions Count - #{count}"
         end
@@ -962,6 +1043,30 @@ class Advertisement < ActiveRecord::Base
               agg_imp.publishers = Advertisement.combine_hash(agg_imp.publishers, val["publishers"]) if !val["publishers"].blank?
               agg_imp.total_imp = agg_imp.total_imp.to_i + val["total_imp"].to_i
               agg_imp.total_clicks = agg_imp.total_clicks.to_i + val["total_clicks"].to_i
+              agg_imp.save!
+            end
+          end
+
+          items_hash.each do |key, val|
+            agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
+
+            if agg_imp.blank?
+              agg_imp = AggregatedImpression.new(val)
+              agg_imp.save!
+            else
+              agg_imp.agg_coll = Advertisement.combine_hash(agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              agg_imp.save!
+            end
+          end
+
+          domains_hash.each do |key, val|
+            agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
+
+            if agg_imp.blank?
+              agg_imp = AggregatedImpression.new(val)
+              agg_imp.save!
+            else
+              agg_imp.agg_coll = Advertisement.combine_hash(agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
               agg_imp.save!
             end
           end

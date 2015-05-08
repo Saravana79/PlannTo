@@ -226,6 +226,40 @@ class OrderHistory < ActiveRecord::Base
         agg_imp.ret = ret
         agg_imp.rii = rii
         agg_imp.save!
+
+        #AggregatedImpression By Item
+        agg_imp_by_item = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Item").last
+        if agg_imp_by_item.blank?
+          agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item")
+          agg_imp_by_item.save!
+        end
+
+        item_agg_coll = agg_imp_by_item.agg_coll.blank? ? {} : agg_imp_by_item.agg_coll
+        if item_agg_coll["#{self.item_id}"].blank?
+          item_agg_coll.merge!({"#{self.item_id}" => {"orders" => 1}})
+        else
+          item_agg_coll["#{self.item_id}"].merge!({"orders" => item_agg_coll["#{self.item_id}"]["orders"].to_i + 1})
+        end
+        agg_imp_by_item.agg_coll = item_agg_coll
+        agg_imp_by_item.save!
+
+        #AggregatedImpression By Domain
+        domain = Item.get_host_without_www(impression.hosted_site_url)
+        agg_imp_by_domain = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Domain").last
+        if agg_imp_by_domain.blank?
+          agg_imp_by_domain = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Domain")
+          agg_imp_by_domain.save!
+        end
+
+        domain_agg_coll = agg_imp_by_domain.agg_coll.blank? ? {} : agg_imp_by_domain.agg_coll
+        if domain_agg_coll["#{domain}"].blank?
+          domain_agg_coll.merge!({"#{domain}" => {"orders" => 1}})
+        else
+          domain_agg_coll["#{domain}"].merge!({"orders" => domain_agg_coll["#{domain}"]["orders"].to_i + 1})
+        end
+        agg_imp_by_domain.agg_coll = domain_agg_coll
+        agg_imp_by_domain.save!
+
       else
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
         if agg_imp.blank?
@@ -248,6 +282,22 @@ class OrderHistory < ActiveRecord::Base
         agg_imp.total_orders = agg_imp.total_orders.to_i + 1
         agg_imp.save!
       end
+
+      #AggregatedImpression By Item
+      agg_imp_by_item = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Item").last
+      if agg_imp_by_item.blank?
+        agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item")
+        agg_imp_by_item.save!
+      end
+
+      item_agg_coll = agg_imp_by_item.agg_coll.blank? ? {} : agg_imp_by_item.agg_coll
+      if item_agg_coll["#{self.item_id}"].blank?
+        item_agg_coll.merge!({"#{self.item_id}" => {"orders" => 1}})
+      else
+        item_agg_coll["#{self.item_id}"].merge!({"orders" => item_agg_coll["#{self.item_id}"]["orders"].to_i + 1})
+      end
+      agg_imp_by_item.agg_coll = item_agg_coll
+      agg_imp_by_item.save!
     else
       time = self.order_date.to_time.utc rescue Time.now
       date = time.to_date rescue ""
