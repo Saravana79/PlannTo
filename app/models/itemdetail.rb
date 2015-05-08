@@ -3,7 +3,11 @@ class Itemdetail < ActiveRecord::Base
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
   has_one :image, as: :imageable
 
+  attr_accessor :skip_after_save
+
   belongs_to :item, :foreign_key => "itemid"
+
+  after_save :update_last_verified_date
 
   def self.get_item_details(item_id, vendor_ids)
     item_id = sanitize(item_id)
@@ -898,6 +902,15 @@ class Itemdetail < ActiveRecord::Base
     # bike_item_type_items = Item.where(:itemtype_id => bike_item_type.id).select("distinct name").map(&:name)
     # return {car_item_type.itemtype => car_item_type_items, bike_item_type.itemtype => bike_item_type_items}
     return {"Car" => {"Car Care Exterior (Shampoos, Polishes, Waxes)" => "Paint & Exterior Care", "Car Care Interior (Dashboard & Trim care, Cleaners)" => "Interior Care", "Car Parts (Filters, Bulbs, wiper blades)" => "Car Parts", "Car Electronics (Audio, GPS, Chargers)" => "Car Electronics", "Car Accessories (Covers, Mats, Freshners)"=> "Car Accessories"}, "Bike" => {"Helmets (Flip-up, Full face, Open face)" => "Helmets", "Gloves" => "Gloves", "Jackets" => "Jackets", "Head & Face Covers" => "Head & Face Covers", "Motor Oils (Engine Oil, Addictives)" => "Engine Oils for Motorbikes", "Bike Parts (Fenders, Cowls, Deflectors)" => "Motorbike Accessories & Parts"}}
+  end
+
+  private
+
+  def update_last_verified_date
+    if self.skip_after_save != true
+      self.skip_after_save = true
+      self.update_attributes!(:last_updated => Time.now)
+    end
   end
 
 end

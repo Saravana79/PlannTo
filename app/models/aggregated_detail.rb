@@ -96,16 +96,31 @@ class AggregatedDetail < ActiveRecord::Base
 
     results = AggregatedImpression.get_results_from_agg_impression(param, start_date, end_date)
 
-    results.each do |each_result|
-      begin
-        entity_id = each_result["_id"]
-        if entity_id.blank?
-          next
+    if entity_type == "publisher"
+      results.each do |each_key, each_val|
+        begin
+          entity_id = each_key
+          if entity_id.blank?
+            next
+          end
+          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail.update_attributes(:impressions_count => each_val["total_imp"], :clicks_count => each_val["total_clicks"], :winning_price => each_val["total_costs"])
+        rescue Exception => e
+          p "Error While updating aggregated detail"
         end
-        aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
-        aggregated_detail.update_attributes(:impressions_count => each_result["total_imp"], :clicks_count => each_result["total_clicks"], :winning_price => each_result["total_costs_wc"])
-      rescue Exception => e
-        p "Error While updating aggregated detail"
+      end
+    else
+      results.each do |each_result|
+        begin
+          entity_id = each_result["_id"]
+          if entity_id.blank?
+            next
+          end
+          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail.update_attributes(:impressions_count => each_result["total_imp"], :clicks_count => each_result["total_clicks"], :winning_price => each_result["total_costs_wc"])
+        rescue Exception => e
+          p "Error While updating aggregated detail"
+        end
       end
     end
   end
