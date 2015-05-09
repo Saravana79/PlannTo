@@ -58,16 +58,16 @@ class AggregatedImpression
 
       if param[:ad_id] != "All"
         query[:ad_id] = param[:ad_id].to_i
+      else
+        query[:ad_id.ne] = nil
       end
 
       if ["Domain", "Item"].include?(param[:type])
-        query[:ad_id.ne] = nil
         query[:agg_type] = param[:type]
         results = AggregatedImpressionByType.where(query)
       else
         if param[:ad_type] == "advertisement"
           query[:for_pub] = nil
-          query[:ad_id.ne] = nil
         elsif param[:ad_type] == "non advertisement"
           query[:for_pub] = true
         end
