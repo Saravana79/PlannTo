@@ -43,31 +43,34 @@ class UserAccessDetail < ActiveRecord::Base
         plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).last
 
         if plannto_user_detail.blank?
-          plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => user_id)
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
-          plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
-          plannto_user_detail.save!
-        end
-
-
-        #plannto user details
-        m_item_type = nil
-
-        if !itemtype_id.blank?
-          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-          if m_item_type.blank?
-            plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
-            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-          else
-            list_of_urls = m_item_type.list_of_urls
-            list_of_urls = list_of_urls.to_a
-            list_of_urls << url
-            list_of_urls.uniq!
-            m_item_type.list_of_urls = list_of_urls
-            m_item_type.save!
+          if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+            plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => user_id)
+            plannto_user_detail.google_user_id = cookie_match.google_user_id
+            plannto_user_detail.save!
           end
         end
-        plannto_user_detail.save!
+
+        if !plannto_user_detail.blank?
+          #plannto user details
+          m_item_type = nil
+
+          if !itemtype_id.blank?
+            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            if m_item_type.blank?
+              plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
+              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+            else
+              list_of_urls = m_item_type.list_of_urls
+              list_of_urls = list_of_urls.to_a
+              list_of_urls << url
+              list_of_urls.uniq!
+              m_item_type.list_of_urls = list_of_urls
+              m_item_type.save!
+            end
+          end
+          plannto_user_detail.save!
+        end
 
         add_fad = u_values.blank? ? true : false
 
@@ -143,6 +146,16 @@ class UserAccessDetail < ActiveRecord::Base
               end
             end
 
+            if !common_item_ids.blank?
+              common_item_ids.each do |item_id|
+                m_item = m_item_type.m_items.where(:item_id => item_id).last
+                if !m_item.blank?
+                  m_item.lad = u_values["#{item_id}_la"].to_date
+                  m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
+                  m_item.save!
+                end
+              end
+            end
           end
 
 

@@ -1168,7 +1168,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               user_id = impression.temp_user_id
               type = article_content.sub_type
               item_ids = article_content.all_item_ids.to_s rescue ""
-              redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto")
+              itemtype_id = article_content.itemtype_id
+              redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
               redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
             end
           rescue Exception => e
@@ -1211,36 +1212,40 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).first
 
             if plannto_user_detail.blank?
-              plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
               cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).select(:google_user_id).last
-              plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
-              plannto_user_detail.save!
+              if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+                plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
+                plannto_user_detail.google_user_id = cookie_match.google_user_id
+                plannto_user_detail.save!
+              end
             end
           end
 
-          itemtype_id = nil
-          #plannto user details
-          if !each_click_mongo["item_id"].blank?
-            itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
-            itemtype_id = itemtype.itemtype_id rescue ""
-          end
+          if !plannto_user_detail.blank?
+            itemtype_id = nil
+            #plannto user details
+            if !each_click_mongo["item_id"].blank?
+              itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
+              itemtype_id = itemtype.itemtype_id rescue ""
+            end
 
-          if !itemtype_id.blank?
-            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-            if m_item_type.blank?
-              plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+            if !itemtype_id.blank?
               m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+              if m_item_type.blank?
+                plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+                m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+              end
+
+              click_item_ids = m_item_type.click_item_ids
+              click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
+              click_item_ids = click_item_ids.map(&:to_i).compact.uniq
+              m_item_type.click_item_ids = click_item_ids
+              m_item_type.last_click_date = Date.today
+              m_item_type.save!
             end
 
-            click_item_ids = m_item_type.click_item_ids
-            click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
-            click_item_ids = click_item_ids.map(&:to_i).compact.uniq
-            m_item_type.click_item_ids = click_item_ids
-            m_item_type.last_click_date = Date.today
-            m_item_type.save!
+            plannto_user_detail.save!
           end
-
-          plannto_user_detail.save!
 
           if each_click_mongo["video_impression_id"].blank?
             ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first

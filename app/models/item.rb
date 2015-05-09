@@ -1589,12 +1589,6 @@ end
     return item_ids
   end
 
-  def self.get_item_ids_for_300_600()
-    items = Item.find_by_sql("select * from item_ad_details  order by impressions desc limit 10")
-    item_ids = items.map(&:id) - [0]
-    return item_ids
-  end
-
   def self.buying_list_process_in_redis
     if $redis.get("buying_list_is_running").to_i == 0
       length = $redis_rtb.llen("users:visits")
@@ -1628,17 +1622,62 @@ end
                 ranking = 0
 
                 if already_exist == false
-                  case type
-                    when "Reviews", "Spec", "Photo"
-                      ranking = 10
-                    when "Comparisons"
-                      ranking = 5
-                    when "Lists", "Others"
-                      ranking = 2
-                  end
 
                   item_ids = item_ids.to_s.split(",")
                   if item_ids.count < 10
+
+                    #Updating PlanntoUserDetail
+                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).first
+
+                    if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                        plannto_user_detail.save!
+                      end
+                    elsif plannto_user_detail.blank?
+                      plannto_user_detail = PlanntoUserDetail.new(:google_user_id => user_id)
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                      end
+                      plannto_user_detail.save!
+                    end
+
+                    if !plannto_user_detail.blank?
+                      #plannto user details
+                      m_item_type = nil
+
+                      article_content = ArticleContent.where(:url => url).first
+                      itemtype_id = article_content.itemtype_id rescue ""
+                      type = article_content.sub_type rescue "" if type.blank?
+
+                      case type
+                        when "Reviews", "Spec", "Photo"
+                          ranking = 10
+                        when "Comparisons"
+                          ranking = 5
+                        when "Lists", "Others"
+                          ranking = 2
+                      end
+
+                      if !itemtype_id.blank?
+                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                        if m_item_type.blank?
+                          plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
+                          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                        else
+                          list_of_urls = m_item_type.list_of_urls
+                          list_of_urls = list_of_urls.to_a
+                          list_of_urls << url
+                          list_of_urls.uniq!
+                          m_item_type.list_of_urls = list_of_urls
+                          m_item_type.save!
+                        end
+                      end
+                      plannto_user_detail.save!
+                    end
+
                     u_key = "u:ac:#{user_id}"
                     u_values = $redis.hgetall(u_key)
 
@@ -1700,6 +1739,46 @@ end
                     items_hash = u_values.select {|k,_| k.include?("_c")}
                     items_count = items_hash.count
                     all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
+
+                    #plannto user details
+                    p m_item_type
+
+                    if !m_item_type.blank?
+                      existing_item_ids = m_item_type.m_items.map(&:item_id)
+                      all_item_ids = all_item_ids.map(&:to_i)
+
+                      common_item_ids = all_item_ids & existing_item_ids
+
+                      new_item_ids = all_item_ids - common_item_ids
+                      removed_item_ids = existing_item_ids - common_item_ids
+
+                      if !removed_item_ids.blank?
+                        removed_item_ids.each do |item_id|
+                          exp_item = m_item_type.m_items.where(:item_id => item_id).last
+                          exp_item.destroy
+                        end
+                      end
+
+                      if !new_item_ids.blank?
+                        new_item_ids.each do |item_id|
+                          lad = u_values["#{item_id}_la"].to_date
+                          ranking = u_values["#{item_id}_c"]
+                          m_item_type.m_items << MItem.new(:item_id => item_id, :lad => lad, :ranking => ranking)
+                        end
+                      end
+
+                      if !common_item_ids.blank?
+                        common_item_ids.each do |item_id|
+                          m_item = m_item_type.m_items.where(:item_id => item_id).last
+                          if !m_item.blank?
+                            m_item.lad = u_values["#{item_id}_la"].to_date
+                            m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
+                            m_item.save!
+                          end
+                        end
+                      end
+                    end
+
                     all_item_ids = all_item_ids.join(",")
                     temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
                     temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs

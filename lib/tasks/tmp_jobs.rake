@@ -13,8 +13,9 @@ task :buying_list_from_user_access => :environment do
       user_id = user_access_detail.plannto_user_id
       type = article_content.sub_type
       item_ids = article_content.item_ids.join(",") rescue ""
+      itemtype_id = article_content.itemtype_id
       begin
-        UserAccessDetail.update_buying_list(user_id, user_access_detail.ref_url, type, item_ids)
+        UserAccessDetail.update_buying_list(user_id, user_access_detail.ref_url, type, item_ids, nil, nil, itemtype_id)
       rescue Exception => e
         p "There was a problem => #{e}"
       end
