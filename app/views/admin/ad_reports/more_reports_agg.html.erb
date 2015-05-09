@@ -99,7 +99,7 @@ To Date
               <% if params[:type] == "Hourly" %>
                 <%= (each_key.to_i + 5) % 24 %>
               <% else %>
-                <%= each_key %>
+                <%= get_if_item(each_key) %>
               <% end %>
             </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_imp"] %> </td>

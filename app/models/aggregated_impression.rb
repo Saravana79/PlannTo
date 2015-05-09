@@ -49,13 +49,6 @@ class AggregatedImpression
     else
       query = {}
 
-      if param[:ad_type] == "advertisement"
-        query[:for_pub] = nil
-        query[:ad_id.ne] = nil
-      elsif param[:ad_type] == "non advertisement"
-        query[:for_pub] = true
-      end
-
       if start_date.to_date == end_date.to_date
         query[:agg_date] = start_date.to_date
       else
@@ -67,7 +60,19 @@ class AggregatedImpression
         query[:ad_id] = param[:ad_id].to_i
       end
 
-      results = AggregatedImpression.where(query)
+      if ["Domain", "Item"].include?(param[:type])
+        query[:ad_id.ne] = nil
+        query[:agg_type] = param[:type]
+        results = AggregatedImpressionByType.where(query)
+      else
+        if param[:ad_type] == "advertisement"
+          query[:for_pub] = nil
+          query[:ad_id.ne] = nil
+        elsif param[:ad_type] == "non advertisement"
+          query[:for_pub] = true
+        end
+        results = AggregatedImpression.where(query)
+      end
 
       option = case param[:type]
         when "Device"
@@ -80,6 +85,10 @@ class AggregatedImpression
         "publishers"
         when "Is Related Item Impression"
         "rii"
+        when "Domain"
+        "agg_coll"
+        when "Item"
+        "agg_coll"
       end
 
       result_hash = results.map(&:"#{option}")
@@ -98,6 +107,8 @@ class AggregatedImpression
       end
 
       results = final_hash
+
+      results = Hash[results.sort_by {|_, v| v["total_imp"].to_i}.reverse]
     end
     results
   end
