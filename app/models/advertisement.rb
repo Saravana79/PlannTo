@@ -763,6 +763,9 @@ class Advertisement < ActiveRecord::Base
                 end
 
                 #Domains hash
+                domain = impression_mongo["domain"].to_s
+                domain = domain.gsub(".", "^")
+
                 current_domain_hash = domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"]
 
                 if current_domain_hash.blank?
@@ -773,10 +776,10 @@ class Advertisement < ActiveRecord::Base
                 current_domain_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s, "agg_type" => "Domain")
 
                 current_domain_hash["agg_coll"] = {} if current_domain_hash["agg_coll"].blank?
-                curr_domain = current_domain_hash["agg_coll"]["#{impression_mongo["domain"].to_s}"]
+                curr_domain = current_domain_hash["agg_coll"]["#{domain}"]
 
                 if curr_domain.blank?
-                  current_domain_hash["agg_coll"].merge!("#{impression_mongo["domain"].to_s}" => {"imp" => 1})
+                  current_domain_hash["agg_coll"].merge!("#{domain}" => {"imp" => 1})
                 else
                   curr_domain.merge!("imp"=> curr_domain["imp"].to_i + 1)
                 end
@@ -922,6 +925,8 @@ class Advertisement < ActiveRecord::Base
 
                   #Domains hash
                   domain = Item.get_host_without_www(click.hosted_site_url)
+                  domain = domain.to_s.gsub(".", "^")
+
                   current_domain_hash = domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"]
 
                   if current_domain_hash.blank?
@@ -1066,7 +1071,11 @@ class Advertisement < ActiveRecord::Base
               domain_agg_imp = AggregatedImpressionByType.new(val)
               domain_agg_imp.save!
             else
-              domain_agg_imp.agg_coll = Advertisement.combine_hash(domain_agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              old_coll = domain_agg_imp.agg_coll
+              old_coll = Hash[old_coll.map {|k, v| [k.gsub(".", "^"), v] }]
+              agg_coll = Advertisement.combine_hash(old_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              agg_coll = Hash[agg_coll.map {|k, v| [k.gsub(".", "^"), v] }]
+              domain_agg_imp.agg_coll = agg_coll
               domain_agg_imp.save!
             end
           end

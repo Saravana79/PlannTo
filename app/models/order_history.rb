@@ -251,7 +251,10 @@ class OrderHistory < ActiveRecord::Base
           agg_imp_by_domain.save!
         end
 
+        domain = domain.to_s.gsub(".", "^")
+
         domain_agg_coll = agg_imp_by_domain.agg_coll.blank? ? {} : agg_imp_by_domain.agg_coll
+        domain_agg_coll = Hash[domain_agg_coll.map {|k, v| [k.gsub(".", "^"), v] }]
         if domain_agg_coll["#{domain}"].blank?
           domain_agg_coll.merge!({"#{domain}" => {"orders" => 1}})
         else
