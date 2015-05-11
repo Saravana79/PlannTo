@@ -133,7 +133,7 @@ class CookieMatch < ActiveRecord::Base
             msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
             if !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
-              item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").first
+              item_detail = Itemdetail.find_by_sql("SELECT itemid,i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.additional_details = '#{msp_id}' #{site_condition} ORDER BY itemdetails.item_details_id DESC LIMIT 1").first
 
               unless item_detail.blank?
                 user_id = new_user_access_detail.plannto_user_id
@@ -143,7 +143,7 @@ class CookieMatch < ActiveRecord::Base
                   type = "Spec"
                 end
 
-                itemtype_id = item_detail.itemtype_id
+                itemtype_id = item_detail.itemtype_id rescue ""
 
                 item_ids = item_detail.itemid.to_s rescue ""
                 redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)

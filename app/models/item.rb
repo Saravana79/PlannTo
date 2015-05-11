@@ -1652,12 +1652,14 @@ end
                       itemtype_id = article_content.itemtype_id rescue ""
                       type = article_content.sub_type rescue "" if type.blank?
 
-                      case type
+                      case type.to_s
                         when "Reviews", "Spec", "Photo"
                           ranking = 10
                         when "Comparisons"
                           ranking = 5
                         when "Lists", "Others"
+                          ranking = 2
+                        when ""
                           ranking = 2
                       end
 
