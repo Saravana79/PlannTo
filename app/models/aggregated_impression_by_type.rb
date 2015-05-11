@@ -42,7 +42,11 @@ class AggregatedImpressionByType
 
       if param[:ad_type] == "advertisement"
         query[:for_pub] = nil
-        query[:ad_id.ne] = nil
+        if param[:ad_id] != "All"
+          query[:ad_id] = param[:ad_id].to_i
+        else
+          query[:ad_id.ne] = nil
+        end
       elsif param[:ad_type] == "non advertisement"
         query[:for_pub] = true
       end
@@ -52,10 +56,6 @@ class AggregatedImpressionByType
       else
         query[:agg_date.gte] = start_date.to_date
         query[:agg_date.lte] = end_date.to_date
-      end
-
-      if param[:ad_id] != "All"
-        query[:ad_id] = param[:ad_id].to_i
       end
 
       results = AggregatedImpression.where(query)
