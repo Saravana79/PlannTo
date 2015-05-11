@@ -10,7 +10,11 @@ module Admin::AdReportsHelper
       item = @items.select {|item| item.id == id.to_i}.last
       item.blank? ? id : item.name
     else
-      id
+      if params[:type] == "Domain"
+        id.to_s.gsub(".", "")
+      else
+        id
+      end
     end
   end
 end
