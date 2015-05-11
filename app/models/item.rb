@@ -1644,9 +1644,9 @@ end
                       plannto_user_detail.save!
                     end
 
+                    m_item_type = nil
                     if !plannto_user_detail.blank?
                       #plannto user details
-                      m_item_type = nil
 
                       article_content = ArticleContent.where(:url => url).first
                       itemtype_id = article_content.itemtype_id rescue ""

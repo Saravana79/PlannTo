@@ -11,7 +11,7 @@ module Admin::AdReportsHelper
       item.blank? ? id : item.name
     else
       if params[:type] == "Domain"
-        id.to_s.gsub(".", "")
+        id.to_s.gsub("^", ".")
       else
         id
       end

@@ -51,9 +51,10 @@ class UserAccessDetail < ActiveRecord::Base
           end
         end
 
+        m_item_type = nil
+
         if !plannto_user_detail.blank?
           #plannto user details
-          m_item_type = nil
 
           if !itemtype_id.blank?
             m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
