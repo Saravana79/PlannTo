@@ -932,10 +932,10 @@ class Advertisement < ActiveRecord::Base
                   current_domain_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s, "agg_type" => "Domain")
 
                   current_domain_hash["agg_coll"] = {} if current_domain_hash["agg_coll"].blank?
-                  curr_domain = current_domain_hash["agg_coll"]["#{domain.to_s}"]
+                  curr_domain = current_domain_hash["agg_coll"]["#{domain}"]
 
                   if curr_domain.blank?
-                    current_domain_hash["agg_coll"].merge!("#{domain.to_s}" => {"clicks" => 1})
+                    current_domain_hash["agg_coll"].merge!("#{domain}" => {"clicks" => 1})
                   else
                     curr_domain.merge!("clicks"=> curr_domain["clicks"].to_i + 1)
                   end
@@ -1060,14 +1060,14 @@ class Advertisement < ActiveRecord::Base
           end
 
           domains_hash.each do |key, val|
-            agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
+            domain_agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
 
-            if agg_imp.blank?
-              agg_imp = AggregatedImpressionByType.new(val)
-              agg_imp.save!
+            if domain_agg_imp.blank?
+              domain_agg_imp = AggregatedImpressionByType.new(val)
+              domain_agg_imp.save!
             else
-              agg_imp.agg_coll = Advertisement.combine_hash(agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
-              agg_imp.save!
+              domain_agg_imp.agg_coll = Advertisement.combine_hash(domain_agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              domain_agg_imp.save!
             end
           end
         rescue Exception => e
