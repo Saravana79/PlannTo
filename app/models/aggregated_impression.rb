@@ -58,6 +58,13 @@ class AggregatedImpression
 
       if ["Domain", "Item"].include?(param[:type])
         query[:agg_type] = param[:type]
+        if param[:ad_type] == "advertisement"
+          if param[:ad_id] != "All"
+            query[:ad_id] = param[:ad_id].to_i
+          else
+            query[:ad_id.ne] = nil
+          end
+        end
         results = AggregatedImpressionByType.where(query)
       else
         if param[:ad_type] == "advertisement"
