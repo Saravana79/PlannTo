@@ -22,6 +22,8 @@ class Itemdetail < ActiveRecord::Base
     status_condition = " and itemdetails.status in (1,3)"
     # vendor_id = sanitize(vendor_id)
 
+    item_ids = item_ids.compact
+    return [] if item_ids.blank?
 
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')}) ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
@@ -33,6 +35,8 @@ class Itemdetail < ActiveRecord::Base
     status_condition = " and itemdetails.status in (1,3)"
     # vendor_id = sanitize(vendor_id)
 
+    item_ids = item_ids.compact
+    return [] if item_ids.blank?
 
     find_by_sql("SELECT count(*) as count FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.to_a.map(&:inspect).join(', ')})
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')})")

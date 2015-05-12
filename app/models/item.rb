@@ -2584,7 +2584,7 @@ end
 
       if itemdetails_count.blank?
         # item = Item.where(:id => item_id).first
-        itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count
+        itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count rescue nil
 
         if !itemdetails_count.blank?
           $redis.set("itemdetails_count:#{item_id}", itemdetails_count)
