@@ -31,7 +31,7 @@ class UserAccessDetail < ActiveRecord::Base
         when "Lists", "Others"
           ranking = 2
         when "Vendor"
-          ranking = 15
+          ranking = 5
       end
 
       item_ids = item_ids.to_s.split(",")
@@ -49,6 +49,23 @@ class UserAccessDetail < ActiveRecord::Base
             plannto_user_detail.google_user_id = cookie_match.google_user_id
             plannto_user_detail.save!
           end
+        end
+
+        plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).first
+
+        if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
+          cookie_match = CookieMatch.where(:plannto_user_detail => user_id).last
+          if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+            plannto_user_detail.google_user_id = cookie_match.google_user_id
+            plannto_user_detail.save!
+          end
+        elsif plannto_user_detail.blank?
+          plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => user_id)
+          cookie_match = CookieMatch.where(:plannto_user_detail => user_id).last
+          if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+            plannto_user_detail.google_user_id = cookie_match.google_user_id
+          end
+          plannto_user_detail.save!
         end
 
         m_item_type = nil
