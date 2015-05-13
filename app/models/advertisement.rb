@@ -1222,14 +1222,14 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).first
 
             if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
-              cookie_match = CookieMatch.where(:plannto_user_detail => each_click_mongo["temp_user_id"]).last
+              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
               if !cookie_match.blank? && !cookie_match.google_user_id.blank?
                 plannto_user_detail.google_user_id = cookie_match.google_user_id
                 plannto_user_detail.save!
               end
             elsif plannto_user_detail.blank?
               plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
-              cookie_match = CookieMatch.where(:plannto_user_detail => each_click_mongo["temp_user_id"]).last
+              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
               if !cookie_match.blank? && !cookie_match.google_user_id.blank?
                 plannto_user_detail.google_user_id = cookie_match.google_user_id
               end
