@@ -12,8 +12,14 @@ module HerokuResqueAutoScale
         response.select {|e| e["process"].include?("worker")}.count
       end
 
-      def set_workers(qty)
-        @@heroku.post_ps_scale(ENV['HEROKU_APP'], "worker", qty)
+      def webs
+        # @@heroku.info(ENV['HEROKU_APP'])[:workers].to_i
+        response = @@heroku.get_ps("plannto").body
+        response.select {|e| e["process"].include?("web")}.count
+      end
+
+      def set_workers(qty, type="worker")
+        @@heroku.post_ps_scale(ENV['HEROKU_APP'], type, qty)
       end
 
       def job_count
@@ -39,6 +45,35 @@ module HerokuResqueAutoScale
   end
 
   def after_enqueue_scale_workers(*args)
+    if $redis.get("auto_scaled_heroku_web").blank?
+      #Increase and Decrease web
+      time = Time.now.localtime.hour
+      new_web_count = 2
+
+      if time == 22
+        web_count = Scaler.webs
+        new_web_count = web_count - 1
+      elsif time == 0
+        web_count = Scaler.webs
+        new_web_count = web_count - 1
+      elsif time == 8
+        web_count = Scaler.webs
+        new_web_count = web_count + 1
+      elsif time == 10
+        web_count = Scaler.webs
+        new_web_count = web_count + 1
+      end
+
+      if new_web_count > 2
+        Scaler.set_workers(new_web_count, "web")
+
+        $redis.pipelined do
+          $redis.set("auto_scaled_heroku_web", "true")
+          $redis.expire("auto_scaled_heroku_web", 1.hour)
+        end
+      end
+    end
+
     return if !$redis.get("auto_scaled_heroku_worker").blank?
 
     $redis.pipelined do
