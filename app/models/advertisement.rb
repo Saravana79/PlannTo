@@ -1167,6 +1167,7 @@ class Advertisement < ActiveRecord::Base
         p "Started buying list update for non ad impressions"
 
         redis_rtb_hash = {}
+        plannto_user_detail_hash = {}
         non_ad_impressions_list.each do |impression|
           begin
             article_content = ArticleContent.find_by_sql("select itemtype_id,sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
