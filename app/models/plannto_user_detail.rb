@@ -83,9 +83,20 @@ class PlanntoUserDetail
 
   def update_additional_details(url)
     domain = Item.get_host_without_www(url)
+    redis_rtb = {}
     male_site_list = ["team-bhp.com", "gadgetstouse.com"]
     female_site_list = ["makeupandbeauty.com", "stylecraze.com", "bollywoodshaadis.com", "southindiafashion.com", "wiseshe.com", "indusladies.com", "celebritysaree.com"]
     resale_site_list = ["olx.in", "quikr.com", "classifieds.team-bhp.com"]
+    buying_cycle_site_list = ["mysmartprices.com", "smartprix.com", "pricebaba.com"]
+
+    user_id_for_key = ""
+    if self.plannto_user_id.blank?
+      user_id_for_key = self.google_user_id.to_s
+      key_prefix = "users:buyinglist:#{user_id_for_key}"
+    else
+      user_id_for_key = self.plannto_user_id.to_s
+      key_prefix = "users:buyinglist:plannto:#{user_id_for_key}"
+    end
 
     if male_site_list.include?(domain)
       self.m_rank = self.m_rank.to_i + 1
@@ -93,14 +104,32 @@ class PlanntoUserDetail
       self.f_rank = self.f_rank.to_i + 1
     elsif resale_site_list.include?(domain)
       a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
-      a_hash.merge!("resale" => "true")
+      a_hash = Hash[a_hash]
+      a_hash.merge!("resale" => "true", "rad" => Date.today.to_s) #rad => resale last accessed date
       self.a = a_hash
+      redis_rtb.merge!("#{key_prefix}:add_detail:resale", Date.today.to_s) if !user_id_for_key.blank?
+    elsif buying_cycle_site_list.include?(domain)
+      a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
+      a_hash = Hash[a_hash]
+      a_hash.merge!("bc" => "true", "bcad" => Date.today.to_s) #bcad => buying cycle last accessed date
+      self.a = a_hash
+      redis_rtb.merge!("#{key_prefix}:add_detail:bc", Date.today.to_s) if !user_id_for_key.blank?
+    end
+
+    if self.m_rank.to_i > self.f_rank.to_i
+      self.gender = "m"
+      redis_rtb.merge!("#{key_prefix}:gender", "male") if !user_id_for_key.blank?
+    elsif self.m_rank.to_i < self.f_rank.to_i
+      self.gender = "f"
+      redis_rtb.merge!("#{key_prefix}:gender", "female") if !user_id_for_key.blank?
     end
 
     self.skip_callback = true
     self.skip_duplicate_update = true
 
     self.save!
+
+    return redis_rtb
   end
 
   private
@@ -203,17 +232,6 @@ class PlanntoUserDetail
           end
         end
 
-      end
-
-      if (self.m_rank_changed? || self.f_rank_changed?)
-        self.skip_duplicate_update = true
-        if self.m_rank.to_i > self.f_rank.to_i
-          self.gender = "m"
-          self.save!
-        elsif self.m_rank.to_i < self.f_rank.to_i
-          self.gender = "f"
-          self.save!
-        end
       end
     end
   end

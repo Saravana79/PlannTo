@@ -18,6 +18,7 @@ class UserAccessDetail < ActiveRecord::Base
     base_item_ids = Item.get_base_items_from_config()
     # source_categories = SourceCategory.get_source_category_with_paginations()
     redis_rtb_hash = {}
+    plannto_user_detail_hash = {}
 
     already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, url_prefix="users:last_visits:plannto")
     ranking = 0
@@ -61,7 +62,6 @@ class UserAccessDetail < ActiveRecord::Base
 
         if !plannto_user_detail.blank?
           #plannto user details
-          plannto_user_detail.update_additional_details(url)
 
           if !itemtype_id.blank?
             m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
@@ -78,6 +78,8 @@ class UserAccessDetail < ActiveRecord::Base
             end
           end
           plannto_user_detail.save!
+          plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
+          plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
         end
 
         add_fad = u_values.blank? ? true : false
@@ -164,6 +166,25 @@ class UserAccessDetail < ActiveRecord::Base
                 end
               end
             end
+
+            #Update redis_rtb from plannto_user_detail
+            if !plannto_user_detail.blank?
+              if plannto_user_detail.plannto_user_id.blank?
+                user_id = plannto_user_detail.google_user_id.to_s
+                pud_redis_rtb_hash_key = "users:buyinglist:#{user_id}:#{m_item_type.itemtype_id}"
+              else
+                user_id = plannto_user_detail.plannto_user_id.to_s
+                pud_redis_rtb_hash_key = "users:buyinglist:plannto:#{user_id}:#{m_item_type.itemtype_id}"
+              end
+
+              if !user_id.blank?
+                item_ids = m_item_type.m_items.sort_by {|each_val| each_val.ranking.to_i}.reverse.map(&:item_id).uniq.join(",")
+                high_score = m_item_type.m_items.map {|each_val| each_val.ranking.to_i}.max
+                tot_count = m_item_type.m_items.count
+                pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
+                plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
+              end
+            end
           end
 
 
@@ -203,7 +224,7 @@ class UserAccessDetail < ActiveRecord::Base
     #     $redis_rtb.expire(key, 2.weeks)
     #   end
     # end
-    redis_rtb_hash
+    return redis_rtb_hash, plannto_user_detail_hash
   end
 
   def self.get_buying_list_above(above_val, u_values, buying_list_key, base_item_ids)
