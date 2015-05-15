@@ -422,13 +422,13 @@ class FeedUrl < ActiveRecord::Base
     next_val = 0
     loop_count = 0
     begin
-      redis_val = $redis_rtb.scan(next_val, match: match, count: 300)
+      redis_val = $redis_rtb.scan(next_val, match: match, count: 3000)
       next_val = redis_val[0].to_i
-      val = redis_val[1]
       p "Loop Count => #{loop_count}"
       loop_count+=1
-      removed_item_count = $redis_rtb.del(val) unless val.blank?
+      removed_item_count = $redis_rtb.del(redis_val[1]) unless redis_val[1].blank?
       p "removed items #{removed_item_count}"
+      removed_item_count = 0
     end while next_val != 0
   end
 
