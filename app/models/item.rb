@@ -1607,13 +1607,14 @@ end
       begin
         user_vals = $redis_rtb.lrange("users:visits", 0, 2000)
         redis_rtb_hash = {}
+        pud_redis_rtb_hash = {}
         redis_hash = {}
 
         buying_list_del_keys = []
         user_vals.each_with_index do |each_user_val, index|
           p "Processing: #{each_user_val}"
           begin
-            t_length-=1
+            t_length -= 1
             # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
             unless each_user_val.blank?
               user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
@@ -1647,6 +1648,8 @@ end
                     m_item_type = nil
                     if !plannto_user_detail.blank?
                       #plannto user details
+
+                      plannto_user_detail.update_additional_details(url)
 
                       article_content = ArticleContent.where(:url => url).first
                       itemtype_id = article_content.itemtype_id rescue ""
@@ -1777,6 +1780,25 @@ end
                             m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
                             m_item.save!
                           end
+                        end
+                      end
+
+                      #Update redis_rtb from plannto_user_detail
+                      if !plannto_user_detail.blank?
+                        if plannto_user_detail.plannto_user_id.blank?
+                          user_id = plannto_user_detail.google_user_id.to_s
+                          pud_redis_rtb_hash_key = "users:buyinglist:#{user_id}:#{m_item_type.itemtype_id}"
+                        else
+                          user_id = plannto_user_detail.plannto_user_id.to_s
+                          pud_redis_rtb_hash_key = "users:buyinglist:plannto:#{user_id}:#{m_item_type.itemtype_id}"
+                        end
+
+                        if !user_id.blank?
+                          # item_ids = m_item_type.m_items.map(&:item_id).uniq.join(",")
+                          # high_ranking = "" #TODO: have to check
+                          # tot_count = m_item_type.m_items.count
+                          # pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_ranking" => "", "tot_count" => tot_count, "lad" => Date.today.to_s}
+                          # plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
                         end
                       end
                     end

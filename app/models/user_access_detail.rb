@@ -40,17 +40,6 @@ class UserAccessDetail < ActiveRecord::Base
         u_key = "u:ac:plannto:#{user_id}"
         u_values = $redis.hgetall(u_key)
 
-        plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).last
-
-        if plannto_user_detail.blank?
-          cookie_match = CookieMatch.where(:plannto_user_id => user_id).select(:google_user_id).last
-          if !cookie_match.blank? && !cookie_match.google_user_id.blank?
-            plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => user_id)
-            plannto_user_detail.google_user_id = cookie_match.google_user_id
-            plannto_user_detail.save!
-          end
-        end
-
         plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).first
 
         if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
@@ -72,6 +61,7 @@ class UserAccessDetail < ActiveRecord::Base
 
         if !plannto_user_detail.blank?
           #plannto user details
+          plannto_user_detail.update_additional_details(url)
 
           if !itemtype_id.blank?
             m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last

@@ -7,9 +7,12 @@ class PlanntoUserDetail
 
 
   field :plannto_user_id, type: String
-  field :gender, type: String
+  field :gender, type: String  #value M/F
   field :google_user_id, type: String
-  field :last_accessed_date, type: Date
+  field :lad, type: Date #Last acessed date
+  field :m_rank, type: Integer #Male Ranking
+  field :f_rank, type: Integer #Female Ranking
+  field :a, type: String # Additional detail
 
   embeds_many :m_item_types
   # embeds_many :m_items
@@ -78,12 +81,34 @@ class PlanntoUserDetail
     end
   end
 
+  def update_additional_details(url)
+    domain = Item.get_host_without_www(url)
+    male_site_list = ["team-bhp.com", "gadgetstouse.com"]
+    female_site_list = ["makeupandbeauty.com", "stylecraze.com", "bollywoodshaadis.com", "southindiafashion.com", "wiseshe.com", "indusladies.com", "celebritysaree.com"]
+    resale_site_list = ["olx.in", "quikr.com", "classifieds.team-bhp.com"]
+
+    if male_site_list.include?(domain)
+      self.m_rank = self.m_rank.to_i + 1
+    elsif female_site_list.include?(domain)
+      self.f_rank = self.f_rank.to_i + 1
+    elsif resale_site_list.include?(domain)
+      a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
+      a_hash.merge!("resale" => "true")
+      self.a = a_hash
+    end
+
+    self.skip_callback = true
+    self.skip_duplicate_update = true
+
+    self.save!
+  end
+
   private
 
   def update_last_accessed_date
     if self.skip_callback != true
       self.skip_callback = true
-      self.last_accessed_date = Date.today
+      self.lad = Date.today
       self.save
     end
   end
@@ -128,6 +153,13 @@ class PlanntoUserDetail
           end
           self.save!
         end
+
+        if !self.google_user_id.blank? && !self.plannto_user_id.blank?
+          $redis_rtb.pipelined do
+            $redis_rtb.set("cm:#{self.google_user_id}", self.plannto_user_id)
+            $redis_rtb.expire("cm:#{self.google_user_id}", 2.weeks)
+          end
+        end
       elsif self.google_user_id_changed?
         self.skip_duplicate_update = true
         plannto_user_details = PlanntoUserDetail.where(:google_user_id => self.google_user_id)
@@ -161,6 +193,25 @@ class PlanntoUserDetail
             end
             old_detail.destroy
           end
+          self.save!
+        end
+
+        if !self.google_user_id.blank? && !self.plannto_user_id.blank?
+          $redis_rtb.pipelined do
+            $redis_rtb.set("cm:#{self.google_user_id}", self.plannto_user_id)
+            $redis_rtb.expire("cm:#{self.google_user_id}", 2.weeks)
+          end
+        end
+
+      end
+
+      if (self.m_rank_changed? || self.f_rank_changed?)
+        self.skip_duplicate_update = true
+        if self.m_rank.to_i > self.f_rank.to_i
+          self.gender = "m"
+          self.save!
+        elsif self.m_rank.to_i < self.f_rank.to_i
+          self.gender = "f"
           self.save!
         end
       end
