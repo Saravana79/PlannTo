@@ -1265,7 +1265,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
               click_item_ids = click_item_ids.map(&:to_i).compact.uniq
               m_item_type.click_item_ids = click_item_ids
-              m_item_type.last_click_date = Date.today
+              m_item_type.lcd = Date.today
               m_item_type.save!
             end
 
@@ -1725,7 +1725,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
             click_item_ids = click_item_ids.map(&:to_i).compact.uniq
             m_item_type.click_item_ids = click_item_ids
-            m_item_type.last_click_date = Date.today
+            m_item_type.lcd = Date.today
             m_item_type.save!
           end
 

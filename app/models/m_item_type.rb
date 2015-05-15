@@ -5,9 +5,9 @@ class MItemType
   field :itemtype_id, type: Integer
   field :list_of_urls, type: Array
   field :click_item_ids, type: Array
-  field :last_click_date, type: Date
+  field :lcd, type: Date #Last click date
   field :order_item_ids, type: Array
-  field :last_order_date, type: Date
+  field :lod, type: Date #Last order date
 
   embedded_in :plannto_user_detail
   embeds_many :m_items

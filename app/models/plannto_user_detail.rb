@@ -73,7 +73,7 @@ class PlanntoUserDetail
         order_item_ids = order_item_ids.blank? ? [impression.item_id.to_i] : (order_item_ids + [impression.item_id.to_i])
         order_item_ids = order_item_ids.map(&:to_i).compact.uniq
         m_item_type.order_item_ids = order_item_ids
-        m_item_type.last_order_date = Date.today
+        m_item_type.lod = Date.today
         m_item_type.save!
       end
 
