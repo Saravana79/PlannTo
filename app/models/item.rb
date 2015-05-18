@@ -1620,7 +1620,7 @@ end
             # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
             unless each_user_val.blank?
               user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-              if !user_id.blank? && !item_ids.blank? && !url.blank?
+              if !user_id.blank? && !url.blank?
                 already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
                 ranking = 0
 
@@ -2564,7 +2564,8 @@ end
       item_name = Item.get_fashion_item_name_random()
 
       item = Item.where(:name => item_name).first
-      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
+      item_id_arr = [item.id] rescue []
+      itemdetails = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids)
       itemdetails = itemdetails.sample(6)
     end
     itemdetails = itemdetails.first(6)
@@ -2587,10 +2588,11 @@ end
     itemdetails.uniq
   end
 
-  def self.get_item_id_and_random_id(ad,item_ids)
+  def self.get_item_id_and_random_id(ad, item_ids, vendor_id=nil)
     item = item_ids.blank? ? nil : Item.where(:id => item_ids.to_s.split(",")).first
     item_id = item.blank? ? nil : item.id
-    vendor_ids = [ad.vendor_id]
+    vendor_ids = ad.blank? ? [vendor_id] : [ad.vendor_id]
+    vendor_ids = vendor_ids.compact
     itemdetails = []
     if !item_id.blank?
       itemdetails_count = $redis.get("itemdetails_count:#{item_id}")
@@ -2608,7 +2610,7 @@ end
 
       itemdetails_rand_id = [*1..itemdetails_count].sample
     else
-      item_name, item_id = Item.get_fashion_item_name_random()
+      item_name, item_id = Item.get_fashion_item_name_random(item_id)
       # item = Item.where(:name => item_name).first
 
       itemdetails_count = $redis.get("itemdetails_count:#{item_id}")
@@ -2629,40 +2631,41 @@ end
     return item_id, itemdetails_rand_id
   end
 
-  def self.get_fashion_item_name_random()
+  def self.get_fashion_item_name_random(item_id=nil)
+    item_id = item_id.to_i
     sample_int = [*1..100].sample
-    if sample_int < 15
+    if item_id==72274 || sample_int < 15
       item_name = "Saree"
       item_id = 72274
-    elsif sample_int < 30
+    elsif item_id==72275 || sample_int < 30
       item_name = "SalwarSuit"
       item_id = 72275
-    elsif sample_int < 40
+    elsif item_id==72276 || sample_int < 40
       item_name = "WomenTop"
       item_id = 72276
-    elsif sample_int < 52
+    elsif item_id==72346 || sample_int < 52
       item_name = "DressMaterial"
       item_id = 72346
-    elsif sample_int < 62
+    elsif item_id==72347 || sample_int < 62
       item_name = "Kurta"
       item_id = 72347
-    elsif sample_int < 70
+    elsif item_id==73288 || sample_int < 70
       item_name = "Watch"
       item_id = 73288
-    elsif sample_int < 74
+    elsif item_id==72348 || sample_int < 74
       item_name = "Sunglass"
       item_id = 72348
     # elsif sample_int < 74
     #   item_name = "Underwear"
     # elsif sample_int < 74
     #   item_name = "Legging"
-    elsif sample_int < 82
+    elsif item_id==72351 || sample_int < 82
       item_name = "Dress"
       item_id = 72351
-    elsif sample_int < 90
+    elsif item_id==72352 || sample_int < 90
       item_name = "Handbag"
       item_id = 72352
-    elsif sample_int < 100
+    elsif item_id==72353 || sample_int < 100
       item_name = "Shoe"
       item_id = 72353
     end

@@ -141,7 +141,7 @@ class HistoryDetailsController < ApplicationController
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
       return render :nothing => true
     else
-
+      @item_detail = Itemdetail.find_by_item_details_id(params[:detail_id])
       type = params[:type].present? ? params[:type] : ""
 
       if (type == "Hotel")

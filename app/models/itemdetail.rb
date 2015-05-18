@@ -908,6 +908,19 @@ class Itemdetail < ActiveRecord::Base
     return {"Car" => {"Car Care Exterior (Shampoos, Polishes, Waxes)" => "Paint & Exterior Care", "Car Care Interior (Dashboard & Trim care, Cleaners)" => "Interior Care", "Car Parts (Filters, Bulbs, wiper blades)" => "Car Parts", "Car Electronics (Audio, GPS, Chargers)" => "Car Electronics", "Car Accessories (Covers, Mats, Freshners)"=> "Car Accessories"}, "Bike" => {"Helmets (Flip-up, Full face, Open face)" => "Helmets", "Gloves" => "Gloves", "Jackets" => "Jackets", "Head & Face Covers" => "Head & Face Covers", "Motor Oils (Engine Oil, Addictives)" => "Engine Oils for Motorbikes", "Bike Parts (Fenders, Cowls, Deflectors)" => "Motorbike Accessories & Parts"}}
   end
 
+  def self.get_widget_details_from_itemdetails(item_details)
+    items = []
+    item_details.each do |item_detail|
+      item = OpenStruct.new
+      item.price = item_detail.price
+      item.itemdetail_id = item_detail.item_details_id
+      item.name = item_detail.ItemName
+      item.image_name = item_detail.Image
+      items << item
+    end
+    items
+  end
+
   private
 
   def update_last_verified_date
