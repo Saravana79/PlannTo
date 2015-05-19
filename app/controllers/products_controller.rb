@@ -391,9 +391,7 @@ class ProductsController < ApplicationController
     params[:page_type] ||= "type_1" if params[:page_type].blank?
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
-
-    @items, tempurl = Item.get_items_from_url(url, params[:item_ids])
-    url =  tempurl
+    url =  @url
 
     included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
     if included_beauty
@@ -1223,7 +1221,16 @@ class ProductsController < ApplicationController
     url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
     params[:ref_url] = url
 
-    if params[:item_ids].blank? || params[:fashion_id].blank?
+    @items, @url = Item.get_items_from_url(url, params[:item_ids])
+
+    if !@items.blank?
+      included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
+      if included_beauty
+        params[:beauty] = "true"
+      end
+    end
+
+    if params[:beauty] != "true" && (params[:item_ids].blank? || params[:fashion_id].blank?)
       item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
 
       if random_id.blank?
@@ -1232,14 +1239,6 @@ class ProductsController < ApplicationController
 
       params[:item_ids] = item_id
       params[:fashion_id] = random_id
-    end
-
-    if !params[:item_ids].blank?
-      items = Item.where(:id => params[:item_ids].to_s.split(","))
-      included_beauty = items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
-      if included_beauty
-        params[:beauty] = "true"
-      end
     end
 
     host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
