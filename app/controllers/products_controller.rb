@@ -3,6 +3,7 @@ require "securerandom"
 class ProductsController < ApplicationController
   before_filter :create_impression_before_widgets, :only => [:where_to_buy_items]
   before_filter :create_impression_before_widgets_vendor, :only => [:where_to_buy_items_vendor]
+  before_filter :create_impression_before_widget_for_women, :only => [:widget_for_women]
   before_filter :create_impression_before_sports_widget, :only => [:sports_widget]
   before_filter :create_impression_before_elec_widget, :only => [:elec_widget_1]
   before_filter :create_impression_before_price_text_vendor_details, :only => [:price_text_vendor_details]
@@ -44,6 +45,22 @@ class ProductsController < ApplicationController
      end
    }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
+  caches_action :widget_for_women, :cache_path => proc {|c|
+    if params[:beauty] == "true"
+      if params[:item_ids].blank?
+        params.slice("ref_url", "page_type", "geo", "beauty")
+      else
+        params.slice("item_ids", "page_type", "geo", "beauty")
+      end
+    else
+      if params[:item_ids].blank?
+        params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty")
+      else
+        params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty")
+      end
+    end
+  }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
+
   caches_action :sports_widget, :cache_path => proc {|c|
     if (!params[:ref_url].blank?)
       params.slice("category_item_detail_id", "category_type", "page_type")
@@ -63,11 +80,11 @@ class ProductsController < ApplicationController
 #  caches_action :search_items, :cache_path => Proc.new { |c| c.params.except(:callback).except(:_) },:expires_in => 24.hours
   before_filter :authenticate_user!, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type]
   before_filter :get_item_object, :only => [:follow_this_item, :own_a_item, :plan_to_buy_item, :follow_item_type, :review_it, :add_item_info]
-  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details]
+  before_filter :all_user_follow_item, :if => Proc.new { |c| !current_user.blank? }, :except => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women]
   before_filter :store_location, :only => [:show]
   before_filter :set_referer,:only => [:show]
   before_filter :log_impression, :only=> [:show]
-  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details]
+  skip_before_filter :cache_follow_items, :store_session_url, :only => [:where_to_buy_items, :where_to_buy_items_vendor, :sports_widget, :elec_widget_1, :price_text_vendor_details, :widget_for_women]
   layout 'product'
   include FollowMethods
   include ItemsHelper
@@ -361,14 +378,111 @@ class ProductsController < ApplicationController
     @ref_url = url
     jsonp = prepare_response_json()
 
-
-
     headers["Content-Type"] = "text/javascript; charset=utf-8"
     respond_to do |format|
       format.js { render :text => jsonp, :content_type => "text/javascript" }
     end
       
     # render :layout => false
+  end
+
+  def widget_for_women
+    # params[:item_ids] = "13874" if params[:item_ids].blank?
+    params[:page_type] ||= "type_1" if params[:page_type].blank?
+    url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
+    @test_condition = @is_test == "true" ? "&is_test=true" : ""
+
+    @items, tempurl = Item.get_items_from_url(url, params[:item_ids])
+    url =  tempurl
+
+    included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
+    if included_beauty
+      get_details_from_beauty_items(url, itemsaccess)
+    else
+      get_details_from_fashion_ads()
+    end
+    jsonp = prepare_response_json()
+
+    headers["Content-Type"] = "text/javascript; charset=utf-8"
+    respond_to do |format|
+      format.js { render :text => jsonp, :content_type => "text/javascript" }
+    end
+
+    # render :layout => false
+  end
+
+  def get_details_from_beauty_items(url, itemsaccess)
+    if !@items.blank?
+      @item, @items, @search_url, @extra_items = Item.get_item_items_from_amazon(@items, params[:item_ids], params[:page_type], params[:geo])
+
+      if @items.blank?
+        @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+      end
+    else
+      @item, @items, @search_url, @extra_items = Item.get_best_seller_beauty_items_from_amazon(params[:page_type], url, params[:geo])
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+    end
+
+    @search_url = CGI.escape(@search_url)
+    url_params = Advertisement.make_url_params(params)
+
+    # include pre order status if we show more details.
+    unless @items.blank?
+      status, @displaycount, @activate_tab = set_status_and_display_count(@moredetails, @activate_tab)
+      @publisher = Publisher.getpublisherfromdomain(url)
+      # Check have to activate tabs for publisher or not
+      # @activate_tab = true if (@publisher.blank? || (!@publisher.blank? && @active_tabs_for_publisher.include?(@publisher.id)))
+      if @is_test != "true"
+        @impression_id = AddImpression.add_impression_to_resque("fashion", @item.id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
+      end
+
+      @show_count = Item.get_show_item_count(@items)
+    else
+      @where_to_buy_items =[]
+      itemsaccess = "none"
+      @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "fashion")
+    end
+    @ref_url = url
+  end
+
+  def get_details_from_fashion_ads()
+    p_item_ids = item_ids = []
+    p_item_ids = item_ids = params[:item_ids].to_s.split(",") unless params[:item_ids].blank?
+
+    impression_type, url, url_params, itemsaccess, vendor_ids, ad_id, winning_price_enc = check_and_assigns_ad_default_values()
+
+    # static ad process
+    # @publisher = Publisher.getpublisherfromdomain(@ad.click_url)
+
+    @ad_template_type = "type_1" #TODO: only accept type 1
+
+    # @vendor = Vendor.where(:name => "Amazon").first
+    # vendor_ids = [@vendor.id]
+    # @vendor_image_url = configatron.root_image_url + "vendor/medium/default_vendor.jpeg"
+    # @vendor_ad_details = VendorDetail.get_vendor_ad_details([9882])
+
+    # @current_vendor = @vendor_ad_details[9882]
+    # @current_vendor = {} if @current_vendor.blank?
+    # item_ids = item_id.to_s.split(",")
+
+    @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
+    # @sliced_item_details = @item_details.each_slice(2)
+
+    @items = Itemdetail.get_widget_details_from_itemdetails(@item_details)
+
+    item_id = @item.id rescue nil
+    if @is_test != "true"
+      @impression_id = AddImpression.add_impression_to_resque("fashion", item_id, url, current_user, request.remote_ip, nil, itemsaccess, url_params,
+                                                              cookies[:plan_to_temp_user_id], nil, nil, nil)
+    end
+
+    # respond_to do |format|
+    #   format.json {
+    #     return render :json => {:success => true, :html => render_to_string("advertisements/show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+    #   }
+    #   format.html { return render "show_fashion_ads.html.erb", :layout => false }
+    # end
   end
 
   def elec_widget_1
@@ -1062,8 +1176,6 @@ class ProductsController < ApplicationController
 
     cache_key = "views/#{host_name}/price_text_vendor_details.js?#{cache_params}.js"
 
-    p cache_key
-
     if params[:is_test] != "true"
       cache = Rails.cache.read(cache_key)
       unless cache.blank?
@@ -1075,6 +1187,96 @@ class ProductsController < ApplicationController
 
           old_iid = FeedUrl.get_value_from_pattern(cache, "iid=<iid>&", "<iid>")
           cache = cache.gsub(old_iid, @impression_id)
+        end
+        return render :text => cache.html_safe, :content_type => "text/javascript"
+        ## Rails.cache.write(cache_key, cache)
+      end
+    end
+  end
+
+  def check_and_assigns_ad_default_values()
+    params[:is_test] ||= 'false'
+    @is_test = params[:is_test]
+    @moredetails = params[:price_full_details]
+    @activate_tab = true
+    @ad_template_type ||= "type_1"
+    impression_type = params[:ad_as_widget] == "true" ? "advertisement_widget" : "advertisement"
+    #TODO: temp commentted no one is using now
+    # @vendor_ids = params[:more_vendors] == "true" ? [9861, 9882, 9874, 9880, 9856, 72329] : []
+    @vendor_ids = params[:vendor_ids].to_s.split(",")
+    @ref_url = params[:ref_url] ||= ""
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    @ref_url = url
+
+    vendor_ids = [9882]
+    url_params = set_cookie_for_temp_user_and_url_params_process(params)
+    winning_price_enc = params[:wp]
+    return impression_type, url, url_params, itemsaccess, vendor_ids, nil, winning_price_enc
+  end
+
+  def create_impression_before_widget_for_women
+    params[:item_ids] ||= ""
+    params[:page_type] ||= ""
+    params[:fashion_id] ||= ""
+    params[:beauty] ||= "false"
+
+    url, itemsaccess = assign_url_and_item_access(params[:ref_url], request.referer)
+    params[:ref_url] = url
+
+    if params[:item_ids].blank? || params[:fashion_id].blank?
+      item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
+
+      if random_id.blank?
+        item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
+      end
+
+      params[:item_ids] = item_id
+      params[:fashion_id] = random_id
+    end
+
+    if !params[:item_ids].blank?
+      items = Item.where(:id => params[:item_ids].to_s.split(","))
+      included_beauty = items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
+      if included_beauty
+        params[:beauty] = "true"
+      end
+    end
+
+    host_name = configatron.hostname.gsub(/(http|https):\/\//, '')
+
+    if params[:beauty] == "true"
+      if params[:item_ids].blank?
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "geo", "beauty"))
+      else
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "geo", "beauty"))
+      end
+    else
+      if params[:item_ids].blank?
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "fashion_id", "geo", "beauty"))
+      else
+        cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "fashion_id", "geo", "beauty"))
+      end
+    end
+
+    cache_params = CGI::unescape(cache_params)
+    cache_key = "views/#{host_name}/widget_for_women.js?#{cache_params}.js"
+
+    if params[:is_test] != "true"
+      cache = Rails.cache.read(cache_key)
+      unless cache.blank?
+        valid_html = cache.match(/_blank/).blank? ? false : true
+        cache = reset_json_callback(cache, params[:callback])
+        if valid_html
+          url_params = set_cookie_for_temp_user_and_url_params_process(params)
+          item_id = params[:item_ids]
+          matched_val = cache.match(/present_item_id=.*#/)
+          unless matched_val.blank?
+            val = matched_val[0]
+            item_id = val.split("=")[1].gsub("#", "")
+          end
+          @impression_id = Advertisement.create_impression_before_cache(params, request.referer, url_params, cookies[:plan_to_temp_user_id], nil, request.remote_ip, "fashion", item_id, nil)
+
+          cache = cache.gsub(/iid=\S+\\/, "iid=#{@impression_id}\\")
         end
         return render :text => cache.html_safe, :content_type => "text/javascript"
         ## Rails.cache.write(cache_key, cache)

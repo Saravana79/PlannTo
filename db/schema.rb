@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150430123707) do
+ActiveRecord::Schema.define(:version => 20150514082403) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -945,6 +945,9 @@ ActiveRecord::Schema.define(:version => 20150430123707) do
     t.integer  "payment_report_id"
     t.string   "sid"
     t.integer  "advertisement_id"
+    t.datetime "impression_time"
+    t.string   "domain"
+    t.float    "impression_cost"
   end
 
   create_table "payment_reports", :force => true do |t|
@@ -1034,6 +1037,8 @@ ActiveRecord::Schema.define(:version => 20150430123707) do
     t.string   "vendor_ids"
     t.string   "exclude_vendor_ids"
   end
+
+  add_index "publishers", ["publisher_url"], :name => "index_publishers_on_publisher_url"
 
   create_table "question_contents", :force => true do |t|
     t.string  "format",      :limit => 1

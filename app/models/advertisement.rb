@@ -618,6 +618,8 @@ class Advertisement < ActiveRecord::Base
         non_ad_impressions_list = []
         ads_hash = {}
         publisher_hash = {}
+        items_hash = {}
+        domains_hash = {}
 
         ads = Advertisement.select("id,commission")
         ad_detail_hash = {}
@@ -625,6 +627,8 @@ class Advertisement < ActiveRecord::Base
         ads.each do |adv|
           ad_detail_hash.merge!("#{adv.id}" => adv.commission.to_f.round(2))
         end
+
+        imported_values = []
 
         add_impressions.each do |each_rec|
           count -= 1
@@ -667,19 +671,8 @@ class Advertisement < ActiveRecord::Base
               hour = time.hour rescue ""
 
               if !impression.temp_user_id.blank? && !url_params[:gid].blank?
-                cookie_match = CookieMatch.where(:google_user_id => url_params[:gid]).last
-                if cookie_match.blank?
-                  cookie_match = CookieMatch.new(:google_user_id => url_params[:gid], :plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
-                  cookie_match.save!
-                else
-                  cookie_match.update_attributes!(:plannto_user_id => impression.temp_user_id, :match_source => "add_impression", :google_mapped => false)
-                end
-
-                $redis_rtb.pipelined do
-                  $redis_rtb.set("cm:#{cookie_match.google_user_id}", cookie_match.plannto_user_id)
-                  $redis_rtb.expire("cm:#{cookie_match.google_user_id}", 2.weeks)
-                end
-
+                cookie_match = CookieMatch.new(:plannto_user_id => impression.temp_user_id, :google_user_id => url_params[:gid], :match_source => "add_impression", :google_mapped => false)
+                imported_values << cookie_match
               end
 
               if !impression.advertisement_id.blank?
@@ -748,6 +741,47 @@ class Advertisement < ActiveRecord::Base
                   current_hash["ret"].merge!({"#{ret_val}" => {"imp" => 1, "costs" => winning_price.to_f}})
                 else
                   curr_ret.merge!({"imp" => curr_ret["imp"].to_i + 1, "costs" => curr_ret["costs"].to_f + winning_price.to_f})
+                end
+
+                #Items hash
+                current_item_hash = items_hash["item_#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_item_hash.blank?
+                  items_hash["item_#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_item_hash = items_hash["item_#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_item_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s, "agg_type" => "Item")
+
+                current_item_hash["agg_coll"] = {} if current_item_hash["agg_coll"].blank?
+                curr_item = current_item_hash["agg_coll"]["#{impression.item_id.to_s}"]
+
+                if curr_item.blank?
+                  current_item_hash["agg_coll"].merge!("#{impression.item_id.to_s}" => {"imp" => 1})
+                else
+                  curr_item.merge!("imp"=> curr_item["imp"].to_i + 1)
+                end
+
+                #Domains hash
+                domain = impression_mongo["domain"].to_s
+                domain = domain.gsub(".", "^")
+
+                current_domain_hash = domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"]
+
+                if current_domain_hash.blank?
+                  domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"] = {}
+                  current_domain_hash = domains_hash["domain_#{date}_#{impression.advertisement_id.to_s}"]
+                end
+
+                current_domain_hash.merge!("agg_date" => "#{date}", "ad_id" => impression.advertisement_id.to_s, "agg_type" => "Domain")
+
+                current_domain_hash["agg_coll"] = {} if current_domain_hash["agg_coll"].blank?
+                curr_domain = current_domain_hash["agg_coll"]["#{domain}"]
+
+                if curr_domain.blank?
+                  current_domain_hash["agg_coll"].merge!("#{domain}" => {"imp" => 1})
+                else
+                  curr_domain.merge!("imp"=> curr_domain["imp"].to_i + 1)
                 end
               else
                 current_hash = publisher_hash["publisher_#{date}"]
@@ -869,6 +903,48 @@ class Advertisement < ActiveRecord::Base
                   else
                     curr_ret.merge!({"clicks" => curr_ret["clicks"].to_i + 1})
                   end
+
+                  #Items hash
+                  current_item_hash = items_hash["item_#{date}_#{click.advertisement_id.to_s}"]
+
+                  if current_item_hash.blank?
+                    items_hash["item_#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_item_hash = items_hash["item_#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_item_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s, "agg_type" => "Item")
+
+                  current_item_hash["agg_coll"] = {} if current_item_hash["agg_coll"].blank?
+                  curr_item = current_item_hash["agg_coll"]["#{click.item_id.to_s}"]
+
+                  if curr_item.blank?
+                    current_item_hash["agg_coll"].merge!("#{click.item_id.to_s}" => {"clicks" => 1})
+                  else
+                    curr_item.merge!("clicks"=> curr_item["clicks"].to_i + 1)
+                  end
+
+                  #Domains hash
+                  domain = Item.get_host_without_www(click.hosted_site_url)
+                  domain = domain.to_s.gsub(".", "^")
+
+                  current_domain_hash = domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"]
+
+                  if current_domain_hash.blank?
+                    domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"] = {}
+                    current_domain_hash = domains_hash["domain_#{date}_#{click.advertisement_id.to_s}"]
+                  end
+
+                  current_domain_hash.merge!("agg_date" => "#{date}", "ad_id" => click.advertisement_id.to_s, "agg_type" => "Domain")
+
+                  current_domain_hash["agg_coll"] = {} if current_domain_hash["agg_coll"].blank?
+                  curr_domain = current_domain_hash["agg_coll"]["#{domain}"]
+
+                  if curr_domain.blank?
+                    current_domain_hash["agg_coll"].merge!("#{domain}" => {"clicks" => 1})
+                  else
+                    curr_domain.merge!("clicks"=> curr_domain["clicks"].to_i + 1)
+                  end
+
                 else
                   current_pub_hash = publisher_hash["publisher_#{date}"]
 
@@ -923,10 +999,21 @@ class Advertisement < ActiveRecord::Base
             end
           rescue Exception => e
             p "There was problem while running impressions process => #{e.backtrace}"
+            p e
           end
           p "Remaining click_or_impressions Count - #{count}"
         end
 
+        imported_values = imported_values.reverse.uniq(&:plannto_user_id)
+
+        result = CookieMatch.import(imported_values)
+
+        $redis_rtb.pipelined do
+          imported_values.each do |cookie_detail|
+            $redis_rtb.set("cm:#{cookie_detail.google_user_id}", cookie_detail.plannto_user_id)
+            $redis_rtb.expire("cm:#{cookie_detail.google_user_id}", 2.weeks)
+          end
+        end
 
         begin
           # AggregatedImpression
@@ -962,6 +1049,34 @@ class Advertisement < ActiveRecord::Base
               agg_imp.total_imp = agg_imp.total_imp.to_i + val["total_imp"].to_i
               agg_imp.total_clicks = agg_imp.total_clicks.to_i + val["total_clicks"].to_i
               agg_imp.save!
+            end
+          end
+
+          items_hash.each do |key, val|
+            agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
+
+            if agg_imp.blank?
+              agg_imp = AggregatedImpressionByType.new(val)
+              agg_imp.save!
+            else
+              agg_imp.agg_coll = Advertisement.combine_hash(agg_imp.agg_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              agg_imp.save!
+            end
+          end
+
+          domains_hash.each do |key, val|
+            domain_agg_imp = AggregatedImpressionByType.where(:agg_date => val["agg_date"], :ad_id => val["ad_id"], :agg_type => val["agg_type"]).last
+
+            if domain_agg_imp.blank?
+              domain_agg_imp = AggregatedImpressionByType.new(val)
+              domain_agg_imp.save!
+            else
+              old_coll = domain_agg_imp.agg_coll
+              old_coll = Hash[old_coll.map {|k, v| [k.gsub(".", "^"), v] }]
+              agg_coll = Advertisement.combine_hash(old_coll, val["agg_coll"]) if !val["agg_coll"].blank?
+              agg_coll = Hash[agg_coll.map {|k, v| [k.gsub(".", "^"), v] }]
+              domain_agg_imp.agg_coll = agg_coll
+              domain_agg_imp.save!
             end
           end
         rescue Exception => e
@@ -1052,9 +1167,10 @@ class Advertisement < ActiveRecord::Base
         p "Started buying list update for non ad impressions"
 
         redis_rtb_hash = {}
+        plannto_user_detail_hash = {}
         non_ad_impressions_list.each do |impression|
           begin
-            article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
+            article_content = ArticleContent.find_by_sql("select itemtype_id,sub_type,group_concat(icc.item_id) all_item_ids, ac.id from article_contents ac inner join contents c on ac.id = c.id
 inner join item_contents_relations_cache icc on icc.content_id = ac.id
 where url = '#{impression.hosted_site_url}' group by ac.id").first
 
@@ -1062,8 +1178,10 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               user_id = impression.temp_user_id
               type = article_content.sub_type
               item_ids = article_content.all_item_ids.to_s rescue ""
-              redis_hash = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto")
+              itemtype_id = article_content.itemtype_id
+              redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, impression.hosted_site_url, type, item_ids, nil, "plannto", itemtype_id)
               redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+              plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
             end
           rescue Exception => e
             p "Error invalid url errors => #{impression.hosted_site_url}"
@@ -1075,6 +1193,13 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
           redis_rtb_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.hincrby(key, "ap_c", 1)
+            $redis_rtb.expire(key, 2.weeks)
+          end
+        end
+
+        $redis_rtb.pipelined do
+          plannto_user_detail_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.expire(key, 2.weeks)
           end
         end
@@ -1102,39 +1227,50 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
         clicks_import_mongo.each do |each_click_mongo|
           if !each_click_mongo["temp_user_id"].blank?
+            #Updating PlanntoUserDetail
             plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => each_click_mongo["temp_user_id"]).first
 
-            if plannto_user_detail.blank?
+            if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
+              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
+              if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+                plannto_user_detail.google_user_id = cookie_match.google_user_id
+                plannto_user_detail.save!
+              end
+            elsif plannto_user_detail.blank?
               plannto_user_detail = PlanntoUserDetail.new(:plannto_user_id => each_click_mongo["temp_user_id"])
-              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).select(:google_user_id).last
-              plannto_user_detail.google_user_id = cookie_match.google_user_id if !cookie_match.blank?
+              cookie_match = CookieMatch.where(:plannto_user_id => each_click_mongo["temp_user_id"]).last
+              if !cookie_match.blank? && !cookie_match.google_user_id.blank?
+                plannto_user_detail.google_user_id = cookie_match.google_user_id
+              end
               plannto_user_detail.save!
             end
           end
 
-          itemtype_id = nil
-          #plannto user details
-          if !each_click_mongo["item_id"].blank?
-            itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
-            itemtype_id = itemtype.itemtype_id rescue ""
-          end
-
-          if !itemtype_id.blank?
-            m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
-            if m_item_type.blank?
-              plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
-              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+          if !plannto_user_detail.blank?
+            itemtype_id = nil
+            #plannto user details
+            if !each_click_mongo["item_id"].blank?
+              itemtype = Item.where(:id => each_click_mongo["item_id"]).select(:itemtype_id).first
+              itemtype_id = itemtype.itemtype_id rescue ""
             end
 
-            click_item_ids = m_item_type.click_item_ids
-            click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
-            click_item_ids = click_item_ids.map(&:to_i).compact.uniq
-            m_item_type.click_item_ids = click_item_ids
-            m_item_type.last_click_date = Date.today
-            m_item_type.save!
-          end
+            if !itemtype_id.blank?
+              m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+              if m_item_type.blank?
+                plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id)
+                m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+              end
 
-          plannto_user_detail.save!
+              click_item_ids = m_item_type.click_item_ids
+              click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
+              click_item_ids = click_item_ids.map(&:to_i).compact.uniq
+              m_item_type.click_item_ids = click_item_ids
+              m_item_type.lcd = Date.today
+              m_item_type.save!
+            end
+
+            plannto_user_detail.save!
+          end
 
           if each_click_mongo["video_impression_id"].blank?
             ad_impression_mon = AdImpression.where(:_id => each_click_mongo["ad_impression_id"]).first
@@ -1589,7 +1725,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
             click_item_ids = click_item_ids.blank? ? [each_click_mongo["item_id"].to_i] : (click_item_ids + [each_click_mongo["item_id"].to_i])
             click_item_ids = click_item_ids.map(&:to_i).compact.uniq
             m_item_type.click_item_ids = click_item_ids
-            m_item_type.last_click_date = Date.today
+            m_item_type.lcd = Date.today
             m_item_type.save!
           end
 

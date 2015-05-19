@@ -112,6 +112,7 @@ class CookieMatch < ActiveRecord::Base
         user_access_details_count = user_access_details.count
         user_access_details_import = []
         redis_rtb_hash = {}
+        plannto_user_detail_hash = {}
         housing_user_access_details_user_ids = []
         user_access_details.each do |user_access_detail|
           begin
@@ -133,7 +134,7 @@ class CookieMatch < ActiveRecord::Base
             msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
             if !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
-              item_detail = Itemdetail.find_by_sql("SELECT itemid FROM `itemdetails` WHERE `itemdetails`.`additional_details` = '#{msp_id}' #{site_condition} ORDER BY `itemdetails`.`item_details_id` DESC LIMIT 1").first
+              item_detail = Itemdetail.find_by_sql("SELECT itemid,i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.additional_details = '#{msp_id}' #{site_condition} ORDER BY itemdetails.item_details_id DESC LIMIT 1").first
 
               unless item_detail.blank?
                 user_id = new_user_access_detail.plannto_user_id
@@ -143,11 +144,12 @@ class CookieMatch < ActiveRecord::Base
                   type = "Spec"
                 end
 
-                itemtype_id = item_detail.itemtype_id
+                itemtype_id = item_detail.itemtype_id rescue ""
 
                 item_ids = item_detail.itemid.to_s rescue ""
-                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
               end
             else
               article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id, itemtype_id from article_contents ac inner join contents c on ac.id = c.id
@@ -163,8 +165,9 @@ where url = '#{ref_url}' group by ac.id").first
                 #plannto user details
                 itemtype_id = article_content.itemtype_id
 
-                redis_hash = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
               end
             end
           rescue Exception => e
@@ -177,6 +180,13 @@ where url = '#{ref_url}' group by ac.id").first
           redis_rtb_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.hincrby(key, "ap_c", 1)
+            $redis_rtb.expire(key, 2.weeks)
+          end
+        end
+
+        $redis_rtb.pipelined do
+          plannto_user_detail_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.expire(key, 2.weeks)
           end
         end

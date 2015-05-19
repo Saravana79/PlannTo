@@ -3,7 +3,11 @@ class Itemdetail < ActiveRecord::Base
   has_one :vendor, :primary_key => "site", :foreign_key => "id"
   has_one :image, as: :imageable
 
+  attr_accessor :skip_after_save
+
   belongs_to :item, :foreign_key => "itemid"
+
+  after_save :update_last_verified_date
 
   def self.get_item_details(item_id, vendor_ids)
     item_id = sanitize(item_id)
@@ -18,6 +22,8 @@ class Itemdetail < ActiveRecord::Base
     status_condition = " and itemdetails.status in (1,3)"
     # vendor_id = sanitize(vendor_id)
 
+    item_ids = item_ids.compact
+    return [] if item_ids.blank?
 
     find_by_sql("SELECT itemdetails.*, items.imageurl, items.type FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.map(&:inspect).join(', ')})
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')}) ORDER BY field(items.id, #{item_ids.map(&:inspect).join(', ')}), itemdetails.status asc, (itemdetails.price - case when itemdetails.cashback is null then 0 else
@@ -29,6 +35,8 @@ class Itemdetail < ActiveRecord::Base
     status_condition = " and itemdetails.status in (1,3)"
     # vendor_id = sanitize(vendor_id)
 
+    item_ids = item_ids.compact
+    return [] if item_ids.blank?
 
     find_by_sql("SELECT count(*) as count FROM `itemdetails` INNER JOIN `items` ON `items`.`id` = `itemdetails`.`itemid` WHERE items.id in (#{item_ids.to_a.map(&:inspect).join(', ')})
                  and itemdetails.isError =0 #{status_condition} and site in (#{vendor_ids.blank? ? "''" : vendor_ids.map(&:inspect).join(', ')})")
@@ -898,6 +906,28 @@ class Itemdetail < ActiveRecord::Base
     # bike_item_type_items = Item.where(:itemtype_id => bike_item_type.id).select("distinct name").map(&:name)
     # return {car_item_type.itemtype => car_item_type_items, bike_item_type.itemtype => bike_item_type_items}
     return {"Car" => {"Car Care Exterior (Shampoos, Polishes, Waxes)" => "Paint & Exterior Care", "Car Care Interior (Dashboard & Trim care, Cleaners)" => "Interior Care", "Car Parts (Filters, Bulbs, wiper blades)" => "Car Parts", "Car Electronics (Audio, GPS, Chargers)" => "Car Electronics", "Car Accessories (Covers, Mats, Freshners)"=> "Car Accessories"}, "Bike" => {"Helmets (Flip-up, Full face, Open face)" => "Helmets", "Gloves" => "Gloves", "Jackets" => "Jackets", "Head & Face Covers" => "Head & Face Covers", "Motor Oils (Engine Oil, Addictives)" => "Engine Oils for Motorbikes", "Bike Parts (Fenders, Cowls, Deflectors)" => "Motorbike Accessories & Parts"}}
+  end
+
+  def self.get_widget_details_from_itemdetails(item_details)
+    items = []
+    item_details.each do |item_detail|
+      item = OpenStruct.new
+      item.price = item_detail.price
+      item.itemdetail_id = item_detail.item_details_id
+      item.name = item_detail.ItemName
+      item.image_name = item_detail.Image
+      items << item
+    end
+    items
+  end
+
+  private
+
+  def update_last_verified_date
+    if self.skip_after_save != true
+      self.skip_after_save = true
+      self.update_attributes!(:last_updated => Time.now)
+    end
   end
 
 end

@@ -140,6 +140,15 @@ class Admin::AdReportsController < ApplicationController
     @advertisements = ["All"] + Advertisement.all.map(&:id)
 
     @results = AggregatedImpression.get_results_from_agg_impression(params, @start_date, @end_date)
+    if @results.is_a?(Hash)
+      @results = Hash[@results.first(50)]
+    else
+      @results = @results.first(50)
+    end
+    if params[:type] == "Item"
+      item_ids = @results.map {|k, _| k}.compact.map(&:to_i)
+      @items = Item.where(:id => item_ids)
+    end
   end
 
   def widget_reports

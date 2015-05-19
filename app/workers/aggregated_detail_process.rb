@@ -16,28 +16,40 @@ class AggregatedDetailProcess
     before_3_hour = now_time - 3.hour
     before_5_hour = now_time - 5.hour
 
-    if only_ad == "false"
-      #AggregatedDetail.update_aggregated_detail(now_time, 'publisher', 1000)
+    # if only_ad == "false"
+    #   #from mongo report
+    #   # AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'publisher', "Publisher")
+    #   #
+    #   # if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
+    #   #   AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time.yesterday, 'publisher', "Publisher")
+    #   # end
+    #
+    #   #from Aggregated Impression
+    #   AggregatedDetail.update_aggregated_details_from_aggregated_impression(now_time, 'publisher', "Publisher")
+    #
+    #   if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
+    #     AggregatedDetail.update_aggregated_details_from_aggregated_impression(now_time.yesterday, 'publisher', "Publisher")
+    #   end
+    # end
 
-      #from mongo report
-      AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'publisher', "Publisher")
-
-      if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
-        AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time.yesterday, 'publisher', "Publisher")
-      end
-    end
-
-    # Update for advertisement_id
-    # AggregatedDetail.update_aggregated_detail(now_time, 'advertisement', 1000)
-
-    #mongo report
-    AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'advertisement', "Advertisement")
+    AggregatedDetail.update_aggregated_details_from_aggregated_impression(now_time, 'publisher', "Publisher")
 
     if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
-      #AggregatedDetail.update_aggregated_detail(before_hour, 'advertisement', 1000)
+      AggregatedDetail.update_aggregated_details_from_aggregated_impression(now_time.yesterday, 'publisher', "Publisher")
+    end
 
-      #mongo report
-      AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time.yesterday, 'advertisement', "Advertisement")
+    #mongo report
+    # AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time, 'advertisement', "Advertisement")
+    #
+    # if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
+    #   AggregatedDetail.update_aggregated_details_from_mongo_reports(now_time.yesterday, 'advertisement', "Advertisement")
+    # end
+
+    #from Aggregated Impression
+    AggregatedDetail.update_aggregated_details_from_aggregated_impression(now_time, 'advertisement', "Advertisement")
+
+    if (before_hour.day != now_time.day || before_3_hour.day != now_time.day || before_5_hour.day != now_time.day)
+      AggregatedDetail.update_aggregated_details_from_aggregated_impression(now_time.yesterday, 'advertisement', "Advertisement")
     end
 
     #rescue => e

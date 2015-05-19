@@ -1,19 +1,10 @@
-class AggregatedImpression
+class AggregatedImpressionByType
   include Mongoid::Document
 
   field :agg_date, type: Date
   field :ad_id, type: Integer
-  field :for_pub, type: Boolean
-  field :total_imp, type: Integer
-  field :total_clicks, type: Integer
-  field :total_orders, type: Integer
-  field :total_costs, type: Float
-  field :total_costs_wc, type: Float #Total costs with commission
-  field :publishers, type: Hash
-  field :hours, type: Hash
-  field :device, type: Hash #Device True or False
-  field :ret, type: Hash #Retargetting True or False
-  field :rii, type: Hash #Related Item Impression True or False
+  field :agg_type, type: String
+  field :agg_coll, type: Hash
 
   # field :hours, type: Array
   # [*0..23].each do |each_hour|
@@ -49,6 +40,17 @@ class AggregatedImpression
     else
       query = {}
 
+      if param[:ad_type] == "advertisement"
+        query[:for_pub] = nil
+        if param[:ad_id] != "All"
+          query[:ad_id] = param[:ad_id].to_i
+        else
+          query[:ad_id.ne] = nil
+        end
+      elsif param[:ad_type] == "non advertisement"
+        query[:for_pub] = true
+      end
+
       if start_date.to_date == end_date.to_date
         query[:agg_date] = start_date.to_date
       else
@@ -56,46 +58,20 @@ class AggregatedImpression
         query[:agg_date.lte] = end_date.to_date
       end
 
-      if ["Domain", "Item"].include?(param[:type])
-        query[:agg_type] = param[:type]
-        if param[:ad_type] == "advertisement"
-          if param[:ad_id] != "All"
-            query[:ad_id] = param[:ad_id].to_i
-          else
-            query[:ad_id.ne] = nil
-          end
-        end
-        results = AggregatedImpressionByType.where(query)
-      else
-        if param[:ad_type] == "advertisement"
-          query[:for_pub] = nil
-          if param[:ad_id] != "All"
-            query[:ad_id] = param[:ad_id].to_i
-          else
-            query[:ad_id.ne] = nil
-          end
-        elsif param[:ad_type] == "non advertisement"
-          query[:for_pub] = true
-        end
-        results = AggregatedImpression.where(query)
-      end
+      results = AggregatedImpression.where(query)
 
       option = case param[:type]
-        when "Device"
-        "device"
-        when "Retargeting"
-        "ret"
-        when "Hourly"
-        "hours"
-        when "Publisher"
-        "publishers"
-        when "Is Related Item Impression"
-        "rii"
-        when "Domain"
-        "agg_coll"
-        when "Item"
-        "agg_coll"
-      end
+                 when "Device"
+                   "device"
+                 when "Retargeting"
+                   "ret"
+                 when "Hourly"
+                   "hours"
+                 when "Publisher"
+                   "publishers"
+                 when "Is Related Item Impression"
+                   "rii"
+               end
 
       result_hash = results.map(&:"#{option}")
 
@@ -113,8 +89,6 @@ class AggregatedImpression
       end
 
       results = final_hash
-
-      results = Hash[results.sort_by {|_, v| v["total_imp"].to_i}.reverse]
     end
     results
   end

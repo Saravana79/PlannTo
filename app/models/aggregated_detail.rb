@@ -81,6 +81,50 @@ class AggregatedDetail < ActiveRecord::Base
     end
   end
 
+  def self.update_aggregated_details_from_aggregated_impression(time,entity_type="advertisement", type="Advertisement")
+    time  = time.to_time
+    time = time.localtime
+    p time
+    param = {}
+    param[:type] = type
+    # param[:ad_type] = "advertisement"
+    param[:ad_type] = entity_type
+    param[:ad_id] = "All"
+    param[:report_sort_by] = "imp_count"
+    start_date = time.to_date.beginning_of_day
+    end_date = time.to_date.end_of_day
+
+    results = AggregatedImpression.get_results_from_agg_impression(param, start_date, end_date)
+
+    if entity_type == "publisher"
+      results.each do |each_key, each_val|
+        begin
+          entity_id = each_key
+          if entity_id.blank?
+            next
+          end
+          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail.update_attributes(:impressions_count => each_val["total_imp"], :clicks_count => each_val["total_clicks"], :winning_price => each_val["total_costs"])
+        rescue Exception => e
+          p "Error While updating aggregated detail"
+        end
+      end
+    else
+      results.each do |each_result|
+        begin
+          entity_id = each_result["_id"]
+          if entity_id.blank?
+            next
+          end
+          aggregated_detail = AggregatedDetail.find_or_initialize_by_entity_id_and_date_and_entity_type(:entity_id => entity_id, :date => time.to_date, :entity_type => entity_type)
+          aggregated_detail.update_attributes(:impressions_count => each_result["total_imp"], :clicks_count => each_result["total_clicks"], :winning_price => each_result["total_costs_wc"])
+        rescue Exception => e
+          p "Error While updating aggregated detail"
+        end
+      end
+    end
+  end
+
   def self.update_aggregated_detail_from_mongo(time, entity_type="advertisement", batch_size=1000)
     time = time.localtime
     entity_field = entity_type + "_id"

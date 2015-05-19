@@ -76,6 +76,7 @@ namespace :admin do
   match "/external_page",:to => "products#external_page"
   match "/where_to_buy_items",:to => "products#where_to_buy_items"
   match "/where_to_buy_items_vendor",:to => "products#where_to_buy_items_vendor"
+  match "/widget_for_women",:to => "products#widget_for_women"
   match "/elec_widget_1",:to => "products#elec_widget_1"
   match "/price_vendor_details",:to => "products#price_vendor_details"
   match "/get_price_from_vendor",:to => "products#get_price_from_vendor"

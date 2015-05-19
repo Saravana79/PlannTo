@@ -422,13 +422,13 @@ class FeedUrl < ActiveRecord::Base
     next_val = 0
     loop_count = 0
     begin
-      redis_val = $redis_rtb.scan(next_val, match: match, count: 300)
+      redis_val = $redis_rtb.scan(next_val, match: match, count: 3000)
       next_val = redis_val[0].to_i
-      val = redis_val[1]
       p "Loop Count => #{loop_count}"
       loop_count+=1
-      removed_item_count = $redis_rtb.del(val) unless val.blank?
+      removed_item_count = $redis_rtb.del(redis_val[1]) unless redis_val[1].blank?
       p "removed items #{removed_item_count}"
+      removed_item_count = 0
     end while next_val != 0
   end
 
@@ -477,18 +477,27 @@ class FeedUrl < ActiveRecord::Base
     # $redis_rtb.del($redis_rtb.keys("missingad:*"))
     # $redis_rtb.del($redis_rtb.keys("spottags:*"))
 
-    remove_missing_keys_new_way("missingurl:*")
-    remove_missing_keys_new_way("missingad:*")
-    remove_missing_keys_new_way("spottags:*")
+    begin
+      remove_missing_keys_new_way("missingurl:*")
+    rescue Exception => e
+      #clean missingurl:*
+      remove_missing_keys("missingurl:*")
+    end
 
-    #clean missingurl:*
-    # remove_missing_keys("missingurl:*") #TOODO: commented
+    begin
+      remove_missing_keys_new_way("missingad:*")
+    rescue Exception => e
+      #clean missingad:*
+      remove_missing_keys("missingad:*")
+    end
 
-    #clean missingad:*
-    # remove_missing_keys("missingad:*")
+    begin
+      remove_missing_keys_new_way("spottags:*")
+    rescue Exception => e
+      #clean spottags:*
+      remove_missing_keys("spottags:*")
+    end
 
-    #clean spottags:*
-    # remove_missing_keys("spottags:*")
     #
     #start sid_ad_detail_process
     # Resque.enqueue(SidAdDetailProcess, "update_clicks_and_impressions_for_sid_ad_details", Time.zone.now, 1000)

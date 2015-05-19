@@ -1589,12 +1589,6 @@ end
     return item_ids
   end
 
-  def self.get_item_ids_for_300_600()
-    items = Item.find_by_sql("select * from item_ad_details  order by impressions desc limit 10")
-    item_ids = items.map(&:id) - [0]
-    return item_ids
-  end
-
   def self.buying_list_process_in_redis
     if $redis.get("buying_list_is_running").to_i == 0
       length = $redis_rtb.llen("users:visits")
@@ -1607,38 +1601,90 @@ end
       source_categories = JSON.parse($redis.get("source_categories_pattern"))
       source_categories.default = ""
 
+      plannto_user_detail_hash = {}
+
       t_length = length
       # start_point = 0
 
       begin
         user_vals = $redis_rtb.lrange("users:visits", 0, 2000)
         redis_rtb_hash = {}
+        pud_redis_rtb_hash = {}
         redis_hash = {}
 
         buying_list_del_keys = []
         user_vals.each_with_index do |each_user_val, index|
           p "Processing: #{each_user_val}"
           begin
-            t_length-=1
+            t_length -= 1
             # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
             unless each_user_val.blank?
               user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-              if !user_id.blank? && !item_ids.blank? && !url.blank?
+              if !user_id.blank? && !url.blank?
                 already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
                 ranking = 0
 
                 if already_exist == false
-                  case type
-                    when "Reviews", "Spec", "Photo"
-                      ranking = 10
-                    when "Comparisons"
-                      ranking = 5
-                    when "Lists", "Others"
-                      ranking = 2
-                  end
 
                   item_ids = item_ids.to_s.split(",")
                   if item_ids.count < 10
+
+                    #Updating PlanntoUserDetail
+                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).first
+
+                    if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                        plannto_user_detail.save!
+                      end
+                    elsif plannto_user_detail.blank?
+                      plannto_user_detail = PlanntoUserDetail.new(:google_user_id => user_id)
+                      cookie_match = CookieMatch.where(:google_user_id => user_id).last
+                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                      end
+                      plannto_user_detail.save!
+                    end
+
+                    m_item_type = nil
+                    if !plannto_user_detail.blank?
+                      #plannto user details
+                      plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
+                      plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
+
+                      article_content = ArticleContent.where(:url => url).first
+                      itemtype_id = article_content.itemtype_id rescue ""
+                      type = article_content.sub_type rescue "" if type.blank?
+
+                      case type.to_s
+                        when "Reviews", "Spec", "Photo"
+                          ranking = 10
+                        when "Comparisons"
+                          ranking = 5
+                        when "Lists", "Others"
+                          ranking = 2
+                        when ""
+                          ranking = 2
+                      end
+
+                      if !itemtype_id.blank?
+                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                        if m_item_type.blank?
+                          plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
+                          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                        else
+                          list_of_urls = m_item_type.list_of_urls
+                          list_of_urls = list_of_urls.to_a
+                          list_of_urls << url
+                          list_of_urls.uniq!
+                          m_item_type.list_of_urls = list_of_urls
+                          m_item_type.save!
+                        end
+                      end
+                      plannto_user_detail.save!
+                    end
+
                     u_key = "u:ac:#{user_id}"
                     u_values = $redis.hgetall(u_key)
 
@@ -1700,6 +1746,65 @@ end
                     items_hash = u_values.select {|k,_| k.include?("_c")}
                     items_count = items_hash.count
                     all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
+
+                    #plannto user details
+                    p m_item_type
+
+                    if !m_item_type.blank?
+                      existing_item_ids = m_item_type.m_items.map(&:item_id)
+                      all_item_ids = all_item_ids.map(&:to_i)
+
+                      common_item_ids = all_item_ids & existing_item_ids
+
+                      new_item_ids = all_item_ids - common_item_ids
+                      removed_item_ids = existing_item_ids - common_item_ids
+
+                      if !removed_item_ids.blank?
+                        removed_item_ids.each do |item_id|
+                          exp_item = m_item_type.m_items.where(:item_id => item_id).last
+                          exp_item.destroy
+                        end
+                      end
+
+                      if !new_item_ids.blank?
+                        new_item_ids.each do |item_id|
+                          lad = u_values["#{item_id}_la"].to_date
+                          ranking = u_values["#{item_id}_c"]
+                          m_item_type.m_items << MItem.new(:item_id => item_id, :lad => lad, :ranking => ranking)
+                        end
+                      end
+
+                      if !common_item_ids.blank?
+                        common_item_ids.each do |item_id|
+                          m_item = m_item_type.m_items.where(:item_id => item_id).last
+                          if !m_item.blank?
+                            m_item.lad = u_values["#{item_id}_la"].to_date
+                            m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
+                            m_item.save!
+                          end
+                        end
+                      end
+
+                      #Update redis_rtb from plannto_user_detail
+                      if !plannto_user_detail.blank?
+                        if plannto_user_detail.plannto_user_id.blank?
+                          user_id_for_key = plannto_user_detail.google_user_id.to_s
+                          pud_redis_rtb_hash_key = "users:buyinglist:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                        else
+                          user_id_for_key = plannto_user_detail.plannto_user_id.to_s
+                          pud_redis_rtb_hash_key = "users:buyinglist:plannto:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                        end
+
+                        if !user_id.blank?
+                          item_ids = m_item_type.m_items.sort_by {|each_val| each_val.ranking.to_i}.reverse.map(&:item_id).uniq.join(",")
+                          high_score = m_item_type.m_items.map {|each_val| each_val.ranking.to_i}.max
+                          tot_count = m_item_type.m_items.count
+                          pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
+                          plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
+                        end
+                      end
+                    end
+
                     all_item_ids = all_item_ids.join(",")
                     temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
                     temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
@@ -1757,6 +1862,13 @@ end
           redis_rtb_hash.each do |key, val|
             $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.hincrby(key, "ap_c", 1)
+            $redis_rtb.expire(key, 2.weeks)
+          end
+        end
+
+        $redis_rtb.pipelined do
+          plannto_user_detail_hash.each do |key, val|
+            $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.expire(key, 2.weeks)
           end
         end
@@ -2452,7 +2564,8 @@ end
       item_name = Item.get_fashion_item_name_random()
 
       item = Item.where(:name => item_name).first
-      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
+      item_id_arr = [item.id] rescue []
+      itemdetails = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids)
       itemdetails = itemdetails.sample(6)
     end
     itemdetails = itemdetails.first(6)
@@ -2475,10 +2588,11 @@ end
     itemdetails.uniq
   end
 
-  def self.get_item_id_and_random_id(ad,item_ids)
+  def self.get_item_id_and_random_id(ad, item_ids, vendor_id=nil)
     item = item_ids.blank? ? nil : Item.where(:id => item_ids.to_s.split(",")).first
     item_id = item.blank? ? nil : item.id
-    vendor_ids = [ad.vendor_id]
+    vendor_ids = ad.blank? ? [vendor_id] : [ad.vendor_id]
+    vendor_ids = vendor_ids.compact
     itemdetails = []
     if !item_id.blank?
       itemdetails_count = $redis.get("itemdetails_count:#{item_id}")
@@ -2496,14 +2610,14 @@ end
 
       itemdetails_rand_id = [*1..itemdetails_count].sample
     else
-      item_name, item_id = Item.get_fashion_item_name_random()
+      item_name, item_id = Item.get_fashion_item_name_random(item_id)
       # item = Item.where(:name => item_name).first
 
       itemdetails_count = $redis.get("itemdetails_count:#{item_id}")
 
       if itemdetails_count.blank?
         # item = Item.where(:id => item_id).first
-        itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count
+        itemdetails_count = Itemdetail.get_item_details_count_by_item_ids([item_id], vendor_ids).first.count rescue nil
 
         if !itemdetails_count.blank?
           $redis.set("itemdetails_count:#{item_id}", itemdetails_count)
@@ -2517,40 +2631,41 @@ end
     return item_id, itemdetails_rand_id
   end
 
-  def self.get_fashion_item_name_random()
+  def self.get_fashion_item_name_random(item_id=nil)
+    item_id = item_id.to_i
     sample_int = [*1..100].sample
-    if sample_int < 15
+    if item_id==72274 || sample_int < 15
       item_name = "Saree"
       item_id = 72274
-    elsif sample_int < 30
+    elsif item_id==72275 || sample_int < 30
       item_name = "SalwarSuit"
       item_id = 72275
-    elsif sample_int < 40
+    elsif item_id==72276 || sample_int < 40
       item_name = "WomenTop"
       item_id = 72276
-    elsif sample_int < 52
+    elsif item_id==72346 || sample_int < 52
       item_name = "DressMaterial"
       item_id = 72346
-    elsif sample_int < 62
+    elsif item_id==72347 || sample_int < 62
       item_name = "Kurta"
       item_id = 72347
-    elsif sample_int < 70
+    elsif item_id==73288 || sample_int < 70
       item_name = "Watch"
       item_id = 73288
-    elsif sample_int < 74
+    elsif item_id==72348 || sample_int < 74
       item_name = "Sunglass"
       item_id = 72348
     # elsif sample_int < 74
     #   item_name = "Underwear"
     # elsif sample_int < 74
     #   item_name = "Legging"
-    elsif sample_int < 82
+    elsif item_id==72351 || sample_int < 82
       item_name = "Dress"
       item_id = 72351
-    elsif sample_int < 90
+    elsif item_id==72352 || sample_int < 90
       item_name = "Handbag"
       item_id = 72352
-    elsif sample_int < 100
+    elsif item_id==72353 || sample_int < 100
       item_name = "Shoe"
       item_id = 72353
     end
