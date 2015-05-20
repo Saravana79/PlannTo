@@ -179,4 +179,4 @@ production:
   fashion_auto_scroll_time: 4000 # 10 sec
   fashion_auto_scroll: "true"
   fashion_auto_scroll_count: "infinity" # one or infinity
-  amazon_top_mobiles: "18093,5527,27976,9950,27976,19673,9952"
+  amazon_top_mobiles: "28947,18093,5527,27976,9950,27976,19673,9952"
