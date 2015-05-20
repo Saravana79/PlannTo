@@ -1892,6 +1892,256 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     end
   end
 
+  def self.update_fashion_item_details_from_junglee()
+    if $redis.get("popular_vendor_fashion_product_update_from_junglee_is_running").to_i == 0
+      $redis.set("popular_vendor_fashion_product_update_from_junglee_is_running", 1)
+      $redis.expire("popular_vendor_fashion_product_update_from_junglee_is_running", 50.minutes)
+
+      # loop_hash = {"saree" => {:node => 824657031, :page_count => 10}, "salwar_suit" => {:node => 3723380031, :page_count => 10}, "women_top" => {:node => 1968543031, :page_count => 8},
+      #              "dress_material" => {:node => 3723377031, :page_count => 10}, "kurta" => {:node => 1968255031, :page_count => 8}, "underwear" => {:node => 1968457031, :page_count => 2},
+      #              "legging" => {:node => 1968456031, :page_count => 2}, "dress" => {:node => 1968445031, :page_count => 8}, "handbag" => {:node => 1983346031, :page_count => 10},
+      #              "sunglass" => {:node => 1968401031, :page_count => 3}, "shoe" => {:node => 1983578031, :page_count => 10}, "watch" => {:node => 2563505031, :page_count => 4},
+      #              "external_hard_disk" => {:node => 1375395031, :page_count => 1}, "power_banks" => {:node => 976419031, :page_count => 1}}
+
+      loop_hash = {"saree" => {:node => 824657031, :page_count => 10, :items_count => 100, :product_group => "Apparel"}}
+
+      loop_hash.each do |each_key, each_val|
+        begin
+          update_price_and_status_for_fashion_items_from_junglee(each_key, each_val)
+        rescue Exception => e
+          p "Error while amazon api call"
+        end
+      end
+
+      ActiveRecord::Base.connection.execute("update itemdetails set status = 2 where site = 9882 and last_verified_date < '#{1.day.ago}'")
+
+      $redis.set("popular_vendor_fashion_product_update_from_junglee_is_running", 0)
+    end
+  end
+
+  def self.update_price_and_status_for_fashion_items_from_junglee(key, val)
+    ad_item_id = []
+    node = val[:node].to_i
+    page_count = val[:page_count]
+
+    [*1..page_count].each do |each_page|
+      begin
+        sleep(3)
+
+        keyword = ""
+        res = Amazon::Ecs.item_search(keyword, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :browse_node => node, :item_page => each_page, :search_index => "Marketplace", :marketplace_domain => "www.junglee.com", :sort => "salesrank"})
+
+        items = res.items
+
+        if ["external_hard_disk", "power_banks"].include?(key)
+          items = items.first(5)
+        end
+
+        items.each do |each_item|
+          begin
+            url = each_item.get("DetailPageURL")
+            begin
+              url = URI.unescape(url)
+              url = url.split("?")[0]
+            rescue Exception => e
+              url = url.split("%3F")[0]
+            end
+            id = each_item.get("ASIN").to_s.downcase rescue nil
+            if id.blank?
+              item_detail = Itemdetail.where(:url => url).first
+            else
+              item_detail = Itemdetail.where(:additional_details => id).first
+              item_detail = Itemdetail.where(:url => url).first if item_detail.blank?
+            end
+
+            if !item_detail.blank?
+              begin
+                #price update
+                offer_listing = each_item.get_element("Offers/Offer/OfferListing")
+                offer_summary = each_item.get_element("OfferSummary")
+                if !offer_listing.blank?
+                  begin
+                    current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                  rescue Exception => e
+                    current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                  end
+                  saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+                  saved_percentage = offer_listing.get("PercentageSaved") rescue 0
+                  availability_str = offer_listing.get("Availability")
+
+                  if availability_str.blank? && !offer_summary.blank?
+                    current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue "" if current_price.blank?
+
+                    total_new = offer_summary.get("TotalNew").to_i
+
+                    if total_new > 0
+                      status = 1
+                    else
+                      status = 0
+                    end
+                  else
+                    status = case availability_str
+                               when /Usually dispatched.*/ || /Usually ships.*/
+                                 1
+                               when /Not yet released/ || /Not yet published/
+                                 3
+                               when /This item is not stocked or has been discontinued/
+                                 4
+                               when /Out of Stock/
+                                 2
+                               else
+                                 4
+                             end
+                  end
+
+                  mrp_price = current_price.to_f + saved_price.to_f
+                  item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price, :last_verified_date => Time.now)
+                elsif !offer_summary.blank?
+                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
+
+                  total_new = offer_summary.get("TotalNew").to_i
+
+                  if total_new > 0
+                    status = 1
+                  else
+                    status = 0
+                  end
+
+                  item_detail.update_attributes!(:price => current_price, :status => status, :last_verified_date => Time.now)
+                else
+                  item_detail.update_attributes!(:status => 2)
+                end
+              rescue Exception => e
+                p "Error while updating itemdetail => #{item_detail.id} price"
+              end
+
+              # item = item_detail.item
+              # if !item.blank?
+              #   update_all_amazon_itemdetails_of_item(item, item_detail)
+              #   item_id = item_detail.itemid
+              #   ad_item_id << item_id
+              # end
+            else
+              p "Not Included"
+              p id
+              p url
+
+              begin
+                id = each_item.get("ASIN").to_s.downcase rescue ""
+                name = each_item.get_element("ItemAttributes").get("Title") rescue ""
+                offer_listing = each_item.get_element("Offers/Offer/OfferListing")
+                offer_summary = each_item.get_element("OfferSummary")
+                current_price = nil
+                status = 2
+                image_url = each_item.get("LargeImage/URL") rescue nil
+                if !offer_listing.blank?
+                  begin
+                    current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                  rescue Exception => e
+                    current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                  end
+                  saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+                  saved_percentage = offer_listing.get("PercentageSaved") rescue 0
+                  availability_str = offer_listing.get("Availability")
+
+                  if availability_str.blank? && !offer_summary.blank?
+                    current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue "" if current_price.blank?
+
+                    total_new = offer_summary.get("TotalNew").to_i
+
+                    if total_new > 0
+                      status = 1
+                    else
+                      status = 0
+                    end
+                  else
+                    status = case availability_str
+                               when /Usually dispatched.*/ || /Usually ships.*/
+                                 1
+                               when /Not yet released/ || /Not yet published/
+                                 3
+                               when /This item is not stocked or has been discontinued/
+                                 4
+                               when /Out of Stock/
+                                 2
+                               else
+                                 4
+                             end
+                  end
+                elsif !offer_summary.blank?
+                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
+
+                  total_new = offer_summary.get("TotalNew").to_i
+
+                  if total_new > 0
+                    status = 1
+                  else
+                    status = 0
+                  end
+                end
+
+                mrp_price = current_price.to_f + saved_price.to_f
+
+                item = Item.where(:name => key.camelize).first
+                item_detail = Itemdetail.new(:itemid => item.id, :ItemName => name, :url => url, :price => current_price, :savepercentage => saved_percentage, :mrpprice => mrp_price, :status => status, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id, :site => "73017" , :last_verified_date => Time.now)
+                item_detail.save!
+
+                next if !item_detail.image.blank? || Rails.env == "development"
+
+                filename = image_url.to_s.split("/").last
+                filename = filename == "noimage.jpg" ? nil : filename
+
+                filename = filename.gsub("%", "_")
+
+                unless filename.blank?
+                  name = filename.to_s.split(".")
+                  name = name[0...name.size-1]
+                  name = name.join(".") + ".jpeg"
+                  filename = name
+                end
+
+                if !item_detail.blank? && !image_url.blank? && !filename.blank?
+                  p "image----------------------------"
+                  @image = item_detail.build_image
+                  # tempfile = open(image_url)
+                  # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+                  # avatar.original_filename = filename
+
+                  safe_thumbnail_url = URI.encode(URI.decode(image_url))
+                  extname = File.extname(safe_thumbnail_url).delete("%")
+
+                  basename = File.basename(safe_thumbnail_url, extname).delete("%")
+
+                  file = Tempfile.new([basename, extname])
+                  file.binmode
+                  open(URI.parse(safe_thumbnail_url)) do |data|
+                    file.write data.read
+                  end
+                  file.rewind
+
+                  avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+                  avatar.original_filename = filename
+
+                  @image.avatar = avatar
+                  if @image.save
+                    item_detail.update_attributes(:Image => filename)
+                  end
+                end
+              rescue Exception => e
+                p "Error while creating itemdetail"
+              end
+            end
+          rescue Exception => e
+            p "skip updating itemdetails"
+          end
+        end
+      rescue Exception => e
+        p "skip amazon api call"
+      end
+    end
+    ad_item_id
+  end
+
   def self.update_top_product_item_ids(ad_ids, ad_item_id)
     all_item_ids = []
     ad_ids.each do |advertisement_id|
