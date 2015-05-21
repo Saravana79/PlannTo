@@ -78,7 +78,7 @@ a { outline: none; }
                         <div class="product-img">
                             <a href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= item_detail.id %>" target = "_blank" rel= "nofollow" >
 
-                            <%= get_image_tag(item_detail, "Amazon", item_detail.item.base_item_image_url(:medium), 132, '').html_safe %>
+                            <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], item_detail.item.base_item_image_url(:medium), 132, '').html_safe %>
 
                                 </a>
 
