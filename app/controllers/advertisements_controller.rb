@@ -342,6 +342,16 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def junglee_gadget_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_4"
+    params[:ads_id] ||= 51
+    params[:more_vendors] ||= false
+    params[:is_test] ||= "true"
+    params[:item_id] ||= "13789,9955,9921,15452,16559"
+    render :layout => false
+  end
+
   def amazon_widget
     params[:page_type] ||= "type_1"
     params[:geo] ||= "in"
