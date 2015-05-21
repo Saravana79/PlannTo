@@ -98,6 +98,7 @@ class AdvertisementsController < ApplicationController
       @click_url = params[:click_url] =~ URI::regexp ? params[:click_url] : ""
       @click_url = @click_url.gsub("&amp;", "&")
     end
+    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
 
     respond_to do |format|
       format.json {
@@ -238,6 +239,7 @@ class AdvertisementsController < ApplicationController
     @vendor_ad_details = vendor_ids.blank? ? {} : VendorDetail.get_vendor_ad_details(vendor_ids)
 
     @current_vendor = @vendor_ad_details[@ad.vendor_id]
+    @vendor_detail = @ad.vendor.vendor_detail rescue VendorDetail.new
     @current_vendor = {} if @current_vendor.blank?
     item_ids = item_id.to_s.split(",")
 

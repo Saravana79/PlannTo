@@ -4,7 +4,7 @@
 .shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
 .shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #E65E7B!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #D2D2D2;}
 .shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
-.shadetabs li.selected{padding:0px!important; margin:0px !important; text-align:center; background: #FF6 !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
+.shadetabs li.selected{padding:0px!important; margin:0px !important; text-align:center; background: <%= @vendor_detail.theme_color %> !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
 .shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
 
 .product-container{ margin:0; padding:5px 0 0 0; float:left;cursor:pointer;height:139px;}
@@ -62,7 +62,9 @@ a { outline: none; }
         <div>
             <ul class="shadetabs">
                 <li class="selected">
-                    <a href="javascript:void(0)" id="where_to_buy_items_a" ><img src="<%= configatron.root_image_path%>static/images/reco_general.png" style="height: 18px;"></a>
+                    <a href="javascript:void(0)" id="where_to_buy_items_a" >
+                      <img src="<%= configatron.root_image_path%>static/images/<%= @vendor_detail.theme_image %>" style="height: 18px;">
+                    </a>
                 </li>
             </div>
             <div id="productdiv">
@@ -94,8 +96,9 @@ a { outline: none; }
 
 
                                 <p class="btn">
-                                    <a class="shop-now" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= item_detail.id %>" target = "_blank" rel="nofollow">Shop
-                                    Now</a>
+                                    <a class="shop-now" href="<%= configatron.hostname%>/history_details?iid=<%=@impression_id%>&detail_id=<%= item_detail.id %>" target = "_blank" rel="nofollow">
+                                      <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
+                                    </a>
                                 </p>
                             </a>
                             <br clear="both" />

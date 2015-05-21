@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150514082403) do
+ActiveRecord::Schema.define(:version => 20150521124932) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -552,8 +552,6 @@ ActiveRecord::Schema.define(:version => 20150514082403) do
     t.string   "article_category"
     t.string   "article_item_ids"
     t.decimal  "score",              :precision => 8, :scale => 2
-    t.integer  "created_by"
-    t.string   "created_type"
   end
 
   create_table "feeds", :force => true do |t|
@@ -939,7 +937,7 @@ ActiveRecord::Schema.define(:version => 20150514082403) do
     t.integer  "item_id"
     t.string   "item_name"
     t.string   "product_price"
-    t.uuid     "impression_id"
+    t.string   "impression_id"
     t.integer  "order_item_id"
     t.datetime "payment_date"
     t.integer  "payment_report_id"
@@ -1380,13 +1378,16 @@ ActiveRecord::Schema.define(:version => 20150514082403) do
   add_index "users", ["uid"], :name => "index_users_on_uid"
 
   create_table "vendor_details", :force => true do |t|
-    t.string  "name",         :limit => 500,  :null => false
-    t.string  "baseurl",      :limit => 2000, :null => false
-    t.string  "imageurl",     :limit => 2000, :null => false
+    t.string  "name",         :limit => 500,                          :null => false
+    t.string  "baseurl",      :limit => 2000,                         :null => false
+    t.string  "imageurl",     :limit => 2000,                         :null => false
     t.string  "params"
     t.integer "item_id"
     t.string  "param1"
     t.text    "default_text"
+    t.string  "action_text",                  :default => "Shop Now"
+    t.string  "theme_colour"
+    t.string  "theme_image"
   end
 
   create_table "video_ad_events", :force => true do |t|

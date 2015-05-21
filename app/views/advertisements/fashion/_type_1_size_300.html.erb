@@ -35,8 +35,7 @@
                         </a>
 
                         <p class="btn">
-                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                            Now</a>
+                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now"> <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %> </a>
                         </p>
                         <!--<div style="font-size: 10px;padding: 0px;height: 15px;text-align: center;">Addl. 15% Cashback.</div>-->
                       </div>

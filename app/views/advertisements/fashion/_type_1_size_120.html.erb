@@ -11,6 +11,7 @@
             <% @item_details.each_with_index do |item_detail, indx| %>
                 <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
                 <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+                <% shop_now_text = @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
 
                 <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
@@ -31,8 +32,7 @@
                         </a>
 
                         <p class="btn">
-                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                            Now</a>
+                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now"><%= shop_now_text %></a>
                         </p>
 
                       </div>

@@ -541,7 +541,9 @@ class ProductsController < ApplicationController
     if !vendor_ids.blank?
       @vendor_ad_details = VendorDetail.get_vendor_ad_details(vendor_ids)
       @multiple_vendors = true if vendor_ids.count > 1
+      @vendor = Vendor.where(:id => vendor_ids).first
     end
+    @vendor_detail = @vendor.vendor_detail rescue VendorDetail.new
 
     @ref_url = url
     jsonp = prepare_response_json()
