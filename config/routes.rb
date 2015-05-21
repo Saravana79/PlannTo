@@ -512,6 +512,8 @@ resources :comments do
   match "advertisements/carwale_demo" => "advertisements#carwale_demo"
   match "advertisements/gaadi_demo" => "advertisements#gaadi_demo"
   match "advertisements/fashion_demo" => "advertisements#fashion_demo"
+  match "advertisements/junglee_gadget_demo" => "advertisements#junglee_gadget_demo"
+  match "advertisements/junglee_fashion_demo" => "advertisements#junglee_fashion_demo"
   match "advertisements/amazon_widget" => "advertisements#amazon_widget"
   match "advertisements/amazon_sports_widget" => "advertisements#amazon_sports_widget"
   match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"

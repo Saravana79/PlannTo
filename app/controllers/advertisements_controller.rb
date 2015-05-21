@@ -342,6 +342,16 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def junglee_gadget_demo
+    params[:ref_url] ||= "http://gadgetstouse.com/comparison/samsung-galaxy-s4-vs-galaxy-s5-specification-comparison/15912"
+    params[:page_type] ||= "type_1"
+    params[:ads_id] ||= 51
+    params[:more_vendors] ||= false
+    params[:is_test] ||= "true"
+    params[:item_id] ||= ""
+    render :layout => false
+  end
+
   def amazon_widget
     params[:page_type] ||= "type_1"
     params[:geo] ||= "in"
@@ -428,6 +438,16 @@ class AdvertisementsController < ApplicationController
     params[:more_vendors] ||= "false"
     params[:is_test] ||= "true"
     params[:item_id] ||= ""
+    render :layout => false
+  end
+
+  def junglee_fashion_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:ads_id] ||= 47
+    params[:more_vendors] ||= "false"
+    params[:is_test] ||= "true"
+    params[:item_id] ||= "72274"
     render :layout => false
   end
 
