@@ -488,7 +488,13 @@ class ProductsController < ApplicationController
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
     @items, itemsaccess, url, tempurl = Item.get_items_by_item_ids(item_ids, url, itemsaccess, request, true, params[:sort_disable])
     @where_to_buy_items = []
-    vendor_ids = params[:vendor_ids].to_s.split(",")
+    if params[:vendor_ids].blank?
+      #defaulting to amazon.
+      vendor_ids = '9882'.to_s.split(",");
+    else
+       vendor_ids = params[:vendor_ids].to_s.split(",") 
+    end
+
     show_count = params[:page_type] == "type_1" ? 6 : 4
     @multiple_vendors = false
 
