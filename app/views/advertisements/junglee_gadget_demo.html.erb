@@ -24,6 +24,16 @@
 <body>
 <div class="advertisements">
   <h1>Contextual Ads Demo</h1>
+  <div class="demo_form row">
+    <div class="search_form">
+      <%= form_for :search, :url => "/advertisements/junglee_gadget_demo", :html => {:method => 'get'} do |search_form| %>
+          Item IDs: <%= text_field_tag :item_id, params[:item_id], :style => "width: 200px;" %>
+          ref url: <%= text_field_tag :ref_url, params[:ref_url], :style => "width: 400px;" %>
+          <%= search_form.submit "Go" %>
+      <% end %>
+    </div>
+  </div>
+
   <div class="ad_list">
     <div class="row">
       <div class="ad_300_250">

@@ -343,12 +343,12 @@ class AdvertisementsController < ApplicationController
   end
 
   def junglee_gadget_demo
-    params[:ref_url] ||= ""
-    params[:page_type] ||= "type_4"
+    params[:ref_url] ||= "http://gadgetstouse.com/comparison/samsung-galaxy-s4-vs-galaxy-s5-specification-comparison/15912"
+    params[:page_type] ||= "type_1"
     params[:ads_id] ||= 51
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"
-    params[:item_id] ||= "13789,9955,9921,15452,16559"
+    params[:item_id] ||= ""
     render :layout => false
   end
 
