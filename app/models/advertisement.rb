@@ -1903,17 +1903,23 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
       #              "sunglass" => {:node => 1968401031, :page_count => 3}, "shoe" => {:node => 1983578031, :page_count => 10}, "watch" => {:node => 2563505031, :page_count => 4},
       #              "external_hard_disk" => {:node => 1375395031, :page_count => 1}, "power_banks" => {:node => 976419031, :page_count => 1}}
 
-      loop_hash = {"saree" => {:node => 824657031, :page_count => 10, :items_count => 100, :product_group => "Apparel"}}
+      loop_hash = {"saree" => {:node => 824657031, :page_count => 10, :items_count => 100, :product_group => "Apparel"}, "salwar_suit" => {:node => 824655031, :page_count => 10,
+                  :items_count => 100, :product_group => "Apparel"}, "dress_material" => {:node => 824660031, :page_count => 10, :items_count => 100, :product_group => "Apparel"},
+                   "kurta" => {:node => 824656031, :page_count => 8, :items_count => 80, :product_group => "Apparel"}, "women_top" => {:node => 792751031, :page_count => 8,
+                   :items_count => 80, :product_group => "Apparel"}, "dress" => {:node => 792608031, :page_count => 8, :items_count => 80, :product_group => "Apparel"},
+                   "handbag" => {:node => 805118031, :page_count => 10, :items_count => 100, :product_group => "Apparel"}, "sunglass" => {:node => 792574031, :page_count => 3,
+                   :items_count => 30, :product_group => "Apparel"}, "shoe" => {:node => 805357031, :page_count => 10, :items_count => 100, :product_group => "Apparel"},
+                   "watch" => {:node => 5607017031, :page_count => 4, :items_count => 40, :product_group => "Apparel"}}
 
       loop_hash.each do |each_key, each_val|
         begin
-          update_price_and_status_for_fashion_items_from_junglee(each_key, each_val)
+          Advertisement.update_price_and_status_for_fashion_items_from_junglee(each_key, each_val)
         rescue Exception => e
           p "Error while amazon api call"
         end
       end
 
-      ActiveRecord::Base.connection.execute("update itemdetails set status = 2 where site = 9882 and last_verified_date < '#{1.day.ago}'")
+      ActiveRecord::Base.connection.execute("update itemdetails set status = 2 where site = 73017 and last_verified_date < '#{1.day.ago}'")
 
       $redis.set("popular_vendor_fashion_product_update_from_junglee_is_running", 0)
     end
