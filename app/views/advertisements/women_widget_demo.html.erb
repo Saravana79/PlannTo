@@ -28,9 +28,9 @@
   <h1>Amazon Widget Demo</h1>
   <div class="demo_form row">
     <div class="search_form">
-      <%= form_for :search, :url => "/advertisements/elec_widget_demo", :html => {:method => 'get'} do |search_form| %>
+      <%= form_for :search, :url => "/advertisements/women_widget_demo", :html => {:method => 'get'} do |search_form| %>
           Url : <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
-          Type : <%= select_tag :type, options_for_select(["price_widget", "elec_widget"], params[:type]) %>
+          Item Ids : <%= search_form.text_field :item_id, :name => "item_id", :value => params[:item_id], :style => "width: 200px;" %>
           <%= search_form.submit "Go" %>
       <% end %>
     </div>
@@ -43,8 +43,7 @@
 
 <div id="where_to_buy_items">
 </div>
-
-<script async src="<%= configatron.hostname %>//javascripts/plannto.women.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=type_1&geo=in"></script>
+<script async src="<%= configatron.hostname %>/javascripts/plannto.women.widget.js?ref_url=<%= params[:ref_url] %>&item_id=<%= params[:item_id] %>&show_details=true&element_id=where_to_buy_items&is_test=&page_type=type_1&geo=in"></script>
 
 <br/>
 

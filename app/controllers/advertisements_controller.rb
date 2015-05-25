@@ -378,7 +378,7 @@ class AdvertisementsController < ApplicationController
   end
 
   def women_widget_demo
-    params[:ref_url] ||= "http://indiatoday.intoday.in/technology/story/samsung-galaxy-note-edge-review/1/420649.html"
+    params[:ref_url] ||= "http://www.wiseshe.com/2014/12/how-to-make-your-curls-last-long.html"
     params[:type] ||= "elec_widget"
     render :layout => false
   end
