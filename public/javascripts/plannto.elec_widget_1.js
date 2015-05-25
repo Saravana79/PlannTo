@@ -203,7 +203,7 @@ function main() {
     jQuery(document).ready(function(jQuery) { 
         url = getScriptUrl();
         var doc_title =  jQuery(document).title;
-        var pathname = getParam(url,"ref_url");        
+        var pathname = getParam(url,"ref_url");
         var item_id = getParam(url,"item_id");
         var show_details = getParam(url,"show_details");
         var show_offer = getParam(url,"show_offer");
@@ -213,6 +213,7 @@ function main() {
         var element_id = getParam(url,"element_id");
         var geo = getParam(url,"geo");
         var vendor_ids = getParam(url,"vendor_ids");
+        var element_ids, page_types;
         is_test = getParam(url,"is_test");
         page_type = getParam(url,"page_type");
         if (ads == "")
@@ -220,10 +221,35 @@ function main() {
           if(element_id == undefined || element_id == "")
           {
             element_id = "where_to_buy_items";
+            element = jQuery("#"+element_id)
+            planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids)
           }
-          element = jQuery("#"+element_id)
-         planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids)
+            else
+          {
+              element_ids = element_id.split(",")
+              page_types = page_type.split(",")
 
+              if (element_ids.length > 1)
+              {
+                  jQuery.each(element_ids, function(i,v)
+                  {
+                      console.log(v)
+                      element = jQuery("#"+v)
+                      page_type = page_types[i]
+                      if (page_type == undefined)
+                      {
+                          page_type = ""
+                      }
+                      planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids)
+                  });
+              }
+              else
+              {
+                  element = jQuery("#"+element_id)
+                  console.log("good")
+                  planntowtbdivcreation (item_id,show_details,"wheretobuymain",element,element_id,pathname,show_price,show_offer,false,geo,vendor_ids)
+              }
+          }
        }
        else
        {
