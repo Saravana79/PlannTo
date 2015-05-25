@@ -518,6 +518,7 @@ resources :comments do
   match "advertisements/amazon_sports_widget" => "advertisements#amazon_sports_widget"
   match "advertisements/search_widget_via_iframe" => "advertisements#search_widget_via_iframe"
   match "advertisements/elec_widget_demo" => "advertisements#elec_widget_demo"
+  match "advertisements/women_widget_demo" => "advertisements#women_widget_demo"
   match "advertisements/ad_via_iframe" => "advertisements#ad_via_iframe"
   match "advertisments/show_ads" => "advertisements#show_ads", :as => "show_ads"
   match "advertisments/check_user_details" => "advertisements#check_user_details", :as => "check_user_details"

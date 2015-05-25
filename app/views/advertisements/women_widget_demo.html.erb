@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>Amazon widget demo</title>
+  <link href='http://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <style>
+      html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+          margin: 0;
+          padding: 0;
+          border: 0;
+      }
+
+      table {
+          border-collapse: collapse;
+          border-spacing: 0;
+      }
+
+      .ad > span {
+          font-size: 14px;
+      }
+  </style>
+</head>
+<body style="height: 100%;">
+
+<div class="advertisements">
+  <h1>Amazon Widget Demo</h1>
+  <div class="demo_form row">
+    <div class="search_form">
+      <%= form_for :search, :url => "/advertisements/elec_widget_demo", :html => {:method => 'get'} do |search_form| %>
+          Url : <%= search_form.text_field :ref_url, :name => "ref_url", :value => params[:ref_url], :style => "width: 528px;" %>
+          Type : <%= select_tag :type, options_for_select(["price_widget", "elec_widget"], params[:type]) %>
+          <%= search_form.submit "Go" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<br />
+<br />
+
+
+<div id="where_to_buy_items">
+</div>
+
+<script async src="<%= configatron.hostname %>//javascripts/plannto.women.widget.js?ref_url=<%= params[:ref_url] %>&item_id=&show_details=true&element_id=where_to_buy_items&is_test=&page_type=type_1&geo=in"></script>
+
+<br/>
+
+<br/>
+</body>
+</html>
+
+
+<style type="text/css">
+    .advertisements h1 {
+    }
+
+    body {
+        margin: 50px;
+    }
+
+    .demo_form {
+        padding-bottom: 20px;
+        padding-top: 20px;
+
+    }
+
+</style>

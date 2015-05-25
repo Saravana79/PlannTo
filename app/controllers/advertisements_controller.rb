@@ -377,6 +377,12 @@ class AdvertisementsController < ApplicationController
     render :layout => false
   end
 
+  def women_widget_demo
+    params[:ref_url] ||= "http://indiatoday.intoday.in/technology/story/samsung-galaxy-note-edge-review/1/420649.html"
+    params[:type] ||= "elec_widget"
+    render :layout => false
+  end
+
   def ad_via_iframe
     render :layout => false
   end
