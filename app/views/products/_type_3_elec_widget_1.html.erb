@@ -1,3 +1,11 @@
+<style type="text/css">
+
+.shadetabs{padding:0; margin:0; width:100%; list-style-type: none; text-align: left;z-index:-1;}
+.shadetabs li.unselected{float:left; padding:0px!important; margin:0 0 0 2px!important;background: #E65E7B!important;list-style-type: none!important; width:49.2%;text-align: center;border-bottom:2px solid #D2D2D2;}
+.shadetabs li.unselected a{ text-decoration: none; font-size:14px; color: #fff!important; text-decoration: none; padding:6px 15px;  display:inline-block; margin:0; text-align:center; }
+.shadetabs li.selected{padding:0px!important; margin:0px !important; text-align:center; background: <%= @vendor_detail.theme_colour %> !important; list-style-type: none!important;text-align: center;text-transform: uppercase;border: 1px solid #929292;font-weight: 700;}
+.shadetabs li.selected a{ color:black!important; font-size:14px; text-decoration: none; padding:4px 15px;  display:inline-block; margin:0; text-align:center;}
+</style>
 <div id="planntobuy">
      <div>
             <ul class="shadetabs">
@@ -38,10 +46,16 @@
             </p>
           </div>
         </span>
-        
+
         <br clear="all">
       </div>
   <% end %>
+        <%if @vendor = "73017" %>
+        <div style="float:left" "> <a href="http://www.junglee.com/Mobile-Phones/b/803073031/ref=nav_menu_1_1_1_0" style="font-size:15px;color: #5A5A5A;text-decoration:none;padding-left:20px;">View More Products. </a></div>
+        <div style="float:right;" style ="font-size:14px;">
+         <span style="float:left;font-size:12px;"> Powered by </span><span style="float:left"><a href="http://www.junglee.com" style="display:inline-block;margin-top:1px;"><img height="14px" class="ad_vendor_logo" id="vendor_logo" alt="" src="<%= get_vendor_image(@where_to_buy_items[0]) %>"></a></span>
+         <div>
+        <%end%>
 </div>
 
 
