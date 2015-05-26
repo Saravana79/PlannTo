@@ -170,11 +170,11 @@ class UserAccessDetail < ActiveRecord::Base
             #Update redis_rtb from plannto_user_detail
             if !plannto_user_detail.blank?
               if plannto_user_detail.plannto_user_id.blank?
-                user_id = plannto_user_detail.google_user_id.to_s
-                pud_redis_rtb_hash_key = "users:buyinglist:#{user_id}:#{m_item_type.itemtype_id}"
+                p_user_id = plannto_user_detail.google_user_id.to_s
+                pud_redis_rtb_hash_key = "ubl:#{p_user_id}:#{m_item_type.itemtype_id}"
               else
-                user_id = plannto_user_detail.plannto_user_id.to_s
-                pud_redis_rtb_hash_key = "users:buyinglist:plannto:#{user_id}:#{m_item_type.itemtype_id}"
+                p_user_id = plannto_user_detail.plannto_user_id.to_s
+                pud_redis_rtb_hash_key = "ubl:pl:#{p_user_id}:#{m_item_type.itemtype_id}"
               end
 
               if !user_id.blank?

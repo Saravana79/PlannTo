@@ -1789,10 +1789,10 @@ end
                       if !plannto_user_detail.blank?
                         if plannto_user_detail.plannto_user_id.blank?
                           user_id_for_key = plannto_user_detail.google_user_id.to_s
-                          pud_redis_rtb_hash_key = "users:buyinglist:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
                         else
                           user_id_for_key = plannto_user_detail.plannto_user_id.to_s
-                          pud_redis_rtb_hash_key = "users:buyinglist:plannto:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
                         end
 
                         if !user_id.blank?

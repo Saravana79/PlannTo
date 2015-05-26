@@ -93,10 +93,10 @@ class PlanntoUserDetail
     user_id_for_key = ""
     if self.plannto_user_id.blank?
       user_id_for_key = self.google_user_id.to_s
-      key_prefix = "users:buyinglist:#{user_id_for_key}"
+      key_prefix = "ubl:#{user_id_for_key}"
     else
       user_id_for_key = self.plannto_user_id.to_s
-      key_prefix = "users:buyinglist:plannto:#{user_id_for_key}"
+      key_prefix = "ubl:pl:#{user_id_for_key}"
     end
 
     if male_site_list.include?(domain)
@@ -108,21 +108,21 @@ class PlanntoUserDetail
       a_hash = Hash[a_hash]
       a_hash.merge!("resale" => "true", "rad" => Date.today.to_s) #rad => resale last accessed date
       self.a = a_hash
-      redis_rtb.merge!("#{key_prefix}:add_detail:resale", Date.today.to_s) if !user_id_for_key.blank?
+      redis_rtb.merge!("#{key_prefix}:ad:rs", Date.today.to_s) if !user_id_for_key.blank?
     elsif buying_cycle_site_list.include?(domain)
       a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
       a_hash = Hash[a_hash]
       a_hash.merge!("bc" => "true", "bcad" => Date.today.to_s) #bcad => buying cycle last accessed date
       self.a = a_hash
-      redis_rtb.merge!("#{key_prefix}:add_detail:bc", Date.today.to_s) if !user_id_for_key.blank?
+      redis_rtb.merge!("#{key_prefix}:ad:bc", Date.today.to_s) if !user_id_for_key.blank?
     end
 
     if self.m_rank.to_i > self.f_rank.to_i
       self.gender = "m"
-      redis_rtb.merge!("#{key_prefix}:gender", "male") if !user_id_for_key.blank?
+      redis_rtb.merge!("#{key_prefix}:g", "male") if !user_id_for_key.blank?
     elsif self.m_rank.to_i < self.f_rank.to_i
       self.gender = "f"
-      redis_rtb.merge!("#{key_prefix}:gender", "female") if !user_id_for_key.blank?
+      redis_rtb.merge!("#{key_prefix}:g", "female") if !user_id_for_key.blank?
     end
 
     self.skip_callback = true
