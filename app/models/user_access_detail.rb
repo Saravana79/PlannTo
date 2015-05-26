@@ -171,10 +171,10 @@ class UserAccessDetail < ActiveRecord::Base
             if !plannto_user_detail.blank?
               if plannto_user_detail.plannto_user_id.blank?
                 p_user_id = plannto_user_detail.google_user_id.to_s
-                pud_redis_rtb_hash_key = "users:buyinglist:#{p_user_id}:#{m_item_type.itemtype_id}"
+                pud_redis_rtb_hash_key = "ubl:#{p_user_id}:#{m_item_type.itemtype_id}"
               else
                 p_user_id = plannto_user_detail.plannto_user_id.to_s
-                pud_redis_rtb_hash_key = "users:buyinglist:plannto:#{p_user_id}:#{m_item_type.itemtype_id}"
+                pud_redis_rtb_hash_key = "ubl:pl:#{p_user_id}:#{m_item_type.itemtype_id}"
               end
 
               if !user_id.blank?
