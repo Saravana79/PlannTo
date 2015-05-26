@@ -91,7 +91,7 @@ class HistoryDetailsController < ApplicationController
 
               url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
             else
-              url = url.gsub("tag=temp", "#{publisher_vendor.trackid}");
+              url = url.gsub("tag=plannto-junglee-g-21", "tag=#{publisher_vendor.trackid}");
             end   
           else
             url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
