@@ -80,14 +80,19 @@ class HistoryDetailsController < ApplicationController
             # if url.include?("%")
             #   url = URI.unescape(url)
             # end
-            tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+            if(publisher_vendor.vendor_id == "9882")
 
-            if tag_val.blank?
-              url = URI.unescape(url)
               tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
-            end
 
-            url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
+              if tag_val.blank?
+                url = URI.unescape(url)
+                tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
+              end
+
+              url = url.gsub(tag_val, "#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}")
+            else
+              url = url.gsub("tag=temp", "#{publisher_vendor.trackid}");
+            end   
           else
             url = url + "&tag=#{publisher_vendor.trackid}&ascsubtag=#{@impression_id}"
           end
