@@ -23,3 +23,27 @@ task :buying_list_from_user_access => :environment do
     p "Remaining #{count-loop_count}"
   end
 end
+
+desc "temporary rake task to update item detail others"
+task :update_item_detail_others, [:url] => :environment do |_, args|
+  args.with_defaults(:url => "http://planntonew.s3.amazonaws.com/test_folder/junglee_cars.csv")
+  count = 0
+  url = args[:url].to_s
+  csv_details = CSV.read(open(url), { :col_sep => "\t" })
+  csv_details.each_with_index do |csv_detail, index|
+    count += 1
+    next if index == 0
+
+    each_url = csv_detail[0]
+    each_url = each_url.to_s
+    each_url = "http://" + each_url if !each_url.include?("http")
+
+    begin
+      ItemDetailOther.update_item_detail_other_for_junglee(each_url)
+    rescue Exception => e
+      p e
+    end
+    p "Processing #{count}"
+  end
+end
+

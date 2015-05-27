@@ -395,3 +395,21 @@ csv_details.each_with_index do |csv_detail, index|
 end
 
 Sourceitem.import(valid_items)
+
+
+# update item_detail_other.rb
+
+csv_details = CSV.read(open("http://planntonew.s3.amazonaws.com/test_folder/junglee_cars.csv"), { :col_sep => "\t" })
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  url = csv_detail[0]
+  url = url.to_s
+  url = "http://" + url if !url.include?("http")
+
+  begin
+    ItemDetailOther.update_item_detail_other_for_junglee(url)
+  rescue Exception => e
+    p e
+  end
+end

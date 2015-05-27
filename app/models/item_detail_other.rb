@@ -5,6 +5,8 @@ class ItemDetailOther < ActiveRecord::Base
 
   def self.update_item_detail_other_for_junglee(url)
     # url ||= "http://www.junglee.com/dp/B00RGA4F3U"
+    url = url.to_s
+    url = "http://" + url if !url.include?("http")
 
     doc = Nokogiri::XML(open(url))
     node = doc.elements.first
@@ -16,7 +18,10 @@ class ItemDetailOther < ActiveRecord::Base
     location = node.at_css("#location .importantDetail").content.squish rescue ""
     status = 1
     search_text = ""
-    ad_detail1 = "", ad_detail2 = "", ad_detail3 = "", ad_detail4 = ""
+    ad_detail1 = ""
+    ad_detail2 = ""
+    ad_detail3 = ""
+    ad_detail4 = ""
     table.elements.each do |each_ele|
       type = each_ele.elements.first.content.to_s.squish rescue ""
       value = each_ele.elements.last.content.to_s.squish rescue ""
