@@ -1,0 +1,144 @@
+<div class="advt-block">
+  <div class="advt-300">
+    <!--<div class="planntoadlogo">
+      <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
+    </div>
+  -->
+    <% if @item_details.count != 0 %>
+
+        <div class="">
+          <ul id="foo3" height="">
+            <% @item_details.each_with_index do |item_detail, indx| %>
+                <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+                <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+                <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
+                <li class="item_details1" id="item_detail_<%= indx + 1 %>">
+                  <div class="advt-box">
+
+                    <div class="product-container">
+                      <div style="margin-bottom:10px;width:100%;float:left">
+                            <span style="float:left">  
+                            <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:6px;" width="100px">
+                          </span>
+                           <span style="float:right"> 
+
+                            <p class="btn">
+                              <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                                <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
+                              </a>
+                            </p>
+                          </span>
+                          <!--<div style="font-size: 10px;padding-top: 8px;height: 15px;text-align: center;font-weight: 600;margin-left: 15px;/* float: center; */">Addl. 15% Cashback.</div>-->
+                      </div>
+                      <div class="product-img-top" style="white-space:nowrap;">
+                        <a href="<%= shop_now_url %>" target="_blank">
+                          <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                           <span style="display: inline-block;width: 289px;text-align: center;"> 
+                          <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+                        </span>
+                          <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                        </a>
+                      </div>
+                      <div class="product-txt-right">
+                        <div style="text-align:center;margin-top:10px;">
+                          <a href="<%= shop_now_url %>" target="_blank" class="">
+                            <p class="product-txt-desc"><%= item_detail.title.to_s.truncate(62) %></p>
+                          </a>
+
+                          <div style="text-align:center;margin-top:2px;">
+                            <a href="<%= shop_now_url %>" target="_blank" class="">
+                             <!-- <p class="mrpprice" style="text-decoration: line-through;margin-top: 90px;color: #555 !important"><%#= prettify_price(item_detail) %></p>-->
+                             <p style="color: #555;padding: 0px;font-size: 13px;text-decoration: line-through;font-family: Arial;min-height:15px;"><%= prettify_price(item_detail) %></p>
+                              <p class="price"><%= prettify_price(item_detail) %></p>
+                            </a>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </li>
+                </span>
+            <% end %>
+
+          </ul>
+        </div>
+        <div class="thumbnail_images">
+          <% @item_details.each_with_index do |item_detail, indx| %>
+            <% if indx == 5 %>
+              <span id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="padding:4px 3px;border:1px solid #BABABA;float:left;border-right:0px;">
+                <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+              </span>
+            <%else%>
+              <span id="thumbnail_<%= indx + 1 %>" class="thumbnails" style="padding:4px 4px;border:1px solid #BABABA;float:left;">
+                <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+
+              </span>
+            <%end%>
+                <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+             <%end%> 
+        </div>
+        <div class="clearfix"></div>
+        <!--<a id="prev3" class="prev" href="#">&lt;</a>
+        <a id="next3" class="next" href="#">&gt;</a>
+       -->
+
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-300 -->
+</div>
+<!-- end of advt-block -->
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {
+        text-decoration: none !important;
+    }
+
+    .advt-box .product-container h3 {
+        font-size: 14px !important;
+        font-family: Arial !important;
+    }
+
+    #rightarrow:hover {
+        color: #D70707 !important;
+    }
+
+    .type_2_description {
+        padding: 3px;
+
+    }
+
+    .thumbnails .ad_img_tag{max-width: 40px;max-height: 30px;}
+
+
+</style>
+
+<script type="application/javascript">
+    $(document).ready(function () {
+        $(".slider_plannto").hide()
+        $("#1").show()
+        $("#1").addClass("active")
+        $("#thumbnail_1").addClass("thumbnailactive")
+      
+    });
+
+    $(".thumbnails").click(function () {
+        $(".slider_plannto").hide()
+        var current_id = $(this).attr("id")
+        var id = current_id.replace("thumbnail_", "")
+        $("#" + id).show()
+        $(".slider_plannto").removeClass("active")
+        $("#" + id).addClass("active")
+        $(".thumbnails").removeClass("thumbnailactive")
+        $("#" + current_id).addClass("thumbnailactive") 
+    })
+</script>

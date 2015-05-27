@@ -1,0 +1,65 @@
+<div class="advt-block">
+  <div class="advt-728">
+    <% if @item_details.count != 0 %>
+        <span id="leftarrow" class="left" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> << </span>
+        <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
+            <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
+              <div class="item_details" id="item_detail_<%= indx + 1 %>">
+                <div class="advt-box">
+                  <% sliced_item_detail.each do |item_detail| %>
+                      <div class="product-container">
+                        <div class="product-img">
+                          <a href="javascript:void(0)">
+                            <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),92 , 70, "original").html_safe %>
+                            <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="92px" height="70px"> -->
+                          </a>
+                        </div>
+                        <p class="mrpprice" style="text-decoration: line-through;margin-top: 90px;color: #555 !important"><%= prettify_price(item_detail) %></p>
+                        <p class="price" style="margin-top: 0px; !important!"><%= prettify_price(item_detail) %></p>
+
+                        <p class="btn">
+                          <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+                          <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                            <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
+                          </a>
+                        </p>
+                      </div>
+                  <% end %>
+                </div>
+              </div>
+            </span>
+        <% end %>
+        <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
+    <% else %>
+        No Product Found
+    <% end %>
+  </div>
+  <!-- end of advt-300 -->
+</div><!-- end of advt-block -->
+
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {text-decoration: none !important;}
+
+    .advt-box .product-container h3 {
+        font-size: 14px !important;
+    }
+
+    #rightarrow:hover {
+        color: #D70707 !important;
+    }
+
+    .type_2_description {
+        padding: 3px;
+
+    }
+
+    .foo3, .slider_plannto {
+        height: 198px !important;
+    }
+</style>

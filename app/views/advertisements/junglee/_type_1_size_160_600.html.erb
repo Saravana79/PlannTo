@@ -1,0 +1,95 @@
+<div class="advt-block">
+  <div class="advt-160-600">
+    <!--<div class="planntoadlogo">
+      <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
+    </div>
+  -->
+    <% if @item_details.count != 0 %>
+        <div class="">
+          <ul id="foo3">
+            <div style="text-align: center;border-bottom: 1px solid #F1F0F0;height:40px;">
+              <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:2px;" width="">
+            </div>
+            <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
+
+            <% @sliced_item_details.each_with_index do |item_details, indx| %>
+                <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
+
+               <% item_details.each_with_index do |item_detail, next_indx| %>
+                <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+                      <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+                      <li class="item_details1" id="item_detail_<%= indx + 1 + next_indx %>">
+                        <div class="advt-box">
+                          <div class="product-container" style="max-height:279px;">
+                            <div class="product-img-top" style="float:left;white-space:nowrap;height:202px;">
+                               <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                               <span style="display: inline-block;width: 152px;text-align: center;"> 
+                              <a href="<%= shop_now_url %>" target="_blank">
+                                <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+                                <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                              </a>
+                             </span>
+                            </div>
+                            <div class="product-txt-right">
+
+                              <div style="padding: 2px 0px;text-transform: capitalize;">
+                                 <a href="<%= shop_now_url %>" target="_blank" class="">
+                                <h3><%= item_detail.title.to_s.truncate(42) %></h3></a>
+                            </div>
+
+                              <a href="<%= shop_now_url %>" target="_blank" class="">
+                                <!--<p class="mrpprice" style="text-decoration: line-through;margin-top: 90px;color: #555 !important"><%#= prettify_mrpprice(item_detail) %></p>-->
+                                <p class="price" ><%= prettify_price(item_detail) %></p>
+                              </a>
+
+                              <p class="btn">
+                                <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
+                                  Now</a>
+                              </p>
+
+                            </div>
+                          </div>
+                        </div>
+
+                      </li>
+            <% end %>
+                    </span>
+            <% end %>
+
+            <a id="rightarrow" class="next" href="#" style="display: block;">&gt;</a>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+        <!--<a id="prev3" class="prev" href="#">&lt;</a>
+        <a id="next3" class="next" href="#">&gt;</a>
+       -->
+
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-300 -->
+</div>
+<!-- end of advt-block -->
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {
+        text-decoration: none !important;
+    }
+
+    .advt-box .product-container h3 {
+        font-size: 11px !important;
+    }
+
+    #rightarrow:hover {
+        color: #D70707 !important;
+    }
+
+
+</style>

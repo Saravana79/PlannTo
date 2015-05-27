@@ -46,6 +46,29 @@ module Admin::AdvertisementsHelper
     "<img src='#{return_url}' alt='' default_src='#{default_src}' id='#{img_id}' class='ad_img_tag' next_src='#{next_src}' width='#{width}px' height='#{height}px'>"
   end
 
+  def get_image_tag_from_item_detail_other(item_detail_other, vendor_name='', default_src='', width=100, height=100, format='medium')
+    return_url = ''
+    img_id = ''
+    next_src = ''
+    image = item_detail_other.image
+    if !item_detail_other.blank? && !image.blank?
+      return_url = configatron.root_image_path + image.avatar.path
+      img_id = "item_details"
+    else
+      # return_url = configatron.root_image_url + type + "/#{format}/" + image_url
+      return_url = ""
+      img_id = 'item'
+    end
+
+    # return_url = "http://planntodev.s3.amazonaws.com/vendors/amazon/original/51kyV5FnlmL.jpeg"
+
+    if height == 0
+      height =''
+    end
+    # return_url = "http://ecx.images-amazon.com/images/I/51QAjlrdk7L.01_SL500_.jpg" #TODO: for testing
+    "<img src='#{return_url}' alt='' id='#{img_id}' class='ad_img_tag' width='#{width}px' height='#{height}px'>"
+  end
+
   def get_image_tag_from_image_name(image_name, vendor_name='', default_src='', width=100, height=100, format='medium')
     return_url = configatron.root_image_path + 'vendors/' + vendor_name + "/#{format}/" + image_name.to_s
 

@@ -1,0 +1,87 @@
+<div class="advt-block">
+  <div class="advt-300">
+    <!--<div class="planntoadlogo">
+      <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
+    </div>
+  -->
+    <% if @item_details.count != 0 %>
+        <div class="">
+          <ul id="foo3" height="190px;">
+            <a id="leftarrow" class="prev" href="#" style="display: block;">&lt;</a>
+            <% @item_details.each_with_index do |item_detail, indx| %>
+                <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+                <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
+
+                <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
+                <li class="item_details" id="item_detail_<%= indx + 1 %>">
+                  <div class="advt-box">
+                    <div class="product-container">
+                      <div class="product-img-top" style="float:left;float:left;white-space:nowrap;height:245px;width:193px">
+                        <a href="<%= shop_now_url %>" target="_blank">
+                           <span style="  display: inline-block;height: 100%;vertical-align: middle;"></span>
+                          <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+                          <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
+                        </a>
+                      </div>
+                      <div class="product-txt-right">
+                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="100px">
+                       <div style="padding: 5px 0px;text-transform: capitalize;height:60px;">
+                         <a href="<%= shop_now_url %>" target="_blank" class="">
+                          <h3><%= item_detail.title.to_s.truncate(52) %></h3></a>
+                      </div>
+                        <a href="<%= shop_now_url %>" target="_blank" class="">
+                         <p style="margin-top: 40px;color: #555;padding: 0px;font-size: 13px;text-decoration: line-through;font-family: Arial;min-height:15px;"><%= prettify_price(item_detail) %></p>
+                         <p class="price" style="margin-top: 0px;"><%= prettify_price(item_detail) %></p>
+                        </a>
+
+                        <p class="btn">
+                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now"> <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %> </a>
+                        </p>
+                        <!--<div style="font-size: 10px;padding: 0px;height: 15px;text-align: center;">Addl. 15% Cashback.</div>-->
+                      </div>
+                    </div>
+                  </div>
+
+                </li>
+                </span>
+            <% end %>
+            <a id="rightarrow" class="next" href="javascript:void(0)" style="display: block;">&gt;</a>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+        <!--<a id="prev3" class="prev" href="#">&lt;</a>
+        <a id="next3" class="next" href="#">&gt;</a>
+       -->
+
+    <% else %>
+        No Product Found
+    <% end %>
+
+  </div>
+  <!-- end of advt-300 -->
+</div>
+<!-- end of advt-block -->
+
+<style type="text/css">
+    .pager a {
+        margin: 0px !important;
+    }
+
+    .product-container a {text-decoration: none !important;}
+
+    .advt-box .product-container h3 {
+        font-size: 10px !important;
+        font-family: Arial !important;
+    }
+
+    #rightarrow:hover {
+        color: #D70707 !important;
+    }
+
+    .type_2_description {
+        padding: 3px;
+
+    }
+
+
+</style>
