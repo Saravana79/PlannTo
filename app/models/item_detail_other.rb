@@ -55,7 +55,7 @@ class ItemDetailOther < ActiveRecord::Base
 
       item = @items.results.first rescue nil
 
-      if !item.blank
+      if !item.blank?
         ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => item.id)
       end
 
@@ -70,7 +70,7 @@ class ItemDetailOther < ActiveRecord::Base
 
       car = cars.results.first rescue nil
 
-      if !car.blank
+      if !car.blank?
         ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => car.id)
       end
 

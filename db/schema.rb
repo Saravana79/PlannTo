@@ -733,7 +733,7 @@ ActiveRecord::Schema.define(:version => 20150527081859) do
   add_index "item_contents_relations_cache", ["item_id", "content_id"], :name => "itemid"
 
   create_table "item_detail_other_mappings", :force => true do |t|
-    t.integer "item_detail_id"
+    t.integer "item_detail_other_id"
     t.integer "item_id"
   end
 
