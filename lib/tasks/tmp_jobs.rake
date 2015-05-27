@@ -139,7 +139,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         end
 
         p "Processing count => #{count}"
-        if count > 10
+        if count > 1000
           ItemDetailOtherMapping.import(mapping_import)
           mapping_import = []
           count = 0
