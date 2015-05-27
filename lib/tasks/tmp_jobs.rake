@@ -47,3 +47,112 @@ task :update_item_detail_others, [:url] => :environment do |_, args|
   end
 end
 
+desc "temporary rake task to update item detail others temp"
+task :update_item_detail_others_temp, [:url] => :environment do |_, args|
+  args.with_defaults(:url => "http://planntonew.s3.amazonaws.com/test_folder/junglee_cars.csv")
+  count = 0
+  url = args[:url].to_s
+  csv_details = CSV.read(open(url), { :col_sep => "\t" })
+
+  count = 0
+  mapping_import = []
+  csv_details.each_with_index do |csv_detail, index|
+    url = csv_detail[0]
+    url = url.to_s
+    url = "http://" + url if !url.include?("http")
+    item_detail_other = ItemDetailOther.where(:url => url).last
+
+    next if index == 0 || !item_detail_other.blank?
+    count += 1
+
+    begin
+      url = url.to_s
+      url = "http://" + url if !url.include?("http")
+
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      table = node.at_css(".centerColumn #center-5 table")
+      title = node.at_css(".productTitle").content.squish rescue ""
+      price = node.at_css(".whole-price").content.squish rescue ""
+      price = price.gsub(",","").gsub(".", "")
+      location = node.at_css("#location .importantDetail").content.squish rescue ""
+      status = 1
+      search_text = ""
+      ad_detail1 = ""
+      ad_detail2 = ""
+      ad_detail3 = ""
+      ad_detail4 = ""
+      table.elements.each do |each_ele|
+        type = each_ele.elements.first.content.to_s.squish rescue ""
+        value = each_ele.elements.last.content.to_s.squish rescue ""
+        if type == "Brand"
+          search_text = value
+        elsif type == "Model"
+          search_text = search_text + " " + value
+        elsif type == "Version"
+          search_text = search_text + " " + value
+        elsif type == "Year of Registration"
+          ad_detail4 = value
+        elsif type == "KMs Driven"
+          ad_detail2 = value
+        elsif type == "Fuel Type"
+          ad_detail1 = value
+        elsif type == "Transmission Type"
+          ad_detail3 = value
+        end
+      end
+
+      if item_detail_other.blank?
+        item_detail_other = ItemDetailOther.new(:title => title, :price => price, :url => url, :status => status, :ad_detail1 => ad_detail1, :ad_detail2 => ad_detail2,
+                                                :ad_detail3 => ad_detail3, :ad_detail4 => ad_detail4, :added_date => Date.today, :last_modified_date => Date.today)
+        item_detail_other.save!
+
+        @items = Sunspot.search([City]) do
+          keywords location do
+            minimum_match 1
+          end
+          order_by :score,:desc
+          order_by :orderbyid , :asc
+          paginate(:page => 1, :per_page => 5)
+        end
+
+        item = @items.results.first rescue nil
+
+        if !item.blank?
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => item.id)
+        end
+
+        cars = Sunspot.search([Car]) do
+          keywords search_text do
+            minimum_match 1
+          end
+          order_by :score,:desc
+          order_by :orderbyid , :asc
+          paginate(:page => 1, :per_page => 5)
+        end
+
+        car = cars.results.first rescue nil
+
+        if !car.blank?
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id)
+        end
+
+        p "Processing count => #{count}"
+        if count > 10
+          ItemDetailOtherMapping.import(mapping_import)
+          mapping_import = []
+          count = 0
+        end
+
+      else
+        item_detail_other.update_attributes(:price => price, :last_modified_date => Date.today)
+      end
+    rescue Exception => e
+      p e
+    end
+  end
+end
+
+
+
