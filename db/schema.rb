@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150521124932) do
+ActiveRecord::Schema.define(:version => 20150527081859) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -731,6 +731,26 @@ ActiveRecord::Schema.define(:version => 20150521124932) do
   end
 
   add_index "item_contents_relations_cache", ["item_id", "content_id"], :name => "itemid"
+
+  create_table "item_detail_other_mappings", :force => true do |t|
+    t.integer "item_detail_id"
+    t.integer "item_id"
+  end
+
+  create_table "item_detail_others", :force => true do |t|
+    t.string   "title"
+    t.string   "url"
+    t.float    "price"
+    t.integer  "status"
+    t.string   "ad_detail1"
+    t.string   "ad_detail2"
+    t.string   "ad_detail3"
+    t.string   "ad_detail4"
+    t.date     "added_date"
+    t.date     "last_modified_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "item_pro_cons", :force => true do |t|
     t.integer  "pro_con_category_id"
