@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150527081859) do
+ActiveRecord::Schema.define(:version => 20150527161537) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -750,6 +750,7 @@ ActiveRecord::Schema.define(:version => 20150527081859) do
     t.date     "last_modified_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "image_name"
   end
 
   create_table "item_pro_cons", :force => true do |t|

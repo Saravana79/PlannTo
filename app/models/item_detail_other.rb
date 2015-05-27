@@ -1,6 +1,6 @@
 class ItemDetailOther < ActiveRecord::Base
-
   has_many :item_detail_other_mappings
+  has_one :image, as: :imageable
 
 
   def self.update_item_detail_other_for_junglee(url)
@@ -16,6 +16,7 @@ class ItemDetailOther < ActiveRecord::Base
     price = node.at_css(".whole-price").content.squish rescue ""
     price = price.gsub(",","").gsub(".", "")
     location = node.at_css("#location .importantDetail").content.squish rescue ""
+    image_url = node.at_css("#mainImageContainer img").attributes["src"].content rescue ""
     status = 1
     search_text = ""
     ad_detail1 = ""
@@ -77,6 +78,46 @@ class ItemDetailOther < ActiveRecord::Base
 
       if !car.blank?
         ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => car.id)
+      end
+
+      filename = image_url.to_s.split("/").last
+      filename = filename == "noimage.jpg" ? nil : filename
+
+      filename = filename.gsub("%", "_")
+
+      unless filename.blank?
+        name = filename.to_s.split(".")
+        name = name[0...name.size-1]
+        name = name.join(".") + ".jpeg"
+        filename = name
+      end
+
+      if !item_detail_other.blank? && !image_url.blank? && !filename.blank?
+        p "image----------------------------"
+        @image = item_detail_other.build_image
+        # tempfile = open(image_url)
+        # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+        # avatar.original_filename = filename
+
+        safe_thumbnail_url = URI.encode(URI.decode(image_url))
+        extname = File.extname(safe_thumbnail_url).delete("%")
+
+        basename = File.basename(safe_thumbnail_url, extname).delete("%")
+
+        file = Tempfile.new([basename, extname])
+        file.binmode
+        open(URI.parse(safe_thumbnail_url)) do |data|
+          file.write data.read
+        end
+        file.rewind
+
+        avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+        avatar.original_filename = filename
+
+        @image.avatar = avatar
+        if @image.save
+          item_detail_other.update_attributes(:image_name => filename)
+        end
       end
 
     else

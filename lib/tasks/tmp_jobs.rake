@@ -77,6 +77,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
       price = node.at_css(".whole-price").content.squish rescue ""
       price = price.gsub(",","").gsub(".", "")
       location = node.at_css("#location .importantDetail").content.squish rescue ""
+      image_url = node.at_css("#mainImageContainer img").attributes["src"].content rescue ""
       status = 1
       search_text = ""
       ad_detail1 = ""
@@ -145,11 +146,51 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
           count = 0
         end
 
+        filename = image_url.to_s.split("/").last
+        filename = filename == "noimage.jpg" ? nil : filename
+
+        filename = filename.gsub("%", "_")
+
+        unless filename.blank?
+          name = filename.to_s.split(".")
+          name = name[0...name.size-1]
+          name = name.join(".") + ".jpeg"
+          filename = name
+        end
+
+        if !item_detail_other.blank? && !image_url.blank? && !filename.blank?
+          p "image----------------------------"
+          @image = item_detail_other.build_image
+          # tempfile = open(image_url)
+          # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          # avatar.original_filename = filename
+
+          safe_thumbnail_url = URI.encode(URI.decode(image_url))
+          extname = File.extname(safe_thumbnail_url).delete("%")
+
+          basename = File.basename(safe_thumbnail_url, extname).delete("%")
+
+          file = Tempfile.new([basename, extname])
+          file.binmode
+          open(URI.parse(safe_thumbnail_url)) do |data|
+            file.write data.read
+          end
+          file.rewind
+
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar.original_filename = filename
+
+          @image.avatar = avatar
+          if @image.save
+            item_detail_other.update_attributes(:image_name => filename)
+          end
+        end
+
       else
         item_detail_other.update_attributes(:price => price, :last_modified_date => Date.today)
       end
     rescue Exception => e
-      p e
+      p e.backtrace
     end
   end
 end
