@@ -145,6 +145,34 @@ class HistoryDetailsController < ApplicationController
                        :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => nil, :source_type => "Offer", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
       Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
       return render :nothing => true
+    elsif !params[:detail_other_id].blank?
+      @item_detail = ItemDetailOther.where(:id => params[:detail_other_id]).last
+      type = params[:type].present? ? params[:type] : ""
+
+      @impression_id = params[:iid].present? ? params[:iid] : "0"
+      if !params[:ads_id].blank? && @item_detail.blank?
+        @ad = Advertisement.where("id = ? and review_status='approved'", params[:ads_id]).first
+        url = @ad.click_url
+
+        url = params[:red_url] if !params[:red_url].blank?
+      else
+        url = "#{@item_detail.url}"
+        url = url.strip
+      end
+
+      item_id = @item_detail.blank? ? "" : @item_detail.item_detail_other_mappings.first.id
+
+      domain = VendorDetail.getdomain(url)
+      @vd = VendorDetail.where(baseurl: domain)
+      unless @vd.empty?
+        vendor = Item.find(@vd[0].item_id)
+      end
+      vendor = @item_detail.blank? ? nil : @item_detail.vendor if vendor.blank?
+      vendor_id = vendor.blank? ? "" : vendor.id
+
+      click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
+                       :publisher => publisher.blank? ? nil : publisher.id, :vendor_id => vendor_id, :source_type => "PC", :temp_user_id => temp_user_id, :advertisement_id => params[:ads_id], :sid => params[:sid], :t => params[:t], :r => params[:r], :ic => params[:ic], :a => params[:a], :video_impression_id => params[:video_impression_id]}.to_json
+      Resque.enqueue(CreateImpressionAndClick, 'Click', click_params) if params[:is_test] != "true"
     else
       @item_detail = Itemdetail.find_by_item_details_id(params[:detail_id])
       type = params[:type].present? ? params[:type] : ""
@@ -246,7 +274,7 @@ class HistoryDetailsController < ApplicationController
 
           url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?
 
-          add_detail = @item_detail.blank? ? "" : @item_detail.additional_details.to_s
+          add_detail = @item_detail.blank? ? "" : @item_detail.additional_details.to_s rescue ""
           url= url.gsub(/\{add}/, add_detail) #pass additional_details
 
           ad_id = params[:ads_id].blank? ? "" : params[:ads_id]

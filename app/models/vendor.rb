@@ -1,6 +1,7 @@
 class Vendor < Item
   has_many :vendor_details, :foreign_key => :item_id
   has_many :hotel_vendor_details
+  has_one :item_detail_other
  
  def self.get_item_object(item)
     item = item.vendor

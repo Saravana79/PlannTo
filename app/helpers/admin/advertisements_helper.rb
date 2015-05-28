@@ -140,6 +140,17 @@ module Admin::AdvertisementsHelper
     ad_url
   end
 
+  def get_ad_url_from_detail_other(item_detail_id, impression_id, ref_url, sid, ads_id, param={})
+    param[:only_layout] ||= "false"
+    ad_url = ""
+    if @is_test == "true"
+      ad_url = configatron.hostname + history_details_path(:detail_other_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :is_test => 'true', :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id])
+    else
+      ad_url = configatron.hostname + history_details_path(:detail_other_id => item_detail_id, :iid => impression_id, :sid => sid, :ads_id => ads_id, :ref_url => ref_url, :t => param[:t], :r => param[:r], :ic => param[:ic], :only_layout => param[:only_layout], :a => param[:a], :video_impression_id => param[:video_impression_id])
+    end
+    ad_url
+  end
+
 
   def get_static_ad_url(click_url, impression_id, ref_url, sid, ads_id, param={})
     param[:only_layout] ||= "false"
