@@ -246,7 +246,7 @@ class AdvertisementsController < ApplicationController
     item_ids = item_id.to_s.split(",")
 
     @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
-    @sliced_item_details = @item_details.each_slice(2)
+    @sliced_item_details = @item_details.each_slice(3)
     
     if @is_test != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])
@@ -281,9 +281,12 @@ class AdvertisementsController < ApplicationController
     item_ids = item_id.to_s.split(",")
 
     # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
+    # TODO: hot coded value
     @item = Car.first
     @item_details = ItemDetailOther.first(6)
     @sliced_item_details = @item_details.each_slice(2)
+
+    @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, [@item], @suitable_ui_size)
 
     if @is_test != "true"
       @impression_id = AddImpression.add_impression_to_resque(impression_type, item_ids.first, url, current_user, request.remote_ip, nil, itemsaccess, url_params, cookies[:plan_to_temp_user_id], @ad.id, winning_price_enc, sid, params[:t], params[:r], params[:a], params[:video], params[:video_impression_id])

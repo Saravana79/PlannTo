@@ -2,6 +2,11 @@ class ItemDetailOther < ActiveRecord::Base
   has_many :item_detail_other_mappings
   has_one :image, as: :imageable
 
+  attr_accessor :vendor_id, :offer
+
+  def vendor_id
+    73017
+  end
 
   def self.update_item_detail_other_for_junglee(url)
     # url ||= "http://www.junglee.com/dp/B00RGA4F3U"

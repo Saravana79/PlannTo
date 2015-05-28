@@ -2,16 +2,15 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>Advt <%= @suitable_ui_size %></title>
-  <link href="<%= configatron.root_image_path %>static/stylesheets/ads/junglee/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
   <link href="/stylesheets/ads/junglee/<%= @ad_template_type %>/<%= @suitable_ui_size %>/style.css" type="text/css" rel="stylesheet" media="all"/>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" %>
 
   <% if (params[:t].to_i == 1) %>
-      <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
-          <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" />
-      <% else %>
-          <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>&google_ula=8326120&google_ula=8365600" />
-      <% end %>
+    <% if !@cookie_match.blank? && !@cookie_match.google_user_id.blank? %>
+        <img src="https://www.plannto.com/pixels?google_gid=<%= @cookie_match.google_user_id %>&source=google&ref_url=<%=params[:ref_url] %>" />
+    <% else %>
+        <img src="https://cm.g.doubleclick.net/pixel?google_nid=plannto&google_cm&ref_url=<%= params[:ref_url] %>&t=<%= params[:t] %>&google_ula=8326120&google_ula=8365600" />
+    <% end %>
   <% end %>
 </head>
 <body>
@@ -49,135 +48,202 @@
         color: #009CC4 !important;
 
     }
-
-    li {
-        list-style: outside none none
-    }
-
-    .divshadow {
-        width: 284px;
-        height: 243px;
-    }
 </style>
 
-<script type="application/javascript">
-    $(document).ready(function()
-    {
-        stop_sliding = false
+<script type="text/javascript">
+    $(document).ready(function () {
+        //hide pixel img
+        $(".plannto-advertisement").siblings("img").hide()
 
-        if ("<%= configatron.fashion_auto_scroll %>" == "true")
+        $(".ad_img_tag").on("error", function()
         {
-            auto_scroll()
-        }
-        else
-        {
-            $(".slider_plannto").hide()
-            $("#1").show()
-            $("#1").addClass("active")
-        }
-    });
+           var img_id = $(this).attr('id')
+            if (img_id == "item_details") {
+              $(this).attr('id', 'item')
+              $(this).attr("src", $(this).attr('next_src'))
+            }
+            else if (img_id == "item")
+            {
+                $(this).attr('id', 'default_image')
+                $(this).attr("src", $(this).attr('default_src'))
+            }
+        });
 
-    function auto_scroll()
-    {
-        $(".slider_plannto").each(function (index) {
-            index = index + 1
+        var stop_sliding = false
+
+        $(".item_details").hide();
+        $(".item_details").first().show();
+        $(".item_details").first().addClass('active')
+        set_logo_url($(".item_details").first(), "shop-now")
+
+        $("#1").addClass('selected')
+
+// TODO: temporary commented
+       <% if 1 !=1 %>
+        $(".item_details").each(function (index) {
+
+            if (index == 0)
+                return
 
             var that = this;
             var t = setTimeout(function () {
                 if (stop_sliding == false) {
-                    $(".slider_plannto").hide();
-                    $(".slider_plannto").removeClass('active')
+                    $(".item_details").hide();
+                    $(".item_details").removeClass('active')
+                    $("#pager2 a").removeClass('selected')
+
+                    split_div = $(that).attr('id').split('_')
+                    $("#" + split_div[split_div.length - 1]).addClass('selected')
 
                     $(that).show();
                     $(that).addClass('active')
+                    set_logo_url(that, "shop-now")
 
-                    if (index == $(".slider_plannto").length)
+                    if (index == ($(".item_details").length - 1))
                         setTimeout(function () {
                             if (stop_sliding == false) {
-                                $(".slider_plannto").hide()
-                                $(".slider_plannto").removeClass('active')
-                                $("#1").show()
-                                $("#1").addClass("active")
+                                $(".item_details").last().hide()
+                                $(".item_details").removeClass('active')
+                                $("#pager2 a").removeClass('selected')
+                                $(".item_details").first().show();
+                                $(".item_details").first().addClass('active')
+                                set_logo_url($(".item_details").first(), "shop-now")
 
-                                if ("<%= configatron.fashion_auto_scroll_count %>" == "infinity")
-                                {
-                                    auto_scroll()
-                                }
+                                $("#1").addClass("selected")
                             }
-                        }, "<%= configatron.fashion_auto_scroll_time %>")
+                        }, 5000)
                 }
-            }, "<%= configatron.fashion_auto_scroll_time %>" * index);
+            }, 5000 * index);
         });
-    }
 
-    $(".advt-block").click(function () {
-        stop_sliding = true
-    })
+        <% end %>
 
-    $(".item_details").click(function()
-    {
-        var shop_now_url = $(this).find(".shop-now").attr("href")
-        window.open(shop_now_url, "_blank")
-        stop_sliding = true
-        return false;
+        $(".next").click(function () {
+            var current_div = $(".item_details.active")
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+            $("#pager2 a").removeClass('selected')
+
+            var splited_val = $(current_div).attr("id").split('_')
+
+            if (parseInt(splited_val[splited_val.length - 1]) < $(".item_details").length) {
+                $(current_div).next().show().addClass('active')
+                set_logo_url($(current_div).next(), "shop-now")
+
+                split_div = $(current_div).next().attr("id").split('_')
+                $("#" + split_div[split_div.length - 1]).addClass('selected')
+            }
+            else {
+                $(".item_details").first().show().addClass('active')
+                set_logo_url($(".item_details").first(), "shop-now")
+
+                $("#1").addClass('selected')
+            }
+        });
+
+
+        $(".prev").click(function () {
+            var current_div = $(".item_details.active")
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+            $("#pager2 a").removeClass('selected')
+
+            var splited_val = $(current_div).attr("id").split('_')
+
+            if (parseInt(splited_val[splited_val.length - 1]) > 1) {
+                $(current_div).prev().show().addClass('active')
+                set_logo_url($(current_div).prev(), "shop-now")
+
+                split_div = $(current_div).prev().attr("id").split('_')
+                $("#" + split_div[split_div.length - 1]).addClass('selected')
+            }
+            else {
+                $(".item_details").last().show().addClass('active')
+                set_logo_url($(".item_details").last(), "shop-now")
+
+                last = $(".item_details").length
+                $("#" + last).addClass('selected')
+            }
+        });
+
+        $("#pager2 a").click(function () {
+            var that = this
+            selected_id = $(that).attr("id")
+            selected_div = $("#item_detail_" + selected_id)
+
+            $(".item_details").hide();
+            $(".item_details").removeClass('active')
+
+            $(selected_div).show()
+            $(selected_div).addClass('active')
+            set_logo_url($(selected_div), "shop-now")
+
+            $("#pager2 a").removeClass('selected')
+            $(that).addClass('selected')
+        })
+
+        $(".advt-block").click(function () {
+            stop_sliding = true
+        })
+
+//        $(".plannto-advertisement").click(function(event)
+//        {
+//            check_navigation = $(event.target).closest('#pager2')
+//
+//            console.log(check_navigation)
+//
+//            if (check_navigation.size() == 0)
+//            {
+//                event.preventDefault()
+//                url = $(".shop-now").attr('href')
+//                window.open("http://"+url);
+//            }
+//        })
+
+        // All place clickable
+
+        $(".plannto-advertisement.main_div").click(function(a)
+        {
+            var ids_list = []
+            ids_list.push(a.target.id)
+            ids_list.push(a.target.parentNode.id)
+            ids_list.push(a.target.parentNode.parentNode.id)
+            var present = $.inArray("pager2", ids_list)
+            if (present < 0)
+            {
+                <% if ["728", "120", "160_600"].include?(@suitable_ui_size) %>
+                    var x = a.target
+                    var d = $(x).closest(".product-container")
+                    var shop_now_url = d.find(".shop-now").attr('href')
+                <% else %>
+                    var x = a.target
+                    var d = $(x).closest(".advt-box")
+                    var shop_now_url = d.find(".shop-now").attr('href')
+                <% end %>
+
+                if (shop_now_url == undefined)
+                {
+                    var shop_now_url = $(".item_details.active").find(".shop-now").attr('href')
+                }
+
+                window.open(shop_now_url, "_blank")
+                return false;
+            }
+        });
+
     });
+
+    function set_logo_url(that, class_name)
+    {
+        var href_val = $(that).find("."+class_name).attr('href')
+
+        var image_src = $(that).find(".vendor_image_src").attr('src')
+
+        if (href_val == "" || href_val == undefined)
+        {
+            href_val = $("."+class_name).attr('href')
+        }
+        $(".logo").find('a img').attr('src', image_src)
+        $(".logo").find('a.vendor_image').attr('href', href_val)
+    }
 </script>
-
-<% if @suitable_ui_size != "300_600" %>
-    <script type="application/javascript">
-        function next_arrow_check()
-        {
-            var active_div = $(".active")
-            var next_div = $(active_div).next()
-            console.log(next_div)
-            $(".slider_plannto").hide()
-            $(".slider_plannto").removeClass("active")
-
-            if ($(next_div).attr("class") != "next" && next_div.length != 0)
-            {
-                $(next_div).show()
-                $(next_div).addClass("active")
-            }
-            else
-            {
-                $(".slider_plannto").first().show()
-                $(".slider_plannto").first().addClass("active")
-            }
-        }
-
-        $(".next").click(function(event)
-        {
-            stop_sliding = true
-            next_arrow_check()
-            event.preventDefault();
-            return false;
-        });
-
-        $(".prev").click(function(event)
-        {
-            stop_sliding = true
-            prev_arrow_check()
-            event.preventDefault();
-            return false;
-        });
-
-        function prev_arrow_check()
-        {
-            var active_div = $(".active")
-            var prev_div = $(active_div).prev()
-            $(".slider_plannto").hide()
-            $(".slider_plannto").removeClass("active")
-
-            if ($(prev_div).attr("class") != "prev" && prev_div.length != 0)
-            {
-                $(prev_div).show()
-                $(prev_div).addClass("active")
-            }
-            else
-            {
-                $(".slider_plannto").last().show()
-                $(".slider_plannto").last().addClass("active")
-            }
-        }
-    </script>
-<% end %>

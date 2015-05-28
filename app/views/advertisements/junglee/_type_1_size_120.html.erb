@@ -1,86 +1,62 @@
 <div class="advt-block">
-  <div class="advt-300">
-    <!--<div class="planntoadlogo">
-      <%#= link_to image_tag("#{configatron.root_image_path}static/images/logosc.png", :width => "12px"), configatron.hostname + "/opt_out", :target => "_blank" %>
-    </div>
-  -->
+  <div class="advt-120">
     <% if @item_details.count != 0 %>
-        <div class="">
-          <ul id="foo3" height="190px;">
-            <span id="leftarrow" class="left" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> << </span>
-            <% @item_details.each_with_index do |item_detail, indx| %>
-                <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
-                <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
-                <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
-                <% shop_now_text = @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
+        <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_image_url %>" alt=""></a>
+  <div id="pager2" class="pager">
+          <% [*1..@item_details.count].each do |each_loop| %>
+              <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
+          <% end %>
+        </div>
 
-                <span style="float:left;margin: 0 0px;" class="slider_plannto" id="<%= indx + 1 %>">
-                <li class="item_details" id="item_detail_<%= indx + 1 %>">
-                  <div class="advt-box">
-                    <div class="product-container">
-                      <div class="product-img-top" style="float:left;">
-                        <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag_from_item_detail_other(item_detail, @current_vendor['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
-                          <!-- <img src="<%#= get_image_url(item_detail, @current_vendor['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
-                        </a>
-                      </div>
-                      <div class="product-txt-right">
-                        <img class="vendor_image_src" src="<%= @current_vendor['imageurl'] %>" alt="" style="margin-top:10px;" width="80px">
+        </div>
+      
+        <% @item_details.each_with_index do |item_detail, indx| %>
+            <% ad_url = get_ad_url(item_detail.id, @impression_id, @ref_url, @sid, params[:ads_id], params) %>
+            <% shop_now_url = @click_url.blank? ? ad_url : (@click_url+ad_url) %>
 
-                        <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="mrpprice" style="text-decoration: line-through;margin-top: 90px;color: #555 !important"><%= prettify_price(item_detail) %></p>
-                          <p class="price" style="margin-top: 0px; !important!"><%= prettify_price(item_detail) %></p>
-                        </a>
+            <div class="item_details" id="item_detail_<%= indx + 1 %>">
+              <div class="advt-box">
+                <div class="product-container">
+                  <a href="<%= shop_now_url %>" target="_blank" class="">
+                     <h3 class="product-title"><%= item_detail.title.to_s.truncate(57) %></h3>
+                     <p class="price"><%= prettify_price(item_detail) %></p>
+                  </a>
 
-                        <p class="btn">
-                          <a href="<%= shop_now_url %>" target="_blank" class="shop-now"><%= shop_now_text %></a>
-                        </p>
 
-                      </div>
-                    </div>
+                  <div class="product-img">
+                    <a href="<%= shop_now_url %>" target="_blank">
+                      <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium), 100 , 100, "original").html_safe %>
+                      <!-- <img src="<%#= item_detail.item.image_url %>" alt="" width="100px" height="100px"> -->
+                    </a>
                   </div>
                   
-                </li>
-                </span>
-            <% end %>
-            <span id="rightarrow" class="right" style="font-size:14px;color: lightsalmon; cursor: pointer;margin-left:2px;display:block;"> &gt;&gt; </span>
-          </ul>
-        </div>
-        <div class="clearfix"></div>
-        <!--<a id="prev3" class="prev" href="#">&lt;</a>
-        <a id="next3" class="next" href="#">&gt;</a>
-       -->
 
+                  <p class="btn">
+                    <a href="<%= shop_now_url %>" target="_blank" class="shop-now">
+                      <%= @vendor_detail.action_text.blank? ? "Shop Now" : @vendor_detail.action_text %>
+                    </a>
+                  </p>
+                </div>
+                <div class="product-extra-desc"><p>
+                  <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['default_text'], 45, shop_now_url) %>
+                </p></div>
+              </div>
+              <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.vendor_id.to_i]['imageurl'] %>" alt="" style="display: none;">
+            </div>
+        <% end %>
     <% else %>
         No Product Found
     <% end %>
 
   </div>
-  <!-- end of advt-300 -->
-</div>
-<!-- end of advt-block -->
+  <!-- end of advt-120 -->
+</div><!-- end of advt-block -->
+
 
 <style type="text/css">
     .pager a {
         margin: 0px !important;
     }
-
+    a {color: inherit;}
     .product-container a {text-decoration: none !important;}
-
-    .advt-box .product-container h3 {
-        font-size: 14px !important;
-    }
-
-    #rightarrow:hover {
-        color: #D70707 !important;
-    }
-
-    .type_2_description {
-        padding: 3px;
-
-    }
-
-    .foo3, .slider_plannto {
-        height: 198px !important;
-    }
 </style>
