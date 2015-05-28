@@ -2631,6 +2631,38 @@ end
     return item_id, itemdetails_rand_id
   end
 
+  def self.get_random_id_from_item_ids(ad, item_ids, vendor_id=nil)
+    item_ids_arr = item_ids.to_s.split(",")
+    alt_item_ids = item_ids.to_s.gsub(",", "_")
+    itemdetails_rand_id = ""
+
+    # item = item_ids.blank? ? nil : Item.where(:id => item_ids.to_s.split(",")).first
+    vendor_ids = ad.blank? ? [vendor_id] : [ad.vendor_id]
+    vendor_ids = vendor_ids.compact
+    if !alt_item_ids.blank?
+      itemdetails_count = $redis.get("itemdetails_count:#{alt_item_ids}")
+
+      if itemdetails_count.blank?
+        items = Item.where(:id => item_ids_arr)
+        location_ids = items.select {|each_val| each_val.is_a?(City)}.map(&:id)
+        cars = items.select {|each_val| each_val.is_a?(Car)}
+        car_ids = cars.map(&:id)
+
+        query = "select count(*) as count from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where idom1.item_id in (#{location_ids.map(&:inspect).join(',')}) and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')})) and vendor_id in (#{vendor_ids.map(&:inspect).join(',')}))"
+        item_details_count = ItemDetailOther.find_by_sql(query).last.count rescue nil
+        if !item_details_count.blank?
+          $redis.set("itemdetails_count:#{alt_item_ids}", item_details_count)
+          $redis.expire("itemdetails_count:#{alt_item_ids}", 3.hours)
+        end
+      end
+
+      itemdetails_count = itemdetails_count.to_i
+
+      itemdetails_rand_id = itemdetails_count == 0 ? "" : [*1..itemdetails_count].sample
+    end
+    return itemdetails_rand_id
+  end
+
   def self.get_fashion_item_name_random(item_id=nil)
     item_id = item_id.to_i
     sample_int = [*1..100].sample
