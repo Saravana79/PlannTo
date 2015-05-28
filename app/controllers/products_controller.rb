@@ -539,7 +539,7 @@ class ProductsController < ApplicationController
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl)
     else
       if params[:is_test] != "true"
-        @impression_id = AddImpression.add_impression_to_resque("pricecomparision", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
+        @impression_id = AddImpression.add_impression_to_resque("elec_widget_1", @item, url, current_user.blank? ? nil : current_user.id, request.remote_ip, nil, itemsaccess, url_params,
                                                                cookies[:plan_to_temp_user_id], nil, nil, nil)
       end
     end
