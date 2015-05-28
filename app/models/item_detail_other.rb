@@ -127,4 +127,17 @@ class ItemDetailOther < ActiveRecord::Base
     end
   end
 
+  def self.get_item_detail_others_from_items(item_id)
+    p item_id
+    item_ids = item_id.to_s.split(",")
+    items = Item.where(:id => item_ids)
+    location_ids = items.select {|each_val| each_val.is_a?(City)}.map(&:id)
+    cars = items.select {|each_val| each_val.is_a?(Car)}
+    car_ids = cars.map(&:id)
+
+    query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where idom1.item_id in (#{location_ids.map(&:inspect).join(',')}) and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')})))"
+    p item_details = ItemDetailOther.find_by_sql(query)
+    return item_details, cars.first
+  end
+
 end

@@ -281,10 +281,7 @@ class AdvertisementsController < ApplicationController
     item_ids = item_id.to_s.split(",")
 
     # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
-    # TODO: hot coded value
-    @item = Car.first
-    @item_details = ItemDetailOther.first(6)
-    @sliced_item_details = @item_details.each_slice(2)
+    @item_details, @item = ItemDetailOther.get_item_detail_others_from_items(params[:item_id])
 
     @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, [@item], @suitable_ui_size)
 
