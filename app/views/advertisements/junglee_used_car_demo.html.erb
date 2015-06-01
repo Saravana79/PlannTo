@@ -28,7 +28,7 @@
     <div class="search_form">
       <%= form_for :search, :url => "/advertisements/junglee_used_car_demo", :html => {:method => 'get'} do |search_form| %>
           City : <%= select_tag :city_id, options_for_select([["Bangalore", "29574"], ["New Delhi", "29758"], ["Chennai", "29673"], ["Hyderabad", "29461"], ["Mumbai", "29858"]], params[:city_id]) %>
-          Car : <%= select_tag :car_ids, options_for_select([["Maruti Swift", "581,582,583,584,585,586"], ["Hyundai i10", "332,333,334,335,336,337,338,339,340,341"], ["Honda City", "12089,12090,12091,12092,12093,12094,12095,12096,12097,12098,12099,12100,12101"], ["Volkswagen Polo", "1018,1019,1020,1021,1022,1023,1024,1025,1026,6184,9995"]], params[:car_ids]) %>
+          Car : <%= select_tag :car_ids, options_for_select([["Hyundai i10", "332,333,334,335,336,337,338,339,340,341"], ["Honda City", "12089,12090,12091,12092,12093,12094,12095,12096,12097,12098,12099,12100,12101"], ["Volkswagen Polo", "1018,1019,1020,1021,1022,1023,1024,1025,1026,6184,9995"]], params[:car_ids]) %>
           <%= search_form.submit "Go" %>
       <% end %>
     </div>
