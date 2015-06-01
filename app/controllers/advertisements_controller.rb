@@ -295,7 +295,7 @@ class AdvertisementsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        return render :json => {:success => true, :html => render_to_string("advertisements/show_fashion_ads.html.erb", :layout => false)}, :callback => params[:callback]
+        return render :json => {:success => true, :html => render_to_string("advertisements/show_junglee_car_ads.html.erb", :layout => false)}, :callback => params[:callback]
       }
       format.html { return render "show_junglee_car_ads.html.erb", :layout => false }
     end
@@ -390,6 +390,21 @@ class AdvertisementsController < ApplicationController
     params[:more_vendors] ||= false
     params[:is_test] ||= "true"
     params[:item_id] ||= ""
+    render :layout => false
+  end
+
+  def junglee_used_car_demo
+    params[:ref_url] ||= ""
+    params[:page_type] ||= "type_1"
+    params[:ads_id] ||= 52
+    params[:more_vendors] ||= false
+    params[:is_test] ||= "true"
+    params[:city_id] ||= "29673"
+    params[:car_ids] ||= "581,582,583,584,585,586"
+    item_ids = params[:city_id].to_s.split(",") + params[:car_ids].to_s.split(",")
+    item_ids = item_ids.compact.uniq.join(",")
+    params[:item_id] = item_ids
+    p params[:item_id]
     render :layout => false
   end
 
@@ -535,7 +550,7 @@ class AdvertisementsController < ApplicationController
 
     if !params[:item_id].blank? && params[:fashion_id].blank?
       ad = Advertisement.where(:id => params[:ads_id]).first
-      if ad.id == 52
+      if !ad.blank? && ad.id == 52
         random_id = Item.get_random_id_from_item_ids(ad, params[:item_id])
 
         if random_id.blank?

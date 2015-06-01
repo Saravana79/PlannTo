@@ -147,6 +147,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
           count = 0
         end
 
+        image_url = image_url.to_s.gsub("._AA300_", "")
         filename = image_url.to_s.split("/").last
         filename = filename == "noimage.jpg" ? nil : filename
 

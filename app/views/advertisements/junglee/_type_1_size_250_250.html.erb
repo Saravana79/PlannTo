@@ -33,17 +33,17 @@
                     <div class="product-container">
                       <div style="padding: 2px 10px;">
                          <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <h3><%= item_detail.ItemName.to_s.truncate(62) %></h3></a>
+                          <h3><%= item_detail.title.to_s.truncate(62) %></h3></a>
                       </div>
                       <div class="product-img-left">
                         <a href="<%= shop_now_url %>" target="_blank">
-                          <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 112, '').html_safe %>
+                          <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium), 112 , "", "original").html_safe %>
                           <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" onerror="this.error=null;this.src='<%#=@item.base_item_image_url(:medium)%>';" alt="" width="132px"> -->
                         </a>
                       </div>
                       <div class="product-txt-right">
                         <a href="<%= shop_now_url %>" target="_blank" class="">
-                          <p class="price"><%= prettify(item_detail) %></p>
+                          <p class="price"><%= prettify_price(item_detail) %></p>
                         </a>
 
                         <p class="btn">
@@ -57,11 +57,11 @@
                     <div class="product-txt-desc">
                       <p>
                         <%#= truncate_without_dot(get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text']), 90) %>
-                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 90, shop_now_url) %>
+                        <%= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['default_text'], 90, shop_now_url) %>
                       </p>
                     </div>
                   </div>
-                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.vendor_id.to_i]['imageurl'] %>" alt="" style="display: none;">
                 </li>
             <% end %>
           </ul>
