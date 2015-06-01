@@ -613,7 +613,6 @@ class FeedUrl < ActiveRecord::Base
       article.video = true
     end
 
-
     article.sub_type = "Others" if article.sub_type.blank?
 
     if article.sub_type == "Others"
@@ -624,33 +623,46 @@ class FeedUrl < ActiveRecord::Base
     end
     article_content = article
 
-    search_params = {}
-    search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)
+    domain = Item.get_host_without_www(feed_url.url)
 
-    results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(search_params)
-    selected_list = selected_list.uniq
-    auto_save = "false" if selected_list.blank?
-    auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count < 2
-
-    actual_title = feed_url.created_at < 2.weeks.ago ? feed_url.title : ""
-
-    if auto_save == "false" && (force_default_save || !actual_title.blank?)
-      if !selected_list.blank? && article.sub_type == "Others"
-        auto_save = "true"
-      else
-        actual_title = feed_url.title if actual_title.blank?
-        host_without_www = Item.get_host_without_www(article.url)
-        selected_list = FeedUrl.get_selected_list_for_old_data(actual_title, host_without_www)
-        selected_list = selected_list.compact.uniq
-        auto_save = "true" if !selected_list.blank?
-      end
+    is_valid_for_auto_used_car_check = false
+    if ["vicky.in"].include?(domain)
+      is_valid_for_auto_used_car_check = FeedUrl.check_auto_used_car(url)
     end
 
-    if auto_save == "true" && !selected_list.blank?
-      old_count = selected_list.count
-      res_with_type = {}; results.each {|result| res_with_type.merge!(result[:id] => result[:type])}
-      selected_list.delete_if {|each_val| res_with_type[each_val] == "Manufacturer"}
-      auto_save = "false" if selected_list.count != old_count
+    if is_valid_for_auto_used_car_check == true
+      underscored_domain = domain.to_s.gsub(".", "_")
+      function_name = "check_and_get_article_item_ids_#{underscored_domain}"
+      auto_save, selected_list, score = Item.send(function_name, url)
+    else
+      search_params = {}
+      search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)
+
+      results, selected_list, list_scores, auto_save = Product.call_search_items_by_relavance(search_params)
+      selected_list = selected_list.uniq
+      auto_save = "false" if selected_list.blank?
+      auto_save = "false" if article.sub_type == "Comparisons" && selected_list.count < 2
+
+      actual_title = feed_url.created_at < 2.weeks.ago ? feed_url.title : ""
+
+      if auto_save == "false" && (force_default_save || !actual_title.blank?)
+        if !selected_list.blank? && article.sub_type == "Others"
+          auto_save = "true"
+        else
+          actual_title = feed_url.title if actual_title.blank?
+          host_without_www = Item.get_host_without_www(article.url)
+          selected_list = FeedUrl.get_selected_list_for_old_data(actual_title, host_without_www)
+          selected_list = selected_list.compact.uniq
+          auto_save = "true" if !selected_list.blank?
+        end
+      end
+
+      if auto_save == "true" && !selected_list.blank?
+        old_count = selected_list.count
+        res_with_type = {}; results.each {|result| res_with_type.merge!(result[:id] => result[:type])}
+        selected_list.delete_if {|each_val| res_with_type[each_val] == "Manufacturer"}
+        auto_save = "false" if selected_list.count != old_count
+      end
     end
 
     if auto_save == "true"
@@ -670,6 +682,11 @@ class FeedUrl < ActiveRecord::Base
         end
         feed_url.update_attributes!(:status => 1, :default_status => 5, :created_type => created_type, :created_by => 1) #TODO: auto save status as 5
       end
+    elsif is_valid_for_auto_used_car_check ==  true
+      title = feed_url.title
+      title_score = title.split(" ").count / 3 * 0.1
+      total_score = score + title_score
+      feed_url.update_attributes(:score => total_score) if total_score > 0
     else
       title = feed_url.title
       result = results[0]
@@ -679,6 +696,15 @@ class FeedUrl < ActiveRecord::Base
       feed_url.update_attributes(:score => total_score) if total_score > 0
     end
     auto_save
+  end
+
+  def self.check_auto_used_car(url)
+    is_valid_for_auto_used_car_check = false
+    url = url.to_s.downcase
+    if url.include?("used") || url.include?("second-hand")
+      is_valid_for_auto_used_car_check = true
+    end
+    is_valid_for_auto_used_car_check
   end
 
   def self.get_selected_list_for_old_data(title_for_check, host_without_www)

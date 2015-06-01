@@ -2763,6 +2763,84 @@ end
     item = @items.results.first
   end
 
+  def self.check_and_get_article_item_ids_vicky_in(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      title = node.at_css("#main .row h1").content.to_s.squish rescue ""
+
+      city = Item.get_city_from_title(title)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      item = nil
+      score = 0
+      search_type = Product.search_type(nil)
+      term = title.to_s
+
+      removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
+                          "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
+                          "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
+                          "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used", "for", "sale"]
+      term = term.gsub("-","")
+      term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+      # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+      search_type_for_data = search_type.first if search_type.is_a?(Array)
+      @items = Sunspot.search(search_type) do
+        keywords term do
+          minimum_match 1
+        end
+        with :status, [1,2,3]
+        order_by :score,:desc
+        order_by :orderbyid , :asc
+        paginate(:page => 1, :per_page => 5)
+      end
+
+      items = @items.results
+
+      hits = @items.hits
+      hits.each_with_index do |each_hit, indx|
+        if each_hit.score > 0.3
+          score = each_hit.score
+          item = items[indx]
+          group = item.group rescue nil
+          if !group.blank?
+            item = group
+          end
+        end
+      end
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.get_city_from_title(title)
+    location = FeedUrl.get_value_from_pattern(title, "in<location>,", "<location>")
+    location = location.to_s.squish
+
+    @items = Sunspot.search([City,Place]) do
+      keywords location do
+        minimum_match 1
+      end
+      order_by :score,:desc
+      order_by :orderbyid , :asc
+      paginate(:page => 1, :per_page => 5)
+    end
+
+    city = @items.results.first rescue nil
+  end
+
   private
 
   def create_item_ad_detail

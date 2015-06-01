@@ -42,7 +42,7 @@ class FeedsController < ApplicationController
 
     # sort =
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
-    intial_condition = condition
+    initial_condition = condition
     unless params[:search].blank?
       #condition = "1=1"
       condition = condition + " and category like '%#{params[:search][:category]}%'" unless params[:search][:category].blank?
@@ -55,11 +55,11 @@ class FeedsController < ApplicationController
     end
 
     if params[:commit] == "Clear"
-      condition = intial_condition
+      condition = initial_condition
       params[:search] = {}
     elsif params[:commit] != "Filter"
       params[:search] ||= {:status => 0}
-      condition = condition == intial_condition ? "created_at < '#{params[:page_loaded_time]}' and status = 0" : condition
+      condition = condition == initial_condition ? "created_at < '#{params[:page_loaded_time]}' and status = 0" : condition
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 25, :total_entries => 5000)
@@ -99,7 +99,7 @@ class FeedsController < ApplicationController
     end
     # sort =
     condition = params[:page_loaded_time].blank? ? "1=1" : "created_at < '#{params[:page_loaded_time]}' "
-    intial_condition = condition
+    initial_condition = condition
     unless params[:search].blank?
       condition = condition + " and source = '#{params[:search][:source]}'" unless params[:search][:source].blank?
       condition = condition + " and title like '%#{title}%'" unless title.blank?
@@ -108,11 +108,11 @@ class FeedsController < ApplicationController
     condition = condition + " and status = 0"
 
     if params[:commit] == "Clear"
-      condition = intial_condition
+      condition = initial_condition
       params[:search] = {}
     elsif params[:commit] != "Filter"
       params[:search] ||= {:status => 0}
-      condition = condition == intial_condition ? "status = 0" : condition
+      condition = condition == initial_condition ? "status = 0" : condition
     end
 
     @feed_urls = FeedUrl.where(condition).order("#{params[:feed_urls_sort_by]} #{params[:feed_urls_order_by]}").paginate(:page => params[:page], :per_page => 50, :total_entries => 5000)

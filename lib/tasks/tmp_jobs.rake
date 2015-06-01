@@ -107,7 +107,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
 
       if item_detail_other.blank?
         item_detail_other = ItemDetailOther.new(:title => title, :price => price, :url => url, :status => status, :ad_detail1 => ad_detail1, :ad_detail2 => ad_detail2,
-                                                :ad_detail3 => ad_detail3, :ad_detail4 => ad_detail4, :added_date => Date.today, :last_modified_date => Date.today)
+                                                :ad_detail3 => ad_detail3, :ad_detail4 => ad_detail4, :added_date => Date.today, :last_modified_date => Date.today, :vendor_id => 73017 )
         item_detail_other.save!
 
         @items = Sunspot.search([City]) do
