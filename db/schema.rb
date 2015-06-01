@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150528060332) do
+ActiveRecord::Schema.define(:version => 20150601153129) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -735,6 +735,7 @@ ActiveRecord::Schema.define(:version => 20150528060332) do
   create_table "item_detail_other_mappings", :force => true do |t|
     t.integer "item_detail_other_id"
     t.integer "item_id"
+    t.integer "itemtype_id"
   end
 
   create_table "item_detail_others", :force => true do |t|

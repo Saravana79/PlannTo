@@ -125,7 +125,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
           mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => item.id)
         end
 
-        cars = Sunspot.search([Car]) do
+        cars = Sunspot.search([Car,Bike]) do
           keywords search_text do
             minimum_match 1
           end
@@ -137,7 +137,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         car = cars.results.first rescue nil
 
         if !car.blank?
-          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id)
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id, :itemtype_id => car.itemtype_id)
         end
 
         p "Processing count => #{count}"
