@@ -626,12 +626,13 @@ class FeedUrl < ActiveRecord::Base
     domain = Item.get_host_without_www(feed_url.url)
 
     is_valid_for_auto_used_car_check = false
-    if ["vicky.in"].include?(domain)
+    if ["vicky.in", "carwale.com", "classifieds.team-bhp.com", "autonagar.com", "bikewale.com", "cartrade.com", "carsndeals.com", "mycarhelpline.com"].include?(domain)
       is_valid_for_auto_used_car_check = FeedUrl.check_auto_used_car(url)
     end
 
     if is_valid_for_auto_used_car_check == true
-      underscored_domain = domain.to_s.gsub(".", "_")
+      article.sub_type = ArticleCategory::ReSale
+      underscored_domain = domain.to_s.gsub(".", "_").gsub("-", "_")
       function_name = "check_and_get_article_item_ids_#{underscored_domain}"
       auto_save, selected_list, score = Item.send(function_name, url)
     else

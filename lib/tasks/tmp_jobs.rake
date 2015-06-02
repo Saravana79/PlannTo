@@ -72,6 +72,8 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
       doc = Nokogiri::XML(open(url))
       node = doc.elements.first
 
+      itemtype_str = node.at_css("#mainTop-1").content.to_s.squish.downcase rescue ""
+
       table = node.at_css(".centerColumn #center-5 table")
       title = node.at_css(".productTitle").content.squish rescue ""
       price = node.at_css(".whole-price").content.squish rescue ""
@@ -110,7 +112,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
                                                 :ad_detail3 => ad_detail3, :ad_detail4 => ad_detail4, :added_date => Date.today, :last_modified_date => Date.today, :vendor_id => 73017 )
         item_detail_other.save!
 
-        @items = Sunspot.search([City]) do
+        places = Sunspot.search([City,Place]) do
           keywords location do
             minimum_match 1
           end
@@ -119,10 +121,16 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
           paginate(:page => 1, :per_page => 5)
         end
 
-        item = @items.results.first rescue nil
+        city = places.results.first rescue nil
 
-        if !item.blank?
-          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => item.id)
+        score = places.hits.first.score.to_f rescue 0
+
+        city = nil if score < 0.3
+
+        status = ItemDetailOther::INVALID_STATUS if city.blank?
+
+        if !city.blank?
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => city.id, :itemtype_id => city.itemtype_id)
         end
 
         cars = Sunspot.search([Car,Bike]) do
@@ -135,9 +143,24 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         end
 
         car = cars.results.first rescue nil
+        if !car.blank?
+          car_group = car.group
+          itemtype_id = car.itemtype_id
+        end
+        car = car_group if !car_group.blank?
+
+        score = cars.hits.first.score.to_f rescue 0
+
+        car = nil if score < 0.3
+
+        status = ItemDetailOther::INVALID_STATUS if car.blank?
 
         if !car.blank?
-          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id, :itemtype_id => car.itemtype_id)
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id, :itemtype_id => itemtype_id)
+        end
+
+        if status != 1
+          item_detail_other.update_attributes(:status => status)
         end
 
         p "Processing count => #{count}"

@@ -2771,49 +2771,17 @@ end
       node = doc.elements.first
 
       title = node.at_css("#main .row h1").content.to_s.squish rescue ""
+      location = FeedUrl.get_value_from_pattern(title, "in<location>,", "<location>")
+      location = location.to_s.squish
 
-      city = Item.get_city_from_title(title)
+      city = Item.get_city_from_location(location)
 
       if city.blank?
         return false, [], 0
       end
 
-      item = nil
-      score = 0
-      search_type = Product.search_type(nil)
-      term = title.to_s
-
-      removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
-                          "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
-                          "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
-                          "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used", "for", "sale"]
-      term = term.gsub("-","")
-      term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
-      # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
-      search_type_for_data = search_type.first if search_type.is_a?(Array)
-      @items = Sunspot.search(search_type) do
-        keywords term do
-          minimum_match 1
-        end
-        with :status, [1,2,3]
-        order_by :score,:desc
-        order_by :orderbyid , :asc
-        paginate(:page => 1, :per_page => 5)
-      end
-
-      items = @items.results
-
-      hits = @items.hits
-      hits.each_with_index do |each_hit, indx|
-        if each_hit.score > 0.3
-          score = each_hit.score
-          item = items[indx]
-          group = item.group rescue nil
-          if !group.blank?
-            item = group
-          end
-        end
-      end
+      title = title.to_s.gsub(location, "")
+      item = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
@@ -2825,10 +2793,7 @@ end
     return auto_save, selected_list, score
   end
 
-  def self.get_city_from_title(title)
-    location = FeedUrl.get_value_from_pattern(title, "in<location>,", "<location>")
-    location = location.to_s.squish
-
+  def self.get_city_from_location(location)
     @items = Sunspot.search([City,Place]) do
       keywords location do
         minimum_match 1
@@ -2839,6 +2804,306 @@ end
     end
 
     city = @items.results.first rescue nil
+
+    score = @items.hits.first.score.to_f rescue 0
+    city = nil if score < 0.3
+
+    city
+  end
+
+  def self.get_item_from_title(title)
+    search_type = Product.search_type(nil)
+
+    removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
+                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
+                        "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
+                        "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used", "for", "sale",
+                        "on"]
+    term = title.gsub("-","")
+    term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+    # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
+    search_type_for_data = search_type.first if search_type.is_a?(Array)
+    @items = Sunspot.search(search_type) do
+      keywords term do
+        minimum_match 1
+      end
+      with :status, [1,2,3]
+      order_by :score,:desc
+      order_by :orderbyid , :asc
+      paginate(:page => 1, :per_page => 5)
+    end
+
+    item = @items.results.first rescue nil
+    item_group = item.group if !item.blank?
+    item = item_group if !item_group.blank?
+
+    score = @items.hits.first.score.to_f rescue 0
+
+    item = nil if score < 0.3
+    item
+  end
+
+  def self.check_and_get_article_item_ids_carwale_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      title = node.at_css('.breadcrumb li.current').content.squish rescue ""
+      location = FeedUrl.get_value_from_pattern(title, "in<location>", "<location>")
+      location = location.to_s.squish
+
+      city = Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_get_article_item_ids_classifieds_team_bhp_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      begin
+        table_ele = node.elements.first
+        title_ele = table_ele.elements.first
+        title = title_ele.values[1].to_s.squish
+      rescue Exception => e
+        title = ""
+        p "Error"
+      end
+
+      if title.blank?
+        return false, [], 0
+      end
+
+      location = FeedUrl.get_value_from_pattern(title, "sale<location>", "<location>")
+      location = location.to_s.squish
+
+      city = location.blank? ? "" : Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+
+      if title.blank?
+        return false, [], 0
+      end
+
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_get_article_item_ids_autonagar_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      main_elements = node.at_css(".vehdet_midwrap").elements rescue []
+      location = ""
+      title = ""
+      main_elements.each do |ele|
+        next if ele.name != "p"
+        content = ele.content.to_s.squish.downcase rescue ""
+
+        if content.include?("city:")
+          location = content.gsub("city:", "").squish rescue ""
+        elsif content.include?("vehicle:")
+          title = content.gsub("vehicle:", "").squish rescue ""
+        end
+      end
+
+      if title.blank?
+        return false, [], 0
+      end
+
+      city = location.blank? ? "" : Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_get_article_item_ids_bikewale_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      title = node.at_css('.margin-top10 h1').content.squish rescue ""
+      location = node.at_css('.text-highlight').content.squish rescue ""
+      location = FeedUrl.get_value_from_pattern(location, "at<location>,", "<location>")
+      location = location.to_s.squish
+
+      city = location.blank? ? "" : Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+
+      if title.blank?
+        return false, [], 0
+      end
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_get_article_item_ids_cartrade_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      title = node.at_css('.v_details h1').content.squish rescue ""
+      location_ele = node.at_css('.v_details .widgetBox tr') rescue ""
+      location = location_ele.elements.last.content.to_s.squish rescue ""
+
+      city = location.blank? ? "" : Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+
+      if title.blank?
+        return false, [], 0
+      end
+
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_get_article_item_ids_carsndeals_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      title = node.at_css("#ContentPlaceHolder1_lblimg").content rescue ""
+      title = title.gsub(/\(.*/, "") rescue ""
+      location = node.at_css('#ContentPlaceHolder1_lblcity').content rescue ""
+
+      city = location.blank? ? "" : Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+
+      if title.blank?
+        return false, [], 0
+      end
+
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_get_article_item_ids_mycarhelpline_com(url)
+    auto_save = false
+    selected_list = []
+    begin
+      doc = Nokogiri::XML(open(url))
+      node = doc.elements.first
+
+      title_ele = node.elements.first.elements[3] rescue []
+      title = title_ele.content.to_s.squish rescue ""
+
+      location = FeedUrl.get_value_from_pattern(title, "in<location>@", "<location>")
+      location = location.to_s.squish rescue ""
+
+      city = location.blank? ? "" : Item.get_city_from_location(location)
+
+      if city.blank?
+        return false, [], 0
+      end
+
+      title = title.to_s.gsub(location, "")
+
+      if title.blank?
+        return false, [], 0
+      end
+
+      item = Item.get_item_from_title(title)
+
+      if !city.blank? && !item.blank?
+        selected_list = [city.id, item.id].compact
+        auto_save = true
+      end
+    rescue Exception => e
+      auto_save = false
+    end
+    return auto_save, selected_list, score
   end
 
   private

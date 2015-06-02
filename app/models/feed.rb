@@ -171,7 +171,7 @@ class Feed < ActiveRecord::Base
     news = ['launch', 'release', 'online', 'available', 'announce', 'official','upcoming','unveiled','leak',' arrive','rumor','on sale','news','for rs','spotted']
     specs = [' spec',' 3d','price in india']
     acces = [' case','shells','covers','charger','accessor']
-    re_sales = ['used cars']
+    re_sales = ['used car', 'used bike', 'resale']
     how_to.each do |how|
       return ArticleCategory::HOW_TO if title_words.scan(how).size > 0
     end

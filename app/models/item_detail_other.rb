@@ -3,6 +3,10 @@ class ItemDetailOther < ActiveRecord::Base
   has_one :image, as: :imageable
   belongs_to :vendor
 
+  VALID_STATUS = 1
+  EXPIRED_STATUS = 2
+  INVALID_STATUS = 3
+
   attr_accessor :offer
 
   def self.update_item_detail_other_for_junglee(url)
