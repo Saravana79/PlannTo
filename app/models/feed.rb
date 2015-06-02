@@ -100,60 +100,64 @@ class Feed < ActiveRecord::Base
     sources_list.default = "Others"
 
     @impression_missing.each do |each_record|
-      status = 0
-      status_val = {"1" => 1, "3" => 2, "4" => 3}
-      status_val.default = 0
+      begin
+        status = 0
+        status_val = {"1" => 1, "3" => 2, "4" => 3}
+        status_val.default = 0
 
-      status = status_val[each_record.status.to_s] unless each_record.status.blank?
+        status = status_val[each_record.status.to_s] unless each_record.status.blank?
 
-      article_content = ArticleContent.find_by_url(each_record.hosted_site_url)
-      status = 1 unless article_content.blank?
+        article_content = ArticleContent.find_by_url(each_record.hosted_site_url)
+        status = 1 unless article_content.blank?
 
-      source = ""
-      if (each_record.hosted_site_url =~ URI::regexp).blank?
         source = ""
-        status = 3
-      else
-        begin
-          source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
-        rescue Exception => e
-          source = Addressable::URI.parse(each_record.hosted_site_url).host.gsub("www.", "")
-        end
-      end
-
-      # sources_list = Rails.cache.read("sources_list_details")
-      category = sources_list[source]["categories"]
-
-      check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
-
-      if check_exist_feed_url.blank?
-
-        title, description, images, page_category = Feed.get_feed_url_values(each_record.hosted_site_url)
-
-        url_for_save = each_record.hosted_site_url
-        if url_for_save.include?("youtube.com")
-          url_for_save = url_for_save.gsub("watch?v=", "video/")
+        if (each_record.hosted_site_url =~ URI::regexp).blank?
+          source = ""
+          status = 3
+        else
+          begin
+            source = URI.parse(URI.encode(URI.decode(each_record.hosted_site_url))).host.gsub("www.", "")
+          rescue Exception => e
+            source = Addressable::URI.parse(each_record.hosted_site_url).host.gsub("www.", "")
+          end
         end
 
-        # remove characters after come with space + '- or |' symbols
-        title = title.to_s.gsub(/\s(-|\|).+/, '')
-        title = title.blank? ? "" : title.to_s.strip
+        # sources_list = Rails.cache.read("sources_list_details")
+        category = sources_list[source]["categories"]
 
-        @feed_url = FeedUrl.new(:url => url_for_save, :title => title.to_s.strip, :status => status, :source => source,
-                                   :category => category, :summary => description, :images => images,
-                                   :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count, :additional_details => page_category)
+        check_exist_feed_url = FeedUrl.where(:url => each_record.hosted_site_url).first
 
-        begin
-          @feed_url.save!
-          feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, admin_user, nil)
-          feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
-        rescue Exception => e
-          p e
+        if check_exist_feed_url.blank?
+
+          title, description, images, page_category = Feed.get_feed_url_values(each_record.hosted_site_url)
+
+          url_for_save = each_record.hosted_site_url
+          if url_for_save.include?("youtube.com")
+            url_for_save = url_for_save.gsub("watch?v=", "video/")
+          end
+
+          # remove characters after come with space + '- or |' symbols
+          title = title.to_s.gsub(/\s(-|\|).+/, '')
+          title = title.blank? ? "" : title.to_s.strip
+
+          @feed_url = FeedUrl.new(:url => url_for_save, :title => title.to_s.strip, :status => status, :source => source,
+                                  :category => category, :summary => description, :images => images,
+                                  :feed_id => self.id, :published_at => each_record.created_at, :priorities => self.priorities, :missing_count => each_record.count, :additional_details => page_category)
+
+          begin
+            @feed_url.save!
+            feed_url, article_content = ArticleContent.check_and_update_mobile_site_feed_urls_from_feed(@feed_url, admin_user, nil)
+            feed_url.auto_save_feed_urls(false,0,"auto") if feed_url.status == 0
+          rescue Exception => e
+            p e
+          end
+
+        else
+          new_count = each_record.count
+          check_exist_feed_url.update_attributes(:missing_count => new_count)
         end
-        
-      else
-        new_count = each_record.count
-        check_exist_feed_url.update_attributes(:missing_count => new_count)
+      rescue Exception => e
+        p "Error"
       end
     end
     self.update_attributes(:last_updated_at => Time.zone.now)
