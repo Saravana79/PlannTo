@@ -1131,6 +1131,9 @@ class ProductsController < ApplicationController
     params[:ref_url] = url
     params[:ref_url] = "" if params[:ref_url].blank?
     params[:vendor_ids] ||= ""
+    params[:is_test] ||= "false"
+
+    params[:is_test] = "false" if params[:ref_url].to_s.include?("gizbot.com")
 
     cache_params = ""
     if !params[:item_ids].blank?
