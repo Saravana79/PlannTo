@@ -627,14 +627,14 @@ class FeedUrl < ActiveRecord::Base
 
     is_valid_for_auto_used_car_check = false
     if ["vicky.in", "carwale.com", "classifieds.team-bhp.com", "autonagar.com", "bikewale.com", "cartrade.com", "carsndeals.com", "mycarhelpline.com"].include?(domain)
-      is_valid_for_auto_used_car_check = FeedUrl.check_auto_used_car(url)
+      is_valid_for_auto_used_car_check = FeedUrl.check_auto_used_car(feed_url.url)
     end
 
     if is_valid_for_auto_used_car_check == true
       article.sub_type = ArticleCategory::ReSale
       underscored_domain = domain.to_s.gsub(".", "_").gsub("-", "_")
       function_name = "check_and_get_article_item_ids_#{underscored_domain}"
-      auto_save, selected_list, score = Item.send(function_name, url)
+      auto_save, selected_list, score = Item.send(function_name, feed_url.url)
     else
       search_params = {}
       search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)

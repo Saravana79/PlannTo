@@ -2764,7 +2764,7 @@ end
   end
 
   def self.check_and_get_article_item_ids_vicky_in(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -2781,14 +2781,14 @@ end
       end
 
       title = title.to_s.gsub(location, "")
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
@@ -2840,11 +2840,11 @@ end
     score = @items.hits.first.score.to_f rescue 0
 
     item = nil if score < 0.3
-    item
+    return item, score
   end
 
   def self.check_and_get_article_item_ids_carwale_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -2861,20 +2861,20 @@ end
       end
 
       title = title.to_s.gsub(location, "")
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
 
   def self.check_and_get_article_item_ids_classifieds_team_bhp_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -2908,20 +2908,20 @@ end
         return false, [], 0
       end
 
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
 
   def self.check_and_get_article_item_ids_autonagar_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -2952,20 +2952,20 @@ end
       end
 
       title = title.to_s.gsub(location, "")
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
 
   def self.check_and_get_article_item_ids_bikewale_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -2987,20 +2987,20 @@ end
       if title.blank?
         return false, [], 0
       end
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
 
   def self.check_and_get_article_item_ids_cartrade_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -3022,20 +3022,20 @@ end
         return false, [], 0
       end
 
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
 
   def self.check_and_get_article_item_ids_carsndeals_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -3057,20 +3057,20 @@ end
         return false, [], 0
       end
 
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
 
   def self.check_and_get_article_item_ids_mycarhelpline_com(url)
-    auto_save = false
+    auto_save = "false"
     selected_list = []
     begin
       doc = Nokogiri::XML(open(url))
@@ -3094,14 +3094,14 @@ end
         return false, [], 0
       end
 
-      item = Item.get_item_from_title(title)
+      item, score = Item.get_item_from_title(title)
 
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
-        auto_save = true
+        auto_save = "true"
       end
     rescue Exception => e
-      auto_save = false
+      auto_save = "false"
     end
     return auto_save, selected_list, score
   end
