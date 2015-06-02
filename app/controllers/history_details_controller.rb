@@ -279,6 +279,7 @@ class HistoryDetailsController < ApplicationController
 
           ad_id = params[:ads_id].blank? ? "" : params[:ads_id]
           url= url.gsub(/\{ad_id}/, ad_id.to_s)
+          url= url.gsub(/\{trackid}/, "")
         end
       end
       url= url.gsub(/\{iid}/, @impression_id) unless @impression_id.nil?

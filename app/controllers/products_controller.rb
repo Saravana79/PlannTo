@@ -20,9 +20,9 @@ class ProductsController < ApplicationController
 
   caches_action :elec_widget_1, :cache_path => proc {|c|
     if !params[:item_ids].blank?
-      params.slice("item_ids")
+      params.slice("item_ids", "page_type", "vendor_ids")
     else
-      params.slice("ref_url")
+      params.slice("ref_url", "page_type", "vendor_ids")
     end
   }, :expires_in => 2.hours, :if => lambda { params[:is_test] != "true" }
 
@@ -1134,9 +1134,9 @@ class ProductsController < ApplicationController
 
     cache_params = ""
     if !params[:item_ids].blank?
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("item_ids", "page_type", "vendor_ids"))
     else
-      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url"))
+      cache_params = ActiveSupport::Cache.expand_cache_key(params.slice("ref_url", "page_type", "vendor_ids"))
     end
     cache_params = CGI::unescape(cache_params)
 
