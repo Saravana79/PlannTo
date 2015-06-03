@@ -3006,8 +3006,8 @@ end
       doc = Nokogiri::XML(open(url))
       node = doc.elements.first
 
-      title = node.at_css('.v_details h1').content.squish rescue ""
-      location_ele = node.at_css('.v_details .widgetBox tr') rescue ""
+      title = node.at_css('.h_2').content.squish rescue ""
+      location_ele = node.at_css('.widgetBox tr') rescue ""
       location = location_ele.elements.last.content.to_s.squish rescue ""
 
       city = location.blank? ? "" : Item.get_city_from_location(location)
