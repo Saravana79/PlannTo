@@ -5,7 +5,7 @@ class ItemDetailOther < ActiveRecord::Base
 
   VALID_STATUS = 1
   EXPIRED_STATUS = 2
-  INVALID_STATUS = 3
+  INVALID_STATUS = 5
 
   attr_accessor :offer
 

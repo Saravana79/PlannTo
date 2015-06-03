@@ -66,13 +66,19 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
     count += 1
 
     begin
+      itemtype_id = nil
       url = url.to_s
       url = "http://" + url if !url.include?("http")
 
       doc = Nokogiri::XML(open(url))
       node = doc.elements.first
+      search_type = [Car,Bike]
 
       itemtype_str = node.at_css("#mainTop-1").content.to_s.squish.downcase rescue ""
+
+      if itemtype_str.include?("motorcycles")
+        search_type = [Bike]
+      end
 
       table = node.at_css(".centerColumn #center-5 table")
       title = node.at_css(".productTitle").content.squish rescue ""
@@ -91,7 +97,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         type = each_ele.elements.first.content.to_s.squish rescue ""
         value = each_ele.elements.last.content.to_s.squish rescue ""
         if type == "Brand"
-          search_text = value
+          search_text = search_text + " " + value
         elsif type == "Model"
           search_text = search_text + " " + value
         elsif type == "Version"
@@ -130,10 +136,10 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         status = ItemDetailOther::INVALID_STATUS if city.blank?
 
         if !city.blank?
-          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => city.id, :itemtype_id => city.itemtype_id)
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => city.id)
         end
 
-        cars = Sunspot.search([Car,Bike]) do
+        cars = Sunspot.search(search_type) do
           keywords search_text do
             minimum_match 1
           end
@@ -156,11 +162,15 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         status = ItemDetailOther::INVALID_STATUS if car.blank?
 
         if !car.blank?
-          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id, :itemtype_id => itemtype_id)
+          mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => car.id)
         end
 
         if status != 1
-          item_detail_other.update_attributes(:status => status)
+          item_detail_other.update_attributes!(:status => status)
+        end
+
+        if !itemtype_id.blank?
+          item_detail_other.update_attributes!(:itemtype_id => itemtype_id)
         end
 
         p "Processing count => #{count}"
@@ -275,4 +285,106 @@ task :image_upload_for_item_detail_other => :environment do
       p "error "
     end
   end
+end
+
+
+desc "image upload job"
+task :mapping_fixes => :environment do
+  query = "select * from item_detail_others where itemtype_id is null"
+
+  page = 1
+  begin
+    item_details = ItemDetailOther.paginate_by_sql(query, :page => page, :per_page => 1000)
+
+    item_details.each do |item_detail_other|
+      begin
+        itemtype_id = nil
+        status = 1
+        url = item_detail_other.url.to_s
+        url = "http://" + url if !url.include?("http")
+
+        doc = Nokogiri::XML(open(url))
+        node = doc.elements.first
+
+        table = node.at_css(".centerColumn #center-5 table") rescue nil
+        search_type = [Car,Bike]
+
+        itemtype_str = node.at_css("#mainTop-1").content.to_s.squish.downcase rescue ""
+
+        if itemtype_str.include?("motorcycles")
+          search_type = [Bike]
+        end
+
+        search_text = ""
+        ad_detail1 = ""
+        ad_detail2 = ""
+        ad_detail3 = ""
+        ad_detail4 = ""
+        table.elements.each do |each_ele|
+          type = each_ele.elements.first.content.to_s.squish rescue ""
+          value = each_ele.elements.last.content.to_s.squish rescue ""
+          if type == "Brand"
+            search_text = search_text + " " + value
+          elsif type == "Model"
+            search_text = search_text + " " + value
+          elsif type == "Version"
+            search_text = search_text + " " + value
+          elsif type == "Year of Registration"
+            ad_detail4 = value
+          elsif type == "KMs Driven"
+            ad_detail2 = value
+          elsif type == "Fuel Type"
+            ad_detail1 = value
+          elsif type == "Transmission Type"
+            ad_detail3 = value
+          end
+        end
+
+        cars = Sunspot.search(search_type) do
+          keywords search_text do
+            minimum_match 1
+          end
+          order_by :score,:desc
+          order_by :orderbyid , :asc
+          paginate(:page => 1, :per_page => 5)
+        end
+
+        car = cars.results.first rescue nil
+        check_car = car
+        if !car.blank?
+          car_group = car.group
+          itemtype_id = car.itemtype_id
+        end
+        car = car_group if !car_group.blank?
+
+        score = cars.hits.first.score.to_f rescue 0
+
+        car = nil if score < 0.3
+
+        status = ItemDetailOther::INVALID_STATUS if car.blank?
+
+        mappings = item_detail_other.item_detail_other_mappings
+
+        mappings.each do |m_item|
+          mapped_item = Item.find m_item.item_id
+          if mapped_item.is_a?(Car) || mapped_item.is_a?(Bike)
+            if car.blank?
+              m_item.destroy
+            elsif check_car == mapped_item || car == mapped_item
+              itemtype_id = itemtype_id
+            else
+              ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+            end
+          end
+        end
+
+        item_detail_other.update_attributes(:status => status, :itemtype_id => itemtype_id)
+
+      rescue Exception => e
+        p "error"
+      end
+    end
+
+    page += 1
+  end while !item_details.empty?
 end
