@@ -544,7 +544,11 @@ class Itemdetail < ActiveRecord::Base
     urls_for_access.each do |each_hash|
       itemtype_hash = {"mobiles" => 6, "laptops" => 23, "tablets" => 13, "lenses" => 20, "cameras" => 12}
       itemtype_id = itemtype_hash[each_hash["type"]]
-      process_flipkart_items(each_hash["url"], itemtype_id) unless itemtype_id.blank?
+      begin
+        Itemdetail.process_flipkart_items(each_hash["url"], itemtype_id) unless itemtype_id.blank?
+      rescue Exception => e
+        p "Error => #{e.message}"
+      end
     end
 
     ActiveRecord::Base.connection.execute("update itemdetails set status = 4 where site = 9861 and last_verified_date < '#{1.day.ago}'")
