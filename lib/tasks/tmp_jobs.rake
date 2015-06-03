@@ -382,6 +382,8 @@ task :mapping_fixes => :environment do
 
       rescue Exception => e
         p "error"
+        status = ItemDetailOther::INVALID_STATUS
+        item_detail_other.update_attributes(:status => status)
       end
     end
 
