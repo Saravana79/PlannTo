@@ -53,7 +53,7 @@ class ItemDetailOther < ActiveRecord::Base
 
     if item_detail_other.blank?
       item_detail_other = ItemDetailOther.new(:title => title, :price => price, :url => url, :status => status, :ad_detail1 => ad_detail1, :ad_detail2 => ad_detail2,
-                                              :ad_detail3 => ad_detail3, :ad_detail4 => ad_detail4, :added_date => Date.today, :last_modified_date => Date.today)
+                                              :ad_detail3 => ad_detail3, :ad_detail4 => ad_detail4, :added_date => Date.today, :last_updated_at => Time.now)
       item_detail_other.save!
 
       @items = Sunspot.search([City]) do
@@ -127,7 +127,7 @@ class ItemDetailOther < ActiveRecord::Base
       end
 
     else
-      item_detail_other.update_attributes(:price => price, :last_modified_date => Date.today)
+      item_detail_other.update_attributes(:price => price, :last_updated_at => Time.now)
     end
   end
 
