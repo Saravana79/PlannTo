@@ -702,7 +702,7 @@ class FeedUrl < ActiveRecord::Base
   def self.check_auto_used_car(url)
     is_valid_for_auto_used_car_check = false
     url = url.to_s.downcase
-    if url.include?("used") || url.include?("second-hand")
+    if url.include?("used") || url.include?("second-hand") || url.include?("classified")
       is_valid_for_auto_used_car_check = true
     end
     is_valid_for_auto_used_car_check
