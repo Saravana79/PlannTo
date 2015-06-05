@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150603115044) do
+ActiveRecord::Schema.define(:version => 20150605080905) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -608,6 +608,15 @@ ActiveRecord::Schema.define(:version => 20150603115044) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
+  create_table "google_content_categories", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "parent_id"
+    t.string   "category"
+    t.string   "plannto_category"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "guides", :force => true do |t|
     t.string   "name"

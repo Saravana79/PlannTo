@@ -413,3 +413,26 @@ csv_details.each_with_index do |csv_detail, index|
     p e
   end
 end
+
+# Update google_content_category
+
+csv_details = CSV.read("/home/sivakumar/skype/verticals.csv")
+google_content_categories = []
+
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  category = csv_detail[0]
+  category_id = csv_detail[1]
+  parent_id = csv_detail[2]
+  plannto_category = csv_detail[3]
+
+  google_content_category = GoogleContentCategory.where(:category => category, :category_id => category_id).last
+
+  if google_content_category.blank?
+    google_content_category = GoogleContentCategory.new(:category => category, :category_id => category_id, :parent_id => parent_id, :plannto_category => plannto_category)
+    google_content_categories << google_content_category
+  end
+end
+
+GoogleContentCategory.import(google_content_categories)
