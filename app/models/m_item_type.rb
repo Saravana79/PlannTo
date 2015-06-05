@@ -8,6 +8,7 @@ class MItemType
   field :lcd, type: Date #Last click date
   field :order_item_ids, type: Array
   field :lod, type: Date #Last order date
+  field :r, type: Boolean, :default => 0 #Resale
 
   embedded_in :plannto_user_detail
   embeds_many :m_items
