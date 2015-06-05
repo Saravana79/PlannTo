@@ -98,7 +98,7 @@ class Feed < ActiveRecord::Base
   end
 
   def table_process()
-    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 0)
+    @impression_missing = ImpressionMissing.where("updated_at > ? and count > ?", (self.last_updated_at.blank? ? Time.zone.now-2.days : self.last_updated_at), 5)
     admin_user = User.where(:is_admin => true).first
 
     sources_list = JSON.parse($redis.get("sources_list_details"))
