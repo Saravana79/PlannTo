@@ -1630,7 +1630,7 @@ end
                   if item_ids.count < 10
 
                     #Updating PlanntoUserDetail
-                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).first
+                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).last
 
                     if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
                       cookie_match = CookieMatch.where(:google_user_id => user_id).last
@@ -1653,7 +1653,7 @@ end
                       plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
                       plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
 
-                      article_content = ArticleContent.where(:url => url).first
+                      article_content = ArticleContent.where(:url => url).last
                       itemtype_id = article_content.itemtype_id rescue ""
                       type = article_content.sub_type rescue "" if type.blank?
 
@@ -1685,6 +1685,7 @@ end
                           m_item_type.save!
                         end
                       end
+                      plannto_user_detail.skip_duplicate_update = true
                       plannto_user_detail.save!
                     end
 

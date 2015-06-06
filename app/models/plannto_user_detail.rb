@@ -23,7 +23,7 @@ class PlanntoUserDetail
   def self.update_plannto_user_detail(impression)
     # plannto user details
     if !impression.temp_user_id.blank?
-      plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => impression.temp_user_id).first
+      plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => impression.temp_user_id).last
 
       if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
         cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).last

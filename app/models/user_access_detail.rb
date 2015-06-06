@@ -43,7 +43,7 @@ class UserAccessDetail < ActiveRecord::Base
         u_key = "u:ac:plannto:#{user_id}"
         u_values = $redis.hgetall(u_key)
 
-        plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).first
+        plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => user_id).last
 
         if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
           cookie_match = CookieMatch.where(:plannto_user_id => user_id).last
