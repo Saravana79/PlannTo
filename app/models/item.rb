@@ -1668,17 +1668,20 @@ end
                           ranking = 2
                       end
 
+                      resale = type == ArticleCategory::ReSale ? true : false
+
                       if !itemtype_id.blank?
-                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
                         if m_item_type.blank?
-                          plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url])
-                          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id).last
+                          plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url], :r => resale)
+                          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
                         else
                           list_of_urls = m_item_type.list_of_urls
                           list_of_urls = list_of_urls.to_a
                           list_of_urls << url
                           list_of_urls.uniq!
                           m_item_type.list_of_urls = list_of_urls
+                          m_item_type.r = resale
                           m_item_type.save!
                         end
                       end
@@ -1789,10 +1792,18 @@ end
                       if !plannto_user_detail.blank?
                         if plannto_user_detail.plannto_user_id.blank?
                           user_id_for_key = plannto_user_detail.google_user_id.to_s
-                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          if resale != true
+                            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          else
+                            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
+                          end
                         else
                           user_id_for_key = plannto_user_detail.plannto_user_id.to_s
-                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          if resale != true
+                            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                          else
+                            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
+                          end
                         end
 
                         if !user_id.blank?
