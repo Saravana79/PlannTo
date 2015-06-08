@@ -540,7 +540,7 @@ class FeedUrl < ActiveRecord::Base
       source_details = source_list[updated_host]
       if !source_details.blank? && !source_details["check_details"].blank?
         check_details = source_details["check_details"].to_s.split("~").map {|each_val| each_val.split("^")}.flatten.map(&:strip)
-        check_details = Hash[*check_details]
+        check_details = Hash[*check_details] rescue {}
         title = article.title.to_s.downcase
         return_val = ""
         changed_title = article.title.to_s.downcase

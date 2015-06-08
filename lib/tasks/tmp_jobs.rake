@@ -81,6 +81,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         doc = Nokogiri::XML(open(url))
         node = doc.elements.first
         search_type = [Car,Bike]
+        status = 1
 
         itemtype_str = node.at_css("#mainTop-1").content.to_s.squish.downcase rescue ""
 
@@ -92,10 +93,10 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
         title = node.at_css(".productTitle").content.squish rescue ""
         price = node.at_css(".whole-price").content.squish rescue ""
         price = price.gsub(",","").gsub(".", "")
+        status = 2 if price.blank?
         location = node.at_css("#location .importantDetail").content.squish rescue ""
         image_url = node.at_css("#mainImageContainer img").attributes["src"].content rescue ""
         image_url = image_url.to_s.gsub("._AA300_", "")
-        status = 1
         search_text = ""
         ad_detail1 = ""
         ad_detail2 = ""
@@ -237,6 +238,9 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
       end
     end
   end
+
+  #update all to set status 2
+  ActiveRecord::Base.connection.execute("update item_detail_others set status = 2 where vendor_id = 73017 and last_updated_at < '#{1.day.ago}'")
 end
 
 
