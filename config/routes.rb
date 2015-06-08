@@ -81,6 +81,7 @@ namespace :admin do
   match "/price_vendor_details",:to => "products#price_vendor_details"
   match "/get_price_from_vendor",:to => "products#get_price_from_vendor"
   match "/price_text_vendor_details",:to => "products#price_text_vendor_details"
+  match "/book_price_widget",:to => "products#book_price_widget"
   match "/sports_widget",:to => "products#sports_widget"
   match "/vendor_widget",:to => "products#vendor_widget"
   match "/product_offers",:to => "products#product_offers"

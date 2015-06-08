@@ -1,0 +1,21 @@
+<% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@item.url}" %>
+
+<div class="plannto_book_price_div" style="width: 150px;">
+  <p style="font-weight: bold;">
+    &#8377; <%= @item.sale_price %> /-
+  </p>
+
+  <span>
+    <p class="btn">
+      <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; background: #F76300;padding: 3px 5px; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href=<%= shop_now_url %>>
+        Buy Now
+      </a>
+    </p>
+  </span>
+
+  <div style="float:left;width:110px;">
+    <a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_ad_details[9882]['imageurl'] %>" alt="" style="width: 80px;">
+    </a>
+  </div>
+
+</div>
