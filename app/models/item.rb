@@ -2224,6 +2224,32 @@ end
     sale_price
   end
 
+  def self.get_amazon_book_item_from_isbn(item_id="")
+    @item = OpenStruct.new
+    item_id = item_id.to_s
+    if item_id.blank?
+      return ""
+    end
+
+    res = APICache.get(item_id.to_s.gsub(" ", ""), :cache => 5.hours) do
+      Amazon::Ecs.item_search(item_id, {:response_group => 'Images,ItemAttributes,Offers', :country => 'in', :search_index => "Books"})
+    end
+
+    item = res.items.first
+    sale_price = ""
+
+    if !item.blank?
+      sale_price = item.get_element("Offer/OfferListing/SalePrice").get("FormattedPrice") rescue ""
+      if sale_price.blank?
+        sale_price = item.get_element("Offer/OfferListing/Price").get("FormattedPrice") rescue ""
+      end
+      sale_price = sale_price.gsub("INR ", "")
+    end
+    @item.sale_price = sale_price
+    @item.url = item.get("DetailPageURL") rescue "http://www.amazon.in"
+    @item
+  end
+
   def self.get_best_seller_beauty_items_from_amazon(page_type, url=nil, geo="in")
     #$redis.lpush("excluded_beauty_items", ["B00GUBY0JA", "B00CE3FT66", "B00KCMRZ40", "B006LX9VPU", "B009EPFCPK", "B007E9I11K","B007E9IGSS","B007E9INFO","B00B5AK41E","B00MPS44A2","B00L8PEEAI"])
 
