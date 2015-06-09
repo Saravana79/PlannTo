@@ -196,6 +196,7 @@ class FeedUrl < ActiveRecord::Base
             if plannto_category.blank?
               parent = google_content_category.parent
               begin
+                break if parent.blank?
                 plannto_category  = parent.plannto_category
                 parent  = parent.parent
               end while plannto_category.blank? && !parent.blank?
@@ -341,6 +342,7 @@ class FeedUrl < ActiveRecord::Base
               if plannto_category.blank?
                 parent = google_content_category.parent
                 begin
+                  break if parent.blank?
                   plannto_category  = parent.plannto_category
                   parent  = parent.parent
                 end while plannto_category.blank? && !parent.blank?
