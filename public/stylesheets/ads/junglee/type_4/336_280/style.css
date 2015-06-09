@@ -1,0 +1,132 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+*, *:before, *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+body {
+	background:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	color: #222;
+	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+	-webkit-text-size-adjust: 100%;
+}
+
+
+.advt-block { margin:0; padding:0;}
+.advt-336-280 { margin:0; padding:0; width:336px; height:280px; background:#fff; border:1px solid #BEBEBE;}
+.advt-336-280 .logo{ margin:0 5px; padding:5px 0; border-bottom:0px solid #F1F0F0;}
+
+advt-300 .logo{ margin:0 5px; padding:4px 0;}
+
+.advt-box { margin:0; padding:0;}
+
+.advt-box .product-container{ clear:both; margin:0; padding:2px;  border-bottom: #CCC solid 0px; border-top:1px solid #d9d9d9;}
+.advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
+.advt-box .product-container:after { clear:both;}
+.advt-box .product-container .product-img-left{ margin:0 7px 0 0; padding:0; float:left;}
+.advt-box .product-container .product-img-left img { margin:0 auto; text-align:center; border:#CCC solid 0px;}
+.advt-box .product-container .product-txt-right{ margin:0; padding:0; float:left; width:180px;}
+.advt-box .product-container h3{ margin:0 0 5px 0;padding:0; font-size:16px; color:#222; font-weight:bold;font-family: Arial, Helvetica, sans-serif;}
+.advt-box .product-container .price{ margin:0; padding:2px 0; color:#b12704; font-size:15px; font-weight:bold; float:left; width:100%;}
+.advt-box .product-container .btn{ margin:0; padding:0;float:right;}
+/*.advt-box .product-container .btn .shop-now{ margin:0; padding:0; background:url(../images/shop-now-btn.png) no-repeat left top; width:78px; height:19px; cursor:pointer; display:inline-block; text-indent:-99999px; border:0;}*/
+.advt-box .product-container .btn .shop-now{ margin:0; padding:6px 8px; background:#e47911; color:#fff; font-size:11px; text-transform:uppercase; border:0; cursor:pointer; display:inline-block; text-decoration:none; font-weight:bold; -webkit-border-radius: 4px; border-radius: 3px; text-align:center;}
+.advt-box .product-desc { margin:0 0 5px 0; font-size:12px; color:#505050; font-family: Arial, Helvetica, sans-serif;}
+.advt-box .product-txt-desc { margin:0; padding:5px 10px;}
+.advt-box .product-txt-desc p{ margin:0; padding:0; font-size:12px; color:#222;}
+
+
+
+
+.graphic, #prevBtn, #nextBtn, #slider1prev, #slider1next{
+	margin:0;
+	padding:0;
+	display:block;
+	overflow:hidden;
+	text-indent:-8000px;
+}
+
+
+/* Sliding gallery */
+.list_carousel {
+	margin: 0;
+	width: 336px;
+	height:280px;
+}
+.list_carousel ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: block;
+}
+.list_carousel li {
+	width: 330px;
+	height: 276px;
+	padding: 0;
+	margin: 0;
+	display: block;
+	float: left;
+}
+.list_carousel.responsive {
+	width: auto;
+	margin-left: 0;
+}
+.clearfix {
+	float: none;
+	clear: both;
+}
+.prev {
+	float: left;
+	background:url(/assets/ads/prev-arrow.png) no-repeat left top;
+	width:21px; height:22px;
+	text-indent:-99999px;
+	position:absolute;
+	top:130px;
+}
+.next {
+	float: right;
+	background:url(/assets/ads/next-arrow.png) no-repeat right top;
+	width:21px; height:22px;
+	text-indent:-99999px;
+	position:absolute;
+	left:270px;
+	top:130px;
+}
+.pager {
+	float:right;
+	left:195px;
+	position:absolute;
+	top:3px;
+	z-index:1000;
+	background:#fff;
+	padding:5px;
+}
+.pager a {
+	/*margin: 0 2px; */
+	text-decoration: none;
+	padding:2px 5px;
+	background:#ccc;
+	color:#222;
+	font-size:12px;
+}
+.pager a.selected {
+	text-decoration: none;
+	background:#e47911;
+	color:#FFF;
+}
+.timer {
+	background-color: #999;
+	height: 6px;
+	width: 0px;
+}
+
+a { outline: none; }
+/* end Sliding gallery */
