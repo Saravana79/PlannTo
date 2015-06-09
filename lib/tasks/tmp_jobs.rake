@@ -386,7 +386,11 @@ task :mapping_fixes => :environment do
             elsif check_car == mapped_item || car == mapped_item
               itemtype_id = itemtype_id
             else
-              ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+              item_map = ItemDetailOtherMapping.where(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+
+              if item_map.blank?
+                ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+              end
             end
           end
         end
@@ -402,5 +406,4 @@ task :mapping_fixes => :environment do
 
     page += 1
   end while !item_details.empty?
-  args.with_defaults(:url => "http://planntonew.s3.amazonaws.com/test_folder/junglee_cars.csv")
 end
