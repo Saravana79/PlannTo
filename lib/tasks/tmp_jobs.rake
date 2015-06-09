@@ -240,7 +240,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
   end
 
   #update all to set status 2
-  ActiveRecord::Base.connection.execute("update item_detail_others set status = 2 where vendor_id = 73017 and last_updated_at < '#{1.day.ago}'")
+  ActiveRecord::Base.connection.execute("update item_detail_others set status = 2 where vendor_id = 73017 and last_updated_at < '#{1.day.ago}' or price is null or price = 0")
 end
 
 
@@ -386,7 +386,11 @@ task :mapping_fixes => :environment do
             elsif check_car == mapped_item || car == mapped_item
               itemtype_id = itemtype_id
             else
-              ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+              item_map = ItemDetailOtherMapping.where(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+
+              if item_map.blank?
+                ItemDetailOtherMapping.create(:item_detail_other_id => item_detail_other.id, :item_id => mapped_item.id)
+              end
             end
           end
         end
@@ -402,5 +406,4 @@ task :mapping_fixes => :environment do
 
     page += 1
   end while !item_details.empty?
-  args.with_defaults(:url => "http://planntonew.s3.amazonaws.com/test_folder/junglee_cars.csv")
 end

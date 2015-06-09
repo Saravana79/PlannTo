@@ -70,7 +70,7 @@ class FeedUrl < ActiveRecord::Base
     if $redis.get("process_missing_url_top_list_is_running").to_i == 0
       $redis.set("process_missing_url_top_list_is_running", 1)
       $redis.expire("process_missing_url_top_list_is_running", 100.minutes)
-      get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
+      FeedUrl.get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
       $redis.set("process_missing_url_top_list_is_running", 0)
     end
   end
@@ -187,29 +187,29 @@ class FeedUrl < ActiveRecord::Base
           end
         end
 
-        begin
-          google_content_categories = GoogleContentCategory.where(:id => verticals.to_s.split(","))
-
-          plannto_categories = []
-          google_content_categories.each do |google_content_category|
-            plannto_category  = google_content_category.plannto_category
-            if plannto_category.blank?
-              parent = google_content_category.parent
-              begin
-                break if parent.blank?
-                plannto_category  = parent.plannto_category
-                parent  = parent.parent
-              end while plannto_category.blank? && !parent.blank?
-            end
-            plannto_categories << plannto_category
-          end
-
-          new_category = plannto_categories.compact.join(",")
-        rescue Exception => e
-          new_category = ""
-        end
-
-        category = new_category if !new_category.blank?
+        # begin
+        #   google_content_categories = GoogleContentCategory.where(:id => verticals.to_s.split(","))
+        #
+        #   plannto_categories = []
+        #   google_content_categories.each do |google_content_category|
+        #     plannto_category  = google_content_category.plannto_category
+        #     if plannto_category.blank?
+        #       parent = google_content_category.parent
+        #       begin
+        #         break if parent.blank?
+        #         plannto_category  = parent.plannto_category
+        #         parent  = parent.parent
+        #       end while plannto_category.blank? && !parent.blank?
+        #     end
+        #     plannto_categories << plannto_category
+        #   end
+        #
+        #   new_category = plannto_categories.compact.uniq.join(",")
+        # rescue Exception => e
+        #   new_category = ""
+        # end
+        #
+        # category = new_category if !new_category.blank?
 
         # remove characters after come with space + '- or |' symbols
         # title = title.to_s.gsub(/\s(-|\|).+/, '')
@@ -333,29 +333,29 @@ class FeedUrl < ActiveRecord::Base
             end
           end
 
-          begin
-            google_content_categories = GoogleContentCategory.where(:id => verticals.to_s.split(","))
-
-            plannto_categories = []
-            google_content_categories.each do |google_content_category|
-              plannto_category  = google_content_category.plannto_category
-              if plannto_category.blank?
-                parent = google_content_category.parent
-                begin
-                  break if parent.blank?
-                  plannto_category  = parent.plannto_category
-                  parent  = parent.parent
-                end while plannto_category.blank? && !parent.blank?
-              end
-              plannto_categories << plannto_category
-            end
-
-            new_category = plannto_categories.compact.join(",")
-          rescue Exception => e
-            new_category = ""
-          end
-
-          category = new_category if !new_category.blank?
+          # begin
+          #   google_content_categories = GoogleContentCategory.where(:id => verticals.to_s.split(","))
+          #
+          #   plannto_categories = []
+          #   google_content_categories.each do |google_content_category|
+          #     plannto_category  = google_content_category.plannto_category
+          #     if plannto_category.blank?
+          #       parent = google_content_category.parent
+          #       begin
+          #         break if parent.blank?
+          #         plannto_category  = parent.plannto_category
+          #         parent  = parent.parent
+          #       end while plannto_category.blank? && !parent.blank?
+          #     end
+          #     plannto_categories << plannto_category
+          #   end
+          #
+          #   new_category = plannto_categories.compact.uniq.join(",")
+          # rescue Exception => e
+          #   new_category = ""
+          # end
+          #
+          # category = new_category if !new_category.blank?
 
           # remove characters after come with space + '- or |' symbols
           # title = title.to_s.gsub(/\s(-|\|).+/, '') #TODO: check and add it later
