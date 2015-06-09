@@ -70,7 +70,7 @@ class FeedUrl < ActiveRecord::Base
     if $redis.get("process_missing_url_top_list_is_running").to_i == 0
       $redis.set("process_missing_url_top_list_is_running", 1)
       $redis.expire("process_missing_url_top_list_is_running", 100.minutes)
-      get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
+      FeedUrl.get_missing_keys_and_process_recent("missingurl-toplist", 0, "process_missing_url_top_list", invalid_urls=[])
       $redis.set("process_missing_url_top_list_is_running", 0)
     end
   end
@@ -204,7 +204,7 @@ class FeedUrl < ActiveRecord::Base
             plannto_categories << plannto_category
           end
 
-          new_category = plannto_categories.compact.join(",")
+          new_category = plannto_categories.compact.uniq.join(",")
         rescue Exception => e
           new_category = ""
         end
@@ -350,7 +350,7 @@ class FeedUrl < ActiveRecord::Base
               plannto_categories << plannto_category
             end
 
-            new_category = plannto_categories.compact.join(",")
+            new_category = plannto_categories.compact.uniq.join(",")
           rescue Exception => e
             new_category = ""
           end
