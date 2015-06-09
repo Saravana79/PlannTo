@@ -25,7 +25,7 @@ body {
 
 .advt-160-600 .advt-box { margin:0; padding:0;border-top: 0px solid #F1F0F0;}
 
-.advt-160-600 .advt-box .product-container{ margin:0; padding:10px 0px;  border-bottom:#F1F0F0 solid 1px;}
+.advt-160-600 .advt-box .product-container{ margin:0; padding:10px 0px;  border-bottom:#F1F0F0 solid 1px;height:266px;}
 .advt-160-600 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-160-600 .advt-box .product-container:after { clear:both;}
 .advt-160-600 .advt-box .product-container .product-img{ margin:0;height: 117px;width:152px;}

@@ -1506,17 +1506,26 @@ end
 
   end
 
-  def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size)
+  def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size,used_cars = false)
 
     if ad_template_type == "type_4"
       if ["300", "120", "728","336_280","160_600"].include?(suitable_ui_size)
         item_details = item_details.first(12)
         sliced_item_details = item_details.each_slice(2)
       elsif suitable_ui_size == "300_600"
-        item_details = item_details.first(18)
-        correct_count = item_details.count > 2 ? item_details.count - (item_details.count % 3) : item_details.count
-        item_details = item_details.first(correct_count)
-        sliced_item_details = item_details.each_slice(3)
+        if(used_cars)
+
+          item_details = item_details.first(24)
+          correct_count = item_details.count > 2 ? item_details.count - (item_details.count % 3) : item_details.count
+          item_details = item_details.first(correct_count)
+          sliced_item_details = item_details.each_slice(4)
+        else
+            item_details = item_details.first(18)
+            correct_count = item_details.count > 2 ? item_details.count - (item_details.count % 3) : item_details.count
+            item_details = item_details.first(correct_count)
+            sliced_item_details = item_details.each_slice(3)
+        end
+
       elsif suitable_ui_size == "468"
         item_details = item_details.first(4)
         sliced_item_details = []

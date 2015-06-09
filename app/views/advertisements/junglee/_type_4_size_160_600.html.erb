@@ -20,7 +20,7 @@
                 <% if sliced_item_detail.count > 1 %>
               <% sliced_item_detail.each_with_index do |item_detail, itindex| %>
                     <div class="product-container" >
-                    <h3 class="product-title" title="<%=item_detail.title%>"><%= item_detail.title.to_s.truncate(46) %></h3>
+                    <h3 class="product-title" title="<%=item_detail.title%>"><%= item_detail.title.to_s.truncate(54) %></h3>
                      <div class="text-desc">
                             <p>
                               <%= item_detail.ad_detail4.to_s.truncate(62) + " | " + item_detail.ad_detail2.to_s.truncate(62) + " KM "%> 

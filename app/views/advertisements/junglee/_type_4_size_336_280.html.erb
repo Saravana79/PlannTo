@@ -2,13 +2,14 @@
   <div class="advt-336-280">
     <div class="logo"><a href="#"><img src="<%= @vendor_image_url %>" alt="" ></a>
     </div>
-    <% if @item_details.count != 0 %>
-        <div class="list_carousel">
-          <div id="pager2" class="pager">
+     <div id="pager2" class="pager">
             <% [*1..@sliced_item_details.count].each do |each_loop| %>
                 <a href="javascript:void(0)" id="<%= each_loop %>" class=""><span> <%= each_loop %></span></a>
             <% end %>
           </div>
+    <% if @item_details.count != 0 %>
+        <div class="list_carousel">
+         
           <ul id="foo3">
             <% @sliced_item_details.each_with_index do |sliced_item_detail, indx| %>
                 <li class="item_details" id="item_detail_<%= indx + 1 %>">
@@ -20,33 +21,33 @@
                         <div class="product-container">
                           <div class="product-img-left">
                             <a href="#">
-                              <%= get_image_tag(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name'], @item.base_item_image_url(:medium), 124, 94).html_safe %>
-                              <!-- <img src="<%#= get_image_url(item_detail, @vendor_ad_details[item_detail.site.to_i]['vendor_name']) %>" alt="" width="119px" height="89px"> -->
+                              <span style="  display: inline-block;height: 100%;vertical-align: middle;  text-align: center;"></span>
+                             <%= get_image_tag_from_item_detail_other(item_detail, @vendor_ad_details[item_detail.vendor_id.to_i]['vendor_name'], @item.base_item_image_url(:medium),"" , "", "original").html_safe %>
+                        
                             </a>
                           </div>
                           <div class="product-txt-right">
-                            <h3 style="font-size:15px;"><%= item_detail.ItemName %></h3>
-
-                            <p class="product-desc">
-                              <%#= raw get_offer_for_ad(@ad, item_detail, @vendor_ad_details[item_detail.site.to_i]['default_text'], 50, shop_now_url) %>
+                            <h3><%= item_detail.title.to_s.truncate(52) %></h3>
+                             <div class="product-txt-desc">
+                            <p>
+                              <%= item_detail.ad_detail4.to_s.truncate(62) + " | " + item_detail.ad_detail2.to_s.truncate(62) + " KM "%> 
                             </p>
-
-                            <p class="price"><%= prettify(item_detail) %></p>
+                          </div>
+                           
+                            <p class="price"><%= prettifyforcarprice(item_detail) %></p>
 
                             <p class="btn">
-                              <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Shop
-                                Now</a>
+                              <a href="<%= shop_now_url %>" target="_blank" class="shop-now">Find out More</a>
                             </p>
                           </div>
                         </div>
                       </div>
+                                  <img class="vendor_image_src" src="<%= @vendor_ad_details[item_detail.vendor_id.to_i]['imageurl'] %>" alt="" style="display: none;">
                   <% end %>
                   <div class="product-txt-desc" style="border-top: 1px solid #D9D9D9;text-align: center;">
-                    <p style="font-size: 12px;font-weight: 600;padding-top: 3px;">
-                         <%= raw get_offer_for_ad(@ad, @sliced_item_details.first.first, @vendor_ad_details[@sliced_item_details.first.first.site.to_i]['default_text'], 60, "") %>
-                    </p>
+                   
                   </div>
-                  <img class="vendor_image_src" src="<%= @vendor_ad_details[sliced_item_detail.first.site.to_i]['imageurl'] %>" alt="" style="display: none;">
+         
                 </li>
             <% end %>
           </ul>
@@ -67,6 +68,6 @@
 
   <style type="text/css">
       .shop-now {
-          margin: 5px 0 0 !important;
+          margin: 2px 0 0 !important;
       }
   </style>
