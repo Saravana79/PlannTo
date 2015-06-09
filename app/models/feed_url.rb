@@ -196,6 +196,7 @@ class FeedUrl < ActiveRecord::Base
             if plannto_category.blank?
               parent = google_content_category.parent
               begin
+                break if parent.blank?
                 plannto_category  = parent.plannto_category
                 parent  = parent.parent
               end while plannto_category.blank? && !parent.blank?
@@ -216,7 +217,8 @@ class FeedUrl < ActiveRecord::Base
 
         new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
                                    status: status, source: source, summary: description, :images => images,
-                                   :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+                                   :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category,
+                                    :article_category => verticals)
 
         begin
           new_feed_url.save!
@@ -340,6 +342,7 @@ class FeedUrl < ActiveRecord::Base
               if plannto_category.blank?
                 parent = google_content_category.parent
                 begin
+                  break if parent.blank?
                   plannto_category  = parent.plannto_category
                   parent  = parent.parent
                 end while plannto_category.blank? && !parent.blank?
@@ -361,7 +364,8 @@ class FeedUrl < ActiveRecord::Base
 
           new_feed_url = FeedUrl.new(feed_id: feed.id, url: url_for_save, title: title.to_s.strip, category: category,
                                      status: status, source: source, summary: description, :images => images,
-                                     :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category)
+                                     :published_at => Time.now, :priorities => feed.priorities, :missing_count => missingurl_count, :additional_details => page_category,
+                                     :article_category => verticals)
 
           begin
             new_feed_url.save!
