@@ -240,7 +240,7 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
   end
 
   #update all to set status 2
-  ActiveRecord::Base.connection.execute("update item_detail_others set status = 2 where vendor_id = 73017 and last_updated_at < '#{1.day.ago}'")
+  ActiveRecord::Base.connection.execute("update item_detail_others set status = 2 where vendor_id = 73017 and last_updated_at < '#{1.day.ago}' or price is null or price = 0")
 end
 
 
