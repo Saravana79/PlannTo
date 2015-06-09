@@ -108,11 +108,12 @@ class FeedUrl < ActiveRecord::Base
       missingurl_count = redis_value["count"]
       feed_url_id = redis_value["feed_url_id"]
       each_url_key = valid_missing_url_keys[index]
+      verticals = redis_value["verticals"]
 
       p each_url_key
       logger.info each_url_key if Rails.env == "production"
       begin
-        FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user)
+        FeedUrl.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user, verticals)
       rescue Exception => e
         p "Error while processing missingurl process top list"
       end
@@ -136,7 +137,7 @@ class FeedUrl < ActiveRecord::Base
     end
   end
 
-  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user)
+  def self.process_missing_url_top_list_action(missingurl_count, feed_url_id, each_url_key, sources_list, valid_categories, feed, admin_user, verticals="")
     if feed_url_id.blank?
       missing_url = each_url_key.split("missingurl:")[1]
 
@@ -185,6 +186,30 @@ class FeedUrl < ActiveRecord::Base
             category = "Mobile,Tablet,Camera,Laptop"
           end
         end
+
+        begin
+          google_content_categories = GoogleContentCategory.where(:id => verticals.to_s.split(","))
+
+          plannto_categories = []
+          google_content_categories.each do |google_content_category|
+            plannto_category  = google_content_category.plannto_category
+            if plannto_category.blank?
+              parent = google_content_category.parent
+              begin
+                plannto_category  = parent.plannto_category
+                parent  = parent.parent
+              end while plannto_category.blank? && !parent.blank?
+            end
+            plannto_categories << plannto_category
+          end
+
+          new_category = plannto_categories.compact.join(",")
+        rescue Exception => e
+          new_category = ""
+        end
+
+        category = new_category if !new_category.blank?
+
         # remove characters after come with space + '- or |' symbols
         # title = title.to_s.gsub(/\s(-|\|).+/, '')
         title = title.blank? ? "" : title.to_s.strip
@@ -244,9 +269,10 @@ class FeedUrl < ActiveRecord::Base
       missingurl_count = redis_value["count"]
       feed_url_id = redis_value["feed_url_id"]
       each_url_key = valid_missing_url_keys[index]
+      verticals = redis_value["verticals"]
 
       begin
-        FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category)
+        FeedUrl.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category, verticals)
       rescue Exception => e
         p "Error while processing missingurl process"
       end
@@ -254,7 +280,7 @@ class FeedUrl < ActiveRecord::Base
 
   end
 
-  def self.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category)
+  def self.process_missing_url_action(missingurl_count, feed_url_id, count, each_url_key, sources_list, valid_categories, feed, admin_user, process_category, verticals="")
     if missingurl_count.to_i > count.to_i
       # greater_count = greater_count + 1
       # logger.info "#{counting} - #{t_count} - #{greater_count} - #{missingurl_count} - #{feed_url_id}"
@@ -304,6 +330,30 @@ class FeedUrl < ActiveRecord::Base
               end
             end
           end
+
+          begin
+            google_content_categories = GoogleContentCategory.where(:id => verticals.to_s.split(","))
+
+            plannto_categories = []
+            google_content_categories.each do |google_content_category|
+              plannto_category  = google_content_category.plannto_category
+              if plannto_category.blank?
+                parent = google_content_category.parent
+                begin
+                  plannto_category  = parent.plannto_category
+                  parent  = parent.parent
+                end while plannto_category.blank? && !parent.blank?
+              end
+              plannto_categories << plannto_category
+            end
+
+            new_category = plannto_categories.compact.join(",")
+          rescue Exception => e
+            new_category = ""
+          end
+
+          category = new_category if !new_category.blank?
+
           # remove characters after come with space + '- or |' symbols
           # title = title.to_s.gsub(/\s(-|\|).+/, '') #TODO: check and add it later
           # title = title.blank? ? "" : title.to_s.strip
