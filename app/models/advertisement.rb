@@ -642,7 +642,7 @@ class Advertisement < ActiveRecord::Base
 
               url_params = Advertisement.reverse_make_url_params(impression.params)
               url_params.symbolize_keys!
-              impression_import << impression
+              impression_import << impression  if !impression.advertisement_id.blank?  # TODO: temporary disabled for optimization
 
               # Impression mongo
               impression_mongo = impression.attributes
@@ -815,13 +815,6 @@ class Advertisement < ActiveRecord::Base
               unless click.blank?
                 clicks_import << click
 
-                # if !click.advertisement_id.blank?
-                #   click_mongo = click.attributes
-                #   click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
-                #   click_mongo.delete("impression_id")
-                #   clicks_import_mongo << click_mongo
-                # end
-
                 click_mongo = click.attributes
                 click_mongo["ad_impression_id"] = click_mongo["impression_id"].to_s
                 click_mongo["video_impression_id"] = click.video_impression_id
@@ -839,6 +832,7 @@ class Advertisement < ActiveRecord::Base
 
                 if click_impression.blank?
                   click_impression = impression_import.select {|each_imp| each_imp.id.to_s == click.impression_id.to_s}.last
+                  click_impression = non_ad_impressions_list.select {|each_imp| each_imp.id.to_s == click.impression_id.to_s}.last if click_impression.blank?
                 end
 
                 if !click_impression.blank?
@@ -1082,26 +1076,21 @@ class Advertisement < ActiveRecord::Base
           p "fixes for => #{e.backtrace}"
         end
 
-        # Impression Process
+        # Process bulk insert for mongo collection impression
         AddImpression.import(impression_import)
 
-        #push to mongo
-        # AdImpression.collection.insert(impression_import_mongo, { ordered: false })
-
-        #TODO: Temp Fix
-        begin
-          #process bulk insert for mongo collection impression
-          AdImpression.collection.insert(impression_import_mongo, { ordered: false })
-        rescue Exception => e
-          #process temp fix
-          impression_import_mongo.each do |each_loop|
-            begin
-              AdImpression.collection.insert(each_loop)
-            rescue Exception => e
-              p e
-            end
-          end
-        end
+        # TODO: temporary disabled for optimization
+        # begin
+        #   AdImpression.collection.insert(impression_import_mongo, { ordered: false })
+        # rescue Exception => e
+        #   impression_import_mongo.each do |each_loop|
+        #     begin
+        #       AdImpression.collection.insert(each_loop)
+        #     rescue Exception => e
+        #       p e
+        #     end
+        #   end
+        # end
 
         video_comp_impression_import_mongo.each do |each_comp_imp|
           begin
@@ -1117,36 +1106,23 @@ class Advertisement < ActiveRecord::Base
           end
         end
 
-        ad_impressions_list_values = $redis_rtb.pipelined do
-          ad_impressions_list.each do |each_impression|
-            $redis_rtb.get("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}")
-          end
-        end
 
-        impression_details = []
-        ad_impressions_list.each_with_index do |imp, index|
-          appearance_count = ad_impressions_list_values[index].to_i
-          if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank? || !imp.device.blank? || !imp.having_related_items.blank?))
-            # impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :device => imp.device)
-            impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo, :device => imp.device, :having_related_items => imp.having_related_items)
-          end
-        end
-
-        ImpressionDetail.import(impression_details)
-
-
-        # p "ImpressionDetail count #{impression_details.count} - #{Time.now}"
-        # impression_details.each do |each_imp_det|
-        #   begin
-        #     ad_imp = AdImpression.where("_id" => each_imp_det.impression_id.to_s).first
-        #     ad_imp.update_attributes(:pre_appearance_count => each_imp_det.pre_appearance_count) unless ad_imp.blank?
-        #   rescue Exception => e
-        #     p "Error while update pre appearance count"
+        # TODO: temporary disabled for optimization
+        # ad_impressions_list_values = $redis_rtb.pipelined do
+        #   ad_impressions_list.each do |each_impression|
+        #     $redis_rtb.get("pu:#{each_impression.temp_user_id}:#{each_impression.advertisement_id}:#{Date.today.day}")
         #   end
         # end
         #
-        # p "Completed Impression Detail Update Process -  #{Time.now}"
-
+        # impression_details = []
+        # ad_impressions_list.each_with_index do |imp, index|
+        #   appearance_count = ad_impressions_list_values[index].to_i
+        #   if (imp.video_impression_id.blank? && (imp.t == 1 || imp.r == 1 || appearance_count > 0 || !imp.a.blank? || imp.video.to_s == "true" || !imp.geo.blank? || !imp.device.blank? || !imp.having_related_items.blank?))
+        #     impression_details << ImpressionDetail.new(:impression_id => imp.id, :tagging => imp.t, :retargeting => imp.r, :pre_appearance_count => appearance_count, :additional_details => imp.a, :video => imp.video, :video_impression_id => imp.video_impression_id, :geo => imp.geo, :device => imp.device, :having_related_items => imp.having_related_items)
+        #   end
+        # end
+        #
+        # ImpressionDetail.import(impression_details)
 
         $redis_rtb.pipelined do
           impression_import.each do |each_impression|
@@ -1300,14 +1276,6 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
         end
 
         p "Completed Click Detail Process"
-
-        #push to mongo
-        # begin
-        #   MClick.collection.insert(clicks_import_mongo)
-        # rescue Exception => e
-        #   p e
-        #   p "Error While processing click"
-        # end
 
         VideoImpression.import(video_imp_import)
 
