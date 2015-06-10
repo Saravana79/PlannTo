@@ -1639,12 +1639,14 @@ end
                   if item_ids.count < 10
 
                     #Updating PlanntoUserDetail
-                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).last
+                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).to_a.last
 
                     if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
                       cookie_match = CookieMatch.where(:google_user_id => user_id).last
                       if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
                         plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
+                        plannto_user_detail.lad = Time.now
+                        plannto_user_detail.skip_callback = true
                         plannto_user_detail.save!
                       end
                     elsif plannto_user_detail.blank?
@@ -1653,6 +1655,8 @@ end
                       if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
                         plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
                       end
+                      plannto_user_detail.lad = Time.now
+                      plannto_user_detail.skip_callback = true
                       plannto_user_detail.save!
                     end
 
