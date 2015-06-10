@@ -1,7 +1,7 @@
 class PlanntoUserDetail
   include Mongoid::Document
   # include Mongoid::Timestamps::Created
-  after_save :update_last_accessed_date, :update_duplicate_record
+  after_save :update_lad, :update_duplicate_record
 
   attr_accessor :skip_callback, :skip_duplicate_update
 
@@ -23,12 +23,14 @@ class PlanntoUserDetail
   def self.update_plannto_user_detail(impression)
     # plannto user details
     if !impression.temp_user_id.blank?
-      plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => impression.temp_user_id).last
+      plannto_user_detail = PlanntoUserDetail.where(:plannto_user_id => impression.temp_user_id).to_a.last
 
       if (!plannto_user_detail.blank? && plannto_user_detail.google_user_id.blank?)
         cookie_match = CookieMatch.where(:plannto_user_id => impression.temp_user_id).last
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.google_user_id = cookie_match.google_user_id
+          plannto_user_detail.lad = Time.now
+          plannto_user_detail.skip_callback = true
           plannto_user_detail.save!
         end
       elsif plannto_user_detail.blank?
@@ -37,6 +39,8 @@ class PlanntoUserDetail
         if !cookie_match.blank? && !cookie_match.google_user_id.blank?
           plannto_user_detail.google_user_id = cookie_match.google_user_id
         end
+        plannto_user_detail.lad = Time.now
+        plannto_user_detail.skip_callback = true
         plannto_user_detail.save!
       end
     end
@@ -136,15 +140,17 @@ class PlanntoUserDetail
 
   private
 
-  def update_last_accessed_date
+  def update_lad
+    self.skip_duplicate_update = true
     if self.skip_callback != true
       self.skip_callback = true
-      self.lad = Date.today
+      self.lad = Time.now
       self.save
     end
   end
 
   def update_duplicate_record
+    self.skip_callback = true
     if self.skip_duplicate_update != true
 
       if self.plannto_user_id_changed?
