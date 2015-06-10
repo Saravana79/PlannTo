@@ -606,6 +606,7 @@ class ProductsController < ApplicationController
   def book_price_widget
     # params[:item_ids] = "13874" if params[:item_ids].blank?
     params[:page_type] ||= "type_1" if params[:page_type].blank?
+    @ad_template_type ||= params[:page_type]
     url_params, url, itemsaccess, item_ids = check_and_assigns_widget_default_values()
     @test_condition = @is_test == "true" ? "&is_test=true" : ""
 
@@ -639,6 +640,7 @@ class ProductsController < ApplicationController
       itemsaccess = "none"
       @impression = ImpressionMissing.create_or_update_impression_missing(tempurl, "book_price_widget")
     end
+
     @ref_url = url
     jsonp = prepare_response_json()
 
