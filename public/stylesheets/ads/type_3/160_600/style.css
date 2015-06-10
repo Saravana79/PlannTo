@@ -29,7 +29,7 @@ body {
 .advt-160-600 .advt-box .product-container:before, .advt-box .product-container:after { content:''; display:block; width:0; height:0;}
 .advt-160-600 .advt-box .product-container:after { clear:both;}
 .advt-160-600 .advt-box .product-container .product-img{ margin:0;white-space: nowrap;}
-.advt-160-600 .advt-box .product-container .product-img img { margin:2px 0px; text-align:center;width:auto;height:auto;}
+.advt-160-600 .advt-box .product-container .product-img img { margin:2px 0px; text-align:center;}
 
 
 .advt-160-600 .advt-box .product-container h3{ margin:0; padding:0px 5px; font-size:14px; color:#222; font-weight:bold;font-family: Arial;word-break:break-word;min-height: 40px;}
