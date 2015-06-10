@@ -1,8 +1,20 @@
 <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@item.url}" %>
 
-<div class="plannto_book_price_div" style="  width: 90px;height: 90px;padding: 6px;border: 1px solid #D8D8D8;">
+<div class="plannto_book_price_div" style="  width: 84px;height: 115px;padding: 6px;border: 1px solid #D8D8D8;">
+  <p style="font-weight: bold;margin:0px;">
+    &#8377;
+    <span style="text-decoration:line-through;">
+      <%= @item.list_price %> /-
+    </span>
+  </p>
+
   <p style="font-weight: bold;margin:0px;">
     &#8377; <%= @item.sale_price %> /-
+    <% if @item.percentage != 0 %>
+      <span style="">
+        (Save <%= @item.percentage %> %)
+      </span>
+    <% end %>
   </p>
 
   <span>

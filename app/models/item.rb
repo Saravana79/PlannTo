@@ -2255,6 +2255,8 @@ end
       sale_price = sale_price.gsub("INR ", "")
     end
     @item.sale_price = sale_price
+    @item.list_price = item.get_element("ItemAttributes/ListPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
+    @item.percentage = item.get_element("Offer/OfferListing").get("PercentageSaved") rescue 0
     @item.url = item.get("DetailPageURL") rescue "http://www.amazon.in"
     @item
   end
