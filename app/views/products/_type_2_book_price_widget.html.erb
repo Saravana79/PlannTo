@@ -1,17 +1,17 @@
 <% shop_now_url = "#{configatron.hostname}/history_details?iid=#{@impression_id}&red_url=#{@item.url}" %>
 
-<div class="plannto_book_price_div" style="height: 55px;padding: 6px;border: 0px solid #D8D8D8;font-size:12px;">
-  <p style="font-weight: bold;margin:0px;">
+<div class="plannto_book_price_div" style="height: 75px;padding: 2px 0px;border: 0px solid #D8D8D8;font-size:12px;">
+  <p style="font-weight: bold;margin:0px;color:#474747">
     <span>Current Sale Price: </span>
     <% if @item.percentage != 0 %>
     <span style="text-decoration:line-through;">
-      Rs <%= @item.list_price %>
+      Rs <%= @item.list_price%>
     </span>
     <%end%>
     <span style="color:B12704;">
-    &nbsp;&nbsp;Rs <%= @item.sale_price %>
+    &nbsp;Rs <%= @item.sale_price%>
     <% if @item.percentage != 0 %>
-        (Save <%= @item.percentage %> %)
+        (Save <%= @item.percentage %>%)
       </span>
     <% end %>
   </p>
@@ -22,7 +22,7 @@
 
     <p class="" style="margin:10px 0px;">
       <a style="margin: 0; padding: 0;cursor: pointer; text-indent: -99999px; border: 0; color: #FFF; font-weight: bold; font-family: Arial;font-size: 14px;text-decoration: none;" class="shop-now" target="_blank" href=<%= shop_now_url %>>
-       <img src="<%= configatron.root_image_path%>static/images/amazon_buynow.png" width="250px"/>
+       <img src="<%= configatron.root_image_path%>static/images/amazon_buynow.png" width="100px"/>
       </a>
     </p>
   </span>
