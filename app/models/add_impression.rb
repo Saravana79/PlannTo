@@ -24,7 +24,6 @@ class AddImpression < ActiveRecord::Base
    ai.id = obj_params[:imp_id]
    p "Creating Impression - #{ai.id}"
    ai.impression_id = obj_params[:impression_id]
-   ai.advertisement_type = obj_params[:type]
    ai.item_id = obj_params[:itemid]
    ai.hosted_site_url = obj_params[:request_referer]
    ai.impression_time = obj_params[:time]
@@ -49,6 +48,8 @@ class AddImpression < ActiveRecord::Base
      ad_id = obj_params[:ad_id]
    end
    ai.advertisement_id = ad_id
+
+   ai.advertisement_type = ad_id.blank? ? obj_params[:type] : 'advertisement'
    # ai.winning_price_enc = obj_params[:winning_price_enc] # removed from db
    begin
      winning_price = obj_params[:winning_price_enc].blank? ? 0.0 : get_winning_price_value(obj_params[:winning_price_enc])

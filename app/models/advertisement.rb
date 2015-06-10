@@ -807,7 +807,6 @@ class Advertisement < ActiveRecord::Base
 
               if impression.advertisement_type == "advertisement" || impression.advertisement_type == "fashion"
                 ad_impressions_list << impression
-
               elsif impression.advertisement_type != "advertisement"
                 non_ad_impressions_list << impression
               end

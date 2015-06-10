@@ -144,7 +144,7 @@ class ItemDetailOther < ActiveRecord::Base
     if !fashion_id.blank?
       item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
     else
-      item_details = item_details.first(6)
+      item_details = item_details.first(12)
     end
 
     return item_details, cars.first
