@@ -78,6 +78,7 @@ class PlanntoUserDetail
         m_item_type.save!
       end
 
+      plannto_user_detail.skip_duplicate_update = true
       plannto_user_detail.save!
     end
   end

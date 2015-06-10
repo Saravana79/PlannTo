@@ -1244,6 +1244,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
               m_item_type.save!
             end
 
+            plannto_user_detail.skip_duplicate_update = true
             plannto_user_detail.save!
           end
 
