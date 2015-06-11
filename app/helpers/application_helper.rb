@@ -337,4 +337,8 @@ module ApplicationHelper
       price = item_detail.price == 0.0 ? pre_order_val :  number_to_indian_currency("%.0f" % item_detail.cashback.to_f)
    end
 
+   def prettifyforprice(priceorg)
+      price = priceorg == 0.0 ? pre_order_val :  number_to_indian_currency("%.2f" % priceorg.to_f)
+   end
+
 end
