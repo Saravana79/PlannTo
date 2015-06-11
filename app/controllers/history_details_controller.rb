@@ -99,7 +99,7 @@ class HistoryDetailsController < ApplicationController
         end
       else
         publisher = Publisher.where(:publisher_url => 'wiseshe.com').first
-        url =  url.gsub("tag=pla04-21","tag=style05-21&ascsubtag=" + @impression_id)
+        #url =  url.gsub("tag=pla04-21","tag=style05-21&ascsubtag=" + @impression_id)
       end
 
       click_params =  {:url => url, :request_referer => req_url, :time => Time.zone.now.utc, :item_id => item_id, :user => current_user.blank? ? nil : current_user.id, :remote_ip => request.remote_ip, :impression_id => @impression_id,
