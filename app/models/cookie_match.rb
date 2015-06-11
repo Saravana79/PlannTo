@@ -19,11 +19,12 @@ class CookieMatch < ActiveRecord::Base
     u_values = $redis.hgetall(u_key)
     google_ula = ""
 
-    if !u_values.blank?
+    # if !u_values.blank?
       valid_param = {"google_id" => param["google_gid"], "plannto_user_id" => plannto_user_id, "ref_url" => "", "source" => "google_pixel"}
       Resque.enqueue(CookieMatchingProcess, "process_cookie_matching", valid_param)
-      google_ula = "&google_ula=8326120&google_ula=8365600"
-    end
+      # google_ula = "&google_ula=8326120&google_ula=8365600"
+      google_ula = "&google_ula=8326120"
+    # end
     google_ula
   end
 
