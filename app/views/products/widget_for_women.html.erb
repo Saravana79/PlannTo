@@ -93,7 +93,7 @@
 
                     </div>
                     <div class="product-text">
-                      <p class="product-title" style="height:38px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(58) %></p>
+                      <p class="product-title" style="height:48px;overflow:hidden;font-size:14px;padding:5px 0px;line-height:normal;margin:0px;"><%= item.name.to_s.truncate(58) %></p>
                       <div class="product-price">
                         <ul style="margin:0px;padding:0px;">
                           <li class=' <%= item.sale_price.blank? ? "price" : "strike" %>'><%= item.price.blank? ? "" : prettifyforprice(item.price) %> </li>
