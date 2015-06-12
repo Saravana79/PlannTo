@@ -104,10 +104,16 @@ task :update_source_categories => :environment do
   Resque.enqueue(SourceCategoryProcess, "check_and_assign_sources_hash_to_source_category_daily", Time.zone.now.utc)
 end
 
+desc "Processing Buying List Enqueue based on user id in redis"
+task :buying_list_process_enqueue => :environment do
+  time = Time.zone.now.utc
+  Resque.enqueue(BuyingListProcessEnqueue, "buying_list_process_in_redis_enqueue", Time.zone.now.utc)
+end
+
 desc "Processing Buying List based on user id in redis"
 task :buying_list_process => :environment do
   time = Time.zone.now.utc
-  Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc)
+  Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc, user_vals=[])
 end
 
 desc "Processing Automated FeedProcess"

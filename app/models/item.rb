@@ -1598,311 +1598,314 @@ end
     return item_ids
   end
 
-  def self.buying_list_process_in_redis
-    if $redis.get("buying_list_is_running").to_i == 0
-      length = $redis_rtb.llen("users:visits")
-      $redis.set("buying_list_is_running", 1)
-      expire_time = length/100000
-      expire_time = expire_time.to_i == 0 ? 30.minutes : expire_time.to_i.hour
-      $redis.expire("buying_list_is_running", expire_time)
-      base_item_ids = Item.get_base_items_from_config()
+  def self.buying_list_process_in_redis_enqueue
+    if $redis.get("buying_list_is_running_enqueue").to_i == 0
+      $redis.set("buying_list_is_running_enqueue", 1)
+      $redis.expire("buying_list_is_running_enqueue", 20.minutes)
 
-      source_categories = JSON.parse($redis.get("source_categories_pattern"))
-      source_categories.default = ""
+      length = $redis.llen("resque:queue:buying_list_process")
+      if length < 5
+        [*length...5].each do |each_count|
+          user_vals = $redis_rtb.lrange("users:visits", 0, 20000)
+          Resque.enqueue(BuyingListProcess, "buying_list_process_in_redis", Time.zone.now.utc, user_vals)
+          $redis_rtb.ltrim("users:visits", user_vals.count, -1)
+        end
+      end
 
-      plannto_user_detail_hash = {}
+      $redis.set("buying_list_is_running_enqueue", 0)
+    end
+  end
 
-      t_length = length
-      # start_point = 0
+  def self.buying_list_process_in_redis(user_vals)
+    base_item_ids = Item.get_base_items_from_config()
+    source_categories = JSON.parse($redis.get("source_categories_pattern"))
+    source_categories.default = ""
 
-      begin
-        user_vals = $redis_rtb.lrange("users:visits", 0, 2000)
-        redis_rtb_hash = {}
-        pud_redis_rtb_hash = {}
-        redis_hash = {}
+    plannto_user_detail_hash = {}
 
-        buying_list_del_keys = []
-        user_vals.each_with_index do |each_user_val, index|
-          p "Processing: #{each_user_val}"
-          begin
-            t_length -= 1
-            # p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
-            unless each_user_val.blank?
-              user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
-              if !user_id.blank? && !url.blank?
-                already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
-                ranking = 0
+    t_length = user_vals.count
 
-                if already_exist == false
+    begin
+      redis_rtb_hash = {}
+      pud_redis_rtb_hash = {}
+      redis_hash = {}
 
-                  item_ids = item_ids.to_s.split(",")
-                  if item_ids.count < 10
+      buying_list_del_keys = []
+      user_vals.each_with_index do |each_user_val, index|
+        p "Processing: url => #{each_user_val};"
+        p "index => #{index}"
+        begin
+          t_length -= 1
+          p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
+          unless each_user_val.blank?
+            user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
+            if !user_id.blank? && !url.blank?
+              already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
+              ranking = 0
 
-                    #Updating PlanntoUserDetail
-                    plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).to_a.last
+              if already_exist == false
 
-                    if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
-                      cookie_match = CookieMatch.where(:google_user_id => user_id).last
-                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
-                        plannto_user_detail.lad = Time.now
-                        plannto_user_detail.skip_callback = true
-                        plannto_user_detail.save!
-                      end
-                    elsif plannto_user_detail.blank?
-                      plannto_user_detail = PlanntoUserDetail.new(:google_user_id => user_id)
-                      cookie_match = CookieMatch.where(:google_user_id => user_id).last
-                      if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
-                        plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
-                      end
+                item_ids = item_ids.to_s.split(",")
+                if item_ids.count < 10
+
+                  #Updating PlanntoUserDetail
+                  plannto_user_detail = PlanntoUserDetail.where(:google_user_id => user_id).to_a.last
+
+                  if (!plannto_user_detail.blank? && plannto_user_detail.plannto_user_id.blank?)
+                    # cookie_match = CookieMatch.where(:google_user_id => user_id).last
+                    cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                    if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                      plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
                       plannto_user_detail.lad = Time.now
                       plannto_user_detail.skip_callback = true
                       plannto_user_detail.save!
                     end
-
-                    m_item_type = nil
-                    if !plannto_user_detail.blank?
-                      #plannto user details
-                      plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
-                      plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
-
-                      article_content = ArticleContent.where(:url => url).last
-                      itemtype_id = article_content.itemtype_id rescue ""
-                      type = article_content.sub_type rescue "" if type.blank?
-
-                      case type.to_s
-                        when "Reviews", "Spec", "Photo"
-                          ranking = 10
-                        when "Comparisons"
-                          ranking = 5
-                        when "Lists", "Others"
-                          ranking = 2
-                        when ""
-                          ranking = 2
-                      end
-
-                      resale = type == ArticleCategory::ReSale ? true : false
-
-                      if !itemtype_id.blank?
-                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
-                        if m_item_type.blank?
-                          plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url], :r => resale)
-                          m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
-                        else
-                          list_of_urls = m_item_type.list_of_urls
-                          list_of_urls = list_of_urls.to_a
-                          list_of_urls << url
-                          list_of_urls.uniq!
-                          m_item_type.list_of_urls = list_of_urls
-                          m_item_type.r = resale
-                          m_item_type.save!
-                        end
-                      end
-                      plannto_user_detail.skip_duplicate_update = true
-                      plannto_user_detail.save!
+                  elsif plannto_user_detail.blank?
+                    plannto_user_detail = PlanntoUserDetail.new(:google_user_id => user_id)
+                    cookie_match = CookieMatch.where(:google_user_id => user_id).select(:plannto_user_id).last
+                    if !cookie_match.blank? && !cookie_match.plannto_user_id.blank?
+                      plannto_user_detail.plannto_user_id = cookie_match.plannto_user_id
                     end
+                    plannto_user_detail.lad = Time.now
+                    plannto_user_detail.skip_callback = true
+                    plannto_user_detail.save!
+                  end
 
-                    u_key = "u:ac:#{user_id}"
-                    u_values = $redis.hgetall(u_key)
-
-                    add_fad = u_values.blank? ? true : false
-
-                    # Remove expired items from user details
-                    u_values.each do |key,val|
-                      if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
-                        item_id = key.gsub("_la", "")
-                        u_values.delete("#{item_id}_c")
-                        u_values.delete("#{item_id}_la")
-                      end
-                    end
-
-                    # incrby count for items
-                    item_ids.each do |each_key|
-                      if u_values["#{each_key}_c"].blank?
-                        u_values["#{each_key}_c"] = ranking
-                        u_values["#{each_key}_la"] = Date.today.to_s
-                      else
-                        old_ranking = u_values["#{each_key}_c"]
-                        u_values["#{each_key}_c"] = old_ranking.to_i + ranking
-                        u_values["#{each_key}_la"] = Date.today.to_s
-                      end
-                    end
-
-                    proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
-
-                    old_buying_list = u_values["buyinglist"]
-                    buying_list = old_buying_list.to_s.split(",")
-
-                    if !buying_list.blank?
-                      have_to_del = []
-
-                      #remove items from buyinglist which detail is expired
-                      buying_list.each do |each_item|
-                        if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
-                          have_to_del << each_item
-                        end
-                      end
-
-                      buying_list = buying_list - have_to_del
-                      buying_list << proc_item_ids
-                      buying_list = buying_list.flatten.uniq
-                    else
-                      buying_list = proc_item_ids
-                    end
-
-                    buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
-
-                    u_values["buyinglist"] = buying_list.join(",")
-
-                    #buying soon check
-                    top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com","91mobiles.com","buyt.in"]
-                    host = Item.get_host_without_www(url)
-                    bs = top_sites.include?(host)
-
-                    # if !old_buying_list.blank? || !buying_list.blank?
-                    items_hash = u_values.select {|k,_| k.include?("_c")}
-                    items_count = items_hash.count
-                    all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
-
+                  m_item_type = nil
+                  if !plannto_user_detail.blank?
                     #plannto user details
-                    p m_item_type
+                    plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
+                    plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
 
-                    if !m_item_type.blank?
-                      existing_item_ids = m_item_type.m_items.map(&:item_id)
-                      all_item_ids = all_item_ids.map(&:to_i)
+                    article_content = ArticleContent.where(:url => url).select("itemtype_id,sub_type").last
+                    itemtype_id = article_content.itemtype_id rescue ""
+                    type = article_content.sub_type rescue "" if type.blank?
 
-                      common_item_ids = all_item_ids & existing_item_ids
-
-                      new_item_ids = all_item_ids - common_item_ids
-                      removed_item_ids = existing_item_ids - common_item_ids
-
-                      if !removed_item_ids.blank?
-                        removed_item_ids.each do |item_id|
-                          exp_item = m_item_type.m_items.where(:item_id => item_id).last
-                          exp_item.destroy
-                        end
-                      end
-
-                      if !new_item_ids.blank?
-                        new_item_ids.each do |item_id|
-                          lad = u_values["#{item_id}_la"].to_date
-                          ranking = u_values["#{item_id}_c"]
-                          m_item_type.m_items << MItem.new(:item_id => item_id, :lad => lad, :ranking => ranking)
-                        end
-                      end
-
-                      if !common_item_ids.blank?
-                        common_item_ids.each do |item_id|
-                          m_item = m_item_type.m_items.where(:item_id => item_id).last
-                          if !m_item.blank?
-                            m_item.lad = u_values["#{item_id}_la"].to_date
-                            m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
-                            m_item.save!
-                          end
-                        end
-                      end
-
-                      #Update redis_rtb from plannto_user_detail
-                      if !plannto_user_detail.blank?
-                        if plannto_user_detail.plannto_user_id.blank?
-                          user_id_for_key = plannto_user_detail.google_user_id.to_s
-                          if resale != true
-                            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
-                          else
-                            pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
-                          end
-                        else
-                          user_id_for_key = plannto_user_detail.plannto_user_id.to_s
-                          if resale != true
-                            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
-                          else
-                            pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
-                          end
-                        end
-
-                        if !user_id.blank?
-                          item_ids = m_item_type.m_items.sort_by {|each_val| each_val.ranking.to_i}.reverse.map(&:item_id).uniq.join(",")
-                          high_score = m_item_type.m_items.map {|each_val| each_val.ranking.to_i}.max
-                          tot_count = m_item_type.m_items.count
-                          pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
-                          plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
-                        end
-                      end
+                    case type.to_s
+                      when "Reviews", "Spec", "Photo"
+                        ranking = 10
+                      when "Comparisons"
+                        ranking = 5
+                      when "Lists", "Others"
+                        ranking = 2
+                      when ""
+                        ranking = 2
                     end
 
-                    all_item_ids = all_item_ids.join(",")
-                    temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
-                    temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
-                    temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
-                    redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => temp_store)
-                    # end
+                    resale = type == ArticleCategory::ReSale ? true : false
 
-                    begin
-                      if u_values.blank?
-                        del_key = "users:buyinglist:#{user_id}"
-                        redis_rtb_hash.delete(del_key)
-                        buying_list_del_keys << del_key
+                    if !itemtype_id.blank?
+                      m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
+                      if m_item_type.blank?
+                        plannto_user_detail.m_item_types << MItemType.new(:itemtype_id => itemtype_id, :list_of_urls => [url], :r => resale)
+                        m_item_type = plannto_user_detail.m_item_types.where(:itemtype_id => itemtype_id, :r => resale).last
                       else
-                        redis_hash.merge!(u_key => u_values)
+                        list_of_urls = m_item_type.list_of_urls
+                        list_of_urls = list_of_urls.to_a
+                        list_of_urls << url
+                        list_of_urls.uniq!
+                        m_item_type.list_of_urls = list_of_urls
+                        m_item_type.r = resale
+                        m_item_type.save!
                       end
-                    rescue Exception => e
-                      p "Problems while hmset: Args:-"
-                      p u_key
-                      p u_values
-                      p u_values.flatten
-                      raise e
                     end
+                    plannto_user_detail.skip_duplicate_update = true
+                    plannto_user_detail.save!
+                  end
+
+                  u_key = "u:ac:#{user_id}"
+                  u_values = $redis.hgetall(u_key)
+
+                  add_fad = u_values.blank? ? true : false
+
+                  # Remove expired items from user details
+                  u_values.each do |key,val|
+                    if key.include?("_la") && val.to_date < 2.weeks.ago.to_date
+                      item_id = key.gsub("_la", "")
+                      u_values.delete("#{item_id}_c")
+                      u_values.delete("#{item_id}_la")
+                    end
+                  end
+
+                  # incrby count for items
+                  item_ids.each do |each_key|
+                    if u_values["#{each_key}_c"].blank?
+                      u_values["#{each_key}_c"] = ranking
+                      u_values["#{each_key}_la"] = Date.today.to_s
+                    else
+                      old_ranking = u_values["#{each_key}_c"]
+                      u_values["#{each_key}_c"] = old_ranking.to_i + ranking
+                      u_values["#{each_key}_la"] = Date.today.to_s
+                    end
+                  end
+
+                  proc_item_ids = u_values.map {|key,val| if key.include?("_c") && val.to_i > 30; key.gsub("_c",""); end}.compact
+
+                  old_buying_list = u_values["buyinglist"]
+                  buying_list = old_buying_list.to_s.split(",")
+
+                  if !buying_list.blank?
+                    have_to_del = []
+
+                    #remove items from buyinglist which detail is expired
+                    buying_list.each do |each_item|
+                      if !u_values.include?("#{each_item}_c") || u_values["#{each_item}_c"].to_i < 30
+                        have_to_del << each_item
+                      end
+                    end
+
+                    buying_list = buying_list - have_to_del
+                    buying_list << proc_item_ids
+                    buying_list = buying_list.flatten.uniq
+                  else
+                    buying_list = proc_item_ids
+                  end
+
+                  buying_list = buying_list.delete_if {|each_item| base_item_ids.include?(each_item)}
+
+                  u_values["buyinglist"] = buying_list.join(",")
+
+                  #buying soon check
+                  top_sites = ["savemymoney.com", " couponrani.com", "mysmartprice.com", "findyogi.com", "findyogi.in", "smartprix.com", "pricebaba.com","91mobiles.com","buyt.in"]
+                  host = Item.get_host_without_www(url)
+                  bs = top_sites.include?(host)
+
+                  # if !old_buying_list.blank? || !buying_list.blank?
+                  items_hash = u_values.select {|k,_| k.include?("_c")}
+                  items_count = items_hash.count
+                  all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
+
+                  #plannto user details
+                  p m_item_type
+
+                  if !m_item_type.blank?
+                    existing_item_ids = m_item_type.m_items.map(&:item_id)
+                    all_item_ids = all_item_ids.map(&:to_i)
+
+                    common_item_ids = all_item_ids & existing_item_ids
+
+                    new_item_ids = all_item_ids - common_item_ids
+                    removed_item_ids = existing_item_ids - common_item_ids
+
+                    if !removed_item_ids.blank?
+                      removed_item_ids.each do |item_id|
+                        exp_item = m_item_type.m_items.where(:item_id => item_id).last
+                        exp_item.destroy
+                      end
+                    end
+
+                    if !new_item_ids.blank?
+                      new_item_ids.each do |item_id|
+                        lad = u_values["#{item_id}_la"].to_date
+                        ranking = u_values["#{item_id}_c"]
+                        m_item_type.m_items << MItem.new(:item_id => item_id, :lad => lad, :ranking => ranking)
+                      end
+                    end
+
+                    if !common_item_ids.blank?
+                      common_item_ids.each do |item_id|
+                        m_item = m_item_type.m_items.where(:item_id => item_id).last
+                        if !m_item.blank?
+                          m_item.lad = u_values["#{item_id}_la"].to_date
+                          m_item.ranking = m_item.ranking.to_i + u_values["#{item_id}_c"].to_i
+                          m_item.save!
+                        end
+                      end
+                    end
+
+                    #Update redis_rtb from plannto_user_detail
+                    if !plannto_user_detail.blank?
+                      if plannto_user_detail.plannto_user_id.blank?
+                        user_id_for_key = plannto_user_detail.google_user_id.to_s
+                        if resale != true
+                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                        else
+                          pud_redis_rtb_hash_key = "ubl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
+                        end
+                      else
+                        user_id_for_key = plannto_user_detail.plannto_user_id.to_s
+                        if resale != true
+                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}"
+                        else
+                          pud_redis_rtb_hash_key = "ubl:pl:#{user_id_for_key}:#{m_item_type.itemtype_id}:resale"
+                        end
+                      end
+
+                      if !user_id.blank?
+                        item_ids = m_item_type.m_items.sort_by {|each_val| each_val.ranking.to_i}.reverse.map(&:item_id).uniq.join(",")
+                        high_score = m_item_type.m_items.map {|each_val| each_val.ranking.to_i}.max
+                        tot_count = m_item_type.m_items.count
+                        pud_redis_rtb_hash_values = {"item_ids" => item_ids, "high_score" => high_score, "tot_count" => tot_count, "lad" => Date.today.to_s}
+                        plannto_user_detail_hash.merge!(pud_redis_rtb_hash_key => pud_redis_rtb_hash_values)
+                      end
+                    end
+                  end
+
+                  all_item_ids = all_item_ids.join(",")
+                  temp_store = {"item_ids" => u_values["buyinglist"], "count" => items_count, "all_item_ids" => all_item_ids, "lad" => Date.today.to_s}
+                  temp_store.merge!("bs" => bs, "bsd" => Date.today.to_s) if bs
+                  temp_store = temp_store.merge("fad" => Date.today.to_s) if add_fad
+                  redis_rtb_hash.merge!("users:buyinglist:#{user_id}" => temp_store)
+                  # end
+
+                  begin
+                    if u_values.blank?
+                      del_key = "users:buyinglist:#{user_id}"
+                      redis_rtb_hash.delete(del_key)
+                      buying_list_del_keys << del_key
+                    else
+                      redis_hash.merge!(u_key => u_values)
+                    end
+                  rescue Exception => e
+                    p "Problems while hmset: Args:-"
+                    p u_key
+                    p u_values
+                    p u_values.flatten
+                    raise e
                   end
                 end
               end
-
             end
-          rescue Exception => e
-            p "Error While Processing => #{e.backtrace}"
+
           end
+        rescue Exception => e
+          p "Error While Processing => #{e.backtrace}"
+        end
+      end
+
+      p "---------------------- Process Redis and Redis rtb update ----------------------"
+
+      $redis.pipelined do
+        buying_list_del_keys.each do |del_key|
+          $redis.del(u_key)
         end
 
-        $redis_rtb.ltrim("users:visits", user_vals.count, -1) #TODO: temporary comment
+        redis_hash.each do |u_key,u_values|
+          $redis.hmset(u_key, u_values.flatten)
+          $redis.expire(u_key, 2.weeks)
+        end
+      end
 
-        $redis.pipelined do
-          buying_list_del_keys.each do |del_key|
-            $redis.del(u_key)
-          end
+      $redis_rtb.pipelined do
+        buying_list_del_keys.each do |del_key|
+          $redis_rtb.del(u_key)
         end
 
-        $redis_rtb.pipelined do
-          buying_list_del_keys.each do |del_key|
-            $redis_rtb.del(u_key)
-          end
+        redis_rtb_hash.each do |key, val|
+          $redis_rtb.hmset(key, val.flatten)
+          $redis_rtb.hincrby(key, "ap_c", 1)
+          $redis_rtb.expire(key, 2.weeks)
         end
 
-        $redis.pipelined do
-          redis_hash.each do |u_key,u_values|
-            $redis.hmset(u_key, u_values.flatten)
-            $redis.expire(u_key, 2.weeks)
-          end
+        plannto_user_detail_hash.each do |key, val|
+          $redis_rtb.hmset(key, val.flatten)
+          $redis_rtb.expire(key, 2.weeks)
         end
+      end
 
-        $redis_rtb.pipelined do
-          redis_rtb_hash.each do |key, val|
-            $redis_rtb.hmset(key, val.flatten)
-            $redis_rtb.hincrby(key, "ap_c", 1)
-            $redis_rtb.expire(key, 2.weeks)
-          end
-        end
-
-        $redis_rtb.pipelined do
-          plannto_user_detail_hash.each do |key, val|
-            $redis_rtb.hmset(key, val.flatten)
-            $redis_rtb.expire(key, 2.weeks)
-          end
-        end
-
-        length = length - user_vals.count
-        # start_point = start_point + 1001
-        p "------------------------------- Remaining Length - #{length} -------------------------------"
-      end while length > 0
-      $redis.set("buying_list_is_running", 0)
+      p "------------------------------ Process Completed ------------------------------"
+    rescue Exception => e
+      p "Problem in buying list process"
     end
   end
 
