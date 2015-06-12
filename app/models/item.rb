@@ -1603,6 +1603,8 @@ end
       $redis.set("buying_list_is_running_enqueue", 1)
       $redis.expire("buying_list_is_running_enqueue", 20.minutes)
 
+      # length = $redis_rtb.llen("users:visits")
+
       length = $redis.llen("resque:queue:buying_list_process")
       if length < 5
         [*length...5].each do |each_count|
