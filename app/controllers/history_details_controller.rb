@@ -292,6 +292,12 @@ class HistoryDetailsController < ApplicationController
       if(vendor && vendor.id == 9861)
           url = url.gsub("www.flipkart.com","dl.flipkart.com/dl")
       end
+      if(vendor && vendor.id == 73017)
+        if(!item_id.blank?)
+          itemidshort = item_id.to_s.last(3).to_i.to_s
+          url = url.gsub("{item_id_short}",itemidshort)
+        end
+      end
       redirect_to url
   end
 
