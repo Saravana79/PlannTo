@@ -13,12 +13,14 @@ class PlanntoUserDetail
   field :m_rank, type: Integer #Male Ranking
   field :f_rank, type: Integer #Female Ranking
   field :a, type: String # Additional detail
+  field :lid, type: String # Locaiton id
 
   embeds_many :m_item_types
   # embeds_many :m_items
 
   index({ plannto_user_id: 1 })
   index({ google_user_id: 1 })
+  index({ lad: 1 })
 
   def self.update_plannto_user_detail(impression)
     # plannto user details

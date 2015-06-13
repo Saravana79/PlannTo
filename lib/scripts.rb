@@ -436,3 +436,48 @@ csv_details.each_with_index do |csv_detail, index|
 end
 
 GoogleContentCategory.import(google_content_categories)
+
+
+# Update google_content_category
+
+csv_details = CSV.read("/home/sivakumar/skype/location.csv")
+google_geo_targetings = []
+
+csv_details.each_with_index do |csv_detail, index|
+  next if index == 0
+
+  criteria_id = csv_detail[0]
+  name = csv_detail[1]
+  canonical_name = csv_detail[2]
+  parent_id = csv_detail[3]
+  country_code = csv_detail[4]
+  target_type = csv_detail[5]
+  status = csv_detail[6]
+
+  # google_geo_targetings = GoogleGeoTargeting.where(:criteria_id => criteria_id).last
+
+  google_geo_targeting = GoogleGeoTargeting.new(:criteria_id => criteria_id, :name => name, :canonical_name => canonical_name, :parent_id => parent_id,
+                         :country_code => country_code, :target_type => target_type, :status => status)
+
+  if country_code == "IN"
+    places_hash = {}
+
+    Place.all.each do |place|
+      places_hash.merge!(place.name => place.id)
+    end
+
+    City.all.each do |city|
+      places_hash.merge!(city.name => city.id)
+    end
+
+    place_id = places_hash[name]
+
+    google_geo_targeting.location_id = place_id if !place_id.blank?
+
+    google_geo_targetings << google_geo_targeting
+  else
+    google_geo_targetings << google_geo_targeting
+  end
+end
+
+GoogleGeoTargeting.import(google_geo_targetings)

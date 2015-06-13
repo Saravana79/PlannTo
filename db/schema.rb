@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150605080905) do
+ActiveRecord::Schema.define(:version => 20150613072910) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -614,6 +614,19 @@ ActiveRecord::Schema.define(:version => 20150605080905) do
     t.integer  "parent_id"
     t.string   "category"
     t.string   "plannto_category"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "google_geo_targetings", :force => true do |t|
+    t.integer  "criteria_id"
+    t.string   "name"
+    t.string   "canonical_name"
+    t.integer  "parent_id"
+    t.string   "country_code"
+    t.string   "target_type"
+    t.string   "status"
+    t.integer  "location_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
