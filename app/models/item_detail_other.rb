@@ -134,11 +134,17 @@ class ItemDetailOther < ActiveRecord::Base
   def self.get_item_detail_others_from_items_and_fashion_id(item_id, fashion_id=nil)
     item_ids = item_id.to_s.split(",")
     items = Item.where(:id => item_ids)
+    if items.blank?
+      return items, [], nil
+    end
     location_ids = items.select {|each_val| each_val.is_a?(City)}.map(&:id)
     cars = items.select {|each_val| each_val.is_a?(Car)}
     car_ids = cars.map(&:id)
 
-    query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where idom1.item_id in (#{location_ids.map(&:inspect).join(',')}) and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')}))) and itemtype_id in (1) and status = 1"
+    location_condition = location_ids.blank? ? "1=1" : "idom1.item_id in (#{location_ids.map(&:inspect).join(',')})"
+    car_condition = car_ids.blank? ? "and 1=1" : "and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')}))"
+
+    query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where #{location_condition} #{car_condition}) and itemtype_id in (1) and status = 1"
     item_details = ItemDetailOther.find_by_sql(query)
 
     if !fashion_id.blank?
@@ -147,7 +153,16 @@ class ItemDetailOther < ActiveRecord::Base
       item_details = item_details.first(12)
     end
 
-    return item_details, cars.first
+    if item_details.count < 12
+      query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where #{location_condition}) and itemtype_id in (1) and status = 1"
+      result_item_details = ItemDetailOther.find_by_sql(query)
+      new_item_details = result_item_details - item_details
+      item_details = item_details + new_item_details
+    end
+    car = cars.first
+
+    car = Car.first if cars.blank?
+    return items, item_details, car
   end
 
 end

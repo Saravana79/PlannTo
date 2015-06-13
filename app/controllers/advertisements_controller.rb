@@ -42,7 +42,9 @@ class AdvertisementsController < ApplicationController
 
     sort_disable = params[:r].to_i == 1 ? "true" : "false"
 
-    if !@ad.blank? && @ad.having_related_items == true
+    if !@ad.blank? && @ad.id == 52
+
+    elsif !@ad.blank? && @ad.having_related_items == true
       itemsaccess = "advertisement"
       original_ids = @ad.get_item_ids_from_ads(url)
       @items = original_ids.blank? ? [] : Item.where(:id => original_ids)
@@ -281,7 +283,7 @@ class AdvertisementsController < ApplicationController
     item_ids = item_id.to_s.split(",")
 
     # @item, @item_details = Item.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, params[:fashion_id])
-    @item_details, @item = ItemDetailOther.get_item_detail_others_from_items_and_fashion_id(params[:item_id], params[:fashion_id])
+    @items, @item_details, @item = ItemDetailOther.get_item_detail_others_from_items_and_fashion_id(params[:item_id], params[:fashion_id])
 
     @item_details, @sliced_item_details, @item, @items = Item.assign_template_and_item(@ad_template_type, @item_details, [@item], @suitable_ui_size,true)
 
@@ -536,7 +538,7 @@ class AdvertisementsController < ApplicationController
 
     if params[:item_id].blank? || params[:fashion_id].blank?
       ad = Advertisement.where(:id => params[:ads_id]).first
-      if !ad.blank? && ad.advertisement_type == "fashion"
+      if (ad.id != 52 && !ad.blank? && ad.advertisement_type == "fashion")
         item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
 
         if random_id.blank?

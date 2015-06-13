@@ -50,9 +50,9 @@ module Admin::AdvertisementsHelper
     return_url = ''
     img_id = ''
     next_src = ''
-    image = item_detail_other.image
-    if !item_detail_other.blank? && !image.blank?
-      return_url = configatron.root_image_path + image.avatar.path
+    image_name = item_detail_other.image_name
+    if !item_detail_other.blank? && !image_name.blank?
+      return_url = "#{configatron.root_image_path}item_detail_others/ad/#{format}/#{image_name}"
       img_id = "item_details"
     else
       # return_url = configatron.root_image_url + type + "/#{format}/" + image_url

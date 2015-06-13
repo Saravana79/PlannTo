@@ -1507,14 +1507,12 @@ end
   end
 
   def self.assign_template_and_item(ad_template_type, item_details, items, suitable_ui_size,used_cars = false)
-
     if ad_template_type == "type_4"
       if ["300", "120", "728","336_280","160_600"].include?(suitable_ui_size)
         item_details = item_details.first(12)
         sliced_item_details = item_details.each_slice(2)
       elsif suitable_ui_size == "300_600"
-        if(used_cars)
-
+        if used_cars
           item_details = item_details.first(24)
           correct_count = item_details.count > 2 ? item_details.count - (item_details.count % 3) : item_details.count
           item_details = item_details.first(correct_count)
@@ -1787,7 +1785,6 @@ end
                   all_item_ids = Hash[items_hash.sort_by {|_,v| v.to_i}.reverse].map {|k,_| k.gsub("_c","")}.compact
 
                   #plannto user details
-                  p m_item_type
 
                   if !m_item_type.blank?
                     existing_item_ids = m_item_type.m_items.map(&:item_id)
@@ -2715,8 +2712,12 @@ end
         cars = items.select {|each_val| each_val.is_a?(Car)}
         car_ids = cars.map(&:id)
 
-        query = "select count(*) as count from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where idom1.item_id in (#{location_ids.map(&:inspect).join(',')}) and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')})) and vendor_id in (#{vendor_ids.map(&:inspect).join(',')})) and itemtype_id in (1) and status = 1"
+        location_condition = location_ids.blank? ? "1=1" : "idom1.item_id in (#{location_ids.map(&:inspect).join(',')})"
+        car_condition = car_ids.blank? ? "and 1=1" : "and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')}))"
+
+        query = "select count(*) as count from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where #{location_condition} #{car_condition}) and itemtype_id in (1) and status = 1"
         item_details_count = ItemDetailOther.find_by_sql(query).last.count rescue nil
+
         if !item_details_count.blank?
           $redis.set("itemdetails_count:#{alt_item_ids}", item_details_count)
           $redis.expire("itemdetails_count:#{alt_item_ids}", 3.hours)
