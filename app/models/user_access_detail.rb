@@ -78,8 +78,7 @@ class UserAccessDetail < ActiveRecord::Base
               list_of_urls = m_item_type.list_of_urls
               list_of_urls = list_of_urls.to_a
               list_of_urls << url
-              list_of_urls.uniq!
-              m_item_type.list_of_urls = list_of_urls
+              m_item_type.list_of_urls = list_of_urls.uniq
               m_item_type.r = resale
               m_item_type.save!
             end
