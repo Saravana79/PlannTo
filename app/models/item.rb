@@ -1622,6 +1622,11 @@ end
     base_item_ids = Item.get_base_items_from_config()
     source_categories = JSON.parse($redis.get("source_categories_pattern"))
     source_categories.default = ""
+    google_geo_targeting_hash = {}
+
+    google_geo_targetings = GoogleGeoTargeting.where("location_id is not null")
+
+    google_geo_targetings.each {|each_val| google_geo_targeting_hash.merge!(each_val.criteria_id => each_val.location_id)}
 
     plannto_user_detail_hash = {}
 
@@ -1640,7 +1645,7 @@ end
           t_length -= 1
           p "Remaining Length each - #{t_length} - #{Time.now.strftime("%H:%M:%S")}"
           unless each_user_val.blank?
-            user_id, url, type, item_ids, advertisement_id = each_user_val.split("<<")
+            user_id, url, type, item_ids, advertisement_id, itemtype, plannto_user_id, google_location_id = each_user_val.split("<<")
             if !user_id.blank? && !url.blank?
               already_exist = Item.check_if_already_exist_in_user_visits(source_categories, user_id, url, "users:last_visits")
               ranking = 0
@@ -1675,6 +1680,11 @@ end
 
                   m_item_type = nil
                   if !plannto_user_detail.blank?
+                    plannto_location_id = nil
+                    if !google_location_id.blank?
+                      plannto_location_id = google_geo_targeting_hash[google_location_id.to_i]
+                    end
+                    plannto_user_detail.loc_id = plannto_location_id if !plannto_location_id.blank?
                     #plannto user details
                     plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
                     plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?

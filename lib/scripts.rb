@@ -441,6 +441,7 @@ GoogleContentCategory.import(google_content_categories)
 # Update google_content_category
 
 csv_details = CSV.read("/home/sivakumar/skype/location.csv")
+csv_details = CSV.read(open(url))
 google_geo_targetings = []
 
 csv_details.each_with_index do |csv_detail, index|
@@ -460,23 +461,28 @@ csv_details.each_with_index do |csv_detail, index|
                          :country_code => country_code, :target_type => target_type, :status => status)
 
   if country_code == "IN"
-    places_hash = {}
-
-    Place.all.each do |place|
-      places_hash.merge!(place.name => place.id)
+    places = Sunspot.search([City,Place]) do
+      keywords name do
+        minimum_match 1
+      end
+      order_by :score,:desc
+      order_by :orderbyid , :asc
+      paginate(:page => 1, :per_page => 5)
     end
 
-    City.all.each do |city|
-      places_hash.merge!(city.name => city.id)
-    end
+    city = places.results.first rescue nil
+    score = places.hits.first.score.to_f rescue 0
 
-    place_id = places_hash[name]
-
-    google_geo_targeting.location_id = place_id if !place_id.blank?
+    google_geo_targeting.location_id = city.id if (!city.blank? && score > 1)
 
     google_geo_targetings << google_geo_targeting
   else
     google_geo_targetings << google_geo_targeting
+  end
+
+  if google_geo_targetings.count > 10000
+    GoogleGeoTargeting.import(google_geo_targetings)
+    google_geo_targetings = []
   end
 end
 

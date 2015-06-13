@@ -13,7 +13,7 @@ class PlanntoUserDetail
   field :m_rank, type: Integer #Male Ranking
   field :f_rank, type: Integer #Female Ranking
   field :a, type: String # Additional detail
-  field :lid, type: String # Locaiton id
+  field :loc_id, type: String # Locaiton id
 
   embeds_many :m_item_types
   # embeds_many :m_items
