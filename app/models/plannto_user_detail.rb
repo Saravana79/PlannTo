@@ -114,13 +114,17 @@ class PlanntoUserDetail
       a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
       a_hash = Hash[a_hash]
       a_hash.merge!("resale" => "true", "rad" => Date.today.to_s) #rad => resale last accessed date
-      self.a = a_hash
+      a_hash_str = ""
+      a_hash.each {|k,v| a_hash_str+="#{k},#{v}<<"}
+      self.a = a_hash_str
       redis_rtb.merge!("#{key_prefix}:ad:rs" => {"val" => Date.today.to_s}) if !key_prefix.blank?
     elsif buying_cycle_site_list.include?(domain)
       a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
       a_hash = Hash[a_hash]
       a_hash.merge!("bc" => "true", "bcad" => Date.today.to_s) #bcad => buying cycle last accessed date
-      self.a = a_hash
+      a_hash_str = ""
+      a_hash.each {|k,v| a_hash_str+="#{k},#{v}<<"}
+      self.a = a_hash_str
       redis_rtb.merge!("#{key_prefix}:ad:bc" => {"val" => Date.today.to_s}) if !key_prefix.blank?
     end
 
