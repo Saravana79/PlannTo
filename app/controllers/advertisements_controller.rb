@@ -553,11 +553,7 @@ class AdvertisementsController < ApplicationController
     if !params[:item_id].blank? && params[:fashion_id].blank?
       ad = Advertisement.where(:id => params[:ads_id]).first
       if !ad.blank? && ad.id == 52
-        random_id = Item.get_random_id_from_item_ids(ad, params[:item_id])
-
-        if random_id.blank?
-          random_id = Item.get_random_id_from_item_ids(ad, params[:item_id])
-        end
+        random_id = rand(10)
 
         params[:fashion_id] = random_id
       end
