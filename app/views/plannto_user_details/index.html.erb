@@ -23,6 +23,38 @@
                           <th>Value</th>
                           <tbody>
                           <% val.each do |each_val| %>
+
+                          <% if each_val.is_a?(Hash) %>
+                              <% each_val.each do |k, v| %>
+                                  <tr>
+                                    <td><%= k %></td>
+                                    <td>
+                                      <% if v.is_a?(Array) %>
+                                          <% v.each do |each_item| %>
+                                              <% if each_item.is_a?(Hash) %>
+                                                  <table border="1">
+                                                    <th>Key</th>
+                                                    <th>Value</th>
+                                                    <tbody>
+                                                    <% each_item.each do |key, val| %>
+                                                        <tr>
+                                                          <td><%= key %></td>
+                                                          <td><%= val %></td>
+                                                        </tr>
+                                                    <% end %>
+                                                    </tbody>
+                                                  </table>
+                                              <% else %>
+                                                <%= each_item %>
+                                              <% end %>
+                                          <% end %>
+                                      <% else %>
+                                          <%= v %>
+                                      <% end %>
+                                    </td>
+                                  </tr>
+                              <% end %>
+                          <% else %>
                               <% each_val.each do |k, v| %>
                                   <tr>
                                     <td><%= k %></td>
@@ -52,6 +84,9 @@
                                     </td>
                                   </tr>
                               <% end %>
+                          <% end %>
+
+
                           <% end %>
                           </tbody>
                         </table>
