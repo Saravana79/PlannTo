@@ -143,15 +143,19 @@ class ItemDetailOther < ActiveRecord::Base
 
     location_condition = location_ids.blank? ? "1=1" : "idom1.item_id in (#{location_ids.map(&:inspect).join(',')})"
     car_condition = car_ids.blank? ? "and 1=1" : "and idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')}))"
+    order_by_condition = ""
+    if !fashion_id.blank?
+      order_by_condition = " order by rand(#{fashion_id}) limit 12"
+    end
 
-    query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where #{location_condition} #{car_condition}) and itemtype_id in (1) and status = 1"
+    query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where #{location_condition} #{car_condition}) and itemtype_id in (1) and status = 1 #{order_by_condition}"
     item_details = ItemDetailOther.find_by_sql(query)
 
-    if !fashion_id.blank?
-      item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
-    else
-      item_details = item_details.first(12)
-    end
+    # if !fashion_id.blank?
+    #   item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
+    # else
+    #   item_details = item_details.first(12)
+    # end
 
     if item_details.count < 12
       query = "select * from item_detail_others where id in (select item_detail_other_id from item_detail_other_mappings idom1 where #{location_condition}) and itemtype_id in (1) and status = 1"
