@@ -1174,6 +1174,8 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
 
         $redis_rtb.pipelined do
           plannto_user_detail_hash.each do |key, val|
+            p key
+            p val
             $redis_rtb.hmset(key, val.flatten)
             $redis_rtb.expire(key, 2.weeks)
           end
