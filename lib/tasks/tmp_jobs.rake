@@ -146,6 +146,8 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
 
           if !city.blank?
             mapping_import << ItemDetailOtherMapping.new(:item_detail_other_id => item_detail_other.id, :item_id => city.id)
+
+            item_detail_other.update_attributes(:location_id => city.id)
           end
 
           cars = Sunspot.search(search_type) do

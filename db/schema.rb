@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150613072910) do
+ActiveRecord::Schema.define(:version => 20150615064405) do
 
   create_table "ad_hourly_spent_details", :force => true do |t|
     t.integer  "advertisement_id"
@@ -775,6 +775,7 @@ ActiveRecord::Schema.define(:version => 20150613072910) do
     t.integer  "vendor_id"
     t.integer  "itemtype_id"
     t.datetime "last_updated_at"
+    t.integer  "location_id"
   end
 
   create_table "item_pro_cons", :force => true do |t|
