@@ -91,7 +91,6 @@ class PlanntoUserDetail
 
   def update_additional_details(url)
     domain = Item.get_host_without_www(url)
-    redis_rtb = {}
     male_site_list = ["team-bhp.com", "gadgetstouse.com"]
     female_site_list = ["makeupandbeauty.com", "stylecraze.com", "bollywoodshaadis.com", "southindiafashion.com", "wiseshe.com", "indusladies.com", "celebritysaree.com"]
     resale_site_list = ["olx.in", "quikr.com", "classifieds.team-bhp.com"]
@@ -105,6 +104,9 @@ class PlanntoUserDetail
       user_id_for_key = self.plannto_user_id.to_s
       key_prefix = "ubl:pl:#{user_id_for_key}"
     end
+    redis_rtb = {key_prefix => {}}
+
+    redis_rtb_ubl = redis_rtb[key_prefix]
 
     if male_site_list.include?(domain)
       self.m_rank = self.m_rank.to_i + 1
@@ -117,23 +119,30 @@ class PlanntoUserDetail
       a_hash_str = ""
       a_hash.each {|k,v| a_hash_str+="#{k},#{v}<<"}
       self.a = a_hash_str
-      redis_rtb.merge!("#{key_prefix}:ad:rs" => {"val" => Date.today.to_s}) if !key_prefix.blank?
+      # redis_rtb.merge!("#{key_prefix}:ad:rs" => {"val" => Date.today.to_s}) if !key_prefix.blank?
     elsif buying_cycle_site_list.include?(domain)
       a_hash = self.a.to_s.split("<<").map {|each_v| each_v.split(",")}
       a_hash = Hash[a_hash]
-      a_hash.merge!("bc" => "true", "bcad" => Date.today.to_s) #bcad => buying cycle last accessed date
+      a_hash.merge!("bc" => "true", "bclad" => Date.today.to_s) #bclad => buying cycle last accessed date
       a_hash_str = ""
       a_hash.each {|k,v| a_hash_str+="#{k},#{v}<<"}
       self.a = a_hash_str
-      redis_rtb.merge!("#{key_prefix}:ad:bc" => {"val" => Date.today.to_s}) if !key_prefix.blank?
+      # redis_rtb.merge!("#{key_prefix}:ad:bc" => {"val" => "true"}) if !key_prefix.blank?
+      redis_rtb_ubl.merge!("bc" => "true", "bclad" => Date.today.to_s)
+    end
+
+    if self.loc_id.blank?
+      redis_rtb_ubl.merge!("loc_id" => self.loc_id)
     end
 
     if self.m_rank.to_i > self.f_rank.to_i
       self.gender = "m"
-      redis_rtb.merge!("#{key_prefix}:g" => {"val" => "male"}) if !key_prefix.blank?
+      # redis_rtb.merge!("#{key_prefix}:g" => {"val" => "male"}) if !key_prefix.blank?
+      redis_rtb_ubl.merge!("g" => "m")
     elsif self.m_rank.to_i < self.f_rank.to_i
       self.gender = "f"
-      redis_rtb.merge!("#{key_prefix}:g" => {"val" => "female"}) if !key_prefix.blank?
+      # redis_rtb.merge!("#{key_prefix}:g" => {"val" => "female"}) if !key_prefix.blank?
+      redis_rtb_ubl.merge!("g" => "f")
     end
 
     self.skip_callback = true
