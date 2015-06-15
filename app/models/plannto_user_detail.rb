@@ -131,7 +131,7 @@ class PlanntoUserDetail
       redis_rtb_ubl.merge!("bc" => "true", "bclad" => Date.today.to_s)
     end
 
-    if self.loc_id.blank?
+    if !self.loc_id.blank?
       redis_rtb_ubl.merge!("loc_id" => self.loc_id)
     end
 
