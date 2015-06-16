@@ -87,7 +87,7 @@ class UserAccessDetail < ActiveRecord::Base
           plannto_user_detail.skip_duplicate_update = true
           plannto_user_detail.save!
           plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
-          plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
+          plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
         end
 
         add_fad = u_values.blank? ? true : false

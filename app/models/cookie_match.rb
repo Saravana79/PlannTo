@@ -150,7 +150,7 @@ class CookieMatch < ActiveRecord::Base
                 item_ids = item_detail.itemid.to_s rescue ""
                 redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
-                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
             else
               article_content = ArticleContent.find_by_sql("select sub_type,group_concat(icc.item_id) all_item_ids, ac.id, itemtype_id from article_contents ac inner join contents c on ac.id = c.id
@@ -168,7 +168,7 @@ where url = '#{ref_url}' group by ac.id").first
 
                 redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
                 redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
-                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
               end
             end
           rescue Exception => e

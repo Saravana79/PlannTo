@@ -1685,7 +1685,7 @@ end
                     plannto_user_detail.loc_id = plannto_location_id if !plannto_location_id.blank?
                     #plannto user details
                     plannto_user_detail_hash_new = plannto_user_detail.update_additional_details(url)
-                    plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.blank?
+                    plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
 
                     article_content = ArticleContent.where(:url => url).select("itemtype_id,sub_type").last
                     itemtype_id = article_content.itemtype_id rescue ""
