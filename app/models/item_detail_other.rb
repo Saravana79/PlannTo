@@ -142,7 +142,7 @@ class ItemDetailOther < ActiveRecord::Base
     car_ids = cars.map(&:id)
 
     location_condition = location_ids.blank? ? "and 1=1" : "and location_id in (#{location_ids.map(&:inspect).join(',')})"
-    car_condition = car_ids.blank? ? "1=1" : "idom1.item_detail_other_id in (select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')}))"
+    car_condition = car_ids.blank? ? "1=1" : "select item_detail_other_id from item_detail_other_mappings where item_id in (#{car_ids.map(&:inspect).join(',')})"
 
     order_by_condition = " order by rand() limit 12"
 
