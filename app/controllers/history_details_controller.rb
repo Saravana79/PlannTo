@@ -80,7 +80,7 @@ class HistoryDetailsController < ApplicationController
             # if url.include?("%")
             #   url = URI.unescape(url)
             # end
-            if(publisher_vendor.vendor_id == "9882")
+            if(publisher_vendor.vendor_id == 9882)
 
               tag_val = FeedUrl.get_value_from_pattern(url, "tag=<tag_val>&", "<tag_val>")
 
