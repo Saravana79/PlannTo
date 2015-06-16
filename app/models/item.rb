@@ -2015,15 +2015,14 @@ end
       item = OpenStruct.new
       # item.id = 1000 + index
       item.id = each_item.get("ASIN")
-      p item.id
       if excluded_items.include?(item.id)
-        p "true"
         next
       end
 
       item.name = each_item.get_element("ItemAttributes").get("Title")
-      item.sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice") rescue nil
-      item.price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice") rescue nil
+      item.sale_price = each_item.get_element("Offers/Offer/OfferListing/SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue nil
+      item.price = each_item.get_element("Offers/Offer/OfferListing/Price").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue nil
+
       if page_type == "type_1"
          item.image_url = each_item.get("ImageSets/ImageSet/TinyImage/URL")
       else

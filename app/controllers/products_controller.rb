@@ -1282,6 +1282,7 @@ class ProductsController < ApplicationController
     @items, @url = Item.get_items_from_url(url, params[:item_ids])
 
     if !@items.blank?
+      params[:item_ids] = @items.map(&:id).join(",")
       included_beauty = @items.map {|d| d.is_a?(Beauty)}.include?(true) rescue false
       if included_beauty
         params[:beauty] = "true"
