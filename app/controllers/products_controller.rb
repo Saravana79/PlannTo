@@ -1289,13 +1289,15 @@ class ProductsController < ApplicationController
     end
 
     if params[:beauty] != "true" && (params[:item_ids].blank? || params[:fashion_id].blank?)
-      item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
+      # item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
+      #
+      # if random_id.blank?
+      #   item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
+      # end
 
-      if random_id.blank?
-        item_id, random_id = Item.get_item_id_and_random_id(nil, params[:item_ids], 9882)
-      end
+      random_id = rand(20)
 
-      params[:item_ids] = item_id
+      # params[:item_ids] = item_id
       params[:fashion_id] = random_id
     end
 

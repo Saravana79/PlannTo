@@ -536,22 +536,24 @@ class AdvertisementsController < ApplicationController
     # params[:protocol_type] ||= ""
     params[:protocol_type] = request.protocol
 
+    ad = Advertisement.where(:id => params[:ads_id]).first
+
     if params[:item_id].blank? || params[:fashion_id].blank?
-      ad = Advertisement.where(:id => params[:ads_id]).first
       if (ad.id != 52 && !ad.blank? && ad.advertisement_type == "fashion")
-        item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
+        # item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
+        #
+        # if random_id.blank?
+        #   item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
+        # end
 
-        if random_id.blank?
-          item_id, random_id = Item.get_item_id_and_random_id(ad, params[:item_id])
-        end
+        random_id = rand(20)
 
-        params[:item_id] = item_id
+        # params[:item_id] = item_id
         params[:fashion_id] = random_id
       end
     end
 
     if !params[:item_id].blank? && params[:fashion_id].blank?
-      ad = Advertisement.where(:id => params[:ads_id]).first
       if !ad.blank? && ad.id == 52
         random_id = rand(10)
 

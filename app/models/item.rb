@@ -2616,24 +2616,24 @@ end
 
   def self.get_item_and_item_details_from_fashion_url(url, item_ids, vendor_ids, fashion_id)
     item = item_ids.blank? ? nil : Item.where(:id => item_ids.split(",")).first
-    itemdetails = []
+    item_details = []
     if !item.blank?
-      itemdetails = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids)
-      if !fashion_id.blank?
-        itemdetails = Item.get_itemdetails_using_fashion_id(itemdetails, fashion_id)
-      else
-        itemdetails = itemdetails.sample(6)
-      end
+      item_details = Itemdetail.get_item_details_by_item_ids([item.id], vendor_ids, fashion_id)
+      # if !fashion_id.blank?
+      #   item_details = Item.get_itemdetails_using_fashion_id(item_details, fashion_id)
+      # else
+      #   item_details = item_details.sample(6)
+      # end
     else
       item_name = Item.get_fashion_item_name_random()
 
       item = Item.where(:name => item_name).first
       item_id_arr = [item.id] rescue []
-      itemdetails = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids)
-      itemdetails = itemdetails.sample(6)
+      item_details = Itemdetail.get_item_details_by_item_ids(item_id_arr, vendor_ids, fashion_id)
+      item_details = item_details.sample(6)
     end
-    itemdetails = itemdetails.first(6)
-    return item, itemdetails
+    item_details = item_details.first(6)
+    return item, item_details
   end
 
   def self.get_itemdetails_using_fashion_id(itemdetails, fashion_id)
