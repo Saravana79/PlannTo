@@ -1,6 +1,6 @@
 class Admin::AdReportsController < ApplicationController
-  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report, :widget_reports]
-  before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report, :widget_reports]
+  before_filter :authenticate_admin_user!, :except => [:view_ad_chart, :report, :generate_report, :widget_reports, :load_vendors]
+  before_filter :authenticate_user!, :only => [:view_ad_chart, :report, :generate_report, :widget_reports, :load_vendors]
   before_filter :get_advertisement, :only => [:report, :generate_report]
   layout "product"
 
@@ -174,7 +174,7 @@ class Admin::AdReportsController < ApplicationController
 
       if !@publisher.blank?
         params[:publisher_id] = @publisher.id
-        @vendors = Vendor.where(:id => @publisher.vendor_ids)
+        @vendors = Vendor.where(:id => @publisher.vendor_ids.to_s.split(",")) rescue []
       end
     end
 
