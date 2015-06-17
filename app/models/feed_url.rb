@@ -692,15 +692,24 @@ class FeedUrl < ActiveRecord::Base
     domain = Item.get_host_without_www(feed_url.url)
 
     is_valid_for_auto_used_car_check = false
+    non_included_list = false
     if ["vicky.in", "carwale.com", "classifieds.team-bhp.com", "autonagar.com", "bikewale.com", "cartrade.com", "carsndeals.com", "mycarhelpline.com"].include?(domain)
       is_valid_for_auto_used_car_check = FeedUrl.check_auto_used_car(feed_url.url)
+    elsif url.to_s.downcase.include?("used") && feed_url.category.to_s.downcase.include?("car")
+      is_valid_for_auto_used_car_check = true
+      non_included_list = true
     end
 
     if is_valid_for_auto_used_car_check == true
-      article.sub_type = ArticleCategory::ReSale
-      underscored_domain = domain.to_s.gsub(".", "_").gsub("-", "_")
-      function_name = "check_and_get_article_item_ids_#{underscored_domain}"
-      auto_save, selected_list, score = Item.send(function_name, feed_url.url)
+      if non_included_list
+        article.sub_type = ArticleCategory::ReSale
+        auto_save, selected_list, score = Item.check_and_update_auto_used_car(feed_url)
+      else
+        article.sub_type = ArticleCategory::ReSale
+        underscored_domain = domain.to_s.gsub(".", "_").gsub("-", "_")
+        function_name = "check_and_get_article_item_ids_#{underscored_domain}"
+        auto_save, selected_list, score = Item.send(function_name, feed_url.url)
+      end
     else
       search_params = {}
       search_params.merge!(:term => title_for_search, :search_type => "ArticleContent", :category => feed_url.category, :ac_sub_type => article.sub_type)

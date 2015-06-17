@@ -2179,12 +2179,12 @@ end
     splitted_url = url.split("/")
     term = splitted_url[3..splitted_url.count].join(" ")
 
-   removed_keywords = ["difference", "between", "of", "and ", "is", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
+    removed_keywords = ["difference", "between", "of", "and ", "is", "a", "an", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
                         "innovative", "style", "store", "preserve", "way", "rs ", "you", "are","simple","choose","right","for","does", "gorgeous", "amazing", "benefit", "health","things", "should", "their", "unforgettable", "stylish","home",
                         "get","goddess","look","with","uses","available", "india", "job ","remedies", "most", "expensive", "product","lose","weight", "help","reason","larger","each","season","treat","every","guide","need","know","side","effects",
                         "prevent","exercise","sick","delicious","apply","perfectly", "and","step","get","tutorial","picture","detailed","article","surprising","prepare","indian","in","best","using","at","everything","from","natural","your","basic",
                         "wear","diy","kiss","woes","good","bye","homemade","wearing","avoid","while","mistake","wonderful","hide","make","sure","cause"]
-     term = term.gsub("-"," ")
+    term = term.gsub("-"," ")
     term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
     term = term.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
 
@@ -2853,6 +2853,75 @@ end
       if !city.blank? && !item.blank?
         selected_list = [city.id, item.id].compact
         auto_save = "true"
+      end
+    rescue Exception => e
+      auto_save = "false"
+    end
+    return auto_save, selected_list, score
+  end
+
+  def self.check_and_update_auto_used_car(feed_url)
+    #TODO: have to work here
+    auto_save = "false"
+    selected_list = []
+    removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
+                        "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
+                        "access","full","depth","detailed","look","difference","update","video","top","best","list","spec","and","point","shoot","camera","mobile",
+                        "tablet","car","bike", "tips", "beauty", "makeup", "blog", "look", "product", "brown girls", "swatches", "swatch", "cards", "used", "for", "sale",
+                        "on", "in"]
+
+    begin
+      title = feed_url.title.to_s
+
+      title = title.gsub("-"," ")
+      title = title.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
+      title = title.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
+
+      places = Sunspot.search([City,Place]) do
+        keywords title do
+          minimum_match 1
+        end
+        order_by :score,:desc
+        order_by :orderbyid , :asc
+        paginate(:page => 1, :per_page => 5)
+      end
+
+      city = places.results.first rescue nil
+
+      score = places.hits.first.score.to_f rescue 0
+
+      city = nil if score < 0.3
+
+      cars = Sunspot.search([Car,Bike]) do
+        keywords title do
+          minimum_match 1
+        end
+        order_by :score,:desc
+        order_by :orderbyid , :asc
+        paginate(:page => 1, :per_page => 5)
+      end
+
+      car_group = nil
+      car = cars.results.first rescue nil
+      if !car.blank?
+        car_group = car.group
+      end
+      car = car_group if !car_group.blank?
+
+      score = cars.hits.first.score.to_f rescue 0
+
+      car = nil if score < 0.3
+
+      if !city.blank? && !car.blank?
+        selected_list = [city.id, car.id].compact
+        auto_save = "true"
+
+        category = feed_url.category
+        splt_category = category.split(",")
+        splt_category = splt_category + ["Car", "Bike", "Place", "City"]
+        splt_category = splt_category.uniq
+        feed_url.category = splt_category.join(",")
+        feed_url.save!
       end
     rescue Exception => e
       auto_save = "false"
