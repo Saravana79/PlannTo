@@ -22,11 +22,20 @@ class VideoContent < ArticleContent
     video_id=self.video_id(url)
     @article.field4 = video_id
     #    @article.youtube = video_id
-    
-    youtube_data = client.video_by(video_id)
-    @article.title = youtube_data.title if youtube_data.title
-    @article.description = youtube_data.description if youtube_data.description
-    @article.thumbnail = youtube_data.thumbnails.first.url if youtube_data.thumbnails.first.url
+
+    begin
+      youtube_data = client.video_by(video_id)
+      @article.title = youtube_data.title if youtube_data.title
+      @article.description = youtube_data.description if youtube_data.description
+      @article.thumbnail = youtube_data.thumbnails.first.url if youtube_data.thumbnails.first.url
+    rescue Exception => e
+      p "youtube_it error - Manual process started"
+      doc = Nokogiri::HTML(open(url, "User-Agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0", :allow_redirections => :all))
+      node = doc.elements.first
+      @article.title = node.css("meta[itemprop='name']/@content").last.value rescue nil
+      @article.description = node.css("meta[itemprop='description']/@content").last.value rescue nil
+      @article.thumbnail = node.css("link[itemprop='thumbnailUrl']/@href").last.value rescue nil
+    end
     @article
   end
   
