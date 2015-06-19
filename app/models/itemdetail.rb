@@ -549,6 +549,7 @@ class Itemdetail < ActiveRecord::Base
 
     urls_for_access.each do |each_hash|
       itemtype_hash = {"mobiles" => 6, "laptops" => 23, "tablets" => 13, "lenses" => 20, "cameras" => 12}
+      itemtype_hash = {"cameras" => 12}
       itemtype_id = itemtype_hash[each_hash["type"]]
       begin
         Itemdetail.process_flipkart_items(each_hash["url"], itemtype_id) unless itemtype_id.blank?
@@ -578,83 +579,87 @@ class Itemdetail < ActiveRecord::Base
       item_count = 0
       begin
         node.xpath("//products//productInfoList").each do |item|
-          item_count += 1
-          total_item_count += 1
-          id = item.at_xpath("productBaseInfo//productIdentifier//productId").content rescue nil
-          id = id.to_s.downcase rescue nil
-          item_info = item.at_xpath("productBaseInfo//productAttributes")
-          title = item_info.at_xpath("title").content rescue ""
-          url = item_info.at_xpath("productUrl").content rescue ""
-          url = url.gsub(/&affid.*/, "")  #remove affiliate id
-          url = url.gsub("dl.", "www.").gsub("/dl/", "/")
-          p "--- Processing url #{url} ---"
-          price = item_info.at_xpath("sellingPrice//amount").content rescue ""
-          image_url = item_info.at_xpath("imageUrls//entry//value").content rescue ""
-          status = item_info.at_xpath("inStock").content rescue ""
-          status = status == "true" ? 1 : 2
-          cod = item_info.at_xpath("codAvailable").content rescue ""
-          cod = cod == "true" ? true : false
-          emi = item_info.at_xpath("emiAvailable").content rescue ""
-          emi = emi == "true" ? true : false
+          begin
+            item_count += 1
+            total_item_count += 1
+            id = item.at_xpath("productBaseInfo//productIdentifier//productId").content rescue nil
+            id = id.to_s.downcase rescue nil
+            item_info = item.at_xpath("productBaseInfo//productAttributes")
+            title = item_info.at_xpath("title").content rescue ""
+            url = item_info.at_xpath("productUrl").content rescue ""
+            url = url.gsub(/&affid.*/, "")  #remove affiliate id
+            url = url.gsub("dl.", "www.").gsub("/dl/", "/")
+            p "--- Processing url #{url} ---"
+            price = item_info.at_xpath("sellingPrice//amount").content rescue ""
+            image_url = item_info.at_xpath("imageUrls//entry//value").content rescue ""
+            status = item_info.at_xpath("inStock").content rescue ""
+            status = status == "true" ? 1 : 2
+            cod = item_info.at_xpath("codAvailable").content rescue ""
+            cod = cod == "true" ? true : false
+            emi = item_info.at_xpath("emiAvailable").content rescue ""
+            emi = emi == "true" ? true : false
 
-          filename = image_url.split("/").last
+            filename = image_url.split("/").last
 
-          unless filename.blank?
-            name = filename.to_s.split(".")
-            name = name[0...name.size-1]
-            name = name.join(".") + ".jpeg"
-            filename = name
-          end
-
-          if itemtype_id.blank?
-            next
-          end
-
-          have_to_create_image = false
-          if id.blank?
-            @item_detail = Itemdetail.find_or_initialize_by_url(url)
-          else
-            @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
-            @item_detail = Itemdetail.find_or_initialize_by_url(url) if @item_detail.blank?
-          end
-          if !@item_detail.new_record?
-            have_to_create_image = @item_detail.Image.blank? ? true : false
-            @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
-          else
-            s_url = url.split("flipkart.com").last
-            source_item = Sourceitem.find_or_initialize_by_url_and_urlsource(s_url, "Flipkart")
-            if source_item.new_record?
-              source_item.update_attributes(:name => title, :status => 1, :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
-            elsif source_item.verified && !source_item.matchitemid.blank?
-              @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 9861, :iscashondeliveryavailable =>cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
-              have_to_create_image = true
+            unless filename.blank?
+              name = filename.to_s.split(".")
+              name = name[0...name.size-1]
+              name = name.join(".") + ".jpeg"
+              filename = name
             end
-          end
 
-          if have_to_create_image && !image_url.blank? && !filename.blank?
-            p "image----------------------------"
-            @image = @item_detail.build_image
-            # tempfile = open(image_url)
-            # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
-            # avatar.original_filename = filename
-
-            safe_thumbnail_url = URI.encode(URI.decode(image_url))
-            extname = File.extname(safe_thumbnail_url).delete("%")
-            basename = File.basename(safe_thumbnail_url, extname).delete("%")
-            file = Tempfile.new([basename, extname])
-            file.binmode
-            open(URI.parse(safe_thumbnail_url)) do |data|
-              file.write data.read
+            if itemtype_id.blank?
+              next
             end
-            file.rewind
 
-            avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
-            avatar.original_filename = filename
-
-            @image.avatar = avatar
-            if @image.save
-              @item_detail.update_attributes(:Image => filename)
+            have_to_create_image = false
+            if id.blank?
+              @item_detail = Itemdetail.find_or_initialize_by_url(url)
+            else
+              @item_detail = Itemdetail.find_or_initialize_by_additional_details(id)
+              @item_detail = Itemdetail.find_or_initialize_by_url(url) if @item_detail.blank?
             end
+            if !@item_detail.new_record?
+              have_to_create_image = @item_detail.Image.blank? ? true : false
+              @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
+            else
+              s_url = url.split("flipkart.com").last
+              source_item = Sourceitem.find_or_initialize_by_url_and_urlsource(s_url, "Flipkart")
+              if source_item.new_record?
+                source_item.update_attributes(:name => title, :status => 1, :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
+              elsif source_item.verified && !source_item.matchitemid.blank?
+                @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 9861, :iscashondeliveryavailable =>cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
+                have_to_create_image = true
+              end
+            end
+
+            if have_to_create_image && !image_url.blank? && !filename.blank?
+              p "image----------------------------"
+              @image = @item_detail.build_image
+              # tempfile = open(image_url)
+              # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+              # avatar.original_filename = filename
+
+              safe_thumbnail_url = URI.encode(URI.decode(image_url))
+              extname = File.extname(safe_thumbnail_url).delete("%")
+              basename = File.basename(safe_thumbnail_url, extname).delete("%")
+              file = Tempfile.new([basename, extname])
+              file.binmode
+              open(URI.parse(safe_thumbnail_url)) do |data|
+                file.write data.read
+              end
+              file.rewind
+
+              avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+              avatar.original_filename = filename
+
+              @image.avatar = avatar
+              if @image.save
+                @item_detail.update_attributes(:Image => filename)
+              end
+            end
+          rescue Exception => e
+            p "Error while processing item"
           end
         end
       rescue Exception => e
