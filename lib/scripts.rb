@@ -487,3 +487,49 @@ csv_details.each_with_index do |csv_detail, index|
 end
 
 GoogleGeoTargeting.import(google_geo_targetings)
+
+
+url = "http://indiatoday.intoday.in/technology/story/zte-nubia-z9-mini-review-camera-and-battery-life-make-it-a-superstar/1/444641.html"
+url = "http://indiatoday.intoday.in/technology/story/microsoft-lumia-540-review-windows-phone-smartphone/1/443370.html"
+
+doc = Nokogiri::HTML(open(url))
+match_words = []
+
+node = doc.elements.first
+
+[*0..3].each do |each_val|
+  term = node.css(".hub-caption p")[3].content rescue ""
+
+  removed_keywords = ["difference", "between", "of", "and ", "is", "a", "an", "the", "how", "to", "must", "have", "top", "10", "when", "fashion", "tale", "here", "new",
+                      "innovative", "style", "store", "preserve", "way", "rs ", "you", "are","simple","choose","right","for","does", "gorgeous", "amazing", "benefit", "health","things", "should", "their", "unforgettable", "stylish","home",
+                      "get","goddess","look","with","uses","available", "india", "job ","remedies", "most", "expensive", "product","lose","weight", "help","reason","larger","each","season","treat","every","guide","need","know","side","effects",
+                      "prevent","exercise","sick","delicious","apply","perfectly", "and","step","get","tutorial","picture","detailed","article","surprising","prepare","indian","in","best","using","at","everything","from","natural","your","basic",
+                      "wear","diy","kiss","woes","good","bye","homemade","wearing","avoid","while","mistake","wonderful","hide","make","sure","cause", "it", "on", "i", "we", "was"]
+  term = term.gsub("-"," ")
+  term = term.to_s.split(/\W+/).delete_if{|x| (removed_keywords.include?(x.to_s.downcase.strip) || x.length < 2) || removed_keywords.include?(Item.remove_last_letter_as_s(x.to_s.downcase)) }.join(' ')
+  #term = term.to_s.split(/\W+/).delete_if{|x| (x =~ /\D/).blank? }.join(' ')
+
+  terms = term.to_s.split(/\W+/)
+
+  terms_splt = terms.each_slice(12)
+
+  terms_splt.each do |each_terms|
+    splt_term = each_terms.join(" ")
+
+    @items = Sunspot.search([Mobile]) do
+      keywords splt_term do
+        minimum_match 1
+      end
+      with :status, [1,2,3]
+      order_by :score,:desc
+      order_by :orderbyid , :asc
+      paginate(:page => 1, :per_page => 5)
+    end
+
+    item = @items.results.first
+
+    score = @items.hits.first.score.to_f rescue 0
+    match_words << item if score > 0.5
+  end
+end
+

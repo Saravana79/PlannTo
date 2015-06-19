@@ -549,7 +549,6 @@ class Itemdetail < ActiveRecord::Base
 
     urls_for_access.each do |each_hash|
       itemtype_hash = {"mobiles" => 6, "laptops" => 23, "tablets" => 13, "lenses" => 20, "cameras" => 12}
-      itemtype_hash = {"cameras" => 12}
       itemtype_id = itemtype_hash[each_hash["type"]]
       begin
         Itemdetail.process_flipkart_items(each_hash["url"], itemtype_id) unless itemtype_id.blank?
