@@ -807,6 +807,9 @@ class FeedUrl < ActiveRecord::Base
   end
 
   def self.automated_feed_process
+    $redis.set("automated_feed_process_is_running", 1)
+    $redis.expire("automated_feed_process_is_running", 40.minutes)
+
     SourceCategory.update_all_to_cache()
     feed_urls = FeedUrl.where("status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
     sources_list = JSON.parse($redis.get("sources_list_details"))
@@ -817,12 +820,14 @@ class FeedUrl < ActiveRecord::Base
         if sources_list[host]["site_status"] == false
           feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
         else
-            feed_url.auto_save_feed_urls(false,0, "auto")
+          feed_url.auto_save_feed_urls(false,0, "auto")
         end
       rescue Exception => e
         p e.backtrace
       end
     end
+
+    $redis.set("automated_feed_process_is_running", 0)
   end
 
   def self.get_value_from_pattern(str, pattern, pattern_val="<pattern_val>")
