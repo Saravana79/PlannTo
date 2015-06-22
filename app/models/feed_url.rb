@@ -1046,7 +1046,11 @@ class FeedUrl < ActiveRecord::Base
         feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
 
         feed_urls.each do |feed_url|
-          feed_url.auto_save_feed_urls(false,0,"auto")
+          begin
+            feed_url.auto_save_feed_urls(false,0,"auto")
+          rescue Exception => e
+            p "Error while process auto save feed urls"
+          end
         end
 
         page += 1
