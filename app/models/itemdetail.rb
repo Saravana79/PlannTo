@@ -939,10 +939,10 @@ class Itemdetail < ActiveRecord::Base
   def self.amazon_deal_update
     item = Item.where(:id => 73683).last
 
-    today_date = Date.today
-    old_date = Date.yesterday
-    old_item_details = Itemdetail.where("last_updated <= '#{Date.yesterday.end_of_day}' and itemid=#{item.id}")
-    old_item_details.destroy_all
+    # today_date = Date.today
+    # old_date = Date.yesterday
+
+    ActiveRecord::Base.connection.execute("update itemdetails set status = 2 where last_updated <= '#{Date.yesterday.end_of_day}' and itemid=#{item.id}")
 
     #egressUrl
 
@@ -978,9 +978,11 @@ class Itemdetail < ActiveRecord::Base
     saved_percentage = saved_percentage.gsub(saved_percentage.first, "").gsub(" : ", "").squish
 
 
-    itemdetail = Itemdetail.where(:itemid => item.id, :url => url)
+    itemdetail = Itemdetail.where(:itemid => item.id, :url => url).last
 
-    if itemdetail.blank?
+    if !itemdetail.blank?
+      item_detail.update_attributes!(:ItemName => title, :price => current_price, :savepercentage => saved_percentage, :mrpprice => price, :status => 1)
+    else
       item_detail = Itemdetail.new(:itemid => item.id, :ItemName => title, :url => click_url, :price => current_price, :savepercentage => saved_percentage, :mrpprice => price, :status => 1, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => "", :site => "9882", :last_verified_date => Time.now)
       item_detail.save!
 
