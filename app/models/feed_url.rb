@@ -1043,7 +1043,7 @@ class FeedUrl < ActiveRecord::Base
   def self.auto_save_or_update_score_feed_urls
     if $redis.get("auto_save_or_update_score_is_running").to_i == 0
       $redis.set("auto_save_or_update_score_is_running", 1)
-      $redis.expire("auto_save_or_update_score_is_running", 50.minutes)
+      $redis.expire("auto_save_or_update_score_is_running", 180.minutes)
 
       query = "SELECT `feed_urls`.* FROM `feed_urls` WHERE (status = 0 and score is null)"
       page = 1
