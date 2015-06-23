@@ -41,7 +41,7 @@ class OrderHistory < ActiveRecord::Base
 
           order_history = OrderHistory.find_or_initialize_by_order_date_and_impression_id_and_total_revenue(time, impression_id, revenue)
           order_history.vendor_ids = 9882
-          order_history.product_price = price
+          order_history.product_price = price.to_s.gsub("," , "")
           order_history.no_of_orders = 1
           order_history.order_status = "Validated"
           order_history.payment_status = "Validated"
@@ -131,7 +131,7 @@ class OrderHistory < ActiveRecord::Base
       order_history.impression_id = csv_detail[headers.index("AffExtParam2")]
       order_history.total_revenue = csv_detail[headers.index("TentativeCommission")]
       order_history.vendor_ids = 9861
-      order_history.product_price = csv_detail[headers.index("Price")]
+      order_history.product_price = csv_detail[headers.index("Price")].to_s.gsub("," , "")
       order_history.no_of_orders = 1
       order_history.order_status = "Validated"
       order_history.payment_status = "Validated"
@@ -190,6 +190,8 @@ class OrderHistory < ActiveRecord::Base
     # Update AggregatedImpression
     impression = AddImpression.where(:id => self.impression_id).last
 
+    price = self.product_price.to_s.gsub("," , "").to_f
+
     if !impression.blank?
       time = impression.impression_time.to_time.utc rescue Time.now
       date = time.to_date rescue ""
@@ -203,39 +205,40 @@ class OrderHistory < ActiveRecord::Base
 
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
         if agg_imp.blank?
-          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1)
+          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :total_product_price => price)
           agg_imp.save!
         else
           agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+          agg_imp.total_product_price = agg_imp.total_product_price.to_f + price
           agg_imp.save!
         end
 
         hours = agg_imp.hours.blank? ? {} : agg_imp.hours
         if hours["#{hour}"].blank?
-          hours.merge!({"#{hour}" => {"orders" => 1}})
+          hours.merge!({"#{hour}" => {"orders" => 1, "product_price" => price}})
         else
-          hours["#{hour}"].merge!({"orders" => hours["#{hour}"]["orders"].to_i + 1})
+          hours["#{hour}"].merge!({"orders" => hours["#{hour}"]["orders"].to_i + 1, "product_price" => hours["#{hour}"]["product_price"].to_f + price})
         end
 
         device = agg_imp.device.blank? ? {} : agg_imp.device
         if device["#{device_name}"].blank?
-          device.merge!({"#{device_name}" => {"orders" => 1}})
+          device.merge!({"#{device_name}" => {"orders" => 1, "product_price" => price}})
         else
-          device["#{device_name}"].merge!({"orders" => device["#{device_name}"]["orders"].to_i + 1})
+          device["#{device_name}"].merge!({"orders" => device["#{device_name}"]["orders"].to_i + 1, "product_price" => device["#{device_name}"]["product_price"].to_f + price})
         end
 
         rii = agg_imp.rii.blank? ? {} : agg_imp.rii
         if rii["#{is_rii}"].blank?
-          rii.merge!({"#{is_rii}" => {"orders" => 1}})
+          rii.merge!({"#{is_rii}" => {"orders" => 1, "product_price" => price}})
         else
-          rii["#{is_rii}"].merge!({"orders" => rii["#{is_rii}"]["orders"].to_i + 1})
+          rii["#{is_rii}"].merge!({"orders" => rii["#{is_rii}"]["orders"].to_i + 1, "product_price" => rii["#{is_rii}"]["product_price"].to_f + price})
         end
 
         ret = agg_imp.ret.blank? ? {} : agg_imp.ret
         if ret["#{ret_val}"].blank?
-          ret.merge!({"#{ret_val}" => {"orders" => 1}})
+          ret.merge!({"#{ret_val}" => {"orders" => 1, "product_price" => price}})
         else
-          ret["#{ret_val}"].merge!({"orders" => ret["#{ret_val}"]["orders"].to_i + 1})
+          ret["#{ret_val}"].merge!({"orders" => ret["#{ret_val}"]["orders"].to_i + 1, "product_price" => ret["#{ret_val}"]["product_price"].to_f + price})
         end
 
         # agg_imp.hours = Advertisement.combine_hash(agg_imp.hours, hours)
@@ -251,15 +254,15 @@ class OrderHistory < ActiveRecord::Base
         #AggregatedImpression By Item
         agg_imp_by_item = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Item").last
         if agg_imp_by_item.blank?
-          agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item")
+          agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item", :total_product_price => price)
           agg_imp_by_item.save!
         end
 
         item_agg_coll = agg_imp_by_item.agg_coll.blank? ? {} : agg_imp_by_item.agg_coll
         if item_agg_coll["#{self.item_id}"].blank?
-          item_agg_coll.merge!({"#{self.item_id}" => {"orders" => 1}})
+          item_agg_coll.merge!({"#{self.item_id}" => {"orders" => 1, "product_price" => price}})
         else
-          item_agg_coll["#{self.item_id}"].merge!({"orders" => item_agg_coll["#{self.item_id}"]["orders"].to_i + 1})
+          item_agg_coll["#{self.item_id}"].merge!({"orders" => item_agg_coll["#{self.item_id}"]["orders"].to_i + 1, "product_price" => item_agg_coll["#{self.item_id}"]["product_price"].to_f + price})
         end
         agg_imp_by_item.agg_coll = item_agg_coll
         agg_imp_by_item.save!
@@ -268,7 +271,7 @@ class OrderHistory < ActiveRecord::Base
         domain = Item.get_host_without_www(impression.hosted_site_url)
         agg_imp_by_domain = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Domain").last
         if agg_imp_by_domain.blank?
-          agg_imp_by_domain = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Domain")
+          agg_imp_by_domain = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Domain")
           agg_imp_by_domain.save!
         end
 
@@ -277,9 +280,9 @@ class OrderHistory < ActiveRecord::Base
         domain_agg_coll = agg_imp_by_domain.agg_coll.blank? ? {} : agg_imp_by_domain.agg_coll
         domain_agg_coll = Hash[domain_agg_coll.map {|k, v| [k.gsub(".", "^"), v] }]
         if domain_agg_coll["#{domain}"].blank?
-          domain_agg_coll.merge!({"#{domain}" => {"orders" => 1}})
+          domain_agg_coll.merge!({"#{domain}" => {"orders" => 1, "product_price" => price}})
         else
-          domain_agg_coll["#{domain}"].merge!({"orders" => domain_agg_coll["#{domain}"]["orders"].to_i + 1})
+          domain_agg_coll["#{domain}"].merge!({"orders" => domain_agg_coll["#{domain}"]["orders"].to_i + 1, "product_price" => domain_agg_coll["#{domain}"]["product_price"].to_f + price})
         end
         agg_imp_by_domain.agg_coll = domain_agg_coll
         agg_imp_by_domain.save!
@@ -287,10 +290,11 @@ class OrderHistory < ActiveRecord::Base
       else
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
         if agg_imp.blank?
-          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true, :total_orders => 1)
+          agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true, :total_orders => 1, :total_product_price => price)
           agg_imp.save!
         else
           agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+          agg_imp.total_product_price = agg_imp.total_product_price.to_f + price
           agg_imp.save!
         end
       end
@@ -300,25 +304,26 @@ class OrderHistory < ActiveRecord::Base
 
       agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
       if agg_imp.blank?
-        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1)
+        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :total_product_price => price)
         agg_imp.save!
       else
         agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+        agg_imp.total_product_price = agg_imp.total_product_price.to_f + price
         agg_imp.save!
       end
 
       #AggregatedImpression By Item
       agg_imp_by_item = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Item").last
       if agg_imp_by_item.blank?
-        agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item")
+        agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Item")
         agg_imp_by_item.save!
       end
 
       item_agg_coll = agg_imp_by_item.agg_coll.blank? ? {} : agg_imp_by_item.agg_coll
       if item_agg_coll["#{self.item_id}"].blank?
-        item_agg_coll.merge!({"#{self.item_id}" => {"orders" => 1}})
+        item_agg_coll.merge!({"#{self.item_id}" => {"orders" => 1, "product_price" => price}})
       else
-        item_agg_coll["#{self.item_id}"].merge!({"orders" => item_agg_coll["#{self.item_id}"]["orders"].to_i + 1})
+        item_agg_coll["#{self.item_id}"].merge!({"orders" => item_agg_coll["#{self.item_id}"]["orders"].to_i + 1, "product_price" => item_agg_coll["#{self.item_id}"]["product_price"].to_f + price})
       end
       agg_imp_by_item.agg_coll = item_agg_coll
       agg_imp_by_item.save!
@@ -328,10 +333,11 @@ class OrderHistory < ActiveRecord::Base
 
       agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => nil, :for_pub => true).last
       if agg_imp.blank?
-        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true, :total_orders => 1)
+        agg_imp = AggregatedImpression.new(:agg_date => date, :ad_id => nil, :for_pub => true, :total_orders => 1, :total_product_price => price)
         agg_imp.save!
       else
         agg_imp.total_orders = agg_imp.total_orders.to_i + 1
+        agg_imp.total_product_price = agg_imp.total_product_price.to_f + price
         agg_imp.save!
       end
     end

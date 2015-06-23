@@ -7,6 +7,7 @@ class AggregatedImpression
   field :total_imp, type: Integer
   field :total_clicks, type: Integer
   field :total_orders, type: Integer
+  field :total_product_price, type: Float
   field :total_costs, type: Float
   field :total_costs_wc, type: Float #Total costs with commission
   field :publishers, type: Hash
@@ -36,7 +37,7 @@ class AggregatedImpression
       end
 
       group =  { "$group" => { "_id" => option, "total_imp" => { "$sum" => "$total_imp" }, "total_clicks" => { "$sum" => "$total_clicks" },
-                               "total_orders" => { "$sum" => "$total_orders" }, "total_costs" => { "$sum" => "$total_costs" }, "total_costs_wc" => { "$sum" => "$total_costs_wc" }#,
+                               "total_orders" => { "$sum" => "$total_orders" }, "total_product_price" => { "$sum" => "$total_orders" }, "total_costs" => { "$sum" => "$total_costs" }, "total_costs_wc" => { "$sum" => "$total_costs_wc" }#,
                                # "click_count" => { "$sum" => { "$size" => { "$ifNull" => [ "$m_clicks", [] ] } } },
                                # "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
                                # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
