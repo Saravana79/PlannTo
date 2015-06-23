@@ -75,6 +75,7 @@ To Date
         <th class="header_compare"  > Total Cost With Comm </th>
     <% end %>
     <th class="header_compare"  > Total Orders </th>
+    <th class="header_compare"  > Total Product Price </th>
   </tr>
   <% if params[:type] == "Advertisement" %>
      <% @results.each do |each_hash| %>
@@ -90,6 +91,7 @@ To Date
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs"] %> </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs_wc"] %> </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_orders"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_product_price"].to_f.round(2) %> </td>
           </tr>
      <% end %>
   <% else %>
@@ -109,6 +111,7 @@ To Date
             </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_costs"] %> </td>
             <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_orders"] %> </td>
+            <td class="bdb_gray1"  style="width:100px;text-align:center;border-bottom: 1px solid #808080;"> <%= each_hash["total_product_price"].to_f.round(2) %> </td>
           </tr>
      <% end %>
   <% end %>

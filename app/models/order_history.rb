@@ -254,7 +254,7 @@ class OrderHistory < ActiveRecord::Base
         #AggregatedImpression By Item
         agg_imp_by_item = AggregatedImpressionByType.where(:agg_date => date, :ad_id => self.advertisement_id, :agg_type => "Item").last
         if agg_imp_by_item.blank?
-          agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item", :total_product_price => price)
+          agg_imp_by_item = AggregatedImpressionByType.new(:agg_date => date, :ad_id => self.advertisement_id, :total_orders => 1, :agg_type => "Item")
           agg_imp_by_item.save!
         end
 

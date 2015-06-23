@@ -37,7 +37,7 @@ class AggregatedImpression
       end
 
       group =  { "$group" => { "_id" => option, "total_imp" => { "$sum" => "$total_imp" }, "total_clicks" => { "$sum" => "$total_clicks" },
-                               "total_orders" => { "$sum" => "$total_orders" }, "total_product_price" => { "$sum" => "$total_orders" }, "total_costs" => { "$sum" => "$total_costs" }, "total_costs_wc" => { "$sum" => "$total_costs_wc" }#,
+                               "total_orders" => { "$sum" => "$total_orders" }, "total_product_price" => { "$sum" => "$total_product_price" }, "total_costs" => { "$sum" => "$total_costs" }, "total_costs_wc" => { "$sum" => "$total_costs_wc" }#,
                                # "click_count" => { "$sum" => { "$size" => { "$ifNull" => [ "$m_clicks", [] ] } } },
                                # "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
                                # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
@@ -110,6 +110,7 @@ class AggregatedImpression
           final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
           final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
           final_hash[key]["total_costs"] = (final_hash[key]["total_costs"].to_f + val["costs"].to_f).round(2)
+          final_hash[key]["total_product_price"] = (final_hash[key]["total_product_price"].to_f + val["product_price"].to_f).round(2)
         end
       end
 
