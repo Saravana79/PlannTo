@@ -98,28 +98,28 @@ class Itemdetail < ActiveRecord::Base
     return "" if vendor.nil?
     return vendor.imageurl
   end
-  
+
   def self.display_item_details(item)
-    if ((item.status ==1 || item.status ==3)  && !item.IsError?)
+    if ((item.status ==1 || item.status ==3) && !item.IsError?)
       return true
     else
       return false
     end
   end
-  
+
 
   def self.display_availability_detail(item)
 
-    if(item.status  == 1)
-       "Available"
-    elsif(item.status  == 2)
+    if (item.status == 1)
+      "Available"
+    elsif (item.status == 2)
       "Out of Stock"
-    elsif(item.status  == 3) 
+    elsif (item.status == 3)
       "Pre-Order"
     end
   end
 
-   def self.display_shipping_detail(item)
+  def self.display_shipping_detail(item)
     unless item.shipping.blank?
       unit = ""
       if item.shippingunit == 1
@@ -135,7 +135,7 @@ class Itemdetail < ActiveRecord::Base
     else
       if item.status == 3
         "[Pre-Order]"
-      else        
+      else
         "N/A"
       end
     end
@@ -144,13 +144,14 @@ class Itemdetail < ActiveRecord::Base
 
   def self.display_price_detail(item)
     pre_order_val = item.status == 3 ? "Pre-Order" : ""
-    if(!item.cashback.nil? && item.cashback != 0.0)
-      item.price == 0.0 ? pre_order_val :  Itemdetail.number_to_indian_currency((item.price - item.cashback).to_f.round(2)).to_s
+    if (!item.cashback.nil? && item.cashback != 0.0)
+      item.price == 0.0 ? pre_order_val : Itemdetail.number_to_indian_currency((item.price - item.cashback).to_f.round(2)).to_s
     else
-    item.price == 0.0 ? pre_order_val :  Itemdetail.number_to_indian_currency(item.price.to_f.round(2)).to_s
+      item.price == 0.0 ? pre_order_val : Itemdetail.number_to_indian_currency(item.price.to_f.round(2)).to_s
     end
 
   end
+
   def self.number_to_indian_currency(number)
     if number
       string = number.to_s
@@ -165,11 +166,11 @@ class Itemdetail < ActiveRecord::Base
 
     item_details.keys.each do |each_key|
       splt_item_details = item_details[each_key]
-      exp_result[each_key] = splt_item_details.group_by {|splt_each_item| splt_each_item.site.to_i}
+      exp_result[each_key] = splt_item_details.group_by { |splt_each_item| splt_each_item.site.to_i }
     end
 
     item_keys = exp_result.keys
-    max_count = exp_result.map {|_, s| s.map {|_, x| x.count}}.flatten.max
+    max_count = exp_result.map { |_, s| s.map { |_, x| x.count } }.flatten.max
 
     vendor_orders = vendor_ids
 
@@ -190,11 +191,11 @@ class Itemdetail < ActiveRecord::Base
   end
 
   def self.get_sort_by_item(item_details)
-    item_details = item_details.group_by {|val| val.itemid}
+    item_details = item_details.group_by { |val| val.itemid }
     return_val = []
 
     item_keys = item_details.keys
-    max_count = item_details.map {|_, x| x.count}.flatten.max
+    max_count = item_details.map { |_, x| x.count }.flatten.max
 
     [*0...max_count].each do |each_val|
       item_keys.each do |each_item|
@@ -209,12 +210,12 @@ class Itemdetail < ActiveRecord::Base
 
   def self.get_sort_by_group(item_details, group_ids)
     item_details = item_details.values.flatten
-    item_details_hash = item_details.group_by {|each_val| group_ids[each_val.itemid]}
+    item_details_hash = item_details.group_by { |each_val| group_ids[each_val.itemid] }
 
     return_val = []
 
     item_keys = item_details_hash.keys
-    max_count = item_details_hash.map {|_, s| s.count}.flatten.max
+    max_count = item_details_hash.map { |_, s| s.count }.flatten.max
 
     [*0...max_count.to_i].each do |each_val|
       item_keys.each do |group_id|
@@ -235,40 +236,40 @@ class Itemdetail < ActiveRecord::Base
       item = items[0]
       itemsaccess = "othercountry"
     elsif show_price != "false"
+      where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
+      main_item = item
+      items = items - tempitems
+
+      # for activate_tab users
+      if (items.blank? && where_to_buy_items.blank? && !main_item.blank?)
+        item = main_item
+        items = Item.where(:id => item.new_version_item_id)
         where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
-        main_item = item
+
         items = items - tempitems
 
-        # for activate_tab users
-        if (items.blank? && where_to_buy_items.blank? && !main_item.blank?)
-          item = main_item
-          items = Item.where(:id => item.new_version_item_id)
-          where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
-
-          items = items - tempitems
-
-          if (items.blank? && where_to_buy_items.blank?)
-            item_ad_detail = main_item.item_ad_detail
-            unless item_ad_detail.blank?
-              items = Item.where(:id => item_ad_detail.old_version_id)
-              where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
-              items = items - tempitems
-            end
+        if (items.blank? && where_to_buy_items.blank?)
+          item_ad_detail = main_item.item_ad_detail
+          unless item_ad_detail.blank?
+            items = Item.where(:id => item_ad_detail.old_version_id)
+            where_to_buy_items, tempitems, item = Item.process_and_get_where_to_buy_items(items, publisher, status)
+            items = items - tempitems
           end
         end
-
-        if (where_to_buy_items.empty?)
-          itemsaccess = "emptyitems"
-        end
-        if is_test != "true"
-          impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.blank? ? nil : item.id, url, user, remote_ip, nil, itemsaccess, url_params,
-                                                                  plan_to_temp_user_id, nil, winning_price_enc, nil)
-        end
-      else
-        where_to_buy_items = []
-        item, best_deals, impression_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
-        itemsaccess = "offers"
       end
+
+      if (where_to_buy_items.empty?)
+        itemsaccess = "emptyitems"
+      end
+      if is_test != "true"
+        impression_id = AddImpression.add_impression_to_resque("pricecomparision", item.blank? ? nil : item.id, url, user, remote_ip, nil, itemsaccess, url_params,
+                                                               plan_to_temp_user_id, nil, winning_price_enc, nil)
+      end
+    else
+      where_to_buy_items = []
+      item, best_deals, impression_id = ArticleContent.get_best_deals(items.map(&:id).join(",").split(","), url, url_params, is_test, user, remote_ip, plan_to_temp_user_id)
+      itemsaccess = "offers"
+    end
 
     return where_to_buy_items, item, best_deals, impression_id
   end
@@ -310,7 +311,7 @@ class Itemdetail < ActiveRecord::Base
     end
 
     if !vendor_ids.blank?
-      item_details = where_to_buy_items.group_by {|item_detail| item_detail.itemid }
+      item_details = where_to_buy_items.group_by { |item_detail| item_detail.itemid }
       where_to_buy_items = Itemdetail.get_sort_by_vendor(item_details, vendor_ids)
     elsif !where_to_buy_items.blank?
       where_to_buy_items = Itemdetail.get_sort_by_item(where_to_buy_items)
@@ -326,7 +327,7 @@ class Itemdetail < ActiveRecord::Base
 
     add_impressions = Item.find_by_sql(query)
     item_ids = add_impressions.map(&:item_id)
-    item_ids = item_ids.map {|item_id| item_id.to_i}
+    item_ids = item_ids.map { |item_id| item_id.to_i }
 
     splitted_array = item_ids.each_slice(30).to_a
 
@@ -338,7 +339,7 @@ class Itemdetail < ActiveRecord::Base
         begin
           p Time.now
           url = item_detail.url
-          asin = url[/.*\/dp\/(.*)/m,1]
+          asin = url[/.*\/dp\/(.*)/m, 1]
           asin = asin.split("/")[0]
 
           # res = Amazon::Ecs.item_lookup("B00B70KYOO", {:response_group => 'Offers', :country => 'in'})
@@ -351,16 +352,16 @@ class Itemdetail < ActiveRecord::Base
               offer_summary = each_item.get_element("OfferSummary")
               if !offer_listing.blank?
                 begin
-                  current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                  current_price = offer_listing.get_element("SalePrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
                 rescue Exception => e
-                  current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",","")
+                  current_price = offer_listing.get_element("Price").get("FormattedPrice").gsub("INR ", "").gsub(",", "")
                 end
                 saved_price = offer_listing.get_element("AmountSaved").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue 0
                 saved_percentage = offer_listing.get("PercentageSaved") rescue 0
                 availability_str = offer_listing.get("Availability")
 
                 if availability_str.blank? && !offer_summary.blank?
-                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue "" if current_price.blank?
+                  current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue "" if current_price.blank?
 
                   total_new = offer_summary.get("TotalNew").to_i
 
@@ -387,7 +388,7 @@ class Itemdetail < ActiveRecord::Base
                 mrp_price = current_price.to_f + saved_price.to_f
                 item_detail.update_attributes!(:price => current_price, :status => status, :savepercentage => saved_percentage, :mrpprice => mrp_price, :last_verified_date => Time.now)
               elsif !offer_summary.blank?
-                current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",","") rescue ""
+                current_price = offer_summary.get_element("LowestNewPrice").get("FormattedPrice").gsub("INR ", "").gsub(",", "") rescue ""
 
                 total_new = offer_summary.get("TotalNew").to_i
 
@@ -422,7 +423,7 @@ class Itemdetail < ActiveRecord::Base
     return if $redis.get("update_itemdetails_from_vendors_is_running").to_i == 0
     $redis.set("update_itemdetails_from_vendors_is_running", 1)
     $redis.expire("update_itemdetails_from_vendors_is_running", 40.minutes)
-    
+
     url = "http://www.mysmartprice.com/store_data/msp_master.xml"
     top_product_ids = $redis.get("mysmartprice_top_products")
     top_product_ids = top_product_ids.to_s.split(",")
@@ -478,14 +479,14 @@ class Itemdetail < ActiveRecord::Base
 
         if !@item_detail.new_record?
           have_to_create_image = @item_detail.Image.blank? ? true : false
-          status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
+          status = [6, 13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
           @item_detail.update_attributes!(:price => price, :status => status, :last_verified_date => Time.now, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
         else
           source_item = Sourceitem.find_or_initialize_by_url(url)
           if source_item.new_record?
             source_item.update_attributes(:name => title, :status => 1, :urlsource => "Mysmartprice", :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
           elsif source_item.verified && !source_item.matchitemid.blank?
-            status = [6,13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
+            status = [6, 13].include?(itemtype_id) && !top_product_ids.include?(id.to_i) ? 6 : 1
             @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 26351, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => id)
             have_to_create_image = true
           end
@@ -586,7 +587,7 @@ class Itemdetail < ActiveRecord::Base
             item_info = item.at_xpath("productBaseInfo//productAttributes")
             title = item_info.at_xpath("title").content rescue ""
             url = item_info.at_xpath("productUrl").content rescue ""
-            url = url.gsub(/&affid.*/, "")  #remove affiliate id
+            url = url.gsub(/&affid.*/, "") #remove affiliate id
             url = url.gsub("dl.", "www.").gsub("/dl/", "/")
             p "--- Processing url #{url} ---"
             price = item_info.at_xpath("sellingPrice//amount").content rescue ""
@@ -627,7 +628,7 @@ class Itemdetail < ActiveRecord::Base
               if source_item.new_record?
                 source_item.update_attributes(:name => title, :status => 1, :itemtype_id => itemtype_id, :created_by => "System", :verified => false)
               elsif source_item.verified && !source_item.matchitemid.blank?
-                @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 9861, :iscashondeliveryavailable =>cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
+                @item_detail.update_attributes!(:ItemName => title, :itemid => source_item.matchitemid, :url => url, :price => price, :status => status, :last_verified_date => Time.now, :site => 9861, :iscashondeliveryavailable => cod, :isemiavailable => emi, :IsError => false, :additional_details => id)
                 have_to_create_image = true
               end
             end
@@ -735,7 +736,7 @@ class Itemdetail < ActiveRecord::Base
 
   def self.get_vendor_product_id(url)
     if url.include?("amazon.in")
-      asin = url[/.*\/dp\/(.*)/m,1]
+      asin = url[/.*\/dp\/(.*)/m, 1]
       asin = asin.split("/")[0]
       asin.to_s.downcase
     elsif url.include?("flipkart.com")
@@ -757,7 +758,7 @@ class Itemdetail < ActiveRecord::Base
   def self.update_itemdetails_from_auto()
     car_item_type = Itemtype.where(:itemtype => "CarAccessory").last
     if car_item_type.blank?
-      car_item_type = Itemtype.new({"itemtype"=>"CarAccessory", "description"=>"Car Accessories", "created_by"=>1, "updated_by"=>nil, "creator_ip"=>nil, "updater_ip"=>nil, "orderby"=>1})
+      car_item_type = Itemtype.new({"itemtype" => "CarAccessory", "description" => "Car Accessories", "created_by" => 1, "updated_by" => nil, "creator_ip" => nil, "updater_ip" => nil, "orderby" => 1})
       car_item_type.save!
     end
     car_item_type_tag = ItemtypeTag.where(:name => "CarAccessory").last
@@ -768,7 +769,7 @@ class Itemdetail < ActiveRecord::Base
 
     bike_item_type = Itemtype.where(:itemtype => "MotorbikeAccessory").last
     if bike_item_type.blank?
-      bike_item_type = Itemtype.new({"itemtype"=>"MotorbikeAccessory", "description"=>"Motorbike Accessories", "created_by"=>1, "updated_by"=>nil, "creator_ip"=>nil, "updater_ip"=>nil, "orderby"=>1})
+      bike_item_type = Itemtype.new({"itemtype" => "MotorbikeAccessory", "description" => "Motorbike Accessories", "created_by" => 1, "updated_by" => nil, "creator_ip" => nil, "updater_ip" => nil, "orderby" => 1})
       bike_item_type.save!
     end
     bike_item_type_tag = ItemtypeTag.where(:name => "MotorbikeAccessory").last
@@ -803,12 +804,12 @@ class Itemdetail < ActiveRecord::Base
         item_type = categories[2].to_s.downcase
         p item_type
         case item_type
-         when /car/
+          when /car/
             itemtype_now = car_item_type
             itemtype_tag = car_item_type_tag
-         when /bike/
-           itemtype_now = bike_item_type
-           itemtype_tag = bike_item_type_tag
+          when /bike/
+            itemtype_now = bike_item_type
+            itemtype_tag = bike_item_type_tag
         end
         itemname = categories.last.to_s.downcase
         p itemtype_tag
@@ -919,7 +920,7 @@ class Itemdetail < ActiveRecord::Base
     # car_item_type_items = Item.where(:itemtype_id => car_item_type.id).select("distinct name").map(&:name)
     # bike_item_type_items = Item.where(:itemtype_id => bike_item_type.id).select("distinct name").map(&:name)
     # return {car_item_type.itemtype => car_item_type_items, bike_item_type.itemtype => bike_item_type_items}
-    return {"Car" => {"Car Care Exterior (Shampoos, Polishes, Waxes)" => "Paint & Exterior Care", "Car Care Interior (Dashboard & Trim care, Cleaners)" => "Interior Care", "Car Parts (Filters, Bulbs, wiper blades)" => "Car Parts", "Car Electronics (Audio, GPS, Chargers)" => "Car Electronics", "Car Accessories (Covers, Mats, Freshners)"=> "Car Accessories"}, "Bike" => {"Helmets (Flip-up, Full face, Open face)" => "Helmets", "Gloves" => "Gloves", "Jackets" => "Jackets", "Head & Face Covers" => "Head & Face Covers", "Motor Oils (Engine Oil, Addictives)" => "Engine Oils for Motorbikes", "Bike Parts (Fenders, Cowls, Deflectors)" => "Motorbike Accessories & Parts"}}
+    return {"Car" => {"Car Care Exterior (Shampoos, Polishes, Waxes)" => "Paint & Exterior Care", "Car Care Interior (Dashboard & Trim care, Cleaners)" => "Interior Care", "Car Parts (Filters, Bulbs, wiper blades)" => "Car Parts", "Car Electronics (Audio, GPS, Chargers)" => "Car Electronics", "Car Accessories (Covers, Mats, Freshners)" => "Car Accessories"}, "Bike" => {"Helmets (Flip-up, Full face, Open face)" => "Helmets", "Gloves" => "Gloves", "Jackets" => "Jackets", "Head & Face Covers" => "Head & Face Covers", "Motor Oils (Engine Oil, Addictives)" => "Engine Oils for Motorbikes", "Bike Parts (Fenders, Cowls, Deflectors)" => "Motorbike Accessories & Parts"}}
   end
 
   def self.get_widget_details_from_itemdetails(item_details)
@@ -933,6 +934,98 @@ class Itemdetail < ActiveRecord::Base
       items << item
     end
     items
+  end
+
+  def self.amazon_deal_update
+    item = Item.where(:id => 73683).last
+
+    today_date = Date.today
+    old_date = Date.yesterday
+    old_item_details = Itemdetail.where("last_updated <= '#{Date.yesterday.end_of_day}' and itemid=#{item.id}")
+    old_item_details.destroy_all
+
+    #egressUrl
+
+    page_url = "http://www.amazon.in/gp/goldbox/ref=nav_topnav_deals"
+    doc = Nokogiri::HTML(open(page_url))
+
+    deal_details = FeedUrl.get_value_from_pattern(doc.to_s, "var responseJSON<ref_url>= responseJSON", "<ref_url>")
+
+    #click_url = FeedUrl.get_value_from_pattern(doc.to_s, "egressUrl<ref_url>,", "<ref_url>")
+    click_url = FeedUrl.get_value_from_pattern(deal_details.to_s, "egressUrl<ref_url>,", "<ref_url>")
+    click_url = CGI.unescape(click_url)
+    click_url = click_url.gsub(click_url.first, "").gsub(" : ", "")
+
+    #image_url = FeedUrl.get_value_from_pattern(doc.to_s, "primaryImage<ref_url>,", "<ref_url>")
+    image_url = FeedUrl.get_value_from_pattern(deal_details.to_s, "primaryImage<ref_url>,", "<ref_url>")
+    image_url = CGI.unescape(image_url)
+    image_url = image_url.gsub(image_url.first, "").gsub(" : ", "")
+
+    title = FeedUrl.get_value_from_pattern(deal_details.to_s, "title<ref_url>,", "<ref_url>")
+    title = CGI.unescape(title)
+    title = title.gsub(title.first, "").gsub(" : ", "").squish
+
+    price = FeedUrl.get_value_from_pattern(deal_details.to_s, "minBAmount<ref_url>,", "<ref_url>")
+    price = CGI.unescape(price)
+    price = price.gsub(price.first, "").gsub(" : ", "").squish
+
+    current_price = FeedUrl.get_value_from_pattern(deal_details.to_s, "minCurrentPrice<ref_url>,", "<ref_url>")
+    current_price = CGI.unescape(current_price)
+    current_price = current_price.gsub(current_price.first, "").gsub(" : ", "").squish
+
+    saved_percentage = FeedUrl.get_value_from_pattern(deal_details.to_s, "minPercentOff<ref_url>,", "<ref_url>")
+    saved_percentage = CGI.unescape(saved_percentage)
+    saved_percentage = saved_percentage.gsub(saved_percentage.first, "").gsub(" : ", "").squish
+
+
+    itemdetail = Itemdetail.where(:itemid => item.id, :url => url)
+
+    if itemdetail.blank?
+      item_detail = Itemdetail.new(:itemid => item.id, :ItemName => title, :url => click_url, :price => current_price, :savepercentage => saved_percentage, :mrpprice => price, :status => 1, :iscashondeliveryavailable => false, :isemiavailable => false, :IsError => false, :additional_details => "", :site => "9882", :last_verified_date => Time.now)
+      item_detail.save!
+
+      if item_detail.image.blank? || Rails.env != "development"
+        filename = image_url.to_s.split("/").last
+        filename = filename == "noimage.jpg" ? nil : filename
+
+        filename = filename.gsub("%", "_")
+
+        unless filename.blank?
+          name = filename.to_s.split(".")
+          name = name[0...name.size-1]
+          name = name.join(".") + ".jpeg"
+          filename = name
+        end
+
+        if !item_detail.blank? && !image_url.blank? && !filename.blank?
+          p "image----------------------------"
+          @image = item_detail.build_image
+          # tempfile = open(image_url)
+          # avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => tempfile})
+          # avatar.original_filename = filename
+
+          safe_thumbnail_url = URI.encode(URI.decode(image_url))
+          extname = File.extname(safe_thumbnail_url).delete("%")
+
+          basename = File.basename(safe_thumbnail_url, extname).delete("%")
+
+          file = Tempfile.new([basename, extname])
+          file.binmode
+          open(URI.parse(safe_thumbnail_url)) do |data|
+            file.write data.read
+          end
+          file.rewind
+
+          avatar = ActionDispatch::Http::UploadedFile.new({:tempfile => file})
+          avatar.original_filename = filename
+
+          @image.avatar = avatar
+          if @image.save
+            item_detail.update_attributes(:Image => filename)
+          end
+        end
+      end
+    end
   end
 
   private
