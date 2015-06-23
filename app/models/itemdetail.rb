@@ -936,7 +936,7 @@ class Itemdetail < ActiveRecord::Base
     items
   end
 
-  def self.amazon_deal_update
+  def self.amazon_daily_deal_update()
     item = Item.where(:id => 73683).last
 
     # today_date = Date.today

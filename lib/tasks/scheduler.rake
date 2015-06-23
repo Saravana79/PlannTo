@@ -221,3 +221,8 @@ desc "Updating Itemdetails from auto"
 task :update_itemdetails_from_auto => :environment do
   Itemdetail.update_itemdetails_from_auto()
 end
+
+desc "Manually update amazon today deal"
+task :update_amazon_daily_deal => :environment do
+  Itemdetail.amazon_daily_deal_update()
+end
