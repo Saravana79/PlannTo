@@ -30,12 +30,14 @@ class ReviewContentsController < ApplicationController
 		end
 		  UserActivity.save_user_activity(current_user,@reviewcontent.id,"created",@reviewcontent.sub_type,@reviewcontent.id,request.remote_ip) 
 		  Follow.content_follow(@reviewcontent,current_user) if @reviewcontent.id!=nil
-		  if current_user.total_points < 10
-		    @reviewcontent.update_attribute('status',Content::SENT_APPROVAL) 
-		    @display = 'false'
-		  else
-		    Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_CREATE)   
-		  end  
+
+		  # if current_user.total_points < 10
+		  #   @reviewcontent.update_attribute('status',Content::SENT_APPROVAL)
+		  #   @display = 'false'
+		  # else
+		  #   Point.add_point_system(current_user, @reviewcontent, Point::PointReason::CONTENT_CREATE)
+		  # end
+
 		    Content.save_thumbnail_using_uploaded_image(@reviewcontent)
      
 		  if @reviewcontent

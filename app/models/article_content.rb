@@ -257,14 +257,17 @@ class ArticleContent < Content
           # Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
           UserActivity.save_user_activity(user, @article.id, "created", @article.sub_type, @article.id, remote_ip) if @article.id!=nil
           content_id = @article.id
-          if user.total_points < 10
-            @article.update_attribute('status', Content::SENT_APPROVAL)
-            @display = 'false'
-          elsif @article.url!=nil
-            Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-          else
-            Point.add_point_system(user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-          end
+
+          # if user.total_points < 10
+          #   @article.update_attribute('status', Content::SENT_APPROVAL)
+          #   @display = 'false'
+          # elsif @article.url!=nil
+          #   Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
+          # else
+          #   Point.add_point_system(user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
+          # end
+
+
           # @facebook_post = param['facebook_post']
           # Follow.content_follow(@article, user) if @article.id!=nil
           # @article,@images = ArticleContent.CreateContent(@article.url,user) unless @article.url.blank?
