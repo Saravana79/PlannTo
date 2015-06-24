@@ -15,6 +15,7 @@ class AggregatedImpression
   field :device, type: Hash #Device True or False
   field :ret, type: Hash #Retargetting True or False
   field :rii, type: Hash #Related Item Impression True or False
+  field :size, type: Hash #Related Item Impression True or False
 
   # field :hours, type: Array
   # [*0..23].each do |each_hour|
@@ -83,19 +84,21 @@ class AggregatedImpression
 
       option = case param[:type]
         when "Device"
-        "device"
+          "device"
         when "Retargeting"
-        "ret"
+          "ret"
         when "Hourly"
-        "hours"
+          "hours"
         when "Publisher"
-        "publishers"
+          "publishers"
         when "Is Related Item Impression"
-        "rii"
+          "rii"
         when "Domain"
-        "agg_coll"
+          "agg_coll"
         when "Item"
-        "agg_coll"
+          "agg_coll"
+        when "Size"
+          "size"
       end
 
       result_hash = results.map(&:"#{option}")
