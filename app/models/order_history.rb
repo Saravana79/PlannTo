@@ -201,6 +201,7 @@ class OrderHistory < ActiveRecord::Base
         url_params = Advertisement.reverse_make_url_params(impression.params)
         url_params.symbolize_keys!
         device_name = url_params[:device].to_s
+        size = url_params[:size].to_s
         ret_val = url_params[:r].to_i == 1
 
         agg_imp = AggregatedImpression.where(:agg_date => date, :ad_id => self.advertisement_id).last
@@ -227,6 +228,13 @@ class OrderHistory < ActiveRecord::Base
           device["#{device_name}"].merge!({"orders" => device["#{device_name}"]["orders"].to_i + 1, "product_price" => device["#{device_name}"]["product_price"].to_f + price})
         end
 
+        curr_size = agg_imp.size.blank? ? {} : agg_imp.size
+        if curr_size["#{size}"].blank?
+          curr_size.merge!({"#{size}" => {"orders" => 1, "product_price" => price}})
+        else
+          curr_size["#{size}"].merge!({"orders" => curr_size["#{size}"]["orders"].to_i + 1, "product_price" => curr_size["#{size}"]["product_price"].to_f + price})
+        end
+
         rii = agg_imp.rii.blank? ? {} : agg_imp.rii
         if rii["#{is_rii}"].blank?
           rii.merge!({"#{is_rii}" => {"orders" => 1, "product_price" => price}})
@@ -247,6 +255,7 @@ class OrderHistory < ActiveRecord::Base
         # agg_imp.rii = Advertisement.combine_hash(agg_imp.rii, rii)
         agg_imp.hours = hours
         agg_imp.device = device
+        agg_imp.size = curr_size
         agg_imp.ret = ret
         agg_imp.rii = rii
         agg_imp.save!
