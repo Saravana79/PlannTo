@@ -302,7 +302,7 @@ class ArticleContent < Content
       return "success"
 
     rescue Exception => e
-      ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 0, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
+      # ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 0, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
       return e
     end
   end
