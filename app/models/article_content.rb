@@ -444,4 +444,40 @@ class ArticleContent < Content
     results = feed_urls = FeedUrl.where("updated_at >= '#{start_date}' and updated_at <= '#{end_date}' and created_type is not null").group(:created_type, :created_by).select("count(*) as count, created_type, created_by")
   end
 
+  def self.article_content_process_auto_enqueue_in_redis()
+    if $redis.get("article_content_process_auto_is_running_enqueue").to_i == 0
+      $redis.set("article_content_process_auto_is_running_enqueue", 1)
+      $redis.expire("article_content_process_auto_is_running_enqueue", 20.minutes)
+
+      # length = $redis_rtb.llen("users:visits")
+
+      length = $redis.llen("resque:queue:article_content_auto_process")
+      if length < 5
+        [*length...5].each do |each_count|
+          article_contents = $redis.lrange("resque:queue:article_content_process_auto", 0, 1000)
+          Resque.enqueue(ArticleContentAutoProcess, "article_content_auto_process_in_redis", Time.zone.now.utc, article_contents)
+          $redis.ltrim("resque:queue:article_content_process_auto", article_contents.count, -1)
+        end
+      end
+
+      $redis.set("article_content_process_auto_is_running_enqueue", 0)
+    end
+  end
+
+  def self.article_content_auto_process_in_redis(article_contents)
+    article_contents.each do |article_content|
+      begin
+        param_hash = JSON.parse(article_content)
+        args = param_hash["args"]
+        param = JSON.parse(args[2])
+        user_id = args[3]
+        remote_ip = args[4]
+
+        created_feed_urls = ArticleContent.create_article_content(param, user_id, remote_ip)
+      rescue Exception => e
+        p "There was a problem while process article content auto process"
+      end
+    end
+  end
+
 end
