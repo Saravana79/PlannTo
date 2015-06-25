@@ -228,9 +228,9 @@ task :update_amazon_daily_deal => :environment do
 end
 
 desc "Processing Buying List Enqueue based on user id in redis"
-task :article_content_process_auto_enqueue => :environment do
+task :article_content_auto_process_enqueue => :environment do
   time = Time.zone.now.utc
-  Resque.enqueue(ArticleContentProcessAutoEnqueue, "article_content_process_auto_enqueue_in_redis", Time.zone.now.utc)
+  Resque.enqueue(ArticleContentAutoProcessEnqueue, "article_content_auto_process_enqueue_in_redis", Time.zone.now.utc)
 end
 
 desc "Processing Buying List based on user id in redis"

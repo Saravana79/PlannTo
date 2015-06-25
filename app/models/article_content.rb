@@ -444,7 +444,7 @@ class ArticleContent < Content
     results = feed_urls = FeedUrl.where("updated_at >= '#{start_date}' and updated_at <= '#{end_date}' and created_type is not null").group(:created_type, :created_by).select("count(*) as count, created_type, created_by")
   end
 
-  def self.article_content_process_auto_enqueue_in_redis()
+  def self.article_content_auto_process_enqueue_in_redis()
     if $redis.get("article_content_process_auto_is_running_enqueue").to_i == 0
       $redis.set("article_content_process_auto_is_running_enqueue", 1)
       $redis.expire("article_content_process_auto_is_running_enqueue", 20.minutes)
@@ -465,7 +465,9 @@ class ArticleContent < Content
   end
 
   def self.article_content_auto_process_in_redis(article_contents)
+    i = article_contents.count
     article_contents.each do |article_content|
+      i -= 1
       begin
         param_hash = JSON.parse(article_content)
         args = param_hash["args"]
@@ -477,6 +479,8 @@ class ArticleContent < Content
       rescue Exception => e
         p "There was a problem while process article content auto process"
       end
+      p "$$$$$$$$$$$$$$$$$$$$$$$$ Article Content Auto process Remaining Count => #{i} $$$$$$$$$$$$$$$$$$$$$$$$"
+      logger.info "$$$$$$$$$$$$$$$$$$$$$$$$ Article Content Auto process Remaining Count => #{i} $$$$$$$$$$$$$$$$$$$$$$$$"
     end
   end
 
