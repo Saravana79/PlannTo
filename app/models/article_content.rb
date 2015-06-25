@@ -2,7 +2,7 @@ class ArticleContent < Content
   acts_as_citier
 
   validates :url, :presence => true
-  validates_uniqueness_of :url
+  # validates_uniqueness_of :url
   belongs_to :article_category
   has_many :content_photos, :foreign_key => 'content_id'
   accepts_nested_attributes_for :content_photos, :allow_destroy => true
@@ -101,7 +101,7 @@ class ArticleContent < Content
           @article.user = user
           @article.ip_address = ip
           @article.field1 = score if score != ""
-          @article.savef_with_items!(ids)
+          @article.save_with_items!(ids)
         end
         @article
       end
@@ -197,6 +197,7 @@ class ArticleContent < Content
       old_article_content = ArticleContent.where(:url => param['article_content']['url'])
 
       if !old_article_content.blank?
+        ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 1, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
         return "already exist"
       end
 
@@ -302,7 +303,7 @@ class ArticleContent < Content
       return "success"
 
     rescue Exception => e
-      # ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 0, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
+      ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 0, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
       return e
     end
   end
