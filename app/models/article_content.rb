@@ -464,7 +464,7 @@ class ArticleContent < Content
       length = $redis.llen("resque:queue:article_content_auto_process")
       if length < 5
         [*length...5].each do |each_count|
-          article_contents = $redis.lrange("resque:queue:article_content_process_auto", 0, 100)
+          article_contents = $redis.lrange("resque:queue:article_content_process_auto", 0, 1000)
           Resque.enqueue(ArticleContentAutoProcess, "article_content_auto_process_in_redis", Time.zone.now.utc, article_contents)
           $redis.ltrim("resque:queue:article_content_process_auto", article_contents.count, -1)
         end
