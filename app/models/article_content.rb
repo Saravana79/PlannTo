@@ -2,6 +2,7 @@ class ArticleContent < Content
   acts_as_citier
 
   validates :url, :presence => true
+  validates_uniqueness_of :url
   belongs_to :article_category
   has_many :content_photos, :foreign_key => 'content_id'
   accepts_nested_attributes_for :content_photos, :allow_destroy => true
@@ -100,7 +101,7 @@ class ArticleContent < Content
           @article.user = user
           @article.ip_address = ip
           @article.field1 = score if score != ""
-          @article.save_with_items!(ids)
+          @article.savef_with_items!(ids)
         end
         @article
       end
@@ -191,6 +192,12 @@ class ArticleContent < Content
         if param['article_content']['url'].include?("utm_source=")
           param['article_content']['url'] = param['article_content']['url'].split("?")[0]
         end
+      end
+
+      old_article_content = ArticleContent.where(:url => param['article_content']['url'])
+
+      if !old_article_content.blank?
+        return "already exist"
       end
 
       if param['article_content']['title']
