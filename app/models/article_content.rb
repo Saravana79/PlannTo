@@ -244,15 +244,17 @@ class ArticleContent < Content
           end
 
           # Resque.enqueue(ContributorPoint, user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-          if param['submit_url'] == 'submit_url'
-            ContentPhoto.save_url_content_to_local(@article)
-          end
 
-          if ((param['article_content']['sub_type'] == "Photo" || param['submit_url'] == 'submit_url') && (!@article.content_photos.first.nil?))
-            @article.update_attribute('thumbnail', @article.content_photos.first.photo.url('thumb'))
-          else
-            Content.save_thumbnail_using_uploaded_image(@article)
-          end
+          #TODO: temp comment
+          # if param['submit_url'] == 'submit_url'
+          #   ContentPhoto.save_url_content_to_local(@article)
+          # end
+
+          # if ((param['article_content']['sub_type'] == "Photo" || param['submit_url'] == 'submit_url') && (!@article.content_photos.first.nil?))
+          #   @article.update_attribute('thumbnail', @article.content_photos.first.photo.url('thumb'))
+          # else
+          #   Content.save_thumbnail_using_uploaded_image(@article)
+          # end
 
           if ((param['article_content']['sub_type'] == "Reviews"))
             @defaultitem = Item.find(ids[0])
