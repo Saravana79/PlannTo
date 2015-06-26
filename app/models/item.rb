@@ -2823,6 +2823,7 @@ end
   end
 
   def self.get_item_from_name_in_search(term, search_type=Car)
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       keywords term do
         minimum_match 1
@@ -2965,6 +2966,7 @@ end
     term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     search_type_for_data = search_type.first if search_type.is_a?(Array)
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       keywords term do
         minimum_match 1

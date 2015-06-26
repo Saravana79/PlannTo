@@ -806,6 +806,7 @@ class FeedUrl < ActiveRecord::Base
     selected_values
   end
 
+  #TODO: have to check and prevent the R14 error
   def self.automated_feed_process
     $redis.set("automated_feed_process_is_running", 1)
     $redis.expire("automated_feed_process_is_running", 40.minutes)

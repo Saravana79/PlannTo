@@ -212,6 +212,7 @@ class ArticleContentsController < ApplicationController
 
   def article_search_by_relevance(article)
     search_type = Product.search_type(params[:search_type])
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       fulltext article.title do
         fields :nameformlt

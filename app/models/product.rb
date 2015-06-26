@@ -219,6 +219,8 @@ has_one :manufacturer,
     p search_type
     p term
 
+    search_type = Product.search_type(nil) if search_type.blank?
+
     @items = Sunspot.search(search_type) do
       keywords term do
         minimum_match 1

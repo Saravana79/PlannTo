@@ -247,7 +247,8 @@ class SearchController < ApplicationController
         else
           search_type = Product.search_type(params[:search_type])
         end
-    end 
+    end
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2]
@@ -403,6 +404,7 @@ class SearchController < ApplicationController
 
   def preference_items
     search_type = Preference.search_type(params[:search_type])
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
       order_by :class, :desc

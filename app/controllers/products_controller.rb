@@ -876,7 +876,8 @@ class ProductsController < ApplicationController
    def product_autocomplete
     item_types =  params[:search_type].blank? ? params[:search_type].split(",") : ["Mobile", "Tablet", "Camera"]
 
-     search_type = Product.search_type(item_types) 
+     search_type = Product.search_type(item_types)
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2,3]
