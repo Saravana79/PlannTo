@@ -34,7 +34,8 @@ class ImageuploadsController < ApplicationController
       search_type = Product.search_type(params[:search_type]) + [Content]
     else
       search_type = Product.search_type(params[:search_type])
-   end 
+    end
+    search_type = Product.search_type(nil) if search_type.blank?
     @items = Sunspot.search(search_type) do
       keywords params[:term].gsub("-",""), :fields => :name
       with :status,[1,2,3]

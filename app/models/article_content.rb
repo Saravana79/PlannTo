@@ -2,6 +2,7 @@ class ArticleContent < Content
   acts_as_citier
 
   validates :url, :presence => true
+  # validates_uniqueness_of :url
   belongs_to :article_category
   has_many :content_photos, :foreign_key => 'content_id'
   accepts_nested_attributes_for :content_photos, :allow_destroy => true
@@ -193,6 +194,13 @@ class ArticleContent < Content
         end
       end
 
+      old_article_content = ArticleContent.where(:url => param['article_content']['url'])
+
+      if !old_article_content.blank?
+        ActiveRecord::Base.connection.execute("UPDATE feed_urls SET status = 1, updated_at = '#{Time.now}' WHERE feed_urls.id = '#{param['feed_url_id']}'")
+        return "already exist"
+      end
+
       if param['article_content']['title']
         if param['article_content']['title'].include?("|")
           param['article_content']['title'] = param['article_content']['title'].slice(0..(param['article_content']['title'].index('|'))).gsub(/\|/, "").strip
@@ -236,15 +244,17 @@ class ArticleContent < Content
           end
 
           # Resque.enqueue(ContributorPoint, user.id, @article.id, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-          if param['submit_url'] == 'submit_url'
-            ContentPhoto.save_url_content_to_local(@article)
-          end
 
-          if ((param['article_content']['sub_type'] == "Photo" || param['submit_url'] == 'submit_url') && (!@article.content_photos.first.nil?))
-            @article.update_attribute('thumbnail', @article.content_photos.first.photo.url('thumb'))
-          else
-            Content.save_thumbnail_using_uploaded_image(@article)
-          end
+          #TODO: temp comment
+          # if param['submit_url'] == 'submit_url'
+          #   ContentPhoto.save_url_content_to_local(@article)
+          # end
+
+          # if ((param['article_content']['sub_type'] == "Photo" || param['submit_url'] == 'submit_url') && (!@article.content_photos.first.nil?))
+          #   @article.update_attribute('thumbnail', @article.content_photos.first.photo.url('thumb'))
+          # else
+          #   Content.save_thumbnail_using_uploaded_image(@article)
+          # end
 
           if ((param['article_content']['sub_type'] == "Reviews"))
             @defaultitem = Item.find(ids[0])
@@ -257,14 +267,17 @@ class ArticleContent < Content
           # Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
           UserActivity.save_user_activity(user, @article.id, "created", @article.sub_type, @article.id, remote_ip) if @article.id!=nil
           content_id = @article.id
-          if user.total_points < 10
-            @article.update_attribute('status', Content::SENT_APPROVAL)
-            @display = 'false'
-          elsif @article.url!=nil
-            Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
-          else
-            Point.add_point_system(user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
-          end
+
+          # if user.total_points < 10
+          #   @article.update_attribute('status', Content::SENT_APPROVAL)
+          #   @display = 'false'
+          # elsif @article.url!=nil
+          #   Point.add_point_system(user, @article, Point::PointReason::CONTENT_SHARE) unless @article.errors.any?
+          # else
+          #   Point.add_point_system(user, @article, Point::PointReason::CONTENT_CREATE) unless @article.errors.any?
+          # end
+
+
           # @facebook_post = param['facebook_post']
           # Follow.content_follow(@article, user) if @article.id!=nil
           # @article,@images = ArticleContent.CreateContent(@article.url,user) unless @article.url.blank?
@@ -439,6 +452,46 @@ class ArticleContent < Content
     end_date = end_date.end_of_day.utc
 
     results = feed_urls = FeedUrl.where("updated_at >= '#{start_date}' and updated_at <= '#{end_date}' and created_type is not null").group(:created_type, :created_by).select("count(*) as count, created_type, created_by")
+  end
+
+  def self.article_content_auto_process_enqueue_in_redis()
+    if $redis.get("article_content_process_auto_is_running_enqueue").to_i == 0
+      $redis.set("article_content_process_auto_is_running_enqueue", 1)
+      $redis.expire("article_content_process_auto_is_running_enqueue", 20.minutes)
+
+      # length = $redis_rtb.llen("users:visits")
+
+      length = $redis.llen("resque:queue:article_content_auto_process")
+      if length < 5
+        [*length...5].each do |each_count|
+          article_contents = $redis.lrange("resque:queue:article_content_process_auto", 0, 1000)
+          Resque.enqueue(ArticleContentAutoProcess, "article_content_auto_process_in_redis", Time.zone.now.utc, article_contents)
+          $redis.ltrim("resque:queue:article_content_process_auto", article_contents.count, -1)
+        end
+      end
+
+      $redis.set("article_content_process_auto_is_running_enqueue", 0)
+    end
+  end
+
+  def self.article_content_auto_process_in_redis(article_contents)
+    i = article_contents.count
+    article_contents.each do |article_content|
+      i -= 1
+      begin
+        param_hash = JSON.parse(article_content)
+        args = param_hash["args"]
+        param = JSON.parse(args[2])
+        user_id = args[3]
+        remote_ip = args[4]
+
+        created_feed_urls = ArticleContent.create_article_content(param, user_id, remote_ip)
+      rescue Exception => e
+        p "There was a problem while process article content auto process"
+      end
+      p "$$$$$$$$$$$$$$$$$$$$$$$$ Article Content Auto process Remaining Count => #{i} $$$$$$$$$$$$$$$$$$$$$$$$"
+      logger.info "$$$$$$$$$$$$$$$$$$$$$$$$ Article Content Auto process Remaining Count => #{i} $$$$$$$$$$$$$$$$$$$$$$$$"
+    end
   end
 
 end

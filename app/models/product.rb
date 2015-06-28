@@ -205,7 +205,7 @@ has_one :manufacturer,
       end
     end
     search_type = Product.search_type(itemtypes)
-    term = param[:term]
+    term = param[:term].to_s
 
     removed_keywords = ["review", "how", "price", "between", "comparison", "vs", "processor", "display", "battery", "features", "india", "released", "launch",
                         "release", "limited", "period", "offer", "deal", "first", "impressions", "available", "online", "android", "video", "hands on", "hands-on",
@@ -215,6 +215,12 @@ has_one :manufacturer,
     term = term.to_s.split(/\W+/).delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     # term = term.to_s.split.delete_if{|x| removed_keywords.include?(x.downcase)}.join(' ')
     search_type_for_data = search_type.first if search_type.is_a?(Array)
+
+    p search_type
+    p term
+
+    search_type = Product.search_type(nil) if search_type.blank?
+
     @items = Sunspot.search(search_type) do
       keywords term do
         minimum_match 1

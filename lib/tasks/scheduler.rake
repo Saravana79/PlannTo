@@ -167,7 +167,7 @@ task :update_top_mysmartprice_item_ids => :environment do
   Resque.enqueue(UpdateTopMysmartpriceItemIds, "update_top_item_ids_from_mysmartprice", Time.zone.now.utc)
 end
 
-desc "Update Itemdetail from Flipkart"
+desc "Update Itemdetail from Flipkart" # Last run Jun 19 9:20 UTC, Hourly job
 task :update_item_details_from_vendors_flipkart => :environment do
   Resque.enqueue(UpdateItemDetailsFromVendorsFlipkart, "update_from_vendors_flipkart", Time.zone.now.utc)
 end
@@ -220,4 +220,21 @@ end
 desc "Updating Itemdetails from auto"
 task :update_itemdetails_from_auto => :environment do
   Itemdetail.update_itemdetails_from_auto()
+end
+
+desc "Manually update amazon today deal"
+task :update_amazon_daily_deal => :environment do
+  Itemdetail.amazon_daily_deal_update()
+end
+
+desc "Processing Buying List Enqueue based on user id in redis"
+task :article_content_auto_process_enqueue => :environment do
+  time = Time.zone.now.utc
+  Resque.enqueue(ArticleContentAutoProcessEnqueue, "article_content_auto_process_enqueue_in_redis", Time.zone.now.utc)
+end
+
+desc "Processing Buying List based on user id in redis"
+task :article_content_auto_process => :environment do
+  time = Time.zone.now.utc
+  Resque.enqueue(ArticleContentAutoProcess, "article_content_auto_process_in_redis", Time.zone.now.utc, article_contents=[])
 end

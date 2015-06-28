@@ -7,6 +7,7 @@ class AggregatedImpression
   field :total_imp, type: Integer
   field :total_clicks, type: Integer
   field :total_orders, type: Integer
+  field :total_product_price, type: Float
   field :total_costs, type: Float
   field :total_costs_wc, type: Float #Total costs with commission
   field :publishers, type: Hash
@@ -14,6 +15,7 @@ class AggregatedImpression
   field :device, type: Hash #Device True or False
   field :ret, type: Hash #Retargetting True or False
   field :rii, type: Hash #Related Item Impression True or False
+  field :size, type: Hash #Related Item Impression True or False
 
   # field :hours, type: Array
   # [*0..23].each do |each_hour|
@@ -36,7 +38,7 @@ class AggregatedImpression
       end
 
       group =  { "$group" => { "_id" => option, "total_imp" => { "$sum" => "$total_imp" }, "total_clicks" => { "$sum" => "$total_clicks" },
-                               "total_orders" => { "$sum" => "$total_orders" }, "total_costs" => { "$sum" => "$total_costs" }, "total_costs_wc" => { "$sum" => "$total_costs_wc" }#,
+                               "total_orders" => { "$sum" => "$total_orders" }, "total_product_price" => { "$sum" => "$total_product_price" }, "total_costs" => { "$sum" => "$total_costs" }, "total_costs_wc" => { "$sum" => "$total_costs_wc" }#,
                                # "click_count" => { "$sum" => { "$size" => { "$ifNull" => [ "$m_clicks", [] ] } } },
                                # "orders_count" => { "$sum" => {"$size" => { "$ifNull" => [ "$m_order_histories", [] ] }} },
                                # "orders_count" => { "$sum" => { "$cond" => [ { "$gte" => [ "$m_order_histories._id", 1 ] }, 1, 0 ] } },
@@ -82,19 +84,21 @@ class AggregatedImpression
 
       option = case param[:type]
         when "Device"
-        "device"
+          "device"
         when "Retargeting"
-        "ret"
+          "ret"
         when "Hourly"
-        "hours"
+          "hours"
         when "Publisher"
-        "publishers"
+          "publishers"
         when "Is Related Item Impression"
-        "rii"
+          "rii"
         when "Domain"
-        "agg_coll"
+          "agg_coll"
         when "Item"
-        "agg_coll"
+          "agg_coll"
+        when "Size"
+          "size"
       end
 
       result_hash = results.map(&:"#{option}")
@@ -109,6 +113,7 @@ class AggregatedImpression
           final_hash[key]["total_clicks"] = final_hash[key]["total_clicks"].to_i + val["clicks"].to_i
           final_hash[key]["total_orders"] = final_hash[key]["total_orders"].to_i + val["orders"].to_i
           final_hash[key]["total_costs"] = (final_hash[key]["total_costs"].to_f + val["costs"].to_f).round(2)
+          final_hash[key]["total_product_price"] = (final_hash[key]["total_product_price"].to_f + val["product_price"].to_f).round(2)
         end
       end
 

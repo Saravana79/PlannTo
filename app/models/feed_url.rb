@@ -806,7 +806,11 @@ class FeedUrl < ActiveRecord::Base
     selected_values
   end
 
+  #TODO: have to check and prevent the R14 error
   def self.automated_feed_process
+    $redis.set("automated_feed_process_is_running", 1)
+    $redis.expire("automated_feed_process_is_running", 40.minutes)
+
     SourceCategory.update_all_to_cache()
     feed_urls = FeedUrl.where("status = 0 and (created_at > '#{2.weeks.ago.utc}' and created_at < '#{2.weeks.ago.utc + 1.day}') or created_at > '#{2.days.ago.utc}'")
     sources_list = JSON.parse($redis.get("sources_list_details"))
@@ -817,12 +821,14 @@ class FeedUrl < ActiveRecord::Base
         if sources_list[host]["site_status"] == false
           feed_url.update_attributes!(:status => FeedUrl::INVALID)  #mark as invalid based on url
         else
-            feed_url.auto_save_feed_urls(false,0, "auto")
+          feed_url.auto_save_feed_urls(false,0, "auto")
         end
       rescue Exception => e
         p e.backtrace
       end
     end
+
+    $redis.set("automated_feed_process_is_running", 0)
   end
 
   def self.get_value_from_pattern(str, pattern, pattern_val="<pattern_val>")
@@ -1038,7 +1044,7 @@ class FeedUrl < ActiveRecord::Base
   def self.auto_save_or_update_score_feed_urls
     if $redis.get("auto_save_or_update_score_is_running").to_i == 0
       $redis.set("auto_save_or_update_score_is_running", 1)
-      $redis.expire("auto_save_or_update_score_is_running", 50.minutes)
+      $redis.expire("auto_save_or_update_score_is_running", 180.minutes)
 
       query = "SELECT `feed_urls`.* FROM `feed_urls` WHERE (status = 0 and score is null)"
       page = 1
@@ -1046,7 +1052,11 @@ class FeedUrl < ActiveRecord::Base
         feed_urls = FeedUrl.paginate_by_sql(query, :page => page, :per_page => 1000)
 
         feed_urls.each do |feed_url|
-          feed_url.auto_save_feed_urls(false,0,"auto")
+          begin
+            feed_url.auto_save_feed_urls(false,0,"auto")
+          rescue Exception => e
+            p "Error while process auto save feed urls"
+          end
         end
 
         page += 1

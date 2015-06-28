@@ -1833,7 +1833,7 @@ where url = '#{impression.hosted_site_url}' group by ac.id").first
     ad_item_id = ad_item_id.flatten
     ad_item_id = ad_item_id.join(",")
 
-    Advertisement.update_top_product_item_ids([25, 35], ad_item_id)
+    Advertisement.update_top_product_item_ids([25, 35, 57], ad_item_id)
 
     exc_advertisement = Advertisement.where(:id => 26).first
 

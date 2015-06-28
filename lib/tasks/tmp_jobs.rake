@@ -150,6 +150,8 @@ task :update_item_detail_others_temp, [:url] => :environment do |_, args|
             item_detail_other.update_attributes(:location_id => city.id)
           end
 
+          search_type = Product.search_type(nil) if search_type.blank?
+
           cars = Sunspot.search(search_type) do
             keywords search_text do
               minimum_match 1
