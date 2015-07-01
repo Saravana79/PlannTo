@@ -20,7 +20,7 @@
                   </div>
                   <div style="float:left;width:178px;">
                   <a href="<%= shop_now_url %>" target="_blank" class="">
-                      <div style="float:left;">
+                      <div style="float:left;width:100%;">
                       <h3 class="product-title"><%= item_detail.ItemName.to_s.truncate(36) %></h3>
                     </div>
                       <div style="float:left;">
@@ -55,6 +55,11 @@
         <% end %>
 
         <div class="logo"><a class="vendor_image" href="javascript:void(0)" target="_blank"><img src="<%= @vendor_ad_details[@item_details[0].site.to_i]['imageurl'] %>" width="68px" alt=""></a>
+        <% if  @item_details[0].site.to_i == 9861%>
+
+          <div style = "font-size: 9px;margin: 3px;" > Extra 10% off on App. </div>
+        <% else%>
+
         <div id="pager2" class="pager">
           <% if @item_details.count > 1 %>
           <% [*1..@item_details.count].each do |each_loop| %>
@@ -62,6 +67,7 @@
           <% end %>
           <% end %>
         </div>
+        <%end%>
         </div>
   <% else %>
         No Product Found
