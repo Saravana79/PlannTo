@@ -460,6 +460,7 @@ class ArticleContent < Content
       $redis.expire("article_content_process_auto_is_running_enqueue", 20.minutes)
 
       # length = $redis_rtb.llen("users:visits")
+      # length = $redis_rtb.llen("users:visits")
 
       length = $redis.llen("resque:queue:article_content_auto_process")
       if length < 5
