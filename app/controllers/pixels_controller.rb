@@ -30,6 +30,8 @@ class PixelsController < ApplicationController
                               "&google_ula=8365600"
                             when "housing"
                               "&google_ula=8423560"
+                            when "cardekho"
+                              "&google_ula=57128440"
                             else
                               ""
                           end
