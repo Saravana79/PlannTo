@@ -133,7 +133,34 @@ class CookieMatch < ActiveRecord::Base
             end
 
             msp_id = CookieMatch.get_mspid_from_existing_pattern(existing_pattern, ref_url)
-            if !msp_id.blank?
+            if ref_url.include?("cardekho")
+              # site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
+              item_detail_other = ItemDetailOther.where(:url => ref_url).last
+
+              if !item_detail_other.blank?
+                user_id = new_user_access_detail.plannto_user_id
+                type = "Resale"
+
+                itemtype_id = item_detail_other.itemtype_id rescue ""
+
+                item_ids = item_detail_other.item_detail_other_mappings.map(&:item_id).join(",").to_s rescue ""
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+              else
+                item_detail_other = ItemDetailOther.update_item_detail_other_for_cardekho(ref_url)
+
+                user_id = new_user_access_detail.plannto_user_id
+                type = "Resale"
+
+                itemtype_id = item_detail_other.itemtype_id rescue ""
+
+                item_ids = item_detail_other.item_detail_other_mappings.map(&:item_id).join(",").to_s rescue ""
+                redis_hash, plannto_user_detail_hash_new = UserAccessDetail.update_buying_list(user_id, ref_url, type, item_ids, source_categories, new_user_access_detail.source, itemtype_id)
+                redis_rtb_hash.merge!(redis_hash) if !redis_hash.blank?
+                plannto_user_detail_hash.merge!(plannto_user_detail_hash_new) if !plannto_user_detail_hash_new.values.map(&:blank?).include?(true)
+              end
+            elsif !msp_id.blank?
               site_condition = new_user_access_detail.source == "mysmartprice" ? " and site='26351'" : ""
               item_detail = Itemdetail.find_by_sql("SELECT itemid,i.itemtype_id FROM itemdetails inner join items i on i.id = itemdetails.itemid WHERE itemdetails.additional_details = '#{msp_id}' #{site_condition} ORDER BY itemdetails.item_details_id DESC LIMIT 1").first
 
